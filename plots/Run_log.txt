@@ -1,0 +1,103 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+// Run was with 'general_file' settings mode.
+// Input file was asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_seed_555_test_17.gst.root.
+// Code version was 7.0a
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Code ran with the following settings:
+
+
+Input:
+==========================================================================================
+loadedInput: asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_seed_555_test_17.gst.root
+filePath: 
+fileInput: asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_seed_555_test_17.gst.root
+plotsInput: asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_seed_555_test_17.gst
+
+FSI settings
+==========================================================================================
+FSI_status = true
+
+
+Plot settings
+==========================================================================================
+lowest_nentries = false
+wider_margin = true
+
+
+Calculation settings
+==========================================================================================
+calculate_2p = true
+calculate_1n1p = true
+calculate_MicroBooNE = true
+
+BEnergyToNucleusCon = false
+BEnergyToNucleus = 0.02
+Probe = e- (PDG: 11)
+Target = C12 (PDG: 1000060120)
+BeamEnergy = 2.222
+
+
+Plot selector
+==========================================================================================
+Theta_plots = true
+Phi_plots = true
+Energy_histogram_plots = true
+ET_all_plots = true
+ET_QEL_plots = true
+ET_MEC_plots = true
+ET_RES_plots = true
+ET_DIS_plots = true
+inclusive_plots = true
+E_cal_plots = true
+other_E_cal_plots = false
+momentum_plots = true
+MicroBooNE_plots = true
+
+
+Normalization settings
+==========================================================================================
+normalized_theta_l_plots = false
+normalized_E_l_plots = false
+normalized_E_Trans15_plots = false
+normalized_E_cal_plots = false
+normalized_inclusive_plots = false
+
+
+Delete settings
+==========================================================================================
+delete_png_files = true
+delete_root_files = true
+
+
+Momentum thresholds (2p)
+==========================================================================================
+P_l_upper_lim_2p = -1
+P_l_lower_lim_2p = -1
+P_p1_upper_lim_2p = -1
+P_p1_lower_lim_2p = 0.3
+P_p2_upper_lim_2p = -1
+P_p2_lower_lim_2p = 0.3
+
+
+Momentum thresholds (1n1p)
+==========================================================================================
+P_l_upper_lim_1n1p = -1
+P_l_lower_lim_1n1p = -1
+P_p_upper_lim_1n1p = -1
+P_p_lower_lim_1n1p = 0.3
+P_n_upper_lim_1n1p = -1
+P_n_lower_lim_1n1p = 0.3
+
+
+Momentum thresholds (2p, MicroBooNE)
+==========================================================================================
+P_l_upper_lim_MicroBooNE = 1.2
+P_l_lower_lim_MicroBooNE = 0.1
+P_L_upper_lim_MicroBooNE = 1
+P_L_lower_lim_MicroBooNE = 0.3
+P_R_upper_lim_MicroBooNE = 1
+P_R_lower_lim_MicroBooNE = 0.3
+P_pion_upper_lim_MicroBooNE = 0.065
+
+
