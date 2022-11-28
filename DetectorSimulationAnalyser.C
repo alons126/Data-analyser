@@ -4660,104 +4660,69 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 // Theta histograms -----------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta histograms">
-    THStack *ThetaStack = new
-            THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
+    THStack *ThetaStack = new THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
 
-    TH1D *theta_l_2p = new
-            TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
-    TH1D *theta_p1_2p = new
-            TH1D("#theta_{p1} (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
-    TH1D *theta_p2_2p = new
-            TH1D("#theta_{p2} (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
-    TH1D *dtheta_2p = new
-            TH1D("#gamma (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
+    TH1D *theta_l_2p = new TH1D("#theta_{l} det sim (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
+    TH1D *theta_p1_2p = new TH1D("#theta_{p1} det sim (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
+    TH1D *theta_p2_2p = new TH1D("#theta_{p2} det sim (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
+    TH1D *dtheta_2p = new TH1D("#gamma det sim (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
 
-    TH1D *theta_l_1n1p = new
-            TH1D("#theta_{l} (1n1p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_1n1p, theta_l_upper_lim_1n1p);
-    TH1D *theta_p_1n1p = new
-            TH1D("#theta_{p} (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
-    TH1D *theta_n_1n1p = new
-            TH1D("#theta_{n} (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
-    TH1D *dtheta_1n1p = new
-            TH1D("#gamma (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
+    TH1D *theta_l_1n1p = new TH1D("#theta_{l} det sim (1n1p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_1n1p, theta_l_upper_lim_1n1p);
+    TH1D *theta_p_1n1p = new TH1D("#theta_{p} det sim (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
+    TH1D *theta_n_1n1p = new TH1D("#theta_{n} det sim (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
+    TH1D *dtheta_1n1p = new TH1D("#gamma det sim (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
     //</editor-fold>
 
 // Phi histograms -------------------------------------------------------------------------------------
 
     //<editor-fold desc="Phi histograms">
-    THStack *PhiStack = new
-            THStack("#phi_{l} stack (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
+    THStack *PhiStack = new THStack("#phi_{l} stack det sim (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
 
-    TH1D *phi_l_2p = new
-            TH1D("#phi_{l} (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
-    TH1D *phi_p1_2p = new
-            TH1D("#phi_{p1} (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
-    TH1D *phi_p2_2p = new
-            TH1D("#phi_{p2} (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
-    TH1D *dphi_2p = new
-            TH1D("#Delta#phi (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
+    TH1D *phi_l_2p = new TH1D("#phi_{l} det sim (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
+    TH1D *phi_p1_2p = new TH1D("#phi_{p1} det sim (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
+    TH1D *phi_p2_2p = new TH1D("#phi_{p2} det sim (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
+    TH1D *dphi_2p = new TH1D("#Delta#phi det sim (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
 
-    TH1D *phi_l_1n1p = new
-            TH1D("#phi_{l} (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
-    TH1D *phi_p_1n1p = new
-            TH1D("#phi_{p} (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
-    TH1D *phi_n_1n1p = new
-            TH1D("#phi_{n} (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
-    TH1D *dphi_1n1p = new
-            TH1D("#Delta#phi (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
+    TH1D *phi_l_1n1p = new TH1D("#phi_{l} det sim (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
+    TH1D *phi_p_1n1p = new TH1D("#phi_{p} det sim (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
+    TH1D *phi_n_1n1p = new TH1D("#phi_{n} det sim (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
+    TH1D *dphi_1n1p = new TH1D("#Delta#phi det sim (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy histograms ----------------------------------------------------------------------------------
 
     //<editor-fold desc="Energy histograms">
-    THStack *EnergyStack = new
-            THStack("E_{l} stack (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
+    THStack *EnergyStack = new THStack("E_{l} stack det sim (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
 
-    TH1D *fsEl_2p = new
-            TH1D("Final State E_{l} (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
-    TH1D *fsEl_QEL_2p = new
-            TH1D("Final State E_{l} (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
-    TH1D *fsEl_MEC_2p = new
-            TH1D("Final State E_{l} (MEC Only, 2p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_2p, fsEl_MEC_upper_lim_2p);
-    TH1D *fsEl_RES_2p = new
-            TH1D("Final State E_{l} (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
-    TH1D *fsEl_DIS_2p = new
-            TH1D("Final State E_{l} (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
-    TH2D *fsEl_VS_theta_l_all_int_2p = new
-            TH2D("Stat} (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_2p = new
-            TH2D("Stat} (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_MEC_only_2p = new
-            TH2D("Stat} (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH1D *fsEl_2p = new TH1D("Final State E_{l} det sim (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
+    TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} det sim (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
+    TH1D *fsEl_MEC_2p = new TH1D("Final State E_{l} det sim (MEC Only, 2p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_2p, fsEl_MEC_upper_lim_2p);
+    TH1D *fsEl_RES_2p = new TH1D("Final State E_{l} det sim (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
+    TH1D *fsEl_DIS_2p = new TH1D("Final State E_{l} det sim (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
+    TH2D *fsEl_VS_theta_l_all_int_2p = new TH2D("Stat det sim (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+                                                200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+                                                200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_QEL_only_2p = new TH2D("Stat det sim (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_MEC_only_2p = new TH2D("Stat det sim (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
 
-    TH1D *fsEl_1n1p = new
-            TH1D("Final State E_{l} (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
-    TH1D *fsEl_QEL_1n1p = new
-            TH1D("Final State E_{l} (QEL Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_1n1p, fsEl_QEL_upper_lim_1n1p);
-    TH1D *fsEl_MEC_1n1p = new
-            TH1D("Final State E_{l} (MEC Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_1n1p, fsEl_MEC_upper_lim_1n1p);
-    TH1D *fsEl_RES_1n1p = new
-            TH1D("Final State E_{l} (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
-    TH1D *fsEl_DIS_1n1p = new
-            TH1D("Final State E_{l} (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
-    TH2D *fsEl_VS_theta_l_all_int_1n1p = new
-            TH2D("Stat (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_1n1p = new
-            TH2D("Stat (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_MEC_only_1n1p = new
-            TH2D("Stat (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} det sim (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
+    TH1D *fsEl_QEL_1n1p = new TH1D("Final State E_{l} det sim (QEL Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_1n1p, fsEl_QEL_upper_lim_1n1p);
+    TH1D *fsEl_MEC_1n1p = new TH1D("Final State E_{l} det sim (MEC Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_1n1p, fsEl_MEC_upper_lim_1n1p);
+    TH1D *fsEl_RES_1n1p = new TH1D("Final State E_{l} det sim (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
+    TH1D *fsEl_DIS_1n1p = new TH1D("Final State E_{l} det sim (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
+    TH2D *fsEl_VS_theta_l_all_int_1n1p = new TH2D("Stat det sim (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+                                                  200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+                                                  200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_QEL_only_1n1p = new TH2D("Stat det sim (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_MEC_only_1n1p = new TH2D("Stat det sim (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
 
     //</editor-fold>
 
@@ -5667,7 +5632,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                //</editor-fold>
 
 //            }
-        }
+            }
 
 
 //            cout << "\n";
@@ -5866,391 +5831,391 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 // Phi histograms
 // ====================================================================================================
 
-//    if (Phi_plots) {
-//
-//        cout << "\n";
-//        cout << "\n";
-//        cout << "Plotting Phi histograms...\n";
-//        cout << "\n";
-//
-////  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
-//
-////      Normalization factor:
-//        double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
-//
-//        //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
-//        histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
-//        histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Phi of outgoing lepton histogram (stack)">
-//        PhiStack->Draw("nostack");
-//        PhiStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-//        PhiStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-//        PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-//        PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-//
-//        auto PhiStack_legend = new
-//                TLegend(0.775, 0.775, 0.9, 0.9);
-////        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
-//
-//        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
-//        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
-//        PhiStack_legend->Draw();
-//
-//        plots->Add(PhiStack);
-//        c1->SetLogy(0);
-//        c1->SaveAs("plots/phi_histograms/Phi_of_lepton_stack.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-////  Phi of nucleon 1 histogram ------------------------------------------------------------------------
-//
-//        //<editor-fold desc="Phi of Proton 1 histogram (2p)">
-//        histPlotter1D(c1, phi_p1_2p, normalized_phi_p1_plots, true, 1., "#phi_{p1} of Scattered Proton 1", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_1", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Phi of Proton histogram (1n1p)">
-//        histPlotter1D(c1, phi_p_1n1p, normalized_phi_p_plots, true, 1., "#phi_{p} of Scattered Proton", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-////  Phi of nucleon 2 histogram ------------------------------------------------------------------------
-//
-//        //<editor-fold desc="Phi of Proton 2 histogram (2p)">
-//        histPlotter1D(c1, phi_p2_2p, normalized_phi_p2_plots, true, 1., "#phi_{p2} of Scattered Proton 2", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_2", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Phi of Neutron histogram (1n1p)">
-//        histPlotter1D(c1, phi_n_1n1p, normalized_phi_p_plots, true, 1., "#phi_{n} of Scattered Neutron", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_neutron", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-////  dPhi histograms ----------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="dPhi histogram (2p)">
-//        histPlotter1D(c1, dphi_2p, normalized_dphi_2p_plots, true, 1., "#Delta#phi = #phi_{p1} - #phi_{p2} of Scattered Protons", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="dPhi histogram (1n1p)">
-//        histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-//    }
+    if (Phi_plots) {
+
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting Phi histograms...\n";
+        cout << "\n";
+
+//  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
+
+//      Normalization factor:
+        double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
+
+        //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
+        histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
+        histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Phi of outgoing lepton histogram (stack)">
+        PhiStack->Draw("nostack");
+        PhiStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        PhiStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+
+        auto PhiStack_legend = new
+                TLegend(0.775, 0.775, 0.9, 0.9);
+//        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+
+        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
+        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
+        PhiStack_legend->Draw();
+
+        plots->Add(PhiStack);
+        c1->SetLogy(0);
+        c1->SaveAs("plots/phi_histograms/Phi_of_lepton_stack.png");
+        c1->Clear();
+        //</editor-fold>
+
+//  Phi of nucleon 1 histogram ------------------------------------------------------------------------
+
+        //<editor-fold desc="Phi of Proton 1 histogram (2p)">
+        histPlotter1D(c1, phi_p1_2p, normalized_phi_p1_plots, true, 1., "#phi_{p1} of Scattered Proton 1", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_1", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Phi of Proton histogram (1n1p)">
+        histPlotter1D(c1, phi_p_1n1p, normalized_phi_p_plots, true, 1., "#phi_{p} of Scattered Proton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+//  Phi of nucleon 2 histogram ------------------------------------------------------------------------
+
+        //<editor-fold desc="Phi of Proton 2 histogram (2p)">
+        histPlotter1D(c1, phi_p2_2p, normalized_phi_p2_plots, true, 1., "#phi_{p2} of Scattered Proton 2", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_2", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Phi of Neutron histogram (1n1p)">
+        histPlotter1D(c1, phi_n_1n1p, normalized_phi_p_plots, true, 1., "#phi_{n} of Scattered Neutron", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_neutron", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+//  dPhi histograms ----------------------------------------------------------------------------------
+
+        //<editor-fold desc="dPhi histogram (2p)">
+        histPlotter1D(c1, dphi_2p, normalized_dphi_2p_plots, true, 1., "#Delta#phi = #phi_{p1} - #phi_{p2} of Scattered Protons", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="dPhi histogram (1n1p)">
+        histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+    }
 
 // Energy histograms
 // ====================================================================================================
 
-//    if (Energy_histogram_plots) {
+    if (Energy_histogram_plots) {
+
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting energy histograms...\n";
+        cout << "\n";
+
+//  El histograms --------------------------------------------------------------------------------------
+
+//      Normalization factor:
+        double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
+
+        //<editor-fold desc="El histograms (2p)">
+
+        //<editor-fold desc="El histograms (all interactions, 2p)">
+        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (QEL only, 2p)">
+        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (MEC only, 2p)">
+        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (RES only, 2p)">
+        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (DIS, 2p)">
+        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (1n1p)">
+
+        //<editor-fold desc="El histograms (all interaction, 1n1p)">
+        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (QEL only, 1n1p)">
+        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (MEC only, 1n1p)">
+        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (RES only, 1n1p)">
+        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (DIS, 1n1p)">
+        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="El histograms (all interactions, stack)">
+        EnergyStack->Draw("nostack");
+        EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+
+        if (normalized_E_l_plots) {
+            EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
+            EnergyStack->GetYaxis()->SetTitle("Probability (%)");
+            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        } else {
+            EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
+            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        }
+
+        auto EnergyStack_legend = new
+                TLegend(0.75, 0.775, 0.875, 0.9);
+
+        TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
+        TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
+        EnergyStack_legend->Draw();
+
+        plots->Add(EnergyStack);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
+        c1->Clear();
+        //</editor-fold>
+
+//  Final State E_{l} vs #theta_{l} histogram ---------------------------------------------------------
+
+        double set_Max_z = 4000;;
+//        double set_Max_z = 1.5;
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
+        double factor_El_VS_theta_l_all_int_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
+            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
+            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
+            fsEl_VS_theta_l_all_int_2p->Draw("colz");
 //
-//        cout << "\n";
-//        cout << "\n";
-//        cout << "Plotting energy histograms...\n";
-//        cout << "\n";
+            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
 //
-////  El histograms --------------------------------------------------------------------------------------
-//
-////      Normalization factor:
-//        double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
-//
-//        //<editor-fold desc="El histograms (2p)">
-//
-//        //<editor-fold desc="El histograms (all interactions, 2p)">
-//        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (QEL only, 2p)">
-//        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (MEC only, 2p)">
-//        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (RES only, 2p)">
-//        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (DIS, 2p)">
-//        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (1n1p)">
-//
-//        //<editor-fold desc="El histograms (all interaction, 1n1p)">
-//        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (QEL only, 1n1p)">
-//        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (MEC only, 1n1p)">
-//        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (RES only, 1n1p)">
-//        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (DIS, 1n1p)">
-//        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//        //<editor-fold desc="El histograms (all interactions, stack)">
-//        EnergyStack->Draw("nostack");
-//        EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-//        EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-//        EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-//        EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-//
-//        if (normalized_E_l_plots) {
-//            EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
-//            EnergyStack->GetYaxis()->SetTitle("Probability (%)");
-//            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-//        } else {
-//            EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
-//            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-//        }
-//
-//        auto EnergyStack_legend = new
-//                TLegend(0.75, 0.775, 0.875, 0.9);
-//
-//        TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
-//        TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
-//        EnergyStack_legend->Draw();
-//
-//        plots->Add(EnergyStack);
-//        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
-//        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-////  Final State E_{l} vs #theta_{l} histogram ---------------------------------------------------------
-//
-//        double set_Max_z = 4000;;
-////        double set_Max_z = 1.5;
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
-//        double factor_El_VS_theta_l_all_int_2p = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
-//            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
-//            fsEl_VS_theta_l_all_int_2p->Draw("colz");
-//            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
-//        } else {
-//            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
-//            fsEl_VS_theta_l_all_int_2p->Draw("colz");
-////
-//            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
-////
-//        }
-//
-//        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
-//        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(fsEl_VS_theta_l_all_int_2p);
-//        fsEl_VS_theta_l_all_int_2p->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
-//        double factor_El_VS_theta_l_QEL_only_2p = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
-//            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
-//            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-//            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-//        } else {
-//            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
-//            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-//            //
-//            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-//            //
-//        }
-//
-//        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
-//        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
-//        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
-//        double factor_El_VS_theta_l_MEC_only_2p = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
-//            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
-//            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-//            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-//        } else {
-//            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
-//            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-//            //
-//            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-//            //
-//        }
-//
-//        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
-//        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
-//        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
-//        double factor_El_VS_theta_l_all_int_1n1p = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
-//            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
-//            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-//            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-//        } else {
-//            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
-//            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-//            //
-//            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-//            //
-//        }
-//
-//        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
-//        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
-//        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
-//        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
-//            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
-//            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-//            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-//        } else {
-//            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
-//            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-//            //
-//            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-//            //
-//        }
-//
-//        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
-//        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
-//        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
-//        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
-//            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
-//            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-//            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-//        } else {
-//            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
-//            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-//            //
-//            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-//            //
-//        }
-//
-//        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
-//        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-//        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
-//        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
-//        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//    }
+        }
+
+        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_all_int_2p);
+        fsEl_VS_theta_l_all_int_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
+        double factor_El_VS_theta_l_QEL_only_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
+            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
+            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
+            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            //
+            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
+        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
+        double factor_El_VS_theta_l_MEC_only_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
+            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
+            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
+            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            //
+            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
+        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
+        double factor_El_VS_theta_l_all_int_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
+            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
+            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
+        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
+        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
+            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
+            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
+        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
+        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
+            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
+            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
+        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //</editor-fold>
+
+    }
 
 // Energy transfer histograms (all interactions)
 // ====================================================================================================
@@ -8528,12 +8493,6 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     plots->Write();
     fout->Write();
     fout->Close();
-
-//    cout << "\n";
-//    cout << "\n";
-//    cout << "Execution ended (code version " << Ver << ").\n";
-//    cout << "File input was " << loadedInput << ".\n";
-//    cout << "Settings mode was '" << file_name << "'.\n";
 
     cout << "\n";
     cout << "\n";
