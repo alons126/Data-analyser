@@ -5355,9 +5355,10 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
         c12.addExactPid(11, 1); //exactly 1 electron
+        c12.addExactPid(2212, 1); //exactly 1 electron
 
-        c12.addAtLeastPid(2212,1);
-        c12.addAtLeastPid(2112,0);
+//        c12.addAtLeastPid(2212,1);
+//        c12.addAtLeastPid(2112,0);
 
         c12.addZeroOfRestPid(); //nothing else
 
