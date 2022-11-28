@@ -30,6 +30,7 @@ scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/h
 */
 
 void Analyser() {
+//void Analyser(int NumberOfProtons,int NumberOfNeutrons) {
 
     string AnalyserVersion = "3.1b";
 
@@ -5200,9 +5201,9 @@ void Analyser() {
     clas12reader c12(loadedInput.c_str()); //open file
 
 // 2p:
-//    c12.addExactPid(2212, 2);    //exactly 2 protons
-//    c12.addExactPid(11, 1);    //exactly 1 electron
-//    c12.addZeroOfRestPid();  //nothing else
+    c12.addExactPid(2212, 2); //exactly 2 protons
+    c12.addExactPid(11, 1); //exactly 1 electron
+    c12.addZeroOfRestPid(); //nothing else
 
 // 1n1p:
 //    c12.addExactPid(2212, 1);    //exactly 2 protons
@@ -5219,9 +5220,9 @@ void Analyser() {
 //  2p:
     while (c12.next()) { //loop over events (2p)
 
-        c12.addExactPid(2212, 2);    //exactly 2 protons
-        c12.addExactPid(11, 1);    //exactly 1 electron
-        c12.addZeroOfRestPid();  //nothing else
+//        c12.addExactPid(2212, 2);    //exactly 2 protons
+//        c12.addExactPid(11, 1);    //exactly 1 electron
+//        c12.addZeroOfRestPid();  //nothing else
 
         auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
 
@@ -5246,33 +5247,34 @@ void Analyser() {
 
 
 //  1n1p:
-    while (c12.next()) { //loop over events (1n1p)
-
-        c12.addExactPid(2212, 1);    //exactly 1 proton
-        c12.addExactPid(2112, 1);    //exactly 1 proton
-        c12.addExactPid(11, 1);    //exactly 1 electron
-        c12.addZeroOfRestPid();  //nothing else
-
-        auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
-
-        cout << "1n1p =====================================================================\n";
-
-        for (int i = 0; i < particles_1n1p.size(); i++) {
-
-            float particlePDG = particles_1n1p[i]->par()->getPid();
-            float Beta = particles_1n1p[i]->par()->getBeta();
-            float P = particles_1n1p[i]->par()->getP();
-
-            Beta_VS_P_1n1p->Fill(P, Beta);
-            P_histogram_1n1p->Fill(P);
-
-            cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-
-        }
-
-        cout << "\n";
-
-    }
+//    while (c12.next()) { //loop over events (1n1p)
+//
+//        cout << "\n";
+//        c12.addExactPid(2212, 1);    //exactly 1 proton
+//        c12.addExactPid(2112, 1);    //exactly 1 proton
+//        c12.addExactPid(11, 1);    //exactly 1 electron
+//        c12.addZeroOfRestPid();  //nothing else
+//
+//        auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
+//
+//        cout << "1n1p =====================================================================\n";
+//
+//        for (int i = 0; i < particles_1n1p.size(); i++) {
+//
+//            float particlePDG = particles_1n1p[i]->par()->getPid();
+//            float Beta = particles_1n1p[i]->par()->getBeta();
+//            float P = particles_1n1p[i]->par()->getP();
+//
+//            Beta_VS_P_1n1p->Fill(P, Beta);
+//            P_histogram_1n1p->Fill(P);
+//
+//            cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+//
+//        }
+//
+//        cout << "\n";
+//
+//    }
 
 
 //    //<editor-fold desc="Code execution">
