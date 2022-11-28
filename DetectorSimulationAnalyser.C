@@ -5450,10 +5450,10 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
 //                  NOT REALLY dtheta:
                     double d_theta_2p = acos(
-                            (particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
-                             particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
-                             particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx()) /
-                            (particles[Proton_1_ind_2p]->getP() * particles[Proton_2_ind_2p]->getP()));
+                            (particles_2p[Proton_1_ind_2p]->par()->getPx() * particles_2p[Proton_2_ind_2p]->par()->getPx() +
+                             particles_2p[Proton_1_ind_2p]->par()->getPx() * particles_2p[Proton_2_ind_2p]->par()->getPx() +
+                             particles_2p[Proton_1_ind_2p]->par()->getPx() * particles_2p[Proton_2_ind_2p]->par()->getPx()) /
+                            (particles_2p[Proton_1_ind_2p]->getP() * particles_2p[Proton_2_ind_2p]->getP()));
                     dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
 
                     //<editor-fold desc="P_L & P_R selector">
@@ -5468,8 +5468,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                         P_L_hist_2p->Fill(P_L_2p);
                         P_R_hist_2p->Fill(P_R_2p);
 
-                        double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                        double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double phi_p1 = particles_2p[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double phi_p2 = particles_2p[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
                         double d_phi_p2 = phi_p1 - phi_p2; // In radians
 
                         double theta_p1 = particles_2p[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
@@ -5497,8 +5497,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                         P_L_hist_2p->Fill(P_L_2p);
                         P_R_hist_2p->Fill(P_R_2p);
 
-                        double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                        double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double phi_p2 = particles_2p[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double phi_p1 = particles_2p[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
                         double d_phi_p2 = phi_p1 - phi_p2; // In radians
 
                         double theta_p2 = particles_2p[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
