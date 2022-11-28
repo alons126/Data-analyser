@@ -5382,8 +5382,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     //</editor-fold>
 
-    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
-    c1->SetGrid();
+//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+//    c1->SetGrid();
 
     if (NumberOfProtons == 2 && NumberOfNeutrons == 0) {
         clas12reader c12(LoadedInput.c_str()); //open file
