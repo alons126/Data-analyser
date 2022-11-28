@@ -5843,2650 +5843,2650 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 // Phi histograms
 // ====================================================================================================
 
-    if (Phi_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting Phi histograms...\n";
-        cout << "\n";
-
-//  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
-
-//      Normalization factor:
-        double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
-
-        //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
-        histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
-        histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Phi of outgoing lepton histogram (stack)">
-        PhiStack->Draw("nostack");
-        PhiStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        PhiStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto PhiStack_legend = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
-
-        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
-        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
-        PhiStack_legend->Draw();
-
-        plots->Add(PhiStack);
-        c1->SetLogy(0);
-        c1->SaveAs("plots/phi_histograms/Phi_of_lepton_stack.png");
-        c1->Clear();
-        //</editor-fold>
-
-//  Phi of nucleon 1 histogram ------------------------------------------------------------------------
-
-        //<editor-fold desc="Phi of Proton 1 histogram (2p)">
-        histPlotter1D(c1, phi_p1_2p, normalized_phi_p1_plots, true, 1., "#phi_{p1} of Scattered Proton 1", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_1", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Phi of Proton histogram (1n1p)">
-        histPlotter1D(c1, phi_p_1n1p, normalized_phi_p_plots, true, 1., "#phi_{p} of Scattered Proton", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-//  Phi of nucleon 2 histogram ------------------------------------------------------------------------
-
-        //<editor-fold desc="Phi of Proton 2 histogram (2p)">
-        histPlotter1D(c1, phi_p2_2p, normalized_phi_p2_plots, true, 1., "#phi_{p2} of Scattered Proton 2", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_2", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Phi of Neutron histogram (1n1p)">
-        histPlotter1D(c1, phi_n_1n1p, normalized_phi_p_plots, true, 1., "#phi_{n} of Scattered Neutron", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_neutron", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-//  dPhi histograms ----------------------------------------------------------------------------------
-
-        //<editor-fold desc="dPhi histogram (2p)">
-        histPlotter1D(c1, dphi_2p, normalized_dphi_2p_plots, true, 1., "#Delta#phi = #phi_{p1} - #phi_{p2} of Scattered Protons", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="dPhi histogram (1n1p)">
-        histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-    }
+//    if (Phi_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting Phi histograms...\n";
+//        cout << "\n";
+//
+////  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
+//
+////      Normalization factor:
+//        double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
+//
+//        //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
+//        histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
+//        histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Phi of outgoing lepton histogram (stack)">
+//        PhiStack->Draw("nostack");
+//        PhiStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        PhiStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto PhiStack_legend = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
+//        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
+//        PhiStack_legend->Draw();
+//
+//        plots->Add(PhiStack);
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/phi_histograms/Phi_of_lepton_stack.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+////  Phi of nucleon 1 histogram ------------------------------------------------------------------------
+//
+//        //<editor-fold desc="Phi of Proton 1 histogram (2p)">
+//        histPlotter1D(c1, phi_p1_2p, normalized_phi_p1_plots, true, 1., "#phi_{p1} of Scattered Proton 1", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_1", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Phi of Proton histogram (1n1p)">
+//        histPlotter1D(c1, phi_p_1n1p, normalized_phi_p_plots, true, 1., "#phi_{p} of Scattered Proton", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+////  Phi of nucleon 2 histogram ------------------------------------------------------------------------
+//
+//        //<editor-fold desc="Phi of Proton 2 histogram (2p)">
+//        histPlotter1D(c1, phi_p2_2p, normalized_phi_p2_plots, true, 1., "#phi_{p2} of Scattered Proton 2", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_2", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Phi of Neutron histogram (1n1p)">
+//        histPlotter1D(c1, phi_n_1n1p, normalized_phi_p_plots, true, 1., "#phi_{n} of Scattered Neutron", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_neutron", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+////  dPhi histograms ----------------------------------------------------------------------------------
+//
+//        //<editor-fold desc="dPhi histogram (2p)">
+//        histPlotter1D(c1, dphi_2p, normalized_dphi_2p_plots, true, 1., "#Delta#phi = #phi_{p1} - #phi_{p2} of Scattered Protons", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="dPhi histogram (1n1p)">
+//        histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+//    }
 
 // Energy histograms
 // ====================================================================================================
 
-    if (Energy_histogram_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy histograms...\n";
-        cout << "\n";
-
-//  El histograms --------------------------------------------------------------------------------------
-
-//      Normalization factor:
-        double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
-
-        //<editor-fold desc="El histograms (2p)">
-
-        //<editor-fold desc="El histograms (all interactions, 2p)">
-        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (QEL only, 2p)">
-        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (MEC only, 2p)">
-        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (RES only, 2p)">
-        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (DIS, 2p)">
-        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (1n1p)">
-
-        //<editor-fold desc="El histograms (all interaction, 1n1p)">
-        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (QEL only, 1n1p)">
-        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (MEC only, 1n1p)">
-        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (RES only, 1n1p)">
-        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (DIS, 1n1p)">
-        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="El histograms (all interactions, stack)">
-        EnergyStack->Draw("nostack");
-        EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_E_l_plots) {
-            EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
-            EnergyStack->GetYaxis()->SetTitle("Probability (%)");
-            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
-            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
-
-        auto EnergyStack_legend = new
-                TLegend(0.75, 0.775, 0.875, 0.9);
-
-        TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
-        TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
-        EnergyStack_legend->Draw();
-
-        plots->Add(EnergyStack);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
-        c1->Clear();
-        //</editor-fold>
-
-//  Final State E_{l} vs #theta_{l} histogram ---------------------------------------------------------
-
-        double set_Max_z = 4000;;
-//        double set_Max_z = 1.5;
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
-        double factor_El_VS_theta_l_all_int_2p = 1.;
-
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
-            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
-            fsEl_VS_theta_l_all_int_2p->Draw("colz");
-            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
-        } else {
-            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
-            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+//    if (Energy_histogram_plots) {
 //
-            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy histograms...\n";
+//        cout << "\n";
 //
-        }
-
-        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_all_int_2p);
-        fsEl_VS_theta_l_all_int_2p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
-        double factor_El_VS_theta_l_QEL_only_2p = 1.;
-
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
-            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
-            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-        } else {
-            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
-            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-            //
-            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-            //
-        }
-
-        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
-        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
-        double factor_El_VS_theta_l_MEC_only_2p = 1.;
-
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
-            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
-            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-        } else {
-            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
-            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-            //
-            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-            //
-        }
-
-        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
-        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
-        double factor_El_VS_theta_l_all_int_1n1p = 1.;
-
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
-            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
-            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-        } else {
-            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
-            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-            //
-            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-            //
-        }
-
-        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
-        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
-        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
-
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
-            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
-            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-        } else {
-            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
-            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-            //
-            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-            //
-        }
-
-        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
-        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
-        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
-
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
-            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
-            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-        } else {
-            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
-            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-            //
-            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-            //
-        }
-
-        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
-        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //</editor-fold>
-
-    }
+////  El histograms --------------------------------------------------------------------------------------
+//
+////      Normalization factor:
+//        double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
+//
+//        //<editor-fold desc="El histograms (2p)">
+//
+//        //<editor-fold desc="El histograms (all interactions, 2p)">
+//        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (QEL only, 2p)">
+//        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (MEC only, 2p)">
+//        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (RES only, 2p)">
+//        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (DIS, 2p)">
+//        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (1n1p)">
+//
+//        //<editor-fold desc="El histograms (all interaction, 1n1p)">
+//        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (QEL only, 1n1p)">
+//        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (MEC only, 1n1p)">
+//        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (RES only, 1n1p)">
+//        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (DIS, 1n1p)">
+//        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="El histograms (all interactions, stack)">
+//        EnergyStack->Draw("nostack");
+//        EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_l_plots) {
+//            EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
+//            EnergyStack->GetYaxis()->SetTitle("Probability (%)");
+//            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
+//            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//        auto EnergyStack_legend = new
+//                TLegend(0.75, 0.775, 0.875, 0.9);
+//
+//        TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
+//        TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
+//        EnergyStack_legend->Draw();
+//
+//        plots->Add(EnergyStack);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+////  Final State E_{l} vs #theta_{l} histogram ---------------------------------------------------------
+//
+//        double set_Max_z = 4000;;
+////        double set_Max_z = 1.5;
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
+//        double factor_El_VS_theta_l_all_int_2p = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
+//            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
+//            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+//            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+//        } else {
+//            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
+//            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+////
+//            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+////
+//        }
+//
+//        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
+//        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(fsEl_VS_theta_l_all_int_2p);
+//        fsEl_VS_theta_l_all_int_2p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
+//        double factor_El_VS_theta_l_QEL_only_2p = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
+//            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
+//            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+//            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+//        } else {
+//            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
+//            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+//            //
+//            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+//            //
+//        }
+//
+//        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
+//        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
+//        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
+//        double factor_El_VS_theta_l_MEC_only_2p = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
+//            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
+//            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+//            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+//        } else {
+//            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
+//            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+//            //
+//            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+//            //
+//        }
+//
+//        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
+//        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
+//        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
+//        double factor_El_VS_theta_l_all_int_1n1p = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
+//            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
+//            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+//            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+//        } else {
+//            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
+//            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+//            //
+//            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+//            //
+//        }
+//
+//        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
+//        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
+//        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
+//        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
+//            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
+//            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+//            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+//        } else {
+//            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
+//            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+//            //
+//            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+//            //
+//        }
+//
+//        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
+//        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
+//        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
+//        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
+//            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
+//            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+//            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+//        } else {
+//            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
+//            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+//            //
+//            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+//            //
+//        }
+//
+//        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
+//        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+//        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
+//        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
+//        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//    }
 
 // Energy transfer histograms (all interactions)
 // ====================================================================================================
 
-    //<editor-fold desc="Energy transfer histograms (all interactions) - normalization factors">
+//    //<editor-fold desc="Energy transfer histograms (all interactions) - normalization factors">
+//
+////  Normalization factors:
+//
+//    double E_Trans15_all_integral_2p = E_Trans15_all_2p->Integral(); // MOVE TO OTHER PLACE
+//    double E_Trans15_all_integral_1n1p = E_Trans15_all_1n1p->Integral(); // MOVE TO OTHER PLACE
+//
+//    double E_Trans15_QEL_integral_2p = E_Trans15_QEL_2p->Integral(); // MOVE TO OTHER PLACE
+//    double E_Trans15_QEL_integral_1n1p = E_Trans15_QEL_1n1p->Integral(); // MOVE TO OTHER PLACE
+//
+//    double E_Trans15_MEC_integral_2p = E_Trans15_MEC_2p->Integral(); // MOVE TO OTHER PLACE
+//    double E_Trans15_MEC_integral_1n1p = E_Trans15_MEC_1n1p->Integral(); // MOVE TO OTHER PLACE
+//
+//    double E_Trans15_RES_integral_2p = E_Trans15_RES_2p->Integral(); // MOVE TO OTHER PLACE
+//    double E_Trans15_RES_integral_1n1p = E_Trans15_RES_1n1p->Integral(); // MOVE TO OTHER PLACE
+//
+//    double E_Trans15_DIS_integral_2p = E_Trans15_DIS_2p->Integral(); // MOVE TO OTHER PLACE
+//    double E_Trans15_DIS_integral_1n1p = E_Trans15_DIS_1n1p->Integral(); // MOVE TO OTHER PLACE
+//    //</editor-fold>
 
-//  Normalization factors:
-
-    double E_Trans15_all_integral_2p = E_Trans15_all_2p->Integral(); // MOVE TO OTHER PLACE
-    double E_Trans15_all_integral_1n1p = E_Trans15_all_1n1p->Integral(); // MOVE TO OTHER PLACE
-
-    double E_Trans15_QEL_integral_2p = E_Trans15_QEL_2p->Integral(); // MOVE TO OTHER PLACE
-    double E_Trans15_QEL_integral_1n1p = E_Trans15_QEL_1n1p->Integral(); // MOVE TO OTHER PLACE
-
-    double E_Trans15_MEC_integral_2p = E_Trans15_MEC_2p->Integral(); // MOVE TO OTHER PLACE
-    double E_Trans15_MEC_integral_1n1p = E_Trans15_MEC_1n1p->Integral(); // MOVE TO OTHER PLACE
-
-    double E_Trans15_RES_integral_2p = E_Trans15_RES_2p->Integral(); // MOVE TO OTHER PLACE
-    double E_Trans15_RES_integral_1n1p = E_Trans15_RES_1n1p->Integral(); // MOVE TO OTHER PLACE
-
-    double E_Trans15_DIS_integral_2p = E_Trans15_DIS_2p->Integral(); // MOVE TO OTHER PLACE
-    double E_Trans15_DIS_integral_1n1p = E_Trans15_DIS_1n1p->Integral(); // MOVE TO OTHER PLACE
-    //</editor-fold>
-
-    if (ET_all_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy transfer histograms (all interactions)...\n";
-        cout << "\n";
-
-//  Energy transfer (Ev-El) for every theta_{l} --------------------------------------------------------
-
-        //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (2p)">
-        histPlotter1D(c1, E_Trans_all_ang_all_int_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
-                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_2p,
-                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "2p", kBlack,
-                      true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (1n1p)">
-        histPlotter1D(c1, E_Trans_all_ang_all_int_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
-                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_1n1p,
-                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "1n1p", kBlack,
-                      true, false, true);
-        //</editor-fold>
-
-
-//  Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions) ------
-
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_all_2p->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 2p) - Normalized");
-            E_Trans15_all_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            E_Trans15_all_2p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_all_2p->Scale(100. / E_Trans15_all_integral_2p, "nosw2");
-            E_Trans15_all_2p->Draw();
-        } else {
-            E_Trans15_all_2p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_all_2p->Draw();
-        }
-
-//        E_Trans15_all_2p->Draw();
-        plots->Add(E_Trans15_all_2p);
-        E_Trans15_all_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_normal_scale_2p.png");
-        E_Trans15_all_2p->SetStats(0);
-        E_Trans15_all_2p->SetLineColor(kBlack);
-        E_Trans15_all_2p->SetLineWidth(4);
-        E_Trans15_all_2p->SetLineStyle(5);
-        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_all_2p);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions, 1n1p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_all_1n1p->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 1n1p) - Normalized");
-            E_Trans15_all_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            E_Trans15_all_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_all_1n1p->Scale(100. / E_Trans15_all_integral_1n1p, "nosw2");
-            E_Trans15_all_1n1p->Draw();
-        } else {
-            E_Trans15_all_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_all_1n1p->Draw();
-        }
-
-//        E_Trans15_all_1n1p->Draw();
-        plots->Add(E_Trans15_all_1n1p);
-        E_Trans15_all_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_normal_scale_1n1p.png");
-        E_Trans15_all_1n1p->SetStats(0);
-        E_Trans15_all_1n1p->SetLineColor(kBlack);
-        E_Trans15_all_1n1p->SetLineWidth(4);
-        E_Trans15_all_1n1p->SetLineStyle(5);
-        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_all_1n1p);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions) --------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 2p)">
-        E_Trans45_all_2p->Draw();
-        plots->Add(E_Trans45_all_2p);
-        E_Trans45_all_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_normal_scale_2p.png");
-        E_Trans45_all_2p->SetLineColor(kRed);
-        E_Trans45_all_2p->SetLineColor(kViolet - 3);
-        E_Trans45_all_2p->SetStats(0);
-        E_Trans45_all_2p->SetLineColor(kBlack);
-        E_Trans45_all_2p->SetLineWidth(3);
-        E_Trans45_all_2p->SetLineStyle(4);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 1n1p)">
-        E_Trans45_all_1n1p->Draw();
-        plots->Add(E_Trans45_all_1n1p);
-        E_Trans45_all_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_normal_scale_1n1p.png");
-        E_Trans45_all_1n1p->SetLineColor(kRed);
-        E_Trans45_all_1n1p->SetStats(0);
-        E_Trans45_all_1n1p->SetLineColor(kBlack);
-        E_Trans45_all_1n1p->SetLineWidth(3);
-        E_Trans45_all_1n1p->SetLineStyle(4);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions) --------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 2p)">
-        E_Trans90_all_2p->Draw();
-        plots->Add(E_Trans90_all_2p);
-        E_Trans90_all_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_normal_scale_2p.png");
-        E_Trans90_all_2p->SetLineColor(kGreen);
-        E_Trans90_all_2p->SetStats(0);
-        E_Trans90_all_2p->SetLineColor(kBlack);
-        E_Trans90_all_2p->SetLineWidth(3);
-        E_Trans90_all_2p->SetLineStyle(6);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 1n1p)">
-        E_Trans90_all_1n1p->Draw();
-        plots->Add(E_Trans90_all_1n1p);
-        E_Trans90_all_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs(
-                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_normal_scale_1n1p.png");
-        E_Trans90_all_1n1p->SetLineColor(kGreen);
-        E_Trans90_all_1n1p->SetStats(0);
-        E_Trans90_all_1n1p->SetLineColor(kBlack);
-        E_Trans90_all_1n1p->SetLineWidth(3);
-        E_Trans90_all_1n1p->SetLineStyle(6);
-        c1->Clear();
-        //</editor-fold>
-
-
-// Energy transfer Ev-El stack (all interactions) -----------------------------------------------------
-
-//        E_Trans15_all_2p->SetLineStyle(1);
-//        E_Trans45_all_2p->SetLineStyle(1);
-//        E_Trans90_all_2p->SetLineStyle(1);
-
-////        TO COMMENT LATER:
-//        E_Trans15_all_1n1p->SetLineStyle(1);
-//        E_Trans45_all_1n1p->SetLineStyle(1);
-//        E_Trans90_all_1n1p->SetLineStyle(1);
-
-    }
+//    if (ET_all_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy transfer histograms (all interactions)...\n";
+//        cout << "\n";
+//
+////  Energy transfer (Ev-El) for every theta_{l} --------------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (2p)">
+//        histPlotter1D(c1, E_Trans_all_ang_all_int_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
+//                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_2p,
+//                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "2p", kBlack,
+//                      true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (1n1p)">
+//        histPlotter1D(c1, E_Trans_all_ang_all_int_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
+//                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_1n1p,
+//                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "1n1p", kBlack,
+//                      true, false, true);
+//        //</editor-fold>
+//
+//
+////  Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions) ------
+//
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_all_2p->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 2p) - Normalized");
+//            E_Trans15_all_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            E_Trans15_all_2p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_all_2p->Scale(100. / E_Trans15_all_integral_2p, "nosw2");
+//            E_Trans15_all_2p->Draw();
+//        } else {
+//            E_Trans15_all_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_all_2p->Draw();
+//        }
+//
+////        E_Trans15_all_2p->Draw();
+//        plots->Add(E_Trans15_all_2p);
+//        E_Trans15_all_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_normal_scale_2p.png");
+//        E_Trans15_all_2p->SetStats(0);
+//        E_Trans15_all_2p->SetLineColor(kBlack);
+//        E_Trans15_all_2p->SetLineWidth(4);
+//        E_Trans15_all_2p->SetLineStyle(5);
+//        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_all_2p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions, 1n1p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_all_1n1p->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 1n1p) - Normalized");
+//            E_Trans15_all_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            E_Trans15_all_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_all_1n1p->Scale(100. / E_Trans15_all_integral_1n1p, "nosw2");
+//            E_Trans15_all_1n1p->Draw();
+//        } else {
+//            E_Trans15_all_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_all_1n1p->Draw();
+//        }
+//
+////        E_Trans15_all_1n1p->Draw();
+//        plots->Add(E_Trans15_all_1n1p);
+//        E_Trans15_all_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_normal_scale_1n1p.png");
+//        E_Trans15_all_1n1p->SetStats(0);
+//        E_Trans15_all_1n1p->SetLineColor(kBlack);
+//        E_Trans15_all_1n1p->SetLineWidth(4);
+//        E_Trans15_all_1n1p->SetLineStyle(5);
+//        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_all_1n1p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions) --------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 2p)">
+//        E_Trans45_all_2p->Draw();
+//        plots->Add(E_Trans45_all_2p);
+//        E_Trans45_all_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_normal_scale_2p.png");
+//        E_Trans45_all_2p->SetLineColor(kRed);
+//        E_Trans45_all_2p->SetLineColor(kViolet - 3);
+//        E_Trans45_all_2p->SetStats(0);
+//        E_Trans45_all_2p->SetLineColor(kBlack);
+//        E_Trans45_all_2p->SetLineWidth(3);
+//        E_Trans45_all_2p->SetLineStyle(4);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 1n1p)">
+//        E_Trans45_all_1n1p->Draw();
+//        plots->Add(E_Trans45_all_1n1p);
+//        E_Trans45_all_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_normal_scale_1n1p.png");
+//        E_Trans45_all_1n1p->SetLineColor(kRed);
+//        E_Trans45_all_1n1p->SetStats(0);
+//        E_Trans45_all_1n1p->SetLineColor(kBlack);
+//        E_Trans45_all_1n1p->SetLineWidth(3);
+//        E_Trans45_all_1n1p->SetLineStyle(4);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions) --------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 2p)">
+//        E_Trans90_all_2p->Draw();
+//        plots->Add(E_Trans90_all_2p);
+//        E_Trans90_all_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_normal_scale_2p.png");
+//        E_Trans90_all_2p->SetLineColor(kGreen);
+//        E_Trans90_all_2p->SetStats(0);
+//        E_Trans90_all_2p->SetLineColor(kBlack);
+//        E_Trans90_all_2p->SetLineWidth(3);
+//        E_Trans90_all_2p->SetLineStyle(6);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 1n1p)">
+//        E_Trans90_all_1n1p->Draw();
+//        plots->Add(E_Trans90_all_1n1p);
+//        E_Trans90_all_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs(
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_normal_scale_1n1p.png");
+//        E_Trans90_all_1n1p->SetLineColor(kGreen);
+//        E_Trans90_all_1n1p->SetStats(0);
+//        E_Trans90_all_1n1p->SetLineColor(kBlack);
+//        E_Trans90_all_1n1p->SetLineWidth(3);
+//        E_Trans90_all_1n1p->SetLineStyle(6);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+//// Energy transfer Ev-El stack (all interactions) -----------------------------------------------------
+//
+////        E_Trans15_all_2p->SetLineStyle(1);
+////        E_Trans45_all_2p->SetLineStyle(1);
+////        E_Trans90_all_2p->SetLineStyle(1);
+//
+//////        TO COMMENT LATER:
+////        E_Trans15_all_1n1p->SetLineStyle(1);
+////        E_Trans45_all_1n1p->SetLineStyle(1);
+////        E_Trans90_all_1n1p->SetLineStyle(1);
+//
+//    }
 
 // Energy transfer histograms (QEL only)
 // ====================================================================================================
 
-    if (ET_QEL_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy transfer histograms (QEL only)...\n";
-        cout << "\n";
-
-//  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 2p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_QEL_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 2p) - Normalized");
-            E_Trans15_QEL_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            E_Trans15_QEL_2p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_QEL_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
-            E_Trans15_QEL_2p->Draw();
-        } else {
-            E_Trans15_QEL_2p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_QEL_2p->Draw();
-        }
-
-//        E_Trans15_QEL_2p->Draw();
-        plots->Add(E_Trans15_QEL_2p);
-        E_Trans15_QEL_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_normal_scale_2p.png");
-        E_Trans15_QEL_2p->SetLineColor(kBlue);
-        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans15_QEL_2p);
-        E_Trans15_QEL_2p->SetStats(0);
-        E_Trans15_QEL_2p->SetLineColor(kAzure + 10);
-        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_QEL_2p);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 1n1p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_QEL_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 1n1p) - Normalized");
-            E_Trans15_QEL_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_QEL_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
-            E_Trans15_QEL_1n1p->Draw();
-        } else {
-            E_Trans15_QEL_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_QEL_1n1p->Draw();
-        }
-
-//        E_Trans15_QEL_1n1p->Draw();
-        plots->Add(E_Trans15_QEL_1n1p);
-        E_Trans15_QEL_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_normal_scale_1n1p.png");
-        E_Trans15_QEL_1n1p->SetLineColor(kBlue);
-        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans15_QEL_1n1p);
-        E_Trans15_QEL_1n1p->SetStats(0);
-        E_Trans15_QEL_1n1p->SetLineColor(kAzure + 10);
-//        E_Trans15_QEL_1n1p->SetLineStyle(2);
-        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_QEL_1n1p);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 2p)">
-        E_Trans45_QEL_2p->Draw();
-        plots->Add(E_Trans45_QEL_2p);
-        E_Trans45_QEL_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_normal_scale_2p.png");
-        E_Trans45_QEL_2p->SetLineColor(kRed);
-        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans45_QEL_2p);
-        E_Trans45_QEL_2p->SetStats(0);
-        E_Trans45_QEL_2p->SetLineColor(kAzure + 10);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 1n1p)">
-        E_Trans45_QEL_1n1p->Draw();
-        plots->Add(E_Trans45_QEL_1n1p);
-        E_Trans45_QEL_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_normal_scale_1n1p.png");
-        E_Trans45_QEL_1n1p->SetLineColor(kRed);
-        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans45_QEL_1n1p);
-        E_Trans45_QEL_1n1p->SetStats(0);
-        E_Trans45_QEL_1n1p->SetLineColor(kAzure + 10);
-        E_Trans45_QEL_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 2p)">
-        E_Trans90_QEL_2p->Draw();
-        plots->Add(E_Trans90_QEL_2p);
-        E_Trans90_QEL_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_normal_scale_2p.png");
-        E_Trans90_QEL_2p->SetLineColor(kGreen);
-        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans90_QEL_2p);
-        E_Trans90_QEL_2p->SetStats(0);
-        E_Trans90_QEL_2p->SetLineColor(kAzure + 10);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 1n1p)">
-        E_Trans90_QEL_1n1p->Draw();
-        plots->Add(E_Trans90_QEL_1n1p);
-        E_Trans90_QEL_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_normal_scale_1n1p.png");
-        E_Trans90_QEL_1n1p->SetLineColor(kGreen);
-        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans90_QEL_1n1p);
-        E_Trans90_QEL_1n1p->SetStats(0);
-        E_Trans90_QEL_1n1p->SetLineColor(kAzure + 10);
-        E_Trans90_QEL_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El stack of angles (QEL only) -------------------------------------------------------------
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (QEL only, 2p)">
-        Energy_Transfer_QEL_Int_Stack_2p->Draw("nostack");
-        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_QEL_int_2p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_QEL_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans15_QEL_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans45_QEL_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans90_QEL_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-        E_Trans_legend_QEL_int_2p->Draw();
-
-        plots->Add(Energy_Transfer_QEL_Int_Stack_2p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (QEL only, 1n1p)">
-        Energy_Transfer_QEL_Int_Stack_1n1p->Draw("nostack");
-        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_QEL_int_1n1p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_QEL_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans15_QEL_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans45_QEL_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans90_QEL_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-        E_Trans_legend_QEL_int_1n1p->Draw();
-
-        plots->Add(Energy_Transfer_QEL_Int_Stack_1n1p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (ET_QEL_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy transfer histograms (QEL only)...\n";
+//        cout << "\n";
+//
+////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 2p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_QEL_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 2p) - Normalized");
+//            E_Trans15_QEL_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            E_Trans15_QEL_2p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_QEL_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
+//            E_Trans15_QEL_2p->Draw();
+//        } else {
+//            E_Trans15_QEL_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_QEL_2p->Draw();
+//        }
+//
+////        E_Trans15_QEL_2p->Draw();
+//        plots->Add(E_Trans15_QEL_2p);
+//        E_Trans15_QEL_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_normal_scale_2p.png");
+//        E_Trans15_QEL_2p->SetLineColor(kBlue);
+//        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans15_QEL_2p);
+//        E_Trans15_QEL_2p->SetStats(0);
+//        E_Trans15_QEL_2p->SetLineColor(kAzure + 10);
+//        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_QEL_2p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 1n1p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_QEL_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 1n1p) - Normalized");
+//            E_Trans15_QEL_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_QEL_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
+//            E_Trans15_QEL_1n1p->Draw();
+//        } else {
+//            E_Trans15_QEL_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_QEL_1n1p->Draw();
+//        }
+//
+////        E_Trans15_QEL_1n1p->Draw();
+//        plots->Add(E_Trans15_QEL_1n1p);
+//        E_Trans15_QEL_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_normal_scale_1n1p.png");
+//        E_Trans15_QEL_1n1p->SetLineColor(kBlue);
+//        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans15_QEL_1n1p);
+//        E_Trans15_QEL_1n1p->SetStats(0);
+//        E_Trans15_QEL_1n1p->SetLineColor(kAzure + 10);
+////        E_Trans15_QEL_1n1p->SetLineStyle(2);
+//        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_QEL_1n1p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 2p)">
+//        E_Trans45_QEL_2p->Draw();
+//        plots->Add(E_Trans45_QEL_2p);
+//        E_Trans45_QEL_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_normal_scale_2p.png");
+//        E_Trans45_QEL_2p->SetLineColor(kRed);
+//        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans45_QEL_2p);
+//        E_Trans45_QEL_2p->SetStats(0);
+//        E_Trans45_QEL_2p->SetLineColor(kAzure + 10);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 1n1p)">
+//        E_Trans45_QEL_1n1p->Draw();
+//        plots->Add(E_Trans45_QEL_1n1p);
+//        E_Trans45_QEL_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_normal_scale_1n1p.png");
+//        E_Trans45_QEL_1n1p->SetLineColor(kRed);
+//        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans45_QEL_1n1p);
+//        E_Trans45_QEL_1n1p->SetStats(0);
+//        E_Trans45_QEL_1n1p->SetLineColor(kAzure + 10);
+//        E_Trans45_QEL_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 2p)">
+//        E_Trans90_QEL_2p->Draw();
+//        plots->Add(E_Trans90_QEL_2p);
+//        E_Trans90_QEL_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_normal_scale_2p.png");
+//        E_Trans90_QEL_2p->SetLineColor(kGreen);
+//        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans90_QEL_2p);
+//        E_Trans90_QEL_2p->SetStats(0);
+//        E_Trans90_QEL_2p->SetLineColor(kAzure + 10);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 1n1p)">
+//        E_Trans90_QEL_1n1p->Draw();
+//        plots->Add(E_Trans90_QEL_1n1p);
+//        E_Trans90_QEL_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_normal_scale_1n1p.png");
+//        E_Trans90_QEL_1n1p->SetLineColor(kGreen);
+//        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans90_QEL_1n1p);
+//        E_Trans90_QEL_1n1p->SetStats(0);
+//        E_Trans90_QEL_1n1p->SetLineColor(kAzure + 10);
+//        E_Trans90_QEL_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El stack of angles (QEL only) -------------------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (QEL only, 2p)">
+//        Energy_Transfer_QEL_Int_Stack_2p->Draw("nostack");
+//        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_QEL_int_2p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_QEL_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans15_QEL_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans45_QEL_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans90_QEL_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//        E_Trans_legend_QEL_int_2p->Draw();
+//
+//        plots->Add(Energy_Transfer_QEL_Int_Stack_2p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (QEL only, 1n1p)">
+//        Energy_Transfer_QEL_Int_Stack_1n1p->Draw("nostack");
+//        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_QEL_int_1n1p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_QEL_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans15_QEL_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans45_QEL_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans90_QEL_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//        E_Trans_legend_QEL_int_1n1p->Draw();
+//
+//        plots->Add(Energy_Transfer_QEL_Int_Stack_1n1p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // Energy transfer histograms (MEC only)
 // ====================================================================================================
 
-    if (ET_MEC_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy transfer histograms (MEC only)...\n";
-        cout << "\n";
-
-//  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only) ------------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 2p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_MEC_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 2p) - Normalized");
-            E_Trans15_MEC_2p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_MEC_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
-            E_Trans15_MEC_2p->Draw();
-        } else {
-            E_Trans15_MEC_2p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_MEC_2p->Draw();
-        }
-
-//        E_Trans15_MEC_2p->Draw();
-        plots->Add(E_Trans15_MEC_2p);
-        E_Trans15_MEC_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_normal_scale_2p.png");
-        E_Trans15_MEC_2p->SetLineColor(kBlue);
-        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans15_MEC_2p);
-        E_Trans15_MEC_2p->SetStats(0);
-        E_Trans15_MEC_2p->SetLineColor(kOrange + 10);
-        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_MEC_2p);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 1n1p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_MEC_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 1n1p) - Normalized");
-            E_Trans15_MEC_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            E_Trans15_MEC_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_MEC_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
-            E_Trans15_MEC_1n1p->Draw();
-        } else {
-            E_Trans15_MEC_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_MEC_1n1p->Draw();
-        }
-
+//    if (ET_MEC_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy transfer histograms (MEC only)...\n";
+//        cout << "\n";
+//
+////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only) ------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 2p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_MEC_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 2p) - Normalized");
+//            E_Trans15_MEC_2p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_MEC_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
+//            E_Trans15_MEC_2p->Draw();
+//        } else {
+//            E_Trans15_MEC_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_MEC_2p->Draw();
+//        }
+//
+////        E_Trans15_MEC_2p->Draw();
+//        plots->Add(E_Trans15_MEC_2p);
+//        E_Trans15_MEC_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_normal_scale_2p.png");
+//        E_Trans15_MEC_2p->SetLineColor(kBlue);
+//        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans15_MEC_2p);
+//        E_Trans15_MEC_2p->SetStats(0);
+//        E_Trans15_MEC_2p->SetLineColor(kOrange + 10);
+//        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_MEC_2p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 1n1p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_MEC_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 1n1p) - Normalized");
+//            E_Trans15_MEC_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            E_Trans15_MEC_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_MEC_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
+//            E_Trans15_MEC_1n1p->Draw();
+//        } else {
+//            E_Trans15_MEC_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_MEC_1n1p->Draw();
+//        }
+//
+////        E_Trans15_MEC_1n1p->Draw();
+//        plots->Add(E_Trans15_MEC_1n1p);
+//        E_Trans15_MEC_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_normal_scale_1n1p.png");
+//        E_Trans15_MEC_1n1p->SetLineColor(kBlue);
+//        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans15_MEC_1n1p);
+//        E_Trans15_MEC_1n1p->SetStats(0);
+//        E_Trans15_MEC_1n1p->SetLineColor(kOrange + 10);
+////        E_Trans15_MEC_1n1p->SetLineStyle(2);
+//        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_MEC_1n1p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only) ------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 2p)">
+//        E_Trans45_MEC_2p->Draw();
+//        plots->Add(E_Trans45_MEC_2p);
+//        E_Trans45_MEC_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_normal_scale_2p.png");
+//        E_Trans45_MEC_2p->SetLineColor(kRed);
+//        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans45_MEC_2p);
+//        E_Trans45_MEC_2p->SetStats(0);
+//        E_Trans45_MEC_2p->SetLineColor(kOrange + 10);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 1n1p)">
 //        E_Trans15_MEC_1n1p->Draw();
-        plots->Add(E_Trans15_MEC_1n1p);
-        E_Trans15_MEC_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_normal_scale_1n1p.png");
-        E_Trans15_MEC_1n1p->SetLineColor(kBlue);
-        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans15_MEC_1n1p);
-        E_Trans15_MEC_1n1p->SetStats(0);
-        E_Trans15_MEC_1n1p->SetLineColor(kOrange + 10);
-//        E_Trans15_MEC_1n1p->SetLineStyle(2);
-        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_MEC_1n1p);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only) ------------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 2p)">
-        E_Trans45_MEC_2p->Draw();
-        plots->Add(E_Trans45_MEC_2p);
-        E_Trans45_MEC_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_normal_scale_2p.png");
-        E_Trans45_MEC_2p->SetLineColor(kRed);
-        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans45_MEC_2p);
-        E_Trans45_MEC_2p->SetStats(0);
-        E_Trans45_MEC_2p->SetLineColor(kOrange + 10);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 1n1p)">
-        E_Trans15_MEC_1n1p->Draw();
-        plots->Add(E_Trans15_MEC_1n1p);
-        E_Trans15_MEC_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_normal_scale_1n1p.png");
-        E_Trans45_MEC_1n1p->SetLineColor(kRed);
-        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans45_MEC_1n1p);
-        E_Trans45_MEC_1n1p->SetStats(0);
-        E_Trans45_MEC_1n1p->SetLineColor(kOrange + 10);
-        E_Trans45_MEC_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only) ------------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 2p)">
-        E_Trans90_MEC_2p->Draw();
-        plots->Add(E_Trans90_MEC_2p);
-        E_Trans90_MEC_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_normal_scale_2p.png");
-        E_Trans90_MEC_2p->SetLineColor(kGreen);
-        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans90_MEC_2p);
-        E_Trans90_MEC_2p->SetStats(0);
-        E_Trans90_MEC_2p->SetLineColor(kOrange + 10);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 1n1p)">
-        E_Trans90_MEC_1n1p->Draw();
-        plots->Add(E_Trans90_MEC_1n1p);
-        E_Trans90_MEC_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_normal_scale_1n1p.png");
-        E_Trans90_MEC_1n1p->SetLineColor(kGreen);
-        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans90_MEC_1n1p);
-        E_Trans90_MEC_1n1p->SetStats(0);
-        E_Trans90_MEC_1n1p->SetLineColor(kOrange + 10);
-        E_Trans90_MEC_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El stack of angles (MEC only) -------------------------------------------------------------
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (MEC only, 2p)">
-        Energy_Transfer_MEC_Int_Stack_2p->Draw("nostack");
-        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_MEC_int_2p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_MEC_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans15_MEC_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans45_MEC_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans90_MEC_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-
-        E_Trans_legend_MEC_int_2p->Draw();
-
-        plots->Add(Energy_Transfer_MEC_Int_Stack_2p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (MEC only, 1n1p)">
-        Energy_Transfer_MEC_Int_Stack_1n1p->Draw("nostack");
-        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_MEC_int_1n1p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_MEC_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans15_MEC_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans45_MEC_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans90_MEC_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-
-        E_Trans_legend_MEC_int_1n1p->Draw();
-
-        plots->Add(Energy_Transfer_MEC_Int_Stack_1n1p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_log_scale_1n1p_1111.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//        plots->Add(E_Trans15_MEC_1n1p);
+//        E_Trans15_MEC_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_normal_scale_1n1p.png");
+//        E_Trans45_MEC_1n1p->SetLineColor(kRed);
+//        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans45_MEC_1n1p);
+//        E_Trans45_MEC_1n1p->SetStats(0);
+//        E_Trans45_MEC_1n1p->SetLineColor(kOrange + 10);
+//        E_Trans45_MEC_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only) ------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 2p)">
+//        E_Trans90_MEC_2p->Draw();
+//        plots->Add(E_Trans90_MEC_2p);
+//        E_Trans90_MEC_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_normal_scale_2p.png");
+//        E_Trans90_MEC_2p->SetLineColor(kGreen);
+//        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans90_MEC_2p);
+//        E_Trans90_MEC_2p->SetStats(0);
+//        E_Trans90_MEC_2p->SetLineColor(kOrange + 10);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 1n1p)">
+//        E_Trans90_MEC_1n1p->Draw();
+//        plots->Add(E_Trans90_MEC_1n1p);
+//        E_Trans90_MEC_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_normal_scale_1n1p.png");
+//        E_Trans90_MEC_1n1p->SetLineColor(kGreen);
+//        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans90_MEC_1n1p);
+//        E_Trans90_MEC_1n1p->SetStats(0);
+//        E_Trans90_MEC_1n1p->SetLineColor(kOrange + 10);
+//        E_Trans90_MEC_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El stack of angles (MEC only) -------------------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (MEC only, 2p)">
+//        Energy_Transfer_MEC_Int_Stack_2p->Draw("nostack");
+//        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_MEC_int_2p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_MEC_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans15_MEC_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans45_MEC_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans90_MEC_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//
+//        E_Trans_legend_MEC_int_2p->Draw();
+//
+//        plots->Add(Energy_Transfer_MEC_Int_Stack_2p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (MEC only, 1n1p)">
+//        Energy_Transfer_MEC_Int_Stack_1n1p->Draw("nostack");
+//        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_MEC_int_1n1p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_MEC_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans15_MEC_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans45_MEC_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans90_MEC_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//
+//        E_Trans_legend_MEC_int_1n1p->Draw();
+//
+//        plots->Add(Energy_Transfer_MEC_Int_Stack_1n1p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_log_scale_1n1p_1111.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // Energy transfer histograms (RES only)
 // ====================================================================================================
 
-    if (ET_RES_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy transfer histograms (RES only)...\n";
-        cout << "\n";
-
-//  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 2p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_RES_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 2p) - Normalized");
-            E_Trans15_RES_2p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_RES_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
-            E_Trans15_RES_2p->Draw();
-        } else {
-            E_Trans15_RES_2p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_RES_2p->Draw();
-        }
-
-//        E_Trans15_RES_2p->Draw();
-        plots->Add(E_Trans15_RES_2p);
-        E_Trans15_RES_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_normal_scale_2p.png");
-        E_Trans15_RES_2p->SetLineColor(kBlue);
-        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans15_RES_2p);
-        E_Trans15_RES_2p->SetStats(0);
-        E_Trans15_RES_2p->SetLineColor(kGreen);
-        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_RES_2p);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 1n1p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_RES_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 1n1p) - Normalized");
-            E_Trans15_RES_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            E_Trans15_RES_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_RES_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
-            E_Trans15_RES_1n1p->Draw();
-        } else {
-            E_Trans15_RES_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_RES_1n1p->Draw();
-        }
-
-//        E_Trans15_RES_1n1p->Draw();
-        plots->Add(E_Trans15_RES_1n1p);
-        E_Trans15_RES_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_normal_scale_1n1p.png");
-        E_Trans15_RES_1n1p->SetLineColor(kBlue);
-        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans15_RES_1n1p);
-        E_Trans15_RES_1n1p->SetStats(0);
-        E_Trans15_RES_1n1p->SetLineColor(kGreen);
-//        E_Trans15_RES_1n1p->SetLineStyle(2);
-        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_RES_1n1p);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 2p)">
-        E_Trans45_RES_2p->Draw();
-        plots->Add(E_Trans45_RES_2p);
-        E_Trans45_RES_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_normal_scale_2p.png");
-        E_Trans45_RES_2p->SetLineColor(kRed);
-        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans45_RES_2p);
-        E_Trans45_RES_2p->SetStats(0);
-        E_Trans45_RES_2p->SetLineColor(kGreen);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 1n1p)">
-        E_Trans45_RES_1n1p->Draw();
-        plots->Add(E_Trans45_RES_1n1p);
-        E_Trans45_RES_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_normal_scale_1n1p.png");
-        E_Trans45_RES_1n1p->SetLineColor(kRed);
-        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans45_RES_1n1p);
-        E_Trans45_RES_1n1p->SetStats(0);
-        E_Trans45_RES_1n1p->SetLineColor(kGreen);
-        E_Trans45_RES_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only) -----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 2p)">
-        E_Trans90_RES_2p->Draw();
-        plots->Add(E_Trans90_RES_2p);
-        E_Trans90_RES_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_normal_scale_2p.png");
-        E_Trans90_RES_2p->SetLineColor(kGreen);
-        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans90_RES_2p);
-        E_Trans90_RES_2p->SetStats(0);
-        E_Trans90_RES_2p->SetLineColor(kGreen);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 1n1p)">
-        E_Trans90_RES_1n1p->Draw();
-        plots->Add(E_Trans90_RES_1n1p);
-        E_Trans90_RES_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_normal_scale_1n1p.png");
-        E_Trans90_RES_1n1p->SetLineColor(kGreen);
-        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans90_RES_1n1p);
-        E_Trans90_RES_1n1p->SetStats(0);
-        E_Trans90_RES_1n1p->SetLineColor(kGreen);
-        E_Trans90_RES_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El stack of angles (RES only) -------------------------------------------------------------
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (RES only, 2p)">
-        Energy_Transfer_RES_Int_Stack_2p->Draw("nostack");
-        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_RES_int_2p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_RES_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans15_RES_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans45_RES_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans90_RES_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-
-        E_Trans_legend_RES_int_2p->Draw();
-
-        plots->Add(Energy_Transfer_RES_Int_Stack_2p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (RES only, 1n1p)">
-        Energy_Transfer_RES_Int_Stack_1n1p->Draw("nostack");
-        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_RES_int_1n1p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_RES_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans15_RES_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans45_RES_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans90_RES_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-
-        E_Trans_legend_RES_int_1n1p->Draw();
-
-        plots->Add(Energy_Transfer_RES_Int_Stack_1n1p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (ET_RES_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy transfer histograms (RES only)...\n";
+//        cout << "\n";
+//
+////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 2p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_RES_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 2p) - Normalized");
+//            E_Trans15_RES_2p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_RES_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
+//            E_Trans15_RES_2p->Draw();
+//        } else {
+//            E_Trans15_RES_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_RES_2p->Draw();
+//        }
+//
+////        E_Trans15_RES_2p->Draw();
+//        plots->Add(E_Trans15_RES_2p);
+//        E_Trans15_RES_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_normal_scale_2p.png");
+//        E_Trans15_RES_2p->SetLineColor(kBlue);
+//        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans15_RES_2p);
+//        E_Trans15_RES_2p->SetStats(0);
+//        E_Trans15_RES_2p->SetLineColor(kGreen);
+//        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_RES_2p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 1n1p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_RES_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 1n1p) - Normalized");
+//            E_Trans15_RES_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            E_Trans15_RES_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_RES_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
+//            E_Trans15_RES_1n1p->Draw();
+//        } else {
+//            E_Trans15_RES_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_RES_1n1p->Draw();
+//        }
+//
+////        E_Trans15_RES_1n1p->Draw();
+//        plots->Add(E_Trans15_RES_1n1p);
+//        E_Trans15_RES_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_normal_scale_1n1p.png");
+//        E_Trans15_RES_1n1p->SetLineColor(kBlue);
+//        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans15_RES_1n1p);
+//        E_Trans15_RES_1n1p->SetStats(0);
+//        E_Trans15_RES_1n1p->SetLineColor(kGreen);
+////        E_Trans15_RES_1n1p->SetLineStyle(2);
+//        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_RES_1n1p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 2p)">
+//        E_Trans45_RES_2p->Draw();
+//        plots->Add(E_Trans45_RES_2p);
+//        E_Trans45_RES_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_normal_scale_2p.png");
+//        E_Trans45_RES_2p->SetLineColor(kRed);
+//        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans45_RES_2p);
+//        E_Trans45_RES_2p->SetStats(0);
+//        E_Trans45_RES_2p->SetLineColor(kGreen);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 1n1p)">
+//        E_Trans45_RES_1n1p->Draw();
+//        plots->Add(E_Trans45_RES_1n1p);
+//        E_Trans45_RES_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_normal_scale_1n1p.png");
+//        E_Trans45_RES_1n1p->SetLineColor(kRed);
+//        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans45_RES_1n1p);
+//        E_Trans45_RES_1n1p->SetStats(0);
+//        E_Trans45_RES_1n1p->SetLineColor(kGreen);
+//        E_Trans45_RES_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only) -----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 2p)">
+//        E_Trans90_RES_2p->Draw();
+//        plots->Add(E_Trans90_RES_2p);
+//        E_Trans90_RES_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_normal_scale_2p.png");
+//        E_Trans90_RES_2p->SetLineColor(kGreen);
+//        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans90_RES_2p);
+//        E_Trans90_RES_2p->SetStats(0);
+//        E_Trans90_RES_2p->SetLineColor(kGreen);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 1n1p)">
+//        E_Trans90_RES_1n1p->Draw();
+//        plots->Add(E_Trans90_RES_1n1p);
+//        E_Trans90_RES_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_normal_scale_1n1p.png");
+//        E_Trans90_RES_1n1p->SetLineColor(kGreen);
+//        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans90_RES_1n1p);
+//        E_Trans90_RES_1n1p->SetStats(0);
+//        E_Trans90_RES_1n1p->SetLineColor(kGreen);
+//        E_Trans90_RES_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El stack of angles (RES only) -------------------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (RES only, 2p)">
+//        Energy_Transfer_RES_Int_Stack_2p->Draw("nostack");
+//        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_RES_int_2p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_RES_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans15_RES_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans45_RES_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans90_RES_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//
+//        E_Trans_legend_RES_int_2p->Draw();
+//
+//        plots->Add(Energy_Transfer_RES_Int_Stack_2p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (RES only, 1n1p)">
+//        Energy_Transfer_RES_Int_Stack_1n1p->Draw("nostack");
+//        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_RES_int_1n1p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_RES_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans15_RES_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans45_RES_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans90_RES_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//
+//        E_Trans_legend_RES_int_1n1p->Draw();
+//
+//        plots->Add(Energy_Transfer_RES_Int_Stack_1n1p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // Energy transfer histograms (DIS only)
 // ====================================================================================================
 
-    if (ET_DIS_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy transfer histograms (DIS only)...\n";
-        cout << "\n";
-
-//  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 2p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_DIS_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 2p) - Normalized");
-            E_Trans15_DIS_2p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_DIS_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
-            E_Trans15_DIS_2p->Draw();
-        } else {
-            E_Trans15_DIS_2p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_DIS_2p->Draw();
-        }
-
-//        E_Trans15_DIS_2p->Draw();
-        plots->Add(E_Trans15_DIS_2p);
-        E_Trans15_DIS_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_normal_scale_2p.png");
-        E_Trans15_DIS_2p->SetLineColor(kBlue);
-        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans15_DIS_2p);
-        E_Trans15_DIS_2p->SetStats(0);
-        E_Trans15_DIS_2p->SetLineColor(kMagenta);
-        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_DIS_2p);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 1n1p)">
-        if (normalized_E_Trans15_plots) {
-            E_Trans15_DIS_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 1n1p) - Normalized");
-            E_Trans15_DIS_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            E_Trans15_DIS_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            E_Trans15_DIS_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
-            E_Trans15_DIS_1n1p->Draw();
-        } else {
-            E_Trans15_DIS_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            E_Trans15_DIS_1n1p->Draw();
-        }
-
-//        E_Trans15_DIS_1n1p->Draw();
-        plots->Add(E_Trans15_DIS_1n1p);
-        E_Trans15_DIS_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_normal_scale_1n1p.png");
-        E_Trans15_DIS_1n1p->SetLineColor(kBlue);
-        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans15_DIS_1n1p);
-        E_Trans15_DIS_1n1p->SetStats(0);
-        E_Trans15_DIS_1n1p->SetLineColor(kMagenta);
-//        E_Trans15_DIS_1n1p->SetLineStyle(2);
-        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_DIS_1n1p);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 2p)">
-        E_Trans45_DIS_2p->Draw();
-        plots->Add(E_Trans45_DIS_2p);
-        E_Trans45_DIS_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_normal_scale_2p.png");
-        E_Trans45_DIS_2p->SetLineColor(kRed);
-        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans45_DIS_2p);
-        E_Trans45_DIS_2p->SetStats(0);
-        E_Trans45_DIS_2p->SetLineColor(kMagenta);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 1n1p)">
-        E_Trans45_DIS_1n1p->Draw();
-        plots->Add(E_Trans45_DIS_1n1p);
-        E_Trans45_DIS_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_normal_scale_1n1p.png");
-        E_Trans45_DIS_1n1p->SetLineColor(kRed);
-        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans45_DIS_1n1p);
-        E_Trans45_DIS_1n1p->SetStats(0);
-        E_Trans45_DIS_1n1p->SetLineColor(kMagenta);
-        E_Trans45_DIS_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only) ----------------
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 2p)">
-        E_Trans90_DIS_2p->Draw();
-        plots->Add(E_Trans90_DIS_2p);
-        E_Trans90_DIS_2p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_normal_scale_2p.png");
-        E_Trans90_DIS_2p->SetLineColor(kGreen);
-        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans90_DIS_2p);
-        E_Trans90_DIS_2p->SetStats(0);
-        E_Trans90_DIS_2p->SetLineColor(kMagenta);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 1n1p)">
-        E_Trans90_DIS_1n1p->Draw();
-        plots->Add(E_Trans90_DIS_1n1p);
-        E_Trans90_DIS_1n1p->SetLineWidth(2);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_normal_scale_1n1p.png");
-        E_Trans90_DIS_1n1p->SetLineColor(kGreen);
-        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans90_DIS_1n1p);
-        E_Trans90_DIS_1n1p->SetStats(0);
-        E_Trans90_DIS_1n1p->SetLineColor(kMagenta);
-        E_Trans90_DIS_1n1p->SetLineStyle(2);
-        c1->Clear();
-        //</editor-fold>
-
-
-//  Energy transfer Ev-El stack of angles (DIS only) -------------------------------------------------------------
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (DIS only, 2p)">
-        Energy_Transfer_DIS_Int_Stack_2p->Draw("nostack");
-        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_DIS_int_2p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_DIS_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans15_DIS_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans45_DIS_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans90_DIS_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-
-        E_Trans_legend_DIS_int_2p->Draw();
-
-        plots->Add(Energy_Transfer_DIS_Int_Stack_2p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_log_scale_2p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Energy transfer Ev-El stack of angles (DIS only, 1n1p)">
-        Energy_Transfer_DIS_Int_Stack_1n1p->Draw("nostack");
-        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_Trans_legend_DIS_int_1n1p = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_Trans_legend_DIS_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_Trans15_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans15_DIS_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
-        TLegendEntry *E_Trans45_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans45_DIS_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
-        TLegendEntry *E_Trans90_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans90_DIS_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
-
-        E_Trans_legend_DIS_int_1n1p->Draw();
-
-        plots->Add(Energy_Transfer_DIS_Int_Stack_1n1p);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_log_scale_1n1p.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (ET_DIS_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy transfer histograms (DIS only)...\n";
+//        cout << "\n";
+//
+////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 2p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_DIS_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 2p) - Normalized");
+//            E_Trans15_DIS_2p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_DIS_2p->Scale(100. * (1. / E_Trans15_all_integral_2p), "nosw2");
+//            E_Trans15_DIS_2p->Draw();
+//        } else {
+//            E_Trans15_DIS_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_DIS_2p->Draw();
+//        }
+//
+////        E_Trans15_DIS_2p->Draw();
+//        plots->Add(E_Trans15_DIS_2p);
+//        E_Trans15_DIS_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_normal_scale_2p.png");
+//        E_Trans15_DIS_2p->SetLineColor(kBlue);
+//        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans15_DIS_2p);
+//        E_Trans15_DIS_2p->SetStats(0);
+//        E_Trans15_DIS_2p->SetLineColor(kMagenta);
+//        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_DIS_2p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 1n1p)">
+//        if (normalized_E_Trans15_plots) {
+//            E_Trans15_DIS_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 1n1p) - Normalized");
+//            E_Trans15_DIS_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            E_Trans15_DIS_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            E_Trans15_DIS_1n1p->Scale(100. * (1. / E_Trans15_all_integral_1n1p), "nosw2");
+//            E_Trans15_DIS_1n1p->Draw();
+//        } else {
+//            E_Trans15_DIS_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            E_Trans15_DIS_1n1p->Draw();
+//        }
+//
+////        E_Trans15_DIS_1n1p->Draw();
+//        plots->Add(E_Trans15_DIS_1n1p);
+//        E_Trans15_DIS_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_normal_scale_1n1p.png");
+//        E_Trans15_DIS_1n1p->SetLineColor(kBlue);
+//        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans15_DIS_1n1p);
+//        E_Trans15_DIS_1n1p->SetStats(0);
+//        E_Trans15_DIS_1n1p->SetLineColor(kMagenta);
+////        E_Trans15_DIS_1n1p->SetLineStyle(2);
+//        Energy_Transfer_all_int_15_Stack_1n1p->Add(E_Trans15_DIS_1n1p);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 2p)">
+//        E_Trans45_DIS_2p->Draw();
+//        plots->Add(E_Trans45_DIS_2p);
+//        E_Trans45_DIS_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_normal_scale_2p.png");
+//        E_Trans45_DIS_2p->SetLineColor(kRed);
+//        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans45_DIS_2p);
+//        E_Trans45_DIS_2p->SetStats(0);
+//        E_Trans45_DIS_2p->SetLineColor(kMagenta);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 1n1p)">
+//        E_Trans45_DIS_1n1p->Draw();
+//        plots->Add(E_Trans45_DIS_1n1p);
+//        E_Trans45_DIS_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_normal_scale_1n1p.png");
+//        E_Trans45_DIS_1n1p->SetLineColor(kRed);
+//        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans45_DIS_1n1p);
+//        E_Trans45_DIS_1n1p->SetStats(0);
+//        E_Trans45_DIS_1n1p->SetLineColor(kMagenta);
+//        E_Trans45_DIS_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only) ----------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 2p)">
+//        E_Trans90_DIS_2p->Draw();
+//        plots->Add(E_Trans90_DIS_2p);
+//        E_Trans90_DIS_2p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_normal_scale_2p.png");
+//        E_Trans90_DIS_2p->SetLineColor(kGreen);
+//        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans90_DIS_2p);
+//        E_Trans90_DIS_2p->SetStats(0);
+//        E_Trans90_DIS_2p->SetLineColor(kMagenta);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 1n1p)">
+//        E_Trans90_DIS_1n1p->Draw();
+//        plots->Add(E_Trans90_DIS_1n1p);
+//        E_Trans90_DIS_1n1p->SetLineWidth(2);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_normal_scale_1n1p.png");
+//        E_Trans90_DIS_1n1p->SetLineColor(kGreen);
+//        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans90_DIS_1n1p);
+//        E_Trans90_DIS_1n1p->SetStats(0);
+//        E_Trans90_DIS_1n1p->SetLineColor(kMagenta);
+//        E_Trans90_DIS_1n1p->SetLineStyle(2);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  Energy transfer Ev-El stack of angles (DIS only) -------------------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (DIS only, 2p)">
+//        Energy_Transfer_DIS_Int_Stack_2p->Draw("nostack");
+//        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_DIS_int_2p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_DIS_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans15_DIS_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans45_DIS_2p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans90_DIS_2p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//
+//        E_Trans_legend_DIS_int_2p->Draw();
+//
+//        plots->Add(Energy_Transfer_DIS_Int_Stack_2p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_log_scale_2p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy transfer Ev-El stack of angles (DIS only, 1n1p)">
+//        Energy_Transfer_DIS_Int_Stack_1n1p->Draw("nostack");
+//        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_Trans_legend_DIS_int_1n1p = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_Trans_legend_DIS_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_Trans15_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans15_DIS_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
+//        TLegendEntry *E_Trans45_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans45_DIS_1n1p, "44 [Deg] <= #theta_{l} <= 46 [Deg]", "l");
+//        TLegendEntry *E_Trans90_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans90_DIS_1n1p, "89 [Deg] <= #theta_{l} <= 91 [Deg]", "l");
+//
+//        E_Trans_legend_DIS_int_1n1p->Draw();
+//
+//        plots->Add(Energy_Transfer_DIS_Int_Stack_1n1p);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_log_scale_1n1p.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // Energy transfer stacks (around 15, 45 and 90 + all interactions) - histogram for every angle
 // ====================================================================================================
 
-    if (ET_all_plots && ET_QEL_plots && ET_MEC_plots && ET_RES_plots && ET_DIS_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting energy transfer stacks...\n";
-        cout << "\n";
-
-
-//  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
-
-        //<editor-fold desc="Energy transfer around 15 deg stack (2p only)">
-        Energy_Transfer_all_int_15_Stack_2p->Draw("nostack");
-        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_E_Trans15_plots) {
-            Energy_Transfer_all_int_15_Stack_2p->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p) - Normalized");
-            Energy_Transfer_all_int_15_Stack_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Probability (%)");
-            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Arbitrary units");
-            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
-
-
-        auto E_Trans_15_legend_2p = new
-                TLegend(0.625, 0.625, 0.9, 0.9);
-//        auto E_Trans_15_legend_2p = new TLegend(0.65, 0.65, 0.9, 0.9);
-
-        TLegendEntry *E_Trans_15_all_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_all_2p, "All interactions", "l");
-        TLegendEntry *E_Trans_15_QEL_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_QEL_2p, "QEL", "l");
-        TLegendEntry *E_Trans_15_MEC_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_MEC_2p, "MEC", "l");
-        TLegendEntry *E_Trans_15_RES_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_RES_2p, "RES", "l");
-        TLegendEntry *E_Trans_15_DIS_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_DIS_2p, "DIS", "l");
-        E_Trans_15_legend_2p->Draw();
-
-        plots->Add(Energy_Transfer_all_int_15_Stack_2p);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-//  Energy transfer around 15 deg stack (1n1p only) ----------------------------------------------------
-
-        //<editor-fold desc="Energy transfer around 15 deg stack (1n1p only)">
-        Energy_Transfer_all_int_15_Stack_1n1p->Draw("nostack");
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_E_Trans15_plots) {
-            Energy_Transfer_all_int_15_Stack_1n1p->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p) - Normalized");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
-
-
-        auto E_Trans_15_legend_1n1p = new
-                TLegend(0.625, 0.625, 0.9, 0.9);
-//        auto E_Trans_15_legend_1n1p = new TLegend(0.65, 0.65, 0.9, 0.9);
-
-        TLegendEntry *E_Trans_15_all_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_all_1n1p, "All interactions", "l");
-        TLegendEntry *E_Trans_15_QEL_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_QEL_1n1p, "QEL", "l");
-        TLegendEntry *E_Trans_15_MEC_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_MEC_1n1p, "MEC", "l");
-        TLegendEntry *E_Trans_15_RES_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_RES_1n1p, "RES", "l");
-        TLegendEntry *E_Trans_15_DIS_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_DIS_1n1p, "DIS", "l");
-
-        E_Trans_15_legend_1n1p->Draw();
-
-        plots->Add(Energy_Transfer_all_int_15_Stack_1n1p);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (ET_all_plots && ET_QEL_plots && ET_MEC_plots && ET_RES_plots && ET_DIS_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting energy transfer stacks...\n";
+//        cout << "\n";
+//
+//
+////  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer around 15 deg stack (2p only)">
+//        Energy_Transfer_all_int_15_Stack_2p->Draw("nostack");
+//        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_Trans15_plots) {
+//            Energy_Transfer_all_int_15_Stack_2p->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p) - Normalized");
+//            Energy_Transfer_all_int_15_Stack_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Probability (%)");
+//            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//
+//        auto E_Trans_15_legend_2p = new
+//                TLegend(0.625, 0.625, 0.9, 0.9);
+////        auto E_Trans_15_legend_2p = new TLegend(0.65, 0.65, 0.9, 0.9);
+//
+//        TLegendEntry *E_Trans_15_all_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_all_2p, "All interactions", "l");
+//        TLegendEntry *E_Trans_15_QEL_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_QEL_2p, "QEL", "l");
+//        TLegendEntry *E_Trans_15_MEC_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_MEC_2p, "MEC", "l");
+//        TLegendEntry *E_Trans_15_RES_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_RES_2p, "RES", "l");
+//        TLegendEntry *E_Trans_15_DIS_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_DIS_2p, "DIS", "l");
+//        E_Trans_15_legend_2p->Draw();
+//
+//        plots->Add(Energy_Transfer_all_int_15_Stack_2p);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+////  Energy transfer around 15 deg stack (1n1p only) ----------------------------------------------------
+//
+//        //<editor-fold desc="Energy transfer around 15 deg stack (1n1p only)">
+//        Energy_Transfer_all_int_15_Stack_1n1p->Draw("nostack");
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_Trans15_plots) {
+//            Energy_Transfer_all_int_15_Stack_1n1p->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p) - Normalized");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//
+//        auto E_Trans_15_legend_1n1p = new
+//                TLegend(0.625, 0.625, 0.9, 0.9);
+////        auto E_Trans_15_legend_1n1p = new TLegend(0.65, 0.65, 0.9, 0.9);
+//
+//        TLegendEntry *E_Trans_15_all_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_all_1n1p, "All interactions", "l");
+//        TLegendEntry *E_Trans_15_QEL_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_QEL_1n1p, "QEL", "l");
+//        TLegendEntry *E_Trans_15_MEC_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_MEC_1n1p, "MEC", "l");
+//        TLegendEntry *E_Trans_15_RES_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_RES_1n1p, "RES", "l");
+//        TLegendEntry *E_Trans_15_DIS_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_DIS_1n1p, "DIS", "l");
+//
+//        E_Trans_15_legend_1n1p->Draw();
+//
+//        plots->Add(Energy_Transfer_all_int_15_Stack_1n1p);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // E_cal restorations
 // ====================================================================================================
 
-    if (E_cal_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting E_cal restoration histograms...\n";
-        cout << "\n";
-
-//  E_cal_QEL restoration ------------------------------------------------------------------------------
-
-        //<editor-fold desc="E_cal_QEL restoration (2p & 1n1p)">
-        double E_cal_QEL_integral = E_cal_QEL_2p->Integral() + E_cal_QEL_1n1p->Integral();
-
-        histPlotter1D(c1, E_cal_QEL_2p, normalized_E_cal_plots, true, E_cal_QEL_integral, "E_{cal} Histogram", "QEL Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_QEL_Stack, "E_cal_restoration_QEL_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
-
-        histPlotter1D(c1, E_cal_QEL_1n1p, normalized_E_cal_plots, true, E_cal_QEL_integral, "E_{cal} Histogram", "QEL Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_QEL_Stack, "E_cal_restoration_QEL_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal_QEL restoration (stack)">
-        E_cal_QEL_Stack->Draw("nostack");
-        E_cal_QEL_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        E_cal_QEL_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        E_cal_QEL_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_E_l_plots) {
-            E_cal_QEL_Stack->SetTitle("E_{cal} Histogram (QEL only, 2p and 1n1p) - Normalized");
-            E_cal_QEL_Stack->GetYaxis()->SetTitle("Probability (%)");
-            E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            E_cal_QEL_Stack->GetYaxis()->SetTitle("Arbitrary units");
-            E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
-
-        auto E_cal_QEL_Stack_legend = new
-                TLegend(0.75, 0.775, 0.875, 0.9);
-//        auto E_cal_QEL_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
-//        auto E_cal_QEL_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_cal_QEL_Stack_legend_entry_2p =
-                E_cal_QEL_Stack_legend->AddEntry(E_cal_QEL_2p, "2p", "l");
-        TLegendEntry *E_cal_QEL_Stack_legend_entry_1n1p =
-                E_cal_QEL_Stack_legend->AddEntry(E_cal_QEL_1n1p, "1n1p", "l");
-
-        E_cal_QEL_Stack_legend->Draw();
-
-        plots->Add(E_cal_QEL_Stack);
-        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_QEL_only.png");
-        c1->Clear();
-        //</editor-fold>
-
-//  E_cal_MEC restoration ------------------------------------------------------------------------------
-
-        //<editor-fold desc="E_cal_MEC restoration (2p & 1n1p)">
-        double E_cal_MEC_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_1n1p->Integral();
-
-        histPlotter1D(c1, E_cal_MEC_2p, normalized_E_cal_plots, true, E_cal_MEC_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_MEC_Stack, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
-
-        histPlotter1D(c1, E_cal_MEC_1n1p, normalized_E_cal_plots, true, E_cal_MEC_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_MEC_Stack, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal_MEC restoration (stack)">
-        E_cal_MEC_Stack->Draw("nostack");
-        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_E_l_plots) {
-            E_cal_MEC_Stack->SetTitle("E_{cal} Histogram (MEC only, 2p and 1n1p) - Normalized");
-            E_cal_MEC_Stack->GetYaxis()->SetTitle("Probability (%)");
-            E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            E_cal_MEC_Stack->GetYaxis()->SetTitle("Arbitrary units");
-            E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
-
-        auto E_cal_MEC_Stack_legend = new
-                TLegend(0.75, 0.775, 0.875, 0.9);
-//        auto E_cal_MEC_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
-//        auto E_cal_MEC_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_cal_MEC_Stack_legend_entry_2p = E_cal_MEC_Stack_legend->AddEntry(E_cal_MEC_2p, "2p", "l");
-        TLegendEntry *E_cal_MEC_Stack_legend_entry_1n1p = E_cal_MEC_Stack_legend->AddEntry(E_cal_MEC_1n1p, "1n1p", "l");
-
-        E_cal_MEC_Stack_legend->Draw();
-
-        plots->Add(E_cal_MEC_Stack);
-        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only.png");
-        c1->Clear();
-        //</editor-fold>
-
-
-//  E_cal_RES restoration ------------------------------------------------------------------------------
-
-        //<editor-fold desc="E_cal_RES restoration (2p & 1n1p)">
-        double E_cal_RES_integral = E_cal_RES_2p->Integral() + E_cal_RES_1n1p->Integral();
-
-        histPlotter1D(c1, E_cal_RES_2p, normalized_E_cal_plots, true, E_cal_RES_integral, "E_{cal} Histogram", "RES Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_RES_Stack, "E_cal_restoration_RES_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
-
-        histPlotter1D(c1, E_cal_RES_1n1p, normalized_E_cal_plots, true, E_cal_RES_integral, "E_{cal} Histogram", "RES Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_RES_Stack, "E_cal_restoration_RES_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal_RES restoration (stack)">
-        E_cal_RES_Stack->Draw("nostack");
-        E_cal_RES_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        E_cal_RES_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        E_cal_RES_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        E_cal_RES_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_cal_RES_Stack_legend = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_cal_RES_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_cal_RES_Stack_legend_entry_2p = E_cal_RES_Stack_legend->AddEntry(E_cal_RES_2p, "2p", "l");
-        TLegendEntry *E_cal_RES_Stack_legend_entry_1n1p = E_cal_RES_Stack_legend->AddEntry(E_cal_RES_1n1p, "1n1p", "l");
-
-        E_cal_RES_Stack_legend->Draw();
-
-        plots->Add(E_cal_RES_Stack);
-        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_RES_only.png");
-        c1->Clear();
-        //</editor-fold>
-
-
-//  E_cal_DIS restoration ------------------------------------------------------------------------------
-
-        //<editor-fold desc="E_cal_DIS restoration (2p & 1n1p)">
-        double E_cal_DIS_integral = E_cal_DIS_2p->Integral() + E_cal_DIS_1n1p->Integral();
-
-        histPlotter1D(c1, E_cal_DIS_2p, normalized_E_cal_plots, true, E_cal_DIS_integral, "E_{cal} Histogram", "DIS Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_DIS_Stack, "E_cal_restoration_DIS_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
-
-        histPlotter1D(c1, E_cal_DIS_1n1p, normalized_E_cal_plots, true, E_cal_DIS_integral, "E_{cal} Histogram", "DIS Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_DIS_Stack, "E_cal_restoration_DIS_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal_DIS restoration (stack)">
-        E_cal_DIS_Stack->Draw("nostack");
-        E_cal_DIS_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        E_cal_DIS_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        E_cal_DIS_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        E_cal_DIS_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        auto E_cal_DIS_Stack_legend = new
-                TLegend(0.775, 0.775, 0.9, 0.9);
-//        auto E_cal_DIS_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
-
-        TLegendEntry *E_cal_DIS_Stack_legend_entry_2p = E_cal_DIS_Stack_legend->AddEntry(E_cal_RES_2p, "2p", "l");
-        TLegendEntry *E_cal_DIS_Stack_legend_entry_1n1p = E_cal_DIS_Stack_legend->AddEntry(E_cal_RES_1n1p, "1n1p", "l");
-
-        E_cal_DIS_Stack_legend->Draw();
-
-        plots->Add(E_cal_DIS_Stack);
-        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_DIS_only.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (E_cal_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting E_cal restoration histograms...\n";
+//        cout << "\n";
+//
+////  E_cal_QEL restoration ------------------------------------------------------------------------------
+//
+//        //<editor-fold desc="E_cal_QEL restoration (2p & 1n1p)">
+//        double E_cal_QEL_integral = E_cal_QEL_2p->Integral() + E_cal_QEL_1n1p->Integral();
+//
+//        histPlotter1D(c1, E_cal_QEL_2p, normalized_E_cal_plots, true, E_cal_QEL_integral, "E_{cal} Histogram", "QEL Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_QEL_Stack, "E_cal_restoration_QEL_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
+//
+//        histPlotter1D(c1, E_cal_QEL_1n1p, normalized_E_cal_plots, true, E_cal_QEL_integral, "E_{cal} Histogram", "QEL Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_QEL_Stack, "E_cal_restoration_QEL_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal_QEL restoration (stack)">
+//        E_cal_QEL_Stack->Draw("nostack");
+//        E_cal_QEL_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        E_cal_QEL_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        E_cal_QEL_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_l_plots) {
+//            E_cal_QEL_Stack->SetTitle("E_{cal} Histogram (QEL only, 2p and 1n1p) - Normalized");
+//            E_cal_QEL_Stack->GetYaxis()->SetTitle("Probability (%)");
+//            E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            E_cal_QEL_Stack->GetYaxis()->SetTitle("Arbitrary units");
+//            E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//        auto E_cal_QEL_Stack_legend = new
+//                TLegend(0.75, 0.775, 0.875, 0.9);
+////        auto E_cal_QEL_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
+////        auto E_cal_QEL_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_cal_QEL_Stack_legend_entry_2p =
+//                E_cal_QEL_Stack_legend->AddEntry(E_cal_QEL_2p, "2p", "l");
+//        TLegendEntry *E_cal_QEL_Stack_legend_entry_1n1p =
+//                E_cal_QEL_Stack_legend->AddEntry(E_cal_QEL_1n1p, "1n1p", "l");
+//
+//        E_cal_QEL_Stack_legend->Draw();
+//
+//        plots->Add(E_cal_QEL_Stack);
+//        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_QEL_only.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+////  E_cal_MEC restoration ------------------------------------------------------------------------------
+//
+//        //<editor-fold desc="E_cal_MEC restoration (2p & 1n1p)">
+//        double E_cal_MEC_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_1n1p->Integral();
+//
+//        histPlotter1D(c1, E_cal_MEC_2p, normalized_E_cal_plots, true, E_cal_MEC_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_MEC_Stack, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
+//
+//        histPlotter1D(c1, E_cal_MEC_1n1p, normalized_E_cal_plots, true, E_cal_MEC_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_MEC_Stack, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal_MEC restoration (stack)">
+//        E_cal_MEC_Stack->Draw("nostack");
+//        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_l_plots) {
+//            E_cal_MEC_Stack->SetTitle("E_{cal} Histogram (MEC only, 2p and 1n1p) - Normalized");
+//            E_cal_MEC_Stack->GetYaxis()->SetTitle("Probability (%)");
+//            E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            E_cal_MEC_Stack->GetYaxis()->SetTitle("Arbitrary units");
+//            E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//        auto E_cal_MEC_Stack_legend = new
+//                TLegend(0.75, 0.775, 0.875, 0.9);
+////        auto E_cal_MEC_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
+////        auto E_cal_MEC_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_cal_MEC_Stack_legend_entry_2p = E_cal_MEC_Stack_legend->AddEntry(E_cal_MEC_2p, "2p", "l");
+//        TLegendEntry *E_cal_MEC_Stack_legend_entry_1n1p = E_cal_MEC_Stack_legend->AddEntry(E_cal_MEC_1n1p, "1n1p", "l");
+//
+//        E_cal_MEC_Stack_legend->Draw();
+//
+//        plots->Add(E_cal_MEC_Stack);
+//        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  E_cal_RES restoration ------------------------------------------------------------------------------
+//
+//        //<editor-fold desc="E_cal_RES restoration (2p & 1n1p)">
+//        double E_cal_RES_integral = E_cal_RES_2p->Integral() + E_cal_RES_1n1p->Integral();
+//
+//        histPlotter1D(c1, E_cal_RES_2p, normalized_E_cal_plots, true, E_cal_RES_integral, "E_{cal} Histogram", "RES Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_RES_Stack, "E_cal_restoration_RES_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
+//
+//        histPlotter1D(c1, E_cal_RES_1n1p, normalized_E_cal_plots, true, E_cal_RES_integral, "E_{cal} Histogram", "RES Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_RES_Stack, "E_cal_restoration_RES_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal_RES restoration (stack)">
+//        E_cal_RES_Stack->Draw("nostack");
+//        E_cal_RES_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        E_cal_RES_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        E_cal_RES_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        E_cal_RES_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_cal_RES_Stack_legend = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_cal_RES_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_cal_RES_Stack_legend_entry_2p = E_cal_RES_Stack_legend->AddEntry(E_cal_RES_2p, "2p", "l");
+//        TLegendEntry *E_cal_RES_Stack_legend_entry_1n1p = E_cal_RES_Stack_legend->AddEntry(E_cal_RES_1n1p, "1n1p", "l");
+//
+//        E_cal_RES_Stack_legend->Draw();
+//
+//        plots->Add(E_cal_RES_Stack);
+//        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_RES_only.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//
+////  E_cal_DIS restoration ------------------------------------------------------------------------------
+//
+//        //<editor-fold desc="E_cal_DIS restoration (2p & 1n1p)">
+//        double E_cal_DIS_integral = E_cal_DIS_2p->Integral() + E_cal_DIS_1n1p->Integral();
+//
+//        histPlotter1D(c1, E_cal_DIS_2p, normalized_E_cal_plots, true, E_cal_DIS_integral, "E_{cal} Histogram", "DIS Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_DIS_Stack, "E_cal_restoration_DIS_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
+//
+//        histPlotter1D(c1, E_cal_DIS_1n1p, normalized_E_cal_plots, true, E_cal_DIS_integral, "E_{cal} Histogram", "DIS Only", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, E_cal_DIS_Stack, "E_cal_restoration_DIS_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal_DIS restoration (stack)">
+//        E_cal_DIS_Stack->Draw("nostack");
+//        E_cal_DIS_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        E_cal_DIS_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        E_cal_DIS_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        E_cal_DIS_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        auto E_cal_DIS_Stack_legend = new
+//                TLegend(0.775, 0.775, 0.9, 0.9);
+////        auto E_cal_DIS_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+//
+//        TLegendEntry *E_cal_DIS_Stack_legend_entry_2p = E_cal_DIS_Stack_legend->AddEntry(E_cal_RES_2p, "2p", "l");
+//        TLegendEntry *E_cal_DIS_Stack_legend_entry_1n1p = E_cal_DIS_Stack_legend->AddEntry(E_cal_RES_1n1p, "1n1p", "l");
+//
+//        E_cal_DIS_Stack_legend->Draw();
+//
+//        plots->Add(E_cal_DIS_Stack);
+//        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_DIS_only.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // Other E_cal plots ----------------------------------------------------------------------------------
 
-    if (other_E_cal_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting other E_cal restoration histograms...\n";
-        cout << "\n";
-
-        //<editor-fold desc="Other E_cal plots (all interactions, 2p)">
-        E_cal_VS_theta_l_all_int_2p->Draw("colz");
-        plots->Add(E_cal_VS_theta_l_all_int_2p);
-        E_cal_VS_theta_l_all_int_2p->SetStats(0);
-        E_cal_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_l_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_l_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Q2_all_int_2p->Draw("colz");
-        plots->Add(E_cal_VS_Q2_all_int_2p);
-        E_cal_VS_Q2_all_int_2p->SetStats(0);
-        E_cal_VS_Q2_all_int_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Q2_all_int_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_Q2_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_Q2_QEL_only_linear_scale_2p.png");
-        c1->Clear();
+//    if (other_E_cal_plots) {
 //
-        E_cal_VS_W_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_W_QEL_only_2p);
-        E_cal_VS_W_QEL_only_2p->SetStats(0);
-        E_cal_VS_W_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_W_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_En_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_En_QEL_only_2p);
-        E_cal_VS_En_QEL_only_2p->SetStats(0);
-        E_cal_VS_En_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_En_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_Pn_QEL_only_2p);
-        E_cal_VS_Pn_QEL_only_2p->SetStats(0);
-        E_cal_VS_Pn_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn1_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_Pn1_QEL_only_2p);
-        E_cal_VS_Pn1_QEL_only_2p->SetStats(0);
-        E_cal_VS_Pn1_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn1_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn2_QEL_only_2p->Draw("colz");
-        E_cal_VS_Pn2_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn2_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        plots->Add(E_cal_VS_Pn2_QEL_only_2p);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_dtheta_all_int_2p->Draw("colz");
-        E_cal_VS_dtheta_all_int_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_dtheta_all_int_2p->GetYaxis()->CenterTitle(true);
-        plots->Add(E_cal_VS_dtheta_all_int_2p);
-        E_cal_VS_dtheta_all_int_2p->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_dtheta_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_dtheta_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Other E_cal plots (QEL only, 2p)">
-        E_cal_VS_theta_l_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_theta_l_QEL_only_2p);
-        E_cal_VS_theta_l_QEL_only_2p->SetStats(0);
-        E_cal_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_l_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_l_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Q2_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_Q2_QEL_only_2p);
-        E_cal_VS_Q2_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Q2_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Q2_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Q2_QEL_only_linear_scale_2p.png");
-        c1->Clear();
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting other E_cal restoration histograms...\n";
+//        cout << "\n";
 //
-        E_cal_VS_W_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_W_QEL_only_2p);
-        E_cal_VS_W_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_W_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_En_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_En_QEL_only_2p);
-        E_cal_VS_En_QEL_only_2p->SetStats(0);
-        E_cal_VS_En_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_En_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_Pn_QEL_only_2p);
-        E_cal_VS_Pn_QEL_only_2p->SetStats(0);
-        E_cal_VS_Pn_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn1_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_Pn1_QEL_only_2p);
-        E_cal_VS_Pn1_QEL_only_2p->SetStats(0);
-        E_cal_VS_Pn1_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn1_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn2_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_Pn2_QEL_only_2p);
-        E_cal_VS_Pn2_QEL_only_2p->SetStats(0);
-        E_cal_VS_Pn2_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn2_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
+//        //<editor-fold desc="Other E_cal plots (all interactions, 2p)">
+//        E_cal_VS_theta_l_all_int_2p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_l_all_int_2p);
+//        E_cal_VS_theta_l_all_int_2p->SetStats(0);
+//        E_cal_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_l_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_l_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
 //
-        E_cal_VS_theta_p1_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_theta_p1_QEL_only_2p);
-        E_cal_VS_theta_p1_QEL_only_2p->SetStats(0);
-        E_cal_VS_theta_p1_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_p1_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p1_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p1_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_theta_p2_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_theta_p2_QEL_only_2p);
-        E_cal_VS_theta_p2_QEL_only_2p->SetStats(0);
-        E_cal_VS_theta_p2_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_p2_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p2_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p2_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-
-        E_cal_VS_dtheta_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_dtheta_QEL_only_2p);
-        E_cal_VS_dtheta_QEL_only_2p->SetStats(0);
-        E_cal_VS_dtheta_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_dtheta_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_dtheta_QEL_only_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_dtheta_QEL_only_linear_scale_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Other E_cal plots (QEL only, 1n1p)">
-        E_cal_VS_theta_l_QEL_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_theta_l_QEL_1n1p);
-        E_cal_VS_theta_l_QEL_1n1p->SetStats(0);
-        E_cal_VS_theta_l_QEL_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_l_QEL_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_l_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_l_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_Q2_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_Q2_QEL_only_1n1p);
-        E_cal_VS_Q2_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_Q2_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Q2_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Q2_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Q2_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
+//        E_cal_VS_Q2_all_int_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Q2_all_int_2p);
+//        E_cal_VS_Q2_all_int_2p->SetStats(0);
+//        E_cal_VS_Q2_all_int_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Q2_all_int_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_Q2_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_Q2_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+////
+//        E_cal_VS_W_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_W_QEL_only_2p);
+//        E_cal_VS_W_QEL_only_2p->SetStats(0);
+//        E_cal_VS_W_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_W_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
 //
-        E_cal_VS_W_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_W_QEL_only_1n1p);
-        E_cal_VS_W_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_W_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_W_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_W_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_W_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_En_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_En_QEL_only_1n1p);
-        E_cal_VS_En_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_En_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_En_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_En_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_En_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_Pn_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_Pn_QEL_only_1n1p);
-        E_cal_VS_Pn_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_Pn_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_Pn_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Pn_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Pn_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_P_p_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_P_p_QEL_only_1n1p);
-        E_cal_VS_P_p_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_P_p_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_P_p_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_p_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_p_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_P_n_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_P_n_QEL_only_1n1p);
-        E_cal_VS_P_n_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_P_n_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_P_n_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_n_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_n_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
+//        E_cal_VS_En_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_En_QEL_only_2p);
+//        E_cal_VS_En_QEL_only_2p->SetStats(0);
+//        E_cal_VS_En_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_En_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
 //
-        E_cal_VS_theta_p_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_theta_p_QEL_only_1n1p);
-        E_cal_VS_theta_p_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_theta_p_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_p_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_p_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_p_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_theta_n_QEL_only_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_theta_n_QEL_only_1n1p);
-        E_cal_VS_theta_n_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_theta_n_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_n_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_n_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_n_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_cal_VS_dtheta_QEL_only_1n1p->Draw("colz");
-        E_cal_VS_dtheta_QEL_only_1n1p->SetStats(0);
-        E_cal_VS_dtheta_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_dtheta_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_dtheta_QEL_only_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_dtheta_QEL_only_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//        E_cal_VS_Pn_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Pn_QEL_only_2p);
+//        E_cal_VS_Pn_QEL_only_2p->SetStats(0);
+//        E_cal_VS_Pn_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Pn1_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Pn1_QEL_only_2p);
+//        E_cal_VS_Pn1_QEL_only_2p->SetStats(0);
+//        E_cal_VS_Pn1_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn1_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Pn2_QEL_only_2p->Draw("colz");
+//        E_cal_VS_Pn2_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn2_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        plots->Add(E_cal_VS_Pn2_QEL_only_2p);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_dtheta_all_int_2p->Draw("colz");
+//        E_cal_VS_dtheta_all_int_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_dtheta_all_int_2p->GetYaxis()->CenterTitle(true);
+//        plots->Add(E_cal_VS_dtheta_all_int_2p);
+//        E_cal_VS_dtheta_all_int_2p->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_dtheta_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_dtheta_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Other E_cal plots (QEL only, 2p)">
+//        E_cal_VS_theta_l_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_l_QEL_only_2p);
+//        E_cal_VS_theta_l_QEL_only_2p->SetStats(0);
+//        E_cal_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_l_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_l_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Q2_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Q2_QEL_only_2p);
+//        E_cal_VS_Q2_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Q2_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Q2_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Q2_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+////
+//        E_cal_VS_W_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_W_QEL_only_2p);
+//        E_cal_VS_W_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_W_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_W_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_En_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_En_QEL_only_2p);
+//        E_cal_VS_En_QEL_only_2p->SetStats(0);
+//        E_cal_VS_En_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_En_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_En_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Pn_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Pn_QEL_only_2p);
+//        E_cal_VS_Pn_QEL_only_2p->SetStats(0);
+//        E_cal_VS_Pn_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Pn1_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Pn1_QEL_only_2p);
+//        E_cal_VS_Pn1_QEL_only_2p->SetStats(0);
+//        E_cal_VS_Pn1_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn1_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn1_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Pn2_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_Pn2_QEL_only_2p);
+//        E_cal_VS_Pn2_QEL_only_2p->SetStats(0);
+//        E_cal_VS_Pn2_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn2_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_Pn2_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+////
+//        E_cal_VS_theta_p1_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_p1_QEL_only_2p);
+//        E_cal_VS_theta_p1_QEL_only_2p->SetStats(0);
+//        E_cal_VS_theta_p1_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_p1_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p1_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p1_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_theta_p2_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_p2_QEL_only_2p);
+//        E_cal_VS_theta_p2_QEL_only_2p->SetStats(0);
+//        E_cal_VS_theta_p2_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_p2_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p2_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_p2_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_dtheta_QEL_only_2p->Draw("colz");
+//        plots->Add(E_cal_VS_dtheta_QEL_only_2p);
+//        E_cal_VS_dtheta_QEL_only_2p->SetStats(0);
+//        E_cal_VS_dtheta_QEL_only_2p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_dtheta_QEL_only_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_dtheta_QEL_only_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_dtheta_QEL_only_linear_scale_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Other E_cal plots (QEL only, 1n1p)">
+//        E_cal_VS_theta_l_QEL_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_l_QEL_1n1p);
+//        E_cal_VS_theta_l_QEL_1n1p->SetStats(0);
+//        E_cal_VS_theta_l_QEL_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_l_QEL_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_l_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_l_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Q2_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_Q2_QEL_only_1n1p);
+//        E_cal_VS_Q2_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_Q2_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Q2_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Q2_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Q2_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+////
+//        E_cal_VS_W_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_W_QEL_only_1n1p);
+//        E_cal_VS_W_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_W_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_W_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_W_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_W_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_En_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_En_QEL_only_1n1p);
+//        E_cal_VS_En_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_En_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_En_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_En_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_En_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_Pn_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_Pn_QEL_only_1n1p);
+//        E_cal_VS_Pn_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_Pn_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_Pn_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Pn_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_Pn_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_P_p_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_P_p_QEL_only_1n1p);
+//        E_cal_VS_P_p_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_P_p_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_P_p_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_p_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_p_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_P_n_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_P_n_QEL_only_1n1p);
+//        E_cal_VS_P_n_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_P_n_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_P_n_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_n_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_P_n_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+////
+//        E_cal_VS_theta_p_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_p_QEL_only_1n1p);
+//        E_cal_VS_theta_p_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_theta_p_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_p_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_p_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_p_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_theta_n_QEL_only_1n1p->Draw("colz");
+//        plots->Add(E_cal_VS_theta_n_QEL_only_1n1p);
+//        E_cal_VS_theta_n_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_theta_n_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_theta_n_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_n_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_theta_n_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_cal_VS_dtheta_QEL_only_1n1p->Draw("colz");
+//        E_cal_VS_dtheta_QEL_only_1n1p->SetStats(0);
+//        E_cal_VS_dtheta_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+//        E_cal_VS_dtheta_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_dtheta_QEL_only_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_vs_dtheta_QEL_only_linear_scale_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 // One commend plots ----------------------------------------------------------------------------------
 
-    if (other_E_cal_plots) {
-
-        //<editor-fold desc="One commend plots - Q2">
-
-//  Q2 -all interactions (2p):
-
-//        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==0 && nfp == 2", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_2p.png");
-//        c1->Clear();
-
-
-//  Q2 - QEL only (2p):
-
-//        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_2p.png");
-//        c1->Clear();
-
-
-//  Q2 -all interactions (1n1p):
-
-//        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==1 && nfp == 1", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_1n1p.png");
-//        c1->Clear();
-
-
-//  Q2 - QEL only (1n1p):
-
-//        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_1n1p.png");
-//        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="One commend plots - Theta_l">
-
-// Theta_l -all interactions (2p):
-
-//        fChain->Draw(
-//                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
-//                "nf==2 && nfn==0 && nfp == 2", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_2p.png");
-//        c1->Clear();
-
-
-// Theta_l - QEL only (2p):
-
-//        fChain->Draw(
-//                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
-//                "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_2p.png");
-//        c1->Clear();
-
-
-// Theta_l -all interactions (1n1p):
-
-//        fChain->Draw(
-//                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
-//                "nf==2 && nfn==1 && nfp == 1", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_1n1p.png");
-//        c1->Clear();
-
-
-// Theta_l - QEL only (1n1p):
-
-//        fChain->Draw(
-//                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
-//                "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
-//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_1n1p.png");
-//        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (other_E_cal_plots) {
+//
+//        //<editor-fold desc="One commend plots - Q2">
+//
+////  Q2 -all interactions (2p):
+//
+////        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==0 && nfp == 2", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_2p.png");
+////        c1->Clear();
+//
+//
+////  Q2 - QEL only (2p):
+//
+////        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_2p.png");
+////        c1->Clear();
+//
+//
+////  Q2 -all interactions (1n1p):
+//
+////        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==1 && nfp == 1", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_1n1p.png");
+////        c1->Clear();
+//
+//
+////  Q2 - QEL only (1n1p):
+//
+////        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_1n1p.png");
+////        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="One commend plots - Theta_l">
+//
+//// Theta_l -all interactions (2p):
+//
+////        fChain->Draw(
+////                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
+////                "nf==2 && nfn==0 && nfp == 2", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_2p.png");
+////        c1->Clear();
+//
+//
+//// Theta_l - QEL only (2p):
+//
+////        fChain->Draw(
+////                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
+////                "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_2p.png");
+////        c1->Clear();
+//
+//
+//// Theta_l -all interactions (1n1p):
+//
+////        fChain->Draw(
+////                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
+////                "nf==2 && nfn==1 && nfp == 1", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_1n1p.png");
+////        c1->Clear();
+//
+//
+//// Theta_l - QEL only (1n1p):
+//
+////        fChain->Draw(
+////                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
+////                "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
+////        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_1n1p.png");
+////        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 
 // Momentum histograms
 // ====================================================================================================
 
-    if (momentum_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting momentum histograms for 2p and 1n1p...\n";
-        cout << "\n";
-
-        //<editor-fold desc="Momentum histograms (2p)">
-        histPlotter1D(c1, P_L_hist_2p, normalized_P_L_plots, false, 1., "Momentum Histogram of Leading Proton P_{L} = P_{p1}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_2p, "P_L_histogram", "plots/momentum_histograms/2p/", "2p", kBlue, true, true, true);
-
-        histPlotter1D(c1, P_R_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Recoil Proton P_{R} = P_{p2}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_2p, "P_R_histogram", "plots/momentum_histograms/2p/", "2p", kRed, true, true, true);
-
-        histPlotter1D(c1, P_lp_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_2p, "P_lp_histogram", "plots/momentum_histograms/2p/", "2p", kGreen, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms (1n1p)">
-        histPlotter1D(c1, P_p_hist_1n1p, normalized_P_L_plots, false, 1., "Momentum Histogram of Scattered Proton P_{p}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_1n1p, "P_p_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kBlue, true, true, true);
-
-        histPlotter1D(c1, P_n_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Scattered Neutron P_{n}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_1n1p, "P_n_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kRed, true, true, true);
-
-        histPlotter1D(c1, P_l_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_1n1p, "P_l_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histogram stack (2p)">
-        MomentumStack_2p->Draw("nostack");
-        MomentumStack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        MomentumStack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        MomentumStack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
-        MomentumStack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-        MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
-
-        auto MomentumStack_2p_legend = new
-                TLegend(0.775, 0.7, 0.85, 0.875);
-
-        TLegendEntry *MomentumStack_2p_legend_P_L_entry = MomentumStack_2p_legend->AddEntry(P_L_hist_2p, "P_{L}", "l");
-        TLegendEntry *MomentumStack_2p_legend_P_R_entry = MomentumStack_2p_legend->AddEntry(P_R_hist_2p, "P_{R}", "l");
-        TLegendEntry *MomentumStack_2p_legend_P_lp_entry = MomentumStack_2p_legend->AddEntry(P_lp_hist_2p, "P_{l}", "l");
-
-        MomentumStack_2p_legend->Draw();
-
-        plots->Add(MomentumStack_2p);
-        c1->SaveAs("plots/momentum_histograms/Momentum_stack_2p.png");
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histogram stack (1n1p)">`
-        MomentumStack_1n1p->Draw("nostack");
-        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        MomentumStack_1n1p->GetHistogram()->GetXaxis()->CenterTitle(true);
-        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
-
-        auto MomentumStack_1n1p_legend = new
-                TLegend(0.775, 0.7, 0.85, 0.875);
-
-        TLegendEntry *MomentumStack_1n1p_legend_P_p_entry = MomentumStack_1n1p_legend->AddEntry(P_p_hist_1n1p, "P_{p}", "l");
-        TLegendEntry *MomentumStack_1n1p_legend_P_n_entry = MomentumStack_1n1p_legend->AddEntry(P_n_hist_1n1p, "P_{n}", "l");
-        TLegendEntry *MomentumStack_1n1p_legend_P_l_entry = MomentumStack_1n1p_legend->AddEntry(P_l_hist_1n1p, "P_{l}", "l");
-
-        MomentumStack_1n1p_legend->Draw();
-
-        plots->Add(MomentumStack_1n1p);
-        c1->SaveAs("plots/momentum_histograms/Momentum_stack_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
-
-    }
+//    if (momentum_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting momentum histograms for 2p and 1n1p...\n";
+//        cout << "\n";
+//
+//        //<editor-fold desc="Momentum histograms (2p)">
+//        histPlotter1D(c1, P_L_hist_2p, normalized_P_L_plots, false, 1., "Momentum Histogram of Leading Proton P_{L} = P_{p1}", "all interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, MomentumStack_2p, "P_L_histogram", "plots/momentum_histograms/2p/", "2p", kBlue, true, true, true);
+//
+//        histPlotter1D(c1, P_R_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Recoil Proton P_{R} = P_{p2}", "all interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, MomentumStack_2p, "P_R_histogram", "plots/momentum_histograms/2p/", "2p", kRed, true, true, true);
+//
+//        histPlotter1D(c1, P_lp_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, MomentumStack_2p, "P_lp_histogram", "plots/momentum_histograms/2p/", "2p", kGreen, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms (1n1p)">
+//        histPlotter1D(c1, P_p_hist_1n1p, normalized_P_L_plots, false, 1., "Momentum Histogram of Scattered Proton P_{p}", "all interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, MomentumStack_1n1p, "P_p_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kBlue, true, true, true);
+//
+//        histPlotter1D(c1, P_n_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Scattered Neutron P_{n}", "all interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, MomentumStack_1n1p, "P_n_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kRed, true, true, true);
+//
+//        histPlotter1D(c1, P_l_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, MomentumStack_1n1p, "P_l_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histogram stack (2p)">
+//        MomentumStack_2p->Draw("nostack");
+//        MomentumStack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        MomentumStack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        MomentumStack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        MomentumStack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//        MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
+//
+//        auto MomentumStack_2p_legend = new
+//                TLegend(0.775, 0.7, 0.85, 0.875);
+//
+//        TLegendEntry *MomentumStack_2p_legend_P_L_entry = MomentumStack_2p_legend->AddEntry(P_L_hist_2p, "P_{L}", "l");
+//        TLegendEntry *MomentumStack_2p_legend_P_R_entry = MomentumStack_2p_legend->AddEntry(P_R_hist_2p, "P_{R}", "l");
+//        TLegendEntry *MomentumStack_2p_legend_P_lp_entry = MomentumStack_2p_legend->AddEntry(P_lp_hist_2p, "P_{l}", "l");
+//
+//        MomentumStack_2p_legend->Draw();
+//
+//        plots->Add(MomentumStack_2p);
+//        c1->SaveAs("plots/momentum_histograms/Momentum_stack_2p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histogram stack (1n1p)">`
+//        MomentumStack_1n1p->Draw("nostack");
+//        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        MomentumStack_1n1p->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
+//
+//        auto MomentumStack_1n1p_legend = new
+//                TLegend(0.775, 0.7, 0.85, 0.875);
+//
+//        TLegendEntry *MomentumStack_1n1p_legend_P_p_entry = MomentumStack_1n1p_legend->AddEntry(P_p_hist_1n1p, "P_{p}", "l");
+//        TLegendEntry *MomentumStack_1n1p_legend_P_n_entry = MomentumStack_1n1p_legend->AddEntry(P_n_hist_1n1p, "P_{n}", "l");
+//        TLegendEntry *MomentumStack_1n1p_legend_P_l_entry = MomentumStack_1n1p_legend->AddEntry(P_l_hist_1n1p, "P_{l}", "l");
+//
+//        MomentumStack_1n1p_legend->Draw();
+//
+//        plots->Add(MomentumStack_1n1p);
+//        c1->SaveAs("plots/momentum_histograms/Momentum_stack_1n1p.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+//    }
 
 
 // MicroBooNE article histogram reconstructions
 // ====================================================================================================
 
-    if (MicroBooNE_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting article histograms...\n";
-        cout << "\n";
-
-// Momentum plots -------------------------------------------------------------------------------------
-
-        P_L_hist->Draw();
-        plots->Add(P_L_hist);
-        P_L_hist->SetLineWidth(2);
-        P_L_hist->GetXaxis()->CenterTitle(true);
-        P_L_hist->SetLineColor(kBlue);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_log_scale.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_linear_scale.png");
-        c1->Clear();
-
-        P_R_hist->Draw();
-        plots->Add(P_R_hist);
-        P_R_hist->SetLineWidth(2);
-        P_R_hist->GetXaxis()->CenterTitle(true);
-        P_R_hist->SetLineColor(kBlue);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_log_scale.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_linear_scale.png");
-        c1->Clear();
-
-        P_l_hist->Draw();
-        plots->Add(P_l_hist);
-        P_l_hist->SetLineWidth(2);
-        P_l_hist->GetXaxis()->CenterTitle(true);
-        P_l_hist->SetLineColor(kBlue);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_log_scale.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_linear_scale.png");
-        c1->Clear();
-
-        P_pion_hist->Draw();
-        plots->Add(P_pion_hist);
-        P_pion_hist->SetLineWidth(2);
-        P_pion_hist->GetXaxis()->CenterTitle(true);
-        P_pion_hist->SetLineColor(kBlue);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_log_scale.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_linear_scale.png");
-        c1->Clear();
-
-// Unweighted plots -----------------------------------------------------------------------------
-
-        gamma_Lab_hist->Draw();
-        gamma_Lab_hist->SetTitleSize(0.06);
-        gamma_Lab_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_hist->GetYaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_hist->GetYaxis()->SetLimits(0., 3.);
-        plots->Add(gamma_Lab_hist);
-        gamma_Lab_hist->SetLineWidth(2);
-        gamma_Lab_hist->SetLineColor(kBlue);
-//        gamma_Lab_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab.png");
-        c1->Clear();
-
-        gamma_mu_p_tot->Draw();
-        gamma_mu_p_tot->SetTitleSize(0.06);
-        gamma_mu_p_tot->GetXaxis()->SetLabelSize(0.0425);
-        gamma_mu_p_tot->GetXaxis()->CenterTitle(true);
-        gamma_mu_p_tot->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_mu_p_tot);
-        gamma_mu_p_tot->SetLineWidth(2);
-        gamma_mu_p_tot->SetLineColor(kBlue);
-//        gamma_mu_p_tot->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot.png");
-        c1->Clear();
-
-        dP_T_hist->Draw();
-        dP_T_hist->SetTitleSize(0.06);
-        dP_T_hist->GetXaxis()->SetLabelSize(0.0425);
-        dP_T_hist->GetXaxis()->CenterTitle(true);
-        dP_T_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(dP_T_hist);
-        dP_T_hist->SetLineWidth(2);
-        dP_T_hist->SetLineColor(kBlue);
-//        dP_T_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram.png");
-        c1->Clear();
-
-        gamma_Lab_all_hist->Draw();
-        gamma_Lab_all_hist->SetTitleSize(0.06);
-        gamma_Lab_all_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_all_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_all_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_all_hist);
-        gamma_Lab_all_hist->SetLineWidth(2);
-        gamma_Lab_all_hist->SetLineColor(kBlue);
-//        gamma_Lab_all_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all.png");
-        c1->Clear();
-
-        gamma_Lab_QEL_hist->Draw();
-        gamma_Lab_QEL_hist->SetTitleSize(0.06);
-        gamma_Lab_QEL_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_QEL_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_QEL_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_QEL_hist);
-        gamma_Lab_QEL_hist->SetLineWidth(2);
-        gamma_Lab_QEL_hist->SetLineColor(kBlue);
-//        gamma_Lab_QEL_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL.png");
-        c1->Clear();
-
-        gamma_Lab_MEC_hist->Draw();
-        gamma_Lab_MEC_hist->SetTitleSize(0.06);
-        gamma_Lab_MEC_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_MEC_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_MEC_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_MEC_hist);
-        gamma_Lab_MEC_hist->SetLineWidth(2);
-        gamma_Lab_MEC_hist->SetLineColor(kBlue);
-//        gamma_Lab_MEC_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC.png");
-        c1->Clear();
-
-        gamma_Lab_RES_hist->Draw();
-        gamma_Lab_RES_hist->SetTitleSize(0.06);
-        gamma_Lab_RES_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_RES_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_RES_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_RES_hist);
-        gamma_Lab_RES_hist->SetLineWidth(2);
-        gamma_Lab_RES_hist->SetLineColor(kBlue);
-//        gamma_Lab_RES_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES.png");
-        c1->Clear();
-
-        gamma_Lab_DIS_hist->Draw();
-        gamma_Lab_DIS_hist->SetTitleSize(0.06);
-        gamma_Lab_DIS_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_DIS_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_DIS_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_DIS_hist);
-        gamma_Lab_DIS_hist->SetLineWidth(2);
-        gamma_Lab_DIS_hist->SetLineColor(kBlue);
-//        gamma_Lab_DIS_hist->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS.png");
-        c1->Clear();
-
-// Weighted plots -------------------------------------------------------------------------------
-
-        gamma_Lab_hist_weighted->Draw();
-        gamma_Lab_hist_weighted->Sumw2();
-        gamma_Lab_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_hist_weighted);
-        gamma_Lab_hist_weighted->SetLineWidth(2);
-        gamma_Lab_hist_weighted->SetLineColor(kBlue);
-        gamma_Lab_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab_weighted.png");
-        c1->Clear();
-
-        gamma_mu_p_tot_weighted->Draw();
-        gamma_mu_p_tot_weighted->Sumw2();
-        gamma_mu_p_tot_weighted->SetTitleSize(0.06);
-        gamma_mu_p_tot_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_mu_p_tot_weighted->GetXaxis()->CenterTitle(true);
-        gamma_mu_p_tot_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_mu_p_tot_weighted);
-        gamma_mu_p_tot_weighted->SetLineWidth(2);
-        gamma_mu_p_tot_weighted->SetLineColor(kBlue);
-        gamma_mu_p_tot_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot_weighted.png");
-        c1->Clear();
-
-        dP_T_hist_weighted->Draw();
-        dP_T_hist_weighted->Sumw2();
-        dP_T_hist_weighted->SetTitleSize(0.06);
-        dP_T_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        dP_T_hist_weighted->GetXaxis()->CenterTitle(true);
-        dP_T_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(dP_T_hist_weighted);
-        dP_T_hist_weighted->SetLineWidth(2);
-        dP_T_hist_weighted->SetLineColor(kBlue);
-        dP_T_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram_weighted.png");
-        c1->Clear();
-
-
-        gamma_Lab_all_hist_weighted->Draw();
-        gamma_Lab_all_hist_weighted->Sumw2();
-        gamma_Lab_all_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_all_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_all_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_all_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_all_hist_weighted);
-        gamma_Lab_all_hist_weighted->SetLineWidth(2);
-        gamma_Lab_all_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_all_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all_weighted.png");
-        c1->Clear();
-
-        gamma_Lab_QEL_hist_weighted->Draw();
-        gamma_Lab_QEL_hist_weighted->Sumw2();
-        gamma_Lab_QEL_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_QEL_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_QEL_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_QEL_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_QEL_hist_weighted);
-        gamma_Lab_QEL_hist_weighted->SetLineWidth(2);
-        gamma_Lab_QEL_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_QEL_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL_weighted.png");
-        c1->Clear();
-
-        gamma_Lab_MEC_hist_weighted->Draw();
-        gamma_Lab_MEC_hist_weighted->Sumw2();
-        gamma_Lab_MEC_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_MEC_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_MEC_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_MEC_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_MEC_hist_weighted);
-        gamma_Lab_MEC_hist_weighted->SetLineWidth(2);
-        gamma_Lab_MEC_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_MEC_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC_weighted.png");
-        c1->Clear();
-
-        gamma_Lab_RES_hist_weighted->Draw();
-        gamma_Lab_RES_hist_weighted->Sumw2();
-        gamma_Lab_RES_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_RES_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_RES_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_RES_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_RES_hist_weighted);
-        gamma_Lab_RES_hist_weighted->SetLineWidth(2);
-        gamma_Lab_RES_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_RES_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES_weighted.png");
-        c1->Clear();
-
-        gamma_Lab_DIS_hist_weighted->Draw();
-        gamma_Lab_DIS_hist_weighted->Sumw2();
-        gamma_Lab_DIS_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_DIS_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_DIS_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_DIS_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_DIS_hist_weighted);
-        gamma_Lab_DIS_hist_weighted->SetLineWidth(2);
-        gamma_Lab_DIS_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_DIS_hist_weighted->SetStats(0);
-        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS_weighted.png");
-        c1->Clear();
-
-    }
+//    if (MicroBooNE_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting article histograms...\n";
+//        cout << "\n";
+//
+//// Momentum plots -------------------------------------------------------------------------------------
+//
+//        P_L_hist->Draw();
+//        plots->Add(P_L_hist);
+//        P_L_hist->SetLineWidth(2);
+//        P_L_hist->GetXaxis()->CenterTitle(true);
+//        P_L_hist->SetLineColor(kBlue);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_log_scale.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_linear_scale.png");
+//        c1->Clear();
+//
+//        P_R_hist->Draw();
+//        plots->Add(P_R_hist);
+//        P_R_hist->SetLineWidth(2);
+//        P_R_hist->GetXaxis()->CenterTitle(true);
+//        P_R_hist->SetLineColor(kBlue);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_log_scale.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_linear_scale.png");
+//        c1->Clear();
+//
+//        P_l_hist->Draw();
+//        plots->Add(P_l_hist);
+//        P_l_hist->SetLineWidth(2);
+//        P_l_hist->GetXaxis()->CenterTitle(true);
+//        P_l_hist->SetLineColor(kBlue);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_log_scale.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_linear_scale.png");
+//        c1->Clear();
+//
+//        P_pion_hist->Draw();
+//        plots->Add(P_pion_hist);
+//        P_pion_hist->SetLineWidth(2);
+//        P_pion_hist->GetXaxis()->CenterTitle(true);
+//        P_pion_hist->SetLineColor(kBlue);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_log_scale.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_linear_scale.png");
+//        c1->Clear();
+//
+//// Unweighted plots -----------------------------------------------------------------------------
+//
+//        gamma_Lab_hist->Draw();
+//        gamma_Lab_hist->SetTitleSize(0.06);
+//        gamma_Lab_hist->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_hist->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_hist->GetYaxis()->SetLabelSize(0.0425);
+////        gamma_Lab_hist->GetYaxis()->SetLimits(0., 3.);
+//        plots->Add(gamma_Lab_hist);
+//        gamma_Lab_hist->SetLineWidth(2);
+//        gamma_Lab_hist->SetLineColor(kBlue);
+////        gamma_Lab_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab.png");
+//        c1->Clear();
+//
+//        gamma_mu_p_tot->Draw();
+//        gamma_mu_p_tot->SetTitleSize(0.06);
+//        gamma_mu_p_tot->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_mu_p_tot->GetXaxis()->CenterTitle(true);
+//        gamma_mu_p_tot->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_mu_p_tot);
+//        gamma_mu_p_tot->SetLineWidth(2);
+//        gamma_mu_p_tot->SetLineColor(kBlue);
+////        gamma_mu_p_tot->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot.png");
+//        c1->Clear();
+//
+//        dP_T_hist->Draw();
+//        dP_T_hist->SetTitleSize(0.06);
+//        dP_T_hist->GetXaxis()->SetLabelSize(0.0425);
+//        dP_T_hist->GetXaxis()->CenterTitle(true);
+//        dP_T_hist->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(dP_T_hist);
+//        dP_T_hist->SetLineWidth(2);
+//        dP_T_hist->SetLineColor(kBlue);
+////        dP_T_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram.png");
+//        c1->Clear();
+//
+//        gamma_Lab_all_hist->Draw();
+//        gamma_Lab_all_hist->SetTitleSize(0.06);
+//        gamma_Lab_all_hist->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_all_hist->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_all_hist->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_all_hist);
+//        gamma_Lab_all_hist->SetLineWidth(2);
+//        gamma_Lab_all_hist->SetLineColor(kBlue);
+////        gamma_Lab_all_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all.png");
+//        c1->Clear();
+//
+//        gamma_Lab_QEL_hist->Draw();
+//        gamma_Lab_QEL_hist->SetTitleSize(0.06);
+//        gamma_Lab_QEL_hist->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_QEL_hist->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_QEL_hist->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_QEL_hist);
+//        gamma_Lab_QEL_hist->SetLineWidth(2);
+//        gamma_Lab_QEL_hist->SetLineColor(kBlue);
+////        gamma_Lab_QEL_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL.png");
+//        c1->Clear();
+//
+//        gamma_Lab_MEC_hist->Draw();
+//        gamma_Lab_MEC_hist->SetTitleSize(0.06);
+//        gamma_Lab_MEC_hist->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_MEC_hist->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_MEC_hist->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_MEC_hist);
+//        gamma_Lab_MEC_hist->SetLineWidth(2);
+//        gamma_Lab_MEC_hist->SetLineColor(kBlue);
+////        gamma_Lab_MEC_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC.png");
+//        c1->Clear();
+//
+//        gamma_Lab_RES_hist->Draw();
+//        gamma_Lab_RES_hist->SetTitleSize(0.06);
+//        gamma_Lab_RES_hist->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_RES_hist->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_RES_hist->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_RES_hist);
+//        gamma_Lab_RES_hist->SetLineWidth(2);
+//        gamma_Lab_RES_hist->SetLineColor(kBlue);
+////        gamma_Lab_RES_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES.png");
+//        c1->Clear();
+//
+//        gamma_Lab_DIS_hist->Draw();
+//        gamma_Lab_DIS_hist->SetTitleSize(0.06);
+//        gamma_Lab_DIS_hist->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_DIS_hist->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_DIS_hist->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_DIS_hist);
+//        gamma_Lab_DIS_hist->SetLineWidth(2);
+//        gamma_Lab_DIS_hist->SetLineColor(kBlue);
+////        gamma_Lab_DIS_hist->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS.png");
+//        c1->Clear();
+//
+//// Weighted plots -------------------------------------------------------------------------------
+//
+//        gamma_Lab_hist_weighted->Draw();
+//        gamma_Lab_hist_weighted->Sumw2();
+//        gamma_Lab_hist_weighted->SetTitleSize(0.06);
+//        gamma_Lab_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_hist_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_hist_weighted);
+//        gamma_Lab_hist_weighted->SetLineWidth(2);
+//        gamma_Lab_hist_weighted->SetLineColor(kBlue);
+//        gamma_Lab_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab_weighted.png");
+//        c1->Clear();
+//
+//        gamma_mu_p_tot_weighted->Draw();
+//        gamma_mu_p_tot_weighted->Sumw2();
+//        gamma_mu_p_tot_weighted->SetTitleSize(0.06);
+//        gamma_mu_p_tot_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_mu_p_tot_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_mu_p_tot_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_mu_p_tot_weighted);
+//        gamma_mu_p_tot_weighted->SetLineWidth(2);
+//        gamma_mu_p_tot_weighted->SetLineColor(kBlue);
+//        gamma_mu_p_tot_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot_weighted.png");
+//        c1->Clear();
+//
+//        dP_T_hist_weighted->Draw();
+//        dP_T_hist_weighted->Sumw2();
+//        dP_T_hist_weighted->SetTitleSize(0.06);
+//        dP_T_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        dP_T_hist_weighted->GetXaxis()->CenterTitle(true);
+//        dP_T_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(dP_T_hist_weighted);
+//        dP_T_hist_weighted->SetLineWidth(2);
+//        dP_T_hist_weighted->SetLineColor(kBlue);
+//        dP_T_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram_weighted.png");
+//        c1->Clear();
+//
+//
+//        gamma_Lab_all_hist_weighted->Draw();
+//        gamma_Lab_all_hist_weighted->Sumw2();
+//        gamma_Lab_all_hist_weighted->SetTitleSize(0.06);
+//        gamma_Lab_all_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_all_hist_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_all_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_all_hist_weighted);
+//        gamma_Lab_all_hist_weighted->SetLineWidth(2);
+//        gamma_Lab_all_hist_weighted->SetLineColor(kBlue);
+////        gamma_Lab_all_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all_weighted.png");
+//        c1->Clear();
+//
+//        gamma_Lab_QEL_hist_weighted->Draw();
+//        gamma_Lab_QEL_hist_weighted->Sumw2();
+//        gamma_Lab_QEL_hist_weighted->SetTitleSize(0.06);
+//        gamma_Lab_QEL_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_QEL_hist_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_QEL_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_QEL_hist_weighted);
+//        gamma_Lab_QEL_hist_weighted->SetLineWidth(2);
+//        gamma_Lab_QEL_hist_weighted->SetLineColor(kBlue);
+////        gamma_Lab_QEL_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL_weighted.png");
+//        c1->Clear();
+//
+//        gamma_Lab_MEC_hist_weighted->Draw();
+//        gamma_Lab_MEC_hist_weighted->Sumw2();
+//        gamma_Lab_MEC_hist_weighted->SetTitleSize(0.06);
+//        gamma_Lab_MEC_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_MEC_hist_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_MEC_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_MEC_hist_weighted);
+//        gamma_Lab_MEC_hist_weighted->SetLineWidth(2);
+//        gamma_Lab_MEC_hist_weighted->SetLineColor(kBlue);
+////        gamma_Lab_MEC_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC_weighted.png");
+//        c1->Clear();
+//
+//        gamma_Lab_RES_hist_weighted->Draw();
+//        gamma_Lab_RES_hist_weighted->Sumw2();
+//        gamma_Lab_RES_hist_weighted->SetTitleSize(0.06);
+//        gamma_Lab_RES_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_RES_hist_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_RES_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_RES_hist_weighted);
+//        gamma_Lab_RES_hist_weighted->SetLineWidth(2);
+//        gamma_Lab_RES_hist_weighted->SetLineColor(kBlue);
+////        gamma_Lab_RES_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES_weighted.png");
+//        c1->Clear();
+//
+//        gamma_Lab_DIS_hist_weighted->Draw();
+//        gamma_Lab_DIS_hist_weighted->Sumw2();
+//        gamma_Lab_DIS_hist_weighted->SetTitleSize(0.06);
+//        gamma_Lab_DIS_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_DIS_hist_weighted->GetXaxis()->CenterTitle(true);
+//        gamma_Lab_DIS_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+//        plots->Add(gamma_Lab_DIS_hist_weighted);
+//        gamma_Lab_DIS_hist_weighted->SetLineWidth(2);
+//        gamma_Lab_DIS_hist_weighted->SetLineColor(kBlue);
+////        gamma_Lab_DIS_hist_weighted->SetStats(0);
+//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS_weighted.png");
+//        c1->Clear();
+//
+//    }
 
 
 // Inclusive Energy transfer histograms
 // ====================================================================================================
 
-    if (inclusive_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting inclusive histograms...\n";
-        cout << "\n";
-
-//      Q2 histogram (inclusive) -----------------------------------------------------
-
-        Q2_hist_inclusive->Draw();
-        plots->Add(Q2_hist_inclusive);
-        Q2_hist_inclusive->SetLineWidth(2);
-        Q2_hist_inclusive->GetXaxis()->CenterTitle(true);
-        Q2_hist_inclusive->SetLineColor(kBlue);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Q2_inclusive.png");
-        Q2_hist_inclusive->SetLineWidth(4);
-        Q2_hist_inclusive->SetLineStyle(2);
-//        Q2_hist_inclusive->SetLineStyle(5);
-        Q2_hist_inclusive->SetStats(0);
-        c1->Clear();
-
-
-//     all interactions (ET around theta_l = 15) -----------------------------------------------------
-
-//      Normalization factor (equals to max(E_Trans15_all_inclusive)):
-        auto factor_E_Trans_inclusive = E_Trans15_all_inclusive->GetMaximum();
-
-        if (normalized_inclusive_plots) {
-            E_Trans15_all_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-            E_Trans15_all_inclusive->Draw("HIST");
-        } else {
-            E_Trans15_all_inclusive->Draw();
-        }
-
-        plots->Add(E_Trans15_all_inclusive);
-        E_Trans15_all_inclusive->SetLineWidth(2);
-        E_Trans15_all_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans15_all_inclusive->SetLineColor(kBlack);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_all_interactions_liner_scale_inclusive.png");
-        E_Trans15_all_inclusive->SetLineWidth(4);
-        E_Trans15_all_inclusive->SetLineStyle(2);
-//        E_Trans15_all_inclusive->SetLineStyle(5);
-        E_Trans15_all_inclusive->SetStats(0);
-        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_all_inclusive);
-        c1->Clear();
-
-
-//      QEL only (ET around theta_l = 15) -------------------------------------------------------------
-
-        if (normalized_inclusive_plots) {
-//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-            E_Trans15_QEL_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-            E_Trans15_QEL_inclusive->Draw("HIST");
-        } else {
-            E_Trans15_QEL_inclusive->Draw();
-        }
-
-        plots->Add(E_Trans15_QEL_inclusive);
-        E_Trans15_QEL_inclusive->SetLineWidth(2);
-        E_Trans15_QEL_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans15_QEL_inclusive->SetLineColor(kBlue);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_QEL_only_liner_scale_inclusive.png");
-        E_Trans15_QEL_inclusive->SetStats(0);
-        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_QEL_inclusive);
-        c1->Clear();
-
-
-//      MEC only (ET around theta_l = 15) -------------------------------------------------------------
-
-        if (normalized_inclusive_plots) {
-//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-            E_Trans15_MEC_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-            E_Trans15_MEC_inclusive->Draw("HIST");
-        } else {
-            E_Trans15_MEC_inclusive->Draw();
-        }
-        plots->Add(E_Trans15_MEC_inclusive);
-        E_Trans15_MEC_inclusive->SetLineWidth(2);
-        E_Trans15_MEC_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans15_MEC_inclusive->SetLineColor(kRed);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_MEC_only_liner_scale_inclusive.png");
-        E_Trans15_MEC_inclusive->SetStats(0);
-        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_MEC_inclusive);
-        c1->Clear();
-
-
-//      RES only (ET around theta_l = 15) -------------------------------------------------------------
-
-        if (normalized_inclusive_plots) {
-//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-            E_Trans15_RES_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-            E_Trans15_RES_inclusive->Draw("HIST");
-        } else {
-            E_Trans15_RES_inclusive->Draw();
-        }
-        plots->Add(E_Trans15_RES_inclusive);
-        E_Trans15_RES_inclusive->SetLineWidth(2);
-        E_Trans15_RES_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans15_RES_inclusive->SetLineColor(kGreen);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_RES_only_liner_scale_inclusive.png");
-        E_Trans15_RES_inclusive->SetStats(0);
-        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_RES_inclusive);
-        c1->Clear();
-
-
-//      DIS only (ET around theta_l = 15) -------------------------------------------------------------
-
-        if (normalized_inclusive_plots) {
-//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-            E_Trans15_DIS_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-            E_Trans15_DIS_inclusive->Draw("HIST");
-        } else {
-            E_Trans15_DIS_inclusive->Draw();
-        }
-        plots->Add(E_Trans15_DIS_inclusive);
-        E_Trans15_DIS_inclusive->SetLineWidth(2);
-        E_Trans15_DIS_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans15_DIS_inclusive->SetLineColor(kCyan);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_DIS_only_liner_scale_inclusive.png");
-        E_Trans15_DIS_inclusive->SetStats(0);
-        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_DIS_inclusive);
-        c1->Clear();
-
-
-//      Inclusive ET stack (around theta_l = 15) ------------------------------------------------------
-
-        Energy_Transfer_all_int_15_inclusive_Stack->Draw("nostack");
-        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_inclusive_plots) {
-            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
-                    "Energy Transfer (^{12}C(e,e')) in range 14#circ #leq #theta_{l} #leq 16#circ - Normalized");
-        } else {
-            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p and 1n1p, ^{12}C(e,e'))");
-        }
-
-        auto E_Trans_15_inclusive_legend = new
-                TLegend(0.625, 0.625, 0.9, 0.9);
-
-        TLegendEntry *E_Trans_15_all_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_all_inclusive, "All interactions", "l");
-        TLegendEntry *E_Trans_15_QEL_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_QEL_inclusive, "QEL only", "l");
-        TLegendEntry *E_Trans_15_MEC_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_MEC_inclusive, "MEC only", "l");
-        TLegendEntry *E_Trans_15_RES_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_RES_inclusive, "RES only", "l");
-        TLegendEntry *E_Trans_15_DIS_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_DIS_inclusive, "DIS only ", "l");
-
-        E_Trans_15_inclusive_legend->Draw();
-
-        plots->Add(Energy_Transfer_all_int_15_inclusive_Stack);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_histogram_15_Stack_liner_scale_inclusive.png");
-        c1->Clear();
-
-
+//    if (inclusive_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting inclusive histograms...\n";
+//        cout << "\n";
+//
+////      Q2 histogram (inclusive) -----------------------------------------------------
+//
+//        Q2_hist_inclusive->Draw();
+//        plots->Add(Q2_hist_inclusive);
+//        Q2_hist_inclusive->SetLineWidth(2);
+//        Q2_hist_inclusive->GetXaxis()->CenterTitle(true);
+//        Q2_hist_inclusive->SetLineColor(kBlue);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Q2_inclusive.png");
+//        Q2_hist_inclusive->SetLineWidth(4);
+//        Q2_hist_inclusive->SetLineStyle(2);
+////        Q2_hist_inclusive->SetLineStyle(5);
+//        Q2_hist_inclusive->SetStats(0);
+//        c1->Clear();
+//
+//
+////     all interactions (ET around theta_l = 15) -----------------------------------------------------
+//
+////      Normalization factor (equals to max(E_Trans15_all_inclusive)):
+//        auto factor_E_Trans_inclusive = E_Trans15_all_inclusive->GetMaximum();
+//
+//        if (normalized_inclusive_plots) {
+//            E_Trans15_all_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+//            E_Trans15_all_inclusive->Draw("HIST");
+//        } else {
+//            E_Trans15_all_inclusive->Draw();
+//        }
+//
+//        plots->Add(E_Trans15_all_inclusive);
+//        E_Trans15_all_inclusive->SetLineWidth(2);
+//        E_Trans15_all_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans15_all_inclusive->SetLineColor(kBlack);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_all_interactions_liner_scale_inclusive.png");
+//        E_Trans15_all_inclusive->SetLineWidth(4);
+//        E_Trans15_all_inclusive->SetLineStyle(2);
+////        E_Trans15_all_inclusive->SetLineStyle(5);
+//        E_Trans15_all_inclusive->SetStats(0);
+//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_all_inclusive);
+//        c1->Clear();
+//
+//
+////      QEL only (ET around theta_l = 15) -------------------------------------------------------------
+//
+//        if (normalized_inclusive_plots) {
+////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+//            E_Trans15_QEL_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+//            E_Trans15_QEL_inclusive->Draw("HIST");
+//        } else {
+//            E_Trans15_QEL_inclusive->Draw();
+//        }
+//
+//        plots->Add(E_Trans15_QEL_inclusive);
+//        E_Trans15_QEL_inclusive->SetLineWidth(2);
+//        E_Trans15_QEL_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans15_QEL_inclusive->SetLineColor(kBlue);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_QEL_only_liner_scale_inclusive.png");
+//        E_Trans15_QEL_inclusive->SetStats(0);
+//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_QEL_inclusive);
+//        c1->Clear();
+//
+//
+////      MEC only (ET around theta_l = 15) -------------------------------------------------------------
+//
+//        if (normalized_inclusive_plots) {
+////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+//            E_Trans15_MEC_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+//            E_Trans15_MEC_inclusive->Draw("HIST");
+//        } else {
+//            E_Trans15_MEC_inclusive->Draw();
+//        }
+//        plots->Add(E_Trans15_MEC_inclusive);
+//        E_Trans15_MEC_inclusive->SetLineWidth(2);
+//        E_Trans15_MEC_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans15_MEC_inclusive->SetLineColor(kRed);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_MEC_only_liner_scale_inclusive.png");
+//        E_Trans15_MEC_inclusive->SetStats(0);
+//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_MEC_inclusive);
+//        c1->Clear();
+//
+//
+////      RES only (ET around theta_l = 15) -------------------------------------------------------------
+//
+//        if (normalized_inclusive_plots) {
+////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+//            E_Trans15_RES_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+//            E_Trans15_RES_inclusive->Draw("HIST");
+//        } else {
+//            E_Trans15_RES_inclusive->Draw();
+//        }
+//        plots->Add(E_Trans15_RES_inclusive);
+//        E_Trans15_RES_inclusive->SetLineWidth(2);
+//        E_Trans15_RES_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans15_RES_inclusive->SetLineColor(kGreen);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_RES_only_liner_scale_inclusive.png");
+//        E_Trans15_RES_inclusive->SetStats(0);
+//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_RES_inclusive);
+//        c1->Clear();
+//
+//
+////      DIS only (ET around theta_l = 15) -------------------------------------------------------------
+//
+//        if (normalized_inclusive_plots) {
+////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+//            E_Trans15_DIS_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+//            E_Trans15_DIS_inclusive->Draw("HIST");
+//        } else {
+//            E_Trans15_DIS_inclusive->Draw();
+//        }
+//        plots->Add(E_Trans15_DIS_inclusive);
+//        E_Trans15_DIS_inclusive->SetLineWidth(2);
+//        E_Trans15_DIS_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans15_DIS_inclusive->SetLineColor(kCyan);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_DIS_only_liner_scale_inclusive.png");
+//        E_Trans15_DIS_inclusive->SetStats(0);
+//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_DIS_inclusive);
+//        c1->Clear();
+//
+//
+////      Inclusive ET stack (around theta_l = 15) ------------------------------------------------------
+//
+//        Energy_Transfer_all_int_15_inclusive_Stack->Draw("nostack");
+//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_inclusive_plots) {
+//            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
+//                    "Energy Transfer (^{12}C(e,e')) in range 14#circ #leq #theta_{l} #leq 16#circ - Normalized");
+//        } else {
+//            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p and 1n1p, ^{12}C(e,e'))");
+//        }
+//
+//        auto E_Trans_15_inclusive_legend = new
+//                TLegend(0.625, 0.625, 0.9, 0.9);
+//
+//        TLegendEntry *E_Trans_15_all_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_all_inclusive, "All interactions", "l");
+//        TLegendEntry *E_Trans_15_QEL_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_QEL_inclusive, "QEL only", "l");
+//        TLegendEntry *E_Trans_15_MEC_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_MEC_inclusive, "MEC only", "l");
+//        TLegendEntry *E_Trans_15_RES_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_RES_inclusive, "RES only", "l");
+//        TLegendEntry *E_Trans_15_DIS_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_DIS_inclusive, "DIS only ", "l");
+//
+//        E_Trans_15_inclusive_legend->Draw();
+//
+//        plots->Add(Energy_Transfer_all_int_15_inclusive_Stack);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_histogram_15_Stack_liner_scale_inclusive.png");
+//        c1->Clear();
+//
+//
+//////      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
+////        auto E_Trans_VS_q_all_inclusive = E_Trans_VS_q_all_inclusive->GetMaximum();
+//
 ////      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
-//        auto E_Trans_VS_q_all_inclusive = E_Trans_VS_q_all_inclusive->GetMaximum();
-
-//      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
-        double factor_E_Trans_VS_q_all_inclusive = 1.;
-
-        if (normalized_E_l_plots) {
-            E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{12}C(e,e')) - Normalized");
-            E_Trans_VS_q_all_inclusive->Scale(factor_E_Trans_VS_q_all_inclusive / E_Trans_VS_q_all_inclusive->Integral(), "width");
-            E_Trans_VS_q_all_inclusive->Draw("colz");
-            E_Trans_VS_q_all_inclusive->SetMaximum(1.5);
-        } else {
-            E_Trans_VS_q_all_inclusive->Draw("colz");
-        }
-
-        E_Trans_VS_q_all_inclusive->SetTitleSize(0.06, "xyz");
-        E_Trans_VS_q_all_inclusive->GetXaxis()->SetLabelSize(0.0425);
-        E_Trans_VS_q_all_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q_all_inclusive->GetYaxis()->SetLabelSize(0.0425);
-        E_Trans_VS_q_all_inclusive->GetYaxis()->CenterTitle(true);
-        E_Trans_VS_q_all_inclusive->GetZaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_all_inclusive->Draw("colz");
-        plots->Add(E_Trans_VS_q_all_inclusive);
-        E_Trans_VS_q_all_inclusive->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_log_scale.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_liner_scale.png");
-        c1->Clear();
-
-//      Normalization factor (equals to max(fsEl_VS_theta_l_all_int_2p)):
-        double factor_E_Trans_VS_q_QEL_inclusive = 1.;
-
-        if (normalized_E_l_plots) {
-            E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{12}C(e,e')) - Normalized");
-            E_Trans_VS_q_QEL_inclusive->Scale(factor_E_Trans_VS_q_QEL_inclusive / E_Trans_VS_q_QEL_inclusive->Integral(), "width");
-            E_Trans_VS_q_QEL_inclusive->Draw("colz");
-            E_Trans_VS_q_QEL_inclusive->SetMaximum(1.5);
-        } else {
-            E_Trans_VS_q_QEL_inclusive->Draw("colz");
-        }
-
-        E_Trans_VS_q_QEL_inclusive->SetTitleSize(0.06, "xyz");
-        E_Trans_VS_q_QEL_inclusive->GetXaxis()->SetLabelSize(0.0425);
-        E_Trans_VS_q_QEL_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q_QEL_inclusive->GetYaxis()->SetLabelSize(0.0425);
-        E_Trans_VS_q_QEL_inclusive->GetYaxis()->CenterTitle(true);
-        E_Trans_VS_q_QEL_inclusive->GetZaxis()->SetLabelSize(0.0425);
-
-//        E_Trans_VS_q_QEL_inclusive->Draw("colz");
-        plots->Add(E_Trans_VS_q_QEL_inclusive);
-        E_Trans_VS_q_QEL_inclusive->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_log_scale.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_liner_scale.png");
-        c1->Clear();
-
-//      Normalization factor (equals to max(E_Trans_VS_q_MEC_inclusive)):
-        double factor_E_Trans_VS_q_MEC_inclusive = 1.;
-
-        if (normalized_E_l_plots) {
-            E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{12}C(e,e')) - Normalized");
-            E_Trans_VS_q_MEC_inclusive->Scale(factor_E_Trans_VS_q_MEC_inclusive / E_Trans_VS_q_MEC_inclusive->Integral(), "width");
-            E_Trans_VS_q_MEC_inclusive->Draw("colz");
-            E_Trans_VS_q_MEC_inclusive->SetMaximum(1.5);
-        } else {
-            E_Trans_VS_q_MEC_inclusive->Draw("colz");
-        }
-
-        E_Trans_VS_q_MEC_inclusive->SetTitleSize(0.06, "xyz");
-        E_Trans_VS_q_MEC_inclusive->GetXaxis()->SetLabelSize(0.0425);
-        E_Trans_VS_q_MEC_inclusive->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q_MEC_inclusive->GetYaxis()->SetLabelSize(0.0425);
-        E_Trans_VS_q_MEC_inclusive->GetYaxis()->CenterTitle(true);
-        E_Trans_VS_q_MEC_inclusive->GetZaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_MEC_inclusive->Draw("colz");
-        plots->Add(E_Trans_VS_q_MEC_inclusive);
-        E_Trans_VS_q_MEC_inclusive->SetStats(0);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_log_scale.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_liner_scale.png");
-        c1->Clear();
-
-// 2p: MOVE TO ET
-
-        E_Trans_VS_q3_all_2p->Draw("colz");
-        plots->Add(E_Trans_VS_q3_all_2p);
-        E_Trans_VS_q3_all_2p->SetStats(0);
-        E_Trans_VS_q3_all_2p->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q3_all_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_2p.png");
-        c1->Clear();
-
-        E_Trans_VS_q3_QEL_2p->Draw("colz");
-        plots->Add(E_Trans_VS_q3_QEL_2p);
-        E_Trans_VS_q3_QEL_2p->SetStats(0);
-        E_Trans_VS_q3_QEL_2p->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q3_QEL_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_2p.png");
-        c1->Clear();
-
-        E_Trans_VS_q3_MEC_2p->Draw("colz");
-        plots->Add(E_Trans_VS_q3_MEC_2p);
-        E_Trans_VS_q3_MEC_2p->SetStats(0);
-        E_Trans_VS_q3_MEC_2p->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q3_MEC_2p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_2p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_2p.png");
-        c1->Clear();
-
-// 1n1p: MOVE TO ET
-
-        E_Trans_VS_q3_all_1n1p->Draw("colz");
-        plots->Add(E_Trans_VS_q3_all_1n1p);
-        E_Trans_VS_q3_all_1n1p->SetStats(0);
-        E_Trans_VS_q3_all_1n1p->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q3_all_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_Trans_VS_q3_QEL_1n1p->Draw("colz");
-        plots->Add(E_Trans_VS_q3_QEL_1n1p);
-        E_Trans_VS_q3_QEL_1n1p->SetStats(0);
-        E_Trans_VS_q3_QEL_1n1p->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q3_QEL_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_1n1p.png");
-        c1->Clear();
-
-        E_Trans_VS_q3_MEC_1n1p->Draw("colz");
-        plots->Add(E_Trans_VS_q3_MEC_1n1p);
-        E_Trans_VS_q3_MEC_1n1p->SetStats(0);
-        E_Trans_VS_q3_MEC_1n1p->GetXaxis()->CenterTitle(true);
-        E_Trans_VS_q3_MEC_1n1p->GetYaxis()->CenterTitle(true);
-        c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_1n1p.png");
-        c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_1n1p.png");
-        c1->Clear();
-
-    }
+//        double factor_E_Trans_VS_q_all_inclusive = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{12}C(e,e')) - Normalized");
+//            E_Trans_VS_q_all_inclusive->Scale(factor_E_Trans_VS_q_all_inclusive / E_Trans_VS_q_all_inclusive->Integral(), "width");
+//            E_Trans_VS_q_all_inclusive->Draw("colz");
+//            E_Trans_VS_q_all_inclusive->SetMaximum(1.5);
+//        } else {
+//            E_Trans_VS_q_all_inclusive->Draw("colz");
+//        }
+//
+//        E_Trans_VS_q_all_inclusive->SetTitleSize(0.06, "xyz");
+//        E_Trans_VS_q_all_inclusive->GetXaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_all_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q_all_inclusive->GetYaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_all_inclusive->GetYaxis()->CenterTitle(true);
+//        E_Trans_VS_q_all_inclusive->GetZaxis()->SetLabelSize(0.0425);
+////        E_Trans_VS_q_all_inclusive->Draw("colz");
+//        plots->Add(E_Trans_VS_q_all_inclusive);
+//        E_Trans_VS_q_all_inclusive->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_log_scale.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_liner_scale.png");
+//        c1->Clear();
+//
+////      Normalization factor (equals to max(fsEl_VS_theta_l_all_int_2p)):
+//        double factor_E_Trans_VS_q_QEL_inclusive = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{12}C(e,e')) - Normalized");
+//            E_Trans_VS_q_QEL_inclusive->Scale(factor_E_Trans_VS_q_QEL_inclusive / E_Trans_VS_q_QEL_inclusive->Integral(), "width");
+//            E_Trans_VS_q_QEL_inclusive->Draw("colz");
+//            E_Trans_VS_q_QEL_inclusive->SetMaximum(1.5);
+//        } else {
+//            E_Trans_VS_q_QEL_inclusive->Draw("colz");
+//        }
+//
+//        E_Trans_VS_q_QEL_inclusive->SetTitleSize(0.06, "xyz");
+//        E_Trans_VS_q_QEL_inclusive->GetXaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_QEL_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q_QEL_inclusive->GetYaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_QEL_inclusive->GetYaxis()->CenterTitle(true);
+//        E_Trans_VS_q_QEL_inclusive->GetZaxis()->SetLabelSize(0.0425);
+//
+////        E_Trans_VS_q_QEL_inclusive->Draw("colz");
+//        plots->Add(E_Trans_VS_q_QEL_inclusive);
+//        E_Trans_VS_q_QEL_inclusive->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_log_scale.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_liner_scale.png");
+//        c1->Clear();
+//
+////      Normalization factor (equals to max(E_Trans_VS_q_MEC_inclusive)):
+//        double factor_E_Trans_VS_q_MEC_inclusive = 1.;
+//
+//        if (normalized_E_l_plots) {
+//            E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{12}C(e,e')) - Normalized");
+//            E_Trans_VS_q_MEC_inclusive->Scale(factor_E_Trans_VS_q_MEC_inclusive / E_Trans_VS_q_MEC_inclusive->Integral(), "width");
+//            E_Trans_VS_q_MEC_inclusive->Draw("colz");
+//            E_Trans_VS_q_MEC_inclusive->SetMaximum(1.5);
+//        } else {
+//            E_Trans_VS_q_MEC_inclusive->Draw("colz");
+//        }
+//
+//        E_Trans_VS_q_MEC_inclusive->SetTitleSize(0.06, "xyz");
+//        E_Trans_VS_q_MEC_inclusive->GetXaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_MEC_inclusive->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q_MEC_inclusive->GetYaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_MEC_inclusive->GetYaxis()->CenterTitle(true);
+//        E_Trans_VS_q_MEC_inclusive->GetZaxis()->SetLabelSize(0.0425);
+////        E_Trans_VS_q_MEC_inclusive->Draw("colz");
+//        plots->Add(E_Trans_VS_q_MEC_inclusive);
+//        E_Trans_VS_q_MEC_inclusive->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_log_scale.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_liner_scale.png");
+//        c1->Clear();
+//
+//// 2p: MOVE TO ET
+//
+//        E_Trans_VS_q3_all_2p->Draw("colz");
+//        plots->Add(E_Trans_VS_q3_all_2p);
+//        E_Trans_VS_q3_all_2p->SetStats(0);
+//        E_Trans_VS_q3_all_2p->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q3_all_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_Trans_VS_q3_QEL_2p->Draw("colz");
+//        plots->Add(E_Trans_VS_q3_QEL_2p);
+//        E_Trans_VS_q3_QEL_2p->SetStats(0);
+//        E_Trans_VS_q3_QEL_2p->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q3_QEL_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_2p.png");
+//        c1->Clear();
+//
+//        E_Trans_VS_q3_MEC_2p->Draw("colz");
+//        plots->Add(E_Trans_VS_q3_MEC_2p);
+//        E_Trans_VS_q3_MEC_2p->SetStats(0);
+//        E_Trans_VS_q3_MEC_2p->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q3_MEC_2p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_2p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_2p.png");
+//        c1->Clear();
+//
+//// 1n1p: MOVE TO ET
+//
+//        E_Trans_VS_q3_all_1n1p->Draw("colz");
+//        plots->Add(E_Trans_VS_q3_all_1n1p);
+//        E_Trans_VS_q3_all_1n1p->SetStats(0);
+//        E_Trans_VS_q3_all_1n1p->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q3_all_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_Trans_VS_q3_QEL_1n1p->Draw("colz");
+//        plots->Add(E_Trans_VS_q3_QEL_1n1p);
+//        E_Trans_VS_q3_QEL_1n1p->SetStats(0);
+//        E_Trans_VS_q3_QEL_1n1p->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q3_QEL_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//        E_Trans_VS_q3_MEC_1n1p->Draw("colz");
+//        plots->Add(E_Trans_VS_q3_MEC_1n1p);
+//        E_Trans_VS_q3_MEC_1n1p->SetStats(0);
+//        E_Trans_VS_q3_MEC_1n1p->GetXaxis()->CenterTitle(true);
+//        E_Trans_VS_q3_MEC_1n1p->GetYaxis()->CenterTitle(true);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_1n1p.png");
+//        c1->SetLogz(0);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_1n1p.png");
+//        c1->Clear();
+//
+//    }
     //</editor-fold>.q
 
 
