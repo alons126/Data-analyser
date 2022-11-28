@@ -5353,8 +5353,12 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     if (NumberOfProtons == 2 && NumberOfNeutrons == 0) {
         clas12reader c12(LoadedInput.c_str()); //open file
 
-        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
+//        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
         c12.addExactPid(11, 1); //exactly 1 electron
+
+        c12.AddAtLeastPid(2212,1);
+        c12.AddAtLeastPid(2112,1);
+
         c12.addZeroOfRestPid(); //nothing else
 
 
@@ -5375,6 +5379,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
             auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
 
 //            cout << "2p =======================================================================\n";
+            cout << "==========================================================================\n";
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
@@ -5388,7 +5393,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                Beta_VS_P_2p->Fill(P, Beta);
 //                P_histogram_2p->Fill(P);
 
-//                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
                 //<editor-fold desc="Proton selector (2p)">
                 if (particlePDG == 2212) {
