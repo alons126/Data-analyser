@@ -5395,7 +5395,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
                 cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
-/*
+                /*
                 //<editor-fold desc="Proton selector (2p)">
                 if (particlePDG == 2212) {
                     ++ProtonCounter_2p;
@@ -5427,12 +5427,12 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                     }
                 }
                 //</editor-fold>
-*/
+                */
 
             }
 
 
-/*
+            /*
 
 
 //          Momentum of first proton in Ef[]:
@@ -5654,6 +5654,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                 }
 
 
+                */
+
 //            cout << "\n";
 
             }
@@ -5679,7 +5681,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //        c1->Clear();
 
 
- */
+
 
         } else if (NumberOfProtons == 1 && NumberOfNeutrons == 1) {
             clas12reader c12(LoadedInput.c_str()); //open file
