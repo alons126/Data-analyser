@@ -9,13 +9,15 @@ int main() {
 
     std::string AnalyserMode;
     string FileType = AnalyseFile.substr(AnalyseFile.find_last_of(".") + 1);
+
+
     cout << "FileType:\t" << FileType << "\n";
 
 
     //<editor-fold desc="AnalyserMode selector">
     if (FileType == "root") {
         AnalyserMode = "Truth level";
-    } else if (FileType == "Detector Simulation") {
+    } else if (FileType == "hipo") {
         AnalyserMode = "Detector Simulation";
     } else {
         cout << "\n";
