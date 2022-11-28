@@ -5392,8 +5392,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         c12.addExactPid(11, 1); //exactly 1 electron
         c12.addZeroOfRestPid(); //nothing else
 
-        auto *Beta_VS_P_2p = new TH2F("Beta VS P (2p)", "#beta VS P (2p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.05);
-        auto *P_histogram_2p = new TH1F("P Histogram (2p)", "P Histogram (2p)", 100, 0, 6);
+//        auto *Beta_VS_P_2p = new TH2F("Beta VS P (2p)", "#beta VS P (2p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.05);
+//        auto *P_histogram_2p = new TH1F("P Histogram (2p)", "P Histogram (2p)", 100, 0, 6);
 
         TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
         c1->SetGrid();
@@ -5402,19 +5402,19 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
             auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
 
-            cout << "2p =======================================================================\n";
+//            cout << "2p =======================================================================\n";
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
 
             for (int i = 0; i < particles_2p.size(); i++) {
 
-                float particlePDG = particles_2p[i]->par()->getPid();
-                float Beta = particles_2p[i]->par()->getBeta();
-                float P = particles_2p[i]->par()->getP();
-
-                Beta_VS_P_2p->Fill(P, Beta);
-                P_histogram_2p->Fill(P);
+//                float particlePDG = particles_2p[i]->par()->getPid();
+//                float Beta = particles_2p[i]->par()->getBeta();
+//                float P = particles_2p[i]->par()->getP();
+//
+//                Beta_VS_P_2p->Fill(P, Beta);
+//                P_histogram_2p->Fill(P);
 
 //                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
@@ -5683,16 +5683,16 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //        //</editor-fold>
 
 
-        Beta_VS_P_2p->SetStats(0);
-        Beta_VS_P_2p->Draw("colz");
-        cout << "\n";
-        c1->SaveAs("./plots/Beta_VS_P_2p.png");
-        c1->Clear();
+//        Beta_VS_P_2p->SetStats(0);
+//        Beta_VS_P_2p->Draw("colz");
+//        cout << "\n";
+//        c1->SaveAs("./plots/Beta_VS_P_2p.png");
+//        c1->Clear();
 
-        P_histogram_2p->Draw("colz");
-        cout << "\n";
-        c1->SaveAs("./plots/P_histogram_2p.png");
-        c1->Clear();
+//        P_histogram_2p->Draw("colz");
+//        cout << "\n";
+//        c1->SaveAs("./plots/P_histogram_2p.png");
+//        c1->Clear();
 
     } else if (NumberOfProtons == 1 && NumberOfNeutrons == 1) {
         clas12reader c12(LoadedInput.c_str()); //open file
