@@ -5216,9 +5216,6 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         auto *Beta_VS_P_2p = new TH2F("Beta VS P (2p)", "#beta VS P (2p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
         auto *P_histogram_2p = new TH1F("P Histogram (2p)", "P Histogram (2p)", 1000, 0, 6);
 
-        auto *Beta_VS_P_1n1p = new TH2F("Beta VS P (1n1p)", "#beta VS P (1n1p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
-        auto *P_histogram_1n1p = new TH1F("P Histogram (1n1p)", "P Histogram (1n1p)", 1000, 0, 6);
-
 //  2p:
         while (c12.next()) { //loop over events (2p)
 
@@ -6469,6 +6466,1251 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         c1->SaveAs("./plots/P_histogram_2p.png");
         c1->Clear();
 
+    } else if (NumberOfProtons == 1 && NumberOfNeutrons == 1) {
+        clas12reader c12(loadedInput.c_str()); //open file
+
+//  1n1p:
+        c12.addExactPid(2212, 1);    //exactly 2 protons
+        c12.addExactPid(2112, 1);    //exactly 2 protons
+        c12.addExactPid(11, 1);    //exactly 1 electron
+        c12.addZeroOfRestPid();  //nothing else
+
+        auto *Beta_VS_P_1n1p = new TH2F("Beta VS P (1n1p)", "#beta VS P (1n1p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
+        auto *P_histogram_1n1p = new TH1F("P Histogram (1n1p)", "P Histogram (1n1p)", 1000, 0, 6);
+
+        while (c12.next()) { //loop over events (1np)
+
+            auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
+
+            cout << "1n1p =======================================================================\n";
+
+            for (int i = 0; i < particles_1n1p.size(); i++) {
+
+                float particlePDG = particles_1n1p[i]->par()->getPid();
+                float Beta = particles_1n1p[i]->par()->getBeta();
+                float P = particles_1n1p[i]->par()->getP();
+
+                Beta_VS_P_1n1p->Fill(P, Beta);
+                P_histogram_1n1p->Fill(P);
+
+                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+
+            }
+
+            cout << "\n";
+
+        }
+
+
+//  1n1p:
+//    while (c12.next()) { //loop over events (1n1p)
+//
+//        cout << "\n";
+//        c12.addExactPid(2212, 1);    //exactly 1 proton
+//        c12.addExactPid(2112, 1);    //exactly 1 proton
+//        c12.addExactPid(11, 1);    //exactly 1 electron
+//        c12.addZeroOfRestPid();  //nothing else
+//
+//        auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
+//
+//        cout << "1n1p =====================================================================\n";
+//
+//        for (int i = 0; i < particles_1n1p.size(); i++) {
+//
+//            float particlePDG = particles_1n1p[i]->par()->getPid();
+//            float Beta = particles_1n1p[i]->par()->getBeta();
+//            float P = particles_1n1p[i]->par()->getP();
+//
+//            Beta_VS_P_1n1p->Fill(P, Beta);
+//            P_histogram_1n1p->Fill(P);
+//
+//            cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+//
+//        }
+//
+//        cout << "\n";
+//
+//    }
+
+
+//    //<editor-fold desc="Code execution">
+//    if (fChain == 0) return;
+//
+//    Long64_t nentries;
+////    Long64_t nentries = fChain->GetEntriesFast(); // original
+//
+//    if (lowest_nentries) {
+//        nentries = custom_nentries; // nentries according to "12C_2222GeV_G18_10a_02_11a" (C12_1161GeV_EM+MEC_G18_02a_00_000_Q2_0_1 is lower)
+//
+//        cout << "\n";
+//        cout << "Filling histograms (lowest_nentries; nentries = " << nentries << ")..." << "\n";
+//        cout << "\n";
+//    } else {
+//        nentries = fChain->GetEntriesFast();
+//
+//        cout << "\n";
+//        cout << "Filling histograms (nentries = " << nentries << "; no limit on nentries)..." << "\n";
+//        cout << "\n";
+//    }
+//
+//    Long64_t nbytes = 0, nb = 0;
+//    x = 0;
+//
+//    for (Long64_t jentry = 0; jentry < nentries; jentry++) {
+//        Long64_t ientry = LoadTree(jentry);
+//
+//        if (ientry < 0) break;
+//
+//        nb = fChain->GetEntry(jentry);
+//        nbytes += nb;
+//
+////        int length = nf;
+//
+////      2p variables:
+//        int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
+//        int Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
+//
+////      1n1p variables:
+//        int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
+//        int Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
+//
+////      MicroBooNE article variables:
+//        int ProtonCounter_article = 0, OtherParticleCounter_article = 0;
+//        int Proton_1_ind_article = -1, Proton_2_ind_article = -1;
+//
+////  Inclusive calculations
+////  ================================================================================================
+//
+//        //<editor-fold desc="Inclusive calculations">
+////      Energy transfer VS q3,q calculations:
+//        double q3 = abs(pzv - pzl);
+//        double q = rCalc(pxv - pxl, pyv - pyl, pzv - pzl);
+//
+//        E_Trans_VS_q_all_inclusive->Fill(q3, Ev - El);
+//        Q2_hist_inclusive->Fill(Q2);
+//
+//        if (qel == true) {
+//            E_Trans_VS_q_QEL_inclusive->Fill(q, Ev - El);
+//        } else if (mec == true) {
+//            E_Trans_VS_q_MEC_inclusive->Fill(q, Ev - El);
+//        }
+//
+//        double Theta_l_inclusive = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // In degrees
+//
+////      Theta_l inclusive calculations:
+//        if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//            E_Trans15_all_inclusive->Fill(Ev - El);
+//            if (qel == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_QEL_inclusive->Fill(Ev - El);
+//                }
+//            } else if (mec == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_MEC_inclusive->Fill(Ev - El);
+//                }
+//            } else if (res == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_RES_inclusive->Fill(Ev - El);
+//                }
+//            } else if (dis == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_DIS_inclusive->Fill(Ev - El);
+//                }
+//            }
+//        }
+//        //</editor-fold>
+//
+//
+////  2p FS calculations
+////  ================================================================================================
+//
+//        //<editor-fold desc="2p FS calculations">
+//        if (calculate_2p == true) {
+////          Calculations with FSI turned ON:
+//            if (FSI_status == true) {
+//                if (nfp == 2 && nfn == 0 && nf == 2) { // See if there are 2FS protons and 2FS hadrons (2p)
+//
+//                    //<editor-fold desc="Proton selector (2p)">
+//                    for (int i = 0; i < nf; i++) {
+//                        if (pdgf[i] == 2212) {
+//                            ++ProtonCounter_2p;
+//                            if (ProtonCounter_2p == 1) {
+//                                Proton_1_ind_2p = i;
+//                            } else if (ProtonCounter_2p == 2) {
+//                                Proton_2_ind_2p = i;
+//                            } else if (ProtonCounter_2p > 2) {
+//                                cout << "\n";
+//                                cout << "Additional Protons detected (2p). PDG = " << pdgf[i] << "\n";
+//                                cout << "\n";
+//                                cout << "\n";
+//                            }
+//                        } else if (pdgf[i] != 2212) {
+//                            ++OtherParticleCounter_2p;
+//                            if (OtherParticleCounter_2p > 0) {
+//                                cout << "\n";
+//                                cout << "Additional particles detected (2p). PDG = " << pdgf[i] << "\n";
+//                                cout << "\n";
+//                                cout << "\n";
+//                            }
+//                        }
+//                    }
+//                    //</editor-fold>
+//
+////                  Momentum of first proton in Ef[]:
+//                    double P_p1_2p = rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p]);
+//
+////                  Momentum of second proton in Ef[]:
+//                    double P_p2_2p = rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]);
+//
+////                  Momentum of second proton in Ef[]:
+//                    double P_lp_2p = rCalc(pxl, pyl, pzl);
+//
+////                  Leading proton:
+//                    double P_L_2p = -1;
+//
+////                  Recoil proton:
+//                    double P_R_2p = -1;
+//
+////                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+//                    if (P_p1_2p >= 0 && P_p2_2p >= 0) {
+////                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+//                        double E_cal_2p;
+//
+//                        if (BEnergyToNucleusCon == true) {
+//                            E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272) + 2 * BEnergyToNucleus;
+//                        } else if (BEnergyToNucleusCon == false) {
+//                            E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
+//                        }
+//
+//                        double Theta_l_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+//
+////                      NOT REALLY dtheta:
+//                        double d_theta_2p = acos(
+//                                (pxf[Proton_1_ind_2p] * pxf[Proton_2_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_2_ind_2p] +
+//                                 pzf[Proton_1_ind_2p] * pzf[Proton_2_ind_2p]) /
+//                                (P_p1_2p * P_p2_2p));
+//                        dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
+//
+//                        //<editor-fold desc="P_L & P_R selector">
+//                        if (Ef[Proton_1_ind_2p] >= Ef[Proton_2_ind_2p]) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
+//
+////                          Leading proton:
+//                            double P_L_2p = P_p1_2p;
+//
+////                          Recoil proton:
+//                            double P_R_2p = P_p2_2p;
+//
+//                            P_L_hist_2p->Fill(P_L_2p);
+//                            P_R_hist_2p->Fill(P_R_2p);
+//
+//                            double phi_p1 = atan2(pyf[Proton_1_ind_2p], pxf[Proton_1_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double phi_p2 = atan2(pyf[Proton_2_ind_2p], pxf[Proton_2_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double d_phi_p2 = phi_p1 - phi_p2; // In radians
+//
+//                            double theta_p1 = acos(pzf[Proton_1_ind_2p] / P_p1_2p); // Leading proton scattering angle in radians
+//                            double theta_p2 = acos(pzf[Proton_2_ind_2p] / P_p2_2p); // Recoil proton scattering angle in radians
+//
+//                            phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+//                            phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+//                            dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+//
+//                            theta_p1_2p->Fill(theta_p1 * 180.0 / 3.14159265359);
+//                            theta_p2_2p->Fill(theta_p2 * 180.0 / 3.14159265359);
+//
+//                            if (qel == true) {
+//                                E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
+//                                E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
+//                            }
+//                        } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
+//
+////                          Leading proton:
+//                            double P_L_2p = P_p2_2p;
+//
+////                          Recoil proton:
+//                            double P_R_2p = P_p1_2p;
+//
+//                            P_L_hist_2p->Fill(P_L_2p);
+//                            P_R_hist_2p->Fill(P_R_2p);
+//
+//                            double phi_p2 = atan2(pyf[Proton_1_ind_2p], pxf[Proton_1_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double phi_p1 = atan2(pyf[Proton_2_ind_2p], pxf[Proton_2_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double d_phi_p2 = phi_p1 - phi_p2; // In radians
+//
+//                            double theta_p2 = acos(pzf[Proton_1_ind_2p] / P_p1_2p); // Leading proton scattering angle in radians
+//                            double theta_p1 = acos(pzf[Proton_2_ind_2p] / P_p2_2p); // Recoil proton scattering angle in radians
+//
+//                            phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+//                            phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+//                            dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+//
+//                            theta_p1_2p->Fill(theta_p2 * 180.0 / 3.14159265359);
+//                            theta_p2_2p->Fill(theta_p1 * 180.0 / 3.14159265359);
+//
+//                            if (qel == true) {
+//                                E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
+//                                E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
+//                            }
+//                        }
+//                        //</editor-fold>
+//
+//                        E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
+//
+//                        P_lp_hist_2p->Fill(P_lp_2p);
+//
+//                        fsEl_2p->Fill(El);
+//                        theta_l_2p->Fill(Theta_l_2p);
+//                        phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//                        fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_2p, El);
+//
+//                        E_Trans_all_ang_all_int_2p->Fill(Ev - El);
+//
+//                        E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+//                        E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
+//                        E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzf[Proton_1_ind_2p] / rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p])) -
+//                                                              acos(pzf[Proton_2_ind_2p] / rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]))) *
+//                                                         180.0 / 3.14159265359, E_cal_2p);
+//
+//                        gamma_Lab_all_hist->Fill(cos(d_theta_2p));
+//                        gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                        if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            E_Trans15_all_2p->Fill(Ev - El);
+//                        } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            E_Trans45_all_2p->Fill(Ev - El);
+//                        } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            E_Trans90_all_2p->Fill(Ev - El);
+//                        }
+//
+//                        //<editor-fold desc="Histogram fill by reaction (2p)">
+//                        if (qel == true) {
+//                            gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_QEL_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_QEL_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_QEL_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, El);
+//
+//                            E_cal_QEL_2p->Fill(E_cal_2p);
+//                            E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, E_cal_2p);
+//                            E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
+//                            E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
+//                            E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
+//                            E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
+//                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_L_2p, E_cal_2p);
+//                            E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
+//                            E_cal_VS_dtheta_QEL_only_2p->Fill(
+//                                    fabs(acos(pzf[Proton_1_ind_2p] / sqrt(pxf[Proton_1_ind_2p] * pxf[Proton_1_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_1_ind_2p] +
+//                                                                          pzf[Proton_1_ind_2p] * pzf[Proton_1_ind_2p])) -
+//                                         acos(pzf[Proton_2_ind_2p] / sqrt(pxf[Proton_2_ind_2p] * pxf[Proton_2_ind_2p] +
+//                                                                          pyf[Proton_2_ind_2p] * pyf[Proton_2_ind_2p] + pzf[Proton_2_ind_2p] * pzf[Proton_2_ind_2p]))) *
+//                                    180.0 /
+//                                    3.14159265359, El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272));
+//
+//                            E_Trans_VS_q3_QEL_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_QEL_2p->Fill(El);
+//                        } else if (mec == true) {
+//                            gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_MEC_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+//
+//                            E_cal_MEC_2p->Fill(E_cal_2p);
+//
+//                            E_Trans_VS_q3_MEC_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_MEC_2p->Fill(El);
+//                        } else if (res == true) {
+//                            gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_RES_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_RES_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_RES_2p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_RES_2p->Fill(E_cal_2p);
+//
+//                            fsEl_RES_2p->Fill(El);
+//                        } else if (dis == true) {
+//                            gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_DIS_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_DIS_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_DIS_2p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_DIS_2p->Fill(E_cal_2p);
+//
+//                            fsEl_DIS_2p->Fill(El);
+//                        }
+//                        //</editor-fold>
+//                    }
+//                }
+////          Calculations with FSI turned OFF:
+//            } else if (FSI_status == false) {
+//                if (nip == 2 && nin == 0 && ni == ni_selection) { // See if there are 2FS protons and 2FS hadrons (2p)
+//
+//                    //<editor-fold desc="Proton selector (2p)">
+//                    for (int i = 0; i < ni; i++) {
+//                        if (pdgi[i] == 2212) {
+//                            ++ProtonCounter_2p;
+//                            if (ProtonCounter_2p == 1) {
+//                                Proton_1_ind_2p = i;
+//                            } else if (ProtonCounter_2p == 2) {
+//                                Proton_2_ind_2p = i;
+//                            }
+//                        } else if (pdgi[i] != 2212) {
+//                            ++OtherParticleCounter_2p;
+//                            if (OtherParticleCounter_2p > 1) { //Taking into account that the rest of the nucleus is in pdgi
+//                                cout << "\n";
+//                                cout << "Additional particles detected (2p). PDG = " << pdgi[i] << "\n";
+//                                cout << "\n";
+//                                cout << "\n";
+//                            }
+//                        }
+//                    }
+//                    //</editor-fold>
+//
+////                  Momentum of first proton in Ei[]:
+//                    double P_p1_2p = rCalc(pxi[Proton_1_ind_2p], pyi[Proton_1_ind_2p], pzi[Proton_1_ind_2p]);
+//
+////                  Momentum of second proton in Ei[]:
+//                    double P_p2_2p = rCalc(pxi[Proton_2_ind_2p], pyi[Proton_2_ind_2p], pzi[Proton_2_ind_2p]);
+//
+////                  Momentum of second proton in Ei[]:
+//                    double P_lp_2p = rCalc(pxl, pyl, pzl);
+//
+////                  Leading proton:
+//                    double P_L_2p = -1;
+//
+////                  Recoil proton:
+//                    double P_R_2p = -1;
+//
+////                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+//                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+//                        double E_cal_2p;
+//
+//                        if (BEnergyToNucleusCon == true) {
+//                            E_cal_2p = El + (Ei[Proton_1_ind_2p] - 0.938272) + (Ei[Proton_2_ind_2p] - 0.938272) + 2 * BEnergyToNucleus;
+//                        } else if (BEnergyToNucleusCon == false) {
+//                            E_cal_2p = El + (Ei[Proton_1_ind_2p] - 0.938272) + (Ei[Proton_2_ind_2p] - 0.938272);
+//                        }
+//
+//                        double Theta_l_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+//
+////                      NOT REALLY dtheta:
+//                        double d_theta_2p = acos(
+//                                (pxi[Proton_1_ind_2p] * pxi[Proton_2_ind_2p] + pyi[Proton_1_ind_2p] * pyi[Proton_2_ind_2p] +
+//                                 pzi[Proton_1_ind_2p] * pzi[Proton_2_ind_2p]) /
+//                                (P_p1_2p * P_p2_2p));
+//                        dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
+//
+//                        //<editor-fold desc="P_L & P_R selector">
+//                        if (Ei[Proton_1_ind_2p] >= Ei[Proton_2_ind_2p]) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
+//
+////                          Leading proton:
+//                            double P_L_2p = P_p1_2p;
+//
+////                          Recoil proton:
+//                            double P_R_2p = P_p2_2p;
+//
+//                            P_L_hist_2p->Fill(P_L_2p);
+//                            P_R_hist_2p->Fill(P_R_2p);
+//
+//                            double phi_p1 = atan2(pyi[Proton_1_ind_2p], pxi[Proton_1_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double phi_p2 = atan2(pyi[Proton_2_ind_2p], pxi[Proton_2_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double d_phi_p2 = phi_p1 - phi_p2; // In radians
+//
+//                            double theta_p1 = acos(pzi[Proton_1_ind_2p] / P_p1_2p); // Leading proton scattering angle in radians
+//                            double theta_p2 = acos(pzi[Proton_2_ind_2p] / P_p2_2p); // Recoil proton scattering angle in radians
+//
+//                            phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+//                            phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+//                            dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+//
+//                            theta_p1_2p->Fill(theta_p1 * 180.0 / 3.14159265359);
+//                            theta_p2_2p->Fill(theta_p2 * 180.0 / 3.14159265359);
+//
+//                            if (qel == true) {
+//                                E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
+//                                E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
+//                            }
+//                        } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
+////                          Leading proton:
+//                            double P_L_2p = P_p2_2p;
+//
+////                          Recoil proton:
+//                            double P_R_2p = P_p1_2p;
+//
+//                            P_L_hist_2p->Fill(P_L_2p);
+//                            P_R_hist_2p->Fill(P_R_2p);
+//
+//                            double phi_p2 = atan2(pyi[Proton_1_ind_2p], pxi[Proton_1_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double phi_p1 = atan2(pyi[Proton_2_ind_2p], pxi[Proton_2_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double d_phi_p2 = phi_p1 - phi_p2; // In radians
+//
+//                            double theta_p2 = acos(pzi[Proton_1_ind_2p] / P_p1_2p); // Leading proton scattering angle in radians
+//                            double theta_p1 = acos(pzi[Proton_2_ind_2p] / P_p2_2p); // Recoil proton scattering angle in radians
+//
+//                            phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+//                            phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+//                            dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+//
+//                            theta_p1_2p->Fill(theta_p2 * 180.0 / 3.14159265359);
+//                            theta_p2_2p->Fill(theta_p1 * 180.0 / 3.14159265359);
+//
+//                            if (qel == true) {
+//                                E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
+//                                E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
+//                            }
+//                        }
+//                        //</editor-fold>
+//
+//                        E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
+//
+//                        P_lp_hist_2p->Fill(P_lp_2p);
+//
+//                        fsEl_2p->Fill(El);
+//                        theta_l_2p->Fill(Theta_l_2p);
+//                        phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//                        fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_2p, El);
+//
+//                        E_Trans_all_ang_all_int_2p->Fill(Ev - El);
+//
+//                        E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+//                        E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
+//                        E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzi[Proton_1_ind_2p] / rCalc(pxi[Proton_1_ind_2p], pyi[Proton_1_ind_2p], pzi[Proton_1_ind_2p])) -
+//                                                              acos(pzi[Proton_2_ind_2p] / rCalc(pxi[Proton_2_ind_2p], pyi[Proton_2_ind_2p], pzi[Proton_2_ind_2p]))) *
+//                                                         180.0 / 3.14159265359, E_cal_2p);
+//
+//                        gamma_Lab_all_hist->Fill(cos(d_theta_2p));
+//                        gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                        if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            E_Trans15_all_2p->Fill(Ev - El);
+//                        } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            E_Trans45_all_2p->Fill(Ev - El);
+//                        } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            E_Trans90_all_2p->Fill(Ev - El);
+//                        }
+//
+//                        //<editor-fold desc="Histogram fill by reaction (2p)">
+//                        if (qel == true) {
+//                            gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_QEL_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_QEL_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_QEL_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, El);
+//
+//                            E_cal_QEL_2p->Fill(E_cal_2p);
+//                            E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, E_cal_2p);
+//                            E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
+//                            E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
+//                            E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
+//                            E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
+//                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_L_2p, E_cal_2p);
+//                            E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
+//                            E_cal_VS_dtheta_QEL_only_2p->Fill(
+//                                    fabs(acos(pzi[Proton_1_ind_2p] / sqrt(pxi[Proton_1_ind_2p] * pxi[Proton_1_ind_2p] + pyi[Proton_1_ind_2p] * pyi[Proton_1_ind_2p] +
+//                                                                          pzi[Proton_1_ind_2p] * pzi[Proton_1_ind_2p])) -
+//                                         acos(pzi[Proton_2_ind_2p] / sqrt(pxi[Proton_2_ind_2p] * pxi[Proton_2_ind_2p] +
+//                                                                          pyi[Proton_2_ind_2p] * pyi[Proton_2_ind_2p] + pzi[Proton_2_ind_2p] * pzi[Proton_2_ind_2p]))) *
+//                                    180.0 /
+//                                    3.14159265359, El + (Ei[Proton_1_ind_2p] - 0.938272) + (Ei[Proton_2_ind_2p] - 0.938272));
+//
+//                            E_Trans_VS_q3_QEL_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_QEL_2p->Fill(El);
+//                        } else if (mec == true) {
+//                            gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_MEC_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+//
+//                            E_cal_MEC_2p->Fill(E_cal_2p);
+//
+//                            E_Trans_VS_q3_MEC_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_MEC_2p->Fill(El);
+//                        } else if (res == true) {
+//                            gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_RES_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_RES_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_RES_2p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_RES_2p->Fill(E_cal_2p);
+//
+//                            fsEl_RES_2p->Fill(El);
+//                        } else if (dis == true) {
+//                            gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_DIS_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_DIS_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_DIS_2p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_DIS_2p->Fill(E_cal_2p);
+//
+//                            fsEl_DIS_2p->Fill(El);
+//                        }
+//                        //</editor-fold>
+//                    }
+//                }
+//            }
+//        }
+//        //</editor-fold>
+//
+//
+////  1n1p calculations
+////  ================================================================================================
+//
+//        //<editor-fold desc="1n1p FS calculations">
+//        if (calculate_1n1p == true) {
+////          Calculations with FSI turned ON:
+//            if (FSI_status == true) {
+//                if (nfp == 1 && nfn == 1 && nf == 2) { // See if there 1FS p and n; and 2FS hadrons (1n1p)
+//
+//                    //<editor-fold desc="Proton & Neutron selector">
+//                    for (int i = 0; i < nf; i++) {
+//                        if (pdgf[i] == 2212) {
+//                            ++ProtonCounter_1n1p;
+//                            Proton_ind_1n1p = i;
+//                        } else if (pdgf[i] == 2112) {
+//                            ++NeutronCounter_1n1p;
+//                            Neutron_ind_1n1p = i;
+//                        } else if ((pdgf[i] != 2212) && (pdgf[i] != 2112)) {
+//                            ++OtherParticleCounter_1n1p;
+//                            if (OtherParticleCounter_1n1p > 0) {
+//                                cout << "\n";
+//                                cout << "Additional particles detected (1n1p). PDG = " << pdgf[i] << "\n";
+//                                cout << "\n";
+//                                cout << "\n";
+//                            }
+//                        }
+//                    }
+//                    //</editor-fold>
+//
+////                  Proton momentum:
+//                    double P_p_1n1p = rCalc(pxf[Proton_ind_1n1p], pyf[Proton_ind_1n1p], pzf[Proton_ind_1n1p]);
+//
+////                  Neutron momentum:
+//                    double P_n_1n1p = rCalc(pxf[Neutron_ind_1n1p], pyf[Neutron_ind_1n1p], pzf[Neutron_ind_1n1p]);;
+//
+////                   Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+//                    if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
+////                    if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
+//                        double E_cal_1n1p;
+//
+//                        if (BEnergyToNucleusCon == true) {
+//                            E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565) + 2 * BEnergyToNucleus;
+//                        } else if (BEnergyToNucleusCon == false) {
+//                            E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
+//                        }
+//
+//                        double Theta_l_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
+//
+//                        double phi_p = atan2(pyf[Proton_ind_1n1p], pxf[Proton_ind_1n1p]) * 180.0 / 3.14159265359;
+//                        double phi_n = atan2(pyf[Neutron_ind_1n1p], pxf[Neutron_ind_1n1p]) * 180.0 / 3.14159265359;
+//                        double d_phi_1n1p = phi_p - phi_n; // In radians
+//
+//                        double theta_p = acos(pzf[Proton_ind_1n1p] / rCalc(pxf[Proton_ind_1n1p], pyf[Proton_ind_1n1p], pzf[Proton_ind_1n1p])) * 180.0 / 3.14159265359;
+//                        double theta_n = acos(pzf[Neutron_ind_1n1p] / rCalc(pxf[Neutron_ind_1n1p], pyf[Neutron_ind_1n1p], pzf[Neutron_ind_1n1p])) * 180.0 / 3.14159265359;
+//
+////                      NOT REALLY dtheta:
+//                        double d_theta_1n1p = acos(
+//                                (pxf[Proton_ind_1n1p] * pxf[Neutron_ind_1n1p] + pyf[Proton_ind_1n1p] * pyf[Neutron_ind_1n1p] +
+//                                 pzf[Proton_ind_1n1p] * pzf[Neutron_ind_1n1p]) / (P_p_1n1p * P_n_1n1p));
+//
+////                      Lepton momentum:
+//                        double P_lp_1n1p = rCalc(pxl, pyl, pzl);
+//
+//                        E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
+//
+//                        //<editor-fold desc="Momentum histograms fill (1n1p)">
+//                        P_p_hist_1n1p->Fill(P_p_1n1p);
+//                        P_n_hist_1n1p->Fill(P_n_1n1p);
+//                        P_l_hist_1n1p->Fill(P_lp_1n1p);
+//                        //</editor-fold>
+//
+//                        //<editor-fold desc="Theta histograms fill (1n1p)">
+//                        theta_p_1n1p->Fill(theta_p);
+//                        theta_n_1n1p->Fill(theta_n);
+//                        dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
+//                        //</editor-fold>
+//
+//                        //<editor-fold desc="Phi histograms fill (1n1p)">
+//                        phi_p_1n1p->Fill(phi_p);
+//                        phi_n_1n1p->Fill(phi_n);
+//                        dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
+//                        //</editor-fold>
+//
+//                        //<editor-fold desc="Energy histograms fill (1n1p)">
+//                        theta_l_1n1p->Fill(Theta_l_1n1p);
+//                        phi_l_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//                        fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+//                        fsEl_1n1p->Fill(El);
+//                        //</editor-fold>
+//
+//                        E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+//
+//                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                            E_Trans15_all_1n1p->Fill(Ev - El);
+//                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                            E_Trans45_all_1n1p->Fill(Ev - El);
+//                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                            E_Trans90_all_1n1p->Fill(Ev - El);
+//                        }
+//
+//                        //<editor-fold desc="Histogram fill by reaction (1n1p)">
+//                        if (qel == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_QEL_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_QEL_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_QEL_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+//
+//                            E_cal_QEL_1n1p->Fill(E_cal_1n1p);
+//                            E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+//                            E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
+//                            E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
+//                            E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
+//                            E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
+//                            E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
+//                            E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
+//                            E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
+//                            E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
+//                            E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
+//
+//                            E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+//
+//                            fsEl_QEL_1n1p->Fill(El);
+//                        } else if (mec == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_MEC_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_MEC_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_MEC_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+//
+//                            E_cal_MEC_1n1p->Fill(E_cal_1n1p);
+//
+//                            E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+//
+//                            fsEl_MEC_1n1p->Fill(El);
+//                        } else if (res == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_RES_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_RES_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_RES_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_RES_1n1p->Fill(E_cal_1n1p);
+//
+//                            fsEl_RES_1n1p->Fill(El);
+//                        } else if (dis == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_DIS_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_DIS_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_DIS_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_DIS_1n1p->Fill(E_cal_1n1p);
+//
+//                            fsEl_DIS_1n1p->Fill(El);
+//                        }
+//                        //</editor-fold>
+//                    }
+//                }
+////          Calculations with FSI turned OFF:
+//            } else if (FSI_status == false) {
+//                if (nip == 1 && nin == 1 && ni == ni_selection) { // See if there 1FS p and n; and 2FS hadrons (1n1p)
+//
+//                    //<editor-fold desc="Proton & Neutron selector">
+//                    for (int i = 0; i < ni; i++) {
+//                        if (pdgi[i] == 2212) {
+//                            ++ProtonCounter_1n1p;
+//                            Proton_ind_1n1p = i;
+//                        } else if (pdgi[i] == 2112) {
+//                            ++NeutronCounter_1n1p;
+//                            Neutron_ind_1n1p = i;
+//                        } else if ((pdgi[i] != 2212) && (pdgi[i] != 2112)) {
+//                            ++OtherParticleCounter_1n1p;
+//                            if (OtherParticleCounter_1n1p > 1) { //Taking into account that the rest of the nucleus is in pdgi
+//                                cout << "\n";
+//                                cout << "Additional particles detected (1n1p). PDG = " << pdgf[i] << "\n";
+//                                cout << "\n";
+//                                cout << "\n";
+//                            }
+//                        }
+//                    }
+//                    //</editor-fold>
+//
+////                  Proton momentum:
+//                    double P_p_1n1p = rCalc(pxi[Proton_ind_1n1p], pyi[Proton_ind_1n1p], pzi[Proton_ind_1n1p]);
+//
+////                  Neutron momentum:
+//                    double P_n_1n1p = rCalc(pxi[Neutron_ind_1n1p], pyi[Neutron_ind_1n1p], pzi[Neutron_ind_1n1p]);;
+//
+////                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+//                    if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
+//                        double E_cal_1n1p;
+//
+//                        if (BEnergyToNucleusCon == true) {
+//                            E_cal_1n1p = El + (Ei[Proton_ind_1n1p] - 0.938272) + (Ei[Neutron_ind_1n1p] - 0.939565) + 2 * BEnergyToNucleus;
+//                        } else if (BEnergyToNucleusCon == false) {
+//                            E_cal_1n1p = El + (Ei[Proton_ind_1n1p] - 0.938272) + (Ei[Neutron_ind_1n1p] - 0.939565);
+//                        }
+//
+//                        double Theta_l_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
+//
+//                        double phi_p = atan2(pyi[Proton_ind_1n1p], pxi[Proton_ind_1n1p]) * 180.0 / 3.14159265359;
+//                        double phi_n = atan2(pyi[Neutron_ind_1n1p], pxi[Neutron_ind_1n1p]) * 180.0 / 3.14159265359;
+//                        double d_phi_1n1p = phi_p - phi_n; // In radians
+//
+//                        double theta_p = acos(pzi[Proton_ind_1n1p] / rCalc(pxi[Proton_ind_1n1p], pyi[Proton_ind_1n1p], pzi[Proton_ind_1n1p])) * 180.0 / 3.14159265359;
+//                        double theta_n = acos(pzi[Neutron_ind_1n1p] / rCalc(pxi[Neutron_ind_1n1p], pyi[Neutron_ind_1n1p], pzi[Neutron_ind_1n1p])) * 180.0 / 3.14159265359;
+//
+////                      NOT REALLY dtheta:
+//                        double d_theta_1n1p = acos(
+//                                (pxi[Proton_ind_1n1p] * pxi[Neutron_ind_1n1p] + pyi[Proton_ind_1n1p] * pyi[Neutron_ind_1n1p] +
+//                                 pzi[Proton_ind_1n1p] * pzi[Neutron_ind_1n1p]) / (P_p_1n1p * P_n_1n1p));
+//
+////                      Lepton momentum:
+//                        double P_lp_1n1p = rCalc(pxl, pyl, pzl);
+//
+//                        E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
+//
+//                        //<editor-fold desc="Momentum histograms fill (1n1p)">
+//                        P_p_hist_1n1p->Fill(P_p_1n1p);
+//                        P_n_hist_1n1p->Fill(P_n_1n1p);
+//                        P_l_hist_1n1p->Fill(P_lp_1n1p);
+//                        //</editor-fold>
+//
+//                        //<editor-fold desc="Theta histograms fill (1n1p)">
+//                        theta_p_1n1p->Fill(theta_p);
+//                        theta_n_1n1p->Fill(theta_n);
+//                        dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
+//                        //</editor-fold>
+//
+//                        //<editor-fold desc="Phi histograms fill (1n1p)">
+//                        phi_p_1n1p->Fill(phi_p);
+//                        phi_n_1n1p->Fill(phi_n);
+//                        dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
+//                        //</editor-fold>
+//
+//                        //<editor-fold desc="Energy histograms fill (1n1p)">
+//                        theta_l_1n1p->Fill(Theta_l_1n1p);
+//                        phi_l_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//                        fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+//                        fsEl_1n1p->Fill(El);
+//                        //</editor-fold>
+//
+//                        E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+//
+//                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                            E_Trans15_all_1n1p->Fill(Ev - El);
+//                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                            E_Trans45_all_1n1p->Fill(Ev - El);
+//                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                            E_Trans90_all_1n1p->Fill(Ev - El);
+//                        }
+//
+//                        //<editor-fold desc="Histogram fill by reaction (1n1p)">
+//                        if (qel == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_QEL_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_QEL_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_QEL_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+//
+//                            E_cal_QEL_1n1p->Fill(E_cal_1n1p);
+//                            E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+//                            E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
+//                            E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
+//                            E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
+//                            E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
+//                            E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
+//                            E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
+//                            E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
+//                            E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
+//                            E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
+//
+//                            E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+//
+//                            fsEl_QEL_1n1p->Fill(El);
+//                        } else if (mec == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_MEC_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_MEC_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_MEC_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+//
+//                            E_cal_MEC_1n1p->Fill(E_cal_1n1p);
+//
+//                            E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+//
+//                            fsEl_MEC_1n1p->Fill(El);
+//                        } else if (res == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_RES_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_RES_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_RES_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_RES_1n1p->Fill(E_cal_1n1p);
+//
+//                            fsEl_RES_1n1p->Fill(El);
+//                        } else if (dis == true) {
+//                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                                E_Trans15_DIS_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                                E_Trans45_DIS_1n1p->Fill(Ev - El);
+//                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                                E_Trans90_DIS_1n1p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_DIS_1n1p->Fill(E_cal_1n1p);
+//
+//                            fsEl_DIS_1n1p->Fill(El);
+//                        }
+//                        //</editor-fold>
+//                    }
+//                }
+//            }
+//        }
+//        //</editor-fold>
+//
+//
+////  MicroBooNE calculations
+////  ================================================================================================
+//
+//        //<editor-fold desc="MicroBooNE calculations">
+//        if (calculate_MicroBooNE == true) {
+//            if (FSI_status == true) { // Calculations with FSI turned ON
+//                if (nfp == 2 && nfpi0 == 0) { // 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons")
+//
+//                    //<editor-fold desc="Proton selector (MicroBooNE)">
+//                    for (int i = 0; i < nf; i++) {
+//                        if (pdgf[i] == 2212) {
+//                            ++ProtonCounter_article;
+//                            if (ProtonCounter_article == 1) {
+//                                Proton_1_ind_article = i;
+//                            } else if (ProtonCounter_article == 2) {
+//                                Proton_2_ind_article = i;
+//                            }
+//                        }
+//                    }
+//                    //</editor-fold>
+//
+////                  Lepton (muon) momentum modulus:
+//                    double P_lp_f = sqrt(pxl * pxl + pyl * pyl + pzl * pzl);
+//
+////                  Leading proton (according to "the proton with the most momentum is labeled as the leading proton") momentum modulus:
+//                    double P_L = fmax(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
+//                                      rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
+//
+////                  Recoil proton (according to "the secondary proton is labeled as the recoil proton") momentum modulus:
+//                    double P_R = fmin(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
+//                                      rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
+//
+//                    if ((P_lp_f >= P_l_lower_lim_MicroBooNE && P_lp_f <= P_l_upper_lim_MicroBooNE)
+//                        && (P_L >= P_L_lower_lim_MicroBooNE && P_L <= P_L_upper_lim_MicroBooNE)
+//                        && (P_R >= P_R_lower_lim_MicroBooNE && P_R <= P_R_upper_lim_MicroBooNE)) {
+//
+////                      Calculating P_T:
+//                        double P_T_x = pxl + pxf[Proton_1_ind_article] + pxf[Proton_2_ind_article]; // x component
+//                        double P_T_y = pyl + pyf[Proton_1_ind_article] + pyf[Proton_2_ind_article]; // y component
+//                        double P_T = sqrt(P_T_x * P_T_x + P_T_y * P_T_y);
+//
+//                        if (nfpip == 0 && nfpim == 0) { // In events without pions
+//
+////                          Calculating the total proton momentum vector:
+//                            double P_tot_x = pxf[Proton_1_ind_article] + pxf[Proton_2_ind_article]; // x component
+//                            double P_tot_y = pyf[Proton_1_ind_article] + pyf[Proton_2_ind_article]; // y component
+//                            double P_tot_z = pzf[Proton_1_ind_article] + pzf[Proton_2_ind_article]; // z component
+//
+////                          Total proton momentum modulus:
+//                            double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
+//
+//                            gamma_mu_p_tot->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_f));
+//                            gamma_mu_p_tot_weighted->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_f), Q2 * Q2);
+//
+//
+////                          Gamma_Lab calculations -------------------------------------------------
+//
+//                            double P_p1 = rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]);
+//                            double P_p2 = rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]);
+//
+//                            gamma_Lab_hist->Fill((pxf[Proton_1_ind_article] * pxf[Proton_2_ind_article] + pyf[Proton_1_ind_article] * pyf[Proton_2_ind_article] +
+//                                                  pzf[Proton_1_ind_article] * pzf[Proton_2_ind_article]) / (P_p1 * P_p2));
+//                            gamma_Lab_hist_weighted->Fill((pxf[Proton_1_ind_article] * pxf[Proton_2_ind_article] + pyf[Proton_1_ind_article] * pyf[Proton_2_ind_article] +
+//                                                           pzf[Proton_1_ind_article] * pzf[Proton_2_ind_article]) / (P_p1 * P_p2), Q2 * Q2);
+//                            dP_T_hist->Fill(P_T);
+//                            dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
+//
+//                            //<editor-fold desc="MicroBooNE momentum plots fill (no charged pions case)">
+//                            P_R_hist->Fill(P_R);
+//                            P_L_hist->Fill(P_L);
+//                            P_l_hist->Fill(P_lp_f);
+//                            //</editor-fold>
+//
+//                        } else { // In events with pions
+//                            for (int i = 0; i < nf; i++) {
+//                                if (abs(pdgf[i]) == 211) { // The abs() for either pi+ or pi-
+//                                    double P_pion = rCalc(pxf[i], pyf[i], pzf[i]);
+//
+////                                  Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                                    if (P_pion <= P_pion_upper_lim_MicroBooNE) {
+//
+////                                      Gamma_mu,P_L+P_R calculations ------------------------------------------
+//
+////                                      Calculating the total proton momentum vector:
+//                                        double P_tot_x = pxf[Proton_1_ind_article] + pxf[Proton_2_ind_article]; // x component
+//                                        double P_tot_y = pyf[Proton_1_ind_article] + pyf[Proton_2_ind_article]; // y component
+//                                        double P_tot_z = pzf[Proton_1_ind_article] + pzf[Proton_2_ind_article]; // z component
+//
+////                                      Total proton momentum modulus:
+//                                        double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
+//
+//                                        gamma_mu_p_tot->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_f));
+//                                        gamma_mu_p_tot_weighted->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_f), Q2 * Q2);
+//
+//
+////                                      Gamma_Lab calculations -------------------------------------------------
+//
+//                                        double P_p1 = rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]);
+//                                        double P_p2 = rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]);
+//
+//                                        gamma_Lab_hist->Fill(
+//                                                (pxf[Proton_1_ind_article] * pxf[Proton_2_ind_article] + pyf[Proton_1_ind_article] * pyf[Proton_2_ind_article] +
+//                                                 pzf[Proton_1_ind_article] * pzf[Proton_2_ind_article]) / (P_p1 * P_p2));
+//                                        gamma_Lab_hist_weighted->Fill(
+//                                                (pxf[Proton_1_ind_article] * pxf[Proton_2_ind_article] + pyf[Proton_1_ind_article] * pyf[Proton_2_ind_article] +
+//                                                 pzf[Proton_1_ind_article] * pzf[Proton_2_ind_article]) / (P_p1 * P_p2), Q2 * Q2);
+//                                        dP_T_hist->Fill(P_T);
+//                                        dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
+//
+//                                        //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
+//                                        P_R_hist->Fill(P_R);
+//                                        P_L_hist->Fill(P_L);
+//                                        P_l_hist->Fill(P_lp_f);
+//                                        P_pion_hist->Fill(P_pion);
+//                                        //</editor-fold>
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            } else if (FSI_status == false) { // Calculations with FSI turned OFF
+//                if (nip == 2 && nipi0 == 0) { // 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons")
+//
+//                    //<editor-fold desc="Proton selector (MicroBooNE)">
+//                    for (int i = 0; i < ni; i++) {
+//                        if (pdgi[i] == 2212) {
+//                            ++ProtonCounter_article;
+//                            if (ProtonCounter_article == 1) {
+//                                Proton_1_ind_article = i;
+//                            } else if (ProtonCounter_article == 2) {
+//                                Proton_2_ind_article = i;
+//                            }
+//                        }
+//                    }
+//                    //</editor-fold>
+//
+////                  Lepton (muon) momentum modulus:
+//                    double P_lp_i = sqrt(pxl * pxl + pyl * pyl + pzl * pzl);
+//
+////                  Leading proton (according to "the proton with the most momentum is labeled as the leading proton") momentum modulus:
+//                    double P_L = fmax(rCalc(pxi[Proton_1_ind_article], pyi[Proton_1_ind_article], pzi[Proton_1_ind_article]),
+//                                      rCalc(pxi[Proton_2_ind_article], pyi[Proton_2_ind_article], pzi[Proton_2_ind_article]));
+//
+////                  Recoil proton (according to "the secondary proton is labeled as the recoil proton") momentum modulus:
+//                    double P_R = fmin(rCalc(pxi[Proton_1_ind_article], pyi[Proton_1_ind_article], pzi[Proton_1_ind_article]),
+//                                      rCalc(pxi[Proton_2_ind_article], pyi[Proton_2_ind_article], pzi[Proton_2_ind_article]));
+//
+//
+//
+//
+//                    //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
+//                    P_R_hist->Fill(P_R);
+//                    P_L_hist->Fill(P_L);
+//                    P_l_hist->Fill(P_lp_i);
+////                    P_pion_hist->Fill(P_pion);
+//                    //</editor-fold>
+//
+//
+//
+//
+//                    if ((P_lp_i >= P_l_lower_lim_MicroBooNE && P_lp_i <= P_l_upper_lim_MicroBooNE)
+//                        && (P_L >= P_L_lower_lim_MicroBooNE && P_L <= P_L_upper_lim_MicroBooNE)
+//                        && (P_R >= P_R_lower_lim_MicroBooNE && P_R <= P_R_upper_lim_MicroBooNE)) {
+//
+////                      Calculating P_T:
+//                        double P_T_x = pxl + pxi[Proton_1_ind_article] + pxi[Proton_2_ind_article]; // x component
+//                        double P_T_y = pyl + pyi[Proton_1_ind_article] + pyi[Proton_2_ind_article]; // y component
+//                        double P_T = sqrt(P_T_x * P_T_x + P_T_y * P_T_y);
+//
+//                        if (nipip == 0 && nipim == 0) { // In events without pions
+//
+////                          Calculating the total proton momentum vector:
+//                            double P_tot_x = pxi[Proton_1_ind_article] + pxi[Proton_2_ind_article]; // x component
+//                            double P_tot_y = pyi[Proton_1_ind_article] + pyi[Proton_2_ind_article]; // y component
+//                            double P_tot_z = pzi[Proton_1_ind_article] + pzi[Proton_2_ind_article]; // z component
+//
+////                          Total proton momentum modulus:
+//                            double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
+//
+//                            gamma_mu_p_tot->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_i));
+//                            gamma_mu_p_tot_weighted->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_i), Q2 * Q2);
+//
+//
+////                          Gamma_Lab calculations -------------------------------------------------
+//
+//                            double P_p1 = rCalc(pxi[Proton_1_ind_article], pyi[Proton_1_ind_article], pzi[Proton_1_ind_article]);
+//                            double P_p2 = rCalc(pxi[Proton_2_ind_article], pyi[Proton_2_ind_article], pzi[Proton_2_ind_article]);
+//
+//                            gamma_Lab_hist->Fill((pxi[Proton_1_ind_article] * pxi[Proton_2_ind_article] + pyi[Proton_1_ind_article] * pyi[Proton_2_ind_article] +
+//                                                  pzi[Proton_1_ind_article] * pzi[Proton_2_ind_article]) / (P_p1 * P_p2));
+//                            gamma_Lab_hist_weighted->Fill((pxi[Proton_1_ind_article] * pxi[Proton_2_ind_article] + pyi[Proton_1_ind_article] * pyi[Proton_2_ind_article] +
+//                                                           pzi[Proton_1_ind_article] * pzi[Proton_2_ind_article]) / (P_p1 * P_p2), Q2 * Q2);
+//                            dP_T_hist->Fill(P_T);
+//                            dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
+//
+//
+////                            //<editor-fold desc="MicroBooNE momentum plots fill (no charged pions case)">
+////                            P_R_hist->Fill(P_R);
+////                            P_L_hist->Fill(P_L);
+////                            P_l_hist->Fill(P_lp_i);
+////                            //</editor-fold>
+//
+//                        } else { // In events with pions
+//                            for (int i = 0; i < ni; i++) {
+////                            for (int i = 0; i < length; i++) {
+//                                if (abs(pdgi[i]) == 211) { // The abs() for either pi+ or pi-
+//                                    double P_pion = rCalc(pxi[i], pyi[i], pzi[i]);
+//
+////                                  Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                                    if (P_pion <= P_pion_upper_lim_MicroBooNE) {
+//
+////                                      Gamma_mu,P_L+P_R calculations ------------------------------------------
+//
+////                                      Calculating the total proton momentum vector:
+//                                        double P_tot_x = pxi[Proton_1_ind_article] + pxi[Proton_2_ind_article]; // x component
+//                                        double P_tot_y = pyi[Proton_1_ind_article] + pyi[Proton_2_ind_article]; // y component
+//                                        double P_tot_z = pzi[Proton_1_ind_article] + pzi[Proton_2_ind_article]; // z component
+//
+////                                      Total proton momentum modulus:
+//                                        double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
+//
+//                                        gamma_mu_p_tot->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_i));
+//                                        gamma_mu_p_tot_weighted->Fill((P_tot_x * pxl + P_tot_y * pyl + P_tot_z * pzl) / (P_tot * P_lp_i), Q2 * Q2);
+//
+//
+////                                      Gamma_Lab calculations -------------------------------------------------
+//
+//                                        double P_p1 = rCalc(pxi[Proton_1_ind_article], pyi[Proton_1_ind_article], pzi[Proton_1_ind_article]);
+//                                        double P_p2 = rCalc(pxi[Proton_2_ind_article], pyi[Proton_2_ind_article], pzi[Proton_2_ind_article]);
+//
+//                                        gamma_Lab_hist->Fill(
+//                                                (pxi[Proton_1_ind_article] * pxi[Proton_2_ind_article] + pyi[Proton_1_ind_article] * pyi[Proton_2_ind_article] +
+//                                                 pzi[Proton_1_ind_article] * pzi[Proton_2_ind_article]) / (P_p1 * P_p2));
+//                                        gamma_Lab_hist_weighted->Fill(
+//                                                (pxi[Proton_1_ind_article] * pxi[Proton_2_ind_article] + pyi[Proton_1_ind_article] * pyi[Proton_2_ind_article] +
+//                                                 pzi[Proton_1_ind_article] * pzi[Proton_2_ind_article]) / (P_p1 * P_p2), Q2 * Q2);
+//                                        dP_T_hist->Fill(P_T);
+//                                        dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
+//
+////                                        //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
+////                                        P_R_hist->Fill(P_R);
+////                                        P_L_hist->Fill(P_L);
+////                                        P_l_hist->Fill(P_lp_i);
+////                                        P_pion_hist->Fill(P_pion);
+////                                        //</editor-fold>
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        //</editor-fold>
+//
+//    }
+//    //</editor-fold>
+
+        TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+        c1->SetGrid();
 
         Beta_VS_P_1n1p->SetStats(0);
         Beta_VS_P_1n1p->Draw("colz");
@@ -6480,6 +7722,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         cout << "\n";
         c1->SaveAs("./plots/P_histogram_1n1p.png");
         c1->Clear();
+
     }
 
     cout << "\n";
