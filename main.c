@@ -8,6 +8,7 @@ int main() {
     std::string AnalyserMode;
     string FileType = AnalyseFile.substr(AnalyseFile.find_last_of(".") + 1);
 
+    //<editor-fold desc="AnalyserMode selector">
     if (FileType == "root") {
         AnalyserMode = "Truth level";
     } else if (FileType == "Detector Simulation") {
@@ -17,6 +18,7 @@ int main() {
         cout << "Could not find file type!" << "\n";
         cout << "\n";
     }
+    //</editor-fold>
 
     if (AnalyserMode == "Truth level") {
         cout << "\n";
@@ -38,7 +40,7 @@ int main() {
         cout << "Running analysis on '" << AnalyserMode << "' mode..." << "\n";
         cout << "\n";
 
-//        INCERT DETECTOR SIM. CODE HERE...
+        Analyser(2,0);
 
         cout << "\n";
         cout << "---------------------------------------------------------------------------\n";

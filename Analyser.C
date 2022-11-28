@@ -29,14 +29,15 @@ using namespace std;
 scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/home/asportes/clas12project/
 */
 
-void Analyser() {
-//void Analyser(int NumberOfProtons,int NumberOfNeutrons) {
+//void Analyser() {
+void Analyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     string AnalyserVersion = "3.1b";
 
-    auto start = std::chrono::system_clock::now(); // Start counting running time
+//    auto start = std::chrono::system_clock::now(); // Start counting running time
 
-    string loadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
+    string loadedInput = AnalyseFile;
+//    string loadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
 
 
 //  Code settings
@@ -5198,12 +5199,13 @@ void Analyser() {
 //  Code execution
 // =======================================================================================================================================================================
 
-    clas12reader c12(loadedInput.c_str()); //open file
+    if (NumberOfProtons == 2 && NumberOfNeutrons == 0) {
+        clas12reader c12(loadedInput.c_str()); //open file
 
 // 2p:
-    c12.addExactPid(2212, 2); //exactly 2 protons
-    c12.addExactPid(11, 1); //exactly 1 electron
-    c12.addZeroOfRestPid(); //nothing else
+        c12.addExactPid(2212, 2); //exactly 2 protons
+        c12.addExactPid(11, 1); //exactly 1 electron
+        c12.addZeroOfRestPid(); //nothing else
 
 // 1n1p:
 //    c12.addExactPid(2212, 1);    //exactly 2 protons
@@ -5211,39 +5213,39 @@ void Analyser() {
 //    c12.addExactPid(11, 1);    //exactly 1 electron
 //    c12.addZeroOfRestPid();  //nothing else
 
-    auto *Beta_VS_P_2p = new TH2F("Beta VS P (2p)", "#beta VS P (2p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
-    auto *P_histogram_2p = new TH1F("P Histogram (2p)", "P Histogram (2p)", 1000, 0, 6);
+        auto *Beta_VS_P_2p = new TH2F("Beta VS P (2p)", "#beta VS P (2p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
+        auto *P_histogram_2p = new TH1F("P Histogram (2p)", "P Histogram (2p)", 1000, 0, 6);
 
-    auto *Beta_VS_P_1n1p = new TH2F("Beta VS P (1n1p)", "#beta VS P (1n1p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
-    auto *P_histogram_1n1p = new TH1F("P Histogram (1n1p)", "P Histogram (1n1p)", 1000, 0, 6);
+        auto *Beta_VS_P_1n1p = new TH2F("Beta VS P (1n1p)", "#beta VS P (1n1p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.1);
+        auto *P_histogram_1n1p = new TH1F("P Histogram (1n1p)", "P Histogram (1n1p)", 1000, 0, 6);
 
 //  2p:
-    while (c12.next()) { //loop over events (2p)
+        while (c12.next()) { //loop over events (2p)
 
 //        c12.addExactPid(2212, 2);    //exactly 2 protons
 //        c12.addExactPid(11, 1);    //exactly 1 electron
 //        c12.addZeroOfRestPid();  //nothing else
 
-        auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
+            auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
 
-        cout << "2p =======================================================================\n";
+            cout << "2p =======================================================================\n";
 
-        for (int i = 0; i < particles_2p.size(); i++) {
+            for (int i = 0; i < particles_2p.size(); i++) {
 
-            float particlePDG = particles_2p[i]->par()->getPid();
-            float Beta = particles_2p[i]->par()->getBeta();
-            float P = particles_2p[i]->par()->getP();
+                float particlePDG = particles_2p[i]->par()->getPid();
+                float Beta = particles_2p[i]->par()->getBeta();
+                float P = particles_2p[i]->par()->getP();
 
-            Beta_VS_P_2p->Fill(P, Beta);
-            P_histogram_2p->Fill(P);
+                Beta_VS_P_2p->Fill(P, Beta);
+                P_histogram_2p->Fill(P);
 
-            cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+
+            }
+
+            cout << "\n";
 
         }
-
-        cout << "\n";
-
-    }
 
 
 //  1n1p:
@@ -6453,36 +6455,32 @@ void Analyser() {
 //    }
 //    //</editor-fold>
 
+        TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+        c1->SetGrid();
+
+        Beta_VS_P_2p->SetStats(0);
+        Beta_VS_P_2p->Draw("colz");
+        cout << "\n";
+        c1->SaveAs("./plots/Beta_VS_P_2p.png");
+        c1->Clear();
+
+        P_histogram_2p->Draw("colz");
+        cout << "\n";
+        c1->SaveAs("./plots/P_histogram_2p.png");
+        c1->Clear();
 
 
+        Beta_VS_P_1n1p->SetStats(0);
+        Beta_VS_P_1n1p->Draw("colz");
+        cout << "\n";
+        c1->SaveAs("./plots/Beta_VS_P_1n1p.png");
+        c1->Clear();
 
-
-    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
-    c1->SetGrid();
-
-    Beta_VS_P_2p->SetStats(0);
-    Beta_VS_P_2p->Draw("colz");
-    cout << "\n";
-    c1->SaveAs("./plots/Beta_VS_P_2p.png");
-    c1->Clear();
-
-    P_histogram_2p->Draw("colz");
-    cout << "\n";
-    c1->SaveAs("./plots/P_histogram_2p.png");
-    c1->Clear();
-
-
-    Beta_VS_P_1n1p->SetStats(0);
-    Beta_VS_P_1n1p->Draw("colz");
-    cout << "\n";
-    c1->SaveAs("./plots/Beta_VS_P_1n1p.png");
-    c1->Clear();
-
-    P_histogram_1n1p->Draw("colz");
-    cout << "\n";
-    c1->SaveAs("./plots/P_histogram_1n1p.png");
-    c1->Clear();
-
+        P_histogram_1n1p->Draw("colz");
+        cout << "\n";
+        c1->SaveAs("./plots/P_histogram_1n1p.png");
+        c1->Clear();
+    }
 
     cout << "\n";
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
