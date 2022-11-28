@@ -41,9 +41,19 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     c1->SetGrid();
 
     if (NumberOfProtons == 2 && NumberOfNeutrons == 0) {
+
+// Histogram definitions (2p):
+// =======================================================================================================================================================================
+
+        TH1D *theta_l_2p = new TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, 60, 190);
+        TH1D *theta_p1_2p = new TH1D("#theta_{p1} (2p)", ";#theta_{p1} [Deg];", 100, 60, 190);
+        TH1D *theta_p2_2p = new TH1D("#theta_{p2} (2p)", ";#theta_{p2} [Deg];", 100, 60, 190);
+        TH1D *dtheta_2p = new TH1D("#gamma (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, -190, 190);
+
+
         clas12reader c12(loadedInput.c_str()); //open file
 
-        c12.addExactPid(2212, 2); //exactly 2 protons
+        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
         c12.addExactPid(11, 1); //exactly 1 electron
         c12.addZeroOfRestPid(); //nothing else
 
@@ -59,6 +69,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
             cout << "2p =======================================================================\n";
 
+            int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
+            int Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
+
             for (int i = 0; i < particles_2p.size(); i++) {
 
                 float particlePDG = particles_2p[i]->par()->getPid();
@@ -68,7 +81,35 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                 Beta_VS_P_2p->Fill(P, Beta);
                 P_histogram_2p->Fill(P);
 
-                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+//                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+
+                //<editor-fold desc="Proton selector (2p)">
+                if (pdgf[i] == 2212) {
+                    ++ProtonCounter_2p;
+                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                    cout << "i = " << i << "\n";
+                    if (ProtonCounter_2p == 1) {
+                        Proton_1_ind_2p = i;
+                        cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
+                    } else if (ProtonCounter_2p == 2) {
+                        Proton_2_ind_2p = i;
+                        cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
+                    } else if (ProtonCounter_2p > 2) {
+                        cout << "\n";
+                        cout << "Additional Protons detected (2p). PDG = " << particlePDG[i] << "\n";
+                        cout << "\n";
+                        cout << "\n";
+                    }
+                } else if (pdgf[i] != 2212) {
+                    ++OtherParticleCounter_2p;
+                    if (OtherParticleCounter_2p > 0) {
+                        cout << "\n";
+                        cout << "Additional particles detected (2p). PDG = " << particlePDG[i] << "\n";
+                        cout << "\n";
+                        cout << "\n";
+                    }
+                }
+                //</editor-fold>
 
             }
 
@@ -90,8 +131,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     } else if (NumberOfProtons == 1 && NumberOfNeutrons == 1) {
         clas12reader c12(loadedInput.c_str()); //open file
 
-        c12.addExactPid(2212, 1);    //exactly 2 protons
-        c12.addExactPid(2112, 1);    //exactly 2 protons
+        c12.addExactPid(2212, NumberOfProtons);    //exactly 1 proton
+        c12.addExactPid(2112, NumberOfNeutrons);    //exactly 1 Neutron
         c12.addExactPid(11, 1);    //exactly 1 electron
         c12.addZeroOfRestPid();  //nothing else
 
