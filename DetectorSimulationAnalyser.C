@@ -5361,7 +5361,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
         c12.addZeroOfRestPid(); //nothing else
 
-
+/*
 
 //        c12.getNParticles();
 //        cout << "c12->getNParticles() = " << c12->getNParticles() << "\n";
@@ -5671,6 +5671,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //        cout << "\n";
 //        c1->SaveAs("./plots/P_histogram_2p.png");
 //        c1->Clear();
+
+
+ */
 
         } else if (NumberOfProtons == 1 && NumberOfNeutrons == 1) {
             clas12reader c12(LoadedInput.c_str()); //open file
