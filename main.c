@@ -12,6 +12,7 @@ int main() {
 
 
     cout << "FileType:\t" << FileType << "\n";
+    cout << "AnalyseFile:\t" << AnalyseFile << "\n";
 
 
     //<editor-fold desc="AnalyserMode selector">
