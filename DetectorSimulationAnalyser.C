@@ -4554,7 +4554,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     myLogFile << "Plot settings\n";
     myLogFile << "==========================================================================================\n";
-    myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
+//    myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
     myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n";
     myLogFile << "\n";
     myLogFile << "\n";
@@ -5479,7 +5479,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double Theta_l_2p = ->getTheta();
+                double Theta_l_2p = particles_2p[Lepton_ind_2p]->getTheta();
 
                 theta_l_2p->Fill(Theta_l_2p);
 
@@ -5665,7 +5665,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    fsEl_DIS_2p->Fill(El);
 //                }
 //                //</editor-fold>
-            }
+
+//            }
         }
 
 
