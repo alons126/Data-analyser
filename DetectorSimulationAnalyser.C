@@ -5717,8 +5717,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                 float Beta = particles_1n1p[i]->par()->getBeta();
                 float P = particles_1n1p[i]->par()->getP();
 
-                Beta_VS_P_1n1p->Fill(P, Beta);
-                P_histogram_1n1p->Fill(P);
+//                Beta_VS_P_1n1p->Fill(P, Beta);
+//                P_histogram_1n1p->Fill(P);
 
 //                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
@@ -5728,16 +5728,16 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
         }
 
-        Beta_VS_P_1n1p->SetStats(0);
-        Beta_VS_P_1n1p->Draw("colz");
-        cout << "\n";
-        c1->SaveAs("./plots/Beta_VS_P_1n1p.png");
-        c1->Clear();
-
-        P_histogram_1n1p->Draw("colz");
-        cout << "\n";
-        c1->SaveAs("./plots/P_histogram_1n1p.png");
-        c1->Clear();
+//        Beta_VS_P_1n1p->SetStats(0);
+//        Beta_VS_P_1n1p->Draw("colz");
+//        cout << "\n";
+//        c1->SaveAs("./plots/Beta_VS_P_1n1p.png");
+//        c1->Clear();
+//
+//        P_histogram_1n1p->Draw("colz");
+//        cout << "\n";
+//        c1->SaveAs("./plots/P_histogram_1n1p.png");
+//        c1->Clear();
 
     }
 
@@ -7761,68 +7761,68 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
 //  Q2 -all interactions (2p):
 
-        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==0 && nfp == 2", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_2p.png");
-        c1->Clear();
+//        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==0 && nfp == 2", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_2p.png");
+//        c1->Clear();
 
 
 //  Q2 - QEL only (2p):
 
-        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_2p.png");
-        c1->Clear();
+//        fChain->Draw("El + Ef[0] + Ef[1] - 2*0.938272:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_2p.png");
+//        c1->Clear();
 
 
 //  Q2 -all interactions (1n1p):
 
-        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==1 && nfp == 1", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_1n1p.png");
-        c1->Clear();
+//        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.3)", "nf==2 && nfn==1 && nfp == 1", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_Q2_all_int_1n1p.png");
+//        c1->Clear();
 
 
 //  Q2 - QEL only (1n1p):
 
-        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_1n1p.png");
-        c1->Clear();
+//        fChain->Draw("El + Ef[0] + Ef[1] - 0.938272 - 0.939565:Q2>>h1(100, 0.0, 3.6, 100, 2.12, 2.23)", "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_Q2_QEL_only_1n1p.png");
+//        c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="One commend plots - Theta_l">
 
 // Theta_l -all interactions (2p):
 
-        fChain->Draw(
-                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
-                "nf==2 && nfn==0 && nfp == 2", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_2p.png");
-        c1->Clear();
+//        fChain->Draw(
+//                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
+//                "nf==2 && nfn==0 && nfp == 2", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_2p.png");
+//        c1->Clear();
 
 
 // Theta_l - QEL only (2p):
 
-        fChain->Draw(
-                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
-                "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_2p.png");
-        c1->Clear();
+//        fChain->Draw(
+//                "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
+//                "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_2p.png");
+//        c1->Clear();
 
 
 // Theta_l -all interactions (1n1p):
 
-        fChain->Draw(
-                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
-                "nf==2 && nfn==1 && nfp == 1", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_1n1p.png");
-        c1->Clear();
+//        fChain->Draw(
+//                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
+//                "nf==2 && nfn==1 && nfp == 1", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_1n1p.png");
+//        c1->Clear();
 
 
 // Theta_l - QEL only (1n1p):
 
-        fChain->Draw(
-                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
-                "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_1n1p.png");
-        c1->Clear();
+//        fChain->Draw(
+//                "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
+//                "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
+//        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_1n1p.png");
+//        c1->Clear();
         //</editor-fold>
 
     }
@@ -8525,7 +8525,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         cout << "FSI status:\tON\n";
     }
 
-    cout << "File input:\t" << loadedInput << "\n";
+    cout << "File input:\t" << LoadedInput << "\n";
     cout << "Settings mode:\t'" << file_name << "'\n";
     cout << "\n";
 
