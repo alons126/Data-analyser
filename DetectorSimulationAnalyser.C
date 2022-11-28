@@ -5357,7 +5357,10 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         c12.addExactPid(11, 1); //exactly 1 electron
         c12.addZeroOfRestPid(); //nothing else
 
-        c12.getNParticles();
+
+        
+//        c12.getNParticles();
+        cout << "c12.getNParticles() = " << c12.getNParticles() << "\n";
 
 
 
