@@ -5225,6 +5225,8 @@ void Analyser() {
 
         auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
 
+        cout << "2p =======================================================================\n";
+
         for (int i = 0; i < particles_2p.size(); i++) {
 
             float particlePDG = particles_2p[i]->par()->getPid();
@@ -5238,7 +5240,7 @@ void Analyser() {
 
         }
 
-        cout << "===========================================================================\n";
+        cout << "\n";
 
     }
 
@@ -5253,6 +5255,8 @@ void Analyser() {
 
         auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
 
+        cout << "1n1p =====================================================================\n";
+
         for (int i = 0; i < particles_1n1p.size(); i++) {
 
             float particlePDG = particles_1n1p[i]->par()->getPid();
@@ -5266,7 +5270,7 @@ void Analyser() {
 
         }
 
-        cout << "===========================================================================\n";
+        cout << "\n";
 
     }
 
