@@ -43,7 +43,7 @@ int main() {
         cout << "Running analysis on '" << AnalyserMode << "' mode..." << "\n";
         cout << "\n";
 
-        Analyser(2,0);
+        EventAnalyser(2,0);
 
         cout << "\n";
         cout << "---------------------------------------------------------------------------\n";

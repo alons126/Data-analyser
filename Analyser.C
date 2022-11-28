@@ -30,7 +30,7 @@ scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/h
 */
 
 //void Analyser() {
-void Analyser(int NumberOfProtons, int NumberOfNeutrons) {
+void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     string AnalyserVersion = "3.1b";
 
