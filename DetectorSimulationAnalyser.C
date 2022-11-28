@@ -34,10 +34,6 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     string AnalyserVersion = "3.1b";
 
-    string LoadedInput = AnalyseFile;
-//    string LoadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-
-
 //  Code settings
 //  =====================================================================================================================================================================
 
@@ -53,7 +49,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //    int ni_selection = 2; // 3 for G18; 2 for SuSAv2
 
     //<editor-fold desc="Input processing (to determine custom_FSI_status)">
-    string LoadedInput = fChain->GetCurrentFile()->GetName();
+    string LoadedInput = AnalyseFile;
+//    string LoadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of("/") + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of("/") + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
@@ -160,12 +157,12 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot settings">
-    bool lowest_nentries = false;
-    int custom_nentries;
-
-    if (lowest_nentries == true) {
-        custom_nentries = 10000000; // 10M entries
-    }
+//    bool lowest_nentries = false;
+//    int custom_nentries;
+//
+//    if (lowest_nentries == true) {
+//        custom_nentries = 10000000; // 10M entries
+//    }
 
     bool wider_margin = true;
     //</editor-fold>
@@ -177,129 +174,129 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
-    //<editor-fold desc="Simulation parameters extraction (assuming all entries have the same parameters)">
-    if (fChain == 0) return;
-
-    Long64_t nbytes0 = 0, nb0 = 0;
-    x = 0;
-
-    for (Long64_t jentry0 = 0; jentry0 < 1; jentry0++) {
-        Long64_t ientry = LoadTree(jentry0);
-
-        if (ientry < 0) break;
-
-        nb0 = fChain->GetEntry(jentry0);
-        nbytes0 += nb0;
-
-        //<editor-fold desc="Energy selector (to nucleus; relevant to QEL only)">
-        switch (tgt) {
-            case 1000020040: // He4
-                BEnergyToNucleus = 0.0150;
-                Target_pdg = 1000020040;
-                Target_nucleus = "He4";
-                break;
-            case 1000030060: // Li6
-                BEnergyToNucleus = 0.0150;
-                Target_pdg = 1000030060;
-                Target_nucleus = "Li6";
-                break;
-            case 1000060120: // C12
-                BEnergyToNucleus = 0.0200;
-                Target_pdg = 1000060120;
-                Target_nucleus = "C12";
-                break;
-            case 1000080160: // O16
-                BEnergyToNucleus = 0.0160;
-                Target_pdg = 1000080160;
-                Target_nucleus = "O16";
-                break;
-            case 1000120240: // Mg24
-                BEnergyToNucleus = 0.0250;
-                Target_pdg = 1000120240;
-                Target_nucleus = "Mg24";
-                break;
-            case 1000180400: // Ar40
-                BEnergyToNucleus = 0.0280;
-                Target_pdg = 1000120240;
-                Target_nucleus = "Ar40";
-                break;
-            case 1000200400: // Ca40
-                BEnergyToNucleus = 0.0280;
-                Target_pdg = 1000200400;
-                Target_nucleus = "Ca40";
-                break;
-            case 1000260560: // Fe56
-                BEnergyToNucleus = 0.0230;
-                Target_pdg = 1000260560;
-                Target_nucleus = "Fe56";
-                break;
-            case 1000280580: // Ni58
-                BEnergyToNucleus = 0.0300;
-                Target_pdg = 1000280580;
-                Target_nucleus = "Ni58";
-                break;
-            case 1000501190: // Sn119
-                BEnergyToNucleus = 0.0280;
-                Target_pdg = 1000501190;
-                Target_nucleus = "Sn119";
-                break;
-            case 1000791970: // Au197
-                BEnergyToNucleus = 0.0310;
-                Target_pdg = 1000791970;
-                Target_nucleus = "Au197";
-                break;
-            case 1000822080: // Pb208
-                BEnergyToNucleus = 0.0310;
-                Target_pdg = 1000822080;
-                Target_nucleus = "Pb208";
-                break;
-            default: // In case tgt does not correspond to any the above pdg codes - no BE considerations
-                BEnergyToNucleus = 0.;
-                Target_pdg = tgt;
-                Target_nucleus = "Unknown";
-        }
-
-        BeamEnergy = Ev;
-        //</editor-fold>
-
-        //<editor-fold desc="Probe selector">
-        Probe_pdg = neu;
-
-        switch (Probe_pdg) {
-            case 11: // electron
-                Probe = "e-";
-                break;
-            case 12: // nu_e
-                Probe = "nu_e";
-                break;
-            case 13: // muon
-                Probe = "mu-";
-                break;
-            case 14: // nu_mu
-                Probe = "nu_mu";
-                break;
-            case 15: // tauon
-                Probe = "tau-";
-                break;
-            case 16: // nu_tau
-                Probe = "nu_tau";
-                break;
-            default: // In case tgt does not correspond to any the above pdg codes - no BE considerations
-                Probe = "Unknown";
-        }
-        //</editor-fold>
-
-        cout << "Event parameters (*)\n";
-        cout << "---------------------------------------------------------------------------\n";
-        cout << "Probe:\t\t" << Probe << " (PDG: " << Probe_pdg << ")\n";
-        cout << "Target:\t\t" << Target_nucleus << " (PDG: " << Target_pdg << ")\n";
-        cout << "Beam energy:\t" << BeamEnergy << " GeV\n";
-        cout << "\n";
-        cout << "(*) assuming all entries have the same parameters\n";
-        cout << "\n";
-        cout << "\n";
-    }
-    //</editor-fold>
+//    //<editor-fold desc="Simulation parameters extraction (assuming all entries have the same parameters)">
+//    if (fChain == 0) return;
+//
+//    Long64_t nbytes0 = 0, nb0 = 0;
+//    x = 0;
+//
+//    for (Long64_t jentry0 = 0; jentry0 < 1; jentry0++) {
+//        Long64_t ientry = LoadTree(jentry0);
+//
+//        if (ientry < 0) break;
+//
+//        nb0 = fChain->GetEntry(jentry0);
+//        nbytes0 += nb0;
+//
+////        //<editor-fold desc="Energy selector (to nucleus; relevant to QEL only)">
+////        switch (tgt) {
+////            case 1000020040: // He4
+////                BEnergyToNucleus = 0.0150;
+////                Target_pdg = 1000020040;
+////                Target_nucleus = "He4";
+////                break;
+////            case 1000030060: // Li6
+////                BEnergyToNucleus = 0.0150;
+////                Target_pdg = 1000030060;
+////                Target_nucleus = "Li6";
+////                break;
+////            case 1000060120: // C12
+////                BEnergyToNucleus = 0.0200;
+////                Target_pdg = 1000060120;
+////                Target_nucleus = "C12";
+////                break;
+////            case 1000080160: // O16
+////                BEnergyToNucleus = 0.0160;
+////                Target_pdg = 1000080160;
+////                Target_nucleus = "O16";
+////                break;
+////            case 1000120240: // Mg24
+////                BEnergyToNucleus = 0.0250;
+////                Target_pdg = 1000120240;
+////                Target_nucleus = "Mg24";
+////                break;
+////            case 1000180400: // Ar40
+////                BEnergyToNucleus = 0.0280;
+////                Target_pdg = 1000120240;
+////                Target_nucleus = "Ar40";
+////                break;
+////            case 1000200400: // Ca40
+////                BEnergyToNucleus = 0.0280;
+////                Target_pdg = 1000200400;
+////                Target_nucleus = "Ca40";
+////                break;
+////            case 1000260560: // Fe56
+////                BEnergyToNucleus = 0.0230;
+////                Target_pdg = 1000260560;
+////                Target_nucleus = "Fe56";
+////                break;
+////            case 1000280580: // Ni58
+////                BEnergyToNucleus = 0.0300;
+////                Target_pdg = 1000280580;
+////                Target_nucleus = "Ni58";
+////                break;
+////            case 1000501190: // Sn119
+////                BEnergyToNucleus = 0.0280;
+////                Target_pdg = 1000501190;
+////                Target_nucleus = "Sn119";
+////                break;
+////            case 1000791970: // Au197
+////                BEnergyToNucleus = 0.0310;
+////                Target_pdg = 1000791970;
+////                Target_nucleus = "Au197";
+////                break;
+////            case 1000822080: // Pb208
+////                BEnergyToNucleus = 0.0310;
+////                Target_pdg = 1000822080;
+////                Target_nucleus = "Pb208";
+////                break;
+////            default: // In case tgt does not correspond to any the above pdg codes - no BE considerations
+////                BEnergyToNucleus = 0.;
+////                Target_pdg = tgt;
+////                Target_nucleus = "Unknown";
+////        }
+////
+////        BeamEnergy = Ev;
+////        //</editor-fold>
+//
+////        //<editor-fold desc="Probe selector">
+////        Probe_pdg = neu;
+////
+////        switch (Probe_pdg) {
+////            case 11: // electron
+////                Probe = "e-";
+////                break;
+////            case 12: // nu_e
+////                Probe = "nu_e";
+////                break;
+////            case 13: // muon
+////                Probe = "mu-";
+////                break;
+////            case 14: // nu_mu
+////                Probe = "nu_mu";
+////                break;
+////            case 15: // tauon
+////                Probe = "tau-";
+////                break;
+////            case 16: // nu_tau
+////                Probe = "nu_tau";
+////                break;
+////            default: // In case tgt does not correspond to any the above pdg codes - no BE considerations
+////                Probe = "Unknown";
+////        }
+////        //</editor-fold>
+//
+//        cout << "Event parameters (*)\n";
+//        cout << "---------------------------------------------------------------------------\n";
+//        cout << "Probe:\t\t" << Probe << " (PDG: " << Probe_pdg << ")\n";
+//        cout << "Target:\t\t" << Target_nucleus << " (PDG: " << Target_pdg << ")\n";
+//        cout << "Beam energy:\t" << BeamEnergy << " GeV\n";
+//        cout << "\n";
+//        cout << "(*) assuming all entries have the same parameters\n";
+//        cout << "\n";
+//        cout << "\n";
+//    }
+//    //</editor-fold>
 
     //</editor-fold>
 
