@@ -5409,7 +5409,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
             for (int i = 0; i < particles_2p.size(); i++) {
 
-//                float particlePDG = particles_2p[i]->par()->getPid();
+                float particlePDG = particles_2p[i]->par()->getPid();
 //                float Beta = particles_2p[i]->par()->getBeta();
 //                float P = particles_2p[i]->par()->getP();
 //
