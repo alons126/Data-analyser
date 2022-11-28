@@ -1,7 +1,8 @@
 //#include "gst.C"
 #include "TruthLevelAnalyser.c"
 //#include "TruthLevelAnalyser.h"
-#include "Analyser.C"
+//#include "Analyser.C"
+#include "DetectorSimulationAnalyser.C"
 
 int main() {
     auto start = std::chrono::system_clock::now(); // Start counting running time
