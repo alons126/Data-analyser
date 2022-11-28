@@ -5383,6 +5383,17 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
 
 
+            auto electrons=c12.getByID(11);
+            auto protons=c12.getByID(2212);
+            auto neutrons=c12.getByID(2112);
+
+            cout << "#electrons = " << electrons.size() << "\n";
+            cout << "#protons = " << protons.size() << "\n";
+            cout << "#neutrons = " << neutrons.size() << "\n";
+            cout << "\n";
+
+
+
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
 
@@ -5394,15 +5405,6 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //
 //                Beta_VS_P_2p->Fill(P, Beta);
 //                P_histogram_2p->Fill(P);
-
-                auto electrons=c12.getByID(11);
-                auto protons=c12.getByID(2212);
-                auto neutrons=c12.getByID(2112);
-
-                cout << "#electrons = " << electrons.size() << "\n";
-                cout << "#protons = " << protons.size() << "\n";
-                cout << "#neutrons = " << neutrons.size() << "\n";
-                cout << "\n";
 
                 cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
