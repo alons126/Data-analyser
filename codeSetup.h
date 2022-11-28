@@ -4509,7 +4509,7 @@ std::string plots_file_type = "_plots.root";
 
 //<editor-fold desc="Local General files">
 std::string file_name = "general_file";
-std::string AnalyseFile = "asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_seed_555_test_17.gst.root";
+std::string AnalyseFile = "/home/alon/Analyser/asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_seed_555_test_19.gst.root";
 //</editor-fold>
 
 //</editor-fold>

@@ -14,7 +14,8 @@
 #include <iomanip>
 #include <string>
 
-using namespace std;
+using namespace
+std;
 
 void gst::Loop() {
 
@@ -40,45 +41,66 @@ void gst::Loop() {
     string fileInput = loadedInput.substr(loadedInput.find_last_of("/") + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
 
-    if (fileInput.find("wfsi") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "\n";
-        cout << "wfsi is in fileInput! Setting custom_FSI_status == true." << "\n";  // and no change to custom_FSI_status
-        cout << "\n";
-    } else if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "\n";
-        cout << "nofsi is in fileInput! Setting custom_FSI_status == false." << "\n";
-        cout << "\n";
-
+    if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
+////        cout << "\n";
+//        cout << "\n";
+//        cout << "nofsi is in fileInput! Setting custom_FSI_status == false." << "\n";
+//        cout << "\n";
+//
         custom_FSI_status = false; // and custom_FSI_status is set to be false
-    } else {
-        cout << "\n";
-        cout << "\n";
-        cout << "Could not figure FSI status. FSI is kept ON." << "\n";
-        cout << "\n";
     }
+
+//    if (fileInput.find("wfsi") <= fileInput[fileInput.size() - 1]) {
+////        cout << "\n";
+////        cout << "\n";
+////        cout << "wfsi is in fileInput! Setting custom_FSI_status == true." << "\n";  // and no change to custom_FSI_status
+////        cout << "\n";
+//    } else if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
+////        cout << "\n";
+//        cout << "\n";
+//        cout << "nofsi is in fileInput! Setting custom_FSI_status == false." << "\n";
+//        cout << "\n";
+//
+//        custom_FSI_status = false; // and custom_FSI_status is set to be false
+//    } else {
+////        cout << "\n";
+//        cout << "\n";
+//        cout << "Could not figure FSI status. FSI is kept ON." << "\n";
+//        cout << "\n";
+//    }
     //</editor-fold>
 
     //<editor-fold desc="Input processing (to determine ni_selection)">
+    string tune;
+
     if (fileInput.find("G18") <= fileInput[fileInput.size() - 1]) {
         cout << "\n";
-        cout << "G18 is in fileInput! Setting ni_selection == 3." << "\n";  // and no change to custom_FSI_status
+        cout << "G18 is in fileInput! Setting ni_selection == 3\n";  // and no change to custom_FSI_status
         cout << "\n";
 
+        tune = "G18";
         ni_selection = 3;
     } else if (fileInput.find("GEM21") <= fileInput[fileInput.size() - 1]) {
         cout << "\n";
-        cout << "GEM21 is in fileInput! Setting ni_selection == 2." << "\n";
+        cout << "GEM21 is in fileInput! Setting ni_selection == 2\n";
         cout << "\n";
 
+        tune = "GEM21 (SuSAv2)";
+        ni_selection = 2;
+    } else if (fileInput.find("SuSAv2") <= fileInput[fileInput.size() - 1]) {
+        cout << "\n";
+        cout << "SuSAv2 is in fileInput! Setting ni_selection == 2\n";
+        cout << "\n";
+
+        tune = "SuSAv2";
         ni_selection = 2;
     } else {
         cout << "\n";
-        cout << "Could not figure tune. ni is kept on 2." << "\n";
+        cout << "Could not figure tune, keeping ni = 2\n";
         cout << "\n";
 
         ni_selection = 2;
+        tune = "unknown";
     }
     //</editor-fold>
 
@@ -95,29 +117,25 @@ void gst::Loop() {
     //</editor-fold>
 
     //<editor-fold desc="FSI indicator">
-    if (FSI_status == true) {
-        cout << "\n";
-        cout << "\n";
-        cout << "File input is " << loadedInput << ".\n";
-        cout << "Code is running in '" << file_name << "' settings mode with FSI turned ON." << "\n";
-        cout << "\n";
+    cout << "\n";
+    cout << "\n";
+    cout << "Execution variables\n";
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "File input:\t" << AnalyseFile << "\n";
+    cout << "Settings mode:\t'" << file_name << "'\n";
+    cout << "FSI status:\t" << BoolToString(FSI_status) << "\n";
+    cout << "ni:\t\t" << ni_selection << "\n";
+    cout << "Tune:\t\t" << tune << "\n";
+    cout << "\n";
+    cout << "\n";
 
-        cout << "loadedInput: " << loadedInput << "\n";
-        cout << "filePath: " << filePath << "\n";
-        cout << "fileInput: " << fileInput << "\n";
-        cout << "\n";
-    } else if (FSI_status == false) {
-        cout << "\n";
-        cout << "\n";
-        cout << "File input is " << loadedInput << ".\n";
-        cout << "Code is running in '" << file_name << "' settings mode with FSI turned OFF (ni = " << ni_selection << ")." << "\n";
-        cout << "\n";
-
-        cout << "loadedInput: " << loadedInput << "\n";
-        cout << "filePath: " << filePath << "\n";
-        cout << "fileInput: " << fileInput << "\n";
-        cout << "\n";
-    }
+    cout << "File input\n";
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "loadedInput:\t" << loadedInput << "\n";
+    cout << "filePath:\t" << filePath << "\n";
+    cout << "fileInput:\t" << fileInput << "\n";
+    cout << "\n";
+    cout << "\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -254,11 +272,14 @@ void gst::Loop() {
         }
         //</editor-fold>
 
+        cout << "Event parameters (*)\n";
+        cout << "---------------------------------------------------------------------------\n";
+        cout << "Probe:\t\t" << Probe << " (PDG: " << Probe_pdg << ")\n";
+        cout << "Target:\t\t" << Target_nucleus << " (PDG: " << Target_pdg << ")\n";
+        cout << "Beam energy:\t" << BeamEnergy << " GeV\n";
         cout << "\n";
-        cout << "Probe: " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
-        cout << "Target: " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n";
-        cout << "Beam energy: " << BeamEnergy << " GeV" << "\n";
-        cout << "* assuming all entries have the same parameters *" << "\n";
+        cout << "(*) assuming all entries have the same parameters\n";
+        cout << "\n";
         cout << "\n";
     }
     //</editor-fold>
@@ -349,7 +370,7 @@ void gst::Loop() {
         normalized_P_R_plots = false; // 2p & 1n1p
 
         cout << "\n";
-        cout << "All normalizations are disabled." << "\n";  // and no change to custom_FSI_status
+        cout << "All normalizations are disabled.\n";  // and no change to custom_FSI_status
         cout << "\n";
     }
 
@@ -370,26 +391,26 @@ void gst::Loop() {
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
         cout << "\n";
-        cout << "Clearing old plots..." << "\n";
+        cout << "Clearing old plots...\n";
         cout << "\n";
 
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\n";
-        cout << "Clearing old root files..." << "\n";
+        cout << "Clearing old root files...\n";
         cout << "\n";
 
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\n";
-        cout << "Clearing old plots & root files..." << "\n";
+        cout << "Clearing old plots & root files...\n";
         cout << "\n";
 
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
     } else {
         cout << "\n";
-        cout << "No files were cleared." << "\n";
+        cout << "No files were cleared.\n";
         cout << "\n";
     }
     //</editor-fold>
@@ -4619,286 +4640,379 @@ void gst::Loop() {
     //<editor-fold desc="Histogram definitions">
 
     cout << "\n";
-    cout << "Defining histograms..." << "\n";
+    cout << "Defining histograms...\n";
     cout << "\n";
 
 // Theta histograms -----------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta histograms">
-    THStack *ThetaStack = new THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
+    THStack *ThetaStack = new
+    THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
 
-    TH1D *theta_l_2p = new TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
-    TH1D *theta_p1_2p = new TH1D("#theta_{p1} (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
-    TH1D *theta_p2_2p = new TH1D("#theta_{p2} (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
-    TH1D *dtheta_2p = new TH1D("#gamma (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
+    TH1D *theta_l_2p = new
+    TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
+    TH1D *theta_p1_2p = new
+    TH1D("#theta_{p1} (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
+    TH1D *theta_p2_2p = new
+    TH1D("#theta_{p2} (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
+    TH1D *dtheta_2p = new
+    TH1D("#gamma (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
 
-    TH1D *theta_l_1n1p = new TH1D("#theta_{l} (1n1p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_1n1p, theta_l_upper_lim_1n1p);
-    TH1D *theta_p_1n1p = new TH1D("#theta_{p} (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
-    TH1D *theta_n_1n1p = new TH1D("#theta_{n} (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
-    TH1D *dtheta_1n1p = new TH1D("#gamma (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
+    TH1D *theta_l_1n1p = new
+    TH1D("#theta_{l} (1n1p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_1n1p, theta_l_upper_lim_1n1p);
+    TH1D *theta_p_1n1p = new
+    TH1D("#theta_{p} (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
+    TH1D *theta_n_1n1p = new
+    TH1D("#theta_{n} (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
+    TH1D *dtheta_1n1p = new
+    TH1D("#gamma (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
     //</editor-fold>
 
 // Phi histograms -------------------------------------------------------------------------------------
 
     //<editor-fold desc="Phi histograms">
-    THStack *PhiStack = new THStack("#phi_{l} stack (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
+    THStack *PhiStack = new
+    THStack("#phi_{l} stack (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
 
-    TH1D *phi_l_2p = new TH1D("#phi_{l} (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
-    TH1D *phi_p1_2p = new TH1D("#phi_{p1} (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
-    TH1D *phi_p2_2p = new TH1D("#phi_{p2} (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
-    TH1D *dphi_2p = new TH1D("#Delta#phi (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
+    TH1D *phi_l_2p = new
+    TH1D("#phi_{l} (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
+    TH1D *phi_p1_2p = new
+    TH1D("#phi_{p1} (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
+    TH1D *phi_p2_2p = new
+    TH1D("#phi_{p2} (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
+    TH1D *dphi_2p = new
+    TH1D("#Delta#phi (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
 
-    TH1D *phi_l_1n1p = new TH1D("#phi_{l} (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
-    TH1D *phi_p_1n1p = new TH1D("#phi_{p} (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
-    TH1D *phi_n_1n1p = new TH1D("#phi_{n} (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
-    TH1D *dphi_1n1p = new TH1D("#Delta#phi (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
+    TH1D *phi_l_1n1p = new
+    TH1D("#phi_{l} (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
+    TH1D *phi_p_1n1p = new
+    TH1D("#phi_{p} (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
+    TH1D *phi_n_1n1p = new
+    TH1D("#phi_{n} (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
+    TH1D *dphi_1n1p = new
+    TH1D("#Delta#phi (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy histograms ----------------------------------------------------------------------------------
 
     //<editor-fold desc="Energy histograms">
-    THStack *EnergyStack = new THStack("E_{l} stack (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
+    THStack *EnergyStack = new
+    THStack("E_{l} stack (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
 
-    TH1D *fsEl_2p = new TH1D("Final State E_{l} (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
-    TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
-    TH1D *fsEl_MEC_2p = new TH1D("Final State E_{l} (MEC Only, 2p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_2p, fsEl_MEC_upper_lim_2p);
-    TH1D *fsEl_RES_2p = new TH1D("Final State E_{l} (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
-    TH1D *fsEl_DIS_2p = new TH1D("Final State E_{l} (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
-    TH2D *fsEl_VS_theta_l_all_int_2p = new TH2D("Stat} (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                                                200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_2p = new TH2D("Stat} (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_MEC_only_2p = new TH2D("Stat} (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                                                 200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH1D *fsEl_2p = new
+    TH1D("Final State E_{l} (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
+    TH1D *fsEl_QEL_2p = new
+    TH1D("Final State E_{l} (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
+    TH1D *fsEl_MEC_2p = new
+    TH1D("Final State E_{l} (MEC Only, 2p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_2p, fsEl_MEC_upper_lim_2p);
+    TH1D *fsEl_RES_2p = new
+    TH1D("Final State E_{l} (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
+    TH1D *fsEl_DIS_2p = new
+    TH1D("Final State E_{l} (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
+    TH2D *fsEl_VS_theta_l_all_int_2p = new
+    TH2D("Stat} (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_QEL_only_2p = new
+    TH2D("Stat} (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_MEC_only_2p = new
+    TH2D("Stat} (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
 
-    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
-    TH1D *fsEl_QEL_1n1p = new TH1D("Final State E_{l} (QEL Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_1n1p, fsEl_QEL_upper_lim_1n1p);
-    TH1D *fsEl_MEC_1n1p = new TH1D("Final State E_{l} (MEC Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_1n1p, fsEl_MEC_upper_lim_1n1p);
-    TH1D *fsEl_RES_1n1p = new TH1D("Final State E_{l} (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
-    TH1D *fsEl_DIS_1n1p = new TH1D("Final State E_{l} (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
-    TH2D *fsEl_VS_theta_l_all_int_1n1p = new TH2D("Stat (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                  200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                                                  200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_1n1p = new TH2D("Stat (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_MEC_only_1n1p = new TH2D("Stat (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-                                                   200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH1D *fsEl_1n1p = new
+    TH1D("Final State E_{l} (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
+    TH1D *fsEl_QEL_1n1p = new
+    TH1D("Final State E_{l} (QEL Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_1n1p, fsEl_QEL_upper_lim_1n1p);
+    TH1D *fsEl_MEC_1n1p = new
+    TH1D("Final State E_{l} (MEC Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_1n1p, fsEl_MEC_upper_lim_1n1p);
+    TH1D *fsEl_RES_1n1p = new
+    TH1D("Final State E_{l} (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
+    TH1D *fsEl_DIS_1n1p = new
+    TH1D("Final State E_{l} (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
+    TH2D *fsEl_VS_theta_l_all_int_1n1p = new
+    TH2D("Stat (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_QEL_only_1n1p = new
+    TH2D("Stat (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_l_MEC_only_1n1p = new
+    TH2D("Stat (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
 
     //</editor-fold>
 
 // Energy Transfer histograms (all interactions) ------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer histograms (all interactions)">
-    THStack *Energy_Transfer_all_int_15_Stack_2p = new THStack("ET around 15 degrees Stack (all interactions, 2p)",
-                                                               "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p);E_{#nu}-E_{l} [GeV]");
-    THStack *Energy_Transfer_all_int_15_Stack_1n1p = new THStack("ET around 15 deg Stack (all interactions, 1n1p)",
-                                                                 "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_all_int_15_Stack_2p = new
+    THStack("ET around 15 degrees Stack (all interactions, 2p)",
+            "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_all_int_15_Stack_1n1p = new
+    THStack("ET around 15 deg Stack (all interactions, 1n1p)",
+            "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p);E_{#nu}-E_{l} [GeV]");
 
 
-    TH1D *E_Trans_all_ang_all_int_2p = new TH1D("ET in all angles (all interactions, 2p)",
-                                                "Energy Transfer (E_{#nu}-E_{l}) for every angle (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
-                                                100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
-    TH1D *E_Trans15_all_2p = new TH1D("ET around 15 degrees (all interactions, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans15_all_lower_lim_2p, E_Trans15_all_upper_lim_2p);
-    TH1D *E_Trans45_all_2p = new TH1D("ET around 45 degrees (all interactions, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans45_all_lower_lim_2p, E_Trans45_all_upper_lim_2p);
-    TH1D *E_Trans90_all_2p = new TH1D("ET around 90 degrees (all interactions, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans90_all_lower_lim_2p, E_Trans90_all_upper_lim_2p);
+    TH1D *E_Trans_all_ang_all_int_2p = new
+    TH1D("ET in all angles (all interactions, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) for every angle (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
+    TH1D *E_Trans15_all_2p = new
+    TH1D("ET around 15 degrees (all interactions, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_all_lower_lim_2p, E_Trans15_all_upper_lim_2p);
+    TH1D *E_Trans45_all_2p = new
+    TH1D("ET around 45 degrees (all interactions, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_all_lower_lim_2p, E_Trans45_all_upper_lim_2p);
+    TH1D *E_Trans90_all_2p = new
+    TH1D("ET around 90 degrees (all interactions, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_all_lower_lim_2p, E_Trans90_all_upper_lim_2p);
 
-    TH1D *E_Trans_all_ang_all_int_1n1p = new TH1D("ET in all angles (all interactions, 1n1p)",
-                                                  "Energy Transfer (E_{#nu}-E_{l}) in every angle (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                                  100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
-    TH1D *E_Trans15_all_1n1p = new TH1D("ET around 15 degrees (all interactions, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans15_all_lower_lim_1n1p, E_Trans15_all_upper_lim_1n1p);
-    TH1D *E_Trans45_all_1n1p = new TH1D("ET around 45 degrees (all interactions, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans45_all_lower_lim_1n1p, E_Trans45_all_upper_lim_1n1p);
-    TH1D *E_Trans90_all_1n1p = new TH1D("ET around 90 degrees (all interactions, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans90_all_lower_lim_1n1p, E_Trans90_all_upper_lim_1n1p);
+    TH1D *E_Trans_all_ang_all_int_1n1p = new
+    TH1D("ET in all angles (all interactions, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in every angle (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
+    TH1D *E_Trans15_all_1n1p = new
+    TH1D("ET around 15 degrees (all interactions, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_all_lower_lim_1n1p, E_Trans15_all_upper_lim_1n1p);
+    TH1D *E_Trans45_all_1n1p = new
+    TH1D("ET around 45 degrees (all interactions, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_all_lower_lim_1n1p, E_Trans45_all_upper_lim_1n1p);
+    TH1D *E_Trans90_all_1n1p = new
+    TH1D("ET around 90 degrees (all interactions, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_all_lower_lim_1n1p, E_Trans90_all_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy Transfer histograms (QEL only) --------------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer histograms (QEL only)">
-    THStack *Energy_Transfer_QEL_Int_Stack_2p = new THStack("Energy_Transfer_QEL_Int_Stack_2p",
-                                                            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (QEL only, 2p);E_{#nu}-E_{l} [GeV]");
-    THStack *Energy_Transfer_QEL_Int_Stack_1n1p = new THStack("Energy_Transfer_QEL_Int_Stack_1n1p",
-                                                              "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (QEL only, 1n1p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_QEL_Int_Stack_2p = new
+    THStack("Energy_Transfer_QEL_Int_Stack_2p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (QEL only, 2p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_QEL_Int_Stack_1n1p = new
+    THStack("Energy_Transfer_QEL_Int_Stack_1n1p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (QEL only, 1n1p);E_{#nu}-E_{l} [GeV]");
 
-    TH1D *E_Trans15_QEL_2p = new TH1D("ET around 15 degrees (QEL Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans15_QEL_lower_lim_2p, E_Trans15_QEL_upper_lim_2p);
-    TH1D *E_Trans45_QEL_2p = new TH1D("ET around 45 degrees (QEL Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (QEL Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans45_QEL_lower_lim_2p, E_Trans45_QEL_upper_lim_2p);
-    TH1D *E_Trans90_QEL_2p = new TH1D("ET around 90 degrees (QEL Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (QEL Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans90_QEL_lower_lim_2p, E_Trans90_QEL_upper_lim_2p);
+    TH1D *E_Trans15_QEL_2p = new
+    TH1D("ET around 15 degrees (QEL Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_QEL_lower_lim_2p, E_Trans15_QEL_upper_lim_2p);
+    TH1D *E_Trans45_QEL_2p = new
+    TH1D("ET around 45 degrees (QEL Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (QEL Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_QEL_lower_lim_2p, E_Trans45_QEL_upper_lim_2p);
+    TH1D *E_Trans90_QEL_2p = new
+    TH1D("ET around 90 degrees (QEL Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (QEL Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_QEL_lower_lim_2p, E_Trans90_QEL_upper_lim_2p);
 
-    TH1D *E_Trans15_QEL_1n1p = new TH1D("ET around 15 degrees (QEL Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans15_QEL_lower_lim_1n1p, E_Trans15_QEL_upper_lim_1n1p);
-    TH1D *E_Trans45_QEL_1n1p = new TH1D("ET around 45 degrees (QEL Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (QEL Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans45_QEL_lower_lim_1n1p, E_Trans45_QEL_upper_lim_1n1p);
-    TH1D *E_Trans90_QEL_1n1p = new TH1D("ET around 90 degrees (QEL Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (QEL Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans90_QEL_lower_lim_1n1p, E_Trans90_QEL_upper_lim_1n1p);
+    TH1D *E_Trans15_QEL_1n1p = new
+    TH1D("ET around 15 degrees (QEL Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_QEL_lower_lim_1n1p, E_Trans15_QEL_upper_lim_1n1p);
+    TH1D *E_Trans45_QEL_1n1p = new
+    TH1D("ET around 45 degrees (QEL Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (QEL Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_QEL_lower_lim_1n1p, E_Trans45_QEL_upper_lim_1n1p);
+    TH1D *E_Trans90_QEL_1n1p = new
+    TH1D("ET around 90 degrees (QEL Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (QEL Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_QEL_lower_lim_1n1p, E_Trans90_QEL_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy Transfer histograms (MEC only) --------------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer histograms (MEC only)">
-    THStack *Energy_Transfer_MEC_Int_Stack_2p = new THStack("Energy_Transfer_MEC_Int_Stack_2p",
-                                                            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (MEC only, 2p);E_{#nu}-E_{l} [GeV]");
-    THStack *Energy_Transfer_MEC_Int_Stack_1n1p = new THStack("Energy_Transfer_MEC_Int_Stack_1n1p",
-                                                              "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (MEC only, 1n1p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_MEC_Int_Stack_2p = new
+    THStack("Energy_Transfer_MEC_Int_Stack_2p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (MEC only, 2p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_MEC_Int_Stack_1n1p = new
+    THStack("Energy_Transfer_MEC_Int_Stack_1n1p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (MEC only, 1n1p);E_{#nu}-E_{l} [GeV]");
 
-    TH1D *E_Trans15_MEC_2p = new TH1D("ET around 15 degrees (MEC Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans15_MEC_lower_lim_2p, E_Trans15_MEC_upper_lim_2p);
-    TH1D *E_Trans45_MEC_2p = new TH1D("ET around 45 degrees (MEC Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (MEC Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans45_MEC_lower_lim_2p, E_Trans45_MEC_upper_lim_2p);
-    TH1D *E_Trans90_MEC_2p = new TH1D("ET around 90 degrees (MEC Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (MEC Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans90_MEC_lower_lim_2p, E_Trans90_MEC_upper_lim_2p);
+    TH1D *E_Trans15_MEC_2p = new
+    TH1D("ET around 15 degrees (MEC Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_MEC_lower_lim_2p, E_Trans15_MEC_upper_lim_2p);
+    TH1D *E_Trans45_MEC_2p = new
+    TH1D("ET around 45 degrees (MEC Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (MEC Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_MEC_lower_lim_2p, E_Trans45_MEC_upper_lim_2p);
+    TH1D *E_Trans90_MEC_2p = new
+    TH1D("ET around 90 degrees (MEC Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (MEC Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_MEC_lower_lim_2p, E_Trans90_MEC_upper_lim_2p);
 
-    TH1D *E_Trans15_MEC_1n1p = new TH1D("ET around 15 degrees (MEC Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 [Deg] #leq #theta_{l} #leq 16 [Deg] (MEC Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans15_MEC_lower_lim_1n1p, E_Trans15_MEC_upper_lim_1n1p);
-    TH1D *E_Trans45_MEC_1n1p = new TH1D("ET around 45 degrees (MEC Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 [Deg] #leq #theta_{l} #leq 46 [Deg] (MEC Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans45_MEC_lower_lim_1n1p, E_Trans45_MEC_upper_lim_1n1p);
-    TH1D *E_Trans90_MEC_1n1p = new TH1D("ET around 90 degrees (MEC Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 [Deg] #leq #theta_{l} #leq 91 [Deg] (MEC Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans90_MEC_lower_lim_1n1p, E_Trans90_MEC_upper_lim_1n1p);
+    TH1D *E_Trans15_MEC_1n1p = new
+    TH1D("ET around 15 degrees (MEC Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 [Deg] #leq #theta_{l} #leq 16 [Deg] (MEC Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_MEC_lower_lim_1n1p, E_Trans15_MEC_upper_lim_1n1p);
+    TH1D *E_Trans45_MEC_1n1p = new
+    TH1D("ET around 45 degrees (MEC Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 [Deg] #leq #theta_{l} #leq 46 [Deg] (MEC Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_MEC_lower_lim_1n1p, E_Trans45_MEC_upper_lim_1n1p);
+    TH1D *E_Trans90_MEC_1n1p = new
+    TH1D("ET around 90 degrees (MEC Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 [Deg] #leq #theta_{l} #leq 91 [Deg] (MEC Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_MEC_lower_lim_1n1p, E_Trans90_MEC_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy Transfer histograms (RES only) --------------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer histograms (RES only)">
-    THStack *Energy_Transfer_RES_Int_Stack_2p = new THStack("Energy_Transfer_RES_Int_Stack_2p",
-                                                            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (RES only, 2p);E_{#nu}-E_{l} [GeV]");
-    THStack *Energy_Transfer_RES_Int_Stack_1n1p = new THStack("Energy_Transfer_RES_Int_Stack_1n1p",
-                                                              "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (RES only, 1n1p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_RES_Int_Stack_2p = new
+    THStack("Energy_Transfer_RES_Int_Stack_2p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (RES only, 2p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_RES_Int_Stack_1n1p = new
+    THStack("Energy_Transfer_RES_Int_Stack_1n1p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (RES only, 1n1p);E_{#nu}-E_{l} [GeV]");
 
-    TH1D *E_Trans15_RES_2p = new TH1D("ET around 15 degrees (RES Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans15_RES_lower_lim_2p, E_Trans15_RES_upper_lim_2p);
-    TH1D *E_Trans45_RES_2p = new TH1D("ET around 45 degrees (RES Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (RES Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans45_RES_lower_lim_2p, E_Trans45_RES_upper_lim_2p);
-    TH1D *E_Trans90_RES_2p = new TH1D("ET around 90 degrees (RES Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (RES Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans90_RES_lower_lim_2p, E_Trans90_RES_upper_lim_2p);
+    TH1D *E_Trans15_RES_2p = new
+    TH1D("ET around 15 degrees (RES Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_RES_lower_lim_2p, E_Trans15_RES_upper_lim_2p);
+    TH1D *E_Trans45_RES_2p = new
+    TH1D("ET around 45 degrees (RES Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (RES Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_RES_lower_lim_2p, E_Trans45_RES_upper_lim_2p);
+    TH1D *E_Trans90_RES_2p = new
+    TH1D("ET around 90 degrees (RES Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (RES Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_RES_lower_lim_2p, E_Trans90_RES_upper_lim_2p);
 
-    TH1D *E_Trans15_RES_1n1p = new TH1D("ET around 15 degrees (RES Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans15_RES_lower_lim_1n1p, E_Trans15_RES_upper_lim_1n1p);
-    TH1D *E_Trans45_RES_1n1p = new TH1D("ET around 45 degrees (RES Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (RES Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans45_RES_lower_lim_1n1p, E_Trans45_RES_upper_lim_1n1p);
-    TH1D *E_Trans90_RES_1n1p = new TH1D("ET around 90 degrees (RES Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (RES Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans90_RES_lower_lim_1n1p, E_Trans90_RES_upper_lim_1n1p);
+    TH1D *E_Trans15_RES_1n1p = new
+    TH1D("ET around 15 degrees (RES Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_RES_lower_lim_1n1p, E_Trans15_RES_upper_lim_1n1p);
+    TH1D *E_Trans45_RES_1n1p = new
+    TH1D("ET around 45 degrees (RES Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (RES Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_RES_lower_lim_1n1p, E_Trans45_RES_upper_lim_1n1p);
+    TH1D *E_Trans90_RES_1n1p = new
+    TH1D("ET around 90 degrees (RES Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (RES Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_RES_lower_lim_1n1p, E_Trans90_RES_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy Transfer histograms (DIS interactions) ------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer histograms (DIS interactions)">
-    THStack *Energy_Transfer_DIS_Int_Stack_2p = new THStack("Energy_Transfer_DIS_Int_Stack_2p",
-                                                            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (DIS only, 2p);E_{#nu}-E_{l} [GeV]");
-    THStack *Energy_Transfer_DIS_Int_Stack_1n1p = new THStack("Energy_Transfer_DIS_Int_Stack_1n1p",
-                                                              "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (DIS only, 1n1p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_DIS_Int_Stack_2p = new
+    THStack("Energy_Transfer_DIS_Int_Stack_2p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (DIS only, 2p);E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_DIS_Int_Stack_1n1p = new
+    THStack("Energy_Transfer_DIS_Int_Stack_1n1p",
+            "Energy Transfer (E_{#nu}-E_{l}) for different #theta_{l} (DIS only, 1n1p);E_{#nu}-E_{l} [GeV]");
 
-    TH1D *E_Trans15_DIS_2p = new TH1D("ET around 15 degrees (DIS Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans15_DIS_lower_lim_2p, E_Trans15_DIS_upper_lim_2p);
-    TH1D *E_Trans45_DIS_2p = new TH1D("ET around 45 degrees (DIS Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (DIS Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans45_DIS_lower_lim_2p, E_Trans45_DIS_upper_lim_2p);
-    TH1D *E_Trans90_DIS_2p = new TH1D("ET around 90 degrees (DIS Only, 2p)",
-                                      "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (DIS Only, 2p);E_{#nu}-E_{l} [GeV]",
-                                      100, E_Trans90_DIS_lower_lim_2p, E_Trans90_DIS_upper_lim_2p);
+    TH1D *E_Trans15_DIS_2p = new
+    TH1D("ET around 15 degrees (DIS Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_DIS_lower_lim_2p, E_Trans15_DIS_upper_lim_2p);
+    TH1D *E_Trans45_DIS_2p = new
+    TH1D("ET around 45 degrees (DIS Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (DIS Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_DIS_lower_lim_2p, E_Trans45_DIS_upper_lim_2p);
+    TH1D *E_Trans90_DIS_2p = new
+    TH1D("ET around 90 degrees (DIS Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (DIS Only, 2p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_DIS_lower_lim_2p, E_Trans90_DIS_upper_lim_2p);
 
-    TH1D *E_Trans15_DIS_1n1p = new TH1D("ET around 15 degrees (DIS Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans15_DIS_lower_lim_1n1p, E_Trans15_DIS_upper_lim_1n1p);
-    TH1D *E_Trans45_DIS_1n1p = new TH1D("ET around 45 degrees (DIS Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (DIS Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans45_DIS_lower_lim_1n1p, E_Trans45_DIS_upper_lim_1n1p);
-    TH1D *E_Trans90_DIS_1n1p = new TH1D("ET around 90 degrees (DIS Only, 1n1p)",
-                                        "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (DIS Only, 1n1p);E_{#nu}-E_{l} [GeV]",
-                                        100, E_Trans90_DIS_lower_lim_1n1p, E_Trans90_DIS_upper_lim_1n1p);
+    TH1D *E_Trans15_DIS_1n1p = new
+    TH1D("ET around 15 degrees (DIS Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_DIS_lower_lim_1n1p, E_Trans15_DIS_upper_lim_1n1p);
+    TH1D *E_Trans45_DIS_1n1p = new
+    TH1D("ET around 45 degrees (DIS Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 44 #leq #theta_{l} #leq 46 (DIS Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans45_DIS_lower_lim_1n1p, E_Trans45_DIS_upper_lim_1n1p);
+    TH1D *E_Trans90_DIS_1n1p = new
+    TH1D("ET around 90 degrees (DIS Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (DIS Only, 1n1p);E_{#nu}-E_{l} [GeV]",
+         100, E_Trans90_DIS_lower_lim_1n1p, E_Trans90_DIS_upper_lim_1n1p);
     //</editor-fold>
 
 // Inclusive Energy Transfer histograms ---------------------------------------------------------------
 
     //<editor-fold desc="Inclusive Energy Transfer histograms">
-    THStack *Energy_Transfer_all_int_15_inclusive_Stack = new THStack("Energy_Transfer_all_int_15_inclusive_Stack", ";E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_all_int_15_inclusive_Stack = new
+    THStack("Energy_Transfer_all_int_15_inclusive_Stack", ";E_{#nu}-E_{l} [GeV]");
 
-    TH1D *E_Trans15_all_inclusive = new TH1D("ET around 15 degrees (all interactions, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                                             100, E_Trans15_all_inclusive_lower_lim, E_Trans15_all_inclusive_upper_lim);
-    TH1D *E_Trans15_QEL_inclusive = new TH1D("ET around 15 degrees (QEL Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                                             100, E_Trans15_QEL_inclusive_lower_lim, E_Trans15_QEL_inclusive_upper_lim);
-    TH1D *E_Trans15_MEC_inclusive = new TH1D("ET around 15 degrees (MEC Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                                             100, E_Trans15_MEC_inclusive_lower_lim, E_Trans15_MEC_inclusive_upper_lim);
-    TH1D *E_Trans15_RES_inclusive = new TH1D("ET around 15 degrees (RES Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                                             100, E_Trans15_RES_inclusive_lower_lim, E_Trans15_RES_inclusive_upper_lim);
-    TH1D *E_Trans15_DIS_inclusive = new TH1D("ET around 15 degrees (DIS Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                                             100, E_Trans15_DIS_inclusive_lower_lim, E_Trans15_DIS_inclusive_upper_lim);
+    TH1D *E_Trans15_all_inclusive = new
+    TH1D("ET around 15 degrees (all interactions, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_all_inclusive_lower_lim, E_Trans15_all_inclusive_upper_lim);
+    TH1D *E_Trans15_QEL_inclusive = new
+    TH1D("ET around 15 degrees (QEL Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_QEL_inclusive_lower_lim, E_Trans15_QEL_inclusive_upper_lim);
+    TH1D *E_Trans15_MEC_inclusive = new
+    TH1D("ET around 15 degrees (MEC Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_MEC_inclusive_lower_lim, E_Trans15_MEC_inclusive_upper_lim);
+    TH1D *E_Trans15_RES_inclusive = new
+    TH1D("ET around 15 degrees (RES Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_RES_inclusive_lower_lim, E_Trans15_RES_inclusive_upper_lim);
+    TH1D *E_Trans15_DIS_inclusive = new
+    TH1D("ET around 15 degrees (DIS Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+         100, E_Trans15_DIS_inclusive_lower_lim, E_Trans15_DIS_inclusive_upper_lim);
 
-    TH1D *Q2_hist_inclusive = new TH1D("Q^{2} (inclusive)", ";Q^{2} [GeV^{2}]", 100, -0.05, 0.8); // CHANGE TITLE & ADD CUSTOM LIMITS
+    TH1D *Q2_hist_inclusive = new
+    TH1D("Q^{2} (inclusive)", ";Q^{2} [GeV^{2}]", 100, -0.05, 0.8); // CHANGE TITLE & ADD CUSTOM LIMITS
 
-    TH2D *E_Trans_VS_q_all_inclusive = new TH2D("ET around #omega VS q_{3} (All Interactions)",
-                                                ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                                200, E_Trans_VS_q_all_inclusive_lower_lim_x, E_Trans_VS_q_all_inclusive_upper_lim_x,
-                                                200, E_Trans_VS_q_all_inclusive_lower_lim_y, E_Trans_VS_q_all_inclusive_upper_lim_y);
-    TH2D *E_Trans_VS_q_QEL_inclusive = new TH2D("ET around #omega VS q_{3} (QEL Only)",
-                                                ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                                200, E_Trans_VS_q_QEL_inclusive_lower_lim_x, E_Trans_VS_q_QEL_inclusive_upper_lim_x,
-                                                200, E_Trans_VS_q_QEL_inclusive_lower_lim_y, E_Trans_VS_q_QEL_inclusive_upper_lim_y);
-    TH2D *E_Trans_VS_q_MEC_inclusive = new TH2D("ET around #omega VS q_{3} (MEC Only)",
-                                                ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                                200, E_Trans_VS_q_MEC_inclusive_lower_lim_x, E_Trans_VS_q_MEC_inclusive_upper_lim_x,
-                                                200, E_Trans_VS_q_MEC_inclusive_lower_lim_y, E_Trans_VS_q_MEC_inclusive_upper_lim_y);
+    TH2D *E_Trans_VS_q_all_inclusive = new
+    TH2D("ET around #omega VS q_{3} (All Interactions)",
+         ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q_all_inclusive_lower_lim_x, E_Trans_VS_q_all_inclusive_upper_lim_x,
+         200, E_Trans_VS_q_all_inclusive_lower_lim_y, E_Trans_VS_q_all_inclusive_upper_lim_y);
+    TH2D *E_Trans_VS_q_QEL_inclusive = new
+    TH2D("ET around #omega VS q_{3} (QEL Only)",
+         ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q_QEL_inclusive_lower_lim_x, E_Trans_VS_q_QEL_inclusive_upper_lim_x,
+         200, E_Trans_VS_q_QEL_inclusive_lower_lim_y, E_Trans_VS_q_QEL_inclusive_upper_lim_y);
+    TH2D *E_Trans_VS_q_MEC_inclusive = new
+    TH2D("ET around #omega VS q_{3} (MEC Only)",
+         ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q_MEC_inclusive_lower_lim_x, E_Trans_VS_q_MEC_inclusive_upper_lim_x,
+         200, E_Trans_VS_q_MEC_inclusive_lower_lim_y, E_Trans_VS_q_MEC_inclusive_upper_lim_y);
 
-    TH2D *E_Trans_VS_q3_all_2p = new TH2D("ET around #omega VS q_{3} (All Interactions, 2p)",
-                                          "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                          200, E_Trans_VS_q3_all_lower_lim_x_2p, E_Trans_VS_q3_all_upper_lim_x_2p,
-                                          200, E_Trans_VS_q3_all_lower_lim_y_2p, E_Trans_VS_q3_all_upper_lim_y_2p);
-    TH2D *E_Trans_VS_q3_QEL_2p = new TH2D("ET around #omega VS q_{3} (QEL Only, 2p)",
-                                          "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                          200, E_Trans_VS_q3_QEL_lower_lim_x_2p, E_Trans_VS_q3_QEL_upper_lim_x_2p,
-                                          200, E_Trans_VS_q3_QEL_lower_lim_y_2p, E_Trans_VS_q3_QEL_upper_lim_y_2p);
-    TH2D *E_Trans_VS_q3_MEC_2p = new TH2D("ET around #omega VS q_{3} (MEC Only, 2p)",
-                                          "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                          200, E_Trans_VS_q3_MEC_lower_lim_x_2p, E_Trans_VS_q3_MEC_upper_lim_x_2p,
-                                          200, E_Trans_VS_q3_MEC_lower_lim_y_2p, E_Trans_VS_q3_MEC_upper_lim_y_2p);
+    TH2D *E_Trans_VS_q3_all_2p = new
+    TH2D("ET around #omega VS q_{3} (All Interactions, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q3_all_lower_lim_x_2p, E_Trans_VS_q3_all_upper_lim_x_2p,
+         200, E_Trans_VS_q3_all_lower_lim_y_2p, E_Trans_VS_q3_all_upper_lim_y_2p);
+    TH2D *E_Trans_VS_q3_QEL_2p = new
+    TH2D("ET around #omega VS q_{3} (QEL Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q3_QEL_lower_lim_x_2p, E_Trans_VS_q3_QEL_upper_lim_x_2p,
+         200, E_Trans_VS_q3_QEL_lower_lim_y_2p, E_Trans_VS_q3_QEL_upper_lim_y_2p);
+    TH2D *E_Trans_VS_q3_MEC_2p = new
+    TH2D("ET around #omega VS q_{3} (MEC Only, 2p)",
+         "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q3_MEC_lower_lim_x_2p, E_Trans_VS_q3_MEC_upper_lim_x_2p,
+         200, E_Trans_VS_q3_MEC_lower_lim_y_2p, E_Trans_VS_q3_MEC_upper_lim_y_2p);
 
-    TH2D *E_Trans_VS_q3_all_1n1p = new TH2D("ET around #omega VS q_{3} (All Interactions, 1n1p)",
-                                            "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                            200, E_Trans_VS_q3_all_lower_lim_x_1n1p, E_Trans_VS_q3_all_upper_lim_x_1n1p,
-                                            200, E_Trans_VS_q3_all_lower_lim_y_1n1p, E_Trans_VS_q3_all_upper_lim_y_1n1p);
-    TH2D *E_Trans_VS_q3_QEL_1n1p = new TH2D("ET around #omega VS q_{3} (QEL Only, 1n1p)",
-                                            "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                            200, E_Trans_VS_q3_QEL_lower_lim_x_1n1p, E_Trans_VS_q3_QEL_upper_lim_x_1n1p,
-                                            200, E_Trans_VS_q3_QEL_lower_lim_y_1n1p, E_Trans_VS_q3_QEL_upper_lim_y_1n1p);
-    TH2D *E_Trans_VS_q3_MEC_1n1p = new TH2D("ET around #omega VS q_{3} (MEC Only, 1n1p)",
-                                            "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                                            200, E_Trans_VS_q3_MEC_lower_lim_x_1n1p, E_Trans_VS_q3_MEC_upper_lim_x_1n1p,
-                                            200, E_Trans_VS_q3_MEC_lower_lim_y_1n1p, E_Trans_VS_q3_MEC_upper_lim_y_1n1p);
+    TH2D *E_Trans_VS_q3_all_1n1p = new
+    TH2D("ET around #omega VS q_{3} (All Interactions, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q3_all_lower_lim_x_1n1p, E_Trans_VS_q3_all_upper_lim_x_1n1p,
+         200, E_Trans_VS_q3_all_lower_lim_y_1n1p, E_Trans_VS_q3_all_upper_lim_y_1n1p);
+    TH2D *E_Trans_VS_q3_QEL_1n1p = new
+    TH2D("ET around #omega VS q_{3} (QEL Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q3_QEL_lower_lim_x_1n1p, E_Trans_VS_q3_QEL_upper_lim_x_1n1p,
+         200, E_Trans_VS_q3_QEL_lower_lim_y_1n1p, E_Trans_VS_q3_QEL_upper_lim_y_1n1p);
+    TH2D *E_Trans_VS_q3_MEC_1n1p = new
+    TH2D("ET around #omega VS q_{3} (MEC Only, 1n1p)",
+         "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+         200, E_Trans_VS_q3_MEC_lower_lim_x_1n1p, E_Trans_VS_q3_MEC_upper_lim_x_1n1p,
+         200, E_Trans_VS_q3_MEC_lower_lim_y_1n1p, E_Trans_VS_q3_MEC_upper_lim_y_1n1p);
 
     //<editor-fold desc="Inclusive Energy Transfer histograms - limits & titles by cases">
     if (Target_nucleus == "12C") {
@@ -4946,149 +5060,206 @@ void gst::Loop() {
     THStack *E_cal_QEL_Stack, *E_cal_MEC_Stack, *E_cal_RES_Stack, *E_cal_DIS_Stack;
 
     if (BEnergyToNucleusCon == true) {
-        E_cal_QEL_Stack = new THStack("E_cal stack (QEL only)", "E_{cal} Histogram (QEL only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
-        E_cal_MEC_Stack = new THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
-        E_cal_RES_Stack = new THStack("E_cal stack (RES only)", "E_{cal} Histogram (RES only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
-        E_cal_DIS_Stack = new THStack("E_cal stack (DIS only)", "E_{cal} Histogram (DIS only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+        E_cal_QEL_Stack = new
+        THStack("E_cal stack (QEL only)", "E_{cal} Histogram (QEL only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+        E_cal_MEC_Stack = new
+        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+        E_cal_RES_Stack = new
+        THStack("E_cal stack (RES only)", "E_{cal} Histogram (RES only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+        E_cal_DIS_Stack = new
+        THStack("E_cal stack (DIS only)", "E_{cal} Histogram (DIS only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
     } else if (BEnergyToNucleusCon == false) {
-        E_cal_QEL_Stack = new THStack("E_cal stack (QEL only)", "E_{cal} Histogram (QEL only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
-        E_cal_MEC_Stack = new THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
-        E_cal_RES_Stack = new THStack("E_cal stack (RES only)", "E_{cal} Histogram (RES only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
-        E_cal_DIS_Stack = new THStack("E_cal stack (DIS only)", "E_{cal} Histogram (DIS only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
+        E_cal_QEL_Stack = new
+        THStack("E_cal stack (QEL only)", "E_{cal} Histogram (QEL only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
+        E_cal_MEC_Stack = new
+        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
+        E_cal_RES_Stack = new
+        THStack("E_cal stack (RES only)", "E_{cal} Histogram (RES only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
+        E_cal_DIS_Stack = new
+        THStack("E_cal stack (DIS only)", "E_{cal} Histogram (DIS only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
     }
 
     if (BEnergyToNucleusCon == true) {
-        E_cal_QEL_2p = new TH1D("E_{cal} (QEL only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
-        E_cal_MEC_2p = new TH1D("E_{cal} (MEC only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
-        E_cal_RES_2p = new TH1D("E_{cal} (RES only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
-        E_cal_DIS_2p = new TH1D("E_{cal} (DIS only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
+        E_cal_QEL_2p = new
+        TH1D("E_{cal} (QEL only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
+        E_cal_MEC_2p = new
+        TH1D("E_{cal} (MEC only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
+        E_cal_RES_2p = new
+        TH1D("E_{cal} (RES only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
+        E_cal_DIS_2p = new
+        TH1D("E_{cal} (DIS only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} + 2*E_{BE} [GeV]", 100, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
     } else if (BEnergyToNucleusCon == false) {
-        E_cal_QEL_2p = new TH1D("E_{cal} (QEL only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
-        E_cal_MEC_2p = new TH1D("E_{cal} (MEC only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
-        E_cal_RES_2p = new TH1D("E_{cal} (RES only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
-        E_cal_DIS_2p = new TH1D("E_{cal} (DIS only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
+        E_cal_QEL_2p = new
+        TH1D("E_{cal} (QEL only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
+        E_cal_MEC_2p = new
+        TH1D("E_{cal} (MEC only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
+        E_cal_RES_2p = new
+        TH1D("E_{cal} (RES only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
+        E_cal_DIS_2p = new
+        TH1D("E_{cal} (DIS only, 2p)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
     }
 
     if (BEnergyToNucleusCon == true) {
-        E_cal_QEL_1n1p = new TH1D("E_{cal} (QEL only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
-                                  100, E_cal_QEL_lower_lim_1n1p, E_cal_QEL_upper_lim_1n1p);
-        E_cal_MEC_1n1p = new TH1D("E_{cal} (MEC only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
-                                  100, E_cal_MEC_lower_lim_1n1p, E_cal_MEC_upper_lim_1n1p);
-        E_cal_RES_1n1p = new TH1D("E_{cal} (RES only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
-                                  100, E_cal_RES_lower_lim_1n1p, E_cal_RES_upper_lim_1n1p);
-        E_cal_DIS_1n1p = new TH1D("E_{cal} (DIS only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
-                                  100, E_cal_DIS_lower_lim_1n1p, E_cal_DIS_upper_lim_1n1p);
+        E_cal_QEL_1n1p = new
+        TH1D("E_{cal} (QEL only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
+             100, E_cal_QEL_lower_lim_1n1p, E_cal_QEL_upper_lim_1n1p);
+        E_cal_MEC_1n1p = new
+        TH1D("E_{cal} (MEC only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
+             100, E_cal_MEC_lower_lim_1n1p, E_cal_MEC_upper_lim_1n1p);
+        E_cal_RES_1n1p = new
+        TH1D("E_{cal} (RES only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
+             100, E_cal_RES_lower_lim_1n1p, E_cal_RES_upper_lim_1n1p);
+        E_cal_DIS_1n1p = new
+        TH1D("E_{cal} (DIS only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} + 2*E_{BE} [GeV]",
+             100, E_cal_DIS_lower_lim_1n1p, E_cal_DIS_upper_lim_1n1p);
     } else if (BEnergyToNucleusCon == false) {
-        E_cal_QEL_1n1p = new TH1D("E_{cal} (QEL only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_QEL_lower_lim_1n1p, E_cal_QEL_upper_lim_1n1p);
-        E_cal_MEC_1n1p = new TH1D("E_{cal} (MEC only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_MEC_lower_lim_1n1p, E_cal_MEC_upper_lim_1n1p);
-        E_cal_RES_1n1p = new TH1D("E_{cal} (RES only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_RES_lower_lim_1n1p, E_cal_RES_upper_lim_1n1p);
-        E_cal_DIS_1n1p = new TH1D("E_{cal} (DIS only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_DIS_lower_lim_1n1p, E_cal_DIS_upper_lim_1n1p);
+        E_cal_QEL_1n1p = new
+        TH1D("E_{cal} (QEL only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_QEL_lower_lim_1n1p, E_cal_QEL_upper_lim_1n1p);
+        E_cal_MEC_1n1p = new
+        TH1D("E_{cal} (MEC only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_MEC_lower_lim_1n1p, E_cal_MEC_upper_lim_1n1p);
+        E_cal_RES_1n1p = new
+        TH1D("E_{cal} (RES only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_RES_lower_lim_1n1p, E_cal_RES_upper_lim_1n1p);
+        E_cal_DIS_1n1p = new
+        TH1D("E_{cal} (DIS only, 1n1p)", ";E_{cal} = E_{l} + T_{p} + T_{n} [GeV]", 100, E_cal_DIS_lower_lim_1n1p, E_cal_DIS_upper_lim_1n1p);
     }
     //</editor-fold>
 
 // E_cal VS other variables (all interactions, 2p):
 
     //<editor-fold desc="E_cal restoration histograms - E_cal VS other variables (all interactions, 2p)">
-    TH2D *E_cal_VS_theta_l_all_int_2p = new TH2D("E_{cal} vs #theta_{l} (all interactions, 2p)",
-                                                 "E_{cal} vs #theta_{l} (All Interactions, 2p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                 200, 0.0, 120, 200, 2.12, 2.3);
-    TH2D *E_cal_VS_Q2_all_int_2p = new TH2D("E_{cal} vs Q^{2} (all interactions, 2p)",
-                                            "E_{cal} vs Q^{2} (All Interactions, 2p);Q^{2} [GeV^{2}];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                            200, 0, 0.2, 200, 2.12, 2.3);
-    TH2D *E_cal_VS_theta_p1_all_int_2p = new TH2D("E_{cal} vs #theta_{p1} (2p)",
-                                                  "E_{cal} vs #theta_{p1} (All Interactions, 2p);#theta_{p1} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                  200, -10, 190, 200, 2.12, 2.3);
-    TH2D *E_cal_VS_theta_p2_all_int_2p = new TH2D("E_{cal} vs #theta_{p2} (all interactions, 2p)",
-                                                  "E_{cal} vs #theta_{p2} (All Interactions, 2p);#theta_{p2} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                  200, -10, 190, 200, 2.12, 2.3);
-    TH2D *E_cal_VS_dtheta_all_int_2p = new TH2D("E_{cal} vs #gamma (all interactions, 2p)",
-                                                "E_{cal} vs #gamma (All Interactions, 2p);#gamma} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                200, -10, 180, 200, 2.12, 2.3);
+    TH2D *E_cal_VS_theta_l_all_int_2p = new
+    TH2D("E_{cal} vs #theta_{l} (all interactions, 2p)",
+         "E_{cal} vs #theta_{l} (All Interactions, 2p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0.0, 120, 200, 2.12, 2.3);
+    TH2D *E_cal_VS_Q2_all_int_2p = new
+    TH2D("E_{cal} vs Q^{2} (all interactions, 2p)",
+         "E_{cal} vs Q^{2} (All Interactions, 2p);Q^{2} [GeV^{2}];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0, 0.2, 200, 2.12, 2.3);
+    TH2D *E_cal_VS_theta_p1_all_int_2p = new
+    TH2D("E_{cal} vs #theta_{p1} (2p)",
+         "E_{cal} vs #theta_{p1} (All Interactions, 2p);#theta_{p1} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -10, 190, 200, 2.12, 2.3);
+    TH2D *E_cal_VS_theta_p2_all_int_2p = new
+    TH2D("E_{cal} vs #theta_{p2} (all interactions, 2p)",
+         "E_{cal} vs #theta_{p2} (All Interactions, 2p);#theta_{p2} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -10, 190, 200, 2.12, 2.3);
+    TH2D *E_cal_VS_dtheta_all_int_2p = new
+    TH2D("E_{cal} vs #gamma (all interactions, 2p)",
+         "E_{cal} vs #gamma (All Interactions, 2p);#gamma} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -10, 180, 200, 2.12, 2.3);
     //</editor-fold>
 
 // E_cal VS other variables (QEL only, 2p):
 
     //<editor-fold desc="E_cal restoration histograms - E_cal VS other variables (QEL only, 2p)">
-    TH2D *E_cal_VS_theta_l_QEL_only_2p = new TH2D("E_{cal} vs #theta_{l} (QEL Only, 2p)",
-                                                  "E_{cal} vs #theta_{l} (QEL Only, 2p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                  200, 0.0, 180, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_Q2_QEL_only_2p = new TH2D("E_{cal} vs Q^{2} (QEL Only, 2p)",
-                                             "E_{cal} vs Q^{2} (QEL Only, 2p);Q^{2} [GeV^{2}];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                             500, -0.1, 0.2, 500, 2.12, 2.23);
-    TH2D *E_cal_VS_W_QEL_only_2p = new TH2D("E_{cal} vs W (QEL Only, 2p)",
-                                            "E_{cal} vs W (QEL Only, 2p);W} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                            200, 0.25, 1.75, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_En_QEL_only_2p = new TH2D("E_{cal} vs En (QEL Only, 2p)",
-                                             "E_{cal} vs En (QEL Only, 2p);En} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                             200, 0.918, 0.923, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_Pn_QEL_only_2p = new TH2D("E_{cal} vs Pn (QEL Only, 2p)",
-                                             "E_{cal} vs Pn (QEL Only, 2p);Pn} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                             200, -0.1, 0.28, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_Pn1_QEL_only_2p = new TH2D("E_{cal} vs P_{1} (QEL Only, 2p)",
-                                              "E_{cal} vs P_{1} (QEL Only, 2p);Pn1} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                              200, -0.1, 2.35, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_Pn2_QEL_only_2p = new TH2D("E_{cal} vs P_{2} (QEL Only, 2p)",
-                                              "E_{cal} vs P_{2} (QEL Only, 2p);Pn2} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                              200, -0.05, 1.15, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_theta_p1_QEL_only_2p = new TH2D("E_{cal} vs #theta_{p1} (QEL Only, 2p)",
-                                                   "E_{cal} vs #theta_{p1} (QEL Only, 2p);#theta_{p1} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                   200, -10, 190, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_theta_p2_QEL_only_2p = new TH2D("E_{cal} vs #theta_{p2} (QEL Only, 2p)",
-                                                   "E_{cal} vs #theta_{p2} (QEL Only, 2p);#theta_{p2} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                   200, -10, 190, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_dtheta_QEL_only_2p = new TH2D("E_{cal} vs #gamma (QEL Only, 2p)",
-                                                 "E_{cal} vs #gamma (QEL Only, 2p);#gamma} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                 200, -10, 180, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_theta_l_QEL_only_2p = new
+    TH2D("E_{cal} vs #theta_{l} (QEL Only, 2p)",
+         "E_{cal} vs #theta_{l} (QEL Only, 2p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0.0, 180, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_Q2_QEL_only_2p = new
+    TH2D("E_{cal} vs Q^{2} (QEL Only, 2p)",
+         "E_{cal} vs Q^{2} (QEL Only, 2p);Q^{2} [GeV^{2}];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         500, -0.1, 0.2, 500, 2.12, 2.23);
+    TH2D *E_cal_VS_W_QEL_only_2p = new
+    TH2D("E_{cal} vs W (QEL Only, 2p)",
+         "E_{cal} vs W (QEL Only, 2p);W} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0.25, 1.75, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_En_QEL_only_2p = new
+    TH2D("E_{cal} vs En (QEL Only, 2p)",
+         "E_{cal} vs En (QEL Only, 2p);En} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0.918, 0.923, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_Pn_QEL_only_2p = new
+    TH2D("E_{cal} vs Pn (QEL Only, 2p)",
+         "E_{cal} vs Pn (QEL Only, 2p);Pn} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -0.1, 0.28, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_Pn1_QEL_only_2p = new
+    TH2D("E_{cal} vs P_{1} (QEL Only, 2p)",
+         "E_{cal} vs P_{1} (QEL Only, 2p);Pn1} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -0.1, 2.35, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_Pn2_QEL_only_2p = new
+    TH2D("E_{cal} vs P_{2} (QEL Only, 2p)",
+         "E_{cal} vs P_{2} (QEL Only, 2p);Pn2} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -0.05, 1.15, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_theta_p1_QEL_only_2p = new
+    TH2D("E_{cal} vs #theta_{p1} (QEL Only, 2p)",
+         "E_{cal} vs #theta_{p1} (QEL Only, 2p);#theta_{p1} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -10, 190, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_theta_p2_QEL_only_2p = new
+    TH2D("E_{cal} vs #theta_{p2} (QEL Only, 2p)",
+         "E_{cal} vs #theta_{p2} (QEL Only, 2p);#theta_{p2} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -10, 190, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_dtheta_QEL_only_2p = new
+    TH2D("E_{cal} vs #gamma (QEL Only, 2p)",
+         "E_{cal} vs #gamma (QEL Only, 2p);#gamma} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -10, 180, 200, 2.12, 2.23);
     //</editor-fold>
 
 // E_cal VS other variables (QEL only, 1n1p):
 
     //<editor-fold desc="E_cal restoration histograms - E_cal VS other variables (QEL only, 1n1p)">
-    TH2D *E_cal_VS_theta_l_QEL_1n1p = new TH2D("E_{cal} vs #theta_{l} (QEL Only, 1n1p)",
-                                               "E_{cal} vs #theta_{l} (QEL Only, 1n1p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
-                                               200, 0.0, 180, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_Q2_QEL_only_1n1p = new TH2D("E_{cal} vs Q^{2} (QEL Only, 1n1p)",
-                                               "E_{cal} vs Q^{2} (QEL Only, 1n1p);Q^{2} [GeV^{2}];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
-                                               500, -0.1, 0.2, 500, 2.12, 2.23);
-    TH2D *E_cal_VS_W_QEL_only_1n1p = new TH2D("E_{cal} vs W (QEL Only, 1n1p)",
-                                              "E_{cal} vs W (QEL Only, 1n1p);W} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                              200, 0.25, 1.75, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_En_QEL_only_1n1p = new TH2D("E_{cal} vs En (QEL Only, 1n1p)",
-                                               "E_{cal} vs En (QEL Only, 1n1p);En} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                               200, 0.917, 0.9225, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_Pn_QEL_only_1n1p = new TH2D("E_{cal} vs Pn (QEL Only, 1n1p)",
-                                               "E_{cal} vs Pn (QEL Only, 1n1p);Pn} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                               200, -0.1, 0.28, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_P_n_QEL_only_1n1p = new TH2D("E_{cal} vs P_{n} (QEL Only, 1n1p)",
-                                                "E_{cal} vs P_{n} (QEL Only, 1n1p);Pn1} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                200, -0.05, 2.35, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_P_p_QEL_only_1n1p = new TH2D("E_{cal} vs P_{p} (QEL Only, 1n1p)",
-                                                "E_{cal} vs P_{p} (QEL Only, 1n1p);Pn2} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
-                                                200, -0.05, 1.15, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_theta_p_QEL_only_1n1p = new TH2D("E_{cal} vs #theta_{p} (QEL Only, 1n1p)",
-                                                    "E_{cal} vs #theta_{p} (QEL Only, 1n1p);#theta_{p} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
-                                                    200, -10, 190, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_theta_n_QEL_only_1n1p = new TH2D("E_{cal} vs #theta_{n} (QEL Only, 1n1p)",
-                                                    "E_{cal} vs #theta_{n} (QEL Only, 1n1p);#theta_{n} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
-                                                    200, -10, 190, 200, 2.12, 2.23);
-    TH2D *E_cal_VS_dtheta_QEL_only_1n1p = new TH2D("E_{cal} vs #gamma (QEL Only, 1n1p)",
-                                                   "E_{cal} vs #gamma (QEL Only, 1n1p);#gamma} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
-                                                   200, -10, 180, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_theta_l_QEL_1n1p = new
+    TH2D("E_{cal} vs #theta_{l} (QEL Only, 1n1p)",
+         "E_{cal} vs #theta_{l} (QEL Only, 1n1p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
+         200, 0.0, 180, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_Q2_QEL_only_1n1p = new
+    TH2D("E_{cal} vs Q^{2} (QEL Only, 1n1p)",
+         "E_{cal} vs Q^{2} (QEL Only, 1n1p);Q^{2} [GeV^{2}];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
+         500, -0.1, 0.2, 500, 2.12, 2.23);
+    TH2D *E_cal_VS_W_QEL_only_1n1p = new
+    TH2D("E_{cal} vs W (QEL Only, 1n1p)",
+         "E_{cal} vs W (QEL Only, 1n1p);W} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0.25, 1.75, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_En_QEL_only_1n1p = new
+    TH2D("E_{cal} vs En (QEL Only, 1n1p)",
+         "E_{cal} vs En (QEL Only, 1n1p);En} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, 0.917, 0.9225, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_Pn_QEL_only_1n1p = new
+    TH2D("E_{cal} vs Pn (QEL Only, 1n1p)",
+         "E_{cal} vs Pn (QEL Only, 1n1p);Pn} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -0.1, 0.28, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_P_n_QEL_only_1n1p = new
+    TH2D("E_{cal} vs P_{n} (QEL Only, 1n1p)",
+         "E_{cal} vs P_{n} (QEL Only, 1n1p);Pn1} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -0.05, 2.35, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_P_p_QEL_only_1n1p = new
+    TH2D("E_{cal} vs P_{p} (QEL Only, 1n1p)",
+         "E_{cal} vs P_{p} (QEL Only, 1n1p);Pn2} [GeV];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
+         200, -0.05, 1.15, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_theta_p_QEL_only_1n1p = new
+    TH2D("E_{cal} vs #theta_{p} (QEL Only, 1n1p)",
+         "E_{cal} vs #theta_{p} (QEL Only, 1n1p);#theta_{p} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
+         200, -10, 190, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_theta_n_QEL_only_1n1p = new
+    TH2D("E_{cal} vs #theta_{n} (QEL Only, 1n1p)",
+         "E_{cal} vs #theta_{n} (QEL Only, 1n1p);#theta_{n} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
+         200, -10, 190, 200, 2.12, 2.23);
+    TH2D *E_cal_VS_dtheta_QEL_only_1n1p = new
+    TH2D("E_{cal} vs #gamma (QEL Only, 1n1p)",
+         "E_{cal} vs #gamma (QEL Only, 1n1p);#gamma} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
+         200, -10, 180, 200, 2.12, 2.23);
     //</editor-fold>
 
 // Momentum histograms -----------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
-    THStack *MomentumStack_2p = new THStack("Momentum Stack (2p)", "Momentum Histogram Stack (All Interactions, 2p);Momentum} [GeV]");
-    THStack *MomentumStack_1n1p = new THStack("Momentum Stack (1n1p)", "Momentum Histogram Stack (All Interactions, 1n1p);Momentum} [GeV]");
+    THStack *MomentumStack_2p = new
+    THStack("Momentum Stack (2p)", "Momentum Histogram Stack (All Interactions, 2p);Momentum} [GeV]");
+    THStack *MomentumStack_1n1p = new
+    THStack("Momentum Stack (1n1p)", "Momentum Histogram Stack (All Interactions, 1n1p);Momentum} [GeV]");
 
-    TH1D *P_L_hist_2p = new TH1D("P_{p1} (all interactions, 2p)", ";P_{L} [GeV/c]", 100, P_L_hist_lower_lim_2p, P_L_hist_upper_lim_2p);
-    TH1D *P_R_hist_2p = new TH1D("P_{p2} (all interactions, 2p)", ";P_{R} [GeV/c]", 100, P_R_hist_lower_lim_2p, P_R_hist_upper_lim_2p);
-    TH1D *P_lp_hist_2p = new TH1D("P_{l} (all interactions, 2p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_2p, P_lp_hist_upper_lim_2p);
+    TH1D *P_L_hist_2p = new
+    TH1D("P_{p1} (all interactions, 2p)", ";P_{L} [GeV/c]", 100, P_L_hist_lower_lim_2p, P_L_hist_upper_lim_2p);
+    TH1D *P_R_hist_2p = new
+    TH1D("P_{p2} (all interactions, 2p)", ";P_{R} [GeV/c]", 100, P_R_hist_lower_lim_2p, P_R_hist_upper_lim_2p);
+    TH1D *P_lp_hist_2p = new
+    TH1D("P_{l} (all interactions, 2p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_2p, P_lp_hist_upper_lim_2p);
 
-    TH1D *P_p_hist_1n1p = new TH1D("P_{p} (all interactions, 1n1p)", ";P_{p} [GeV/c]", 100, P_p_hist_lower_lim_1n1p, P_p_hist_upper_lim_1n1p);
-    TH1D *P_n_hist_1n1p = new TH1D("P_{n} (all interactions, 1n1p)", ";P_{n} [GeV/c]", 100, P_n_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p);
-    TH1D *P_l_hist_1n1p = new TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_l_hist_lower_lim_1n1p, P_l_hist_upper_lim_1n1p);
+    TH1D *P_p_hist_1n1p = new
+    TH1D("P_{p} (all interactions, 1n1p)", ";P_{p} [GeV/c]", 100, P_p_hist_lower_lim_1n1p, P_p_hist_upper_lim_1n1p);
+    TH1D *P_n_hist_1n1p = new
+    TH1D("P_{n} (all interactions, 1n1p)", ";P_{n} [GeV/c]", 100, P_n_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p);
+    TH1D *P_l_hist_1n1p = new
+    TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_l_hist_lower_lim_1n1p, P_l_hist_upper_lim_1n1p);
     //</editor-fold>
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
@@ -5098,67 +5269,88 @@ void gst::Loop() {
     THStack *gamma_Lab_weighted_Stack, *gamma_mu_p_tot_weighted_Stack, dP_T_Stack_weighted;
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (unweighted)">
-    TH1D *gamma_Lab_hist = new TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, gamma_Lab_hist_lower_lim_2p, gamma_Lab_hist_upper_lim_2p);
-    TH1D *gamma_mu_p_tot = new TH1D("cos(#gamma_{#mu,p_{L}+p_{R}})", "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram;cos(#gamma_{#mu,p_{L}+p_{R}})",
-                                    8, gamma_mu_p_tot_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p);
+    TH1D *gamma_Lab_hist = new
+    TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, gamma_Lab_hist_lower_lim_2p, gamma_Lab_hist_upper_lim_2p);
+    TH1D *gamma_mu_p_tot = new
+    TH1D("cos(#gamma_{#mu,p_{L}+p_{R}})", "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram;cos(#gamma_{#mu,p_{L}+p_{R}})",
+         8, gamma_mu_p_tot_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (Q4 weighted)">
-    TH1D *gamma_Lab_hist_weighted = new TH1D("cos(#gamma_{Lab}) (Q^{4} weighted)", "cos(#gamma_{Lab}) Histogram (Q^{4} weighted);cos(#gamma_{Lab})",
-                                             8, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_Lab_hist_weighted_upper_lim_1n1p);
+    TH1D *gamma_Lab_hist_weighted = new
+    TH1D("cos(#gamma_{Lab}) (Q^{4} weighted)", "cos(#gamma_{Lab}) Histogram (Q^{4} weighted);cos(#gamma_{Lab})",
+         8, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_Lab_hist_weighted_upper_lim_1n1p);
 
-    TH1D *gamma_mu_p_tot_weighted = new TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted)",
-                                             "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted);cos(#gamma_{#mu,p_{L}+p_{R}})",
-                                             8, gamma_mu_p_tot_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p);
+    TH1D *gamma_mu_p_tot_weighted = new
+    TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted)",
+         "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted);cos(#gamma_{#mu,p_{L}+p_{R}})",
+         8, gamma_mu_p_tot_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (no pions, for every interaction)">
-    TH1D *gamma_Lab_all_hist = new TH1D("cos(#gamma_{Lab}) -all interactions",
-                                        "cos(#gamma_{Lab}) Histogram -all interactions;cos(#gamma_{Lab})",
-                                        8, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_upper_lim);
-    TH1D *gamma_Lab_all_hist_weighted = new TH1D("cos(#gamma_{Lab}) -all interactions (Q^{4} weighted)",
-                                                 "cos(#gamma_{Lab}) Histogram -all interactions (Q^{4} weighted);cos(#gamma_{Lab})",
-                                                 8, gamma_Lab_all_hist_weighted_lower_lim, gamma_Lab_all_hist_weighted_upper_lim);
+    TH1D *gamma_Lab_all_hist = new
+    TH1D("cos(#gamma_{Lab}) -all interactions",
+         "cos(#gamma_{Lab}) Histogram -all interactions;cos(#gamma_{Lab})",
+         8, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_upper_lim);
+    TH1D *gamma_Lab_all_hist_weighted = new
+    TH1D("cos(#gamma_{Lab}) -all interactions (Q^{4} weighted)",
+         "cos(#gamma_{Lab}) Histogram -all interactions (Q^{4} weighted);cos(#gamma_{Lab})",
+         8, gamma_Lab_all_hist_weighted_lower_lim, gamma_Lab_all_hist_weighted_upper_lim);
 
-    TH1D *gamma_Lab_QEL_hist = new TH1D("cos(#gamma_{Lab}) - QEL Only", "cos(#gamma_{Lab}) Histogram - QEL Only;cos(#gamma_{Lab})",
-                                        8, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_upper_lim);
-    TH1D *gamma_Lab_QEL_hist_weighted = new TH1D("cos(#gamma_{Lab}) - QEL Only (Q^{4} weighted)",
-                                                 "cos(#gamma_{Lab}) Histogram - QEL Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                                                 8, gamma_Lab_QEL_hist_weighted_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim);
+    TH1D *gamma_Lab_QEL_hist = new
+    TH1D("cos(#gamma_{Lab}) - QEL Only", "cos(#gamma_{Lab}) Histogram - QEL Only;cos(#gamma_{Lab})",
+         8, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_upper_lim);
+    TH1D *gamma_Lab_QEL_hist_weighted = new
+    TH1D("cos(#gamma_{Lab}) - QEL Only (Q^{4} weighted)",
+         "cos(#gamma_{Lab}) Histogram - QEL Only (Q^{4} weighted);cos(#gamma_{Lab})",
+         8, gamma_Lab_QEL_hist_weighted_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim);
 
-    TH1D *gamma_Lab_MEC_hist = new TH1D("cos(#gamma_{Lab}) - MEC Only", "cos(#gamma_{Lab}) Histogram - MEC Only;cos(#gamma_{Lab})",
-                                        8, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_upper_lim);
-    TH1D *gamma_Lab_MEC_hist_weighted = new TH1D("cos(#gamma_{Lab}) - MEC Only (Q^{4} weighted)",
-                                                 "cos(#gamma_{Lab}) Histogram - MEC Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                                                 8, gamma_Lab_MEC_hist_weighted_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim);
+    TH1D *gamma_Lab_MEC_hist = new
+    TH1D("cos(#gamma_{Lab}) - MEC Only", "cos(#gamma_{Lab}) Histogram - MEC Only;cos(#gamma_{Lab})",
+         8, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_upper_lim);
+    TH1D *gamma_Lab_MEC_hist_weighted = new
+    TH1D("cos(#gamma_{Lab}) - MEC Only (Q^{4} weighted)",
+         "cos(#gamma_{Lab}) Histogram - MEC Only (Q^{4} weighted);cos(#gamma_{Lab})",
+         8, gamma_Lab_MEC_hist_weighted_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim);
 
-    TH1D *gamma_Lab_RES_hist = new TH1D("cos(#gamma_{Lab}) - RES Only", "cos(#gamma_{Lab}) Histogram - RES Only;cos(#gamma_{Lab})",
-                                        8, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_upper_lim);
-    TH1D *gamma_Lab_RES_hist_weighted = new TH1D("cos(#gamma_{Lab}) - RES Only (Q^{4} weighted)",
-                                                 "cos(#gamma_{Lab}) Histogram - RES Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                                                 8, gamma_Lab_RES_hist_weighted_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim);
+    TH1D *gamma_Lab_RES_hist = new
+    TH1D("cos(#gamma_{Lab}) - RES Only", "cos(#gamma_{Lab}) Histogram - RES Only;cos(#gamma_{Lab})",
+         8, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_upper_lim);
+    TH1D *gamma_Lab_RES_hist_weighted = new
+    TH1D("cos(#gamma_{Lab}) - RES Only (Q^{4} weighted)",
+         "cos(#gamma_{Lab}) Histogram - RES Only (Q^{4} weighted);cos(#gamma_{Lab})",
+         8, gamma_Lab_RES_hist_weighted_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim);
 
-    TH1D *gamma_Lab_DIS_hist = new TH1D("cos(#gamma_{Lab}) - DIS Only", "cos(#gamma_{Lab}) Histogram - DIS Only;cos(#gamma_{Lab})",
-                                        8, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_upper_lim);
-    TH1D *gamma_Lab_DIS_hist_weighted = new TH1D("cos(#gamma_{Lab}) - DIS Only (Q^{4} weighted)",
-                                                 "cos(#gamma_{Lab}) Histogram - DIS Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                                                 8, gamma_Lab_DIS_hist_weighted_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim);
+    TH1D *gamma_Lab_DIS_hist = new
+    TH1D("cos(#gamma_{Lab}) - DIS Only", "cos(#gamma_{Lab}) Histogram - DIS Only;cos(#gamma_{Lab})",
+         8, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_upper_lim);
+    TH1D *gamma_Lab_DIS_hist_weighted = new
+    TH1D("cos(#gamma_{Lab}) - DIS Only (Q^{4} weighted)",
+         "cos(#gamma_{Lab}) Histogram - DIS Only (Q^{4} weighted);cos(#gamma_{Lab})",
+         8, gamma_Lab_DIS_hist_weighted_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE dP_T plots (unweighted and Q4 weighted)">
-    TH1D *dP_T_hist = new TH1D("#deltaP_{T}", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
-                               100, dP_T_hist_lower_lim, dP_T_hist_upper_lim);
-    TH1D *dP_T_hist_weighted = new TH1D("#deltaP_{T} (Q^{4} weighted)", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
-                                        100, dP_T_hist_weighted_lower_lim, dP_T_hist_weighted_upper_lim);
+    TH1D *dP_T_hist = new
+    TH1D("#deltaP_{T}", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
+         100, dP_T_hist_lower_lim, dP_T_hist_upper_lim);
+    TH1D *dP_T_hist_weighted = new
+    TH1D("#deltaP_{T} (Q^{4} weighted)", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
+         100, dP_T_hist_weighted_lower_lim, dP_T_hist_weighted_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
-    THStack *MomentumStack_MicroBooNE = new THStack("Momentum Stack (MicroBooNE)", ";Momentum [GeV]");
+    THStack *MomentumStack_MicroBooNE = new
+    THStack("Momentum Stack (MicroBooNE)", ";Momentum [GeV]");
 
-    TH1D *P_L_hist = new TH1D("P_{L}", "Momentum of Leading Proton (P_{L});P_{L} [GeV/c]", 100, P_L_hist_lower_lim, P_L_hist_upper_lim);
-    TH1D *P_R_hist = new TH1D("P_{R}", "Momentum of Recoil Proton (P_{R});P_{R} [GeV/c]", 100, P_R_hist_lower_lim, P_R_hist_upper_lim);
-    TH1D *P_l_hist = new TH1D("P_{l}", "Momentum of Lepton (P_{l});P_{l} [GeV/c]", 100, P_l_hist_lower_lim, P_l_hist_upper_lim);
-    TH1D *P_pion_hist = new TH1D("P_{#pi^{#pm}}", "Momentum of Pions (P_{#pi^{#pm}});P_{#pi^{#pm}} [GeV/c]", 100, P_pion_hist_lower_lim, P_pion_hist_upper_lim);
+    TH1D *P_L_hist = new
+    TH1D("P_{L}", "Momentum of Leading Proton (P_{L});P_{L} [GeV/c]", 100, P_L_hist_lower_lim, P_L_hist_upper_lim);
+    TH1D *P_R_hist = new
+    TH1D("P_{R}", "Momentum of Recoil Proton (P_{R});P_{R} [GeV/c]", 100, P_R_hist_lower_lim, P_R_hist_upper_lim);
+    TH1D *P_l_hist = new
+    TH1D("P_{l}", "Momentum of Lepton (P_{l});P_{l} [GeV/c]", 100, P_l_hist_lower_lim, P_l_hist_upper_lim);
+    TH1D *P_pion_hist = new
+    TH1D("P_{#pi^{#pm}}", "Momentum of Pions (P_{#pi^{#pm}});P_{#pi^{#pm}} [GeV/c]", 100, P_pion_hist_lower_lim, P_pion_hist_upper_lim);
 
     string dP_T_title = "#deltaP_{T} Histogram (" + file_name + ")";
     const char *dP_T_Title = dP_T_title.c_str();
@@ -5171,7 +5363,8 @@ void gst::Loop() {
 
 // List definition ---------------------------------------------------------------------------------
 
-    TList *plots = new TList();
+    TList *plots = new
+    TList();
 
     //</editor-fold>
 
@@ -5189,13 +5382,13 @@ void gst::Loop() {
         nentries = custom_nentries; // nentries according to "12C_2222GeV_G18_10a_02_11a" (C12_1161GeV_EM+MEC_G18_02a_00_000_Q2_0_1 is lower)
 
         cout << "\n";
-        cout << "Filling histograms (lowest_nentries; nentries = " << nentries << ")..." << "\n";
+        cout << "Filling histograms (lowest_nentries; nentries = " << nentries << ")...\n";
         cout << "\n";
     } else {
         nentries = fChain->GetEntriesFast();
 
         cout << "\n";
-        cout << "Filling histograms (nentries = " << nentries << "; no limit on nentries)..." << "\n";
+        cout << "Filling histograms (nentries = " << nentries << "; no limit on nentries)...\n";
         cout << "\n";
     }
 
@@ -6364,7 +6557,8 @@ void gst::Loop() {
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1000); // original
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1250);
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1150);
-    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+    TCanvas *c1 = new
+    TCanvas("canvas", "canvas", 1650, 1150);
     c1->cd();
     c1->SetGrid();
     c1->SetBottomMargin(0.1275);
@@ -6390,7 +6584,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting Theta histograms..." << "\n";
+        cout << "Plotting Theta histograms...\n";
         cout << "\n";
 
 //  Theta of outgoing lepton histograms --------------------------------------------------------------
@@ -6424,7 +6618,8 @@ void gst::Loop() {
             ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         }
 
-        auto ThetaStack_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
+        auto ThetaStack_legend = new
+        TLegend(0.75, 0.775, 0.875, 0.9);
 
         TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(theta_l_2p, "2p", "l");
         TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
@@ -6483,7 +6678,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting Phi histograms..." << "\n";
+        cout << "Plotting Phi histograms...\n";
         cout << "\n";
 
 //  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
@@ -6508,7 +6703,8 @@ void gst::Loop() {
         PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
         PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto PhiStack_legend = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto PhiStack_legend = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
         TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
@@ -6566,7 +6762,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy histograms..." << "\n";
+        cout << "Plotting energy histograms...\n";
         cout << "\n";
 
 //  El histograms --------------------------------------------------------------------------------------
@@ -6648,7 +6844,8 @@ void gst::Loop() {
             EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         }
 
-        auto EnergyStack_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
+        auto EnergyStack_legend = new
+        TLegend(0.75, 0.775, 0.875, 0.9);
 
         TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
         TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
@@ -6890,7 +7087,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy transfer histograms (all interactions)..." << "\n";
+        cout << "Plotting energy transfer histograms (all interactions)...\n";
         cout << "\n";
 
 //  Energy transfer (Ev-El) for every theta_{l} --------------------------------------------------------
@@ -7071,7 +7268,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy transfer histograms (QEL only)..." << "\n";
+        cout << "Plotting energy transfer histograms (QEL only)...\n";
         cout << "\n";
 
 //  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only) ----------------
@@ -7207,7 +7404,8 @@ void gst::Loop() {
         Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_QEL_int_2p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_QEL_int_2p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_QEL_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_QEL_int_entry_2p = E_Trans_legend_QEL_int_2p->AddEntry(E_Trans15_QEL_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7229,7 +7427,8 @@ void gst::Loop() {
         Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_QEL_int_1n1p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_QEL_int_1n1p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_QEL_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_QEL_int_entry_1n1p = E_Trans_legend_QEL_int_1n1p->AddEntry(E_Trans15_QEL_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7254,7 +7453,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy transfer histograms (MEC only)..." << "\n";
+        cout << "Plotting energy transfer histograms (MEC only)...\n";
         cout << "\n";
 
 //  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only) ------------------
@@ -7390,7 +7589,8 @@ void gst::Loop() {
         Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_MEC_int_2p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_MEC_int_2p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_MEC_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_MEC_int_entry_2p = E_Trans_legend_MEC_int_2p->AddEntry(E_Trans15_MEC_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7413,7 +7613,8 @@ void gst::Loop() {
         Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_MEC_int_1n1p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_MEC_int_1n1p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_MEC_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_MEC_int_entry_1n1p = E_Trans_legend_MEC_int_1n1p->AddEntry(E_Trans15_MEC_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7439,7 +7640,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy transfer histograms (RES only)..." << "\n";
+        cout << "Plotting energy transfer histograms (RES only)...\n";
         cout << "\n";
 
 //  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only) ----------------
@@ -7575,7 +7776,8 @@ void gst::Loop() {
         Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_RES_int_2p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_RES_int_2p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_RES_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_RES_int_entry_2p = E_Trans_legend_RES_int_2p->AddEntry(E_Trans15_RES_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7598,7 +7800,8 @@ void gst::Loop() {
         Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_RES_int_1n1p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_RES_int_1n1p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_RES_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_RES_int_entry_1n1p = E_Trans_legend_RES_int_1n1p->AddEntry(E_Trans15_RES_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7624,7 +7827,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy transfer histograms (DIS only)..." << "\n";
+        cout << "Plotting energy transfer histograms (DIS only)...\n";
         cout << "\n";
 
 //  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only) ----------------
@@ -7760,7 +7963,8 @@ void gst::Loop() {
         Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_DIS_int_2p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_DIS_int_2p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_DIS_int_2p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_DIS_int_entry_2p = E_Trans_legend_DIS_int_2p->AddEntry(E_Trans15_DIS_2p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7783,7 +7987,8 @@ void gst::Loop() {
         Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_Trans_legend_DIS_int_1n1p = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_Trans_legend_DIS_int_1n1p = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_Trans_legend_DIS_int_1n1p = new TLegend(0.65, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_Trans15_DIS_int_entry_1n1p = E_Trans_legend_DIS_int_1n1p->AddEntry(E_Trans15_DIS_1n1p, "14 [Deg] <= #theta_{l} <= 16 [Deg]", "l");
@@ -7809,7 +8014,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting energy transfer stacks..." << "\n";
+        cout << "Plotting energy transfer stacks...\n";
         cout << "\n";
 
 
@@ -7833,7 +8038,8 @@ void gst::Loop() {
         }
 
 
-        auto E_Trans_15_legend_2p = new TLegend(0.625, 0.625, 0.9, 0.9);
+        auto E_Trans_15_legend_2p = new
+        TLegend(0.625, 0.625, 0.9, 0.9);
 //        auto E_Trans_15_legend_2p = new TLegend(0.65, 0.65, 0.9, 0.9);
 
         TLegendEntry *E_Trans_15_all_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_all_2p, "All interactions", "l");
@@ -7869,7 +8075,8 @@ void gst::Loop() {
         }
 
 
-        auto E_Trans_15_legend_1n1p = new TLegend(0.625, 0.625, 0.9, 0.9);
+        auto E_Trans_15_legend_1n1p = new
+        TLegend(0.625, 0.625, 0.9, 0.9);
 //        auto E_Trans_15_legend_1n1p = new TLegend(0.65, 0.65, 0.9, 0.9);
 
         TLegendEntry *E_Trans_15_all_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_all_1n1p, "All interactions", "l");
@@ -7894,7 +8101,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting E_cal restoration histograms..." << "\n";
+        cout << "Plotting E_cal restoration histograms...\n";
         cout << "\n";
 
 //  E_cal_QEL restoration ------------------------------------------------------------------------------
@@ -7925,7 +8132,8 @@ void gst::Loop() {
             E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         }
 
-        auto E_cal_QEL_Stack_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
+        auto E_cal_QEL_Stack_legend = new
+        TLegend(0.75, 0.775, 0.875, 0.9);
 //        auto E_cal_QEL_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
 //        auto E_cal_QEL_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
@@ -7969,7 +8177,8 @@ void gst::Loop() {
             E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         }
 
-        auto E_cal_MEC_Stack_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
+        auto E_cal_MEC_Stack_legend = new
+        TLegend(0.75, 0.775, 0.875, 0.9);
 //        auto E_cal_MEC_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
 //        auto E_cal_MEC_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
@@ -8003,7 +8212,8 @@ void gst::Loop() {
         E_cal_RES_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
         E_cal_RES_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_cal_RES_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_cal_RES_Stack_legend = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_cal_RES_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_cal_RES_Stack_legend_entry_2p = E_cal_RES_Stack_legend->AddEntry(E_cal_RES_2p, "2p", "l");
@@ -8036,7 +8246,8 @@ void gst::Loop() {
         E_cal_DIS_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
         E_cal_DIS_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        auto E_cal_DIS_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9);
+        auto E_cal_DIS_Stack_legend = new
+        TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto E_cal_DIS_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
         TLegendEntry *E_cal_DIS_Stack_legend_entry_2p = E_cal_DIS_Stack_legend->AddEntry(E_cal_RES_2p, "2p", "l");
@@ -8057,7 +8268,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting other E_cal restoration histograms..." << "\n";
+        cout << "Plotting other E_cal restoration histograms...\n";
         cout << "\n";
 
         //<editor-fold desc="Other E_cal plots (all interactions, 2p)">
@@ -8455,7 +8666,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting momentum histograms for 2p and 1n1p..." << "\n";
+        cout << "Plotting momentum histograms for 2p and 1n1p...\n";
         cout << "\n";
 
         //<editor-fold desc="Momentum histograms (2p)">
@@ -8488,7 +8699,8 @@ void gst::Loop() {
         MomentumStack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
         MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
 
-        auto MomentumStack_2p_legend = new TLegend(0.775, 0.7, 0.85, 0.875);
+        auto MomentumStack_2p_legend = new
+        TLegend(0.775, 0.7, 0.85, 0.875);
 
         TLegendEntry *MomentumStack_2p_legend_P_L_entry = MomentumStack_2p_legend->AddEntry(P_L_hist_2p, "P_{L}", "l");
         TLegendEntry *MomentumStack_2p_legend_P_R_entry = MomentumStack_2p_legend->AddEntry(P_R_hist_2p, "P_{R}", "l");
@@ -8509,7 +8721,8 @@ void gst::Loop() {
         MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
         MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
 
-        auto MomentumStack_1n1p_legend = new TLegend(0.775, 0.7, 0.85, 0.875);
+        auto MomentumStack_1n1p_legend = new
+        TLegend(0.775, 0.7, 0.85, 0.875);
 
         TLegendEntry *MomentumStack_1n1p_legend_P_p_entry = MomentumStack_1n1p_legend->AddEntry(P_p_hist_1n1p, "P_{p}", "l");
         TLegendEntry *MomentumStack_1n1p_legend_P_n_entry = MomentumStack_1n1p_legend->AddEntry(P_n_hist_1n1p, "P_{n}", "l");
@@ -8532,7 +8745,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting article histograms..." << "\n";
+        cout << "Plotting article histograms...\n";
         cout << "\n";
 
 // Momentum plots -------------------------------------------------------------------------------------
@@ -8797,7 +9010,7 @@ void gst::Loop() {
 
         cout << "\n";
         cout << "\n";
-        cout << "Plotting inclusive histograms..." << "\n";
+        cout << "Plotting inclusive histograms...\n";
         cout << "\n";
 
 //      Q2 histogram (inclusive) -----------------------------------------------------
@@ -8933,7 +9146,8 @@ void gst::Loop() {
                     "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p and 1n1p, ^{12}C(e,e'))");
         }
 
-        auto E_Trans_15_inclusive_legend = new TLegend(0.625, 0.625, 0.9, 0.9);
+        auto E_Trans_15_inclusive_legend = new
+        TLegend(0.625, 0.625, 0.9, 0.9);
 
         TLegendEntry *E_Trans_15_all_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_all_inclusive, "All interactions", "l");
         TLegendEntry *E_Trans_15_QEL_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_QEL_inclusive, "QEL only", "l");
@@ -9116,7 +9330,8 @@ void gst::Loop() {
     cout << "Saving histogram list...\n";
     cout << "\n";
 
-    TFile *fout = new TFile(TListName, "recreate");
+    TFile *fout = new
+    TFile(TListName, "recreate");
     fout->cd();
     plots->Write();
     fout->Write(); //todo: figure out if fout is needed.
