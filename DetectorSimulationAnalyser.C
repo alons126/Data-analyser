@@ -37,6 +37,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     string loadedInput = AnalyseFile;
 //    string loadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
 
+    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+    c1->SetGrid();
+
     if (NumberOfProtons == 2 && NumberOfNeutrons == 0) {
         clas12reader c12(loadedInput.c_str()); //open file
 
