@@ -34,8 +34,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     string AnalyserVersion = "3.1b";
 
-    string loadedInput = AnalyseFile;
-//    string loadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
+    string LoadedInput = AnalyseFile;
+//    string LoadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
 
 
 //  Code settings
@@ -53,9 +53,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //    int ni_selection = 2; // 3 for G18; 2 for SuSAv2
 
     //<editor-fold desc="Input processing (to determine custom_FSI_status)">
-    string loadedInput = fChain->GetCurrentFile()->GetName();
-    string filePath = loadedInput.substr(0, loadedInput.find_last_of("/") + 1);
-    string fileInput = loadedInput.substr(loadedInput.find_last_of("/") + 1);
+    string LoadedInput = fChain->GetCurrentFile()->GetName();
+    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of("/") + 1);
+    string fileInput = LoadedInput.substr(LoadedInput.find_last_of("/") + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
 
     if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
@@ -148,7 +148,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     cout << "File input\n";
     cout << "---------------------------------------------------------------------------\n";
-    cout << "loadedInput:\t" << loadedInput << "\n";
+    cout << "LoadedInput:\t" << LoadedInput << "\n";
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n";
     cout << "\n";
@@ -4533,7 +4533,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n";
     myLogFile << "// Run was with '" << file_name << "' settings mode.\n";
-    myLogFile << "// Input file was " << loadedInput << ".\n";
+    myLogFile << "// Input file was " << LoadedInput << ".\n";
     myLogFile << "// Code version was " << Ver << "\n";
     myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n";
     myLogFile << "\n";
@@ -4543,7 +4543,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     myLogFile << "Input:\n";
     myLogFile << "==========================================================================================\n";
-    myLogFile << "loadedInput: " << loadedInput << "\n";
+    myLogFile << "LoadedInput: " << LoadedInput << "\n";
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
     myLogFile << "plotsInput: " << plotsInput << "\n";
@@ -5389,7 +5389,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     c1->SetGrid();
 
     if (NumberOfProtons == 2 && NumberOfNeutrons == 0) {
-        clas12reader c12(loadedInput.c_str()); //open file
+        clas12reader c12(LoadedInput.c_str()); //open file
 
         c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
         c12.addExactPid(11, 1); //exactly 1 electron
@@ -5697,7 +5697,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         c1->Clear();
 
     } else if (NumberOfProtons == 1 && NumberOfNeutrons == 1) {
-        clas12reader c12(loadedInput.c_str()); //open file
+        clas12reader c12(LoadedInput.c_str()); //open file
 
         c12.addExactPid(2212, NumberOfProtons);    //exactly 1 proton
         c12.addExactPid(2112, NumberOfNeutrons);    //exactly 1 Neutron
