@@ -1,3 +1,7 @@
+//git pull && clas12root -b -q main.c
+/* Copy commend (local -> JLab):
+scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/home/asportes/clas12project/
+*/
 
 //#include "HipoChain.h"
 
@@ -24,10 +28,6 @@
 
 using namespace clas12;
 using namespace std;
-
-/* Copy commend (local -> JLab):
-scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/home/asportes/clas12project/
-*/
 
 //void Analyser() {
 void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
@@ -5670,7 +5670,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         }
 
 
-            cout << "\n";
+//            cout << "\n";
 
         }
 
@@ -5724,7 +5724,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
             }
 
-            cout << "\n";
+//            cout << "\n";
 
         }
 
