@@ -5395,8 +5395,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //        auto *Beta_VS_P_2p = new TH2F("Beta VS P (2p)", "#beta VS P (2p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.05);
 //        auto *P_histogram_2p = new TH1F("P Histogram (2p)", "P Histogram (2p)", 100, 0, 6);
 
-        TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
-        c1->SetGrid();
+//        TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+//        c1->SetGrid();
 
         while (c12.next()) { //loop over events (2p)
 
@@ -5741,6 +5741,29 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
     }
 
+//  Canvas definitions
+// =======================================================================================================================================================================
+
+    //<editor-fold desc="Canvas definitions">
+
+//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1000); // original
+//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1250);
+//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1150);
+    TCanvas *c1 = new
+            TCanvas("canvas", "canvas", 1650, 1150);
+    c1->cd();
+    c1->SetGrid();
+    c1->SetBottomMargin(0.1275);
+//    c1->SetBottomMargin(0.125);
+//    c1->SetBottomMargin(0.115); // original
+
+    if (wider_margin) {
+        c1->SetLeftMargin(0.1275);
+        c1->SetRightMargin(0.1275);
+    }
+    //</editor-fold>
+
+
 //  Histograms plots
 // =======================================================================================================================================================================
 
@@ -5749,96 +5772,96 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //  Theta histograms
 //  ===================================================================================================
 
-    if (Theta_plots) {
-
-        cout << "\n";
-        cout << "\n";
-        cout << "Plotting Theta histograms...\n";
-        cout << "\n";
-
-//  Theta of outgoing lepton histograms --------------------------------------------------------------
-
-//      Normalization factor:
-        double theta_l_integral = theta_l_2p->Integral() + theta_l_1n1p->Integral();
-
-        //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-        histPlotter1D(c1, theta_l_2p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Theta of outgoing lepton histogram (1n1p)">
-        histPlotter1D(c1, theta_l_1n1p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "1n1p", kRed, true, true, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Theta of outgoing lepton histogram (stack)">
-        ThetaStack->Draw("nostack");
-        ThetaStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        ThetaStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        ThetaStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        ThetaStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-
-        if (normalized_theta_l_plots) {
-            ThetaStack->SetTitle("#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p) - Normalized");
-            ThetaStack->GetYaxis()->SetTitle("Probability (%)");
-            ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            ThetaStack->GetYaxis()->SetTitle("Arbitrary units");
-            ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
-
-        auto ThetaStack_legend = new
-                TLegend(0.75, 0.775, 0.875, 0.9);
-
-        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(theta_l_2p, "2p", "l");
-        TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
-        ThetaStack_legend->Draw();
-
-        plots->Add(ThetaStack);
-        c1->SetLogy(1);
-        c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_log_scale.png");
-        c1->SetLogy(0);
-        c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_linear_scale.png");
-        c1->Clear();
-        //</editor-fold>
-
-//  Theta of nucleon 1 histogram ----------------------------------------------------------------------
-
-        //<editor-fold desc="Theta of Proton 1 histogram (2p)">
-        histPlotter1D(c1, theta_p1_2p, normalized_theta_p1_plots, true, 1., "#theta_{p1} of Proton 1", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_1", "plots/theta_histograms/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Theta of Proton histogram (1n1p)">
-        histPlotter1D(c1, theta_p_1n1p, normalized_theta_p_plots, true, 1., "#theta_{p} of Scattered Proton", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-//  Theta of nucleon 2 histogram ---------------------------------------------------------------------
-
-        //<editor-fold desc="Theta of Proton 2 histogram (2p)">
-        histPlotter1D(c1, theta_p2_2p, normalized_theta_p2_plots, true, 1., "#theta_{p2} of Proton 2", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_2", "plots/theta_histograms/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="Theta of Neutron histogram (1n1p)">
-        histPlotter1D(c1, theta_n_1n1p, normalized_theta_p_plots, true, 1., "#theta_{n} of Scattered Neutron", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_neutron", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-//  dTheta and dPhi histograms ----------------------------------------------------------------------------------
-
-        //<editor-fold desc="dTheta histogram (2p)">
-        histPlotter1D(c1, dtheta_2p, normalized_dtheta_2p_plots, true, 1., "#gamma = #theta_{p1} - #theta_{p2} of Scattered Protons", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_protons", "plots/theta_histograms/", "2p", kBlue, true, false, true);
-        //</editor-fold>
-
-        //<editor-fold desc="dTheta histogram (1n1p)">
-        histPlotter1D(c1, dtheta_1n1p, normalized_dtheta_1n1p_plots, true, 1., "#gamma = #theta_{p} - #theta_{n} of Scattered Nucleons", "All Interactions",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_nucleons", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
-        //</editor-fold>
-
-    }
+//    if (Theta_plots) {
+//
+//        cout << "\n";
+//        cout << "\n";
+//        cout << "Plotting Theta histograms...\n";
+//        cout << "\n";
+//
+////  Theta of outgoing lepton histograms --------------------------------------------------------------
+//
+////      Normalization factor:
+//        double theta_l_integral = theta_l_2p->Integral() + theta_l_1n1p->Integral();
+//
+//        //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
+//        histPlotter1D(c1, theta_l_2p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Theta of outgoing lepton histogram (1n1p)">
+//        histPlotter1D(c1, theta_l_1n1p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "1n1p", kRed, true, true, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Theta of outgoing lepton histogram (stack)">
+//        ThetaStack->Draw("nostack");
+//        ThetaStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        ThetaStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        ThetaStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+//        ThetaStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_theta_l_plots) {
+//            ThetaStack->SetTitle("#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p) - Normalized");
+//            ThetaStack->GetYaxis()->SetTitle("Probability (%)");
+//            ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            ThetaStack->GetYaxis()->SetTitle("Arbitrary units");
+//            ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//        auto ThetaStack_legend = new
+//                TLegend(0.75, 0.775, 0.875, 0.9);
+//
+//        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(theta_l_2p, "2p", "l");
+//        TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
+//        ThetaStack_legend->Draw();
+//
+//        plots->Add(ThetaStack);
+//        c1->SetLogy(1);
+//        c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_log_scale.png");
+//        c1->SetLogy(0);
+//        c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_linear_scale.png");
+//        c1->Clear();
+//        //</editor-fold>
+//
+////  Theta of nucleon 1 histogram ----------------------------------------------------------------------
+//
+//        //<editor-fold desc="Theta of Proton 1 histogram (2p)">
+//        histPlotter1D(c1, theta_p1_2p, normalized_theta_p1_plots, true, 1., "#theta_{p1} of Proton 1", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_1", "plots/theta_histograms/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Theta of Proton histogram (1n1p)">
+//        histPlotter1D(c1, theta_p_1n1p, normalized_theta_p_plots, true, 1., "#theta_{p} of Scattered Proton", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+////  Theta of nucleon 2 histogram ---------------------------------------------------------------------
+//
+//        //<editor-fold desc="Theta of Proton 2 histogram (2p)">
+//        histPlotter1D(c1, theta_p2_2p, normalized_theta_p2_plots, true, 1., "#theta_{p2} of Proton 2", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_2", "plots/theta_histograms/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Theta of Neutron histogram (1n1p)">
+//        histPlotter1D(c1, theta_n_1n1p, normalized_theta_p_plots, true, 1., "#theta_{n} of Scattered Neutron", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_neutron", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+////  dTheta and dPhi histograms ----------------------------------------------------------------------------------
+//
+//        //<editor-fold desc="dTheta histogram (2p)">
+//        histPlotter1D(c1, dtheta_2p, normalized_dtheta_2p_plots, true, 1., "#gamma = #theta_{p1} - #theta_{p2} of Scattered Protons", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_protons", "plots/theta_histograms/", "2p", kBlue, true, false, true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="dTheta histogram (1n1p)">
+//        histPlotter1D(c1, dtheta_1n1p, normalized_dtheta_1n1p_plots, true, 1., "#gamma = #theta_{p} - #theta_{n} of Scattered Nucleons", "All Interactions",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_nucleons", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
+//        //</editor-fold>
+//
+//    }
 
 // Phi histograms
 // ====================================================================================================
@@ -8503,7 +8526,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
             TFile(TListName, "recreate");
     fout->cd();
     plots->Write();
-    fout->Write(); //todo: figure out if fout is needed.
+    fout->Write();
     fout->Close();
 
 //    cout << "\n";
