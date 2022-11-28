@@ -5444,9 +5444,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double Theta_l_histogram = particles_2p[Lepton_ind_2p]->getTheta();
+//                double Theta_l_histogram = particles_2p[Lepton_ind_2p]->getTheta();
 
-                Theta_l_histogram->Fill(Theta_l_histogram);
+                Theta_l_histogram->Fill(particles_2p[Lepton_ind_2p]->getTheta());
 
 ////                      NOT REALLY dtheta:
 //                double d_theta_2p = acos(
