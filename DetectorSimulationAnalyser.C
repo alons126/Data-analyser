@@ -4662,9 +4662,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
     //<editor-fold desc="Theta histograms">
     THStack *ThetaStack = new THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
 
-    TH1D *theta_l = new TH1D("#theta_{l} det sim (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
-    TH1D *theta_p1 = new TH1D("#theta_{p1} det sim (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
-    TH1D *theta_p2 = new TH1D("#theta_{p2} det sim (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
+    TH1D *Theta_l_histogram = new TH1D("#theta_{l} det sim (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
+    TH1D *Theta_p1_histogram = new TH1D("#theta_{p1} det sim (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
+    TH1D *Theta_p2_histogram = new TH1D("#theta_{p2} det sim (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
     TH1D *dtheta_2p = new TH1D("#gamma det sim (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
 
     TH1D *theta_l_1n1p = new TH1D("#theta_{l} det sim (1n1p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_1n1p, theta_l_upper_lim_1n1p);
@@ -5444,9 +5444,9 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double theta_l = particles_2p[Lepton_ind_2p]->getTheta();
+                double Theta_l_histogram = particles_2p[Lepton_ind_2p]->getTheta();
 
-                theta_l->Fill(theta_l);
+                Theta_l_histogram->Fill(Theta_l_histogram);
 
 ////                      NOT REALLY dtheta:
 //                double d_theta_2p = acos(
@@ -5478,8 +5478,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
 //                    dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 //
-//                    theta_p1->Fill(theta_p1 * 180.0 / 3.14159265359);
-//                    theta_p2->Fill(theta_p2 * 180.0 / 3.14159265359);
+//                    Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+//                    Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
@@ -5507,8 +5507,8 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
 //                    dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 //
-//                    theta_p1->Fill(theta_p2 * 180.0 / 3.14159265359);
-//                    theta_p2->Fill(theta_p1 * 180.0 / 3.14159265359);
+//                    Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
+//                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
@@ -5522,13 +5522,13 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                P_lp_hist_2p->Fill(P_lp_2p);
 
 //                fsEl_2p->Fill(El);
-//                 theta_l->Fill( theta_l);
+//                Theta_l_histogram->Fill(Theta_l_histogram);
 //                phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-//                fsEl_VS_theta_l_all_int_2p->Fill( theta_l, El);
+//                fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_histogram, El);
 
 //                E_Trans_all_ang_all_int_2p->Fill(Ev - El);
 
-//                E_cal_VS_theta_l_all_int_2p->Fill( theta_l, E_cal_2p);
+//                E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_histogram, E_cal_2p);
 //                E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
 //                E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzf[Proton_1_ind_2p] / rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p])) -
 //                                                      acos(pzf[Proton_2_ind_2p] / rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]))) *
@@ -5537,11 +5537,11 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                gamma_Lab_all_hist->Fill(cos(d_theta_2p));
 //                gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-//                if ( theta_l >= 14.0 &&  theta_l <= 16.0) {
+//                if (Theta_l_histogram >= 14.0 && Theta_l_histogram <= 16.0) {
 //                    E_Trans15_all_2p->Fill(Ev - El);
-//                } else if ( theta_l >= 44.0 &&  theta_l <= 46.0) {
+//                } else if (Theta_l_histogram >= 44.0 && Theta_l_histogram <= 46.0) {
 //                    E_Trans45_all_2p->Fill(Ev - El);
-//                } else if ( theta_l >= 89.0 &&  theta_l <= 91.0) {
+//                } else if (Theta_l_histogram >= 89.0 && Theta_l_histogram <= 91.0) {
 //                    E_Trans90_all_2p->Fill(Ev - El);
 //                }
 
@@ -5550,18 +5550,18 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
 //                    gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                    if ( theta_l >= 14.0 &&  theta_l <= 16.0) {
+//                    if (Theta_l_histogram >= 14.0 && Theta_l_histogram <= 16.0) {
 //                        E_Trans15_QEL_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 44.0 &&  theta_l <= 46.0) {
+//                    } else if (Theta_l_histogram >= 44.0 && Theta_l_histogram <= 46.0) {
 //                        E_Trans45_QEL_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 89.0 &&  theta_l <= 91.0) {
+//                    } else if (Theta_l_histogram >= 89.0 && Theta_l_histogram <= 91.0) {
 //                        E_Trans90_QEL_2p->Fill(Ev - El);
 //                    }
 //
-//                    fsEl_VS_theta_l_QEL_only_2p->Fill( theta_l, El);
+//                    fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_histogram, El);
 //
 //                    E_cal_QEL_2p->Fill(E_cal_2p);
-//                    E_cal_VS_theta_l_QEL_only_2p->Fill( theta_l, E_cal_2p);
+//                    E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_histogram, E_cal_2p);
 //                    E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
 //                    E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
 //                    E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
@@ -5583,15 +5583,15 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
 //                    gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                    if ( theta_l >= 14.0 &&  theta_l <= 16.0) {
+//                    if (Theta_l_histogram >= 14.0 && Theta_l_histogram <= 16.0) {
 //                        E_Trans15_MEC_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 44.0 &&  theta_l <= 46.0) {
+//                    } else if (Theta_l_histogram >= 44.0 && Theta_l_histogram <= 46.0) {
 //                        E_Trans45_MEC_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 89.0 &&  theta_l <= 91.0) {
+//                    } else if (Theta_l_histogram >= 89.0 && Theta_l_histogram <= 91.0) {
 //                        E_Trans90_MEC_2p->Fill(Ev - El);
 //                    }
 //
-//                    fsEl_VS_theta_l_MEC_only_2p->Fill( theta_l, El);
+//                    fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_histogram, El);
 //
 //                    E_cal_MEC_2p->Fill(E_cal_2p);
 //
@@ -5602,11 +5602,11 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
 //                    gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                    if ( theta_l >= 14.0 &&  theta_l <= 16.0) {
+//                    if (Theta_l_histogram >= 14.0 && Theta_l_histogram <= 16.0) {
 //                        E_Trans15_RES_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 44.0 &&  theta_l <= 46.0) {
+//                    } else if (Theta_l_histogram >= 44.0 && Theta_l_histogram <= 46.0) {
 //                        E_Trans45_RES_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 89.0 &&  theta_l <= 91.0) {
+//                    } else if (Theta_l_histogram >= 89.0 && Theta_l_histogram <= 91.0) {
 //                        E_Trans90_RES_2p->Fill(Ev - El);
 //                    }
 //
@@ -5617,11 +5617,11 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                    gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
 //                    gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                    if ( theta_l >= 14.0 &&  theta_l <= 16.0) {
+//                    if (Theta_l_histogram >= 14.0 && Theta_l_histogram <= 16.0) {
 //                        E_Trans15_DIS_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 44.0 &&  theta_l <= 46.0) {
+//                    } else if (Theta_l_histogram >= 44.0 && Theta_l_histogram <= 46.0) {
 //                        E_Trans45_DIS_2p->Fill(Ev - El);
-//                    } else if ( theta_l >= 89.0 &&  theta_l <= 91.0) {
+//                    } else if (Theta_l_histogram >= 89.0 && Theta_l_histogram <= 91.0) {
 //                        E_Trans90_DIS_2p->Fill(Ev - El);
 //                    }
 //
@@ -5640,10 +5640,10 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         }
 
         //      Normalization factor:
-//        double theta_l_integral =  theta_l->Integral() + theta_l_1n1p->Integral();
+//        double theta_l_integral = Theta_l_histogram->Integral() + theta_l_1n1p->Integral();
 //
 //        //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-//        histPlotter1D(c1,  theta_l, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+//        histPlotter1D(c1, Theta_l_histogram, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
 //                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
 //        //</editor-fold>
 
@@ -5747,10 +5747,10 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //  Theta of outgoing lepton histograms --------------------------------------------------------------
 
 //      Normalization factor:
-        double theta_l_integral = theta_l->Integral() + theta_l_1n1p->Integral();
+        double theta_l_integral = Theta_l_histogram->Integral() + theta_l_1n1p->Integral();
 
         //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-        histPlotter1D(c1, theta_l, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+        histPlotter1D(c1, Theta_l_histogram, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
         //</editor-fold>
 
@@ -5778,7 +5778,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
         auto ThetaStack_legend = new
                 TLegend(0.75, 0.775, 0.875, 0.9);
 
-        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(theta_l, "2p", "l");
+        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(Theta_l_histogram, "2p", "l");
         TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
         ThetaStack_legend->Draw();
 
@@ -5793,7 +5793,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //  Theta of nucleon 1 histogram ----------------------------------------------------------------------
 
         //<editor-fold desc="Theta of Proton 1 histogram (2p)">
-        histPlotter1D(c1, theta_p1, normalized_theta_p1_plots, true, 1., "#theta_{p1} of Proton 1", "All Interactions",
+        histPlotter1D(c1, Theta_p1_histogram, normalized_theta_p1_plots, true, 1., "#theta_{p1} of Proton 1", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_1", "plots/theta_histograms/", "2p", kBlue, true, false, true);
         //</editor-fold>
 
@@ -5805,7 +5805,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //  Theta of nucleon 2 histogram ---------------------------------------------------------------------
 
         //<editor-fold desc="Theta of Proton 2 histogram (2p)">
-        histPlotter1D(c1, theta_p2, normalized_theta_p2_plots, true, 1., "#theta_{p2} of Proton 2", "All Interactions",
+        histPlotter1D(c1, Theta_p2_histogram, normalized_theta_p2_plots, true, 1., "#theta_{p2} of Proton 2", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_2", "plots/theta_histograms/", "2p", kBlue, true, false, true);
         //</editor-fold>
 
