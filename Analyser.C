@@ -18,7 +18,8 @@
 #include <TBenchmark.h>
 #include "clas12reader.h"
 
-#include "gst.h"
+#include "TruthLevelAnalyser.h"
+//#include "gst.h"
 #include "codeSetup.h"
 
 using namespace clas12;
