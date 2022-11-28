@@ -5361,7 +5361,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
         c12.addZeroOfRestPid(); //nothing else
 
-/*
+
 
 //        c12.getNParticles();
 //        cout << "c12->getNParticles() = " << c12->getNParticles() << "\n";
@@ -5395,6 +5395,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
                 cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
+/*
                 //<editor-fold desc="Proton selector (2p)">
                 if (particlePDG == 2212) {
                     ++ProtonCounter_2p;
@@ -5426,8 +5427,13 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                     }
                 }
                 //</editor-fold>
+*/
 
             }
+
+
+/*
+
 
 //          Momentum of first proton in Ef[]:
             double P_p1_2p = particles_2p[Proton_1_ind_2p]->par()->getP();
