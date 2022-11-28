@@ -31,7 +31,7 @@ scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/h
 
 void Analyser() {
 
-    float Ver = "3.1b";
+    string AnalyserVersion = "3.1b";
 
     auto start = std::chrono::system_clock::now(); // Start counting running time
 
@@ -6479,7 +6479,7 @@ void Analyser() {
 
 
     cout << "\n";
-    cout << "Operation finished (Ver = " << Ver << ")." << "\n";
+    cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
     cout << "\n";
 
 }
