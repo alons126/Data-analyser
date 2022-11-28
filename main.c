@@ -1,6 +1,7 @@
 //#include "gst.C"
 #include "TruthLevelAnalyser.c"
 //#include "TruthLevelAnalyser.h"
+#include "Analyser.C"
 
 int main() {
     auto start = std::chrono::system_clock::now(); // Start counting running time
