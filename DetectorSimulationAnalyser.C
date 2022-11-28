@@ -84,7 +84,7 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 //                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
                 //<editor-fold desc="Proton selector (2p)">
-                if (pdgf[i] == 2212) {
+                if (particlePDG == 2212) {
                     ++ProtonCounter_2p;
                     cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
                     cout << "i = " << i << "\n";
@@ -96,15 +96,15 @@ void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
                         cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
                     } else if (ProtonCounter_2p > 2) {
                         cout << "\n";
-                        cout << "Additional Protons detected (2p). PDG = " << particlePDG[i] << "\n";
+                        cout << "Additional Protons detected (2p). PDG = " << particlePDG << "\n";
                         cout << "\n";
                         cout << "\n";
                     }
-                } else if (pdgf[i] != 2212) {
+                } else if (particlePDG != 2212) {
                     ++OtherParticleCounter_2p;
                     if (OtherParticleCounter_2p > 0) {
                         cout << "\n";
-                        cout << "Additional particles detected (2p). PDG = " << particlePDG[i] << "\n";
+                        cout << "Additional particles detected (2p). PDG = " << particlePDG << "\n";
                         cout << "\n";
                         cout << "\n";
                     }
