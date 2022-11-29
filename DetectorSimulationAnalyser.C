@@ -5357,18 +5357,15 @@ void EventAnalyser() {
     clas12reader c12(LoadedInput.c_str()); // open file
 
 // 2p+1e - 85 out of 970000
-// 2p+1e - 85 out of 970000
+// 2p - 0 out of 970000
 // 1n1p+1e - 284 out of 970000
 // 1n1p - 0 out of 970000
 
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
-//    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-    c12.addExactPid(2212, 2); // exactly 1 electron (outgoing lepton)
-//    c12.addExactPid(2112, 1); // exactly 1 electron (outgoing lepton)
-
-//    c12.addAtLeastPid(2212,1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-//    c12.addAtLeastPid(2112,0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
+    c12.addAtLeastPid(2212,1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+    c12.addAtLeastPid(2112,0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
 
     c12.addZeroOfRestPid(); // nothing else
 
@@ -5382,15 +5379,15 @@ void EventAnalyser() {
         auto protons=c12.getByID(2212);
         auto neutrons=c12.getByID(2112);
 
+        if (protons.size() != 2 && neutrons.size() != 0) continue;
+
         cout << "#electrons = " << electrons.size() << "\n";
         cout << "#protons = " << protons.size() << "\n";
         cout << "#neutrons = " << neutrons.size() << "\n";
         cout << "\n";
 
-
-
-        int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
-        int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
+//        int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
+//        int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
 
         for (int i = 0; i < particles_2p.size(); i++) {
 
