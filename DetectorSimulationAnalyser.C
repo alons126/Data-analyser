@@ -5471,7 +5471,7 @@ void EventAnalyser() {
                 } else if (particlePDG_1n1p == 2112) {
                     ++NeutronCounter_1n1p;
                     Neutron_ind_1n1p = i;
-                } else if (particlePDG_2p == 11) {
+                } else if (particlePDG_1n1p == 11) {
                     Lepton_ind_1n1p = i;
 //                    cout << "Lepton_ind_1n1p = " << Lepton_ind_1n1p << "\n";
 //                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
