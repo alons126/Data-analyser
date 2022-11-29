@@ -5371,15 +5371,15 @@ void EventAnalyser() {
 
     while (c12.next()) { //loop over events (2p)
 
-        auto particles_2p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
-
-        cout << "==========================================================================\n";
+        auto particles_2p = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
         auto electrons=c12.getByID(11);
         auto protons=c12.getByID(2212);
         auto neutrons=c12.getByID(2112);
 
-        if (protons.size() != 2 && neutrons.size() != 0) continue;
+        if (protons.size() != 2 && neutrons.size() != 0) break;
+
+        cout << "==========================================================================\n";
 
         cout << "#electrons = " << electrons.size() << "\n";
         cout << "#protons = " << protons.size() << "\n";
