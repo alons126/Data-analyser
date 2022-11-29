@@ -5354,7 +5354,7 @@ void EventAnalyser() {
 
 // 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    clas12reader c12(LoadedInput.c_str()); //open file
+    clas12reader c12(LoadedInput.c_str()); // open file
 
 // 2p+1e - 85 out of 970000
 // 1n1p+1e - 85 out of 970000
@@ -5363,7 +5363,7 @@ void EventAnalyser() {
 //        c12.addExactPid(2212, 1); //exactly 1 electron
     c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
     c12.addExactPid(2212, 1); // exactly 1 electron (outgoing lepton)
-    c12.addExactPid(2212, 1); // exactly 1 electron (outgoing lepton)
+    c12.addExactPid(2112, 1); // exactly 1 electron (outgoing lepton)
 
 //    c12.addAtLeastPid(2212,1); // at least 1 proton (1 for 1n1p, 2 for 2p)
 //    c12.addAtLeastPid(2112,0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
