@@ -5446,7 +5446,7 @@ void EventAnalyser() {
             ++num_of_1n1p_events;
 
             cout << "==========================================================================\n";
-            cout << "num_of_1n1p_events = " << num_of_2p_events << "\n";
+            cout << "num_of_1n1p_events = " << num_of_1n1p_events << "\n";
             cout << "\n";
             cout << "#electrons = " << electrons.size() << "\n";
             cout << "#protons = " << protons.size() << "\n";
