@@ -5382,6 +5382,9 @@ void EventAnalyser() {
 
 
 
+        
+        ++num_of_2p_events;
+
         cout << "==========================================================================\n";
 
         cout << "num_of_2p_events = " << num_of_2p_events << "\n";
@@ -5396,8 +5399,8 @@ void EventAnalyser() {
 
 
         if (protons.size() == 2 && neutrons.size() == 0) {
-            ++num_of_2p_events;
-
+//            ++num_of_2p_events;
+//
 //            cout << "==========================================================================\n";
 //
 //            cout << "num_of_2p_events = " << num_of_2p_events << "\n";
