@@ -37,8 +37,10 @@ int main() {
         cout << "Analysis mode:\t'" << AnalyserMode << "'" << "\n";
         cout << "Code version:\t" << Ver << "\n";
     } else if (AnalyserMode == "Detector Simulation") {
-        EventAnalyser(2,0);
-        EventAnalyser(1,1);
+//        EventAnalyser(2,0);
+//        EventAnalyser(1,1);
+
+        EventAnalyser();
 
         cout << "\n";
         cout << "---------------------------------------------------------------------------\n";
