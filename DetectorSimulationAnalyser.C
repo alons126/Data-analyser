@@ -5385,9 +5385,9 @@ void EventAnalyser() {
             cout << "==========================================================================\n";
             cout << "num_of_2p_events = " << num_of_2p_events << "\n";
             cout << "\n";
-            cout << "#electrons = " << electrons.size() << "\n";
-            cout << "#protons = " << protons.size() << "\n";
-            cout << "#neutrons = " << neutrons.size() << "\n";
+            cout << "\n";
+            cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
+            cout << "\n";
             cout << "\n";
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
@@ -5437,7 +5437,6 @@ void EventAnalyser() {
                 //</editor-fold>
 
             }
-
         }
 
 // 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -5448,13 +5447,11 @@ void EventAnalyser() {
             cout << "==========================================================================\n";
             cout << "num_of_1n1p_events = " << num_of_1n1p_events << "\n";
             cout << "\n";
-            cout << "#electrons = " << electrons.size() << "\n";
-            cout << "#protons = " << protons.size() << "\n";
-            cout << "#neutrons = " << neutrons.size() << "\n";
+            cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
             cout << "\n";
 
             int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
-            int Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
+            int Lepton_ind_1n1p = -1, Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
 
             for (int i = 0; i < particles.size(); i++) {
 
@@ -5474,6 +5471,10 @@ void EventAnalyser() {
                 } else if (particlePDG_1n1p == 2112) {
                     ++NeutronCounter_1n1p;
                     Neutron_ind_1n1p = i;
+                } else if (particlePDG_2p == 11) {
+                    Lepton_ind_1n1p = i;
+//                    cout << "Lepton_ind_1n1p = " << Lepton_ind_1n1p << "\n";
+//                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
                 } else if ((particlePDG_1n1p != 2212) && (particlePDG_1n1p != 2112) && (particlePDG_1n1p != 11)) {
                     ++OtherParticleCounter_1n1p;
                     if (OtherParticleCounter_1n1p > 0) {
@@ -5486,14 +5487,11 @@ void EventAnalyser() {
                 //</editor-fold>
 
             }
-
         }
 
 
 
         /*
-
-
 //          Momentum of first proton in Ef[]:
         double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP();
 
