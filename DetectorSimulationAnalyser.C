@@ -5357,11 +5357,12 @@ void EventAnalyser() {
     clas12reader c12(LoadedInput.c_str()); // open file
 
 // 2p+1e - 85 out of 970000
-// 1n1p+1e - 85 out of 970000
+// 1n1p+1e - 284 out of 970000
+// 1n1p+1e - 284 out of 970000
 
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
-    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
+//    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
     c12.addExactPid(2212, 1); // exactly 1 electron (outgoing lepton)
     c12.addExactPid(2112, 1); // exactly 1 electron (outgoing lepton)
 
