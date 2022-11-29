@@ -5381,7 +5381,7 @@ void EventAnalyser() {
         auto protons=c12.getByID(2212);
         auto neutrons=c12.getByID(2112);
 
-        if (protons.size() != 2 && neutrons.size() != 0) {
+        if (protons.size() == 2 && neutrons.size() == 0) {
             ++num_of_2p_events;
 
             cout << "==========================================================================\n";
@@ -8548,13 +8548,14 @@ void EventAnalyser() {
         cout << "===========================================================================\n";
         cout << "\n";
 
+        cout << "#(2p) events:\t" << num_of_2p_events << "\n";
+
         if (FSI_status == false) {
             cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
         } else if (FSI_status == true) {
             cout << "FSI status:\tON\n";
         }
 
-        cout << "num_of_2p_events:\t" << num_of_2p_events << "\n";
         cout << "File input:\t" << LoadedInput << "\n";
         cout << "Settings mode:\t'" << file_name << "'\n";
         cout << "\n";
