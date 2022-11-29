@@ -5369,10 +5369,8 @@ void EventAnalyser() {
 
     c12.addZeroOfRestPid(); // nothing else
 
-
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
-
 
     while (c12.next()) { //loop over events (2p)
 
@@ -5406,7 +5404,6 @@ void EventAnalyser() {
 
                 cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
-                /*
                 //<editor-fold desc="Proton selector (2p)">
                 if (particlePDG == 2212) {
                     ++ProtonCounter_2p;
@@ -5414,10 +5411,10 @@ void EventAnalyser() {
     //                    cout << "i = " << i << "\n";
                     if (ProtonCounter_2p == 1) {
                         Proton_1_ind_2p = i;
-    //                        cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
+                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
                     } else if (ProtonCounter_2p == 2) {
                         Proton_2_ind_2p = i;
-    //                        cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
+                            cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
                     } else if (ProtonCounter_2p > 2) {
                         cout << "\n";
                         cout << "Additional Protons detected (2p). PDG = " << particlePDG << "\n";
@@ -5427,7 +5424,7 @@ void EventAnalyser() {
                 } else if (particlePDG == 11) {
                     Lepton_ind_2p = i;
     //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
-    //                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                        cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
                 } else if (particlePDG != 2212) {
                     ++OtherParticleCounter_2p;
                     if (OtherParticleCounter_2p > 0) {
@@ -5438,7 +5435,7 @@ void EventAnalyser() {
                     }
                 }
                 //</editor-fold>
-                */
+
 
             }
 
@@ -5731,8 +5728,6 @@ void EventAnalyser() {
 
 
             */
-
-//            cout << "\n";
 
     }
 
@@ -8612,7 +8607,7 @@ void EventAnalyser() {
         cout << "\n";
 
         cout << "#(2p) events:\t" << num_of_2p_events << "\n";
-        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n"; 
+        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
 
         if (FSI_status == false) {
             cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
