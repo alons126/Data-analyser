@@ -29,7 +29,7 @@ void splines_plot() {
 
 //    std::string filename1 = "spline_asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_original_table.root";
     std::string filename1 = "spline_asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_original_table_test_2.root";
-    std::string filename2 = "spline_asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_new_table_test_4.root";
+    std::string filename2 = "total_xsec.root";
 
 
 
@@ -42,7 +42,8 @@ void splines_plot() {
     TDirectoryFile *mydir2 = (TDirectoryFile *) fxsec2->Get("e-_C12");
 
     TGraph *graph1 = (TGraph *) mydir1->Get("tot_em");
-    TGraph *graph2 = (TGraph *) mydir2->Get("tot_em");
+//    TGraph *graph2 = (TGraph *) mydir2->Get("tot_em");
+    TGraph *graph2 = (TGraph *) mydir2->Get("mec_em");
 
     graph1->SetLineColor(kRed);
     graph1->SetLineWidth(4);
@@ -69,10 +70,10 @@ void splines_plot() {
 
     auto legend = new TLegend(0.128, 0.8, 0.378, 0.9);
 //    auto legend = new TLegend(0.1, 0.8, 0.35, 0.9);
-    legend->AddEntry(graph1, "original_table_test_2");
-//    legend->AddEntry(graph1, "Original table");
-//    legend->AddEntry(graph2, "New table (no zeros)");
-    legend->AddEntry(graph2, "new_table_test_4");
+//    legend->AddEntry(graph1, "original_table_test_2");
+    legend->AddEntry(graph1, "Original table");
+    legend->AddEntry(graph2, "New table");
+//    legend->AddEntry(graph2, "new_table_test_4");
 //    legend->AddEntry(graph2, "original_table_test_2");
     legend->Draw();
 

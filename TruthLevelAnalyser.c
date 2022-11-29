@@ -156,7 +156,7 @@ void gst::Loop() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
+    bool calculate_2n = true, calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
@@ -5056,14 +5056,19 @@ void gst::Loop() {
 
     //todo: remove title and fix xlabel according to BEnergy for QEL case (confirm w/ Adi)
     //<editor-fold desc="E_cal restoration histograms - old plots">
+    TH1D *E_cal_MEC_2n;
     TH1D *E_cal_QEL_2p, *E_cal_MEC_2p, *E_cal_RES_2p, *E_cal_DIS_2p, *E_cal_QEL_1n1p, *E_cal_MEC_1n1p, *E_cal_RES_1n1p, *E_cal_DIS_1n1p;
-    THStack *E_cal_QEL_Stack, *E_cal_MEC_Stack, *E_cal_RES_Stack, *E_cal_DIS_Stack;
+    THStack *E_cal_QEL_Stack, *E_cal_MEC_Stack_1n1p_and_2p, *E_cal_MEC_Stack_2p_and_2n, *E_cal_RES_Stack, *E_cal_DIS_Stack;
 
     if (BEnergyToNucleusCon == true) {
         E_cal_QEL_Stack = new
         THStack("E_cal stack (QEL only)", "E_{cal} Histogram (QEL only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
-        E_cal_MEC_Stack = new
+        E_cal_MEC_Stack_1n1p_and_2p = new
         THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+        E_cal_MEC_Stack_2p_and_2n = new
+        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 2n);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+//        E_cal_MEC_Stack = new
+//        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
         E_cal_RES_Stack = new
         THStack("E_cal stack (RES only)", "E_{cal} Histogram (RES only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
         E_cal_DIS_Stack = new
@@ -5071,12 +5076,24 @@ void gst::Loop() {
     } else if (BEnergyToNucleusCon == false) {
         E_cal_QEL_Stack = new
         THStack("E_cal stack (QEL only)", "E_{cal} Histogram (QEL only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
-        E_cal_MEC_Stack = new
+        E_cal_MEC_Stack_1n1p_and_2p = new
         THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
+        E_cal_MEC_Stack_2p_and_2n = new
+        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 2n);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+//        E_cal_MEC_Stack = new
+//        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
         E_cal_RES_Stack = new
         THStack("E_cal stack (RES only)", "E_{cal} Histogram (RES only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
         E_cal_DIS_Stack = new
         THStack("E_cal stack (DIS only)", "E_{cal} Histogram (DIS only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
+    }
+
+    if (BEnergyToNucleusCon == true) {
+        E_cal_MEC_2n = new
+        TH1D("E_{cal} (MEC only, 2n)", ";E_{cal} = E_{l} + T_{n1} + T_{n2} + 2*E_{BE} [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
+    } else if (BEnergyToNucleusCon == false) {
+        E_cal_MEC_2n = new
+        TH1D("E_{cal} (MEC only, 2n)", ";E_{cal} = E_{l} + T_{n1} + T_{n2} [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
     }
 
     if (BEnergyToNucleusCon == true) {
@@ -5405,6 +5422,10 @@ void gst::Loop() {
 
 //        int length = nf;
 
+//      2n variables:
+        int NeutronCounter_2n = 0, OtherParticleCounter_2n = 0;
+        int Neutron_1_ind_2n = -1, Neutron_2_ind_2n = -1;
+
 //      2p variables:
         int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
         int Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
@@ -5454,6 +5475,279 @@ void gst::Loop() {
             } else if (dis == true) {
                 if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
                     E_Trans15_DIS_inclusive->Fill(Ev - El);
+                }
+            }
+        }
+        //</editor-fold>
+
+
+//  2n FS calculations
+//  ================================================================================================
+
+        //<editor-fold desc="2n FS calculations">
+        if (calculate_2n == true) {
+//          Calculations with FSI turned ON:
+            if (FSI_status == true) {
+                if (nfp == 0 && nfn == 2 && nf == 2) { // See if there are 2FS protons and 2FS hadrons (2n)
+
+                    //<editor-fold desc="Proton selector (2n)">
+                    for (int i = 0; i < nf; i++) {
+                        if (pdgf[i] == 2112) {
+                            ++NeutronCounter_2n;
+                            if (NeutronCounter_2n == 1) {
+                                Neutron_1_ind_2n = i;
+                            } else if (NeutronCounter_2n == 2) {
+                                Neutron_2_ind_2n = i;
+                            } else if (NeutronCounter_2n > 2) {
+                                cout << "\n";
+                                cout << "Additional Protons detected (2n). PDG = " << pdgf[i] << "\n";
+                                cout << "\n";
+                                cout << "\n";
+                            }
+                        } else if (pdgf[i] != 2112) {
+                            ++OtherParticleCounter_2n;
+                            if (OtherParticleCounter_2n > 0) {
+                                cout << "\n";
+                                cout << "Additional particles detected (2n). PDG = " << pdgf[i] << "\n";
+                                cout << "\n";
+                                cout << "\n";
+                            }
+                        }
+                    }
+                    //</editor-fold>
+
+//                  Momentum of first proton in Ef[]:
+                    double P_n1_2n = rCalc(pxf[Neutron_1_ind_2n], pyf[Neutron_1_ind_2n], pzf[Neutron_1_ind_2n]);
+
+//                  Momentum of second proton in Ef[]:
+                    double P_n2_2n = rCalc(pxf[Neutron_2_ind_2n], pyf[Neutron_2_ind_2n], pzf[Neutron_2_ind_2n]);
+
+//                  Momentum of second proton in Ef[]:
+                    double P_lp_2n = rCalc(pxl, pyl, pzl);
+
+////                  Leading proton:
+//                    double P_L_2p = -1;
+//
+////                  Recoil proton:
+//                    double P_R_2p = -1;
+
+//                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+                    if (P_n1_2n >= 0 && P_n2_2n >= 0) {
+//                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+                        double E_cal_2n;
+
+                        if (BEnergyToNucleusCon == true) {
+                            E_cal_2n = El + (Ef[Neutron_1_ind_2n] - 0.939565) + (Ef[Neutron_2_ind_2n] - 0.939565) + 2 * BEnergyToNucleus;
+                        } else if (BEnergyToNucleusCon == false) {
+                            E_cal_2n = El + (Ef[Neutron_1_ind_2n] - 0.939565) + (Ef[Neutron_2_ind_2n] - 0.939565);
+                        }
+
+                        if (mec == true) {
+//                            gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_MEC_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+//
+                            E_cal_MEC_2n->Fill(E_cal_2n);
+//
+//                            E_Trans_VS_q3_MEC_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_MEC_2p->Fill(El);
+                        }
+
+//                        double Theta_l_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+//
+////                      NOT REALLY dtheta:
+//                        double d_theta_2p = acos(
+//                                (pxf[Proton_1_ind_2p] * pxf[Proton_2_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_2_ind_2p] +
+//                                 pzf[Proton_1_ind_2p] * pzf[Proton_2_ind_2p]) /
+//                                (P_p1_2p * P_p2_2p));
+//                        dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
+//
+//                        //<editor-fold desc="P_L & P_R selector">
+//                        if (Ef[Proton_1_ind_2p] >= Ef[Proton_2_ind_2p]) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
+//
+////                          Leading proton:
+//                            double P_L_2p = P_p1_2p;
+//
+////                          Recoil proton:
+//                            double P_R_2p = P_p2_2p;
+//
+//                            P_L_hist_2p->Fill(P_L_2p);
+//                            P_R_hist_2p->Fill(P_R_2p);
+//
+//                            double phi_p1 = atan2(pyf[Proton_1_ind_2p], pxf[Proton_1_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double phi_p2 = atan2(pyf[Proton_2_ind_2p], pxf[Proton_2_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double d_phi_p2 = phi_p1 - phi_p2; // In radians
+//
+//                            double theta_p1 = acos(pzf[Proton_1_ind_2p] / P_p1_2p); // Leading proton scattering angle in radians
+//                            double theta_p2 = acos(pzf[Proton_2_ind_2p] / P_p2_2p); // Recoil proton scattering angle in radians
+//
+//                            phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+//                            phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+//                            dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+//
+//                            theta_p1_2p->Fill(theta_p1 * 180.0 / 3.14159265359);
+//                            theta_p2_2p->Fill(theta_p2 * 180.0 / 3.14159265359);
+//
+//                            if (qel == true) {
+//                                E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
+//                                E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
+//                            }
+//                        } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
+//
+////                          Leading proton:
+//                            double P_L_2p = P_p2_2p;
+//
+////                          Recoil proton:
+//                            double P_R_2p = P_p1_2p;
+//
+//                            P_L_hist_2p->Fill(P_L_2p);
+//                            P_R_hist_2p->Fill(P_R_2p);
+//
+//                            double phi_p2 = atan2(pyf[Proton_1_ind_2p], pxf[Proton_1_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double phi_p1 = atan2(pyf[Proton_2_ind_2p], pxf[Proton_2_ind_2p]); // Leading proton azimuthal angle in radians
+//                            double d_phi_p2 = phi_p1 - phi_p2; // In radians
+//
+//                            double theta_p2 = acos(pzf[Proton_1_ind_2p] / P_p1_2p); // Leading proton scattering angle in radians
+//                            double theta_p1 = acos(pzf[Proton_2_ind_2p] / P_p2_2p); // Recoil proton scattering angle in radians
+//
+//                            phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+//                            phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+//                            dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+//
+//                            theta_p1_2p->Fill(theta_p2 * 180.0 / 3.14159265359);
+//                            theta_p2_2p->Fill(theta_p1 * 180.0 / 3.14159265359);
+//
+//                            if (qel == true) {
+//                                E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
+//                                E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
+//                            }
+//                        }
+//                        //</editor-fold>
+//
+//                        E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
+//
+//                        P_lp_hist_2p->Fill(P_lp_2p);
+//
+//                        fsEl_2p->Fill(El);
+//                        theta_l_2p->Fill(Theta_l_2p);
+//                        phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//                        fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_2p, El);
+//
+//                        E_Trans_all_ang_all_int_2p->Fill(Ev - El);
+//
+//                        E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+//                        E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
+//                        E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzf[Proton_1_ind_2p] / rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p])) -
+//                                                              acos(pzf[Proton_2_ind_2p] / rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]))) *
+//                                                         180.0 / 3.14159265359, E_cal_2p);
+//
+//                        gamma_Lab_all_hist->Fill(cos(d_theta_2p));
+//                        gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                        if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            E_Trans15_all_2p->Fill(Ev - El);
+//                        } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            E_Trans45_all_2p->Fill(Ev - El);
+//                        } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            E_Trans90_all_2p->Fill(Ev - El);
+//                        }
+//
+//                        //<editor-fold desc="Histogram fill by reaction (2p)">
+//                        if (qel == true) {
+//                            gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_QEL_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_QEL_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_QEL_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, El);
+//
+//                            E_cal_QEL_2p->Fill(E_cal_2p);
+//                            E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, E_cal_2p);
+//                            E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
+//                            E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
+//                            E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
+//                            E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
+//                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_L_2p, E_cal_2p);
+//                            E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
+//                            E_cal_VS_dtheta_QEL_only_2p->Fill(
+//                                    fabs(acos(pzf[Proton_1_ind_2p] / sqrt(pxf[Proton_1_ind_2p] * pxf[Proton_1_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_1_ind_2p] +
+//                                                                          pzf[Proton_1_ind_2p] * pzf[Proton_1_ind_2p])) -
+//                                         acos(pzf[Proton_2_ind_2p] / sqrt(pxf[Proton_2_ind_2p] * pxf[Proton_2_ind_2p] +
+//                                                                          pyf[Proton_2_ind_2p] * pyf[Proton_2_ind_2p] + pzf[Proton_2_ind_2p] * pzf[Proton_2_ind_2p]))) *
+//                                    180.0 /
+//                                    3.14159265359, El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272));
+//
+//                            E_Trans_VS_q3_QEL_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_QEL_2p->Fill(El);
+//                        } else if (mec == true) {
+//                            gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_MEC_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_MEC_2p->Fill(Ev - El);
+//                            }
+//
+//                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+//
+//                            E_cal_MEC_2p->Fill(E_cal_2p);
+//
+//                            E_Trans_VS_q3_MEC_2p->Fill(q3, Ev - El);
+//
+//                            fsEl_MEC_2p->Fill(El);
+//                        } else if (res == true) {
+//                            gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_RES_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_RES_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_RES_2p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_RES_2p->Fill(E_cal_2p);
+//
+//                            fsEl_RES_2p->Fill(El);
+//                        } else if (dis == true) {
+//                            gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
+//                            gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
+//
+//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                                E_Trans15_DIS_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                                E_Trans45_DIS_2p->Fill(Ev - El);
+//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                                E_Trans90_DIS_2p->Fill(Ev - El);
+//                            }
+//
+//                            E_cal_DIS_2p->Fill(E_cal_2p);
+//
+//                            fsEl_DIS_2p->Fill(El);
+//                        }
+//                        //</editor-fold>
+                    }
                 }
             }
         }
@@ -8151,43 +8445,79 @@ void gst::Loop() {
 
 //  E_cal_MEC restoration ------------------------------------------------------------------------------
 
-        //<editor-fold desc="E_cal_MEC restoration (2p & 1n1p)">
-        double E_cal_MEC_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_1n1p->Integral();
+        //<editor-fold desc="E_cal_MEC restoration (2n, 2p & 1n1p)">
+        double E_cal_MEC_1n1p_and_2p_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_1n1p->Integral();
+        double E_cal_MEC_2p_and_2n_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_2n->Integral();
 
-        histPlotter1D(c1, E_cal_MEC_2p, normalized_E_cal_plots, true, E_cal_MEC_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_MEC_Stack, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
+        histPlotter1D(c1, E_cal_MEC_2n, normalized_E_cal_plots, true, E_cal_MEC_2p_and_2n_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 4, false, true, E_cal_MEC_Stack_2p_and_2n, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "2n", kGreen, true, true, true);
 
-        histPlotter1D(c1, E_cal_MEC_1n1p, normalized_E_cal_plots, true, E_cal_MEC_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, E_cal_MEC_Stack, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
+        histPlotter1D(c1, E_cal_MEC_2p, normalized_E_cal_plots, true, E_cal_MEC_1n1p_and_2p_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, E_cal_MEC_Stack_1n1p_and_2p, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "2p", kBlue, true, true, true);
+        E_cal_MEC_Stack_2p_and_2n->Add(E_cal_MEC_2p);
+
+        histPlotter1D(c1, E_cal_MEC_1n1p, normalized_E_cal_plots, true, E_cal_MEC_1n1p_and_2p_integral, "E_{cal} Histogram", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, E_cal_MEC_Stack_1n1p_and_2p, "E_cal_restoration_MEC_only", "plots/E_cal_restorations/", "1n1p", kRed, true, true, true);
         //</editor-fold>
 
-        //<editor-fold desc="E_cal_MEC restoration (stack)">
-        E_cal_MEC_Stack->Draw("nostack");
-        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        E_cal_MEC_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-        E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        //<editor-fold desc="E_cal_MEC restoration (stack of 2p and 1n1p)">
+        E_cal_MEC_Stack_1n1p_and_2p->Draw("nostack");
+        E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
         if (normalized_E_l_plots) {
-            E_cal_MEC_Stack->SetTitle("E_{cal} Histogram (MEC only, 2p and 1n1p) - Normalized");
-            E_cal_MEC_Stack->GetYaxis()->SetTitle("Probability (%)");
-            E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+            E_cal_MEC_Stack_1n1p_and_2p->SetTitle("E_{cal} Histogram (MEC only, 2p and 1n1p) - Normalized");
+            E_cal_MEC_Stack_1n1p_and_2p->GetYaxis()->SetTitle("Probability (%)");
+            E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         } else {
-            E_cal_MEC_Stack->GetYaxis()->SetTitle("Arbitrary units");
-            E_cal_MEC_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+            E_cal_MEC_Stack_1n1p_and_2p->GetYaxis()->SetTitle("Arbitrary units");
+            E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         }
 
-        auto E_cal_MEC_Stack_legend = new
+        auto E_cal_MEC_Stack_1n1p_and_2p_legend = new
         TLegend(0.75, 0.775, 0.875, 0.9);
-//        auto E_cal_MEC_Stack_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
-//        auto E_cal_MEC_Stack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+//        auto E_cal_MEC_Stack_1n1p_and_2p_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
+//        auto E_cal_MEC_Stack_1n1p_and_2p_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
-        TLegendEntry *E_cal_MEC_Stack_legend_entry_2p = E_cal_MEC_Stack_legend->AddEntry(E_cal_MEC_2p, "2p", "l");
-        TLegendEntry *E_cal_MEC_Stack_legend_entry_1n1p = E_cal_MEC_Stack_legend->AddEntry(E_cal_MEC_1n1p, "1n1p", "l");
+        TLegendEntry *E_cal_MEC_Stack_1n1p_and_2p_legend_entry_2p = E_cal_MEC_Stack_1n1p_and_2p_legend->AddEntry(E_cal_MEC_2p, "2p", "l");
+        TLegendEntry *E_cal_MEC_Stack_1n1p_and_2p_legend_entry_1n1p = E_cal_MEC_Stack_1n1p_and_2p_legend->AddEntry(E_cal_MEC_1n1p, "1n1p", "l");
 
-        E_cal_MEC_Stack_legend->Draw();
+        E_cal_MEC_Stack_1n1p_and_2p_legend->Draw();
 
-        plots->Add(E_cal_MEC_Stack);
+        plots->Add(E_cal_MEC_Stack_1n1p_and_2p);
+        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="E_cal_MEC restoration (stack of 2p and 2n)">
+        E_cal_MEC_Stack_2p_and_2n->Draw("nostack");
+        E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetXaxis()->CenterTitle(true);
+        E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+
+        if (normalized_E_l_plots) {
+            E_cal_MEC_Stack_2p_and_2n->SetTitle("E_{cal} Histogram (MEC only, 2n and 2p) - Normalized");
+            E_cal_MEC_Stack_2p_and_2n->GetYaxis()->SetTitle("Probability (%)");
+            E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        } else {
+            E_cal_MEC_Stack_2p_and_2n->GetYaxis()->SetTitle("Arbitrary units");
+            E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        }
+
+        auto E_cal_MEC_Stack_2p_and_2n_legend = new
+        TLegend(0.75, 0.775, 0.875, 0.9);
+//        auto E_cal_MEC_Stack_2p_and_2n_legend = new TLegend(0.775, 0.775, 0.9, 0.9); //original
+//        auto E_cal_MEC_Stack_2p_and_2n_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
+
+        TLegendEntry *E_cal_MEC_Stack_2p_and_2n_legend_entry_2n = E_cal_MEC_Stack_2p_and_2n_legend->AddEntry(E_cal_MEC_2n, "2n", "l");
+        TLegendEntry *E_cal_MEC_Stack_2p_and_2n_legend_entry_2p = E_cal_MEC_Stack_2p_and_2n_legend->AddEntry(E_cal_MEC_2p, "2p", "l");
+
+        E_cal_MEC_Stack_2p_and_2n_legend->Draw();
+
+        plots->Add(E_cal_MEC_Stack_2p_and_2n);
         c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only.png");
         c1->Clear();
         //</editor-fold>
