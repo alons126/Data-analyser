@@ -5380,18 +5380,33 @@ void EventAnalyser() {
         auto protons=c12.getByID(2212);
         auto neutrons=c12.getByID(2112);
 
+
+
+        cout << "==========================================================================\n";
+
+        cout << "num_of_2p_events = " << num_of_2p_events << "\n";
+        cout << "\n";
+
+        cout << "#electrons = " << electrons.size() << "\n";
+        cout << "#protons = " << protons.size() << "\n";
+        cout << "#neutrons = " << neutrons.size() << "\n";
+        cout << "\n";
+
+
+
+
         if (protons.size() == 2 && neutrons.size() == 0) {
             ++num_of_2p_events;
 
-            cout << "==========================================================================\n";
-
-            cout << "num_of_2p_events = " << num_of_2p_events << "\n";
-            cout << "\n";
-
-            cout << "#electrons = " << electrons.size() << "\n";
-            cout << "#protons = " << protons.size() << "\n";
-            cout << "#neutrons = " << neutrons.size() << "\n";
-            cout << "\n";
+//            cout << "==========================================================================\n";
+//
+//            cout << "num_of_2p_events = " << num_of_2p_events << "\n";
+//            cout << "\n";
+//
+//            cout << "#electrons = " << electrons.size() << "\n";
+//            cout << "#protons = " << protons.size() << "\n";
+//            cout << "#neutrons = " << neutrons.size() << "\n";
+//            cout << "\n";
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
