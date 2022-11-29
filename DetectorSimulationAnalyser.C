@@ -5369,6 +5369,10 @@ void EventAnalyser() {
 
     c12.addZeroOfRestPid(); // nothing else
 
+
+    int num_of_2p_events = -1;
+
+
     while (c12.next()) { //loop over events (2p)
 
         auto particles_2p = c12.getDetParticles(); //particles are now a std::vector of particles for this event
@@ -5377,64 +5381,68 @@ void EventAnalyser() {
         auto protons=c12.getByID(2212);
         auto neutrons=c12.getByID(2112);
 
-        if (protons.size() != 2 && neutrons.size() != 0) break;
+        if (protons.size() != 2 && neutrons.size() != 0) {
+            ++num_of_2p_events;
 
-        cout << "==========================================================================\n";
+            cout << "==========================================================================\n";
 
-        cout << "#electrons = " << electrons.size() << "\n";
-        cout << "#protons = " << protons.size() << "\n";
-        cout << "#neutrons = " << neutrons.size() << "\n";
-        cout << "\n";
+            cout << "#electrons = " << electrons.size() << "\n";
+            cout << "#protons = " << protons.size() << "\n";
+            cout << "#neutrons = " << neutrons.size() << "\n";
+            cout << "\n";
 
 //        int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
 //        int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
 
-        for (int i = 0; i < particles_2p.size(); i++) {
+            for (int i = 0; i < particles_2p.size(); i++) {
 
-            float particlePDG = particles_2p[i]->par()->getPid();
+                float particlePDG = particles_2p[i]->par()->getPid();
 //                float Beta = particles_2p[i]->par()->getBeta();
 //                float P = particles_2p[i]->par()->getP();
 //
 //                Beta_VS_P_2p->Fill(P, Beta);
 //                P_histogram_2p->Fill(P);
 
-            cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
 
-            /*
-            //<editor-fold desc="Proton selector (2p)">
-            if (particlePDG == 2212) {
-                ++ProtonCounter_2p;
-//                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-//                    cout << "i = " << i << "\n";
-                if (ProtonCounter_2p == 1) {
-                    Proton_1_ind_2p = i;
-//                        cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
-                } else if (ProtonCounter_2p == 2) {
-                    Proton_2_ind_2p = i;
-//                        cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
-                } else if (ProtonCounter_2p > 2) {
-                    cout << "\n";
-                    cout << "Additional Protons detected (2p). PDG = " << particlePDG << "\n";
-                    cout << "\n";
-                    cout << "\n";
+                /*
+                //<editor-fold desc="Proton selector (2p)">
+                if (particlePDG == 2212) {
+                    ++ProtonCounter_2p;
+    //                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+    //                    cout << "i = " << i << "\n";
+                    if (ProtonCounter_2p == 1) {
+                        Proton_1_ind_2p = i;
+    //                        cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
+                    } else if (ProtonCounter_2p == 2) {
+                        Proton_2_ind_2p = i;
+    //                        cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
+                    } else if (ProtonCounter_2p > 2) {
+                        cout << "\n";
+                        cout << "Additional Protons detected (2p). PDG = " << particlePDG << "\n";
+                        cout << "\n";
+                        cout << "\n";
+                    }
+                } else if (particlePDG == 11) {
+                    Lepton_ind_2p = i;
+    //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
+    //                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                } else if (particlePDG != 2212) {
+                    ++OtherParticleCounter_2p;
+                    if (OtherParticleCounter_2p > 0) {
+                        cout << "\n";
+                        cout << "Additional particles detected (2p). PDG = " << particlePDG << "\n";
+                        cout << "\n";
+                        cout << "\n";
+                    }
                 }
-            } else if (particlePDG == 11) {
-                Lepton_ind_2p = i;
-//                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
-//                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-            } else if (particlePDG != 2212) {
-                ++OtherParticleCounter_2p;
-                if (OtherParticleCounter_2p > 0) {
-                    cout << "\n";
-                    cout << "Additional particles detected (2p). PDG = " << particlePDG << "\n";
-                    cout << "\n";
-                    cout << "\n";
-                }
+                //</editor-fold>
+                */
+
             }
-            //</editor-fold>
-            */
 
         }
+
 
 
         /*
@@ -5739,6 +5747,10 @@ void EventAnalyser() {
 //        c1->Clear();
 
 */
+
+
+/*
+
 
 //  Canvas definitions
 // =======================================================================================================================================================================
@@ -8511,6 +8523,7 @@ void EventAnalyser() {
 //    }
         //</editor-fold>.q
 
+ */
 
 // Saving histogram list and finishing execution
 // =======================================================================================================================================================================
@@ -8541,6 +8554,7 @@ void EventAnalyser() {
             cout << "FSI status:\tON\n";
         }
 
+        cout << "num_of_2p_events:\t" << num_of_2p_events << "\n";
         cout << "File input:\t" << LoadedInput << "\n";
         cout << "Settings mode:\t'" << file_name << "'\n";
         cout << "\n";
