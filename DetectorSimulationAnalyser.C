@@ -5385,6 +5385,9 @@ void EventAnalyser() {
 
             cout << "==========================================================================\n";
 
+            cout << "num_of_2p_events = " << num_of_2p_events << "\n";
+            cout << "\n";
+
             cout << "#electrons = " << electrons.size() << "\n";
             cout << "#protons = " << protons.size() << "\n";
             cout << "#neutrons = " << neutrons.size() << "\n";
@@ -5411,10 +5414,10 @@ void EventAnalyser() {
     //                    cout << "i = " << i << "\n";
                     if (ProtonCounter_2p == 1) {
                         Proton_1_ind_2p = i;
-                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
+//                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
                     } else if (ProtonCounter_2p == 2) {
                         Proton_2_ind_2p = i;
-                            cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
+//                            cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
                     } else if (ProtonCounter_2p > 2) {
                         cout << "\n";
                         cout << "Additional Protons detected (2p). PDG = " << particlePDG << "\n";
@@ -5424,7 +5427,7 @@ void EventAnalyser() {
                 } else if (particlePDG == 11) {
                     Lepton_ind_2p = i;
     //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
-                        cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+//                        cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
                 } else if (particlePDG != 2212) {
                     ++OtherParticleCounter_2p;
                     if (OtherParticleCounter_2p > 0) {
