@@ -8612,6 +8612,7 @@ void EventAnalyser() {
         cout << "\n";
 
         cout << "#(2p) events:\t" << num_of_2p_events << "\n";
+        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
 
         if (FSI_status == false) {
             cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
