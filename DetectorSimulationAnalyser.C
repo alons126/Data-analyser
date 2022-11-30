@@ -1967,7 +1967,12 @@ void EventAnalyser() {
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
-                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
+
+
+//                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
+                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n";
+
+
 
 //                fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_histogram, El);
 
