@@ -5673,7 +5673,7 @@ void EventAnalyser() {
 //                //</editor-fold>
 
 //            }
-            } // end of momentum cut if
+            } // end of momentum cut if (2p)
 
         } // end of 2p if
         //</editor-fold>
@@ -5726,12 +5726,14 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                double P_lp_1n1p = particles[Lepton_ind_1n1p]->getP(); // Lepton momentum
-                double P_p_1n1p = particles[Proton_ind_1n1p]->getP(); // Proton momentum
-                double P_n_1n1p = particles[Neutron_ind_1n1p]->getP(); // Neutron momentum
+            }
+
+            double P_lp_1n1p = particles[Lepton_ind_1n1p]->getP(); // Lepton momentum
+            double P_p_1n1p = particles[Proton_ind_1n1p]->getP(); // Proton momentum
+            double P_n_1n1p = particles[Neutron_ind_1n1p]->getP(); // Neutron momentum
 
 //              Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-                if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
+            if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
 //                if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
 
 //                    double E_cal_1n1p;
@@ -5742,140 +5744,139 @@ void EventAnalyser() {
 //                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
 //                    }
 
-                    //<editor-fold desc="Lepton theta & phi">
-                    double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(), particles[Lepton_ind_1n1p]->par()->getPx()); // Theta of lepton in particles
-                    phi_l_1n1p->Fill(Phi_l_1n1p * 180.0 / 3.14159265359);
+                //<editor-fold desc="Lepton theta & phi">
+                double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(), particles[Lepton_ind_1n1p]->par()->getPx()); // Theta of lepton in particles
+                phi_l_1n1p->Fill(Phi_l_1n1p * 180.0 / 3.14159265359);
 
-                    double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles
-                    theta_l_1n1p->Fill(Theta_l_1n1p);
-                    //</editor-fold>
+                double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles
+                theta_l_1n1p->Fill(Theta_l_1n1p);
+                //</editor-fold>
 
-                    //<editor-fold desc="Nucleon theta & phi">
-                    double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx());
-                    phi_p_1n1p->Fill(phi_p * 180.0 / 3.14159265359);
+                //<editor-fold desc="Nucleon theta & phi">
+                double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx());
+                phi_p_1n1p->Fill(phi_p * 180.0 / 3.14159265359);
 
-                    double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx());
-                    phi_n_1n1p->Fill(phi_n * 180.0 / 3.14159265359);
+                double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx());
+                phi_n_1n1p->Fill(phi_n * 180.0 / 3.14159265359);
 
-                    double d_phi_1n1p = phi_p - phi_n; // In radians
-                    dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
+                double d_phi_1n1p = phi_p - phi_n; // In radians
+                dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
 
-                    double theta_p = particles[Proton_ind_1n1p]->getTheta();
-                    theta_p_1n1p->Fill(theta_p * 180.0 / 3.14159265359);
+                double theta_p = particles[Proton_ind_1n1p]->getTheta();
+                theta_p_1n1p->Fill(theta_p * 180.0 / 3.14159265359);
 
-                    double theta_n = particles[Neutron_ind_1n1p]->getTheta();
-                    theta_n_1n1p->Fill(theta_n * 180.0 / 3.14159265359);
+                double theta_n = particles[Neutron_ind_1n1p]->getTheta();
+                theta_n_1n1p->Fill(theta_n * 180.0 / 3.14159265359);
 
 //                  ***NOT REALLY dtheta:
-                    double d_theta_1n1p = acos(
-                            (particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
-                             particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
-                             particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx()) /
-                            (particles[Proton_ind_1n1p]->getP() * particles[Neutron_ind_1n1p]->getP()));
-                    dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
-                    //</editor-fold>
+                double d_theta_1n1p = acos(
+                        (particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
+                         particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
+                         particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx()) /
+                        (particles[Proton_ind_1n1p]->getP() * particles[Neutron_ind_1n1p]->getP()));
+                dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
+                //</editor-fold>
 
 //                    E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
 
-                    //<editor-fold desc="Momentum histograms fill (1n1p)">
-                    P_p_hist_1n1p->Fill(P_p_1n1p);
-                    P_n_hist_1n1p->Fill(P_n_1n1p);
-                    P_l_hist_1n1p->Fill(P_lp_1n1p);
-                    //</editor-fold>
+                //<editor-fold desc="Momentum histograms fill (1n1p)">
+                P_p_hist_1n1p->Fill(P_p_1n1p);
+                P_n_hist_1n1p->Fill(P_n_1n1p);
+                P_l_hist_1n1p->Fill(P_lp_1n1p);
+                //</editor-fold>
 
-                    /*
-                    //<editor-fold desc="Energy histograms fill (1n1p)">
-                    fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
-                    fsEl_1n1p->Fill(El);
-                    //</editor-fold>
+                /*
+                //<editor-fold desc="Energy histograms fill (1n1p)">
+                fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+                fsEl_1n1p->Fill(El);
+                //</editor-fold>
 
-                    E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+                E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
 
-                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
-                        E_Trans15_all_1n1p->Fill(Ev - El);
-                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
-                        E_Trans45_all_1n1p->Fill(Ev - El);
-                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
-                        E_Trans90_all_1n1p->Fill(Ev - El);
-                    }
-
-                    //<editor-fold desc="Histogram fill by reaction (1n1p)">
-                    if (qel == true) {
-                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
-                            E_Trans15_QEL_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
-                            E_Trans45_QEL_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
-                            E_Trans90_QEL_1n1p->Fill(Ev - El);
-                        }
-
-                        fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
-
-                        E_cal_QEL_1n1p->Fill(E_cal_1n1p);
-                        E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
-                        E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
-                        E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
-                        E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
-                        E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
-                        E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
-                        E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
-                        E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
-                        E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
-                        E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
-
-                        E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
-
-                        fsEl_QEL_1n1p->Fill(El);
-                    } else if (mec == true) {
-                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
-                            E_Trans15_MEC_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
-                            E_Trans45_MEC_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
-                            E_Trans90_MEC_1n1p->Fill(Ev - El);
-                        }
-
-                        fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
-
-                        E_cal_MEC_1n1p->Fill(E_cal_1n1p);
-
-                        E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
-
-                        fsEl_MEC_1n1p->Fill(El);
-                    } else if (res == true) {
-                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
-                            E_Trans15_RES_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
-                            E_Trans45_RES_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
-                            E_Trans90_RES_1n1p->Fill(Ev - El);
-                        }
-
-                        E_cal_RES_1n1p->Fill(E_cal_1n1p);
-
-                        fsEl_RES_1n1p->Fill(El);
-                    } else if (dis == true) {
-                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
-                            E_Trans15_DIS_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
-                            E_Trans45_DIS_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
-                            E_Trans90_DIS_1n1p->Fill(Ev - El);
-                        }
-
-                        E_cal_DIS_1n1p->Fill(E_cal_1n1p);
-
-                        fsEl_DIS_1n1p->Fill(El);
-                    }
-                    //</editor-fold>
-                    */
+                if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                    E_Trans15_all_1n1p->Fill(Ev - El);
+                } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                    E_Trans45_all_1n1p->Fill(Ev - El);
+                } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                    E_Trans90_all_1n1p->Fill(Ev - El);
                 }
 
-            }
-        }
-        //</editor-fold>
-    }
+                //<editor-fold desc="Histogram fill by reaction (1n1p)">
+                if (qel == true) {
+                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        E_Trans15_QEL_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        E_Trans45_QEL_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        E_Trans90_QEL_1n1p->Fill(Ev - El);
+                    }
 
+                    fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+
+                    E_cal_QEL_1n1p->Fill(E_cal_1n1p);
+                    E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+                    E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
+                    E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
+                    E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
+                    E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
+                    E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
+                    E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
+                    E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
+                    E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
+                    E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
+
+                    E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+
+                    fsEl_QEL_1n1p->Fill(El);
+                } else if (mec == true) {
+                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        E_Trans15_MEC_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        E_Trans45_MEC_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        E_Trans90_MEC_1n1p->Fill(Ev - El);
+                    }
+
+                    fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+
+                    E_cal_MEC_1n1p->Fill(E_cal_1n1p);
+
+                    E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+
+                    fsEl_MEC_1n1p->Fill(El);
+                } else if (res == true) {
+                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        E_Trans15_RES_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        E_Trans45_RES_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        E_Trans90_RES_1n1p->Fill(Ev - El);
+                    }
+
+                    E_cal_RES_1n1p->Fill(E_cal_1n1p);
+
+                    fsEl_RES_1n1p->Fill(El);
+                } else if (dis == true) {
+                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        E_Trans15_DIS_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        E_Trans45_DIS_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        E_Trans90_DIS_1n1p->Fill(Ev - El);
+                    }
+
+                    E_cal_DIS_1n1p->Fill(E_cal_1n1p);
+
+                    fsEl_DIS_1n1p->Fill(El);
+                }
+                //</editor-fold>
+                */
+
+            } // end of momentum cut if (1n1p)
+        } // end of 1n1p if
+        //</editor-fold>
+
+    } // end of while
     //</editor-fold>
 
 
