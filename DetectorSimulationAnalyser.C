@@ -185,7 +185,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = true;
+    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
