@@ -10,7 +10,7 @@ int main() {
     std::string AnalyserMode;
     string FileType = AnalyseFile.substr(AnalyseFile.find_last_of(".") + 1);
 
-    cout << "AnalyseFile:\t" << AnalyseFile << "\n";
+    cout << "\n" << "AnalyseFile:\t" << AnalyseFile << "\n";
     cout << "FileType:\t" << FileType << "\n";
 
     //<editor-fold desc="AnalyserMode selector">

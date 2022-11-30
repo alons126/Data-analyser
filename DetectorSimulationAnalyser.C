@@ -35,6 +35,12 @@ using namespace std;
 
 void EventAnalyser() {
 
+    cout << "\n";
+    cout << "===========================================================================\n";
+    cout << "\t\t\tDetector simulation analyser\n";
+    cout << "===========================================================================\n";
+    cout << "\n";
+
     string AnalyserVersion = "Beta version";
 
     bool selection_test_2p = false, selection_test_1n1p = false;
@@ -93,30 +99,30 @@ void EventAnalyser() {
     string tune;
 
     if (fileInput.find("G18") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "G18 is in fileInput! Setting ni_selection == 3\n";  // and no change to custom_FSI_status
-        cout << "\n";
+//        cout << "\n";
+//        cout << "G18 is in fileInput! Setting ni_selection == 3\n";  // and no change to custom_FSI_status
+//        cout << "\n";
 
         tune = "G18";
         ni_selection = 3;
     } else if (fileInput.find("GEM21") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "GEM21 is in fileInput! Setting ni_selection == 2\n";
-        cout << "\n";
+//        cout << "\n";
+//        cout << "GEM21 is in fileInput! Setting ni_selection == 2\n";
+//        cout << "\n";
 
         tune = "GEM21 (SuSAv2)";
         ni_selection = 2;
     } else if (fileInput.find("SuSAv2") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "SuSAv2 is in fileInput! Setting ni_selection == 2\n";
-        cout << "\n";
+//        cout << "\n";
+//        cout << "SuSAv2 is in fileInput! Setting ni_selection == 2\n";
+//        cout << "\n";
 
         tune = "SuSAv2";
         ni_selection = 2;
     } else {
-        cout << "\n";
-        cout << "Could not figure tune, keeping ni = 2\n";
-        cout << "\n";
+//        cout << "\n";
+//        cout << "Could not figure tune, keeping ni = 2\n";
+//        cout << "\n";
 
         ni_selection = 2;
         tune = "unknown";
@@ -410,27 +416,33 @@ void EventAnalyser() {
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
         cout << "\n";
-        cout << "Clearing old plots...\n";
-        cout << "\n";
+        cout << "Clearing old plots...";
+//        cout << "\n";
 
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
+
+        cout << " done.\n\n";
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\n";
-        cout << "Clearing old root files...\n";
-        cout << "\n";
+        cout << "Clearing old root files...";
+//        cout << "\n";
 
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
+
+        cout << " done.\n\n";
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\n";
-        cout << "Clearing old plots & root files...\n";
-        cout << "\n";
+        cout << "Clearing old plots & root files...";
+//        cout << "\n";
 
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
+
+        cout << " done.\n\n";
     } else {
         cout << "\n";
-        cout << "No files were cleared.\n";
-        cout << "\n";
+        cout << "No files were cleared.\n\n";
+//        cout << "\n";
     }
     //</editor-fold>
 
@@ -5350,7 +5362,7 @@ void EventAnalyser() {
 
     TList *plots = new TList();
 
-    cout << "Done.\n\n";
+    cout << " Done.\n\n";
 //    cout << "\n";
 
     //</editor-fold>
@@ -8592,7 +8604,7 @@ void EventAnalyser() {
     cout << "\n";
     cout << "\n";
     cout << "===========================================================================\n";
-    cout << "\t\t\t\tExecution summary\n";
+    cout << "\t\t\tExecution summary\n";
     cout << "===========================================================================\n";
     cout << "\n";
 
