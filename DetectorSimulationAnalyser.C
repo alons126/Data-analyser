@@ -30,9 +30,14 @@ using namespace clas12;
 using namespace std;
 
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "Simplify"
+
 void EventAnalyser() {
 
     string AnalyserVersion = "Beta version";
+
+    bool selection_test_2p = false, selection_test_1n1p = false;
 
 //  Code settings
 //  =====================================================================================================================================================================
@@ -51,8 +56,8 @@ void EventAnalyser() {
     //<editor-fold desc="Input processing (to determine custom_FSI_status)">
     string LoadedInput = AnalyseFile;
 //    string LoadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of("/") + 1);
-    string fileInput = LoadedInput.substr(LoadedInput.find_last_of("/") + 1);
+    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
+    string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
 
     if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
@@ -5363,8 +5368,8 @@ void EventAnalyser() {
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
     c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-    c12.addAtLeastPid(2212,1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-    c12.addAtLeastPid(2112,0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
 
     c12.addZeroOfRestPid(); // nothing else
 
@@ -5375,22 +5380,24 @@ void EventAnalyser() {
 
         auto particles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
-        auto electrons=c12.getByID(11);
-        auto protons=c12.getByID(2212);
-        auto neutrons=c12.getByID(2112);
+        auto electrons = c12.getByID(11);
+        auto protons = c12.getByID(2212);
+        auto neutrons = c12.getByID(2112);
 
 // 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        if (protons.size() == 2 && neutrons.size() == 0) {
+        if (calculate_2p && protons.size() == 2 && neutrons.size() == 0) {
             ++num_of_2p_events;
 
-            cout << "==========================================================================\n";
-            cout << "num_of_2p_events = " << num_of_2p_events << "\n";
-            cout << "\n";
-            cout << "\n";
-            cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
-            cout << "\n";
-            cout << "\n";
+            if (selection_test_2p) {
+                cout << "==========================================================================\n";
+                cout << "num_of_2p_events = " << num_of_2p_events << "\n";
+                cout << "\n";
+                cout << "\n";
+                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
+                cout << "\n";
+                cout << "\n";
+            }
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
@@ -5404,13 +5411,15 @@ void EventAnalyser() {
 //                Beta_VS_P_2p->Fill(P, Beta);
 //                P_histogram_2p->Fill(P);
 
-                cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+                if (selection_test_2p) {
+                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+                }
 
                 //<editor-fold desc="Proton selector (2p)">
                 if (particlePDG_2p == 2212) {
                     ++ProtonCounter_2p;
-    //                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
-    //                    cout << "i = " << i << "\n";
+                    //                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+                    //                    cout << "i = " << i << "\n";
                     if (ProtonCounter_2p == 1) {
                         Proton_1_ind_2p = i;
 //                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
@@ -5425,7 +5434,7 @@ void EventAnalyser() {
                     }
                 } else if (particlePDG_2p == 11) {
                     Lepton_ind_2p = i;
-    //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
+                    //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
 //                        cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
                 } else if (particlePDG_2p != 2212) {
                     ++OtherParticleCounter_2p;
@@ -5438,162 +5447,109 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-            }
-        }
-
-// 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        if (protons.size() == 1 && neutrons.size() == 1) {
-            ++num_of_1n1p_events;
-
-            cout << "==========================================================================\n";
-            cout << "num_of_1n1p_events = " << num_of_1n1p_events << "\n";
-            cout << "\n";
-            cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
-            cout << "\n";
-
-            int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
-            int Lepton_ind_1n1p = -1, Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
-
-            for (int i = 0; i < particles.size(); i++) {
-
-                float particlePDG_1n1p = particles[i]->par()->getPid();
-//                float Beta = particles[i]->par()->getBeta();
-//                float P = particles[i]->par()->getP();
-//
-//                Beta_VS_P_2p->Fill(P, Beta);
-//                P_histogram_2p->Fill(P);
-
-                cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
-
-                //<editor-fold desc="Proton & Neutron selector">
-                if (particlePDG_1n1p == 2212) {
-                    ++ProtonCounter_1n1p;
-                    Proton_ind_1n1p = i;
-                } else if (particlePDG_1n1p == 2112) {
-                    ++NeutronCounter_1n1p;
-                    Neutron_ind_1n1p = i;
-                } else if (particlePDG_1n1p == 11) {
-                    Lepton_ind_1n1p = i;
-//                    cout << "Lepton_ind_1n1p = " << Lepton_ind_1n1p << "\n";
-//                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
-                } else if ((particlePDG_1n1p != 2212) && (particlePDG_1n1p != 2112) && (particlePDG_1n1p != 11)) {
-                    ++OtherParticleCounter_1n1p;
-                    if (OtherParticleCounter_1n1p > 0) {
-                        cout << "\n";
-                        cout << "Additional particles detected (1n1p). PDG = " << particlePDG_1n1p << "\n";
-                        cout << "\n";
-                        cout << "\n";
-                    }
-                }
-                //</editor-fold>
-
-            }
-        }
 
 
+//              Momentum of first proton in Ef[]:
+                double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP();
 
-        /*
-//          Momentum of first proton in Ef[]:
-        double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP();
+//              Momentum of second proton in Ef[]:
+                double P_p2_2p = particles[Proton_2_ind_2p]->par()->getP();
 
-//          Momentum of second proton in Ef[]:
-        double P_p2_2p = particles[Proton_2_ind_2p]->par()->getP();
+//              Momentum of second proton in Ef[]:
+                double P_lp_2p = particles[Lepton_ind_2p]->par()->getP();
 
-//          Momentum of second proton in Ef[]:
-        double P_lp_2p = particles[Lepton_ind_2p]->par()->getP();
+//              Leading proton:
+                double P_L_2p = -1;
 
-//          Leading proton:
-        double P_L_2p = -1;
+//              Recoil proton:
+                double P_R_2p = -1;
 
-//          Recoil proton:
-        double P_R_2p = -1;
+//              Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+                if (P_p1_2p >= 0 && P_p2_2p >= 0) {
+//                if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
 
-//          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-//            if (P_p1_2p >= 0 && P_p2_2p >= 0) {
 
-            if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
 //                double E_cal_2p;
-//
+
 //                if (BEnergyToNucleusCon == true) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272) + 2 * BEnergyToNucleus;
 //                } else if (BEnergyToNucleusCon == false) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double theta_l_2p = particles[Lepton_ind_2p]->getTheta();
+                    double theta_l_2p = particles[Lepton_ind_2p]->getTheta();
 
-                Theta_l_histogram->Fill(theta_l_2p);
+                    Theta_l_histogram->Fill(theta_l_2p);
 
 //                  NOT REALLY dtheta:
-                double d_theta_2p = acos(
-                        (particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
-                         particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
-                         particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx()) /
-                        (particles[Proton_1_ind_2p]->getP() * particles[Proton_2_ind_2p]->getP()));
-                dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
+                    double d_theta_2p = acos(
+                            (particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
+                             particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
+                             particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx()) /
+                            (particles[Proton_1_ind_2p]->getP() * particles[Proton_2_ind_2p]->getP()));
+                    dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
 
-                //<editor-fold desc="P_L & P_R selector">
-                if (P_p1_2p >= P_p2_2p) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
+                    //<editor-fold desc="P_L & P_R selector">
+                    if (P_p1_2p >= P_p2_2p) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
 
 //                      Leading proton:
-                    double P_L_2p = P_p1_2p;
+                        double P_L_2p = P_p1_2p;
 
 //                      Recoil proton:
-                    double P_R_2p = P_p2_2p;
+                        double P_R_2p = P_p2_2p;
 
-                    P_L_hist_2p->Fill(P_L_2p);
-                    P_R_hist_2p->Fill(P_R_2p);
+                        P_L_hist_2p->Fill(P_L_2p);
+                        P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
+                        double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double d_phi_p2 = phi_p1 - phi_p2; // In radians
 
-                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
-                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
+                        double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
+                        double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
 
-                    phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
-                    phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
-                    dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+                        phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+                        phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+                        dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
-                    Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
-                    Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
+                        Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+                        Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
 //                    }
-                } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
+                    } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
 
 //                      Leading proton:
-                    double P_L_2p = P_p2_2p;
+                        double P_L_2p = P_p2_2p;
 
 //                      Recoil proton:
-                    double P_R_2p = P_p1_2p;
+                        double P_R_2p = P_p1_2p;
 
-                    P_L_hist_2p->Fill(P_L_2p);
-                    P_R_hist_2p->Fill(P_R_2p);
+                        P_L_hist_2p->Fill(P_L_2p);
+                        P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
+                        double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                        double d_phi_p2 = phi_p1 - phi_p2; // In radians
 
-                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
-                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
+                        double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
+                        double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
 
-                    phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
-                    phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
-                    dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+                        phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+                        phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+                        dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
-                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
-                    Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
+                        Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+                        Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
 //                    }
-                }
-                //</editor-fold>
+                    }
+                    //</editor-fold>
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
@@ -5710,10 +5666,66 @@ void EventAnalyser() {
 //                //</editor-fold>
 
 //            }
+                } // end of momentum cut if
+
+            } // end of loop over particles
+
+        } // end of 2p if
+
+// 1n1p -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1) {
+            ++num_of_1n1p_events;
+
+            if (selection_test_1n1p) {
+                cout << "==========================================================================\n";
+                cout << "num_of_1n1p_events = " << num_of_1n1p_events << "\n";
+                cout << "\n";
+                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
+                cout << "\n";
             }
 
+            int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
+            int Lepton_ind_1n1p = -1, Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
 
-            */
+            for (int i = 0; i < particles.size(); i++) {
+
+                float particlePDG_1n1p = particles[i]->par()->getPid();
+//                float Beta = particles[i]->par()->getBeta();
+//                float P = particles[i]->par()->getP();
+//
+//                Beta_VS_P_2p->Fill(P, Beta);
+//                P_histogram_2p->Fill(P);
+
+                if (selection_test_1n1p) {
+                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
+                }
+
+                //<editor-fold desc="Proton & Neutron selector">
+                if (particlePDG_1n1p == 2212) {
+                    ++ProtonCounter_1n1p;
+                    Proton_ind_1n1p = i;
+                } else if (particlePDG_1n1p == 2112) {
+                    ++NeutronCounter_1n1p;
+                    Neutron_ind_1n1p = i;
+                } else if (particlePDG_1n1p == 11) {
+                    Lepton_ind_1n1p = i;
+//                    cout << "Lepton_ind_1n1p = " << Lepton_ind_1n1p << "\n";
+//                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
+                } else if ((particlePDG_1n1p != 2212) && (particlePDG_1n1p != 2112) && (particlePDG_1n1p != 11)) {
+                    ++OtherParticleCounter_1n1p;
+                    if (OtherParticleCounter_1n1p > 0) {
+                        cout << "\n";
+                        cout << "Additional particles detected (1n1p). PDG = " << particlePDG_1n1p << "\n";
+                        cout << "\n";
+                        cout << "\n";
+                    }
+                }
+                //</editor-fold>
+
+            }
+        }
+
 
     }
 
@@ -8589,7 +8601,7 @@ void EventAnalyser() {
     cout << "\n";
     cout << "\n";
     cout << "===========================================================================\n";
-    cout << "Execution summary\n";
+    cout << "\t\t\t\tExecution summary\n";
     cout << "===========================================================================\n";
     cout << "\n";
 
@@ -8611,3 +8623,5 @@ void EventAnalyser() {
     //</editor-fold>
 
 }
+
+#pragma clang diagnostic pop
