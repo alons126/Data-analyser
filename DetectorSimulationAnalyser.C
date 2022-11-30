@@ -4703,7 +4703,7 @@ void EventAnalyser() {
     TH1D *phi_l_2p = new TH1D("#phi_{l} det sim (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
     TH1D *phi_p1_2p = new TH1D("#phi_{p1} det sim (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
     TH1D *phi_p2_2p = new TH1D("#phi_{p2} det sim (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
-    TH1D *dphi_2p = new TH1D("#Delta#phi det sim (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
+    TH1D *dphi_2p = new TH1D("#Delta#phi det sim (2p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
 
     TH1D *phi_l_1n1p = new TH1D("#phi_{l} det sim (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
     TH1D *phi_p_1n1p = new TH1D("#phi_{p} det sim (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
@@ -5825,13 +5825,13 @@ void EventAnalyser() {
     TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
     c1->cd();
     c1->SetGrid();
-    c1->SetBottomMargin(0.15);
+    c1->SetBottomMargin(0.14);
 //        c1->SetBottomMargin(0.1275); // original now
 //    c1->SetBottomMargin(0.125);
 //    c1->SetBottomMargin(0.115); // original
 
     if (wider_margin) {
-        c1->SetLeftMargin(0.15);
+        c1->SetLeftMargin(0.14);
 //
 //            c1->SetLeftMargin(0.1275);
 //            c1->SetRightMargin(0.1275);
