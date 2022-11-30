@@ -632,8 +632,10 @@ void EventAnalyser() {
             fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
             fsEl_VS_theta_l_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
-            fsEl_upper_lim_2p = 2.21;
+            fsEl_upper_lim_2p = 110.;
             fsEl_lower_lim_2p = 1;
+//            fsEl_upper_lim_2p = 2.21;
+//            fsEl_lower_lim_2p = 1;
             fsEl_QEL_upper_lim_2p = 2.3;
             fsEl_QEL_lower_lim_2p = 0;
             fsEl_MEC_upper_lim_2p = 2.3;
@@ -1969,9 +1971,9 @@ void EventAnalyser() {
 
 
 
-//                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
+                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
                 cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
-                cout << "particles[" << Lepton_ind_2p << "]->getEnergy() = " << particles[Lepton_ind_2p]->getEnergy() << "\n\n";
+//                cout << "particles[" << Lepton_ind_2p << "]->getEnergy() = " << particles[Lepton_ind_2p]->getEnergy() << "\n\n";
 
 
 
