@@ -1801,6 +1801,12 @@ void EventAnalyser() {
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
 
+        //The following run conditions can be returned directly by c12
+        cout << "Event count: " << rcdbData.event_count << endl;
+        cout << "Beam energy: " << rcdbData.beam_energy << endl;
+        cout << "Beam current: " << rcdbData.beam_current << endl;
+        cout << "Target Polarisation: " << rcdbData.target_polarization << endl;
+
 // 2p
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
