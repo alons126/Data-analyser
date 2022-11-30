@@ -29,11 +29,10 @@ scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/h
 using namespace clas12;
 using namespace std;
 
-//void Analyser() {
-void EventAnalyser() {
-//void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
-    string AnalyserVersion = "3.1b";
+void EventAnalyser() {
+
+    string AnalyserVersion = "Beta version";
 
 //  Code settings
 //  =====================================================================================================================================================================
@@ -5351,6 +5350,9 @@ void EventAnalyser() {
 
 // Code execution:
 // =======================================================================================================================================================================
+
+    //<editor-fold desc="Code execution">
+
     clas12reader c12(LoadedInput.c_str()); // open file
 
 // 2p+1e - 85 out of 970000
@@ -5789,6 +5791,7 @@ void EventAnalyser() {
 //        c1->Clear();
 
 */
+    //</editor-fold>
 
 
 /*
@@ -8570,42 +8573,41 @@ void EventAnalyser() {
 // Saving histogram list and finishing execution
 // =======================================================================================================================================================================
 
-        //<editor-fold desc="Saving histogram list and finishing execution">
-        cout << "\n";
-        cout << "\n";
-        cout << "Saving histogram list...\n";
-        cout << "\n";
+    //<editor-fold desc="Saving histogram list and finishing execution">
+    cout << "\n";
+    cout << "\n";
+    cout << "Saving histogram list...\n";
+    cout << "\n";
 
-        TFile *fout = new
-                TFile(TListName, "recreate");
-        fout->cd();
-        plots->Write();
-        fout->Write();
-        fout->Close();
+    TFile *fout = new
+            TFile(TListName, "recreate");
+    fout->cd();
+    plots->Write();
+    fout->Write();
+    fout->Close();
 
-        cout << "\n";
-        cout << "\n";
-        cout << "===========================================================================\n";
-        cout << "Execution summary\n";
-        cout << "===========================================================================\n";
-        cout << "\n";
+    cout << "\n";
+    cout << "\n";
+    cout << "===========================================================================\n";
+    cout << "Execution summary\n";
+    cout << "===========================================================================\n";
+    cout << "\n";
 
-        cout << "#(2p) events:\t" << num_of_2p_events << "\n";
-        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
+    cout << "#(2p) events:\t" << num_of_2p_events << "\n";
+    cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
 
-        if (FSI_status == false) {
-            cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
-        } else if (FSI_status == true) {
-            cout << "FSI status:\tON\n";
-        }
-
-        cout << "File input:\t" << LoadedInput << "\n";
-        cout << "Settings mode:\t'" << file_name << "'\n";
-        cout << "\n";
-
-        cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
-        cout << "\n";
-        //</editor-fold>
-
-
+    if (FSI_status == false) {
+        cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
+    } else if (FSI_status == true) {
+        cout << "FSI status:\tON\n";
     }
+
+    cout << "File input:\t" << LoadedInput << "\n";
+    cout << "Settings mode:\t'" << file_name << "'\n";
+    cout << "\n";
+
+    cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
+    cout << "\n";
+    //</editor-fold>
+
+}
