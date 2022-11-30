@@ -8580,8 +8580,7 @@ void EventAnalyser() {
     cout << "Saving histogram list...\n";
     cout << "\n";
 
-    TFile *fout = new
-            TFile(TListName, "recreate");
+    TFile *fout = new TFile(TListName, "recreate");
     fout->cd();
     plots->Write();
     fout->Write();
@@ -8594,8 +8593,17 @@ void EventAnalyser() {
     cout << "===========================================================================\n";
     cout << "\n";
 
-    cout << "#(2p) events:\t" << num_of_2p_events << "\n";
-    cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
+    if (calculate_2p == true) {
+        cout << "#(2p) events:\t" << num_of_2p_events << "\n";
+    } else {
+        cout << "#(2p) events:\tcalculation not performed\n";
+    }
+
+    if (calculate_1n1p == true) {
+        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
+    } else {
+        cout << "#(1n1p) events:\tcalculation not performed\n";
+    }
 
     if (FSI_status == false) {
         cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
