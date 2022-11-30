@@ -3977,7 +3977,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
+    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
+//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
     if (normalize_Histogram == true && custom_normalization == false) {

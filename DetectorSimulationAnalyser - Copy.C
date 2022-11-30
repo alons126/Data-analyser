@@ -2,6 +2,9 @@
 /* Copy commend (local -> JLab):
 scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/home/asportes/clas12project/
 */
+/* Copy commend (JLab -> local):
+scp -r asportes@ftp.jlab.org:/u/home/asportes/Analyser/plots -J /home/alon/Analyser/temp/
+*/
 
 //#include "HipoChain.h"
 
@@ -29,11 +32,22 @@ scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/h
 using namespace clas12;
 using namespace std;
 
-//void Analyser() {
-void EventAnalyser() {
-//void EventAnalyser(int NumberOfProtons, int NumberOfNeutrons) {
 
-    string AnalyserVersion = "3.1b";
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "Simplify"
+
+void EventAnalyser() {
+
+//    cout << "\n";
+//    cout << "\n";
+    cout << "\n\n===========================================================================\n";
+    cout << "\t\t\tDetector simulation analyser\n";
+    cout << "===========================================================================\n";
+    cout << "\n";
+
+    string AnalyserVersion = "Beta version";
+
+    bool selection_test_2p = false, selection_test_1n1p = false;
 
 //  Code settings
 //  =====================================================================================================================================================================
@@ -52,8 +66,8 @@ void EventAnalyser() {
     //<editor-fold desc="Input processing (to determine custom_FSI_status)">
     string LoadedInput = AnalyseFile;
 //    string LoadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of("/") + 1);
-    string fileInput = LoadedInput.substr(LoadedInput.find_last_of("/") + 1);
+    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
+    string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
 
     if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
@@ -89,30 +103,30 @@ void EventAnalyser() {
     string tune;
 
     if (fileInput.find("G18") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "G18 is in fileInput! Setting ni_selection == 3\n";  // and no change to custom_FSI_status
-        cout << "\n";
+//        cout << "\n";
+//        cout << "G18 is in fileInput! Setting ni_selection == 3\n";  // and no change to custom_FSI_status
+//        cout << "\n";
 
         tune = "G18";
         ni_selection = 3;
     } else if (fileInput.find("GEM21") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "GEM21 is in fileInput! Setting ni_selection == 2\n";
-        cout << "\n";
+//        cout << "\n";
+//        cout << "GEM21 is in fileInput! Setting ni_selection == 2\n";
+//        cout << "\n";
 
         tune = "GEM21 (SuSAv2)";
         ni_selection = 2;
     } else if (fileInput.find("SuSAv2") <= fileInput[fileInput.size() - 1]) {
-        cout << "\n";
-        cout << "SuSAv2 is in fileInput! Setting ni_selection == 2\n";
-        cout << "\n";
+//        cout << "\n";
+//        cout << "SuSAv2 is in fileInput! Setting ni_selection == 2\n";
+//        cout << "\n";
 
         tune = "SuSAv2";
         ni_selection = 2;
     } else {
-        cout << "\n";
-        cout << "Could not figure tune, keeping ni = 2\n";
-        cout << "\n";
+//        cout << "\n";
+//        cout << "Could not figure tune, keeping ni = 2\n";
+//        cout << "\n";
 
         ni_selection = 2;
         tune = "unknown";
@@ -132,9 +146,10 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="FSI indicator">
-    cout << "\n";
-    cout << "\n";
-    cout << "Execution variables\n";
+//    cout << "\n";
+//    cout << "\n";
+//    cout << "\nExecution variables\n";
+    cout << "\nExecution variables\n";
     cout << "---------------------------------------------------------------------------\n";
     cout << "File input:\t" << AnalyseFile << "\n";
     cout << "Settings mode:\t'" << file_name << "'\n";
@@ -142,9 +157,8 @@ void EventAnalyser() {
     cout << "ni:\t\t" << ni_selection << "\n";
     cout << "Tune:\t\t" << tune << "\n";
     cout << "\n";
-    cout << "\n";
 
-    cout << "File input\n";
+    cout << "\nFile input\n";
     cout << "---------------------------------------------------------------------------\n";
     cout << "LoadedInput:\t" << LoadedInput << "\n";
     cout << "filePath:\t" << filePath << "\n";
@@ -171,7 +185,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
+    bool calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = true;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
@@ -406,27 +420,33 @@ void EventAnalyser() {
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
         cout << "\n";
-        cout << "Clearing old plots...\n";
-        cout << "\n";
+        cout << "Clearing old plots...";
+//        cout << "\n";
 
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
+
+        cout << " done.\n\n";
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\n";
-        cout << "Clearing old root files...\n";
-        cout << "\n";
+        cout << "Clearing old root files...";
+//        cout << "\n";
 
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
+
+        cout << " done.\n\n";
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\n";
-        cout << "Clearing old plots & root files...\n";
-        cout << "\n";
+        cout << "Clearing old plots & root files...";
+//        cout << "\n";
 
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
+
+        cout << " done.\n\n";
     } else {
         cout << "\n";
-        cout << "No files were cleared.\n";
-        cout << "\n";
+        cout << "No files were cleared.\n\n";
+//        cout << "\n";
     }
     //</editor-fold>
 
@@ -4655,8 +4675,9 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram definitions">
 
     cout << "\n";
-    cout << "Defining histograms...\n";
-    cout << "\n";
+    cout << "Defining histograms...";
+//    cout << "Defining histograms...\n";
+//    cout << "\n";
 
 // Theta histograms -----------------------------------------------------------------------------------
 
@@ -4682,12 +4703,12 @@ void EventAnalyser() {
     TH1D *phi_l_2p = new TH1D("#phi_{l} det sim (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
     TH1D *phi_p1_2p = new TH1D("#phi_{p1} det sim (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
     TH1D *phi_p2_2p = new TH1D("#phi_{p2} det sim (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
-    TH1D *dphi_2p = new TH1D("#Delta#phi det sim (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
+    TH1D *dphi_2p = new TH1D("#Delta#phi det sim (2p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
 
     TH1D *phi_l_1n1p = new TH1D("#phi_{l} det sim (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
     TH1D *phi_p_1n1p = new TH1D("#phi_{p} det sim (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
     TH1D *phi_n_1n1p = new TH1D("#phi_{n} det sim (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
-    TH1D *dphi_1n1p = new TH1D("#Delta#phi det sim (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
+    TH1D *dphi_1n1p = new TH1D("#Delta#phi det sim (1n1p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy histograms ----------------------------------------------------------------------------------
@@ -5343,8 +5364,10 @@ void EventAnalyser() {
 
 // List definition ---------------------------------------------------------------------------------
 
-    TList *plots = new
-            TList();
+    TList *plots = new TList();
+
+    cout << " done.\n\n";
+//    cout << "\n";
 
     //</editor-fold>
 
@@ -5352,7 +5375,7 @@ void EventAnalyser() {
 // Code execution:
 // =======================================================================================================================================================================
 
-// 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //<editor-fold desc="Code execution">
 
     clas12reader c12(LoadedInput.c_str()); // open file
 
@@ -5364,8 +5387,8 @@ void EventAnalyser() {
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
     c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-    c12.addAtLeastPid(2212,1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-    c12.addAtLeastPid(2112,0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
 
     c12.addZeroOfRestPid(); // nothing else
 
@@ -5374,44 +5397,43 @@ void EventAnalyser() {
 
     while (c12.next()) { //loop over events (2p)
 
-        auto particles_2p = c12.getDetParticles(); //particles are now a std::vector of particles for this event
+        auto particles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
-        auto electrons=c12.getByID(11);
-        auto protons=c12.getByID(2212);
-        auto neutrons=c12.getByID(2112);
+        auto electrons = c12.getByID(11);
+        auto protons = c12.getByID(2212);
+        auto neutrons = c12.getByID(2112);
 
-        if (protons.size() == 2 && neutrons.size() == 0) {
+// 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        if (calculate_2p && protons.size() == 2 && neutrons.size() == 0) {
             ++num_of_2p_events;
 
-//            cout << "==========================================================================\n";
-//
-//            cout << "num_of_2p_events = " << num_of_2p_events << "\n";
-//            cout << "\n";
-//
-//            cout << "#electrons = " << electrons.size() << "\n";
-//            cout << "#protons = " << protons.size() << "\n";
-//            cout << "#neutrons = " << neutrons.size() << "\n";
-//            cout << "\n";
+            if (selection_test_2p) {
+                cout << "==========================================================================\n";
+                cout << "num_of_2p_events = " << num_of_2p_events << "\n";
+                cout << "\n";
+                cout << "\n";
+                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
+                cout << "\n";
+                cout << "\n";
+            }
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
 
-            for (int i = 0; i < particles_2p.size(); i++) {
+            for (int i = 0; i < particles.size(); i++) {
 
-                float particlePDG = particles_2p[i]->par()->getPid();
-//                float Beta = particles_2p[i]->par()->getBeta();
-//                float P = particles_2p[i]->par()->getP();
-//
-//                Beta_VS_P_2p->Fill(P, Beta);
-//                P_histogram_2p->Fill(P);
+                float particlePDG_2p = particles[i]->par()->getPid();
 
-                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                if (selection_test_2p) {
+                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+                }
 
                 //<editor-fold desc="Proton selector (2p)">
-                if (particlePDG == 2212) {
+                if (particlePDG_2p == 2212) {
                     ++ProtonCounter_2p;
-    //                    cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-    //                    cout << "i = " << i << "\n";
+                    //                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+                    //                    cout << "i = " << i << "\n";
                     if (ProtonCounter_2p == 1) {
                         Proton_1_ind_2p = i;
 //                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
@@ -5420,102 +5442,39 @@ void EventAnalyser() {
 //                            cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
                     } else if (ProtonCounter_2p > 2) {
                         cout << "\n";
-                        cout << "Additional Protons detected (2p). PDG = " << particlePDG << "\n";
+                        cout << "Additional Protons detected (2p). PDG = " << particlePDG_2p << "\n";
                         cout << "\n";
                         cout << "\n";
                     }
-                } else if (particlePDG == 11) {
+                } else if (particlePDG_2p == 11) {
                     Lepton_ind_2p = i;
-    //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
-//                        cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-                } else if (particlePDG != 2212) {
+                    //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
+//                        cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+                } else if (particlePDG_2p != 2212) {
                     ++OtherParticleCounter_2p;
                     if (OtherParticleCounter_2p > 0) {
                         cout << "\n";
-                        cout << "Additional particles detected (2p). PDG = " << particlePDG << "\n";
+                        cout << "Additional particles detected (2p). PDG = " << particlePDG_2p << "\n";
                         cout << "\n";
                         cout << "\n";
                     }
                 }
                 //</editor-fold>
 
-            }
+            } // end of loop over particles
 
-        }
+            double P_lp_2p = particles[Lepton_ind_2p]->getP(); // Momentum of lepton in particles
+            double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP(); // Momentum of first proton in particles
+            double P_p2_2p = particles[Proton_2_ind_2p]->getP(); // Momentum of first proton in particles
 
-
-        if (protons.size() == 1 && neutrons.size() == 1) {
-            ++num_of_1n1p_events;
-
-            cout << "==========================================================================\n";
-
-            cout << "#electrons = " << electrons.size() << "\n";
-            cout << "#protons = " << protons.size() << "\n";
-            cout << "#neutrons = " << neutrons.size() << "\n";
-            cout << "\n";
-
-            int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
-            int Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
-
-            for (int i = 0; i < particles_2p.size(); i++) {
-
-                float particlePDG = particles_2p[i]->par()->getPid();
-//                float Beta = particles_2p[i]->par()->getBeta();
-//                float P = particles_2p[i]->par()->getP();
-//
-//                Beta_VS_P_2p->Fill(P, Beta);
-//                P_histogram_2p->Fill(P);
-
-                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-
-                //<editor-fold desc="Proton & Neutron selector">
-                for (int i = 0; i < nf; i++) {
-                    if (pdgf[i] == 2212) {
-                        ++ProtonCounter_1n1p;
-                        Proton_ind_1n1p = i;
-                    } else if (pdgf[i] == 2112) {
-                        ++NeutronCounter_1n1p;
-                        Neutron_ind_1n1p = i;
-                    } else if ((pdgf[i] != 2212) && (pdgf[i] != 2112)) {
-                        ++OtherParticleCounter_1n1p;
-                        if (OtherParticleCounter_1n1p > 0) {
-                            cout << "\n";
-                            cout << "Additional particles detected (1n1p). PDG = " << pdgf[i] << "\n";
-                            cout << "\n";
-                            cout << "\n";
-                        }
-                    }
-                }
-                //</editor-fold>
-
-            }
-
-        }
-
-
-
-        /*
-
-
-//          Momentum of first proton in Ef[]:
-        double P_p1_2p = particles_2p[Proton_1_ind_2p]->par()->getP();
-
-//          Momentum of second proton in Ef[]:
-        double P_p2_2p = particles_2p[Proton_2_ind_2p]->par()->getP();
-
-//          Momentum of second proton in Ef[]:
-        double P_lp_2p = particles_2p[Lepton_ind_2p]->par()->getP();
-
-//          Leading proton:
-        double P_L_2p = -1;
-
-//          Recoil proton:
-        double P_R_2p = -1;
+            double P_L_2p = -1; // Leading proton
+            double P_R_2p = -1; // Recoil proton
 
 //          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-//            if (P_p1_2p >= 0 && P_p2_2p >= 0) {
+            if (P_p1_2p >= 0 && P_p2_2p >= 0) {
+//            if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
 
-            if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+
 //                double E_cal_2p;
 //
 //                if (BEnergyToNucleusCon == true) {
@@ -5524,83 +5483,82 @@ void EventAnalyser() {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double theta_l_2p = particles_2p[Lepton_ind_2p]->getTheta();
+                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles
 
                 Theta_l_histogram->Fill(theta_l_2p);
 
-//                  NOT REALLY dtheta:
+//              ***NOT REALLY dtheta:
                 double d_theta_2p = acos(
-                        (particles_2p[Proton_1_ind_2p]->par()->getPx() * particles_2p[Proton_2_ind_2p]->par()->getPx() +
-                         particles_2p[Proton_1_ind_2p]->par()->getPx() * particles_2p[Proton_2_ind_2p]->par()->getPx() +
-                         particles_2p[Proton_1_ind_2p]->par()->getPx() * particles_2p[Proton_2_ind_2p]->par()->getPx()) /
-                        (particles_2p[Proton_1_ind_2p]->getP() * particles_2p[Proton_2_ind_2p]->getP()));
+                        (particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
+                         particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
+                         particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx()) /
+                        (particles[Proton_1_ind_2p]->getP() * particles[Proton_2_ind_2p]->getP()));
                 dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
 
                 //<editor-fold desc="P_L & P_R selector">
                 if (P_p1_2p >= P_p2_2p) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
 
-//                      Leading proton:
-                    double P_L_2p = P_p1_2p;
-
-//                      Recoil proton:
-                    double P_R_2p = P_p2_2p;
-
+                    P_L_2p = P_p1_2p; // Leading proton
                     P_L_hist_2p->Fill(P_L_2p);
+
+                    P_R_2p = P_p2_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p1 = particles_2p[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double phi_p2 = particles_2p[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
-
-                    double theta_p1 = particles_2p[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
-                    double theta_p2 = particles_2p[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
-
+                    double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
                     phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+
+                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
                     phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+
+                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
                     dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
+                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
                     Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+
+                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
                     Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
 //                    }
+
                 } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
 
-//                      Leading proton:
-                    double P_L_2p = P_p2_2p;
-
-//                      Recoil proton:
-                    double P_R_2p = P_p1_2p;
-
+                    P_L_2p = P_p2_2p; // Leading proton
                     P_L_hist_2p->Fill(P_L_2p);
+
+                    P_R_2p = P_p1_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p2 = particles_2p[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double phi_p1 = particles_2p[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
-
-                    double theta_p2 = particles_2p[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
-                    double theta_p1 = particles_2p[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
-
-                    phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+                    double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
                     phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+
+                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                    phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+
+                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
                     dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
-                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
                     Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
-//
+
+                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
+                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+
+                    //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
 //                    }
-                }
+
+                } // end of P_L & P_R selector
                 //</editor-fold>
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
-//                P_lp_hist_2p->Fill(P_lp_2p);
+                P_lp_hist_2p->Fill(P_lp_2p);
 
 //                fsEl_2p->Fill(El);
 //                Theta_l_histogram->Fill(Theta_l_histogram);
@@ -5713,602 +5671,714 @@ void EventAnalyser() {
 //                //</editor-fold>
 
 //            }
+            } // end of momentum cut if
+
+        } // end of 2p if
+
+// 1n1p -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1) {
+            ++num_of_1n1p_events;
+
+            if (selection_test_1n1p) {
+                cout << "==========================================================================\n";
+                cout << "num_of_1n1p_events = " << num_of_1n1p_events << "\n";
+                cout << "\n";
+                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
+                cout << "\n";
             }
 
+            int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
+            int Lepton_ind_1n1p = -1, Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
 
-            */
+            for (int i = 0; i < particles.size(); i++) {
 
-    }
+                float particlePDG_1n1p = particles[i]->par()->getPid();
 
-    //      Normalization factor:
-//        double theta_l_integral = Theta_l_histogram->Integral() + theta_l_1n1p->Integral();
-//
-//        //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-//        histPlotter1D(c1, Theta_l_histogram, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
-//        //</editor-fold>
+                if (selection_test_1n1p) {
+                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
+                }
 
+                //<editor-fold desc="Proton & Neutron selector">
+                if (particlePDG_1n1p == 2212) {
+                    ++ProtonCounter_1n1p;
+                    Proton_ind_1n1p = i;
+                } else if (particlePDG_1n1p == 2112) {
+                    ++NeutronCounter_1n1p;
+                    Neutron_ind_1n1p = i;
+                } else if (particlePDG_1n1p == 11) {
+                    Lepton_ind_1n1p = i;
+//                    cout << "Lepton_ind_1n1p = " << Lepton_ind_1n1p << "\n";
+//                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
+                } else if ((particlePDG_1n1p != 2212) && (particlePDG_1n1p != 2112) && (particlePDG_1n1p != 11)) {
+                    ++OtherParticleCounter_1n1p;
+                    if (OtherParticleCounter_1n1p > 0) {
+                        cout << "\n";
+                        cout << "Additional particles detected (1n1p). PDG = " << particlePDG_1n1p << "\n";
+                        cout << "\n";
+                        cout << "\n";
+                    }
+                }
+                //</editor-fold>
 
-//        Beta_VS_P_2p->SetStats(0);
-//        Beta_VS_P_2p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/Beta_VS_P_2p.png");
-//        c1->Clear();
+                double P_p_1n1p = rCalc(pxf[Proton_ind_1n1p], pyf[Proton_ind_1n1p], pzf[Proton_ind_1n1p]); // Proton momentum
+                double P_n_1n1p = rCalc(pxf[Neutron_ind_1n1p], pyf[Neutron_ind_1n1p], pzf[Neutron_ind_1n1p]); // Neutron momentum
 
-//        P_histogram_2p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/P_histogram_2p.png");
-//        c1->Clear();
+//              Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+                if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
+//                if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
 
+//                    double E_cal_1n1p;
 
+//                    if (BEnergyToNucleusCon == true) {
+//                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565) + 2 * BEnergyToNucleus;
+//                    } else if (BEnergyToNucleusCon == false) {
+//                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
+//                    }
 
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
+                    double Theta_l_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
 
-/*
-    clas12reader c12(LoadedInput.c_str()); //open file
+                    double phi_p = atan2(pyf[Proton_ind_1n1p], pxf[Proton_ind_1n1p]) * 180.0 / 3.14159265359;
+                    double phi_n = atan2(pyf[Neutron_ind_1n1p], pxf[Neutron_ind_1n1p]) * 180.0 / 3.14159265359;
+                    double d_phi_1n1p = phi_p - phi_n; // In radians
 
-    c12.addExactPid(2212, NumberOfProtons);    //exactly 1 proton
-    c12.addExactPid(2112, NumberOfNeutrons);    //exactly 1 Neutron
-    c12.addExactPid(11, 1);    //exactly 1 electron
-    c12.addZeroOfRestPid();  //nothing else
+                    double theta_p = acos(pzf[Proton_ind_1n1p] / rCalc(pxf[Proton_ind_1n1p], pyf[Proton_ind_1n1p], pzf[Proton_ind_1n1p])) * 180.0 / 3.14159265359;
+                    double theta_n = acos(pzf[Neutron_ind_1n1p] / rCalc(pxf[Neutron_ind_1n1p], pyf[Neutron_ind_1n1p], pzf[Neutron_ind_1n1p])) * 180.0 / 3.14159265359;
 
-//        auto *Beta_VS_P_1n1p = new TH2F("Beta VS P (1n1p)", "#beta VS P (1n1p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.05);
-//        auto *P_histogram_1n1p = new TH1F("P Histogram (1n1p)", "P Histogram (1n1p)", 100, 0, 6);
+//                      NOT REALLY dtheta:
+                    double d_theta_1n1p = acos(
+                            (pxf[Proton_ind_1n1p] * pxf[Neutron_ind_1n1p] + pyf[Proton_ind_1n1p] * pyf[Neutron_ind_1n1p] +
+                             pzf[Proton_ind_1n1p] * pzf[Neutron_ind_1n1p]) / (P_p_1n1p * P_n_1n1p));
 
-    while (c12.next()) { //loop over events (1np)
+//                      Lepton momentum:
+                    double P_lp_1n1p = rCalc(pxl, pyl, pzl);
 
-        auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
+                    E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
 
-//            cout << "1n1p =======================================================================\n";
+                    //<editor-fold desc="Momentum histograms fill (1n1p)">
+                    P_p_hist_1n1p->Fill(P_p_1n1p);
+                    P_n_hist_1n1p->Fill(P_n_1n1p);
+                    P_l_hist_1n1p->Fill(P_lp_1n1p);
+                    //</editor-fold>
 
-        for (int i = 0; i < particles_1n1p.size(); i++) {
+                    //<editor-fold desc="Theta histograms fill (1n1p)">
+                    theta_p_1n1p->Fill(theta_p);
+                    theta_n_1n1p->Fill(theta_n);
+                    dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
+                    //</editor-fold>
 
-            float particlePDG = particles_1n1p[i]->par()->getPid();
-            float Beta = particles_1n1p[i]->par()->getBeta();
-            float P = particles_1n1p[i]->par()->getP();
+                    //<editor-fold desc="Phi histograms fill (1n1p)">
+                    phi_p_1n1p->Fill(phi_p);
+                    phi_n_1n1p->Fill(phi_n);
+                    dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
+                    //</editor-fold>
 
-//                Beta_VS_P_1n1p->Fill(P, Beta);
-//                P_histogram_1n1p->Fill(P);
+                    //<editor-fold desc="Energy histograms fill (1n1p)">
+                    theta_l_1n1p->Fill(Theta_l_1n1p);
+                    phi_l_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+                    fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+                    fsEl_1n1p->Fill(El);
+                    //</editor-fold>
 
-//                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
+                    E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
 
+                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        E_Trans15_all_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        E_Trans45_all_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        E_Trans90_all_1n1p->Fill(Ev - El);
+                    }
+
+                    //<editor-fold desc="Histogram fill by reaction (1n1p)">
+                    if (qel == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_QEL_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_QEL_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_QEL_1n1p->Fill(Ev - El);
+                        }
+
+                        fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+
+                        E_cal_QEL_1n1p->Fill(E_cal_1n1p);
+                        E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+                        E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
+                        E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
+                        E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
+                        E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
+                        E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
+                        E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
+                        E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
+                        E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
+                        E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
+
+                        E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+
+                        fsEl_QEL_1n1p->Fill(El);
+                    } else if (mec == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_MEC_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_MEC_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_MEC_1n1p->Fill(Ev - El);
+                        }
+
+                        fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+
+                        E_cal_MEC_1n1p->Fill(E_cal_1n1p);
+
+                        E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+
+                        fsEl_MEC_1n1p->Fill(El);
+                    } else if (res == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_RES_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_RES_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_RES_1n1p->Fill(Ev - El);
+                        }
+
+                        E_cal_RES_1n1p->Fill(E_cal_1n1p);
+
+                        fsEl_RES_1n1p->Fill(El);
+                    } else if (dis == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_DIS_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_DIS_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_DIS_1n1p->Fill(Ev - El);
+                        }
+
+                        E_cal_DIS_1n1p->Fill(E_cal_1n1p);
+
+                        fsEl_DIS_1n1p->Fill(El);
+                    }
+                    //</editor-fold>
+                }
+
+            }
         }
-
-//            cout << "\n";
-
     }
 
-//        Beta_VS_P_1n1p->SetStats(0);
-//        Beta_VS_P_1n1p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/Beta_VS_P_1n1p.png");
-//        c1->Clear();
-//
-//        P_histogram_1n1p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/P_histogram_1n1p.png");
-//        c1->Clear();
-
-*/
-
-
-/*
+    //</editor-fold>
 
 
 //  Canvas definitions
 // =======================================================================================================================================================================
 
-        //<editor-fold desc="Canvas definitions">
+    //<editor-fold desc="Canvas definitions">
 
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1000); // original
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1250);
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1150);
-        TCanvas *c1 = new
-                TCanvas("canvas", "canvas", 1650, 1150);
-        c1->cd();
-        c1->SetGrid();
-        c1->SetBottomMargin(0.1275);
+    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+    c1->cd();
+    c1->SetGrid();
+    c1->SetBottomMargin(0.14);
+//        c1->SetBottomMargin(0.1275); // original now
 //    c1->SetBottomMargin(0.125);
 //    c1->SetBottomMargin(0.115); // original
 
-        if (wider_margin) {
-            c1->SetLeftMargin(0.1275);
-            c1->SetRightMargin(0.1275);
-        }
-        //</editor-fold>
+    if (wider_margin) {
+        c1->SetLeftMargin(0.14);
+//
+//            c1->SetLeftMargin(0.1275);
+//            c1->SetRightMargin(0.1275);
+    }
+    //</editor-fold>
 
 
 //  Histograms plots
 // =======================================================================================================================================================================
 
-        //<editor-fold desc="Histograms plots">
+    //<editor-fold desc="Histograms plots">
 
 //  Theta histograms
 //  ===================================================================================================
 
-        if (Theta_plots) {
+    if (Theta_plots) {
 
-            cout << "\n";
-            cout << "\n";
-            cout << "Plotting Theta histograms...\n";
-            cout << "\n";
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting Theta histograms...\n";
+        cout << "\n";
 
 //  Theta of outgoing lepton histograms --------------------------------------------------------------
 
 //      Normalization factor:
-            double theta_l_integral = Theta_l_histogram->Integral() + theta_l_1n1p->Integral();
+        double theta_l_integral = Theta_l_histogram->Integral() + theta_l_1n1p->Integral();
 
-            //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-            histPlotter1D(c1, Theta_l_histogram, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
+        histPlotter1D(c1, Theta_l_histogram, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Theta of outgoing lepton histogram (1n1p)">
-            histPlotter1D(c1, theta_l_1n1p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "1n1p", kRed, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="Theta of outgoing lepton histogram (1n1p)">
+        histPlotter1D(c1, theta_l_1n1p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "1n1p", kRed, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Theta of outgoing lepton histogram (stack)">
-            ThetaStack->Draw("nostack");
-            ThetaStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-            ThetaStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-            ThetaStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-            ThetaStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        //<editor-fold desc="Theta of outgoing lepton histogram (stack)">
+        ThetaStack->Draw("nostack");
+        ThetaStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        ThetaStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        ThetaStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        ThetaStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-            if (normalized_theta_l_plots) {
-                ThetaStack->SetTitle("#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p) - Normalized");
-                ThetaStack->GetYaxis()->SetTitle("Probability (%)");
-                ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-            } else {
-                ThetaStack->GetYaxis()->SetTitle("Arbitrary units");
-                ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-            }
+        if (normalized_theta_l_plots) {
+            ThetaStack->SetTitle("#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p) - Normalized");
+            ThetaStack->GetYaxis()->SetTitle("Probability (%)");
+            ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        } else {
+            ThetaStack->GetYaxis()->SetTitle("Arbitrary units");
+            ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        }
 
-            auto ThetaStack_legend = new
-                    TLegend(0.75, 0.775, 0.875, 0.9);
+        auto ThetaStack_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
 
-            TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(Theta_l_histogram, "2p", "l");
-            TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
-            ThetaStack_legend->Draw();
+        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(Theta_l_histogram, "2p", "l");
+        TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
+        ThetaStack_legend->Draw();
 
-            plots->Add(ThetaStack);
-            c1->SetLogy(1);
-            c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_log_scale.png");
-            c1->SetLogy(0);
-            c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_linear_scale.png");
-            c1->Clear();
-            //</editor-fold>
+        plots->Add(ThetaStack);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/theta_histograms/Theta_of_lepton_stack_linear_scale.png");
+        c1->Clear();
+        //</editor-fold>
 
 //  Theta of nucleon 1 histogram ----------------------------------------------------------------------
 
-            //<editor-fold desc="Theta of Proton 1 histogram (2p)">
-            histPlotter1D(c1, Theta_p1_histogram, normalized_theta_p1_plots, true, 1., "#theta_{p1} of Proton 1", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_1", "plots/theta_histograms/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Theta of Proton 1 histogram (2p)">
+        histPlotter1D(c1, Theta_p1_histogram, normalized_theta_p1_plots, true, 1., "#theta_{p1} of Proton 1", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_1", "plots/theta_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Theta of Proton histogram (1n1p)">
-            histPlotter1D(c1, theta_p_1n1p, normalized_theta_p_plots, true, 1., "#theta_{p} of Scattered Proton", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Theta of Proton histogram (1n1p)">
+        histPlotter1D(c1, theta_p_1n1p, normalized_theta_p_plots, true, 1., "#theta_{p} of Scattered Proton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
 //  Theta of nucleon 2 histogram ---------------------------------------------------------------------
 
-            //<editor-fold desc="Theta of Proton 2 histogram (2p)">
-            histPlotter1D(c1, Theta_p2_histogram, normalized_theta_p2_plots, true, 1., "#theta_{p2} of Proton 2", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_2", "plots/theta_histograms/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Theta of Proton 2 histogram (2p)">
+        histPlotter1D(c1, Theta_p2_histogram, normalized_theta_p2_plots, true, 1., "#theta_{p2} of Proton 2", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_proton_2", "plots/theta_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Theta of Neutron histogram (1n1p)">
-            histPlotter1D(c1, theta_n_1n1p, normalized_theta_p_plots, true, 1., "#theta_{n} of Scattered Neutron", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_neutron", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Theta of Neutron histogram (1n1p)">
+        histPlotter1D(c1, theta_n_1n1p, normalized_theta_p_plots, true, 1., "#theta_{n} of Scattered Neutron", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "Theta_of_neutron", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
 //  dTheta and dPhi histograms ----------------------------------------------------------------------------------
 
-            //<editor-fold desc="dTheta histogram (2p)">
-            histPlotter1D(c1, dtheta_2p, normalized_dtheta_2p_plots, true, 1., "#gamma = #theta_{p1} - #theta_{p2} of Scattered Protons", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_protons", "plots/theta_histograms/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="dTheta histogram (2p)">
+        histPlotter1D(c1, dtheta_2p, normalized_dtheta_2p_plots, true, 1., "#gamma = #theta_{p1} - #theta_{p2} of Scattered Protons", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_protons", "plots/theta_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="dTheta histogram (1n1p)">
-            histPlotter1D(c1, dtheta_1n1p, normalized_dtheta_1n1p_plots, true, 1., "#gamma = #theta_{p} - #theta_{n} of Scattered Nucleons", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_nucleons", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="dTheta histogram (1n1p)">
+        histPlotter1D(c1, dtheta_1n1p, normalized_dtheta_1n1p_plots, true, 1., "#gamma = #theta_{p} - #theta_{n} of Scattered Nucleons", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_nucleons", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-        }
+    }
 
 // Phi histograms
 // ====================================================================================================
 
-        if (Phi_plots) {
+    if (Phi_plots) {
 
-            cout << "\n";
-            cout << "\n";
-            cout << "Plotting Phi histograms...\n";
-            cout << "\n";
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting Phi histograms...\n";
+        cout << "\n";
 
 //  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
 
 //      Normalization factor:
-            double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
+        double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
 
-            //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
-            histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
+        histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
-            histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
+        histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Phi of outgoing lepton histogram (stack)">
-            PhiStack->Draw("nostack");
-            PhiStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-            PhiStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-            PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-            PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        //<editor-fold desc="Phi of outgoing lepton histogram (stack)">
+        PhiStack->Draw("nostack");
+        PhiStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        PhiStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-            auto PhiStack_legend = new
-                    TLegend(0.775, 0.775, 0.9, 0.9);
+        auto PhiStack_legend = new TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
-            TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
-            TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
-            PhiStack_legend->Draw();
+        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
+        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
+        PhiStack_legend->Draw();
 
-            plots->Add(PhiStack);
-            c1->SetLogy(0);
-            c1->SaveAs("plots/phi_histograms/Phi_of_lepton_stack.png");
-            c1->Clear();
-            //</editor-fold>
+        plots->Add(PhiStack);
+        c1->SetLogy(0);
+        c1->SaveAs("plots/phi_histograms/Phi_of_lepton_stack.png");
+        c1->Clear();
+        //</editor-fold>
 
 //  Phi of nucleon 1 histogram ------------------------------------------------------------------------
 
-            //<editor-fold desc="Phi of Proton 1 histogram (2p)">
-            histPlotter1D(c1, phi_p1_2p, normalized_phi_p1_plots, true, 1., "#phi_{p1} of Scattered Proton 1", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_1", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Phi of Proton 1 histogram (2p)">
+        histPlotter1D(c1, phi_p1_2p, normalized_phi_p1_plots, true, 1., "#phi_{p1} of Scattered Proton 1", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_1", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Phi of Proton histogram (1n1p)">
-            histPlotter1D(c1, phi_p_1n1p, normalized_phi_p_plots, true, 1., "#phi_{p} of Scattered Proton", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Phi of Proton histogram (1n1p)">
+        histPlotter1D(c1, phi_p_1n1p, normalized_phi_p_plots, true, 1., "#phi_{p} of Scattered Proton", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
 //  Phi of nucleon 2 histogram ------------------------------------------------------------------------
 
-            //<editor-fold desc="Phi of Proton 2 histogram (2p)">
-            histPlotter1D(c1, phi_p2_2p, normalized_phi_p2_plots, true, 1., "#phi_{p2} of Scattered Proton 2", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_2", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Phi of Proton 2 histogram (2p)">
+        histPlotter1D(c1, phi_p2_2p, normalized_phi_p2_plots, true, 1., "#phi_{p2} of Scattered Proton 2", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_proton_2", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="Phi of Neutron histogram (1n1p)">
-            histPlotter1D(c1, phi_n_1n1p, normalized_phi_p_plots, true, 1., "#phi_{n} of Scattered Neutron", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_neutron", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="Phi of Neutron histogram (1n1p)">
+        histPlotter1D(c1, phi_n_1n1p, normalized_phi_p_plots, true, 1., "#phi_{n} of Scattered Neutron", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_neutron", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
 //  dPhi histograms ----------------------------------------------------------------------------------
 
-            //<editor-fold desc="dPhi histogram (2p)">
-            histPlotter1D(c1, dphi_2p, normalized_dphi_2p_plots, true, 1., "#Delta#phi = #phi_{p1} - #phi_{p2} of Scattered Protons", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="dPhi histogram (2p)">
+        histPlotter1D(c1, dphi_2p, normalized_dphi_2p_plots, true, 1., "#Delta#phi = #phi_{p1} - #phi_{p2} of Scattered Protons", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="dPhi histogram (1n1p)">
-            histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
-                          0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="dPhi histogram (1n1p)">
+        histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-        }
+    }
 
+    /*
 // Energy histograms
 // ====================================================================================================
 
-        if (Energy_histogram_plots) {
+    if (Energy_histogram_plots) {
 
-            cout << "\n";
-            cout << "\n";
-            cout << "Plotting energy histograms...\n";
-            cout << "\n";
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting energy histograms...\n";
+        cout << "\n";
 
 //  El histograms --------------------------------------------------------------------------------------
 
 //      Normalization factor:
-            double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
+        double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
 
-            //<editor-fold desc="El histograms (2p)">
+        //<editor-fold desc="El histograms (2p)">
 
-            //<editor-fold desc="El histograms (all interactions, 2p)">
-            histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (all interactions, 2p)">
+        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (QEL only, 2p)">
-            histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (QEL only, 2p)">
+        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (MEC only, 2p)">
-            histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (MEC only, 2p)">
+        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (RES only, 2p)">
-            histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (RES only, 2p)">
+        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (DIS, 2p)">
-            histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (DIS, 2p)">
+        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //</editor-fold>
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (1n1p)">
+        //<editor-fold desc="El histograms (1n1p)">
 
-            //<editor-fold desc="El histograms (all interaction, 1n1p)">
-            histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (all interaction, 1n1p)">
+        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (QEL only, 1n1p)">
-            histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (QEL only, 1n1p)">
+        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (MEC only, 1n1p)">
-            histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (MEC only, 1n1p)">
+        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (RES only, 1n1p)">
-            histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (RES only, 1n1p)">
+        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (DIS, 1n1p)">
-            histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (DIS, 1n1p)">
+        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //</editor-fold>
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (all interactions, stack)">
-            EnergyStack->Draw("nostack");
-            EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-            EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-            EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-            EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        //<editor-fold desc="El histograms (all interactions, stack)">
+        EnergyStack->Draw("nostack");
+        EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-            if (normalized_E_l_plots) {
-                EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
-                EnergyStack->GetYaxis()->SetTitle("Probability (%)");
-                EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-            } else {
-                EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
-                EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-            }
+        if (normalized_E_l_plots) {
+            EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
+            EnergyStack->GetYaxis()->SetTitle("Probability (%)");
+            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        } else {
+            EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
+            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        }
 
-            auto EnergyStack_legend = new
-                    TLegend(0.75, 0.775, 0.875, 0.9);
+        auto EnergyStack_legend = new
+                TLegend(0.75, 0.775, 0.875, 0.9);
 
-            TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
-            TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
-            EnergyStack_legend->Draw();
+        TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
+        TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
+        EnergyStack_legend->Draw();
 
-            plots->Add(EnergyStack);
-            c1->SetLogy(1);
-            c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
-            c1->SetLogy(0);
-            c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
-            c1->Clear();
-            //</editor-fold>
+        plots->Add(EnergyStack);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
+        c1->Clear();
+        //</editor-fold>
 
 //  Final State E_{l} vs #theta_{l} histogram ---------------------------------------------------------
 
-            double set_Max_z = 4000;;
+        double set_Max_z = 4000;;
 //        double set_Max_z = 1.5;
 
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
 
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
-            double factor_El_VS_theta_l_all_int_2p = 1.;
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
+        double factor_El_VS_theta_l_all_int_2p = 1.;
 
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
-                fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
-                fsEl_VS_theta_l_all_int_2p->Draw("colz");
-                fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
-                fsEl_VS_theta_l_all_int_2p->Draw("colz");
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
+            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
+            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
+            fsEl_VS_theta_l_all_int_2p->Draw("colz");
 //
-                fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
 //
-            }
-
-            fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_all_int_2p);
-            fsEl_VS_theta_l_all_int_2p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
-            double factor_El_VS_theta_l_QEL_only_2p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
-                fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
-                fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-                fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
-                fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-                //
-                fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_QEL_only_2p);
-            fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
-            double factor_El_VS_theta_l_MEC_only_2p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
-                fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
-                fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-                fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
-                fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-                //
-                fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_MEC_only_2p);
-            fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
-            double factor_El_VS_theta_l_all_int_1n1p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
-                fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
-                fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-                fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
-                fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-                //
-                fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_all_int_1n1p);
-            fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
-            double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
-                fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
-                fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-                fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
-                fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-                //
-                fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
-            fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
-            double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
-                fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
-                fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-                fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
-                fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-                //
-                fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
-            fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //</editor-fold>
-
         }
+
+        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_all_int_2p);
+        fsEl_VS_theta_l_all_int_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
+        double factor_El_VS_theta_l_QEL_only_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
+            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
+            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
+            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            //
+            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
+        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
+        double factor_El_VS_theta_l_MEC_only_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
+            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
+            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
+            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            //
+            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
+        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
+        double factor_El_VS_theta_l_all_int_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
+            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
+            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
+        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
+        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
+            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
+            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
+        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
+        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
+            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
+            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
+        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //</editor-fold>
+
+    }
 
 // Energy transfer histograms (all interactions)
 // ====================================================================================================
@@ -8568,49 +8638,60 @@ void EventAnalyser() {
 //        c1->Clear();
 //
 //    }
-        //</editor-fold>.q
+    //</editor-fold>.q
 
- */
+*/
+
 
 // Saving histogram list and finishing execution
 // =======================================================================================================================================================================
 
-        //<editor-fold desc="Saving histogram list and finishing execution">
-        cout << "\n";
-        cout << "\n";
-        cout << "Saving histogram list...\n";
-        cout << "\n";
+    //<editor-fold desc="Saving histogram list and finishing execution">
+    cout << "\n";
+    cout << "\n";
+    cout << "Saving histogram list...";
 
-        TFile *fout = new
-                TFile(TListName, "recreate");
-        fout->cd();
-        plots->Write();
-        fout->Write();
-        fout->Close();
+    TFile *fout = new TFile(TListName, "recreate");
+    fout->cd();
+    plots->Write();
+    fout->Write();
+    fout->Close();
 
-        cout << "\n";
-        cout << "\n";
-        cout << "===========================================================================\n";
-        cout << "Execution summary\n";
-        cout << "===========================================================================\n";
-        cout << "\n";
+    cout << " done.\n\n";
 
+    cout << "\n";
+    cout << "\n";
+    cout << "===========================================================================\n";
+    cout << "\t\t\tExecution summary\n";
+    cout << "===========================================================================\n";
+    cout << "\n";
+
+    if (calculate_2p == true) {
         cout << "#(2p) events:\t" << num_of_2p_events << "\n";
-        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
-
-        if (FSI_status == false) {
-            cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
-        } else if (FSI_status == true) {
-            cout << "FSI status:\tON\n";
-        }
-
-        cout << "File input:\t" << LoadedInput << "\n";
-        cout << "Settings mode:\t'" << file_name << "'\n";
-        cout << "\n";
-
-        cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
-        cout << "\n";
-        //</editor-fold>
-
-
+    } else {
+        cout << "#(2p) events:\tcalculation not performed\n";
     }
+
+    if (calculate_1n1p == true) {
+        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
+    } else {
+        cout << "#(1n1p) events:\tcalculation not performed\n";
+    }
+
+    if (FSI_status == false) {
+        cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
+    } else if (FSI_status == true) {
+        cout << "FSI status:\tON\n";
+    }
+
+    cout << "File input:\t" << LoadedInput << "\n";
+    cout << "Settings mode:\t'" << file_name << "'\n";
+    cout << "\n";
+
+    cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
+    cout << "\n";
+    //</editor-fold>
+
+}
+
+#pragma clang diagnostic pop

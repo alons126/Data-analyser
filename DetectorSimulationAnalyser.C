@@ -5403,8 +5403,10 @@ void EventAnalyser() {
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
 
-// 2p -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// 2p
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        //<editor-fold desc="Calculation 2p">
         if (calculate_2p && protons.size() == 2 && neutrons.size() == 0) {
             ++num_of_2p_events;
 
@@ -5424,11 +5426,6 @@ void EventAnalyser() {
             for (int i = 0; i < particles.size(); i++) {
 
                 float particlePDG_2p = particles[i]->par()->getPid();
-//                float Beta = particles[i]->par()->getBeta();
-//                float P = particles[i]->par()->getP();
-//
-//                Beta_VS_P_2p->Fill(P, Beta);
-//                P_histogram_2p->Fill(P);
 
                 if (selection_test_2p) {
                     cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
@@ -5469,7 +5466,7 @@ void EventAnalyser() {
             } // end of loop over particles
 
             double P_lp_2p = particles[Lepton_ind_2p]->getP(); // Momentum of lepton in particles
-            double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP(); // Momentum of first proton in particles
+            double P_p1_2p = particles[Proton_1_ind_2p]->getP(); // Momentum of first proton in particles
             double P_p2_2p = particles[Proton_2_ind_2p]->getP(); // Momentum of first proton in particles
 
             double P_L_2p = -1; // Leading proton
@@ -5679,9 +5676,12 @@ void EventAnalyser() {
             } // end of momentum cut if
 
         } // end of 2p if
+        //</editor-fold>
 
-// 1n1p -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// 1n1p
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        //<editor-fold desc="Calculation 1n1p">
         if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1) {
             ++num_of_1n1p_events;
 
@@ -5699,11 +5699,6 @@ void EventAnalyser() {
             for (int i = 0; i < particles.size(); i++) {
 
                 float particlePDG_1n1p = particles[i]->par()->getPid();
-//                float Beta = particles[i]->par()->getBeta();
-//                float P = particles[i]->getP();
-//
-//                Beta_VS_P_2p->Fill(P, Beta);
-//                P_histogram_2p->Fill(P);
 
                 if (selection_test_1n1p) {
                     cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
@@ -5731,86 +5726,156 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
+                double P_lp_1n1p = particles[Lepton_ind_1n1p]->getP(); // Lepton momentum
+                double P_p_1n1p = particles[Proton_ind_1n1p]->getP(); // Proton momentum
+                double P_n_1n1p = particles[Neutron_ind_1n1p]->getP(); // Neutron momentum
+
+//              Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+                if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
+//                if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
+
+//                    double E_cal_1n1p;
+
+//                    if (BEnergyToNucleusCon == true) {
+//                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565) + 2 * BEnergyToNucleus;
+//                    } else if (BEnergyToNucleusCon == false) {
+//                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
+//                    }
+
+                    //<editor-fold desc="Lepton theta & phi">
+                    double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(), particles[Lepton_ind_1n1p]->par()->getPx()); // Theta of lepton in particles
+                    phi_l_1n1p->Fill(Phi_l_1n1p * 180.0 / 3.14159265359);
+
+                    double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles
+                    theta_l_1n1p->Fill(Theta_l_1n1p);
+                    //</editor-fold>
+
+                    //<editor-fold desc="Nucleon theta & phi">
+                    double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx());
+                    phi_p_1n1p->Fill(phi_p * 180.0 / 3.14159265359);
+
+                    double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx()));
+                    phi_n_1n1p->Fill(phi_n * 180.0 / 3.14159265359);
+
+                    double d_phi_1n1p = phi_p - phi_n; // In radians
+                    dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
+
+                    double theta_p = particles[Proton_ind_1n1p]->getTheta();
+                    theta_p_1n1p->Fill(theta_p * 180.0 / 3.14159265359);
+
+                    double theta_n = particles[Neutron_ind_1n1p]->getTheta();
+                    theta_n_1n1p->Fill(theta_n * 180.0 / 3.14159265359);
+
+//                  ***NOT REALLY dtheta:
+                    double d_theta_1n1p = acos(
+                            (particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
+                             particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
+                             particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx()) /
+                            (particles[Proton_ind_1n1p]->getP() * particles[Neutron_ind_1n1p]->getP()));
+                    dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
+                    //</editor-fold>
+
+//                    E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
+
+                    //<editor-fold desc="Momentum histograms fill (1n1p)">
+                    P_p_hist_1n1p->Fill(P_p_1n1p);
+                    P_n_hist_1n1p->Fill(P_n_1n1p);
+                    P_l_hist_1n1p->Fill(P_lp_1n1p);
+                    //</editor-fold>
+
+                    /*
+                    //<editor-fold desc="Energy histograms fill (1n1p)">
+                    fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+                    fsEl_1n1p->Fill(El);
+                    //</editor-fold>
+
+                    E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+
+                    if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        E_Trans15_all_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        E_Trans45_all_1n1p->Fill(Ev - El);
+                    } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        E_Trans90_all_1n1p->Fill(Ev - El);
+                    }
+
+                    //<editor-fold desc="Histogram fill by reaction (1n1p)">
+                    if (qel == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_QEL_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_QEL_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_QEL_1n1p->Fill(Ev - El);
+                        }
+
+                        fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+
+                        E_cal_QEL_1n1p->Fill(E_cal_1n1p);
+                        E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+                        E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
+                        E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
+                        E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
+                        E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
+                        E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
+                        E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
+                        E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
+                        E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
+                        E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
+
+                        E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+
+                        fsEl_QEL_1n1p->Fill(El);
+                    } else if (mec == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_MEC_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_MEC_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_MEC_1n1p->Fill(Ev - El);
+                        }
+
+                        fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+
+                        E_cal_MEC_1n1p->Fill(E_cal_1n1p);
+
+                        E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+
+                        fsEl_MEC_1n1p->Fill(El);
+                    } else if (res == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_RES_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_RES_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_RES_1n1p->Fill(Ev - El);
+                        }
+
+                        E_cal_RES_1n1p->Fill(E_cal_1n1p);
+
+                        fsEl_RES_1n1p->Fill(El);
+                    } else if (dis == true) {
+                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            E_Trans15_DIS_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            E_Trans45_DIS_1n1p->Fill(Ev - El);
+                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            E_Trans90_DIS_1n1p->Fill(Ev - El);
+                        }
+
+                        E_cal_DIS_1n1p->Fill(E_cal_1n1p);
+
+                        fsEl_DIS_1n1p->Fill(El);
+                    }
+                    //</editor-fold>
+                    */
+                }
+
             }
         }
-
-
+        //</editor-fold>
     }
 
-    //      Normalization factor:
-//        double theta_l_integral = Theta_l_histogram->Integral() + theta_l_1n1p->Integral();
-//
-//        //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-//        histPlotter1D(c1, Theta_l_histogram, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
-//                      0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
-//        //</editor-fold>
-
-
-//        Beta_VS_P_2p->SetStats(0);
-//        Beta_VS_P_2p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/Beta_VS_P_2p.png");
-//        c1->Clear();
-
-//        P_histogram_2p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/P_histogram_2p.png");
-//        c1->Clear();
-
-
-
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-// ======================================================================================================================================================================
-
-/*
-    clas12reader c12(LoadedInput.c_str()); //open file
-
-    c12.addExactPid(2212, NumberOfProtons);    //exactly 1 proton
-    c12.addExactPid(2112, NumberOfNeutrons);    //exactly 1 Neutron
-    c12.addExactPid(11, 1);    //exactly 1 electron
-    c12.addZeroOfRestPid();  //nothing else
-
-//        auto *Beta_VS_P_1n1p = new TH2F("Beta VS P (1n1p)", "#beta VS P (1n1p); P [GeV]; #beta [Arbitrary units]", 250, 0, 6, 250, 0, 1.05);
-//        auto *P_histogram_1n1p = new TH1F("P Histogram (1n1p)", "P Histogram (1n1p)", 100, 0, 6);
-
-    while (c12.next()) { //loop over events (1np)
-
-        auto particles_1n1p = c12.getDetParticles(); //particles is now a std::vector of particles for this event
-
-//            cout << "1n1p =======================================================================\n";
-
-        for (int i = 0; i < particles_1n1p.size(); i++) {
-
-            float particlePDG = particles_1n1p[i]->par()->getPid();
-            float Beta = particles_1n1p[i]->par()->getBeta();
-            float P = particles_1n1p[i]->getP();
-
-//                Beta_VS_P_1n1p->Fill(P, Beta);
-//                P_histogram_1n1p->Fill(P);
-
-//                cout << "particlePDG[" << i << "] = " << particlePDG << "\n";
-
-        }
-
-//            cout << "\n";
-
-    }
-
-//        Beta_VS_P_1n1p->SetStats(0);
-//        Beta_VS_P_1n1p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/Beta_VS_P_1n1p.png");
-//        c1->Clear();
-//
-//        P_histogram_1n1p->Draw("colz");
-//        cout << "\n";
-//        c1->SaveAs("./plots/P_histogram_1n1p.png");
-//        c1->Clear();
-
-*/
     //</editor-fold>
 
 
