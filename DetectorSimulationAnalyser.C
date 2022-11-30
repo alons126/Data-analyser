@@ -2,6 +2,9 @@
 /* Copy commend (local -> JLab):
 scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/home/asportes/clas12project/
 */
+/* Copy commend (JLab -> local):
+scp -r asportes@ftp.jlab.org:/u/home/asportes/Analyser/plots -J /home/alon/Analyser/temp/
+*/
 
 //#include "HipoChain.h"
 
@@ -142,9 +145,9 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="FSI indicator">
-    cout << "\n";
-    cout << "\n";
-    cout << "Execution variables\n";
+//    cout << "\n";
+//    cout << "\n";
+    cout << "\nExecution variables\n";
     cout << "---------------------------------------------------------------------------\n";
     cout << "File input:\t" << AnalyseFile << "\n";
     cout << "Settings mode:\t'" << file_name << "'\n";
@@ -5362,7 +5365,7 @@ void EventAnalyser() {
 
     TList *plots = new TList();
 
-    cout << " Done.\n\n";
+    cout << " done.\n\n";
 //    cout << "\n";
 
     //</editor-fold>
@@ -5810,7 +5813,7 @@ void EventAnalyser() {
     //</editor-fold>
 
 
-/*
+
 
 
 //  Canvas definitions
@@ -5821,8 +5824,7 @@ void EventAnalyser() {
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1000); // original
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1250);
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1150);
-        TCanvas *c1 = new
-                TCanvas("canvas", "canvas", 1650, 1150);
+        TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
         c1->cd();
         c1->SetGrid();
         c1->SetBottomMargin(0.1275);
@@ -5882,8 +5884,7 @@ void EventAnalyser() {
                 ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
             }
 
-            auto ThetaStack_legend = new
-                    TLegend(0.75, 0.775, 0.875, 0.9);
+            auto ThetaStack_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
 
             TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(Theta_l_histogram, "2p", "l");
             TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
@@ -5967,8 +5968,7 @@ void EventAnalyser() {
             PhiStack->GetHistogram()->GetXaxis()->CenterTitle(true);
             PhiStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-            auto PhiStack_legend = new
-                    TLegend(0.775, 0.775, 0.9, 0.9);
+            auto PhiStack_legend = new TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
             TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
@@ -6019,310 +6019,311 @@ void EventAnalyser() {
 
         }
 
+    /*
 // Energy histograms
 // ====================================================================================================
 
-        if (Energy_histogram_plots) {
+    if (Energy_histogram_plots) {
 
-            cout << "\n";
-            cout << "\n";
-            cout << "Plotting energy histograms...\n";
-            cout << "\n";
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting energy histograms...\n";
+        cout << "\n";
 
 //  El histograms --------------------------------------------------------------------------------------
 
 //      Normalization factor:
-            double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
+        double fsEl_integral = fsEl_2p->Integral() + fsEl_1n1p->Integral();
 
-            //<editor-fold desc="El histograms (2p)">
+        //<editor-fold desc="El histograms (2p)">
 
-            //<editor-fold desc="El histograms (all interactions, 2p)">
-            histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (all interactions, 2p)">
+        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (QEL only, 2p)">
-            histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (QEL only, 2p)">
+        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (MEC only, 2p)">
-            histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (MEC only, 2p)">
+        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (RES only, 2p)">
-            histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (RES only, 2p)">
+        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (DIS, 2p)">
-            histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (DIS, 2p)">
+        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
+        //</editor-fold>
 
-            //</editor-fold>
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (1n1p)">
+        //<editor-fold desc="El histograms (1n1p)">
 
-            //<editor-fold desc="El histograms (all interaction, 1n1p)">
-            histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (all interaction, 1n1p)">
+        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (QEL only, 1n1p)">
-            histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (QEL only, 1n1p)">
+        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (MEC only, 1n1p)">
-            histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (MEC only, 1n1p)">
+        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (RES only, 1n1p)">
-            histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (RES only, 1n1p)">
+        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (DIS, 1n1p)">
-            histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
-            //</editor-fold>
+        //<editor-fold desc="El histograms (DIS, 1n1p)">
+        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
+        //</editor-fold>
 
-            //</editor-fold>
+        //</editor-fold>
 
-            //<editor-fold desc="El histograms (all interactions, stack)">
-            EnergyStack->Draw("nostack");
-            EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-            EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-            EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
-            EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        //<editor-fold desc="El histograms (all interactions, stack)">
+        EnergyStack->Draw("nostack");
+        EnergyStack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        EnergyStack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-            if (normalized_E_l_plots) {
-                EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
-                EnergyStack->GetYaxis()->SetTitle("Probability (%)");
-                EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-            } else {
-                EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
-                EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-            }
+        if (normalized_E_l_plots) {
+            EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
+            EnergyStack->GetYaxis()->SetTitle("Probability (%)");
+            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        } else {
+            EnergyStack->GetYaxis()->SetTitle("Arbitrary units");
+            EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        }
 
-            auto EnergyStack_legend = new
-                    TLegend(0.75, 0.775, 0.875, 0.9);
+        auto EnergyStack_legend = new
+                TLegend(0.75, 0.775, 0.875, 0.9);
 
-            TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
-            TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
-            EnergyStack_legend->Draw();
+        TLegendEntry *EnergyStack_entry_2p = EnergyStack_legend->AddEntry(fsEl_2p, "2p", "l");
+        TLegendEntry *EnergyStack_entry_1n1p = EnergyStack_legend->AddEntry(fsEl_1n1p, "1n1p", "l");
+        EnergyStack_legend->Draw();
 
-            plots->Add(EnergyStack);
-            c1->SetLogy(1);
-            c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
-            c1->SetLogy(0);
-            c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
-            c1->Clear();
-            //</editor-fold>
+        plots->Add(EnergyStack);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/Energy_histograms/El_histograms/Final_State_El_linear_scale.png");
+        c1->Clear();
+        //</editor-fold>
 
 //  Final State E_{l} vs #theta_{l} histogram ---------------------------------------------------------
 
-            double set_Max_z = 4000;;
+        double set_Max_z = 4000;;
 //        double set_Max_z = 1.5;
 
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
 
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
-            double factor_El_VS_theta_l_all_int_2p = 1.;
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
+        double factor_El_VS_theta_l_all_int_2p = 1.;
 
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
-                fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
-                fsEl_VS_theta_l_all_int_2p->Draw("colz");
-                fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
-                fsEl_VS_theta_l_all_int_2p->Draw("colz");
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
+            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
+            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
+            fsEl_VS_theta_l_all_int_2p->Draw("colz");
 //
-                fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
 //
-            }
-
-            fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_all_int_2p);
-            fsEl_VS_theta_l_all_int_2p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
-            double factor_El_VS_theta_l_QEL_only_2p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
-                fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
-                fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-                fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
-                fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-                //
-                fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_QEL_only_2p);
-            fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
-            double factor_El_VS_theta_l_MEC_only_2p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
-                fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
-                fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-                fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
-                fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-                //
-                fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_MEC_only_2p);
-            fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
-            double factor_El_VS_theta_l_all_int_1n1p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
-                fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
-                fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-                fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
-                fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-                //
-                fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_all_int_1n1p);
-            fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
-            double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
-                fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
-                fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-                fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
-                fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-                //
-                fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
-            fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
-            double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
-
-            if (normalized_E_l_plots) {
-                fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
-                fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
-                fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-                fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-            } else {
-                fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
-                fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-                //
-                fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
-                //
-            }
-
-            fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
-            fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
-            fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
-            fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
-            c1->SetLogz(1);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
-            c1->SetLogz(0);
-            c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
-            c1->Clear();
-            //</editor-fold>
-
-            //</editor-fold>
-
         }
+
+        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_all_int_2p);
+        fsEl_VS_theta_l_all_int_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
+        double factor_El_VS_theta_l_QEL_only_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
+            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
+            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
+            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            //
+            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
+        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
+        double factor_El_VS_theta_l_MEC_only_2p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
+            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
+            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
+            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            //
+            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
+        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
+        double factor_El_VS_theta_l_all_int_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
+            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
+            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
+        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
+        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
+            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
+            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
+        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
+        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
+
+        if (normalized_E_l_plots) {
+            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
+            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+        } else {
+            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
+            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            //
+            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+            //
+        }
+
+        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
+        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //</editor-fold>
+
+    }
 
 // Energy transfer histograms (all interactions)
 // ====================================================================================================
@@ -8582,9 +8583,9 @@ void EventAnalyser() {
 //        c1->Clear();
 //
 //    }
-        //</editor-fold>.q
+    //</editor-fold>.q
 
- */
+*/
 
 // Saving histogram list and finishing execution
 // =======================================================================================================================================================================
@@ -8592,14 +8593,15 @@ void EventAnalyser() {
     //<editor-fold desc="Saving histogram list and finishing execution">
     cout << "\n";
     cout << "\n";
-    cout << "Saving histogram list...\n";
-    cout << "\n";
+    cout << "Saving histogram list...";
 
     TFile *fout = new TFile(TListName, "recreate");
     fout->cd();
     plots->Write();
     fout->Write();
     fout->Close();
+
+    cout << " done.\n\n";
 
     cout << "\n";
     cout << "\n";
