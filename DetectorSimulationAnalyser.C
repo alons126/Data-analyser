@@ -616,8 +616,10 @@ void EventAnalyser() {
 
         //<editor-fold desc="Energy histograms (2p)">
         if (FSI_status == true) {
-            fsEl_upper_lim_2p = 2.21;
+            fsEl_upper_lim_2p = 110.;
             fsEl_lower_lim_2p = 1;
+//            fsEl_upper_lim_2p = 2.21;
+//            fsEl_lower_lim_2p = 1;
             fsEl_QEL_upper_lim_2p = 2.3;
             fsEl_QEL_lower_lim_2p = 0;
             fsEl_MEC_upper_lim_2p = 2.3;
@@ -632,10 +634,8 @@ void EventAnalyser() {
             fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
             fsEl_VS_theta_l_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
-            fsEl_upper_lim_2p = 110.;
+            fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
-//            fsEl_upper_lim_2p = 2.21;
-//            fsEl_lower_lim_2p = 1;
             fsEl_QEL_upper_lim_2p = 2.3;
             fsEl_QEL_lower_lim_2p = 0;
             fsEl_MEC_upper_lim_2p = 2.3;
