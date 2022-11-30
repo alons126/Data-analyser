@@ -1649,8 +1649,8 @@ void EventAnalyser() {
 // Momentum histograms -----------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
-    THStack *MomentumStack_2p = new THStack("Momentum Stack (2p)", "Momentum Histogram Stack (All Interactions, 2p);Momentum} [GeV]");
-    THStack *MomentumStack_1n1p = new THStack("Momentum Stack (1n1p)", "Momentum Histogram Stack (All Interactions, 1n1p);Momentum} [GeV]");
+    THStack *MomentumStack_2p = new THStack("Momentum Stack (2p)", "Momentum Histogram Stack (All Interactions, 2p);Momentum [GeV]");
+    THStack *MomentumStack_1n1p = new THStack("Momentum Stack (1n1p)", "Momentum Histogram Stack (All Interactions, 1n1p);Momentum [GeV]");
 
     TH1D *P_L_hist_2p = new TH1D("P_{p1} (all interactions, 2p)", ";P_{L} [GeV/c]", 100, P_L_hist_lower_lim_2p, P_L_hist_upper_lim_2p);
     TH1D *P_R_hist_2p = new TH1D("P_{p2} (all interactions, 2p)", ";P_{R} [GeV/c]", 100, P_R_hist_lower_lim_2p, P_R_hist_upper_lim_2p);
@@ -4428,7 +4428,9 @@ void EventAnalyser() {
         MomentumStack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
         MomentumStack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         MomentumStack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         MomentumStack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        MomentumStack_2p->GetHistogram()->GetYaxis()->CenterTitle(true);
         MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
 
         auto MomentumStack_2p_legend = new TLegend(0.775, 0.7, 0.85, 0.875);
@@ -4449,7 +4451,9 @@ void EventAnalyser() {
         MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
         MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
         MomentumStack_1n1p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        MomentumStack_1n1p->GetHistogram()->GetYaxis()->CenterTitle(true);
         MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
 
         auto MomentumStack_1n1p_legend = new TLegend(0.775, 0.7, 0.85, 0.875);
