@@ -5450,13 +5450,13 @@ void EventAnalyser() {
 
 
 //              Momentum of first proton in Ef[]:
-                double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP();
+                double P_p1_2p = particles[Proton_1_ind_2p]->getP();
 
 //              Momentum of second proton in Ef[]:
-                double P_p2_2p = particles[Proton_2_ind_2p]->par()->getP();
+                double P_p2_2p = particles[Proton_2_ind_2p]->getP();
 
 //              Momentum of second proton in Ef[]:
-                double P_lp_2p = particles[Lepton_ind_2p]->par()->getP();
+                double P_lp_2p = particles[Lepton_ind_2p]->getP();
 
 //              Leading proton:
                 double P_L_2p = -1;
@@ -5692,7 +5692,7 @@ void EventAnalyser() {
 
                 float particlePDG_1n1p = particles[i]->par()->getPid();
 //                float Beta = particles[i]->par()->getBeta();
-//                float P = particles[i]->par()->getP();
+//                float P = particles[i]->getP();
 //
 //                Beta_VS_P_2p->Fill(P, Beta);
 //                P_histogram_2p->Fill(P);
@@ -5778,7 +5778,7 @@ void EventAnalyser() {
 
             float particlePDG = particles_1n1p[i]->par()->getPid();
             float Beta = particles_1n1p[i]->par()->getBeta();
-            float P = particles_1n1p[i]->par()->getP();
+            float P = particles_1n1p[i]->getP();
 
 //                Beta_VS_P_1n1p->Fill(P, Beta);
 //                P_histogram_1n1p->Fill(P);
