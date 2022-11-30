@@ -5449,41 +5449,31 @@ void EventAnalyser() {
 
             } // end of loop over particles
 
-//              Momentum of first proton in Ef[]:
-            cout << "Proton_1_ind_2p:\t" << Proton_1_ind_2p << "\n";
-            cout << "\n";
-            double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP();
+            double P_lp_2p = particles[Lepton_ind_2p]->getP(); // Momentum of lepton in particles
+            double P_p1_2p = particles[Proton_1_ind_2p]->par()->getP(); // Momentum of first proton in particles
+            double P_p2_2p = particles[Proton_2_ind_2p]->getP(); // Momentum of first proton in particles
 
-//              Momentum of second proton in Ef[]:
-            double P_p2_2p = particles[Proton_2_ind_2p]->getP();
+            double P_L_2p = -1; // Leading proton
+            double P_R_2p = -1; // Recoil proton
 
-//              Momentum of second proton in Ef[]:
-            double P_lp_2p = particles[Lepton_ind_2p]->getP();
-
-//              Leading proton:
-            double P_L_2p = -1;
-
-//              Recoil proton:
-            double P_R_2p = -1;
-
-//              Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+//          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
             if (P_p1_2p >= 0 && P_p2_2p >= 0) {
-//                if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+//            if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
 
 
 //                double E_cal_2p;
-
+//
 //                if (BEnergyToNucleusCon == true) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272) + 2 * BEnergyToNucleus;
 //                } else if (BEnergyToNucleusCon == false) {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double theta_l_2p = particles[Lepton_ind_2p]->getTheta();
+                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles
 
                 Theta_l_histogram->Fill(theta_l_2p);
 
-//                  NOT REALLY dtheta:
+//              ***NOT REALLY dtheta:
                 double d_theta_2p = acos(
                         (particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
                          particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
@@ -5494,63 +5484,62 @@ void EventAnalyser() {
                 //<editor-fold desc="P_L & P_R selector">
                 if (P_p1_2p >= P_p2_2p) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
 
-//                      Leading proton:
-                    double P_L_2p = P_p1_2p;
-
-//                      Recoil proton:
-                    double P_R_2p = P_p2_2p;
-
+                    P_L_2p = P_p1_2p; // Leading proton
                     P_L_hist_2p->Fill(P_L_2p);
+
+                    P_R_2p = P_p2_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
                     double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
-
-                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
-                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
-
                     phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+
+                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
                     phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+
+                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
                     dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
+                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
                     Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+
+                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
                     Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
 //                    }
+
                 } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
 
-//                      Leading proton:
-                    double P_L_2p = P_p2_2p;
-
-//                      Recoil proton:
-                    double P_R_2p = P_p1_2p;
-
+                    P_L_2p = P_p2_2p; // Leading proton
                     P_L_hist_2p->Fill(P_L_2p);
+
+                    P_R_2p = P_p1_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
                     double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
-
-                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
-                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
-
-                    phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
                     phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+
+                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                    phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+
+                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
                     dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
-                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
                     Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
-//
+
+                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
+                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+
+                    //
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
 //                    }
-                }
+
+                } // end of P_L & P_R selector
                 //</editor-fold>
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
