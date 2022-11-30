@@ -5243,24 +5243,16 @@ void EventAnalyser() {
 // Momentum histograms -----------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
-    THStack *MomentumStack_2p = new
-            THStack("Momentum Stack (2p)", "Momentum Histogram Stack (All Interactions, 2p);Momentum} [GeV]");
-    THStack *MomentumStack_1n1p = new
-            THStack("Momentum Stack (1n1p)", "Momentum Histogram Stack (All Interactions, 1n1p);Momentum} [GeV]");
+    THStack *MomentumStack_2p = new THStack("Momentum Stack (2p)", "Momentum Histogram Stack (All Interactions, 2p);Momentum} [GeV]");
+    THStack *MomentumStack_1n1p = new THStack("Momentum Stack (1n1p)", "Momentum Histogram Stack (All Interactions, 1n1p);Momentum} [GeV]");
 
-    TH1D *P_L_hist_2p = new
-            TH1D("P_{p1} (all interactions, 2p)", ";P_{L} [GeV/c]", 100, P_L_hist_lower_lim_2p, P_L_hist_upper_lim_2p);
-    TH1D *P_R_hist_2p = new
-            TH1D("P_{p2} (all interactions, 2p)", ";P_{R} [GeV/c]", 100, P_R_hist_lower_lim_2p, P_R_hist_upper_lim_2p);
-    TH1D *P_lp_hist_2p = new
-            TH1D("P_{l} (all interactions, 2p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_2p, P_lp_hist_upper_lim_2p);
+    TH1D *P_L_hist_2p = new TH1D("P_{p1} (all interactions, 2p)", ";P_{L} [GeV/c]", 100, P_L_hist_lower_lim_2p, P_L_hist_upper_lim_2p);
+    TH1D *P_R_hist_2p = new TH1D("P_{p2} (all interactions, 2p)", ";P_{R} [GeV/c]", 100, P_R_hist_lower_lim_2p, P_R_hist_upper_lim_2p);
+    TH1D *P_lp_hist_2p = new TH1D("P_{l} (all interactions, 2p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_2p, P_lp_hist_upper_lim_2p);
 
-    TH1D *P_p_hist_1n1p = new
-            TH1D("P_{p} (all interactions, 1n1p)", ";P_{p} [GeV/c]", 100, P_p_hist_lower_lim_1n1p, P_p_hist_upper_lim_1n1p);
-    TH1D *P_n_hist_1n1p = new
-            TH1D("P_{n} (all interactions, 1n1p)", ";P_{n} [GeV/c]", 100, P_n_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p);
-    TH1D *P_l_hist_1n1p = new
-            TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_l_hist_lower_lim_1n1p, P_l_hist_upper_lim_1n1p);
+    TH1D *P_p_hist_1n1p = new TH1D("P_{p} (all interactions, 1n1p)", ";P_{p} [GeV/c]", 100, P_p_hist_lower_lim_1n1p, P_p_hist_upper_lim_1n1p);
+    TH1D *P_n_hist_1n1p = new TH1D("P_{n} (all interactions, 1n1p)", ";P_{n} [GeV/c]", 100, P_n_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p);
+    TH1D *P_lp_hist_1n1p = new TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_l_hist_lower_lim_1n1p, P_l_hist_upper_lim_1n1p);
     //</editor-fold>
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
@@ -5418,7 +5410,7 @@ void EventAnalyser() {
                 cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
                 cout << "\n";
                 cout << "\n";
-            }
+            } // end of selection test if (2p)
 
             int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
             int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
@@ -5429,13 +5421,13 @@ void EventAnalyser() {
 
                 if (selection_test_2p) {
                     cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
-                }
+                } // end of selection test if (2p)
 
                 //<editor-fold desc="Proton selector (2p)">
                 if (particlePDG_2p == 2212) {
                     ++ProtonCounter_2p;
-                    //                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
-                    //                    cout << "i = " << i << "\n";
+//                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+//                    cout << "i = " << i << "\n";
                     if (ProtonCounter_2p == 1) {
                         Proton_1_ind_2p = i;
 //                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
@@ -5450,8 +5442,8 @@ void EventAnalyser() {
                     }
                 } else if (particlePDG_2p == 11) {
                     Lepton_ind_2p = i;
-                    //                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
-//                        cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
+//                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
+//                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
                 } else if (particlePDG_2p != 2212) {
                     ++OtherParticleCounter_2p;
                     if (OtherParticleCounter_2p > 0) {
@@ -5460,14 +5452,14 @@ void EventAnalyser() {
                         cout << "\n";
                         cout << "\n";
                     }
-                }
+                } // end of selector (2p)
                 //</editor-fold>
 
-            } // end of loop over particles
+            } // end of loop over particles vector
 
-            double P_lp_2p = particles[Lepton_ind_2p]->getP(); // Momentum of lepton in particles
-            double P_p1_2p = particles[Proton_1_ind_2p]->getP(); // Momentum of first proton in particles
-            double P_p2_2p = particles[Proton_2_ind_2p]->getP(); // Momentum of first proton in particles
+            double P_lp_2p = particles[Lepton_ind_2p]->getP(); // Momentum of lepton in particles vector
+            double P_p1_2p = particles[Proton_1_ind_2p]->getP(); // Momentum of first proton in particles vector
+            double P_p2_2p = particles[Proton_2_ind_2p]->getP(); // Momentum of first proton in particles vector
 
             double P_L_2p = -1; // Leading proton
             double P_R_2p = -1; // Recoil proton
@@ -5475,7 +5467,6 @@ void EventAnalyser() {
 //          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
             if (P_p1_2p >= 0 && P_p2_2p >= 0) {
 //            if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
-
 
 //                double E_cal_2p;
 //
@@ -5485,8 +5476,10 @@ void EventAnalyser() {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles
+                double Phi_l_2p = atan2(particles[Lepton_ind_2p]->par()->getPy(), particles[Lepton_ind_2p]->par()->getPx()); // Theta of lepton in particles (in radians)
+                phi_l_2p->Fill(Phi_l_2p * 180.0 / 3.14159265359);
 
+                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
                 Theta_l_histogram->Fill(theta_l_2p);
 
 //              ***NOT REALLY dtheta:
@@ -5506,19 +5499,19 @@ void EventAnalyser() {
                     P_R_2p = P_p2_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                    double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton phi (in radians)
                     phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
 
-                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Recoil proton phi (in radians)
                     phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
 
                     double d_phi_p2 = phi_p1 - phi_p2; // In radians
                     dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
-                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
+                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle theta (in radians)
                     Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
 
-                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
+                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle theta (in radians)
                     Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 //
 //                    if (qel == true) {
@@ -5534,19 +5527,19 @@ void EventAnalyser() {
                     P_R_2p = P_p1_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                    double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton phi (in radians)
                     phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
 
-                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Leading proton azimuthal angle in radians
+                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Recoil proton phi (in radians)
                     phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
 
                     double d_phi_p2 = phi_p1 - phi_p2; // In radians
                     dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
 
-                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle in radians
+                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle theta (in radians)
                     Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
 
-                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle in radians
+                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle theta (in radians)
                     Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
 
                     //
@@ -5558,9 +5551,9 @@ void EventAnalyser() {
                 } // end of P_L & P_R selector
                 //</editor-fold>
 
-//                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
+                P_lp_hist_2p->Fill(P_lp_2p); // Lepton momentum
 
-//                P_lp_hist_2p->Fill(P_lp_2p);
+//                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
 //                fsEl_2p->Fill(El);
 //                Theta_l_histogram->Fill(Theta_l_histogram);
@@ -5691,7 +5684,7 @@ void EventAnalyser() {
                 cout << "\n";
                 cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n";
                 cout << "\n";
-            }
+            } // end of selection test if (1n1p)
 
             int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
             int Lepton_ind_1n1p = -1, Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
@@ -5732,7 +5725,7 @@ void EventAnalyser() {
             double P_p_1n1p = particles[Proton_ind_1n1p]->getP(); // Proton momentum
             double P_n_1n1p = particles[Neutron_ind_1n1p]->getP(); // Neutron momentum
 
-//              Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
+//          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
             if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
 //                if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
 
@@ -5745,30 +5738,31 @@ void EventAnalyser() {
 //                    }
 
                 //<editor-fold desc="Lepton theta & phi">
-                double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(), particles[Lepton_ind_1n1p]->par()->getPx()); // Theta of lepton in particles
+                double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(),
+                                          particles[Lepton_ind_1n1p]->par()->getPx()); // Thi of lepton in particles (in radians)
                 phi_l_1n1p->Fill(Phi_l_1n1p * 180.0 / 3.14159265359);
 
-                double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles
+                double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles (in radians)
                 theta_l_1n1p->Fill(Theta_l_1n1p);
                 //</editor-fold>
 
                 //<editor-fold desc="Nucleon theta & phi">
-                double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx());
+                double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx()); // Momentum of proton in particles
                 phi_p_1n1p->Fill(phi_p * 180.0 / 3.14159265359);
 
-                double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx());
+                double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx()); // Momentum of neutron in particles
                 phi_n_1n1p->Fill(phi_n * 180.0 / 3.14159265359);
 
                 double d_phi_1n1p = phi_p - phi_n; // In radians
                 dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
 
-                double theta_p = particles[Proton_ind_1n1p]->getTheta();
+                double theta_p = particles[Proton_ind_1n1p]->getTheta(); // Theta of proton in particles (in radians)
                 theta_p_1n1p->Fill(theta_p * 180.0 / 3.14159265359);
 
-                double theta_n = particles[Neutron_ind_1n1p]->getTheta();
+                double theta_n = particles[Neutron_ind_1n1p]->getTheta(); // Theta of neutron in particles (in radians)
                 theta_n_1n1p->Fill(theta_n * 180.0 / 3.14159265359);
 
-//                  ***NOT REALLY dtheta:
+//              ***NOT REALLY dtheta:
                 double d_theta_1n1p = acos(
                         (particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
                          particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
@@ -5782,7 +5776,7 @@ void EventAnalyser() {
                 //<editor-fold desc="Momentum histograms fill (1n1p)">
                 P_p_hist_1n1p->Fill(P_p_1n1p);
                 P_n_hist_1n1p->Fill(P_n_1n1p);
-                P_l_hist_1n1p->Fill(P_lp_1n1p);
+                P_lp_hist_1n1p->Fill(P_lp_1n1p);
                 //</editor-fold>
 
                 /*
@@ -7989,87 +7983,85 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //    }
-
+*/
 
 // Momentum histograms
 // ====================================================================================================
 
-//    if (momentum_plots) {
-//
-//        cout << "\n";
-//        cout << "\n";
-//        cout << "Plotting momentum histograms for 2p and 1n1p...\n";
-//        cout << "\n";
-//
-//        //<editor-fold desc="Momentum histograms (2p)">
-//        histPlotter1D(c1, P_L_hist_2p, normalized_P_L_plots, false, 1., "Momentum Histogram of Leading Proton P_{L} = P_{p1}", "all interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, MomentumStack_2p, "P_L_histogram", "plots/momentum_histograms/2p/", "2p", kBlue, true, true, true);
-//
-//        histPlotter1D(c1, P_R_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Recoil Proton P_{R} = P_{p2}", "all interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, MomentumStack_2p, "P_R_histogram", "plots/momentum_histograms/2p/", "2p", kRed, true, true, true);
-//
-//        histPlotter1D(c1, P_lp_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, MomentumStack_2p, "P_lp_histogram", "plots/momentum_histograms/2p/", "2p", kGreen, true, true, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Momentum histograms (1n1p)">
-//        histPlotter1D(c1, P_p_hist_1n1p, normalized_P_L_plots, false, 1., "Momentum Histogram of Scattered Proton P_{p}", "all interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, MomentumStack_1n1p, "P_p_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kBlue, true, true, true);
-//
-//        histPlotter1D(c1, P_n_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Scattered Neutron P_{n}", "all interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, MomentumStack_1n1p, "P_n_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kRed, true, true, true);
-//
-//        histPlotter1D(c1, P_l_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, MomentumStack_1n1p, "P_l_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Momentum histogram stack (2p)">
-//        MomentumStack_2p->Draw("nostack");
-//        MomentumStack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-//        MomentumStack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-//        MomentumStack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
-//        MomentumStack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-//        MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
-//
-//        auto MomentumStack_2p_legend = new
-//                TLegend(0.775, 0.7, 0.85, 0.875);
-//
-//        TLegendEntry *MomentumStack_2p_legend_P_L_entry = MomentumStack_2p_legend->AddEntry(P_L_hist_2p, "P_{L}", "l");
-//        TLegendEntry *MomentumStack_2p_legend_P_R_entry = MomentumStack_2p_legend->AddEntry(P_R_hist_2p, "P_{R}", "l");
-//        TLegendEntry *MomentumStack_2p_legend_P_lp_entry = MomentumStack_2p_legend->AddEntry(P_lp_hist_2p, "P_{l}", "l");
-//
-//        MomentumStack_2p_legend->Draw();
-//
-//        plots->Add(MomentumStack_2p);
-//        c1->SaveAs("plots/momentum_histograms/Momentum_stack_2p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Momentum histogram stack (1n1p)">`
-//        MomentumStack_1n1p->Draw("nostack");
-//        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-//        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-//        MomentumStack_1n1p->GetHistogram()->GetXaxis()->CenterTitle(true);
-//        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-//        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
-//
-//        auto MomentumStack_1n1p_legend = new
-//                TLegend(0.775, 0.7, 0.85, 0.875);
-//
-//        TLegendEntry *MomentumStack_1n1p_legend_P_p_entry = MomentumStack_1n1p_legend->AddEntry(P_p_hist_1n1p, "P_{p}", "l");
-//        TLegendEntry *MomentumStack_1n1p_legend_P_n_entry = MomentumStack_1n1p_legend->AddEntry(P_n_hist_1n1p, "P_{n}", "l");
-//        TLegendEntry *MomentumStack_1n1p_legend_P_l_entry = MomentumStack_1n1p_legend->AddEntry(P_l_hist_1n1p, "P_{l}", "l");
-//
-//        MomentumStack_1n1p_legend->Draw();
-//
-//        plots->Add(MomentumStack_1n1p);
-//        c1->SaveAs("plots/momentum_histograms/Momentum_stack_1n1p.png");
-//        c1->Clear();
-//        //</editor-fold>
-//
-//    }
+    if (momentum_plots) {
 
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting momentum histograms for 2p and 1n1p...\n";
+        cout << "\n";
 
+        //<editor-fold desc="Momentum histograms (2p)">
+        histPlotter1D(c1, P_L_hist_2p, normalized_P_L_plots, false, 1., "Momentum Histogram of Leading Proton P_{L} = P_{p1}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_2p, "P_L_histogram", "plots/momentum_histograms/2p/", "2p", kBlue, true, true, true);
+
+        histPlotter1D(c1, P_R_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Recoil Proton P_{R} = P_{p2}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_2p, "P_R_histogram", "plots/momentum_histograms/2p/", "2p", kRed, true, true, true);
+
+        histPlotter1D(c1, P_lp_hist_2p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_2p, "P_lp_histogram", "plots/momentum_histograms/2p/", "2p", kGreen, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histograms (1n1p)">
+        histPlotter1D(c1, P_p_hist_1n1p, normalized_P_L_plots, false, 1., "Momentum Histogram of Scattered Proton P_{p}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_1n1p, "P_p_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kBlue, true, true, true);
+
+        histPlotter1D(c1, P_n_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Scattered Neutron P_{n}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_1n1p, "P_n_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kRed, true, true, true);
+
+        histPlotter1D(c1, P_lp_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_1n1p, "P_l_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histogram stack (2p)">
+        MomentumStack_2p->Draw("nostack");
+        MomentumStack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        MomentumStack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        MomentumStack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        MomentumStack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        MomentumStack_2p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
+
+        auto MomentumStack_2p_legend = new TLegend(0.775, 0.7, 0.85, 0.875);
+
+        TLegendEntry *MomentumStack_2p_legend_P_L_entry = MomentumStack_2p_legend->AddEntry(P_L_hist_2p, "P_{L}", "l");
+        TLegendEntry *MomentumStack_2p_legend_P_R_entry = MomentumStack_2p_legend->AddEntry(P_R_hist_2p, "P_{R}", "l");
+        TLegendEntry *MomentumStack_2p_legend_P_lp_entry = MomentumStack_2p_legend->AddEntry(P_lp_hist_2p, "P_{l}", "l");
+
+        MomentumStack_2p_legend->Draw();
+
+        plots->Add(MomentumStack_2p);
+        c1->SaveAs("plots/momentum_histograms/Momentum_stack_2p.png");
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histogram stack (1n1p)">`
+        MomentumStack_1n1p->Draw("nostack");
+        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        MomentumStack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        MomentumStack_1n1p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        MomentumStack_1n1p->GetHistogram()->GetYaxis()->SetTitle("Arbitrary units");
+
+        auto MomentumStack_1n1p_legend = new TLegend(0.775, 0.7, 0.85, 0.875);
+
+        TLegendEntry *MomentumStack_1n1p_legend_P_p_entry = MomentumStack_1n1p_legend->AddEntry(P_p_hist_1n1p, "P_{p}", "l");
+        TLegendEntry *MomentumStack_1n1p_legend_P_n_entry = MomentumStack_1n1p_legend->AddEntry(P_n_hist_1n1p, "P_{n}", "l");
+        TLegendEntry *MomentumStack_1n1p_legend_P_l_entry = MomentumStack_1n1p_legend->AddEntry(P_lp_hist_1n1p, "P_{l}", "l");
+
+        MomentumStack_1n1p_legend->Draw();
+
+        plots->Add(MomentumStack_1n1p);
+        c1->SaveAs("plots/momentum_histograms/Momentum_stack_1n1p.png");
+        c1->Clear();
+        //</editor-fold>
+
+    }
+
+/*
 // MicroBooNE article histogram reconstructions
 // ====================================================================================================
 
