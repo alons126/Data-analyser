@@ -5754,7 +5754,7 @@ void EventAnalyser() {
                     double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx());
                     phi_p_1n1p->Fill(phi_p * 180.0 / 3.14159265359);
 
-                    double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx()));
+                    double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx());
                     phi_n_1n1p->Fill(phi_n * 180.0 / 3.14159265359);
 
                     double d_phi_1n1p = phi_p - phi_n; // In radians
