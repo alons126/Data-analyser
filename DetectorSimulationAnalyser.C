@@ -1970,7 +1970,8 @@ void EventAnalyser() {
 
 
 //                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
-                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n";
+                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
+                cout << "particles[" << Lepton_ind_2p << "]->getEnergy() = " << particles[Lepton_ind_2p]->getEnergy() << "\n\n";
 
 
 
