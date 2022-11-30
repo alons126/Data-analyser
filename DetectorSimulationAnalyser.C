@@ -175,7 +175,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
+    bool calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = true;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
@@ -4659,8 +4659,9 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram definitions">
 
     cout << "\n";
-    cout << "Defining histograms...\n";
-    cout << "\n";
+    cout << "Defining histograms...";
+//    cout << "Defining histograms...\n";
+//    cout << "\n";
 
 // Theta histograms -----------------------------------------------------------------------------------
 
@@ -5347,8 +5348,10 @@ void EventAnalyser() {
 
 // List definition ---------------------------------------------------------------------------------
 
-    TList *plots = new
-            TList();
+    TList *plots = new TList();
+
+    cout << "Done.\n\n";
+//    cout << "\n";
 
     //</editor-fold>
 
