@@ -1098,6 +1098,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta histograms">
     THStack *ThetaStack = new THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
 
+    TH1D *Theta_l_histogram_test = new TH1D("Theta_l_histogram_test", "Theta_l_histogram_test;#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
+
     TH1D *Theta_l_histogram = new TH1D("#theta_{l} det sim (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
     TH1D *Theta_p1_histogram = new TH1D("#theta_{p1} det sim (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
     TH1D *Theta_p2_histogram = new TH1D("#theta_{p2} det sim (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
@@ -1129,6 +1131,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Energy histograms">
     THStack *EnergyStack = new THStack("E_{l} stack det sim (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
+
+    TH1D *fsEl_histogram_test = new TH1D("fsEl_histogram_test", "fsEl_histogram_test;E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
 
     TH1D *fsEl_2p = new TH1D("Final State E_{l} det sim (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
     TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} det sim (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
@@ -1163,6 +1167,8 @@ void EventAnalyser() {
     //</editor-fold>
 
 // Energy Transfer histograms (all interactions) ------------------------------------------------------
+
+    //<editor-fold desc="Energy Transfer histograms">
 
     //<editor-fold desc="Energy Transfer histograms (all interactions)">
     THStack *Energy_Transfer_all_int_15_Stack_2p = new
@@ -1356,6 +1362,8 @@ void EventAnalyser() {
                  100, E_Trans90_DIS_lower_lim_1n1p, E_Trans90_DIS_upper_lim_1n1p);
     //</editor-fold>
 
+    //</editor-fold>
+
 // Inclusive Energy Transfer histograms ---------------------------------------------------------------
 
     //<editor-fold desc="Inclusive Energy Transfer histograms">
@@ -1467,7 +1475,9 @@ void EventAnalyser() {
 
 // E_cal restoration histograms -----------------------------------------------------------------------
 
-// Old plots:
+    //<editor-fold desc="E_cal restoration histograms">
+
+    // Old plots:
 
     //todo: remove title and fix xlabel according to BEnergy for QEL case (confirm w/ Adi)
     //<editor-fold desc="E_cal restoration histograms - old plots">
@@ -1654,6 +1664,8 @@ void EventAnalyser() {
                  200, -10, 180, 200, 2.12, 2.23);
     //</editor-fold>
 
+    //</editor-fold>
+
 // Momentum histograms -----------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
@@ -1671,7 +1683,9 @@ void EventAnalyser() {
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
 
-//todo: get rid of the stack in histPlotter1D() (make a default without it)
+    //<editor-fold desc="MicroBooNE histogram reconstruction">
+
+    //todo: get rid of the stack in histPlotter1D() (make a default without it)
     THStack *gamma_Lab_Stack, *gamma_mu_p_tot_Stack, dP_T_Stack;
     THStack *gamma_Lab_weighted_Stack, *gamma_mu_p_tot_weighted_Stack, dP_T_Stack_weighted;
 
@@ -1768,6 +1782,8 @@ void EventAnalyser() {
     dP_T_hist_weighted->SetTitle(dP_T_weighted_Title);
     //</editor-fold>
 
+    //</editor-fold>
+
 // List definition ---------------------------------------------------------------------------------
 
     TList *plots = new TList();
@@ -1801,7 +1817,7 @@ void EventAnalyser() {
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
 
-    while (c12.next()) { //loop over events (2p)
+    while (c12.next()) { // loop over events
 
         auto particles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
@@ -1809,16 +1825,18 @@ void EventAnalyser() {
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
 
-//        //The following run conditions can be returned directly by c12
-//        cout << "Event count: " << rcdbData.event_count << endl;
-//        cout << "Beam energy: " << rcdbData.beam_energy << endl;
-//        cout << "Beam current: " << rcdbData.beam_current << endl;
-//        cout << "Target Polarisation: " << rcdbData.target_polarization << endl;
+        cout << "==========================================================================\n";
+        float particlePDG = particles[0]->par()->getPid();
+        cout << "particlePDG = " << particlePDG << "\n";
+        double theta_l = particles[0]->getTheta();
+        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
+        double El = particles[0]->getDeltaEnergy();
+        cout << "El = " << El << "\n\n";
 
-// 2p
+// 2p calculations
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Calculation 2p">
+        //<editor-fold desc="2p calculations">
         if (calculate_2p && protons.size() == 2 && neutrons.size() == 0) {
             ++num_of_2p_events;
 
@@ -1902,7 +1920,7 @@ void EventAnalyser() {
 //                double theta_l_2p = particles[Lepton_ind_2p]->che(HTCC)->getDtheta(); // Theta of lepton in particles (in radians)
                 double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
                 Theta_l_histogram->Fill(theta_l_2p * 180.0 / 3.14159265359);
-                cout << "theta_l_2p = " << theta_l_2p * 180.0 / 3.14159265359 << "\n\n";
+//                cout << "theta_l_2p = " << theta_l_2p * 180.0 / 3.14159265359 << "\n\n";
 
 
 //              ***NOT REALLY dtheta:
@@ -1978,14 +1996,14 @@ void EventAnalyser() {
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
-                double El = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
+                double El_2p = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
                             particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
                             particles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
                             particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
                             particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
                             particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
-                fsEl_2p->Fill(El);
-//                cout << "El = " << El << "\n\n";
+                fsEl_2p->Fill(El_2p);
+//                cout << "El_2p = " << El_2p << "\n\n";
 
 //                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
 //                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
@@ -2106,10 +2124,10 @@ void EventAnalyser() {
         } // end of 2p if
         //</editor-fold>
 
-// 1n1p
+// 1n1p calculations
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Calculation 1n1p">
+        //<editor-fold desc="1n1p calculations">
         if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1) {
             ++num_of_1n1p_events;
 
