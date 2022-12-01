@@ -1,10 +1,16 @@
 // git pull && clas12root -b -q main.c
-/* Copy commend (local -> JLab):
+
+/*
+
+ git pull && clas12root -b -q main.c
+
+ * Copy commend (local -> JLab):
 scp -r /home/alon/project/temp/BankHist/Analyser.C -J asportes@ftp.jlab.org:/u/home/asportes/clas12project/
-*/
-/* Copy commend (JLab -> local):
+
+ * Copy commend (JLab -> local):
 scp -r asportes@ftp.jlab.org:/u/home/asportes/Analyser/plots -J /home/alon/Analyser/temp/
-*/
+
+ */
 
 //#include "HipoChain.h"
 
@@ -1969,10 +1975,14 @@ void EventAnalyser() {
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
+                double El = particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() + particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
+                            particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
 
+                fsEl_2p->Fill(El);
+                cout << "El = " << El << "\n\n";
 
-                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
-                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
+//                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
+//                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
 //                cout << "particles[" << Lepton_ind_2p << "]->getEnergy() = " << particles[Lepton_ind_2p]->getEnergy() << "\n\n";
 
 
