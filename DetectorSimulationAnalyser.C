@@ -1874,10 +1874,25 @@ void EventAnalyser() {
         cout << "particlePDG = " << particlePDG << "\n";
         double theta_l = particles[0]->getTheta();
         Theta_l_histogram_test->Fill(theta_l * 180.0 / 3.14159265359);
-        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
-        double El = particles[0]->getDeltaEnergy();
-        fsEl_histogram_test->Fill(El);
-        cout << "El = " << El << "\n\n";
+//        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
+
+        double El;
+        if (theta_l <= 40 && theta_l >= 5) {
+            El = particles[0]->sci(FTOF1A)->getEnergy(FTOF1A) +
+                 particles[0]->sci(FTOF1B)->getEnergy(FTOF1A) +
+                 particles[0]->sci(FTOF1B)->getEnergy(FTOF1A) +
+                 particles[0]->sci(PCAL)->getEnergy(FTOF1A) +
+                 particles[0]->sci(ECIN)->getEnergy(FTOF1A) +
+                 particles[0]->sci(ECOUT)->getEnergy(FTOF1A);
+
+            cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
+            fsEl_histogram_test->Fill(El);
+            cout << "El = " << El << "\n\n";
+        }
+
+//        double El = particles[0]->getDeltaEnergy();
+//        fsEl_histogram_test->Fill(El);
+//        cout << "El = " << El << "\n\n";
 
 // 2p calculations
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2043,11 +2058,11 @@ void EventAnalyser() {
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
                 double El_2p = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
-                            particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
-                            particles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
-                            particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
-                            particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
-                            particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
+                               particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
+                               particles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
+                               particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
+                               particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
+                               particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
                 fsEl_2p->Fill(El_2p);
 //                cout << "El_2p = " << El_2p << "\n\n";
 
