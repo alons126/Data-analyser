@@ -1878,12 +1878,12 @@ void EventAnalyser() {
 
         double El;
         if (theta_l <= 40 && theta_l >= 5) {
-            El = particles[0]->sci(FTOF1A)->getEnergy(FTOF1A) +
-                 particles[0]->sci(FTOF1B)->getEnergy(FTOF1A) +
-                 particles[0]->sci(FTOF1B)->getEnergy(FTOF1A) +
-                 particles[0]->sci(PCAL)->getEnergy(FTOF1A) +
-                 particles[0]->sci(ECIN)->getEnergy(FTOF1A) +
-                 particles[0]->sci(ECOUT)->getEnergy(FTOF1A);
+            El = particles[0]->sci(FTOF1A)->getEnergy() +
+                 particles[0]->sci(FTOF1B)->getEnergy() +
+                 particles[0]->sci(FTOF1B)->getEnergy() +
+                 particles[0]->sci(PCAL)->getEnergy() +
+                 particles[0]->sci(ECIN)->getEnergy() +
+                 particles[0]->sci(ECOUT)->getEnergy();
 
             cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
             fsEl_histogram_test->Fill(El);
