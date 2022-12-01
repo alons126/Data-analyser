@@ -324,9 +324,9 @@ void EventAnalyser() {
 // Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
-    bool Theta_plots = false, Phi_plots = false;
+    bool Theta_plots = true, Phi_plots = true;
 
-    bool Energy_histogram_plots = false;
+    bool Energy_histogram_plots = true;
 
     bool ET_plots = true, ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
     if (ET_plots == false) {
@@ -1142,7 +1142,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta histograms">
     THStack *ThetaStack = new THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
 
-    TH1D *Theta_l_histogram_test = new TH1D("Theta_l_histogram_test", "Theta_l_histogram_test;#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
+//    TH1D *Theta_l_histogram_test = new TH1D("Theta_l_histogram_test", "Theta_l_histogram_test;#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
 
     TH1D *Theta_l_histogram = new TH1D("#theta_{l} det sim (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
     TH1D *Theta_p1_histogram = new TH1D("#theta_{p1} det sim (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
@@ -1176,7 +1176,7 @@ void EventAnalyser() {
     //<editor-fold desc="Energy histograms">
     THStack *EnergyStack = new THStack("E_{l} stack det sim (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
 
-    TH1D *fsEl_histogram_test = new TH1D("fsEl/100_histogram_test", "fsEl/100_histogram_test;E_{l}/100 []", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
+//    TH1D *fsEl_histogram_test = new TH1D("fsEl/100_histogram_test", "fsEl/100_histogram_test;E_{l}/100 []", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
 
     TH1D *fsEl_2p = new TH1D("Final State E_{l} det sim (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
     TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} det sim (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
@@ -1846,9 +1846,9 @@ void EventAnalyser() {
     clas12reader c12(LoadedInput.c_str()); // open file
 
 // 2p+1e - 85 out of 970000
-// 2p - 0 out of 970000
+// 2p+0e - 0 out of 970000
 // 1n1p+1e - 284 out of 970000
-// 1n1p - 0 out of 970000
+// 1n1p+0e - 0 out of 970000
 
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
@@ -1869,31 +1869,33 @@ void EventAnalyser() {
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
 
-        cout << "==========================================================================\n";
-        float particlePDG = particles[0]->par()->getPid();
-        cout << "particlePDG = " << particlePDG << "\n";
-        double theta_l_rad = particles[0]->getTheta();
-        double theta_l = theta_l_rad * 180.0 / 3.14159265359;
-        Theta_l_histogram_test->Fill(theta_l);
-//        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
-
-        double El;
-        if (theta_l <= 40 && theta_l >= 5) {
-            El = particles[0]->sci(FTOF1A)->getEnergy() +
-                 particles[0]->sci(FTOF1B)->getEnergy() +
-                 particles[0]->sci(FTOF1B)->getEnergy() +
-                 particles[0]->sci(PCAL)->getEnergy() +
-                 particles[0]->sci(ECIN)->getEnergy() +
-                 particles[0]->sci(ECOUT)->getEnergy();
-
-            cout << "theta_l = " << theta_l << "\n";
-            fsEl_histogram_test->Fill(El/100);
-            cout << "El/100 = " << El/100 << "\n\n";
-        }
+        //<editor-fold desc="Test plots fill">
+        //        cout << "==========================================================================\n";
+//        float particlePDG = particles[0]->par()->getPid();
+//        cout << "particlePDG = " << particlePDG << "\n";
+//        double theta_l_rad = particles[0]->getTheta();
+//        double theta_l = theta_l_rad * 180.0 / 3.14159265359;
+//        Theta_l_histogram_test->Fill(theta_l);
+////        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
+//
+//        double El;
+//        if (theta_l <= 40 && theta_l >= 5) {
+//            El = particles[0]->sci(FTOF1A)->getEnergy() +
+//                 particles[0]->sci(FTOF1B)->getEnergy() +
+//                 particles[0]->sci(FTOF1B)->getEnergy() +
+//                 particles[0]->sci(PCAL)->getEnergy() +
+//                 particles[0]->sci(ECIN)->getEnergy() +
+//                 particles[0]->sci(ECOUT)->getEnergy();
+//
+//            cout << "theta_l = " << theta_l << "\n";
+//            fsEl_histogram_test->Fill(El/100);
+//            cout << "El/100 = " << El/100 << "\n\n";
+//        }
 
 //        double El = particles[0]->getDeltaEnergy();
 //        fsEl_histogram_test->Fill(El);
 //        cout << "El = " << El << "\n\n";
+        //</editor-fold>
 
 // 2p calculations
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2058,13 +2060,35 @@ void EventAnalyser() {
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
-                double El_2p = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
-                               particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
-                               particles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
-                               particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
-                               particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
-                               particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
+                double El_2p, El1_2p, El2_2p;
+                if (theta_l <= 40 && theta_l >= 5) {
+                    El1_2p = particles[Proton_1_ind_2p]->sci(FTOF1A)->getEnergy() +
+                         particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
+                         particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
+                         particles[Proton_1_ind_2p]->sci(PCAL)->getEnergy() +
+                         particles[Proton_1_ind_2p]->sci(ECIN)->getEnergy() +
+                         particles[Proton_1_ind_2p]->sci(ECOUT)->getEnergy();
+
+                    El2_2p = particles[Proton_2_ind_2p]->sci(FTOF1A)->getEnergy() +
+                         particles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
+                         particles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
+                         particles[Proton_2_ind_2p]->sci(PCAL)->getEnergy() +
+                         particles[Proton_2_ind_2p]->sci(ECIN)->getEnergy() +
+                         particles[Proton_2_ind_2p]->sci(ECOUT)->getEnergy();
+
+                }
+
+                El_2p = El1_2p + El2_2p
                 fsEl_2p->Fill(El_2p);
+                cout << "El_2p (E_cal) = El1_2p + El2_2p = " << El1_2p << " + " << El2_2p << " = " << El_2p << "\n\n";
+
+//                double El_2p = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
+//                               particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
+//                               particles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
+//                               particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
+//                               particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
+//                               particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
+//                fsEl_2p->Fill(El_2p);
 //                cout << "El_2p = " << El_2p << "\n\n";
 
 //                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
@@ -2416,13 +2440,18 @@ void EventAnalyser() {
     //</editor-fold>
 
 
-    Theta_l_histogram_test->Draw();
-    c1->SaveAs("./plots/Theta_l_histogram_test.png");
-    c1->Clear();
+//  Test plots
+// =======================================================================================================================================================================
 
-    fsEl_histogram_test->Draw();
-    c1->SaveAs("./plots/fsEl_histogram_test.png");
-    c1->Clear();
+    //<editor-fold desc="Test plots">
+    //    Theta_l_histogram_test->Draw();
+//    c1->SaveAs("./plots/Theta_l_histogram_test.png");
+//    c1->Clear();
+
+//    fsEl_histogram_test->Draw();
+//    c1->SaveAs("./plots/fsEl_histogram_test.png");
+//    c1->Clear();
+    //</editor-fold>
 
 
 //  Histograms plots
