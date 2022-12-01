@@ -324,9 +324,9 @@ void EventAnalyser() {
 // Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
-    bool Theta_plots = true, Phi_plots = true;
+    bool Theta_plots = false, Phi_plots = false;
 
-    bool Energy_histogram_plots = true;
+    bool Energy_histogram_plots = false;
 
     bool ET_plots = true, ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
     if (ET_plots == false) {
@@ -1886,9 +1886,9 @@ void EventAnalyser() {
                  particles[0]->sci(ECIN)->getEnergy() +
                  particles[0]->sci(ECOUT)->getEnergy();
 
-            cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
-            fsEl_histogram_test->Fill(El);
-            cout << "El = " << El << "\n\n";
+            cout << "theta_l = " << theta_l << "\n";
+            fsEl_histogram_test->Fill(El/100);
+            cout << "El/100 = " << El/100 << "\n\n";
         }
 
 //        double El = particles[0]->getDeltaEnergy();
