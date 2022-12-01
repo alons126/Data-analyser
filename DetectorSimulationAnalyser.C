@@ -584,6 +584,12 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE dP_T plots">
+    dP_T_hist_upper_lim = 2;
+    dP_T_hist_lower_lim = 0;
+    dP_T_hist_weighted_upper_lim = 2;
+    dP_T_hist_weighted_lower_lim = 0;
+
+    /*
     if (FSI_status == true) {
         dP_T_hist_upper_lim = 2;
         dP_T_hist_lower_lim = 0;
@@ -595,6 +601,7 @@ void EventAnalyser() {
         dP_T_hist_weighted_upper_lim = 2;
         dP_T_hist_weighted_lower_lim = 0;
     }
+     */
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
@@ -621,6 +628,25 @@ void EventAnalyser() {
         //<editor-fold desc="Energy histograms">
 
         //<editor-fold desc="Energy histograms (2p)">
+//            fsEl_upper_lim_2p = 110.;
+//            fsEl_lower_lim_2p = 1;
+        fsEl_upper_lim_2p = 6.5;
+        fsEl_lower_lim_2p = 0.;
+        fsEl_QEL_upper_lim_2p = 2.3;
+        fsEl_QEL_lower_lim_2p = 0;
+        fsEl_MEC_upper_lim_2p = 2.3;
+        fsEl_MEC_lower_lim_2p = 0;
+        fsEl_RES_upper_lim_2p = 2.3;
+        fsEl_RES_lower_lim_2p = 0;
+        fsEl_DIS_upper_lim_2p = 2.3;
+        fsEl_DIS_lower_lim_2p = 0;
+        fsEl_VS_theta_l_upper_lim_2p_x = 70.0;
+//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
+        fsEl_VS_theta_l_lower_lim_2p_x = 0;
+        fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
+        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+
+        /*
         if (FSI_status == true) {
 //            fsEl_upper_lim_2p = 110.;
 //            fsEl_lower_lim_2p = 1;
@@ -656,10 +682,27 @@ void EventAnalyser() {
             fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
             fsEl_VS_theta_l_lower_lim_2p_y = 0;
         }
+         */
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
-        if (FSI_status == true) {
+        fsEl_upper_lim_1n1p = 2.3;
+        fsEl_lower_lim_1n1p = 1;
+        fsEl_QEL_upper_lim_1n1p = 2.3;
+        fsEl_QEL_lower_lim_1n1p = 0;
+        fsEl_MEC_upper_lim_1n1p = 2.3;
+        fsEl_MEC_lower_lim_1n1p = 0;
+        fsEl_RES_upper_lim_1n1p = 2.3;
+        fsEl_RES_lower_lim_1n1p = 0;
+        fsEl_DIS_upper_lim_1n1p = 2.3;
+        fsEl_DIS_lower_lim_1n1p = 0;
+        fsEl_VS_theta_l_upper_lim_1n1p_x = 70.0;
+//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
+        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
+        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+
+        /*        if (FSI_status == true) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
             fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -692,6 +735,7 @@ void EventAnalyser() {
             fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
             fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
         }
+*/
         //</editor-fold>
 
         //</editor-fold>
@@ -1809,10 +1853,10 @@ void EventAnalyser() {
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
     c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+//    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+//    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
 
-    c12.addZeroOfRestPid(); // nothing else
+//    c12.addZeroOfRestPid(); // nothing else
 
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
