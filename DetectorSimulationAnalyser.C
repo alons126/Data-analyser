@@ -1176,7 +1176,7 @@ void EventAnalyser() {
     //<editor-fold desc="Energy histograms">
     THStack *EnergyStack = new THStack("E_{l} stack det sim (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
 
-    TH1D *fsEl_histogram_test = new TH1D("fsEl_histogram_test", "fsEl_histogram_test;E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
+    TH1D *fsEl_histogram_test = new TH1D("fsEl/100_histogram_test", "fsEl/100_histogram_test;E_{l}/100 []", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
 
     TH1D *fsEl_2p = new TH1D("Final State E_{l} det sim (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
     TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} det sim (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
@@ -1853,10 +1853,10 @@ void EventAnalyser() {
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
     c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-//    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-//    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
 
-//    c12.addZeroOfRestPid(); // nothing else
+    c12.addZeroOfRestPid(); // nothing else
 
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
