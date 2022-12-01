@@ -53,8 +53,6 @@ void EventAnalyser() {
 
     string AnalyserVersion = "Beta version";
 
-    bool selection_test_2p = false, selection_test_1n1p = false;
-
 //  Code settings
 //  =====================================================================================================================================================================
 
@@ -191,9 +189,11 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
+    bool calculate_2p = false, calculate_1n1p = false, calculate_MicroBooNE = false;
 
-    bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
+    bool selection_test_2p = false, selection_test_1n1p = false;
+
+//    bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
 //    //<editor-fold desc="Simulation parameters extraction (assuming all entries have the same parameters)">
 //    if (fChain == 0) return;
@@ -1829,8 +1829,10 @@ void EventAnalyser() {
         float particlePDG = particles[0]->par()->getPid();
         cout << "particlePDG = " << particlePDG << "\n";
         double theta_l = particles[0]->getTheta();
+        Theta_l_histogram_test->Fill(theta_l * 180.0 / 3.14159265359);
         cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
         double El = particles[0]->getDeltaEnergy();
+        fsEl_histogram_test->Fill(El);
         cout << "El = " << El << "\n\n";
 
 // 2p calculations
@@ -2352,6 +2354,15 @@ void EventAnalyser() {
 //            c1->SetRightMargin(0.1275);
     }
     //</editor-fold>
+
+
+    Theta_l_histogram_test->Draw();
+    c1->SaveAs("./plots/Theta_l_histogram_test.png");
+    c1->Clear();
+
+    fsEl_histogram_test->Draw();
+    c1->SaveAs("./plots/fsEl_histogram_test.png");
+    c1->Clear();
 
 
 //  Histograms plots

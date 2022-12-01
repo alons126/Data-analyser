@@ -3982,13 +3982,13 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
-    if (normalize_Histogram == true && custom_normalization == false) {
+    if (normalize_Histogram && !custom_normalization) {
         Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram == true && custom_normalization == true) {
+    } else if (normalize_Histogram && custom_normalization) {
         Histogram1D_integral = custom_normalization_factor;
     }
 
-    if (normalize_Histogram == true) {
+    if (normalize_Histogram) {
         string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
@@ -4005,7 +4005,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
             Histogram1D->Draw();
         }
-    } else if (normalize_Histogram == false) {
+    } else if (!normalize_Histogram) {
         string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
@@ -4033,7 +4033,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
     Histogram_list->Add(Histogram1D);
     Histogram1D->SetLineWidth(lineWidth);
 
-    if (showStats == false) {
+    if (!showStats) {
         Histogram1D->SetStats(0);
     }
 
@@ -4051,7 +4051,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
-    if (addToStack == true) {
+    if (addToStack) {
         Histogram1D->SetLineColor(kColor);
         Histogram1D->SetStats(0);
         Histogram1DStack->Add(Histogram1D);
