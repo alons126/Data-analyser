@@ -2322,7 +2322,7 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 double El_1n1p, Elp_1n1p, Eln_1n1p;
-                if (theta_l_1n1p <= 40 && theta_l_1n1p >= 5) {
+                if (Theta_l_1n1p <= 40 && Theta_l_1n1p >= 5) {
                     Elp_1n1p = particles[Proton_ind_1n1p]->sci(FTOF1A)->getEnergy() +
                              particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
                              particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
