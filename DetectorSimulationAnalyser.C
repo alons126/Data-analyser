@@ -2061,7 +2061,7 @@ void EventAnalyser() {
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
                 double El_2p, El1_2p, El2_2p;
-                if (theta_l <= 40 && theta_l >= 5) {
+                if ((theta_l_2p * 180.0 / 3.14159265359) <= 40 && (theta_l_2p * 180.0 / 3.14159265359) >= 5) {
                     El1_2p = particles[Proton_1_ind_2p]->sci(FTOF1A)->getEnergy() +
                          particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
                          particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
