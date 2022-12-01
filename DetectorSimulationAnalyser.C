@@ -1872,8 +1872,9 @@ void EventAnalyser() {
         cout << "==========================================================================\n";
         float particlePDG = particles[0]->par()->getPid();
         cout << "particlePDG = " << particlePDG << "\n";
-        double theta_l = particles[0]->getTheta();
-        Theta_l_histogram_test->Fill(theta_l * 180.0 / 3.14159265359);
+        double theta_l_rad = particles[0]->getTheta();
+        double theta_l = theta_l_rad * 180.0 / 3.14159265359;
+        Theta_l_histogram_test->Fill(theta_l);
 //        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
 
         double El;
