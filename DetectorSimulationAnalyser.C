@@ -1978,12 +1978,13 @@ void EventAnalyser() {
 //                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
 //                }
 
-                double Phi_l_2p = atan2(particles[Lepton_ind_2p]->par()->getPy(), particles[Lepton_ind_2p]->par()->getPx()); // Theta of lepton in particles (in radians)
-                phi_l_2p->Fill(Phi_l_2p * 180.0 / 3.14159265359);
+                double Phi_l_2p = atan2(particles[Lepton_ind_2p]->par()->getPy(), particles[Lepton_ind_2p]->par()->getPx())
+                                  * 180.0 / 3.14159265359; // Theta of lepton in particles (in deg)
+                phi_l_2p->Fill(Phi_l_2p);
 
 //                double theta_l_2p = particles[Lepton_ind_2p]->che(HTCC)->getDtheta(); // Theta of lepton in particles (in radians)
-                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
-                Theta_l_histogram->Fill(theta_l_2p * 180.0 / 3.14159265359);
+                double theta_l_2p = particles[Lepton_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Theta of lepton in particles  (in deg)
+                Theta_l_histogram->Fill(theta_l_2p);
 //                cout << "theta_l_2p = " << theta_l_2p * 180.0 / 3.14159265359 << "\n\n";
 
 
@@ -1992,8 +1993,8 @@ void EventAnalyser() {
                         (particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
                          particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx() +
                          particles[Proton_1_ind_2p]->par()->getPx() * particles[Proton_2_ind_2p]->par()->getPx()) /
-                        (particles[Proton_1_ind_2p]->getP() * particles[Proton_2_ind_2p]->getP()));
-                dtheta_2p->Fill(d_theta_2p * 180.0 / 3.14159265359);
+                        (particles[Proton_1_ind_2p]->getP() * particles[Proton_2_ind_2p]->getP())) * 180.0 / 3.14159265359;
+                dtheta_2p->Fill(d_theta_2p);
 
                 //<editor-fold desc="P_L & P_R selector">
                 if (P_p1_2p >= P_p2_2p) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
@@ -2004,21 +2005,21 @@ void EventAnalyser() {
                     P_R_2p = P_p2_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p1 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton phi (in radians)
-                    phi_p1_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+                    double phi_p1 = particles[Proton_1_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Leading proton phi (in deg)
+                    phi_p1_2p->Fill(phi_p1);
 
-                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi(); // Recoil proton phi (in radians)
-                    phi_p2_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+                    double phi_p2 = particles[Proton_2_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Recoil proton phi (in deg)
+                    phi_p2_2p->Fill(phi_p2);
 
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
-                    dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+                    double d_phi_p2 = phi_p1 - phi_p2; // In deg
+                    dphi_2p->Fill(d_phi_p2);
 
-                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle theta (in radians)
-                    Theta_p1_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+                    double theta_p1 = particles[Proton_1_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Leading proton scattering angle theta (in deg)
+                    Theta_p1_histogram->Fill(theta_p1);
 
-                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle theta (in radians)
-                    Theta_p2_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
-//
+                    double theta_p2 = particles[Proton_2_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Recoil proton scattering angle theta (in deg)
+                    Theta_p2_histogram->Fill(theta_p2);
+
 //                    if (qel == true) {
 //                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
 //                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
@@ -2032,20 +2033,20 @@ void EventAnalyser() {
                     P_R_2p = P_p1_2p; // Recoil proton
                     P_R_hist_2p->Fill(P_R_2p);
 
-                    double phi_p2 = particles[Proton_1_ind_2p]->getPhi(); // Leading proton phi (in radians)
-                    phi_p1_2p->Fill(phi_p2 * 180.0 / 3.14159265359);
+                    double phi_p2 = particles[Proton_1_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Leading proton phi (in deg)
+                    phi_p1_2p->Fill(phi_p2);
 
-                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi(); // Recoil proton phi (in radians)
-                    phi_p2_2p->Fill(phi_p1 * 180.0 / 3.14159265359);
+                    double phi_p1 = particles[Proton_2_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Recoil proton phi (in deg)
+                    phi_p2_2p->Fill(phi_p1);
 
-                    double d_phi_p2 = phi_p1 - phi_p2; // In radians
-                    dphi_2p->Fill(d_phi_p2 * 180.0 / 3.14159265359);
+                    double d_phi_p2 = phi_p1 - phi_p2; // In deg
+                    dphi_2p->Fill(d_phi_p2);
 
-                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta(); // Leading proton scattering angle theta (in radians)
-                    Theta_p1_histogram->Fill(theta_p2 * 180.0 / 3.14159265359);
+                    double theta_p2 = particles[Proton_1_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Leading proton scattering angle theta (in deg)
+                    Theta_p1_histogram->Fill(theta_p2);
 
-                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta(); // Recoil proton scattering angle theta (in radians)
-                    Theta_p2_histogram->Fill(theta_p1 * 180.0 / 3.14159265359);
+                    double theta_p1 = particles[Proton_2_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Recoil proton scattering angle theta (in deg)
+                    Theta_p2_histogram->Fill(theta_p1);
 
                     //
 //                    if (qel == true) {
@@ -2061,24 +2062,24 @@ void EventAnalyser() {
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
                 double El_2p, El1_2p, El2_2p;
-                if ((theta_l_2p * 180.0 / 3.14159265359) <= 40 && (theta_l_2p * 180.0 / 3.14159265359) >= 5) {
+                if (theta_l_2p <= 40 && theta_l_2p >= 5) {
                     El1_2p = particles[Proton_1_ind_2p]->sci(FTOF1A)->getEnergy() +
-                         particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
-                         particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
-                         particles[Proton_1_ind_2p]->sci(PCAL)->getEnergy() +
-                         particles[Proton_1_ind_2p]->sci(ECIN)->getEnergy() +
-                         particles[Proton_1_ind_2p]->sci(ECOUT)->getEnergy();
+                             particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
+                             particles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
+                             particles[Proton_1_ind_2p]->sci(PCAL)->getEnergy() +
+                             particles[Proton_1_ind_2p]->sci(ECIN)->getEnergy() +
+                             particles[Proton_1_ind_2p]->sci(ECOUT)->getEnergy();
 
                     El2_2p = particles[Proton_2_ind_2p]->sci(FTOF1A)->getEnergy() +
-                         particles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
-                         particles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
-                         particles[Proton_2_ind_2p]->sci(PCAL)->getEnergy() +
-                         particles[Proton_2_ind_2p]->sci(ECIN)->getEnergy() +
-                         particles[Proton_2_ind_2p]->sci(ECOUT)->getEnergy();
+                             particles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
+                             particles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
+                             particles[Proton_2_ind_2p]->sci(PCAL)->getEnergy() +
+                             particles[Proton_2_ind_2p]->sci(ECIN)->getEnergy() +
+                             particles[Proton_2_ind_2p]->sci(ECOUT)->getEnergy();
 
                 }
 
-                El_2p = El1_2p + El2_2p
+                El_2p = El1_2p + El2_2p;
                 fsEl_2p->Fill(El_2p);
                 cout << "El_2p (E_cal) = El1_2p + El2_2p = " << El1_2p << " + " << El2_2p << " = " << El_2p << "\n\n";
 
@@ -2277,37 +2278,39 @@ void EventAnalyser() {
 //                    }
 
                 //<editor-fold desc="Lepton theta & phi">
-                double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(),
-                                          particles[Lepton_ind_1n1p]->par()->getPx()); // Thi of lepton in particles (in radians)
-                phi_l_1n1p->Fill(Phi_l_1n1p * 180.0 / 3.14159265359);
+                double Phi_l_1n1p = atan2(particles[Lepton_ind_1n1p]->par()->getPy(), particles[Lepton_ind_1n1p]->par()->getPx())
+                                    * 180.0 / 3.14159265359; // Thi of lepton in particles (in deg)
+                phi_l_1n1p->Fill(Phi_l_1n1p);
 
-                double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles (in radians)
-                theta_l_1n1p->Fill(Theta_l_1n1p * 180.0 / 3.14159265359);
+                double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta() * 180.0 / 3.14159265359; // Theta of lepton in particles (in deg)
+                theta_l_1n1p->Fill(Theta_l_1n1p);
                 //</editor-fold>
 
                 //<editor-fold desc="Nucleon theta & phi">
-                double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx()); // Momentum of proton in particles
-                phi_p_1n1p->Fill(phi_p * 180.0 / 3.14159265359);
+                double phi_p = atan2(particles[Proton_ind_1n1p]->par()->getPy(), particles[Proton_ind_1n1p]->par()->getPx())
+                               * 180.0 / 3.14159265359; // Phi of proton in particles (in deg)
+                phi_p_1n1p->Fill(phi_p);
 
-                double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx()); // Momentum of neutron in particles
-                phi_n_1n1p->Fill(phi_n * 180.0 / 3.14159265359);
+                double phi_n = atan2(particles[Neutron_ind_1n1p]->par()->getPy(), particles[Neutron_ind_1n1p]->par()->getPx())
+                               * 180.0 / 3.14159265359; // Phi of neutron in particles (in deg)
+                phi_n_1n1p->Fill(phi_n);
 
-                double d_phi_1n1p = phi_p - phi_n; // In radians
-                dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
+                double d_phi_1n1p = phi_p - phi_n; // In deg
+                dphi_1n1p->Fill(d_phi_1n1p);
 
-                double theta_p = particles[Proton_ind_1n1p]->getTheta(); // Theta of proton in particles (in radians)
-                theta_p_1n1p->Fill(theta_p * 180.0 / 3.14159265359);
+                double theta_p = particles[Proton_ind_1n1p]->getTheta() * 180.0 / 3.14159265359; // Theta of proton in particles (in deg)
+                theta_p_1n1p->Fill(theta_p);
 
-                double theta_n = particles[Neutron_ind_1n1p]->getTheta(); // Theta of neutron in particles (in radians)
-                theta_n_1n1p->Fill(theta_n * 180.0 / 3.14159265359);
+                double theta_n = particles[Neutron_ind_1n1p]->getTheta() * 180.0 / 3.14159265359; // Theta of neutron in particles (in deg)
+                theta_n_1n1p->Fill(theta_n);
 
 //              ***NOT REALLY dtheta:
                 double d_theta_1n1p = acos(
                         (particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
                          particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx() +
                          particles[Proton_ind_1n1p]->par()->getPx() * particles[Neutron_ind_1n1p]->par()->getPx()) /
-                        (particles[Proton_ind_1n1p]->getP() * particles[Neutron_ind_1n1p]->getP()));
-                dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
+                        (particles[Proton_ind_1n1p]->getP() * particles[Neutron_ind_1n1p]->getP())) * 180.0 / 3.14159265359;
+                dtheta_1n1p->Fill(d_theta_1n1p);
                 //</editor-fold>
 
 //                    E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
@@ -2318,7 +2321,30 @@ void EventAnalyser() {
                 P_lp_hist_1n1p->Fill(P_lp_1n1p);
                 //</editor-fold>
 
-                fsEl_1n1p->Fill(particles[Lepton_ind_1n1p]->getDeltaEnergy());
+                double El_1n1p, Elp_1n1p, Eln_1n1p;
+                if (theta_l_1n1p <= 40 && theta_l_1n1p >= 5) {
+                    Elp_1n1p = particles[Proton_ind_1n1p]->sci(FTOF1A)->getEnergy() +
+                             particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                             particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                             particles[Proton_ind_1n1p]->sci(PCAL)->getEnergy() +
+                             particles[Proton_ind_1n1p]->sci(ECIN)->getEnergy() +
+                             particles[Proton_ind_1n1p]->sci(ECOUT)->getEnergy();
+
+                    Eln_1n1p = particles[Neutron_ind_1n1p]->sci(FTOF1A)->getEnergy() +
+                             particles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                             particles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                             particles[Neutron_ind_1n1p]->sci(PCAL)->getEnergy() +
+                             particles[Neutron_ind_1n1p]->sci(ECIN)->getEnergy() +
+                             particles[Neutron_ind_1n1p]->sci(ECOUT)->getEnergy();
+
+                }
+
+                El_1n1p = Elp_1n1p + Eln_1n1p;
+                fsEl_1n1p->Fill(El_1n1p);
+                cout << "El_1n1p (E_cal) = Elp_1n1p + Eln_1n1p = " << Elp_1n1p << " + " << Eln_1n1p << " = " << El_1n1p << "\n\n";
+
+
+//                fsEl_1n1p->Fill(particles[Lepton_ind_1n1p]->getDeltaEnergy());
 
                 /*
                 //<editor-fold desc="Energy histograms fill (1n1p)">
