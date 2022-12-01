@@ -193,7 +193,7 @@ void EventAnalyser() {
 
     bool selection_test_2p = false, selection_test_1n1p = false;
 
-//    bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
+    bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
 //    //<editor-fold desc="Simulation parameters extraction (assuming all entries have the same parameters)">
 //    if (fChain == 0) return;
