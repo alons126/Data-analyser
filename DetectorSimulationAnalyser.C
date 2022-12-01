@@ -1899,8 +1899,11 @@ void EventAnalyser() {
                 double Phi_l_2p = atan2(particles[Lepton_ind_2p]->par()->getPy(), particles[Lepton_ind_2p]->par()->getPx()); // Theta of lepton in particles (in radians)
                 phi_l_2p->Fill(Phi_l_2p * 180.0 / 3.14159265359);
 
-                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
+                double theta_l_2p = particles[Lepton_ind_2p]->che(HTCC)->getDtheta(); // Theta of lepton in particles (in radians)
+//                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
                 Theta_l_histogram->Fill(theta_l_2p);
+                cout << "theta_l_2p = " << theta_l_2p << "\n\n";
+
 
 //              ***NOT REALLY dtheta:
                 double d_theta_2p = acos(
@@ -1975,11 +1978,14 @@ void EventAnalyser() {
 
 //                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 
-                double El = particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() + particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
+                double El = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
+                            particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
+                            particles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
+                            particles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
+                            particles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
                             particles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
-
                 fsEl_2p->Fill(El);
-                cout << "El = " << El << "\n\n";
+//                cout << "El = " << El << "\n\n";
 
 //                fsEl_2p->Fill(particles[Lepton_ind_2p]->getDeltaEnergy());
 //                cout << "particles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << particles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
