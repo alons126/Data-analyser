@@ -1899,10 +1899,10 @@ void EventAnalyser() {
                 double Phi_l_2p = atan2(particles[Lepton_ind_2p]->par()->getPy(), particles[Lepton_ind_2p]->par()->getPx()); // Theta of lepton in particles (in radians)
                 phi_l_2p->Fill(Phi_l_2p * 180.0 / 3.14159265359);
 
-                double theta_l_2p = particles[Lepton_ind_2p]->che(HTCC)->getDtheta(); // Theta of lepton in particles (in radians)
-//                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
-                Theta_l_histogram->Fill(theta_l_2p);
-                cout << "theta_l_2p = " << theta_l_2p << "\n\n";
+//                double theta_l_2p = particles[Lepton_ind_2p]->che(HTCC)->getDtheta(); // Theta of lepton in particles (in radians)
+                double theta_l_2p = particles[Lepton_ind_2p]->getTheta(); // Theta of lepton in particles (in radians)
+                Theta_l_histogram->Fill(theta_l_2p * 180.0 / 3.14159265359);
+                cout << "theta_l_2p = " << theta_l_2p * 180.0 / 3.14159265359 << "\n\n";
 
 
 //              ***NOT REALLY dtheta:
