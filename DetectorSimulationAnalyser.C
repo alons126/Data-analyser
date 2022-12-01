@@ -2178,7 +2178,7 @@ void EventAnalyser() {
                 phi_l_1n1p->Fill(Phi_l_1n1p * 180.0 / 3.14159265359);
 
                 double Theta_l_1n1p = particles[Lepton_ind_1n1p]->getTheta(); // Theta of lepton in particles (in radians)
-                theta_l_1n1p->Fill(Theta_l_1n1p);
+                theta_l_1n1p->Fill(Theta_l_1n1p * 180.0 / 3.14159265359);
                 //</editor-fold>
 
                 //<editor-fold desc="Nucleon theta & phi">
