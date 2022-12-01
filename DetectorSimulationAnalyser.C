@@ -189,7 +189,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = false, calculate_1n1p = false, calculate_MicroBooNE = false;
+    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = false;
 
     bool selection_test_2p = false, selection_test_1n1p = false;
 
