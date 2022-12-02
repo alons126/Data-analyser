@@ -29,7 +29,8 @@ scp -r asportes@ftp.jlab.org:/u/home/asportes/Analyser/plots -J /home/alon/Analy
 #include <TChain.h>
 #include <TCanvas.h>
 #include <TBenchmark.h>
-#include "clas12reader.h"
+#include "/home/alon/clas12root/Clas12Banks/clas12reader.h"
+//#include "clas12reader.h"
 
 //#include "TruthLevelAnalyser.h"
 //#include "gst.h"
