@@ -4503,29 +4503,10 @@ std::string plots_file_type = "_plots.root";
 
 // file_name definitions and selection ----------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="file_name definitions">
-
-//<editor-fold desc="Local files">
-
-// General file ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="Local General files">
 std::string file_name = "general_file";
 std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-//std::string AnalyseFile = "/home/alon/Analyser/e_on_1000060120_2222MeV_emmec.gst.root";
-//</editor-fold>
-
-//</editor-fold>
-
-// Files from GENIE gpvm ------------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="Files from GENIE gpvm">
-//TODO: Implement a mechanism that selects file_name automatically when running on gpvm
-//std::string file_name = "GENIE_with_fsi";
-//std::string file_name = "GENIE_no_fsi";
-//</editor-fold>
-
-//</editor-fold>
+//std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
+//std::string AnalyseFile = "/mnt/d/NRG/hipo_data_files/2delete/recon_c12_6gev/recon_c12_6gev_5_torus-1.0.hipo";
 
 
 // BEnergyToNucleus definition ------------------------------------------------------------------------------------------------------------------------------------------
