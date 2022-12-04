@@ -184,9 +184,9 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = false;
+    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
 
-    bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false;
+    bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false, selection_test_MicroBooNE = false;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
@@ -1858,16 +1858,17 @@ void EventAnalyser() {
 //    c12->addZeroOfRestPid(); // nothing else
     //</editor-fold>
 
-//        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
-//        c12.addExactPid(2212, 1); //exactly 1 electron
     c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
     c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
     c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+//    c12.addAtLeastPid(211, 0); // at least 0 pi+ (MicroBooNE)
+//    c12.addAtLeastPid(-211, 0); // at least 0 pi- (MicroBooNE)
 
     c12.addZeroOfRestPid(); // nothing else
 
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
+    int num_of_MicroBooNE_events = 0;
 
 //    gSystem->RedirectOutput("mylogfile.txt", "a");
 //    while (chain.Next()) { // loop over events
@@ -1889,6 +1890,26 @@ void EventAnalyser() {
         auto electrons = c12.getByID(11);
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
+        auto piplus = c12.getByID(211);
+        auto piminus = c12.getByID(-211);
+
+//        cout << "==========================================================================\n";
+//        cout << "electrons.size() ==" << electrons.size() << "\n";
+//        cout << "protons.size() ==" << protons.size() << "\n";
+//        cout << "neutrons.size() ==" << neutrons.size() << "\n";
+//        cout << "piplus.size() ==" << piplus.size() << "\n";
+//        cout << "piminus.size() ==" << piminus.size() << "\n\n";
+
+
+        if (piplus.size() == 0 && piminus.size() == 0) {
+            cout << "==========================================================================\n";
+            cout << "electrons.size() == " << electrons.size() << "\n";
+            cout << "protons.size() == " << protons.size() << "\n";
+            cout << "neutrons.size() == " << neutrons.size() << "\n";
+            cout << "piplus.size() == " << piplus.size() << "\n";
+            cout << "piminus.size() == " << piminus.size() << "\n\n";
+        }
+
 
         //<editor-fold desc="Test plots fill">
         //        cout << "==========================================================================\n";
@@ -1919,7 +1940,7 @@ void EventAnalyser() {
         //</editor-fold>
 
 //  Inclusive calculations
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Inclusive calculations">
         if (calculate_inclusive == true) {
@@ -1940,7 +1961,7 @@ void EventAnalyser() {
                 //</editor-fold>
             } // end of loop over particles vector
 
-//      Energy transfer VS q3,q calculations:
+//          Energy transfer VS q3,q calculations:
             double Plx = particles[lepton_ind_inclusive]->par()->getPx();
             double Ply = particles[lepton_ind_inclusive]->par()->getPy();
             double Plz = particles[lepton_ind_inclusive]->par()->getPz();
@@ -1987,11 +2008,11 @@ void EventAnalyser() {
         //</editor-fold>
 
 
-// 2p calculations
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  2p calculations
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="2p calculations">
-        if (calculate_2p && protons.size() == 2 && neutrons.size() == 0) {
+        if (calculate_2p && protons.size() == 2 && neutrons.size() == 0 && piplus.size() == 0 && piminus.size() == 0) {
             ++num_of_2p_events;
 
             if (selection_test_2p) {
@@ -2301,11 +2322,12 @@ void EventAnalyser() {
         } // end of 2p if
         //</editor-fold>
 
-// 1n1p calculations
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//  1n1p calculations
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1n1p calculations">
-        if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1) {
+        if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1 && piplus.size() == 0 && piminus.size() == 0) {
             ++num_of_1n1p_events;
 
             if (selection_test_1n1p) {
@@ -2527,6 +2549,171 @@ void EventAnalyser() {
         } // end of 1n1p if
         //</editor-fold>
 
+
+//  MicroBooNE calculations
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="MicroBooNE calculations">
+        if (calculate_MicroBooNE == true && protons.size() == 2) { // 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons")
+            ++num_of_MicroBooNE_events;
+
+            int ProtonCounter_MicroBooNE = 0, OtherParticleCounter_MicroBooNE = 0;
+            int Lepton_ind_MicroBooNE = -1, Proton_1_ind_MicroBooNE = -1, Proton_2_ind_MicroBooNE = -1;
+
+            for (int i = 0; i < particles.size(); i++) {
+
+                float particlePDG_MicroBooNE = particles[i]->par()->getPid();
+
+                if (selection_test_MicroBooNE) {
+                    cout << "particlePDG_MicroBooNE[" << i << "] = " << particlePDG_MicroBooNE << "\n";
+                } // end of selection test if (MicroBooNE)
+
+                //<editor-fold desc="Selector (MicroBooNE)">
+                if (particlePDG_MicroBooNE == 2212) {
+                    ++ProtonCounter_MicroBooNE;
+//                    cout << "particlePDG_MicroBooNE[" << i << "] = " << particlePDG_MicroBooNE << "\n";
+//                    cout << "i = " << i << "\n";
+                    if (ProtonCounter_MicroBooNE == 1) {
+                        Proton_1_ind_MicroBooNE = i;
+//                            cout << "Proton_1_ind_MicroBooNE = " << Proton_1_ind_MicroBooNE << "\n";
+                    } else if (ProtonCounter_MicroBooNE == 2) {
+                        Proton_2_ind_MicroBooNE = i;
+//                            cout << "Proton_2_ind_MicroBooNE = " << Proton_2_ind_MicroBooNE << "\n";
+                    }
+                } else if (particlePDG_MicroBooNE == 11) {
+                    Lepton_ind_MicroBooNE = i;
+                } // end of selector (MicroBooNE)
+                //</editor-fold>
+
+            } // end of loop over particles vector
+
+            double Plx = particles[Lepton_ind_MicroBooNE]->par()->getPx();
+            double Ply = particles[Lepton_ind_MicroBooNE]->par()->getPy();
+            double Plz = particles[Lepton_ind_MicroBooNE]->par()->getPz();
+
+//          Lepton (muon) momentum modulus:
+            double P_lp_f = sqrt(Plx * Plx + Ply * Ply + Plz * Plz);
+
+//          Leading proton (according to "the proton with the most momentum is labeled as the leading proton") momentum modulus:
+            double P_L = fmax(rCalc(particles[Proton_1_ind_MicroBooNE]->par()->getPx(), particles[Proton_1_ind_MicroBooNE]->par()->getPy(),
+                                    particles[Proton_1_ind_MicroBooNE]->par()->getPz()),
+                              rCalc(particles[Proton_2_ind_MicroBooNE]->par()->getPx(), particles[Proton_2_ind_MicroBooNE]->par()->getPy(),
+                                    particles[Proton_2_ind_MicroBooNE]->par()->getPz()));
+//            double P_L = fmax(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
+//                              rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
+
+//          Recoil proton (according to "the secondary proton is labeled as the recoil proton") momentum modulus:
+            double P_R = fmin(rCalc(particles[Proton_1_ind_MicroBooNE]->par()->getPx(), particles[Proton_1_ind_MicroBooNE]->par()->getPy(),
+                                    particles[Proton_1_ind_MicroBooNE]->par()->getPz()),
+                              rCalc(particles[Proton_2_ind_MicroBooNE]->par()->getPx(), particles[Proton_2_ind_MicroBooNE]->par()->getPy(),
+                                    particles[Proton_2_ind_MicroBooNE]->par()->getPz()));
+//            double P_R = fmin(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
+//                              rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
+
+            if ((P_lp_f >= P_l_lower_lim_MicroBooNE && P_lp_f <= P_l_upper_lim_MicroBooNE)
+                && (P_L >= P_L_lower_lim_MicroBooNE && P_L <= P_L_upper_lim_MicroBooNE)
+                && (P_R >= P_R_lower_lim_MicroBooNE && P_R <= P_R_upper_lim_MicroBooNE)) {
+
+//              Calculating P_T:
+                double P_T_x = Plx + particles[Proton_1_ind_MicroBooNE]->par()->getPx() + particles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
+                double P_T_y = Ply + particles[Proton_1_ind_MicroBooNE]->par()->getPy() + particles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
+                double P_T = sqrt(P_T_x * P_T_x + P_T_y * P_T_y);
+
+                if (piplus.size() == 0 && piminus.size() == 0) { // In events without pions
+
+//                  Calculating the total proton momentum vector:
+                    double P_tot_x = particles[Proton_1_ind_MicroBooNE]->par()->getPx() + particles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
+                    double P_tot_y = particles[Proton_1_ind_MicroBooNE]->par()->getPy() + particles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
+                    double P_tot_z = particles[Proton_1_ind_MicroBooNE]->par()->getPz() + particles[Proton_2_ind_MicroBooNE]->par()->getPz(); // z component
+
+//                  Total proton momentum modulus:
+                    double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
+
+                    gamma_mu_p_tot->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f));
+//                    gamma_mu_p_tot_weighted->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f), Q2 * Q2);
+
+
+//                  Gamma_Lab calculations -------------------------------------------------
+
+                    double P_p1 = rCalc(particles[Proton_1_ind_MicroBooNE]->par()->getPx(), particles[Proton_1_ind_MicroBooNE]->par()->getPy(),
+                                        particles[Proton_1_ind_MicroBooNE]->par()->getPz());
+                    double P_p2 = rCalc(particles[Proton_2_ind_MicroBooNE]->par()->getPx(), particles[Proton_2_ind_MicroBooNE]->par()->getPy(),
+                                        particles[Proton_2_ind_MicroBooNE]->par()->getPz());
+
+                    gamma_Lab_hist->Fill((particles[Proton_1_ind_MicroBooNE]->par()->getPx() * particles[Proton_2_ind_MicroBooNE]->par()->getPx() +
+                                          particles[Proton_1_ind_MicroBooNE]->par()->getPy() * particles[Proton_2_ind_MicroBooNE]->par()->getPy() +
+                                          particles[Proton_1_ind_MicroBooNE]->par()->getPz() * particles[Proton_2_ind_MicroBooNE]->par()->getPz()) / (P_p1 * P_p2));
+//                    gamma_Lab_hist_weighted->Fill((particles[Proton_1_ind_MicroBooNE]->par()->getPx() * particles[Proton_2_ind_MicroBooNE]->par()->getPx() +
+//                                                   particles[Proton_1_ind_MicroBooNE]->par()->getPy() * particles[Proton_2_ind_MicroBooNE]->par()->getPy() +
+//                                                   particles[Proton_1_ind_MicroBooNE]->par()->getPz() * particles[Proton_2_ind_MicroBooNE]->par()->getPz()) /
+//                                                  (P_p1 * P_p2), Q2 * Q2);
+                    dP_T_hist->Fill(P_T);
+//                    dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
+
+                    //<editor-fold desc="MicroBooNE momentum plots fill (no charged pions case)">
+                    P_R_hist->Fill(P_R);
+                    P_L_hist->Fill(P_L);
+                    P_l_hist->Fill(P_lp_f);
+                    //</editor-fold>
+
+                } else { // In events with pions
+                    for (int i = 0; i < particles.size(); i++) {
+
+                        float particlePDG_MicroBooNE1 = particles[i]->par()->getPid();
+
+                        if (abs(particlePDG_MicroBooNE1) == 211) { // The abs() for either pi+ or pi-
+                            double P_pion = rCalc(particles[i]->par()->getPx(), particles[i]->par()->getPy(), particles[i]->par()->getPz());
+
+//                          Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+                            if (P_pion <= P_pion_upper_lim_MicroBooNE) {
+
+//                              Gamma_mu,P_L+P_R calculations ------------------------------------------
+
+//                              Calculating the total proton momentum vector:
+                                double P_tot_x = particles[Proton_1_ind_MicroBooNE]->par()->getPx() + particles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
+                                double P_tot_y = particles[Proton_1_ind_MicroBooNE]->par()->getPy() + particles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
+                                double P_tot_z = particles[Proton_1_ind_MicroBooNE]->par()->getPz() + particles[Proton_2_ind_MicroBooNE]->par()->getPz(); // z component
+
+//                              Total proton momentum modulus:
+                                double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
+
+                                gamma_mu_p_tot->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f));
+//                                gamma_mu_p_tot_weighted->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f), Q2 * Q2);
+
+
+//                              Gamma_Lab calculations -------------------------------------------------
+
+                                double P_p1 = rCalc(particles[Proton_1_ind_MicroBooNE]->par()->getPx(), particles[Proton_1_ind_MicroBooNE]->par()->getPy(),
+                                                    particles[Proton_1_ind_MicroBooNE]->par()->getPz());
+                                double P_p2 = rCalc(particles[Proton_2_ind_MicroBooNE]->par()->getPx(), particles[Proton_2_ind_MicroBooNE]->par()->getPy(),
+                                                    particles[Proton_2_ind_MicroBooNE]->par()->getPz());
+
+                                gamma_Lab_hist->Fill(
+                                        (particles[Proton_1_ind_MicroBooNE]->par()->getPx() * particles[Proton_2_ind_MicroBooNE]->par()->getPx() +
+                                         particles[Proton_1_ind_MicroBooNE]->par()->getPy() * particles[Proton_2_ind_MicroBooNE]->par()->getPy() +
+                                         particles[Proton_1_ind_MicroBooNE]->par()->getPz() * particles[Proton_2_ind_MicroBooNE]->par()->getPz()) / (P_p1 * P_p2));
+//                                gamma_Lab_hist_weighted->Fill(
+//                                        (particles[Proton_1_ind_MicroBooNE]->par()->getPx() * particles[Proton_2_ind_MicroBooNE]->par()->getPx() +
+//                                         particles[Proton_1_ind_MicroBooNE]->par()->getPy() * particles[Proton_2_ind_MicroBooNE]->par()->getPy() +
+//                                         particles[Proton_1_ind_MicroBooNE]->par()->getPz() * particles[Proton_2_ind_MicroBooNE]->par()->getPz()) / (P_p1 * P_p2),
+//                                        Q2 * Q2);
+                                dP_T_hist->Fill(P_T);
+//                                dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
+
+                                //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
+                                P_R_hist->Fill(P_R);
+                                P_L_hist->Fill(P_L);
+                                P_l_hist->Fill(P_lp_f);
+                                P_pion_hist->Fill(P_pion);
+                                //</editor-fold>
+
+                            } // end of pion threshold if
+                        } // end of abs if
+                    } // end of for loop
+                } // end of "with pions" if
+            } // end of momentum threshold if
+        } // end of MicroBooNE if
+        //</editor-fold>
     } // end of while
     //</editor-fold>
 
@@ -4739,268 +4926,271 @@ void EventAnalyser() {
 // MicroBooNE article histogram reconstructions
 // ====================================================================================================
 
-/*
-//    if (MicroBooNE_plots) {
-//
-//        cout << "\n";
-//        cout << "\n";
-//        cout << "Plotting article histograms...\n";
-//        cout << "\n";
-//
-//// Momentum plots -------------------------------------------------------------------------------------
-//
-//        P_L_hist->Draw();
-//        plots->Add(P_L_hist);
-//        P_L_hist->SetLineWidth(2);
-//        P_L_hist->GetXaxis()->CenterTitle(true);
-//        P_L_hist->SetLineColor(kBlue);
-//        c1->SetLogy(1);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_log_scale.png");
-//        c1->SetLogy(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_linear_scale.png");
-//        c1->Clear();
-//
-//        P_R_hist->Draw();
-//        plots->Add(P_R_hist);
-//        P_R_hist->SetLineWidth(2);
-//        P_R_hist->GetXaxis()->CenterTitle(true);
-//        P_R_hist->SetLineColor(kBlue);
-//        c1->SetLogy(1);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_log_scale.png");
-//        c1->SetLogy(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_linear_scale.png");
-//        c1->Clear();
-//
-//        P_l_hist->Draw();
-//        plots->Add(P_l_hist);
-//        P_l_hist->SetLineWidth(2);
-//        P_l_hist->GetXaxis()->CenterTitle(true);
-//        P_l_hist->SetLineColor(kBlue);
-//        c1->SetLogy(1);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_log_scale.png");
-//        c1->SetLogy(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_linear_scale.png");
-//        c1->Clear();
-//
-//        P_pion_hist->Draw();
-//        plots->Add(P_pion_hist);
-//        P_pion_hist->SetLineWidth(2);
-//        P_pion_hist->GetXaxis()->CenterTitle(true);
-//        P_pion_hist->SetLineColor(kBlue);
-//        c1->SetLogy(1);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_log_scale.png");
-//        c1->SetLogy(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_linear_scale.png");
-//        c1->Clear();
-//
-//// Unweighted plots -----------------------------------------------------------------------------
-//
-//        gamma_Lab_hist->Draw();
-//        gamma_Lab_hist->SetTitleSize(0.06);
-//        gamma_Lab_hist->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_hist->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_hist->GetYaxis()->SetLabelSize(0.0425);
-////        gamma_Lab_hist->GetYaxis()->SetLimits(0., 3.);
-//        plots->Add(gamma_Lab_hist);
-//        gamma_Lab_hist->SetLineWidth(2);
-//        gamma_Lab_hist->SetLineColor(kBlue);
-////        gamma_Lab_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab.png");
-//        c1->Clear();
-//
-//        gamma_mu_p_tot->Draw();
-//        gamma_mu_p_tot->SetTitleSize(0.06);
-//        gamma_mu_p_tot->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_mu_p_tot->GetXaxis()->CenterTitle(true);
-//        gamma_mu_p_tot->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_mu_p_tot);
-//        gamma_mu_p_tot->SetLineWidth(2);
-//        gamma_mu_p_tot->SetLineColor(kBlue);
-////        gamma_mu_p_tot->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot.png");
-//        c1->Clear();
-//
-//        dP_T_hist->Draw();
-//        dP_T_hist->SetTitleSize(0.06);
-//        dP_T_hist->GetXaxis()->SetLabelSize(0.0425);
-//        dP_T_hist->GetXaxis()->CenterTitle(true);
-//        dP_T_hist->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(dP_T_hist);
-//        dP_T_hist->SetLineWidth(2);
-//        dP_T_hist->SetLineColor(kBlue);
-////        dP_T_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram.png");
-//        c1->Clear();
-//
-//        gamma_Lab_all_hist->Draw();
-//        gamma_Lab_all_hist->SetTitleSize(0.06);
-//        gamma_Lab_all_hist->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_all_hist->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_all_hist->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_all_hist);
-//        gamma_Lab_all_hist->SetLineWidth(2);
-//        gamma_Lab_all_hist->SetLineColor(kBlue);
-////        gamma_Lab_all_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all.png");
-//        c1->Clear();
-//
-//        gamma_Lab_QEL_hist->Draw();
-//        gamma_Lab_QEL_hist->SetTitleSize(0.06);
-//        gamma_Lab_QEL_hist->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_QEL_hist->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_QEL_hist->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_QEL_hist);
-//        gamma_Lab_QEL_hist->SetLineWidth(2);
-//        gamma_Lab_QEL_hist->SetLineColor(kBlue);
-////        gamma_Lab_QEL_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL.png");
-//        c1->Clear();
-//
-//        gamma_Lab_MEC_hist->Draw();
-//        gamma_Lab_MEC_hist->SetTitleSize(0.06);
-//        gamma_Lab_MEC_hist->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_MEC_hist->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_MEC_hist->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_MEC_hist);
-//        gamma_Lab_MEC_hist->SetLineWidth(2);
-//        gamma_Lab_MEC_hist->SetLineColor(kBlue);
-////        gamma_Lab_MEC_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC.png");
-//        c1->Clear();
-//
-//        gamma_Lab_RES_hist->Draw();
-//        gamma_Lab_RES_hist->SetTitleSize(0.06);
-//        gamma_Lab_RES_hist->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_RES_hist->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_RES_hist->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_RES_hist);
-//        gamma_Lab_RES_hist->SetLineWidth(2);
-//        gamma_Lab_RES_hist->SetLineColor(kBlue);
-////        gamma_Lab_RES_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES.png");
-//        c1->Clear();
-//
-//        gamma_Lab_DIS_hist->Draw();
-//        gamma_Lab_DIS_hist->SetTitleSize(0.06);
-//        gamma_Lab_DIS_hist->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_DIS_hist->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_DIS_hist->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_DIS_hist);
-//        gamma_Lab_DIS_hist->SetLineWidth(2);
-//        gamma_Lab_DIS_hist->SetLineColor(kBlue);
-////        gamma_Lab_DIS_hist->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS.png");
-//        c1->Clear();
-//
-//// Weighted plots -------------------------------------------------------------------------------
-//
-//        gamma_Lab_hist_weighted->Draw();
-//        gamma_Lab_hist_weighted->Sumw2();
-//        gamma_Lab_hist_weighted->SetTitleSize(0.06);
-//        gamma_Lab_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_hist_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_hist_weighted);
-//        gamma_Lab_hist_weighted->SetLineWidth(2);
-//        gamma_Lab_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab_weighted.png");
-//        c1->Clear();
-//
-//        gamma_mu_p_tot_weighted->Draw();
-//        gamma_mu_p_tot_weighted->Sumw2();
-//        gamma_mu_p_tot_weighted->SetTitleSize(0.06);
-//        gamma_mu_p_tot_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_mu_p_tot_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_mu_p_tot_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_mu_p_tot_weighted);
-//        gamma_mu_p_tot_weighted->SetLineWidth(2);
-//        gamma_mu_p_tot_weighted->SetLineColor(kBlue);
-//        gamma_mu_p_tot_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot_weighted.png");
-//        c1->Clear();
-//
-//        dP_T_hist_weighted->Draw();
-//        dP_T_hist_weighted->Sumw2();
-//        dP_T_hist_weighted->SetTitleSize(0.06);
-//        dP_T_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        dP_T_hist_weighted->GetXaxis()->CenterTitle(true);
-//        dP_T_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(dP_T_hist_weighted);
-//        dP_T_hist_weighted->SetLineWidth(2);
-//        dP_T_hist_weighted->SetLineColor(kBlue);
-//        dP_T_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram_weighted.png");
-//        c1->Clear();
-//
-//
-//        gamma_Lab_all_hist_weighted->Draw();
-//        gamma_Lab_all_hist_weighted->Sumw2();
-//        gamma_Lab_all_hist_weighted->SetTitleSize(0.06);
-//        gamma_Lab_all_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_all_hist_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_all_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_all_hist_weighted);
-//        gamma_Lab_all_hist_weighted->SetLineWidth(2);
-//        gamma_Lab_all_hist_weighted->SetLineColor(kBlue);
-////        gamma_Lab_all_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all_weighted.png");
-//        c1->Clear();
-//
-//        gamma_Lab_QEL_hist_weighted->Draw();
-//        gamma_Lab_QEL_hist_weighted->Sumw2();
-//        gamma_Lab_QEL_hist_weighted->SetTitleSize(0.06);
-//        gamma_Lab_QEL_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_QEL_hist_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_QEL_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_QEL_hist_weighted);
-//        gamma_Lab_QEL_hist_weighted->SetLineWidth(2);
-//        gamma_Lab_QEL_hist_weighted->SetLineColor(kBlue);
-////        gamma_Lab_QEL_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL_weighted.png");
-//        c1->Clear();
-//
-//        gamma_Lab_MEC_hist_weighted->Draw();
-//        gamma_Lab_MEC_hist_weighted->Sumw2();
-//        gamma_Lab_MEC_hist_weighted->SetTitleSize(0.06);
-//        gamma_Lab_MEC_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_MEC_hist_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_MEC_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_MEC_hist_weighted);
-//        gamma_Lab_MEC_hist_weighted->SetLineWidth(2);
-//        gamma_Lab_MEC_hist_weighted->SetLineColor(kBlue);
-////        gamma_Lab_MEC_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC_weighted.png");
-//        c1->Clear();
-//
-//        gamma_Lab_RES_hist_weighted->Draw();
-//        gamma_Lab_RES_hist_weighted->Sumw2();
-//        gamma_Lab_RES_hist_weighted->SetTitleSize(0.06);
-//        gamma_Lab_RES_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_RES_hist_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_RES_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_RES_hist_weighted);
-//        gamma_Lab_RES_hist_weighted->SetLineWidth(2);
-//        gamma_Lab_RES_hist_weighted->SetLineColor(kBlue);
-////        gamma_Lab_RES_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES_weighted.png");
-//        c1->Clear();
-//
-//        gamma_Lab_DIS_hist_weighted->Draw();
-//        gamma_Lab_DIS_hist_weighted->Sumw2();
-//        gamma_Lab_DIS_hist_weighted->SetTitleSize(0.06);
-//        gamma_Lab_DIS_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_DIS_hist_weighted->GetXaxis()->CenterTitle(true);
-//        gamma_Lab_DIS_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-//        plots->Add(gamma_Lab_DIS_hist_weighted);
-//        gamma_Lab_DIS_hist_weighted->SetLineWidth(2);
-//        gamma_Lab_DIS_hist_weighted->SetLineColor(kBlue);
-////        gamma_Lab_DIS_hist_weighted->SetStats(0);
-//        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS_weighted.png");
-//        c1->Clear();
-//
-//    }
-*/
+    if (MicroBooNE_plots) {
+
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting MicroBooNE histograms...\n";
+        cout << "\n";
+
+// Momentum plots -------------------------------------------------------------------------------------
+
+        P_L_hist->Draw();
+        plots->Add(P_L_hist);
+        P_L_hist->SetLineWidth(2);
+        P_L_hist->GetXaxis()->CenterTitle(true);
+        P_L_hist->SetLineColor(kBlue);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_L_histogram_linear_scale.png");
+        c1->Clear();
+
+        P_R_hist->Draw();
+        plots->Add(P_R_hist);
+        P_R_hist->SetLineWidth(2);
+        P_R_hist->GetXaxis()->CenterTitle(true);
+        P_R_hist->SetLineColor(kBlue);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_linear_scale.png");
+        c1->Clear();
+
+        P_l_hist->Draw();
+        plots->Add(P_l_hist);
+        P_l_hist->SetLineWidth(2);
+        P_l_hist->GetXaxis()->CenterTitle(true);
+        P_l_hist->SetLineColor(kBlue);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_linear_scale.png");
+        c1->Clear();
+
+        P_pion_hist->Draw();
+        plots->Add(P_pion_hist);
+        P_pion_hist->SetLineWidth(2);
+        P_pion_hist->GetXaxis()->CenterTitle(true);
+        P_pion_hist->SetLineColor(kBlue);
+        c1->SetLogy(1);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_log_scale.png");
+        c1->SetLogy(0);
+        c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_pion_histogram_linear_scale.png");
+        c1->Clear();
+
+// Unweighted plots -----------------------------------------------------------------------------
+
+        gamma_Lab_hist->Draw();
+        gamma_Lab_hist->SetTitleSize(0.06);
+        gamma_Lab_hist->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_hist->GetXaxis()->CenterTitle(true);
+        gamma_Lab_hist->GetYaxis()->SetLabelSize(0.0425);
+//        gamma_Lab_hist->GetYaxis()->SetLimits(0., 3.);
+        plots->Add(gamma_Lab_hist);
+        gamma_Lab_hist->SetLineWidth(2);
+        gamma_Lab_hist->SetLineColor(kBlue);
+//        gamma_Lab_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab.png");
+        c1->Clear();
+
+        gamma_mu_p_tot->Draw();
+        gamma_mu_p_tot->SetTitleSize(0.06);
+        gamma_mu_p_tot->GetXaxis()->SetLabelSize(0.0425);
+        gamma_mu_p_tot->GetXaxis()->CenterTitle(true);
+        gamma_mu_p_tot->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_mu_p_tot);
+        gamma_mu_p_tot->SetLineWidth(2);
+        gamma_mu_p_tot->SetLineColor(kBlue);
+//        gamma_mu_p_tot->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot.png");
+        c1->Clear();
+
+        dP_T_hist->Draw();
+        dP_T_hist->SetTitleSize(0.06);
+        dP_T_hist->GetXaxis()->SetLabelSize(0.0425);
+        dP_T_hist->GetXaxis()->CenterTitle(true);
+        dP_T_hist->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(dP_T_hist);
+        dP_T_hist->SetLineWidth(2);
+        dP_T_hist->SetLineColor(kBlue);
+//        dP_T_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram.png");
+        c1->Clear();
+
+        gamma_Lab_all_hist->Draw();
+        gamma_Lab_all_hist->SetTitleSize(0.06);
+        gamma_Lab_all_hist->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_all_hist->GetXaxis()->CenterTitle(true);
+        gamma_Lab_all_hist->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_all_hist);
+        gamma_Lab_all_hist->SetLineWidth(2);
+        gamma_Lab_all_hist->SetLineColor(kBlue);
+//        gamma_Lab_all_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all.png");
+        c1->Clear();
+
+        /*
+        gamma_Lab_QEL_hist->Draw();
+        gamma_Lab_QEL_hist->SetTitleSize(0.06);
+        gamma_Lab_QEL_hist->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_QEL_hist->GetXaxis()->CenterTitle(true);
+        gamma_Lab_QEL_hist->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_QEL_hist);
+        gamma_Lab_QEL_hist->SetLineWidth(2);
+        gamma_Lab_QEL_hist->SetLineColor(kBlue);
+//        gamma_Lab_QEL_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL.png");
+        c1->Clear();
+
+        gamma_Lab_MEC_hist->Draw();
+        gamma_Lab_MEC_hist->SetTitleSize(0.06);
+        gamma_Lab_MEC_hist->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_MEC_hist->GetXaxis()->CenterTitle(true);
+        gamma_Lab_MEC_hist->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_MEC_hist);
+        gamma_Lab_MEC_hist->SetLineWidth(2);
+        gamma_Lab_MEC_hist->SetLineColor(kBlue);
+//        gamma_Lab_MEC_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC.png");
+        c1->Clear();
+
+        gamma_Lab_RES_hist->Draw();
+        gamma_Lab_RES_hist->SetTitleSize(0.06);
+        gamma_Lab_RES_hist->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_RES_hist->GetXaxis()->CenterTitle(true);
+        gamma_Lab_RES_hist->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_RES_hist);
+        gamma_Lab_RES_hist->SetLineWidth(2);
+        gamma_Lab_RES_hist->SetLineColor(kBlue);
+//        gamma_Lab_RES_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES.png");
+        c1->Clear();
+
+        gamma_Lab_DIS_hist->Draw();
+        gamma_Lab_DIS_hist->SetTitleSize(0.06);
+        gamma_Lab_DIS_hist->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_DIS_hist->GetXaxis()->CenterTitle(true);
+        gamma_Lab_DIS_hist->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_DIS_hist);
+        gamma_Lab_DIS_hist->SetLineWidth(2);
+        gamma_Lab_DIS_hist->SetLineColor(kBlue);
+//        gamma_Lab_DIS_hist->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS.png");
+        c1->Clear();
+        */
+
+// Weighted plots -------------------------------------------------------------------------------
+
+        gamma_Lab_hist_weighted->Draw();
+        gamma_Lab_hist_weighted->Sumw2();
+        gamma_Lab_hist_weighted->SetTitleSize(0.06);
+        gamma_Lab_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_hist_weighted->GetXaxis()->CenterTitle(true);
+        gamma_Lab_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_hist_weighted);
+        gamma_Lab_hist_weighted->SetLineWidth(2);
+        gamma_Lab_hist_weighted->SetLineColor(kBlue);
+        gamma_Lab_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab_weighted.png");
+        c1->Clear();
+
+        gamma_mu_p_tot_weighted->Draw();
+        gamma_mu_p_tot_weighted->Sumw2();
+        gamma_mu_p_tot_weighted->SetTitleSize(0.06);
+        gamma_mu_p_tot_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_mu_p_tot_weighted->GetXaxis()->CenterTitle(true);
+        gamma_mu_p_tot_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_mu_p_tot_weighted);
+        gamma_mu_p_tot_weighted->SetLineWidth(2);
+        gamma_mu_p_tot_weighted->SetLineColor(kBlue);
+        gamma_mu_p_tot_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot_weighted.png");
+        c1->Clear();
+
+        dP_T_hist_weighted->Draw();
+        dP_T_hist_weighted->Sumw2();
+        dP_T_hist_weighted->SetTitleSize(0.06);
+        dP_T_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        dP_T_hist_weighted->GetXaxis()->CenterTitle(true);
+        dP_T_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(dP_T_hist_weighted);
+        dP_T_hist_weighted->SetLineWidth(2);
+        dP_T_hist_weighted->SetLineColor(kBlue);
+        dP_T_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram_weighted.png");
+        c1->Clear();
+
+
+        gamma_Lab_all_hist_weighted->Draw();
+        gamma_Lab_all_hist_weighted->Sumw2();
+        gamma_Lab_all_hist_weighted->SetTitleSize(0.06);
+        gamma_Lab_all_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_all_hist_weighted->GetXaxis()->CenterTitle(true);
+        gamma_Lab_all_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_all_hist_weighted);
+        gamma_Lab_all_hist_weighted->SetLineWidth(2);
+        gamma_Lab_all_hist_weighted->SetLineColor(kBlue);
+//        gamma_Lab_all_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all_weighted.png");
+        c1->Clear();
+
+        /*
+        gamma_Lab_QEL_hist_weighted->Draw();
+        gamma_Lab_QEL_hist_weighted->Sumw2();
+        gamma_Lab_QEL_hist_weighted->SetTitleSize(0.06);
+        gamma_Lab_QEL_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_QEL_hist_weighted->GetXaxis()->CenterTitle(true);
+        gamma_Lab_QEL_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_QEL_hist_weighted);
+        gamma_Lab_QEL_hist_weighted->SetLineWidth(2);
+        gamma_Lab_QEL_hist_weighted->SetLineColor(kBlue);
+//        gamma_Lab_QEL_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL_weighted.png");
+        c1->Clear();
+
+        gamma_Lab_MEC_hist_weighted->Draw();
+        gamma_Lab_MEC_hist_weighted->Sumw2();
+        gamma_Lab_MEC_hist_weighted->SetTitleSize(0.06);
+        gamma_Lab_MEC_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_MEC_hist_weighted->GetXaxis()->CenterTitle(true);
+        gamma_Lab_MEC_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_MEC_hist_weighted);
+        gamma_Lab_MEC_hist_weighted->SetLineWidth(2);
+        gamma_Lab_MEC_hist_weighted->SetLineColor(kBlue);
+//        gamma_Lab_MEC_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC_weighted.png");
+        c1->Clear();
+
+        gamma_Lab_RES_hist_weighted->Draw();
+        gamma_Lab_RES_hist_weighted->Sumw2();
+        gamma_Lab_RES_hist_weighted->SetTitleSize(0.06);
+        gamma_Lab_RES_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_RES_hist_weighted->GetXaxis()->CenterTitle(true);
+        gamma_Lab_RES_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_RES_hist_weighted);
+        gamma_Lab_RES_hist_weighted->SetLineWidth(2);
+        gamma_Lab_RES_hist_weighted->SetLineColor(kBlue);
+//        gamma_Lab_RES_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES_weighted.png");
+        c1->Clear();
+
+        gamma_Lab_DIS_hist_weighted->Draw();
+        gamma_Lab_DIS_hist_weighted->Sumw2();
+        gamma_Lab_DIS_hist_weighted->SetTitleSize(0.06);
+        gamma_Lab_DIS_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
+        gamma_Lab_DIS_hist_weighted->GetXaxis()->CenterTitle(true);
+        gamma_Lab_DIS_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(gamma_Lab_DIS_hist_weighted);
+        gamma_Lab_DIS_hist_weighted->SetLineWidth(2);
+        gamma_Lab_DIS_hist_weighted->SetLineColor(kBlue);
+//        gamma_Lab_DIS_hist_weighted->SetStats(0);
+        c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS_weighted.png");
+        c1->Clear();
+        */
+
+    }
+
 
 // Inclusive Energy transfer histograms
 // ====================================================================================================
@@ -5317,7 +5507,7 @@ void EventAnalyser() {
         c1->Clear();
 
     }
-    //</editor-fold>.q
+    //</editor-fold>
 
 
 // Saving histogram list and finishing execution
@@ -5344,25 +5534,31 @@ void EventAnalyser() {
     cout << "\n";
 
     if (calculate_2p == true) {
-        cout << "#(2p) events:\t" << num_of_2p_events << "\n";
+        cout << "#(2p) events:\t\t" << num_of_2p_events << "\n";
     } else {
-        cout << "#(2p) events:\tcalculation not performed\n";
+        cout << "#(2p) events:\t\tcalculation not performed\n";
     }
 
     if (calculate_1n1p == true) {
-        cout << "#(1n1p) events:\t" << num_of_1n1p_events << "\n";
+        cout << "#(1n1p) events:\t\t" << num_of_1n1p_events << "\n";
     } else {
-        cout << "#(1n1p) events:\tcalculation not performed\n";
+        cout << "#(1n1p) events:\t\tcalculation not performed\n";
+    }
+
+    if (calculate_MicroBooNE == true) {
+        cout << "#(MicroBooNE) events:\t" << num_of_MicroBooNE_events << "\n";
+    } else {
+        cout << "#(MicroBooNE) events:\tcalculation not performed\n";
     }
 
     if (FSI_status == false) {
-        cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
+        cout << "FSI status:\t\tOFF (ni = " << ni_selection << ")\n";
     } else if (FSI_status == true) {
-        cout << "FSI status:\tON\n";
+        cout << "FSI status:\t\tON\n";
     }
 
-    cout << "File input:\t" << LoadedInput << "\n";
-    cout << "Settings mode:\t'" << file_name << "'\n";
+    cout << "File input:\t\t" << LoadedInput << "\n";
+    cout << "Settings mode:\t\t'" << file_name << "'\n";
     cout << "\n";
 
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n";
