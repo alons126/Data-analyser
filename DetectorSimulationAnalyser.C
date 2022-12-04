@@ -1901,14 +1901,14 @@ void EventAnalyser() {
 //        cout << "piminus.size() ==" << piminus.size() << "\n\n";
 
 
-        if (piplus.size() == 0 && piminus.size() == 0) {
-            cout << "==========================================================================\n";
-            cout << "electrons.size() == " << electrons.size() << "\n";
-            cout << "protons.size() == " << protons.size() << "\n";
-            cout << "neutrons.size() == " << neutrons.size() << "\n";
-            cout << "piplus.size() == " << piplus.size() << "\n";
-            cout << "piminus.size() == " << piminus.size() << "\n\n";
-        }
+//        if (piplus.size() == 0 && piminus.size() == 0) {
+//            cout << "==========================================================================\n";
+//            cout << "electrons.size() == " << electrons.size() << "\n";
+//            cout << "protons.size() == " << protons.size() << "\n";
+//            cout << "neutrons.size() == " << neutrons.size() << "\n";
+//            cout << "piplus.size() == " << piplus.size() << "\n";
+//            cout << "piminus.size() == " << piminus.size() << "\n\n";
+//        }
 
 
         //<editor-fold desc="Test plots fill">
