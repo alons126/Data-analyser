@@ -77,11 +77,6 @@ void EventAnalyser() {
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
 
     if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
-////        cout << "\n";
-//        cout << "\n";
-//        cout << "nofsi is in fileInput! Setting custom_FSI_status == false." << "\n";
-//        cout << "\n";
-//
         custom_FSI_status = false; // and custom_FSI_status is set to be false
     }
 
@@ -109,34 +104,32 @@ void EventAnalyser() {
     string tune;
 
     if (fileInput.find("G18") <= fileInput[fileInput.size() - 1]) {
-//        cout << "\n";
-//        cout << "G18 is in fileInput! Setting ni_selection == 3\n";  // and no change to custom_FSI_status
-//        cout << "\n";
-
         tune = "G18";
         ni_selection = 3;
     } else if (fileInput.find("GEM21") <= fileInput[fileInput.size() - 1]) {
-//        cout << "\n";
-//        cout << "GEM21 is in fileInput! Setting ni_selection == 2\n";
-//        cout << "\n";
-
         tune = "GEM21 (SuSAv2)";
         ni_selection = 2;
     } else if (fileInput.find("SuSAv2") <= fileInput[fileInput.size() - 1]) {
-//        cout << "\n";
-//        cout << "SuSAv2 is in fileInput! Setting ni_selection == 2\n";
-//        cout << "\n";
-
         tune = "SuSAv2";
         ni_selection = 2;
     } else {
-//        cout << "\n";
-//        cout << "Could not figure tune, keeping ni = 2\n";
-//        cout << "\n";
-
         ni_selection = 2;
         tune = "unknown";
     }
+    //</editor-fold>
+
+    //<editor-fold desc="Set Ev and Pv of incoming lepton">
+    double Ev; // electron energy decloration
+    double m_e = 0.00051099895; // electron mass in GeV
+
+    if (fileInput == "recon_c12_6gev.hipo") {
+        Ev = 5.98636;
+    }
+
+    double Pv = sqrt(Ev * Ev - m_e * m_e);
+    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
+    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
+    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
     //</editor-fold>
 
     //<editor-fold desc="Set FSI according to setting mode">
@@ -191,9 +184,9 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = false;
+    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = false;
 
-    bool selection_test_2p = false, selection_test_1n1p = false;
+    bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
 
@@ -335,7 +328,7 @@ void EventAnalyser() {
         bool ET_all_plots = false, ET_QEL_plots = false, ET_MEC_plots = false, ET_RES_plots = false, ET_DIS_plots = false;
     }
 
-    bool inclusive_plots = true;
+    bool inclusive_plots = false;
 
     bool E_cal_plots = true, other_E_cal_plots = false;
 
@@ -861,51 +854,51 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Inclusive Energy Transfer histograms">
-        E_Trans15_all_inclusive_upper_lim = 2.3;
+        E_Trans15_all_inclusive_upper_lim = 6;
         E_Trans15_all_inclusive_lower_lim = 0;
-        E_Trans15_QEL_inclusive_upper_lim = 2.3;
+        E_Trans15_QEL_inclusive_upper_lim = 6;
         E_Trans15_QEL_inclusive_lower_lim = 0;
-        E_Trans15_MEC_inclusive_upper_lim = 2.3;
+        E_Trans15_MEC_inclusive_upper_lim = 6;
         E_Trans15_MEC_inclusive_lower_lim = 0;
-        E_Trans15_RES_inclusive_upper_lim = 2.3;
+        E_Trans15_RES_inclusive_upper_lim = 6;
         E_Trans15_RES_inclusive_lower_lim = 0;
-        E_Trans15_DIS_inclusive_upper_lim = 2.3;
+        E_Trans15_DIS_inclusive_upper_lim = 6;
         E_Trans15_DIS_inclusive_lower_lim = 0;
-        E_Trans_VS_q_all_inclusive_upper_lim_x = 2.75;
+        E_Trans_VS_q_all_inclusive_upper_lim_x = 6;
         E_Trans_VS_q_all_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_all_inclusive_upper_lim_y = 2.3;
+        E_Trans_VS_q_all_inclusive_upper_lim_y = 6;
         E_Trans_VS_q_all_inclusive_lower_lim_y = 0;
-        E_Trans_VS_q_QEL_inclusive_upper_lim_x = 2.75;
+        E_Trans_VS_q_QEL_inclusive_upper_lim_x = 6;
         E_Trans_VS_q_QEL_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 2.3;
+        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 6;
         E_Trans_VS_q_QEL_inclusive_lower_lim_y = 0;
-        E_Trans_VS_q_MEC_inclusive_upper_lim_x = 2.75;
+        E_Trans_VS_q_MEC_inclusive_upper_lim_x = 6;
         E_Trans_VS_q_MEC_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 2.3;
+        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 6;
         E_Trans_VS_q_MEC_inclusive_lower_lim_y = 0;
-        E_Trans_VS_q3_all_upper_lim_x_2p = 2.75;
+        E_Trans_VS_q3_all_upper_lim_x_2p = 6;
         E_Trans_VS_q3_all_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_2p = 2.3;
+        E_Trans_VS_q3_all_upper_lim_y_2p = 6;
         E_Trans_VS_q3_all_lower_lim_y_2p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_x_2p = 2.75;
+        E_Trans_VS_q3_QEL_upper_lim_x_2p = 6;
         E_Trans_VS_q3_QEL_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_2p = 2.3;
+        E_Trans_VS_q3_QEL_upper_lim_y_2p = 6;
         E_Trans_VS_q3_QEL_lower_lim_y_2p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_x_2p = 2.75;
+        E_Trans_VS_q3_MEC_upper_lim_x_2p = 6;
         E_Trans_VS_q3_MEC_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_2p = 2.3;
+        E_Trans_VS_q3_MEC_upper_lim_y_2p = 6;
         E_Trans_VS_q3_MEC_lower_lim_y_2p = 0;
-        E_Trans_VS_q3_all_upper_lim_x_1n1p = 2.75;
+        E_Trans_VS_q3_all_upper_lim_x_1n1p = 6;
         E_Trans_VS_q3_all_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_1n1p = 2.3;
+        E_Trans_VS_q3_all_upper_lim_y_1n1p = 6;
         E_Trans_VS_q3_all_lower_lim_y_1n1p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 2.75;
+        E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 6;
         E_Trans_VS_q3_QEL_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 2.3;
+        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 6;
         E_Trans_VS_q3_QEL_lower_lim_y_1n1p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 2.75;
+        E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 6;
         E_Trans_VS_q3_MEC_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 2.3;
+        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 6;
         E_Trans_VS_q3_MEC_lower_lim_y_1n1p = 0;
         //</editor-fold>
 
@@ -1413,75 +1406,56 @@ void EventAnalyser() {
 // Inclusive Energy Transfer histograms ---------------------------------------------------------------
 
     //<editor-fold desc="Inclusive Energy Transfer histograms">
-    THStack *Energy_Transfer_all_int_15_inclusive_Stack = new
-            THStack("Energy_Transfer_all_int_15_inclusive_Stack", ";E_{#nu}-E_{l} [GeV]");
+    THStack *Energy_Transfer_all_int_15_inclusive_Stack = new THStack("Energy_Transfer_all_int_15_inclusive_Stack", ";E_{#nu}-E_{l} [GeV]");
 
-    TH1D *E_Trans15_all_inclusive = new
-            TH1D("ET around 15 degrees (all interactions, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                 100, E_Trans15_all_inclusive_lower_lim, E_Trans15_all_inclusive_upper_lim);
-    TH1D *E_Trans15_QEL_inclusive = new
-            TH1D("ET around 15 degrees (QEL Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                 100, E_Trans15_QEL_inclusive_lower_lim, E_Trans15_QEL_inclusive_upper_lim);
-    TH1D *E_Trans15_MEC_inclusive = new
-            TH1D("ET around 15 degrees (MEC Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                 100, E_Trans15_MEC_inclusive_lower_lim, E_Trans15_MEC_inclusive_upper_lim);
-    TH1D *E_Trans15_RES_inclusive = new
-            TH1D("ET around 15 degrees (RES Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                 100, E_Trans15_RES_inclusive_lower_lim, E_Trans15_RES_inclusive_upper_lim);
-    TH1D *E_Trans15_DIS_inclusive = new
-            TH1D("ET around 15 degrees (DIS Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
-                 100, E_Trans15_DIS_inclusive_lower_lim, E_Trans15_DIS_inclusive_upper_lim);
+    TH1D *E_Trans15_all_inclusive = new TH1D("ET around 15 degrees (all interactions, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+                                             100, E_Trans15_all_inclusive_lower_lim, E_Trans15_all_inclusive_upper_lim);
+    TH1D *E_Trans15_QEL_inclusive = new TH1D("ET around 15 degrees (QEL Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+                                             100, E_Trans15_QEL_inclusive_lower_lim, E_Trans15_QEL_inclusive_upper_lim);
+    TH1D *E_Trans15_MEC_inclusive = new TH1D("ET around 15 degrees (MEC Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+                                             100, E_Trans15_MEC_inclusive_lower_lim, E_Trans15_MEC_inclusive_upper_lim);
+    TH1D *E_Trans15_RES_inclusive = new TH1D("ET around 15 degrees (RES Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+                                             100, E_Trans15_RES_inclusive_lower_lim, E_Trans15_RES_inclusive_upper_lim);
+    TH1D *E_Trans15_DIS_inclusive = new TH1D("ET around 15 degrees (DIS Only, inclusive)", ";E_{#nu}-E_{l} [GeV]",
+                                             100, E_Trans15_DIS_inclusive_lower_lim, E_Trans15_DIS_inclusive_upper_lim);
 
-    TH1D *Q2_hist_inclusive = new
-            TH1D("Q^{2} (inclusive)", ";Q^{2} [GeV^{2}]", 100, -0.05, 0.8); // CHANGE TITLE & ADD CUSTOM LIMITS
+    TH1D *Q2_hist_inclusive = new TH1D("Q^{2} (inclusive)", ";Q^{2} [GeV^{2}]", 100, -0.05, 0.8); // CHANGE TITLE & ADD CUSTOM LIMITS
 
-    TH2D *E_Trans_VS_q_all_inclusive = new
-            TH2D("ET around #omega VS q_{3} (All Interactions)",
-                 ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q_all_inclusive_lower_lim_x, E_Trans_VS_q_all_inclusive_upper_lim_x,
-                 200, E_Trans_VS_q_all_inclusive_lower_lim_y, E_Trans_VS_q_all_inclusive_upper_lim_y);
-    TH2D *E_Trans_VS_q_QEL_inclusive = new
-            TH2D("ET around #omega VS q_{3} (QEL Only)",
-                 ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q_QEL_inclusive_lower_lim_x, E_Trans_VS_q_QEL_inclusive_upper_lim_x,
-                 200, E_Trans_VS_q_QEL_inclusive_lower_lim_y, E_Trans_VS_q_QEL_inclusive_upper_lim_y);
-    TH2D *E_Trans_VS_q_MEC_inclusive = new
-            TH2D("ET around #omega VS q_{3} (MEC Only)",
-                 ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q_MEC_inclusive_lower_lim_x, E_Trans_VS_q_MEC_inclusive_upper_lim_x,
-                 200, E_Trans_VS_q_MEC_inclusive_lower_lim_y, E_Trans_VS_q_MEC_inclusive_upper_lim_y);
+    TH2D *E_Trans_VS_q_all_inclusive = new TH2D("ET around #omega VS q_{3} (All Interactions)", ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                                200, E_Trans_VS_q_all_inclusive_lower_lim_x, E_Trans_VS_q_all_inclusive_upper_lim_x,
+                                                200, E_Trans_VS_q_all_inclusive_lower_lim_y, E_Trans_VS_q_all_inclusive_upper_lim_y);
+    TH2D *E_Trans_VS_q_QEL_inclusive = new TH2D("ET around #omega VS q_{3} (QEL Only)", ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                                200, E_Trans_VS_q_QEL_inclusive_lower_lim_x, E_Trans_VS_q_QEL_inclusive_upper_lim_x,
+                                                200, E_Trans_VS_q_QEL_inclusive_lower_lim_y, E_Trans_VS_q_QEL_inclusive_upper_lim_y);
+    TH2D *E_Trans_VS_q_MEC_inclusive = new TH2D("ET around #omega VS q_{3} (MEC Only)", ";|q| = |p_{v} - p_{l}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                                200, E_Trans_VS_q_MEC_inclusive_lower_lim_x, E_Trans_VS_q_MEC_inclusive_upper_lim_x,
+                                                200, E_Trans_VS_q_MEC_inclusive_lower_lim_y, E_Trans_VS_q_MEC_inclusive_upper_lim_y);
 
-    TH2D *E_Trans_VS_q3_all_2p = new
-            TH2D("ET around #omega VS q_{3} (All Interactions, 2p)",
-                 "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q3_all_lower_lim_x_2p, E_Trans_VS_q3_all_upper_lim_x_2p,
-                 200, E_Trans_VS_q3_all_lower_lim_y_2p, E_Trans_VS_q3_all_upper_lim_y_2p);
-    TH2D *E_Trans_VS_q3_QEL_2p = new
-            TH2D("ET around #omega VS q_{3} (QEL Only, 2p)",
-                 "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q3_QEL_lower_lim_x_2p, E_Trans_VS_q3_QEL_upper_lim_x_2p,
-                 200, E_Trans_VS_q3_QEL_lower_lim_y_2p, E_Trans_VS_q3_QEL_upper_lim_y_2p);
-    TH2D *E_Trans_VS_q3_MEC_2p = new
-            TH2D("ET around #omega VS q_{3} (MEC Only, 2p)",
-                 "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q3_MEC_lower_lim_x_2p, E_Trans_VS_q3_MEC_upper_lim_x_2p,
-                 200, E_Trans_VS_q3_MEC_lower_lim_y_2p, E_Trans_VS_q3_MEC_upper_lim_y_2p);
+    TH2D *E_Trans_VS_q3_all_2p = new TH2D("ET around #omega VS q_{3} (All Interactions, 2p)",
+                                          "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                          200, E_Trans_VS_q3_all_lower_lim_x_2p, E_Trans_VS_q3_all_upper_lim_x_2p,
+                                          200, E_Trans_VS_q3_all_lower_lim_y_2p, E_Trans_VS_q3_all_upper_lim_y_2p);
+    TH2D *E_Trans_VS_q3_QEL_2p = new TH2D("ET around #omega VS q_{3} (QEL Only, 2p)",
+                                          "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                          200, E_Trans_VS_q3_QEL_lower_lim_x_2p, E_Trans_VS_q3_QEL_upper_lim_x_2p,
+                                          200, E_Trans_VS_q3_QEL_lower_lim_y_2p, E_Trans_VS_q3_QEL_upper_lim_y_2p);
+    TH2D *E_Trans_VS_q3_MEC_2p = new TH2D("ET around #omega VS q_{3} (MEC Only, 2p)",
+                                          "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 2p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                          200, E_Trans_VS_q3_MEC_lower_lim_x_2p, E_Trans_VS_q3_MEC_upper_lim_x_2p,
+                                          200, E_Trans_VS_q3_MEC_lower_lim_y_2p, E_Trans_VS_q3_MEC_upper_lim_y_2p);
 
-    TH2D *E_Trans_VS_q3_all_1n1p = new
-            TH2D("ET around #omega VS q_{3} (All Interactions, 1n1p)",
-                 "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q3_all_lower_lim_x_1n1p, E_Trans_VS_q3_all_upper_lim_x_1n1p,
-                 200, E_Trans_VS_q3_all_lower_lim_y_1n1p, E_Trans_VS_q3_all_upper_lim_y_1n1p);
-    TH2D *E_Trans_VS_q3_QEL_1n1p = new
-            TH2D("ET around #omega VS q_{3} (QEL Only, 1n1p)",
-                 "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q3_QEL_lower_lim_x_1n1p, E_Trans_VS_q3_QEL_upper_lim_x_1n1p,
-                 200, E_Trans_VS_q3_QEL_lower_lim_y_1n1p, E_Trans_VS_q3_QEL_upper_lim_y_1n1p);
-    TH2D *E_Trans_VS_q3_MEC_1n1p = new
-            TH2D("ET around #omega VS q_{3} (MEC Only, 1n1p)",
-                 "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
-                 200, E_Trans_VS_q3_MEC_lower_lim_x_1n1p, E_Trans_VS_q3_MEC_upper_lim_x_1n1p,
-                 200, E_Trans_VS_q3_MEC_lower_lim_y_1n1p, E_Trans_VS_q3_MEC_upper_lim_y_1n1p);
+    TH2D *E_Trans_VS_q3_all_1n1p = new TH2D("ET around #omega VS q_{3} (All Interactions, 1n1p)",
+                                            "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (All Interactions, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                            200, E_Trans_VS_q3_all_lower_lim_x_1n1p, E_Trans_VS_q3_all_upper_lim_x_1n1p,
+                                            200, E_Trans_VS_q3_all_lower_lim_y_1n1p, E_Trans_VS_q3_all_upper_lim_y_1n1p);
+    TH2D *E_Trans_VS_q3_QEL_1n1p = new TH2D("ET around #omega VS q_{3} (QEL Only, 1n1p)",
+                                            "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (QEL Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                            200, E_Trans_VS_q3_QEL_lower_lim_x_1n1p, E_Trans_VS_q3_QEL_upper_lim_x_1n1p,
+                                            200, E_Trans_VS_q3_QEL_lower_lim_y_1n1p, E_Trans_VS_q3_QEL_upper_lim_y_1n1p);
+    TH2D *E_Trans_VS_q3_MEC_1n1p = new TH2D("ET around #omega VS q_{3} (MEC Only, 1n1p)",
+                                            "Energy Transfer (E_{#nu}-E_{l}) vs q_{3} (MEC Only, 1n1p);q_{3} = |p_{v,3} - p_{l,3}| [GeV/c];#omega = E_{v} - E_{l} [GeV]",
+                                            200, E_Trans_VS_q3_MEC_lower_lim_x_1n1p, E_Trans_VS_q3_MEC_upper_lim_x_1n1p,
+                                            200, E_Trans_VS_q3_MEC_lower_lim_y_1n1p, E_Trans_VS_q3_MEC_upper_lim_y_1n1p);
 
     //<editor-fold desc="Inclusive Energy Transfer histograms - limits & titles by cases">
     if (Target_nucleus == "12C") {
@@ -1514,6 +1488,16 @@ void EventAnalyser() {
         E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{56}Fe(e,e'))");
         E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{56}Fe(e,e'))");
         E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{56}Fe(e,e'))");
+    } else {
+        E_Trans15_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, ^{12}C(e,e'))");
+        E_Trans15_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, ^{12}C(e,e'))");
+        E_Trans15_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, ^{12}C(e,e'))");
+        E_Trans15_RES_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, ^{12}C(e,e'))");
+        E_Trans15_DIS_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, ^{12}C(e,e'))");
+        Q2_hist_inclusive->SetTitle("Q^{2} Histogram ^{12}C(e,e')");
+        E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{12}C(e,e'))");
+        E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{12}C(e,e'))");
+        E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{12}C(e,e'))");
     }
     //</editor-fold>
 
@@ -1902,8 +1886,6 @@ void EventAnalyser() {
 
         auto particles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
-        cout << "particles.getDetEnergy()" << particles.getDetEnergy() << "\n";
-
         auto electrons = c12.getByID(11);
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
@@ -1935,6 +1917,75 @@ void EventAnalyser() {
 //        fsEl_histogram_test->Fill(El);
 //        cout << "El = " << El << "\n\n";
         //</editor-fold>
+
+//  Inclusive calculations
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Inclusive calculations">
+        if (calculate_inclusive == true) {
+            int lepton_ind_inclusive = -1;
+
+            for (int i = 0; i < particles.size(); i++) {
+
+                float particlePDG_inclusive = particles[i]->par()->getPid();
+
+                if (selection_test_inclusive) {
+                    cout << "particlePDG_inclusive[" << i << "] = " << particlePDG_inclusive << "\n";
+                } // end of selection test if (inclusive)
+
+                //<editor-fold desc="lepton selector (inclusive)">
+                if (particlePDG_inclusive == 11) {
+                    lepton_ind_inclusive = i;
+                } // end of lepton selector (inclusive)
+                //</editor-fold>
+            } // end of loop over particles vector
+
+//      Energy transfer VS q3,q calculations:
+            double Plx = particles[lepton_ind_inclusive]->par()->getPx();
+            double Ply = particles[lepton_ind_inclusive]->par()->getPy();
+            double Plz = particles[lepton_ind_inclusive]->par()->getPz();
+
+            double El = particles[lepton_ind_inclusive]->getDeltaEnergy();
+
+            double q3 = abs(Pvz - Plz);
+            double q = rCalc(Pvx - Plx, Pvy - Ply, Pvz - Plz);
+
+            E_Trans_VS_q_all_inclusive->Fill(q3, Ev - El);
+//        Q2_hist_inclusive->Fill(Q2);
+
+//        if (qel == true) {
+//            E_Trans_VS_q_QEL_inclusive->Fill(q, Ev - El);
+//        } else if (mec == true) {
+//            E_Trans_VS_q_MEC_inclusive->Fill(q, Ev - El);
+//        }
+
+            double Theta_l_inclusive = particles[lepton_ind_inclusive]->getTheta() * 180.0 / 3.14159265359; // In degrees
+//        double Theta_l_inclusive = acos(Plz / rCalc(Plx, Ply, Plz)) * 180.0 / 3.14159265359; // In degrees
+
+//      Theta_l inclusive calculations:
+            if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+                E_Trans15_all_inclusive->Fill(Ev - El);
+//            if (qel == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_QEL_inclusive->Fill(Ev - El);
+//                }
+//            } else if (mec == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_MEC_inclusive->Fill(Ev - El);
+//                }
+//            } else if (res == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_RES_inclusive->Fill(Ev - El);
+//                }
+//            } else if (dis == true) {
+//                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+//                    E_Trans15_DIS_inclusive->Fill(Ev - El);
+//                }
+//            }
+            }
+        }
+        //</editor-fold>
+
 
 // 2p calculations
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2120,7 +2171,7 @@ void EventAnalyser() {
 
                 El_2p = El1_2p + El2_2p;
                 fsEl_2p->Fill(El_2p);
-                cout << "El_2p (E_cal) = El1_2p + El2_2p = " << El1_2p << " + " << El2_2p << " = " << El_2p << "\n\n";
+//                cout << "El_2p (E_cal) = El1_2p + El2_2p = " << El1_2p << " + " << El2_2p << " = " << El_2p << "\n\n";
 
 //                double El_2p = particles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
 //                               particles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
@@ -2363,24 +2414,24 @@ void EventAnalyser() {
                 double El_1n1p, Elp_1n1p, Eln_1n1p;
                 if (Theta_l_1n1p <= 40 && Theta_l_1n1p >= 5) {
                     Elp_1n1p = particles[Proton_ind_1n1p]->sci(FTOF1A)->getEnergy() +
-                             particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-                             particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-                             particles[Proton_ind_1n1p]->sci(PCAL)->getEnergy() +
-                             particles[Proton_ind_1n1p]->sci(ECIN)->getEnergy() +
-                             particles[Proton_ind_1n1p]->sci(ECOUT)->getEnergy();
+                               particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                               particles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                               particles[Proton_ind_1n1p]->sci(PCAL)->getEnergy() +
+                               particles[Proton_ind_1n1p]->sci(ECIN)->getEnergy() +
+                               particles[Proton_ind_1n1p]->sci(ECOUT)->getEnergy();
 
                     Eln_1n1p = particles[Neutron_ind_1n1p]->sci(FTOF1A)->getEnergy() +
-                             particles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-                             particles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-                             particles[Neutron_ind_1n1p]->sci(PCAL)->getEnergy() +
-                             particles[Neutron_ind_1n1p]->sci(ECIN)->getEnergy() +
-                             particles[Neutron_ind_1n1p]->sci(ECOUT)->getEnergy();
+                               particles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                               particles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
+                               particles[Neutron_ind_1n1p]->sci(PCAL)->getEnergy() +
+                               particles[Neutron_ind_1n1p]->sci(ECIN)->getEnergy() +
+                               particles[Neutron_ind_1n1p]->sci(ECOUT)->getEnergy();
 
                 }
 
                 El_1n1p = Elp_1n1p + Eln_1n1p;
                 fsEl_1n1p->Fill(El_1n1p);
-                cout << "El_1n1p (E_cal) = Elp_1n1p + Eln_1n1p = " << Elp_1n1p << " + " << Eln_1n1p << " = " << El_1n1p << "\n\n";
+//                cout << "El_1n1p (E_cal) = Elp_1n1p + Eln_1n1p = " << Elp_1n1p << " + " << Eln_1n1p << " = " << El_1n1p << "\n\n";
 
 
 //                fsEl_1n1p->Fill(particles[Lepton_ind_1n1p]->getDeltaEnergy());
@@ -4949,326 +5000,324 @@ void EventAnalyser() {
 //        c1->Clear();
 //
 //    }
-
+*/
 
 // Inclusive Energy transfer histograms
 // ====================================================================================================
 
-//    if (inclusive_plots) {
-//
-//        cout << "\n";
-//        cout << "\n";
-//        cout << "Plotting inclusive histograms...\n";
-//        cout << "\n";
-//
-////      Q2 histogram (inclusive) -----------------------------------------------------
-//
-//        Q2_hist_inclusive->Draw();
-//        plots->Add(Q2_hist_inclusive);
-//        Q2_hist_inclusive->SetLineWidth(2);
-//        Q2_hist_inclusive->GetXaxis()->CenterTitle(true);
-//        Q2_hist_inclusive->SetLineColor(kBlue);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Q2_inclusive.png");
-//        Q2_hist_inclusive->SetLineWidth(4);
-//        Q2_hist_inclusive->SetLineStyle(2);
-////        Q2_hist_inclusive->SetLineStyle(5);
-//        Q2_hist_inclusive->SetStats(0);
-//        c1->Clear();
-//
-//
-////     all interactions (ET around theta_l = 15) -----------------------------------------------------
-//
-////      Normalization factor (equals to max(E_Trans15_all_inclusive)):
-//        auto factor_E_Trans_inclusive = E_Trans15_all_inclusive->GetMaximum();
-//
-//        if (normalized_inclusive_plots) {
-//            E_Trans15_all_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-//            E_Trans15_all_inclusive->Draw("HIST");
-//        } else {
-//            E_Trans15_all_inclusive->Draw();
-//        }
-//
-//        plots->Add(E_Trans15_all_inclusive);
-//        E_Trans15_all_inclusive->SetLineWidth(2);
-//        E_Trans15_all_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans15_all_inclusive->SetLineColor(kBlack);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_all_interactions_liner_scale_inclusive.png");
-//        E_Trans15_all_inclusive->SetLineWidth(4);
-//        E_Trans15_all_inclusive->SetLineStyle(2);
-////        E_Trans15_all_inclusive->SetLineStyle(5);
-//        E_Trans15_all_inclusive->SetStats(0);
-//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_all_inclusive);
-//        c1->Clear();
-//
-//
-////      QEL only (ET around theta_l = 15) -------------------------------------------------------------
-//
-//        if (normalized_inclusive_plots) {
-////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-//            E_Trans15_QEL_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-//            E_Trans15_QEL_inclusive->Draw("HIST");
-//        } else {
-//            E_Trans15_QEL_inclusive->Draw();
-//        }
-//
-//        plots->Add(E_Trans15_QEL_inclusive);
-//        E_Trans15_QEL_inclusive->SetLineWidth(2);
-//        E_Trans15_QEL_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans15_QEL_inclusive->SetLineColor(kBlue);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_QEL_only_liner_scale_inclusive.png");
-//        E_Trans15_QEL_inclusive->SetStats(0);
-//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_QEL_inclusive);
-//        c1->Clear();
-//
-//
-////      MEC only (ET around theta_l = 15) -------------------------------------------------------------
-//
-//        if (normalized_inclusive_plots) {
-////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-//            E_Trans15_MEC_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-//            E_Trans15_MEC_inclusive->Draw("HIST");
-//        } else {
-//            E_Trans15_MEC_inclusive->Draw();
-//        }
-//        plots->Add(E_Trans15_MEC_inclusive);
-//        E_Trans15_MEC_inclusive->SetLineWidth(2);
-//        E_Trans15_MEC_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans15_MEC_inclusive->SetLineColor(kRed);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_MEC_only_liner_scale_inclusive.png");
-//        E_Trans15_MEC_inclusive->SetStats(0);
-//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_MEC_inclusive);
-//        c1->Clear();
-//
-//
-////      RES only (ET around theta_l = 15) -------------------------------------------------------------
-//
-//        if (normalized_inclusive_plots) {
-////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-//            E_Trans15_RES_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-//            E_Trans15_RES_inclusive->Draw("HIST");
-//        } else {
-//            E_Trans15_RES_inclusive->Draw();
-//        }
-//        plots->Add(E_Trans15_RES_inclusive);
-//        E_Trans15_RES_inclusive->SetLineWidth(2);
-//        E_Trans15_RES_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans15_RES_inclusive->SetLineColor(kGreen);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_RES_only_liner_scale_inclusive.png");
-//        E_Trans15_RES_inclusive->SetStats(0);
-//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_RES_inclusive);
-//        c1->Clear();
-//
-//
-////      DIS only (ET around theta_l = 15) -------------------------------------------------------------
-//
-//        if (normalized_inclusive_plots) {
-////        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
-//            E_Trans15_DIS_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
-//            E_Trans15_DIS_inclusive->Draw("HIST");
-//        } else {
-//            E_Trans15_DIS_inclusive->Draw();
-//        }
-//        plots->Add(E_Trans15_DIS_inclusive);
-//        E_Trans15_DIS_inclusive->SetLineWidth(2);
-//        E_Trans15_DIS_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans15_DIS_inclusive->SetLineColor(kCyan);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_DIS_only_liner_scale_inclusive.png");
-//        E_Trans15_DIS_inclusive->SetStats(0);
-//        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_DIS_inclusive);
-//        c1->Clear();
-//
-//
-////      Inclusive ET stack (around theta_l = 15) ------------------------------------------------------
-//
-//        Energy_Transfer_all_int_15_inclusive_Stack->Draw("nostack");
-//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
-//        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-//
-//        if (normalized_inclusive_plots) {
-//            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
-//                    "Energy Transfer (^{12}C(e,e')) in range 14#circ #leq #theta_{l} #leq 16#circ - Normalized");
-//        } else {
-//            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
-//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p and 1n1p, ^{12}C(e,e'))");
-//        }
-//
-//        auto E_Trans_15_inclusive_legend = new
-//                TLegend(0.625, 0.625, 0.9, 0.9);
-//
-//        TLegendEntry *E_Trans_15_all_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_all_inclusive, "All interactions", "l");
-//        TLegendEntry *E_Trans_15_QEL_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_QEL_inclusive, "QEL only", "l");
-//        TLegendEntry *E_Trans_15_MEC_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_MEC_inclusive, "MEC only", "l");
-//        TLegendEntry *E_Trans_15_RES_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_RES_inclusive, "RES only", "l");
-//        TLegendEntry *E_Trans_15_DIS_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_DIS_inclusive, "DIS only ", "l");
-//
-//        E_Trans_15_inclusive_legend->Draw();
-//
-//        plots->Add(Energy_Transfer_all_int_15_inclusive_Stack);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_histogram_15_Stack_liner_scale_inclusive.png");
-//        c1->Clear();
-//
-//
-//////      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
-////        auto E_Trans_VS_q_all_inclusive = E_Trans_VS_q_all_inclusive->GetMaximum();
-//
-////      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
-//        double factor_E_Trans_VS_q_all_inclusive = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{12}C(e,e')) - Normalized");
-//            E_Trans_VS_q_all_inclusive->Scale(factor_E_Trans_VS_q_all_inclusive / E_Trans_VS_q_all_inclusive->Integral(), "width");
-//            E_Trans_VS_q_all_inclusive->Draw("colz");
-//            E_Trans_VS_q_all_inclusive->SetMaximum(1.5);
-//        } else {
-//            E_Trans_VS_q_all_inclusive->Draw("colz");
-//        }
-//
-//        E_Trans_VS_q_all_inclusive->SetTitleSize(0.06, "xyz");
-//        E_Trans_VS_q_all_inclusive->GetXaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_all_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q_all_inclusive->GetYaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_all_inclusive->GetYaxis()->CenterTitle(true);
-//        E_Trans_VS_q_all_inclusive->GetZaxis()->SetLabelSize(0.0425);
-////        E_Trans_VS_q_all_inclusive->Draw("colz");
-//        plots->Add(E_Trans_VS_q_all_inclusive);
-//        E_Trans_VS_q_all_inclusive->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_log_scale.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_liner_scale.png");
-//        c1->Clear();
-//
-////      Normalization factor (equals to max(fsEl_VS_theta_l_all_int_2p)):
-//        double factor_E_Trans_VS_q_QEL_inclusive = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{12}C(e,e')) - Normalized");
-//            E_Trans_VS_q_QEL_inclusive->Scale(factor_E_Trans_VS_q_QEL_inclusive / E_Trans_VS_q_QEL_inclusive->Integral(), "width");
-//            E_Trans_VS_q_QEL_inclusive->Draw("colz");
-//            E_Trans_VS_q_QEL_inclusive->SetMaximum(1.5);
-//        } else {
-//            E_Trans_VS_q_QEL_inclusive->Draw("colz");
-//        }
-//
-//        E_Trans_VS_q_QEL_inclusive->SetTitleSize(0.06, "xyz");
-//        E_Trans_VS_q_QEL_inclusive->GetXaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_QEL_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q_QEL_inclusive->GetYaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_QEL_inclusive->GetYaxis()->CenterTitle(true);
-//        E_Trans_VS_q_QEL_inclusive->GetZaxis()->SetLabelSize(0.0425);
-//
-////        E_Trans_VS_q_QEL_inclusive->Draw("colz");
-//        plots->Add(E_Trans_VS_q_QEL_inclusive);
-//        E_Trans_VS_q_QEL_inclusive->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_log_scale.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_liner_scale.png");
-//        c1->Clear();
-//
-////      Normalization factor (equals to max(E_Trans_VS_q_MEC_inclusive)):
-//        double factor_E_Trans_VS_q_MEC_inclusive = 1.;
-//
-//        if (normalized_E_l_plots) {
-//            E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{12}C(e,e')) - Normalized");
-//            E_Trans_VS_q_MEC_inclusive->Scale(factor_E_Trans_VS_q_MEC_inclusive / E_Trans_VS_q_MEC_inclusive->Integral(), "width");
-//            E_Trans_VS_q_MEC_inclusive->Draw("colz");
-//            E_Trans_VS_q_MEC_inclusive->SetMaximum(1.5);
-//        } else {
-//            E_Trans_VS_q_MEC_inclusive->Draw("colz");
-//        }
-//
-//        E_Trans_VS_q_MEC_inclusive->SetTitleSize(0.06, "xyz");
-//        E_Trans_VS_q_MEC_inclusive->GetXaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_MEC_inclusive->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q_MEC_inclusive->GetYaxis()->SetLabelSize(0.0425);
-//        E_Trans_VS_q_MEC_inclusive->GetYaxis()->CenterTitle(true);
-//        E_Trans_VS_q_MEC_inclusive->GetZaxis()->SetLabelSize(0.0425);
-////        E_Trans_VS_q_MEC_inclusive->Draw("colz");
-//        plots->Add(E_Trans_VS_q_MEC_inclusive);
-//        E_Trans_VS_q_MEC_inclusive->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_log_scale.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_liner_scale.png");
-//        c1->Clear();
-//
-//// 2p: MOVE TO ET
-//
-//        E_Trans_VS_q3_all_2p->Draw("colz");
-//        plots->Add(E_Trans_VS_q3_all_2p);
-//        E_Trans_VS_q3_all_2p->SetStats(0);
-//        E_Trans_VS_q3_all_2p->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q3_all_2p->GetYaxis()->CenterTitle(true);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_2p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_2p.png");
-//        c1->Clear();
-//
-//        E_Trans_VS_q3_QEL_2p->Draw("colz");
-//        plots->Add(E_Trans_VS_q3_QEL_2p);
-//        E_Trans_VS_q3_QEL_2p->SetStats(0);
-//        E_Trans_VS_q3_QEL_2p->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q3_QEL_2p->GetYaxis()->CenterTitle(true);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_2p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_2p.png");
-//        c1->Clear();
-//
-//        E_Trans_VS_q3_MEC_2p->Draw("colz");
-//        plots->Add(E_Trans_VS_q3_MEC_2p);
-//        E_Trans_VS_q3_MEC_2p->SetStats(0);
-//        E_Trans_VS_q3_MEC_2p->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q3_MEC_2p->GetYaxis()->CenterTitle(true);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_2p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_2p.png");
-//        c1->Clear();
-//
-//// 1n1p: MOVE TO ET
-//
-//        E_Trans_VS_q3_all_1n1p->Draw("colz");
-//        plots->Add(E_Trans_VS_q3_all_1n1p);
-//        E_Trans_VS_q3_all_1n1p->SetStats(0);
-//        E_Trans_VS_q3_all_1n1p->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q3_all_1n1p->GetYaxis()->CenterTitle(true);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_1n1p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_1n1p.png");
-//        c1->Clear();
-//
-//        E_Trans_VS_q3_QEL_1n1p->Draw("colz");
-//        plots->Add(E_Trans_VS_q3_QEL_1n1p);
-//        E_Trans_VS_q3_QEL_1n1p->SetStats(0);
-//        E_Trans_VS_q3_QEL_1n1p->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q3_QEL_1n1p->GetYaxis()->CenterTitle(true);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_1n1p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_1n1p.png");
-//        c1->Clear();
-//
-//        E_Trans_VS_q3_MEC_1n1p->Draw("colz");
-//        plots->Add(E_Trans_VS_q3_MEC_1n1p);
-//        E_Trans_VS_q3_MEC_1n1p->SetStats(0);
-//        E_Trans_VS_q3_MEC_1n1p->GetXaxis()->CenterTitle(true);
-//        E_Trans_VS_q3_MEC_1n1p->GetYaxis()->CenterTitle(true);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_1n1p.png");
-//        c1->SetLogz(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_1n1p.png");
-//        c1->Clear();
-//
-//    }
-    //</editor-fold>.q
+    if (inclusive_plots) {
 
-*/
+        cout << "\n";
+        cout << "\n";
+        cout << "Plotting inclusive histograms...\n";
+        cout << "\n";
+
+//      Q2 histogram (inclusive) -----------------------------------------------------
+
+        Q2_hist_inclusive->Draw();
+        plots->Add(Q2_hist_inclusive);
+        Q2_hist_inclusive->SetLineWidth(2);
+        Q2_hist_inclusive->GetXaxis()->CenterTitle(true);
+        Q2_hist_inclusive->SetLineColor(kBlue);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Q2_inclusive.png");
+        Q2_hist_inclusive->SetLineWidth(4);
+        Q2_hist_inclusive->SetLineStyle(2);
+//        Q2_hist_inclusive->SetLineStyle(5);
+        Q2_hist_inclusive->SetStats(0);
+        c1->Clear();
+
+
+//     all interactions (ET around theta_l = 15) -----------------------------------------------------
+
+//      Normalization factor (equals to max(E_Trans15_all_inclusive)):
+        auto factor_E_Trans_inclusive = E_Trans15_all_inclusive->GetMaximum();
+
+        if (normalized_inclusive_plots) {
+            E_Trans15_all_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+            E_Trans15_all_inclusive->Draw("HIST");
+        } else {
+            E_Trans15_all_inclusive->Draw();
+        }
+
+        plots->Add(E_Trans15_all_inclusive);
+        E_Trans15_all_inclusive->SetLineWidth(2);
+        E_Trans15_all_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans15_all_inclusive->SetLineColor(kBlack);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_all_interactions_liner_scale_inclusive.png");
+        E_Trans15_all_inclusive->SetLineWidth(4);
+        E_Trans15_all_inclusive->SetLineStyle(2);
+//        E_Trans15_all_inclusive->SetLineStyle(5);
+        E_Trans15_all_inclusive->SetStats(0);
+        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_all_inclusive);
+        c1->Clear();
+
+
+//      QEL only (ET around theta_l = 15) -------------------------------------------------------------
+
+        if (normalized_inclusive_plots) {
+//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+            E_Trans15_QEL_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+            E_Trans15_QEL_inclusive->Draw("HIST");
+        } else {
+            E_Trans15_QEL_inclusive->Draw();
+        }
+
+        plots->Add(E_Trans15_QEL_inclusive);
+        E_Trans15_QEL_inclusive->SetLineWidth(2);
+        E_Trans15_QEL_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans15_QEL_inclusive->SetLineColor(kBlue);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_QEL_only_liner_scale_inclusive.png");
+        E_Trans15_QEL_inclusive->SetStats(0);
+        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_QEL_inclusive);
+        c1->Clear();
+
+
+//      MEC only (ET around theta_l = 15) -------------------------------------------------------------
+
+        if (normalized_inclusive_plots) {
+//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+            E_Trans15_MEC_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+            E_Trans15_MEC_inclusive->Draw("HIST");
+        } else {
+            E_Trans15_MEC_inclusive->Draw();
+        }
+        plots->Add(E_Trans15_MEC_inclusive);
+        E_Trans15_MEC_inclusive->SetLineWidth(2);
+        E_Trans15_MEC_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans15_MEC_inclusive->SetLineColor(kRed);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_MEC_only_liner_scale_inclusive.png");
+        E_Trans15_MEC_inclusive->SetStats(0);
+        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_MEC_inclusive);
+        c1->Clear();
+
+
+//      RES only (ET around theta_l = 15) -------------------------------------------------------------
+
+        if (normalized_inclusive_plots) {
+//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+            E_Trans15_RES_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+            E_Trans15_RES_inclusive->Draw("HIST");
+        } else {
+            E_Trans15_RES_inclusive->Draw();
+        }
+        plots->Add(E_Trans15_RES_inclusive);
+        E_Trans15_RES_inclusive->SetLineWidth(2);
+        E_Trans15_RES_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans15_RES_inclusive->SetLineColor(kGreen);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_RES_only_liner_scale_inclusive.png");
+        E_Trans15_RES_inclusive->SetStats(0);
+        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_RES_inclusive);
+        c1->Clear();
+
+
+//      DIS only (ET around theta_l = 15) -------------------------------------------------------------
+
+        if (normalized_inclusive_plots) {
+//        if (normalized_inclusive_plots && (file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000")) {
+            E_Trans15_DIS_inclusive->Scale(1 / factor_E_Trans_inclusive, "nosw2");
+            E_Trans15_DIS_inclusive->Draw("HIST");
+        } else {
+            E_Trans15_DIS_inclusive->Draw();
+        }
+        plots->Add(E_Trans15_DIS_inclusive);
+        E_Trans15_DIS_inclusive->SetLineWidth(2);
+        E_Trans15_DIS_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans15_DIS_inclusive->SetLineColor(kCyan);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_DIS_only_liner_scale_inclusive.png");
+        E_Trans15_DIS_inclusive->SetStats(0);
+        Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_DIS_inclusive);
+        c1->Clear();
+
+
+//      Inclusive ET stack (around theta_l = 15) ------------------------------------------------------
+
+        Energy_Transfer_all_int_15_inclusive_Stack->Draw("nostack");
+        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
+        Energy_Transfer_all_int_15_inclusive_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+
+        if (normalized_inclusive_plots) {
+            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
+                    "Energy Transfer (^{12}C(e,e')) in range 14#circ #leq #theta_{l} #leq 16#circ - Normalized");
+        } else {
+            Energy_Transfer_all_int_15_inclusive_Stack->SetTitle(
+                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p and 1n1p, ^{12}C(e,e'))");
+        }
+
+        auto E_Trans_15_inclusive_legend = new
+                TLegend(0.625, 0.625, 0.9, 0.9);
+
+        TLegendEntry *E_Trans_15_all_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_all_inclusive, "All interactions", "l");
+        TLegendEntry *E_Trans_15_QEL_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_QEL_inclusive, "QEL only", "l");
+        TLegendEntry *E_Trans_15_MEC_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_MEC_inclusive, "MEC only", "l");
+        TLegendEntry *E_Trans_15_RES_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_RES_inclusive, "RES only", "l");
+        TLegendEntry *E_Trans_15_DIS_entry_inclusive = E_Trans_15_inclusive_legend->AddEntry(E_Trans15_DIS_inclusive, "DIS only ", "l");
+
+        E_Trans_15_inclusive_legend->Draw();
+
+        plots->Add(Energy_Transfer_all_int_15_inclusive_Stack);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_histogram_15_Stack_liner_scale_inclusive.png");
+        c1->Clear();
+
+
+////      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
+//        auto E_Trans_VS_q_all_inclusive = E_Trans_VS_q_all_inclusive->GetMaximum();
+
+//      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
+        double factor_E_Trans_VS_q_all_inclusive = 1.;
+
+        if (normalized_E_l_plots) {
+            E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{12}C(e,e')) - Normalized");
+            E_Trans_VS_q_all_inclusive->Scale(factor_E_Trans_VS_q_all_inclusive / E_Trans_VS_q_all_inclusive->Integral(), "width");
+            E_Trans_VS_q_all_inclusive->Draw("colz");
+            E_Trans_VS_q_all_inclusive->SetMaximum(1.5);
+        } else {
+            E_Trans_VS_q_all_inclusive->Draw("colz");
+        }
+
+        E_Trans_VS_q_all_inclusive->SetTitleSize(0.06, "xyz");
+        E_Trans_VS_q_all_inclusive->GetXaxis()->SetLabelSize(0.0425);
+        E_Trans_VS_q_all_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q_all_inclusive->GetYaxis()->SetLabelSize(0.0425);
+        E_Trans_VS_q_all_inclusive->GetYaxis()->CenterTitle(true);
+        E_Trans_VS_q_all_inclusive->GetZaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_all_inclusive->Draw("colz");
+        plots->Add(E_Trans_VS_q_all_inclusive);
+        E_Trans_VS_q_all_inclusive->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_log_scale.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_liner_scale.png");
+        c1->Clear();
+
+//      Normalization factor (equals to max(fsEl_VS_theta_l_all_int_2p)):
+        double factor_E_Trans_VS_q_QEL_inclusive = 1.;
+
+        if (normalized_E_l_plots) {
+            E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{12}C(e,e')) - Normalized");
+            E_Trans_VS_q_QEL_inclusive->Scale(factor_E_Trans_VS_q_QEL_inclusive / E_Trans_VS_q_QEL_inclusive->Integral(), "width");
+            E_Trans_VS_q_QEL_inclusive->Draw("colz");
+            E_Trans_VS_q_QEL_inclusive->SetMaximum(1.5);
+        } else {
+            E_Trans_VS_q_QEL_inclusive->Draw("colz");
+        }
+
+        E_Trans_VS_q_QEL_inclusive->SetTitleSize(0.06, "xyz");
+        E_Trans_VS_q_QEL_inclusive->GetXaxis()->SetLabelSize(0.0425);
+        E_Trans_VS_q_QEL_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q_QEL_inclusive->GetYaxis()->SetLabelSize(0.0425);
+        E_Trans_VS_q_QEL_inclusive->GetYaxis()->CenterTitle(true);
+        E_Trans_VS_q_QEL_inclusive->GetZaxis()->SetLabelSize(0.0425);
+
+//        E_Trans_VS_q_QEL_inclusive->Draw("colz");
+        plots->Add(E_Trans_VS_q_QEL_inclusive);
+        E_Trans_VS_q_QEL_inclusive->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_log_scale.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_liner_scale.png");
+        c1->Clear();
+
+//      Normalization factor (equals to max(E_Trans_VS_q_MEC_inclusive)):
+        double factor_E_Trans_VS_q_MEC_inclusive = 1.;
+
+        if (normalized_E_l_plots) {
+            E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{12}C(e,e')) - Normalized");
+            E_Trans_VS_q_MEC_inclusive->Scale(factor_E_Trans_VS_q_MEC_inclusive / E_Trans_VS_q_MEC_inclusive->Integral(), "width");
+            E_Trans_VS_q_MEC_inclusive->Draw("colz");
+            E_Trans_VS_q_MEC_inclusive->SetMaximum(1.5);
+        } else {
+            E_Trans_VS_q_MEC_inclusive->Draw("colz");
+        }
+
+        E_Trans_VS_q_MEC_inclusive->SetTitleSize(0.06, "xyz");
+        E_Trans_VS_q_MEC_inclusive->GetXaxis()->SetLabelSize(0.0425);
+        E_Trans_VS_q_MEC_inclusive->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q_MEC_inclusive->GetYaxis()->SetLabelSize(0.0425);
+        E_Trans_VS_q_MEC_inclusive->GetYaxis()->CenterTitle(true);
+        E_Trans_VS_q_MEC_inclusive->GetZaxis()->SetLabelSize(0.0425);
+//        E_Trans_VS_q_MEC_inclusive->Draw("colz");
+        plots->Add(E_Trans_VS_q_MEC_inclusive);
+        E_Trans_VS_q_MEC_inclusive->SetStats(0);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_log_scale.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_liner_scale.png");
+        c1->Clear();
+
+// 2p: MOVE TO ET
+
+        E_Trans_VS_q3_all_2p->Draw("colz");
+        plots->Add(E_Trans_VS_q3_all_2p);
+        E_Trans_VS_q3_all_2p->SetStats(0);
+        E_Trans_VS_q3_all_2p->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q3_all_2p->GetYaxis()->CenterTitle(true);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_2p.png");
+        c1->Clear();
+
+        E_Trans_VS_q3_QEL_2p->Draw("colz");
+        plots->Add(E_Trans_VS_q3_QEL_2p);
+        E_Trans_VS_q3_QEL_2p->SetStats(0);
+        E_Trans_VS_q3_QEL_2p->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q3_QEL_2p->GetYaxis()->CenterTitle(true);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_2p.png");
+        c1->Clear();
+
+        E_Trans_VS_q3_MEC_2p->Draw("colz");
+        plots->Add(E_Trans_VS_q3_MEC_2p);
+        E_Trans_VS_q3_MEC_2p->SetStats(0);
+        E_Trans_VS_q3_MEC_2p->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q3_MEC_2p->GetYaxis()->CenterTitle(true);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_2p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_2p.png");
+        c1->Clear();
+
+// 1n1p: MOVE TO ET
+
+        E_Trans_VS_q3_all_1n1p->Draw("colz");
+        plots->Add(E_Trans_VS_q3_all_1n1p);
+        E_Trans_VS_q3_all_1n1p->SetStats(0);
+        E_Trans_VS_q3_all_1n1p->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q3_all_1n1p->GetYaxis()->CenterTitle(true);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_1n1p.png");
+        c1->Clear();
+
+        E_Trans_VS_q3_QEL_1n1p->Draw("colz");
+        plots->Add(E_Trans_VS_q3_QEL_1n1p);
+        E_Trans_VS_q3_QEL_1n1p->SetStats(0);
+        E_Trans_VS_q3_QEL_1n1p->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q3_QEL_1n1p->GetYaxis()->CenterTitle(true);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_1n1p.png");
+        c1->Clear();
+
+        E_Trans_VS_q3_MEC_1n1p->Draw("colz");
+        plots->Add(E_Trans_VS_q3_MEC_1n1p);
+        E_Trans_VS_q3_MEC_1n1p->SetStats(0);
+        E_Trans_VS_q3_MEC_1n1p->GetXaxis()->CenterTitle(true);
+        E_Trans_VS_q3_MEC_1n1p->GetYaxis()->CenterTitle(true);
+        c1->SetLogz(1);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_1n1p.png");
+        c1->SetLogz(0);
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_1n1p.png");
+        c1->Clear();
+
+    }
+    //</editor-fold>.q
 
 
 // Saving histogram list and finishing execution
