@@ -1845,12 +1845,34 @@ void EventAnalyser() {
 
     //<editor-fold desc="Code execution">
 
+    //<editor-fold desc="HipoChain tests">
+    //    gROOT->ProcessLine( "gErrorIgnoreLevel = 1000;");
+//    gSystem->RedirectOutput("mylogfile.txt", "a");
+//    clas12root::HipoChain chain;
+//    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
+//    chain.Add(AnalyseFileDirContent.c_str());
+//    auto config_c12=chain.GetC12Reader();
+//    chain.SetReaderTags({0});
+//    auto& c12=chain.C12ref();
+//    gSystem->RedirectOutput(0,0);
+    //</editor-fold>
+
     clas12reader c12(LoadedInput.c_str()); // open file
 
 // 2p+1e - 85 out of 970000
 // 2p+0e - 0 out of 970000
 // 1n1p+1e - 284 out of 970000
 // 1n1p+0e - 0 out of 970000
+
+    //<editor-fold desc="HipoChain tests">
+    ////        c12->addExactPid(2212, NumberOfProtons); //exactly 2 protons
+////        c12->addExactPid(2212, 1); //exactly 1 electron
+//    c12->addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
+//    c12->addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+//    c12->addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+//
+//    c12->addZeroOfRestPid(); // nothing else
+    //</editor-fold>
 
 //        c12.addExactPid(2212, NumberOfProtons); //exactly 2 protons
 //        c12.addExactPid(2212, 1); //exactly 1 electron
@@ -1863,9 +1885,24 @@ void EventAnalyser() {
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
 
+//    gSystem->RedirectOutput("mylogfile.txt", "a");
+//    while (chain.Next()) { // loop over events
+
     while (c12.next()) { // loop over events
 
+        //<editor-fold desc="HipoChain tests">
+        //        gSystem->RedirectOutput("mylogfile.txt", "a");
+//        auto particles = c12->getDetParticles(); //particles are now a std::vector of particles for this event
+//
+//        auto electrons = c12->getByID(11);
+//        auto protons = c12->getByID(2212);
+//        auto neutrons = c12->getByID(2112);
+//        gSystem->RedirectOutput(0,0);
+        //</editor-fold>
+
         auto particles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
+
+        cout << "particles.getDetEnergy()" << particles.getDetEnergy() << "\n";
 
         auto electrons = c12.getByID(11);
         auto protons = c12.getByID(2212);

@@ -4505,8 +4505,10 @@ std::string plots_file_type = "_plots.root";
 
 std::string file_name = "general_file";
 std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
+
 //std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
-//std::string AnalyseFile = "/mnt/d/NRG/hipo_data_files/2delete/recon_c12_6gev/recon_c12_6gev_5_torus-1.0.hipo";
+//std::string AnalyseFile = "/mnt/d/NRG/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
+//std::string AnalyseFileDir = "/mnt/d/NRG/hipo_data_files/2delete/recon_c12_6gev";
 
 
 // BEnergyToNucleus definition ------------------------------------------------------------------------------------------------------------------------------------------
