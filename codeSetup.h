@@ -32,8 +32,8 @@ inline const char *const BoolToString(bool b) {
 //    //<editor-fold desc="Theta histograms">
 //    if (histogram_specification == "Theta histograms" && FS_specification == "2p") {
 //        //<editor-fold desc="Theta histograms (2p)">
-//        theta_l_upper_lim_2p = 60;
-//        theta_l_lower_lim_2p = 0;
+//        theta_lp_upper_lim_2p = 60;
+//        theta_lp_lower_lim_2p = 0;
 //        theta_p1_upper_lim_2p = 190;
 //        theta_p1_lower_lim_2p = -10;
 //        theta_p2_upper_lim_2p = 190;
@@ -43,8 +43,8 @@ inline const char *const BoolToString(bool b) {
 //        //</editor-fold>
 //    } else if (histogram_specification == "Theta histograms" && FS_specification == "1n1p") {
 //        //<editor-fold desc="Theta histograms (1n1p)">
-//        theta_l_upper_lim_1n1p = 60;
-//        theta_l_lower_lim_1n1p = 0;
+//        theta_lp_upper_lim_1n1p = 60;
+//        theta_lp_lower_lim_1n1p = 0;
 //        theta_p_upper_lim_1n1p = 190;
 //        theta_p_lower_lim_1n1p = -10;
 //        theta_n_upper_lim_1n1p = 190;
@@ -59,8 +59,8 @@ inline const char *const BoolToString(bool b) {
 //    if (histogram_specification == "Phi histograms" && FS_specification == "2p") {
 //
 //        //<editor-fold desc="Phi histograms (2p)">
-//        phi_l_upper_lim_2p = 60;
-//        phi_l_lower_lim_2p = 0;
+//        phi_lp_upper_lim_2p = 60;
+//        phi_lp_lower_lim_2p = 0;
 //        phi_p1_upper_lim_2p = 190;
 //        phi_p1_lower_lim_2p = -10;
 //        phi_p2_upper_lim_2p = 190;
@@ -72,8 +72,8 @@ inline const char *const BoolToString(bool b) {
 //    } else if (histogram_specification == "Phi histograms" && FS_specification == "1n1p") {
 //
 //        //<editor-fold desc="Phi histograms (1n1p)">
-//        phi_l_upper_lim_1n1p = 60;
-//        phi_l_lower_lim_1n1p = 0;
+//        phi_lp_upper_lim_1n1p = 60;
+//        phi_lp_lower_lim_1n1p = 0;
 //        phi_p_upper_lim_1n1p = 190;
 //        phi_p_lower_lim_1n1p = -10;
 //        phi_n_upper_lim_1n1p = 190;
@@ -85,8 +85,8 @@ inline const char *const BoolToString(bool b) {
 //    }
 //
 //    //<editor-fold desc="Phi histograms (2p)">
-//    phi_l_upper_lim_2p = 200;
-//    phi_l_lower_lim_2p = -200;
+//    phi_lp_upper_lim_2p = 200;
+//    phi_lp_lower_lim_2p = -200;
 //    phi_p1_upper_lim_2p = 200;
 //    phi_p1_lower_lim_2p = -200;
 //    phi_p2_upper_lim_2p = 200;
@@ -96,8 +96,8 @@ inline const char *const BoolToString(bool b) {
 //    //</editor-fold>
 //
 //    //<editor-fold desc="Phi histograms (1n1p)">
-//    phi_l_upper_lim_1n1p = 200;
-//    phi_l_lower_lim_1n1p = -200;
+//    phi_lp_upper_lim_1n1p = 200;
+//    phi_lp_lower_lim_1n1p = -200;
 //    phi_p_upper_lim_1n1p = 200;
 //    phi_p_lower_lim_1n1p = -200;
 //    phi_n_upper_lim_1n1p = 200;
@@ -170,8 +170,8 @@ inline const char *const BoolToString(bool b) {
 //    P_L_hist_lower_lim = 0;
 //    P_R_hist_upper_lim = 3.0;
 //    P_R_hist_lower_lim = 0;
-//    P_l_hist_upper_lim = 3.0;
-//    P_l_hist_lower_lim = 0;
+//    P_lp_hist_upper_lim = 3.0;
+//    P_lp_hist_lower_lim = 0;
 //    P_pion_hist_upper_lim = 0.1;
 //    P_pion_hist_lower_lim = 0;
 //    //</editor-fold>
@@ -199,10 +199,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_2p = 0;
 //        fsEl_DIS_upper_lim_2p = 0.6;
 //        fsEl_DIS_lower_lim_2p = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_y = 0.6;
-//        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 0.6;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy histograms (1n1p)">
@@ -216,10 +216,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_1n1p = 0;
 //        fsEl_DIS_upper_lim_1n1p = 0.6;
 //        fsEl_DIS_lower_lim_1n1p = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_y = 0.6;
-//        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 0.6;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -466,8 +466,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 1.5;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 1.5;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 1.5;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -491,10 +491,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_2p = 0;
 //        fsEl_DIS_upper_lim_2p = 1.0;
 //        fsEl_DIS_lower_lim_2p = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_y = 1.0;
-//        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 1.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy histograms (1n1p)">
@@ -508,10 +508,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_1n1p = 0;
 //        fsEl_DIS_upper_lim_1n1p = 1.0;
 //        fsEl_DIS_lower_lim_1n1p = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -767,8 +767,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 1.5;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 1.5;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 1.5;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -792,10 +792,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_2p = 0;
 //        fsEl_DIS_upper_lim_2p = 1.2;
 //        fsEl_DIS_lower_lim_2p = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_y = 1.2;
-//        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 1.2;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy histograms (1n1p)">
@@ -809,10 +809,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_1n1p = 0;
 //        fsEl_DIS_upper_lim_1n1p = 1.2;
 //        fsEl_DIS_lower_lim_1n1p = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.2;
-//        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.2;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -1059,8 +1059,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 1.2;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 1.2;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 1.2;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -1084,10 +1084,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_2p = 0;
 //        fsEl_DIS_upper_lim_2p = 1.3;
 //        fsEl_DIS_lower_lim_2p = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_y = 1.3;
-//        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 1.3;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy histograms (1n1p)">
@@ -1101,10 +1101,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_1n1p = 0;
 //        fsEl_DIS_upper_lim_1n1p = 1.3;
 //        fsEl_DIS_lower_lim_1n1p = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.3;
-//        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.3;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -1351,8 +1351,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 1.5;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 1.5;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 1.5;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -1377,10 +1377,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
@@ -1392,10 +1392,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 ////                fsEl_upper_lim_2p = 2.3;
 ////                fsEl_lower_lim_2p = 1.6;
 ////                fsEl_QEL_upper_lim_2p = 2.3;
@@ -1406,10 +1406,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_2p = 1.6;
 ////                fsEl_DIS_upper_lim_2p = 2.3;
 ////                fsEl_DIS_lower_lim_2p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_2p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_2p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //
 //        }
 //        //</editor-fold>
@@ -1426,10 +1426,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_1n1p = 2.3;
 //            fsEl_lower_lim_1n1p = 1;
@@ -1441,10 +1441,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 ////                fsEl_upper_lim_1n1p = 2.3;
 ////                fsEl_lower_lim_1n1p = 1.6;
 ////                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -1455,10 +1455,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_1n1p = 1.6;
 ////                fsEl_DIS_upper_lim_1n1p = 2.3;
 ////                fsEl_DIS_lower_lim_1n1p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        }
 //        //</editor-fold>
 //
@@ -1706,8 +1706,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 2.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 2.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -1732,10 +1732,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
@@ -1747,10 +1747,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 ////                fsEl_upper_lim_2p = 2.3;
 ////                fsEl_lower_lim_2p = 1.6;
 ////                fsEl_QEL_upper_lim_2p = 2.3;
@@ -1761,10 +1761,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_2p = 1.6;
 ////                fsEl_DIS_upper_lim_2p = 2.3;
 ////                fsEl_DIS_lower_lim_2p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_2p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_2p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //
 //        }
 //        //</editor-fold>
@@ -1781,10 +1781,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_1n1p = 2.3;
 //            fsEl_lower_lim_1n1p = 1;
@@ -1796,10 +1796,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 ////                fsEl_upper_lim_1n1p = 2.3;
 ////                fsEl_lower_lim_1n1p = 1.6;
 ////                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -1810,10 +1810,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_1n1p = 1.6;
 ////                fsEl_DIS_upper_lim_1n1p = 2.3;
 ////                fsEl_DIS_lower_lim_1n1p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        }
 //        //</editor-fold>
 //
@@ -2061,8 +2061,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 2.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 2.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -2087,10 +2087,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
@@ -2102,10 +2102,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 ////                fsEl_upper_lim_2p = 2.3;
 ////                fsEl_lower_lim_2p = 1.6;
 ////                fsEl_QEL_upper_lim_2p = 2.3;
@@ -2116,10 +2116,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_2p = 1.6;
 ////                fsEl_DIS_upper_lim_2p = 2.3;
 ////                fsEl_DIS_lower_lim_2p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_2p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_2p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //
 //        }
 //        //</editor-fold>
@@ -2136,10 +2136,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_1n1p = 2.3;
 //            fsEl_lower_lim_1n1p = 1;
@@ -2151,10 +2151,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 ////                fsEl_upper_lim_1n1p = 2.3;
 ////                fsEl_lower_lim_1n1p = 1.6;
 ////                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -2165,10 +2165,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_1n1p = 1.6;
 ////                fsEl_DIS_upper_lim_1n1p = 2.3;
 ////                fsEl_DIS_lower_lim_1n1p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        }
 //        //</editor-fold>
 //
@@ -2416,8 +2416,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 2.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 2.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -2442,10 +2442,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
@@ -2457,10 +2457,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 ////                fsEl_upper_lim_2p = 2.3;
 ////                fsEl_lower_lim_2p = 1.6;
 ////                fsEl_QEL_upper_lim_2p = 2.3;
@@ -2471,10 +2471,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_2p = 1.6;
 ////                fsEl_DIS_upper_lim_2p = 2.3;
 ////                fsEl_DIS_lower_lim_2p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_2p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_2p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //
 //        }
 //        //</editor-fold>
@@ -2491,10 +2491,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_1n1p = 2.3;
 //            fsEl_lower_lim_1n1p = 1;
@@ -2506,10 +2506,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 ////                fsEl_upper_lim_1n1p = 2.3;
 ////                fsEl_lower_lim_1n1p = 1.6;
 ////                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -2520,10 +2520,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_1n1p = 1.6;
 ////                fsEl_DIS_upper_lim_1n1p = 2.3;
 ////                fsEl_DIS_lower_lim_1n1p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        }
 //        //</editor-fold>
 //
@@ -2771,8 +2771,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 2.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 2.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -2797,10 +2797,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
@@ -2812,10 +2812,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 ////                fsEl_upper_lim_2p = 2.3;
 ////                fsEl_lower_lim_2p = 1.6;
 ////                fsEl_QEL_upper_lim_2p = 2.3;
@@ -2826,10 +2826,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_2p = 1.6;
 ////                fsEl_DIS_upper_lim_2p = 2.3;
 ////                fsEl_DIS_lower_lim_2p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_2p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_2p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //
 //        }
 //        //</editor-fold>
@@ -2846,10 +2846,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_1n1p = 2.3;
 //            fsEl_lower_lim_1n1p = 1;
@@ -2861,10 +2861,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 ////                fsEl_upper_lim_1n1p = 2.3;
 ////                fsEl_lower_lim_1n1p = 1.6;
 ////                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -2875,10 +2875,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_1n1p = 1.6;
 ////                fsEl_DIS_upper_lim_1n1p = 2.3;
 ////                fsEl_DIS_lower_lim_1n1p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        }
 //        //</editor-fold>
 //
@@ -3126,8 +3126,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 2.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 2.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -3152,10 +3152,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
@@ -3167,10 +3167,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_2p = 0;
 //            fsEl_DIS_upper_lim_2p = 2.3;
 //            fsEl_DIS_lower_lim_2p = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 ////                fsEl_upper_lim_2p = 2.3;
 ////                fsEl_lower_lim_2p = 1.6;
 ////                fsEl_QEL_upper_lim_2p = 2.3;
@@ -3181,10 +3181,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_2p = 1.6;
 ////                fsEl_DIS_upper_lim_2p = 2.3;
 ////                fsEl_DIS_lower_lim_2p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_2p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_2p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //
 //        }
 //        //</editor-fold>
@@ -3201,10 +3201,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        } else if (FSI_status == false) {
 //            fsEl_upper_lim_1n1p = 2.3;
 //            fsEl_lower_lim_1n1p = 1;
@@ -3216,10 +3216,10 @@ inline const char *const BoolToString(bool b) {
 //            fsEl_RES_lower_lim_1n1p = 0;
 //            fsEl_DIS_upper_lim_1n1p = 2.3;
 //            fsEl_DIS_lower_lim_1n1p = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 ////                fsEl_upper_lim_1n1p = 2.3;
 ////                fsEl_lower_lim_1n1p = 1.6;
 ////                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -3230,10 +3230,10 @@ inline const char *const BoolToString(bool b) {
 ////                fsEl_RES_lower_lim_1n1p = 1.6;
 ////                fsEl_DIS_upper_lim_1n1p = 2.3;
 ////                fsEl_DIS_lower_lim_1n1p = 1.6;
-////                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-////                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-////                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-////                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+////                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+////                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        }
 //        //</editor-fold>
 //
@@ -3481,8 +3481,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 2.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 2.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -3504,10 +3504,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_2p = 0;
 //        fsEl_DIS_upper_lim_2p = 3;
 //        fsEl_DIS_lower_lim_2p = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_y = 3;
-//        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 3;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy histograms (1n1p)">
@@ -3521,10 +3521,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_1n1p = 0;
 //        fsEl_DIS_upper_lim_1n1p = 3;
 //        fsEl_DIS_lower_lim_1n1p = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_y = 3;
-//        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 3;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
@@ -3706,8 +3706,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 3.0;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 3.0;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 3.0;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -3727,10 +3727,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_2p = 0;
 //        fsEl_DIS_upper_lim_2p = 1.3;
 //        fsEl_DIS_lower_lim_2p = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_2p_y = 1.3;
-//        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 1.3;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy histograms (1n1p)">
@@ -3744,10 +3744,10 @@ inline const char *const BoolToString(bool b) {
 //        fsEl_RES_lower_lim_1n1p = 0;
 //        fsEl_DIS_upper_lim_1n1p = 1.3;
 //        fsEl_DIS_lower_lim_1n1p = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-//        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.3;
-//        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.3;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
@@ -3929,8 +3929,8 @@ inline const char *const BoolToString(bool b) {
 //        P_p_hist_lower_lim_1n1p = 0;
 //        P_n_hist_upper_lim_1n1p = 1.3;
 //        P_n_hist_lower_lim_1n1p = 0;
-//        P_l_hist_upper_lim_1n1p = 1.3;
-//        P_l_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 1.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
 //        //</editor-fold>
 //
 //        //</editor-fold>
@@ -4033,9 +4033,21 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
     Histogram_list->Add(Histogram1D);
     Histogram1D->SetLineWidth(lineWidth);
 
-    if (!showStats) {
+    if (showStats == false) {
         Histogram1D->SetStats(0);
     }
+
+//    if (showStats == false) {
+//        Histogram1D->SetStats(0);
+//        gStyle->SetOptStat(000001111);
+//        gROOT->ForceStyle();
+////        gStyle->SetOptStat(111110);
+////        Histogram1D->SetOptStat(111110);
+//    } else if (showStats == true) {
+////        gStyle->SetOptStat(000001111);
+//        gStyle->SetOptStat(111110);
+//        gROOT->ForceStyle();
+//    }
 
     if (logScalePlot) {
         Histogram1DCanvas->SetLogy(1);
@@ -4074,13 +4086,13 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //             int Proton_2_ind_2p, Double_t pxl, Double_t pyl, Double_t pzl, Double_t pxf[15], Double_t pyf[15], Double_t pzf[15], Double_t Ef[15], TH1D *P_L_hist_2p,
 //             TH1D *P_R_hist_2p, TH1D *phi_p1_2p, TH1D *phi_p2_2p, TH1D *dphi_2p, TH1D *theta_p1_2p, TH1D *theta_p2_2p, TH1D *dtheta_2p,
 //             TH2D *E_cal_VS_theta_p1_QEL_2p,
-//             TH2D *E_cal_VS_theta_p2_QEL_2p, TH2D *E_Trans_VS_q3_all_2p, Double_t Ev, Double_t El, double q3, double q, TH1D *P_lp_hist_2p, TH1D *theta_l_2p,
-//             TH1D *phi_l_2p, TH2D *E_cal_VS_theta_l_all_int_2p, Double_t Q2, Double_t W, Double_t En, Double_t pxn, Double_t pyn, Double_t pzn,
+//             TH2D *E_cal_VS_theta_p2_QEL_2p, TH2D *E_Trans_VS_q3_all_2p, Double_t Ev, Double_t El, double q3, double q, TH1D *P_lp_hist_2p, TH1D *theta_lp_2p,
+//             TH1D *phi_lp_2p, TH2D *E_cal_VS_theta_lp_all_int_2p, Double_t Q2, Double_t W, Double_t En, Double_t pxn, Double_t pyn, Double_t pzn,
 //             TH2D *E_cal_VS_Q2_all_int_2p,
-//             TH2D *E_cal_VS_dtheta_all_int_2p, TH1D *fsEl_2p, TH2D *fsEl_VS_theta_l_2p, TH1D *E_Trans_all_ang_all_int_2p, TH1D *gamma_Lab_all_hist_weighted,
+//             TH2D *E_cal_VS_dtheta_all_int_2p, TH1D *fsEl_2p, TH2D *fsEl_VS_theta_lp_2p, TH1D *E_Trans_all_ang_all_int_2p, TH1D *gamma_Lab_all_hist_weighted,
 //             TH1D *E_Trans15_all_2p, TH1D *E_Trans45_all_2p, TH1D *E_Trans90_all_2p, TH1D *gamma_Lab_all_hist, TH1D *gamma_Lab_QEL_hist,
 //             TH1D *gamma_Lab_QEL_hist_weighted,
-//             TH1D *E_Trans15_QEL_2p, TH1D *E_Trans45_QEL_2p, TH1D *E_Trans90_QEL_2p, TH1D *E_cal_QEL_2p, TH2D *E_cal_VS_theta_l_QEL_2p,
+//             TH1D *E_Trans15_QEL_2p, TH1D *E_Trans45_QEL_2p, TH1D *E_Trans90_QEL_2p, TH1D *E_cal_QEL_2p, TH2D *E_cal_VS_theta_lp_QEL_2p,
 //             TH2D *E_cal_VS_Q2_QEL_2p,
 //             TH2D *E_cal_VS_W_QEL_2p, TH2D *E_cal_VS_En_QEL_2p, TH2D *E_cal_VS_Pn_QEL_2p, TH2D *E_cal_VS_Pn1_QEL_2p, TH2D *E_cal_VS_Pn2_QEL_2p,
 //             TH2D *E_cal_VS_dtheta_QEL_2p, TH2D *E_Trans_VS_q3_QEL_2p, TH1D *fsEl_QEL_2p, TH1D *gamma_Lab_MEC_hist, TH1D *gamma_Lab_MEC_hist_weighted,
@@ -4092,11 +4104,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 ////void calc2p(bool qel, bool mec, bool res, bool dis, bool calculate_2p, int nfp, int nfn, int nf, int length, int pdgf[15], int ProtonCounter_2p, int Proton_1_ind_2p,
 ////             int Proton_2_ind_2p, Double_t pxl, Double_t pyl, Double_t pzl, Double_t pxf[15], Double_t pyf[15], Double_t pzf[15], Double_t Ef[15], TH1D P_L_hist_2p,
 ////             TH1D P_R_hist_2p, TH1D phi_p1_2p, TH1D phi_p2_2p, TH1D dphi_2p, TH1D theta_p1_2p, TH1D theta_p2_2p, TH1D dtheta_2p, TH2D E_cal_VS_theta_p1_QEL_2p,
-////             TH2D E_cal_VS_theta_p2_QEL_2p, TH2D E_Trans_VS_q3_all_2p, Double_t Ev, Double_t El, double q3, double q, TH1D P_lp_hist_2p, TH1D theta_l_2p,
-////             TH1D phi_l_2p, TH2D E_cal_VS_theta_l_all_int_2p, Double_t Q2, Double_t W, Double_t En, Double_t pxn, Double_t pyn, Double_t pzn, TH2D E_cal_VS_Q2_all_int_2p,
-////             TH2D E_cal_VS_dtheta_all_int_2p, TH1D fsEl_2p, TH2D fsEl_VS_theta_l_2p, TH1D E_Trans_all_ang_all_int_2p, TH1D gamma_Lab_all_hist_weighted,
+////             TH2D E_cal_VS_theta_p2_QEL_2p, TH2D E_Trans_VS_q3_all_2p, Double_t Ev, Double_t El, double q3, double q, TH1D P_lp_hist_2p, TH1D theta_lp_2p,
+////             TH1D phi_lp_2p, TH2D E_cal_VS_theta_lp_all_int_2p, Double_t Q2, Double_t W, Double_t En, Double_t pxn, Double_t pyn, Double_t pzn, TH2D E_cal_VS_Q2_all_int_2p,
+////             TH2D E_cal_VS_dtheta_all_int_2p, TH1D fsEl_2p, TH2D fsEl_VS_theta_lp_2p, TH1D E_Trans_all_ang_all_int_2p, TH1D gamma_Lab_all_hist_weighted,
 ////             TH1D E_Trans15_all_2p, TH1D E_Trans45_all_2p, TH1D E_Trans90_all_2p, TH1D gamma_Lab_all_hist, TH1D gamma_Lab_QEL_hist, TH1D gamma_Lab_QEL_hist_weighted,
-////             TH1D E_Trans15_QEL_2p, TH1D E_Trans45_QEL_2p, TH1D E_Trans90_QEL_2p, TH1D E_cal_QEL_2p, TH1D E_cal_VS_theta_l_QEL_2p, TH2D E_cal_VS_Q2_QEL_2p,
+////             TH1D E_Trans15_QEL_2p, TH1D E_Trans45_QEL_2p, TH1D E_Trans90_QEL_2p, TH1D E_cal_QEL_2p, TH1D E_cal_VS_theta_lp_QEL_2p, TH2D E_cal_VS_Q2_QEL_2p,
 ////             TH2D E_cal_VS_W_QEL_2p, TH2D E_cal_VS_En_QEL_2p, TH2D E_cal_VS_Pn_QEL_2p, TH2D E_cal_VS_Pn1_QEL_2p, TH2D E_cal_VS_Pn2_QEL_2p,
 ////             TH2D E_cal_VS_dtheta_QEL_2p, TH2D E_Trans_VS_q3_QEL_2p, TH1D fsEl_QEL_2p, TH1D gamma_Lab_MEC_hist, TH1D gamma_Lab_MEC_hist_weighted,
 ////             TH1D E_Trans15_MEC_2p, TH1D E_Trans45_MEC_2p, TH1D E_Trans90_MEC_2p, TH1D E_cal_MEC_2p, TH2D E_Trans_VS_q3_MEC_2p, TH1D fsEl_MEC_2p, TH1D gamma_Lab_RES_hist,
@@ -4133,7 +4145,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //                pxf[Proton_2_ind_2p] * pxf[Proton_2_ind_2p] + pyf[Proton_2_ind_2p] * pyf[Proton_2_ind_2p] + pzf[Proton_2_ind_2p] * pzf[Proton_2_ind_2p]);
 //
 ////          Momentum of second proton in Ef[]:
-//        double P_l_2p = sqrt(pxf[Proton_2_ind_2p] * pxf[Proton_2_ind_2p] + pyf[Proton_2_ind_2p] * pyf[Proton_2_ind_2p] + pzf[Proton_2_ind_2p] * pzf[Proton_2_ind_2p]);
+//        double P_lp_2p = sqrt(pxf[Proton_2_ind_2p] * pxf[Proton_2_ind_2p] + pyf[Proton_2_ind_2p] * pyf[Proton_2_ind_2p] + pzf[Proton_2_ind_2p] * pzf[Proton_2_ind_2p]);
 //
 ////          Leading proton:
 //        double P_L_2p = -1;
@@ -4145,7 +4157,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //        if (P_p1_2p >= 0.3 && P_p2_2p >= 0.3) {
 //
 //            double E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
-//            double Theta_l_2p = acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+//            double Theta_lp_2p = acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359; // Theta_lp_2p is in degrees
 //
 ////              NOT REALLY dtheta:
 //            double d_theta_2p = acos(
@@ -4216,16 +4228,16 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //
 //            E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
 //
-//            P_lp_hist_2p->Fill(P_l_2p);
+//            P_lp_hist_2p->Fill(P_lp_2p);
 //
 //            fsEl_2p->Fill(El);
-//            theta_l_2p->Fill(Theta_l_2p);
-//            phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-//            fsEl_VS_theta_l_2p->Fill(Theta_l_2p, El);
+//            theta_lp_2p->Fill(Theta_lp_2p);
+//            phi_lp_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//            fsEl_VS_theta_lp_2p->Fill(Theta_lp_2p, El);
 //
 //            E_Trans_all_ang_all_int_2p->Fill(Ev - El);
 //
-//            E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+//            E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, E_cal_2p);
 //            E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
 //            E_cal_VS_dtheta_all_int_2p->Fill(
 //                    fabs(acos(pzf[Proton_1_ind_2p] / sqrt(pxf[Proton_1_ind_2p] * pxf[Proton_1_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_1_ind_2p] +
@@ -4236,11 +4248,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //            gamma_Lab_all_hist->Fill(cos(d_theta_2p));
 //            gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                E_Trans15_all_2p->Fill(Ev - El);
-//            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                E_Trans45_all_2p->Fill(Ev - El);
-//            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                E_Trans90_all_2p->Fill(Ev - El);
 //            }
 //
@@ -4248,16 +4260,16 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //                gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
 //                gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                    E_Trans15_QEL_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                    E_Trans45_QEL_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                    E_Trans90_QEL_2p->Fill(Ev - El);
 //                }
 //
 //                E_cal_QEL_2p->Fill(E_cal_2p);
-//                E_cal_VS_theta_l_QEL_2p->Fill(Theta_l_2p, E_cal_2p);
+//                E_cal_VS_theta_lp_QEL_2p->Fill(Theta_lp_2p, E_cal_2p);
 //                E_cal_VS_Q2_QEL_2p->Fill(Q2, E_cal_2p);
 //                E_cal_VS_W_QEL_2p->Fill(W, E_cal_2p);
 //                E_cal_VS_En_QEL_2p->Fill(En, E_cal_2p);
@@ -4278,11 +4290,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //                gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
 //                gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                    E_Trans15_MEC_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                    E_Trans45_MEC_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                    E_Trans90_MEC_2p->Fill(Ev - El);
 //                }
 //
@@ -4295,11 +4307,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //                gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
 //                gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                    E_Trans15_RES_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                    E_Trans45_RES_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                    E_Trans90_RES_2p->Fill(Ev - El);
 //                }
 //
@@ -4310,11 +4322,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //                gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
 //                gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                    E_Trans15_DIS_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                    E_Trans45_DIS_2p->Fill(Ev - El);
-//                } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                    E_Trans90_DIS_2p->Fill(Ev - El);
 //                }
 //
@@ -4333,10 +4345,10 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //          int Neutron_ind_1n1p, Double_t pxl, Double_t pyl, Double_t pzl, Double_t pxf[15], Double_t pyf[15], Double_t pzf[15], Double_t Ef[15], TH1D *P_p_hist_1n1p,
 //          TH1D *P_n_hist_1n1p, TH1D *phi_p_1n1p, TH1D *phi_n_1n1p, TH1D *dphi_1n1p, TH1D *theta_p_1n1p, TH1D *theta_n_1n1p, TH1D *dtheta_1n1p,
 //          TH2D *E_cal_VS_theta_p_QEL_1n1p, TH2D *E_cal_VS_theta_n_QEL_1n1p, TH2D *E_Trans_VS_q3_all_1n1p, Double_t Ev, Double_t El, double q3, double q,
-//          TH1D *P_l_hist_1n1p, TH1D *theta_l_1n1p, TH1D *phi_l_1n1p, Double_t Q2, Double_t W, Double_t En, Double_t pxn, Double_t pyn, Double_t pzn,
-//          TH1D *fsEl_1n1p, TH2D *fsEl_VS_theta_l_1n1p, TH1D *E_Trans_all_ang_all_int_1n1p, TH1D *gamma_Lab_all_hist_weighted, TH1D *E_Trans15_all_1n1p,
+//          TH1D *P_lp_hist_1n1p, TH1D *theta_lp_1n1p, TH1D *phi_lp_1n1p, Double_t Q2, Double_t W, Double_t En, Double_t pxn, Double_t pyn, Double_t pzn,
+//          TH1D *fsEl_1n1p, TH2D *fsEl_VS_theta_lp_1n1p, TH1D *E_Trans_all_ang_all_int_1n1p, TH1D *gamma_Lab_all_hist_weighted, TH1D *E_Trans15_all_1n1p,
 //          TH1D *E_Trans45_all_1n1p, TH1D *E_Trans90_all_1n1p, TH1D *gamma_Lab_all_hist, TH1D *gamma_Lab_QEL_hist, TH1D *gamma_Lab_QEL_hist_weighted,
-//          TH1D *E_Trans15_QEL_1n1p, TH1D *E_Trans45_QEL_1n1p, TH1D *E_Trans90_QEL_1n1p, TH1D *E_cal_QEL_1n1p, TH2D *E_cal_VS_theta_l_QEL_1n1p, TH2D *E_cal_VS_Q2_QEL_1n1p,
+//          TH1D *E_Trans15_QEL_1n1p, TH1D *E_Trans45_QEL_1n1p, TH1D *E_Trans90_QEL_1n1p, TH1D *E_cal_QEL_1n1p, TH2D *E_cal_VS_theta_lp_QEL_1n1p, TH2D *E_cal_VS_Q2_QEL_1n1p,
 //          TH2D *E_cal_VS_W_QEL_1n1p, TH2D *E_cal_VS_En_QEL_1n1p, TH2D *E_cal_VS_Pn_QEL_1n1p, TH2D *E_cal_VS_P_p_QEL_1n1p, TH2D *E_cal_VS_P_n_QEL_1n1p,
 //          TH2D *E_cal_VS_dtheta_QEL_1n1p, TH2D *E_Trans_VS_q3_QEL_1n1p, TH1D *fsEl_QEL_1n1p, TH1D *gamma_Lab_MEC_hist, TH1D *gamma_Lab_MEC_hist_weighted,
 //          TH1D *E_Trans15_MEC_1n1p, TH1D *E_Trans45_MEC_1n1p, TH1D *E_Trans90_MEC_1n1p, TH1D *E_cal_MEC_1n1p, TH2D *E_Trans_VS_q3_MEC_1n1p, TH1D *fsEl_MEC_1n1p,
@@ -4373,7 +4385,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //        if (P_p_1n1p >= 0.3 && P_n_1n1p >= 0.3) {
 //
 //            double E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
-//            double Theta_l_1n1p = acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359;
+//            double Theta_lp_1n1p = acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359;
 //
 //            double phi_p = atan2(pyf[Proton_ind_1n1p], pxf[Proton_ind_1n1p]) * 180.0 / 3.14159265359;
 //            double phi_n = atan2(pyf[Neutron_ind_1n1p], pxf[Neutron_ind_1n1p]) * 180.0 / 3.14159265359;
@@ -4390,13 +4402,13 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //                    (P_p_1n1p * P_n_1n1p));
 //
 ////              Lepton momentum:
-//            double P_l_1n1p = sqrt(pxl * pxl + pyl * pyl + pzl * pzl);
+//            double P_lp_1n1p = sqrt(pxl * pxl + pyl * pyl + pzl * pzl);
 //
 //            E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
 //
 //            P_p_hist_1n1p->Fill(P_p_1n1p);
 //            P_n_hist_1n1p->Fill(P_n_1n1p);
-//            P_l_hist_1n1p->Fill(P_l_1n1p);
+//            P_lp_hist_1n1p->Fill(P_lp_1n1p);
 //
 //            phi_p_1n1p->Fill(phi_p);
 //            theta_p_1n1p->Fill(theta_p);
@@ -4405,32 +4417,32 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //            dphi_1n1p->Fill(d_phi_1n1p * 180.0 / 3.14159265359);
 //            dtheta_1n1p->Fill(d_theta_1n1p * 180.0 / 3.14159265359);
 //
-//            theta_l_1n1p->Fill(Theta_l_1n1p);
-//            phi_l_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-//            fsEl_VS_theta_l_1n1p->Fill(Theta_l_1n1p, El);
+//            theta_lp_1n1p->Fill(Theta_lp_1n1p);
+//            phi_lp_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//            fsEl_VS_theta_lp_1n1p->Fill(Theta_lp_1n1p, El);
 //            fsEl_1n1p->Fill(El);
 //
 //            E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
 //
-//            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
 //                E_Trans15_all_1n1p->Fill(Ev - El);
-//            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
 //                E_Trans45_all_1n1p->Fill(Ev - El);
-//            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
 //                E_Trans90_all_1n1p->Fill(Ev - El);
 //            }
 //
 //            if (qel == true) {
-//                if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
 //                    E_Trans15_QEL_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
 //                    E_Trans45_QEL_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
 //                    E_Trans90_QEL_1n1p->Fill(Ev - El);
 //                }
 //
 //                E_cal_QEL_1n1p->Fill(E_cal_1n1p);
-//                E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+//                E_cal_VS_theta_lp_QEL_1n1p->Fill(Theta_lp_1n1p, E_cal_1n1p);
 //                E_cal_VS_Q2_QEL_1n1p->Fill(Q2, E_cal_1n1p);
 //                E_cal_VS_dtheta_QEL_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
 //                E_cal_VS_theta_p_QEL_1n1p->Fill(theta_p, E_cal_1n1p);
@@ -4445,11 +4457,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //
 //                fsEl_QEL_1n1p->Fill(El);
 //            } else if (mec == true) {
-//                if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
 //                    E_Trans15_MEC_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
 //                    E_Trans45_MEC_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
 //                    E_Trans90_MEC_1n1p->Fill(Ev - El);
 //                }
 //
@@ -4459,11 +4471,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //
 //                fsEl_MEC_1n1p->Fill(El);
 //            } else if (res == true) {
-//                if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
 //                    E_Trans15_RES_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
 //                    E_Trans45_RES_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
 //                    E_Trans90_RES_1n1p->Fill(Ev - El);
 //                }
 //
@@ -4471,11 +4483,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //
 //                fsEl_RES_1n1p->Fill(El);
 //            } else if (dis == true) {
-//                if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+//                if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
 //                    E_Trans15_DIS_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+//                } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
 //                    E_Trans45_DIS_1n1p->Fill(Ev - El);
-//                } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+//                } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
 //                    E_Trans90_DIS_1n1p->Fill(Ev - El);
 //                }
 //
@@ -4504,10 +4516,10 @@ std::string plots_file_type = "_plots.root";
 // file_name definitions and selection ----------------------------------------------------------------------------------------------------------------------------------
 
 std::string file_name = "general_file";
-std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
+//std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
 
 //std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
-//std::string AnalyseFile = "/mnt/d/NRG/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
+std::string AnalyseFile = "/mnt/d/NRG/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
 //std::string AnalyseFile = "/mnt/d/NRG/root_data_files/Fixing SuSAv2/Julia's script/e_on_1000060120_2222MeV_em.gst.root";
 
 //std::string AnalyseFileDir = "/mnt/d/NRG/hipo_data_files/2delete/recon_c12_6gev";
@@ -4536,14 +4548,14 @@ double BeamEnergy;
 //<editor-fold desc="Theta histograms">
 
 //<editor-fold desc="Theta histograms (2p)">
-double theta_l_upper_lim_2p, theta_l_lower_lim_2p;
+double theta_lp_upper_lim_2p, theta_lp_lower_lim_2p;
 double theta_p1_upper_lim_2p, theta_p1_lower_lim_2p;
 double theta_p2_upper_lim_2p, theta_p2_lower_lim_2p;
 double dtheta_upper_lim_2p, dtheta_lower_lim_2p;
 //</editor-fold>
 
 //<editor-fold desc="Theta histograms (1n1p)">
-double theta_l_upper_lim_1n1p, theta_l_lower_lim_1n1p;
+double theta_lp_upper_lim_1n1p, theta_lp_lower_lim_1n1p;
 double theta_p_upper_lim_1n1p, theta_p_lower_lim_1n1p;
 double theta_n_upper_lim_1n1p, theta_n_lower_lim_1n1p;
 double dtheta_upper_lim_1n1p, dtheta_lower_lim_1n1p;
@@ -4554,14 +4566,14 @@ double dtheta_upper_lim_1n1p, dtheta_lower_lim_1n1p;
 //<editor-fold desc="Phi histograms">
 
 //<editor-fold desc="Phi histograms (2p)">
-double phi_l_upper_lim_2p, phi_l_lower_lim_2p;
+double phi_lp_upper_lim_2p, phi_lp_lower_lim_2p;
 double phi_p1_upper_lim_2p, phi_p1_lower_lim_2p;
 double phi_p2_upper_lim_2p, phi_p2_lower_lim_2p;
 double dphi_upper_lim_2p, dphi_lower_lim_2p;
 //</editor-fold>
 
 //<editor-fold desc="Phi histograms (1n1p)">
-double phi_l_upper_lim_1n1p, phi_l_lower_lim_1n1p;
+double phi_lp_upper_lim_1n1p, phi_lp_lower_lim_1n1p;
 double phi_p_upper_lim_1n1p, phi_p_lower_lim_1n1p;
 double phi_n_upper_lim_1n1p, phi_n_lower_lim_1n1p;
 double dphi_upper_lim_1n1p, dphi_lower_lim_1n1p;
@@ -4577,8 +4589,8 @@ double fsEl_QEL_upper_lim_2p, fsEl_QEL_lower_lim_2p;
 double fsEl_MEC_upper_lim_2p, fsEl_MEC_lower_lim_2p;
 double fsEl_RES_upper_lim_2p, fsEl_RES_lower_lim_2p;
 double fsEl_DIS_upper_lim_2p, fsEl_DIS_lower_lim_2p;
-double fsEl_VS_theta_l_upper_lim_2p_x, fsEl_VS_theta_l_lower_lim_2p_x;
-double fsEl_VS_theta_l_upper_lim_2p_y, fsEl_VS_theta_l_lower_lim_2p_y;
+double fsEl_VS_theta_lp_upper_lim_2p_x, fsEl_VS_theta_lp_lower_lim_2p_x;
+double fsEl_VS_theta_lp_upper_lim_2p_y, fsEl_VS_theta_lp_lower_lim_2p_y;
 //</editor-fold>
 
 //<editor-fold desc="Energy histograms (1n1p)">
@@ -4587,8 +4599,8 @@ double fsEl_QEL_upper_lim_1n1p, fsEl_QEL_lower_lim_1n1p;
 double fsEl_MEC_upper_lim_1n1p, fsEl_MEC_lower_lim_1n1p;
 double fsEl_RES_upper_lim_1n1p, fsEl_RES_lower_lim_1n1p;
 double fsEl_DIS_upper_lim_1n1p, fsEl_DIS_lower_lim_1n1p;
-double fsEl_VS_theta_l_upper_lim_1n1p_x, fsEl_VS_theta_l_lower_lim_1n1p_x;
-double fsEl_VS_theta_l_upper_lim_1n1p_y, fsEl_VS_theta_l_lower_lim_1n1p_y;
+double fsEl_VS_theta_lp_upper_lim_1n1p_x, fsEl_VS_theta_lp_lower_lim_1n1p_x;
+double fsEl_VS_theta_lp_upper_lim_1n1p_y, fsEl_VS_theta_lp_lower_lim_1n1p_y;
 //</editor-fold>
 
 //</editor-fold>
@@ -4800,7 +4812,7 @@ double P_lp_hist_upper_lim_2p, P_lp_hist_lower_lim_2p;
 //<editor-fold desc="Momentum histograms (1n1p)">
 double P_p_hist_upper_lim_1n1p, P_p_hist_lower_lim_1n1p;
 double P_n_hist_upper_lim_1n1p, P_n_hist_lower_lim_1n1p;
-double P_l_hist_upper_lim_1n1p, P_l_hist_lower_lim_1n1p;
+double P_lp_hist_upper_lim_1n1p, P_lp_hist_lower_lim_1n1p;
 //</editor-fold>
 
 //</editor-fold>
@@ -4838,7 +4850,7 @@ double dP_T_hist_weighted_upper_lim, dP_T_hist_weighted_lower_lim;
 //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
 double P_L_hist_upper_lim, P_L_hist_lower_lim;
 double P_R_hist_upper_lim, P_R_hist_lower_lim;
-double P_l_hist_upper_lim, P_l_hist_lower_lim;
+double P_lp_hist_upper_lim, P_lp_hist_lower_lim;
 double P_pion_hist_upper_lim, P_pion_hist_lower_lim;
 //</editor-fold>
 

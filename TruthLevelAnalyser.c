@@ -312,16 +312,16 @@ void gst::Loop() {
     //<editor-fold desc="Normalization settings">
     bool normalize_master = false;
 
-    bool normalized_theta_l_plots = true;
+    bool normalized_theta_lp_plots = true;
     bool normalized_theta_p1_plots = false, normalized_theta_p2_plots = false, normalized_dtheta_2p_plots = false; // 2p
     bool normalized_theta_p_plots = false, normalized_theta_n_plots = false, normalized_dtheta_1n1p_plots = false; // 1n1p
 
-    bool normalized_phi_l_plots = false;
+    bool normalized_phi_lp_plots = false;
     bool normalized_phi_p1_plots = false, normalized_phi_p2_plots = false, normalized_dphi_2p_plots = false; // 2p
     bool normalized_phi_p_plots = false, normalized_phi_n_plots = false, normalized_dphi_1n1p_plots = false; // 1n1p
 
-    bool normalized_E_l_plots = true;
-    bool normalized_E_l_all_int_plots = true, normalized_E_l_QEL_plots = true, normalized_E_l_MEC_plots = true, normalized_E_l_RES_plots = true, normalized_E_l_DIS_plots = true;
+    bool normalized_E_lp_plots = true;
+    bool normalized_E_lp_all_int_plots = true, normalized_E_lp_QEL_plots = true, normalized_E_lp_MEC_plots = true, normalized_E_lp_RES_plots = true, normalized_E_lp_DIS_plots = true;
 
     bool normalized_E_Trans_all_ang_all_int_plots = true;
     bool normalized_E_Trans15_plots = true;
@@ -333,7 +333,7 @@ void gst::Loop() {
     bool normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
-        normalized_theta_l_plots = false;
+        normalized_theta_lp_plots = false;
 
         normalized_theta_p1_plots = false;
         normalized_theta_p2_plots = false;
@@ -343,7 +343,7 @@ void gst::Loop() {
         normalized_theta_n_plots = false;
         normalized_dtheta_1n1p_plots = false; // 1n1p
 
-        normalized_phi_l_plots = false;
+        normalized_phi_lp_plots = false;
 
         normalized_phi_p1_plots = false;
         normalized_phi_p2_plots = false;
@@ -353,12 +353,12 @@ void gst::Loop() {
         normalized_phi_n_plots = false;
         normalized_dphi_1n1p_plots = false; // 1n1p
 
-        normalized_E_l_plots = false;
-        normalized_E_l_all_int_plots = false;
-        normalized_E_l_QEL_plots = false;
-        normalized_E_l_MEC_plots = false;
-        normalized_E_l_RES_plots = false;
-        normalized_E_l_DIS_plots = false;
+        normalized_E_lp_plots = false;
+        normalized_E_lp_all_int_plots = false;
+        normalized_E_lp_QEL_plots = false;
+        normalized_E_lp_MEC_plots = false;
+        normalized_E_lp_RES_plots = false;
+        normalized_E_lp_DIS_plots = false;
 
         normalized_E_Trans_all_ang_all_int_plots = false;
         normalized_E_Trans15_plots = false;
@@ -374,12 +374,12 @@ void gst::Loop() {
         cout << "\n";
     }
 
-    if (normalized_E_l_plots == false) {
-        normalized_E_l_all_int_plots = false;
-        normalized_E_l_QEL_plots = false;
-        normalized_E_l_MEC_plots = false;
-        normalized_E_l_RES_plots = false;
-        normalized_E_l_DIS_plots = false;
+    if (normalized_E_lp_plots == false) {
+        normalized_E_lp_all_int_plots = false;
+        normalized_E_lp_QEL_plots = false;
+        normalized_E_lp_MEC_plots = false;
+        normalized_E_lp_RES_plots = false;
+        normalized_E_lp_DIS_plots = false;
     }
     //</editor-fold>
 
@@ -427,19 +427,19 @@ void gst::Loop() {
 // Momentum thresholds --------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum thresholds (2p)">
-    double P_l_upper_lim_2p = -1, P_l_lower_lim_2p = -1;
+    double P_lp_upper_lim_2p = -1, P_lp_lower_lim_2p = -1;
     double P_p1_upper_lim_2p = -1, P_p1_lower_lim_2p = 0.3;
     double P_p2_upper_lim_2p = -1, P_p2_lower_lim_2p = 0.3;
     //</editor-fold>
 
     //<editor-fold desc="Momentum thresholds (1n1p)">
-    double P_l_upper_lim_1n1p = -1, P_l_lower_lim_1n1p = -1;
+    double P_lp_upper_lim_1n1p = -1, P_lp_lower_lim_1n1p = -1;
     double P_p_upper_lim_1n1p = -1, P_p_lower_lim_1n1p = 0.3;
     double P_n_upper_lim_1n1p = -1, P_n_lower_lim_1n1p = 0.3;
     //</editor-fold>
 
     //<editor-fold desc="Momentum thresholds (2p, MicroBooNE)">
-    double P_l_upper_lim_MicroBooNE = 1.2, P_l_lower_lim_MicroBooNE = 0.1;
+    double P_lp_upper_lim_MicroBooNE = 1.2, P_lp_lower_lim_MicroBooNE = 0.1;
     double P_L_upper_lim_MicroBooNE = 1.0, P_L_lower_lim_MicroBooNE = 0.3;
     double P_R_upper_lim_MicroBooNE = 1.0, P_R_lower_lim_MicroBooNE = 0.3;
     double P_pion_upper_lim_MicroBooNE = 0.065;
@@ -454,8 +454,8 @@ void gst::Loop() {
     //<editor-fold desc="Theta histograms">
 
     //<editor-fold desc="Theta histograms (2p)">
-    theta_l_upper_lim_2p = 60;
-    theta_l_lower_lim_2p = 0;
+    theta_lp_upper_lim_2p = 60;
+    theta_lp_lower_lim_2p = 0;
     theta_p1_upper_lim_2p = 190;
     theta_p1_lower_lim_2p = -10;
     theta_p2_upper_lim_2p = 190;
@@ -465,8 +465,8 @@ void gst::Loop() {
     //</editor-fold>
 
     //<editor-fold desc="Theta histograms (1n1p)">
-    theta_l_upper_lim_1n1p = 60;
-    theta_l_lower_lim_1n1p = 0;
+    theta_lp_upper_lim_1n1p = 60;
+    theta_lp_lower_lim_1n1p = 0;
     theta_p_upper_lim_1n1p = 190;
     theta_p_lower_lim_1n1p = -10;
     theta_n_upper_lim_1n1p = 190;
@@ -480,8 +480,8 @@ void gst::Loop() {
     //<editor-fold desc="Phi histograms">
 
     //<editor-fold desc="Phi histograms (2p)">
-    phi_l_upper_lim_2p = 200;
-    phi_l_lower_lim_2p = -200;
+    phi_lp_upper_lim_2p = 200;
+    phi_lp_lower_lim_2p = -200;
     phi_p1_upper_lim_2p = 200;
     phi_p1_lower_lim_2p = -200;
     phi_p2_upper_lim_2p = 200;
@@ -491,8 +491,8 @@ void gst::Loop() {
     //</editor-fold>
 
     //<editor-fold desc="Phi histograms (1n1p)">
-    phi_l_upper_lim_1n1p = 200;
-    phi_l_lower_lim_1n1p = -200;
+    phi_lp_upper_lim_1n1p = 200;
+    phi_lp_lower_lim_1n1p = -200;
     phi_p_upper_lim_1n1p = 200;
     phi_p_lower_lim_1n1p = -200;
     phi_n_upper_lim_1n1p = 200;
@@ -561,8 +561,8 @@ void gst::Loop() {
     P_L_hist_lower_lim = 0;
     P_R_hist_upper_lim = 3.0;
     P_R_hist_lower_lim = 0;
-    P_l_hist_upper_lim = 3.0;
-    P_l_hist_lower_lim = 0;
+    P_lp_hist_upper_lim = 3.0;
+    P_lp_hist_lower_lim = 0;
     P_pion_hist_upper_lim = 0.1;
     P_pion_hist_lower_lim = 0;
     //</editor-fold>
@@ -590,10 +590,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_2p = 0;
         fsEl_DIS_upper_lim_2p = 0.6;
         fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-        fsEl_VS_theta_l_upper_lim_2p_y = 0.6;
-        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_y = 0.6;
+        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
@@ -607,10 +607,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_1n1p = 0;
         fsEl_DIS_upper_lim_1n1p = 0.6;
         fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_y = 0.6;
-        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_y = 0.6;
+        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -857,8 +857,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 1.5;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 1.5;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 1.5;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -882,10 +882,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_2p = 0;
         fsEl_DIS_upper_lim_2p = 1.0;
         fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-        fsEl_VS_theta_l_upper_lim_2p_y = 1.0;
-        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_y = 1.0;
+        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
@@ -899,10 +899,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_1n1p = 0;
         fsEl_DIS_upper_lim_1n1p = 1.0;
         fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -1159,8 +1159,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 1.5;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 1.5;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 1.5;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -1184,10 +1184,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_2p = 0;
         fsEl_DIS_upper_lim_2p = 1.2;
         fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-        fsEl_VS_theta_l_upper_lim_2p_y = 1.2;
-        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_y = 1.2;
+        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
@@ -1201,10 +1201,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_1n1p = 0;
         fsEl_DIS_upper_lim_1n1p = 1.2;
         fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.2;
-        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.2;
+        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -1451,8 +1451,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 1.2;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 1.2;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 1.2;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -1476,10 +1476,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_2p = 0;
         fsEl_DIS_upper_lim_2p = 1.3;
         fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-        fsEl_VS_theta_l_upper_lim_2p_y = 1.3;
-        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_y = 1.3;
+        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
@@ -1493,10 +1493,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_1n1p = 0;
         fsEl_DIS_upper_lim_1n1p = 1.3;
         fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.3;
-        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.3;
+        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -1743,8 +1743,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 1.5;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 1.5;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 1.5;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -1769,10 +1769,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -1784,10 +1784,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -1803,10 +1803,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -1818,10 +1818,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -2069,8 +2069,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -2095,10 +2095,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -2110,10 +2110,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -2129,10 +2129,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -2144,10 +2144,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -2395,8 +2395,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -2421,10 +2421,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -2436,10 +2436,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -2455,10 +2455,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -2470,10 +2470,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
 //                fsEl_upper_lim_1n1p = 2.3;
 //                fsEl_lower_lim_1n1p = 1.6;
 //                fsEl_QEL_upper_lim_1n1p = 2.3;
@@ -2484,10 +2484,10 @@ void gst::Loop() {
 //                fsEl_RES_lower_lim_1n1p = 1.6;
 //                fsEl_DIS_upper_lim_1n1p = 2.3;
 //                fsEl_DIS_lower_lim_1n1p = 1.6;
-//                fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-//                fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-//                fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-//                fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+//                fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//                fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//                fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//                fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -2735,8 +2735,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -2761,10 +2761,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -2776,10 +2776,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -2795,10 +2795,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -2810,10 +2810,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -3061,8 +3061,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -3087,10 +3087,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -3102,10 +3102,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -3121,10 +3121,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -3136,10 +3136,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -3387,8 +3387,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -3413,10 +3413,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -3428,10 +3428,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -3447,10 +3447,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -3462,10 +3462,10 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -3713,8 +3713,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -3736,10 +3736,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_2p = 0;
         fsEl_DIS_upper_lim_2p = 3;
         fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-        fsEl_VS_theta_l_upper_lim_2p_y = 3;
-        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_y = 3;
+        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
@@ -3753,10 +3753,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_1n1p = 0;
         fsEl_DIS_upper_lim_1n1p = 3;
         fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_y = 3;
-        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_y = 3;
+        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
@@ -3938,8 +3938,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 3.0;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 3.0;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 3.0;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -3959,10 +3959,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_2p = 0;
         fsEl_DIS_upper_lim_2p = 1.3;
         fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_l_upper_lim_2p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_2p_x = 0;
-        fsEl_VS_theta_l_upper_lim_2p_y = 1.3;
-        fsEl_VS_theta_l_lower_lim_2p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_2p_y = 1.3;
+        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy histograms (1n1p)">
@@ -3976,10 +3976,10 @@ void gst::Loop() {
         fsEl_RES_lower_lim_1n1p = 0;
         fsEl_DIS_upper_lim_1n1p = 1.3;
         fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_x = 180.0;
-        fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_l_upper_lim_1n1p_y = 1.3;
-        fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_x = 180.0;
+        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+        fsEl_VS_theta_lp_upper_lim_1n1p_y = 1.3;
+        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
@@ -4161,8 +4161,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 1.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 1.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 1.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -4185,11 +4185,11 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_2p = 2.21;
             fsEl_lower_lim_2p = 1;
@@ -4201,11 +4201,11 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_l_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_l_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_2p_x = 0;
-            fsEl_VS_theta_l_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_2p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
         }
         //</editor-fold>
 
@@ -4221,11 +4221,11 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         } else if (FSI_status == false) {
             fsEl_upper_lim_1n1p = 2.3;
             fsEl_lower_lim_1n1p = 1;
@@ -4237,11 +4237,11 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_l_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_l_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_l_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_l_lower_lim_1n1p_y = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
         }
         //</editor-fold>
 
@@ -4489,8 +4489,8 @@ void gst::Loop() {
         P_p_hist_lower_lim_1n1p = 0;
         P_n_hist_upper_lim_1n1p = 2.3;
         P_n_hist_lower_lim_1n1p = 0;
-        P_l_hist_upper_lim_1n1p = 2.3;
-        P_l_hist_lower_lim_1n1p = 0;
+        P_lp_hist_upper_lim_1n1p = 2.3;
+        P_lp_hist_lower_lim_1n1p = 0;
         //</editor-fold>
 
         //</editor-fold>
@@ -4579,8 +4579,8 @@ void gst::Loop() {
 
     myLogFile << "Normalization settings\n";
     myLogFile << "==========================================================================================\n";
-    myLogFile << "normalized_theta_l_plots = " << BoolToString(normalized_theta_l_plots) << "\n";
-    myLogFile << "normalized_E_l_plots = " << BoolToString(normalized_E_l_plots) << "\n";
+    myLogFile << "normalized_theta_lp_plots = " << BoolToString(normalized_theta_lp_plots) << "\n";
+    myLogFile << "normalized_E_lp_plots = " << BoolToString(normalized_E_lp_plots) << "\n";
     myLogFile << "normalized_E_Trans15_plots = " << BoolToString(normalized_E_Trans15_plots) << "\n";
     myLogFile << "normalized_E_cal_plots = " << BoolToString(normalized_E_cal_plots) << "\n";
     myLogFile << "normalized_inclusive_plots = " << BoolToString(normalized_inclusive_plots) << "\n";
@@ -4596,8 +4596,8 @@ void gst::Loop() {
 
     myLogFile << "Momentum thresholds (2p)\n";
     myLogFile << "==========================================================================================\n";
-    myLogFile << "P_l_upper_lim_2p = " << P_l_upper_lim_2p << "\n";
-    myLogFile << "P_l_lower_lim_2p = " << P_l_lower_lim_2p << "\n";
+    myLogFile << "P_lp_upper_lim_2p = " << P_lp_upper_lim_2p << "\n";
+    myLogFile << "P_lp_lower_lim_2p = " << P_lp_lower_lim_2p << "\n";
     myLogFile << "P_p1_upper_lim_2p = " << P_p1_upper_lim_2p << "\n";
     myLogFile << "P_p1_lower_lim_2p = " << P_p1_lower_lim_2p << "\n";
     myLogFile << "P_p2_upper_lim_2p = " << P_p2_upper_lim_2p << "\n";
@@ -4607,8 +4607,8 @@ void gst::Loop() {
 
     myLogFile << "Momentum thresholds (1n1p)\n";
     myLogFile << "==========================================================================================\n";
-    myLogFile << "P_l_upper_lim_1n1p = " << P_l_upper_lim_1n1p << "\n";
-    myLogFile << "P_l_lower_lim_1n1p = " << P_l_lower_lim_1n1p << "\n";
+    myLogFile << "P_lp_upper_lim_1n1p = " << P_lp_upper_lim_1n1p << "\n";
+    myLogFile << "P_lp_lower_lim_1n1p = " << P_lp_lower_lim_1n1p << "\n";
     myLogFile << "P_p_upper_lim_1n1p = " << P_p_upper_lim_1n1p << "\n";
     myLogFile << "P_p_lower_lim_1n1p = " << P_p_lower_lim_1n1p << "\n";
     myLogFile << "P_n_upper_lim_1n1p = " << P_n_upper_lim_1n1p << "\n";
@@ -4618,10 +4618,10 @@ void gst::Loop() {
 
     myLogFile << "Momentum thresholds (2p, MicroBooNE)\n";
     myLogFile << "==========================================================================================\n";
-    myLogFile << "P_l_upper_lim_MicroBooNE = " << P_l_upper_lim_MicroBooNE << "\n";
-    myLogFile << "P_l_lower_lim_MicroBooNE = " << P_l_lower_lim_MicroBooNE << "\n";
-    myLogFile << "P_L_upper_lim_MicroBooNE = " << P_L_upper_lim_MicroBooNE << "\n";
-    myLogFile << "P_L_lower_lim_MicroBooNE = " << P_L_lower_lim_MicroBooNE << "\n";
+    myLogFile << "P_lp_upper_lim_MicroBooNE = " << P_lp_upper_lim_MicroBooNE << "\n";
+    myLogFile << "P_lp_lower_lim_MicroBooNE = " << P_lp_lower_lim_MicroBooNE << "\n";
+    myLogFile << "P_lp_upper_lim_MicroBooNE = " << P_lp_upper_lim_MicroBooNE << "\n";
+    myLogFile << "P_lp_lower_lim_MicroBooNE = " << P_lp_lower_lim_MicroBooNE << "\n";
     myLogFile << "P_R_upper_lim_MicroBooNE = " << P_R_upper_lim_MicroBooNE << "\n";
     myLogFile << "P_R_lower_lim_MicroBooNE = " << P_R_lower_lim_MicroBooNE << "\n";
     myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n";
@@ -4649,8 +4649,8 @@ void gst::Loop() {
     THStack *ThetaStack = new
     THStack("#theta_{l} stack (2p & 1n1p)", "#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#theta_{l} [Deg];");
 
-    TH1D *theta_l_2p = new
-    TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_2p, theta_l_upper_lim_2p);
+    TH1D *theta_lp_2p = new
+    TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_2p, theta_lp_upper_lim_2p);
     TH1D *theta_p1_2p = new
     TH1D("#theta_{p1} (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
     TH1D *theta_p2_2p = new
@@ -4658,8 +4658,8 @@ void gst::Loop() {
     TH1D *dtheta_2p = new
     TH1D("#gamma (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
 
-    TH1D *theta_l_1n1p = new
-    TH1D("#theta_{l} (1n1p)", ";#theta_{l} [Deg];", 100, theta_l_lower_lim_1n1p, theta_l_upper_lim_1n1p);
+    TH1D *theta_lp_1n1p = new
+    TH1D("#theta_{l} (1n1p)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_1n1p, theta_lp_upper_lim_1n1p);
     TH1D *theta_p_1n1p = new
     TH1D("#theta_{p} (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
     TH1D *theta_n_1n1p = new
@@ -4674,8 +4674,8 @@ void gst::Loop() {
     THStack *PhiStack = new
     THStack("#phi_{l} stack (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
 
-    TH1D *phi_l_2p = new
-    TH1D("#phi_{l} (2p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_2p, phi_l_upper_lim_2p);
+    TH1D *phi_lp_2p = new
+    TH1D("#phi_{l} (2p)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *phi_p1_2p = new
     TH1D("#phi_{p1} (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
     TH1D *phi_p2_2p = new
@@ -4683,8 +4683,8 @@ void gst::Loop() {
     TH1D *dphi_2p = new
     TH1D("#Delta#phi (2p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
 
-    TH1D *phi_l_1n1p = new
-    TH1D("#phi_{l} (1n1p)", ";#phi_{l} [Deg];", 100, phi_l_lower_lim_1n1p, phi_l_upper_lim_1n1p);
+    TH1D *phi_lp_1n1p = new
+    TH1D("#phi_{l} (1n1p)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_1n1p, phi_lp_upper_lim_1n1p);
     TH1D *phi_p_1n1p = new
     TH1D("#phi_{p} (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
     TH1D *phi_n_1n1p = new
@@ -4709,18 +4709,18 @@ void gst::Loop() {
     TH1D("Final State E_{l} (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
     TH1D *fsEl_DIS_2p = new
     TH1D("Final State E_{l} (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
-    TH2D *fsEl_VS_theta_l_all_int_2p = new
+    TH2D *fsEl_VS_theta_lp_all_int_2p = new
     TH2D("Stat} (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_2p = new
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_lp_QEL_only_2p = new
     TH2D("Stat} (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_MEC_only_2p = new
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_lp_MEC_only_2p = new
     TH2D("Stat} (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
 
     TH1D *fsEl_1n1p = new
     TH1D("Final State E_{l} (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
@@ -4732,18 +4732,18 @@ void gst::Loop() {
     TH1D("Final State E_{l} (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
     TH1D *fsEl_DIS_1n1p = new
     TH1D("Final State E_{l} (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
-    TH2D *fsEl_VS_theta_l_all_int_1n1p = new
+    TH2D *fsEl_VS_theta_lp_all_int_1n1p = new
     TH2D("Stat (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_1n1p = new
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_lp_QEL_only_1n1p = new
     TH2D("Stat (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_MEC_only_1n1p = new
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+    TH2D *fsEl_VS_theta_lp_MEC_only_1n1p = new
     TH2D("Stat (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-         200, fsEl_VS_theta_l_lower_lim_1n1p_x, fsEl_VS_theta_l_upper_lim_1n1p_x,
-         200, fsEl_VS_theta_l_lower_lim_1n1p_y, fsEl_VS_theta_l_upper_lim_1n1p_y);
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+         200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
 
     //</editor-fold>
 
@@ -5144,7 +5144,7 @@ void gst::Loop() {
 // E_cal VS other variables (all interactions, 2p):
 
     //<editor-fold desc="E_cal restoration histograms - E_cal VS other variables (all interactions, 2p)">
-    TH2D *E_cal_VS_theta_l_all_int_2p = new
+    TH2D *E_cal_VS_theta_lp_all_int_2p = new
     TH2D("E_{cal} vs #theta_{l} (all interactions, 2p)",
          "E_{cal} vs #theta_{l} (All Interactions, 2p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
          200, 0.0, 120, 200, 2.12, 2.3);
@@ -5169,7 +5169,7 @@ void gst::Loop() {
 // E_cal VS other variables (QEL only, 2p):
 
     //<editor-fold desc="E_cal restoration histograms - E_cal VS other variables (QEL only, 2p)">
-    TH2D *E_cal_VS_theta_l_QEL_only_2p = new
+    TH2D *E_cal_VS_theta_lp_QEL_only_2p = new
     TH2D("E_{cal} vs #theta_{l} (QEL Only, 2p)",
          "E_{cal} vs #theta_{l} (QEL Only, 2p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]",
          200, 0.0, 180, 200, 2.12, 2.23);
@@ -5214,7 +5214,7 @@ void gst::Loop() {
 // E_cal VS other variables (QEL only, 1n1p):
 
     //<editor-fold desc="E_cal restoration histograms - E_cal VS other variables (QEL only, 1n1p)">
-    TH2D *E_cal_VS_theta_l_QEL_1n1p = new
+    TH2D *E_cal_VS_theta_lp_QEL_1n1p = new
     TH2D("E_{cal} vs #theta_{l} (QEL Only, 1n1p)",
          "E_{cal} vs #theta_{l} (QEL Only, 1n1p);#theta_{l} [Deg];E_{cal} = E_{l} + T_{p} + T_{n} [GeV]",
          200, 0.0, 180, 200, 2.12, 2.23);
@@ -5275,8 +5275,8 @@ void gst::Loop() {
     TH1D("P_{p} (all interactions, 1n1p)", ";P_{p} [GeV/c]", 100, P_p_hist_lower_lim_1n1p, P_p_hist_upper_lim_1n1p);
     TH1D *P_n_hist_1n1p = new
     TH1D("P_{n} (all interactions, 1n1p)", ";P_{n} [GeV/c]", 100, P_n_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p);
-    TH1D *P_l_hist_1n1p = new
-    TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_l_hist_lower_lim_1n1p, P_l_hist_upper_lim_1n1p);
+    TH1D *P_lp_hist_1n1p = new
+    TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_1n1p, P_lp_hist_upper_lim_1n1p);
     //</editor-fold>
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
@@ -5364,8 +5364,8 @@ void gst::Loop() {
     TH1D("P_{L}", "Momentum of Leading Proton (P_{L});P_{L} [GeV/c]", 100, P_L_hist_lower_lim, P_L_hist_upper_lim);
     TH1D *P_R_hist = new
     TH1D("P_{R}", "Momentum of Recoil Proton (P_{R});P_{R} [GeV/c]", 100, P_R_hist_lower_lim, P_R_hist_upper_lim);
-    TH1D *P_l_hist = new
-    TH1D("P_{l}", "Momentum of Lepton (P_{l});P_{l} [GeV/c]", 100, P_l_hist_lower_lim, P_l_hist_upper_lim);
+    TH1D *P_lp_hist = new
+    TH1D("P_{l}", "Momentum of Lepton (P_{l});P_{l} [GeV/c]", 100, P_lp_hist_lower_lim, P_lp_hist_upper_lim);
     TH1D *P_pion_hist = new
     TH1D("P_{#pi^{#pm}}", "Momentum of Pions (P_{#pi^{#pm}});P_{#pi^{#pm}} [GeV/c]", 100, P_pion_hist_lower_lim, P_pion_hist_upper_lim);
 
@@ -5455,25 +5455,25 @@ void gst::Loop() {
             E_Trans_VS_q_MEC_inclusive->Fill(q, Ev - El);
         }
 
-        double Theta_l_inclusive = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // In degrees
+        double Theta_lp_inclusive = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // In degrees
 
 //      Theta_l inclusive calculations:
-        if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+        if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
             E_Trans15_all_inclusive->Fill(Ev - El);
             if (qel == true) {
-                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
                     E_Trans15_QEL_inclusive->Fill(Ev - El);
                 }
             } else if (mec == true) {
-                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
                     E_Trans15_MEC_inclusive->Fill(Ev - El);
                 }
             } else if (res == true) {
-                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
                     E_Trans15_RES_inclusive->Fill(Ev - El);
                 }
             } else if (dis == true) {
-                if (Theta_l_inclusive >= 14.0 && Theta_l_inclusive <= 16.0) {
+                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
                     E_Trans15_DIS_inclusive->Fill(Ev - El);
                 }
             }
@@ -5546,15 +5546,15 @@ void gst::Loop() {
 //                            gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
 //                            gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                                E_Trans15_MEC_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                                E_Trans45_MEC_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                                E_Trans90_MEC_2p->Fill(Ev - El);
 //                            }
 //
-//                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+//                            fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_2p, El);
 //
                             E_cal_MEC_2n->Fill(E_cal_2n);
 //
@@ -5563,7 +5563,7 @@ void gst::Loop() {
 //                            fsEl_MEC_2p->Fill(El);
                         }
 
-//                        double Theta_l_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+//                        double Theta_lp_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_lp_2p is in degrees
 //
 ////                      NOT REALLY dtheta:
 //                        double d_theta_2p = acos(
@@ -5639,13 +5639,13 @@ void gst::Loop() {
 //                        P_lp_hist_2p->Fill(P_lp_2p);
 //
 //                        fsEl_2p->Fill(El);
-//                        theta_l_2p->Fill(Theta_l_2p);
-//                        phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-//                        fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_2p, El);
+//                        theta_lp_2p->Fill(Theta_lp_2p);
+//                        phi_lp_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+//                        fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, El);
 //
 //                        E_Trans_all_ang_all_int_2p->Fill(Ev - El);
 //
-//                        E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+//                        E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, E_cal_2p);
 //                        E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
 //                        E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzf[Proton_1_ind_2p] / rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p])) -
 //                                                              acos(pzf[Proton_2_ind_2p] / rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]))) *
@@ -5654,11 +5654,11 @@ void gst::Loop() {
 //                        gamma_Lab_all_hist->Fill(cos(d_theta_2p));
 //                        gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                        if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                        if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                            E_Trans15_all_2p->Fill(Ev - El);
-//                        } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                        } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                            E_Trans45_all_2p->Fill(Ev - El);
-//                        } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                        } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                            E_Trans90_all_2p->Fill(Ev - El);
 //                        }
 //
@@ -5667,23 +5667,23 @@ void gst::Loop() {
 //                            gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
 //                            gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                                E_Trans15_QEL_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                                E_Trans45_QEL_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                                E_Trans90_QEL_2p->Fill(Ev - El);
 //                            }
 //
-//                            fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, El);
+//                            fsEl_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_2p, El);
 //
 //                            E_cal_QEL_2p->Fill(E_cal_2p);
-//                            E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, E_cal_2p);
+//                            E_cal_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_2p, E_cal_2p);
 //                            E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
 //                            E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
 //                            E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
 //                            E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
-//                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_L_2p, E_cal_2p);
+//                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_lp_2p, E_cal_2p);
 //                            E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
 //                            E_cal_VS_dtheta_QEL_only_2p->Fill(
 //                                    fabs(acos(pzf[Proton_1_ind_2p] / sqrt(pxf[Proton_1_ind_2p] * pxf[Proton_1_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_1_ind_2p] +
@@ -5700,15 +5700,15 @@ void gst::Loop() {
 //                            gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
 //                            gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                                E_Trans15_MEC_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                                E_Trans45_MEC_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                                E_Trans90_MEC_2p->Fill(Ev - El);
 //                            }
 //
-//                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+//                            fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_2p, El);
 //
 //                            E_cal_MEC_2p->Fill(E_cal_2p);
 //
@@ -5719,11 +5719,11 @@ void gst::Loop() {
 //                            gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
 //                            gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                                E_Trans15_RES_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                                E_Trans45_RES_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                                E_Trans90_RES_2p->Fill(Ev - El);
 //                            }
 //
@@ -5734,11 +5734,11 @@ void gst::Loop() {
 //                            gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
 //                            gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
-//                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+//                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
 //                                E_Trans15_DIS_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+//                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
 //                                E_Trans45_DIS_2p->Fill(Ev - El);
-//                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+//                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
 //                                E_Trans90_DIS_2p->Fill(Ev - El);
 //                            }
 //
@@ -5815,7 +5815,7 @@ void gst::Loop() {
                             E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
                         }
 
-                        double Theta_l_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+                        double Theta_lp_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_lp_2p is in degrees
 
 //                      NOT REALLY dtheta:
                         double d_theta_2p = acos(
@@ -5891,13 +5891,13 @@ void gst::Loop() {
                         P_lp_hist_2p->Fill(P_lp_2p);
 
                         fsEl_2p->Fill(El);
-                        theta_l_2p->Fill(Theta_l_2p);
-                        phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-                        fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_2p, El);
+                        theta_lp_2p->Fill(Theta_lp_2p);
+                        phi_lp_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+                        fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, El);
 
                         E_Trans_all_ang_all_int_2p->Fill(Ev - El);
 
-                        E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+                        E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, E_cal_2p);
                         E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
                         E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzf[Proton_1_ind_2p] / rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p])) -
                                                               acos(pzf[Proton_2_ind_2p] / rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]))) *
@@ -5906,11 +5906,11 @@ void gst::Loop() {
                         gamma_Lab_all_hist->Fill(cos(d_theta_2p));
                         gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                        if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                        if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                             E_Trans15_all_2p->Fill(Ev - El);
-                        } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                        } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                             E_Trans45_all_2p->Fill(Ev - El);
-                        } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                        } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                             E_Trans90_all_2p->Fill(Ev - El);
                         }
 
@@ -5919,23 +5919,23 @@ void gst::Loop() {
                             gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_QEL_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_QEL_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_QEL_2p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, El);
+                            fsEl_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_2p, El);
 
                             E_cal_QEL_2p->Fill(E_cal_2p);
-                            E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, E_cal_2p);
+                            E_cal_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_2p, E_cal_2p);
                             E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
                             E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
                             E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
                             E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
-                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_L_2p, E_cal_2p);
+                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_lp_2p, E_cal_2p);
                             E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
                             E_cal_VS_dtheta_QEL_only_2p->Fill(
                                     fabs(acos(pzf[Proton_1_ind_2p] / sqrt(pxf[Proton_1_ind_2p] * pxf[Proton_1_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_1_ind_2p] +
@@ -5952,15 +5952,15 @@ void gst::Loop() {
                             gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_MEC_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_MEC_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_MEC_2p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+                            fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_2p, El);
 
                             E_cal_MEC_2p->Fill(E_cal_2p);
 
@@ -5971,11 +5971,11 @@ void gst::Loop() {
                             gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_RES_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_RES_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_RES_2p->Fill(Ev - El);
                             }
 
@@ -5986,11 +5986,11 @@ void gst::Loop() {
                             gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_DIS_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_DIS_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_DIS_2p->Fill(Ev - El);
                             }
 
@@ -6051,7 +6051,7 @@ void gst::Loop() {
                             E_cal_2p = El + (Ei[Proton_1_ind_2p] - 0.938272) + (Ei[Proton_2_ind_2p] - 0.938272);
                         }
 
-                        double Theta_l_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_l_2p is in degrees
+                        double Theta_lp_2p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // Theta_lp_2p is in degrees
 
 //                      NOT REALLY dtheta:
                         double d_theta_2p = acos(
@@ -6126,13 +6126,13 @@ void gst::Loop() {
                         P_lp_hist_2p->Fill(P_lp_2p);
 
                         fsEl_2p->Fill(El);
-                        theta_l_2p->Fill(Theta_l_2p);
-                        phi_l_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-                        fsEl_VS_theta_l_all_int_2p->Fill(Theta_l_2p, El);
+                        theta_lp_2p->Fill(Theta_lp_2p);
+                        phi_lp_2p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+                        fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, El);
 
                         E_Trans_all_ang_all_int_2p->Fill(Ev - El);
 
-                        E_cal_VS_theta_l_all_int_2p->Fill(Theta_l_2p, E_cal_2p);
+                        E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, E_cal_2p);
                         E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
                         E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzi[Proton_1_ind_2p] / rCalc(pxi[Proton_1_ind_2p], pyi[Proton_1_ind_2p], pzi[Proton_1_ind_2p])) -
                                                               acos(pzi[Proton_2_ind_2p] / rCalc(pxi[Proton_2_ind_2p], pyi[Proton_2_ind_2p], pzi[Proton_2_ind_2p]))) *
@@ -6141,11 +6141,11 @@ void gst::Loop() {
                         gamma_Lab_all_hist->Fill(cos(d_theta_2p));
                         gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                        if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                        if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                             E_Trans15_all_2p->Fill(Ev - El);
-                        } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                        } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                             E_Trans45_all_2p->Fill(Ev - El);
-                        } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                        } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                             E_Trans90_all_2p->Fill(Ev - El);
                         }
 
@@ -6154,23 +6154,23 @@ void gst::Loop() {
                             gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_QEL_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_QEL_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_QEL_2p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, El);
+                            fsEl_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_2p, El);
 
                             E_cal_QEL_2p->Fill(E_cal_2p);
-                            E_cal_VS_theta_l_QEL_only_2p->Fill(Theta_l_2p, E_cal_2p);
+                            E_cal_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_2p, E_cal_2p);
                             E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
                             E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
                             E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
                             E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
-                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_L_2p, E_cal_2p);
+                            E_cal_VS_Pn1_QEL_only_2p->Fill(P_lp_2p, E_cal_2p);
                             E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
                             E_cal_VS_dtheta_QEL_only_2p->Fill(
                                     fabs(acos(pzi[Proton_1_ind_2p] / sqrt(pxi[Proton_1_ind_2p] * pxi[Proton_1_ind_2p] + pyi[Proton_1_ind_2p] * pyi[Proton_1_ind_2p] +
@@ -6187,15 +6187,15 @@ void gst::Loop() {
                             gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_MEC_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_MEC_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_MEC_2p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_MEC_only_2p->Fill(Theta_l_2p, El);
+                            fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_2p, El);
 
                             E_cal_MEC_2p->Fill(E_cal_2p);
 
@@ -6206,11 +6206,11 @@ void gst::Loop() {
                             gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_RES_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_RES_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_RES_2p->Fill(Ev - El);
                             }
 
@@ -6221,11 +6221,11 @@ void gst::Loop() {
                             gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
                             gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
-                            if (Theta_l_2p >= 14.0 && Theta_l_2p <= 16.0) {
+                            if (Theta_lp_2p >= 14.0 && Theta_lp_2p <= 16.0) {
                                 E_Trans15_DIS_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 44.0 && Theta_l_2p <= 46.0) {
+                            } else if (Theta_lp_2p >= 44.0 && Theta_lp_2p <= 46.0) {
                                 E_Trans45_DIS_2p->Fill(Ev - El);
-                            } else if (Theta_l_2p >= 89.0 && Theta_l_2p <= 91.0) {
+                            } else if (Theta_lp_2p >= 89.0 && Theta_lp_2p <= 91.0) {
                                 E_Trans90_DIS_2p->Fill(Ev - El);
                             }
 
@@ -6287,7 +6287,7 @@ void gst::Loop() {
                             E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
                         }
 
-                        double Theta_l_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
+                        double Theta_lp_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
 
                         double phi_p = atan2(pyf[Proton_ind_1n1p], pxf[Proton_ind_1n1p]) * 180.0 / 3.14159265359;
                         double phi_n = atan2(pyf[Neutron_ind_1n1p], pxf[Neutron_ind_1n1p]) * 180.0 / 3.14159265359;
@@ -6309,7 +6309,7 @@ void gst::Loop() {
                         //<editor-fold desc="Momentum histograms fill (1n1p)">
                         P_p_hist_1n1p->Fill(P_p_1n1p);
                         P_n_hist_1n1p->Fill(P_n_1n1p);
-                        P_l_hist_1n1p->Fill(P_lp_1n1p);
+                        P_lp_hist_1n1p->Fill(P_lp_1n1p);
                         //</editor-fold>
 
                         //<editor-fold desc="Theta histograms fill (1n1p)">
@@ -6325,36 +6325,36 @@ void gst::Loop() {
                         //</editor-fold>
 
                         //<editor-fold desc="Energy histograms fill (1n1p)">
-                        theta_l_1n1p->Fill(Theta_l_1n1p);
-                        phi_l_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-                        fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+                        theta_lp_1n1p->Fill(Theta_lp_1n1p);
+                        phi_lp_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+                        fsEl_VS_theta_lp_all_int_1n1p->Fill(Theta_lp_1n1p, El);
                         fsEl_1n1p->Fill(El);
                         //</editor-fold>
 
                         E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
 
-                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                             E_Trans15_all_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                             E_Trans45_all_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                             E_Trans90_all_1n1p->Fill(Ev - El);
                         }
 
                         //<editor-fold desc="Histogram fill by reaction (1n1p)">
                         if (qel == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_QEL_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_QEL_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_QEL_1n1p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+                            fsEl_VS_theta_lp_QEL_only_1n1p->Fill(Theta_lp_1n1p, El);
 
                             E_cal_QEL_1n1p->Fill(E_cal_1n1p);
-                            E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+                            E_cal_VS_theta_lp_QEL_1n1p->Fill(Theta_lp_1n1p, E_cal_1n1p);
                             E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
                             E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
                             E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
@@ -6369,15 +6369,15 @@ void gst::Loop() {
 
                             fsEl_QEL_1n1p->Fill(El);
                         } else if (mec == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_MEC_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_MEC_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_MEC_1n1p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+                            fsEl_VS_theta_lp_MEC_only_1n1p->Fill(Theta_lp_1n1p, El);
 
                             E_cal_MEC_1n1p->Fill(E_cal_1n1p);
 
@@ -6385,11 +6385,11 @@ void gst::Loop() {
 
                             fsEl_MEC_1n1p->Fill(El);
                         } else if (res == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_RES_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_RES_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_RES_1n1p->Fill(Ev - El);
                             }
 
@@ -6397,11 +6397,11 @@ void gst::Loop() {
 
                             fsEl_RES_1n1p->Fill(El);
                         } else if (dis == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_DIS_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_DIS_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_DIS_1n1p->Fill(Ev - El);
                             }
 
@@ -6452,7 +6452,7 @@ void gst::Loop() {
                             E_cal_1n1p = El + (Ei[Proton_ind_1n1p] - 0.938272) + (Ei[Neutron_ind_1n1p] - 0.939565);
                         }
 
-                        double Theta_l_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
+                        double Theta_lp_1n1p = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359;
 
                         double phi_p = atan2(pyi[Proton_ind_1n1p], pxi[Proton_ind_1n1p]) * 180.0 / 3.14159265359;
                         double phi_n = atan2(pyi[Neutron_ind_1n1p], pxi[Neutron_ind_1n1p]) * 180.0 / 3.14159265359;
@@ -6474,7 +6474,7 @@ void gst::Loop() {
                         //<editor-fold desc="Momentum histograms fill (1n1p)">
                         P_p_hist_1n1p->Fill(P_p_1n1p);
                         P_n_hist_1n1p->Fill(P_n_1n1p);
-                        P_l_hist_1n1p->Fill(P_lp_1n1p);
+                        P_lp_hist_1n1p->Fill(P_lp_1n1p);
                         //</editor-fold>
 
                         //<editor-fold desc="Theta histograms fill (1n1p)">
@@ -6490,36 +6490,36 @@ void gst::Loop() {
                         //</editor-fold>
 
                         //<editor-fold desc="Energy histograms fill (1n1p)">
-                        theta_l_1n1p->Fill(Theta_l_1n1p);
-                        phi_l_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
-                        fsEl_VS_theta_l_all_int_1n1p->Fill(Theta_l_1n1p, El);
+                        theta_lp_1n1p->Fill(Theta_lp_1n1p);
+                        phi_lp_1n1p->Fill(atan2(pyl, pxl) * 180.0 / 3.14159265359);
+                        fsEl_VS_theta_lp_all_int_1n1p->Fill(Theta_lp_1n1p, El);
                         fsEl_1n1p->Fill(El);
                         //</editor-fold>
 
                         E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
 
-                        if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                        if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                             E_Trans15_all_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                        } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                             E_Trans45_all_1n1p->Fill(Ev - El);
-                        } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                        } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                             E_Trans90_all_1n1p->Fill(Ev - El);
                         }
 
                         //<editor-fold desc="Histogram fill by reaction (1n1p)">
                         if (qel == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_QEL_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_QEL_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_QEL_1n1p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_QEL_only_1n1p->Fill(Theta_l_1n1p, El);
+                            fsEl_VS_theta_lp_QEL_only_1n1p->Fill(Theta_lp_1n1p, El);
 
                             E_cal_QEL_1n1p->Fill(E_cal_1n1p);
-                            E_cal_VS_theta_l_QEL_1n1p->Fill(Theta_l_1n1p, E_cal_1n1p);
+                            E_cal_VS_theta_lp_QEL_1n1p->Fill(Theta_lp_1n1p, E_cal_1n1p);
                             E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
                             E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
                             E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
@@ -6534,15 +6534,15 @@ void gst::Loop() {
 
                             fsEl_QEL_1n1p->Fill(El);
                         } else if (mec == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_MEC_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_MEC_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_MEC_1n1p->Fill(Ev - El);
                             }
 
-                            fsEl_VS_theta_l_MEC_only_1n1p->Fill(Theta_l_1n1p, El);
+                            fsEl_VS_theta_lp_MEC_only_1n1p->Fill(Theta_lp_1n1p, El);
 
                             E_cal_MEC_1n1p->Fill(E_cal_1n1p);
 
@@ -6550,11 +6550,11 @@ void gst::Loop() {
 
                             fsEl_MEC_1n1p->Fill(El);
                         } else if (res == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_RES_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_RES_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_RES_1n1p->Fill(Ev - El);
                             }
 
@@ -6562,11 +6562,11 @@ void gst::Loop() {
 
                             fsEl_RES_1n1p->Fill(El);
                         } else if (dis == true) {
-                            if (Theta_l_1n1p >= 14.0 && Theta_l_1n1p <= 16.0) {
+                            if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                                 E_Trans15_DIS_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 44.0 && Theta_l_1n1p <= 46.0) {
+                            } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
                                 E_Trans45_DIS_1n1p->Fill(Ev - El);
-                            } else if (Theta_l_1n1p >= 89.0 && Theta_l_1n1p <= 91.0) {
+                            } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
                                 E_Trans90_DIS_1n1p->Fill(Ev - El);
                             }
 
@@ -6614,7 +6614,7 @@ void gst::Loop() {
                     double P_R = fmin(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
                                       rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
 
-                    if ((P_lp_f >= P_l_lower_lim_MicroBooNE && P_lp_f <= P_l_upper_lim_MicroBooNE)
+                    if ((P_lp_f >= P_lp_lower_lim_MicroBooNE && P_lp_f <= P_lp_upper_lim_MicroBooNE)
                         && (P_L >= P_L_lower_lim_MicroBooNE && P_L <= P_L_upper_lim_MicroBooNE)
                         && (P_R >= P_R_lower_lim_MicroBooNE && P_R <= P_R_upper_lim_MicroBooNE)) {
 
@@ -6652,7 +6652,7 @@ void gst::Loop() {
                             //<editor-fold desc="MicroBooNE momentum plots fill (no charged pions case)">
                             P_R_hist->Fill(P_R);
                             P_L_hist->Fill(P_L);
-                            P_l_hist->Fill(P_lp_f);
+                            P_lp_hist->Fill(P_lp_f);
                             //</editor-fold>
 
                         } else { // In events with pions
@@ -6694,7 +6694,7 @@ void gst::Loop() {
                                         //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
                                         P_R_hist->Fill(P_R);
                                         P_L_hist->Fill(P_L);
-                                        P_l_hist->Fill(P_lp_f);
+                                        P_lp_hist->Fill(P_lp_f);
                                         P_pion_hist->Fill(P_pion);
                                         //</editor-fold>
                                     }
@@ -6736,14 +6736,14 @@ void gst::Loop() {
                     //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
                     P_R_hist->Fill(P_R);
                     P_L_hist->Fill(P_L);
-                    P_l_hist->Fill(P_lp_i);
+                    P_lp_hist->Fill(P_lp_i);
 //                    P_pion_hist->Fill(P_pion);
                     //</editor-fold>
 
 
 
 
-                    if ((P_lp_i >= P_l_lower_lim_MicroBooNE && P_lp_i <= P_l_upper_lim_MicroBooNE)
+                    if ((P_lp_i >= P_lp_lower_lim_MicroBooNE && P_lp_i <= P_lp_upper_lim_MicroBooNE)
                         && (P_L >= P_L_lower_lim_MicroBooNE && P_L <= P_L_upper_lim_MicroBooNE)
                         && (P_R >= P_R_lower_lim_MicroBooNE && P_R <= P_R_upper_lim_MicroBooNE)) {
 
@@ -6782,7 +6782,7 @@ void gst::Loop() {
 //                            //<editor-fold desc="MicroBooNE momentum plots fill (no charged pions case)">
 //                            P_R_hist->Fill(P_R);
 //                            P_L_hist->Fill(P_L);
-//                            P_l_hist->Fill(P_lp_i);
+//                            P_lp_hist->Fill(P_lp_i);
 //                            //</editor-fold>
 
                         } else { // In events with pions
@@ -6825,7 +6825,7 @@ void gst::Loop() {
 //                                        //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
 //                                        P_R_hist->Fill(P_R);
 //                                        P_L_hist->Fill(P_L);
-//                                        P_l_hist->Fill(P_lp_i);
+//                                        P_lp_hist->Fill(P_lp_i);
 //                                        P_pion_hist->Fill(P_pion);
 //                                        //</editor-fold>
                                     }
@@ -6884,15 +6884,15 @@ void gst::Loop() {
 //  Theta of outgoing lepton histograms --------------------------------------------------------------
 
 //      Normalization factor:
-        double theta_l_integral = theta_l_2p->Integral() + theta_l_1n1p->Integral();
+        double theta_lp_integral = theta_lp_2p->Integral() + theta_lp_1n1p->Integral();
 
         //<editor-fold desc="Theta of outgoing lepton histogram (2p)">
-        histPlotter1D(c1, theta_l_2p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+        histPlotter1D(c1, theta_lp_2p, normalized_theta_lp_plots, true, theta_lp_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "2p", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Theta of outgoing lepton histogram (1n1p)">
-        histPlotter1D(c1, theta_l_1n1p, normalized_theta_l_plots, true, theta_l_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
+        histPlotter1D(c1, theta_lp_1n1p, normalized_theta_lp_plots, true, theta_lp_integral, "#theta_{l} of Outgoing Lepton", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, true, true, ThetaStack, "Theta_of_lepton", "plots/theta_histograms/", "1n1p", kRed, true, true, true);
         //</editor-fold>
 
@@ -6903,7 +6903,7 @@ void gst::Loop() {
         ThetaStack->GetHistogram()->GetXaxis()->CenterTitle(true);
         ThetaStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        if (normalized_theta_l_plots) {
+        if (normalized_theta_lp_plots) {
             ThetaStack->SetTitle("#theta_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p) - Normalized");
             ThetaStack->GetYaxis()->SetTitle("Probability (%)");
             ThetaStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
@@ -6915,8 +6915,8 @@ void gst::Loop() {
         auto ThetaStack_legend = new
         TLegend(0.75, 0.775, 0.875, 0.9);
 
-        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(theta_l_2p, "2p", "l");
-        TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_l_1n1p, "1n1p", "l");
+        TLegendEntry *ThetaStack_entry_2p = ThetaStack_legend->AddEntry(theta_lp_2p, "2p", "l");
+        TLegendEntry *ThetaStack_entry_1n1p = ThetaStack_legend->AddEntry(theta_lp_1n1p, "1n1p", "l");
         ThetaStack_legend->Draw();
 
         plots->Add(ThetaStack);
@@ -6978,15 +6978,15 @@ void gst::Loop() {
 //  Phi of outgoing lepton histogram ---------------------------------------------------------------------------
 
 //      Normalization factor:
-        double phi_l_integral = phi_l_2p->Integral() + phi_l_1n1p->Integral();
+        double phi_lp_integral = phi_lp_2p->Integral() + phi_lp_1n1p->Integral();
 
         //<editor-fold desc="Phi of outgoing lepton histogram (2p)">
-        histPlotter1D(c1, phi_l_2p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+        histPlotter1D(c1, phi_lp_2p, normalized_phi_lp_plots, true, phi_lp_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "2p", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Phi of outgoing lepton histogram (1n1p)">
-        histPlotter1D(c1, phi_l_1n1p, normalized_phi_l_plots, true, phi_l_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
+        histPlotter1D(c1, phi_lp_1n1p, normalized_phi_lp_plots, true, phi_lp_integral, "#phi_{l} of Outgoing Lepton", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "Phi_of_lepton", "plots/phi_histograms/", "1n1p", kRed, true, true, true);
         //</editor-fold>
 
@@ -7001,8 +7001,8 @@ void gst::Loop() {
         TLegend(0.775, 0.775, 0.9, 0.9);
 //        auto PhiStack_legend = new TLegend(0.8, 0.6, 0.9, 0.7);
 
-        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_l_2p, "2p", "l");
-        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_l_1n1p, "1n1p", "l");
+        TLegendEntry *PhiStack_entry_2p = PhiStack_legend->AddEntry(phi_lp_2p, "2p", "l");
+        TLegendEntry *PhiStack_entry_1n1p = PhiStack_legend->AddEntry(phi_lp_1n1p, "1n1p", "l");
         PhiStack_legend->Draw();
 
         plots->Add(PhiStack);
@@ -7067,27 +7067,27 @@ void gst::Loop() {
         //<editor-fold desc="El histograms (2p)">
 
         //<editor-fold desc="El histograms (all interactions, 2p)">
-        histPlotter1D(c1, fsEl_2p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_2p, normalized_E_lp_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
                       plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "2p", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (QEL only, 2p)">
-        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_QEL_2p, normalized_E_lp_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
                       plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "2p", kBlue, true, false, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (MEC only, 2p)">
-        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_MEC_2p, normalized_E_lp_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
                       plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "2p", kBlue, true, false, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (RES only, 2p)">
-        histPlotter1D(c1, fsEl_RES_2p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_RES_2p, normalized_E_lp_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "2p", kBlue, true, false, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (DIS, 2p)">
-        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_DIS_2p, normalized_E_lp_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "2p", kBlue, true, false, true);
         //</editor-fold>
 
@@ -7096,27 +7096,27 @@ void gst::Loop() {
         //<editor-fold desc="El histograms (1n1p)">
 
         //<editor-fold desc="El histograms (all interaction, 1n1p)">
-        histPlotter1D(c1, fsEl_1n1p, normalized_E_l_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_1n1p, normalized_E_lp_all_int_plots, true, fsEl_integral, "Final State E_{l}", "All Interactions", 0.06, 0.0425, 0.0425,
                       plots, 2, true, true, EnergyStack, "Final_State_El", "plots/Energy_histograms/El_histograms/all_interactions/", "1n1p", kRed, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (QEL only, 1n1p)">
-        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_l_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_QEL_1n1p, normalized_E_lp_QEL_plots, true, fsEl_integral, "Final State E_{l}", "QEL Only", 0.06, 0.0425, 0.0425,
                       plots, 2, true, true, EnergyStack, "Final_State_El_QEL", "plots/Energy_histograms/El_histograms/QEL_only/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (MEC only, 1n1p)">
-        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_l_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_MEC_1n1p, normalized_E_lp_MEC_plots, true, fsEl_integral, "Final State E_{l}", "MEC Only", 0.06, 0.0425, 0.0425,
                       plots, 2, true, true, EnergyStack, "Final_State_El_MEC", "plots/Energy_histograms/El_histograms/MEC_only/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (RES only, 1n1p)">
-        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_l_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_RES_1n1p, normalized_E_lp_RES_plots, true, fsEl_integral, "Final State E_{l}", "RES Only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, EnergyStack, "Final_State_El_RES", "plots/Energy_histograms/El_histograms/RES_only/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
         //<editor-fold desc="El histograms (DIS, 1n1p)">
-        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_l_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, fsEl_DIS_1n1p, normalized_E_lp_DIS_plots, true, fsEl_integral, "Final State E_{l}", "DIS Only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, EnergyStack, "Final_State_El_DIS", "plots/Energy_histograms/El_histograms/DIS_only/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
@@ -7129,7 +7129,7 @@ void gst::Loop() {
         EnergyStack->GetHistogram()->GetXaxis()->CenterTitle(true);
         EnergyStack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             EnergyStack->SetTitle("Final State E_{l} (All Interactions, 2p and 1n1p) - Normalized");
             EnergyStack->GetYaxis()->SetTitle("Probability (%)");
             EnergyStack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
@@ -7161,95 +7161,95 @@ void gst::Loop() {
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (2p)">
 
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 2p)">
-        double factor_El_VS_theta_l_all_int_2p = 1.;
+        double factor_El_VS_theta_lp_all_int_2p = 1.;
 
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
-            fsEl_VS_theta_l_all_int_2p->Scale(factor_El_VS_theta_l_all_int_2p / fsEl_VS_theta_l_all_int_2p->Integral(), "width");
-            fsEl_VS_theta_l_all_int_2p->Draw("colz");
-            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+        if (normalized_E_lp_plots) {
+            fsEl_VS_theta_lp_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p) - Normalized");
+            fsEl_VS_theta_lp_all_int_2p->Scale(factor_El_VS_theta_lp_all_int_2p / fsEl_VS_theta_lp_all_int_2p->Integral(), "width");
+            fsEl_VS_theta_lp_all_int_2p->Draw("colz");
+            fsEl_VS_theta_lp_all_int_2p->SetMaximum(set_Max_z);
         } else {
-            fsEl_VS_theta_l_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
-            fsEl_VS_theta_l_all_int_2p->Draw("colz");
+            fsEl_VS_theta_lp_all_int_2p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 2p)");
+            fsEl_VS_theta_lp_all_int_2p->Draw("colz");
 //
-            fsEl_VS_theta_l_all_int_2p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_lp_all_int_2p->SetMaximum(set_Max_z);
 //
         }
 
-        fsEl_VS_theta_l_all_int_2p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_all_int_2p);
-        fsEl_VS_theta_l_all_int_2p->SetStats(0);
+        fsEl_VS_theta_lp_all_int_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_lp_all_int_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_all_int_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_all_int_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_all_int_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_all_int_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_lp_all_int_2p);
+        fsEl_VS_theta_lp_all_int_2p->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_2p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_2p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_linear_scale_2p.png");
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 2p)">
-        double factor_El_VS_theta_l_QEL_only_2p = 1.;
+        double factor_El_VS_theta_lp_QEL_only_2p = 1.;
 
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
-            fsEl_VS_theta_l_QEL_only_2p->Scale(factor_El_VS_theta_l_QEL_only_2p / fsEl_VS_theta_l_QEL_only_2p->Integral(), "width");
-            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
-            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+        if (normalized_E_lp_plots) {
+            fsEl_VS_theta_lp_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p) - Normalized");
+            fsEl_VS_theta_lp_QEL_only_2p->Scale(factor_El_VS_theta_lp_QEL_only_2p / fsEl_VS_theta_lp_QEL_only_2p->Integral(), "width");
+            fsEl_VS_theta_lp_QEL_only_2p->Draw("colz");
+            fsEl_VS_theta_lp_QEL_only_2p->SetMaximum(set_Max_z);
         } else {
-            fsEl_VS_theta_l_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
-            fsEl_VS_theta_l_QEL_only_2p->Draw("colz");
+            fsEl_VS_theta_lp_QEL_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 2p)");
+            fsEl_VS_theta_lp_QEL_only_2p->Draw("colz");
             //
-            fsEl_VS_theta_l_QEL_only_2p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_lp_QEL_only_2p->SetMaximum(set_Max_z);
             //
         }
 
-        fsEl_VS_theta_l_QEL_only_2p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_QEL_only_2p);
-        fsEl_VS_theta_l_QEL_only_2p->SetStats(0);
+        fsEl_VS_theta_lp_QEL_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_lp_QEL_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_QEL_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_QEL_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_QEL_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_QEL_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_lp_QEL_only_2p);
+        fsEl_VS_theta_lp_QEL_only_2p->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_2p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_lp_histogram_QEL_only_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_2p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_lp_histogram_QEL_only_linear_scale_2p.png");
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 2p)">
-        double factor_El_VS_theta_l_MEC_only_2p = 1.;
+        double factor_El_VS_theta_lp_MEC_only_2p = 1.;
 
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
-            fsEl_VS_theta_l_MEC_only_2p->Scale(factor_El_VS_theta_l_MEC_only_2p / fsEl_VS_theta_l_MEC_only_2p->Integral(), "width");
-            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
-            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+        if (normalized_E_lp_plots) {
+            fsEl_VS_theta_lp_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p) - Normalized");
+            fsEl_VS_theta_lp_MEC_only_2p->Scale(factor_El_VS_theta_lp_MEC_only_2p / fsEl_VS_theta_lp_MEC_only_2p->Integral(), "width");
+            fsEl_VS_theta_lp_MEC_only_2p->Draw("colz");
+            fsEl_VS_theta_lp_MEC_only_2p->SetMaximum(set_Max_z);
         } else {
-            fsEl_VS_theta_l_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
-            fsEl_VS_theta_l_MEC_only_2p->Draw("colz");
+            fsEl_VS_theta_lp_MEC_only_2p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 2p)");
+            fsEl_VS_theta_lp_MEC_only_2p->Draw("colz");
             //
-            fsEl_VS_theta_l_MEC_only_2p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_lp_MEC_only_2p->SetMaximum(set_Max_z);
             //
         }
 
-        fsEl_VS_theta_l_MEC_only_2p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_2p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_2p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_MEC_only_2p);
-        fsEl_VS_theta_l_MEC_only_2p->SetStats(0);
+        fsEl_VS_theta_lp_MEC_only_2p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_lp_MEC_only_2p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_MEC_only_2p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_MEC_only_2p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_MEC_only_2p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_MEC_only_2p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_lp_MEC_only_2p);
+        fsEl_VS_theta_lp_MEC_only_2p->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_2p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_lp_histogram_MEC_only_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_2p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_lp_histogram_MEC_only_linear_scale_2p.png");
         c1->Clear();
         //</editor-fold>
 
@@ -7258,95 +7258,95 @@ void gst::Loop() {
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (1n1p)">
 
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (all interactions, 1n1p)">
-        double factor_El_VS_theta_l_all_int_1n1p = 1.;
+        double factor_El_VS_theta_lp_all_int_1n1p = 1.;
 
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
-            fsEl_VS_theta_l_all_int_1n1p->Scale(factor_El_VS_theta_l_all_int_1n1p / fsEl_VS_theta_l_all_int_1n1p->Integral(), "width");
-            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
-            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+        if (normalized_E_lp_plots) {
+            fsEl_VS_theta_lp_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p) - Normalized");
+            fsEl_VS_theta_lp_all_int_1n1p->Scale(factor_El_VS_theta_lp_all_int_1n1p / fsEl_VS_theta_lp_all_int_1n1p->Integral(), "width");
+            fsEl_VS_theta_lp_all_int_1n1p->Draw("colz");
+            fsEl_VS_theta_lp_all_int_1n1p->SetMaximum(set_Max_z);
         } else {
-            fsEl_VS_theta_l_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
-            fsEl_VS_theta_l_all_int_1n1p->Draw("colz");
+            fsEl_VS_theta_lp_all_int_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (all interactions, 1n1p)");
+            fsEl_VS_theta_lp_all_int_1n1p->Draw("colz");
             //
-            fsEl_VS_theta_l_all_int_1n1p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_lp_all_int_1n1p->SetMaximum(set_Max_z);
             //
         }
 
-        fsEl_VS_theta_l_all_int_1n1p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_1n1p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_all_int_1n1p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_all_int_1n1p);
-        fsEl_VS_theta_l_all_int_1n1p->SetStats(0);
+        fsEl_VS_theta_lp_all_int_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_lp_all_int_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_all_int_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_all_int_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_all_int_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_all_int_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_lp_all_int_1n1p);
+        fsEl_VS_theta_lp_all_int_1n1p->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_log_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_l_histogram_all_int_linear_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_linear_scale_1n1p.png");
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (QEL only, 1n1p)">
-        double factor_El_VS_theta_l_QEL_only_1n1p = 1.;
+        double factor_El_VS_theta_lp_QEL_only_1n1p = 1.;
 
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
-            fsEl_VS_theta_l_QEL_only_1n1p->Scale(factor_El_VS_theta_l_QEL_only_1n1p / fsEl_VS_theta_l_QEL_only_1n1p->Integral(), "width");
-            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
-            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+        if (normalized_E_lp_plots) {
+            fsEl_VS_theta_lp_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p) - Normalized");
+            fsEl_VS_theta_lp_QEL_only_1n1p->Scale(factor_El_VS_theta_lp_QEL_only_1n1p / fsEl_VS_theta_lp_QEL_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_lp_QEL_only_1n1p->Draw("colz");
+            fsEl_VS_theta_lp_QEL_only_1n1p->SetMaximum(set_Max_z);
         } else {
-            fsEl_VS_theta_l_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
-            fsEl_VS_theta_l_QEL_only_1n1p->Draw("colz");
+            fsEl_VS_theta_lp_QEL_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (QEL only, 1n1p)");
+            fsEl_VS_theta_lp_QEL_only_1n1p->Draw("colz");
             //
-            fsEl_VS_theta_l_QEL_only_1n1p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_lp_QEL_only_1n1p->SetMaximum(set_Max_z);
             //
         }
 
-        fsEl_VS_theta_l_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_QEL_only_1n1p);
-        fsEl_VS_theta_l_QEL_only_1n1p->SetStats(0);
+        fsEl_VS_theta_lp_QEL_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_lp_QEL_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_QEL_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_QEL_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_QEL_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_QEL_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_lp_QEL_only_1n1p);
+        fsEl_VS_theta_lp_QEL_only_1n1p->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_log_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_lp_histogram_QEL_only_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_l_histogram_QEL_only_linear_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/QEL_only/El_VS_theta_lp_histogram_QEL_only_linear_scale_1n1p.png");
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Final State E_{l} vs #theta_{l} histogram (MEC only, 1n1p)">
-        double factor_El_VS_theta_l_MEC_only_1n1p = 1.;
+        double factor_El_VS_theta_lp_MEC_only_1n1p = 1.;
 
-        if (normalized_E_l_plots) {
-            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
-            fsEl_VS_theta_l_MEC_only_1n1p->Scale(factor_El_VS_theta_l_MEC_only_1n1p / fsEl_VS_theta_l_MEC_only_1n1p->Integral(), "width");
-            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
-            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+        if (normalized_E_lp_plots) {
+            fsEl_VS_theta_lp_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p) - Normalized");
+            fsEl_VS_theta_lp_MEC_only_1n1p->Scale(factor_El_VS_theta_lp_MEC_only_1n1p / fsEl_VS_theta_lp_MEC_only_1n1p->Integral(), "width");
+            fsEl_VS_theta_lp_MEC_only_1n1p->Draw("colz");
+            fsEl_VS_theta_lp_MEC_only_1n1p->SetMaximum(set_Max_z);
         } else {
-            fsEl_VS_theta_l_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
-            fsEl_VS_theta_l_MEC_only_1n1p->Draw("colz");
+            fsEl_VS_theta_lp_MEC_only_1n1p->SetTitle("Final State E_{l} vs #theta_{l} (MEC only, 1n1p)");
+            fsEl_VS_theta_lp_MEC_only_1n1p->Draw("colz");
             //
-            fsEl_VS_theta_l_MEC_only_1n1p->SetMaximum(set_Max_z);
+            fsEl_VS_theta_lp_MEC_only_1n1p->SetMaximum(set_Max_z);
             //
         }
 
-        fsEl_VS_theta_l_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
-        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
-        fsEl_VS_theta_l_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(fsEl_VS_theta_l_MEC_only_1n1p);
-        fsEl_VS_theta_l_MEC_only_1n1p->SetStats(0);
+        fsEl_VS_theta_lp_MEC_only_1n1p->SetTitleSize(0.06, "xyz");
+        fsEl_VS_theta_lp_MEC_only_1n1p->GetXaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_MEC_only_1n1p->GetXaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_MEC_only_1n1p->GetYaxis()->SetLabelSize(0.0425);
+        fsEl_VS_theta_lp_MEC_only_1n1p->GetYaxis()->CenterTitle(true);
+        fsEl_VS_theta_lp_MEC_only_1n1p->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(fsEl_VS_theta_lp_MEC_only_1n1p);
+        fsEl_VS_theta_lp_MEC_only_1n1p->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_log_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_lp_histogram_MEC_only_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_l_histogram_MEC_only_linear_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/MEC_only/El_VS_theta_lp_histogram_MEC_only_linear_scale_1n1p.png");
         c1->Clear();
         //</editor-fold>
 
@@ -8417,7 +8417,7 @@ void gst::Loop() {
         E_cal_QEL_Stack->GetHistogram()->GetXaxis()->CenterTitle(true);
         E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             E_cal_QEL_Stack->SetTitle("E_{cal} Histogram (QEL only, 2p and 1n1p) - Normalized");
             E_cal_QEL_Stack->GetYaxis()->SetTitle("Probability (%)");
             E_cal_QEL_Stack->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
@@ -8467,7 +8467,7 @@ void gst::Loop() {
         E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
         E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             E_cal_MEC_Stack_1n1p_and_2p->SetTitle("E_{cal} Histogram (MEC only, 2p and 1n1p) - Normalized");
             E_cal_MEC_Stack_1n1p_and_2p->GetYaxis()->SetTitle("Probability (%)");
             E_cal_MEC_Stack_1n1p_and_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
@@ -8498,7 +8498,7 @@ void gst::Loop() {
         E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetXaxis()->CenterTitle(true);
         E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             E_cal_MEC_Stack_2p_and_2n->SetTitle("E_{cal} Histogram (MEC only, 2n and 2p) - Normalized");
             E_cal_MEC_Stack_2p_and_2n->GetYaxis()->SetTitle("Probability (%)");
             E_cal_MEC_Stack_2p_and_2n->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
@@ -8602,15 +8602,15 @@ void gst::Loop() {
         cout << "\n";
 
         //<editor-fold desc="Other E_cal plots (all interactions, 2p)">
-        E_cal_VS_theta_l_all_int_2p->Draw("colz");
-        plots->Add(E_cal_VS_theta_l_all_int_2p);
-        E_cal_VS_theta_l_all_int_2p->SetStats(0);
-        E_cal_VS_theta_l_all_int_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_l_all_int_2p->GetYaxis()->CenterTitle(true);
+        E_cal_VS_theta_lp_all_int_2p->Draw("colz");
+        plots->Add(E_cal_VS_theta_lp_all_int_2p);
+        E_cal_VS_theta_lp_all_int_2p->SetStats(0);
+        E_cal_VS_theta_lp_all_int_2p->GetXaxis()->CenterTitle(true);
+        E_cal_VS_theta_lp_all_int_2p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_l_QEL_only_log_scale_2p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_lp_QEL_only_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_l_QEL_only_linear_scale_2p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/2p/E_cal_vs_theta_lp_QEL_only_linear_scale_2p.png");
         c1->Clear();
 
         E_cal_VS_Q2_all_int_2p->Draw("colz");
@@ -8691,15 +8691,15 @@ void gst::Loop() {
         //</editor-fold>
 
         //<editor-fold desc="Other E_cal plots (QEL only, 2p)">
-        E_cal_VS_theta_l_QEL_only_2p->Draw("colz");
-        plots->Add(E_cal_VS_theta_l_QEL_only_2p);
-        E_cal_VS_theta_l_QEL_only_2p->SetStats(0);
-        E_cal_VS_theta_l_QEL_only_2p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_l_QEL_only_2p->GetYaxis()->CenterTitle(true);
+        E_cal_VS_theta_lp_QEL_only_2p->Draw("colz");
+        plots->Add(E_cal_VS_theta_lp_QEL_only_2p);
+        E_cal_VS_theta_lp_QEL_only_2p->SetStats(0);
+        E_cal_VS_theta_lp_QEL_only_2p->GetXaxis()->CenterTitle(true);
+        E_cal_VS_theta_lp_QEL_only_2p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_l_QEL_only_log_scale_2p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_lp_QEL_only_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_l_QEL_only_linear_scale_2p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/2p/E_cal_vs_theta_lp_QEL_only_linear_scale_2p.png");
         c1->Clear();
 
         E_cal_VS_Q2_QEL_only_2p->Draw("colz");
@@ -8802,15 +8802,15 @@ void gst::Loop() {
         //</editor-fold>
 
         //<editor-fold desc="Other E_cal plots (QEL only, 1n1p)">
-        E_cal_VS_theta_l_QEL_1n1p->Draw("colz");
-        plots->Add(E_cal_VS_theta_l_QEL_1n1p);
-        E_cal_VS_theta_l_QEL_1n1p->SetStats(0);
-        E_cal_VS_theta_l_QEL_1n1p->GetXaxis()->CenterTitle(true);
-        E_cal_VS_theta_l_QEL_1n1p->GetYaxis()->CenterTitle(true);
+        E_cal_VS_theta_lp_QEL_1n1p->Draw("colz");
+        plots->Add(E_cal_VS_theta_lp_QEL_1n1p);
+        E_cal_VS_theta_lp_QEL_1n1p->SetStats(0);
+        E_cal_VS_theta_lp_QEL_1n1p->GetXaxis()->CenterTitle(true);
+        E_cal_VS_theta_lp_QEL_1n1p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_l_QEL_only_log_scale_1n1p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_lp_QEL_only_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_l_QEL_only_linear_scale_1n1p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/1n1p/E_cal_1n1p_vs_theta_lp_QEL_only_linear_scale_1n1p.png");
         c1->Clear();
 
         E_cal_VS_Q2_QEL_only_1n1p->Draw("colz");
@@ -8955,7 +8955,7 @@ void gst::Loop() {
         fChain->Draw(
                 "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
                 "nf==2 && nfn==0 && nfp == 2", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_2p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_lp_all_int_2p.png");
         c1->Clear();
 
 
@@ -8964,7 +8964,7 @@ void gst::Loop() {
         fChain->Draw(
                 "El + Ef[0] + Ef[1] - 2*0.938272:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
                 "nf==2 && nfn==0 && nfp == 2 && qel", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_2p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_lp_QEL_only_2p.png");
         c1->Clear();
 
 
@@ -8973,7 +8973,7 @@ void gst::Loop() {
         fChain->Draw(
                 "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.3)",
                 "nf==2 && nfn==1 && nfp == 1", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_l_all_int_1n1p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/all_interactions/E_cal_vs_theta_lp_all_int_1n1p.png");
         c1->Clear();
 
 
@@ -8982,7 +8982,7 @@ void gst::Loop() {
         fChain->Draw(
                 "El + Ef[0] + Ef[1] - 0.938272 - 0.939565:acos(pzl / sqrt(pxl * pxl + pyl * pyl + pzl * pzl)) * 180.0 / 3.14159265359>>h2(100, 0.0, 120, 100, 2.12, 2.23)",
                 "nf==2 && nfn==1 && nfp == 1 && qel", "colz");
-        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_l_QEL_only_1n1p.png");
+        c1->SaveAs("plots/E_cal_restorations/Other/QEL_only/E_cal_vs_theta_lp_QEL_only_1n1p.png");
         c1->Clear();
         //</editor-fold>
 
@@ -9017,8 +9017,8 @@ void gst::Loop() {
         histPlotter1D(c1, P_n_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Scattered Neutron P_{n}", "all interactions", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, MomentumStack_1n1p, "P_n_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kRed, true, true, true);
 
-        histPlotter1D(c1, P_l_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, MomentumStack_1n1p, "P_l_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
+        histPlotter1D(c1, P_lp_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_1n1p, "P_lp_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Momentum histogram stack (2p)">
@@ -9056,7 +9056,7 @@ void gst::Loop() {
 
         TLegendEntry *MomentumStack_1n1p_legend_P_p_entry = MomentumStack_1n1p_legend->AddEntry(P_p_hist_1n1p, "P_{p}", "l");
         TLegendEntry *MomentumStack_1n1p_legend_P_n_entry = MomentumStack_1n1p_legend->AddEntry(P_n_hist_1n1p, "P_{n}", "l");
-        TLegendEntry *MomentumStack_1n1p_legend_P_l_entry = MomentumStack_1n1p_legend->AddEntry(P_l_hist_1n1p, "P_{l}", "l");
+        TLegendEntry *MomentumStack_1n1p_legend_P_lp_entry = MomentumStack_1n1p_legend->AddEntry(P_lp_hist_1n1p, "P_{l}", "l");
 
         MomentumStack_1n1p_legend->Draw();
 
@@ -9102,11 +9102,11 @@ void gst::Loop() {
         c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_R_histogram_linear_scale.png");
         c1->Clear();
 
-        P_l_hist->Draw();
-        plots->Add(P_l_hist);
-        P_l_hist->SetLineWidth(2);
-        P_l_hist->GetXaxis()->CenterTitle(true);
-        P_l_hist->SetLineColor(kBlue);
+        P_lp_hist->Draw();
+        plots->Add(P_lp_hist);
+        P_lp_hist->SetLineWidth(2);
+        P_lp_hist->GetXaxis()->CenterTitle(true);
+        P_lp_hist->SetLineColor(kBlue);
         c1->SetLogy(1);
         c1->SaveAs("plots/MicroBooNE_plots/momentum_distributions/P_lp_histogram_log_scale.png");
         c1->SetLogy(0);
@@ -9498,7 +9498,7 @@ void gst::Loop() {
 //      Normalization factor (equals to max(E_Trans_VS_q_all_inclusive)):
         double factor_E_Trans_VS_q_all_inclusive = 1.;
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             E_Trans_VS_q_all_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (All Interactions, ^{12}C(e,e')) - Normalized");
             E_Trans_VS_q_all_inclusive->Scale(factor_E_Trans_VS_q_all_inclusive / E_Trans_VS_q_all_inclusive->Integral(), "width");
             E_Trans_VS_q_all_inclusive->Draw("colz");
@@ -9522,10 +9522,10 @@ void gst::Loop() {
         c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_liner_scale.png");
         c1->Clear();
 
-//      Normalization factor (equals to max(fsEl_VS_theta_l_all_int_2p)):
+//      Normalization factor (equals to max(fsEl_VS_theta_lp_all_int_2p)):
         double factor_E_Trans_VS_q_QEL_inclusive = 1.;
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             E_Trans_VS_q_QEL_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (QEL Only, ^{12}C(e,e')) - Normalized");
             E_Trans_VS_q_QEL_inclusive->Scale(factor_E_Trans_VS_q_QEL_inclusive / E_Trans_VS_q_QEL_inclusive->Integral(), "width");
             E_Trans_VS_q_QEL_inclusive->Draw("colz");
@@ -9553,7 +9553,7 @@ void gst::Loop() {
 //      Normalization factor (equals to max(E_Trans_VS_q_MEC_inclusive)):
         double factor_E_Trans_VS_q_MEC_inclusive = 1.;
 
-        if (normalized_E_l_plots) {
+        if (normalized_E_lp_plots) {
             E_Trans_VS_q_MEC_inclusive->SetTitle("Energy Transfer (E_{#nu}-E_{l}) vs |q| (MEC Only, ^{12}C(e,e')) - Normalized");
             E_Trans_VS_q_MEC_inclusive->Scale(factor_E_Trans_VS_q_MEC_inclusive / E_Trans_VS_q_MEC_inclusive->Integral(), "width");
             E_Trans_VS_q_MEC_inclusive->Draw("colz");
