@@ -19,7 +19,11 @@ std;
 
 void gst::Loop() {
 
-    auto start = std::chrono::system_clock::now(); // Start counting running time
+//    auto start = std::chrono::system_clock::now(); // Start counting running time
+
+    cout << "\n\n===========================================================================\n";
+    cout << "\t\t\tTruth level analyser\n";
+    cout << "===========================================================================\n\n";
 
 //  Code settings
 //  =====================================================================================================================================================================
@@ -5805,8 +5809,8 @@ void gst::Loop() {
                     double P_R_2p = -1;
 
 //                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-                    if (P_p1_2p >= 0 && P_p2_2p >= 0) {
-//                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+//                    if (P_p1_2p >= 0 && P_p2_2p >= 0) {
+                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
                         double E_cal_2p;
 
                         if (BEnergyToNucleusCon == true) {
@@ -6277,8 +6281,8 @@ void gst::Loop() {
                     double P_n_1n1p = rCalc(pxf[Neutron_ind_1n1p], pyf[Neutron_ind_1n1p], pzf[Neutron_ind_1n1p]);;
 
 //                   Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-                    if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
-//                    if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
+//                    if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
+                    if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
                         double E_cal_1n1p;
 
                         if (BEnergyToNucleusCon == true) {

@@ -41,9 +41,6 @@ using namespace clas12;
 using namespace std;
 
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "Simplify"
-
 void EventAnalyser() {
 
     cout << "\n\n===========================================================================\n";
@@ -56,6 +53,38 @@ void EventAnalyser() {
 //  =====================================================================================================================================================================
 
     //<editor-fold desc="Code settings">
+
+//  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
+
+//  todo: finish auto-generating directories
+    //<editor-fold desc="Checking directories">
+//    DirectoryChecker("/home/alon/project/plots/Beta_VS_p");
+//    DirectoryChecker("/home/alon/project/plots/Chi2_plots");
+
+//    string BetaVSPDir = "/home/alon/project/plots/Beta_VS_p";
+//
+//    if (IsPathExist(BetaVSPDir.c_str())) {
+//        cout << BetaVSPDir << " exists!\n\n";
+//    } else {
+//        string commend = "mkdir " + BetaVSPDir;
+//        system(commend.c_str());
+//        cout << BetaVSPDir << " does not exists! directory created.\n\n";
+////        fs::create_directory(BetaVSPDir.c_str());
+//    }
+//
+//
+//    string Chi2Dir = "/home/alon/project/plots/Chi2_plots";
+//
+//    if (IsPathExist(Chi2Dir.c_str())) {
+//        cout << Chi2Dir << " exists!\n\n";
+//    } else {
+//        string commend = "mkdir " + Chi2Dir;
+//        system(commend.c_str());
+//        cout << Chi2Dir << " does not exists! directory created.\n\n";
+////        fs::create_directory(Chi2Dir.c_str());
+//    }
+
+    //</editor-fold>
 
 //  FSI settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -179,7 +208,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
+    bool calculate_inclusive = false, calculate_2p = false, calculate_1n1p = false, calculate_MicroBooNE = false;
 
     bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false, selection_test_MicroBooNE = false;
 
@@ -314,11 +343,17 @@ void EventAnalyser() {
 // Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
+    bool Beta_vs_P_plots = true;
+
+    bool Chi2_plots = true;
+
     bool Theta_plots = true, Phi_plots = true;
 
     bool Energy_histogram_plots = true;
 
-    bool ET_plots = true, ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
+    bool ET_plots = true;
+    bool ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
+
     if (ET_plots == false) {
         bool ET_all_plots = false, ET_QEL_plots = false, ET_MEC_plots = false, ET_RES_plots = false, ET_DIS_plots = false;
     }
@@ -336,6 +371,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Normalization settings">
     bool normalize_master = false;
+
+    bool normalized_chi2_plots = false;
 
     bool normalized_theta_lp_plots = true;
     bool normalized_theta_p1_plots = false, normalized_theta_p2_plots = false, normalized_dtheta_2p_plots = false; // 2p
@@ -358,6 +395,8 @@ void EventAnalyser() {
     bool normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
+        normalized_chi2_plots = false;
+
         normalized_theta_lp_plots = false;
 
         normalized_theta_p1_plots = false;
@@ -447,6 +486,8 @@ void EventAnalyser() {
 
 // Momentum thresholds --------------------------------------------------------------------------------------------------------------------------------------------------
 
+    //<editor-fold desc="Momentum thresholds">
+
     //<editor-fold desc="Momentum thresholds (2p)">
     double P_lp_upper_lim_2p = -1, P_lp_lower_lim_2p = -1;
     double P_p1_upper_lim_2p = -1, P_p1_lower_lim_2p = 0.3;
@@ -464,6 +505,29 @@ void EventAnalyser() {
     double P_L_upper_lim_MicroBooNE = 1.0, P_L_lower_lim_MicroBooNE = 0.3;
     double P_R_upper_lim_MicroBooNE = 1.0, P_R_lower_lim_MicroBooNE = 0.3;
     double P_pion_upper_lim_MicroBooNE = 0.065;
+    //</editor-fold>
+
+    //</editor-fold>
+
+// Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Chi2 cuts">
+
+    //<editor-fold desc="Electron chi2 cut">
+    double Chi2_Electron_cut_CD = 1.;
+    double Chi2_Electron_cut_FD = 1.;
+    //</editor-fold>
+
+    //<editor-fold desc="Proton chi2 cut">
+    double Chi2_Proton_cut_CD = 1.;
+    double Chi2_Proton_cut_FD = 1.;
+    //</editor-fold>
+
+    //<editor-fold desc="Neutron chi2 cut">
+    double Chi2_Neutron_cut_CD = 1.;
+    double Chi2_Neutron_cut_FD = 1.;
+    //</editor-fold>
+
     //</editor-fold>
 
 // Histogram limits ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -987,6 +1051,8 @@ void EventAnalyser() {
         system("find ./plots -type f -iname '*.txt' -delete"); // Delete existing .txt files
     }
 
+//    system("[ -d '/home/alon/project/plots/theta_histograms' ] && echo 'Directory /home/alon/project/plots/theta_histograms exists.'");
+
     ofstream myLogFile;
 
     myLogFile.open("./plots/Run_log.txt");
@@ -1118,6 +1184,28 @@ void EventAnalyser() {
 
     cout << "\nDefining histograms...";
 
+// Beta VS P histograms -------------------------------------------------------------------------------
+
+    //<editor-fold desc="Beta vs P histograms">
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+    //</editor-fold>
+
+// Chi2 plots -------------------------------------------------------------------------------
+
+    //<editor-fold desc="Chi2 plots">
+    THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
+    THStack *Chi2_Proton_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
+
+    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (CD)", "Electron #chi^{2} (Central Detector);Electron #chi^{2};", 100, -10, 10);
+    TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (FD)", "Electron #chi^{2} (Forward Detector);Electron #chi^{2};", 100, -10, 10);
+
+    TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (CD)", "Proton #chi^{2} (Central Detector);Proton #chi^{2};", 100, -10, 10);
+    TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (FD)", "Proton #chi^{2} (Forward Detector);Proton #chi^{2};", 100, -10, 10);
+    //</editor-fold>
+
 // Theta histograms -----------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta histograms">
@@ -1166,14 +1254,14 @@ void EventAnalyser() {
     TH1D *fsEl_RES_2p = new TH1D("Final State E_{l} det sim (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
     TH1D *fsEl_DIS_2p = new TH1D("Final State E_{l} det sim (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
     TH2D *fsEl_VS_theta_lp_all_int_2p = new TH2D("Stat det sim (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
-                                                200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+                                                 200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+                                                 200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
     TH2D *fsEl_VS_theta_l_QEL_only_2p = new TH2D("Stat det sim (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
     TH2D *fsEl_VS_theta_lp_MEC_only_2p = new TH2D("Stat det sim (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                 200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
-                                                 200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
 
     TH1D *fsEl_1n1p = new TH1D("Final State E_{l} det sim (1n1p)", ";E_{l} [???];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
 //    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} det sim (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
@@ -1182,14 +1270,14 @@ void EventAnalyser() {
     TH1D *fsEl_RES_1n1p = new TH1D("Final State E_{l} det sim (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
     TH1D *fsEl_DIS_1n1p = new TH1D("Final State E_{l} det sim (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
     TH2D *fsEl_VS_theta_lp_all_int_1n1p = new TH2D("Stat det sim (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
-                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
     TH2D *fsEl_VS_theta_lp_QEL_only_1n1p = new TH2D("Stat det sim (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
-                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+                                                    200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+                                                    200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
     TH2D *fsEl_VS_theta_lp_MEC_only_1n1p = new TH2D("Stat det sim (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
-                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
-                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
+                                                    200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
+                                                    200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
 
     //</editor-fold>
 
@@ -1807,7 +1895,6 @@ void EventAnalyser() {
     TList *plots = new TList();
 
     cout << " done.\n\n";
-
     //</editor-fold>
 
 
@@ -1830,101 +1917,59 @@ void EventAnalyser() {
 
     clas12reader c12(LoadedInput.c_str()); // open file
 
-// 2p+1e - 85 out of 970000
-// 2p+0e - 0 out of 970000
-// 1n1p+1e - 284 out of 970000
-// 1n1p+0e - 0 out of 970000
-
-    //<editor-fold desc="HipoChain tests">
-    ////        c12->addExactPid(2212, NumberOfProtons); //exactly 2 protons
-////        c12->addExactPid(2212, 1); //exactly 1 electron
-//    c12->addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-//    c12->addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-//    c12->addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
-//
-//    c12->addZeroOfRestPid(); // nothing else
-    //</editor-fold>
-
-    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
+//    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
+//    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
+//    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
 //    c12.addAtLeastPid(211, 0); // at least 0 pi+ (MicroBooNE)
 //    c12.addAtLeastPid(-211, 0); // at least 0 pi- (MicroBooNE)
 
-    c12.addZeroOfRestPid(); // nothing else
+//    c12.addZeroOfRestPid(); // nothing else
 
     int num_of_2p_events = 0;
     int num_of_1n1p_events = 0;
     int num_of_MicroBooNE_events = 0;
 
-//    gSystem->RedirectOutput("mylogfile.txt", "a");
-//    while (chain.Next()) { // loop over events
-
     while (c12.next()) { // loop over events
-
-        //<editor-fold desc="HipoChain tests">
-        //        gSystem->RedirectOutput("mylogfile.txt", "a");
-//        auto particles = c12->getDetParticles(); //particles are now a std::vector of particles for this event
-//
-//        auto electrons = c12->getByID(11);
-//        auto protons = c12->getByID(2212);
-//        auto neutrons = c12->getByID(2112);
-//        gSystem->RedirectOutput(0,0);
-        //</editor-fold>
 
         auto particles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
         auto electrons = c12.getByID(11);
         auto protons = c12.getByID(2212);
         auto neutrons = c12.getByID(2112);
+        auto pizero = c12.getByID(111);
         auto piplus = c12.getByID(211);
         auto piminus = c12.getByID(-211);
 
-//        cout << "==========================================================================\n";
-//        cout << "electrons.size() ==" << electrons.size() << "\n";
-//        cout << "protons.size() ==" << protons.size() << "\n";
-//        cout << "neutrons.size() ==" << neutrons.size() << "\n";
-//        cout << "piplus.size() ==" << piplus.size() << "\n";
-//        cout << "piminus.size() ==" << piminus.size() << "\n\n";
-
-
-//        if (piplus.size() == 0 && piminus.size() == 0) {
-//            cout << "==========================================================================\n";
-//            cout << "electrons.size() == " << electrons.size() << "\n";
-//            cout << "protons.size() == " << protons.size() << "\n";
-//            cout << "neutrons.size() == " << neutrons.size() << "\n";
-//            cout << "piplus.size() == " << piplus.size() << "\n";
-//            cout << "piminus.size() == " << piminus.size() << "\n\n";
-//        }
-
-
-        //<editor-fold desc="Test plots fill">
-        //        cout << "==========================================================================\n";
-//        float particlePDG = particles[0]->par()->getPid();
-//        cout << "particlePDG = " << particlePDG << "\n";
-//        double theta_lp_rad = particles[0]->getTheta();
-//        double theta_l = theta_lp_rad * 180.0 / 3.14159265359;
-//        Theta_lp_histogram_test->Fill(theta_l);
-////        cout << "theta_l = " << theta_l * 180.0 / 3.14159265359 << "\n";
-//
-//        double El;
-//        if (theta_l <= 40 && theta_l >= 5) {
-//            El = particles[0]->sci(FTOF1A)->getEnergy() +
-//                 particles[0]->sci(FTOF1B)->getEnergy() +
-//                 particles[0]->sci(FTOF1B)->getEnergy() +
-//                 particles[0]->sci(PCAL)->getEnergy() +
-//                 particles[0]->sci(ECIN)->getEnergy() +
-//                 particles[0]->sci(ECOUT)->getEnergy();
-//
-//            cout << "theta_l = " << theta_l << "\n";
-//            fsEl_histogram_test->Fill(El/100);
-//            cout << "El/100 = " << El/100 << "\n\n";
-//        }
-
-//        double El = particles[0]->getDeltaEnergy();
-//        fsEl_histogram_test->Fill(El);
-//        cout << "El = " << El << "\n\n";
+        //<editor-fold desc="Fill Beta vs P">
+        for (int i = 0; i < particles.size(); i++) {
+            if (particles[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(particles[i]->getP(), particles[i]->par()->getBeta());
+            } else if (particles[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(particles[i]->getP(), particles[i]->par()->getBeta());
+            }
+        } // end of loop over particles vector
         //</editor-fold>
+
+        //<editor-fold desc="Fill Chi2_Proton_CD & Chi2_Proton_FD">
+        for (auto &p: protons) {
+            if (p->getRegion() == CD) {
+                Chi2_Proton_CD->Fill(p->par()->getChi2Pid());
+            } else if (p->getRegion() == FD) {
+                Chi2_Proton_FD->Fill(p->par()->getChi2Pid());
+            }
+        } // end of loop over particles vector
+        //</editor-fold>
+
+        //<editor-fold desc="Fill Chi2_Electron_CD & Chi2_Electron_FD">
+        for (auto &e: electrons) {
+            if (e->getRegion() == CD) {
+                Chi2_Electron_CD->Fill(e->par()->getChi2Pid());
+            } else if (e->getRegion() == FD) {
+                Chi2_Electron_FD->Fill(e->par()->getChi2Pid());
+            }
+        } // end of loop over particles vector
+        //</editor-fold>
+
 
 //  Inclusive calculations
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2688,6 +2733,7 @@ void EventAnalyser() {
             } // end of momentum threshold if
         } // end of MicroBooNE if
         //</editor-fold>
+
     } // end of while
     //</editor-fold>
 
@@ -2714,27 +2760,93 @@ void EventAnalyser() {
 //            c1->SetLeftMargin(0.1275);
 //            c1->SetRightMargin(0.1275);
     }
+
+    float DefStatX = gStyle->GetStatX();
+    float DefStatY = gStyle->GetStatY();
+//    cout << "\n\nStatX = "<< StatX << "\n\n";
+//    cout << "\n\nStatY = "<< StatY << "\n\n";
     //</editor-fold>
-
-
-//  Test plots
-// =======================================================================================================================================================================
-
-    //<editor-fold desc="Test plots">
-    //    Theta_lp_histogram_test->Draw();
-//    c1->SaveAs("./plots/Theta_lp_histogram_test.png");
-//    c1->Clear();
-
-//    fsEl_histogram_test->Draw();
-//    c1->SaveAs("./plots/fsEl_histogram_test.png");
-//    c1->Clear();
-    //</editor-fold>
-
 
 //  Histograms plots
 // =======================================================================================================================================================================
 
     //<editor-fold desc="Histograms plots">
+
+//  Beta vs P histograms
+//  ===================================================================================================
+
+    if (Beta_vs_P_plots) {
+
+        cout << "\n\nPlotting Beta vs P histograms...\n\n";
+
+//  Beta vs P histograms ------------------------------------------------------------------------------
+
+        Beta_vs_P_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_CD);
+//        Beta_vs_P_CD->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
+        Beta_vs_P_CD->Draw("colz");
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.88);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs("plots/Beta_VS_p/Beta_vs_P_CD.png");
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Beta_vs_P_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_FD);
+//        Beta_vs_P_FD->SetStats(0);
+//        c1->SetLogz(1);
+//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
+        Beta_vs_P_FD->Draw("colz");
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.88);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs("plots/Beta_VS_p/Beta_vs_P_FD.png");
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+    }
+
+
+//  Chi2 plots
+//  ===================================================================================================
+
+    if (Chi2_plots) {
+
+        cout << "\n\nPlotting Chi2 plots...\n\n";
+
+        //<editor-fold desc="Electron chi2">
+        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/", "CD", kBlue, true, true, true, true);
+
+        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/", "FD", kBlue, true, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Proton chi2">
+        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/", "CD", kBlue, true, true, true, true);
+
+        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/", "FD", kBlue, true, true, true, true);
+        //</editor-fold>
+
+    }
+
 
 //  Theta histograms
 //  ===================================================================================================
@@ -2825,6 +2937,7 @@ void EventAnalyser() {
         //</editor-fold>
 
     }
+
 
 // Phi histograms
 // ====================================================================================================
@@ -3207,6 +3320,7 @@ void EventAnalyser() {
         //</editor-fold>
 
     }
+
 
 // Energy transfer histograms (all interactions)
 // ====================================================================================================
@@ -5491,5 +5605,3 @@ void EventAnalyser() {
     //</editor-fold>
 
 }
-
-#pragma clang diagnostic pop
