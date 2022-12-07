@@ -49,8 +49,8 @@ void EventAnalyser() {
 
     string AnalyserVersion = "Beta version";
 
-//  Code settings
-//  =====================================================================================================================================================================
+// Code settings
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Code settings">
 
@@ -347,9 +347,9 @@ void EventAnalyser() {
 
     bool Chi2_plots = true;
 
-    bool Theta_plots = true, Phi_plots = true;
+    bool Theta_plots = false, Phi_plots = false;
 
-    bool Energy_histogram_plots = true;
+    bool Energy_histogram_plots = false;
 
     bool ET_plots = true;
     bool ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
@@ -535,6 +535,11 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram limits">
 
     //<editor-fold desc="Histogram limits for every case">
+
+    //<editor-fold desc="Chi2 plots">
+    Chi2_upper_lim = 50;
+    Chi2_lower_lim = -Chi2_upper_lim;
+    //</editor-fold>
 
     //<editor-fold desc="Theta histograms">
 
@@ -1178,7 +1183,7 @@ void EventAnalyser() {
 
 
 // Histogram definitions:
-// =======================================================================================================================================================================
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Histogram definitions">
 
@@ -1199,11 +1204,11 @@ void EventAnalyser() {
     THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
     THStack *Chi2_Proton_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
 
-    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (CD)", "Electron #chi^{2} (Central Detector);Electron #chi^{2};", 100, -10, 10);
-    TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (FD)", "Electron #chi^{2} (Forward Detector);Electron #chi^{2};", 100, -10, 10);
+    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (CD)", "Electron #chi^{2} (Central Detector);Electron #chi^{2};", 100, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (FD)", "Electron #chi^{2} (Forward Detector);Electron #chi^{2};", 100, Chi2_lower_lim, Chi2_upper_lim);
 
-    TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (CD)", "Proton #chi^{2} (Central Detector);Proton #chi^{2};", 100, -10, 10);
-    TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (FD)", "Proton #chi^{2} (Forward Detector);Proton #chi^{2};", 100, -10, 10);
+    TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (CD)", "Proton #chi^{2} (Central Detector);Proton #chi^{2};", 100, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (FD)", "Proton #chi^{2} (Forward Detector);Proton #chi^{2};", 100, Chi2_lower_lim, Chi2_upper_lim);
     //</editor-fold>
 
 // Theta histograms -----------------------------------------------------------------------------------
@@ -1899,7 +1904,7 @@ void EventAnalyser() {
 
 
 // Code execution:
-// =======================================================================================================================================================================
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Code execution">
 
@@ -2738,8 +2743,8 @@ void EventAnalyser() {
     //</editor-fold>
 
 
-//  Canvas definitions
-// =======================================================================================================================================================================
+// Canvas definitions
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Canvas definitions">
 
@@ -2767,14 +2772,16 @@ void EventAnalyser() {
 //    cout << "\n\nStatY = "<< StatY << "\n\n";
     //</editor-fold>
 
-//  Histograms plots
-// =======================================================================================================================================================================
+
+// Histograms plots
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Histograms plots">
 
-//  Beta vs P histograms
-//  ===================================================================================================
+// Beta vs P histograms
+// ====================================================================================================
 
+    //<editor-fold desc="Beta vs P histograms">
     if (Beta_vs_P_plots) {
 
         cout << "\n\nPlotting Beta vs P histograms...\n\n";
@@ -2819,38 +2826,46 @@ void EventAnalyser() {
         gStyle->SetStatY(DefStatY);
         c1->Clear();
 
+    } else {
+        cout << "\n\nBeta vs P plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
-//  Chi2 plots
-//  ===================================================================================================
+// Chi2 plots
+// ====================================================================================================
 
+    //<editor-fold desc="Chi2 plots">
     if (Chi2_plots) {
 
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
         //<editor-fold desc="Electron chi2">
-        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/", "CD", kBlue, true, true, true, true);
+        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "", 0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Electron_Stack,
+                      "Electron_chi2", "plots/Chi2_plots/", "CD", kBlue, true, true, true, true, true, Chi2_Electron_cut_CD, 0);
 
-        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/", "FD", kBlue, true, true, true, true);
+        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "", 0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Electron_Stack,
+                      "Electron_chi2", "plots/Chi2_plots/", "FD", kRed, true, true, true, true, true, Chi2_Electron_cut_FD, 0);
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2">
-        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/", "CD", kBlue, true, true, true, true);
+        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "", 0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Proton_Stack,
+                      "Proton_chi2", "plots/Chi2_plots/", "CD", kBlue, true, true, true, true, true, Chi2_Proton_cut_CD, Chi2_Proton_CD->GetMean());
 
-        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/", "FD", kBlue, true, true, true, true);
+        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "", 0.06, 0.0425, 0.0425, plots, 2, false, true, Chi2_Proton_Stack,
+                      "Proton_chi2", "plots/Chi2_plots/", "FD", kRed, true, true, true, true, true, Chi2_Proton_cut_FD, Chi2_Proton_FD->GetMean());
         //</editor-fold>
 
+    } else {
+        cout << "\n\nChi2 plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
-//  Theta histograms
-//  ===================================================================================================
+// Theta histograms
+// ====================================================================================================
 
+    //<editor-fold desc="Theta histograms">
     if (Theta_plots) {
 
         cout << "\n\nPlotting Theta histograms...\n\n";
@@ -2936,12 +2951,16 @@ void EventAnalyser() {
                       0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_nucleons", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
+    } else {
+        cout << "\n\nTheta plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
 // Phi histograms
 // ====================================================================================================
 
+    //<editor-fold desc="Phi histograms">
     if (Phi_plots) {
 
         cout << "\n\nPlotting Phi histograms...\n\n";
@@ -3017,12 +3036,16 @@ void EventAnalyser() {
                       0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
+    } else {
+        cout << "\n\nPhi plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
 // Energy histograms
 // ====================================================================================================
 
+    //<editor-fold desc="Energy histograms">
     if (Energy_histogram_plots) {
 
         cout << "\n\nPlotting energy histograms...\n\n";
@@ -3319,7 +3342,10 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+    } else {
+        cout << "\n\nEnergy plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
 // Energy transfer histograms (all interactions)
@@ -3345,7 +3371,8 @@ void EventAnalyser() {
 //    double E_Trans15_DIS_integral_1n1p = E_Trans15_DIS_1n1p->Integral(); // MOVE TO OTHER PLACE
 //    //</editor-fold>
 
-//    if (ET_all_plots) {
+    //<editor-fold desc="Energy transfer histograms">
+    //    if (ET_all_plots) {
 //
 //        cout << "\n\nPlotting energy transfer histograms (all interactions)...\n\n";
 //
@@ -3395,7 +3422,7 @@ void EventAnalyser() {
 //        E_Trans15_all_2p->SetLineStyle(5);
 //        Energy_Transfer_all_int_15_Stack_2p->Add(E_Trans15_all_2p);
 //        c1->Clear();
-//        //</editor-fold>
+
 //
 //        //<editor-fold desc="Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions, 1n1p)">
 //        if (normalized_E_Trans15_plots) {
@@ -4337,11 +4364,14 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //    }
+    //</editor-fold>
+
 
 // E_cal restorations
 // ====================================================================================================
 
-//    if (E_cal_plots) {
+    //<editor-fold desc="E_cal restorations">
+    //    if (E_cal_plots) {
 //
 //        cout << "\n\nPlotting E_cal restoration histograms...\n\n";
 //
@@ -4895,11 +4925,13 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //    }
+    //</editor-fold>
 
 
 // Momentum histograms
 // ====================================================================================================
 
+    //<editor-fold desc="Momentum histograms">
     if (momentum_plots) {
 
         cout << "\n\nPlotting momentum histograms for 2p and 1n1p...\n\n";
@@ -4972,12 +5004,16 @@ void EventAnalyser() {
         c1->Clear();
         //</editor-fold>
 
+    } else {
+        cout << "\n\nMomentum plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
 // MicroBooNE article histogram reconstructions
 // ====================================================================================================
 
+    //<editor-fold desc="MicroBooNE article histogram reconstructions">
     if (MicroBooNE_plots) {
 
         cout << "\n\nPlotting MicroBooNE histograms...\n\n";
@@ -5238,12 +5274,16 @@ void EventAnalyser() {
         c1->Clear();
         */
 
+    } else {
+        cout << "\n\nMicroBooNE plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
 // Inclusive Energy transfer histograms
 // ====================================================================================================
 
+    //<editor-fold desc="Inclusive Energy transfer histograms">
     if (inclusive_plots) {
 
         cout << "\n\nPlotting inclusive histograms...\n\n";
@@ -5552,12 +5592,16 @@ void EventAnalyser() {
         c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_1n1p.png");
         c1->Clear();
 
+    } else {
+        cout << "\n\nInclusive plots are disabled by user.\n\n";
     }
+    //</editor-fold>
+
     //</editor-fold>
 
 
 // Saving histogram list and finishing execution
-// =======================================================================================================================================================================
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Saving histogram list and finishing execution">
     cout << "\n\nSaving histogram list...";

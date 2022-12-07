@@ -56,6 +56,7 @@ double rCalc(double x, double y, double z) {
 }
 //</editor-fold>
 
+/*
 //TODO: to finish
 //<editor-fold desc="histPlotter1D function">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
@@ -187,6 +188,291 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
 }
 //</editor-fold>
+*/
+
+//TODO: to finish
+//<editor-fold desc="histPlotter1D function">
+void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
+                   TH1D *Histogram1D, //The histogram
+                   bool normalize_Histogram, //Normalize histogram or not
+                   bool custom_normalization, //Normalize histogram or not
+                   double custom_normalization_factor, //Normalize histogram or not
+                   string Histogram1DTitle,
+                   string Histogram1DTitleReactions,
+                   double titleSize,
+                   double labelSizex,
+                   double labelSizey,
+                   TList *Histogram_list,
+                   int lineWidth,
+                   bool logScalePlot,
+                   bool linearScalePlot,
+                   THStack *Histogram1DStack,
+                   string Histogram1DSaveName,
+                   string Histogram1DSaveNamePath,
+                   string finalState,
+                   int kColor = 1,
+                   bool centerTitle = true,
+                   bool addToStack = false,
+                   bool showStats = true,
+                   bool title2 = false,
+                   bool plot_chi2_cuts = false,
+                   double chi2_cuts = 0,
+                   double chi2_mean = 0) {
+
+//  Normalization factor:
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
+    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    if (normalize_Histogram == true && custom_normalization == false) {
+        Histogram1D_integral = Histogram1D->Integral();
+    } else if (normalize_Histogram == true && custom_normalization == true) {
+        Histogram1D_integral = custom_normalization_factor;
+    }
+
+    if (normalize_Histogram == true) {
+        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        const char *HistogramTitle = title.c_str();
+        Histogram1D->SetTitle(HistogramTitle);
+        Histogram1D->GetYaxis()->SetTitle("Probability (%)");
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Draw();
+        }
+    } else if (normalize_Histogram == false) {
+        string title;
+
+        if (title2 == false) {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        } else {
+            title = Histogram1DTitle + " (" + finalState + ")";
+        }
+//        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        const char *HistogramTitle = title.c_str();
+        Histogram1D->SetTitle(HistogramTitle);
+        Histogram1D->GetYaxis()->SetTitle("Arbitrary units");
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+//            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Draw();
+        }
+    }
+
+    Histogram1D->GetXaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram1D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram1D->GetYaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram1D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram1D->SetLineWidth(lineWidth);
+    Histogram_list->Add(Histogram1D);
+
+    if (showStats == false) {
+        Histogram1D->SetStats(0);
+    }
+
+    if (plot_chi2_cuts == true) {
+        gPad->Update();
+        TLine *upper_cut = new TLine(-chi2_cuts + chi2_mean, 0., -chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
+        TLine *lower_cut = new TLine(chi2_cuts + chi2_mean, 0., chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
+
+        if (Histogram1D->Integral() != 0.) {
+            upper_cut->Draw("same");
+            upper_cut->SetLineColor(kMagenta);
+            lower_cut->Draw("same");
+            lower_cut->SetLineColor(kMagenta);
+        }
+    }
+
+//    if (showStats == false) {
+//        Histogram1D->SetStats(0);
+//        gStyle->SetOptStat(000001111);
+//        gROOT->ForceStyle();
+////        gStyle->SetOptStat(111110);
+////        Histogram1D->SetOptStat(111110);
+//    } else if (showStats == true) {
+////        gStyle->SetOptStat(000001111);
+//        gStyle->SetOptStat(111110);
+//        gROOT->ForceStyle();
+//    }
+
+    if (logScalePlot == true) {
+        Histogram1DCanvas->SetLogy(1);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas->SaveAs(SaveDir);
+    }
+
+    if (linearScalePlot == true) {
+        Histogram1DCanvas->SetLogy(0);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas->SaveAs(SaveDir);
+    }
+
+    if (addToStack == true) {
+        Histogram1D->SetLineColor(kColor);
+        Histogram1D->SetStats(0);
+        Histogram1DStack->Add(Histogram1D);
+    }
+
+    Histogram1DCanvas->Clear();
+
+}
+//</editor-fold>
+
+/*
+//TODO: to finish
+//<editor-fold desc="Chi2Plotter1D function">
+void Chi2Plotter1D(TCanvas *Histogram1DCanvas, //The canvas
+                   TH1D *Histogram1D, //The histogram
+                   bool normalize_Histogram, //Normalize histogram or not
+                   bool custom_normalization, //Normalize histogram or not
+                   double custom_normalization_factor, //Normalize histogram or not
+                   string Histogram1DTitle,
+                   string Histogram1DTitleReactions,
+                   double titleSize,
+                   double labelSizex,
+                   double labelSizey,
+                   TList *Histogram_list,
+                   int lineWidth,
+                   bool logScalePlot,
+                   bool linearScalePlot,
+                   THStack *Histogram1DStack,
+                   string Histogram1DSaveName,
+                   string Histogram1DSaveNamePath,
+                   string finalState,
+                   int kColor = 1,
+                   double Chi2_cut,
+                   double Chi2_mean,
+                   bool centerTitle = true,
+                   bool addToStack = false,
+                   bool showStats = true,
+                   bool title2 = false) {
+
+//  Normalization factor:
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
+    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    if (normalize_Histogram && !custom_normalization) {
+        Histogram1D_integral = Histogram1D->Integral();
+    } else if (normalize_Histogram && custom_normalization) {
+        Histogram1D_integral = custom_normalization_factor;
+    }
+
+    if (normalize_Histogram) {
+        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        const char *HistogramTitle = title.c_str();
+        Histogram1D->SetTitle(HistogramTitle);
+        Histogram1D->GetYaxis()->SetTitle("Probability (%)");
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Draw();
+        }
+    } else if (!normalize_Histogram) {
+        string title;
+
+        if (title2 == false) {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        } else {
+            title = Histogram1DTitle + " (" + finalState + ")";
+        }
+//        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        const char *HistogramTitle = title.c_str();
+        Histogram1D->SetTitle(HistogramTitle);
+        Histogram1D->GetYaxis()->SetTitle("Arbitrary units");
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+//            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Draw();
+        }
+    }
+
+    Histogram1D->GetXaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram1D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram1D->GetYaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram1D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram_list->Add(Histogram1D);
+    Histogram1D->SetLineWidth(lineWidth);
+
+    if (showStats == false) {
+        Histogram1D->SetStats(0);
+    }
+
+//    if (showStats == false) {
+//        Histogram1D->SetStats(0);
+//        gStyle->SetOptStat(000001111);
+//        gROOT->ForceStyle();
+////        gStyle->SetOptStat(111110);
+////        Histogram1D->SetOptStat(111110);
+//    } else if (showStats == true) {
+////        gStyle->SetOptStat(000001111);
+//        gStyle->SetOptStat(111110);
+//        gROOT->ForceStyle();
+//    }
+
+    if (logScalePlot) {
+        Histogram1DCanvas->SetLogy(1);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas->SaveAs(SaveDir);
+    }
+
+    if (linearScalePlot) {
+        Histogram1DCanvas->SetLogy(0);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas->SaveAs(SaveDir);
+    }
+
+    if (addToStack) {
+        Histogram1D->SetLineColor(kColor);
+        Histogram1D->SetStats(0);
+        Histogram1DStack->Add(Histogram1D);
+    }
+
+    Histogram1DCanvas->Clear();
+
+}
+//</editor-fold>
+*/
 
 //TODO:
 //<editor-fold desc="histPlotter2D function">
@@ -238,6 +524,11 @@ double BeamEnergy;
 // Range variables definitions ------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Histogram range variables">
+
+//<editor-fold desc="Chi2 plots">
+double Chi2_upper_lim;
+double Chi2_lower_lim;
+//</editor-fold>
 
 //<editor-fold desc="Theta histograms">
 
