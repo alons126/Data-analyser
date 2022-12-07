@@ -1,5 +1,7 @@
 //
-// Created by alons on 14/11/2022.
+// replaces - splines_plot.cpp
+// COMMAND4ROOT: root splines_plot.cpp+ .L (from Julia)
+// COMMAND4ROOT: root -b -q plotter_1x1.cpp (mine)
 //
 
 #include<iostream>
@@ -12,9 +14,7 @@
 
 using namespace std;
 
-void splines_plot() {
-
-//    COMMAND4ROOT: root splines_plot.cpp+ .L
+void plotter_1x1() {
 
 //    TCanvas *c = new TCanvas("c", "c", 800, 600);
     TCanvas *c = new TCanvas("c", "c", 1600, 1200);
@@ -32,7 +32,6 @@ void splines_plot() {
     std::string filename2 = "total_xsec.root";
 
 
-
     std::string graphTitle = "Xsec Comparison - New vs Old Total Tensor Tables";
 
     TFile *fxsec1 = TFile::Open(filename1.c_str());
@@ -47,8 +46,8 @@ void splines_plot() {
 
     graph1->SetLineColor(kRed);
     graph1->SetLineWidth(4);
-    graph1->GetXaxis()->SetRangeUser(0,5);
-    graph1->GetYaxis()->SetRangeUser(0,625E6);
+    graph1->GetXaxis()->SetRangeUser(0, 5);
+    graph1->GetYaxis()->SetRangeUser(0, 625E6);
     graph1->SetTitle(graphTitle.c_str());
     graph1->GetXaxis()->SetTitleSize(0.05);
     graph1->GetYaxis()->SetTitleSize(0.05);
@@ -57,8 +56,8 @@ void splines_plot() {
 
     graph2->SetLineColor(kBlue);
     graph2->SetLineWidth(2);
-    graph2->GetXaxis()->SetRangeUser(0,5);
-    graph2->GetYaxis()->SetRangeUser(0,652E6);
+    graph2->GetXaxis()->SetRangeUser(0, 5);
+    graph2->GetYaxis()->SetRangeUser(0, 652E6);
     graph2->SetTitle(graphTitle.c_str());
     graph1->GetXaxis()->SetTitleSize(0.05);
     graph1->GetYaxis()->SetTitleSize(0.05);
@@ -80,6 +79,6 @@ void splines_plot() {
     c->SaveAs("Xsec Comparison - New vs Old Tensor Tables.png");
     c->Clear();
 
-    return ;
+    return;
 }
 
