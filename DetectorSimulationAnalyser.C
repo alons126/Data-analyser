@@ -515,24 +515,28 @@ void EventAnalyser() {
 
     //<editor-fold desc="Electron chi2 cut">
     double Chi2_Electron_cut_CD = 3.;
+    double Chi2_Electron_1e_mean_CD = 0; // 1e mean
     double Chi2_Electron_cut_FD = 3.;
+    double Chi2_Electron_1e_mean_FD = -0.8841; // 1e mean
 //    double Chi2_Electron_cut_CD = 1.;
 //    double Chi2_Electron_cut_FD = 1.;
     //</editor-fold>
 
     //<editor-fold desc="Proton chi2 cut">
     double Chi2_Proton_cut_CD = 3.;
+    double Chi2_Proton_1e_mean_CD = 0.698; // 1e mean
     double Chi2_Proton_cut_FD = 3.;
+    double Chi2_Proton_1e_mean_FD = -0.0521; // 1e mean
 //    double Chi2_Proton_cut_CD = 1.;
 //    double Chi2_Proton_cut_FD = 1.;
     //</editor-fold>
 
-    //<editor-fold desc="Neutron chi2 cut">
-    double Chi2_Neutron_cut_CD = 3.;
-    double Chi2_Neutron_cut_FD = 3.;
-//    double Chi2_Neutron_cut_CD = 1.;
-//    double Chi2_Neutron_cut_FD = 1.;
-    //</editor-fold>
+//    //<editor-fold desc="Neutron chi2 cut">
+//    double Chi2_Neutron_cut_CD = 3.;
+//    double Chi2_Neutron_cut_FD = 3.;
+////    double Chi2_Neutron_cut_CD = 1.;
+////    double Chi2_Neutron_cut_FD = 1.;
+//    //</editor-fold>
 
     //</editor-fold>
 
@@ -1240,6 +1244,18 @@ void EventAnalyser() {
     TH1D *Chi2_Proton_1e_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD)", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
                                        100, Chi2_lower_lim, Chi2_upper_lim);
     TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD)", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
+                                       100, Chi2_lower_lim, Chi2_upper_lim);
+
+
+
+    TH1D *Chi2_Electron_1e_test_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
+                                       100, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Electron_1e_test_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
+                                       100, Chi2_lower_lim, Chi2_upper_lim);
+
+    TH1D *Chi2_Proton_1e_test_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
+                                       100, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Proton_1e_test_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
                                        100, Chi2_lower_lim, Chi2_upper_lim);
     //</editor-fold>
 
@@ -2029,50 +2045,111 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Fill Electron chi2 plots (1e cut, CD & FD)">
+            double e_chi2_CD;
+            double e_chi2_FD;
             for (auto &e: electrons) {
                 if (e->getRegion() == CD) {
-                    Chi2_Electron_1e_CD->Fill(e->par()->getChi2Pid());
+                    e_chi2_CD = e->par()->getChi2Pid();
+                    Chi2_Electron_1e_CD->Fill(e_chi2_CD);
+
+                    //<editor-fold desc="Chi2 test (electron, CD)">
+                    if ((fabs(Chi2_Electron_1e_mean_CD - e_chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_chi2_CD) > Chi2_Electron_cut_CD)) {
+                        continue;
+                    } else {
+                        Chi2_Electron_1e_test_CD->Fill(e_chi2_CD);
+                    }
+                    //</editor-fold>
+
                 } else if (e->getRegion() == FD) {
-                    Chi2_Electron_1e_FD->Fill(e->par()->getChi2Pid());
+                    e_chi2_FD = e->par()->getChi2Pid();
+                    Chi2_Electron_1e_FD->Fill(e_chi2_FD);
+
+                    //<editor-fold desc="Chi2 test (electron, FD)">
+                    if ((fabs(Chi2_Electron_1e_mean_FD - e_chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_chi2_FD) > Chi2_Electron_cut_FD)) {
+                        continue;
+                    } else {
+                        Chi2_Electron_1e_test_FD->Fill(e_chi2_FD);
+                    }
+                    //</editor-fold>
+
                 }
             } // end of loop over electrons vector
             //</editor-fold>
 
             //<editor-fold desc="Fill Proton chi2 plots (1e cut, CD & FD)">
+            double p_chi2_CD;
+            double p_chi2_FD;
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
-                    Chi2_Proton_1e_CD->Fill(p->par()->getChi2Pid());
+                    p_chi2_CD = p->par()->getChi2Pid();
+                    Chi2_Proton_1e_CD->Fill(p_chi2_CD);
+                    if ((fabs(Chi2_Proton_1e_mean_CD - p_chi2_CD) > Chi2_Proton_cut_CD) || (fabs(Chi2_Proton_1e_mean_CD + p_chi2_CD) > Chi2_Proton_cut_CD)) {
+                        continue;
+                    } else {
+                        Chi2_Proton_1e_test_CD->Fill(p_chi2_CD);
+                    }
                 } else if (p->getRegion() == FD) {
-                    Chi2_Proton_1e_FD->Fill(p->par()->getChi2Pid());
+                    p_chi2_FD = p->par()->getChi2Pid();
+                    Chi2_Proton_1e_FD->Fill(p_chi2_FD);
+                    if ((fabs(Chi2_Proton_1e_mean_FD - p_chi2_FD) > Chi2_Proton_cut_FD) || (fabs(Chi2_Proton_1e_mean_FD + p_chi2_FD) > Chi2_Proton_cut_FD)) {
+                        continue;
+                    } else {
+                        Chi2_Proton_1e_test_FD->Fill(p_chi2_FD);
+                    }
                 }
             } // end of loop over protons vector
             //</editor-fold>
 
 
+//            double upper_e_chi2_cut =
+
+//            Chi2_Electron_1e_mean_CD - e_chi2_CD
+//
+//            if ((fabs(Chi2_Electron_1e_mean_CD - e_chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_chi2_CD) > Chi2_Electron_cut_CD)) {
+//                Chi2_Electron_1e_test_CD->Fill(e_chi2_CD);
+//            }
+
+//            if ((fabs(Chi2_Electron_1e_mean_FD - e_chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_chi2_FD) > Chi2_Electron_cut_FD)) {
+//                Chi2_Electron_1e_test_FD->Fill(e_chi2_FD);
+//            }
+//
+//            if ((fabs(Chi2_Electron_1e_mean_CD - e_chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_chi2_CD) > Chi2_Electron_cut_CD)) {
+//                Chi2_Electron_1e_test_FD->Fill(e_chi2_FD);
+//                Chi2_Proton_1e_test_CD->Fill(p_chi2_CD);
+//                Chi2_Proton_1e_test_FD->Fill(p_chi2_FD);
+//            }
+////
+//            if ((fabs(Chi2_Electron_1e_mean_CD - e_chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_chi2_CD) > Chi2_Electron_cut_CD)) {
+//                Chi2_Electron_1e_test_FD->Fill(e_chi2_FD);
+//                Chi2_Proton_1e_test_CD->Fill(p_chi2_CD);
+//                Chi2_Proton_1e_test_FD->Fill(p_chi2_FD);
+//            }
+//
+
+//            cout << "\n\n\n==========================================================================\n";
+//            cout << "electrons[0]->par()->getChi2Pid() = " << electrons[0]->par()->getChi2Pid() << "\n";
 
 
-
-            if (AllParticles.size() == 3) {
-
-                cout << "\n\n\n==========================================================================\n";
-                cout << "AllParticles.size() = " << AllParticles.size() << "\n";
-                cout << "protons.size() = " << protons.size() << "\n";
-
-                for (int i = 0; i < AllParticles.size(); i++) {
-                    float particlePDG_test = AllParticles[i]->par()->getPid();
-                    cout << "particlePDG_test[" << i << "] = " << particlePDG_test << "\n";
-//                    } // end of selection test if (2p)
-                } // end of loop over AllParticles vector
-
-//                cout << "==========================================================================\n";
-//                cout << "num_of_2p_events = " << num_of_2p_events << "\n\n\n";
-//                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n\n\n";
-
-
-
-
-
-            } // end of "AllParticles.size() == 3" if
+//            if (AllParticles.size() == 3) {
+//
+////                cout << "AllParticles.size() = " << AllParticles.size() << "\n";
+////                cout << "protons.size() = " << protons.size() << "\n";
+////
+////                for (int i = 0; i < AllParticles.size(); i++) {
+////                    float particlePDG_test = AllParticles[i]->par()->getPid();
+////                    cout << "particlePDG_test[" << i << "] = " << particlePDG_test << "\n";
+//////                    } // end of selection test if (2p)
+////                } // end of loop over AllParticles vector
+//
+////                cout << "==========================================================================\n";
+////                cout << "num_of_2p_events = " << num_of_2p_events << "\n\n\n";
+////                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n\n\n";
+//
+//
+//
+//
+//
+//            } // end of "AllParticles.size() == 3" if
         } // end of "electrons.size() == 1" if
 
 // Canvas definitions
@@ -2799,9 +2876,12 @@ void EventAnalyser() {
 //                              Gamma_mu,P_L+P_R calculations ------------------------------------------
 
 //                              Calculating the total proton momentum vector:
-                                double P_tot_x = AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
-                                double P_tot_y = AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
-                                double P_tot_z = AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz(); // z component
+                                double P_tot_x =
+                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
+                                double P_tot_y =
+                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
+                                double P_tot_z =
+                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz(); // z component
 
 //                              Total proton momentum modulus:
                                 double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
@@ -3030,6 +3110,26 @@ void EventAnalyser() {
         histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/1e_cut/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_FD->GetMean());
+        //</editor-fold>
+
+//  Electron chi2 - test (1e cut) ----------------------------------------------------------------------------
+
+        //<editor-fold desc="Electron chi2 (1e cut)">
+        histPlotter1D(c1, Chi2_Electron_1e_test_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/test/", "test_CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD, 0);
+
+        histPlotter1D(c1, Chi2_Electron_1e_test_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/test/", "test_FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD, 0);
+        //</editor-fold>
+
+        //<editor-fold desc="Proton chi2 (1e cut)">
+        histPlotter1D(c1, Chi2_Proton_1e_test_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/test/", "test_CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+                      Chi2_Proton_1e_test_CD->GetMean());
+
+        histPlotter1D(c1, Chi2_Proton_1e_test_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/test/", "test_FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
+                      Chi2_Proton_1e_test_FD->GetMean());
         //</editor-fold>
 
     } else {
