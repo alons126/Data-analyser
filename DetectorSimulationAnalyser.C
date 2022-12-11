@@ -58,6 +58,48 @@ void EventAnalyser() {
 
 //  todo: finish auto-generating directories
     //<editor-fold desc="Checking directories">
+
+//    string MakeDirCommend;
+//    string MakeDir = "mkdir ./plots/";
+
+    string Plots_Parent_Folder = "./plots";
+
+    bool create_beta_vs_P_Dir = true;
+    string BetaVSP_ParentDir = "Beta_VS_p";
+//    string BetaVSP_Dir_no_electron_cuts = BetaVSP_ParentDir + "no_electron_cuts";
+//    string BetaVSP_Dir_1e_cut = BetaVSP_ParentDir + "1e_cut";
+
+
+    string BetaVSP_Daughter_Folders[3] = {"no_electron_cuts", "1e_cut", "Array_test"};
+
+//    for (auto &folders_name: Plots_Daughter_Folders) {
+//        MakeDirectory(create_beta_vs_P_Dir, Plots_Parent_Folder, BetaVSP_ParentDir, folders_name);
+//    } // end of loop over AllParticles vector
+
+    for (string folders_name: BetaVSP_Daughter_Folders) {
+        MakeDirectory(create_beta_vs_P_Dir, Plots_Parent_Folder, BetaVSP_ParentDir, folders_name);
+    } // end of loop over AllParticles vector
+
+//    MakeDirectory(create_beta_vs_P_Dir, Plots_Parent_Folder, BetaVSP_ParentDir, BetaVSP_Daughter_Folders);
+
+//    bool create_beta_vs_P_Dir = true, create_Chi2_Dir = true;
+
+
+//    if (create_beta_vs_P_Dir == true) {
+////        MakeDirCommend
+//        system((MakeDir + BetaVSP_Dir_no_electron_cuts).c_str());
+//        system((MakeDir + BetaVSP_Dir_1e_cut).c_str());
+////        system((MakeDir + "test_test_test_test_").c_str());
+//    }
+//
+//    if (create_beta_vs_P_Dir == true) {
+////        MakeDirCommend
+//        system((MakeDir + BetaVSP_Dir_no_electron_cuts).c_str());
+//        system((MakeDir + BetaVSP_Dir_1e_cut).c_str());
+////        system((MakeDir + "test_test_test_test_").c_str());
+//    }
+
+
 //    DirectoryChecker("/home/alon/project/plots/Beta_VS_p");
 //    DirectoryChecker("/home/alon/project/plots/Chi2_plots");
 
@@ -1246,17 +1288,18 @@ void EventAnalyser() {
     TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD)", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
                                        100, Chi2_lower_lim, Chi2_upper_lim);
 
-
-
+    //<editor-fold desc="Chi2 plots (1e cut) - test">
     TH1D *Chi2_Electron_1e_test_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
-                                       100, Chi2_lower_lim, Chi2_upper_lim);
+                                              100, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
     TH1D *Chi2_Electron_1e_test_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
-                                       100, Chi2_lower_lim, Chi2_upper_lim);
+                                              100, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
 
     TH1D *Chi2_Proton_1e_test_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
-                                       100, Chi2_lower_lim, Chi2_upper_lim);
+                                            100, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
     TH1D *Chi2_Proton_1e_test_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
-                                       100, Chi2_lower_lim, Chi2_upper_lim);
+                                            100, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
