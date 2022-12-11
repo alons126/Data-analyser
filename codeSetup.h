@@ -75,49 +75,20 @@ std::string Ver = "7.0b";
 ////</editor-fold>
 
 //<editor-fold desc="MakeDirectory">
-void MakeDirectory(bool Create_Directory, std::string Parent_Folder, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder) {
-//void MakeDirectory(bool Create_Directory, std::string Parent_Folder, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folders[]) {
+void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
+                   std::string Parent_Folder = "./plots") {
 
-//    string MakeDirCommend;
     string MakeDir = "mkdir " + Parent_Folder;
-//    string MakeDir = "mkdir ./plots/";
+    string RemoveDir = "rm -rf " + Parent_Folder;
+
+//    if (Clear_Parent_Folder_content == true) {
+//        system(RemoveDir.c_str());
+//    }
 
     if (Create_Directory == true) {
-//        cout << MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder << "\n";
         system((MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
+//        cout << MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder << "\n\n";
     }
-
-//    bool create_beta_vs_P_Dir = true;
-//    string BetaVSP_ParentDir = "Beta_VS_p/";
-//    string BetaVSP_Dir_no_electron_cuts = BetaVSP_ParentDir + "no_electron_cuts";
-//    string BetaVSP_Dir_1e_cut = BetaVSP_ParentDir + "1e_cut";
-
-//    bool create_beta_vs_P_Dir = true, create_Chi2_Dir = true;
-
-//    int Total_Plots_Daughter_Folders_Length = 0;
-
-//    for (auto &folders_name: Plots_Daughter_Folders) {
-////        Total_Plots_Daughter_Folders_Length += Total_Plots_Daughter_Folders_Length + sizeof(folders_name) / sizeof(char);
-//
-//        cout << "\n\nfolders_name = " << folders_name << "\n";
-//    } // end of loop over AllParticles vector
-
-//    cout << "\n\nPlots_Daughter_Folders_Length = " << Plots_Daughter_Folders_Length << "\n";
-
-//    int Plots_Daughter_Folders_Length = sizeof(Plots_Daughter_Folders) / sizeof(string);
-////    int Plots_Daughter_Folders_Length = sizeof(Plots_Daughter_Folders) / sizeof(char);
-//
-//    for (int i = 0; i < Plots_Daughter_Folders_Length; i++) {
-//        cout << "\n\nPlots_Daughter_Folders_Length = " << Plots_Daughter_Folders_Length << "\n";
-//        cout << "Plots_Daughter_Folders[" << i << "] = " << Plots_Daughter_Folders[i] << "\n\n";
-//    }
-
-//    if (Create_Directory == true) {
-////        MakeDirCommend
-//        system((MakeDir + BetaVSP_Dir_no_electron_cuts).c_str());
-//        system((MakeDir + BetaVSP_Dir_1e_cut).c_str());
-////        system((MakeDir + "test_test_test_test_").c_str());
-//    }
 }
 //</editor-fold>
 
@@ -618,6 +589,11 @@ double BeamEnergy;
 //<editor-fold desc="Chi2 plots">
 double Chi2_upper_lim;
 double Chi2_lower_lim;
+//</editor-fold>
+
+//<editor-fold desc="Vertex plots">
+double Vertex_upper_lim;
+double Vertex_lower_lim;
 //</editor-fold>
 
 //<editor-fold desc="Theta histograms">
