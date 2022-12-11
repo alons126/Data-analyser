@@ -594,6 +594,9 @@ double Chi2_lower_lim;
 //<editor-fold desc="Vertex plots">
 double Vertex_upper_lim;
 double Vertex_lower_lim;
+
+double dV_upper_lim;
+double dV_lower_lim;
 //</editor-fold>
 
 //<editor-fold desc="Theta histograms">
