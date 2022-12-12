@@ -74,21 +74,33 @@ std::string Ver = "7.0b";
 //}
 ////</editor-fold>
 
+// todo: figure out how to clear parent content appropriately
 //<editor-fold desc="MakeDirectory">
 void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
                    std::string Parent_Folder = "./plots") {
 
-    string MakeDir = "mkdir " + Parent_Folder;
-    string RemoveDir = "rm -rf " + Parent_Folder;
+    string MakeDirectory = "mkdir " + Parent_Folder;
+    string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
+//    cout << "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*" << "\n\n";
 
-//    if (Clear_Parent_Folder_content == true) {
-//        system(RemoveDir.c_str());
-//    }
-
-    if (Create_Directory == true) {
-        system((MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
-//        cout << MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder << "\n\n";
+    if (Clear_Parent_Folder_content == true && Create_Directory == true) {
+        system(RemoveDirectoryContent.c_str());
+        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
+    } else if (Clear_Parent_Folder_content == false && Create_Directory == true) {
+        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
     }
+
+    /*
+//    if (Clear_Parent_Folder_content == true) {
+//        system(RemoveDirectoryContent.c_str());
+//    }
+//
+//    if (Create_Directory == true) {
+//        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
+////        cout << MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder << "\n\n";
+//    }
+     */
+
 }
 //</editor-fold>
 
@@ -351,14 +363,30 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
     if (plot_chi2_cuts == true) {
         gPad->Update();
-        TLine *upper_cut = new TLine(-chi2_cuts + chi2_mean, 0., -chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
-        TLine *lower_cut = new TLine(chi2_cuts + chi2_mean, 0., chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
+        double Upper_cut = chi2_cuts + chi2_mean;
+        double Lower_cut = -chi2_cuts + chi2_mean;
+        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+        upper_cut->SetLineWidth(lineWidth);
+        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+        lower_cut->SetLineWidth(lineWidth);
+//        TLine *upper_cut = new TLine(-chi2_cuts + chi2_mean, 0., -chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
+//        TLine *lower_cut = new TLine(chi2_cuts + chi2_mean, 0., chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
+        auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3);
+//        auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.5, gStyle->GetStatX(), gStyle->GetStatY() - 0.2);
+//        auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY(), gStyle->GetStatX() + 0.2, gStyle->GetStatY() + 0.2);
+//        auto Cut_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
 
         if (Histogram1D->Integral() != 0.) {
             upper_cut->Draw("same");
-            upper_cut->SetLineColor(kMagenta);
+            upper_cut->SetLineColor(kBlue);
+//            upper_cut->SetLineColor(kMagenta);
             lower_cut->Draw("same");
-            lower_cut->SetLineColor(kMagenta);
+            lower_cut->SetLineColor(kRed);
+//            lower_cut->SetLineColor(kMagenta);
+
+            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string(Upper_cut)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string(Lower_cut)).c_str(), "l");
+            Cut_legend->Draw("same");
         }
     }
 
