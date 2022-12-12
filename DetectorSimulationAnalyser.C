@@ -69,6 +69,14 @@ void EventAnalyser() {
     //<editor-fold desc="Set initial energy (Ev) and momentum (Pv) of incoming lepton">
     double Ev; // electron energy declaration
     double m_e = 0.00051099895; // electron mass (in GeV)
+    double m_p = 0.93827208816; // proton mass (in GeV)
+    double m_n = 0.93956542052; // proton mass (in GeV)
+    double m_pizero = 0.1349768; // pizero mass (in GeV)
+    double m_piplus = 0.13957039; // piplus mass (in GeV)
+    double m_piminus = m_piplus; // piminus mass (in GeV)
+    double m_Kzero = 0.497611; // Kzero mass (in GeV)
+    double m_Kplus = 0.493677; // Kplus mass (in GeV)
+    double m_Kminus = m_Kplus; // Kminus mass (in GeV)
 
     if (fileInput == "recon_c12_6gev.hipo") {
         Ev = 5.98636;
@@ -1220,15 +1228,15 @@ void EventAnalyser() {
 // Beta VS P histograms -------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
-    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
-    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
-//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
-//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
 
-    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
-    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
-//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
-//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
+//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
+    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
     //</editor-fold>
 
 // Chi2 plots -------------------------------------------------------------------------------
@@ -2119,6 +2127,7 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Code execution">
+    cout << "Filling histograms...\n\n";
 
     //<editor-fold desc="HipoChain tests">
     //    gROOT->ProcessLine( "gErrorIgnoreLevel = 1000;");
@@ -2143,8 +2152,10 @@ void EventAnalyser() {
 //    c12.addZeroOfRestPid(); // nothing else
 
     int num_of_events = 0;
+    int num_of_events_with_e = 0;
     int num_of_events_1e = 0;
-    int num_of_events_1e2N = 0;
+    int num_of_events_1enP = 0;
+    int num_of_events_1e2X = 0;
     int num_of_events_1e2p = 0;
 
     int num_of_2p_events = 0;
@@ -2170,7 +2181,19 @@ void EventAnalyser() {
         //<editor-fold desc="All electrons plots">
 
         //<editor-fold desc="Fill Beta vs P (no #(electron) cut, CD & FD)">
+
+//        cout << "\n";
+
         for (int i = 0; i < AllParticles.size(); i++) {
+
+//            int particlePDG = AllParticles[i]->par()->getPid();
+//
+//            if ((particlePDG != 0) && (abs(particlePDG) != 11) && (particlePDG != 22) && (abs(particlePDG) != 2212) && (particlePDG != 2112) &&
+//                (particlePDG != 211) && (particlePDG != -211) && (particlePDG != 111) && (abs(particlePDG) != 321)
+//                ) {
+//                cout << "particlePDG:\t" << particlePDG << "\n";
+//            }
+
             if (AllParticles[i]->getRegion() == CD) {
                 Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
             } else if (AllParticles[i]->getRegion() == FD) {
@@ -2216,6 +2239,10 @@ void EventAnalyser() {
 
 //  1e only plots
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        if (electrons.size() >= 1) {
+            ++num_of_events_with_e;
+        } // applying 1e only
 
         if (electrons.size() != 1) { continue; } // applying 1e only
         ++num_of_events_1e;
@@ -2332,11 +2359,22 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
-        ++num_of_events_1e2N;
+        if (AllParticles.size() - electrons.size() == protons.size()) {
+//            if (protons.size() > 1) {
+//                cout << "\n\nAllParticles.size():\t" << AllParticles.size() << "\n";
+//                cout << "electrons.size():\t" << electrons.size() << "\n";
+//                cout << "protons.size():\t" << protons.size() << "\n\n";
+//                ++num_of_events_1enP;
+//            }
+//            cout << "\n\nAllParticles.size():\t" << AllParticles.size() << "\n";
+//            cout << "electrons.size():\t" << electrons.size() << "\n";
+//            cout << "protons.size():\t" << protons.size() << "\n\n";
+            ++num_of_events_1enP;
+        }
 
-//        cout << "electrons.size() = " << electrons.size() << "\n";
-//        cout << "AllParticles.size() = " << AllParticles.size() << "\n\n";
+
+        if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
+        ++num_of_events_1e2X;
 
         if (protons.size() == 2) { // for 2p calculations
             ++num_of_events_1e2p;
@@ -3274,6 +3312,19 @@ void EventAnalyser() {
 
 //  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
 
+        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, 0.75 * Ev);
+//        auto *beta_proton = new TF1("beta_proton", "sin(x)", -2000, 2000);
+
+//  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
+
         //<editor-fold desc="Beta vs P histograms (no #(electrons) cut)">
         Beta_vs_P_CD->SetTitleSize(0.06, "xyz");
         Beta_vs_P_CD->GetXaxis()->SetLabelSize(0.0425);
@@ -3286,6 +3337,16 @@ void EventAnalyser() {
 //        c1->SetLogz(1);
 //        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
         Beta_vs_P_CD->Draw("colz");
+        beta_electron->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
+//        beta_proton.Draw();
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
@@ -3305,6 +3366,15 @@ void EventAnalyser() {
 //        c1->SetLogz(1);
 //        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
         Beta_vs_P_FD->Draw("colz");
+        beta_electron->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
@@ -3328,6 +3398,15 @@ void EventAnalyser() {
 //        c1->SetLogz(1);
 //        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
         Beta_vs_P_1e_CD->Draw("colz");
+        beta_electron->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
@@ -3347,6 +3426,15 @@ void EventAnalyser() {
 //        c1->SetLogz(1);
 //        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
         Beta_vs_P_1e_FD->Draw("colz");
+        beta_electron->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
@@ -6355,11 +6443,13 @@ void EventAnalyser() {
     cout << "===========================================================================\n\n";
 
     cout << "-- Event counts -----------------------------------------------------------\n";
-    cout << "Total #(events):\t" << num_of_events << "\n";
-    cout << "#(events) w/ 1e:\t" << num_of_events_1e << "\n";
-    cout << "#(events) w/ 1e2N:\t" << num_of_events_1e2N << "\n";
-//    cout << "#(events) w/ 1e & 2 nucleons (|AllParticles| = 3):\t\t" << num_of_events_1e2N << "\n";
-    cout << "#(events) w/ 1e2p:\t" << num_of_events_1e2p << "\n\n";
+    cout << "Total #(events):\t\t" << num_of_events << "\n";
+    cout << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
+    cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
+    cout << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
+    cout << "#(events) w/ 1e2X:\t\t" << num_of_events_1e2X << "\n";
+//    cout << "#(events) w/ 1e & 2 nucleons (|AllParticles| = 3):\t\t" << num_of_events_1e2X << "\n";
+    cout << "#(events) w/ 1e2p:\t\t" << num_of_events_1e2p << "\n\n";
 
 //    if (calculate_2p == true) {
 //        cout << "#(2p) events:\t\t" << num_of_2p_events << "\n";
