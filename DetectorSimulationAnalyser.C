@@ -49,10 +49,50 @@ void EventAnalyser() {
 
     string AnalyserVersion = "Beta version";
 
+// ======================================================================================================================================================================
 // Code settings
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Code settings">
+
+//  Input processing ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Input processing">
+
+    //<editor-fold desc="Determine file path and name">
+    string LoadedInput = AnalyseFile; // AnalyseFile is taken from codeSetup.h
+    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
+    string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
+    string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
+    //</editor-fold>
+
+    //<editor-fold desc="Set initial energy (Ev) and momentum (Pv) of incoming lepton">
+    double Ev; // electron energy declaration
+    double m_e = 0.00051099895; // electron mass (in GeV)
+
+    if (fileInput == "recon_c12_6gev.hipo") {
+        Ev = 5.98636;
+    }
+
+    double Pv = sqrt(Ev * Ev - m_e * m_e);
+    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
+    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
+    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
+    //</editor-fold>
+
+    //<editor-fold desc="Execution variables">
+//    cout << "\n";
+//    cout << "\n";
+//    cout << "\nExecution variables\n";
+    cout << "\nExecution variables\n";
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "File input:\t" << AnalyseFile << "\n";
+    cout << "Settings mode:\t'" << file_name << "'\n";
+    cout << "filePath:\t" << filePath << "\n";
+    cout << "fileInput:\t" << fileInput << "\n\n\n";
+    //</editor-fold>
+
+    //</editor-fold>
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -90,112 +130,6 @@ void EventAnalyser() {
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_vertex_Dir, Vertex_ParentDir, folders_name);
     }
-    //</editor-fold>
-
-    //</editor-fold>
-
-//  FSI settings --------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="FSI settings">
-    bool FSI_status; // true == with FSI; false == no FSI
-    bool custom_FSI_status = true; // set as true by default
-
-    int ni_selection; // 3 for G18; 2 for SuSAv2
-//    int ni_selection = 2; // 3 for G18; 2 for SuSAv2
-
-    //<editor-fold desc="Input processing (to determine custom_FSI_status)">
-    string LoadedInput = AnalyseFile;
-//    string LoadedInput = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
-    string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
-    string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
-
-    if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
-        custom_FSI_status = false; // and custom_FSI_status is set to be false
-    }
-
-//    if (fileInput.find("wfsi") <= fileInput[fileInput.size() - 1]) {
-////        cout << "\n";
-////        cout << "\n";
-////        cout << "wfsi is in fileInput! Setting custom_FSI_status == true." << "\n";  // and no change to custom_FSI_status
-////        cout << "\n";
-//    } else if (fileInput.find("nofsi") <= fileInput[fileInput.size() - 1]) {
-////        cout << "\n";
-//        cout << "\n";
-//        cout << "nofsi is in fileInput! Setting custom_FSI_status == false." << "\n";
-//        cout << "\n";
-//
-//        custom_FSI_status = false; // and custom_FSI_status is set to be false
-//    } else {
-////        cout << "\n";
-//        cout << "\n";
-//        cout << "Could not figure FSI status. FSI is kept ON." << "\n";
-//        cout << "\n";
-//    }
-    //</editor-fold>
-
-    //<editor-fold desc="Input processing (to determine ni_selection)">
-    string tune;
-
-    if (fileInput.find("G18") <= fileInput[fileInput.size() - 1]) {
-        tune = "G18";
-        ni_selection = 3;
-    } else if (fileInput.find("GEM21") <= fileInput[fileInput.size() - 1]) {
-        tune = "GEM21 (SuSAv2)";
-        ni_selection = 2;
-    } else if (fileInput.find("SuSAv2") <= fileInput[fileInput.size() - 1]) {
-        tune = "SuSAv2";
-        ni_selection = 2;
-    } else {
-        ni_selection = 2;
-        tune = "unknown";
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Set Ev and Pv of incoming lepton">
-    double Ev; // electron energy decloration
-    double m_e = 0.00051099895; // electron mass in GeV
-
-    if (fileInput == "recon_c12_6gev.hipo") {
-        Ev = 5.98636;
-    }
-
-    double Pv = sqrt(Ev * Ev - m_e * m_e);
-    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
-    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
-    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
-    //</editor-fold>
-
-    //<editor-fold desc="Set FSI according to setting mode">
-    if (file_name == "12C_056GeV_G18_10a_02_11a" || file_name == "12C_0961GeV_G18_10a_02_11a" || file_name == "C12_1161GeV_EM+MEC_G18_02a_00_000_Q2_0_1" ||
-        file_name == "12C_1299GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_G18_10a_02_11a" || file_name == "12C_2222GeV_GTEST19_10b_00_000" ||
-        file_name == "adi_11_1000060120_2222_fsi.gst" || file_name == "GENIE_with_fsi") {
-        FSI_status = true;
-    } else if (file_name == "asportes_11_1000060120_2222_nofsi_10M.gst" || file_name == "GENIE_no_fsi") {
-        FSI_status = false;
-    } else if (file_name == "general_file") {
-        FSI_status = custom_FSI_status;
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="FSI indicator">
-//    cout << "\n";
-//    cout << "\n";
-//    cout << "\nExecution variables\n";
-    cout << "\nExecution variables\n";
-    cout << "---------------------------------------------------------------------------\n";
-    cout << "File input:\t" << AnalyseFile << "\n";
-    cout << "Settings mode:\t'" << file_name << "'\n";
-    cout << "FSI status:\t" << BoolToString(FSI_status) << "\n";
-    cout << "ni:\t\t" << ni_selection << "\n";
-    cout << "Tune:\t\t" << tune << "\n";
-    cout << "\n";
-
-    cout << "\nFile input\n";
-    cout << "---------------------------------------------------------------------------\n";
-    cout << "LoadedInput:\t" << LoadedInput << "\n";
-    cout << "filePath:\t" << filePath << "\n";
-    cout << "fileInput:\t" << fileInput << "\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -1135,49 +1069,41 @@ void EventAnalyser() {
     myLogFile.open("./plots/Run_log.txt");
 
     myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n";
-    myLogFile << "// Run was with '" << file_name << "' settings mode.\n";
-    myLogFile << "// Input file was " << LoadedInput << ".\n";
+    myLogFile << "// Run was with '" << file_name << "' settings mode\n";
+    myLogFile << "// Input file was " << LoadedInput << "\n";
     myLogFile << "// Code version was " << Ver << "\n";
-    myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n";
-    myLogFile << "\n";
-    myLogFile << "Code ran with the following settings:" << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "// Analysis mode was 'Detector simulation'\n";
+    myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n\n";
+    myLogFile << "Code ran with the following settings:" << "\n\n\n";
 
     myLogFile << "Input:\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "LoadedInput: " << LoadedInput << "\n";
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
-    myLogFile << "plotsInput: " << plotsInput << "\n";
-    myLogFile << "\n";
-
-    myLogFile << "FSI settings\n";
-    myLogFile << "==========================================================================================\n";
-    myLogFile << "FSI_status = " << BoolToString(FSI_status) << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
-
+    myLogFile << "plotsInput: " << plotsInput << "\n\n";
+//
+//    myLogFile << "FSI settings\n";
+//    myLogFile << "==========================================================================================\n\n\n";
+////    myLogFile << "FSI_status = " << BoolToString(FSI_status) << "\n";
+//    myLogFile << "\n";
+//    myLogFile << "\n";
+//
     myLogFile << "Plot settings\n";
     myLogFile << "==========================================================================================\n";
 //    myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
-    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
 
     myLogFile << "Calculation settings\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
     myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
-    myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n";
-    myLogFile << "\n";
+    myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n\n";
     myLogFile << "BEnergyToNucleusCon = " << BoolToString(BEnergyToNucleusCon) << "\n";
     myLogFile << "BEnergyToNucleus = " << BEnergyToNucleus << "\n";
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n";
-    myLogFile << "BeamEnergy = " << BeamEnergy << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "BeamEnergy = " << Ev << "\n\n\n";
 
     myLogFile << "Plot selector\n";
     myLogFile << "==========================================================================================\n";
@@ -1193,9 +1119,7 @@ void EventAnalyser() {
     myLogFile << "E_cal_plots = " << BoolToString(E_cal_plots) << "\n";
     myLogFile << "other_E_cal_plots = " << BoolToString(other_E_cal_plots) << "\n";
     myLogFile << "momentum_plots = " << BoolToString(momentum_plots) << "\n";
-    myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n\n";
 
     myLogFile << "Normalization settings\n";
     myLogFile << "==========================================================================================\n";
@@ -1203,16 +1127,12 @@ void EventAnalyser() {
     myLogFile << "normalized_E_lp_plots = " << BoolToString(normalized_E_lp_plots) << "\n";
     myLogFile << "normalized_E_Trans15_plots = " << BoolToString(normalized_E_Trans15_plots) << "\n";
     myLogFile << "normalized_E_cal_plots = " << BoolToString(normalized_E_cal_plots) << "\n";
-    myLogFile << "normalized_inclusive_plots = " << BoolToString(normalized_inclusive_plots) << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "normalized_inclusive_plots = " << BoolToString(normalized_inclusive_plots) << "\n\n\n";
 
     myLogFile << "Delete settings\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
-    myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n\n";
 
     myLogFile << "Momentum thresholds (2p)\n";
     myLogFile << "==========================================================================================\n";
@@ -1221,9 +1141,7 @@ void EventAnalyser() {
     myLogFile << "P_p1_upper_lim_2p = " << P_p1_upper_lim_2p << "\n";
     myLogFile << "P_p1_lower_lim_2p = " << P_p1_lower_lim_2p << "\n";
     myLogFile << "P_p2_upper_lim_2p = " << P_p2_upper_lim_2p << "\n";
-    myLogFile << "P_p2_lower_lim_2p = " << P_p2_lower_lim_2p << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "P_p2_lower_lim_2p = " << P_p2_lower_lim_2p << "\n\n\n";
 
     myLogFile << "Momentum thresholds (1n1p)\n";
     myLogFile << "==========================================================================================\n";
@@ -1232,9 +1150,7 @@ void EventAnalyser() {
     myLogFile << "P_p_upper_lim_1n1p = " << P_p_upper_lim_1n1p << "\n";
     myLogFile << "P_p_lower_lim_1n1p = " << P_p_lower_lim_1n1p << "\n";
     myLogFile << "P_n_upper_lim_1n1p = " << P_n_upper_lim_1n1p << "\n";
-    myLogFile << "P_n_lower_lim_1n1p = " << P_n_lower_lim_1n1p << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "P_n_lower_lim_1n1p = " << P_n_lower_lim_1n1p << "\n\n\n";
 
     myLogFile << "Momentum thresholds (2p, MicroBooNE)\n";
     myLogFile << "==========================================================================================\n";
@@ -1244,16 +1160,14 @@ void EventAnalyser() {
     myLogFile << "P_L_lower_lim_MicroBooNE = " << P_L_lower_lim_MicroBooNE << "\n";
     myLogFile << "P_R_upper_lim_MicroBooNE = " << P_R_upper_lim_MicroBooNE << "\n";
     myLogFile << "P_R_lower_lim_MicroBooNE = " << P_R_lower_lim_MicroBooNE << "\n";
-    myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n";
-    myLogFile << "\n";
-    myLogFile << "\n";
+    myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n\n\n";
 
     myLogFile.close();
     //</editor-fold>
 
     //</editor-fold>
 
-
+// ======================================================================================================================================================================
 // Histogram definitions:
 // ======================================================================================================================================================================
 
@@ -2149,7 +2063,7 @@ void EventAnalyser() {
     cout << " done.\n\n";
     //</editor-fold>
 
-
+// ======================================================================================================================================================================
 // Code execution:
 // ======================================================================================================================================================================
 
@@ -3238,7 +3152,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-
+// ======================================================================================================================================================================
 // Canvas definitions
 // ======================================================================================================================================================================
 
@@ -3268,7 +3182,7 @@ void EventAnalyser() {
 //    cout << "\n\nStatY = "<< StatY << "\n\n";
     //</editor-fold>
 
-
+// ======================================================================================================================================================================
 // Histograms plots
 // ======================================================================================================================================================================
 
@@ -6340,7 +6254,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-
+// ======================================================================================================================================================================
 // Saving histogram list and finishing execution
 // ======================================================================================================================================================================
 
@@ -6377,11 +6291,11 @@ void EventAnalyser() {
         cout << "#(MicroBooNE) events:\tcalculation not performed\n";
     }
 
-    if (FSI_status == false) {
-        cout << "FSI status:\t\tOFF (ni = " << ni_selection << ")\n";
-    } else if (FSI_status == true) {
-        cout << "FSI status:\t\tON\n";
-    }
+//    if (FSI_status == false) {
+//        cout << "FSI status:\t\tOFF (ni = " << ni_selection << ")\n";
+//    } else if (FSI_status == true) {
+//        cout << "FSI status:\t\tON\n";
+//    }
 
     cout << "File input:\t\t" << LoadedInput << "\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
