@@ -89,6 +89,9 @@ void EventAnalyser() {
     double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
     double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
     double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
+
+//    TLorentzVector incident_e(0,0,0,db->GetParticle(11)->Mass());
+
     //</editor-fold>
 
     //<editor-fold desc="Execution variables">
@@ -2142,8 +2145,6 @@ void EventAnalyser() {
         double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
         double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
-//        cout << "------------------------------------" << "\n";
-
         for (int i = 0; i < electrons.size(); i++) {
             if (electrons[i]->getRegion() == CD) {
                 ++num_of_events_e_CD;
@@ -2161,7 +2162,7 @@ void EventAnalyser() {
                 q_CD = rCalc(qx_CD, qy_CD, qz_CD);
                 omega_CD = Ev - Ee_CD;
 
-                Q2_CD = omega_CD * omega_CD - q_CD * q_CD;
+                Q2_CD = fabs(omega_CD * omega_CD - q_CD * q_CD);
                 Q2_histogram_CD->Fill(Q2_CD);
             } else if (AllParticles[i]->getRegion() == FD) {
                 ++num_of_events_e_FD;
@@ -2179,10 +2180,7 @@ void EventAnalyser() {
                 q_FD = rCalc(qx_FD, qy_FD, qz_FD);
                 omega_FD = Ev - Ee_FD;
 
-//                cout << "q_FD:" << q_FD << "\n";
-//                cout << "omega_FD:" << omega_FD << "\n";
-
-                Q2_FD = omega_FD * omega_FD - q_FD * q_FD;
+                Q2_FD = fabs(omega_FD * omega_FD - q_FD * q_FD);
                 Q2_histogram_FD->Fill(Q2_FD);
             }
         } // end of loop over AllParticles vector
