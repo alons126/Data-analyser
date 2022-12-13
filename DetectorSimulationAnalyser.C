@@ -68,6 +68,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Set initial energy (Ev) and momentum (Pv) of incoming lepton">
     double Ev; // electron energy declaration
+
+    //<editor-fold desc="Particle masses">
     double m_e = 0.00051099895; // electron mass (in GeV)
     double m_p = 0.93827208816; // proton mass (in GeV)
     double m_n = 0.93956542052; // proton mass (in GeV)
@@ -77,6 +79,7 @@ void EventAnalyser() {
     double m_Kzero = 0.497611; // Kzero mass (in GeV)
     double m_Kplus = 0.493677; // Kplus mass (in GeV)
     double m_Kminus = m_Kplus; // Kminus mass (in GeV)
+    //</editor-fold>
 
     if (fileInput == "recon_c12_6gev.hipo") {
         Ev = 5.98636;
@@ -113,7 +116,7 @@ void EventAnalyser() {
     //<editor-fold desc="Checking directories">
     cout << "Creating plots direcroties...\n\n";
 
-    //<editor-fold desc="Beta_vs_P directory">
+    //<editor-fold desc="Beta_VS_p directory">
     bool create_beta_vs_P_Dir = true;
     string BetaVSP_ParentDir = "Beta_VS_p";
 //    MakeDirectory(create_beta_vs_P_Dir, BetaVSP_ParentDir, "");
@@ -124,7 +127,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Chi2 directory">
+    //<editor-fold desc="Chi2_plots directory">
     bool create_chi2_Dir = true;
     string Chi2_ParentDir = "Chi2_plots";
 //    MakeDirectory(create_chi2_Dir, Chi2_ParentDir, "");
@@ -135,7 +138,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Vertex directory">
+    //<editor-fold desc="Vertex_plots directory">
     bool create_vertex_Dir = true;
     string Vertex_ParentDir = "Vertex_plots";
 //    MakeDirectory(create_vertex_Dir, Vertex_ParentDir, "");
@@ -143,6 +146,26 @@ void EventAnalyser() {
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_vertex_Dir, Vertex_ParentDir, folders_name);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="theta_histograms directory">
+    bool create_theta_Dir = true;
+    string Theta_ParentDir = "theta_histograms";
+    string Theta_Daughter_Folders[] = {"", "Theta_e_plots"};
+
+    for (string folders_name: Theta_Daughter_Folders) {
+        MakeDirectory(create_theta_Dir, Theta_ParentDir, folders_name);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Q2_histograms directory">
+    bool create_Q2_Dir = true;
+    string Q2_ParentDir = "Q2_histograms";
+    string Q2_Daughter_Folders[] = {""};
+
+    for (string folders_name: Q2_Daughter_Folders) {
+        MakeDirectory(create_Q2_Dir, Q2_ParentDir, folders_name);
     }
     //</editor-fold>
 
@@ -306,6 +329,11 @@ void EventAnalyser() {
 
     bool Vertex_plots = true;
 
+    bool Theta_e_plots = true;
+
+    bool Q2_plots = true;
+
+    //<editor-fold desc="other plots">
     bool Theta_plots = false, Phi_plots = false;
 
     bool Energy_histogram_plots = false;
@@ -326,13 +354,20 @@ void EventAnalyser() {
     bool MicroBooNE_plots = false;
     //</editor-fold>
 
+    //</editor-fold>
+
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Normalization settings">
     bool normalize_master = false;
 
     bool normalized_chi2_plots = false;
+
     bool normalized_vertex_plots = false;
+
+    bool normalized_theta_e_plots = false;
+
+    bool normalized_Q2_plots = false;
 
     bool normalized_theta_lp_plots = true;
     bool normalized_theta_p1_plots = false, normalized_theta_p2_plots = false, normalized_dtheta_2p_plots = false; // 2p
@@ -1272,6 +1307,26 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+// Theta_e histograms -----------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_e histograms">
+    THStack *Theta_e_Stack = new THStack("#theta_{e} stack (CD & FD)", "#theta_{e} of Outgoing Electron (no #(electrons) cut, CD & FD);#theta_{e} [Deg];");
+
+    TH1D *Theta_e_CD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, CD)", ";#theta_{e} [Deg];", 100, 35, 143);
+    TH1D *Theta_e_FD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 100, 0, 45);
+    //</editor-fold>
+
+// Q2 histograms -----------------------------------------------------------------------------------
+
+    //<editor-fold desc="Q2 histograms">
+    THStack *Q2_Stack = new THStack("Q^{2} stack (CD & FD)", "Q^{2} Histogram (no #(electrons) cut, CD & FD);Q^{2} [GeV^{2}];");
+
+    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, -Ev * 1.1, Ev * 1.1);
+    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, -Ev * 1.1, Ev * 1.1);
+//    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
+//    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
+    //</editor-fold>
+
 // Older plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Older plots">
@@ -1999,6 +2054,8 @@ void EventAnalyser() {
 //    c12.addZeroOfRestPid(); // nothing else
 
     int num_of_events = 0;
+    int num_of_events_e_CD = 0;
+    int num_of_events_e_FD = 0;
     int num_of_events_with_e = 0;
     int num_of_events_1e = 0;
     int num_of_events_1enP = 0;
@@ -2027,7 +2084,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="All electrons plots">
 
-        //<editor-fold desc="Fill Beta vs P (no #(electron) cut, CD & FD)">
+        //<editor-fold desc="Beta vs P (no #(electron) cut, CD & FD)">
 
 //        cout << "\n";
 
@@ -2049,7 +2106,7 @@ void EventAnalyser() {
         } // end of loop over AllParticles vector
         //</editor-fold>
 
-        //<editor-fold desc="Fill Electron chi2 plots (no #(electron) cut, CD & FD)">
+        //<editor-fold desc="Electron chi2 plots (no #(electron) cut, CD & FD)">
         for (auto &e: electrons) {
             if (e->getRegion() == CD) {
                 Chi2_Electron_CD->Fill(e->par()->getChi2Pid());
@@ -2065,7 +2122,7 @@ void EventAnalyser() {
         } // end of loop over AllParticles vector
         //</editor-fold>
 
-        //<editor-fold desc="Fill Proton chi2 plots (no #(electron) cut, CD & FD)">
+        //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
         for (auto &p: protons) {
             if (p->getRegion() == CD) {
                 Chi2_Proton_CD->Fill(p->par()->getChi2Pid());
@@ -2081,12 +2138,63 @@ void EventAnalyser() {
         } // end of loop over protons vector
         //</editor-fold>
 
+        //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
+        double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
+        double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
+
+//        cout << "------------------------------------" << "\n";
+
+        for (int i = 0; i < electrons.size(); i++) {
+            if (electrons[i]->getRegion() == CD) {
+                ++num_of_events_e_CD;
+
+                Theta_e_CD->Fill(electrons[i]->getTheta());
+                Pe_CD = electrons[i]->par()->getP();
+                Pex_CD = electrons[i]->par()->getPx();
+                Pey_CD = electrons[i]->par()->getPy();
+                Pez_CD = electrons[i]->par()->getPz();
+                Ee_CD = sqrt(m_e * m_e + Pe_CD * Pe_CD);
+
+                qx_CD = Pvx - Pex_CD;
+                qy_CD = Pvy - Pey_CD;
+                qz_CD = Pvz - Pez_CD;
+                q_CD = rCalc(qx_CD, qy_CD, qz_CD);
+                omega_CD = Ev - Ee_CD;
+
+                Q2_CD = omega_CD * omega_CD - q_CD * q_CD;
+                Q2_histogram_CD->Fill(Q2_CD);
+            } else if (AllParticles[i]->getRegion() == FD) {
+                ++num_of_events_e_FD;
+
+                Theta_e_FD->Fill(electrons[i]->getTheta());
+                Pe_FD = electrons[i]->par()->getP();
+                Pex_FD = electrons[i]->par()->getPx();
+                Pey_FD = electrons[i]->par()->getPy();
+                Pez_FD = electrons[i]->par()->getPz();
+                Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
+
+                qx_FD = Pvx - Pex_FD;
+                qy_FD = Pvy - Pey_FD;
+                qz_FD = Pvz - Pez_FD;
+                q_FD = rCalc(qx_FD, qy_FD, qz_FD);
+                omega_FD = Ev - Ee_FD;
+
+//                cout << "q_FD:" << q_FD << "\n";
+//                cout << "omega_FD:" << omega_FD << "\n";
+
+                Q2_FD = omega_FD * omega_FD - q_FD * q_FD;
+                Q2_histogram_FD->Fill(Q2_FD);
+            }
+        } // end of loop over AllParticles vector
+        //</editor-fold>
+
         //</editor-fold>
 
 
 //  1e only plots
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        //<editor-fold desc="1e only plots">
         if (electrons.size() >= 1) {
             ++num_of_events_with_e;
         } // applying 1e only
@@ -3109,6 +3217,8 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+        //</editor-fold>
+
     } // end of while
 
     //</editor-fold>
@@ -3530,7 +3640,67 @@ void EventAnalyser() {
     //</editor-fold>
 
 
-// Theta histograms
+// Theta_e histograms
+// ====================================================================================================
+
+    //<editor-fold desc="Theta_e histograms">
+    if (Theta_e_plots) {
+
+        cout << "\n\nPlotting Theta Det histograms...\n\n";
+
+//  Theta of electron (CD & FD) --------------------------------------------------------------
+
+//      Normalization factor:
+        double Theta_e_integral = Theta_e_CD->Integral() + Theta_e_FD->Integral();
+
+        //<editor-fold desc="Theta of electron (CD)">
+        histPlotter1D(c1, Theta_e_CD, normalized_theta_e_plots, true, Theta_e_integral, "#theta_{e} of Outgoing Lepton", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e", "plots/theta_histograms/Theta_e_plots/", "CD", kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Theta of electron (FD)">
+        histPlotter1D(c1, Theta_e_FD, normalized_theta_e_plots, true, Theta_e_integral, "#theta_{e} of Outgoing Lepton", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e", "plots/theta_histograms/Theta_e_plots/", "FD", kBlue, true, true, true);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nTheta Det plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+
+// Q2 histograms
+// ====================================================================================================
+
+    //<editor-fold desc="Q2 histograms">
+    if (Q2_plots) {
+
+        cout << "\n\nPlotting Q2 histograms...\n\n";
+
+//  Q2 (CD & FD) --------------------------------------------------------------
+
+//      Normalization factor:
+        double Q2_integral = Q2_histogram_CD->Integral() + Q2_histogram_FD->Integral();
+
+        //<editor-fold desc="Q2 (CD)">
+        histPlotter1D(c1, Q2_histogram_CD, normalized_Q2_plots, true, Q2_integral, "Q^{2} Histogram", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "CD", kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Q2 (FD)">
+        histPlotter1D(c1, Q2_histogram_FD, normalized_Q2_plots, true, Q2_integral, "Q^{2} Histogram", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "FD", kBlue, true, true, true);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nQ2 plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+
+    //<editor-fold desc="Other plots">
+
+    // Theta histograms
 // ====================================================================================================
 
     //<editor-fold desc="Theta histograms">
@@ -6264,6 +6434,7 @@ void EventAnalyser() {
         cout << "\n\nInclusive plots are disabled by user.\n\n";
     }
     //</editor-fold>
+    //</editor-fold>
 
     //</editor-fold>
 
@@ -6426,6 +6597,8 @@ void EventAnalyser() {
     myLogFile << "Event counts\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
+    myLogFile << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
+    myLogFile << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
     myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_1e << "\n";
     myLogFile << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
@@ -6457,6 +6630,8 @@ void EventAnalyser() {
 
     cout << "-- Event counts -----------------------------------------------------------\n";
     cout << "Total #(events):\t\t" << num_of_events << "\n";
+    cout << "#(events) w/ e in CD:\t" << num_of_events_e_CD << "\n";
+    cout << "#(events) w/ e in FD:\t" << num_of_events_e_FD << "\n";
     cout << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
     cout << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
