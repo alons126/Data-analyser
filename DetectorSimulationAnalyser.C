@@ -496,7 +496,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Vertex cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Vertex cuts ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Vertex cuts">
 
@@ -533,7 +533,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Histogram limits ---------------------------------------------------------------------------------------------------------------------------------------------------
+// Histogram limits -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Histogram limits">
 
@@ -1060,7 +1060,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Saving settings to log file -------------------------------------------------------------------------------------------------------------------------------------------
+// Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving settings to log file">
     if (delete_txt_files == true) {
@@ -1228,18 +1228,20 @@ void EventAnalyser() {
 // Beta VS P histograms -------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
-//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
-//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
-    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
-    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
 
+    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
 //    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
 //    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
-    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
-    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
     //</editor-fold>
 
-// Chi2 plots -------------------------------------------------------------------------------
+// Chi2 plots -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
 
@@ -1296,7 +1298,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Vertex plots -------------------------------------------------------------------------------
+// Vertex plots ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Vertex plots">
 
@@ -1425,7 +1427,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Older plots ----------------------------------------------------------------------------------------
+// Older plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Older plots">
 
@@ -2115,7 +2117,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// List definition ---------------------------------------------------------------------------------
+// List definition ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     TList *plots = new TList();
 
