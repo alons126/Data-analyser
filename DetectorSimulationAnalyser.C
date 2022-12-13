@@ -72,7 +72,7 @@ void EventAnalyser() {
     //<editor-fold desc="Particle masses">
     double m_e = 0.00051099895; // electron mass (in GeV)
     double m_p = 0.93827208816; // proton mass (in GeV)
-    double m_n = 0.93956542052; // proton mass (in GeV)
+    double m_n = 0.93956542052; // neutron mass (in GeV)
     double m_pizero = 0.1349768; // pizero mass (in GeV)
     double m_piplus = 0.13957039; // piplus mass (in GeV)
     double m_piminus = m_piplus; // piminus mass (in GeV)
@@ -1324,8 +1324,8 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 histograms">
     THStack *Q2_Stack = new THStack("Q^{2} stack (CD & FD)", "Q^{2} Histogram (no #(electrons) cut, CD & FD);Q^{2} [GeV^{2}];");
 
-    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, -Ev * 1.1, Ev * 1.1);
-    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, -Ev * 1.1, Ev * 1.1);
+    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
+    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
 //    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
 //    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
     //</editor-fold>
