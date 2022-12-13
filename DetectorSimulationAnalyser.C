@@ -1060,161 +1060,6 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Saving settings to log file">
-    if (delete_txt_files == true) {
-        system("find ./plots -type f -iname '*.txt' -delete"); // Delete existing .txt files
-    }
-
-//    system("[ -d '/home/alon/project/plots/theta_histograms' ] && echo 'Directory /home/alon/project/plots/theta_histograms exists.'");
-
-    ofstream myLogFile;
-
-    myLogFile.open("./plots/Run_log.txt");
-
-    myLogFile << "///////////////////////////////////////////////////////////////////////////\n";
-    myLogFile << "// Run was with '" << file_name << "' settings mode\n";
-    myLogFile << "// Input file was " << LoadedInput << "\n";
-    myLogFile << "// Code version was " << Ver << "\n";
-    myLogFile << "// Analysis mode was 'Detector simulation'\n";
-    myLogFile << "///////////////////////////////////////////////////////////////////////////\n\n";
-    myLogFile << "Code ran with the following settings:" << "\n\n\n";
-
-    myLogFile << "Input\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "LoadedInput: " << LoadedInput << "\n";
-    myLogFile << "filePath: " << filePath << "\n";
-    myLogFile << "fileInput: " << fileInput << "\n";
-    myLogFile << "plotsInput: " << plotsInput << "\n\n\n";
-//
-//    myLogFile << "FSI settings\n";
-//    myLogFile << "===========================================================================\n";
-////    myLogFile << "FSI_status = " << BoolToString(FSI_status) << "\n";
-//    myLogFile << "\n";
-//    myLogFile << "\n";
-//
-    myLogFile << "Plot settings\n";
-    myLogFile << "===========================================================================\n";
-//    myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
-    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
-
-    myLogFile << "Calculation settings\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
-    myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
-    myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n\n";
-    myLogFile << "BEnergyToNucleusCon = " << BoolToString(BEnergyToNucleusCon) << "\n";
-    myLogFile << "BEnergyToNucleus = " << BEnergyToNucleus << "\n";
-    myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
-    myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
-    myLogFile << "m_e = " << m_e << "\n";
-    myLogFile << "Ev = " << Ev << "\n";
-    myLogFile << "Pv = " << Pv << "\n";
-    myLogFile << "Pvx = " << Pvx << "\n";
-    myLogFile << "Pvy = " << Pvy << "\n";
-    myLogFile << "Pvz = " << Pvz << "\n\n\n";
-
-    myLogFile << "Plot selector\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "Theta_plots = " << BoolToString(Theta_plots) << "\n";
-    myLogFile << "Phi_plots = " << BoolToString(Phi_plots) << "\n";
-    myLogFile << "Energy_histogram_plots = " << BoolToString(Energy_histogram_plots) << "\n";
-    myLogFile << "ET_all_plots = " << BoolToString(ET_all_plots) << "\n";
-    myLogFile << "ET_QEL_plots = " << BoolToString(ET_QEL_plots) << "\n";
-    myLogFile << "ET_MEC_plots = " << BoolToString(ET_MEC_plots) << "\n";
-    myLogFile << "ET_RES_plots = " << BoolToString(ET_RES_plots) << "\n";
-    myLogFile << "ET_DIS_plots = " << BoolToString(ET_DIS_plots) << "\n";
-    myLogFile << "inclusive_plots = " << BoolToString(inclusive_plots) << "\n";
-    myLogFile << "E_cal_plots = " << BoolToString(E_cal_plots) << "\n";
-    myLogFile << "other_E_cal_plots = " << BoolToString(other_E_cal_plots) << "\n";
-    myLogFile << "momentum_plots = " << BoolToString(momentum_plots) << "\n";
-    myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n\n";
-
-    myLogFile << "Normalization settings\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "normalized_theta_lp_plots = " << BoolToString(normalized_theta_lp_plots) << "\n";
-    myLogFile << "normalized_E_lp_plots = " << BoolToString(normalized_E_lp_plots) << "\n";
-    myLogFile << "normalized_E_Trans15_plots = " << BoolToString(normalized_E_Trans15_plots) << "\n";
-    myLogFile << "normalized_E_cal_plots = " << BoolToString(normalized_E_cal_plots) << "\n";
-    myLogFile << "normalized_inclusive_plots = " << BoolToString(normalized_inclusive_plots) << "\n\n\n";
-
-    myLogFile << "Delete settings\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
-    myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n\n";
-
-    myLogFile << "Momentum thresholds (2p)\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "P_lp_upper_lim_2p = " << P_lp_upper_lim_2p << "\n";
-    myLogFile << "P_lp_lower_lim_2p = " << P_lp_lower_lim_2p << "\n";
-    myLogFile << "P_p1_upper_lim_2p = " << P_p1_upper_lim_2p << "\n";
-    myLogFile << "P_p1_lower_lim_2p = " << P_p1_lower_lim_2p << "\n";
-    myLogFile << "P_p2_upper_lim_2p = " << P_p2_upper_lim_2p << "\n";
-    myLogFile << "P_p2_lower_lim_2p = " << P_p2_lower_lim_2p << "\n\n\n";
-
-    myLogFile << "Momentum thresholds (1n1p)\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "P_lp_upper_lim_1n1p = " << P_lp_upper_lim_1n1p << "\n";
-    myLogFile << "P_lp_lower_lim_1n1p = " << P_lp_lower_lim_1n1p << "\n";
-    myLogFile << "P_p_upper_lim_1n1p = " << P_p_upper_lim_1n1p << "\n";
-    myLogFile << "P_p_lower_lim_1n1p = " << P_p_lower_lim_1n1p << "\n";
-    myLogFile << "P_n_upper_lim_1n1p = " << P_n_upper_lim_1n1p << "\n";
-    myLogFile << "P_n_lower_lim_1n1p = " << P_n_lower_lim_1n1p << "\n\n\n";
-
-    myLogFile << "Momentum thresholds (2p, MicroBooNE)\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "P_lp_upper_lim_MicroBooNE = " << P_lp_upper_lim_MicroBooNE << "\n";
-    myLogFile << "P_lp_lower_lim_MicroBooNE = " << P_lp_lower_lim_MicroBooNE << "\n";
-    myLogFile << "P_L_upper_lim_MicroBooNE = " << P_L_upper_lim_MicroBooNE << "\n";
-    myLogFile << "P_L_lower_lim_MicroBooNE = " << P_L_lower_lim_MicroBooNE << "\n";
-    myLogFile << "P_R_upper_lim_MicroBooNE = " << P_R_upper_lim_MicroBooNE << "\n";
-    myLogFile << "P_R_lower_lim_MicroBooNE = " << P_R_lower_lim_MicroBooNE << "\n";
-    myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n\n\n";
-
-    myLogFile << "Chi2 cuts\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
-    myLogFile << "Chi2_Electron_1e_mean_CD = " << Chi2_Electron_1e_mean_CD << "\n";
-    myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
-    myLogFile << "Chi2_Electron_1e_mean_FD = " << Chi2_Electron_1e_mean_FD << "\n\n";
-
-    myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
-    myLogFile << "Chi2_Proton_1e_mean_CD = " << Chi2_Proton_1e_mean_CD << "\n";
-    myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
-    myLogFile << "Chi2_Proton_1e_mean_FD = " << Chi2_Proton_1e_mean_FD << "\n\n\n";
-
-    myLogFile << "Vertex cuts\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "Vertex_Electron_cut_CD = " << Vertex_Electron_cut_CD << "\n";
-    myLogFile << "Vertex_Electron_1e_mean_CD = " << Vertex_Electron_1e_mean_CD << "\n";
-    myLogFile << "Vertex_Electron_cut_FD = " << Vertex_Electron_cut_FD << "\n";
-    myLogFile << "Vertex_Electron_1e_mean_FD = " << Vertex_Electron_1e_mean_FD << "\n\n";
-
-    myLogFile << "Vertex_Proton_cut_CD = " << Vertex_Proton_cut_CD << "\n";
-    myLogFile << "Vertex_Proton_1e_mean_CD = " << Vertex_Proton_1e_mean_CD << "\n";
-    myLogFile << "Vertex_Proton_cut_FD = " << Vertex_Proton_cut_FD << "\n";
-    myLogFile << "Vertex_Proton_1e_mean_FD = " << Vertex_Proton_1e_mean_FD << "\n\n\n";
-
-    myLogFile << "dV cuts\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "dVx_cut_CD = " << dVx_cut_CD << "\n";
-    myLogFile << "dVx_mean_CD = " << dVx_mean_CD << "\n";
-    myLogFile << "dVy_cut_CD = " << dVy_cut_CD << "\n";
-    myLogFile << "dVy_mean_CD = " << dVy_mean_CD << "\n";
-    myLogFile << "dVz_cut_CD = " << dVz_cut_CD << "\n";
-    myLogFile << "dVz_mean_CD = " << dVz_mean_CD << "\n\n";
-
-    myLogFile << "dVx_cut_FD = " << dVx_cut_FD << "\n";
-    myLogFile << "dVx_mean_FD = " << dVx_mean_FD << "\n";
-    myLogFile << "dVy_cut_FD = " << dVy_cut_FD << "\n";
-    myLogFile << "dVy_mean_FD = " << dVy_mean_FD << "\n";
-    myLogFile << "dVz_cut_FD = " << dVz_cut_FD << "\n";
-    myLogFile << "dVz_mean_FD = " << dVz_mean_FD << "\n\n\n";
-
-    myLogFile.close();
-    //</editor-fold>
-
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -1228,13 +1073,13 @@ void EventAnalyser() {
 // Beta VS P histograms -------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
-    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
-    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
 //    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
 //    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
 
-    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
-    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 10);
+    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
+    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
 //    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
 //    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
 //    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
@@ -1303,99 +1148,99 @@ void EventAnalyser() {
     //<editor-fold desc="Vertex plots">
 
     //<editor-fold desc="Vertex plots (no #(electrons) cut)">
-    THStack *Vertex_Electron_Vx_Stack = new THStack("Electron V_{x} (CD & FD)", "Electron V_{x} (CD & FD);Electron V_{x};");
-    THStack *Vertex_Electron_Vy_Stack = new THStack("Electron V_{y} (CD & FD)", "Electron V_{y} (CD & FD);Electron V_{y};");
-    THStack *Vertex_Electron_Vz_Stack = new THStack("Electron V_{z} (CD & FD)", "Electron V_{z} (CD & FD);Electron V_{z};");
-    THStack *Vertex_Proton_Vx_Stack = new THStack("Proton V_{x} (CD & FD)", "Proton V_{x} (CD & FD);Proton V_{x};");
-    THStack *Vertex_Proton_Vy_Stack = new THStack("Proton V_{y} (CD & FD)", "Proton V_{y} (CD & FD);Proton V_{y};");
-    THStack *Vertex_Proton_Vz_Stack = new THStack("Proton V_{z} (CD & FD)", "Proton V_{z} (CD & FD);Proton V_{z};");
+    THStack *Vertex_Electron_Vx_Stack = new THStack("Electron V_{x} (CD & FD)", "Electron V_{x} (CD & FD);Electron V_{x} [];");
+    THStack *Vertex_Electron_Vy_Stack = new THStack("Electron V_{y} (CD & FD)", "Electron V_{y} (CD & FD);Electron V_{y} [];");
+    THStack *Vertex_Electron_Vz_Stack = new THStack("Electron V_{z} (CD & FD)", "Electron V_{z} (CD & FD);Electron V_{z} [];");
+    THStack *Vertex_Proton_Vx_Stack = new THStack("Proton V_{x} (CD & FD)", "Proton V_{x} (CD & FD);Proton V_{x} [];");
+    THStack *Vertex_Proton_Vy_Stack = new THStack("Proton V_{y} (CD & FD)", "Proton V_{y} (CD & FD);Proton V_{y} [];");
+    THStack *Vertex_Proton_Vz_Stack = new THStack("Proton V_{z} (CD & FD)", "Proton V_{z} (CD & FD);Proton V_{z} [];");
 
-    TH1D *Vertex_Electron_Vx_CD = new TH1D("Electron V_{x} (no #(electrons) cut, CD)", "Electron V_{x} (no #(electrons) cut, Central Detector);Electron V_{x};",
+    TH1D *Vertex_Electron_Vx_CD = new TH1D("Electron V_{x} (no #(electrons) cut, CD)", "Electron V_{x} (no #(electrons) cut, Central Detector);Electron V_{x} [];",
                                            100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_Vy_CD = new TH1D("Electron V_{y} (no #(electrons) cut, CD)", "Electron V_{y} (no #(electrons) cut, Central Detector);Electron V_{y};",
+    TH1D *Vertex_Electron_Vy_CD = new TH1D("Electron V_{y} (no #(electrons) cut, CD)", "Electron V_{y} (no #(electrons) cut, Central Detector);Electron V_{y} [];",
                                            100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_Vz_CD = new TH1D("Electron V_{z} (no #(electrons) cut, CD)", "Electron V_{z} (no #(electrons) cut, Central Detector);Electron V_{z};",
+    TH1D *Vertex_Electron_Vz_CD = new TH1D("Electron V_{z} (no #(electrons) cut, CD)", "Electron V_{z} (no #(electrons) cut, Central Detector);Electron V_{z} [];",
                                            100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_Vx_FD = new TH1D("Electron V_{x} (no #(electrons) cut, FD)", "Electron V_{x} (no #(electrons) cut, Central Detector);Electron V_{x};",
+    TH1D *Vertex_Electron_Vx_FD = new TH1D("Electron V_{x} (no #(electrons) cut, FD)", "Electron V_{x} (no #(electrons) cut, Central Detector);Electron V_{x} [];",
                                            100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_Vy_FD = new TH1D("Electron V_{y} (no #(electrons) cut, FD)", "Electron V_{y} (no #(electrons) cut, Central Detector);Electron V_{y};",
+    TH1D *Vertex_Electron_Vy_FD = new TH1D("Electron V_{y} (no #(electrons) cut, FD)", "Electron V_{y} (no #(electrons) cut, Central Detector);Electron V_{y} [];",
                                            100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_Vz_FD = new TH1D("Electron V_{z} (no #(electrons) cut, FD)", "Electron V_{z} (no #(electrons) cut, Central Detector);Electron V_{z};",
+    TH1D *Vertex_Electron_Vz_FD = new TH1D("Electron V_{z} (no #(electrons) cut, FD)", "Electron V_{z} (no #(electrons) cut, Central Detector);Electron V_{z} [];",
                                            100, Vertex_lower_lim, Vertex_upper_lim);
 
-    TH1D *Vertex_Proton_Vx_CD = new TH1D("Proton V_{x} (no #(Protons) cut, CD)", "Proton V_{x} (no #(Protons) cut, Central Detector);Proton V_{x};",
+    TH1D *Vertex_Proton_Vx_CD = new TH1D("Proton V_{x} (no #(Protons) cut, CD)", "Proton V_{x} (no #(Protons) cut, Central Detector);Proton V_{x} [];",
                                          100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_Vy_CD = new TH1D("Proton V_{y} (no #(Protons) cut, CD)", "Proton V_{y} (no #(Protons) cut, Central Detector);Proton V_{y};",
+    TH1D *Vertex_Proton_Vy_CD = new TH1D("Proton V_{y} (no #(Protons) cut, CD)", "Proton V_{y} (no #(Protons) cut, Central Detector);Proton V_{y} [];",
                                          100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_Vz_CD = new TH1D("Proton V_{z} (no #(Protons) cut, CD)", "Proton V_{z} (no #(Protons) cut, Central Detector);Proton V_{z};",
+    TH1D *Vertex_Proton_Vz_CD = new TH1D("Proton V_{z} (no #(Protons) cut, CD)", "Proton V_{z} (no #(Protons) cut, Central Detector);Proton V_{z} [];",
                                          100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_Vx_FD = new TH1D("Proton V_{x} (no #(Protons) cut, FD)", "Proton V_{x} (no #(Protons) cut, Central Detector);Proton V_{x};",
+    TH1D *Vertex_Proton_Vx_FD = new TH1D("Proton V_{x} (no #(Protons) cut, FD)", "Proton V_{x} (no #(Protons) cut, Central Detector);Proton V_{x} [];",
                                          100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_Vy_FD = new TH1D("Proton V_{y} (no #(Protons) cut, FD)", "Proton V_{y} (no #(Protons) cut, Central Detector);Proton V_{y};",
+    TH1D *Vertex_Proton_Vy_FD = new TH1D("Proton V_{y} (no #(Protons) cut, FD)", "Proton V_{y} (no #(Protons) cut, Central Detector);Proton V_{y} [];",
                                          100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_Vz_FD = new TH1D("Proton V_{z} (no #(Protons) cut, FD)", "Proton V_{z} (no #(Protons) cut, Central Detector);Proton V_{z};",
+    TH1D *Vertex_Proton_Vz_FD = new TH1D("Proton V_{z} (no #(Protons) cut, FD)", "Proton V_{z} (no #(Protons) cut, Central Detector);Proton V_{z} [];",
                                          100, Vertex_lower_lim, Vertex_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots (1e only)">
-    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("Electron V_{x} (1e only, CD & FD)", "Electron V_{x} (1e only, CD & FD);Electron V_{x};");
-    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("Electron V_{y} (1e only, CD & FD)", "Electron V_{y} (1e only, CD & FD);Electron V_{y};");
-    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("Electron V_{z} (1e only, CD & FD)", "Electron V_{z} (1e only, CD & FD);Electron V_{z};");
-    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("Proton V_{x} (1e only, CD & FD)", "Proton V_{x} (1e only, CD & FD);Proton V_{x};");
-    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("Proton V_{y} (1e only, CD & FD)", "Proton V_{y} (1e only, CD & FD);Proton V_{y};");
-    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("Proton V_{z} (1e only, CD & FD)", "Proton V_{z} (1e only, CD & FD);Proton V_{z};");
+    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("Electron V_{x} (1e only, CD & FD)", "Electron V_{x} (1e only, CD & FD);Electron V_{x} [];");
+    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("Electron V_{y} (1e only, CD & FD)", "Electron V_{y} (1e only, CD & FD);Electron V_{y} [];");
+    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("Electron V_{z} (1e only, CD & FD)", "Electron V_{z} (1e only, CD & FD);Electron V_{z} [];");
+    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("Proton V_{x} (1e only, CD & FD)", "Proton V_{x} (1e only, CD & FD);Proton V_{x} [];");
+    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("Proton V_{y} (1e only, CD & FD)", "Proton V_{y} (1e only, CD & FD);Proton V_{y} [];");
+    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("Proton V_{z} (1e only, CD & FD)", "Proton V_{z} (1e only, CD & FD);Proton V_{z} [];");
 
-    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("Electron V_{x} (1e only, CD)", "Electron V_{x} (1e only, Central Detector);Electron V_{x};",
+    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("Electron V_{x} (1e only, CD)", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [];",
                                               100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("Electron V_{y} (1e only, CD)", "Electron V_{y} (1e only, Central Detector);Electron V_{y};",
+    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("Electron V_{y} (1e only, CD)", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [];",
                                               100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("Electron V_{z} (1e only, CD)", "Electron V_{z} (1e only, Central Detector);Electron V_{z};",
+    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("Electron V_{z} (1e only, CD)", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [];",
                                               100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("Electron V_{x} (1e only, FD)", "Electron V_{x} (1e only, Forward Detector);Electron V_{x};",
+    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("Electron V_{x} (1e only, FD)", "Electron V_{x} (1e only, Forward Detector);Electron V_{x} [];",
                                               100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("Electron V_{y} (1e only, FD)", "Electron V_{y} (1e only, Forward Detector);Electron V_{y};",
+    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("Electron V_{y} (1e only, FD)", "Electron V_{y} (1e only, Forward Detector);Electron V_{y} [];",
                                               100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("Electron V_{z} (1e only, FD)", "Electron V_{z} (1e only, Forward Detector);Electron V_{z};",
+    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("Electron V_{z} (1e only, FD)", "Electron V_{z} (1e only, Forward Detector);Electron V_{z} [];",
                                               100, Vertex_lower_lim, Vertex_upper_lim);
 
-    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("Proton V_{x} (1e only, CD)", "Proton V_{x} (1e only, Central Detector);Proton V_{x};",
+    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("Proton V_{x} (1e only, CD)", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [];",
                                             100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("Proton V_{y} (1e only, CD)", "Proton V_{y} (1e only, Central Detector);Proton V_{y};",
+    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("Proton V_{y} (1e only, CD)", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [];",
                                             100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("Proton V_{z} (1e only, CD)", "Proton V_{z} (1e only, Central Detector);Proton V_{z};",
+    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("Proton V_{z} (1e only, CD)", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [];",
                                             100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("Proton V_{x} (1e only, FD)", "Proton V_{x} (1e only, Forward Detector);Proton V_{x};",
+    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("Proton V_{x} (1e only, FD)", "Proton V_{x} (1e only, Forward Detector);Proton V_{x} [];",
                                             100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("Proton V_{y} (1e only, FD)", "Proton V_{y} (1e only, Forward Detector);Proton V_{y};",
+    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("Proton V_{y} (1e only, FD)", "Proton V_{y} (1e only, Forward Detector);Proton V_{y} [];",
                                             100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("Proton V_{z} (1e only, FD)", "Proton V_{z} (1e only, Forward Detector);Proton V_{z};",
+    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("Proton V_{z} (1e only, FD)", "Proton V_{z} (1e only, Forward Detector);Proton V_{z} [];",
                                             100, Vertex_lower_lim, Vertex_upper_lim);
 
     //<editor-fold desc="Vertex plots (1e only) - test">
-    TH1D *Vertex_Electron_1e_test_Vx_CD = new TH1D("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x};",
+    TH1D *Vertex_Electron_1e_test_Vx_CD = new TH1D("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [];",
                                                    100, -1.5 * Vertex_Electron_cut_CD, 1.5 * Vertex_Electron_cut_CD);
-    TH1D *Vertex_Electron_1e_test_Vy_CD = new TH1D("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y};",
+    TH1D *Vertex_Electron_1e_test_Vy_CD = new TH1D("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [];",
                                                    100, -1.5 * Vertex_Electron_cut_CD, 1.5 * Vertex_Electron_cut_CD);
-    TH1D *Vertex_Electron_1e_test_Vz_CD = new TH1D("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z};",
+    TH1D *Vertex_Electron_1e_test_Vz_CD = new TH1D("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [];",
                                                    100, -1.5 * Vertex_Electron_cut_CD, 1.5 * Vertex_Electron_cut_CD);
-    TH1D *Vertex_Electron_1e_test_Vx_FD = new TH1D("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x};",
+    TH1D *Vertex_Electron_1e_test_Vx_FD = new TH1D("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [];",
                                                    100, -1.5 * Vertex_Electron_cut_FD, 1.5 * Vertex_Electron_cut_FD);
-    TH1D *Vertex_Electron_1e_test_Vy_FD = new TH1D("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y};",
+    TH1D *Vertex_Electron_1e_test_Vy_FD = new TH1D("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [];",
                                                    100, -1.5 * Vertex_Electron_cut_FD, 1.5 * Vertex_Electron_cut_FD);
-    TH1D *Vertex_Electron_1e_test_Vz_FD = new TH1D("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z};",
+    TH1D *Vertex_Electron_1e_test_Vz_FD = new TH1D("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [];",
                                                    100, -1.5 * Vertex_Electron_cut_FD, 1.5 * Vertex_Electron_cut_FD);
 
-    TH1D *Vertex_Proton_1e_test_Vx_CD = new TH1D("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x};",
+    TH1D *Vertex_Proton_1e_test_Vx_CD = new TH1D("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [];",
                                                  100, -1.5 * Vertex_Proton_cut_CD, 1.5 * Vertex_Proton_cut_CD);
-    TH1D *Vertex_Proton_1e_test_Vy_CD = new TH1D("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y};",
+    TH1D *Vertex_Proton_1e_test_Vy_CD = new TH1D("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [];",
                                                  100, -1.5 * Vertex_Proton_cut_CD, 1.5 * Vertex_Proton_cut_CD);
-    TH1D *Vertex_Proton_1e_test_Vz_CD = new TH1D("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z};",
+    TH1D *Vertex_Proton_1e_test_Vz_CD = new TH1D("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [];",
                                                  100, -1.5 * Vertex_Proton_cut_CD, 1.5 * Vertex_Proton_cut_CD);
-    TH1D *Vertex_Proton_1e_test_Vx_FD = new TH1D("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x};",
+    TH1D *Vertex_Proton_1e_test_Vx_FD = new TH1D("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [];",
                                                  100, -1.5 * Vertex_Proton_cut_FD, 1.5 * Vertex_Proton_cut_FD);
-    TH1D *Vertex_Proton_1e_test_Vy_FD = new TH1D("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y};",
+    TH1D *Vertex_Proton_1e_test_Vy_FD = new TH1D("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [];",
                                                  100, -1.5 * Vertex_Proton_cut_FD, 1.5 * Vertex_Proton_cut_FD);
-    TH1D *Vertex_Proton_1e_test_Vz_FD = new TH1D("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z};",
+    TH1D *Vertex_Proton_1e_test_Vz_FD = new TH1D("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [];",
                                                  100, -1.5 * Vertex_Proton_cut_FD, 1.5 * Vertex_Proton_cut_FD);
     //</editor-fold>
 
@@ -1403,24 +1248,24 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex differences plots (1e only & chi2 cuts)">
     THStack *dVx_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e only & #chi^{2} cuts, CD & FD)",
-                                     "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e only & #chi^{2} cuts, CD & FD);dV_{x};");
+                                     "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e only & #chi^{2} cuts, CD & FD);dV_{x} [];");
     THStack *dVy_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e only & #chi^{2} cuts, CD & FD)",
-                                     "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e only & #chi^{2} cuts, CD & FD);dV_{y};");
+                                     "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e only & #chi^{2} cuts, CD & FD);dV_{y} [];");
     THStack *dVz_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e only & #chi^{2} cuts, CD & FD)",
-                                     "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e only & #chi^{2} cuts, CD & FD);dV_{z};");
+                                     "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e only & #chi^{2} cuts, CD & FD);dV_{z} [];");
 
-    TH1D *deltaVx_CD = new TH1D("dV_{x} (1e only & #chi^{2} cuts, CD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Central Detector);dV_{x};",
+    TH1D *deltaVx_CD = new TH1D("dV_{x} (1e only & #chi^{2} cuts, CD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Central Detector);dV_{x} [];",
                                 100, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVy_CD = new TH1D("dV_{y} (1e only & #chi^{2} cuts, CD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Central Detector);dV_{y};",
+    TH1D *deltaVy_CD = new TH1D("dV_{y} (1e only & #chi^{2} cuts, CD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Central Detector);dV_{y} [];",
                                 100, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVz_CD = new TH1D("dV_{z} (1e only & #chi^{2} cuts, CD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Central Detector);dV_{z};",
+    TH1D *deltaVz_CD = new TH1D("dV_{z} (1e only & #chi^{2} cuts, CD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Central Detector);dV_{z} [];",
                                 100, dV_lower_lim, dV_upper_lim);
 
-    TH1D *deltaVx_FD = new TH1D("dV_{x} (1e only & #chi^{2} cuts, FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Forward Detector);dV_{x};",
+    TH1D *deltaVx_FD = new TH1D("dV_{x} (1e only & #chi^{2} cuts, FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Forward Detector);dV_{x} [];",
                                 100, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVy_FD = new TH1D("dV_{y} (1e only & #chi^{2} cuts, FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Forward Detector);dV_{y};",
+    TH1D *deltaVy_FD = new TH1D("dV_{y} (1e only & #chi^{2} cuts, FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Forward Detector);dV_{y} [];",
                                 100, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVz_FD = new TH1D("dV_{z} (1e only & #chi^{2} cuts, FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Forward Detector);dV_{z};",
+    TH1D *deltaVz_FD = new TH1D("dV_{z} (1e only & #chi^{2} cuts, FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Forward Detector);dV_{z} [];",
                                 100, dV_lower_lim, dV_upper_lim);
 
     //</editor-fold>
@@ -3633,24 +3478,24 @@ void EventAnalyser() {
 
 //  dVertex (1e only) ----------------------------------------------------------------------------
 
-        //<editor-fold desc="Electron Vertex (1e only)">
-        histPlotter1D(c1, deltaVx_CD, normalized_vertex_plots, true, .1, "dV_{x}=|V^{e}_{x}-V^{p}_{x}|", "1e only", 0.06, 0.0425, 0.0425,
+        //<editor-fold desc="dVertex">
+        histPlotter1D(c1, deltaVx_CD, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVx_Stack, "dVx", "plots/Vertex_plots/Only_1e/dV_plots/", "CD", kBlue, true, true, true, false, true,
                       dVx_cut_CD, dVx_mean_CD);
-        histPlotter1D(c1, deltaVy_CD, normalized_vertex_plots, true, .1, "dV_{y}=|V^{e}_{y}-V^{p}_{y}|", "1e only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVy_CD, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "1e only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVy_Stack, "dVy", "plots/Vertex_plots/Only_1e/dV_plots/", "CD", kBlue, true, true, true, false, true,
                       dVy_cut_CD, dVy_mean_CD);
-        histPlotter1D(c1, deltaVz_CD, normalized_vertex_plots, true, .1, "dV_{z}=|V^{e}_{z}-V^{p}_{z}|", "1e only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVz_CD, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "1e only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVz_Stack, "dVz", "plots/Vertex_plots/Only_1e/dV_plots/", "CD", kBlue, true, true, true, false, true,
                       dVz_cut_CD, dVz_mean_CD);
 
-        histPlotter1D(c1, deltaVx_FD, normalized_vertex_plots, true, .1, "dV_{x}=|V^{e}_{x}-V^{p}_{x}|", "1e only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVx_FD, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVx_Stack, "dVx", "plots/Vertex_plots/Only_1e/dV_plots/", "FD", kBlue, true, true, true, false, true,
                       dVx_cut_FD, dVx_mean_FD);
-        histPlotter1D(c1, deltaVy_FD, normalized_vertex_plots, true, .1, "dV_{y}=|V^{e}_{y}-V^{p}_{y}|", "1e only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVy_FD, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "1e only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVy_Stack, "dVy", "plots/Vertex_plots/Only_1e/dV_plots/", "FD", kBlue, true, true, true, false, true,
                       dVy_cut_FD, dVy_mean_FD);
-        histPlotter1D(c1, deltaVz_FD, normalized_vertex_plots, true, .1, "dV_{z}=|V^{e}_{z}-V^{p}_{z}|", "1e only", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVz_FD, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "1e only", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVz_Stack, "dVz", "plots/Vertex_plots/Only_1e/dV_plots/", "FD", kBlue, true, true, true, false, true,
                       dVz_cut_FD, dVz_mean_FD);
         //</editor-fold>
@@ -6425,6 +6270,172 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 // Saving histogram list and finishing execution
 // ======================================================================================================================================================================
+
+// Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Saving settings to log file">
+    if (delete_txt_files == true) {
+        system("find ./plots -type f -iname '*.txt' -delete"); // Delete existing .txt files
+    }
+
+//    system("[ -d '/home/alon/project/plots/theta_histograms' ] && echo 'Directory /home/alon/project/plots/theta_histograms exists.'");
+
+    ofstream myLogFile;
+
+    myLogFile.open("./plots/Run_log.txt");
+
+    myLogFile << "///////////////////////////////////////////////////////////////////////////\n";
+    myLogFile << "// Run was with '" << file_name << "' settings mode\n";
+    myLogFile << "// Input file was " << LoadedInput << "\n";
+    myLogFile << "// Code version was " << Ver << "\n";
+    myLogFile << "// Analysis mode was 'Detector simulation'\n";
+    myLogFile << "///////////////////////////////////////////////////////////////////////////\n\n";
+    myLogFile << "Code ran with the following settings:" << "\n\n\n";
+
+    myLogFile << "Input\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "LoadedInput: " << LoadedInput << "\n";
+    myLogFile << "filePath: " << filePath << "\n";
+    myLogFile << "fileInput: " << fileInput << "\n";
+    myLogFile << "plotsInput: " << plotsInput << "\n\n\n";
+//
+//    myLogFile << "FSI settings\n";
+//    myLogFile << "===========================================================================\n";
+////    myLogFile << "FSI_status = " << BoolToString(FSI_status) << "\n";
+//    myLogFile << "\n";
+//    myLogFile << "\n";
+//
+    myLogFile << "Plot settings\n";
+    myLogFile << "===========================================================================\n";
+//    myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
+    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
+
+    myLogFile << "Calculation settings\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
+    myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
+    myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n\n";
+    myLogFile << "BEnergyToNucleusCon = " << BoolToString(BEnergyToNucleusCon) << "\n";
+    myLogFile << "BEnergyToNucleus = " << BEnergyToNucleus << "\n";
+    myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
+    myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
+    myLogFile << "m_e = " << m_e << "\n";
+    myLogFile << "Ev = " << Ev << "\n";
+    myLogFile << "Pv = " << Pv << "\n";
+    myLogFile << "Pvx = " << Pvx << "\n";
+    myLogFile << "Pvy = " << Pvy << "\n";
+    myLogFile << "Pvz = " << Pvz << "\n\n\n";
+
+    myLogFile << "Plot selector\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Theta_plots = " << BoolToString(Theta_plots) << "\n";
+    myLogFile << "Phi_plots = " << BoolToString(Phi_plots) << "\n";
+    myLogFile << "Energy_histogram_plots = " << BoolToString(Energy_histogram_plots) << "\n";
+    myLogFile << "ET_all_plots = " << BoolToString(ET_all_plots) << "\n";
+    myLogFile << "ET_QEL_plots = " << BoolToString(ET_QEL_plots) << "\n";
+    myLogFile << "ET_MEC_plots = " << BoolToString(ET_MEC_plots) << "\n";
+    myLogFile << "ET_RES_plots = " << BoolToString(ET_RES_plots) << "\n";
+    myLogFile << "ET_DIS_plots = " << BoolToString(ET_DIS_plots) << "\n";
+    myLogFile << "inclusive_plots = " << BoolToString(inclusive_plots) << "\n";
+    myLogFile << "E_cal_plots = " << BoolToString(E_cal_plots) << "\n";
+    myLogFile << "other_E_cal_plots = " << BoolToString(other_E_cal_plots) << "\n";
+    myLogFile << "momentum_plots = " << BoolToString(momentum_plots) << "\n";
+    myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n\n";
+
+    myLogFile << "Normalization settings\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "normalized_theta_lp_plots = " << BoolToString(normalized_theta_lp_plots) << "\n";
+    myLogFile << "normalized_E_lp_plots = " << BoolToString(normalized_E_lp_plots) << "\n";
+    myLogFile << "normalized_E_Trans15_plots = " << BoolToString(normalized_E_Trans15_plots) << "\n";
+    myLogFile << "normalized_E_cal_plots = " << BoolToString(normalized_E_cal_plots) << "\n";
+    myLogFile << "normalized_inclusive_plots = " << BoolToString(normalized_inclusive_plots) << "\n\n\n";
+
+    myLogFile << "Delete settings\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
+    myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n\n";
+
+    myLogFile << "Momentum thresholds (2p)\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "P_lp_upper_lim_2p = " << P_lp_upper_lim_2p << "\n";
+    myLogFile << "P_lp_lower_lim_2p = " << P_lp_lower_lim_2p << "\n";
+    myLogFile << "P_p1_upper_lim_2p = " << P_p1_upper_lim_2p << "\n";
+    myLogFile << "P_p1_lower_lim_2p = " << P_p1_lower_lim_2p << "\n";
+    myLogFile << "P_p2_upper_lim_2p = " << P_p2_upper_lim_2p << "\n";
+    myLogFile << "P_p2_lower_lim_2p = " << P_p2_lower_lim_2p << "\n\n\n";
+
+    myLogFile << "Momentum thresholds (1n1p)\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "P_lp_upper_lim_1n1p = " << P_lp_upper_lim_1n1p << "\n";
+    myLogFile << "P_lp_lower_lim_1n1p = " << P_lp_lower_lim_1n1p << "\n";
+    myLogFile << "P_p_upper_lim_1n1p = " << P_p_upper_lim_1n1p << "\n";
+    myLogFile << "P_p_lower_lim_1n1p = " << P_p_lower_lim_1n1p << "\n";
+    myLogFile << "P_n_upper_lim_1n1p = " << P_n_upper_lim_1n1p << "\n";
+    myLogFile << "P_n_lower_lim_1n1p = " << P_n_lower_lim_1n1p << "\n\n\n";
+
+    myLogFile << "Momentum thresholds (2p, MicroBooNE)\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "P_lp_upper_lim_MicroBooNE = " << P_lp_upper_lim_MicroBooNE << "\n";
+    myLogFile << "P_lp_lower_lim_MicroBooNE = " << P_lp_lower_lim_MicroBooNE << "\n";
+    myLogFile << "P_L_upper_lim_MicroBooNE = " << P_L_upper_lim_MicroBooNE << "\n";
+    myLogFile << "P_L_lower_lim_MicroBooNE = " << P_L_lower_lim_MicroBooNE << "\n";
+    myLogFile << "P_R_upper_lim_MicroBooNE = " << P_R_upper_lim_MicroBooNE << "\n";
+    myLogFile << "P_R_lower_lim_MicroBooNE = " << P_R_lower_lim_MicroBooNE << "\n";
+    myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n\n\n";
+
+    myLogFile << "Chi2 cuts\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
+    myLogFile << "Chi2_Electron_1e_mean_CD = " << Chi2_Electron_1e_mean_CD << "\n";
+    myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
+    myLogFile << "Chi2_Electron_1e_mean_FD = " << Chi2_Electron_1e_mean_FD << "\n\n";
+
+    myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
+    myLogFile << "Chi2_Proton_1e_mean_CD = " << Chi2_Proton_1e_mean_CD << "\n";
+    myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
+    myLogFile << "Chi2_Proton_1e_mean_FD = " << Chi2_Proton_1e_mean_FD << "\n\n\n";
+
+    myLogFile << "Vertex cuts\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Vertex_Electron_cut_CD = " << Vertex_Electron_cut_CD << "\n";
+    myLogFile << "Vertex_Electron_1e_mean_CD = " << Vertex_Electron_1e_mean_CD << "\n";
+    myLogFile << "Vertex_Electron_cut_FD = " << Vertex_Electron_cut_FD << "\n";
+    myLogFile << "Vertex_Electron_1e_mean_FD = " << Vertex_Electron_1e_mean_FD << "\n\n";
+
+    myLogFile << "Vertex_Proton_cut_CD = " << Vertex_Proton_cut_CD << "\n";
+    myLogFile << "Vertex_Proton_1e_mean_CD = " << Vertex_Proton_1e_mean_CD << "\n";
+    myLogFile << "Vertex_Proton_cut_FD = " << Vertex_Proton_cut_FD << "\n";
+    myLogFile << "Vertex_Proton_1e_mean_FD = " << Vertex_Proton_1e_mean_FD << "\n\n\n";
+
+    myLogFile << "dV cuts\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "dVx_cut_CD = " << dVx_cut_CD << "\n";
+    myLogFile << "dVx_mean_CD = " << dVx_mean_CD << "\n";
+    myLogFile << "dVy_cut_CD = " << dVy_cut_CD << "\n";
+    myLogFile << "dVy_mean_CD = " << dVy_mean_CD << "\n";
+    myLogFile << "dVz_cut_CD = " << dVz_cut_CD << "\n";
+    myLogFile << "dVz_mean_CD = " << dVz_mean_CD << "\n\n";
+
+    myLogFile << "dVx_cut_FD = " << dVx_cut_FD << "\n";
+    myLogFile << "dVx_mean_FD = " << dVx_mean_FD << "\n";
+    myLogFile << "dVy_cut_FD = " << dVy_cut_FD << "\n";
+    myLogFile << "dVy_mean_FD = " << dVy_mean_FD << "\n";
+    myLogFile << "dVz_cut_FD = " << dVz_cut_FD << "\n";
+    myLogFile << "dVz_mean_FD = " << dVz_mean_FD << "\n\n\n";
+
+    myLogFile << "Event counts\n";
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
+    myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
+    myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_1e << "\n";
+    myLogFile << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
+    myLogFile << "#(events) w/ 1e2X:\t\t\t" << num_of_events_1e2X << "\n";
+    myLogFile << "#(events) w/ 1e2p:\t\t\t" << num_of_events_1e2p << "\n\n\n";
+
+    myLogFile.close();
+    //</editor-fold>
+
+// Saving histogram list and finishing execution ------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving histogram list and finishing execution">
 
