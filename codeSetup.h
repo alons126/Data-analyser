@@ -305,7 +305,11 @@ std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_
 //std::string AnalyseFile = "/mnt/d/e4nu/root_data_files/Fixing SuSAv2/Julia's script/e_on_1000060120_2222MeV_em.gst.root";
 //std::string AnalyseFile = "12C_2222GeV_GEM21_11a_00_000_wfsi_mk2.root";
 
-//std::string AnalyseFileDir = "/mnt/d/e4nu/hipo_data_files/2delete/recon_c12_6gev";
+std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+//std::string AnalyseFilePath = "/mnt/d/e4nu/hipo_data_files/";
+std::string AnalyseFileSample = "recon_c12_6gev";
+//std::string AnalyseFileSample = "/recon_c12_6gev/";
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
 
 // BEnergyToNucleus definition
