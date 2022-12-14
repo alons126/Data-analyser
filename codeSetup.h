@@ -19,7 +19,7 @@ std::string Ver = "7.0b";
 
 //<editor-fold desc="Functions definitions">
 
-// todo: figure out how to add arrays to this finction
+// TODO: figure out how to add arrays to this function
 ////<editor-fold desc="MakeDirectory (old)">
 //void MakeDirectory(bool Create_Directory, std::string Parent_Folder, std::string Plots_Parent_Folder, const std::string Plots_Daughter_Folders[]) {
 ////void MakeDirectory(bool Create_Directory, std::string Parent_Folder, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folders[]) {
@@ -62,7 +62,7 @@ std::string Ver = "7.0b";
 //}
 ////</editor-fold>
 
-// todo: figure out how to clear parent content appropriately
+// TODO: figure out how to clear parent content appropriately
 //<editor-fold desc="MakeDirectory">
 void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
                    std::string Parent_Folder = "./plots") {
@@ -92,6 +92,7 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 }
 //</editor-fold>
 
+// TODO: to finish
 ////<editor-fold desc="DirectoryChecker function">
 //void DirectoryChecker(std::string Directory) {
 //    if (IsPathExist(Directory.c_str())) {
@@ -117,141 +118,7 @@ double rCalc(double x, double y, double z) {
 }
 //</editor-fold>
 
-/*
-//TODO: to finish
-//<editor-fold desc="histPlotter1D function">
-void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
-                   TH1D *Histogram1D, //The histogram
-                   bool normalize_Histogram, //Normalize histogram or not
-                   bool custom_normalization, //Normalize histogram or not
-                   double custom_normalization_factor, //Normalize histogram or not
-                   string Histogram1DTitle,
-                   string Histogram1DTitleReactions,
-                   double titleSize,
-                   double labelSizex,
-                   double labelSizey,
-                   TList *Histogram_list,
-                   int lineWidth,
-                   bool logScalePlot,
-                   bool linearScalePlot,
-                   THStack *Histogram1DStack,
-                   string Histogram1DSaveName,
-                   string Histogram1DSaveNamePath,
-                   string finalState,
-                   int kColor = 1,
-                   bool centerTitle = true,
-                   bool addToStack = false,
-                   bool showStats = true,
-                   bool title2 = false) {
-
-//  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
-
-    if (normalize_Histogram && !custom_normalization) {
-        Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram && custom_normalization) {
-        Histogram1D_integral = custom_normalization_factor;
-    }
-
-    if (normalize_Histogram) {
-        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
-        const char *HistogramTitle = title.c_str();
-        Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Probability (%)");
-        if (Histogram1D->Integral() == 0.) {
-            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
-            displayText->SetTextSize(diplayTextSize);
-            displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
-            displayText->AddText("Empty histogram");
-            Histogram1D->Draw();
-            displayText->Draw();
-        } else if (Histogram1D->Integral() != 0.) {
-            Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
-            Histogram1D->Draw();
-        }
-    } else if (!normalize_Histogram) {
-        string title;
-
-        if (title2 == false) {
-            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
-        } else {
-            title = Histogram1DTitle + " (" + finalState + ")";
-        }
-//        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
-        const char *HistogramTitle = title.c_str();
-        Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units");
-        if (Histogram1D->Integral() == 0.) {
-            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
-//            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
-            displayText->SetTextSize(diplayTextSize);
-            displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
-            displayText->AddText("Empty histogram");
-            Histogram1D->Draw();
-            displayText->Draw();
-        } else if (Histogram1D->Integral() != 0.) {
-            Histogram1D->Draw();
-        }
-    }
-
-    Histogram1D->GetXaxis()->SetTitleSize(titleSize);
-    Histogram1D->GetXaxis()->SetLabelSize(labelSizex);
-    Histogram1D->GetXaxis()->CenterTitle(centerTitle);
-    Histogram1D->GetYaxis()->SetTitleSize(titleSize);
-    Histogram1D->GetYaxis()->SetLabelSize(labelSizey);
-    Histogram1D->GetYaxis()->CenterTitle(centerTitle);
-    Histogram_list->Add(Histogram1D);
-    Histogram1D->SetLineWidth(lineWidth);
-
-    if (showStats == false) {
-        Histogram1D->SetStats(0);
-    }
-
-//    if (showStats == false) {
-//        Histogram1D->SetStats(0);
-//        gStyle->SetOptStat(000001111);
-//        gROOT->ForceStyle();
-////        gStyle->SetOptStat(111110);
-////        Histogram1D->SetOptStat(111110);
-//    } else if (showStats == true) {
-////        gStyle->SetOptStat(000001111);
-//        gStyle->SetOptStat(111110);
-//        gROOT->ForceStyle();
-//    }
-
-    if (logScalePlot) {
-        Histogram1DCanvas->SetLogy(1);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
-        const char *SaveDir = Histogram1DSaveNameDir.c_str();
-        Histogram1DCanvas->SaveAs(SaveDir);
-    }
-
-    if (linearScalePlot) {
-        Histogram1DCanvas->SetLogy(0);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
-        const char *SaveDir = Histogram1DSaveNameDir.c_str();
-        Histogram1DCanvas->SaveAs(SaveDir);
-    }
-
-    if (addToStack) {
-        Histogram1D->SetLineColor(kColor);
-        Histogram1D->SetStats(0);
-        Histogram1DStack->Add(Histogram1D);
-    }
-
-    Histogram1DCanvas->Clear();
-
-}
-//</editor-fold>
-*/
-
-//TODO: to finish
+// TODO: to finish
 //<editor-fold desc="histPlotter1D function">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
@@ -415,148 +282,6 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 }
 //</editor-fold>
 
-/*
-//TODO: to finish
-//<editor-fold desc="Chi2Plotter1D function">
-void Chi2Plotter1D(TCanvas *Histogram1DCanvas, //The canvas
-                   TH1D *Histogram1D, //The histogram
-                   bool normalize_Histogram, //Normalize histogram or not
-                   bool custom_normalization, //Normalize histogram or not
-                   double custom_normalization_factor, //Normalize histogram or not
-                   string Histogram1DTitle,
-                   string Histogram1DTitleReactions,
-                   double titleSize,
-                   double labelSizex,
-                   double labelSizey,
-                   TList *Histogram_list,
-                   int lineWidth,
-                   bool logScalePlot,
-                   bool linearScalePlot,
-                   THStack *Histogram1DStack,
-                   string Histogram1DSaveName,
-                   string Histogram1DSaveNamePath,
-                   string finalState,
-                   int kColor = 1,
-                   double Chi2_cut,
-                   double Chi2_mean,
-                   bool centerTitle = true,
-                   bool addToStack = false,
-                   bool showStats = true,
-                   bool title2 = false) {
-
-//  Normalization factor:
-    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
-
-    if (normalize_Histogram && !custom_normalization) {
-        Histogram1D_integral = Histogram1D->Integral();
-    } else if (normalize_Histogram && custom_normalization) {
-        Histogram1D_integral = custom_normalization_factor;
-    }
-
-    if (normalize_Histogram) {
-        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
-        const char *HistogramTitle = title.c_str();
-        Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Probability (%)");
-        if (Histogram1D->Integral() == 0.) {
-            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
-            displayText->SetTextSize(diplayTextSize);
-            displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
-            displayText->AddText("Empty histogram");
-            Histogram1D->Draw();
-            displayText->Draw();
-        } else if (Histogram1D->Integral() != 0.) {
-            Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
-            Histogram1D->Draw();
-        }
-    } else if (!normalize_Histogram) {
-        string title;
-
-        if (title2 == false) {
-            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
-        } else {
-            title = Histogram1DTitle + " (" + finalState + ")";
-        }
-//        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
-        const char *HistogramTitle = title.c_str();
-        Histogram1D->SetTitle(HistogramTitle);
-        Histogram1D->GetYaxis()->SetTitle("Arbitrary units");
-        if (Histogram1D->Integral() == 0.) {
-            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
-//            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
-            displayText->SetTextSize(diplayTextSize);
-            displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
-            displayText->AddText("Empty histogram");
-            Histogram1D->Draw();
-            displayText->Draw();
-        } else if (Histogram1D->Integral() != 0.) {
-            Histogram1D->Draw();
-        }
-    }
-
-    Histogram1D->GetXaxis()->SetTitleSize(titleSize);
-    Histogram1D->GetXaxis()->SetLabelSize(labelSizex);
-    Histogram1D->GetXaxis()->CenterTitle(centerTitle);
-    Histogram1D->GetYaxis()->SetTitleSize(titleSize);
-    Histogram1D->GetYaxis()->SetLabelSize(labelSizey);
-    Histogram1D->GetYaxis()->CenterTitle(centerTitle);
-    Histogram_list->Add(Histogram1D);
-    Histogram1D->SetLineWidth(lineWidth);
-
-    if (showStats == false) {
-        Histogram1D->SetStats(0);
-    }
-
-//    if (showStats == false) {
-//        Histogram1D->SetStats(0);
-//        gStyle->SetOptStat(000001111);
-//        gROOT->ForceStyle();
-////        gStyle->SetOptStat(111110);
-////        Histogram1D->SetOptStat(111110);
-//    } else if (showStats == true) {
-////        gStyle->SetOptStat(000001111);
-//        gStyle->SetOptStat(111110);
-//        gROOT->ForceStyle();
-//    }
-
-    if (logScalePlot) {
-        Histogram1DCanvas->SetLogy(1);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
-        const char *SaveDir = Histogram1DSaveNameDir.c_str();
-        Histogram1DCanvas->SaveAs(SaveDir);
-    }
-
-    if (linearScalePlot) {
-        Histogram1DCanvas->SetLogy(0);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
-        const char *SaveDir = Histogram1DSaveNameDir.c_str();
-        Histogram1DCanvas->SaveAs(SaveDir);
-    }
-
-    if (addToStack) {
-        Histogram1D->SetLineColor(kColor);
-        Histogram1D->SetStats(0);
-        Histogram1DStack->Add(Histogram1D);
-    }
-
-    Histogram1DCanvas->Clear();
-
-}
-//</editor-fold>
-*/
-
-//TODO:
-//<editor-fold desc="histPlotter2D function">
-//void histPlotter2D(double x, double y, double z) {
-//}
-//</editor-fold>
-
 //</editor-fold>
 
 
@@ -565,29 +290,31 @@ void Chi2Plotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
 // path definitions -----------------------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="path definitions">
 std::string plots_path = "./plots/";
 std::string plots_file_type = "_plots.root";
+//</editor-fold>
 
 // file_name definitions and selection ----------------------------------------------------------------------------------------------------------------------------------
 
 std::string file_name = "general_file";
 //std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
 
-std::string AnalyseFile = "/mnt/d/NRG/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
+std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
 //std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
-//std::string AnalyseFile = "/mnt/d/NRG/root_data_files/Fixing SuSAv2/Julia's script/e_on_1000060120_2222MeV_em.gst.root";
+//std::string AnalyseFile = "/mnt/d/e4nu/root_data_files/Fixing SuSAv2/Julia's script/e_on_1000060120_2222MeV_em.gst.root";
 //std::string AnalyseFile = "12C_2222GeV_GEM21_11a_00_000_wfsi_mk2.root";
 
-//std::string AnalyseFileDir = "/mnt/d/NRG/hipo_data_files/2delete/recon_c12_6gev";
+//std::string AnalyseFileDir = "/mnt/d/e4nu/hipo_data_files/2delete/recon_c12_6gev";
 
 
-// BEnergyToNucleus definition ------------------------------------------------------------------------------------------------------------------------------------------
+// BEnergyToNucleus definition
 // ======================================================================================================================================================================
 
 double BEnergyToNucleus;
 
 
-// Simulation parameters extraction -------------------------------------------------------------------------------------------------------------------------------------
+// Simulation parameters extraction
 // ======================================================================================================================================================================
 
 int Target_pdg, Probe_pdg;
