@@ -66,8 +66,8 @@ void EventAnalyser() {
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
     //</editor-fold>
 
-    //<editor-fold desc="Set initial energy (Ev) and momentum (Pv) of incoming lepton">
-    double Ev; // electron energy declaration
+    //<editor-fold desc="Set beam energy (beamE)">
+    double beamE; // electron energy declaration
 
     //<editor-fold desc="Particle masses">
 //    double m_e = 0.00051099895; // electron mass (in GeV)
@@ -82,10 +82,10 @@ void EventAnalyser() {
     //</editor-fold>
 
     if (fileInput == "recon_c12_6gev.hipo") {
-        Ev = 5.98636;
+        beamE = 5.98636;
     }
 
-//    double Pv = sqrt(Ev * Ev - m_e * m_e);
+//    double Pv = sqrt(beamE * beamE - m_e * m_e);
 //    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
 //    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
 //    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
@@ -104,7 +104,7 @@ void EventAnalyser() {
     cout << "Settings mode:\t'" << file_name << "'\n";
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n\n";
-    cout << "Ev:\t\t" << Ev << "\n\n\n";
+    cout << "beamE:\t\t" << beamE << "\n\n\n";
 //    cout << "Pv:\t\t" << Pv << "\n";
 //    cout << "Pvx:\t\t" << Pvx << "\n";
 //    cout << "Pvy:\t\t" << Pvy << "\n";
@@ -279,7 +279,7 @@ void EventAnalyser() {
 ////                Target_nucleus = "Unknown";
 ////        }
 ////
-////        BeamEnergy = Ev;
+////        BeamEnergy = beamE;
 ////        //</editor-fold>
 //
 ////        //<editor-fold desc="Probe selector">
@@ -1112,17 +1112,17 @@ void EventAnalyser() {
 // Beta VS P histograms -------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
-    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
-    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
-//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
-//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
 
-    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
-    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 8);
-//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
-//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 2);
-//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
-//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, Ev * 1.1, 250, 0, 1.5);
+    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
+//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
+//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
+//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
     //</editor-fold>
 
 // Chi2 plots -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1325,10 +1325,10 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 histograms">
     THStack *Q2_Stack = new THStack("Q^{2} stack (CD & FD)", "Q^{2} Histogram (no #(electrons) cut, CD & FD);Q^{2} [GeV^{2}];");
 
-    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
-    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
-//    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
-//    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, Ev * 1.1);
+    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+//    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+//    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
     //</editor-fold>
 
 // Older plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2039,15 +2039,9 @@ void EventAnalyser() {
     //<editor-fold desc="HipoChain tests">
 
     clas12root::HipoChain chain;
-//    HipoChain chain;
 
     string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
-//    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
     chain.Add(AnalyseFileDirContent.c_str());
-//    chain.Add(AnalyseFileDir.c_str());
-
-//    clas12root::HipoChain chain;
-//    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
 
     //<editor-fold desc="Getting particle masses">
     auto db = TDatabasePDG::Instance();
@@ -2082,12 +2076,12 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Beam particle's momentum">
-    double Pv = sqrt(Ev * Ev - m_e * m_e);
+    double Pv = sqrt(beamE * beamE - m_e * m_e);
     double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
     double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
     double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
 
-//    TLorentzVector incident_e(0,0,0,db->GetParticle(11)->Mass());
+    TLorentzVector incident_e(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
     int num_of_events = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
@@ -2173,6 +2167,8 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
+            TLorentzVector outgoing_e;
+            TLorentzVector Q;
             double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
             double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
@@ -2181,6 +2177,7 @@ void EventAnalyser() {
                     ++num_of_events_e_CD;
 
                     Theta_e_CD->Fill(electrons[i]->getTheta());
+
                     Pe_CD = electrons[i]->par()->getP();
                     Pex_CD = electrons[i]->par()->getPx();
                     Pey_CD = electrons[i]->par()->getPy();
@@ -2191,7 +2188,7 @@ void EventAnalyser() {
                     qy_CD = Pvy - Pey_CD;
                     qz_CD = Pvz - Pez_CD;
                     q_CD = rCalc(qx_CD, qy_CD, qz_CD);
-                    omega_CD = Ev - Ee_CD;
+                    omega_CD = beamE - Ee_CD;
 
                     Q2_CD = fabs(omega_CD * omega_CD - q_CD * q_CD);
                     Q2_histogram_CD->Fill(Q2_CD);
@@ -2199,20 +2196,39 @@ void EventAnalyser() {
                     ++num_of_events_e_FD;
 
                     Theta_e_FD->Fill(electrons[i]->getTheta());
+
                     Pe_FD = electrons[i]->par()->getP();
-                    Pex_FD = electrons[i]->par()->getPx();
-                    Pey_FD = electrons[i]->par()->getPy();
-                    Pez_FD = electrons[i]->par()->getPz();
-                    Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
+                    outgoing_e.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_FD * Pe_FD));
+//                    Pex_FD = electrons[i]->par()->getPx();
+//                    Pey_FD = electrons[i]->par()->getPy();
+//                    Pez_FD = electrons[i]->par()->getPz();
 
-                    qx_FD = Pvx - Pex_FD;
-                    qy_FD = Pvy - Pey_FD;
-                    qz_FD = Pvz - Pez_FD;
-                    q_FD = rCalc(qx_FD, qy_FD, qz_FD);
-                    omega_FD = Ev - Ee_FD;
+//                    Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
 
-                    Q2_FD = fabs(omega_FD * omega_FD - q_FD * q_FD);
+//                    qx_FD = Pvx - Pex_FD;
+//                    qy_FD = Pvy - Pey_FD;
+//                    qz_FD = Pvz - Pez_FD;
+                    Q = incident_e - outgoing_e;
+
+//                    q_FD = rCalc(qx_FD, qy_FD, qz_FD);
+//                    omega_FD = beamE - Ee_FD;
+
+                    Q2_FD = fabs(Q.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
+//                    Pe_FD = electrons[i]->par()->getP();
+//                    Pex_FD = electrons[i]->par()->getPx();
+//                    Pey_FD = electrons[i]->par()->getPy();
+//                    Pez_FD = electrons[i]->par()->getPz();
+//                    Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
+//
+//                    qx_FD = Pvx - Pex_FD;
+//                    qy_FD = Pvy - Pey_FD;
+//                    qz_FD = Pvz - Pez_FD;
+//                    q_FD = rCalc(qx_FD, qy_FD, qz_FD);
+//                    omega_FD = beamE - Ee_FD;
+//
+//                    Q2_FD = fabs(omega_FD * omega_FD - q_FD * q_FD);
+//                    Q2_histogram_FD->Fill(Q2_FD);
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
@@ -2510,13 +2526,13 @@ void EventAnalyser() {
                 double q3 = abs(Pvz - Plz);
                 double q = rCalc(Pvx - Plx, Pvy - Ply, Pvz - Plz);
 
-                E_Trans_VS_q_all_inclusive->Fill(q3, Ev - El);
+                E_Trans_VS_q_all_inclusive->Fill(q3, beamE - El);
 //        Q2_hist_inclusive->Fill(Q2);
 
 //        if (qel == true) {
-//            E_Trans_VS_q_QEL_inclusive->Fill(q, Ev - El);
+//            E_Trans_VS_q_QEL_inclusive->Fill(q, beamE - El);
 //        } else if (mec == true) {
-//            E_Trans_VS_q_MEC_inclusive->Fill(q, Ev - El);
+//            E_Trans_VS_q_MEC_inclusive->Fill(q, beamE - El);
 //        }
 
                 double Theta_lp_inclusive = AllParticles[lepton_ind_inclusive]->getTheta() * 180.0 / 3.14159265359; // In degrees
@@ -2524,22 +2540,22 @@ void EventAnalyser() {
 
 //      Theta_l inclusive calculations:
                 if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-                    E_Trans15_all_inclusive->Fill(Ev - El);
+                    E_Trans15_all_inclusive->Fill(beamE - El);
 //            if (qel == true) {
 //                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-//                    E_Trans15_QEL_inclusive->Fill(Ev - El);
+//                    E_Trans15_QEL_inclusive->Fill(beamE - El);
 //                }
 //            } else if (mec == true) {
 //                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-//                    E_Trans15_MEC_inclusive->Fill(Ev - El);
+//                    E_Trans15_MEC_inclusive->Fill(beamE - El);
 //                }
 //            } else if (res == true) {
 //                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-//                    E_Trans15_RES_inclusive->Fill(Ev - El);
+//                    E_Trans15_RES_inclusive->Fill(beamE - El);
 //                }
 //            } else if (dis == true) {
 //                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-//                    E_Trans15_DIS_inclusive->Fill(Ev - El);
+//                    E_Trans15_DIS_inclusive->Fill(beamE - El);
 //                }
 //            }
                 }
@@ -2700,7 +2716,7 @@ void EventAnalyser() {
 
                     P_lp_hist_2p->Fill(P_lp_2p); // Lepton momentum
 
-//                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
+//                E_Trans_VS_q3_all_2p->Fill(q3, beamE - El);
 
 //                double El_2p, El1_2p, El2_2p;
 //                if (theta_lp_2p <= 40 && theta_lp_2p >= 5) {
@@ -2741,7 +2757,7 @@ void EventAnalyser() {
 
 //                fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_histogram, El);
 
-//                E_Trans_all_ang_all_int_2p->Fill(Ev - El);
+//                E_Trans_all_ang_all_int_2p->Fill(beamE - El);
 
 //                E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_histogram, E_cal_2p);
 //                E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
@@ -2753,11 +2769,11 @@ void EventAnalyser() {
 //                gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 
 //                if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-//                    E_Trans15_all_2p->Fill(Ev - El);
+//                    E_Trans15_all_2p->Fill(beamE - El);
 //                } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-//                    E_Trans45_all_2p->Fill(Ev - El);
+//                    E_Trans45_all_2p->Fill(beamE - El);
 //                } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-//                    E_Trans90_all_2p->Fill(Ev - El);
+//                    E_Trans90_all_2p->Fill(beamE - El);
 //                }
 
 //                //<editor-fold desc="Histogram fill by reaction (2p)">
@@ -2766,11 +2782,11 @@ void EventAnalyser() {
 //                    gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
 //                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-//                        E_Trans15_QEL_2p->Fill(Ev - El);
+//                        E_Trans15_QEL_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-//                        E_Trans45_QEL_2p->Fill(Ev - El);
+//                        E_Trans45_QEL_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-//                        E_Trans90_QEL_2p->Fill(Ev - El);
+//                        E_Trans90_QEL_2p->Fill(beamE - El);
 //                    }
 //
 //                    fsEl_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_histogram, El);
@@ -2791,7 +2807,7 @@ void EventAnalyser() {
 //                            180.0 /
 //                            3.14159265359, El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272));
 //
-//                    E_Trans_VS_q3_QEL_2p->Fill(q3, Ev - El);
+//                    E_Trans_VS_q3_QEL_2p->Fill(q3, beamE - El);
 //
 //                    fsEl_QEL_2p->Fill(El);
 //                } else if (mec == true) {
@@ -2799,18 +2815,18 @@ void EventAnalyser() {
 //                    gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
 //                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-//                        E_Trans15_MEC_2p->Fill(Ev - El);
+//                        E_Trans15_MEC_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-//                        E_Trans45_MEC_2p->Fill(Ev - El);
+//                        E_Trans45_MEC_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-//                        E_Trans90_MEC_2p->Fill(Ev - El);
+//                        E_Trans90_MEC_2p->Fill(beamE - El);
 //                    }
 //
 //                    fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_histogram, El);
 //
 //                    E_cal_MEC_2p->Fill(E_cal_2p);
 //
-//                    E_Trans_VS_q3_MEC_2p->Fill(q3, Ev - El);
+//                    E_Trans_VS_q3_MEC_2p->Fill(q3, beamE - El);
 //
 //                    fsEl_MEC_2p->Fill(El);
 //                } else if (res == true) {
@@ -2818,11 +2834,11 @@ void EventAnalyser() {
 //                    gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
 //                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-//                        E_Trans15_RES_2p->Fill(Ev - El);
+//                        E_Trans15_RES_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-//                        E_Trans45_RES_2p->Fill(Ev - El);
+//                        E_Trans45_RES_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-//                        E_Trans90_RES_2p->Fill(Ev - El);
+//                        E_Trans90_RES_2p->Fill(beamE - El);
 //                    }
 //
 //                    E_cal_RES_2p->Fill(E_cal_2p);
@@ -2833,11 +2849,11 @@ void EventAnalyser() {
 //                    gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
 //                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-//                        E_Trans15_DIS_2p->Fill(Ev - El);
+//                        E_Trans15_DIS_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-//                        E_Trans45_DIS_2p->Fill(Ev - El);
+//                        E_Trans45_DIS_2p->Fill(beamE - El);
 //                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-//                        E_Trans90_DIS_2p->Fill(Ev - El);
+//                        E_Trans90_DIS_2p->Fill(beamE - El);
 //                    }
 //
 //                    E_cal_DIS_2p->Fill(E_cal_2p);
@@ -2951,7 +2967,7 @@ void EventAnalyser() {
                     dtheta_1n1p->Fill(d_theta_1n1p);
                     //</editor-fold>
 
-//                    E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
+//                    E_Trans_VS_q3_all_1n1p->Fill(q3, beamE - El);
 
                     //<editor-fold desc="Momentum histograms fill (1n1p)">
                     P_p_hist_1n1p->Fill(P_p_1n1p);
@@ -2990,24 +3006,24 @@ void EventAnalyser() {
                     fsEl_1n1p->Fill(El);
                     //</editor-fold>
 
-                    E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+                    E_Trans_all_ang_all_int_1n1p->Fill(beamE - El);
 
                     if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-                        E_Trans15_all_1n1p->Fill(Ev - El);
+                        E_Trans15_all_1n1p->Fill(beamE - El);
                     } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-                        E_Trans45_all_1n1p->Fill(Ev - El);
+                        E_Trans45_all_1n1p->Fill(beamE - El);
                     } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-                        E_Trans90_all_1n1p->Fill(Ev - El);
+                        E_Trans90_all_1n1p->Fill(beamE - El);
                     }
 
                     //<editor-fold desc="Histogram fill by reaction (1n1p)">
                     if (qel == true) {
                         if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-                            E_Trans15_QEL_1n1p->Fill(Ev - El);
+                            E_Trans15_QEL_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-                            E_Trans45_QEL_1n1p->Fill(Ev - El);
+                            E_Trans45_QEL_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-                            E_Trans90_QEL_1n1p->Fill(Ev - El);
+                            E_Trans90_QEL_1n1p->Fill(beamE - El);
                         }
 
                         fsEl_VS_theta_lp_QEL_only_1n1p->Fill(Theta_lp_1n1p, El);
@@ -3024,32 +3040,32 @@ void EventAnalyser() {
                         E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
                         E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
 
-                        E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+                        E_Trans_VS_q3_QEL_1n1p->Fill(q3, beamE - El);
 
                         fsEl_QEL_1n1p->Fill(El);
                     } else if (mec == true) {
                         if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-                            E_Trans15_MEC_1n1p->Fill(Ev - El);
+                            E_Trans15_MEC_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-                            E_Trans45_MEC_1n1p->Fill(Ev - El);
+                            E_Trans45_MEC_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-                            E_Trans90_MEC_1n1p->Fill(Ev - El);
+                            E_Trans90_MEC_1n1p->Fill(beamE - El);
                         }
 
                         fsEl_VS_theta_lp_MEC_only_1n1p->Fill(Theta_lp_1n1p, El);
 
                         E_cal_MEC_1n1p->Fill(E_cal_1n1p);
 
-                        E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+                        E_Trans_VS_q3_MEC_1n1p->Fill(q3, beamE - El);
 
                         fsEl_MEC_1n1p->Fill(El);
                     } else if (res == true) {
                         if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-                            E_Trans15_RES_1n1p->Fill(Ev - El);
+                            E_Trans15_RES_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-                            E_Trans45_RES_1n1p->Fill(Ev - El);
+                            E_Trans45_RES_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-                            E_Trans90_RES_1n1p->Fill(Ev - El);
+                            E_Trans90_RES_1n1p->Fill(beamE - El);
                         }
 
                         E_cal_RES_1n1p->Fill(E_cal_1n1p);
@@ -3057,11 +3073,11 @@ void EventAnalyser() {
                         fsEl_RES_1n1p->Fill(El);
                     } else if (dis == true) {
                         if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-                            E_Trans15_DIS_1n1p->Fill(Ev - El);
+                            E_Trans15_DIS_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-                            E_Trans45_DIS_1n1p->Fill(Ev - El);
+                            E_Trans45_DIS_1n1p->Fill(beamE - El);
                         } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-                            E_Trans90_DIS_1n1p->Fill(Ev - El);
+                            E_Trans90_DIS_1n1p->Fill(beamE - El);
                         }
 
                         E_cal_DIS_1n1p->Fill(E_cal_1n1p);
@@ -3252,18 +3268,6 @@ void EventAnalyser() {
 
         } // end of while
     } // end of for loop over files
-
-
-    //    gROOT->ProcessLine( "gErrorIgnoreLevel = 1000;");
-//    gSystem->RedirectOutput("mylogfile.txt", "a");
-//    clas12root::HipoChain chain;
-//    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
-//    chain.Add(AnalyseFileDirContent.c_str());
-//    auto config_c12=chain.GetC12Reader();
-//    chain.SetReaderTags({0});
-//    auto& c12=chain.C12ref();
-//    gSystem->RedirectOutput(0,0);
-
     //</editor-fold>
 
 
@@ -3715,13 +3719,13 @@ void EventAnalyser() {
 //            double q3 = abs(Pvz - Plz);
 //            double q = rCalc(Pvx - Plx, Pvy - Ply, Pvz - Plz);
 //
-//            E_Trans_VS_q_all_inclusive->Fill(q3, Ev - El);
+//            E_Trans_VS_q_all_inclusive->Fill(q3, beamE - El);
 ////        Q2_hist_inclusive->Fill(Q2);
 //
 ////        if (qel == true) {
-////            E_Trans_VS_q_QEL_inclusive->Fill(q, Ev - El);
+////            E_Trans_VS_q_QEL_inclusive->Fill(q, beamE - El);
 ////        } else if (mec == true) {
-////            E_Trans_VS_q_MEC_inclusive->Fill(q, Ev - El);
+////            E_Trans_VS_q_MEC_inclusive->Fill(q, beamE - El);
 ////        }
 //
 //            double Theta_lp_inclusive = AllParticles[lepton_ind_inclusive]->getTheta() * 180.0 / 3.14159265359; // In degrees
@@ -3729,22 +3733,22 @@ void EventAnalyser() {
 //
 ////      Theta_l inclusive calculations:
 //            if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-//                E_Trans15_all_inclusive->Fill(Ev - El);
+//                E_Trans15_all_inclusive->Fill(beamE - El);
 ////            if (qel == true) {
 ////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_QEL_inclusive->Fill(Ev - El);
+////                    E_Trans15_QEL_inclusive->Fill(beamE - El);
 ////                }
 ////            } else if (mec == true) {
 ////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_MEC_inclusive->Fill(Ev - El);
+////                    E_Trans15_MEC_inclusive->Fill(beamE - El);
 ////                }
 ////            } else if (res == true) {
 ////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_RES_inclusive->Fill(Ev - El);
+////                    E_Trans15_RES_inclusive->Fill(beamE - El);
 ////                }
 ////            } else if (dis == true) {
 ////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_DIS_inclusive->Fill(Ev - El);
+////                    E_Trans15_DIS_inclusive->Fill(beamE - El);
 ////                }
 ////            }
 //            }
@@ -3905,7 +3909,7 @@ void EventAnalyser() {
 //
 //                P_lp_hist_2p->Fill(P_lp_2p); // Lepton momentum
 //
-////                E_Trans_VS_q3_all_2p->Fill(q3, Ev - El);
+////                E_Trans_VS_q3_all_2p->Fill(q3, beamE - El);
 //
 ////                double El_2p, El1_2p, El2_2p;
 ////                if (theta_lp_2p <= 40 && theta_lp_2p >= 5) {
@@ -3946,7 +3950,7 @@ void EventAnalyser() {
 //
 ////                fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_histogram, El);
 //
-////                E_Trans_all_ang_all_int_2p->Fill(Ev - El);
+////                E_Trans_all_ang_all_int_2p->Fill(beamE - El);
 //
 ////                E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_histogram, E_cal_2p);
 ////                E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
@@ -3958,11 +3962,11 @@ void EventAnalyser() {
 ////                gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 //
 ////                if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                    E_Trans15_all_2p->Fill(Ev - El);
+////                    E_Trans15_all_2p->Fill(beamE - El);
 ////                } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                    E_Trans45_all_2p->Fill(Ev - El);
+////                    E_Trans45_all_2p->Fill(beamE - El);
 ////                } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                    E_Trans90_all_2p->Fill(Ev - El);
+////                    E_Trans90_all_2p->Fill(beamE - El);
 ////                }
 //
 ////                //<editor-fold desc="Histogram fill by reaction (2p)">
@@ -3971,11 +3975,11 @@ void EventAnalyser() {
 ////                    gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 ////
 ////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_QEL_2p->Fill(Ev - El);
+////                        E_Trans15_QEL_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_QEL_2p->Fill(Ev - El);
+////                        E_Trans45_QEL_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_QEL_2p->Fill(Ev - El);
+////                        E_Trans90_QEL_2p->Fill(beamE - El);
 ////                    }
 ////
 ////                    fsEl_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_histogram, El);
@@ -3996,7 +4000,7 @@ void EventAnalyser() {
 ////                            180.0 /
 ////                            3.14159265359, El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272));
 ////
-////                    E_Trans_VS_q3_QEL_2p->Fill(q3, Ev - El);
+////                    E_Trans_VS_q3_QEL_2p->Fill(q3, beamE - El);
 ////
 ////                    fsEl_QEL_2p->Fill(El);
 ////                } else if (mec == true) {
@@ -4004,18 +4008,18 @@ void EventAnalyser() {
 ////                    gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 ////
 ////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_MEC_2p->Fill(Ev - El);
+////                        E_Trans15_MEC_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_MEC_2p->Fill(Ev - El);
+////                        E_Trans45_MEC_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_MEC_2p->Fill(Ev - El);
+////                        E_Trans90_MEC_2p->Fill(beamE - El);
 ////                    }
 ////
 ////                    fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_histogram, El);
 ////
 ////                    E_cal_MEC_2p->Fill(E_cal_2p);
 ////
-////                    E_Trans_VS_q3_MEC_2p->Fill(q3, Ev - El);
+////                    E_Trans_VS_q3_MEC_2p->Fill(q3, beamE - El);
 ////
 ////                    fsEl_MEC_2p->Fill(El);
 ////                } else if (res == true) {
@@ -4023,11 +4027,11 @@ void EventAnalyser() {
 ////                    gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 ////
 ////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_RES_2p->Fill(Ev - El);
+////                        E_Trans15_RES_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_RES_2p->Fill(Ev - El);
+////                        E_Trans45_RES_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_RES_2p->Fill(Ev - El);
+////                        E_Trans90_RES_2p->Fill(beamE - El);
 ////                    }
 ////
 ////                    E_cal_RES_2p->Fill(E_cal_2p);
@@ -4038,11 +4042,11 @@ void EventAnalyser() {
 ////                    gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
 ////
 ////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_DIS_2p->Fill(Ev - El);
+////                        E_Trans15_DIS_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_DIS_2p->Fill(Ev - El);
+////                        E_Trans45_DIS_2p->Fill(beamE - El);
 ////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_DIS_2p->Fill(Ev - El);
+////                        E_Trans90_DIS_2p->Fill(beamE - El);
 ////                    }
 ////
 ////                    E_cal_DIS_2p->Fill(E_cal_2p);
@@ -4156,7 +4160,7 @@ void EventAnalyser() {
 //                dtheta_1n1p->Fill(d_theta_1n1p);
 //                //</editor-fold>
 //
-////                    E_Trans_VS_q3_all_1n1p->Fill(q3, Ev - El);
+////                    E_Trans_VS_q3_all_1n1p->Fill(q3, beamE - El);
 //
 //                //<editor-fold desc="Momentum histograms fill (1n1p)">
 //                P_p_hist_1n1p->Fill(P_p_1n1p);
@@ -4195,24 +4199,24 @@ void EventAnalyser() {
 //                fsEl_1n1p->Fill(El);
 //                //</editor-fold>
 //
-//                E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+//                E_Trans_all_ang_all_int_1n1p->Fill(beamE - El);
 //
 //                if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                    E_Trans15_all_1n1p->Fill(Ev - El);
+//                    E_Trans15_all_1n1p->Fill(beamE - El);
 //                } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                    E_Trans45_all_1n1p->Fill(Ev - El);
+//                    E_Trans45_all_1n1p->Fill(beamE - El);
 //                } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                    E_Trans90_all_1n1p->Fill(Ev - El);
+//                    E_Trans90_all_1n1p->Fill(beamE - El);
 //                }
 //
 //                //<editor-fold desc="Histogram fill by reaction (1n1p)">
 //                if (qel == true) {
 //                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_QEL_1n1p->Fill(Ev - El);
+//                        E_Trans15_QEL_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_QEL_1n1p->Fill(Ev - El);
+//                        E_Trans45_QEL_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_QEL_1n1p->Fill(Ev - El);
+//                        E_Trans90_QEL_1n1p->Fill(beamE - El);
 //                    }
 //
 //                    fsEl_VS_theta_lp_QEL_only_1n1p->Fill(Theta_lp_1n1p, El);
@@ -4229,32 +4233,32 @@ void EventAnalyser() {
 //                    E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
 //                    E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
 //
-//                    E_Trans_VS_q3_QEL_1n1p->Fill(q3, Ev - El);
+//                    E_Trans_VS_q3_QEL_1n1p->Fill(q3, beamE - El);
 //
 //                    fsEl_QEL_1n1p->Fill(El);
 //                } else if (mec == true) {
 //                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_MEC_1n1p->Fill(Ev - El);
+//                        E_Trans15_MEC_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_MEC_1n1p->Fill(Ev - El);
+//                        E_Trans45_MEC_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_MEC_1n1p->Fill(Ev - El);
+//                        E_Trans90_MEC_1n1p->Fill(beamE - El);
 //                    }
 //
 //                    fsEl_VS_theta_lp_MEC_only_1n1p->Fill(Theta_lp_1n1p, El);
 //
 //                    E_cal_MEC_1n1p->Fill(E_cal_1n1p);
 //
-//                    E_Trans_VS_q3_MEC_1n1p->Fill(q3, Ev - El);
+//                    E_Trans_VS_q3_MEC_1n1p->Fill(q3, beamE - El);
 //
 //                    fsEl_MEC_1n1p->Fill(El);
 //                } else if (res == true) {
 //                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_RES_1n1p->Fill(Ev - El);
+//                        E_Trans15_RES_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_RES_1n1p->Fill(Ev - El);
+//                        E_Trans45_RES_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_RES_1n1p->Fill(Ev - El);
+//                        E_Trans90_RES_1n1p->Fill(beamE - El);
 //                    }
 //
 //                    E_cal_RES_1n1p->Fill(E_cal_1n1p);
@@ -4262,11 +4266,11 @@ void EventAnalyser() {
 //                    fsEl_RES_1n1p->Fill(El);
 //                } else if (dis == true) {
 //                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_DIS_1n1p->Fill(Ev - El);
+//                        E_Trans15_DIS_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_DIS_1n1p->Fill(Ev - El);
+//                        E_Trans45_DIS_1n1p->Fill(beamE - El);
 //                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_DIS_1n1p->Fill(Ev - El);
+//                        E_Trans90_DIS_1n1p->Fill(beamE - El);
 //                    }
 //
 //                    E_cal_DIS_1n1p->Fill(E_cal_1n1p);
@@ -4504,15 +4508,15 @@ void EventAnalyser() {
 
 //  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
 
-        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, 0.75 * Ev);
-        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, 0.75 * Ev);
+        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, 0.75 * beamE);
 //        auto *beta_proton = new TF1("beta_proton", "sin(x)", -2000, 2000);
 
 //  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
@@ -5449,24 +5453,24 @@ void EventAnalyser() {
 //
 //        cout << "\n\nPlotting energy transfer histograms (all interactions)...\n\n";
 //
-////  Energy transfer (Ev-El) for every theta_{l} --------------------------------------------------------
+////  Energy transfer (beamE-El) for every theta_{l} --------------------------------------------------------
 //
-//        //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (2p)">
+//        //<editor-fold desc="Energy transfer (beamE-El) for every theta_{l} (2p)">
 //        histPlotter1D(c1, E_Trans_all_ang_all_int_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
 //                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_2p,
-//                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "2p", kBlack,
+//                      "Energy_transfer_beamE-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "2p", kBlack,
 //                      true, false, true);
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (1n1p)">
+//        //<editor-fold desc="Energy transfer (beamE-El) for every theta_{l} (1n1p)">
 //        histPlotter1D(c1, E_Trans_all_ang_all_int_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
 //                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_1n1p,
-//                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "1n1p", kBlack,
+//                      "Energy_transfer_beamE-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "1n1p", kBlack,
 //                      true, false, true);
 //        //</editor-fold>
 //
 //
-////  Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions) ------
+////  Energy transfer (beamE-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions) ------
 //
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_all_2p->SetTitle(
@@ -5485,10 +5489,10 @@ void EventAnalyser() {
 //        E_Trans15_all_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_log_scale_2p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_15_Deg_all_interactions_log_scale_2p.png");
 //        c1->SetLogy(0);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_normal_scale_2p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_15_Deg_all_interactions_normal_scale_2p.png");
 //        E_Trans15_all_2p->SetStats(0);
 //        E_Trans15_all_2p->SetLineColor(kBlack);
 //        E_Trans15_all_2p->SetLineWidth(4);
@@ -5497,7 +5501,7 @@ void EventAnalyser() {
 //        c1->Clear();
 
 //
-//        //<editor-fold desc="Energy transfer (Ev-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions, 1n1p)">
+//        //<editor-fold desc="Energy transfer (beamE-El) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions, 1n1p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_all_1n1p->SetTitle(
 //                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 1n1p) - Normalized");
@@ -5515,10 +5519,10 @@ void EventAnalyser() {
 //        E_Trans15_all_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_log_scale_1n1p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_15_Deg_all_interactions_log_scale_1n1p.png");
 //        c1->SetLogy(0);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_15_Deg_all_interactions_normal_scale_1n1p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_15_Deg_all_interactions_normal_scale_1n1p.png");
 //        E_Trans15_all_1n1p->SetStats(0);
 //        E_Trans15_all_1n1p->SetLineColor(kBlack);
 //        E_Trans15_all_1n1p->SetLineWidth(4);
@@ -5528,18 +5532,18 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions) --------
+////  Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions) --------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 2p)">
 //        E_Trans45_all_2p->Draw();
 //        plots->Add(E_Trans45_all_2p);
 //        E_Trans45_all_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_log_scale_2p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_45_Deg_all_interactions_log_scale_2p.png");
 //        c1->SetLogy(0);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_normal_scale_2p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_45_Deg_all_interactions_normal_scale_2p.png");
 //        E_Trans45_all_2p->SetLineColor(kRed);
 //        E_Trans45_all_2p->SetLineColor(kViolet - 3);
 //        E_Trans45_all_2p->SetStats(0);
@@ -5549,16 +5553,16 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (all interactions, 1n1p)">
 //        E_Trans45_all_1n1p->Draw();
 //        plots->Add(E_Trans45_all_1n1p);
 //        E_Trans45_all_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_log_scale_1n1p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_45_Deg_all_interactions_log_scale_1n1p.png");
 //        c1->SetLogy(0);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_45_Deg_all_interactions_normal_scale_1n1p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_45_Deg_all_interactions_normal_scale_1n1p.png");
 //        E_Trans45_all_1n1p->SetLineColor(kRed);
 //        E_Trans45_all_1n1p->SetStats(0);
 //        E_Trans45_all_1n1p->SetLineColor(kBlack);
@@ -5568,18 +5572,18 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions) --------
+////  Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions) --------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 2p)">
 //        E_Trans90_all_2p->Draw();
 //        plots->Add(E_Trans90_all_2p);
 //        E_Trans90_all_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_log_scale_2p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_90_Deg_all_interactions_log_scale_2p.png");
 //        c1->SetLogy(0);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_normal_scale_2p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_90_Deg_all_interactions_normal_scale_2p.png");
 //        E_Trans90_all_2p->SetLineColor(kGreen);
 //        E_Trans90_all_2p->SetStats(0);
 //        E_Trans90_all_2p->SetLineColor(kBlack);
@@ -5588,16 +5592,16 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (all interactions, 1n1p)">
 //        E_Trans90_all_1n1p->Draw();
 //        plots->Add(E_Trans90_all_1n1p);
 //        E_Trans90_all_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_log_scale_1n1p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_90_Deg_all_interactions_log_scale_1n1p.png");
 //        c1->SetLogy(0);
 //        c1->SaveAs(
-//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_Ev-El_around_90_Deg_all_interactions_normal_scale_1n1p.png");
+//                "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/Energy_transfer_beamE-El_around_90_Deg_all_interactions_normal_scale_1n1p.png");
 //        E_Trans90_all_1n1p->SetLineColor(kGreen);
 //        E_Trans90_all_1n1p->SetStats(0);
 //        E_Trans90_all_1n1p->SetLineColor(kBlack);
@@ -5607,7 +5611,7 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-//// Energy transfer Ev-El stack (all interactions) -----------------------------------------------------
+//// Energy transfer beamE-El stack (all interactions) -----------------------------------------------------
 //
 ////        E_Trans15_all_2p->SetLineStyle(1);
 ////        E_Trans45_all_2p->SetLineStyle(1);
@@ -5627,9 +5631,9 @@ void EventAnalyser() {
 //
 //        cout << "\n\nPlotting energy transfer histograms (QEL only)...\n\n";
 //
-////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only) ----------------
+////  Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 2p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_QEL_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 2p) - Normalized");
 //            E_Trans15_QEL_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
@@ -5645,9 +5649,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_QEL_2p);
 //        E_Trans15_QEL_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_15_Deg_QEL_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_15_Deg_QEL_only_normal_scale_2p.png");
 //        E_Trans15_QEL_2p->SetLineColor(kBlue);
 //        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans15_QEL_2p);
 //        E_Trans15_QEL_2p->SetStats(0);
@@ -5656,7 +5660,7 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only, 1n1p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_QEL_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (QEL Only, 1n1p) - Normalized");
 //            E_Trans15_QEL_1n1p->GetYaxis()->SetTitle("Probability (%)");
@@ -5671,9 +5675,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_QEL_1n1p);
 //        E_Trans15_QEL_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_15_Deg_QEL_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_15_Deg_QEL_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_15_Deg_QEL_only_normal_scale_1n1p.png");
 //        E_Trans15_QEL_1n1p->SetLineColor(kBlue);
 //        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans15_QEL_1n1p);
 //        E_Trans15_QEL_1n1p->SetStats(0);
@@ -5684,16 +5688,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only) ----------------
+////  Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 2p)">
 //        E_Trans45_QEL_2p->Draw();
 //        plots->Add(E_Trans45_QEL_2p);
 //        E_Trans45_QEL_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_45_Deg_QEL_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_45_Deg_QEL_only_normal_scale_2p.png");
 //        E_Trans45_QEL_2p->SetLineColor(kRed);
 //        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans45_QEL_2p);
 //        E_Trans45_QEL_2p->SetStats(0);
@@ -5701,14 +5705,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (QEL only, 1n1p)">
 //        E_Trans45_QEL_1n1p->Draw();
 //        plots->Add(E_Trans45_QEL_1n1p);
 //        E_Trans45_QEL_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_45_Deg_QEL_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_45_Deg_QEL_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_45_Deg_QEL_only_normal_scale_1n1p.png");
 //        E_Trans45_QEL_1n1p->SetLineColor(kRed);
 //        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans45_QEL_1n1p);
 //        E_Trans45_QEL_1n1p->SetStats(0);
@@ -5718,16 +5722,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only) ----------------
+////  Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 2p)">
 //        E_Trans90_QEL_2p->Draw();
 //        plots->Add(E_Trans90_QEL_2p);
 //        E_Trans90_QEL_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_90_Deg_QEL_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_90_Deg_QEL_only_normal_scale_2p.png");
 //        E_Trans90_QEL_2p->SetLineColor(kGreen);
 //        Energy_Transfer_QEL_Int_Stack_2p->Add(E_Trans90_QEL_2p);
 //        E_Trans90_QEL_2p->SetStats(0);
@@ -5735,14 +5739,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (QEL only, 1n1p)">
 //        E_Trans90_QEL_1n1p->Draw();
 //        plots->Add(E_Trans90_QEL_1n1p);
 //        E_Trans90_QEL_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_90_Deg_QEL_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_around_90_Deg_QEL_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_around_90_Deg_QEL_only_normal_scale_1n1p.png");
 //        E_Trans90_QEL_1n1p->SetLineColor(kGreen);
 //        Energy_Transfer_QEL_Int_Stack_1n1p->Add(E_Trans90_QEL_1n1p);
 //        E_Trans90_QEL_1n1p->SetStats(0);
@@ -5752,9 +5756,9 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El stack of angles (QEL only) -------------------------------------------------------------
+////  Energy transfer beamE-El stack of angles (QEL only) -------------------------------------------------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (QEL only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (QEL only, 2p)">
 //        Energy_Transfer_QEL_Int_Stack_2p->Draw("nostack");
 //        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_QEL_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -5771,13 +5775,13 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_QEL_Int_Stack_2p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_QEL_only_Stack_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_linear_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_QEL_only_Stack_linear_scale_2p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (QEL only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (QEL only, 1n1p)">
 //        Energy_Transfer_QEL_Int_Stack_1n1p->Draw("nostack");
 //        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_QEL_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -5794,9 +5798,9 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_QEL_Int_Stack_1n1p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_QEL_only_Stack_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_Ev-El_QEL_only_Stack_linear_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only/Energy_transfer_beamE-El_QEL_only_Stack_linear_scale_1n1p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
@@ -5809,9 +5813,9 @@ void EventAnalyser() {
 //
 //        cout << "\n\nPlotting energy transfer histograms (MEC only)...\n\n";
 //
-////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only) ------------------
+////  Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only) ------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 2p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_MEC_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 2p) - Normalized");
 //            E_Trans15_MEC_2p->GetYaxis()->SetTitle("Probability (%)");
@@ -5826,9 +5830,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_MEC_2p);
 //        E_Trans15_MEC_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_15_Deg_MEC_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_15_Deg_MEC_only_normal_scale_2p.png");
 //        E_Trans15_MEC_2p->SetLineColor(kBlue);
 //        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans15_MEC_2p);
 //        E_Trans15_MEC_2p->SetStats(0);
@@ -5837,7 +5841,7 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only, 1n1p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_MEC_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (MEC Only, 1n1p) - Normalized");
 //            E_Trans15_MEC_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
@@ -5853,9 +5857,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_MEC_1n1p);
 //        E_Trans15_MEC_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_15_Deg_MEC_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_15_Deg_MEC_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_15_Deg_MEC_only_normal_scale_1n1p.png");
 //        E_Trans15_MEC_1n1p->SetLineColor(kBlue);
 //        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans15_MEC_1n1p);
 //        E_Trans15_MEC_1n1p->SetStats(0);
@@ -5866,16 +5870,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only) ------------------
+////  Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only) ------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 2p)">
 //        E_Trans45_MEC_2p->Draw();
 //        plots->Add(E_Trans45_MEC_2p);
 //        E_Trans45_MEC_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_45_Deg_MEC_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_45_Deg_MEC_only_normal_scale_2p.png");
 //        E_Trans45_MEC_2p->SetLineColor(kRed);
 //        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans45_MEC_2p);
 //        E_Trans45_MEC_2p->SetStats(0);
@@ -5883,14 +5887,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (MEC only, 1n1p)">
 //        E_Trans15_MEC_1n1p->Draw();
 //        plots->Add(E_Trans15_MEC_1n1p);
 //        E_Trans15_MEC_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_45_Deg_MEC_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_45_Deg_MEC_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_45_Deg_MEC_only_normal_scale_1n1p.png");
 //        E_Trans45_MEC_1n1p->SetLineColor(kRed);
 //        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans45_MEC_1n1p);
 //        E_Trans45_MEC_1n1p->SetStats(0);
@@ -5900,16 +5904,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only) ------------------
+////  Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only) ------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 2p)">
 //        E_Trans90_MEC_2p->Draw();
 //        plots->Add(E_Trans90_MEC_2p);
 //        E_Trans90_MEC_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_90_Deg_MEC_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_90_Deg_MEC_only_normal_scale_2p.png");
 //        E_Trans90_MEC_2p->SetLineColor(kGreen);
 //        Energy_Transfer_MEC_Int_Stack_2p->Add(E_Trans90_MEC_2p);
 //        E_Trans90_MEC_2p->SetStats(0);
@@ -5917,14 +5921,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (MEC only, 1n1p)">
 //        E_Trans90_MEC_1n1p->Draw();
 //        plots->Add(E_Trans90_MEC_1n1p);
 //        E_Trans90_MEC_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_90_Deg_MEC_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_around_90_Deg_MEC_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_around_90_Deg_MEC_only_normal_scale_1n1p.png");
 //        E_Trans90_MEC_1n1p->SetLineColor(kGreen);
 //        Energy_Transfer_MEC_Int_Stack_1n1p->Add(E_Trans90_MEC_1n1p);
 //        E_Trans90_MEC_1n1p->SetStats(0);
@@ -5934,9 +5938,9 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El stack of angles (MEC only) -------------------------------------------------------------
+////  Energy transfer beamE-El stack of angles (MEC only) -------------------------------------------------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (MEC only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (MEC only, 2p)">
 //        Energy_Transfer_MEC_Int_Stack_2p->Draw("nostack");
 //        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_MEC_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -5954,13 +5958,13 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_MEC_Int_Stack_2p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_MEC_only_Stack_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_linear_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_MEC_only_Stack_linear_scale_2p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (MEC only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (MEC only, 1n1p)">
 //        Energy_Transfer_MEC_Int_Stack_1n1p->Draw("nostack");
 //        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_MEC_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -5978,9 +5982,9 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_MEC_Int_Stack_1n1p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_log_scale_1n1p_1111.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_MEC_only_Stack_log_scale_1n1p_1111.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_Ev-El_MEC_only_Stack_linear_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only/Energy_transfer_beamE-El_MEC_only_Stack_linear_scale_1n1p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
@@ -5993,9 +5997,9 @@ void EventAnalyser() {
 //
 //        cout << "\n\nPlotting energy transfer histograms (RES only)...\n\n";
 //
-////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only) ----------------
+////  Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 2p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_RES_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 2p) - Normalized");
 //            E_Trans15_RES_2p->GetYaxis()->SetTitle("Probability (%)");
@@ -6010,9 +6014,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_RES_2p);
 //        E_Trans15_RES_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_15_Deg_RES_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_15_Deg_RES_only_normal_scale_2p.png");
 //        E_Trans15_RES_2p->SetLineColor(kBlue);
 //        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans15_RES_2p);
 //        E_Trans15_RES_2p->SetStats(0);
@@ -6021,7 +6025,7 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only, 1n1p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_RES_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (RES Only, 1n1p) - Normalized");
 //            E_Trans15_RES_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
@@ -6037,9 +6041,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_RES_1n1p);
 //        E_Trans15_RES_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_15_Deg_RES_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_15_Deg_RES_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_15_Deg_RES_only_normal_scale_1n1p.png");
 //        E_Trans15_RES_1n1p->SetLineColor(kBlue);
 //        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans15_RES_1n1p);
 //        E_Trans15_RES_1n1p->SetStats(0);
@@ -6050,16 +6054,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only) ----------------
+////  Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 2p)">
 //        E_Trans45_RES_2p->Draw();
 //        plots->Add(E_Trans45_RES_2p);
 //        E_Trans45_RES_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_45_Deg_RES_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_45_Deg_RES_only_normal_scale_2p.png");
 //        E_Trans45_RES_2p->SetLineColor(kRed);
 //        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans45_RES_2p);
 //        E_Trans45_RES_2p->SetStats(0);
@@ -6067,14 +6071,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (RES only, 1n1p)">
 //        E_Trans45_RES_1n1p->Draw();
 //        plots->Add(E_Trans45_RES_1n1p);
 //        E_Trans45_RES_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_45_Deg_RES_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_45_Deg_RES_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_45_Deg_RES_only_normal_scale_1n1p.png");
 //        E_Trans45_RES_1n1p->SetLineColor(kRed);
 //        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans45_RES_1n1p);
 //        E_Trans45_RES_1n1p->SetStats(0);
@@ -6084,16 +6088,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only) -----------------
+////  Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only) -----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 2p)">
 //        E_Trans90_RES_2p->Draw();
 //        plots->Add(E_Trans90_RES_2p);
 //        E_Trans90_RES_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_90_Deg_RES_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_90_Deg_RES_only_normal_scale_2p.png");
 //        E_Trans90_RES_2p->SetLineColor(kGreen);
 //        Energy_Transfer_RES_Int_Stack_2p->Add(E_Trans90_RES_2p);
 //        E_Trans90_RES_2p->SetStats(0);
@@ -6101,14 +6105,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (RES only, 1n1p)">
 //        E_Trans90_RES_1n1p->Draw();
 //        plots->Add(E_Trans90_RES_1n1p);
 //        E_Trans90_RES_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_90_Deg_RES_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_around_90_Deg_RES_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_around_90_Deg_RES_only_normal_scale_1n1p.png");
 //        E_Trans90_RES_1n1p->SetLineColor(kGreen);
 //        Energy_Transfer_RES_Int_Stack_1n1p->Add(E_Trans90_RES_1n1p);
 //        E_Trans90_RES_1n1p->SetStats(0);
@@ -6118,9 +6122,9 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El stack of angles (RES only) -------------------------------------------------------------
+////  Energy transfer beamE-El stack of angles (RES only) -------------------------------------------------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (RES only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (RES only, 2p)">
 //        Energy_Transfer_RES_Int_Stack_2p->Draw("nostack");
 //        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_RES_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -6138,13 +6142,13 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_RES_Int_Stack_2p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_RES_only_Stack_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_linear_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_RES_only_Stack_linear_scale_2p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (RES only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (RES only, 1n1p)">
 //        Energy_Transfer_RES_Int_Stack_1n1p->Draw("nostack");
 //        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_RES_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -6162,9 +6166,9 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_RES_Int_Stack_1n1p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_RES_only_Stack_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_Ev-El_RES_only_Stack_linear_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only/Energy_transfer_beamE-El_RES_only_Stack_linear_scale_1n1p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
@@ -6177,9 +6181,9 @@ void EventAnalyser() {
 //
 //        cout << "\n\nPlotting energy transfer histograms (DIS only)...\n\n";
 //
-////  Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only) ----------------
+////  Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 2p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_DIS_2p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 2p) - Normalized");
 //            E_Trans15_DIS_2p->GetYaxis()->SetTitle("Probability (%)");
@@ -6194,9 +6198,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_DIS_2p);
 //        E_Trans15_DIS_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_15_Deg_DIS_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_15_Deg_DIS_only_normal_scale_2p.png");
 //        E_Trans15_DIS_2p->SetLineColor(kBlue);
 //        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans15_DIS_2p);
 //        E_Trans15_DIS_2p->SetStats(0);
@@ -6205,7 +6209,7 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only, 1n1p)">
 //        if (normalized_E_Trans15_plots) {
 //            E_Trans15_DIS_1n1p->SetTitle("Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (DIS Only, 1n1p) - Normalized");
 //            E_Trans15_DIS_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
@@ -6221,9 +6225,9 @@ void EventAnalyser() {
 //        plots->Add(E_Trans15_DIS_1n1p);
 //        E_Trans15_DIS_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_15_Deg_DIS_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_15_Deg_DIS_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_15_Deg_DIS_only_normal_scale_1n1p.png");
 //        E_Trans15_DIS_1n1p->SetLineColor(kBlue);
 //        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans15_DIS_1n1p);
 //        E_Trans15_DIS_1n1p->SetStats(0);
@@ -6234,16 +6238,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only) ----------------
+////  Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 2p)">
 //        E_Trans45_DIS_2p->Draw();
 //        plots->Add(E_Trans45_DIS_2p);
 //        E_Trans45_DIS_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_45_Deg_DIS_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_45_Deg_DIS_only_normal_scale_2p.png");
 //        E_Trans45_DIS_2p->SetLineColor(kRed);
 //        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans45_DIS_2p);
 //        E_Trans45_DIS_2p->SetStats(0);
@@ -6251,14 +6255,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 44[Deg] <= theta_{l} <= 46[Deg] (DIS only, 1n1p)">
 //        E_Trans45_DIS_1n1p->Draw();
 //        plots->Add(E_Trans45_DIS_1n1p);
 //        E_Trans45_DIS_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_45_Deg_DIS_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_45_Deg_DIS_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_45_Deg_DIS_only_normal_scale_1n1p.png");
 //        E_Trans45_DIS_1n1p->SetLineColor(kRed);
 //        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans45_DIS_1n1p);
 //        E_Trans45_DIS_1n1p->SetStats(0);
@@ -6268,16 +6272,16 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only) ----------------
+////  Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only) ----------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 2p)">
 //        E_Trans90_DIS_2p->Draw();
 //        plots->Add(E_Trans90_DIS_2p);
 //        E_Trans90_DIS_2p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_90_Deg_DIS_only_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_normal_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_90_Deg_DIS_only_normal_scale_2p.png");
 //        E_Trans90_DIS_2p->SetLineColor(kGreen);
 //        Energy_Transfer_DIS_Int_Stack_2p->Add(E_Trans90_DIS_2p);
 //        E_Trans90_DIS_2p->SetStats(0);
@@ -6285,14 +6289,14 @@ void EventAnalyser() {
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El in the angle range 89[Deg] <= theta_{l} <= 91[Deg] (DIS only, 1n1p)">
 //        E_Trans90_DIS_1n1p->Draw();
 //        plots->Add(E_Trans90_DIS_1n1p);
 //        E_Trans90_DIS_1n1p->SetLineWidth(2);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_90_Deg_DIS_only_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_around_90_Deg_DIS_only_normal_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_around_90_Deg_DIS_only_normal_scale_1n1p.png");
 //        E_Trans90_DIS_1n1p->SetLineColor(kGreen);
 //        Energy_Transfer_DIS_Int_Stack_1n1p->Add(E_Trans90_DIS_1n1p);
 //        E_Trans90_DIS_1n1p->SetStats(0);
@@ -6302,9 +6306,9 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //
-////  Energy transfer Ev-El stack of angles (DIS only) -------------------------------------------------------------
+////  Energy transfer beamE-El stack of angles (DIS only) -------------------------------------------------------------
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (DIS only, 2p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (DIS only, 2p)">
 //        Energy_Transfer_DIS_Int_Stack_2p->Draw("nostack");
 //        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_DIS_Int_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -6322,13 +6326,13 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_DIS_Int_Stack_2p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_log_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_DIS_only_Stack_log_scale_2p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_linear_scale_2p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_DIS_only_Stack_linear_scale_2p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Energy transfer Ev-El stack of angles (DIS only, 1n1p)">
+//        //<editor-fold desc="Energy transfer beamE-El stack of angles (DIS only, 1n1p)">
 //        Energy_Transfer_DIS_Int_Stack_1n1p->Draw("nostack");
 //        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
 //        Energy_Transfer_DIS_Int_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
@@ -6346,15 +6350,15 @@ void EventAnalyser() {
 //
 //        plots->Add(Energy_Transfer_DIS_Int_Stack_1n1p);
 //        c1->SetLogy(1);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_log_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_DIS_only_Stack_log_scale_1n1p.png");
 //        c1->SetLogy(0);
-//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_Ev-El_DIS_only_Stack_linear_scale_1n1p.png");
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only/Energy_transfer_beamE-El_DIS_only_Stack_linear_scale_1n1p.png");
 //        c1->Clear();
 //        //</editor-fold>
 //
 //    }
 
-// Energy transfer stacks (around 15, 45 and 90 + all interactions) - histogram for every angle
+// Energy transfer stacks (around 15, 45 and 90 + all interactions) - histogram for beamEery angle
 // ====================================================================================================
 
 //    if (ET_all_plots && ET_QEL_plots && ET_MEC_plots && ET_RES_plots && ET_DIS_plots) {
@@ -7392,7 +7396,7 @@ void EventAnalyser() {
         E_Trans15_all_inclusive->SetLineWidth(2);
         E_Trans15_all_inclusive->GetXaxis()->CenterTitle(true);
         E_Trans15_all_inclusive->SetLineColor(kBlack);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_all_interactions_liner_scale_inclusive.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_around_15_Deg_all_interactions_liner_scale_inclusive.png");
         E_Trans15_all_inclusive->SetLineWidth(4);
         E_Trans15_all_inclusive->SetLineStyle(2);
 //        E_Trans15_all_inclusive->SetLineStyle(5);
@@ -7415,7 +7419,7 @@ void EventAnalyser() {
         E_Trans15_QEL_inclusive->SetLineWidth(2);
         E_Trans15_QEL_inclusive->GetXaxis()->CenterTitle(true);
         E_Trans15_QEL_inclusive->SetLineColor(kBlue);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_QEL_only_liner_scale_inclusive.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_around_15_Deg_QEL_only_liner_scale_inclusive.png");
         E_Trans15_QEL_inclusive->SetStats(0);
         Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_QEL_inclusive);
         c1->Clear();
@@ -7434,7 +7438,7 @@ void EventAnalyser() {
         E_Trans15_MEC_inclusive->SetLineWidth(2);
         E_Trans15_MEC_inclusive->GetXaxis()->CenterTitle(true);
         E_Trans15_MEC_inclusive->SetLineColor(kRed);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_MEC_only_liner_scale_inclusive.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_around_15_Deg_MEC_only_liner_scale_inclusive.png");
         E_Trans15_MEC_inclusive->SetStats(0);
         Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_MEC_inclusive);
         c1->Clear();
@@ -7453,7 +7457,7 @@ void EventAnalyser() {
         E_Trans15_RES_inclusive->SetLineWidth(2);
         E_Trans15_RES_inclusive->GetXaxis()->CenterTitle(true);
         E_Trans15_RES_inclusive->SetLineColor(kGreen);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_RES_only_liner_scale_inclusive.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_around_15_Deg_RES_only_liner_scale_inclusive.png");
         E_Trans15_RES_inclusive->SetStats(0);
         Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_RES_inclusive);
         c1->Clear();
@@ -7472,7 +7476,7 @@ void EventAnalyser() {
         E_Trans15_DIS_inclusive->SetLineWidth(2);
         E_Trans15_DIS_inclusive->GetXaxis()->CenterTitle(true);
         E_Trans15_DIS_inclusive->SetLineColor(kCyan);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_around_15_Deg_DIS_only_liner_scale_inclusive.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_around_15_Deg_DIS_only_liner_scale_inclusive.png");
         E_Trans15_DIS_inclusive->SetStats(0);
         Energy_Transfer_all_int_15_inclusive_Stack->Add(E_Trans15_DIS_inclusive);
         c1->Clear();
@@ -7535,9 +7539,9 @@ void EventAnalyser() {
         plots->Add(E_Trans_VS_q_all_inclusive);
         E_Trans_VS_q_all_inclusive->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_log_scale.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_VS_q_all_inclusive_log_scale.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_all_inclusive_liner_scale.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_VS_q_all_inclusive_liner_scale.png");
         c1->Clear();
 
 //      Normalization factor (equals to max(fsEl_VS_theta_lp_all_int_2p)):
@@ -7563,9 +7567,9 @@ void EventAnalyser() {
         plots->Add(E_Trans_VS_q_QEL_inclusive);
         E_Trans_VS_q_QEL_inclusive->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_log_scale.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_VS_q_QEL_inclusive_log_scale.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_QEL_inclusive_liner_scale.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_VS_q_QEL_inclusive_liner_scale.png");
         c1->Clear();
 
 //      Normalization factor (equals to max(E_Trans_VS_q_MEC_inclusive)):
@@ -7590,9 +7594,9 @@ void EventAnalyser() {
         plots->Add(E_Trans_VS_q_MEC_inclusive);
         E_Trans_VS_q_MEC_inclusive->SetStats(0);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_log_scale.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_VS_q_MEC_inclusive_log_scale.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_Ev-El_VS_q_MEC_inclusive_liner_scale.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Inclusive_plots/Energy_transfer_beamE-El_VS_q_MEC_inclusive_liner_scale.png");
         c1->Clear();
 
 // 2p: MOVE TO ET
@@ -7603,9 +7607,9 @@ void EventAnalyser() {
         E_Trans_VS_q3_all_2p->GetXaxis()->CenterTitle(true);
         E_Trans_VS_q3_all_2p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_2p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_all_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_2p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_all_linear_scale_2p.png");
         c1->Clear();
 
         E_Trans_VS_q3_QEL_2p->Draw("colz");
@@ -7614,9 +7618,9 @@ void EventAnalyser() {
         E_Trans_VS_q3_QEL_2p->GetXaxis()->CenterTitle(true);
         E_Trans_VS_q3_QEL_2p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_2p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_QEL_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_2p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_QEL_linear_scale_2p.png");
         c1->Clear();
 
         E_Trans_VS_q3_MEC_2p->Draw("colz");
@@ -7625,9 +7629,9 @@ void EventAnalyser() {
         E_Trans_VS_q3_MEC_2p->GetXaxis()->CenterTitle(true);
         E_Trans_VS_q3_MEC_2p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_2p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_MEC_log_scale_2p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_2p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_MEC_linear_scale_2p.png");
         c1->Clear();
 
 // 1n1p: MOVE TO ET
@@ -7638,9 +7642,9 @@ void EventAnalyser() {
         E_Trans_VS_q3_all_1n1p->GetXaxis()->CenterTitle(true);
         E_Trans_VS_q3_all_1n1p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_log_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_all_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_all_linear_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_all_linear_scale_1n1p.png");
         c1->Clear();
 
         E_Trans_VS_q3_QEL_1n1p->Draw("colz");
@@ -7649,9 +7653,9 @@ void EventAnalyser() {
         E_Trans_VS_q3_QEL_1n1p->GetXaxis()->CenterTitle(true);
         E_Trans_VS_q3_QEL_1n1p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_log_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_QEL_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_QEL_linear_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_QEL_linear_scale_1n1p.png");
         c1->Clear();
 
         E_Trans_VS_q3_MEC_1n1p->Draw("colz");
@@ -7660,9 +7664,9 @@ void EventAnalyser() {
         E_Trans_VS_q3_MEC_1n1p->GetXaxis()->CenterTitle(true);
         E_Trans_VS_q3_MEC_1n1p->GetYaxis()->CenterTitle(true);
         c1->SetLogz(1);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_log_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_MEC_log_scale_1n1p.png");
         c1->SetLogz(0);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_Ev-El_VS_q3_MEC_linear_scale_1n1p.png");
+        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_VS_q3/Energy_transfer_beamE-El_VS_q3_MEC_linear_scale_1n1p.png");
         c1->Clear();
 
     } else {
@@ -7726,7 +7730,7 @@ void EventAnalyser() {
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
     myLogFile << "m_e = " << m_e << "\n";
-    myLogFile << "Ev = " << Ev << "\n";
+    myLogFile << "beamE = " << beamE << "\n";
     myLogFile << "Pv = " << Pv << "\n";
     myLogFile << "Pvx = " << Pvx << "\n";
     myLogFile << "Pvy = " << Pvy << "\n";
@@ -7831,7 +7835,7 @@ void EventAnalyser() {
 
     myLogFile << "Event counts\n";
     myLogFile << "===========================================================================\n";
-    myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
+    myLogFile << "Total #(beamEents):\t\t\t" << num_of_events << "\n";
     myLogFile << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
     myLogFile << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
     myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
