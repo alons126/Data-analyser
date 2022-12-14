@@ -2167,8 +2167,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
-            TLorentzVector e_out_CD, Q_CD;
-            TLorentzVector e_out_FD, Q_FD;
+            TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
             double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
             double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
@@ -2177,26 +2176,20 @@ void EventAnalyser() {
                     ++num_of_events_e_CD;
 
                     Theta_e_CD->Fill(electrons[i]->getTheta());
-
-                    Theta_e_CD->Fill(electrons[i]->getTheta());
-
                     Pe_CD = electrons[i]->par()->getP();
                     e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_CD * Pe_CD));
 
                     Q_CD = e_in - e_out_CD;
-
                     Q2_CD = fabs(Q_CD.Mag2());
                     Q2_histogram_CD->Fill(Q2_CD);
                 } else if (AllParticles[i]->getRegion() == FD) {
                     ++num_of_events_e_FD;
 
                     Theta_e_FD->Fill(electrons[i]->getTheta());
-
                     Pe_FD = electrons[i]->par()->getP();
                     e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_FD * Pe_FD));
 
                     Q_FD = e_in - e_out_FD;
-
                     Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
                 }
