@@ -2113,19 +2113,7 @@ void EventAnalyser() {
             //<editor-fold desc="All electrons plots">
 
             //<editor-fold desc="Beta vs P (no #(electron) cut, CD & FD)">
-
-//        cout << "\n";
-
             for (int i = 0; i < AllParticles.size(); i++) {
-
-//            int particlePDG = AllParticles[i]->par()->getPid();
-//
-//            if ((particlePDG != 0) && (abs(particlePDG) != 11) && (particlePDG != 22) && (abs(particlePDG) != 2212) && (particlePDG != 2112) &&
-//                (particlePDG != 211) && (particlePDG != -211) && (particlePDG != 111) && (abs(particlePDG) != 321)
-//                ) {
-//                cout << "particlePDG:\t" << particlePDG << "\n";
-//            }
-
                 if (AllParticles[i]->getRegion() == CD) {
                     Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 } else if (AllParticles[i]->getRegion() == FD) {
@@ -2133,19 +2121,63 @@ void EventAnalyser() {
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
+//
+//            //<editor-fold desc="Electron chi2 plots (no #(electron) cut, CD & FD)">
+//            for (auto &e: electrons) {
+//                if (e->getRegion() == CD) {
+//                    Chi2_Electron_CD->Fill(e->par()->getChi2Pid());
+//                    Vertex_Electron_Vx_CD->Fill(e->par()->getVx());
+//                    Vertex_Electron_Vy_CD->Fill(e->par()->getVy());
+//                    Vertex_Electron_Vz_CD->Fill(e->par()->getVz());
+//                } else if (e->getRegion() == FD) {
+//                    Chi2_Electron_FD->Fill(e->par()->getChi2Pid());
+//                    Vertex_Electron_Vx_FD->Fill(e->par()->getVx());
+//                    Vertex_Electron_Vy_FD->Fill(e->par()->getVy());
+//                    Vertex_Electron_Vz_FD->Fill(e->par()->getVz());
+//                }
+//            } // end of loop over AllParticles vector
+//            //</editor-fold>
+//
+            //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
+            TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
+            double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
+            double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
-            //<editor-fold desc="Electron chi2 plots (no #(electron) cut, CD & FD)">
-            for (auto &e: electrons) {
-                if (e->getRegion() == CD) {
-                    Chi2_Electron_CD->Fill(e->par()->getChi2Pid());
-                    Vertex_Electron_Vx_CD->Fill(e->par()->getVx());
-                    Vertex_Electron_Vy_CD->Fill(e->par()->getVy());
-                    Vertex_Electron_Vz_CD->Fill(e->par()->getVz());
-                } else if (e->getRegion() == FD) {
-                    Chi2_Electron_FD->Fill(e->par()->getChi2Pid());
-                    Vertex_Electron_Vx_FD->Fill(e->par()->getVx());
-                    Vertex_Electron_Vy_FD->Fill(e->par()->getVy());
-                    Vertex_Electron_Vz_FD->Fill(e->par()->getVz());
+            for (int i = 0; i < electrons.size(); i++) {
+                if (electrons[i]->getRegion() == CD) {
+                    ++num_of_events_e_CD;
+
+                    Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
+
+                    Vertex_Electron_Vx_CD->Fill(electrons[i]->par()->getVx());
+                    Vertex_Electron_Vy_CD->Fill(electrons[i]->par()->getVy());
+                    Vertex_Electron_Vz_CD->Fill(electrons[i]->par()->getVz());
+
+                    Theta_e_CD->Fill(electrons[i]->getTheta());
+
+                    Pe_CD = electrons[i]->par()->getP();
+                    e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_CD * Pe_CD));
+
+                    Q_CD = e_in - e_out_CD;
+                    Q2_CD = fabs(Q_CD.Mag2());
+                    Q2_histogram_CD->Fill(Q2_CD);
+                } else if (AllParticles[i]->getRegion() == FD) {
+                    ++num_of_events_e_FD;
+
+                    Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
+
+                    Vertex_Electron_Vx_FD->Fill(electrons[i]->par()->getVx());
+                    Vertex_Electron_Vy_FD->Fill(electrons[i]->par()->getVy());
+                    Vertex_Electron_Vz_FD->Fill(electrons[i]->par()->getVz());
+
+                    Theta_e_FD->Fill(electrons[i]->getTheta());
+
+                    Pe_FD = electrons[i]->par()->getP();
+                    e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_FD * Pe_FD));
+
+                    Q_FD = e_in - e_out_FD;
+                    Q2_FD = fabs(Q_FD.Mag2());
+                    Q2_histogram_FD->Fill(Q2_FD);
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
@@ -2164,36 +2196,6 @@ void EventAnalyser() {
                     Vertex_Proton_Vz_FD->Fill(p->par()->getVz());
                 }
             } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
-            TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
-            double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
-            double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
-
-            for (int i = 0; i < electrons.size(); i++) {
-                if (electrons[i]->getRegion() == CD) {
-                    ++num_of_events_e_CD;
-
-                    Theta_e_CD->Fill(electrons[i]->getTheta());
-                    Pe_CD = electrons[i]->par()->getP();
-                    e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_CD * Pe_CD));
-
-                    Q_CD = e_in - e_out_CD;
-                    Q2_CD = fabs(Q_CD.Mag2());
-                    Q2_histogram_CD->Fill(Q2_CD);
-                } else if (AllParticles[i]->getRegion() == FD) {
-                    ++num_of_events_e_FD;
-
-                    Theta_e_FD->Fill(electrons[i]->getTheta());
-                    Pe_FD = electrons[i]->par()->getP();
-                    e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_FD * Pe_FD));
-
-                    Q_FD = e_in - e_out_FD;
-                    Q2_FD = fabs(Q_FD.Mag2());
-                    Q2_histogram_FD->Fill(Q2_FD);
-                }
-            } // end of loop over AllParticles vector
             //</editor-fold>
 
             //</editor-fold>
@@ -4617,24 +4619,27 @@ void EventAnalyser() {
 
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
+//  TODO: cut around the chi2 distribution peak
 //  Electron chi2 (no #(electrons) cut) ---------------------------------------------------------------
 
         //<editor-fold desc="Electron chi2 (no #(electrons) cut)">
         histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD, 0);
+                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+                      Chi2_Electron_CD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD, 0);
+                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+                      Chi2_Electron_FD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (no #(electrons) cut)">
         histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-                      Chi2_Proton_CD->GetMean());
+                      Chi2_Proton_CD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
-                      Chi2_Proton_FD->GetMean());
+                      Chi2_Proton_FD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
         //</editor-fold>
 
 //  Electron chi2 (1e only) ----------------------------------------------------------------------------
