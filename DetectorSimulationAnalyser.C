@@ -2081,7 +2081,7 @@ void EventAnalyser() {
     double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
     double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
 
-    TLorentzVector incident_e(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
+    TLorentzVector e_in(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
     int num_of_events = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
@@ -2167,8 +2167,8 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
-            TLorentzVector outgoing_e;
-            TLorentzVector Q;
+            TLorentzVector e_out_CD, Q_CD;
+            TLorentzVector e_out_FD, Q_FD;
             double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
             double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
@@ -2178,19 +2178,14 @@ void EventAnalyser() {
 
                     Theta_e_CD->Fill(electrons[i]->getTheta());
 
+                    Theta_e_CD->Fill(electrons[i]->getTheta());
+
                     Pe_CD = electrons[i]->par()->getP();
-                    Pex_CD = electrons[i]->par()->getPx();
-                    Pey_CD = electrons[i]->par()->getPy();
-                    Pez_CD = electrons[i]->par()->getPz();
-                    Ee_CD = sqrt(m_e * m_e + Pe_CD * Pe_CD);
+                    e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_CD * Pe_CD));
 
-                    qx_CD = Pvx - Pex_CD;
-                    qy_CD = Pvy - Pey_CD;
-                    qz_CD = Pvz - Pez_CD;
-                    q_CD = rCalc(qx_CD, qy_CD, qz_CD);
-                    omega_CD = beamE - Ee_CD;
+                    Q_CD = e_in - e_out_CD;
 
-                    Q2_CD = fabs(omega_CD * omega_CD - q_CD * q_CD);
+                    Q2_CD = fabs(Q_CD.Mag2());
                     Q2_histogram_CD->Fill(Q2_CD);
                 } else if (AllParticles[i]->getRegion() == FD) {
                     ++num_of_events_e_FD;
@@ -2198,37 +2193,12 @@ void EventAnalyser() {
                     Theta_e_FD->Fill(electrons[i]->getTheta());
 
                     Pe_FD = electrons[i]->par()->getP();
-                    outgoing_e.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_FD * Pe_FD));
-//                    Pex_FD = electrons[i]->par()->getPx();
-//                    Pey_FD = electrons[i]->par()->getPy();
-//                    Pez_FD = electrons[i]->par()->getPz();
+                    e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(),electrons[i]->par()->getPy(),electrons[i]->par()->getPz(),sqrt(m_e * m_e + Pe_FD * Pe_FD));
 
-//                    Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
+                    Q_FD = e_in - e_out_FD;
 
-//                    qx_FD = Pvx - Pex_FD;
-//                    qy_FD = Pvy - Pey_FD;
-//                    qz_FD = Pvz - Pez_FD;
-                    Q = incident_e - outgoing_e;
-
-//                    q_FD = rCalc(qx_FD, qy_FD, qz_FD);
-//                    omega_FD = beamE - Ee_FD;
-
-                    Q2_FD = fabs(Q.Mag2());
+                    Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
-//                    Pe_FD = electrons[i]->par()->getP();
-//                    Pex_FD = electrons[i]->par()->getPx();
-//                    Pey_FD = electrons[i]->par()->getPy();
-//                    Pez_FD = electrons[i]->par()->getPz();
-//                    Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
-//
-//                    qx_FD = Pvx - Pex_FD;
-//                    qy_FD = Pvy - Pey_FD;
-//                    qz_FD = Pvz - Pez_FD;
-//                    q_FD = rCalc(qx_FD, qy_FD, qz_FD);
-//                    omega_FD = beamE - Ee_FD;
-//
-//                    Q2_FD = fabs(omega_FD * omega_FD - q_FD * q_FD);
-//                    Q2_histogram_FD->Fill(Q2_FD);
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
