@@ -70,27 +70,27 @@ void EventAnalyser() {
     double Ev; // electron energy declaration
 
     //<editor-fold desc="Particle masses">
-    double m_e = 0.00051099895; // electron mass (in GeV)
-    double m_p = 0.93827208816; // proton mass (in GeV)
-    double m_n = 0.93956542052; // neutron mass (in GeV)
-    double m_pizero = 0.1349768; // pizero mass (in GeV)
-    double m_piplus = 0.13957039; // piplus mass (in GeV)
-    double m_piminus = m_piplus; // piminus mass (in GeV)
-    double m_Kzero = 0.497611; // Kzero mass (in GeV)
-    double m_Kplus = 0.493677; // Kplus mass (in GeV)
-    double m_Kminus = m_Kplus; // Kminus mass (in GeV)
+//    double m_e = 0.00051099895; // electron mass (in GeV)
+//    double m_p = 0.93827208816; // proton mass (in GeV)
+//    double m_n = 0.93956542052; // neutron mass (in GeV)
+//    double m_pizero = 0.1349768; // pizero mass (in GeV)
+//    double m_piplus = 0.13957039; // piplus mass (in GeV)
+//    double m_piminus = m_piplus; // piminus mass (in GeV)
+//    double m_Kzero = 0.497611; // Kzero mass (in GeV)
+//    double m_Kplus = 0.493677; // Kplus mass (in GeV)
+//    double m_Kminus = m_Kplus; // Kminus mass (in GeV)
     //</editor-fold>
 
     if (fileInput == "recon_c12_6gev.hipo") {
         Ev = 5.98636;
     }
 
-    double Pv = sqrt(Ev * Ev - m_e * m_e);
-    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
-    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
-    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
-
-//    TLorentzVector incident_e(0,0,0,db->GetParticle(11)->Mass());
+//    double Pv = sqrt(Ev * Ev - m_e * m_e);
+//    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
+//    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
+//    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
+//
+////    TLorentzVector incident_e(0,0,0,db->GetParticle(11)->Mass());
 
     //</editor-fold>
 
@@ -104,11 +104,11 @@ void EventAnalyser() {
     cout << "Settings mode:\t'" << file_name << "'\n";
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n\n";
-    cout << "Ev:\t\t" << Ev << "\n";
-    cout << "Pv:\t\t" << Pv << "\n";
-    cout << "Pvx:\t\t" << Pvx << "\n";
-    cout << "Pvy:\t\t" << Pvy << "\n";
-    cout << "Pvz:\t\t" << Pvz << "\n\n\n";
+    cout << "Ev:\t\t" << Ev << "\n\n\n";
+//    cout << "Pv:\t\t" << Pv << "\n";
+//    cout << "Pvx:\t\t" << Pvx << "\n";
+//    cout << "Pvy:\t\t" << Pvy << "\n";
+//    cout << "Pvz:\t\t" << Pvz << "\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -2041,65 +2041,64 @@ void EventAnalyser() {
     clas12root::HipoChain chain;
 //    HipoChain chain;
 
-    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
+    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
+//    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
     chain.Add(AnalyseFileDirContent.c_str());
 //    chain.Add(AnalyseFileDir.c_str());
 
 //    clas12root::HipoChain chain;
 //    string AnalyseFileDirContent = AnalyseFileDir + "/*.hipo";
 
-    int num_of_events = 0;
-    int num_of_events_e_CD = 0;
-    int num_of_events_e_FD = 0;
-    int num_of_events_with_e = 0;
-    int num_of_events_1e = 0;
-    int num_of_events_1enP = 0;
-    int num_of_events_1e2X = 0;
-    int num_of_events_1e2p = 0;
+    //<editor-fold desc="Getting particle masses">
+    auto db = TDatabasePDG::Instance();
+    chain.db()->turnOffQADB();
+    double m_e = db->GetParticle(11)->Mass();
+    double m_p = db->GetParticle(2212)->Mass();
+    double m_n = db->GetParticle(2112)->Mass();
+    double m_pizero = db->GetParticle(111)->Mass();
+    double m_piplus = db->GetParticle(211)->Mass();
+    double m_piminus = db->GetParticle(-211)->Mass();
+    double m_Kzero = db->GetParticle(311)->Mass();
+    double m_Kplus = db->GetParticle(321)->Mass();
+    double m_Kminus = db->GetParticle(-321)->Mass();
+//    double mass_p = db->GetParticle(2212)->Mass();
+//    double mass_n = db->GetParticle(2112)->Mass();
+//    double mass_pip = db->GetParticle(211)->Mass();
+//    double mass_pim = db->GetParticle(-211)->Mass();
 
-    int num_of_2p_events = 0;
-    int num_of_1n1p_events = 0;
-    int num_of_MicroBooNE_events = 0;
+//    cout << "m_e:\t'" << m_e << "'\n";
+//    cout << "m_p:\t'" << m_p << "'\n";
+//    cout << "m_n:\t'" << m_n << "'\n";
+//    cout << "m_pizero:\t'" << m_pizero << "'\n";
+//    cout << "m_piplus:\t'" << m_piplus << "'\n";
+//    cout << "m_piminus:\t'" << m_piminus << "'\n";
+//    cout << "m_Kzero:\t'" << m_Kzero << "'\n";
+//    cout << "m_Kplus:\t'" << m_Kplus << "'\n";
+//    cout << "m_Kminus:\t'" << m_Kminus << "'\n";
+//    cout << "mass_p:\t'" << mass_p << "'\n";
+//    cout << "mass_n:\t'" << mass_n << "'\n";
+//    cout << "mass_pip:\t'" << mass_pip << "'\n";
+//    cout << "mass_pim:\t'" << mass_pim << "'\n";
+    //</editor-fold>
+
+    //<editor-fold desc="Beam particle's momentum">
+    double Pv = sqrt(Ev * Ev - m_e * m_e);
+    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
+    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
+    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
+
+//    TLorentzVector incident_e(0,0,0,db->GetParticle(11)->Mass());
+    //</editor-fold>
+
+    int num_of_events = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
+    int num_of_events_with_e = 0, num_of_events_1e = 0, num_of_events_1enP = 0, num_of_events_1e2X = 0, num_of_events_1e2p = 0;
+    int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
         cout << "\nAnalysing " << chain.GetFileName(ifile) << "\n\n";
 
         clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
-
-        //    auto db=TDatabasePDG::Instance();
-//    c12.db()->turnOffQADB();
-//    double mass_p = db->GetParticle(2212)->Mass();
-//    double mass_n = db->GetParticle(2112)->Mass();
-//    double mass_pip = db->GetParticle(211)->Mass();
-//    double mass_pim = db->GetParticle(-211)->Mass();
-//
-//    cout << "mass_p:\t'" << mass_p << "'\n";
-//    cout << "mass_n:\t'" << mass_n << "'\n";
-//    cout << "mass_pip:\t'" << mass_pip << "'\n";
-//    cout << "mass_pim:\t'" << mass_pim << "'\n";
-
-
-//    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-//    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-//    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
-//    c12.addAtLeastPid(211, 0); // at least 0 pi+ (MicroBooNE)
-//    c12.addAtLeastPid(-211, 0); // at least 0 pi- (MicroBooNE)
-
-//    c12.addZeroOfRestPid(); // nothing else
-
-//        int num_of_events = 0;
-//        int num_of_events_e_CD = 0;
-//        int num_of_events_e_FD = 0;
-//        int num_of_events_with_e = 0;
-//        int num_of_events_1e = 0;
-//        int num_of_events_1enP = 0;
-//        int num_of_events_1e2X = 0;
-//        int num_of_events_1e2p = 0;
-//
-//        int num_of_2p_events = 0;
-//        int num_of_1n1p_events = 0;
-//        int num_of_MicroBooNE_events = 0;
 
         while (c12.next()) { // loop over events
             ++num_of_events;
