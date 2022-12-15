@@ -1325,10 +1325,10 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 histograms">
     THStack *Q2_Stack = new THStack("Q^{2} stack (CD & FD)", "Q^{2} Histogram (no #(electrons) cut, CD & FD);Q^{2} [GeV^{2}];");
 
-    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-//    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-//    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+//    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, 1.1 * beamE);
+//    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, 1.1 * beamE);
     //</editor-fold>
 
 // Older plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4629,37 +4629,66 @@ void EventAnalyser() {
 
         histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
-                      Chi2_Electron_FD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
+                      Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()));
+
+        //        double testVar = Chi2_Electron_CD->GetBinContent(Chi2_Electron_CD->GetMaximumBin());
+
+//        cout << "\n\nChi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t" << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n\n";
+
+        cout << "\n\nChi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t" << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+        cout << "Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+        cout << "Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+        cout << "Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+        cout << "Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+        cout << "Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n";
+        cout << "Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()) << "\n\n";
+
+//        cout << "\n\nChi2_Electron_FD->GetMaximumBin():\t" << Chi2_Electron_FD->GetMaximumBin() << "\n";
+//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
+//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
+//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
+//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
+//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
+//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n\n";
+
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (no #(electrons) cut)">
         histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-                      Chi2_Proton_CD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
+                      Chi2_Proton_CD->GetBinContent(Chi2_Proton_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
-                      Chi2_Proton_FD->GetBinContent(Chi2_Electron_CD->GetMaximumBin()));
+                      Chi2_Proton_FD->GetBinContent(Chi2_Proton_FD->GetMaximumBin()));
         //</editor-fold>
 
 //  Electron chi2 (1e only) ----------------------------------------------------------------------------
 
         //<editor-fold desc="Electron chi2 (1e only)">
         histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD, 0);
+                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+                      Chi2_Electron_1e_CD->GetBinContent(Chi2_Electron_1e_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD, 0);
+                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+                      Chi2_Electron_1e_FD->GetBinContent(Chi2_Electron_1e_FD->GetMaximumBin()));
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (1e only)">
         histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-                      Chi2_Proton_1e_CD->GetMean());
+                      Chi2_Proton_1e_CD->GetBinContent(Chi2_Proton_1e_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
-                      Chi2_Proton_1e_FD->GetMean());
+                      Chi2_Proton_1e_FD->GetBinContent(Chi2_Proton_1e_FD->GetMaximumBin()));
         //</editor-fold>
 
 //  Electron chi2 - test (1e only) ----------------------------------------------------------------------------
@@ -4667,23 +4696,21 @@ void EventAnalyser() {
         //<editor-fold desc="Electron chi2 (1e only)">
         histPlotter1D(c1, Chi2_Electron_1e_test_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_CD,
-                      Chi2_Electron_1e_mean_CD);
+                      Chi2_Electron_cut_CD, Chi2_Electron_1e_test_CD->GetBinContent(Chi2_Electron_1e_test_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Electron_1e_test_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
-                      Chi2_Electron_cut_FD,
-                      Chi2_Electron_1e_mean_FD);
+                      Chi2_Electron_cut_FD, Chi2_Electron_1e_test_FD->GetBinContent(Chi2_Electron_1e_test_FD->GetMaximumBin()));
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (1e only)">
         histPlotter1D(c1, Chi2_Proton_1e_test_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-                      Chi2_Proton_1e_mean_CD);
+                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true,
+                      Chi2_Proton_cut_CD, Chi2_Proton_1e_test_CD->GetBinContent(Chi2_Proton_1e_test_CD->GetMaximumBin()));
 
         histPlotter1D(c1, Chi2_Proton_1e_test_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
-                      Chi2_Proton_1e_mean_FD);
+                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
+                      Chi2_Proton_cut_FD, Chi2_Proton_1e_test_FD->GetBinContent(Chi2_Proton_1e_test_FD->GetMaximumBin()));
         //</editor-fold>
 
     } else {
