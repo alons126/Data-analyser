@@ -514,23 +514,23 @@ void EventAnalyser() {
 
     //<editor-fold desc="Electron chi2 cuts">
     double Chi2_Electron_cut_CD = 5.;
-    double Chi2_Electron_Xmax_CD;
-    double Chi2_Electron_1e_mean_CD = 0; // 1e mean
-    double Chi2_Electron_1e_Xmax_CD; // 1e mean
+    double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
+    double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
+    double Chi2_Electron_1e_Xmax_CD;
     double Chi2_Electron_cut_FD = 5.;
-    double Chi2_Electron_Xmax_FD;
-    double Chi2_Electron_1e_mean_FD = -0.8841; // 1e mean
-    double Chi2_Electron_1e_Xmax_FD; // 1e mean
+    double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
+    double Chi2_Electron_1e_peak_FD = 0.15; // to fill using Chi2_Electron_1e_Xmax_FD
+    double Chi2_Electron_1e_Xmax_FD;
     //</editor-fold>
 
     //<editor-fold desc="Proton chi2 cuts">
     double Chi2_Proton_cut_CD = 3.;
-    double Chi2_Proton_Xmax_CD;
-    double Chi2_Proton_1e_mean_CD = 0.698; // 1e mean
+    double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
+    double Chi2_Proton_1e_peak_CD = 0.55; // to fill using Chi2_Proton_1e_Xmax_CD
     double Chi2_Proton_1e_Xmax_CD;
     double Chi2_Proton_cut_FD = 3.;
-    double Chi2_Proton_Xmax_FD;
-    double Chi2_Proton_1e_mean_FD = -0.0521; // 1e mean
+    double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
+    double Chi2_Proton_1e_peak_FD = -0.15; // to fill using Chi2_Proton_1e_Xmax_FD
     double Chi2_Proton_1e_Xmax_FD;
     //</editor-fold>
 
@@ -1142,14 +1142,14 @@ void EventAnalyser() {
     THStack *Chi2_Proton_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
 
     TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (no #(electrons) cut, CD)", "Electron #chi^{2} (no #(electrons) cut, Central Detector);Electron #chi^{2};",
-                                      100, Chi2_lower_lim, Chi2_upper_lim);
+                                      1000, Chi2_lower_lim, Chi2_upper_lim);
     TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (no #(electrons) cut, FD)", "Electron #chi^{2} (no #(electrons) cut, Forward Detector);Electron #chi^{2};",
-                                      100, Chi2_lower_lim, Chi2_upper_lim);
+                                      1000, Chi2_lower_lim, Chi2_upper_lim);
 
     TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (no #(electrons) cut, CD)", "Proton #chi^{2} (no #(electrons) cut, Central Detector);Proton #chi^{2};",
-                                    100, Chi2_lower_lim, Chi2_upper_lim);
+                                    1000, Chi2_lower_lim, Chi2_upper_lim);
     TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (no #(electrons) cut, FD)", "Proton #chi^{2} (no #(electrons) cut, Forward Detector);Proton #chi^{2};",
-                                    100, Chi2_lower_lim, Chi2_upper_lim);
+                                    1000, Chi2_lower_lim, Chi2_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots (1e only)">
@@ -1157,31 +1157,31 @@ void EventAnalyser() {
     THStack *Chi2_Proton_1e_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
 
     TH1D *Chi2_Electron_1e_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD)", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
-                                         100, Chi2_lower_lim, Chi2_upper_lim);
+                                         1000, Chi2_lower_lim, Chi2_upper_lim);
     TH1D *Chi2_Electron_1e_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD)", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
-                                         100, Chi2_lower_lim, Chi2_upper_lim);
+                                         1000, Chi2_lower_lim, Chi2_upper_lim);
 
     TH1D *Chi2_Proton_1e_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD)", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
-                                       100, Chi2_lower_lim, Chi2_upper_lim);
+                                       1000, Chi2_lower_lim, Chi2_upper_lim);
     TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD)", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
-                                       100, Chi2_lower_lim, Chi2_upper_lim);
+                                       1000, Chi2_lower_lim, Chi2_upper_lim);
 
     //<editor-fold desc="Chi2 plots (1e only) - test">
     TH1D *Chi2_Electron_1e_test_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
-                                              100, -2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_mean_CD, 2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_mean_CD);
+                                              1000, -2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_peak_CD, 2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_peak_CD);
 //    TH1D *Chi2_Electron_1e_test_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
 //                                              100, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
     TH1D *Chi2_Electron_1e_test_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
-                                              100, -2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_mean_FD, 2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_mean_FD);
+                                              1000, -2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_peak_FD, 2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_peak_FD);
 //    TH1D *Chi2_Electron_1e_test_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
 //                                              100, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
 
     TH1D *Chi2_Proton_1e_test_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
-                                            100, -2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_mean_CD, 2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_mean_CD);
+                                            1000, -2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_peak_CD, 2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_peak_CD);
 //    TH1D *Chi2_Proton_1e_test_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
 //                                            100, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
     TH1D *Chi2_Proton_1e_test_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
-                                            100, -2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_mean_FD, 2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_mean_FD);
+                                            1000, -2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_peak_FD, 2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_peak_FD);
 //    TH1D *Chi2_Proton_1e_test_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
 //                                            100, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
     //</editor-fold>
@@ -2249,12 +2249,15 @@ void EventAnalyser() {
                     Vertex_Electron_1e_Vz_CD->Fill(e_Vz_CD);
 
                     //<editor-fold desc="Electron chi2 test (1e only, CD)">
-                    if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-//                if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-                        continue;
-                    } else {
+                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) < Chi2_Electron_cut_CD)) {
                         Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
                     }
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+////                if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+//                        continue;
+//                    } else {
+//                        Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
+//                    }
                     //</editor-fold>
 
                 } else if (e->getRegion() == FD) {
@@ -2269,12 +2272,15 @@ void EventAnalyser() {
                     Vertex_Electron_1e_Vz_FD->Fill(e_Vz_FD);
 
                     //<editor-fold desc="Electron chi2 test (1e only, FD)">
-                    if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-//                if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-                        continue;
-                    } else {
+                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) < Chi2_Electron_cut_FD)) {
                         Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
                     }
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+////                if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+//                        continue;
+//                    } else {
+//                        Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
+//                    }
                     //</editor-fold>
 
                 }
@@ -2298,12 +2304,15 @@ void EventAnalyser() {
                     Vertex_Proton_1e_Vz_CD->Fill(p_Vz_tmp_CD);
 
                     //<editor-fold desc="Proton chi2 test (1e only, CD)">
-                    if ((fabs(Chi2_Proton_1e_mean_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
-//                if ((fabs(Chi2_Proton_1e_mean_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD) || (fabs(Chi2_Proton_1e_mean_CD + p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
-                        continue;
-                    } else {
+                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) < Chi2_Proton_cut_CD)) {
                         Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
                     }
+//                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
+////                if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD) || (fabs(Chi2_Proton_1e_peak_CD + p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
+//                        continue;
+//                    } else {
+//                        Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
+//                    }
                     //</editor-fold>
 
                 } else if (p->getRegion() == FD) {
@@ -2318,12 +2327,15 @@ void EventAnalyser() {
                     Vertex_Proton_1e_Vz_FD->Fill(p_Vz_tmp_FD);
 
                     //<editor-fold desc="Proton chi2 test (1e only, FD)">
-                    if ((fabs(Chi2_Proton_1e_mean_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
-//                if ((fabs(Chi2_Proton_1e_mean_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD) || (fabs(Chi2_Proton_1e_mean_FD + p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
-                        continue;
-                    } else {
+                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) < Chi2_Proton_cut_FD)) {
                         Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
                     }
+//                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
+////                if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD) || (fabs(Chi2_Proton_1e_peak_FD + p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
+//                        continue;
+//                    } else {
+//                        Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
+//                    }
                     //</editor-fold>
 
                 }
@@ -2367,10 +2379,10 @@ void EventAnalyser() {
                     if (p->getRegion() == CD) {
                         p_Chi2_CD = p->par()->getChi2Pid();
 
-                        if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) // applying electron chi2 cut
-                            && (fabs(Chi2_Proton_1e_mean_CD - p_Chi2_CD) > Chi2_Proton_cut_CD)) // applying proton chi2 cut
+                        if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) // applying electron chi2 cut
+                            && (fabs(Chi2_Proton_1e_peak_CD - p_Chi2_CD) > Chi2_Proton_cut_CD)) // applying proton chi2 cut
                         {
-//                    if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
                             continue;
                         } else {
 //                            p_Chi2_CD = p->par()->getChi2Pid();
@@ -2389,10 +2401,10 @@ void EventAnalyser() {
                     } else if (p->getRegion() == FD) {
                         p_Chi2_FD = p->par()->getChi2Pid();
 
-                        if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) // applying electron chi2 cut
-                            && (fabs(Chi2_Proton_1e_mean_FD - p_Chi2_FD) > Chi2_Proton_cut_FD)) // applying proton chi2 cut
+                        if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) // applying electron chi2 cut
+                            && (fabs(Chi2_Proton_1e_peak_FD - p_Chi2_FD) > Chi2_Proton_cut_FD)) // applying proton chi2 cut
                         {
-//                    if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
                             continue;
                         } else {
 //                            p_Chi2_FD = p->par()->getChi2Pid();
@@ -2415,23 +2427,23 @@ void EventAnalyser() {
 
 //            double upper_e_chi2_cut =
 
-//            Chi2_Electron_1e_mean_CD - e_Chi2_CD
+//            Chi2_Electron_1e_peak_CD - e_Chi2_CD
 //
-//            if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+//            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 //                Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
 //            }
 
-//            if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+//            if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
 //                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
 //            }
 //
-//            if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+//            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 //                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
 //                Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
 //                Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
 //            }
 ////
-//            if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+//            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 //                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
 //                Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
 //                Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
@@ -3442,8 +3454,8 @@ void EventAnalyser() {
 //                Vertex_Electron_1e_Vz_CD->Fill(e_Vz_CD);
 //
 //                //<editor-fold desc="Electron chi2 test (1e only, CD)">
-//                if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-////                if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+//                if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+////                if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 //                    continue;
 //                } else {
 //                    Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
@@ -3462,8 +3474,8 @@ void EventAnalyser() {
 //                Vertex_Electron_1e_Vz_FD->Fill(e_Vz_FD);
 //
 //                //<editor-fold desc="Electron chi2 test (1e only, FD)">
-//                if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-////                if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+//                if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+////                if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
 //                    continue;
 //                } else {
 //                    Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
@@ -3491,8 +3503,8 @@ void EventAnalyser() {
 //                Vertex_Proton_1e_Vz_CD->Fill(p_Vz_tmp_CD);
 //
 //                //<editor-fold desc="Proton chi2 test (1e only, CD)">
-//                if ((fabs(Chi2_Proton_1e_mean_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
-////                if ((fabs(Chi2_Proton_1e_mean_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD) || (fabs(Chi2_Proton_1e_mean_CD + p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
+//                if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
+////                if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD) || (fabs(Chi2_Proton_1e_peak_CD + p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
 //                    continue;
 //                } else {
 //                    Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
@@ -3511,8 +3523,8 @@ void EventAnalyser() {
 //                Vertex_Proton_1e_Vz_FD->Fill(p_Vz_tmp_FD);
 //
 //                //<editor-fold desc="Proton chi2 test (1e only, FD)">
-//                if ((fabs(Chi2_Proton_1e_mean_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
-////                if ((fabs(Chi2_Proton_1e_mean_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD) || (fabs(Chi2_Proton_1e_mean_FD + p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
+//                if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
+////                if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD) || (fabs(Chi2_Proton_1e_peak_FD + p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
 //                    continue;
 //                } else {
 //                    Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
@@ -3560,10 +3572,10 @@ void EventAnalyser() {
 //                if (p->getRegion() == CD) {
 //                    p_Chi2_CD = p->par()->getChi2Pid();
 //
-//                    if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) // applying electron chi2 cut
-//                        && (fabs(Chi2_Proton_1e_mean_CD - p_Chi2_CD) > Chi2_Proton_cut_CD)) // applying proton chi2 cut
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) // applying electron chi2 cut
+//                        && (fabs(Chi2_Proton_1e_peak_CD - p_Chi2_CD) > Chi2_Proton_cut_CD)) // applying proton chi2 cut
 //                    {
-////                    if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+////                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 //                        continue;
 //                    } else {
 ////                            p_Chi2_CD = p->par()->getChi2Pid();
@@ -3582,10 +3594,10 @@ void EventAnalyser() {
 //                } else if (p->getRegion() == FD) {
 //                    p_Chi2_FD = p->par()->getChi2Pid();
 //
-//                    if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) // applying electron chi2 cut
-//                        && (fabs(Chi2_Proton_1e_mean_FD - p_Chi2_FD) > Chi2_Proton_cut_FD)) // applying proton chi2 cut
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) // applying electron chi2 cut
+//                        && (fabs(Chi2_Proton_1e_peak_FD - p_Chi2_FD) > Chi2_Proton_cut_FD)) // applying proton chi2 cut
 //                    {
-////                    if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+////                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
 //                        continue;
 //                    } else {
 ////                            p_Chi2_FD = p->par()->getChi2Pid();
@@ -3608,23 +3620,23 @@ void EventAnalyser() {
 //
 ////            double upper_e_chi2_cut =
 //
-////            Chi2_Electron_1e_mean_CD - e_Chi2_CD
+////            Chi2_Electron_1e_peak_CD - e_Chi2_CD
 ////
-////            if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+////            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 ////                Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
 ////            }
 //
-////            if ((fabs(Chi2_Electron_1e_mean_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_mean_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
+////            if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
 ////                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
 ////            }
 ////
-////            if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+////            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 ////                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
 ////                Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
 ////                Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
 ////            }
 //////
-////            if ((fabs(Chi2_Electron_1e_mean_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_mean_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
+////            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
 ////                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
 ////                Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
 ////                Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
@@ -4627,70 +4639,31 @@ void EventAnalyser() {
 
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
+        Chi2_Electron_Xmax_CD = Chi2_Electron_CD->GetBinCenter(Chi2_Electron_CD->GetMaximumBin());
+        Chi2_Electron_Xmax_FD = Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin());
+        Chi2_Proton_Xmax_CD = Chi2_Proton_CD->GetBinCenter(Chi2_Proton_CD->GetMaximumBin());
+        Chi2_Proton_Xmax_FD = Chi2_Proton_FD->GetBinCenter(Chi2_Proton_FD->GetMaximumBin());
+        Chi2_Electron_1e_Xmax_CD = Chi2_Electron_1e_CD->GetBinCenter(Chi2_Electron_1e_CD->GetMaximumBin());
+        Chi2_Electron_1e_Xmax_FD = Chi2_Electron_1e_FD->GetBinCenter(Chi2_Electron_1e_FD->GetMaximumBin());
+        Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD->GetBinCenter(Chi2_Proton_1e_CD->GetMaximumBin());
+        Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD->GetBinCenter(Chi2_Proton_1e_FD->GetMaximumBin());
+
 //  TODO: cut around the chi2 distribution peak
 //  Electron chi2 (no #(electrons) cut) ---------------------------------------------------------------
 
         //<editor-fold desc="Electron chi2 (no #(electrons) cut)">
-        Chi2_Electron_Xmax_CD = Chi2_Electron_CD->GetBinCenter(Chi2_Electron_CD->GetMaximumBin());
-
         histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_Xmax_CD);
 
-
-        Chi2_Electron_Xmax_FD = Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin());
-
         histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_Xmax_FD);
-//        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
-//                      Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin()));
-
-        //        double testVar = Chi2_Electron_CD->GetBinContent(Chi2_Electron_CD->GetMaximumBin());
-
-//        cout << "\n\nChi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t" << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n\n";
-
-//        cout << "\n\ntestVar:\t" << testVar << "\n";
-//        cout << "testVar:\t"  << testVar << "\n";
-//        cout << "testVar:\t"  << testVar << "\n";
-//        cout << "testVar:\t"  << testVar << "\n";
-//        cout << "testVar:\t"  << testVar << "\n";
-//        cout << "testVar:\t"  << testVar << "\n";
-//        cout << "testVar:\t"  << testVar << "\n\n";
-
-//        cout << "\n\nChi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t" << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n";
-//        cout << "Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()):\t"  << Chi2_Electron_FD->GetXaxis()->GetBinContent(Chi2_Electron_FD->GetMaximumBin()) << "\n\n";
-//
-//        cout << "\n\nChi2_Electron_FD->GetMaximumBin():\t" << Chi2_Electron_FD->GetMaximumBin() << "\n";
-//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
-//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
-//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
-//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
-//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n";
-//        cout << "Chi2_Electron_FD->GetMaximumBin():\t"  << Chi2_Electron_FD->GetMaximumBin() << "\n\n";
-
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (no #(electrons) cut)">
-        Chi2_Proton_Xmax_CD = Chi2_Proton_CD->GetBinCenter(Chi2_Proton_CD->GetMaximumBin());
-
         histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_Xmax_CD);
-
-
-        Chi2_Proton_Xmax_FD = Chi2_Proton_FD->GetBinCenter(Chi2_Proton_FD->GetMaximumBin());
 
         histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
@@ -4699,14 +4672,9 @@ void EventAnalyser() {
 //  Electron chi2 (1e only) ----------------------------------------------------------------------------
 
         //<editor-fold desc="Electron chi2 (1e only)">
-        Chi2_Electron_1e_Xmax_CD = Chi2_Electron_1e_CD->GetBinCenter(Chi2_Electron_1e_CD->GetMaximumBin());
-
         histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_1e_Xmax_CD);
-
-
-        Chi2_Electron_1e_Xmax_FD = Chi2_Electron_1e_FD->GetBinCenter(Chi2_Electron_1e_FD->GetMaximumBin());
 
         histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
@@ -4714,14 +4682,9 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (1e only)">
-        Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD->GetBinCenter(Chi2_Proton_1e_CD->GetMaximumBin());
-
         histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_Xmax_CD);
-
-
-        Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD->GetBinCenter(Chi2_Proton_1e_FD->GetMaximumBin());
 
         histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
@@ -4733,21 +4696,21 @@ void EventAnalyser() {
         //<editor-fold desc="Electron chi2 (1e only)">
         histPlotter1D(c1, Chi2_Electron_1e_test_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_CD, Chi2_Electron_1e_Xmax_CD);
+                      Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
 
         histPlotter1D(c1, Chi2_Electron_1e_test_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
-                      Chi2_Electron_cut_FD, Chi2_Electron_1e_Xmax_FD);
+                      Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
         //</editor-fold>
 
         //<editor-fold desc="Proton chi2 (1e only)">
         histPlotter1D(c1, Chi2_Proton_1e_test_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true,
-                      Chi2_Proton_cut_CD, Chi2_Electron_1e_Xmax_FD);
+                      Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
 
         histPlotter1D(c1, Chi2_Proton_1e_test_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
-                      Chi2_Proton_cut_FD, Chi2_Proton_1e_Xmax_FD);
+                      Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
         //</editor-fold>
 
     } else {
@@ -7827,23 +7790,83 @@ void EventAnalyser() {
 
     myLogFile << "Chi2 cuts\n";
     myLogFile << "===========================================================================\n";
-    myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
-    myLogFile << "Chi2_Electron_Xmax_CD = " << Chi2_Electron_Xmax_CD << "\n";
-    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_CD << "\n";
-    myLogFile << "Chi2_Electron_1e_Xmax_CD = " << Chi2_Electron_1e_Xmax_CD << "\n";
-    myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
-    myLogFile << "Chi2_Electron_Xmax_FD = " << Chi2_Electron_Xmax_FD << "\n";
-    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_FD << "\n";
-    myLogFile << "Chi2_Electron_1e_Xmax_FD = " << Chi2_Electron_1e_Xmax_FD << "\n\n";
 
+    //<editor-fold desc="Chi2_Electron">
+    myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
+
+    if (Chi2_Electron_CD->Integral() == 0.) {
+        myLogFile << "Chi2_Electron_Xmax_CD = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Electron_Xmax_CD = " << Chi2_Electron_Xmax_CD << "\n";
+    }
+
+    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_CD << "\n";
+
+    if (Chi2_Electron_1e_CD->Integral() == 0.) {
+        myLogFile << "Chi2_Electron_1e_Xmax_CD = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Electron_1e_Xmax_CD = " << Chi2_Electron_1e_Xmax_CD << "\n";
+    }
+
+    myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
+
+    if (Chi2_Electron_FD->Integral() == 0.) {
+        myLogFile << "Chi2_Electron_Xmax_FD = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Electron_Xmax_FD = " << Chi2_Electron_Xmax_FD << "\n";
+    }
+
+    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_FD << "\n";
+
+    if (Chi2_Electron_1e_FD->Integral() == 0.) {
+        myLogFile << "Chi2_Electron_1e_Xmax_FD = NO EVENTS" << "\n\n\n";
+    } else {
+        myLogFile << "Chi2_Electron_1e_Xmax_FD = " << Chi2_Electron_1e_Xmax_FD << "\n\n\n";
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2_Proton">
     myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
-    myLogFile << "Chi2_Proton_Xmax_CD = " << Chi2_Proton_Xmax_CD << "\n";
+
+    if (Chi2_Proton_CD->Integral() == 0.) {
+        myLogFile << "Chi2_Proton_Xmax_CD = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Proton_Xmax_CD = " << Chi2_Proton_Xmax_CD << "\n";
+    }
+
     myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
-    myLogFile << "Chi2_Proton_1e_Xmax_CD = " << Chi2_Proton_1e_Xmax_CD << "\n";
+
+    if (Chi2_Proton_1e_CD->Integral() == 0.) {
+        myLogFile << "Chi2_Proton_1e_Xmax_CD = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Proton_1e_Xmax_CD = " << Chi2_Proton_1e_Xmax_CD << "\n";
+    }
+
     myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
-    myLogFile << "Chi2_Proton_Xmax_FD = " << Chi2_Proton_Xmax_FD << "\n";
+
+    if (Chi2_Proton_FD->Integral() == 0.) {
+        myLogFile << "Chi2_Proton_Xmax_FD = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Proton_Xmax_FD = " << Chi2_Proton_Xmax_FD << "\n";
+    }
+
     myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
-    myLogFile << "Chi2_Proton_1e_Xmax_FD = " << Chi2_Proton_1e_Xmax_FD << "\n\n\n";
+
+    if (Chi2_Proton_1e_FD->Integral() == 0.) {
+        myLogFile << "Chi2_Proton_1e_Xmax_FD = NO EVENTS" << "\n\n\n";
+    } else {
+        myLogFile << "Chi2_Proton_1e_Xmax_FD = " << Chi2_Proton_1e_Xmax_FD << "\n\n\n";
+    }
+    //</editor-fold>
+
+//    myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
+//    myLogFile << "Chi2_Proton_Xmax_CD = " << Chi2_Proton_Xmax_CD << "\n";
+//    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
+//    myLogFile << "Chi2_Proton_1e_Xmax_CD = " << Chi2_Proton_1e_Xmax_CD << "\n";
+//    myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
+//    myLogFile << "Chi2_Proton_Xmax_FD = " << Chi2_Proton_Xmax_FD << "\n";
+//    myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
+//    myLogFile << "Chi2_Proton_1e_Xmax_FD = " << Chi2_Proton_1e_Xmax_FD << "\n\n\n";
 
     myLogFile << "Vertex cuts (MEAN**************)\n";
     myLogFile << "===========================================================================\n";

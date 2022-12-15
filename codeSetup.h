@@ -118,6 +118,22 @@ double rCalc(double x, double y, double z) {
 }
 //</editor-fold>
 
+////<editor-fold desc="findHistPeakLocation">
+//double findHistPeakXLocation(TH1D *Histogram1D,bool returnString = false) {
+//    double Xmax;
+//
+//    if (Histogram1D->Integral() == 0.) {
+//        Xmax = 0.;
+//    } else {
+//        Xmax = Histogram1D->GetBinCenter(Histogram1D->GetMaximumBin());
+//    }
+//
+//    if (Histogram1D->Integral() == 0. && returnString == true) {
+//        return "";
+//    }
+//}
+////</editor-fold>
+
 // TODO: to finish
 //<editor-fold desc="histPlotter1D function">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
@@ -145,7 +161,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    bool title2 = false,
                    bool plot_chi2_cuts = false,
                    double chi2_cuts = 0,
-                   double chi2_mean = 0) {
+                   double chi2_max = 0) {
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
@@ -218,18 +234,15 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
     if (plot_chi2_cuts == true) {
         gPad->Update();
-        double Upper_cut = chi2_cuts + chi2_mean;
-        double Lower_cut = -chi2_cuts + chi2_mean;
+        double Upper_cut = chi2_cuts + chi2_max;
+        double Lower_cut = -chi2_cuts + chi2_max;
         TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(lineWidth);
         TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
         lower_cut->SetLineWidth(lineWidth);
-//        TLine *upper_cut = new TLine(-chi2_cuts + chi2_mean, 0., -chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
-//        TLine *lower_cut = new TLine(chi2_cuts + chi2_mean, 0., chi2_cuts + chi2_mean, gPad->GetFrame()->GetY2());
+        TLine *max_location = new TLine(chi2_max, 0., chi2_max, gPad->GetFrame()->GetY2());
+        max_location->SetLineWidth(lineWidth + 1);
         auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3);
-//        auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.5, gStyle->GetStatX(), gStyle->GetStatY() - 0.2);
-//        auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY(), gStyle->GetStatX() + 0.2, gStyle->GetStatY() + 0.2);
-//        auto Cut_legend = new TLegend(0.75, 0.775, 0.875, 0.9);
 
         if (Histogram1D->Integral() != 0.) {
             upper_cut->Draw("same");
@@ -238,9 +251,14 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
+            max_location->Draw("same");
+            max_location->SetLineColor(kBlack);
+//            lower_cut->SetLineColor(kMagenta);
 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string(Lower_cut)).c_str(), "l");
+            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, "Peak location", "l");
+//            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string(max_location)).c_str(), "l");
             Cut_legend->Draw("same");
         }
     }
