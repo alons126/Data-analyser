@@ -32,9 +32,6 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TBenchmark.h>
 //#include "/home/alon/clas12root/Clas12Banks/clas12reader.h"
 #include "clas12reader.h"
-
-//#include "TruthLevelAnalyser.h"
-//#include "gst.h"
 #include "codeSetup.h"
 
 using namespace clas12;
@@ -69,35 +66,12 @@ void EventAnalyser() {
     //<editor-fold desc="Set beam energy (beamE)">
     double beamE; // electron energy declaration
 
-    //<editor-fold desc="Particle masses">
-//    double m_e = 0.00051099895; // electron mass (in GeV)
-//    double m_p = 0.93827208816; // proton mass (in GeV)
-//    double m_n = 0.93956542052; // neutron mass (in GeV)
-//    double m_pizero = 0.1349768; // pizero mass (in GeV)
-//    double m_piplus = 0.13957039; // piplus mass (in GeV)
-//    double m_piminus = m_piplus; // piminus mass (in GeV)
-//    double m_Kzero = 0.497611; // Kzero mass (in GeV)
-//    double m_Kplus = 0.493677; // Kplus mass (in GeV)
-//    double m_Kminus = m_Kplus; // Kminus mass (in GeV)
-    //</editor-fold>
-
     if (fileInput == "recon_c12_6gev.hipo") {
         beamE = 5.98636;
     }
-
-//    double Pv = sqrt(beamE * beamE - m_e * m_e);
-//    double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
-//    double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
-//    double Pvz = Pv; // assuming momentum of incoming lepton is on the z direction
-//
-////    TLorentzVector incident_e(0,0,0,db->GetParticle(11)->Mass());
-
     //</editor-fold>
 
     //<editor-fold desc="Execution variables">
-//    cout << "\n";
-//    cout << "\n";
-//    cout << "\nExecution variables\n";
     cout << "\nExecution variables\n";
     cout << "---------------------------------------------------------------------------\n";
     cout << "File input:\t" << AnalyseFile << "\n";
@@ -105,10 +79,6 @@ void EventAnalyser() {
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n\n";
     cout << "beamE:\t\t" << beamE << "\n\n\n";
-//    cout << "Pv:\t\t" << Pv << "\n";
-//    cout << "Pvx:\t\t" << Pvx << "\n";
-//    cout << "Pvy:\t\t" << Pvy << "\n";
-//    cout << "Pvz:\t\t" << Pvz << "\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -122,7 +92,6 @@ void EventAnalyser() {
     //<editor-fold desc="Beta_VS_p directory">
     bool create_beta_vs_P_Dir = true;
     string BetaVSP_ParentDir = "Beta_VS_p";
-//    MakeDirectory(create_beta_vs_P_Dir, BetaVSP_ParentDir, "");
     string BetaVSP_Daughter_Folders[] = {"", "All_e", "Only_1e"};
 
     for (string folders_name: BetaVSP_Daughter_Folders) {
@@ -133,7 +102,6 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2_plots directory">
     bool create_chi2_Dir = true;
     string Chi2_ParentDir = "Chi2_plots";
-//    MakeDirectory(create_chi2_Dir, Chi2_ParentDir, "");
     string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
@@ -144,7 +112,6 @@ void EventAnalyser() {
     //<editor-fold desc="Vertex_plots directory">
     bool create_vertex_Dir = true;
     string Vertex_ParentDir = "Vertex_plots";
-//    MakeDirectory(create_vertex_Dir, Vertex_ParentDir, "");
     string Vertex_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/Vertex_plots_by_components", "Only_1e/dV_plots"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
@@ -173,19 +140,6 @@ void EventAnalyser() {
     //</editor-fold>
 
     cout << "\n";
-    //</editor-fold>
-
-// Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Plot settings">
-//    bool lowest_nentries = false;
-//    int custom_nentries;
-//
-//    if (lowest_nentries == true) {
-//        custom_nentries = 10000000; // 10M entries
-//    }
-
-    bool wider_margin = true;
     //</editor-fold>
 
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -323,9 +277,11 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
+// Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
+    bool wider_margin = true;
+
     bool Beta_vs_P_plots = true;
 
     bool Chi2_plots = true;
@@ -341,8 +297,7 @@ void EventAnalyser() {
 
     bool Energy_histogram_plots = false;
 
-    bool ET_plots = true;
-    bool ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
+    bool ET_plots = true, ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
 
     if (ET_plots == false) {
         bool ET_all_plots = false, ET_QEL_plots = false, ET_MEC_plots = false, ET_RES_plots = false, ET_DIS_plots = false;
@@ -383,63 +338,60 @@ void EventAnalyser() {
     bool normalized_E_lp_plots = true;
     bool normalized_E_lp_all_int_plots = true, normalized_E_lp_QEL_plots = true, normalized_E_lp_MEC_plots = true, normalized_E_lp_RES_plots = true, normalized_E_lp_DIS_plots = true;
 
-    bool normalized_E_Trans_all_ang_all_int_plots = true;
-    bool normalized_E_Trans15_plots = true;
-    bool normalized_E_cal_plots = true;
-    bool normalized_inclusive_plots = true;
+    bool normalized_E_Trans_all_ang_all_int_plots = true, normalized_E_Trans15_plots = true, normalized_inclusive_plots = true;
 
-    bool normalized_P_lp_plots = false; // 2p & 1n1p
-    bool normalized_P_L_plots = false; // 2p & 1n1p
-    bool normalized_P_R_plots = false; // 2p & 1n1p
+    bool normalized_E_cal_plots = true;
+
+    bool normalized_P_lp_plots = false, normalized_P_L_plots = false, normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
-        normalized_chi2_plots = false;
+        normalized_chi2_plots = normalized_vertex_plots = normalized_theta_e_plots = normalized_Q2_plots = normalized_theta_lp_plots = false;
 
-        normalized_theta_lp_plots = false;
+//        normalized_theta_lp_plots = false;
 
-        normalized_theta_p1_plots = false;
-        normalized_theta_p2_plots = false;
-        normalized_dtheta_2p_plots = false; // 2p
+        normalized_theta_p1_plots = normalized_theta_p2_plots = normalized_dtheta_2p_plots = false; // 2p
+//        normalized_theta_p2_plots = false;
+//        normalized_dtheta_2p_plots = false; // 2p
 
-        normalized_theta_p_plots = false;
-        normalized_theta_n_plots = false;
-        normalized_dtheta_1n1p_plots = false; // 1n1p
+        normalized_theta_p_plots = normalized_theta_n_plots = normalized_dtheta_1n1p_plots = false; // 1n1p
+//        normalized_theta_n_plots = false;
+//        normalized_dtheta_1n1p_plots = false; // 1n1p
 
         normalized_phi_lp_plots = false;
 
-        normalized_phi_p1_plots = false;
-        normalized_phi_p2_plots = false;
-        normalized_dphi_2p_plots = false; // 2p
+        normalized_phi_p1_plots = normalized_phi_p2_plots = normalized_dphi_2p_plots = false; // 2p
+//        normalized_phi_p2_plots = false;
+//        normalized_dphi_2p_plots = false; // 2p
 
-        normalized_phi_p_plots = false;
-        normalized_phi_n_plots = false;
-        normalized_dphi_1n1p_plots = false; // 1n1p
+        normalized_phi_p_plots = normalized_phi_n_plots = normalized_dphi_1n1p_plots = false; // 1n1p
+//        normalized_phi_n_plots = false;
+//        normalized_dphi_1n1p_plots = false; // 1n1p
 
-        normalized_E_lp_plots = false;
-        normalized_E_lp_all_int_plots = false;
-        normalized_E_lp_QEL_plots = false;
-        normalized_E_lp_MEC_plots = false;
-        normalized_E_lp_RES_plots = false;
-        normalized_E_lp_DIS_plots = false;
+        normalized_E_lp_plots = normalized_E_lp_all_int_plots = normalized_E_lp_QEL_plots = normalized_E_lp_MEC_plots = normalized_E_lp_RES_plots = normalized_E_lp_DIS_plots = false;
+//        normalized_E_lp_all_int_plots = false;
+//        normalized_E_lp_QEL_plots = false;
+//        normalized_E_lp_MEC_plots = false;
+//        normalized_E_lp_RES_plots = false;
+//        normalized_E_lp_DIS_plots = false;
 
-        normalized_E_Trans_all_ang_all_int_plots = false;
-        normalized_E_Trans15_plots = false;
-        normalized_E_cal_plots = false;
-        normalized_inclusive_plots = false;
+        normalized_E_Trans_all_ang_all_int_plots = normalized_E_Trans15_plots = normalized_E_cal_plots = normalized_inclusive_plots = false;
+//        normalized_E_Trans15_plots = false;
+//        normalized_E_cal_plots = false;
+//        normalized_inclusive_plots = false;
 
-        normalized_P_lp_plots = false; // 2p & 1n1p
-        normalized_P_L_plots = false; // 2p & 1n1p
-        normalized_P_R_plots = false; // 2p & 1n1p
+        normalized_P_lp_plots = normalized_P_L_plots = normalized_P_R_plots = false; // 2p & 1n1p
+//        normalized_P_L_plots = false; // 2p & 1n1p
+//        normalized_P_R_plots = false; // 2p & 1n1p
 
         cout << "\nAll normalizations are disabled.\n\n";  // and no change to custom_FSI_status
     }
 
     if (normalized_E_lp_plots == false) {
-        normalized_E_lp_all_int_plots = false;
-        normalized_E_lp_QEL_plots = false;
-        normalized_E_lp_MEC_plots = false;
-        normalized_E_lp_RES_plots = false;
-        normalized_E_lp_DIS_plots = false;
+        normalized_E_lp_all_int_plots = normalized_E_lp_QEL_plots = normalized_E_lp_MEC_plots = normalized_E_lp_RES_plots = normalized_E_lp_DIS_plots = false;
+//        normalized_E_lp_QEL_plots = false;
+//        normalized_E_lp_MEC_plots = false;
+//        normalized_E_lp_RES_plots = false;
+//        normalized_E_lp_DIS_plots = false;
     }
     //</editor-fold>
 
@@ -451,23 +403,20 @@ void EventAnalyser() {
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
         cout << "\nClearing old plots...";
-
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
-
         cout << " done.\n\n";
+
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\nClearing old root files...";
-
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
-
         cout << " done.\n\n";
+
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\nClearing old plots & root files...";
-
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
-
         cout << " done.\n\n";
+
     } else {
         cout << "\nNo files were cleared.\n\n";
     }
@@ -479,7 +428,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="TList name setup">
     string listName = plots_path + AnalyseFileSample + plots_file_type; //todo: add if-else to choose plotsInput or file_name
-//    string listName = plots_path + plotsInput + plots_file_type; //todo: add if-else to choose plotsInput or file_name
     const char *TListName = listName.c_str();
     //</editor-fold>
 
@@ -488,21 +436,15 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum thresholds">
 
     //<editor-fold desc="Momentum thresholds (2p)">
-    double P_lp_upper_lim_2p = -1, P_lp_lower_lim_2p = -1;
-    double P_p1_upper_lim_2p = -1, P_p1_lower_lim_2p = 0.3;
-    double P_p2_upper_lim_2p = -1, P_p2_lower_lim_2p = 0.3;
+    double P_lp_upper_lim_2p = -1, P_lp_lower_lim_2p = -1, P_p1_upper_lim_2p = -1, P_p1_lower_lim_2p = 0.3, P_p2_upper_lim_2p = -1, P_p2_lower_lim_2p = 0.3;
     //</editor-fold>
 
     //<editor-fold desc="Momentum thresholds (1n1p)">
-    double P_lp_upper_lim_1n1p = -1, P_lp_lower_lim_1n1p = -1;
-    double P_p_upper_lim_1n1p = -1, P_p_lower_lim_1n1p = 0.3;
-    double P_n_upper_lim_1n1p = -1, P_n_lower_lim_1n1p = 0.3;
+    double P_lp_upper_lim_1n1p = -1, P_lp_lower_lim_1n1p = -1, P_p_upper_lim_1n1p = -1, P_p_lower_lim_1n1p = 0.3, P_n_upper_lim_1n1p = -1, P_n_lower_lim_1n1p = 0.3;
     //</editor-fold>
 
     //<editor-fold desc="Momentum thresholds (2p, MicroBooNE)">
-    double P_lp_upper_lim_MicroBooNE = 1.2, P_lp_lower_lim_MicroBooNE = 0.1;
-    double P_L_upper_lim_MicroBooNE = 1.0, P_L_lower_lim_MicroBooNE = 0.3;
-    double P_R_upper_lim_MicroBooNE = 1.0, P_R_lower_lim_MicroBooNE = 0.3;
+    double P_lp_upper_lim_MicroBooNE = 1.2, P_lp_lower_lim_MicroBooNE = 0.1, P_L_upper_lim_MicroBooNE = 1.0, P_L_lower_lim_MicroBooNE = 0.3, P_R_upper_lim_MicroBooNE = 1.0, P_R_lower_lim_MicroBooNE = 0.3;
     double P_pion_upper_lim_MicroBooNE = 0.065;
     //</editor-fold>
 
@@ -562,13 +504,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="dV cuts">
-    double dVx_cut_CD = 3., dVx_mean_CD = 0.;
-    double dVy_cut_CD = 3., dVy_mean_CD = 0.;
-    double dVz_cut_CD = 3., dVz_mean_CD = 0.;
-
-    double dVx_cut_FD = 3., dVx_mean_FD = 0.;
-    double dVy_cut_FD = 3., dVy_mean_FD = 0.;
-    double dVz_cut_FD = 3., dVz_mean_FD = 0.;
+    double dVx_cut_CD = 3., dVx_mean_CD = 0., dVy_cut_CD = 3., dVy_mean_CD = 0., dVz_cut_CD = 3., dVz_mean_CD = 0.;
+    double dVx_cut_FD = 3., dVx_mean_FD = 0., dVy_cut_FD = 3., dVy_mean_FD = 0., dVz_cut_FD = 3., dVz_mean_FD = 0.;
     //</editor-fold>
 
 //    //<editor-fold desc="Neutron Vertex cut">
@@ -4466,15 +4403,10 @@ void EventAnalyser() {
 
     if (wider_margin) {
         c1->SetLeftMargin(0.14);
-//
-//            c1->SetLeftMargin(0.1275);
-//            c1->SetRightMargin(0.1275);
     }
 
     float DefStatX = gStyle->GetStatX();
     float DefStatY = gStyle->GetStatY();
-//    cout << "\n\nStatX = "<< StatX << "\n\n";
-//    cout << "\n\nStatY = "<< StatY << "\n\n";
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -4494,6 +4426,11 @@ void EventAnalyser() {
 //  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
 
         auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * beamE);
+        TPaveText *beta_electron_title = new TPaveText(0.,0.,0.1,0.1);
+        beta_electron_title->AddText("#font[25]{e^{-}}");
+        beta_electron_title->SetTextColor(kRed);
+//        beta_electron_title->Draw();
+
         auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, 0.75 * beamE);
         auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n) + ")").c_str(), 0, 0.75 * beamE);
         auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero) + ")").c_str(), 0, 0.75 * beamE);
@@ -4502,7 +4439,6 @@ void EventAnalyser() {
         auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, 0.75 * beamE);
         auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, 0.75 * beamE);
         auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, 0.75 * beamE);
-//        auto *beta_proton = new TF1("beta_proton", "sin(x)", -2000, 2000);
 
 //  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
 
@@ -4519,6 +4455,7 @@ void EventAnalyser() {
 //        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
         Beta_vs_P_CD->Draw("colz");
         beta_electron->Draw("same");
+        beta_electron_title->Draw("same");
         beta_proton->Draw("same");
         beta_neutron->Draw("same");
         beta_pizero->Draw("same");
@@ -4648,7 +4585,6 @@ void EventAnalyser() {
         Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD->GetBinCenter(Chi2_Proton_1e_CD->GetMaximumBin());
         Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD->GetBinCenter(Chi2_Proton_1e_FD->GetMaximumBin());
 
-//  TODO: cut around the chi2 distribution peak
 //  Electron chi2 (no #(electrons) cut) ---------------------------------------------------------------
 
         //<editor-fold desc="Electron chi2 (no #(electrons) cut)">
@@ -7686,7 +7622,6 @@ void EventAnalyser() {
 //    system("[ -d '/home/alon/project/plots/theta_histograms' ] && echo 'Directory /home/alon/project/plots/theta_histograms exists.'");
 
     ofstream myLogFile;
-
     myLogFile.open("./plots/Run_log.txt");
 
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n";
@@ -7703,16 +7638,9 @@ void EventAnalyser() {
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
     myLogFile << "plotsInput: " << plotsInput << "\n\n\n";
-//
-//    myLogFile << "FSI settings\n";
-//    myLogFile << "===========================================================================\n";
-////    myLogFile << "FSI_status = " << BoolToString(FSI_status) << "\n";
-//    myLogFile << "\n";
-//    myLogFile << "\n";
-//
+
     myLogFile << "Plot settings\n";
     myLogFile << "===========================================================================\n";
-//    myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
     myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
 
     myLogFile << "Calculation settings\n";
@@ -7859,15 +7787,6 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-//    myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
-//    myLogFile << "Chi2_Proton_Xmax_CD = " << Chi2_Proton_Xmax_CD << "\n";
-//    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
-//    myLogFile << "Chi2_Proton_1e_Xmax_CD = " << Chi2_Proton_1e_Xmax_CD << "\n";
-//    myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
-//    myLogFile << "Chi2_Proton_Xmax_FD = " << Chi2_Proton_Xmax_FD << "\n";
-//    myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
-//    myLogFile << "Chi2_Proton_1e_Xmax_FD = " << Chi2_Proton_1e_Xmax_FD << "\n\n\n";
-
     myLogFile << "Vertex cuts (MEAN**************)\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Vertex_Electron_cut_CD = " << Vertex_Electron_cut_CD << "\n";
@@ -7938,32 +7857,7 @@ void EventAnalyser() {
     cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
     cout << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
     cout << "#(events) w/ 1e2X:\t\t" << num_of_events_1e2X << "\n";
-//    cout << "#(events) w/ 1e & 2 nucleons (|AllParticles| = 3):\t\t" << num_of_events_1e2X << "\n";
     cout << "#(events) w/ 1e2p:\t\t" << num_of_events_1e2p << "\n\n";
-
-//    if (calculate_2p == true) {
-//        cout << "#(2p) events:\t\t" << num_of_2p_events << "\n";
-//    } else {
-//        cout << "#(2p) events:\t\tcalculation not performed\n";
-//    }
-//
-//    if (calculate_1n1p == true) {
-//        cout << "#(1n1p) events:\t\t" << num_of_1n1p_events << "\n";
-//    } else {
-//        cout << "#(1n1p) events:\t\tcalculation not performed\n";
-//    }
-//
-//    if (calculate_MicroBooNE == true) {
-//        cout << "#(MicroBooNE) events:\t" << num_of_MicroBooNE_events << "\n";
-//    } else {
-//        cout << "#(MicroBooNE) events:\tcalculation not performed\n";
-//    }
-
-//    if (FSI_status == false) {
-//        cout << "FSI status:\t\tOFF (ni = " << ni_selection << ")\n";
-//    } else if (FSI_status == true) {
-//        cout << "FSI status:\t\tON\n";
-//    }
 
     cout << "-- Input ------------------------------------------------------------------\n";
     cout << "File input:\t" << LoadedInput << "\n";

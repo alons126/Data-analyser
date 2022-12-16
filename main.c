@@ -1,7 +1,5 @@
-//#include "gst.C"
+
 #include "TruthLevelAnalyser.c"
-//#include "TruthLevelAnalyser.h"
-//#include "Analyser.C"
 #include "DetectorSimulationAnalyser.C"
 
 int main() {
@@ -19,9 +17,7 @@ int main() {
     } else if (FileType == "hipo") {
         AnalyserMode = "Detector Simulation";
     } else {
-        cout << "\n";
-        cout << "Could not find file type!" << "\n";
-        cout << "\n";
+        cout << "\nCould not find file type!" << "\n\n";
     }
     //</editor-fold>
 
@@ -30,29 +26,17 @@ int main() {
     if (AnalyserMode == "Truth level") {
         gst g;
         g.Loop();
-
-        cout << "\n";
-        cout << "---------------------------------------------------------------------------\n";
-        cout << "\n";
-        cout << "Analysis mode:\t'" << AnalyserMode << "'" << "\n";
-        cout << "Code version:\t" << Ver << "\n";
     } else if (AnalyserMode == "Detector Simulation") {
-//        EventAnalyser(2,0);
-//        EventAnalyser(1,1);
-
         EventAnalyser();
-
-        cout << "\n";
-        cout << "---------------------------------------------------------------------------\n";
-        cout << "\n";
-        cout << "Analysis mode:\t'" << AnalyserMode << "'" << "\n";
-        cout << "Code version:\t" << Ver << "\n";
     }
+
+    cout << "\n---------------------------------------------------------------------------\n\n";
+    cout << "Analysis mode:\t'" << AnalyserMode << "'" << "\n";
+    cout << "Code version:\t" << Ver << "\n";
 
     auto end = std::chrono::system_clock::now();
     auto elapsed_time_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     double elapsed_time_minutes = elapsed_time_seconds.count() / 60;
 
-    std::cout << "Running time:\t" << elapsed_time_seconds.count() << " seconds\n";
-    cout << "\n";
+    std::cout << "Running time:\t" << elapsed_time_seconds.count() << " seconds\n\n";
 }
