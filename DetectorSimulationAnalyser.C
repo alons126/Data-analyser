@@ -89,53 +89,59 @@ void EventAnalyser() {
     //<editor-fold desc="Checking directories">
     cout << "Creating plots direcroties...\n\n";
 
-    //<editor-fold desc="Beta_VS_p directory">
-    bool create_beta_vs_P_Dir = true;
-    string BetaVSP_ParentDir = "Beta_VS_p";
-    string BetaVSP_Daughter_Folders[] = {"", "All_e", "Only_1e"};
+    string Plots_Folder = "./plots"; // Plots_Folder = Parent_Folder
 
-    for (string folders_name: BetaVSP_Daughter_Folders) {
-        MakeDirectory(create_beta_vs_P_Dir, BetaVSP_ParentDir, folders_name);
+    //<editor-fold desc="Beta VS p plots directory">
+    bool create_Beta_vs_P_Dir = true;
+    string Beta_VS_P_Parent_Directory = "Beta_VS_p";
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e"};
+
+    for (string folders_name: Beta_VS_P_Daughter_Folders) {
+        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
     }
+
+    // TODO: define 'Beta_VS_P_Parent_Directory' properly, and set it as the saving dir for plots below
+    string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1];
+    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2];;
     //</editor-fold>
 
-    //<editor-fold desc="Chi2_plots directory">
+    //<editor-fold desc="Chi2 plots directory">
     bool create_chi2_Dir = true;
-    string Chi2_ParentDir = "Chi2_plots";
+    string Chi2_Parent_Directory = "Chi2_plots";
     string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
-        MakeDirectory(create_chi2_Dir, Chi2_ParentDir, folders_name);
+        MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name);
     }
     //</editor-fold>
 
-    //<editor-fold desc="Vertex_plots directory">
+    //<editor-fold desc="Vertex plots directory">
     bool create_vertex_Dir = true;
-    string Vertex_ParentDir = "Vertex_plots";
+    string Vertex_Parent_Directory = "Vertex_plots";
     string Vertex_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/Vertex_plots_by_components", "Only_1e/dV_plots"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
-        MakeDirectory(create_vertex_Dir, Vertex_ParentDir, folders_name);
+        MakeDirectory(create_vertex_Dir, Vertex_Parent_Directory, folders_name);
     }
     //</editor-fold>
 
-    //<editor-fold desc="theta_histograms directory">
+    //<editor-fold desc="Theta plots directory">
     bool create_theta_Dir = true;
-    string Theta_ParentDir = "theta_histograms";
+    string Theta_Parent_Directory = "theta_histograms";
     string Theta_Daughter_Folders[] = {"", "Theta_e_plots"};
 
     for (string folders_name: Theta_Daughter_Folders) {
-        MakeDirectory(create_theta_Dir, Theta_ParentDir, folders_name);
+        MakeDirectory(create_theta_Dir, Theta_Parent_Directory, folders_name);
     }
     //</editor-fold>
 
-    //<editor-fold desc="Q2_histograms directory">
+    //<editor-fold desc="Q2 plots directory">
     bool create_Q2_Dir = true;
-    string Q2_ParentDir = "Q2_histograms";
+    string Q2_Parent_Directory = "Q2_histograms";
     string Q2_Daughter_Folders[] = {""};
 
     for (string folders_name: Q2_Daughter_Folders) {
-        MakeDirectory(create_Q2_Dir, Q2_ParentDir, folders_name);
+        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name);
     }
     //</editor-fold>
 
