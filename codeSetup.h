@@ -39,7 +39,7 @@ double rCalc(double x, double y, double z) {
 void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
                    std::string Parent_Folder = "./plots") {
 
-    string MakeDirectory = "mkdir " + Parent_Folder;
+    string MakeDirectory = "mkdir -p " + Parent_Folder;
     string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
 //    cout << "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*" << "\n\n";
 

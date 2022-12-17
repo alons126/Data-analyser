@@ -78,7 +78,7 @@ void EventAnalyser() {
     cout << "Settings mode:\t'" << file_name << "'\n";
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n\n";
-    cout << "beamE:\t\t" << beamE << "\n\n\n";
+    cout << "beamE:\t\t" << beamE << "\n\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -101,8 +101,14 @@ void EventAnalyser() {
     }
 
     // TODO: define 'Beta_VS_P_Parent_Directory' properly, and set it as the saving dir for plots below
-    string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1];
-    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2];;
+    string Beta_VS_P_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[0];
+    string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
+    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
+
+    string Beta_vs_P_FD_save_names[4][2] = {{"Beta_vs_P_CD",    "Beta_vs_P_CD.png"},
+                                        {"Beta_vs_P_FD",    "Beta_vs_P_FD.png"},
+                                        {"Beta_vs_P_1e_CD", "Beta_vs_P_1e_only_CD.png"},
+                                        {"Beta_vs_P_1e_FD", "Beta_vs_P_1e_only_FD.png"}};
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directory">
@@ -145,7 +151,6 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    cout << "\n";
     //</editor-fold>
 
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1064,7 +1069,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs P histograms">
     TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+//    string Beta_vs_P_CD_save_name = "Beta_vs_P_CD.png";
     TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+//    string Beta_vs_P_FD_save_name = "Beta_vs_P_FD.png";
+
 //    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
 //    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
 
@@ -4432,7 +4440,7 @@ void EventAnalyser() {
 //  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
 
         auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * beamE);
-        TPaveText *beta_electron_title = new TPaveText(0.,0.,0.1,0.1);
+        TPaveText *beta_electron_title = new TPaveText(0., 0., 0.1, 0.1);
         beta_electron_title->AddText("#font[25]{e^{-}}");
         beta_electron_title->SetTextColor(kRed);
 //        beta_electron_title->Draw();
@@ -4474,7 +4482,8 @@ void EventAnalyser() {
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
-        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_CD.png");
+        c1->SaveAs((Beta_VS_P_All_e_Directory + Beta_vs_P_FD_save_names[0][1]).c_str());
+//        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_CD.png");
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -4502,7 +4511,9 @@ void EventAnalyser() {
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
-        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_FD.png");
+        c1->SaveAs((Beta_VS_P_All_e_Directory + Beta_vs_P_FD_save_names[1][1]).c_str());
+//        c1->SaveAs((Beta_VS_P_All_e_Directory + "Beta_vs_P_FD.png").c_str());
+//        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_FD.png");
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -4534,7 +4545,8 @@ void EventAnalyser() {
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
-        c1->SaveAs("plots/Beta_VS_p/Only_1e/Beta_vs_P_1e_only_CD.png");
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + Beta_vs_P_FD_save_names[2][1]).c_str());
+//        c1->SaveAs("plots/Beta_VS_p/Only_1e/Beta_vs_P_1e_only_CD.png");
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -4562,7 +4574,8 @@ void EventAnalyser() {
         c1->SetLogz(1);
         gStyle->SetStatX(0.88);
         gStyle->SetStatY(0.4);
-        c1->SaveAs("plots/Beta_VS_p/Only_1e/Beta_vs_P_1e_only_FD.png");
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + Beta_vs_P_FD_save_names[3][1]).c_str());
+//        c1->SaveAs("plots/Beta_VS_p/Only_1e/Beta_vs_P_1e_only_FD.png");
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
