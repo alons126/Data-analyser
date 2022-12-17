@@ -105,15 +105,10 @@ void EventAnalyser() {
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
 
-    string Beta_vs_P_FD_save_names[4][2] = {{"Beta_vs_P_CD",    "Beta_vs_P_CD.png"},
-                                            {"Beta_vs_P_FD",    "Beta_vs_P_FD.png"},
-                                            {"Beta_vs_P_1e_CD", "Beta_vs_P_1e_only_CD.png"},
-                                            {"Beta_vs_P_1e_FD", "Beta_vs_P_1e_only_FD.png"}};
-
-    string Beta_vs_P_FD_save_names_array[4] = {Beta_VS_P_All_e_Directory + "Beta_vs_P_CD_ARRAY_ARRAY_ARRAY_ARRAY.png",
-                                               Beta_VS_P_All_e_Directory + "Beta_vs_P_FD_ARRAY_ARRAY_ARRAY_ARRAY.png",
-                                               Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_CD_ARRAY_ARRAY_ARRAY_ARRAY.png",
-                                               Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_FD_ARRAY_ARRAY_ARRAY_ARRAY.png"};
+    string Beta_vs_P_FD_save_directories[4] = {Beta_VS_P_All_e_Directory + "Beta_vs_P_CD.png",
+                                               Beta_VS_P_All_e_Directory + "Beta_vs_P_FD.png",
+                                               Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_CD.png",
+                                               Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_FD.png"};
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directory">
@@ -1073,37 +1068,15 @@ void EventAnalyser() {
 // Beta VS P histograms -------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
-    TH2D Beta_vs_P_CD_test("#beta vs P (CD) test", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
-    TH2D Beta_vs_P_FD_test("#beta vs P (FD) test", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
-    TH2D Beta_vs_P_1e_CD_test("#beta vs P (1e only, CD) test", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
-    TH2D Beta_vs_P_1e_FD_test("#beta vs P (1e only, FD) test", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
-
-    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
-    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
-//    TH2D *Beta_vs_P_CD = new TH2D("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
-//    TH2D *Beta_vs_P_FD = new TH2D("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
-
-    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
-    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
-//    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs P (1e only, CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
-//    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs P (1e only, FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.5);
+    TH2D Beta_vs_P_CD("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+    TH2D Beta_vs_P_FD("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
+    TH2D Beta_vs_P_1e_CD("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
+    TH2D Beta_vs_P_1e_FD("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
     //</editor-fold>
 
 // Chi2 plots -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
-
-//
-    //<editor-fold desc="TH1D array test">
-    //    TH1D *Chi2_Electron_1, *Chi2_Electron_2;
-//    TH1D Chi2_Electron_1, Chi2_Electron_2;
-//
-//
-//    TH1D histArray[2] = {Chi2_Electron_1, Chi2_Electron_2};
-//    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (no #(electrons) cut, CD)", "Electron #chi^{2} (no #(electrons) cut, Central Detector);Electron #chi^{2};",
-//                                      1000, Chi2_lower_lim, Chi2_upper_lim);
-    //</editor-fold>
-//
 
     //<editor-fold desc="Chi2 plots (no #(electrons) cut)">
     THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
@@ -2091,40 +2064,13 @@ void EventAnalyser() {
             //<editor-fold desc="Beta vs P (no #(electron) cut, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
                 if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-//
-                    Beta_vs_P_CD_test.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//
-
+                    Beta_vs_P_CD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-//
-                    Beta_vs_P_FD_test.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//
-
-
+                    Beta_vs_P_FD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
-//
-//            //<editor-fold desc="Electron chi2 plots (no #(electron) cut, CD & FD)">
-//            for (auto &e: electrons) {
-//                if (e->getRegion() == CD) {
-//                    Chi2_Electron_CD->Fill(e->par()->getChi2Pid());
-//                    Vertex_Electron_Vx_CD->Fill(e->par()->getVx());
-//                    Vertex_Electron_Vy_CD->Fill(e->par()->getVy());
-//                    Vertex_Electron_Vz_CD->Fill(e->par()->getVz());
-//                } else if (e->getRegion() == FD) {
-//                    Chi2_Electron_FD->Fill(e->par()->getChi2Pid());
-//                    Vertex_Electron_Vx_FD->Fill(e->par()->getVx());
-//                    Vertex_Electron_Vy_FD->Fill(e->par()->getVy());
-//                    Vertex_Electron_Vz_FD->Fill(e->par()->getVz());
-//                }
-//            } // end of loop over AllParticles vector
-//            //</editor-fold>
-//
+
             //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
             TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
             double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
@@ -2204,21 +2150,9 @@ void EventAnalyser() {
             //<editor-fold desc="Fill Beta vs P (1e only, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
                 if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-//
-                    Beta_vs_P_1e_CD_test.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//
-
-
+                    Beta_vs_P_1e_CD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-//
-                    Beta_vs_P_1e_FD_test.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//
-
-
+                    Beta_vs_P_1e_FD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
@@ -4477,9 +4411,12 @@ void EventAnalyser() {
 
         cout << "\n\nPlotting Beta vs P histograms...\n\n";
 
-//  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
+//  Beta VS P TF1 plots --------------------------------------------------------
 
+        //<editor-fold desc="Beta VS P TF1 plots">
         auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * beamE);
+
+        // TODO: finish adding function labels
         TPaveText *beta_electron_title = new TPaveText(0., 0., 0.1, 0.1);
         beta_electron_title->AddText("#font[25]{e^{-}}");
         beta_electron_title->SetTextColor(kRed);
@@ -4493,22 +4430,19 @@ void EventAnalyser() {
         auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, 0.75 * beamE);
         auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, 0.75 * beamE);
         auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, 0.75 * beamE);
+        //</editor-fold>
 
-//  Beta vs P histograms (no #(electrons) cut) --------------------------------------------------------
+//  Beta vs P histograms --------------------------------------------------------
 
-        TH2D *Beta_vs_P_CD_ref = &Beta_vs_P_CD_test, *Beta_vs_P_FD_ref = &Beta_vs_P_FD_test, *Beta_vs_P_1e_CD_ref = &Beta_vs_P_1e_CD_test, *Beta_vs_P_1e_FD_ref = &Beta_vs_P_1e_FD_test;
-//        TH2D *Beta_vs_P_FD_ref = &Beta_vs_P_FD_test;
+        //<editor-fold desc="Beta vs P histograms">
+        TH2D *Beta_vs_P_CD_ref = &Beta_vs_P_CD, *Beta_vs_P_FD_ref = &Beta_vs_P_FD, *Beta_vs_P_1e_CD_ref = &Beta_vs_P_1e_CD, *Beta_vs_P_1e_FD_ref = &Beta_vs_P_1e_FD;
+
+        // TODO: figure out how to automatically find the length of Beta_vs_P_histograms
         int Beta_vs_P_histograms_length = 4;
-//    TH2D Beta_vs_P_histograms[4] = {*Beta_vs_P_CD, *Beta_vs_P_FD, *Beta_vs_P_1e_CD, *Beta_vs_P_1e_FD};
-//    TH2D Beta_vs_P_histograms[4] = {Beta_vs_P_CD_ref, Beta_vs_P_FD_ref, Beta_vs_P_1e_CD_ref, Beta_vs_P_1e_FD_ref};
         TH2D Beta_vs_P_histograms[4] = {*Beta_vs_P_CD_ref, *Beta_vs_P_FD_ref, *Beta_vs_P_1e_CD_ref, *Beta_vs_P_1e_FD_ref};
 
         for (int i = 0; i < Beta_vs_P_histograms_length; ++i) {
-//        for (int i = 0; i < Beta_vs_P_histograms_length; ++i) {
-//            cout << "\n\ni = " << i << "\n\n";
-//        for (auto &histogram: Beta_vs_P_histograms) {
             auto histogram = &Beta_vs_P_histograms[i];
-
             histogram->SetTitleSize(0.06, "xyz");
             histogram->GetXaxis()->SetLabelSize(0.0425);
             histogram->GetXaxis()->CenterTitle(true);
@@ -4516,13 +4450,7 @@ void EventAnalyser() {
             histogram->GetYaxis()->CenterTitle(true);
             histogram->GetZaxis()->SetLabelSize(0.0425);
             plots->Add(histogram);
-
-//        Beta_vs_P_CD->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_Beta_vs_P_histograms[i]s/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
-//            auto h = &Beta_vs_P_histograms[i];
             histogram->Draw("colz");
-//            *Beta_vs_P_histograms[i]->Draw("colz");
             beta_electron->Draw("same");
             beta_electron_title->Draw("same");
             beta_proton->Draw("same");
@@ -4533,147 +4461,21 @@ void EventAnalyser() {
             beta_Kzero->Draw("same");
             beta_Kplus->Draw("same");
             beta_Kminus->Draw("same");
-//        beta_proton.Draw();
             c1->SetLogz(1);
             gStyle->SetStatX(0.88);
             gStyle->SetStatY(0.4);
-            c1->SaveAs((Beta_vs_P_FD_save_names_array[i]).c_str());
-//            c1->SaveAs((Beta_VS_P_All_e_Directory + Beta_vs_P_FD_save_names[i][1] + "_ARRAY_ARRAY_ARRAY_ARRAY").c_str());
-//        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_CD.png");
+            c1->SaveAs(Beta_vs_P_FD_save_directories[i].c_str());
             gStyle->SetStatX(DefStatX);
             gStyle->SetStatY(DefStatY);
             c1->Clear();
         }
-
-
-        //<editor-fold desc="Beta vs P histograms (no #(electrons) cut)">
-        Beta_vs_P_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_CD);
-//        Beta_vs_P_CD->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
-        Beta_vs_P_CD->Draw("colz");
-        beta_electron->Draw("same");
-        beta_electron_title->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-//        beta_proton.Draw();
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.88);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + Beta_vs_P_FD_save_names[0][1]).c_str());
-//        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_CD.png");
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-
-        Beta_vs_P_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_FD);
-//        Beta_vs_P_FD->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
-        Beta_vs_P_FD->Draw("colz");
-        beta_electron->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.88);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + Beta_vs_P_FD_save_names[1][1]).c_str());
-//        c1->SaveAs((Beta_VS_P_All_e_Directory + "Beta_vs_P_FD.png").c_str());
-//        c1->SaveAs("plots/Beta_VS_p/All_e/Beta_vs_P_FD.png");
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-//  Beta vs P histograms (1e only) ---------------------------------------------------------------------
-
-        //<editor-fold desc="Beta vs P histograms (1e only)">
-        Beta_vs_P_1e_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_CD);
-//        Beta_vs_P_1e_CD->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
-        Beta_vs_P_1e_CD->Draw("colz");
-        beta_electron->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.88);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + Beta_vs_P_FD_save_names[2][1]).c_str());
-//        c1->SaveAs("plots/Beta_VS_p/Only_1e/Beta_vs_P_1e_only_CD.png");
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-
-        Beta_vs_P_1e_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_FD);
-//        Beta_vs_P_1e_FD->SetStats(0);
-//        c1->SetLogz(1);
-//        c1->SaveAs("plots/Energy_histograms/El_VS_theta_l/all_interactions/El_VS_theta_lp_histogram_all_int_log_scale_2p.png");
-        Beta_vs_P_1e_FD->Draw("colz");
-        beta_electron->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.88);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + Beta_vs_P_FD_save_names[3][1]).c_str());
-//        c1->SaveAs("plots/Beta_VS_p/Only_1e/Beta_vs_P_1e_only_FD.png");
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
         //</editor-fold>
 
     } else {
         cout << "\n\nBeta vs P plots are disabled by user.\n\n";
-    }
+    } // end of Beta vs P plot if
+
+
     //</editor-fold>
 
 
