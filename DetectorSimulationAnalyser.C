@@ -85,12 +85,12 @@ void EventAnalyser() {
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
-//  todo: finish auto-generating directories
     //<editor-fold desc="Checking directories">
     cout << "Creating plots direcroties...\n\n";
 
     string Plots_Folder = "./plots"; // Plots_Folder = Parent_Folder
 
+//  todo: finish auto-generating directories for other histograms
     //<editor-fold desc="Beta VS p plots directory">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
@@ -106,9 +106,9 @@ void EventAnalyser() {
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
 
     string Beta_vs_P_FD_save_names[4][2] = {{"Beta_vs_P_CD",    "Beta_vs_P_CD.png"},
-                                        {"Beta_vs_P_FD",    "Beta_vs_P_FD.png"},
-                                        {"Beta_vs_P_1e_CD", "Beta_vs_P_1e_only_CD.png"},
-                                        {"Beta_vs_P_1e_FD", "Beta_vs_P_1e_only_FD.png"}};
+                                            {"Beta_vs_P_FD",    "Beta_vs_P_FD.png"},
+                                            {"Beta_vs_P_1e_CD", "Beta_vs_P_1e_only_CD.png"},
+                                            {"Beta_vs_P_1e_FD", "Beta_vs_P_1e_only_FD.png"}};
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directory">
@@ -1087,6 +1087,18 @@ void EventAnalyser() {
 // Chi2 plots -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
+
+//
+    //<editor-fold desc="TH1D array test">
+    //    TH1D *Chi2_Electron_1, *Chi2_Electron_2;
+//    TH1D Chi2_Electron_1, Chi2_Electron_2;
+//
+//
+//    TH1D histArray[2] = {Chi2_Electron_1, Chi2_Electron_2};
+//    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (no #(electrons) cut, CD)", "Electron #chi^{2} (no #(electrons) cut, Central Detector);Electron #chi^{2};",
+//                                      1000, Chi2_lower_lim, Chi2_upper_lim);
+    //</editor-fold>
+//
 
     //<editor-fold desc="Chi2 plots (no #(electrons) cut)">
     THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
