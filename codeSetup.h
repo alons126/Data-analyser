@@ -7,6 +7,7 @@
 #include <tuple>
 #include <iostream>
 #include <sys/stat.h>
+//#include <sstream>
 
 
 // ======================================================================================================================================================================
@@ -20,6 +21,14 @@ std::string Ver = "DetSim testings";
 // ======================================================================================================================================================================
 
 //<editor-fold desc="Functions definitions">
+
+//template <typename T>
+//std::string to_string_with_precision(const T a_value, const int n = 6) {
+//    std::ostringstream out;
+//    out.precision(n);
+//    out << std::fixed << a_value;
+//    return out.str();
+//}
 
 //<editor-fold desc="BoolToString function">
 inline const char *const BoolToString(bool b) {
@@ -179,6 +188,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         gPad->Update();
         double Upper_cut = chi2_cuts + chi2_max;
         double Lower_cut = -chi2_cuts + chi2_max;
+        double Chi2_max = chi2_max;
         TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(lineWidth);
         TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
@@ -195,12 +205,12 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
             max_location->Draw("same");
-            max_location->SetLineColor(kBlack);
+            max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string(Lower_cut)).c_str(), "l");
-            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, "Peak location", "l");
+            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string(Chi2_max)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string(max_location)).c_str(), "l");
             Cut_legend->Draw("same");
         }
