@@ -490,25 +490,51 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2 cuts">
 
     //<editor-fold desc="Electron chi2 cuts">
+
+    //<editor-fold desc="Electrons in CD (no #e cuts)">
     double Chi2_Electron_cut_CD = 5.;
     double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
-    double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
-    double Chi2_Electron_1e_Xmax_CD;
+    //</editor-fold>
+
+    //<editor-fold desc="Electrons in FD (no #e cuts)">
     double Chi2_Electron_cut_FD = 5.;
     double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
+    //</editor-fold>
+
+    //<editor-fold desc="Electrons in CD (1e cut)">
+    double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
+    double Chi2_Electron_1e_Xmax_CD;
+    //</editor-fold>
+
+    //<editor-fold desc="Electrons in FD (1e cut)">
     double Chi2_Electron_1e_peak_FD = 0.15; // to fill using Chi2_Electron_1e_Xmax_FD
     double Chi2_Electron_1e_Xmax_FD;
     //</editor-fold>
 
+    //</editor-fold>
+
     //<editor-fold desc="Proton chi2 cuts">
+
+    //<editor-fold desc="Protons in CD (no #e cuts)">
     double Chi2_Proton_cut_CD = 3.;
     double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
-    double Chi2_Proton_1e_peak_CD = 0.55; // to fill using Chi2_Proton_1e_Xmax_CD
-    double Chi2_Proton_1e_Xmax_CD;
+    //</editor-fold>
+
+    //<editor-fold desc="Protons in FD (no #e cuts)">
     double Chi2_Proton_cut_FD = 3.;
     double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
+    //</editor-fold>
+
+    //<editor-fold desc="Protons in CD (1e cut)">
+    double Chi2_Proton_1e_peak_CD = 0.55; // to fill using Chi2_Proton_1e_Xmax_CD
+    double Chi2_Proton_1e_Xmax_CD;
+    //</editor-fold>
+
+    //<editor-fold desc="Protons in FD (1e cut)">
     double Chi2_Proton_1e_peak_FD = -0.15; // to fill using Chi2_Proton_1e_Xmax_FD
     double Chi2_Proton_1e_Xmax_FD;
+    //</editor-fold>
+
     //</editor-fold>
 
 //    //<editor-fold desc="Neutron chi2 cuts">
@@ -4543,30 +4569,17 @@ void EventAnalyser() {
                                               {Chi2_Electron_cut_FD, Chi2_Electron_1e_Xmax_FD},
                                               {Chi2_Proton_cut_CD,   Chi2_Proton_1e_Xmax_CD},
                                               {Chi2_Proton_cut_FD,   Chi2_Proton_1e_Xmax_FD},
-                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD},
-                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD},
-                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_peak_CD},
-                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_peak_FD}};
-//        double Chi2_histograms_cuts[12][2] = {{Chi2_Electron_cut_CD, Chi2_Electron_Xmax_CD},
-//                                              {Chi2_Electron_cut_FD, Chi2_Electron_Xmax_FD},
-//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_Xmax_CD},
-//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_Xmax_FD},
-//                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_Xmax_CD},
-//                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_Xmax_FD},
-//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_Xmax_CD},
-//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_Xmax_FD},
-//                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD},
-//                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD},
-//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_peak_CD},
-//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_peak_FD}};
+                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD}, // Chi2_Electron_1e_peak_CD and not Chi2_Electron_1e_Xmax_CD
+                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD}, // Chi2_Electron_1e_peak_FD and not Chi2_Electron_1e_Xmax_FD
+                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_peak_CD}, // Chi2_Proton_1e_peak_CD and not Chi2_Proton_1e_Xmax_CD
+                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_peak_FD}}; // Chi2_Proton_1e_peak_FD and not Chi2_Proton_1e_Xmax_FD
         int Chi2_histograms_length = sizeof(Chi2_histograms) / sizeof(TH1D);
 
         for (int i = 0; i < Chi2_histograms_length; ++i) {
             auto histogram = &Chi2_histograms[i];
             histPlotter1D(c1, histogram, normalized_chi2_plots, true, .1, Chi2_histograms_titles[i][0], Chi2_histograms_titles[i][1], 0.06, 0.0425, 0.0425, plots, 2,
                           false, true, &Chi2_histogram_Stacks[i], Chi2_save_directories[i][0], Chi2_save_directories[i][1], Chi2_save_directories[i][2], kBlue, true,
-                          true,
-                          true, false, true, Chi2_histograms_cuts[i][0], Chi2_histograms_cuts[i][1]);
+                          true, true, false, true, Chi2_histograms_cuts[i][0], Chi2_histograms_cuts[i][1]);
         }
 
 
@@ -7617,6 +7630,7 @@ void EventAnalyser() {
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n\n";
     myLogFile << "Code ran with the following settings:" << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Input\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "LoadedInput: " << LoadedInput << "\n";
@@ -7624,10 +7638,12 @@ void EventAnalyser() {
     myLogFile << "fileInput: " << fileInput << "\n";
     myLogFile << "plotsInput: " << plotsInput << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Plot settings\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Calculation settings\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
@@ -7644,6 +7660,7 @@ void EventAnalyser() {
     myLogFile << "Pvy = " << Pvy << "\n";
     myLogFile << "Pvz = " << Pvz << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Plot selector\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Theta_plots = " << BoolToString(Theta_plots) << "\n";
@@ -7660,6 +7677,7 @@ void EventAnalyser() {
     myLogFile << "momentum_plots = " << BoolToString(momentum_plots) << "\n";
     myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Normalization settings\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "normalized_theta_lp_plots = " << BoolToString(normalized_theta_lp_plots) << "\n";
@@ -7668,11 +7686,13 @@ void EventAnalyser() {
     myLogFile << "normalized_E_cal_plots = " << BoolToString(normalized_E_cal_plots) << "\n";
     myLogFile << "normalized_inclusive_plots = " << BoolToString(normalized_inclusive_plots) << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Delete settings\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
     myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (2p)\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "P_lp_upper_lim_2p = " << P_lp_upper_lim_2p << "\n";
@@ -7682,6 +7702,7 @@ void EventAnalyser() {
     myLogFile << "P_p2_upper_lim_2p = " << P_p2_upper_lim_2p << "\n";
     myLogFile << "P_p2_lower_lim_2p = " << P_p2_lower_lim_2p << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (1n1p)\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "P_lp_upper_lim_1n1p = " << P_lp_upper_lim_1n1p << "\n";
@@ -7691,6 +7712,7 @@ void EventAnalyser() {
     myLogFile << "P_n_upper_lim_1n1p = " << P_n_upper_lim_1n1p << "\n";
     myLogFile << "P_n_lower_lim_1n1p = " << P_n_lower_lim_1n1p << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (2p, MicroBooNE)\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "P_lp_upper_lim_MicroBooNE = " << P_lp_upper_lim_MicroBooNE << "\n";
@@ -7701,77 +7723,95 @@ void EventAnalyser() {
     myLogFile << "P_R_lower_lim_MicroBooNE = " << P_R_lower_lim_MicroBooNE << "\n";
     myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Chi2 cuts\n";
     myLogFile << "===========================================================================\n";
 
     //<editor-fold desc="Chi2_Electron">
+    myLogFile << "\n-- Electrons in CD (no #e cuts) -------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
 
     if (Chi2_Electron_CD.Integral() == 0.) {
-        myLogFile << "Chi2_Electron_Xmax_CD = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Electron_Xmax_CD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Electron_Xmax_CD = " << Chi2_Electron_Xmax_CD << "\n";
+        myLogFile << "Chi2_Electron_Xmax_CD (from histogram) = " << Chi2_Electron_Xmax_CD << "\n";
     }
 
-    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_CD << "\n";
-
-    if (Chi2_Electron_1e_CD.Integral() == 0.) {
-        myLogFile << "Chi2_Electron_1e_Xmax_CD = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Electron_1e_Xmax_CD = " << Chi2_Electron_1e_Xmax_CD << "\n";
-    }
-
+    myLogFile << "\n-- Electrons in FD (no #e cuts) -------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
 
     if (Chi2_Electron_FD.Integral() == 0.) {
-        myLogFile << "Chi2_Electron_Xmax_FD = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Electron_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Electron_Xmax_FD = " << Chi2_Electron_Xmax_FD << "\n";
+        myLogFile << "Chi2_Electron_Xmax_FD (from histogram) = " << Chi2_Electron_Xmax_FD << "\n";
     }
 
+    myLogFile << "\n-- Electrons in CD (1e cut) -----------------------------------------------" << "\n";
+    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_CD << "\n";
+
+    if (Chi2_Electron_1e_CD.Integral() == 0.) {
+        myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = " << Chi2_Electron_1e_Xmax_CD << "\n";
+    }
+
+    myLogFile << "Chi2_Electron_1e_peak_CD (used in cuts) = " << Chi2_Electron_1e_peak_CD << "\n";
+
+    myLogFile << "\n-- Electrons in FD (1e cut) -----------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_FD << "\n";
 
     if (Chi2_Electron_1e_FD.Integral() == 0.) {
-        myLogFile << "Chi2_Electron_1e_Xmax_FD = NO EVENTS" << "\n\n\n";
+        myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Electron_1e_Xmax_FD = " << Chi2_Electron_1e_Xmax_FD << "\n\n\n";
+        myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = " << Chi2_Electron_1e_Xmax_FD << "\n";
     }
+
+    myLogFile << "Chi2_Electron_1e_peak_FD (used in cuts) = " << Chi2_Electron_1e_peak_FD << "\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_Proton">
+    myLogFile << "\n-- Protons in CD (no #e cuts) ---------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
 
     if (Chi2_Proton_CD.Integral() == 0.) {
-        myLogFile << "Chi2_Proton_Xmax_CD = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_Xmax_CD = " << Chi2_Proton_Xmax_CD << "\n";
+        myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = " << Chi2_Proton_Xmax_CD << "\n";
     }
 
-    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
-
-    if (Chi2_Proton_1e_CD.Integral() == 0.) {
-        myLogFile << "Chi2_Proton_1e_Xmax_CD = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Proton_1e_Xmax_CD = " << Chi2_Proton_1e_Xmax_CD << "\n";
-    }
-
+    myLogFile << "\n-- Protons in FD (no #e cuts) ---------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
 
     if (Chi2_Proton_FD.Integral() == 0.) {
-        myLogFile << "Chi2_Proton_Xmax_FD = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_Xmax_FD = " << Chi2_Proton_Xmax_FD << "\n";
+        myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = " << Chi2_Proton_Xmax_FD << "\n";
     }
 
+    myLogFile << "\n-- Protons in CD (1e cut) -------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
+
+    if (Chi2_Proton_1e_CD.Integral() == 0.) {
+        myLogFile << "Chi2_Proton_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Proton_1e_Xmax_CD (from histogram) = " << Chi2_Proton_1e_Xmax_CD << "\n";
+    }
+
+    myLogFile << "Chi2_Proton_1e_peak_CD (used in cuts) = " << Chi2_Proton_1e_peak_CD << "\n";
+
+    myLogFile << "\n-- Protons in FD (1e cut) -------------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
 
     if (Chi2_Proton_1e_FD.Integral() == 0.) {
-        myLogFile << "Chi2_Proton_1e_Xmax_FD = NO EVENTS" << "\n\n\n";
+        myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_1e_Xmax_FD = " << Chi2_Proton_1e_Xmax_FD << "\n\n\n";
+        myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = " << Chi2_Proton_1e_Xmax_FD << "\n";
     }
+
+    myLogFile << "Chi2_Proton_1e_peak_FD (used in cuts) = " << Chi2_Proton_1e_peak_FD << "\n\n\n";
     //</editor-fold>
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Vertex cuts (MEAN**************)\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Vertex_Electron_cut_CD = " << Vertex_Electron_cut_CD << "\n";
@@ -7784,6 +7824,7 @@ void EventAnalyser() {
     myLogFile << "Vertex_Proton_cut_FD = " << Vertex_Proton_cut_FD << "\n";
     myLogFile << "Vertex_Proton_1e_mean_FD = " << Vertex_Proton_1e_mean_FD << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "dV cuts\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "dVx_cut_CD = " << dVx_cut_CD << "\n";
@@ -7800,6 +7841,7 @@ void EventAnalyser() {
     myLogFile << "dVz_cut_FD = " << dVz_cut_FD << "\n";
     myLogFile << "dVz_mean_FD = " << dVz_mean_FD << "\n\n\n";
 
+    myLogFile << "===========================================================================\n";
     myLogFile << "Event counts\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Total #(beamEents):\t\t\t" << num_of_events << "\n";
