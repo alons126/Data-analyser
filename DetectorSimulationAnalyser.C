@@ -2110,8 +2110,9 @@ void EventAnalyser() {
     TLorentzVector e_in(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
-    int num_of_events = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
-    int num_of_events_with_e = 0, num_of_events_1e = 0, num_of_events_1enP = 0, num_of_events_1e2X = 0, num_of_events_1e2p = 0;
+    int num_of_events = 0, num_of_events_wo_e = 0, num_of_events_w_e = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0, num_of_events_e_FT = 0;
+//    int num_of_events = 0, num_of_events_CD = 0, num_of_events_FD = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
+    int num_of_events_with_e = 0, num_of_events_1e = 0, num_of_events_1enP = 0, num_of_events_1e2X = 0, num_of_events_1e1p = 0, num_of_events_1e2p = 0;
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
@@ -2131,6 +2132,12 @@ void EventAnalyser() {
             auto pizero = c12.getByID(111);
             auto piplus = c12.getByID(211);
             auto piminus = c12.getByID(-211);
+
+            if (electrons.size() == 0) {
+                ++num_of_events_wo_e;
+            } else {
+                ++num_of_events_w_e;
+            }
 
 
 //  All electrons plots
@@ -2171,7 +2178,7 @@ void EventAnalyser() {
                     Q_CD = e_in - e_out_CD;
                     Q2_CD = fabs(Q_CD.Mag2());
                     Q2_histogram_CD->Fill(Q2_CD);
-                } else if (AllParticles[i]->getRegion() == FD) {
+                } else if (electrons[i]->getRegion() == FD) {
                     ++num_of_events_e_FD;
 
                     Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
@@ -2188,22 +2195,25 @@ void EventAnalyser() {
                     Q_FD = e_in - e_out_FD;
                     Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
+                } else if (electrons[i]->getRegion() == FT) {
+//                } else {
+                    ++num_of_events_e_FT;
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
 
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
-            for (auto &p: protons) {
-                if (p->getRegion() == CD) {
-                    Chi2_Proton_CD.Fill(p->par()->getChi2Pid());
-                    Vertex_Proton_Vx_CD_test.Fill(p->par()->getVx());
-                    Vertex_Proton_Vy_CD_test.Fill(p->par()->getVy());
-                    Vertex_Proton_Vz_CD_test.Fill(p->par()->getVz());
-                } else if (p->getRegion() == FD) {
-                    Chi2_Proton_FD.Fill(p->par()->getChi2Pid());
-                    Vertex_Proton_Vx_FD_test.Fill(p->par()->getVx());
-                    Vertex_Proton_Vy_FD_test.Fill(p->par()->getVy());
-                    Vertex_Proton_Vz_FD_test.Fill(p->par()->getVz());
+            for (auto &prot: protons) {
+                if (prot->getRegion() == CD) {
+                    Chi2_Proton_CD.Fill(prot->par()->getChi2Pid());
+                    Vertex_Proton_Vx_CD_test.Fill(prot->par()->getVx());
+                    Vertex_Proton_Vy_CD_test.Fill(prot->par()->getVy());
+                    Vertex_Proton_Vz_CD_test.Fill(prot->par()->getVz());
+                } else if (prot->getRegion() == FD) {
+                    Chi2_Proton_FD.Fill(prot->par()->getChi2Pid());
+                    Vertex_Proton_Vx_FD_test.Fill(prot->par()->getVx());
+                    Vertex_Proton_Vy_FD_test.Fill(prot->par()->getVy());
+                    Vertex_Proton_Vz_FD_test.Fill(prot->par()->getVz());
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -2221,6 +2231,11 @@ void EventAnalyser() {
 
             if (electrons.size() != 1) { continue; } // applying 1e only
             ++num_of_events_1e;
+
+//            cout << "electrons.size() = " << electrons.size() << "\n";
+//            if (electrons.size() == 1) {
+//                cout << "electrons.size() = " << electrons.size() << "\n";
+//            }
 
             //<editor-fold desc="General 1e only plots">
 
@@ -2329,6 +2344,10 @@ void EventAnalyser() {
 
             if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
             ++num_of_events_1e2X;
+
+            if (protons.size() == 1) {
+                ++num_of_events_1e1p;
+            }
 
             if (protons.size() == 2) { // for 2p calculations
                 ++num_of_events_1e2p;
@@ -7783,13 +7802,21 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n";
     myLogFile << "Event counts\n";
     myLogFile << "===========================================================================\n";
-    myLogFile << "Total #(beamEents):\t\t\t" << num_of_events << "\n";
+    myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
+    myLogFile << "Total #(events) w/o any e:\t\t" << num_of_events_wo_e << "\n";
+    myLogFile << "Total #(events) w/ any e:\t\t" << num_of_events_w_e << "\n\n";
+
+    myLogFile << "#(events) in CD:\t\t" << "to be added" << "\n";
+    myLogFile << "#(events) in FD:\t\t" << "to be added" << "\n";
     myLogFile << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
     myLogFile << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
+    myLogFile << "#(events) w/ e in FT:\t\t" << num_of_events_e_FT << "\n\n";
+
     myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_1e << "\n";
-    myLogFile << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
     myLogFile << "#(events) w/ 1e2X:\t\t\t" << num_of_events_1e2X << "\n";
+    myLogFile << "#(events) w/ 1e & any #p:\t" << num_of_events_1enP << "\n";
+    myLogFile << "#(events) w/ 1e1p:\t\t\t" << num_of_events_1e1p << "\n";
     myLogFile << "#(events) w/ 1e2p:\t\t\t" << num_of_events_1e2p << "\n\n\n";
 
     myLogFile.close();
@@ -7817,12 +7844,20 @@ void EventAnalyser() {
 
     cout << "-- Event counts -----------------------------------------------------------\n";
     cout << "Total #(events):\t\t" << num_of_events << "\n";
+    cout << "Total #(events) w/o any e:\t" << num_of_events_wo_e << "\n";
+    cout << "Total #(events) w/ any e:\t" << num_of_events_w_e << "\n\n";
+
+    cout << "#(events) in CD:\t\t" << "to be added" << "\n";
+    cout << "#(events) in FD:\t\t" << "to be added" << "\n";
     cout << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
     cout << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
+    cout << "#(events) w/ e in FT:\t\t" << num_of_events_e_FT << "\n\n";
+
     cout << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
-    cout << "#(events) w/ 1e & only p:\t" << num_of_events_1enP << "\n";
     cout << "#(events) w/ 1e2X:\t\t" << num_of_events_1e2X << "\n";
+    cout << "#(events) w/ 1e & any #p:\t" << num_of_events_1enP << "\n";
+    cout << "#(events) w/ 1e1p:\t\t" << num_of_events_1e1p << "\n";
     cout << "#(events) w/ 1e2p:\t\t" << num_of_events_1e2p << "\n\n";
 
     cout << "-- Input ------------------------------------------------------------------\n";
