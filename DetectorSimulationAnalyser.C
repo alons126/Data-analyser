@@ -78,6 +78,7 @@ void EventAnalyser() {
     cout << "Settings mode:\t'" << file_name << "'\n";
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n\n";
+//    cout << "fileInput:\t" << fileInput << "\n\n";
     cout << "beamE:\t\t" << beamE << "\n\n\n\n";
     //</editor-fold>
 
@@ -2117,7 +2118,7 @@ void EventAnalyser() {
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
-        cout << "\nAnalysing " << chain.GetFileName(ifile) << "\n\n";
+//        cout << "\nAnalysing " << chain.GetFileName(ifile) << "\n\n";
 
         clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
 
@@ -2195,10 +2196,16 @@ void EventAnalyser() {
                     Q_FD = e_in - e_out_FD;
                     Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
-                } else if (electrons[i]->getRegion() == FT) {
+                } else if (electrons[0]->getRegion() == FT) {
+//                } else if (electrons[i]->getRegion() == FT) {
 //                } else {
                     ++num_of_events_e_FT;
                 }
+
+//                if (electrons[0]->getRegion() == FT) {
+////                } else {
+//                    num_of_events_e_FT = num_of_events_e_FT - electrons.size() + 1;
+//                }
             } // end of loop over AllParticles vector
             //</editor-fold>
 
@@ -7861,7 +7868,8 @@ void EventAnalyser() {
     cout << "#(events) w/ 1e2p:\t\t" << num_of_events_1e2p << "\n\n";
 
     cout << "-- Input ------------------------------------------------------------------\n";
-    cout << "File input:\t" << LoadedInput << "\n";
+    cout << "AnalyseFileDir:\t" << AnalyseFileDir << "\n";
+//    cout << "File input:\t" << LoadedInput << "\n";
     cout << "Settings mode:\t'" << file_name << "'\n\n";
 
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n\n";
