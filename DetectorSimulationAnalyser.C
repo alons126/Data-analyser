@@ -2175,7 +2175,7 @@ void EventAnalyser() {
             for (int i = 0; i < electrons.size(); i++) {
 
                 if (electrons[i]->getRegion() == CD) {
-                    ++num_of_e_in_CD;
+                    ++num_of_events_e_CD;
 
                     Chi2_Electron_CD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2192,7 +2192,7 @@ void EventAnalyser() {
                     Q2_CD = fabs(Q_CD.Mag2());
                     Q2_histogram_CD->Fill(Q2_CD);
                 } else if (electrons[i]->getRegion() == FD) {
-                    ++num_of_e_in_FD;
+                    ++num_of_events_e_FD;
 
                     Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2209,44 +2209,10 @@ void EventAnalyser() {
                     Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
                 } else if (electrons[i]->getRegion() == FT) {
-                    ++num_of_e_in_FT;
+                    ++num_of_events_e_FT;
 
                 }
             } // end of loop over AllParticles vector
-
-
-            if (num_of_e_in_CD > 0) {
-                ++num_of_events_e_CD;
-//                cout << "\nnum_of_e_in_FT = " << num_of_e_in_FT << "\n";
-//                cout << "\nnum_of_events_e_FT = " << num_of_events_e_FT << "\n\n";
-            }
-
-            if (num_of_e_in_FD > 0) {
-                ++num_of_events_e_FD;
-//                cout << "\nnum_of_e_in_FT = " << num_of_e_in_FT << "\n";
-//                cout << "\nnum_of_events_e_FT = " << num_of_events_e_FT << "\n\n";
-            }
-
-            if (num_of_e_in_FT > 0) {
-                ++num_of_events_e_FT;
-//                cout << "\nnum_of_e_in_FT = " << num_of_e_in_FT << "\n";
-//                cout << "\nnum_of_events_e_FT = " << num_of_events_e_FT << "\n\n";
-            }
-
-//            if (electrons.size() > 1) {
-//                ++num_of_multi_e_ev;
-//                cout << "\nelectrons.size() = " << electrons.size() << "\n";
-//                for (int i = 0; i < electrons.size(); i++) {
-//                    if (electrons[i]->getRegion() == CD) {
-//                        cout << "CD" << "\n";
-//                    } else if (electrons[i]->getRegion() == FD) {
-//                        cout << "FD" << "\n";
-//                    } else if (electrons[i]->getRegion() == FT) {
-//                        cout << "FT" << "\n";
-//                    }
-//                } // end of loop over AllParticles vector
-//            }
-
             //</editor-fold>
 
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
@@ -7853,14 +7819,15 @@ void EventAnalyser() {
     myLogFile << "Event counts\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
-    myLogFile << "Total #(events) w/o any e:\t\t" << num_of_events_wo_e << "\n";
-    myLogFile << "Total #(events) w/ any e:\t\t" << num_of_events_w_e << "\n\n";
+    myLogFile << "Total #(events) w/o any e:\t" << num_of_events_wo_e << "\n";
+    myLogFile << "Total #(events) w/ any e:\t" << num_of_events_w_e << "\n\n";
 
     myLogFile << "#(events) in CD:\t\t" << "to be added" << "\n";
     myLogFile << "#(events) in FD:\t\t" << "to be added" << "\n";
-    myLogFile << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
-    myLogFile << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
-    myLogFile << "#(events) w/ e in FT:\t\t" << num_of_events_e_FT << "\n\n";
+    myLogFile << "#e in CD:\t\t\t\t\t" << num_of_events_e_CD << "\n";
+    myLogFile << "#e in FD:\t\t\t\t" << num_of_events_e_FD << "\n";
+    myLogFile << "#e in FT:\t\t\t\t" << num_of_events_e_FT << "\n";
+    myLogFile << "#e in FT:\t\t\t\t" << num_of_events_e_FT - num_of_events_more_then_1e << " (corrected)" << "\n\n";
 
     myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_1e << "\n";
@@ -7901,10 +7868,11 @@ void EventAnalyser() {
 
     cout << "#(events) in CD:\t\t" << "to be added" << "\n";
     cout << "#(events) in FD:\t\t" << "to be added" << "\n";
-    cout << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
-    cout << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
-    cout << "#(events) w/ e in FT:\t\t" << num_of_events_e_FT << "\n\n";
-    cout << "#(events)_e_CD+#(events)_e_FD+#(events)_e_FD:\t" << num_of_events_e_CD + num_of_events_e_FD + num_of_events_e_FT << "\n\n";
+    cout << "#e in CD:\t\t\t" << num_of_events_e_CD << "\n";
+    cout << "#e in FD:\t\t\t" << num_of_events_e_FD << "\n";
+    cout << "#e in FT:\t\t\t" << num_of_events_e_FT << "\n";
+    cout << "#e in FT:\t\t\t" << num_of_events_e_FT - num_of_events_more_then_1e << " (corrected)" << "\n\n";
+//    cout << "#(events)_e_CD+#(events)_e_FD+#(events)_e_FD:\t" << num_of_events_e_CD + num_of_events_e_FD + num_of_events_e_FT << "\n\n";
 
     cout << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
