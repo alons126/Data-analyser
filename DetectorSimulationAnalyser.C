@@ -30,6 +30,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TChain.h>
 #include <TCanvas.h>
 #include <TBenchmark.h>
+#include <iomanip>
 //#include "/home/alon/clas12root/Clas12Banks/clas12reader.h"
 #include "clas12reader.h"
 #include "codeSetup.h"
@@ -2111,13 +2112,11 @@ void EventAnalyser() {
     TLorentzVector e_in(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
+    int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
+    int num_of_events_with_e_in_CD = 0, num_of_events_with_e_in_FD = 0, num_of_events_with_e_in_FT = 0;
+    int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_more_then_1e = 0;
+    int num_of_events_with_1enP = 0, num_of_events_with_1e2X = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
-    int num_of_multi_e_ev = 0;
-
-
-    int num_of_events = 0, num_of_events_wo_e = 0, num_of_events_w_e = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0, num_of_events_e_FT = 0;
-//    int num_of_events = 0, num_of_events_CD = 0, num_of_events_FD = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
-    int num_of_events_with_e = 0, num_of_events_1e = 0, num_of_events_more_then_1e = 0, num_of_events_1enP = 0, num_of_events_1e2X = 0, num_of_events_1e1p = 0, num_of_events_1e2p = 0;
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
@@ -2127,7 +2126,7 @@ void EventAnalyser() {
         clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
 
         while (c12.next()) { // loop over events
-            ++num_of_events;
+            ++num_of_events; // logging Total #(events)
 
             auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
 
@@ -2139,9 +2138,9 @@ void EventAnalyser() {
             auto piminus = c12.getByID(-211);
 
             if (electrons.size() == 0) {
-                ++num_of_events_wo_e;
+                ++num_of_events_without_any_e; // logging Total #(events) w/o any e
             } else {
-                ++num_of_events_w_e;
+                ++num_of_events_with_any_e; // logging Total #(events) w/ any e
             }
 
 
@@ -2175,7 +2174,7 @@ void EventAnalyser() {
             for (int i = 0; i < electrons.size(); i++) {
 
                 if (electrons[i]->getRegion() == CD) {
-                    ++num_of_events_e_CD;
+                    ++num_of_events_with_e_in_CD; // logging #e in CD
 
                     Chi2_Electron_CD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2192,7 +2191,7 @@ void EventAnalyser() {
                     Q2_CD = fabs(Q_CD.Mag2());
                     Q2_histogram_CD->Fill(Q2_CD);
                 } else if (electrons[i]->getRegion() == FD) {
-                    ++num_of_events_e_FD;
+                    ++num_of_events_with_e_in_FD; // logging #e in FD
 
                     Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2209,10 +2208,9 @@ void EventAnalyser() {
                     Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
                 } else if (electrons[i]->getRegion() == FT) {
-                    ++num_of_events_e_FT;
-
+                    ++num_of_events_with_e_in_FT; // logging #e in FT
                 }
-            } // end of loop over AllParticles vector
+            } // end of loop over electrons vector
             //</editor-fold>
 
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
@@ -2239,19 +2237,14 @@ void EventAnalyser() {
 
             //<editor-fold desc="1e only plots">
             if (electrons.size() >= 1) {
-                ++num_of_events_with_e;
+                ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
                 if (electrons.size() > 1) {
-                    ++num_of_events_more_then_1e;
+                    ++num_of_events_more_then_1e; // logging #(events) w/ more then 1e
                 }
             } // applying 1e only
 
             if (electrons.size() != 1) { continue; } // applying 1e only
-            ++num_of_events_1e;
-
-//            cout << "electrons.size() = " << electrons.size() << "\n";
-//            if (electrons.size() == 1) {
-//                cout << "electrons.size() = " << electrons.size() << "\n";
-//            }
+            ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
 
             //<editor-fold desc="General 1e only plots">
 
@@ -2354,19 +2347,19 @@ void EventAnalyser() {
             //</editor-fold>
 
             if (AllParticles.size() - electrons.size() == protons.size()) {
-                ++num_of_events_1enP;
+                ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
             }
 
 
             if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
-            ++num_of_events_1e2X;
+            ++num_of_events_with_1e2X; // logging #(events) w/ 1e2X
 
             if (protons.size() == 1) {
-                ++num_of_events_1e1p;
+                ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
             }
 
             if (protons.size() == 2) { // for 2p calculations
-                ++num_of_events_1e2p;
+                ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
                 double dVx_CD, dVy_CD, dVz_CD, dVx_FD, dVy_FD, dVz_FD;
 
@@ -3196,1197 +3189,6 @@ void EventAnalyser() {
         } // end of while
     } // end of for loop over files
     //</editor-fold>
-
-
-//    //<editor-fold desc="old reader">
-//    clas12reader c12(LoadedInput.c_str()); // open file
-//
-//
-////    auto db=TDatabasePDG::Instance();
-////    c12.db()->turnOffQADB();
-////    double mass_p = db->GetParticle(2212)->Mass();
-////    double mass_n = db->GetParticle(2112)->Mass();
-////    double mass_pip = db->GetParticle(211)->Mass();
-////    double mass_pim = db->GetParticle(-211)->Mass();
-////
-////    cout << "mass_p:\t'" << mass_p << "'\n";
-////    cout << "mass_n:\t'" << mass_n << "'\n";
-////    cout << "mass_pip:\t'" << mass_pip << "'\n";
-////    cout << "mass_pim:\t'" << mass_pim << "'\n";
-//
-//
-////    c12.addExactPid(11, 1); // exactly 1 electron (outgoing lepton)
-////    c12.addAtLeastPid(2212, 1); // at least 1 proton (1 for 1n1p, 2 for 2p)
-////    c12.addAtLeastPid(2112, 0); // at least 1 neutron (1 for 1n1p, 0 for 2p)
-////    c12.addAtLeastPid(211, 0); // at least 0 pi+ (MicroBooNE)
-////    c12.addAtLeastPid(-211, 0); // at least 0 pi- (MicroBooNE)
-//
-////    c12.addZeroOfRestPid(); // nothing else
-//
-//    int num_of_events = 0;
-//    int num_of_events_e_CD = 0;
-//    int num_of_events_e_FD = 0;
-//    int num_of_events_with_e = 0;
-//    int num_of_events_1e = 0;
-//    int num_of_events_1enP = 0;
-//    int num_of_events_1e2X = 0;
-//    int num_of_events_1e2p = 0;
-//
-//    int num_of_2p_events = 0;
-//    int num_of_1n1p_events = 0;
-//    int num_of_MicroBooNE_events = 0;
-//
-//    while (c12.next()) { // loop over events
-//        ++num_of_events;
-//
-//        auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
-//
-//        auto electrons = c12.getByID(11);
-//        auto protons = c12.getByID(2212);
-//        auto neutrons = c12.getByID(2112);
-//        auto pizero = c12.getByID(111);
-//        auto piplus = c12.getByID(211);
-//        auto piminus = c12.getByID(-211);
-//
-//
-////  All electrons plots
-////  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="All electrons plots">
-//
-//        //<editor-fold desc="Beta vs P (no #(electron) cut, CD & FD)">
-//
-////        cout << "\n";
-//
-//        for (int i = 0; i < AllParticles.size(); i++) {
-//
-////            int particlePDG = AllParticles[i]->par()->getPid();
-////
-////            if ((particlePDG != 0) && (abs(particlePDG) != 11) && (particlePDG != 22) && (abs(particlePDG) != 2212) && (particlePDG != 2112) &&
-////                (particlePDG != 211) && (particlePDG != -211) && (particlePDG != 111) && (abs(particlePDG) != 321)
-////                ) {
-////                cout << "particlePDG:\t" << particlePDG << "\n";
-////            }
-//
-//            if (AllParticles[i]->getRegion() == CD) {
-//                Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//            } else if (AllParticles[i]->getRegion() == FD) {
-//                Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//            }
-//        } // end of loop over AllParticles vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Electron chi2 plots (no #(electron) cut, CD & FD)">
-//        for (auto &e: electrons) {
-//            if (e->getRegion() == CD) {
-//                Chi2_Electron_CD->Fill(e->par()->getChi2Pid());
-//                Vertex_Electron_Vx_CD->Fill(e->par()->getVx());
-//                Vertex_Electron_Vy_CD->Fill(e->par()->getVy());
-//                Vertex_Electron_Vz_CD->Fill(e->par()->getVz());
-//            } else if (e->getRegion() == FD) {
-//                Chi2_Electron_FD->Fill(e->par()->getChi2Pid());
-//                Vertex_Electron_Vx_FD->Fill(e->par()->getVx());
-//                Vertex_Electron_Vy_FD->Fill(e->par()->getVy());
-//                Vertex_Electron_Vz_FD->Fill(e->par()->getVz());
-//            }
-//        } // end of loop over AllParticles vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
-//        for (auto &p: protons) {
-//            if (p->getRegion() == CD) {
-//                Chi2_Proton_CD->Fill(p->par()->getChi2Pid());
-//                Vertex_Proton_Vx_CD->Fill(p->par()->getVx());
-//                Vertex_Proton_Vy_CD->Fill(p->par()->getVy());
-//                Vertex_Proton_Vz_CD->Fill(p->par()->getVz());
-//            } else if (p->getRegion() == FD) {
-//                Chi2_Proton_FD->Fill(p->par()->getChi2Pid());
-//                Vertex_Proton_Vx_FD->Fill(p->par()->getVx());
-//                Vertex_Proton_Vy_FD->Fill(p->par()->getVy());
-//                Vertex_Proton_Vz_FD->Fill(p->par()->getVz());
-//            }
-//        } // end of loop over protons vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
-//        double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
-//        double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
-//
-//        for (int i = 0; i < electrons.size(); i++) {
-//            if (electrons[i]->getRegion() == CD) {
-//                ++num_of_events_e_CD;
-//
-//                Theta_e_CD->Fill(electrons[i]->getTheta());
-//                Pe_CD = electrons[i]->par()->getP();
-//                Pex_CD = electrons[i]->par()->getPx();
-//                Pey_CD = electrons[i]->par()->getPy();
-//                Pez_CD = electrons[i]->par()->getPz();
-//                Ee_CD = sqrt(m_e * m_e + Pe_CD * Pe_CD);
-//
-//                qx_CD = Pvx - Pex_CD;
-//                qy_CD = Pvy - Pey_CD;
-//                qz_CD = Pvz - Pez_CD;
-//                q_CD = rCalc(qx_CD, qy_CD, qz_CD);
-//                omega_CD = Ev - Ee_CD;
-//
-//                Q2_CD = fabs(omega_CD * omega_CD - q_CD * q_CD);
-//                Q2_histogram_CD->Fill(Q2_CD);
-//            } else if (AllParticles[i]->getRegion() == FD) {
-//                ++num_of_events_e_FD;
-//
-//                Theta_e_FD->Fill(electrons[i]->getTheta());
-//                Pe_FD = electrons[i]->par()->getP();
-//                Pex_FD = electrons[i]->par()->getPx();
-//                Pey_FD = electrons[i]->par()->getPy();
-//                Pez_FD = electrons[i]->par()->getPz();
-//                Ee_FD = sqrt(m_e * m_e + Pe_FD * Pe_FD);
-//
-//                qx_FD = Pvx - Pex_FD;
-//                qy_FD = Pvy - Pey_FD;
-//                qz_FD = Pvz - Pez_FD;
-//                q_FD = rCalc(qx_FD, qy_FD, qz_FD);
-//                omega_FD = Ev - Ee_FD;
-//
-//                Q2_FD = fabs(omega_FD * omega_FD - q_FD * q_FD);
-//                Q2_histogram_FD->Fill(Q2_FD);
-//            }
-//        } // end of loop over AllParticles vector
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//
-////  1e only plots
-////  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="1e only plots">
-//        if (electrons.size() >= 1) {
-//            ++num_of_events_with_e;
-//        } // applying 1e only
-//
-//        if (electrons.size() != 1) { continue; } // applying 1e only
-//        ++num_of_events_1e;
-//
-//        //<editor-fold desc="General 1e only plots">
-//
-//        //<editor-fold desc="Fill Beta vs P (1e only, CD & FD)">
-//        for (int i = 0; i < AllParticles.size(); i++) {
-//            if (AllParticles[i]->getRegion() == CD) {
-//                Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//            } else if (AllParticles[i]->getRegion() == FD) {
-//                Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//            }
-//        } // end of loop over AllParticles vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Fill Electron chi2 plots (1e only, CD & FD)">
-//        double e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD;
-//        double e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD;
-//
-//        for (auto &e: electrons) {
-//            if (e->getRegion() == CD) {
-//                e_Chi2_CD = e->par()->getChi2Pid();
-//                Chi2_Electron_1e_CD->Fill(e_Chi2_CD);
-//
-//                e_Vx_CD = e->par()->getVx();
-//                Vertex_Electron_1e_Vx_CD->Fill(e_Vx_CD);
-//                e_Vy_CD = e->par()->getVy();
-//                Vertex_Electron_1e_Vy_CD->Fill(e_Vy_CD);
-//                e_Vz_CD = e->par()->getVz();
-//                Vertex_Electron_1e_Vz_CD->Fill(e_Vz_CD);
-//
-//                //<editor-fold desc="Electron chi2 test (1e only, CD)">
-//                if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-////                if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-//                    continue;
-//                } else {
-//                    Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
-//                }
-//                //</editor-fold>
-//
-//            } else if (e->getRegion() == FD) {
-//                e_Chi2_FD = e->par()->getChi2Pid();
-//                Chi2_Electron_1e_FD->Fill(e_Chi2_FD);
-//
-//                e_Vx_FD = e->par()->getVx();
-//                Vertex_Electron_1e_Vx_FD->Fill(e_Vx_FD);
-//                e_Vy_FD = e->par()->getVy();
-//                Vertex_Electron_1e_Vy_FD->Fill(e_Vy_FD);
-//                e_Vz_FD = e->par()->getVz();
-//                Vertex_Electron_1e_Vz_FD->Fill(e_Vz_FD);
-//
-//                //<editor-fold desc="Electron chi2 test (1e only, FD)">
-//                if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-////                if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-//                    continue;
-//                } else {
-//                    Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
-//                }
-//                //</editor-fold>
-//
-//            }
-//        } // end of loop over electrons vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Fill Proton chi2 plots (1e only, CD & FD)">
-//        double p_Chi2_tmp_CD, p_Vx_tmp_CD, p_Vy_tmp_CD, p_Vz_tmp_CD;
-//        double p_Chi2_tmp_FD, p_Vx_tmp_FD, p_Vy_tmp_FD, p_Vz_tmp_FD;
-//
-//        for (auto &p: protons) {
-//            if (p->getRegion() == CD) {
-//                p_Chi2_tmp_CD = p->par()->getChi2Pid();
-//                Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
-//
-//                p_Vx_tmp_CD = p->par()->getVx();
-//                Vertex_Proton_1e_Vx_CD->Fill(p_Vx_tmp_CD);
-//                p_Vy_tmp_CD = p->par()->getVy();
-//                Vertex_Proton_1e_Vy_CD->Fill(p_Vy_tmp_CD);
-//                p_Vz_tmp_CD = p->par()->getVz();
-//                Vertex_Proton_1e_Vz_CD->Fill(p_Vz_tmp_CD);
-//
-//                //<editor-fold desc="Proton chi2 test (1e only, CD)">
-//                if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
-////                if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) > Chi2_Proton_cut_CD) || (fabs(Chi2_Proton_1e_peak_CD + p_Chi2_tmp_CD) > Chi2_Proton_cut_CD)) {
-//                    continue;
-//                } else {
-//                    Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
-//                }
-//                //</editor-fold>
-//
-//            } else if (p->getRegion() == FD) {
-//                p_Chi2_tmp_FD = p->par()->getChi2Pid();
-//                Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
-//
-//                p_Vx_tmp_FD = p->par()->getVx();
-//                Vertex_Proton_1e_Vx_FD->Fill(p_Vx_tmp_FD);
-//                p_Vy_tmp_FD = p->par()->getVy();
-//                Vertex_Proton_1e_Vy_FD->Fill(p_Vy_tmp_FD);
-//                p_Vz_tmp_FD = p->par()->getVz();
-//                Vertex_Proton_1e_Vz_FD->Fill(p_Vz_tmp_FD);
-//
-//                //<editor-fold desc="Proton chi2 test (1e only, FD)">
-//                if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
-////                if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) > Chi2_Proton_cut_FD) || (fabs(Chi2_Proton_1e_peak_FD + p_Chi2_tmp_FD) > Chi2_Proton_cut_FD)) {
-//                    continue;
-//                } else {
-//                    Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
-//                }
-//                //</editor-fold>
-//
-//            }
-//        } // end of loop over protons vector
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//        if (AllParticles.size() - electrons.size() == protons.size()) {
-////            if (protons.size() > 1) {
-////                cout << "\n\nAllParticles.size():\t" << AllParticles.size() << "\n";
-////                cout << "electrons.size():\t" << electrons.size() << "\n";
-////                cout << "protons.size():\t" << protons.size() << "\n\n";
-////                ++num_of_events_1enP;
-////            }
-////            cout << "\n\nAllParticles.size():\t" << AllParticles.size() << "\n";
-////            cout << "electrons.size():\t" << electrons.size() << "\n";
-////            cout << "protons.size():\t" << protons.size() << "\n\n";
-//            ++num_of_events_1enP;
-//        }
-//
-//
-//        if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
-//        ++num_of_events_1e2X;
-//
-//        if (protons.size() == 2) { // for 2p calculations
-//            ++num_of_events_1e2p;
-//
-//            double dVx_CD, dVy_CD, dVz_CD, dVx_FD, dVy_FD, dVz_FD;
-//
-//            //<editor-fold desc="Fill dV plots (1e only & #chi^{2} cuts, CD & FD)">
-//            double p_Vx_CD, p_Vy_CD, p_Vz_CD;
-//            double p_Vx_FD, p_Vy_FD, p_Vz_FD;
-//
-////                double p_Chi2_CD, p_Vx_CD, p_Vy_CD, p_Vz_CD;
-////                double p_Chi2_FD, p_Vx_FD, p_Vy_FD, p_Vz_FD;
-//
-//            for (auto &p: protons) {
-//                double p_Chi2_CD, p_Chi2_FD;
-//
-//                if (p->getRegion() == CD) {
-//                    p_Chi2_CD = p->par()->getChi2Pid();
-//
-//                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) // applying electron chi2 cut
-//                        && (fabs(Chi2_Proton_1e_peak_CD - p_Chi2_CD) > Chi2_Proton_cut_CD)) // applying proton chi2 cut
-//                    {
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-//                        continue;
-//                    } else {
-////                            p_Chi2_CD = p->par()->getChi2Pid();
-////                            Chi2_Proton_1e_CD->Fill(p_Chi2_CD);
-//
-//                        p_Vx_CD = p->par()->getVx();
-//                        dVx_CD = (e_Vx_CD - p_Vx_CD);
-//                        deltaVx_CD->Fill(dVx_CD);
-//                        p_Vy_CD = p->par()->getVy();
-//                        dVy_CD = (e_Vy_CD - p_Vy_CD);
-//                        deltaVy_CD->Fill(dVy_CD);
-//                        p_Vz_CD = p->par()->getVz();
-//                        dVz_CD = (e_Vz_CD - p_Vz_CD);
-//                        deltaVz_CD->Fill(dVz_CD);
-//                    }
-//                } else if (p->getRegion() == FD) {
-//                    p_Chi2_FD = p->par()->getChi2Pid();
-//
-//                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) // applying electron chi2 cut
-//                        && (fabs(Chi2_Proton_1e_peak_FD - p_Chi2_FD) > Chi2_Proton_cut_FD)) // applying proton chi2 cut
-//                    {
-////                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-//                        continue;
-//                    } else {
-////                            p_Chi2_FD = p->par()->getChi2Pid();
-////                            Chi2_Proton_1e_FD->Fill(p_Chi2_FD);
-//
-//                        p_Vx_FD = p->par()->getVx();
-//                        dVx_FD = (e_Vx_FD - p_Vx_FD);
-//                        deltaVx_FD->Fill(dVx_FD);
-//                        p_Vy_FD = p->par()->getVy();
-//                        dVy_FD = (e_Vy_FD - p_Vy_FD);
-//                        deltaVy_FD->Fill(dVy_FD);
-//                        p_Vz_FD = p->par()->getVz();
-//                        dVz_FD = (e_Vz_FD - p_Vz_FD);
-//                        deltaVz_FD->Fill(dVz_FD);
-//                    }
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//
-////            double upper_e_chi2_cut =
-//
-////            Chi2_Electron_1e_peak_CD - e_Chi2_CD
-////
-////            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-////                Chi2_Electron_1e_test_CD->Fill(e_Chi2_CD);
-////            }
-//
-////            if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) > Chi2_Electron_cut_FD) || (fabs(Chi2_Electron_1e_peak_FD + e_Chi2_FD) > Chi2_Electron_cut_FD)) {
-////                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
-////            }
-////
-////            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-////                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
-////                Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
-////                Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
-////            }
-//////
-////            if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) > Chi2_Electron_cut_CD) || (fabs(Chi2_Electron_1e_peak_CD + e_Chi2_CD) > Chi2_Electron_cut_CD)) {
-////                Chi2_Electron_1e_test_FD->Fill(e_Chi2_FD);
-////                Chi2_Proton_1e_test_CD->Fill(p_Chi2_tmp_CD);
-////                Chi2_Proton_1e_test_FD->Fill(p_Chi2_tmp_FD);
-////            }
-////
-//
-////            cout << "\n\n\n==========================================================================\n";
-////            cout << "electrons[0]->par()->getChi2Pid() = " << electrons[0]->par()->getChi2Pid() << "\n";
-//
-//
-////            if (AllParticles.size() == 3) {
-////
-//////                cout << "AllParticles.size() = " << AllParticles.size() << "\n";
-//////                cout << "protons.size() = " << protons.size() << "\n";
-//////
-//////                for (int i = 0; i < AllParticles.size(); i++) {
-//////                    float particlePDG_test = AllParticles[i]->par()->getPid();
-//////                    cout << "particlePDG_test[" << i << "] = " << particlePDG_test << "\n";
-////////                    } // end of selection test if (2p)
-//////                } // end of loop over AllParticles vector
-////
-//////                cout << "==========================================================================\n";
-//////                cout << "num_of_2p_events = " << num_of_2p_events << "\n\n\n";
-//////                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n\n\n";
-////
-////
-////
-////
-////
-////            } // end of "AllParticles.size() == 3" if
-//
-//        } // end of "protons.size() == 2" if
-//
-//        //<editor-fold desc="Other calculations">
-//
-//        //  Inclusive calculations
-////  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="Inclusive calculations">
-//        if (calculate_inclusive == true) {
-//            int lepton_ind_inclusive = -1;
-//
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//
-//                float particlePDG_inclusive = AllParticles[i]->par()->getPid();
-//
-//                if (selection_test_inclusive) {
-//                    cout << "particlePDG_inclusive[" << i << "] = " << particlePDG_inclusive << "\n";
-//                } // end of selection test if (inclusive)
-//
-//                //<editor-fold desc="lepton selector (inclusive)">
-//                if (particlePDG_inclusive == 11) {
-//                    lepton_ind_inclusive = i;
-//                } // end of lepton selector (inclusive)
-//                //</editor-fold>
-//            } // end of loop over AllParticles vector
-//
-////          Energy transfer VS q3,q calculations:
-//            double Plx = AllParticles[lepton_ind_inclusive]->par()->getPx();
-//            double Ply = AllParticles[lepton_ind_inclusive]->par()->getPy();
-//            double Plz = AllParticles[lepton_ind_inclusive]->par()->getPz();
-//
-//            double El = AllParticles[lepton_ind_inclusive]->getDeltaEnergy();
-//
-//            double q3 = abs(Pvz - Plz);
-//            double q = rCalc(Pvx - Plx, Pvy - Ply, Pvz - Plz);
-//
-//            E_Trans_VS_q_all_inclusive->Fill(q3, beamE - El);
-////        Q2_hist_inclusive->Fill(Q2);
-//
-////        if (qel == true) {
-////            E_Trans_VS_q_QEL_inclusive->Fill(q, beamE - El);
-////        } else if (mec == true) {
-////            E_Trans_VS_q_MEC_inclusive->Fill(q, beamE - El);
-////        }
-//
-//            double Theta_lp_inclusive = AllParticles[lepton_ind_inclusive]->getTheta() * 180.0 / 3.14159265359; // In degrees
-////        double Theta_lp_inclusive = acos(Plz / rCalc(Plx, Ply, Plz)) * 180.0 / 3.14159265359; // In degrees
-//
-////      Theta_l inclusive calculations:
-//            if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-//                E_Trans15_all_inclusive->Fill(beamE - El);
-////            if (qel == true) {
-////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_QEL_inclusive->Fill(beamE - El);
-////                }
-////            } else if (mec == true) {
-////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_MEC_inclusive->Fill(beamE - El);
-////                }
-////            } else if (res == true) {
-////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_RES_inclusive->Fill(beamE - El);
-////                }
-////            } else if (dis == true) {
-////                if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
-////                    E_Trans15_DIS_inclusive->Fill(beamE - El);
-////                }
-////            }
-//            }
-//        }
-//        //</editor-fold>
-//
-//
-////  2p calculations
-////  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="2p calculations">
-//        if (calculate_2p && protons.size() == 2 && neutrons.size() == 0 && piplus.size() == 0 && piminus.size() == 0) {
-//            ++num_of_2p_events;
-//
-//            if (selection_test_2p) {
-//                cout << "==========================================================================\n";
-//                cout << "num_of_2p_events = " << num_of_2p_events << "\n\n\n";
-//                cout << "#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n\n\n";
-//            } // end of selection test if (2p)
-//
-//            int ProtonCounter_2p = 0, OtherParticleCounter_2p = 0;
-//            int Lepton_ind_2p = -1, Proton_1_ind_2p = -1, Proton_2_ind_2p = -1;
-//
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//
-//                float particlePDG_2p = AllParticles[i]->par()->getPid();
-//
-//                if (selection_test_2p) {
-//                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
-//                } // end of selection test if (2p)
-//
-//                //<editor-fold desc="Proton selector (2p)">
-//                if (particlePDG_2p == 2212) {
-//                    ++ProtonCounter_2p;
-////                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
-////                    cout << "i = " << i << "\n";
-//                    if (ProtonCounter_2p == 1) {
-//                        Proton_1_ind_2p = i;
-////                            cout << "Proton_1_ind_2p = " << Proton_1_ind_2p << "\n";
-//                    } else if (ProtonCounter_2p == 2) {
-//                        Proton_2_ind_2p = i;
-////                            cout << "Proton_2_ind_2p = " << Proton_2_ind_2p << "\n";
-//                    } else if (ProtonCounter_2p > 2) {
-//                        cout << "\nAdditional Protons detected (2p). PDG = " << particlePDG_2p << "\n\n\n";
-//                    }
-//                } else if (particlePDG_2p == 11) {
-//                    Lepton_ind_2p = i;
-////                    cout << "Lepton_ind_2p = " << Lepton_ind_2p << "\n";
-////                    cout << "particlePDG_2p[" << i << "] = " << particlePDG_2p << "\n";
-//                } else if (particlePDG_2p != 2212) {
-//                    ++OtherParticleCounter_2p;
-//                    if (OtherParticleCounter_2p > 0) {
-//                        cout << "\nAdditional AllParticles detected (2p). PDG = " << particlePDG_2p << "\n\n\n";
-//                    }
-//                } // end of selector (2p)
-//                //</editor-fold>
-//
-//            } // end of loop over AllParticles vector
-//
-//            double P_lp_2p = AllParticles[Lepton_ind_2p]->getP(); // Momentum of lepton in AllParticles vector
-//            double P_p1_2p = AllParticles[Proton_1_ind_2p]->getP(); // Momentum of first proton in AllParticles vector
-//            double P_p2_2p = AllParticles[Proton_2_ind_2p]->getP(); // Momentum of first proton in AllParticles vector
-//
-//            double P_L_2p = -1; // Leading proton
-//            double P_R_2p = -1; // Recoil proton
-//
-////          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-//            if (P_p1_2p >= 0 && P_p2_2p >= 0) {
-////            if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
-//
-////                double E_cal_2p;
-////
-////                if (BEnergyToNucleusCon == true) {
-////                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272) + 2 * BEnergyToNucleus;
-////                } else if (BEnergyToNucleusCon == false) {
-////                    E_cal_2p = El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272);
-////                }
-//
-//                double Phi_lp_2p = AllParticles[Lepton_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Phi of lepton in AllParticles (in deg)
-////                double Phi_lp_2p = atan2(AllParticles[Lepton_ind_2p]->par()->getPy(), AllParticles[Lepton_ind_2p]->par()->getPx())
-////                                  * 180.0 / 3.14159265359; // Theta of lepton in AllParticles (in deg)
-//                phi_lp_2p->Fill(Phi_lp_2p);
-//
-////                double theta_lp_2p = AllParticles[Lepton_ind_2p]->che(HTCC)->getDtheta(); // Theta of lepton in AllParticles (in radians)
-//                double theta_lp_2p = AllParticles[Lepton_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Theta of lepton in AllParticles  (in deg)
-//                Theta_lp_histogram->Fill(theta_lp_2p);
-////                cout << "theta_lp_2p = " << theta_lp_2p * 180.0 / 3.14159265359 << "\n\n";
-//
-//
-////              ***NOT REALLY dtheta:
-//                double d_theta_2p = acos(
-//                        (AllParticles[Proton_1_ind_2p]->par()->getPx() * AllParticles[Proton_2_ind_2p]->par()->getPx() +
-//                         AllParticles[Proton_1_ind_2p]->par()->getPx() * AllParticles[Proton_2_ind_2p]->par()->getPx() +
-//                         AllParticles[Proton_1_ind_2p]->par()->getPx() * AllParticles[Proton_2_ind_2p]->par()->getPx()) /
-//                        (AllParticles[Proton_1_ind_2p]->getP() * AllParticles[Proton_2_ind_2p]->getP())) * 180.0 / 3.14159265359;
-//                dtheta_2p->Fill(d_theta_2p);
-//
-//                //<editor-fold desc="P_L & P_R selector">
-//                if (P_p1_2p >= P_p2_2p) { // If Proton_1_ind_2p is the leading proton and Proton_2_ind_2p is the recoil
-//
-//                    P_L_2p = P_p1_2p; // Leading proton
-//                    P_L_hist_2p->Fill(P_L_2p);
-//
-//                    P_R_2p = P_p2_2p; // Recoil proton
-//                    P_R_hist_2p->Fill(P_R_2p);
-//
-//                    double phi_p1 = AllParticles[Proton_1_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Leading proton phi (in deg)
-//                    phi_p1_2p->Fill(phi_p1);
-//
-//                    double phi_p2 = AllParticles[Proton_2_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Recoil proton phi (in deg)
-//                    phi_p2_2p->Fill(phi_p2);
-//
-//                    double d_phi_p2 = phi_p1 - phi_p2; // In deg
-//                    dphi_2p->Fill(d_phi_p2);
-//
-//                    double theta_p1 = AllParticles[Proton_1_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Leading proton scattering angle theta (in deg)
-//                    Theta_p1_histogram->Fill(theta_p1);
-//
-//                    double theta_p2 = AllParticles[Proton_2_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Recoil proton scattering angle theta (in deg)
-//                    Theta_p2_histogram->Fill(theta_p2);
-//
-////                    if (qel == true) {
-////                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
-////                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
-////                    }
-//
-//                } else { // If Proton_2_ind_2p is the leading proton and Proton_1_ind_2p is the recoil
-//
-//                    P_L_2p = P_p2_2p; // Leading proton
-//                    P_L_hist_2p->Fill(P_L_2p);
-//
-//                    P_R_2p = P_p1_2p; // Recoil proton
-//                    P_R_hist_2p->Fill(P_R_2p);
-//
-//                    double phi_p2 = AllParticles[Proton_1_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Leading proton phi (in deg)
-//                    phi_p1_2p->Fill(phi_p2);
-//
-//                    double phi_p1 = AllParticles[Proton_2_ind_2p]->getPhi() * 180.0 / 3.14159265359; // Recoil proton phi (in deg)
-//                    phi_p2_2p->Fill(phi_p1);
-//
-//                    double d_phi_p2 = phi_p1 - phi_p2; // In deg
-//                    dphi_2p->Fill(d_phi_p2);
-//
-//                    double theta_p2 = AllParticles[Proton_1_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Leading proton scattering angle theta (in deg)
-//                    Theta_p1_histogram->Fill(theta_p2);
-//
-//                    double theta_p1 = AllParticles[Proton_2_ind_2p]->getTheta() * 180.0 / 3.14159265359; // Recoil proton scattering angle theta (in deg)
-//                    Theta_p2_histogram->Fill(theta_p1);
-//
-//                    //
-////                    if (qel == true) {
-////                        E_cal_VS_theta_p2_QEL_only_2p->Fill(theta_p1 * 180.0 / 3.14159265359, E_cal_2p);
-////                        E_cal_VS_theta_p1_QEL_only_2p->Fill(theta_p2 * 180.0 / 3.14159265359, E_cal_2p);
-////                    }
-//
-//                } // end of P_L & P_R selector
-//                //</editor-fold>
-//
-//                P_lp_hist_2p->Fill(P_lp_2p); // Lepton momentum
-//
-////                E_Trans_VS_q3_all_2p->Fill(q3, beamE - El);
-//
-////                double El_2p, El1_2p, El2_2p;
-////                if (theta_lp_2p <= 40 && theta_lp_2p >= 5) {
-////                    El1_2p = AllParticles[Proton_1_ind_2p]->sci(FTOF1A)->getEnergy() +
-////                             AllParticles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
-////                             AllParticles[Proton_1_ind_2p]->sci(FTOF1B)->getEnergy() +
-////                             AllParticles[Proton_1_ind_2p]->sci(PCAL)->getEnergy() +
-////                             AllParticles[Proton_1_ind_2p]->sci(ECIN)->getEnergy() +
-////                             AllParticles[Proton_1_ind_2p]->sci(ECOUT)->getEnergy();
-////
-////                    El2_2p = AllParticles[Proton_2_ind_2p]->sci(FTOF1A)->getEnergy() +
-////                             AllParticles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
-////                             AllParticles[Proton_2_ind_2p]->sci(FTOF1B)->getEnergy() +
-////                             AllParticles[Proton_2_ind_2p]->sci(PCAL)->getEnergy() +
-////                             AllParticles[Proton_2_ind_2p]->sci(ECIN)->getEnergy() +
-////                             AllParticles[Proton_2_ind_2p]->sci(ECOUT)->getEnergy();
-////
-////                }
-////
-////                El_2p = El1_2p + El2_2p;
-////                fsEl_2p->Fill(El_2p);
-////                cout << "El_2p (E_cal) = El1_2p + El2_2p = " << El1_2p << " + " << El2_2p << " = " << El_2p << "\n\n";
-//
-////                double El_2p = AllParticles[Lepton_ind_2p]->cal(FTOF1A)->getEnergy() +
-////                               AllParticles[Lepton_ind_2p]->cal(FTOF1B)->getEnergy() +
-////                               AllParticles[Lepton_ind_2p]->cal(FTOF2)->getEnergy() +
-////                               AllParticles[Lepton_ind_2p]->cal(PCAL)->getEnergy() +
-////                               AllParticles[Lepton_ind_2p]->cal(ECIN)->getEnergy() +
-////                               AllParticles[Lepton_ind_2p]->cal(ECOUT)->getEnergy();
-////                fsEl_2p->Fill(El_2p);
-////                cout << "El_2p = " << El_2p << "\n\n";
-//
-//                fsEl_2p->Fill(AllParticles[Lepton_ind_2p]->getDeltaEnergy());
-////                cout << "AllParticles[" << Lepton_ind_2p << "]->getDeltaEnergy() = " << AllParticles[Lepton_ind_2p]->getDeltaEnergy() << "\n\n";
-////                cout << "AllParticles[" << Lepton_ind_2p << "]->getEnergy() = " << AllParticles[Lepton_ind_2p]->getEnergy() << "\n\n";
-//
-//
-//
-////                fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_histogram, El);
-//
-////                E_Trans_all_ang_all_int_2p->Fill(beamE - El);
-//
-////                E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_histogram, E_cal_2p);
-////                E_cal_VS_Q2_all_int_2p->Fill(Q2, E_cal_2p);
-////                E_cal_VS_dtheta_all_int_2p->Fill(fabs(acos(pzf[Proton_1_ind_2p] / rCalc(pxf[Proton_1_ind_2p], pyf[Proton_1_ind_2p], pzf[Proton_1_ind_2p])) -
-////                                                      acos(pzf[Proton_2_ind_2p] / rCalc(pxf[Proton_2_ind_2p], pyf[Proton_2_ind_2p], pzf[Proton_2_ind_2p]))) *
-////                                                 180.0 / 3.14159265359, E_cal_2p);
-//
-////                gamma_Lab_all_hist->Fill(cos(d_theta_2p));
-////                gamma_Lab_all_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
-//
-////                if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                    E_Trans15_all_2p->Fill(beamE - El);
-////                } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                    E_Trans45_all_2p->Fill(beamE - El);
-////                } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                    E_Trans90_all_2p->Fill(beamE - El);
-////                }
-//
-////                //<editor-fold desc="Histogram fill by reaction (2p)">
-////                if (qel == true) {
-////                    gamma_Lab_QEL_hist->Fill(cos(d_theta_2p));
-////                    gamma_Lab_QEL_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
-////
-////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_QEL_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_QEL_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_QEL_2p->Fill(beamE - El);
-////                    }
-////
-////                    fsEl_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_histogram, El);
-////
-////                    E_cal_QEL_2p->Fill(E_cal_2p);
-////                    E_cal_VS_theta_lp_QEL_only_2p->Fill(Theta_lp_histogram, E_cal_2p);
-////                    E_cal_VS_Q2_QEL_only_2p->Fill(Q2, E_cal_2p);
-////                    E_cal_VS_W_QEL_only_2p->Fill(W, E_cal_2p);
-////                    E_cal_VS_En_QEL_only_2p->Fill(En, E_cal_2p);
-////                    E_cal_VS_Pn_QEL_only_2p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_2p);
-////                    E_cal_VS_Pn1_QEL_only_2p->Fill(P_lp_2p, E_cal_2p);
-////                    E_cal_VS_Pn2_QEL_only_2p->Fill(P_R_2p, E_cal_2p);
-////                    E_cal_VS_dtheta_QEL_only_2p->Fill(
-////                            fabs(acos(pzf[Proton_1_ind_2p] / sqrt(pxf[Proton_1_ind_2p] * pxf[Proton_1_ind_2p] + pyf[Proton_1_ind_2p] * pyf[Proton_1_ind_2p] +
-////                                                                  pzf[Proton_1_ind_2p] * pzf[Proton_1_ind_2p])) -
-////                                 acos(pzf[Proton_2_ind_2p] / sqrt(pxf[Proton_2_ind_2p] * pxf[Proton_2_ind_2p] +
-////                                                                  pyf[Proton_2_ind_2p] * pyf[Proton_2_ind_2p] + pzf[Proton_2_ind_2p] * pzf[Proton_2_ind_2p]))) *
-////                            180.0 /
-////                            3.14159265359, El + (Ef[Proton_1_ind_2p] - 0.938272) + (Ef[Proton_2_ind_2p] - 0.938272));
-////
-////                    E_Trans_VS_q3_QEL_2p->Fill(q3, beamE - El);
-////
-////                    fsEl_QEL_2p->Fill(El);
-////                } else if (mec == true) {
-////                    gamma_Lab_MEC_hist->Fill(cos(d_theta_2p));
-////                    gamma_Lab_MEC_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
-////
-////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_MEC_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_MEC_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_MEC_2p->Fill(beamE - El);
-////                    }
-////
-////                    fsEl_VS_theta_lp_MEC_only_2p->Fill(Theta_lp_histogram, El);
-////
-////                    E_cal_MEC_2p->Fill(E_cal_2p);
-////
-////                    E_Trans_VS_q3_MEC_2p->Fill(q3, beamE - El);
-////
-////                    fsEl_MEC_2p->Fill(El);
-////                } else if (res == true) {
-////                    gamma_Lab_RES_hist->Fill(cos(d_theta_2p));
-////                    gamma_Lab_RES_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
-////
-////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_RES_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_RES_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_RES_2p->Fill(beamE - El);
-////                    }
-////
-////                    E_cal_RES_2p->Fill(E_cal_2p);
-////
-////                    fsEl_RES_2p->Fill(El);
-////                } else if (dis == true) {
-////                    gamma_Lab_DIS_hist->Fill(cos(d_theta_2p));
-////                    gamma_Lab_DIS_hist_weighted->Fill(cos(d_theta_2p), Q2 * Q2);
-////
-////                    if (Theta_lp_histogram >= 14.0 && Theta_lp_histogram <= 16.0) {
-////                        E_Trans15_DIS_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 44.0 && Theta_lp_histogram <= 46.0) {
-////                        E_Trans45_DIS_2p->Fill(beamE - El);
-////                    } else if (Theta_lp_histogram >= 89.0 && Theta_lp_histogram <= 91.0) {
-////                        E_Trans90_DIS_2p->Fill(beamE - El);
-////                    }
-////
-////                    E_cal_DIS_2p->Fill(E_cal_2p);
-////
-////                    fsEl_DIS_2p->Fill(El);
-////                }
-////                //</editor-fold>
-//
-////            }
-//            } // end of momentum cut if (2p)
-//
-//        } // end of 2p if
-//        //</editor-fold>
-//
-//
-////  1n1p calculations
-////  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="1n1p calculations">
-//        if (calculate_1n1p && protons.size() == 1 && neutrons.size() == 1 && piplus.size() == 0 && piminus.size() == 0) {
-//            ++num_of_1n1p_events;
-//
-//            if (selection_test_1n1p) {
-//                cout << "==========================================================================\n";
-//                cout << "num_of_1n1p_events = " << num_of_1n1p_events << "\n";
-//                cout << "\n#electrons = " << electrons.size() << ", #protons = " << protons.size() << ", #neutrons = " << neutrons.size() << "\n\n\n";
-//            } // end of selection test if (1n1p)
-//
-//            int ProtonCounter_1n1p = 0, NeutronCounter_1n1p = 0, OtherParticleCounter_1n1p = 0;
-//            int Lepton_ind_1n1p = -1, Proton_ind_1n1p = -1, Neutron_ind_1n1p = -1;
-//
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//
-//                float particlePDG_1n1p = AllParticles[i]->par()->getPid();
-//
-//                if (selection_test_1n1p) {
-//                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
-//                }
-//
-//                //<editor-fold desc="Proton & Neutron selector">
-//                if (particlePDG_1n1p == 2212) {
-//                    ++ProtonCounter_1n1p;
-//                    Proton_ind_1n1p = i;
-//                } else if (particlePDG_1n1p == 2112) {
-//                    ++NeutronCounter_1n1p;
-//                    Neutron_ind_1n1p = i;
-//                } else if (particlePDG_1n1p == 11) {
-//                    Lepton_ind_1n1p = i;
-////                    cout << "Lepton_ind_1n1p = " << Lepton_ind_1n1p << "\n";
-////                    cout << "particlePDG_1n1p[" << i << "] = " << particlePDG_1n1p << "\n";
-//                } else if ((particlePDG_1n1p != 2212) && (particlePDG_1n1p != 2112) && (particlePDG_1n1p != 11)) {
-//                    ++OtherParticleCounter_1n1p;
-//                    if (OtherParticleCounter_1n1p > 0) {
-//                        cout << "\nAdditional particles detected (1n1p). PDG = " << particlePDG_1n1p << "\n\n\n";
-//                    }
-//                }
-//                //</editor-fold>
-//
-//            }
-//
-//            double P_lp_1n1p = AllParticles[Lepton_ind_1n1p]->getP(); // Lepton momentum
-//            double P_p_1n1p = AllParticles[Proton_ind_1n1p]->getP(); // Proton momentum
-//            double P_n_1n1p = AllParticles[Neutron_ind_1n1p]->getP(); // Neutron momentum
-//
-////          Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-//            if (P_p_1n1p >= 0 && P_n_1n1p >= 0) {
-////                if (P_p_1n1p >= P_p_lower_lim_1n1p && P_n_1n1p >= P_n_lower_lim_1n1p) {
-//
-////                    double E_cal_1n1p;
-//
-////                    if (BEnergyToNucleusCon == true) {
-////                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565) + 2 * BEnergyToNucleus;
-////                    } else if (BEnergyToNucleusCon == false) {
-////                        E_cal_1n1p = El + (Ef[Proton_ind_1n1p] - 0.938272) + (Ef[Neutron_ind_1n1p] - 0.939565);
-////                    }
-//
-//                //<editor-fold desc="Lepton theta & phi">
-//                double Phi_lp_1n1p = AllParticles[Lepton_ind_1n1p]->getPhi() * 180.0 / 3.14159265359; // Phi of lepton in AllParticles (in deg)
-////                double Phi_lp_1n1p = atan2(AllParticles[Lepton_ind_1n1p]->par()->getPy(), AllParticles[Lepton_ind_1n1p]->par()->getPx())
-////                                    * 180.0 / 3.14159265359; // Phi of lepton in AllParticles (in deg)
-//                phi_lp_1n1p->Fill(Phi_lp_1n1p);
-//
-//                double Theta_lp_1n1p = AllParticles[Lepton_ind_1n1p]->getTheta() * 180.0 / 3.14159265359; // Theta of lepton in AllParticles (in deg)
-//                theta_lp_1n1p->Fill(Theta_lp_1n1p);
-//                //</editor-fold>
-//
-//                //<editor-fold desc="Nucleon theta & phi">
-//                double phi_p = atan2(AllParticles[Proton_ind_1n1p]->par()->getPy(), AllParticles[Proton_ind_1n1p]->par()->getPx())
-//                               * 180.0 / 3.14159265359; // Phi of proton in AllParticles (in deg)
-//                phi_p_1n1p->Fill(phi_p);
-//
-//                double phi_n = atan2(AllParticles[Neutron_ind_1n1p]->par()->getPy(), AllParticles[Neutron_ind_1n1p]->par()->getPx())
-//                               * 180.0 / 3.14159265359; // Phi of neutron in AllParticles (in deg)
-//                phi_n_1n1p->Fill(phi_n);
-//
-//                double d_phi_1n1p = phi_p - phi_n; // In deg
-//                dphi_1n1p->Fill(d_phi_1n1p);
-//
-//                double theta_p = AllParticles[Proton_ind_1n1p]->getTheta() * 180.0 / 3.14159265359; // Theta of proton in AllParticles (in deg)
-//                theta_p_1n1p->Fill(theta_p);
-//
-//                double theta_n = AllParticles[Neutron_ind_1n1p]->getTheta() * 180.0 / 3.14159265359; // Theta of neutron in AllParticles (in deg)
-//                theta_n_1n1p->Fill(theta_n);
-//
-////              ***NOT REALLY dtheta:
-//                double d_theta_1n1p = acos(
-//                        (AllParticles[Proton_ind_1n1p]->par()->getPx() * AllParticles[Neutron_ind_1n1p]->par()->getPx() +
-//                         AllParticles[Proton_ind_1n1p]->par()->getPx() * AllParticles[Neutron_ind_1n1p]->par()->getPx() +
-//                         AllParticles[Proton_ind_1n1p]->par()->getPx() * AllParticles[Neutron_ind_1n1p]->par()->getPx()) /
-//                        (AllParticles[Proton_ind_1n1p]->getP() * AllParticles[Neutron_ind_1n1p]->getP())) * 180.0 / 3.14159265359;
-//                dtheta_1n1p->Fill(d_theta_1n1p);
-//                //</editor-fold>
-//
-////                    E_Trans_VS_q3_all_1n1p->Fill(q3, beamE - El);
-//
-//                //<editor-fold desc="Momentum histograms fill (1n1p)">
-//                P_p_hist_1n1p->Fill(P_p_1n1p);
-//                P_n_hist_1n1p->Fill(P_n_1n1p);
-//                P_lp_hist_1n1p->Fill(P_lp_1n1p);
-//                //</editor-fold>
-//
-////                double El_1n1p, Elp_1n1p, Eln_1n1p;
-////                if (Theta_lp_1n1p <= 40 && Theta_lp_1n1p >= 5) {
-////                    Elp_1n1p = AllParticles[Proton_ind_1n1p]->sci(FTOF1A)->getEnergy() +
-////                               AllParticles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-////                               AllParticles[Proton_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-////                               AllParticles[Proton_ind_1n1p]->sci(PCAL)->getEnergy() +
-////                               AllParticles[Proton_ind_1n1p]->sci(ECIN)->getEnergy() +
-////                               AllParticles[Proton_ind_1n1p]->sci(ECOUT)->getEnergy();
-////
-////                    Eln_1n1p = AllParticles[Neutron_ind_1n1p]->sci(FTOF1A)->getEnergy() +
-////                               AllParticles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-////                               AllParticles[Neutron_ind_1n1p]->sci(FTOF1B)->getEnergy() +
-////                               AllParticles[Neutron_ind_1n1p]->sci(PCAL)->getEnergy() +
-////                               AllParticles[Neutron_ind_1n1p]->sci(ECIN)->getEnergy() +
-////                               AllParticles[Neutron_ind_1n1p]->sci(ECOUT)->getEnergy();
-////
-////                }
-////
-////                El_1n1p = Elp_1n1p + Eln_1n1p;
-////                fsEl_1n1p->Fill(El_1n1p);
-////                cout << "El_1n1p (E_cal) = Elp_1n1p + Eln_1n1p = " << Elp_1n1p << " + " << Eln_1n1p << " = " << El_1n1p << "\n\n";
-//
-//
-////                fsEl_1n1p->Fill(AllParticles[Lepton_ind_1n1p]->getDeltaEnergy());
-//
-//                /*
-//                //<editor-fold desc="Energy histograms fill (1n1p)">
-//                fsEl_VS_theta_lp_all_int_1n1p->Fill(Theta_lp_1n1p, El);
-//                fsEl_1n1p->Fill(El);
-//                //</editor-fold>
-//
-//                E_Trans_all_ang_all_int_1n1p->Fill(beamE - El);
-//
-//                if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                    E_Trans15_all_1n1p->Fill(beamE - El);
-//                } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                    E_Trans45_all_1n1p->Fill(beamE - El);
-//                } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                    E_Trans90_all_1n1p->Fill(beamE - El);
-//                }
-//
-//                //<editor-fold desc="Histogram fill by reaction (1n1p)">
-//                if (qel == true) {
-//                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_QEL_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_QEL_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_QEL_1n1p->Fill(beamE - El);
-//                    }
-//
-//                    fsEl_VS_theta_lp_QEL_only_1n1p->Fill(Theta_lp_1n1p, El);
-//
-//                    E_cal_QEL_1n1p->Fill(E_cal_1n1p);
-//                    E_cal_VS_theta_lp_QEL_1n1p->Fill(Theta_lp_1n1p, E_cal_1n1p);
-//                    E_cal_VS_Q2_QEL_only_1n1p->Fill(Q2, E_cal_1n1p);
-//                    E_cal_VS_dtheta_QEL_only_1n1p->Fill(d_theta_1n1p, E_cal_1n1p);
-//                    E_cal_VS_theta_p_QEL_only_1n1p->Fill(theta_p, E_cal_1n1p);
-//                    E_cal_VS_theta_n_QEL_only_1n1p->Fill(theta_n, E_cal_1n1p);
-//                    E_cal_VS_W_QEL_only_1n1p->Fill(W, E_cal_1n1p);
-//                    E_cal_VS_En_QEL_only_1n1p->Fill(En, E_cal_1n1p);
-//                    E_cal_VS_Pn_QEL_only_1n1p->Fill(sqrt(pxn * pxn + pyn * pyn + pzn * pzn), E_cal_1n1p);
-//                    E_cal_VS_P_n_QEL_only_1n1p->Fill(P_p_1n1p, E_cal_1n1p);
-//                    E_cal_VS_P_p_QEL_only_1n1p->Fill(P_n_1n1p, E_cal_1n1p);
-//
-//                    E_Trans_VS_q3_QEL_1n1p->Fill(q3, beamE - El);
-//
-//                    fsEl_QEL_1n1p->Fill(El);
-//                } else if (mec == true) {
-//                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_MEC_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_MEC_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_MEC_1n1p->Fill(beamE - El);
-//                    }
-//
-//                    fsEl_VS_theta_lp_MEC_only_1n1p->Fill(Theta_lp_1n1p, El);
-//
-//                    E_cal_MEC_1n1p->Fill(E_cal_1n1p);
-//
-//                    E_Trans_VS_q3_MEC_1n1p->Fill(q3, beamE - El);
-//
-//                    fsEl_MEC_1n1p->Fill(El);
-//                } else if (res == true) {
-//                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_RES_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_RES_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_RES_1n1p->Fill(beamE - El);
-//                    }
-//
-//                    E_cal_RES_1n1p->Fill(E_cal_1n1p);
-//
-//                    fsEl_RES_1n1p->Fill(El);
-//                } else if (dis == true) {
-//                    if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
-//                        E_Trans15_DIS_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 44.0 && Theta_lp_1n1p <= 46.0) {
-//                        E_Trans45_DIS_1n1p->Fill(beamE - El);
-//                    } else if (Theta_lp_1n1p >= 89.0 && Theta_lp_1n1p <= 91.0) {
-//                        E_Trans90_DIS_1n1p->Fill(beamE - El);
-//                    }
-//
-//                    E_cal_DIS_1n1p->Fill(E_cal_1n1p);
-//
-//                    fsEl_DIS_1n1p->Fill(El);
-//                }
-//                //</editor-fold>
-//                */
-//
-//            } // end of momentum cut if (1n1p)
-//        } // end of 1n1p if
-//        //</editor-fold>
-//
-//
-////  MicroBooNE calculations
-////  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//        //<editor-fold desc="MicroBooNE calculations">
-//        if (calculate_MicroBooNE == true && protons.size() == 2) { // 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons")
-//            ++num_of_MicroBooNE_events;
-//
-//            int ProtonCounter_MicroBooNE = 0, OtherParticleCounter_MicroBooNE = 0;
-//            int Lepton_ind_MicroBooNE = -1, Proton_1_ind_MicroBooNE = -1, Proton_2_ind_MicroBooNE = -1;
-//
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//
-//                float particlePDG_MicroBooNE = AllParticles[i]->par()->getPid();
-//
-//                if (selection_test_MicroBooNE) {
-//                    cout << "particlePDG_MicroBooNE[" << i << "] = " << particlePDG_MicroBooNE << "\n";
-//                } // end of selection test if (MicroBooNE)
-//
-//                //<editor-fold desc="Selector (MicroBooNE)">
-//                if (particlePDG_MicroBooNE == 2212) {
-//                    ++ProtonCounter_MicroBooNE;
-////                    cout << "particlePDG_MicroBooNE[" << i << "] = " << particlePDG_MicroBooNE << "\n";
-////                    cout << "i = " << i << "\n";
-//                    if (ProtonCounter_MicroBooNE == 1) {
-//                        Proton_1_ind_MicroBooNE = i;
-////                            cout << "Proton_1_ind_MicroBooNE = " << Proton_1_ind_MicroBooNE << "\n";
-//                    } else if (ProtonCounter_MicroBooNE == 2) {
-//                        Proton_2_ind_MicroBooNE = i;
-////                            cout << "Proton_2_ind_MicroBooNE = " << Proton_2_ind_MicroBooNE << "\n";
-//                    }
-//                } else if (particlePDG_MicroBooNE == 11) {
-//                    Lepton_ind_MicroBooNE = i;
-//                } // end of selector (MicroBooNE)
-//                //</editor-fold>
-//
-//            } // end of loop over AllParticles vector
-//
-//            double Plx = AllParticles[Lepton_ind_MicroBooNE]->par()->getPx();
-//            double Ply = AllParticles[Lepton_ind_MicroBooNE]->par()->getPy();
-//            double Plz = AllParticles[Lepton_ind_MicroBooNE]->par()->getPz();
-//
-////          Lepton (muon) momentum modulus:
-//            double P_lp_f = sqrt(Plx * Plx + Ply * Ply + Plz * Plz);
-//
-////          Leading proton (according to "the proton with the most momentum is labeled as the leading proton") momentum modulus:
-//            double P_L = fmax(rCalc(AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy(),
-//                                    AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz()),
-//                              rCalc(AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(),
-//                                    AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz()));
-////            double P_L = fmax(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
-////                              rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
-//
-////          Recoil proton (according to "the secondary proton is labeled as the recoil proton") momentum modulus:
-//            double P_R = fmin(rCalc(AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy(),
-//                                    AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz()),
-//                              rCalc(AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(),
-//                                    AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz()));
-////            double P_R = fmin(rCalc(pxf[Proton_1_ind_article], pyf[Proton_1_ind_article], pzf[Proton_1_ind_article]),
-////                              rCalc(pxf[Proton_2_ind_article], pyf[Proton_2_ind_article], pzf[Proton_2_ind_article]));
-//
-//            if ((P_lp_f >= P_lp_lower_lim_MicroBooNE && P_lp_f <= P_lp_upper_lim_MicroBooNE)
-//                && (P_L >= P_lp_lower_lim_MicroBooNE && P_L <= P_lp_upper_lim_MicroBooNE)
-//                && (P_R >= P_R_lower_lim_MicroBooNE && P_R <= P_R_upper_lim_MicroBooNE)) {
-//
-////              Calculating P_T:
-//                double P_T_x = Plx + AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
-//                double P_T_y = Ply + AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
-//                double P_T = sqrt(P_T_x * P_T_x + P_T_y * P_T_y);
-//
-//                if (piplus.size() == 0 && piminus.size() == 0) { // In events without pions
-//
-////                  Calculating the total proton momentum vector:
-//                    double P_tot_x = AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
-//                    double P_tot_y = AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
-//                    double P_tot_z = AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz(); // z component
-//
-////                  Total proton momentum modulus:
-//                    double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
-//
-//                    gamma_mu_p_tot->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f));
-////                    gamma_mu_p_tot_weighted->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f), Q2 * Q2);
-//
-//
-////                  Gamma_Lab calculations -------------------------------------------------
-//
-//                    double P_p1 = rCalc(AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy(),
-//                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz());
-//                    double P_p2 = rCalc(AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(),
-//                                        AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz());
-//
-//                    gamma_Lab_hist->Fill((AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx() +
-//                                          AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy() +
-//                                          AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz()) / (P_p1 * P_p2));
-////                    gamma_Lab_hist_weighted->Fill((AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx() +
-////                                                   AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy() +
-////                                                   AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz()) /
-////                                                  (P_p1 * P_p2), Q2 * Q2);
-//                    dP_T_hist->Fill(P_T);
-////                    dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
-//
-//                    //<editor-fold desc="MicroBooNE momentum plots fill (no charged pions case)">
-//                    P_R_hist->Fill(P_R);
-//                    P_lp_hist->Fill(P_L);
-//                    P_lp_hist->Fill(P_lp_f);
-//                    //</editor-fold>
-//
-//                } else { // In events with pions
-//                    for (int i = 0; i < AllParticles.size(); i++) {
-//
-//                        float particlePDG_MicroBooNE1 = AllParticles[i]->par()->getPid();
-//
-//                        if (abs(particlePDG_MicroBooNE1) == 211) { // The abs() for either pi+ or pi-
-//                            double P_pion = rCalc(AllParticles[i]->par()->getPx(), AllParticles[i]->par()->getPy(), AllParticles[i]->par()->getPz());
-//
-////                          Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-//                            if (P_pion <= P_pion_upper_lim_MicroBooNE) {
-//
-////                              Gamma_mu,P_L+P_R calculations ------------------------------------------
-//
-////                              Calculating the total proton momentum vector:
-//                                double P_tot_x =
-//                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(); // x component
-//                                double P_tot_y =
-//                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(); // y component
-//                                double P_tot_z =
-//                                        AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() + AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz(); // z component
-//
-////                              Total proton momentum modulus:
-//                                double P_tot = sqrt(P_tot_x * P_tot_x + P_tot_y * P_tot_y + P_tot_z * P_tot_z);
-//
-//                                gamma_mu_p_tot->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f));
-////                                gamma_mu_p_tot_weighted->Fill((P_tot_x * Plx + P_tot_y * Ply + P_tot_z * Plz) / (P_tot * P_lp_f), Q2 * Q2);
-//
-//
-////                              Gamma_Lab calculations -------------------------------------------------
-//
-//                                double P_p1 = rCalc(AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy(),
-//                                                    AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz());
-//                                double P_p2 = rCalc(AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx(), AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy(),
-//                                                    AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz());
-//
-//                                gamma_Lab_hist->Fill(
-//                                        (AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx() +
-//                                         AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy() +
-//                                         AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz()) / (P_p1 * P_p2));
-////                                gamma_Lab_hist_weighted->Fill(
-////                                        (AllParticles[Proton_1_ind_MicroBooNE]->par()->getPx() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPx() +
-////                                         AllParticles[Proton_1_ind_MicroBooNE]->par()->getPy() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPy() +
-////                                         AllParticles[Proton_1_ind_MicroBooNE]->par()->getPz() * AllParticles[Proton_2_ind_MicroBooNE]->par()->getPz()) / (P_p1 * P_p2),
-////                                        Q2 * Q2);
-//                                dP_T_hist->Fill(P_T);
-////                                dP_T_hist_weighted->Fill(P_T, Q2 * Q2);
-//
-//                                //<editor-fold desc="MicroBooNE momentum plots (with charged pions case)">
-//                                P_R_hist->Fill(P_R);
-//                                P_lp_hist->Fill(P_L);
-//                                P_lp_hist->Fill(P_lp_f);
-//                                P_pion_hist->Fill(P_pion);
-//                                //</editor-fold>
-//
-//                            } // end of pion threshold if
-//                        } // end of abs if
-//                    } // end of for loop
-//                } // end of "with pions" if
-//            } // end of momentum threshold if
-//        } // end of MicroBooNE if
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//        //</editor-fold>
-//
-//    } // end of while
-//    //</editor-fold>
-
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -7819,24 +6621,24 @@ void EventAnalyser() {
     myLogFile << "Event counts\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
-    myLogFile << "Total #(events) w/o any e:\t" << num_of_events_wo_e << "\n";
-    myLogFile << "Total #(events) w/ any e:\t" << num_of_events_w_e << "\n\n";
+    myLogFile << "Total #(events) w/o any e:\t" << num_of_events_without_any_e << "\n";
+    myLogFile << "Total #(events) w/ any e:\t" << num_of_events_with_any_e << "\n\n";
 
     myLogFile << "#(events) in CD:\t\t" << "to be added" << "\n";
     myLogFile << "#(events) in FD:\t\t" << "to be added" << "\n";
-    myLogFile << "#e in CD:\t\t\t\t\t" << num_of_events_e_CD << "\n";
-    myLogFile << "#e in FD:\t\t\t\t" << num_of_events_e_FD << "\n";
-    myLogFile << "#e in FT:\t\t\t\t" << num_of_events_e_FT << "\n";
-    myLogFile << "#e in FT:\t\t\t\t" << num_of_events_e_FT - num_of_events_more_then_1e << " (corrected)" << "\n\n";
+    myLogFile << "#e in CD:\t\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
+    myLogFile << "#e in FD:\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
+    myLogFile << "#e in FT:\t\t\t\t" << num_of_events_with_e_in_FT << "\n";
+    myLogFile << "#e in FT:\t\t\t\t" << num_of_events_with_e_in_FT - num_of_events_more_then_1e << " (corrected for multi e duplications)" << "\n\n";
 
-    myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
-    myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_1e << "\n";
+    myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_at_least_1e << "\n";
+    myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n";
     myLogFile << "#(events) w/ more then 1e:\t" << num_of_events_more_then_1e << "\n\n";
 
-    myLogFile << "#(events) w/ 1e2X:\t\t\t" << num_of_events_1e2X << "\n";
-    myLogFile << "#(events) w/ 1e & any #p:\t" << num_of_events_1enP << "\n";
-    myLogFile << "#(events) w/ 1e1p:\t\t\t" << num_of_events_1e1p << "\n";
-    myLogFile << "#(events) w/ 1e2p:\t\t\t" << num_of_events_1e2p << "\n\n\n";
+    myLogFile << "#(events) w/ 1e2X:\t\t\t" << num_of_events_with_1e2X << "\n";
+    myLogFile << "#(events) w/ 1e & any #p:\t" << num_of_events_with_1enP << "\n";
+    myLogFile << "#(events) w/ 1e1p:\t\t\t" << num_of_events_with_1e1p << "\n";
+    myLogFile << "#(events) w/ 1e2p:\t\t\t" << num_of_events_with_1e2p << "\n\n\n";
 
     myLogFile.close();
     //</editor-fold>
@@ -7863,25 +6665,29 @@ void EventAnalyser() {
 
     cout << "-- Event counts -----------------------------------------------------------\n";
     cout << "Total #(events):\t\t" << num_of_events << "\n";
-    cout << "Total #(events) w/o any e:\t" << num_of_events_wo_e << "\n";
-    cout << "Total #(events) w/ any e:\t" << num_of_events_w_e << "\n\n";
+    cout << "Total #(events) w/o any e:\t" << num_of_events_without_any_e << "\n";
+    cout << "Total #(events) w/ any e:\t" << num_of_events_with_any_e << "\n\n";
 
     cout << "#(events) in CD:\t\t" << "to be added" << "\n";
     cout << "#(events) in FD:\t\t" << "to be added" << "\n";
-    cout << "#e in CD:\t\t\t" << num_of_events_e_CD << "\n";
-    cout << "#e in FD:\t\t\t" << num_of_events_e_FD << "\n";
-    cout << "#e in FT:\t\t\t" << num_of_events_e_FT << "\n";
-    cout << "#e in FT:\t\t\t" << num_of_events_e_FT - num_of_events_more_then_1e << " (corrected)" << "\n\n";
-//    cout << "#(events)_e_CD+#(events)_e_FD+#(events)_e_FD:\t" << num_of_events_e_CD + num_of_events_e_FD + num_of_events_e_FT << "\n\n";
+    cout << "#e in CD:\t\t\t" << num_of_events_with_e_in_CD << "\n";
+    cout << "#e in FD:\t\t\t" << num_of_events_with_e_in_FD << "\n";
+    cout << "#e in FT:\t\t\t" << num_of_events_with_e_in_FT << "\n";
+    cout << "#e in FT:\t\t\t" << num_of_events_with_e_in_FT - num_of_events_more_then_1e << " (corrected for multi e duplications)" << "\n\n";
 
-    cout << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
-    cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
+    cout << "#(events) w/ at least 1e:\t" << num_of_events_with_at_least_1e << "\n";
+    cout << "#(events) w/ exactly 1e:\t" << num_of_events_with_exactly_1e << "\n";
     cout << "#(events) w/ more then 1e:\t" << num_of_events_more_then_1e << "\n\n";
 
-    cout << "#(events) w/ 1e2X:\t\t" << num_of_events_1e2X << "\n";
-    cout << "#(events) w/ 1e & any #p:\t" << num_of_events_1enP << "\n";
-    cout << "#(events) w/ 1e1p:\t\t" << num_of_events_1e1p << "\n";
-    cout << "#(events) w/ 1e2p:\t\t" << num_of_events_1e2p << "\n\n";
+    // TODO: add percentage relative to 'num_of_events_with_at_least_1e'
+    cout << "#(events) w/ 1e2X:\t\t" << num_of_events_with_1e2X << "\n";
+    cout << "#(events) w/ 1e & any #p:\t" << num_of_events_with_1enP << "\n";
+    cout << "#(events) w/ 1e1p:\t\t" << num_of_events_with_1e1p << "\n";
+    cout << "#(events) w/ 1e2p:\t\t" << num_of_events_with_1e2p << "\n\n";
+//    cout << "#(events) w/ 1e2X:\t\t" << num_of_events_with_1e2X << " (" << (100 * num_of_events_with_1e2X / num_of_events_with_at_least_1e) << "%)\n";
+//    cout << "#(events) w/ 1e & any #p:\t" << num_of_events_with_1enP << " (" << (100 * num_of_events_with_1enP / num_of_events_with_at_least_1e) << "%)\n";
+//    cout << "#(events) w/ 1e1p:\t\t" << num_of_events_with_1e1p << " (" << (100 * num_of_events_with_1e1p / num_of_events_with_at_least_1e) << "%)\n";
+//    cout << "#(events) w/ 1e2p:\t\t" << num_of_events_with_1e2p << " (" << (100 * num_of_events_with_1e2p / num_of_events_with_at_least_1e) << "%)\n\n";
 
     cout << "-- Input ------------------------------------------------------------------\n";
     cout << "AnalyseFileDir:\t" << AnalyseFileDir << "\n";
