@@ -2111,9 +2111,13 @@ void EventAnalyser() {
     TLorentzVector e_in(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
+
+    int num_of_multi_e_ev = 0;
+
+
     int num_of_events = 0, num_of_events_wo_e = 0, num_of_events_w_e = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0, num_of_events_e_FT = 0;
 //    int num_of_events = 0, num_of_events_CD = 0, num_of_events_FD = 0, num_of_events_e_CD = 0, num_of_events_e_FD = 0;
-    int num_of_events_with_e = 0, num_of_events_1e = 0, num_of_events_1enP = 0, num_of_events_1e2X = 0, num_of_events_1e1p = 0, num_of_events_1e2p = 0;
+    int num_of_events_with_e = 0, num_of_events_1e = 0, num_of_events_more_then_1e = 0, num_of_events_1enP = 0, num_of_events_1e2X = 0, num_of_events_1e1p = 0, num_of_events_1e2p = 0;
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
@@ -2161,9 +2165,17 @@ void EventAnalyser() {
             double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
             double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
+
+//            cout << "\n===============================================" << "\n";
+
+            int num_of_e_in_CD = 0;
+            int num_of_e_in_FD = 0;
+            int num_of_e_in_FT = 0;
+
             for (int i = 0; i < electrons.size(); i++) {
+
                 if (electrons[i]->getRegion() == CD) {
-                    ++num_of_events_e_CD;
+                    ++num_of_e_in_CD;
 
                     Chi2_Electron_CD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2180,7 +2192,7 @@ void EventAnalyser() {
                     Q2_CD = fabs(Q_CD.Mag2());
                     Q2_histogram_CD->Fill(Q2_CD);
                 } else if (electrons[i]->getRegion() == FD) {
-                    ++num_of_events_e_FD;
+                    ++num_of_e_in_FD;
 
                     Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2196,17 +2208,45 @@ void EventAnalyser() {
                     Q_FD = e_in - e_out_FD;
                     Q2_FD = fabs(Q_FD.Mag2());
                     Q2_histogram_FD->Fill(Q2_FD);
-                } else if (electrons[0]->getRegion() == FT) {
-//                } else if (electrons[i]->getRegion() == FT) {
-//                } else {
-                    ++num_of_events_e_FT;
-                }
+                } else if (electrons[i]->getRegion() == FT) {
+                    ++num_of_e_in_FT;
 
-//                if (electrons[0]->getRegion() == FT) {
-////                } else {
-//                    num_of_events_e_FT = num_of_events_e_FT - electrons.size() + 1;
-//                }
+                }
             } // end of loop over AllParticles vector
+
+
+            if (num_of_e_in_CD > 0) {
+                ++num_of_events_e_CD;
+//                cout << "\nnum_of_e_in_FT = " << num_of_e_in_FT << "\n";
+//                cout << "\nnum_of_events_e_FT = " << num_of_events_e_FT << "\n\n";
+            }
+
+            if (num_of_e_in_FD > 0) {
+                ++num_of_events_e_FD;
+//                cout << "\nnum_of_e_in_FT = " << num_of_e_in_FT << "\n";
+//                cout << "\nnum_of_events_e_FT = " << num_of_events_e_FT << "\n\n";
+            }
+
+            if (num_of_e_in_FT > 0) {
+                ++num_of_events_e_FT;
+//                cout << "\nnum_of_e_in_FT = " << num_of_e_in_FT << "\n";
+//                cout << "\nnum_of_events_e_FT = " << num_of_events_e_FT << "\n\n";
+            }
+
+//            if (electrons.size() > 1) {
+//                ++num_of_multi_e_ev;
+//                cout << "\nelectrons.size() = " << electrons.size() << "\n";
+//                for (int i = 0; i < electrons.size(); i++) {
+//                    if (electrons[i]->getRegion() == CD) {
+//                        cout << "CD" << "\n";
+//                    } else if (electrons[i]->getRegion() == FD) {
+//                        cout << "FD" << "\n";
+//                    } else if (electrons[i]->getRegion() == FT) {
+//                        cout << "FT" << "\n";
+//                    }
+//                } // end of loop over AllParticles vector
+//            }
+
             //</editor-fold>
 
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
@@ -2234,6 +2274,9 @@ void EventAnalyser() {
             //<editor-fold desc="1e only plots">
             if (electrons.size() >= 1) {
                 ++num_of_events_with_e;
+                if (electrons.size() > 1) {
+                    ++num_of_events_more_then_1e;
+                }
             } // applying 1e only
 
             if (electrons.size() != 1) { continue; } // applying 1e only
@@ -7821,6 +7864,8 @@ void EventAnalyser() {
 
     myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_1e << "\n";
+    myLogFile << "#(events) w/ more then 1e:\t" << num_of_events_more_then_1e << "\n\n";
+
     myLogFile << "#(events) w/ 1e2X:\t\t\t" << num_of_events_1e2X << "\n";
     myLogFile << "#(events) w/ 1e & any #p:\t" << num_of_events_1enP << "\n";
     myLogFile << "#(events) w/ 1e1p:\t\t\t" << num_of_events_1e1p << "\n";
@@ -7859,9 +7904,12 @@ void EventAnalyser() {
     cout << "#(events) w/ e in CD:\t\t" << num_of_events_e_CD << "\n";
     cout << "#(events) w/ e in FD:\t\t" << num_of_events_e_FD << "\n";
     cout << "#(events) w/ e in FT:\t\t" << num_of_events_e_FT << "\n\n";
+    cout << "#(events)_e_CD+#(events)_e_FD+#(events)_e_FD:\t" << num_of_events_e_CD + num_of_events_e_FD + num_of_events_e_FT << "\n\n";
 
     cout << "#(events) w/ at least 1e:\t" << num_of_events_with_e << "\n";
     cout << "#(events) w/ exactly 1e:\t" << num_of_events_1e << "\n";
+    cout << "#(events) w/ more then 1e:\t" << num_of_events_more_then_1e << "\n\n";
+
     cout << "#(events) w/ 1e2X:\t\t" << num_of_events_1e2X << "\n";
     cout << "#(events) w/ 1e & any #p:\t" << num_of_events_1enP << "\n";
     cout << "#(events) w/ 1e1p:\t\t" << num_of_events_1e1p << "\n";
