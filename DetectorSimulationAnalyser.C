@@ -1347,6 +1347,7 @@ void EventAnalyser() {
     THStack *Theta_e_Stack = new THStack("#theta_{e} stack (CD & FD)", "#theta_{e} of Outgoing Electron (no #(electrons) cut, CD & FD);#theta_{e} [Deg];");
 
     TH1D *Theta_e_CD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, CD)", ";#theta_{e} [Deg];", 100, 35, 143);
+//    TH1D *Theta_e_FD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 100, 0, 1.5);
     TH1D *Theta_e_FD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 100, 0, 45);
     //</editor-fold>
 
@@ -2161,15 +2162,11 @@ void EventAnalyser() {
 
             //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
             TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
-            double Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
-            double Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
+            double theta_e_CD, Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
+            double theta_e_FD, Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
 
 //            cout << "\n===============================================" << "\n";
-
-            int num_of_e_in_CD = 0;
-            int num_of_e_in_FD = 0;
-            int num_of_e_in_FT = 0;
 
             for (int i = 0; i < electrons.size(); i++) {
 
@@ -2182,7 +2179,8 @@ void EventAnalyser() {
                     Vertex_Electron_Vy_CD_test.Fill(electrons[i]->par()->getVy());
                     Vertex_Electron_Vz_CD_test.Fill(electrons[i]->par()->getVz());
 
-                    Theta_e_CD->Fill(electrons[i]->getTheta());
+                    theta_e_CD = electrons[i]->getTheta() * 180.0 / 3.14159265359; // theta_e_CD in radians
+                    Theta_e_CD->Fill(theta_e_CD);
 
                     Pe_CD = electrons[i]->par()->getP();
                     e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_CD * Pe_CD));
@@ -2199,7 +2197,8 @@ void EventAnalyser() {
                     Vertex_Electron_Vy_FD_test.Fill(electrons[i]->par()->getVy());
                     Vertex_Electron_Vz_FD_test.Fill(electrons[i]->par()->getVz());
 
-                    Theta_e_FD->Fill(electrons[i]->getTheta());
+                    theta_e_FD = electrons[i]->getTheta() * 180.0 / 3.14159265359; // theta_e_FD in radians
+                    Theta_e_FD->Fill(theta_e_FD);
 
                     Pe_FD = electrons[i]->par()->getP();
                     e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_FD * Pe_FD));
