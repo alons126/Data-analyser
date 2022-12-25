@@ -96,7 +96,7 @@ void EventAnalyser() {
     //<editor-fold desc="Beta VS p plots directory">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -107,10 +107,22 @@ void EventAnalyser() {
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
 
-    string Beta_vs_P_FD_save_directories[4] = {Beta_VS_P_All_e_Directory + "Beta_vs_P_CD.png",
-                                               Beta_VS_P_All_e_Directory + "Beta_vs_P_FD.png",
-                                               Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_CD.png",
-                                               Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_FD.png"};
+    string Beta_vs_P_FD_save_directories[16] = {Beta_VS_P_All_e_Directory + "Beta_vs_P_All_Particles_CD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_All_Particles_FD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_All_Particles_CD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_All_Particles_FD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Electrons_Only_CD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Electrons_Only_FD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Electrons_Only_CD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Electrons_Only_FD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Protons_Only_CD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Protons_Only_FD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Protons_Only_CD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Protons_Only_FD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Neutrons_Only_CD.png",
+                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Neutrons_Only_FD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Neutrons_Only_CD.png",
+                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Neutrons_Only_FD.png"};
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directory">
@@ -1161,10 +1173,53 @@ void EventAnalyser() {
 // Beta VS P histograms -------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
-    TH2D Beta_vs_P_CD("#beta vs P (CD)", "#beta vs P (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
-    TH2D Beta_vs_P_FD("#beta vs P (FD)", "#beta vs P (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 8);
-    TH2D Beta_vs_P_1e_CD("#beta vs P (1e only, CD)", "#beta vs P (1e only, Central Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
-    TH2D Beta_vs_P_1e_FD("#beta vs P (1e only, FD)", "#beta vs P (1e only, Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 2);
+    TH2D Beta_vs_P_CD("#beta vs P (All Particles, CD)", "#beta vs P - All Particles (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
+    TH2D Beta_vs_P_FD("#beta vs P (All Particles, FD)", "#beta vs P - All Particles (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
+    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e only cut, Central Detector);P [GeV];#beta",
+                         250, 0, beamE * 1.425, 250, 0, 8);
+    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e only cut, Forward Detector);P [GeV];#beta",
+                         250, 0, beamE * 1.425, 250, 0, 8);
+//    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e only cut, Central Detector);P [GeV];#beta",
+//    250, 0, beamE * 1.425, 250, 0, 2);
+//    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e only cut, Forward Detector);P [GeV];#beta"
+//    , 250, 0, beamE * 1.425, 250, 0, 2);
+
+    TH2D Beta_vs_P_Electrons_Only_CD("#beta vs P (Electrons Only, CD)", "#beta vs P - Electrons Only (Central Detector);P [GeV];#beta",
+                                     250, 0, beamE * 1.425, 250, 0.5, 3);
+    TH2D Beta_vs_P_Electrons_Only_FD("#beta vs P (Electrons Only, FD)", "#beta vs P - Electrons Only (Forward Detector);P [GeV];#beta",
+                                     250, 0, beamE * 1.425, 250, 0.5, 3);
+    TH2D Beta_vs_P_1e_Electrons_Only_CD("#beta vs P (Electrons Only, 1e only, CD)", "#beta vs P - Electrons Only (1e only cut, Central Detector);P [GeV];#beta",
+                                        250, 0, beamE * 1.425, 250, 0.5, 3);
+    TH2D Beta_vs_P_1e_Electrons_Only_FD("#beta vs P (Electrons Only, 1e only, FD)", "#beta vs P - Electrons Only (1e only cut, Forward Detector);P [GeV];#beta",
+                                        250, 0, beamE * 1.425, 250, 0.5, 3);
+
+    TH2D Beta_vs_P_Protons_Only_CD("#beta vs P (Protons Only, CD)", "#beta vs P - Protons Only (Central Detector);P [GeV];#beta",
+                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D Beta_vs_P_Protons_Only_FD("#beta vs P (Protons Only, FD)", "#beta vs P - Protons Only (Forward Detector);P [GeV];#beta",
+                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D Beta_vs_P_1e_Protons_Only_CD("#beta vs P (Protons Only, 1e only, CD)", "#beta vs P - Protons Only (1e only cut, Central Detector);P [GeV];#beta",
+                                      250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D Beta_vs_P_1e_Protons_Only_FD("#beta vs P (Protons Only, 1e only, FD)", "#beta vs P - Protons Only (1e only cut, Forward Detector);P [GeV];#beta",
+                                      250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D Beta_vs_P_Neutrons_Only_CD("#beta vs P (Neutrons Only, CD)", "#beta vs P - Neutrons Only (Central Detector);P [GeV];#beta",
+                                    250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D Beta_vs_P_Neutrons_Only_FD("#beta vs P (Neutrons Only, FD)", "#beta vs P - Neutrons Only (Forward Detector);P [GeV];#beta",
+                                    250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D Beta_vs_P_1e_Neutrons_Only_CD("#beta vs P (Neutrons Only, 1e only, CD)", "#beta vs P - Neutrons Only (1e only cut, Central Detector);P [GeV];#beta",
+                                       250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D Beta_vs_P_1e_Neutrons_Only_FD("#beta vs P (Neutrons Only, 1e only, FD)", "#beta vs P - Neutrons Only (1e only cut, Forward Detector);P [GeV];#beta",
+                                       250, 0, beamE * 1.425, 250, 0, 3);
+
+//    TH2D Beta_vs_P_cPions_Only_CD("#beta vs P (#pi^{#pm} Only, CD)", "#beta vs P - #pi^{#pm} Only (Central Detector);P [GeV];#beta",
+//                                  250, 0, beamE * 1.425, 250, 0, 3);
+//    TH2D Beta_vs_P_cPions_Only_FD("#beta vs P (#pi^{#pm} Only, FD)", "#beta vs P - #pi^{#pm} Only (Forward Detector);P [GeV];#beta",
+//                                  250, 0, beamE * 1.425, 250, 0, 3);
+//    TH2D Beta_vs_P_1e_cPions_Only_CD("#beta vs P (#pi^{#pm} Only, 1e only, CD)", "#beta vs P - #pi^{#pm} Only (1e only cut, Central Detector);P [GeV];#beta",
+//                                     250, 0, beamE * 1.425, 250, 0, 3);
+//    TH2D Beta_vs_P_1e_cPions_Only_FD("#beta vs P (#pi^{#pm} Only, 1e only, FD)", "#beta vs P - #pi^{#pm} Only (1e only cut, Forward Detector);P [GeV];#beta",
+//                                     250, 0, beamE * 1.425, 250, 0, 3);
+
     //</editor-fold>
 
 // Chi2 plots -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1238,17 +1293,17 @@ void EventAnalyser() {
     TH1D Vertex_Electron_Vz_FD_test("Electron V_{z} (no #(electrons) cut, FD) test", "Electron V_{z} (no #(electrons) cut, Central Detector);Electron V_{z} [];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
 
-    TH1D Vertex_Proton_Vx_CD_test("Proton V_{x} (no #(Protons) cut, CD) test", "Proton V_{x} (no #(Protons) cut, Central Detector);Proton V_{x} [];",
+    TH1D Vertex_Proton_Vx_CD_test("Proton V_{x} (no #(Electrons) cut, CD) test", "Proton V_{x} (no #(Electrons) cut, Central Detector);Proton V_{x} [];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vy_CD_test("Proton V_{y} (no #(Protons) cut, CD) test", "Proton V_{y} (no #(Protons) cut, Central Detector);Proton V_{y} [];",
+    TH1D Vertex_Proton_Vy_CD_test("Proton V_{y} (no #(Electrons) cut, CD) test", "Proton V_{y} (no #(Electrons) cut, Central Detector);Proton V_{y} [];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vz_CD_test("Proton V_{z} (no #(Protons) cut, CD) test", "Proton V_{z} (no #(Protons) cut, Central Detector);Proton V_{z} [];",
+    TH1D Vertex_Proton_Vz_CD_test("Proton V_{z} (no #(Electrons) cut, CD) test", "Proton V_{z} (no #(Electrons) cut, Central Detector);Proton V_{z} [];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vx_FD_test("Proton V_{x} (no #(Protons) cut, FD) test", "Proton V_{x} (no #(Protons) cut, Central Detector);Proton V_{x} [];",
+    TH1D Vertex_Proton_Vx_FD_test("Proton V_{x} (no #(Electrons) cut, FD) test", "Proton V_{x} (no #(Electrons) cut, Central Detector);Proton V_{x} [];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vy_FD_test("Proton V_{y} (no #(Protons) cut, FD) test", "Proton V_{y} (no #(Protons) cut, Central Detector);Proton V_{y} [];",
+    TH1D Vertex_Proton_Vy_FD_test("Proton V_{y} (no #(Electrons) cut, FD) test", "Proton V_{y} (no #(Electrons) cut, Central Detector);Proton V_{y} [];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vz_FD_test("Proton V_{z} (no #(Protons) cut, FD) test", "Proton V_{z} (no #(Protons) cut, Central Detector);Proton V_{z} [];",
+    TH1D Vertex_Proton_Vz_FD_test("Proton V_{z} (no #(Electrons) cut, FD) test", "Proton V_{z} (no #(Electrons) cut, Central Detector);Proton V_{z} [];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
     //</editor-fold>
 
@@ -2065,8 +2120,6 @@ void EventAnalyser() {
     //<editor-fold desc="Code execution">
     cout << "Looping over chain files...\n\n";
 
-    //<editor-fold desc="HipoChain tests">
-
     clas12root::HipoChain chain;
 
     string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
@@ -2126,6 +2179,26 @@ void EventAnalyser() {
 
         clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
 
+        //<editor-fold desc="Forcing cuts (inaccurate!)">
+        //        c12.addAtLeastPid(11, 0);    // at least 0 electron
+//        c12.addAtLeastPid(2212, 0);    // at least 0 proton
+//        c12.addAtLeastPid(2112, 0);    // at least 0 neutron
+////        c12.addAtLeastPid(211,0);    // at least 0 pi+
+////        c12.addExactPid(211,0);    // at least 0 pi+
+//        c12.addAtLeastPid(-211,0);    // at least 0 pi-
+////        c12.addExactPid(-211,0);    // at least 0 pi-
+//        c12.addAtLeastPid(321, 0);    // at least 0 K+
+//        c12.addAtLeastPid(-321, 0);    // at least 0 K-
+//        c12.addZeroOfRestPid();  // nothing else
+
+//        c12.addExactPid(11,1);    // exactly 1 electron
+//        c12.addExactPid(211,1);    // exactly 1 pi+
+//        c12.addExactPid(-211,1);    // exactly 1 pi-
+//        c12.addExactPid(2212,1);    // exactly 1 proton
+//        //c12.addExactPid(22,2);    // exactly 2 gamma
+//        c12.addZeroOfRestPid();  // nothing else
+        //</editor-fold>
+
         while (c12.next()) { // loop over events
             ++num_of_events; // logging Total #(events)
 
@@ -2165,13 +2238,11 @@ void EventAnalyser() {
             double theta_e_CD, Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
             double theta_e_FD, Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
-
-//            cout << "\n===============================================" << "\n";
-
             for (int i = 0; i < electrons.size(); i++) {
-
                 if (electrons[i]->getRegion() == CD) {
                     ++num_of_events_with_e_in_CD; // logging #e in CD
+
+                    Beta_vs_P_Electrons_Only_CD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_CD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2190,6 +2261,8 @@ void EventAnalyser() {
                     Q2_histogram_CD->Fill(Q2_CD);
                 } else if (electrons[i]->getRegion() == FD) {
                     ++num_of_events_with_e_in_FD; // logging #e in FD
+
+                    Beta_vs_P_Electrons_Only_FD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2215,15 +2288,32 @@ void EventAnalyser() {
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
             for (auto &prot: protons) {
                 if (prot->getRegion() == CD) {
+
+                    Beta_vs_P_Protons_Only_CD.Fill(prot->getP(), prot->par()->getBeta());
+
                     Chi2_Proton_CD.Fill(prot->par()->getChi2Pid());
                     Vertex_Proton_Vx_CD_test.Fill(prot->par()->getVx());
                     Vertex_Proton_Vy_CD_test.Fill(prot->par()->getVy());
                     Vertex_Proton_Vz_CD_test.Fill(prot->par()->getVz());
                 } else if (prot->getRegion() == FD) {
+
+                    Beta_vs_P_Protons_Only_FD.Fill(prot->getP(), prot->par()->getBeta());
+
                     Chi2_Proton_FD.Fill(prot->par()->getChi2Pid());
                     Vertex_Proton_Vx_FD_test.Fill(prot->par()->getVx());
                     Vertex_Proton_Vy_FD_test.Fill(prot->par()->getVy());
                     Vertex_Proton_Vz_FD_test.Fill(prot->par()->getVz());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+
+            //<editor-fold desc="Neutron Beta vs P plots (no #(electron) cut, CD & FD)">
+            for (auto &n: neutrons) {
+                if (n->getRegion() == CD) {
+                    Beta_vs_P_Neutrons_Only_CD.Fill(n->getP(), n->par()->getBeta());
+                } else if (n->getRegion() == FD) {
+                    Beta_vs_P_Neutrons_Only_FD.Fill(n->getP(), n->par()->getBeta());
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -2263,6 +2353,11 @@ void EventAnalyser() {
 
             for (auto &e: electrons) {
                 if (e->getRegion() == CD) {
+
+//
+                    Beta_vs_P_1e_Electrons_Only_CD.Fill(e->getP(), e->par()->getBeta());
+//
+
                     e_Chi2_CD = e->par()->getChi2Pid();
                     Chi2_Electron_1e_CD.Fill(e_Chi2_CD);
 
@@ -2280,6 +2375,11 @@ void EventAnalyser() {
                     //</editor-fold>
 
                 } else if (e->getRegion() == FD) {
+
+//
+                    Beta_vs_P_1e_Electrons_Only_FD.Fill(e->getP(), e->par()->getBeta());
+//
+
                     e_Chi2_FD = e->par()->getChi2Pid();
                     Chi2_Electron_1e_FD.Fill(e_Chi2_FD);
 
@@ -2306,6 +2406,11 @@ void EventAnalyser() {
 
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
+
+//
+                    Beta_vs_P_1e_Protons_Only_CD.Fill(p->getP(), p->par()->getBeta());
+//
+
                     p_Chi2_tmp_CD = p->par()->getChi2Pid();
                     Chi2_Proton_1e_CD.Fill(p_Chi2_tmp_CD);
 
@@ -2323,6 +2428,11 @@ void EventAnalyser() {
                     //</editor-fold>
 
                 } else if (p->getRegion() == FD) {
+
+//
+                    Beta_vs_P_1e_Protons_Only_FD.Fill(p->getP(), p->par()->getBeta());
+//
+
                     p_Chi2_tmp_FD = p->par()->getChi2Pid();
                     Chi2_Proton_1e_FD.Fill(p_Chi2_tmp_FD);
 
@@ -2343,12 +2453,21 @@ void EventAnalyser() {
             } // end of loop over protons vector
             //</editor-fold>
 
+            //<editor-fold desc="Fill Neutron Beta vs P plots (1e only, CD & FD)">
+            for (auto &n: neutrons) {
+                if (n->getRegion() == CD) {
+                    Beta_vs_P_1e_Neutrons_Only_CD.Fill(n->getP(), n->par()->getBeta());
+                } else if (n->getRegion() == FD) {
+                    Beta_vs_P_1e_Neutrons_Only_FD.Fill(n->getP(), n->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
             //</editor-fold>
 
             if (AllParticles.size() - electrons.size() == protons.size()) {
                 ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
             }
-
 
             if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
             ++num_of_events_with_1e2X; // logging #(events) w/ 1e2X
@@ -3186,9 +3305,7 @@ void EventAnalyser() {
             //</editor-fold>
 
         } // end of while
-    } // end of for loop over files
-    //</editor-fold>
-    //</editor-fold>
+    } // end of for loop over files    //</editor-fold>
 
 // ======================================================================================================================================================================
 // Canvas definitions
@@ -3232,7 +3349,7 @@ void EventAnalyser() {
 //  Beta VS P TF1 plots --------------------------------------------------------
 
         //<editor-fold desc="Beta VS P TF1 plots">
-        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, beamE);
 
         // TODO: finish adding function labels
         TPaveText *beta_electron_title = new TPaveText(0., 0., 0.1, 0.1);
@@ -3240,14 +3357,14 @@ void EventAnalyser() {
         beta_electron_title->SetTextColor(kRed);
 //        beta_electron_title->Draw();
 
-        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, 0.75 * beamE);
-        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, 0.75 * beamE);
+        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, beamE);
+        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n) + ")").c_str(), 0, beamE);
+        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero) + ")").c_str(), 0, beamE);
+        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus) + ")").c_str(), 0, beamE);
+        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus) + ")").c_str(), 0, beamE);
+        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero) + ")").c_str(), 0, beamE);
+        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus) + ")").c_str(), 0, beamE);
+        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus) + ")").c_str(), 0, beamE);
         //</editor-fold>
 
 //  Beta vs P histograms --------------------------------------------------------
@@ -3255,8 +3372,24 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs P histograms">
         TH2D *Beta_vs_P_CD_ref = &Beta_vs_P_CD, *Beta_vs_P_FD_ref = &Beta_vs_P_FD, *Beta_vs_P_1e_CD_ref = &Beta_vs_P_1e_CD, *Beta_vs_P_1e_FD_ref = &Beta_vs_P_1e_FD;
 
+        TH2D *Beta_vs_P_Electrons_Only_CD_ref = &Beta_vs_P_Electrons_Only_CD, *Beta_vs_P_Electrons_Only_FD_ref = &Beta_vs_P_Electrons_Only_FD, *Beta_vs_P_1e_Electrons_Only_CD_ref = &Beta_vs_P_1e_Electrons_Only_CD, *Beta_vs_P_1e_Electrons_Only_FD_ref = &Beta_vs_P_1e_Electrons_Only_FD;
+        TH2D *Beta_vs_P_Protons_Only_CD_ref = &Beta_vs_P_Protons_Only_CD, *Beta_vs_P_Protons_Only_FD_ref = &Beta_vs_P_Protons_Only_FD, *Beta_vs_P_1e_Protons_Only_CD_ref = &Beta_vs_P_1e_Protons_Only_CD, *Beta_vs_P_1e_Protons_Only_FD_ref = &Beta_vs_P_1e_Protons_Only_FD;
+        TH2D *Beta_vs_P_Neutrons_Only_CD_ref = &Beta_vs_P_Neutrons_Only_CD, *Beta_vs_P_Neutrons_Only_FD_ref = &Beta_vs_P_Neutrons_Only_FD, *Beta_vs_P_1e_Neutrons_Only_CD_ref = &Beta_vs_P_1e_Neutrons_Only_CD, *Beta_vs_P_1e_Neutrons_Only_FD_ref = &Beta_vs_P_1e_Neutrons_Only_FD;
+
         // TODO: figure out how to automatically find the length of Beta_vs_P_histograms
-        TH2D Beta_vs_P_histograms[4] = {*Beta_vs_P_CD_ref, *Beta_vs_P_FD_ref, *Beta_vs_P_1e_CD_ref, *Beta_vs_P_1e_FD_ref};
+//        TH2D Beta_vs_P_histograms[12] = {*Beta_vs_P_CD_ref, *Beta_vs_P_FD_ref, *Beta_vs_P_1e_CD_ref, *Beta_vs_P_1e_FD_ref,
+//                                         *Beta_vs_P_Electrons_Only_CD_ref, *Beta_vs_P_Electrons_Only_FD_ref, *Beta_vs_P_1e_Electrons_Only_CD_ref,
+//                                         *Beta_vs_P_1e_Electrons_Only_FD_ref,
+//                                         *Beta_vs_P_Protons_Only_CD_ref, *Beta_vs_P_Protons_Only_FD_ref, *Beta_vs_P_1e_Protons_Only_CD_ref,
+//                                         *Beta_vs_P_1e_Protons_Only_FD_ref};
+        TH2D Beta_vs_P_histograms[16] = {*Beta_vs_P_CD_ref, *Beta_vs_P_FD_ref, *Beta_vs_P_1e_CD_ref, *Beta_vs_P_1e_FD_ref,
+                                         *Beta_vs_P_Electrons_Only_CD_ref, *Beta_vs_P_Electrons_Only_FD_ref, *Beta_vs_P_1e_Electrons_Only_CD_ref,
+                                         *Beta_vs_P_1e_Electrons_Only_FD_ref,
+                                         *Beta_vs_P_Protons_Only_CD_ref, *Beta_vs_P_Protons_Only_FD_ref, *Beta_vs_P_1e_Protons_Only_CD_ref,
+                                         *Beta_vs_P_1e_Protons_Only_FD_ref,
+                                         *Beta_vs_P_Neutrons_Only_CD_ref, *Beta_vs_P_Neutrons_Only_FD_ref, *Beta_vs_P_1e_Neutrons_Only_CD_ref,
+                                         *Beta_vs_P_1e_Neutrons_Only_FD_ref};
+
         int Beta_vs_P_histograms_length = sizeof(Beta_vs_P_histograms) / sizeof(TH2D);
 //        int Beta_vs_P_histograms_length = 4;
 
@@ -3270,16 +3403,26 @@ void EventAnalyser() {
             histogram->GetZaxis()->SetLabelSize(0.0425);
             plots->Add(histogram);
             histogram->Draw("colz");
-            beta_electron->Draw("same");
-            beta_electron_title->Draw("same");
-            beta_proton->Draw("same");
-            beta_neutron->Draw("same");
-            beta_pizero->Draw("same");
-            beta_piplus->Draw("same");
-            beta_piminus->Draw("same");
-            beta_Kzero->Draw("same");
-            beta_Kplus->Draw("same");
-            beta_Kminus->Draw("same");
+
+            if (i < 4) {
+                beta_electron->Draw("same");
+                beta_electron_title->Draw("same");
+                beta_proton->Draw("same");
+                beta_neutron->Draw("same");
+                beta_pizero->Draw("same");
+                beta_piplus->Draw("same");
+                beta_piminus->Draw("same");
+                beta_Kzero->Draw("same");
+                beta_Kplus->Draw("same");
+                beta_Kminus->Draw("same");
+            } else if (i >= 4 && i < 8) {
+                beta_electron->Draw("same");
+            } else if (i >= 8 && i < 12) {
+                beta_proton->Draw("same");
+            } else if (i >= 12 && i < 18) {
+                beta_neutron->Draw("same");
+            }
+
             c1->SetLogz(1);
             gStyle->SetStatX(0.88);
             gStyle->SetStatY(0.4);
