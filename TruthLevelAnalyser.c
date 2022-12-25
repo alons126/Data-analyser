@@ -4507,6 +4507,20 @@ void gst::Loop() {
 
     //</editor-fold>
 
+// Creating directories -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Creating directories">
+
+    system("mkdir -p ./plots");
+    system("mkdir -p ./plots/theta_histograms");
+    system("mkdir -p ./plots/phi_histograms");
+
+    system("mkdir -p ./plots/momentum_histograms");
+    system("mkdir -p ./plots/momentum_histograms/2p");
+    system("mkdir -p ./plots/momentum_histograms/1n1p");
+
+    //</editor-fold>
+
 // Saving settings to log file -------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving settings to log file">
@@ -4670,6 +4684,9 @@ void gst::Loop() {
     TH1D("#theta_{n} (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
     TH1D *dtheta_1n1p = new
     TH1D("#gamma (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
+
+    TH1D *theta_lp_inclusive = new
+    TH1D("#theta_{l} (inclusive)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_1n1p, theta_lp_upper_lim_1n1p);
     //</editor-fold>
 
 // Phi histograms -------------------------------------------------------------------------------------
@@ -4695,6 +4712,9 @@ void gst::Loop() {
     TH1D("#phi_{n} (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
     TH1D *dphi_1n1p = new
     TH1D("#Delta#phi (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
+
+    TH1D * phi_lp_inclusive = new
+    TH1D("#phi_{l} (inclusive)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_1n1p, phi_lp_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy histograms ----------------------------------------------------------------------------------
@@ -5281,6 +5301,10 @@ void gst::Loop() {
     TH1D("P_{n} (all interactions, 1n1p)", ";P_{n} [GeV/c]", 100, P_n_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p);
     TH1D *P_lp_hist_1n1p = new
     TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_1n1p, P_lp_hist_upper_lim_1n1p);
+
+
+    TH1D * P_lp_hist_inclusive = new
+    TH1D("P_{l} (all interactions, inc.)", ";P_{l} [GeV/c]", 250, 0, 7);
     //</editor-fold>
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
@@ -5452,6 +5476,7 @@ void gst::Loop() {
 
         E_Trans_VS_q_all_inclusive->Fill(q3, Ev - El);
         Q2_hist_inclusive->Fill(Q2);
+        P_lp_hist_inclusive->Fill(rCalc(pxl,pyl,pzl));
 
         if (qel == true) {
             E_Trans_VS_q_QEL_inclusive->Fill(q, Ev - El);
@@ -5460,6 +5485,10 @@ void gst::Loop() {
         }
 
         double Theta_lp_inclusive = acos(pzl / rCalc(pxl, pyl, pzl)) * 180.0 / 3.14159265359; // In degrees
+        theta_lp_inclusive->Fill(Theta_lp_inclusive);
+        double Phi_lp_inclusive = atan2(pyl, pxl) * 180.0 / 3.14159265359;
+        phi_lp_inclusive->Fill(Phi_lp_inclusive);
+
 
 //      Theta_l inclusive calculations:
         if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
@@ -6967,6 +6996,10 @@ void gst::Loop() {
                       0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "gamma_of_nucleons", "plots/theta_histograms/", "1n1p", kRed, true, false, true);
         //</editor-fold>
 
+
+        histPlotter1D(c1, theta_lp_inclusive, false, true, 1., "#theta_{l} (inclusive)", "inclusive",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "theta_lp_inclusive", "plots/", "inclusive", kBlue, true, false, true);
+
     }
 
 // Phi histograms
@@ -7050,6 +7083,9 @@ void gst::Loop() {
         histPlotter1D(c1, dphi_1n1p, normalized_dphi_1n1p_plots, true, 1., "#Delta#phi = #phi_{p} - #phi_{n} of Scattered Nucleons", "All Interactions",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "dPhi_of_protons", "plots/phi_histograms/", "1n1p", kRed, true, false, true);
         //</editor-fold>
+
+        histPlotter1D(c1, phi_lp_inclusive, false, true, 1., "#phi_{l} (inclusive)", "inclusive",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, PhiStack, "phi_lp_inclusive", "plots/", "inclusive", kBlue, true, false, true);
 
     }
 
@@ -9024,6 +9060,9 @@ void gst::Loop() {
         histPlotter1D(c1, P_lp_hist_1n1p, normalized_P_R_plots, false, 1., "Momentum Histogram of Outgoing Lepton P_{l}", "all interactions", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, MomentumStack_1n1p, "P_lp_histogram", "plots/momentum_histograms/1n1p/", "1n1p", kGreen, true, true, true);
         //</editor-fold>
+
+        histPlotter1D(c1, P_lp_hist_inclusive, false, false, 1., "P_{l} (all interactions)", "inclusive", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, MomentumStack_1n1p, "P_lp_hist", "plots/", "inclusive", kBlue, true, true, true);
 
         //<editor-fold desc="Momentum histogram stack (2p)">
         MomentumStack_2p->Draw("nostack");

@@ -92,6 +92,8 @@ void EventAnalyser() {
 
     string Plots_Folder = "./plots"; // Plots_Folder = Parent_Folder
 
+    system(("rm -r " + Plots_Folder + "/*").c_str()); // clear old stuff in Parent_Folder
+
 //  todo: finish auto-generating directories for other histograms
     //<editor-fold desc="Beta VS p plots directory">
     bool create_Beta_vs_P_Dir = true;
@@ -210,13 +212,23 @@ void EventAnalyser() {
 //    } // end of loop over AllParticles vector
     //</editor-fold>
 
-    //<editor-fold desc="Theta plots directory">
-    bool create_theta_Dir = true;
-    string Theta_Parent_Directory = "theta_histograms";
-    string Theta_Daughter_Folders[] = {"", "Theta_e_plots"};
+    //<editor-fold desc="Theta_e plots directory">
+    bool create_Theta_e_Dir = true;
+    string Theta_e_Parent_Directory = "Ang_histograms";
+    string Theta_e_Daughter_Folders[] = {"", "Theta_e_plots", "Theta_e_plots/All_e", "Theta_e_plots/Only_1e_cut"};
 
-    for (string folders_name: Theta_Daughter_Folders) {
-        MakeDirectory(create_theta_Dir, Theta_Parent_Directory, folders_name);
+    for (string folders_name: Theta_e_Daughter_Folders) {
+        MakeDirectory(create_Theta_e_Dir, Theta_e_Parent_Directory, folders_name);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Phi_e plots directory">
+    bool create_Phi_e_Dir = true;
+    string Phi_e_Parent_Directory = "Ang_histograms";
+    string Phi_e_Daughter_Folders[] = {"", "Phi_e_plots", "Phi_e_plots/All_e", "Phi_e_plots/Only_1e_cut"};
+
+    for (string folders_name: Phi_e_Daughter_Folders) {
+        MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name);
     }
     //</editor-fold>
 
@@ -227,6 +239,16 @@ void EventAnalyser() {
 
     for (string folders_name: Q2_Daughter_Folders) {
         MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Momentum plots directory">
+    bool create_Momentum_Dir = true;
+    string Momentum_Parent_Directory = "Momentum_histograms";
+    string Momentum_Daughter_Folders[] = {""};
+
+    for (string folders_name: Momentum_Daughter_Folders) {
+        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name);
     }
     //</editor-fold>
 
@@ -378,9 +400,13 @@ void EventAnalyser() {
 
     bool Vertex_plots = true;
 
-    bool Theta_e_plots = true;
+    bool Angle_plots = true;
+
+    bool Phi_e_plots = true;
 
     bool Q2_plots = true;
+
+    bool Momentum_plots = true;
 
     //<editor-fold desc="other plots">
     bool Theta_plots = false, Phi_plots = false;
@@ -413,7 +439,7 @@ void EventAnalyser() {
 
     bool normalized_vertex_plots = false;
 
-    bool normalized_theta_e_plots = false;
+    bool normalized_Angle_plots = false;
 
     bool normalized_Q2_plots = false;
 
@@ -435,7 +461,7 @@ void EventAnalyser() {
     bool normalized_P_lp_plots = false, normalized_P_L_plots = false, normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
-        normalized_chi2_plots = normalized_vertex_plots = normalized_theta_e_plots = normalized_Q2_plots = normalized_theta_lp_plots = false;
+        normalized_chi2_plots = normalized_vertex_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_theta_lp_plots = false;
 
 //        normalized_theta_lp_plots = false;
 
@@ -1170,7 +1196,9 @@ void EventAnalyser() {
 
     cout << "\nDefining histograms...";
 
-// Beta VS P histograms -------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Beta VS P histograms
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Beta vs P histograms">
     TH2D Beta_vs_P_CD("#beta vs P (All Particles, CD)", "#beta vs P - All Particles (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
@@ -1222,7 +1250,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Chi2 plots -----------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Chi2 plots
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
 
@@ -1268,7 +1298,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Vertex plots ---------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Vertex plots
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Vertex plots">
 
@@ -1396,17 +1428,64 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Theta_e histograms -----------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Angle histograms
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Theta_e --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_e histograms">
     THStack *Theta_e_Stack = new THStack("#theta_{e} stack (CD & FD)", "#theta_{e} of Outgoing Electron (no #(electrons) cut, CD & FD);#theta_{e} [Deg];");
 
-    TH1D *Theta_e_CD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, CD)", ";#theta_{e} [Deg];", 100, 35, 143);
-//    TH1D *Theta_e_FD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 100, 0, 1.5);
-    TH1D *Theta_e_FD = new TH1D("#theta_{e} of Outgoing Electron (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 100, 0, 45);
+    TH1D *Theta_e_CD = new TH1D("#theta_{e} (no #(electrons) cut, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_FD = new TH1D("#theta_{e} (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e_CD = new TH1D("#theta_{e} (1e Only cut, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e_FD = new TH1D("#theta_{e} (1e Only cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     //</editor-fold>
 
-// Q2 histograms -----------------------------------------------------------------------------------
+// Phi_e ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Phi_e histograms">
+    THStack *Phi_e_Stack = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(electrons) cut, CD & FD);#phi_{e} [Deg];");
+
+    TH1D *Phi_e_CD = new TH1D("#phi_{e} (no #(electrons) cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_FD = new TH1D("#phi_{e} (no #(electrons) cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e_CD = new TH1D("#phi_{e} (1e Only cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e_FD = new TH1D("#phi_{e} (1e Only cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    //</editor-fold>
+
+// Theta_e VS Phi_e -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_e VS Phi_e histograms">
+    TH2D *Theta_e_VS_Phi_e_CD = new TH2D("#theta_{e} VS #phi_{e} (no #(electrons) cut, Central Detector)",
+                                         "#theta_{e} VS #phi_{e}  (no #(electrons) cut, Central Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                         250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
+    TH2D *Theta_e_VS_Phi_e_FD = new TH2D("#theta_{e} VS #phi_{e} (no #(electrons) cut, Forward Detector)",
+                                         "#theta_{e} VS #phi_{e}  (no #(electrons) cut, Forward Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                         250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
+
+    TH2D *Theta_e_VS_Phi_e_1e_CD = new TH2D("#theta_{e} VS #phi_{e} (1e Only cut, Central Detector)",
+                                            "#theta_{e} VS #phi_{e}  (1e Only cut, Central Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                            250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
+    TH2D *Theta_e_VS_Phi_e_1e_FD = new TH2D("#theta_{e} VS #phi_{e} (1e Only cut, Forward Detector)",
+                                            "#theta_{e} VS #phi_{e} (1e Only cut, Forward Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                            250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Momentum histograms
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Momentum histograms">
+    THStack *P_e_Stack = new THStack("P_{e} stack (CD & FD)", "P_{e} Histogram (no #(electrons) cut, CD & FD);P_{e} [GeV^{2}];");
+
+    TH1D *P_e_histogram_CD = new TH1D("P_{e} (no #(electrons) cut, CD)", ";P_{e} [GeV^{2}];", 250, 0, 7);
+    TH1D *P_e_histogram_FD = new TH1D("P_{e} (no #(electrons) cut, FD)", ";P_{e} [GeV^{2}];", 250, 0, 7);
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Q2 histograms
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Q2 histograms">
     THStack *Q2_Stack = new THStack("Q^{2} stack (CD & FD)", "Q^{2} Histogram (no #(electrons) cut, CD & FD);Q^{2} [GeV^{2}];");
@@ -2235,13 +2314,14 @@ void EventAnalyser() {
 
             //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
             TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
-            double theta_e_CD, Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
-            double theta_e_FD, Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
+            double theta_e_CD, phi_e_CD, Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
+            double theta_e_FD, phi_e_FD, Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
 
             for (int i = 0; i < electrons.size(); i++) {
                 if (electrons[i]->getRegion() == CD) {
                     ++num_of_events_with_e_in_CD; // logging #e in CD
 
+                    P_e_histogram_CD->Fill(electrons[i]->getP());
                     Beta_vs_P_Electrons_Only_CD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_CD.Fill(electrons[i]->par()->getChi2Pid());
@@ -2250,8 +2330,11 @@ void EventAnalyser() {
                     Vertex_Electron_Vy_CD_test.Fill(electrons[i]->par()->getVy());
                     Vertex_Electron_Vz_CD_test.Fill(electrons[i]->par()->getVz());
 
-                    theta_e_CD = electrons[i]->getTheta() * 180.0 / 3.14159265359; // theta_e_CD in radians
+                    theta_e_CD = electrons[i]->getTheta() * 180.0 / 3.14159265359; // theta_e_CD in deg
                     Theta_e_CD->Fill(theta_e_CD);
+                    phi_e_CD = electrons[i]->getPhi() * 180.0 / 3.14159265359; // phi_e_CD in deg
+                    Phi_e_CD->Fill(phi_e_CD);
+                    Theta_e_VS_Phi_e_CD->Fill(phi_e_CD, theta_e_CD);
 
                     Pe_CD = electrons[i]->par()->getP();
                     e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_CD * Pe_CD));
@@ -2262,6 +2345,7 @@ void EventAnalyser() {
                 } else if (electrons[i]->getRegion() == FD) {
                     ++num_of_events_with_e_in_FD; // logging #e in FD
 
+                    P_e_histogram_FD->Fill(electrons[i]->getP());
                     Beta_vs_P_Electrons_Only_FD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
@@ -2270,8 +2354,11 @@ void EventAnalyser() {
                     Vertex_Electron_Vy_FD_test.Fill(electrons[i]->par()->getVy());
                     Vertex_Electron_Vz_FD_test.Fill(electrons[i]->par()->getVz());
 
-                    theta_e_FD = electrons[i]->getTheta() * 180.0 / 3.14159265359; // theta_e_FD in radians
+                    theta_e_FD = electrons[i]->getTheta() * 180.0 / 3.14159265359; // theta_e_FD in deg
                     Theta_e_FD->Fill(theta_e_FD);
+                    phi_e_FD = electrons[i]->getPhi() * 180.0 / 3.14159265359; // phi_e_FD in deg
+                    Phi_e_FD->Fill(phi_e_FD);
+                    Theta_e_VS_Phi_e_FD->Fill(phi_e_FD, theta_e_FD);
 
                     Pe_FD = electrons[i]->par()->getP();
                     e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_FD * Pe_FD));
@@ -2348,15 +2435,18 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Fill Electron chi2 plots (1e only, CD & FD)">
-            double e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD;
-            double e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD;
+            double theta_e_1e_CD, phi_e_1e_CD, e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD;
+            double theta_e_1e_FD, phi_e_1e_FD, e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD;
 
             for (auto &e: electrons) {
                 if (e->getRegion() == CD) {
-
-//
                     Beta_vs_P_1e_Electrons_Only_CD.Fill(e->getP(), e->par()->getBeta());
-//
+
+                    theta_e_1e_CD = e->getTheta() * 180.0 / 3.14159265359; // theta_e_1e_CD in deg
+                    Theta_e_1e_CD->Fill(theta_e_1e_CD);
+                    phi_e_1e_CD = e->getPhi() * 180.0 / 3.14159265359; // phi_e_1e_CD in deg
+                    Phi_e_1e_CD->Fill(phi_e_1e_CD);
+                    Theta_e_VS_Phi_e_1e_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
 
                     e_Chi2_CD = e->par()->getChi2Pid();
                     Chi2_Electron_1e_CD.Fill(e_Chi2_CD);
@@ -2375,10 +2465,13 @@ void EventAnalyser() {
                     //</editor-fold>
 
                 } else if (e->getRegion() == FD) {
-
-//
                     Beta_vs_P_1e_Electrons_Only_FD.Fill(e->getP(), e->par()->getBeta());
-//
+
+                    theta_e_1e_FD = e->getTheta() * 180.0 / 3.14159265359; // theta_e_1e_FD in deg
+                    Theta_e_1e_FD->Fill(theta_e_1e_FD);
+                    phi_e_1e_FD = e->getPhi() * 180.0 / 3.14159265359; // phi_e_1e_FD in deg
+                    Phi_e_1e_FD->Fill(phi_e_1e_FD);
+                    Theta_e_VS_Phi_e_1e_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
 
                     e_Chi2_FD = e->par()->getChi2Pid();
                     Chi2_Electron_1e_FD.Fill(e_Chi2_FD);
@@ -2406,10 +2499,7 @@ void EventAnalyser() {
 
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
-
-//
                     Beta_vs_P_1e_Protons_Only_CD.Fill(p->getP(), p->par()->getBeta());
-//
 
                     p_Chi2_tmp_CD = p->par()->getChi2Pid();
                     Chi2_Proton_1e_CD.Fill(p_Chi2_tmp_CD);
@@ -2429,9 +2519,7 @@ void EventAnalyser() {
 
                 } else if (p->getRegion() == FD) {
 
-//
                     Beta_vs_P_1e_Protons_Only_FD.Fill(p->getP(), p->par()->getBeta());
-//
 
                     p_Chi2_tmp_FD = p->par()->getChi2Pid();
                     Chi2_Proton_1e_FD.Fill(p_Chi2_tmp_FD);
@@ -3728,31 +3816,163 @@ void EventAnalyser() {
     //</editor-fold>
 
 
-// Theta_e histograms
+// Angle histograms
 // ====================================================================================================
 
-    //<editor-fold desc="Theta_e histograms">
-    if (Theta_e_plots) {
+    //<editor-fold desc="Angle histograms">
+    if (Angle_plots) {
 
-        cout << "\n\nPlotting Theta Det histograms...\n\n";
+        cout << "\n\nPlotting Angle histograms...\n\n";
 
-//  Theta of electron (CD & FD) --------------------------------------------------------------
+//  Theta_e (CD & FD) --------------------------------------------------------------
 
-//      Normalization factor:
+        //<editor-fold desc="Theta_e (no #(electrons) cut)">
+        //      Normalization factor:
         double Theta_e_integral = Theta_e_CD->Integral() + Theta_e_FD->Integral();
 
         //<editor-fold desc="Theta of electron (CD)">
-        histPlotter1D(c1, Theta_e_CD, normalized_theta_e_plots, true, Theta_e_integral, "#theta_{e} of Outgoing Lepton", "no #(electrons) cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e", "plots/theta_histograms/Theta_e_plots/", "CD", kBlue, true, true, true);
+        histPlotter1D(c1, Theta_e_CD, normalized_Angle_plots, true, Theta_e_integral, "#theta_{e}", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_All_e", "plots/Ang_histograms/Theta_e_plots/All_e/", "CD",
+                      kBlue, true, true, true, false, true, 47.5, 87.5, false);
         //</editor-fold>
 
         //<editor-fold desc="Theta of electron (FD)">
-        histPlotter1D(c1, Theta_e_FD, normalized_theta_e_plots, true, Theta_e_integral, "#theta_{e} of Outgoing Lepton", "no #(electrons) cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e", "plots/theta_histograms/Theta_e_plots/", "FD", kBlue, true, true, true);
+        histPlotter1D(c1, Theta_e_FD, normalized_Angle_plots, true, Theta_e_integral, "#theta_{e}", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_All_e", "plots/Ang_histograms/Theta_e_plots/All_e/", "FD",
+                      kBlue, true, true, true, false, true, 17.5, 22.5, false);
         //</editor-fold>
 
+        //</editor-fold>
+
+        //<editor-fold desc="Theta_e (1e Only cut)">
+        //      Normalization factor:
+        double Theta_e_1e_integral = Theta_e_1e_CD->Integral() + Theta_e_1e_FD->Integral();
+
+        //<editor-fold desc="Theta of electron (CD)">
+        histPlotter1D(c1, Theta_e_1e_CD, normalized_Angle_plots, true, Theta_e_1e_integral, "#theta_{e}", "1e Only cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "CD",
+                      kBlue, true, true, true, false, true, 47.5, 87.5, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Theta of electron (FD)">
+        histPlotter1D(c1, Theta_e_1e_FD, normalized_Angle_plots, true, Theta_e_1e_integral, "#theta_{e}", "1e Only cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "FD",
+                      kBlue, true, true, true, false, true, 17.5, 22.5, false);
+        //</editor-fold>
+
+        //</editor-fold>
+
+//  Phi_e (CD & FD) --------------------------------------------------------------
+
+        //<editor-fold desc="Phi_e (no #(electrons) cut)">
+
+//      Normalization factor:
+        double Phi_e_integral = Phi_e_CD->Integral() + Phi_e_FD->Integral();
+
+        //<editor-fold desc="Phi of electron (CD)">
+        histPlotter1D(c1, Phi_e_CD, normalized_Angle_plots, true, Phi_e_integral, "#phi_{e}", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Phi_e_Stack, "Phi_e_All_e", "plots/Ang_histograms/Phi_e_plots/All_e/", "CD",
+                      kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Phi of electron (FD)">
+        histPlotter1D(c1, Phi_e_FD, normalized_Angle_plots, true, Phi_e_integral, "#phi_{e}", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Phi_e_Stack, "Phi_e_All_e", "plots/Ang_histograms/Phi_e_plots/All_e/", "FD",
+                      kBlue, true, true, true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Phi_e (1e Only cut)">
+//      Normalization factor:
+        double Phi_e_1e_integral = Phi_e_1e_CD->Integral() + Phi_e_1e_FD->Integral();
+
+        //<editor-fold desc="Phi of electron (CD)">
+        histPlotter1D(c1, Phi_e_1e_CD, normalized_Angle_plots, true, Phi_e_1e_integral, "#phi_{e}", "1e Only cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Phi_e_Stack, "Phi_e_Only_1e_cut", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "CD",
+                      kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Phi of electron (FD)">
+        histPlotter1D(c1, Phi_e_1e_FD, normalized_Angle_plots, true, Phi_e_1e_integral, "#phi_{e}", "1e Only cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Phi_e_Stack, "Phi_e_Only_1e_cut", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "FD",
+                      kBlue, true, true, true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+//  Theta_e VS Phi_e (CD & FD) --------------------------------------------------------------
+
+        Theta_e_VS_Phi_e_CD->SetTitleSize(0.06, "xyz");
+        Theta_e_VS_Phi_e_CD->GetXaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_CD->GetXaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_CD->GetYaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_CD->GetYaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Theta_e_VS_Phi_e_CD);
+        Theta_e_VS_Phi_e_CD->Draw("colz");
+        c1->SetLogz(0);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Theta_e_VS_Phi_e_CD->SetStats(0);
+        c1->SaveAs((Plots_Folder + "/" + Theta_e_Parent_Directory + "/" + "Theta_e_VS_Phi_e_All_e_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Theta_e_VS_Phi_e_FD->SetTitleSize(0.06, "xyz");
+        Theta_e_VS_Phi_e_FD->GetXaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_FD->GetXaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_FD->GetYaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_FD->GetYaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Theta_e_VS_Phi_e_FD);
+        Theta_e_VS_Phi_e_FD->Draw("colz");
+        c1->SetLogz(0);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Theta_e_VS_Phi_e_FD->SetStats(0);
+        c1->SaveAs((Plots_Folder + "/" + Theta_e_Parent_Directory + "/" + "Theta_e_VS_Phi_e_All_e_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Theta_e_VS_Phi_e_1e_CD->SetTitleSize(0.06, "xyz");
+        Theta_e_VS_Phi_e_1e_CD->GetXaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_1e_CD->GetXaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_1e_CD->GetYaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_1e_CD->GetYaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_1e_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Theta_e_VS_Phi_e_1e_CD);
+        Theta_e_VS_Phi_e_1e_CD->Draw("colz");
+        c1->SetLogz(0);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Theta_e_VS_Phi_e_1e_CD->SetStats(0);
+        c1->SaveAs((Plots_Folder + "/" + Theta_e_Parent_Directory + "/" + "Theta_e_VS_Phi_e_Only_1e_cut_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Theta_e_VS_Phi_e_1e_FD->SetTitleSize(0.06, "xyz");
+        Theta_e_VS_Phi_e_1e_FD->GetXaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_1e_FD->GetXaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_1e_FD->GetYaxis()->SetLabelSize(0.0425);
+        Theta_e_VS_Phi_e_1e_FD->GetYaxis()->CenterTitle(true);
+        Theta_e_VS_Phi_e_1e_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Theta_e_VS_Phi_e_1e_FD);
+        Theta_e_VS_Phi_e_1e_FD->Draw("colz");
+        c1->SetLogz(0);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Theta_e_VS_Phi_e_1e_FD->SetStats(0);
+        c1->SaveAs((Plots_Folder + "/" + Theta_e_Parent_Directory + "/" + "Theta_e_VS_Phi_e_Only_1e_cut_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
     } else {
-        cout << "\n\nTheta Det plots are disabled by user.\n\n";
+        cout << "\n\nAngle plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -3778,6 +3998,35 @@ void EventAnalyser() {
         //<editor-fold desc="Q2 (FD)">
         histPlotter1D(c1, Q2_histogram_FD, normalized_Q2_plots, true, Q2_integral, "Q^{2} Histogram", "no #(electrons) cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "FD", kBlue, true, true, true);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nQ2 plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+
+// P_e histograms
+// ====================================================================================================
+
+    //<editor-fold desc="Q2 histograms">
+    if (Momentum_plots) {
+
+        cout << "\n\nPlotting Momentum histograms...\n\n";
+
+//  Q2 (CD & FD) --------------------------------------------------------------
+
+//      Normalization factor:
+        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
+
+        //<editor-fold desc="P_e (CD)">
+        histPlotter1D(c1, P_e_histogram_CD, false, true, Momentum_integral, "P_{e}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack,
+                      "P_e_All_e", "plots/Momentum_histograms/", "CD", kBlue, true, true, true);
+        //</editor-fold>
+
+        //<editor-fold desc="P_e (FD)">
+        histPlotter1D(c1, P_e_histogram_FD, false, true, Momentum_integral, "P_{e}", "no #(electrons) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack,
+                      "P_e_All_e", "plots/Momentum_histograms/", "FD", kBlue, true, true, true);
         //</editor-fold>
 
     } else {

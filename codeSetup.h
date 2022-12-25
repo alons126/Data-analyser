@@ -113,7 +113,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    bool title2 = false,
                    bool plot_chi2_cuts = false,
                    double chi2_cuts = 0,
-                   double chi2_max = 0) {
+                   double chi2_max = 0,
+                   bool plot_chi_max = true) {
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
@@ -204,14 +205,20 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
-            max_location->Draw("same");
-            max_location->SetLineColor(kGreen);
+            if (plot_chi_max == true) {
+                max_location->Draw("same");
+                max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
+            }
 
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string(Lower_cut)).c_str(), "l");
-            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string(Chi2_max)).c_str(), "l");
+
+            if (plot_chi_max == true) {
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string(Chi2_max)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string(max_location)).c_str(), "l");
+            }
+
             Cut_legend->Draw("same");
         }
     }
@@ -270,25 +277,36 @@ std::string plots_file_type = "_plots.root";
 
 std::string file_name = "general_file";
 
+// hipo files:
+
 //std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
 std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
 //std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
-//std::string AnalyseFile = "/mnt/d/e4nu/root_data_files/Fixing SuSAv2/Julia's script/e_on_1000060120_2222MeV_em.gst.root";
-//std::string AnalyseFile = "12C_2222GeV_GEM21_11a_00_000_wfsi_mk2.root";
 
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFilePath = "/mnt/d/e4nu/hipo_data_files/";
 //std::string AnalyseFileSample = "recon_c12_6gev";
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test";
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2";
-std::string AnalyseFileSample = "recon_c12_6gev";
+//std::string AnalyseFileSample = "recon_c12_6gev";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/" + "first_50_test" + "/";
 
-//std::string AnalyseFileDir = "/home/alon/project/temp/";
+
+//// root files:
+//
+//std::string AnalyseFile = "./e_on_1000060120_598636MeV.gst.root";
+//
+//std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//
+////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
+////std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/" + "first_50_test" + "/";
+//
+////std::string AnalyseFileDir = "/home/alon/project/temp/";
 
 // ======================================================================================================================================================================
 // BEnergyToNucleus definition
