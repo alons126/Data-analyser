@@ -285,9 +285,9 @@ std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_
 
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFilePath = "/mnt/d/e4nu/hipo_data_files/";
-//std::string AnalyseFileSample = "recon_c12_6gev";
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2";
+std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_c12_6gev";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
