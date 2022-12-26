@@ -62,6 +62,7 @@ void EventAnalyser() {
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
+    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
     //</editor-fold>
 
     //<editor-fold desc="Set beam energy (beamE)">
@@ -72,15 +73,34 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+    //<editor-fold desc="Set beam energy (beamE)">
+    string Target;
+    int TargetPDG;
+
+    if ((AnalyseFileSample.find("c12") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
+        (AnalyseFileSample.find("C12") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
+        (AnalyseFileSample.find("12c") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
+        (AnalyseFileSample.find("12C") <= AnalyseFileSample[AnalyseFileSample.size() - 1])) {
+        Target = "C12";
+        TargetPDG = 1000060120;
+    } else {
+        Target = "UNKOWN";
+        TargetPDG = 0;
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Execution variables">
     cout << "\nExecution variables\n";
     cout << "---------------------------------------------------------------------------\n";
-    cout << "File input:\t" << AnalyseFile << "\n";
-    cout << "Settings mode:\t'" << file_name << "'\n";
-    cout << "filePath:\t" << filePath << "\n";
-    cout << "fileInput:\t" << fileInput << "\n\n";
+    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
+    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
+    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
+    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
+//    cout << "filePath:\t" << filePath << "\n";
 //    cout << "fileInput:\t" << fileInput << "\n\n";
-    cout << "beamE:\t\t" << beamE << "\n\n\n\n";
+//    cout << "fileInput:\t" << fileInput << "\n\n";
+    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
+    cout << "Beam Energy:\t\t" << beamE << "\n\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -235,11 +255,14 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 plots directory">
     bool create_Q2_Dir = true;
     string Q2_Parent_Directory = "Q2_histograms";
-    string Q2_Daughter_Folders[] = {""};
+    string Q2_Daughter_Folders[] = {"", "All_e", "Only_1e_cut"};
 
     for (string folders_name: Q2_Daughter_Folders) {
         MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name);
     }
+
+    string Q2_All_e_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[1] + "/";
+    string Q2_Only_1e_cut_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[2] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots directory">
@@ -1203,49 +1226,49 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs P histograms">
     TH2D Beta_vs_P_CD("#beta vs P (All Particles, CD)", "#beta vs P - All Particles (Central Detector);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
     TH2D Beta_vs_P_FD("#beta vs P (All Particles, FD)", "#beta vs P - All Particles (Forward Detector);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
-    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e only cut, Central Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e Only Cut, Central Detector);P [GeV];#beta",
                          250, 0, beamE * 1.425, 250, 0, 8);
-    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e only cut, Forward Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e Only Cut, Forward Detector);P [GeV];#beta",
                          250, 0, beamE * 1.425, 250, 0, 8);
-//    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e only cut, Central Detector);P [GeV];#beta",
+//    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e Only Cut, Central Detector);P [GeV];#beta",
 //    250, 0, beamE * 1.425, 250, 0, 2);
-//    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e only cut, Forward Detector);P [GeV];#beta"
+//    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e Only Cut, Forward Detector);P [GeV];#beta"
 //    , 250, 0, beamE * 1.425, 250, 0, 2);
 
     TH2D Beta_vs_P_Electrons_Only_CD("#beta vs P (Electrons Only, CD)", "#beta vs P - Electrons Only (Central Detector);P [GeV];#beta",
                                      250, 0, beamE * 1.425, 250, 0.5, 3);
     TH2D Beta_vs_P_Electrons_Only_FD("#beta vs P (Electrons Only, FD)", "#beta vs P - Electrons Only (Forward Detector);P [GeV];#beta",
                                      250, 0, beamE * 1.425, 250, 0.5, 3);
-    TH2D Beta_vs_P_1e_Electrons_Only_CD("#beta vs P (Electrons Only, 1e only, CD)", "#beta vs P - Electrons Only (1e only cut, Central Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_Electrons_Only_CD("#beta vs P (Electrons Only, 1e only, CD)", "#beta vs P - Electrons Only (1e Only Cut, Central Detector);P [GeV];#beta",
                                         250, 0, beamE * 1.425, 250, 0.5, 3);
-    TH2D Beta_vs_P_1e_Electrons_Only_FD("#beta vs P (Electrons Only, 1e only, FD)", "#beta vs P - Electrons Only (1e only cut, Forward Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_Electrons_Only_FD("#beta vs P (Electrons Only, 1e only, FD)", "#beta vs P - Electrons Only (1e Only Cut, Forward Detector);P [GeV];#beta",
                                         250, 0, beamE * 1.425, 250, 0.5, 3);
 
     TH2D Beta_vs_P_Protons_Only_CD("#beta vs P (Protons Only, CD)", "#beta vs P - Protons Only (Central Detector);P [GeV];#beta",
                                    250, 0, beamE * 1.425, 250, 0, 3);
     TH2D Beta_vs_P_Protons_Only_FD("#beta vs P (Protons Only, FD)", "#beta vs P - Protons Only (Forward Detector);P [GeV];#beta",
                                    250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Protons_Only_CD("#beta vs P (Protons Only, 1e only, CD)", "#beta vs P - Protons Only (1e only cut, Central Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_Protons_Only_CD("#beta vs P (Protons Only, 1e only, CD)", "#beta vs P - Protons Only (1e Only Cut, Central Detector);P [GeV];#beta",
                                       250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Protons_Only_FD("#beta vs P (Protons Only, 1e only, FD)", "#beta vs P - Protons Only (1e only cut, Forward Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_Protons_Only_FD("#beta vs P (Protons Only, 1e only, FD)", "#beta vs P - Protons Only (1e Only Cut, Forward Detector);P [GeV];#beta",
                                       250, 0, beamE * 1.425, 250, 0, 3);
 
     TH2D Beta_vs_P_Neutrons_Only_CD("#beta vs P (Neutrons Only, CD)", "#beta vs P - Neutrons Only (Central Detector);P [GeV];#beta",
                                     250, 0, beamE * 1.425, 250, 0, 3);
     TH2D Beta_vs_P_Neutrons_Only_FD("#beta vs P (Neutrons Only, FD)", "#beta vs P - Neutrons Only (Forward Detector);P [GeV];#beta",
                                     250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Neutrons_Only_CD("#beta vs P (Neutrons Only, 1e only, CD)", "#beta vs P - Neutrons Only (1e only cut, Central Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_Neutrons_Only_CD("#beta vs P (Neutrons Only, 1e only, CD)", "#beta vs P - Neutrons Only (1e Only Cut, Central Detector);P [GeV];#beta",
                                        250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Neutrons_Only_FD("#beta vs P (Neutrons Only, 1e only, FD)", "#beta vs P - Neutrons Only (1e only cut, Forward Detector);P [GeV];#beta",
+    TH2D Beta_vs_P_1e_Neutrons_Only_FD("#beta vs P (Neutrons Only, 1e only, FD)", "#beta vs P - Neutrons Only (1e Only Cut, Forward Detector);P [GeV];#beta",
                                        250, 0, beamE * 1.425, 250, 0, 3);
 
 //    TH2D Beta_vs_P_cPions_Only_CD("#beta vs P (#pi^{#pm} Only, CD)", "#beta vs P - #pi^{#pm} Only (Central Detector);P [GeV];#beta",
 //                                  250, 0, beamE * 1.425, 250, 0, 3);
 //    TH2D Beta_vs_P_cPions_Only_FD("#beta vs P (#pi^{#pm} Only, FD)", "#beta vs P - #pi^{#pm} Only (Forward Detector);P [GeV];#beta",
 //                                  250, 0, beamE * 1.425, 250, 0, 3);
-//    TH2D Beta_vs_P_1e_cPions_Only_CD("#beta vs P (#pi^{#pm} Only, 1e only, CD)", "#beta vs P - #pi^{#pm} Only (1e only cut, Central Detector);P [GeV];#beta",
+//    TH2D Beta_vs_P_1e_cPions_Only_CD("#beta vs P (#pi^{#pm} Only, 1e only, CD)", "#beta vs P - #pi^{#pm} Only (1e Only Cut, Central Detector);P [GeV];#beta",
 //                                     250, 0, beamE * 1.425, 250, 0, 3);
-//    TH2D Beta_vs_P_1e_cPions_Only_FD("#beta vs P (#pi^{#pm} Only, 1e only, FD)", "#beta vs P - #pi^{#pm} Only (1e only cut, Forward Detector);P [GeV];#beta",
+//    TH2D Beta_vs_P_1e_cPions_Only_FD("#beta vs P (#pi^{#pm} Only, 1e only, FD)", "#beta vs P - #pi^{#pm} Only (1e Only Cut, Forward Detector);P [GeV];#beta",
 //                                     250, 0, beamE * 1.425, 250, 0, 3);
 
     //</editor-fold>
@@ -1439,14 +1462,14 @@ void EventAnalyser() {
 
     TH1D *Theta_e_CD = new TH1D("#theta_{e} (no #(electrons) cut, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *Theta_e_FD = new TH1D("#theta_{e} (no #(electrons) cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
-    TH1D *Theta_e_1e_CD = new TH1D("#theta_{e} (1e Only cut, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e_FD = new TH1D("#theta_{e} (1e Only cut, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_1e_CD = new TH1D("#theta_{e} (1e Only Cut, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
+    TH1D *Theta_e_1e_FD = new TH1D("#theta_{e} (1e Only Cut, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
 
-    TH1D *Theta_e_1e2X_CD = new TH1D("#theta_{e} for 1e2X (1e Only cut, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2X_FD = new TH1D("#theta_{e} for 1e2X (1e Only cut, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_1e2X_CD = new TH1D("#theta_{e} for 1e2X (1e Only Cut, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
+    TH1D *Theta_e_1e2X_FD = new TH1D("#theta_{e} for 1e2X (1e Only Cut, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
 
-    TH1D *Theta_e_1e2p_CD = new TH1D("#theta_{e} for 1e2p (1e Only cut, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2p_FD = new TH1D("#theta_{e} for 1e2p (1e Only cut, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_1e2p_CD = new TH1D("#theta_{e} 1e2p (CD)", ";#theta_{e} [Deg];", 100, 35, 140);
+    TH1D *Theta_e_1e2p_FD = new TH1D("#theta_{e} 1e2p (FD)", ";#theta_{e} [Deg];", 100, 0, 50);
     //</editor-fold>
 
 // Phi_e ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1456,14 +1479,14 @@ void EventAnalyser() {
 
     TH1D *Phi_e_CD = new TH1D("#phi_{e} (no #(electrons) cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *Phi_e_FD = new TH1D("#phi_{e} (no #(electrons) cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e_CD = new TH1D("#phi_{e} (1e Only cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e_FD = new TH1D("#phi_{e} (1e Only cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e_CD = new TH1D("#phi_{e} (1e Only Cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e_FD = new TH1D("#phi_{e} (1e Only Cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
 
-    TH1D *Phi_e_1e2X_CD = new TH1D("#phi_{e} for 1e2X (1e Only cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_FD = new TH1D("#phi_{e} for 1e2X (1e Only cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
 
-    TH1D *Phi_e_1e2p_CD = new TH1D("#phi_{e} for 1e2p (1e Only cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_FD = new TH1D("#phi_{e} for 1e2p (1e Only cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_CD = new TH1D("#phi_{e} 1e2p (CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_FD = new TH1D("#phi_{e} 1e2p (FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     //</editor-fold>
 
 // Theta_e VS Phi_e -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1476,11 +1499,11 @@ void EventAnalyser() {
                                          "#theta_{e} VS #phi_{e}  (no #(electrons) cut, Forward Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
                                          250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
 
-    TH2D *Theta_e_VS_Phi_e_1e_CD = new TH2D("#theta_{e} VS #phi_{e} (1e Only cut, Central Detector)",
-                                            "#theta_{e} VS #phi_{e}  (1e Only cut, Central Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
+    TH2D *Theta_e_VS_Phi_e_1e_CD = new TH2D("#theta_{e} VS #phi_{e} (1e Only Cut, Central Detector)",
+                                            "#theta_{e} VS #phi_{e}  (1e Only Cut, Central Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
                                             250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
-    TH2D *Theta_e_VS_Phi_e_1e_FD = new TH2D("#theta_{e} VS #phi_{e} (1e Only cut, Forward Detector)",
-                                            "#theta_{e} VS #phi_{e} (1e Only cut, Forward Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
+    TH2D *Theta_e_VS_Phi_e_1e_FD = new TH2D("#theta_{e} VS #phi_{e} (1e Only Cut, Forward Detector)",
+                                            "#theta_{e} VS #phi_{e} (1e Only Cut, Forward Detector);#phi_{e} [Deg];#theta_{e} [Deg]",
                                             250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
     //</editor-fold>
 
@@ -1504,15 +1527,15 @@ void EventAnalyser() {
 
     TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
     TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
-//    TH1D *Q2_histogram_CD = new TH1D("Q^{2} (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 100, 0, 1.1 * beamE);
-//    TH1D *Q2_histogram_FD = new TH1D("Q^{2} (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 100, 0, 1.1 * beamE);
+    string Q2_histogram_CD_Dir = Q2_All_e_Directory, Q2_histogram_FD_Dir = Q2_All_e_Directory;
 
-    TH1D *Q2_histogram_1e2X_CD = new TH1D("Q^{2} 1e2X (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
-    TH1D *Q2_histogram_1e2X_FD = new TH1D("Q^{2} 1e2X (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+    TH1D *Q2_histogram_1e2X_CD = new TH1D("Q^{2} 1e2X (CD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+    TH1D *Q2_histogram_1e2X_FD = new TH1D("Q^{2} 1e2X (FD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+    string Q2_histogram_1e2X_CD_Dir = Q2_Only_1e_cut_Directory, Q2_histogram_1e2X_FD_Dir = Q2_Only_1e_cut_Directory;
 
-    TH1D *Q2_histogram_1e2p_CD = new TH1D("Q^{2} 1e2p (no #(electrons) cut, CD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
-    TH1D *Q2_histogram_1e2p_FD = new TH1D("Q^{2} 1e2p (no #(electrons) cut, FD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
-
+    TH1D *Q2_histogram_1e2p_CD = new TH1D("Q^{2} 1e2p (CD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+    TH1D *Q2_histogram_1e2p_FD = new TH1D("Q^{2} 1e2p (FD)", ";Q^{2} [GeV^{2}];", 500, 0, 1.1 * beamE);
+    string Q2_histogram_1e2p_CD_Dir = Q2_Only_1e_cut_Directory, Q2_histogram_1e2p_FD_Dir = Q2_Only_1e_cut_Directory;
     //</editor-fold>
 
 // Theta histograms -----------------------------------------------------------------------------------
@@ -2220,7 +2243,6 @@ void EventAnalyser() {
 
     clas12root::HipoChain chain;
 
-    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
     chain.Add(AnalyseFileDirContent.c_str());
 
     //<editor-fold desc="Getting particle masses">
@@ -2271,6 +2293,8 @@ void EventAnalyser() {
 
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
 
+    bool qel, mec, res, dis;
+
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
 //        cout << "\nAnalysing " << chain.GetFileName(ifile) << "\n\n";
@@ -2300,7 +2324,9 @@ void EventAnalyser() {
         while (c12.next()) { // loop over events
             ++num_of_events; // logging Total #(events)
 
+            qel = mec = res = dis = false;
             auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
+            double processID = c12.mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
 
             auto electrons = c12.getByID(11);
             auto protons = c12.getByID(2212);
@@ -2309,11 +2335,27 @@ void EventAnalyser() {
             auto piplus = c12.getByID(211);
             auto piminus = c12.getByID(-211);
 
+            //<editor-fold desc="Log total #(events) with and without electrons">
             if (electrons.size() == 0) {
                 ++num_of_events_without_any_e; // logging Total #(events) w/o any e
             } else {
                 ++num_of_events_with_any_e; // logging Total #(events) w/ any e
             }
+            //</editor-fold>
+
+            //<editor-fold desc="Identify process ID">
+            if (processID == 1) {
+                qel = true;
+            } else if (processID == 2) {
+                mec = true;
+            } else if (processID == 3) {
+                res = true;
+            } else if (processID == 4) {
+                dis = true;
+            } else {
+                cout << "processID UNKNON.\n\n";
+            }
+            //</editor-fold>
 
 
 //  All electrons plots
@@ -3623,10 +3665,10 @@ void EventAnalyser() {
                                                 {"Electron #chi^{2}", "1e only"},
                                                 {"Proton #chi^{2}",   "1e only"},
                                                 {"Proton #chi^{2}",   "1e only"},
-                                                {"Electron #chi^{2}", "1e only cut test"},
-                                                {"Electron #chi^{2}", "1e only cut test"},
-                                                {"Proton #chi^{2}",   "1e only cut test"},
-                                                {"Proton #chi^{2}",   "1e only cut test"}};
+                                                {"Electron #chi^{2}", "1e Only Cut test"},
+                                                {"Electron #chi^{2}", "1e Only Cut test"},
+                                                {"Proton #chi^{2}",   "1e Only Cut test"},
+                                                {"Proton #chi^{2}",   "1e Only Cut test"}};
         double Chi2_histograms_cuts[12][2] = {{Chi2_Electron_cut_CD, Chi2_Electron_Xmax_CD},
                                               {Chi2_Electron_cut_FD, Chi2_Electron_Xmax_FD},
                                               {Chi2_Proton_cut_CD,   Chi2_Proton_Xmax_CD},
@@ -3898,54 +3940,54 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Theta_e (1e Only cut)">
+        //<editor-fold desc="Theta_e (1e Only Cut)">
         //      Normalization factor:
         double Theta_e_1e_integral = Theta_e_1e_CD->Integral() + Theta_e_1e_FD->Integral();
 
         //<editor-fold desc="Theta of electron (CD)">
-        histPlotter1D(c1, Theta_e_1e_CD, normalized_Angle_plots, true, Theta_e_1e_integral, "#theta_{e}", "1e Only cut",
+        histPlotter1D(c1, Theta_e_1e_CD, normalized_Angle_plots, true, Theta_e_1e_integral, "#theta_{e}", "1e Only Cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "CD",
                       kBlue, true, true, true, false, true, 47.5, 87.5, false);
         //</editor-fold>
 
         //<editor-fold desc="Theta of electron (FD)">
-        histPlotter1D(c1, Theta_e_1e_FD, normalized_Angle_plots, true, Theta_e_1e_integral, "#theta_{e}", "1e Only cut",
+        histPlotter1D(c1, Theta_e_1e_FD, normalized_Angle_plots, true, Theta_e_1e_integral, "#theta_{e}", "1e Only Cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "FD",
                       kBlue, true, true, true, false, true, 17.5, 22.5, false);
         //</editor-fold>
 
         //</editor-fold>
 
-        //<editor-fold desc="Theta_e 1e2X (1e Only cut)">
+        //<editor-fold desc="Theta_e 1e2X (1e Only Cut)">
         //      Normalization factor:
         double Theta_e_1e_1e2X_integral = Theta_e_1e2X_CD->Integral() + Theta_e_1e2X_FD->Integral();
 
         //<editor-fold desc="Theta_e 1e2X (CD)">
-        histPlotter1D(c1, Theta_e_1e2X_CD, normalized_Angle_plots, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "1e Only cut",
+        histPlotter1D(c1, Theta_e_1e2X_CD, normalized_Angle_plots, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "1e Only Cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut_1e2X", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "CD",
                       kBlue, true, true, true, false, true, 47.5, 87.5, false);
         //</editor-fold>
 
         //<editor-fold desc="Theta_e 1e2X (FD)">
-        histPlotter1D(c1, Theta_e_1e2X_FD, normalized_Angle_plots, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "1e Only cut",
+        histPlotter1D(c1, Theta_e_1e2X_FD, normalized_Angle_plots, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "1e Only Cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut_1e2X", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "FD",
                       kBlue, true, true, true, false, true, 17.5, 22.5, false);
         //</editor-fold>
 
         //</editor-fold>
 
-        //<editor-fold desc="Theta_e 1e2p (1e Only cut)">
+        //<editor-fold desc="Theta_e 1e2p (1e Only Cut)">
         //      Normalization factor:
         double Theta_e_1e_1e2p_integral = Theta_e_1e2p_CD->Integral() + Theta_e_1e2p_FD->Integral();
 
         //<editor-fold desc="Theta_e 1e2p (CD)">
-        histPlotter1D(c1, Theta_e_1e2p_CD, normalized_Angle_plots, true, Theta_e_1e_1e2p_integral, "#theta_{e} 1e2p", "1e Only cut",
+        histPlotter1D(c1, Theta_e_1e2p_CD, normalized_Angle_plots, true, Theta_e_1e_1e2p_integral, "#theta_{e} 1e2p", "1e Only Cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut_1e2p", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "CD",
                       kBlue, true, true, true, false, true, 47.5, 87.5, false);
         //</editor-fold>
 
         //<editor-fold desc="Theta_e 1e2p (FD)">
-        histPlotter1D(c1, Theta_e_1e2p_FD, normalized_Angle_plots, true, Theta_e_1e_1e2p_integral, "#theta_{e} 1e2p", "1e Only cut",
+        histPlotter1D(c1, Theta_e_1e2p_FD, normalized_Angle_plots, true, Theta_e_1e_1e2p_integral, "#theta_{e} 1e2p", "1e Only Cut",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack, "Theta_e_Only_1e_cut_1e2p", "plots/Ang_histograms/Theta_e_plots/Only_1e_cut/", "FD",
                       kBlue, true, true, true, false, true, 17.5, 22.5, false);
         //</editor-fold>
@@ -3973,46 +4015,46 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Phi_e (1e Only cut)">
+        //<editor-fold desc="Phi_e (1e Only Cut)">
         double Phi_e_1e_integral = Phi_e_1e_CD->Integral() + Phi_e_1e_FD->Integral();
 
         //<editor-fold desc="Phi of electron (CD)">
-        histPlotter1D(c1, Phi_e_1e_CD, normalized_Angle_plots, true, Phi_e_1e_integral, "#phi_{e}", "1e Only cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Phi_e_1e_CD, normalized_Angle_plots, true, Phi_e_1e_integral, "#phi_{e}", "1e Only Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Phi_e_Stack, "Phi_e_Only_1e_cut", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "CD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Phi of electron (FD)">
-        histPlotter1D(c1, Phi_e_1e_FD, normalized_Angle_plots, true, Phi_e_1e_integral, "#phi_{e}", "1e Only cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Phi_e_1e_FD, normalized_Angle_plots, true, Phi_e_1e_integral, "#phi_{e}", "1e Only Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Phi_e_Stack, "Phi_e_Only_1e_cut", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "FD", kBlue, true, true, true);
         //</editor-fold>
 
         //</editor-fold>
 
-        //<editor-fold desc="Phi_e 1e2X (1e Only cut)">
+        //<editor-fold desc="Phi_e 1e2X (1e Only Cut)">
         double Phi_e_1e_1e2X_integral = Phi_e_1e2X_CD->Integral() + Phi_e_1e2X_FD->Integral();
 
         //<editor-fold desc="Phi_e 1e2X (CD)">
-        histPlotter1D(c1, Phi_e_1e2X_CD, normalized_Angle_plots, true, Phi_e_1e_1e2X_integral, "#phi_{e} 1e2X", "1e Only cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+        histPlotter1D(c1, Phi_e_1e2X_CD, normalized_Angle_plots, true, Phi_e_1e_1e2X_integral, "#phi_{e} 1e2X", "1e Only Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, Phi_e_Stack, "phi_e_Only_1e_cut_1e2X", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "CD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Phi_e 1e2X (FD)">
-        histPlotter1D(c1, Phi_e_1e2X_FD, normalized_Angle_plots, true, Phi_e_1e_1e2X_integral, "#phi_{e} 1e2X", "1e Only cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+        histPlotter1D(c1, Phi_e_1e2X_FD, normalized_Angle_plots, true, Phi_e_1e_1e2X_integral, "#phi_{e} 1e2X", "1e Only Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, Phi_e_Stack, "phi_e_Only_1e_cut_1e2X", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "FD", kBlue, true, true, true);
         //</editor-fold>
 
         //</editor-fold>
 
-        //<editor-fold desc="Phi_e 1e2p (1e Only cut)">
+        //<editor-fold desc="Phi_e 1e2p (1e Only Cut)">
         double Phi_e_1e_1e2p_integral = Phi_e_1e2p_CD->Integral() + Phi_e_1e2p_FD->Integral();
 
         //<editor-fold desc="Phi_e 1e2p (CD)">
-        histPlotter1D(c1, Phi_e_1e2p_CD, normalized_Angle_plots, true, Phi_e_1e_1e2p_integral, "#phi_{e} 1e2p", "1e Only cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+        histPlotter1D(c1, Phi_e_1e2p_CD, normalized_Angle_plots, true, Phi_e_1e_1e2p_integral, "#phi_{e} 1e2p", "1e Only Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, Phi_e_Stack, "Phi_e_Only_1e_cut_1e2p", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "CD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Phi_e 1e2p (FD)">
-        histPlotter1D(c1, Phi_e_1e2p_FD, normalized_Angle_plots, true, Phi_e_1e_1e2p_integral, "#phi_{e} 1e2p", "1e Only cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+        histPlotter1D(c1, Phi_e_1e2p_FD, normalized_Angle_plots, true, Phi_e_1e_1e2p_integral, "#phi_{e} 1e2p", "1e Only Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, Phi_e_Stack, "Phi_e_Only_1e_cut_1e2p", "plots/Ang_histograms/Phi_e_plots/Only_1e_cut/", "FD", kBlue, true, true, true);
         //</editor-fold>
 
@@ -4108,46 +4150,50 @@ void EventAnalyser() {
 
         //<editor-fold desc="Q2 (no #(electrons) cut)">
         //      Normalization factor:
-        double Q2_integral = Q2_histogram_CD->Integral() + Q2_histogram_FD->Integral();
+        double Q2_All_e_integral = Q2_histogram_CD->Integral() + Q2_histogram_FD->Integral();
 
-        //<editor-fold desc="Q2 (CD)">
-        histPlotter1D(c1, Q2_histogram_CD, normalized_Q2_plots, true, Q2_integral, "Q^{2} Histogram", "no #(electrons) cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "CD", kBlue, true, true, true);
+        //<editor-fold desc="Q2 (no #(electrons) cut, CD)">
+        histPlotter1D(c1, Q2_histogram_CD, normalized_Q2_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_All_e", Q2_histogram_CD_Dir.c_str(), "CD", kBlue, true, true, true);
+//        histPlotter1D(c1, Q2_histogram_CD, normalized_Q2_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "no #(electrons) cut",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_All_e", "plots/Q2_histograms/", "CD", kBlue, true, true, true);
         //</editor-fold>
 
-        //<editor-fold desc="Q2 (FD)">
-        histPlotter1D(c1, Q2_histogram_FD, normalized_Q2_plots, true, Q2_integral, "Q^{2} Histogram", "no #(electrons) cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "FD", kBlue, true, true, true);
+        //<editor-fold desc="Q2 (no #(electrons) cut, FD)">
+        histPlotter1D(c1, Q2_histogram_FD, normalized_Q2_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "no #(electrons) cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_All_e", Q2_histogram_FD_Dir.c_str(), "FD", kBlue, true, true, true);
+//        histPlotter1D(c1, Q2_histogram_FD, normalized_Q2_plots, true, Q2_All_e_integral, "Q^{2} Histogram", "no #(electrons) cut",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_All_e", "plots/Q2_histograms/", "FD", kBlue, true, true, true);
         //</editor-fold>
         //</editor-fold>
 
-        //<editor-fold desc="Q2 1e2X (1e Only cut)">
+        //<editor-fold desc="Q2 1e2X (1e Only Cut)">
         //      Normalization factor:
         double Q2_1e2X_integral = Q2_histogram_1e2X_CD->Integral() + Q2_histogram_1e2X_FD->Integral();
 
         //<editor-fold desc="Q2 1e2X (CD)">
-        histPlotter1D(c1, Q2_histogram_1e2X_CD, normalized_Q2_plots, true, Q2_1e2X_integral, "Q^{2} 1e2X Histogram", "1e Only cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "CD", kBlue, true, true, true);
+        histPlotter1D(c1, Q2_histogram_1e2X_CD, normalized_Q2_plots, true, Q2_1e2X_integral, "Q^{2} 1e2X Histogram", "1e Only Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_1e2X", Q2_histogram_1e2X_CD_Dir.c_str(), "CD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Q2 1e2X (FD)">
-        histPlotter1D(c1, Q2_histogram_1e2X_FD, normalized_Q2_plots, true, Q2_1e2X_integral, "Q^{2} 1e2X Histogram", "1e Only cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "FD", kBlue, true, true, true);
+        histPlotter1D(c1, Q2_histogram_1e2X_FD, normalized_Q2_plots, true, Q2_1e2X_integral, "Q^{2} 1e2X Histogram", "1e Only Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_1e2X", Q2_histogram_1e2X_FD_Dir.c_str(), "FD", kBlue, true, true, true);
         //</editor-fold>
         //</editor-fold>
 
-        //<editor-fold desc="Q2 1e2p (1e Only cut)">
+        //<editor-fold desc="Q2 1e2p (1e Only Cut)">
         //      Normalization factor:
         double Q2_1e2p_integral = Q2_histogram_1e2p_CD->Integral() + Q2_histogram_1e2p_FD->Integral();
 
         //<editor-fold desc="Q2 1e2p (CD)">
-        histPlotter1D(c1, Q2_histogram_1e2p_CD, normalized_Q2_plots, true, Q2_1e2p_integral, "Q^{2} 1e2p Histogram", "1e Only cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "CD", kBlue, true, true, true);
+        histPlotter1D(c1, Q2_histogram_1e2p_CD, normalized_Q2_plots, true, Q2_1e2p_integral, "Q^{2} 1e2p Histogram", "1e Only Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_1e2p", Q2_histogram_1e2p_CD_Dir.c_str(), "CD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Q2 1e2p (FD)">
-        histPlotter1D(c1, Q2_histogram_1e2p_FD, normalized_Q2_plots, true, Q2_1e2p_integral, "Q^{2} 1e2p Histogram", "1e Only cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2", "plots/Q2_histograms/", "FD", kBlue, true, true, true);
+        histPlotter1D(c1, Q2_histogram_1e2p_FD, normalized_Q2_plots, true, Q2_1e2p_integral, "Q^{2} 1e2p Histogram", "1e Only Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, Q2_Stack, "Q2_1e2p", Q2_histogram_1e2p_FD_Dir.c_str(), "FD", kBlue, true, true, true);
         //</editor-fold>
         //</editor-fold>
 
