@@ -22,14 +22,6 @@ std::string Ver = "DetSim testings";
 
 //<editor-fold desc="Functions definitions">
 
-//template <typename T>
-//std::string to_string_with_precision(const T a_value, const int n = 6) {
-//    std::ostringstream out;
-//    out.precision(n);
-//    out << std::fixed << a_value;
-//    return out.str();
-//}
-
 //<editor-fold desc="BoolToString function">
 inline const char *const BoolToString(bool b) {
     return b ? "true" : "false";
@@ -111,10 +103,10 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    bool addToStack = false,
                    bool showStats = true,
                    bool title2 = false,
-                   bool plot_chi2_cuts = false,
-                   double chi2_cuts = 0,
-                   double chi2_max = 0,
-                   bool plot_chi_max = true) {
+                   bool apply_plot_cuts = false,
+                   double plot_cuts = 0,
+                   double plot_Xmax = 0,
+                   bool plot_max = true) {
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
@@ -185,16 +177,16 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         Histogram1D->SetStats(0);
     }
 
-    if (plot_chi2_cuts == true) {
+    if (apply_plot_cuts == true) {
         gPad->Update();
-        double Upper_cut = chi2_cuts + chi2_max;
-        double Lower_cut = -chi2_cuts + chi2_max;
-        double Chi2_max = chi2_max;
+        double Upper_cut = plot_cuts + plot_Xmax;
+        double Lower_cut = -plot_cuts + plot_Xmax;
+        double plot_Xmax = plot_Xmax;
         TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(lineWidth);
         TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
         lower_cut->SetLineWidth(lineWidth);
-        TLine *max_location = new TLine(chi2_max, 0., chi2_max, gPad->GetFrame()->GetY2());
+        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
         max_location->SetLineWidth(lineWidth + 1);
         auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3);
 
@@ -205,7 +197,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             lower_cut->Draw("same");
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
-            if (plot_chi_max == true) {
+            if (plot_max == true) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);
 //            lower_cut->SetLineColor(kMagenta);
@@ -214,8 +206,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
             TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string(Upper_cut)).c_str(), "l");
             TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string(Lower_cut)).c_str(), "l");
 
-            if (plot_chi_max == true) {
-                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string(Chi2_max)).c_str(), "l");
+            if (plot_max == true) {
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string(plot_Xmax)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string(max_location)).c_str(), "l");
             }
 
@@ -285,9 +277,10 @@ std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_
 
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFilePath = "/mnt/d/e4nu/hipo_data_files/";
-std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
+//std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_c12_6gev";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
@@ -319,6 +312,8 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 
 //double beamE; // electron energy declaration
 
+// TargetParameters class -----------------------------------------------------------------------------------------------------------------------------------------------
+
 class TargetParameters {
 protected:
     string TargetElement;
@@ -343,6 +338,8 @@ public:
     double GetBindingEnergyToNucleus() { return BindingEnergyToNucleus; }
 };
 
+// Histogram class ------------------------------------------------------------------------------------------------------------------------------------------------------
+
 class Histogram {
 protected:
     TH1D Histogram1D;
@@ -350,8 +347,34 @@ protected:
     string HistogramTitle, HistogramStatTitle, XaxisTitle, YaxisTitle;
     int HistogramNumberOfXBins, HistogramNumberOfYBins;
     double UpperXlim, LowerXlim, UpperYlim, LowerYlim, UpperZlim, LowerZlim;
+    bool NormalizeHistogram;
+    bool CustomNormalization;
+    double CustomNormalizationFactor;
+//    string Histogram1DTitle;
+    string Histogram1DTitleReactions;
+    double TitleSize;
+    double LabelSizex;
+    double LabelSizey;
+    TList *HistogramList;
+    int LineWidth;
+    bool LogScalePlot;
+    bool LinearScalePlot;
+    THStack *Histogram1DStack;
+    string Histogram1DSaveName;
+    string Histogram1DSaveNamePath;
+    string FinalState;
+    int kColor = 1;
+    bool CenterTitle = true;
+    bool AddToStack = false;
+    bool ShowStats = true;
+    bool Title2 = false;
+    bool ApplyPlotCuts = false;
+    double PlotCuts = 0;
+    double PlotXmax = 0;
+    bool PlotHistogramMax = true;
 
 public:
+//  Set methods:
     void SetHistogram1D(TH1D Histogram) { Histogram1D = Histogram; }
 
     void SetHistogram2D(TH2D Histogram) { Histogram2D = Histogram; }
@@ -396,53 +419,162 @@ public:
         HistogramNumberOfYBins = NumberOfYBins;
     }
 
-    void SetUpperXlim(int uXlim) { UpperXlim = uXlim; }
+    void SetUpperXlim(double uXlim) { UpperXlim = uXlim; }
 
-    void SetLowerXlim(int lXlim) { LowerXlim = lXlim; }
+    void SetLowerXlim(double lXlim) { LowerXlim = lXlim; }
 
-    void SetUpperYlim(int uYlim) { UpperYlim = uYlim; }
+    void SetUpperYlim(double uYlim) { UpperYlim = uYlim; }
 
-    void SetLowerYlim(int lYlim) { LowerYlim = lYlim; }
+    void SetLowerYlim(double lYlim) { LowerYlim = lYlim; }
 
-    void SetUpperZlim(int uZlim) { UpperZlim = uZlim; }
+    void SetUpperZlim(double uZlim) { UpperZlim = uZlim; }
 
-    void SetLowerZlim(int lZlim) { LowerZlim = lZlim; }
+    void SetLowerZlim(double lZlim) { LowerZlim = lZlim; }
 
-    void SetXAxisLimits(int uXlim, int lXlim) {
+    void SetXAxisLimits(double uXlim, double lXlim) {
         UpperXlim = uXlim;
         LowerXlim = lXlim;
     }
 
-    void SetYAxisLimits(int uYlim, int lYlim) {
+    void SetYAxisLimits(double uYlim, double lYlim) {
         UpperYlim = uYlim;
         LowerYlim = lYlim;
     }
 
-    void SetZAxisLimits(int uZlim, int lZlim) {
+    void SetZAxisLimits(double uZlim, double lZlim) {
         UpperZlim = uZlim;
         LowerZlim = lZlim;
     }
 
-    void SetAxisLimits(int uXlim, int lXlim, int uYlim, int lYlim, int uZlim, int lZlim) {
+    void SetAxisLimits(double uXlim, double lXlim, double uYlim, double lYlim, double uZlim, double lZlim) {
         UpperZlim = uZlim;
         LowerZlim = lZlim;
     }
 
-//    string GetTargetElement() {
-//        return TargetElement;
-//    }
-//
-//    int GetTargetElementPDG() {
-//        return TargetElementPDG;
-//    }
-//
-//    int GetProbePDG() {
-//        return ProbePDG;
-//    }
-//
-//    double GetBindingEnergyToNucleus() {
-//        return BindingEnergyToNucleus;
-//    }
+    void SetNormalizeHistogram(bool nHistogram) { NormalizeHistogram = nHistogram; }
+
+    void SetCustomNormalization(bool cNormalization) { CustomNormalization = cNormalization; }
+
+    void SetCustomNormalizationFactor(bool cnFactor) { CustomNormalizationFactor = cnFactor; }
+
+    void SetHistogram1DTitleReactions(string h1drReactions) { Histogram1DTitleReactions = h1drReactions; }
+
+    void SetTitleSize(double tSize) { TitleSize = tSize; }
+
+    void SetLabelSizex(double lSizex) { LabelSizex = lSizex; }
+
+    void SetLabelSizey(double lSizey) { LabelSizey = lSizey; }
+
+//    void SetHistogramList(TList *hList) { *HistogramList = hList; }
+
+    void SetLineWidth(int lWidth) { LineWidth = lWidth; }
+
+    void SetLogScalePlot(bool lsPlot) { LogScalePlot = lsPlot; }
+
+    void SetLinearScalePlot(bool lsPlot) { LinearScalePlot = lsPlot; }
+
+//    void SetHistogram1DStack(THStack *h1dStack) { *Histogram1DStack = h1dStack; }
+
+    void SetHistogram1DSaveName(string h1dsName) { Histogram1DSaveName = h1dsName; }
+
+    void SetHistogram1DSaveNamePath(string h1dsNamePath) { Histogram1DSaveNamePath = h1dsNamePath; }
+
+    void SetFinalState(string fState) { FinalState = fState; }
+
+    void SetkColor(int kCol = 1) { kColor = kCol; }
+
+    void SetCenterTitle(bool cTitle = true) { CenterTitle = cTitle; }
+
+    void SetAddToStack(bool atStack = false) { AddToStack = atStack; }
+
+    void SetShowStats(bool sStats = true) { ShowStats = sStats; }
+
+    void SetTitle2(bool T2 = false) { Title2 = T2; }
+
+    void SetApplyPlotCuts(bool apCuts = false) { ApplyPlotCuts = apCuts; }
+
+    void SetPlotCuts(double pCuts = 0) { PlotCuts = pCuts; }
+
+    void SetPlotXmax(double pXmax = 0) { PlotXmax = pXmax; }
+
+    void SetPlotHistogramMax(bool phMax = true) { PlotHistogramMax = phMax; }
+
+//  Get methods:
+    TH1D GetHistogram1D() { return Histogram1D; }
+
+    TH2D GetHistogram2D() { return Histogram2D; }
+
+    string GetHistogramTitle() { return HistogramTitle; }
+
+    string GetHistogramStatTitle(string sTitle) { return HistogramStatTitle; }
+
+    string GetXaxisTitle(string xTitle) { return XaxisTitle = xTitle; }
+
+    string GetYaxisTitle(string yTitle) { return YaxisTitle = yTitle; }
+
+    int GetHistogramNumberOfXBins(int NumberOfXBins) { return HistogramNumberOfXBins; }
+
+    int GetHistogramNumberOfYBins(int NumberOfYBins) { return HistogramNumberOfYBins; }
+
+    double GetUpperXlim() { return UpperXlim; }
+
+    double GetLowerXlim() { return LowerXlim; }
+
+    double GetUpperYlim() { return UpperYlim; }
+
+    double GetLowerYlim() { return LowerYlim; }
+
+    double GetUpperZlim() { return UpperZlim; }
+
+    double GetLowerZlim() { return LowerZlim; }
+
+    bool GetNormalizeHistogram() { return NormalizeHistogram; }
+
+    bool GetCustomNormalization() { return CustomNormalization; }
+
+    bool GetCustomNormalizationFactor() { return CustomNormalizationFactor; }
+
+    string GetHistogram1DTitleReactions() { return Histogram1DTitleReactions; }
+
+    double GetTitleSize() { return TitleSize; }
+
+    double GetLabelSizex() { return LabelSizex; }
+
+    double GetLabelSizey() { return LabelSizey; }
+
+//    TList GetHistogramList() { return *HistogramList; }
+
+    int GetLineWidth() { return LineWidth; }
+
+    bool GetLogScalePlot() { return LogScalePlot; }
+
+    bool GetLinearScalePlot() { return LinearScalePlot; }
+
+//    THStack GetHistogram1DStack() { return *Histogram1DStack; }
+
+    string GetHistogram1DSaveName() { return Histogram1DSaveName; }
+
+    string GetHistogram1DSaveNamePath() { return Histogram1DSaveNamePath; }
+
+    string GetFinalState() { return FinalState; }
+
+    int GetkColor() { return kColor; }
+
+    bool GetCenterTitle() { return CenterTitle; }
+
+    bool GetAddToStack() { return AddToStack; }
+
+    bool GetShowStats() { return ShowStats; }
+
+    bool GetTitle2() { return Title2; }
+
+    bool GetApplyPlotCuts() { return ApplyPlotCuts; }
+
+    double GetPlotCuts() { return PlotCuts; }
+
+    double GetPlotXmax() { return PlotXmax; }
+
+    bool GetPlotHistogramMax() { return PlotHistogramMax; }
 };
 
 

@@ -123,8 +123,7 @@ void gst::Loop() {
     //<editor-fold desc="FSI indicator">
     cout << "\n";
     cout << "\n";
-    cout << "Execution variables\n";
-    cout << "---------------------------------------------------------------------------\n";
+    cout << "-- Execution variables ----------------------------------------------------\n";
     cout << "File input:\t" << AnalyseFile << "\n";
     cout << "Settings mode:\t'" << file_name << "'\n";
     cout << "FSI status:\t" << BoolToString(FSI_status) << "\n";
@@ -133,8 +132,7 @@ void gst::Loop() {
     cout << "\n";
     cout << "\n";
 
-    cout << "File input\n";
-    cout << "---------------------------------------------------------------------------\n";
+    cout << "-- File input -------------------------------------------------------------\n";
     cout << "loadedInput:\t" << loadedInput << "\n";
     cout << "filePath:\t" << filePath << "\n";
     cout << "fileInput:\t" << fileInput << "\n";
@@ -4687,6 +4685,9 @@ void gst::Loop() {
 
     TH1D *theta_lp_inclusive = new
     TH1D("#theta_{l} (inclusive)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_1n1p, theta_lp_upper_lim_1n1p);
+
+    TH2D *theta_lp_VS_phi_lp = new
+    TH2D("#theta_{l} VS #phi_{l} (inclusive)", ";#phi_{l} [Deg];#theta_{l} [Deg]", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
     //</editor-fold>
 
 // Phi histograms -------------------------------------------------------------------------------------
@@ -4713,7 +4714,7 @@ void gst::Loop() {
     TH1D *dphi_1n1p = new
     TH1D("#Delta#phi (1n1p)", ";#Delta#phi} [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
 
-    TH1D * phi_lp_inclusive = new
+    TH1D *phi_lp_inclusive = new
     TH1D("#phi_{l} (inclusive)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_1n1p, phi_lp_upper_lim_1n1p);
     //</editor-fold>
 
@@ -5303,7 +5304,7 @@ void gst::Loop() {
     TH1D("P_{l} (all interactions, 1n1p)", ";P_{l} [GeV/c]", 100, P_lp_hist_lower_lim_1n1p, P_lp_hist_upper_lim_1n1p);
 
 
-    TH1D * P_lp_hist_inclusive = new
+    TH1D *P_lp_hist_inclusive = new
     TH1D("P_{l} (all interactions, inc.)", ";P_{l} [GeV/c]", 250, 0, 7);
     //</editor-fold>
 
@@ -5476,7 +5477,7 @@ void gst::Loop() {
 
         E_Trans_VS_q_all_inclusive->Fill(q3, Ev - El);
         Q2_hist_inclusive->Fill(Q2);
-        P_lp_hist_inclusive->Fill(rCalc(pxl,pyl,pzl));
+        P_lp_hist_inclusive->Fill(rCalc(pxl, pyl, pzl));
 
         if (qel == true) {
             E_Trans_VS_q_QEL_inclusive->Fill(q, Ev - El);
@@ -5488,7 +5489,7 @@ void gst::Loop() {
         theta_lp_inclusive->Fill(Theta_lp_inclusive);
         double Phi_lp_inclusive = atan2(pyl, pxl) * 180.0 / 3.14159265359;
         phi_lp_inclusive->Fill(Phi_lp_inclusive);
-
+        theta_lp_VS_phi_lp->Fill(Phi_lp_inclusive, Theta_lp_inclusive);
 
 //      Theta_l inclusive calculations:
         if (Theta_lp_inclusive >= 14.0 && Theta_lp_inclusive <= 16.0) {
@@ -6999,6 +7000,24 @@ void gst::Loop() {
 
         histPlotter1D(c1, theta_lp_inclusive, false, true, 1., "#theta_{l} (inclusive)", "inclusive",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, ThetaStack, "theta_lp_inclusive", "plots/", "inclusive", kBlue, true, false, true);
+
+
+        theta_lp_VS_phi_lp->SetTitleSize(0.06, "xyz");
+        theta_lp_VS_phi_lp->GetXaxis()->SetLabelSize(0.0425);
+        theta_lp_VS_phi_lp->GetXaxis()->CenterTitle(true);
+        theta_lp_VS_phi_lp->GetYaxis()->SetLabelSize(0.0425);
+        theta_lp_VS_phi_lp->GetYaxis()->CenterTitle(true);
+        theta_lp_VS_phi_lp->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(theta_lp_VS_phi_lp);
+        theta_lp_VS_phi_lp->Draw("colz");
+        c1->SetLogz(0);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        theta_lp_VS_phi_lp->SetStats(0);
+        c1->SaveAs("./plots/Theta_l_VS_Phi_l_inclusive.png");
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+        c1->Clear();
 
     }
 
@@ -9723,13 +9742,16 @@ void gst::Loop() {
     cout << "===========================================================================\n";
     cout << "\n";
 
+    cout << "File input:\t" << loadedInput << "\n";
+
     if (FSI_status == false) {
         cout << "FSI status:\tOFF (ni = " << ni_selection << ")\n";
     } else if (FSI_status == true) {
         cout << "FSI status:\tON\n";
     }
 
-    cout << "File input:\t" << loadedInput << "\n";
+    cout << "ni:\t\t" << ni_selection << "\n";
+    cout << "Tune:\t\t" << tune << "\n";
     cout << "Settings mode:\t'" << file_name << "'\n";
     //</editor-fold>
 
