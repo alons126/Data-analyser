@@ -309,6 +309,144 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 ////std::string AnalyseFileDir = "/home/alon/project/temp/";
 
 // ======================================================================================================================================================================
+// Strucks definitions
+// ======================================================================================================================================================================
+
+
+// ======================================================================================================================================================================
+// Classes definitions
+// ======================================================================================================================================================================
+
+//double beamE; // electron energy declaration
+
+class TargetParameters {
+protected:
+    string TargetElement;
+    int TargetElementPDG, ProbePDG;
+    double BindingEnergyToNucleus;
+
+public:
+    void SetTargetElement(string TargetElementName) { TargetElement = TargetElementName; }
+
+    void SetTargetElementPDG(int TargetElementPDGNumber) { TargetElementPDG = TargetElementPDGNumber; }
+
+    void SetProbePDG(int ProbePDGNumber) { ProbePDG = ProbePDGNumber; }
+
+    void SetBindingEnergyToNucleus(double BindingEnergy) { BindingEnergyToNucleus = BindingEnergy; }
+
+    string GetTargetElement() { return TargetElement; }
+
+    int GetTargetElementPDG() { return TargetElementPDG; }
+
+    int GetProbePDG() { return ProbePDG; }
+
+    double GetBindingEnergyToNucleus() { return BindingEnergyToNucleus; }
+};
+
+class Histogram {
+protected:
+    TH1D Histogram1D;
+    TH2D Histogram2D;
+    string HistogramTitle, HistogramStatTitle, XaxisTitle, YaxisTitle;
+    int HistogramNumberOfXBins, HistogramNumberOfYBins;
+    double UpperXlim, LowerXlim, UpperYlim, LowerYlim, UpperZlim, LowerZlim;
+
+public:
+    void SetHistogram1D(TH1D Histogram) { Histogram1D = Histogram; }
+
+    void SetHistogram2D(TH2D Histogram) { Histogram2D = Histogram; }
+
+    void SetHistogramTitle(string hTitle) { HistogramTitle = hTitle; }
+
+    void SetHistogramStatTitle(string sTitle) { HistogramStatTitle = sTitle; }
+
+    void SetXaxisTitle(string xTitle) { XaxisTitle = xTitle; }
+
+    void SetYaxisTitle(string yTitle) { YaxisTitle = yTitle; }
+
+    void SetHistogramHeadTitles(string hTitle, string sTitle) {
+        HistogramTitle = hTitle;
+        HistogramStatTitle = sTitle;
+    }
+
+    void SetHistogramTitles(string hTitle, string sTitle, string xTitle, string yTitle) {
+        HistogramTitle = hTitle;
+        HistogramStatTitle = sTitle;
+        XaxisTitle = xTitle;
+        YaxisTitle = yTitle;
+    }
+
+    void SetHistogramTitles(string hTitle, string sTitle, string xTitle) {
+        HistogramTitle = hTitle;
+        HistogramStatTitle = sTitle;
+        XaxisTitle = xTitle;
+    }
+
+    void SetAxisTitles(string xTitle, string yTitle) {
+        XaxisTitle = xTitle;
+        YaxisTitle = yTitle;
+    }
+
+    void SetHistogramNumberOfXBins(int NumberOfXBins) { HistogramNumberOfXBins = NumberOfXBins; }
+
+    void SetHistogramNumberOfYBins(int NumberOfYBins) { HistogramNumberOfYBins = NumberOfYBins; }
+
+    void SetHistogramNumberOfBins(int NumberOfXBins, int NumberOfYBins) {
+        HistogramNumberOfXBins = NumberOfXBins;
+        HistogramNumberOfYBins = NumberOfYBins;
+    }
+
+    void SetUpperXlim(int uXlim) { UpperXlim = uXlim; }
+
+    void SetLowerXlim(int lXlim) { LowerXlim = lXlim; }
+
+    void SetUpperYlim(int uYlim) { UpperYlim = uYlim; }
+
+    void SetLowerYlim(int lYlim) { LowerYlim = lYlim; }
+
+    void SetUpperZlim(int uZlim) { UpperZlim = uZlim; }
+
+    void SetLowerZlim(int lZlim) { LowerZlim = lZlim; }
+
+    void SetXAxisLimits(int uXlim, int lXlim) {
+        UpperXlim = uXlim;
+        LowerXlim = lXlim;
+    }
+
+    void SetYAxisLimits(int uYlim, int lYlim) {
+        UpperYlim = uYlim;
+        LowerYlim = lYlim;
+    }
+
+    void SetZAxisLimits(int uZlim, int lZlim) {
+        UpperZlim = uZlim;
+        LowerZlim = lZlim;
+    }
+
+    void SetAxisLimits(int uXlim, int lXlim, int uYlim, int lYlim, int uZlim, int lZlim) {
+        UpperZlim = uZlim;
+        LowerZlim = lZlim;
+    }
+
+//    string GetTargetElement() {
+//        return TargetElement;
+//    }
+//
+//    int GetTargetElementPDG() {
+//        return TargetElementPDG;
+//    }
+//
+//    int GetProbePDG() {
+//        return ProbePDG;
+//    }
+//
+//    double GetBindingEnergyToNucleus() {
+//        return BindingEnergyToNucleus;
+//    }
+};
+
+
+// ======================================================================================================================================================================
 // BEnergyToNucleus definition
 // ======================================================================================================================================================================
 

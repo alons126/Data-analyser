@@ -74,8 +74,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Configure target">
-    string Target;
-    int TargetPDG;
+    TargetParameters ScattringTarget;
 
     if ((AnalyseFileSample.find("c12") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
         (AnalyseFileSample.find("C12") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
@@ -83,12 +82,18 @@ void EventAnalyser() {
         (AnalyseFileSample.find("12C") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
         (AnalyseFileSample.find("_c_") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
         (AnalyseFileSample.find("_C_") <= AnalyseFileSample[AnalyseFileSample.size() - 1])) {
-        Target = "C12";
-        TargetPDG = 1000060120;
+        ScattringTarget.SetTargetElement("C12");
+        ScattringTarget.SetTargetElementPDG(1000060120);
     } else {
-        Target = "UNKOWN";
-        TargetPDG = 0;
+//        TargetParameters ScattringTarget("UNKOWN", 0);
+        //        Target = "UNKOWN";
+//        TargetPDG = 0;
+        ScattringTarget.SetTargetElement("UNKOWN");
+        ScattringTarget.SetTargetElementPDG(0);
     }
+
+    string Target = ScattringTarget.GetTargetElement();
+    int TargetPDG = ScattringTarget.GetTargetElementPDG();
     //</editor-fold>
 
     //<editor-fold desc="Execution variables">
