@@ -160,7 +160,7 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
     string Chi2_Parent_Directory = "Chi2_plots";
-    string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test", "1e2p_weChi2_cut"};
+    string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test", "1e2p_plots", "1e2p_plots/separate_Chi2_cuts"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
         MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name);
@@ -172,6 +172,7 @@ void EventAnalyser() {
     string Chi2_Only_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/";
     string Chi2_Only_1e_test_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/";
     string Chi2_1e2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
+    string Chi2_1e2p_Separate_Cuts_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/";
 
     string Chi2_save_directories[12][3] = {{"Electron_All_e_chi2",        Chi2_All_e_Directory,        "CD"},
                                            {"Electron_All_e_chi2",        Chi2_All_e_Directory,        "FD"},
@@ -657,12 +658,12 @@ void EventAnalyser() {
     //<editor-fold desc="Electron chi2 cuts">
 
     //<editor-fold desc="Electrons in CD (no #e cuts)">
-    double Chi2_Electron_cut_CD = 5.;
+    double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
     double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
     //</editor-fold>
 
     //<editor-fold desc="Electrons in FD (no #e cuts)">
-    double Chi2_Electron_cut_FD = 5.;
+    double Chi2_Electron_cut_FD = 15.; // 100 since electron detection is great
     double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
     //</editor-fold>
 
@@ -672,7 +673,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Electrons in FD (1e cut)">
-    double Chi2_Electron_1e_peak_FD = 0.15; // to fill using Chi2_Electron_1e_Xmax_FD
+    double Chi2_Electron_1e_peak_FD = -0.15; // to fill using Chi2_Electron_1e_Xmax_FD
     double Chi2_Electron_1e_Xmax_FD;
     //</editor-fold>
 
@@ -681,22 +682,23 @@ void EventAnalyser() {
     //<editor-fold desc="Proton chi2 cuts">
 
     //<editor-fold desc="Protons in CD (no #e cuts)">
-    double Chi2_Proton_cut_CD = 3.;
+    // TODO: reexamine Josh's proton CD cuts (they're unsymmetrical) and apply to my code
+    double Chi2_Proton_cut_CD = 4.; // Josh's proton FD cut
     double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
     //</editor-fold>
 
     //<editor-fold desc="Protons in FD (no #e cuts)">
-    double Chi2_Proton_cut_FD = 3.;
+    double Chi2_Proton_cut_FD = 4.; // Josh's proton FD cut
     double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
     //</editor-fold>
 
     //<editor-fold desc="Protons in CD (1e cut)">
-    double Chi2_Proton_1e_peak_CD = 0.55; // to fill using Chi2_Proton_1e_Xmax_CD
+    double Chi2_Proton_1e_peak_CD = 0.45; // to fill using Chi2_Proton_1e_Xmax_CD
     double Chi2_Proton_1e_Xmax_CD;
     //</editor-fold>
 
     //<editor-fold desc="Protons in FD (1e cut)">
-    double Chi2_Proton_1e_peak_FD = -0.15; // to fill using Chi2_Proton_1e_Xmax_FD
+    double Chi2_Proton_1e_peak_FD = 0.25; // to fill using Chi2_Proton_1e_Xmax_FD
     double Chi2_Proton_1e_Xmax_FD;
     //</editor-fold>
 
@@ -709,6 +711,11 @@ void EventAnalyser() {
 ////    double Chi2_Neutron_cut_FD = 1.;
 //    //</editor-fold>
 
+//    string Electron_Chi2_subTitle_CD = "(|#chi^{2}_{e,CD}| #leqslant " + to_string(Chi2_Electron_cut_CD) + ")";
+//    string Electron_Chi2_subTitle_FD = "(|#chi^{2}_{e,FD}| #leqslant " + to_string(Chi2_Electron_cut_FD) + ")";
+//    string Proton_Chi2_subTitle_CD = "(|#chi^{2}_{p,CD}| #leqslant " + to_string(Chi2_Proton_cut_CD) + ")";
+//    string Proton_Chi2_subTitle_FD = "example subtitle";
+//    string Proton_Chi2_subTitle_FD = "(|#chi^{2}_{p,FD}| #leqslant " + to_string(Chi2_Proton_cut_FD) + ")";
     //</editor-fold>
 
 // Vertex cuts ----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1368,17 +1375,40 @@ void EventAnalyser() {
     TH1D Chi2_Proton_1e_FD("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
                            1000, Chi2_lower_lim, Chi2_upper_lim);
 
-    TH1D *Chi2_Electron_1e2p_CD = new TH1D("Electron #chi^{2} (1e2p & #chi^{2} cut, CD) test",
-                                           "Electron #chi^{2} (1e2p & #chi^{2} cut, Central Detector);Electron #chi^{2};",
+
+    //<editor-fold desc="Applying Chi2 cuts separately">
+    TH1D *Chi2_Electron_1e2p_sChi2_cut_CD = new TH1D("Electron #chi^{2} (1e2p & Electron #chi^{2} cut, CD) test",
+                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, Central Detector);Electron #chi^{2};",
+                                                     1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_1e2p_sChi2_cut_FD = new TH1D("Electron #chi^{2} (1e2p & Electron #chi^{2} cut, FD) test",
+                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, Forward Detector);Electron #chi^{2};",
+                                                     1000, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+
+    TH1D *Chi2_Proton_1e2p_sChi2_cut_CD = new TH1D("Proton #chi^{2} (1e2p & Proton #chi^{2} cut, CD) test",
+                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, Central Detector);Proton #chi^{2};",
+                                                   1000, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_1e2p_sChi2_cut_FD = new TH1D("Proton #chi^{2} (1e2p & Proton #chi^{2} cut, FD) test",
+                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, Forward Detector);Proton #chi^{2};",
+                                                   1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    //</editor-fold>
+
+
+    //<editor-fold desc="Applying all Chi2 cuts at once">
+    TH1D *Chi2_Electron_1e2p_CD = new TH1D("Electron #chi^{2} (1e2p & All #chi^{2} cuts, CD) test",
+                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, Central Detector);Electron #chi^{2};",
                                            1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_1e2p_FD = new TH1D("Electron #chi^{2} (1e2p & #chi^{2} cut, FD) test",
-                                           "Electron #chi^{2} (1e2p & #chi^{2} cut, Forward Detector);Electron #chi^{2};",
+    TH1D *Chi2_Electron_1e2p_FD = new TH1D("Electron #chi^{2} (1e2p & All #chi^{2} cuts, FD) test",
+                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, Forward Detector);Electron #chi^{2};",
                                            1000, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
 
-    TH1D *Chi2_Proton_1e2p_CD = new TH1D("Proton #chi^{2} (1e2p & #chi^{2} cut, CD) test", "Proton #chi^{2} (1e2p & #chi^{2} cut, Central Detector);Proton #chi^{2};",
+    TH1D *Chi2_Proton_1e2p_CD = new TH1D("Proton #chi^{2} (1e2p & All #chi^{2} cuts, CD) test",
+                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, Central Detector);Proton #chi^{2};",
                                          1000, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_1e2p_FD = new TH1D("Proton #chi^{2} (1e2p & #chi^{2} cut, FD) test", "Proton #chi^{2} (1e2p & #chi^{2} cut, Forward Detector);Proton #chi^{2};",
+    TH1D *Chi2_Proton_1e2p_FD = new TH1D("Proton #chi^{2} (1e2p & All #chi^{2} cuts, FD) test",
+                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, Forward Detector);Proton #chi^{2};",
                                          1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    //</editor-fold>
+
 
     //<editor-fold desc="Chi2 plots (1e only) - cut test">
     TH1D Chi2_Electron_1e_cut_test_CD("Electron #chi^{2} (1e^{-} cut test, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
@@ -1403,99 +1433,99 @@ void EventAnalyser() {
     //<editor-fold desc="Vertex plots">
 
     //<editor-fold desc="Vertex plots (no #(e) cut)">
-    THStack Vertex_Electron_Vx_Stack_test("Electron V_{x} (CD & FD) test", "Electron V_{x} (CD & FD);Electron V_{x} [];");
-    THStack Vertex_Electron_Vy_Stack_test("Electron V_{y} (CD & FD) test", "Electron V_{y} (CD & FD);Electron V_{y} [];");
-    THStack Vertex_Electron_Vz_Stack_test("Electron V_{z} (CD & FD) test", "Electron V_{z} (CD & FD);Electron V_{z} [];");
-    THStack Vertex_Proton_Vx_Stack_test("Proton V_{x} (CD & FD) test", "Proton V_{x} (CD & FD);Proton V_{x} [];");
-    THStack Vertex_Proton_Vy_Stack_test("Proton V_{y} (CD & FD) test", "Proton V_{y} (CD & FD);Proton V_{y} [];");
-    THStack Vertex_Proton_Vz_Stack_test("Proton V_{z} (CD & FD) test", "Proton V_{z} (CD & FD);Proton V_{z} [];");
+    THStack Vertex_Electron_Vx_Stack_test("Electron V_{x} (CD & FD) test", "Electron V_{x} (CD & FD);Electron V_{x} [cm];");
+    THStack Vertex_Electron_Vy_Stack_test("Electron V_{y} (CD & FD) test", "Electron V_{y} (CD & FD);Electron V_{y} [cm];");
+    THStack Vertex_Electron_Vz_Stack_test("Electron V_{z} (CD & FD) test", "Electron V_{z} (CD & FD);Electron V_{z} [cm];");
+    THStack Vertex_Proton_Vx_Stack_test("Proton V_{x} (CD & FD) test", "Proton V_{x} (CD & FD);Proton V_{x} [cm];");
+    THStack Vertex_Proton_Vy_Stack_test("Proton V_{y} (CD & FD) test", "Proton V_{y} (CD & FD);Proton V_{y} [cm];");
+    THStack Vertex_Proton_Vz_Stack_test("Proton V_{z} (CD & FD) test", "Proton V_{z} (CD & FD);Proton V_{z} [cm];");
 
-    TH1D Vertex_Electron_Vx_CD_test("Electron V_{x} (no #(e) cut, CD) test", "Electron V_{x} (no #(e) cut, Central Detector);Electron V_{x} [];",
+    TH1D Vertex_Electron_Vx_CD_test("Electron V_{x} (no #(e) cut, CD) test", "Electron V_{x} (no #(e) cut, Central Detector);Electron V_{x} [cm];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vy_CD_test("Electron V_{y} (no #(e) cut, CD) test", "Electron V_{y} (no #(e) cut, Central Detector);Electron V_{y} [];",
+    TH1D Vertex_Electron_Vy_CD_test("Electron V_{y} (no #(e) cut, CD) test", "Electron V_{y} (no #(e) cut, Central Detector);Electron V_{y} [cm];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vz_CD_test("Electron V_{z} (no #(e) cut, CD) test", "Electron V_{z} (no #(e) cut, Central Detector);Electron V_{z} [];",
+    TH1D Vertex_Electron_Vz_CD_test("Electron V_{z} (no #(e) cut, CD) test", "Electron V_{z} (no #(e) cut, Central Detector);Electron V_{z} [cm];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vx_FD_test("Electron V_{x} (no #(e) cut, FD) test", "Electron V_{x} (no #(e) cut, Central Detector);Electron V_{x} [];",
+    TH1D Vertex_Electron_Vx_FD_test("Electron V_{x} (no #(e) cut, FD) test", "Electron V_{x} (no #(e) cut, Central Detector);Electron V_{x} [cm];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vy_FD_test("Electron V_{y} (no #(e) cut, FD) test", "Electron V_{y} (no #(e) cut, Central Detector);Electron V_{y} [];",
+    TH1D Vertex_Electron_Vy_FD_test("Electron V_{y} (no #(e) cut, FD) test", "Electron V_{y} (no #(e) cut, Central Detector);Electron V_{y} [cm];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vz_FD_test("Electron V_{z} (no #(e) cut, FD) test", "Electron V_{z} (no #(e) cut, Central Detector);Electron V_{z} [];",
+    TH1D Vertex_Electron_Vz_FD_test("Electron V_{z} (no #(e) cut, FD) test", "Electron V_{z} (no #(e) cut, Central Detector);Electron V_{z} [cm];",
                                     100, Vertex_lower_lim, Vertex_upper_lim);
 
-    TH1D Vertex_Proton_Vx_CD_test("Proton V_{x} (no #(e) cut, CD) test", "Proton V_{x} (no #(e) cut, Central Detector);Proton V_{x} [];",
+    TH1D Vertex_Proton_Vx_CD_test("Proton V_{x} (no #(e) cut, CD) test", "Proton V_{x} (no #(e) cut, Central Detector);Proton V_{x} [cm];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vy_CD_test("Proton V_{y} (no #(e) cut, CD) test", "Proton V_{y} (no #(e) cut, Central Detector);Proton V_{y} [];",
+    TH1D Vertex_Proton_Vy_CD_test("Proton V_{y} (no #(e) cut, CD) test", "Proton V_{y} (no #(e) cut, Central Detector);Proton V_{y} [cm];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vz_CD_test("Proton V_{z} (no #(e) cut, CD) test", "Proton V_{z} (no #(e) cut, Central Detector);Proton V_{z} [];",
+    TH1D Vertex_Proton_Vz_CD_test("Proton V_{z} (no #(e) cut, CD) test", "Proton V_{z} (no #(e) cut, Central Detector);Proton V_{z} [cm];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vx_FD_test("Proton V_{x} (no #(e) cut, FD) test", "Proton V_{x} (no #(e) cut, Central Detector);Proton V_{x} [];",
+    TH1D Vertex_Proton_Vx_FD_test("Proton V_{x} (no #(e) cut, FD) test", "Proton V_{x} (no #(e) cut, Central Detector);Proton V_{x} [cm];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vy_FD_test("Proton V_{y} (no #(e) cut, FD) test", "Proton V_{y} (no #(e) cut, Central Detector);Proton V_{y} [];",
+    TH1D Vertex_Proton_Vy_FD_test("Proton V_{y} (no #(e) cut, FD) test", "Proton V_{y} (no #(e) cut, Central Detector);Proton V_{y} [cm];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vz_FD_test("Proton V_{z} (no #(e) cut, FD) test", "Proton V_{z} (no #(e) cut, Central Detector);Proton V_{z} [];",
+    TH1D Vertex_Proton_Vz_FD_test("Proton V_{z} (no #(e) cut, FD) test", "Proton V_{z} (no #(e) cut, Central Detector);Proton V_{z} [cm];",
                                   100, Vertex_lower_lim, Vertex_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots (1e only)">
-    THStack Vertex_Electron_1e_Vx_Stack_test("Electron V_{x} (1e only, CD & FD) test", "Electron V_{x} (1e only, CD & FD);Electron V_{x} [];");
-    THStack Vertex_Electron_1e_Vy_Stack_test("Electron V_{y} (1e only, CD & FD) test", "Electron V_{y} (1e only, CD & FD);Electron V_{y} [];");
-    THStack Vertex_Electron_1e_Vz_Stack_test("Electron V_{z} (1e only, CD & FD) test", "Electron V_{z} (1e only, CD & FD);Electron V_{z} [];");
-    THStack Vertex_Proton_1e_Vx_Stack_test("Proton V_{x} (1e only, CD & FD) test", "Proton V_{x} (1e only, CD & FD);Proton V_{x} [];");
-    THStack Vertex_Proton_1e_Vy_Stack_test("Proton V_{y} (1e only, CD & FD) test", "Proton V_{y} (1e only, CD & FD);Proton V_{y} [];");
-    THStack Vertex_Proton_1e_Vz_Stack_test("Proton V_{z} (1e only, CD & FD) test", "Proton V_{z} (1e only, CD & FD);Proton V_{z} [];");
+    THStack Vertex_Electron_1e_Vx_Stack_test("Electron V_{x} (1e only, CD & FD) test", "Electron V_{x} (1e only, CD & FD);Electron V_{x} [cm];");
+    THStack Vertex_Electron_1e_Vy_Stack_test("Electron V_{y} (1e only, CD & FD) test", "Electron V_{y} (1e only, CD & FD);Electron V_{y} [cm];");
+    THStack Vertex_Electron_1e_Vz_Stack_test("Electron V_{z} (1e only, CD & FD) test", "Electron V_{z} (1e only, CD & FD);Electron V_{z} [cm];");
+    THStack Vertex_Proton_1e_Vx_Stack_test("Proton V_{x} (1e only, CD & FD) test", "Proton V_{x} (1e only, CD & FD);Proton V_{x} [cm];");
+    THStack Vertex_Proton_1e_Vy_Stack_test("Proton V_{y} (1e only, CD & FD) test", "Proton V_{y} (1e only, CD & FD);Proton V_{y} [cm];");
+    THStack Vertex_Proton_1e_Vz_Stack_test("Proton V_{z} (1e only, CD & FD) test", "Proton V_{z} (1e only, CD & FD);Proton V_{z} [cm];");
 
-    TH1D Vertex_Electron_1e_Vx_CD_test("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [];",
+    TH1D Vertex_Electron_1e_Vx_CD_test("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [cm];",
                                        100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vy_CD_test("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [];",
+    TH1D Vertex_Electron_1e_Vy_CD_test("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [cm];",
                                        100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vz_CD_test("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [];",
+    TH1D Vertex_Electron_1e_Vz_CD_test("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [cm];",
                                        100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vx_FD_test("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, Forward Detector);Electron V_{x} [];",
+    TH1D Vertex_Electron_1e_Vx_FD_test("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, Forward Detector);Electron V_{x} [cm];",
                                        100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vy_FD_test("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, Forward Detector);Electron V_{y} [];",
+    TH1D Vertex_Electron_1e_Vy_FD_test("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, Forward Detector);Electron V_{y} [cm];",
                                        100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vz_FD_test("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, Forward Detector);Electron V_{z} [];",
+    TH1D Vertex_Electron_1e_Vz_FD_test("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, Forward Detector);Electron V_{z} [cm];",
                                        100, Vertex_lower_lim, Vertex_upper_lim);
 
-    TH1D Vertex_Proton_1e_Vx_CD_test("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [];",
+    TH1D Vertex_Proton_1e_Vx_CD_test("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [cm];",
                                      100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vy_CD_test("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [];",
+    TH1D Vertex_Proton_1e_Vy_CD_test("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [cm];",
                                      100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vz_CD_test("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [];",
+    TH1D Vertex_Proton_1e_Vz_CD_test("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [cm];",
                                      100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vx_FD_test("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, Forward Detector);Proton V_{x} [];",
+    TH1D Vertex_Proton_1e_Vx_FD_test("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, Forward Detector);Proton V_{x} [cm];",
                                      100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vy_FD_test("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, Forward Detector);Proton V_{y} [];",
+    TH1D Vertex_Proton_1e_Vy_FD_test("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, Forward Detector);Proton V_{y} [cm];",
                                      100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vz_FD_test("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, Forward Detector);Proton V_{z} [];",
+    TH1D Vertex_Proton_1e_Vz_FD_test("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, Forward Detector);Proton V_{z} [cm];",
                                      100, Vertex_lower_lim, Vertex_upper_lim);
 
 //    //<editor-fold desc="Vertex plots (1e only) - test">
-//    TH1D Vertex_Electron_1e_test_Vx_CD_test("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [];",
+//    TH1D Vertex_Electron_1e_test_Vx_CD_test("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [cm];",
 //                                            100, -1.5 * Vertex_Electron_cut_CD, 1.5 * Vertex_Electron_cut_CD);
-//    TH1D Vertex_Electron_1e_test_Vy_CD_test("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [];",
+//    TH1D Vertex_Electron_1e_test_Vy_CD_test("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [cm];",
 //                                            100, -1.5 * Vertex_Electron_cut_CD, 1.5 * Vertex_Electron_cut_CD);
-//    TH1D Vertex_Electron_1e_test_Vz_CD_test("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [];",
+//    TH1D Vertex_Electron_1e_test_Vz_CD_test("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [cm];",
 //                                            100, -1.5 * Vertex_Electron_cut_CD, 1.5 * Vertex_Electron_cut_CD);
-//    TH1D Vertex_Electron_1e_test_Vx_FD_test("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [];",
+//    TH1D Vertex_Electron_1e_test_Vx_FD_test("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, Central Detector);Electron V_{x} [cm];",
 //                                            100, -1.5 * Vertex_Electron_cut_FD, 1.5 * Vertex_Electron_cut_FD);
-//    TH1D Vertex_Electron_1e_test_Vy_FD_test("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [];",
+//    TH1D Vertex_Electron_1e_test_Vy_FD_test("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, Central Detector);Electron V_{y} [cm];",
 //                                            100, -1.5 * Vertex_Electron_cut_FD, 1.5 * Vertex_Electron_cut_FD);
-//    TH1D Vertex_Electron_1e_test_Vz_FD_test("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [];",
+//    TH1D Vertex_Electron_1e_test_Vz_FD_test("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, Central Detector);Electron V_{z} [cm];",
 //                                            100, -1.5 * Vertex_Electron_cut_FD, 1.5 * Vertex_Electron_cut_FD);
 //
-//    TH1D Vertex_Proton_1e_test_Vx_CD_test("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [];",
+//    TH1D Vertex_Proton_1e_test_Vx_CD_test("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [cm];",
 //                                          100, -1.5 * Vertex_Proton_cut_CD, 1.5 * Vertex_Proton_cut_CD);
-//    TH1D Vertex_Proton_1e_test_Vy_CD_test("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [];",
+//    TH1D Vertex_Proton_1e_test_Vy_CD_test("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [cm];",
 //                                          100, -1.5 * Vertex_Proton_cut_CD, 1.5 * Vertex_Proton_cut_CD);
-//    TH1D Vertex_Proton_1e_test_Vz_CD_test("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [];",
+//    TH1D Vertex_Proton_1e_test_Vz_CD_test("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [cm];",
 //                                          100, -1.5 * Vertex_Proton_cut_CD, 1.5 * Vertex_Proton_cut_CD);
-//    TH1D Vertex_Proton_1e_test_Vx_FD_test("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [];",
+//    TH1D Vertex_Proton_1e_test_Vx_FD_test("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, Central Detector);Proton V_{x} [cm];",
 //                                          100, -1.5 * Vertex_Proton_cut_FD, 1.5 * Vertex_Proton_cut_FD);
-//    TH1D Vertex_Proton_1e_test_Vy_FD_test("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [];",
+//    TH1D Vertex_Proton_1e_test_Vy_FD_test("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, Central Detector);Proton V_{y} [cm];",
 //                                          100, -1.5 * Vertex_Proton_cut_FD, 1.5 * Vertex_Proton_cut_FD);
-//    TH1D Vertex_Proton_1e_test_Vz_FD_test("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [];",
+//    TH1D Vertex_Proton_1e_test_Vz_FD_test("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, Central Detector);Proton V_{z} [cm];",
 //                                          100, -1.5 * Vertex_Proton_cut_FD, 1.5 * Vertex_Proton_cut_FD);
 //    //</editor-fold>
 
@@ -1503,24 +1533,24 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex differences plots (1e only & chi2 cuts)">
     THStack dVx_Stack_test("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e only & #chi^{2} cuts, CD & FD) test",
-                           "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e only & #chi^{2} cuts, CD & FD) test;dV_{x} [];");
+                           "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e only & #chi^{2} cuts, CD & FD) test;dV_{x} [cm];");
     THStack dVy_Stack_test("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e only & #chi^{2} cuts, CD & FD) test",
-                           "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e only & #chi^{2} cuts, CD & FD) test;dV_{y} [];");
+                           "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e only & #chi^{2} cuts, CD & FD) test;dV_{y} [cm];");
     THStack dVz_Stack_test("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e only & #chi^{2} cuts, CD & FD) test",
-                           "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e only & #chi^{2} cuts, CD & FD) test;dV_{z} [];");
+                           "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e only & #chi^{2} cuts, CD & FD) test;dV_{z} [cm];");
 
-    TH1D deltaVx_CD_test("dV_{x} (1e only & #chi^{2} cuts, CD) test", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Central Detector);dV_{x} [];",
+    TH1D deltaVx_CD_test("dV_{x} (1e only & #chi^{2} cuts, CD) test", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Central Detector);dV_{x} [cm];",
                          100, dV_lower_lim, dV_upper_lim);
-    TH1D deltaVy_CD_test("dV_{y} (1e only & #chi^{2} cuts, CD) test", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Central Detector);dV_{y} [];",
+    TH1D deltaVy_CD_test("dV_{y} (1e only & #chi^{2} cuts, CD) test", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Central Detector);dV_{y} [cm];",
                          100, dV_lower_lim, dV_upper_lim);
-    TH1D deltaVz_CD_test("dV_{z} (1e only & #chi^{2} cuts, CD) test", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Central Detector);dV_{z} [];",
+    TH1D deltaVz_CD_test("dV_{z} (1e only & #chi^{2} cuts, CD) test", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Central Detector);dV_{z} [cm];",
                          100, dV_lower_lim, dV_upper_lim);
 
-    TH1D deltaVx_FD_test("dV_{x} (1e only & #chi^{2} cuts, FD) test", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Forward Detector);dV_{x} [];",
+    TH1D deltaVx_FD_test("dV_{x} (1e only & #chi^{2} cuts, FD) test", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e only & #chi^{2} cuts, Forward Detector);dV_{x} [cm];",
                          100, dV_lower_lim, dV_upper_lim);
-    TH1D deltaVy_FD_test("dV_{y} (1e only & #chi^{2} cuts, FD) test", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Forward Detector);dV_{y} [];",
+    TH1D deltaVy_FD_test("dV_{y} (1e only & #chi^{2} cuts, FD) test", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e only & #chi^{2} cuts, Forward Detector);dV_{y} [cm];",
                          100, dV_lower_lim, dV_upper_lim);
-    TH1D deltaVz_FD_test("dV_{z} (1e only & #chi^{2} cuts, FD) test", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Forward Detector);dV_{z} [];",
+    TH1D deltaVz_FD_test("dV_{z} (1e only & #chi^{2} cuts, FD) test", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e only & #chi^{2} cuts, Forward Detector);dV_{z} [cm];",
                          100, dV_lower_lim, dV_upper_lim);
     //</editor-fold>
 
@@ -2623,16 +2653,24 @@ void EventAnalyser() {
     //</editor-fold>
 
     int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
+
     int num_of_events_with_e_in_CD = 0, num_of_events_with_e_in_FD = 0, num_of_events_with_e_in_FT = 0;
+
     int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_more_then_1e = 0;
+
     int num_of_events_with_1enP = 0, num_of_events_with_1e2X = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
-    int num_of_events_with_1e2p_with_eChi2_cut_CD = 0, num_of_events_with_1e2p_with_eChi2_cut_FD = 0;
+
+    int num_of_events_1e2p_w_eChi2_cut_only_CD = 0, num_of_events_1e2p_w_eChi2_cut_only_FD = 0, num_of_events_1e2p_w_eChi2_cut_only_FT = 0;
+    int num_of_events_1e2p_w_pChi2_cut_only_CD = 0, num_of_events_1e2p_w_pChi2_cut_only_FD = 0, num_of_events_1e2p_w_pChi2_cut_only_FT = 0;
+    int num_of_events_1e2p_w_allChi2_cuts_only_CD = 0, num_of_events_1e2p_w_allChi2_cuts_only_FD = 0, num_of_events_1e2p_w_allChi2_cuts_only_FT = 0;
 
     int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
     int num_of_QEL_1e2X_CD_events = 0, num_of_MEC_1e2X_CD_events = 0, num_of_RES_1e2X_CD_events = 0, num_of_DIS_1e2X_CD_events = 0;
     int num_of_QEL_1e2X_FD_events = 0, num_of_MEC_1e2X_FD_events = 0, num_of_RES_1e2X_FD_events = 0, num_of_DIS_1e2X_FD_events = 0;
+    int num_of_QEL_1e2X_FT_events = 0, num_of_MEC_1e2X_FT_events = 0, num_of_RES_1e2X_FT_events = 0, num_of_DIS_1e2X_FT_events = 0;
     int num_of_QEL_1e2p_CD_events = 0, num_of_MEC_1e2p_CD_events = 0, num_of_RES_1e2p_CD_events = 0, num_of_DIS_1e2p_CD_events = 0;
     int num_of_QEL_1e2p_FD_events = 0, num_of_MEC_1e2p_FD_events = 0, num_of_RES_1e2p_FD_events = 0, num_of_DIS_1e2p_FD_events = 0;
+    int num_of_QEL_1e2p_FT_events = 0, num_of_MEC_1e2p_FT_events = 0, num_of_RES_1e2p_FT_events = 0, num_of_DIS_1e2p_FT_events = 0;
 
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
 
@@ -3016,6 +3054,41 @@ void EventAnalyser() {
                     }
                     //</editor-fold>
 
+                } else if (e->getRegion() == FT) {
+
+                    if (AllParticles.size() == 3) {
+
+                        if (qel) {
+                            ++num_of_QEL_1e2X_FT_events;
+
+                        } else if (mec) {
+                            ++num_of_MEC_1e2X_FT_events;
+
+                        } else if (res) {
+                            ++num_of_RES_1e2X_FT_events;
+
+                        } else if (dis) {
+                            ++num_of_DIS_1e2X_FT_events;
+
+                        }
+
+                        if (protons.size() == 2) {
+
+                            if (qel) {
+                                ++num_of_QEL_1e2p_FT_events;
+
+                            } else if (mec) {
+                                ++num_of_MEC_1e2p_FT_events;
+
+                            } else if (res) {
+                                ++num_of_RES_1e2p_FT_events;
+
+                            } else if (dis) {
+                                ++num_of_DIS_1e2p_FT_events;
+
+                            }
+                        }
+                    }
                 }
             } // end of loop over electrons vector
             //</editor-fold>
@@ -3095,6 +3168,7 @@ void EventAnalyser() {
 
                 double dVx_CD, dVy_CD, dVz_CD, dVx_FD, dVy_FD, dVz_FD;
 
+                // TODO: uncomment these vertex plots:
 //                //<editor-fold desc="Fill dV plots (1e only & #chi^{2} cuts, CD & FD)">
 //                double p_Vx_CD, p_Vy_CD, p_Vz_CD;
 //                double p_Vx_FD, p_Vy_FD, p_Vz_FD;
@@ -3145,22 +3219,72 @@ void EventAnalyser() {
 //                for (int i = 0; i < electrons.size(); i++) {
 //                    if (electrons[i]->getRegion() == CD) {
 //                        if ((fabs(Chi2_Electron_1e_peak_CD - electrons[i]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                        ++num_of_events_with_1e2p_with_eChi2_cut_CD;
+//                        ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
 //                        Chi2_Electron_1e2p_CD->Fill(electrons[i]->par()->getChi2Pid());
 //                    } else if (electrons[i]->getRegion() == FD) {
 //                        if ((fabs(Chi2_Electron_1e_peak_FD - electrons[i]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                        ++num_of_events_with_1e2p_with_eChi2_cut_FD;
+//                        ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
 //                        Chi2_Electron_1e2p_FD->Fill(electrons[i]->par()->getChi2Pid());
 //                    }
 ////                    } else if (electrons[i]->getRegion() == FT) {}
 //                } // end of loop over electrons vector
 
-                // TODO: check why this cut gives 0 events
+//                // TODO: check why this cut gives 0 events
+//                if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) &&
+//                    ((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD))) &&
+//                    ((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
+////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
+//                    Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                    Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
+//                    Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
+//                } else if (((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD)) &&
+//                           ((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD))) &&
+//                           ((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
+////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
+//                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
+//                    Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+
+                // TODO: add cuts for FT
+                if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD))) {
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+                    Chi2_Electron_1e2p_sChi2_cut_CD->Fill(electrons[0]->par()->getChi2Pid());
+                } else if (((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD))) {
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+                    Chi2_Electron_1e2p_sChi2_cut_FD->Fill(electrons[0]->par()->getChi2Pid());
+                }
+
+                if (((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+                    Chi2_Proton_1e2p_sChi2_cut_CD->Fill(protons[0]->par()->getChi2Pid());
+                } else if (((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+                    Chi2_Proton_1e2p_sChi2_cut_FD->Fill(protons[0]->par()->getChi2Pid());
+                }
+
+                if (((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[1]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+                    Chi2_Proton_1e2p_sChi2_cut_CD->Fill(protons[1]->par()->getChi2Pid());
+                } else if (((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[1]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+                    Chi2_Proton_1e2p_sChi2_cut_FD->Fill(protons[1]->par()->getChi2Pid());
+                }
+
+
                 if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) &&
                     ((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD))) &&
                     ((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
 //                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-                    ++num_of_events_with_1e2p_with_eChi2_cut_CD;
+                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
                     Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
                     Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
                     Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
@@ -3168,39 +3292,37 @@ void EventAnalyser() {
                            ((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD))) &&
                            ((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
 //                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-                    ++num_of_events_with_1e2p_with_eChi2_cut_FD;
+                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
                     Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
                     Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
                     Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
                 }
 
-//                if (protons[0]->getRegion() == CD) {
-//                    if ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
-////                    ++num_of_events_with_1e2p_with_eChi2_cut_CD;
+//                if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) &&
+//                    ((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD))) &&
+//                    ((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
+////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
+//                    Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
 //                    Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
-//                } else if (protons[0]->getRegion() == FD) {
-//                    if ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
-////                    ++num_of_events_with_1e2p_with_eChi2_cut_FD;
-//                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
-//                }
-
-//                if (protons[1]->getRegion() == CD) {
-//                    if ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
-//                    ++num_of_events_with_1e2p_with_eChi2_cut_CD;
 //                    Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
-//                } else if (protons[1]->getRegion() == FD) {
-//                    if ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
-//                    ++num_of_events_with_1e2p_with_eChi2_cut_FD;
+//                } else if (((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD)) &&
+//                           ((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD))) &&
+//                           ((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
+////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
+//                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
 //                    Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
 //                }
 
 //                if (electrons[0]->getRegion() == CD) {
 //                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[i]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_with_1e2p_with_eChi2_cut_CD;
+//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
 //                    Chi2_Electron_1e2p_CD->Fill(electrons[i]->par()->getChi2Pid());
 //                } else if (electrons[0]->getRegion() == FD) {
 //                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[i]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_with_1e2p_with_eChi2_cut_FD;
+//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
 //                    Chi2_Electron_1e2p_FD->Fill(electrons[i]->par()->getChi2Pid());
 //                }
 
@@ -3989,16 +4111,11 @@ void EventAnalyser() {
 
     //<editor-fold desc="Canvas definitions">
 
-//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1000); // original
-//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1250);
-//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1500, 1150);
+    //<editor-fold desc="Canvas c1">
     TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
     c1->cd();
     c1->SetGrid();
     c1->SetBottomMargin(0.14);
-//        c1->SetBottomMargin(0.1275); // original now
-//    c1->SetBottomMargin(0.125);
-//    c1->SetBottomMargin(0.115); // original
 
     if (wider_margin) {
         c1->SetLeftMargin(0.14);
@@ -4006,6 +4123,19 @@ void EventAnalyser() {
 
     float DefStatX = gStyle->GetStatX();
     float DefStatY = gStyle->GetStatY();
+    //</editor-fold>
+
+    //<editor-fold desc="Canvas c2">
+    TCanvas *c2 = new TCanvas("canvas2", "canvas2", 1650, 1150);
+    c2->SetGrid();
+    c2->SetBottomMargin(0.14);
+    c2->SetTopMargin(0.15);
+
+    if (wider_margin) {
+        c2->SetLeftMargin(0.14);
+    }
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -4123,6 +4253,7 @@ void EventAnalyser() {
 
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
+        //<editor-fold desc="Finding Xmax">
         Chi2_Electron_Xmax_CD = Chi2_Electron_CD.GetBinCenter(Chi2_Electron_CD.GetMaximumBin());
         Chi2_Electron_Xmax_FD = Chi2_Electron_FD.GetBinCenter(Chi2_Electron_FD.GetMaximumBin());
         Chi2_Proton_Xmax_CD = Chi2_Proton_CD.GetBinCenter(Chi2_Proton_CD.GetMaximumBin());
@@ -4131,6 +4262,7 @@ void EventAnalyser() {
         Chi2_Electron_1e_Xmax_FD = Chi2_Electron_1e_FD.GetBinCenter(Chi2_Electron_1e_FD.GetMaximumBin());
         Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD.GetBinCenter(Chi2_Proton_1e_CD.GetMaximumBin());
         Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD.GetBinCenter(Chi2_Proton_1e_FD.GetMaximumBin());
+        //</editor-fold>
 
         THStack *Chi2_Electron_Stack_ref = &Chi2_Electron_Stack, *Chi2_Proton_Stack_ref = &Chi2_Proton_Stack;
 
@@ -4181,26 +4313,45 @@ void EventAnalyser() {
                           true, true, false, true, Chi2_histograms_cuts[i][0], Chi2_histograms_cuts[i][1]);
         }
 
-        histPlotter1D(c1, Chi2_Electron_1e2p_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & #chi^{2} cut", 0.06, 0.0425, 0.0425, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_weChi2_cuts", Chi2_1e2p_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+        //<editor-fold desc="Applying Chi2 cuts separately">
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_sChi2_cut_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & Electron #chi^{2} cut", "CD", "e",
+                      0.06, 0.04, 0.04, plots, 2, false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_w_pChi2_cuts", Chi2_1e2p_Separate_Cuts_Directory,
+                      kBlue, true, true, true, false, true, Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
 
-        histPlotter1D(c1, Chi2_Electron_1e2p_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & #chi^{2} cut", 0.06, 0.0425, 0.0425, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_weChi2_cuts", Chi2_1e2p_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_sChi2_cut_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & Electron #chi^{2} cut", "FD", "e",
+                      0.06, 0.04, 0.04, plots, 2, false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_w_pChi2_cuts", Chi2_1e2p_Separate_Cuts_Directory,
+                      kBlue, true, true, true, false, true, Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, Chi2_Proton_1e2p_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & #chi^{2} cut", 0.06, 0.0425, 0.0425, plots, 2,
-                      false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_weChi2_cuts", Chi2_1e2p_Directory, "CD", kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_sChi2_cut_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & Proton #chi^{2} cut", "CD", "p",
+                      0.06, 0.04, 0.04, plots, 2, false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_w_pChi2_cuts", Chi2_1e2p_Separate_Cuts_Directory,
+                      kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
+
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_sChi2_cut_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & Proton #chi^{2} cut", "FD", "p",
+                      0.06, 0.04, 0.04, plots, 2, false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_w_pChi2_cuts", Chi2_1e2p_Separate_Cuts_Directory,
+                      kBlue, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
+        //</editor-fold>
+
+        //<editor-fold desc="Applying all Chi2 cuts at once">
+        histPlotter1D(c1, Chi2_Electron_1e2p_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_w_allChi2_cuts", Chi2_1e2p_Directory, "CD", kBlue, true, true, true, false,
+                      true, Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+
+        histPlotter1D(c1, Chi2_Electron_1e2p_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_w_allChi2_cuts", Chi2_1e2p_Directory, "FD", kBlue, true, true, true, false,
+                      true, Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
+
+        histPlotter1D(c1, Chi2_Proton_1e2p_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_w_allChi2_cuts", Chi2_1e2p_Directory, "CD", kBlue, true, true, true, false, true,
                       Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
 
-        histPlotter1D(c1, Chi2_Proton_1e2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & #chi^{2} cut", 0.06, 0.0425, 0.0425, plots, 2,
-                      false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_weChi2_cuts", Chi2_1e2p_Directory, "FD", kBlue, true, true, true, false, true,
+        histPlotter1D(c1, Chi2_Proton_1e2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_w_allChi2_cuts", Chi2_1e2p_Directory, "FD", kBlue, true, true, true, false, true,
                       Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
+        //</editor-fold>
 
-//        Chi2_Electron_1e2p_CD.Fill(electrons[i]->par()->getChi2Pid());
 
-
-////  Electron chi2 (no #(e) cut) ---------------------------------------------------------------
+        //<editor-fold desc="older chi2 plots">
+        ////  Electron chi2 (no #(e) cut) ---------------------------------------------------------------
 //
 //        //<editor-fold desc="Electron chi2 (no #(e) cut)">
 //        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -4263,6 +4414,7 @@ void EventAnalyser() {
 //                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
 //                      Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
 //        //</editor-fold>
+        //</editor-fold>
 
     } else {
         cout << "\n\nChi2 plots are disabled by user.\n\n";
@@ -7676,7 +7828,7 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Input\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "LoadedInput: " << LoadedInput << "\n";
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
@@ -7684,12 +7836,12 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Plot settings\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Calculation settings\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
     myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
     myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n\n";
@@ -7706,7 +7858,7 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Plot selector\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "Theta_plots = " << BoolToString(Theta_plots) << "\n";
     myLogFile << "Phi_plots = " << BoolToString(Phi_plots) << "\n";
     myLogFile << "Energy_histogram_plots = " << BoolToString(Energy_histogram_plots) << "\n";
@@ -7723,7 +7875,7 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Normalization settings\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "normalized_theta_lp_plots = " << BoolToString(normalized_theta_lp_plots) << "\n";
     myLogFile << "normalized_E_lp_plots = " << BoolToString(normalized_E_lp_plots) << "\n";
     myLogFile << "normalized_E_Trans15_plots = " << BoolToString(normalized_E_Trans15_plots) << "\n";
@@ -7732,13 +7884,13 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Delete settings\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
     myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (2p)\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "P_lp_upper_lim_2p = " << P_lp_upper_lim_2p << "\n";
     myLogFile << "P_lp_lower_lim_2p = " << P_lp_lower_lim_2p << "\n";
     myLogFile << "P_p1_upper_lim_2p = " << P_p1_upper_lim_2p << "\n";
@@ -7748,7 +7900,7 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (1n1p)\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "P_lp_upper_lim_1n1p = " << P_lp_upper_lim_1n1p << "\n";
     myLogFile << "P_lp_lower_lim_1n1p = " << P_lp_lower_lim_1n1p << "\n";
     myLogFile << "P_p_upper_lim_1n1p = " << P_p_upper_lim_1n1p << "\n";
@@ -7758,7 +7910,7 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (2p, MicroBooNE)\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "P_lp_upper_lim_MicroBooNE = " << P_lp_upper_lim_MicroBooNE << "\n";
     myLogFile << "P_lp_lower_lim_MicroBooNE = " << P_lp_lower_lim_MicroBooNE << "\n";
     myLogFile << "P_L_upper_lim_MicroBooNE = " << P_L_upper_lim_MicroBooNE << "\n";
@@ -7769,7 +7921,7 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Chi2 cuts\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
 
     //<editor-fold desc="Chi2_Electron">
     myLogFile << "\n-- Electrons in CD (no #e cuts) -------------------------------------------" << "\n";
@@ -7887,50 +8039,95 @@ void EventAnalyser() {
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Event counts\n";
-    myLogFile << "===========================================================================\n";
-    myLogFile << "Total #(events):\t\t\t" << num_of_events << "\n";
-    myLogFile << "Total #(events) w/o any e:\t" << num_of_events_without_any_e << "\n";
-    myLogFile << "Total #(events) w/ any e:\t" << num_of_events_with_any_e << "\n\n";
+    myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "Total #(QEL events):\t\t" << num_of_QEL_events << "\n";
-    myLogFile << "Total #(MEC events):\t\t" << num_of_MEC_events << "\n";
-    myLogFile << "Total #(RES events):\t\t" << num_of_RES_events << "\n";
-    myLogFile << "Total #(DIS events):\t\t" << num_of_DIS_events << "\n";
-    myLogFile << "QEL+MEC+RES+DIS:\t\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
+    myLogFile << "-- Total counts -----------------------------------------------------------\n";
+    myLogFile << "Total #(events):\t\t\t\t" << num_of_events << "\n";
+    myLogFile << "Total #(events) w/o any e:\t\t" << num_of_events_without_any_e << "\n";
+    myLogFile << "Total #(events) w/ any e:\t\t" << num_of_events_with_any_e << "\n\n";
 
-    myLogFile << "#(events) in CD:\t\t" << "to be added" << "\n";
-    myLogFile << "#(events) in FD:\t\t" << "to be added" << "\n";
+    myLogFile << "Total #(QEL events):\t\t\t" << num_of_QEL_events << "\n";
+    myLogFile << "Total #(MEC events):\t\t\t" << num_of_MEC_events << "\n";
+    myLogFile << "Total #(RES events):\t\t\t" << num_of_RES_events << "\n";
+    myLogFile << "Total #(DIS events):\t\t\t" << num_of_DIS_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS:\t\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
+
+    myLogFile << "-- Counts to be added -----------------------------------------------------\n";
+    myLogFile << "#(events) in CD:\t\t\t\t" << "to be added" << "\n";
+    myLogFile << "#(events) in FD:\t\t\t\t" << "to be added" << "\n";
     myLogFile << "#(e) in CD:\t\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
-    myLogFile << "#(e) in FD:\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
-    myLogFile << "#(e) in FT:\t\t\t\t" << num_of_events_with_e_in_FT << "\n";
-    myLogFile << "#(e) in FT:\t\t\t\t" << num_of_events_with_e_in_FT - num_of_events_more_then_1e << " (corrected for multi e duplications)" << "\n\n";
+    myLogFile << "#(e) in FD:\t\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
+    myLogFile << "#(e) in FT:\t\t\t\t\t" << num_of_events_with_e_in_FT << "\n";
+    myLogFile << "#(e) in FT:\t\t\t\t\t" << num_of_events_with_e_in_FT - num_of_events_more_then_1e << " (corrected for multi e duplications)" << "\n\n";
 
-    myLogFile << "#(events) w/ at least 1e:\t" << num_of_events_with_at_least_1e << "\n";
-    myLogFile << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n";
-    myLogFile << "#(events) w/ more then 1e:\t" << num_of_events_more_then_1e << "\n\n";
+    myLogFile << "-- Events with electrons counts -------------------------------------------\n";
+    myLogFile << "#(events) w/ at least 1e:\t\t" << num_of_events_with_at_least_1e << "\n";
+    myLogFile << "#(events) w/ exactly 1e:\t\t\t" << num_of_events_with_exactly_1e << "\n";
+    myLogFile << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n\n";
 
-    myLogFile << "#(events) w/ 1e2X:\t\t" << num_of_events_with_1e2X << "\n";
-    myLogFile << "#(events) w/ 1e2X QEL in CD:\t" << num_of_QEL_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X MEC in CD:\t" << num_of_MEC_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X RES in CD:\t" << num_of_RES_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X DIS in CD:\t" << num_of_DIS_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X QEL in FD:\t" << num_of_QEL_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X MEC in FD:\t" << num_of_MEC_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X RES in FD:\t" << num_of_RES_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X DIS in FD:\t" << num_of_DIS_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e & any #p:\t" << num_of_events_with_1enP << "\n";
-    myLogFile << "#(events) w/ 1e1p:\t\t" << num_of_events_with_1e1p << "\n";
-    myLogFile << "#(events) w/ 1e2p:\t\t" << num_of_events_with_1e2p << "\n";
-    myLogFile << "#(events) w/ 1e2p QEL in CD:\t" << num_of_QEL_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p MEC in CD:\t" << num_of_MEC_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p RES in CD:\t" << num_of_RES_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p DIS in CD:\t" << num_of_DIS_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p & eChi2 CD:\t" << num_of_events_with_1e2p_with_eChi2_cut_CD << "\n";
-    myLogFile << "#(events) w/ 1e2p QEL in FD:\t" << num_of_QEL_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p MEC in FD:\t" << num_of_MEC_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p RES in FD:\t" << num_of_RES_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p DIS in FD:\t" << num_of_DIS_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p & eChi2 FD:\t" << num_of_events_with_1e2p_with_eChi2_cut_FD << "\n\n\n";
+    // TODO: add percentage relative to 'num_of_events_with_at_least_1e'
+    myLogFile << "-- 1e2X event counts ------------------------------------------------------\n";
+    myLogFile << "#(events) w/ 1e2X:\t\t\t\t" << num_of_events_with_1e2X << "\n\n";
+
+    myLogFile << "#(events) w/ 1e2X QEL in CD:\t\t" << num_of_QEL_1e2X_CD_events << "\n";
+    myLogFile << "#(events) w/ 1e2X MEC in CD:\t\t" << num_of_MEC_1e2X_CD_events << "\n";
+    myLogFile << "#(events) w/ 1e2X RES in CD:\t\t" << num_of_RES_1e2X_CD_events << "\n";
+    myLogFile << "#(events) w/ 1e2X DIS in CD:\t\t" << num_of_DIS_1e2X_CD_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (CD):\t\t" << num_of_QEL_1e2X_CD_events + num_of_MEC_1e2X_CD_events + num_of_RES_1e2X_CD_events + num_of_DIS_1e2X_CD_events
+              << "\n\n";
+
+    myLogFile << "#(events) w/ 1e2X QEL in FD:\t\t" << num_of_QEL_1e2X_FD_events << "\n";
+    myLogFile << "#(events) w/ 1e2X MEC in FD:\t\t" << num_of_MEC_1e2X_FD_events << "\n";
+    myLogFile << "#(events) w/ 1e2X RES in FD:\t\t" << num_of_RES_1e2X_FD_events << "\n";
+    myLogFile << "#(events) w/ 1e2X DIS in FD:\t\t" << num_of_DIS_1e2X_FD_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (FD):\t\t" << num_of_QEL_1e2X_FD_events + num_of_MEC_1e2X_FD_events + num_of_RES_1e2X_FD_events + num_of_DIS_1e2X_FD_events
+              << "\n\n";
+
+    myLogFile << "#(events) w/ 1e2X QEL in FT:\t\t" << num_of_QEL_1e2X_FT_events << "\n";
+    myLogFile << "#(events) w/ 1e2X MEC in FT:\t\t" << num_of_MEC_1e2X_FT_events << "\n";
+    myLogFile << "#(events) w/ 1e2X RES in FT:\t\t" << num_of_RES_1e2X_FT_events << "\n";
+    myLogFile << "#(events) w/ 1e2X DIS in FT:\t\t" << num_of_DIS_1e2X_FT_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (FT):\t\t" << num_of_QEL_1e2X_FT_events + num_of_MEC_1e2X_FT_events + num_of_RES_1e2X_FT_events + num_of_DIS_1e2X_FT_events
+              << "\n\n";
+
+    myLogFile << "-- 1enp event counts ------------------------------------------------------\n";
+    myLogFile << "#(events) w/ 1e & any #p:\t\t" << num_of_events_with_1enP << "\n\n";
+
+    myLogFile << "-- 1e1p event counts ------------------------------------------------------\n";
+    myLogFile << "#(events) w/ 1e1p:\t\t\t\t" << num_of_events_with_1e1p << "\n\n";
+
+    myLogFile << "-- 1e2p event counts ------------------------------------------------------\n";
+    myLogFile << "#(events) w/ 1e2p:\t\t\t\t" << num_of_events_with_1e2p << "\n\n";
+
+    myLogFile << "#(events) w/ 1e2p QEL in CD:\t\t" << num_of_QEL_1e2p_CD_events << "\n";
+    myLogFile << "#(events) w/ 1e2p MEC in CD:\t\t" << num_of_MEC_1e2p_CD_events << "\n";
+    myLogFile << "#(events) w/ 1e2p RES in CD:\t\t" << num_of_RES_1e2p_CD_events << "\n";
+    myLogFile << "#(events) w/ 1e2p DIS in CD:\t\t" << num_of_DIS_1e2p_CD_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (CD):\t\t" << num_of_QEL_1e2p_CD_events + num_of_MEC_1e2p_CD_events + num_of_RES_1e2p_CD_events + num_of_DIS_1e2p_CD_events
+              << "\n";
+    myLogFile << "#(events) 1e2p & e Chi2 cuts CD:\t" << num_of_events_1e2p_w_eChi2_cut_only_CD << "\n";
+    myLogFile << "#(events) 1e2p & p Chi2 cuts CD:\t" << num_of_events_1e2p_w_pChi2_cut_only_CD << "\n";
+    myLogFile << "#(events) 1e2p & all Chi2 cuts CD:\t" << num_of_events_1e2p_w_allChi2_cuts_only_CD << "\n\n";
+
+    myLogFile << "#(events) w/ 1e2p QEL in FD:\t\t" << num_of_QEL_1e2p_FD_events << "\n";
+    myLogFile << "#(events) w/ 1e2p MEC in FD:\t\t" << num_of_MEC_1e2p_FD_events << "\n";
+    myLogFile << "#(events) w/ 1e2p RES in FD:\t\t" << num_of_RES_1e2p_FD_events << "\n";
+    myLogFile << "#(events) w/ 1e2p DIS in FD:\t\t" << num_of_DIS_1e2p_FD_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (FD):\t\t" << num_of_QEL_1e2p_FD_events + num_of_MEC_1e2p_FD_events + num_of_RES_1e2p_FD_events + num_of_DIS_1e2p_FD_events
+              << "\n";
+    myLogFile << "#(events) 1e2p & e Chi2 cuts FD:\t" << num_of_events_1e2p_w_eChi2_cut_only_FD << "\n";
+    myLogFile << "#(events) 1e2p & p Chi2 cuts FD:\t" << num_of_events_1e2p_w_pChi2_cut_only_FD << "\n";
+    myLogFile << "#(events) 1e2p & all Chi2 cuts FD:\t" << num_of_events_1e2p_w_allChi2_cuts_only_FD << "\n\n";
+
+    myLogFile << "#(events) w/ 1e2p QEL in FT:\t\t" << num_of_QEL_1e2p_FT_events << "\n";
+    myLogFile << "#(events) w/ 1e2p MEC in FT:\t\t" << num_of_MEC_1e2p_FT_events << "\n";
+    myLogFile << "#(events) w/ 1e2p RES in FT:\t\t" << num_of_RES_1e2p_FT_events << "\n";
+    myLogFile << "#(events) w/ 1e2p DIS in FT:\t\t" << num_of_DIS_1e2p_FT_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (FT):\t\t" << num_of_QEL_1e2p_FT_events + num_of_MEC_1e2p_FT_events + num_of_RES_1e2p_FT_events + num_of_DIS_1e2p_FT_events
+              << "\n";
+    myLogFile << "#(events) 1e2p & e Chi2 cuts FT:\t" << num_of_events_1e2p_w_eChi2_cut_only_FT << "\n";
+    myLogFile << "#(events) 1e2p & p Chi2 cuts FT:\t" << num_of_events_1e2p_w_pChi2_cut_only_FT << "\n";
+    myLogFile << "#(events) 1e2p & all Chi2 cuts FT:\t" << num_of_events_1e2p_w_allChi2_cuts_only_FT << "\n\n\n";
 
     myLogFile.close();
     //</editor-fold>
@@ -7955,53 +8152,96 @@ void EventAnalyser() {
     cout << "\t\t\tExecution summary\n";
     cout << "===========================================================================\n\n";
 
-    cout << "-- Event counts -----------------------------------------------------------\n";
-    cout << "Total #(events):\t\t" << num_of_events << "\n";
-    cout << "Total #(events) w/o any e:\t" << num_of_events_without_any_e << "\n";
-    cout << "Total #(events) w/ any e:\t" << num_of_events_with_any_e << "\n\n";
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "\t\t\tEvent counts\n";
+    cout << "---------------------------------------------------------------------------\n\n";
 
-    cout << "Total #(QEL events):\t\t" << num_of_QEL_events << "\n";
-    cout << "Total #(MEC events):\t\t" << num_of_MEC_events << "\n";
-    cout << "Total #(RES events):\t\t" << num_of_RES_events << "\n";
-    cout << "Total #(DIS events):\t\t" << num_of_DIS_events << "\n";
-    cout << "QEL + MEC + RES + DIS:\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
+    cout << "-- Total counts -----------------------------------------------------------\n";
+    cout << "Total #(events):\t\t\t" << num_of_events << "\n";
+    cout << "Total #(events) w/o any e:\t\t" << num_of_events_without_any_e << "\n";
+    cout << "Total #(events) w/ any e:\t\t" << num_of_events_with_any_e << "\n\n";
 
-    cout << "#(events) in CD:\t\t" << "to be added" << "\n";
-    cout << "#(events) in FD:\t\t" << "to be added" << "\n";
-    cout << "#(e) in CD:\t\t\t" << num_of_events_with_e_in_CD << "\n";
-    cout << "#(e) in FD:\t\t\t" << num_of_events_with_e_in_FD << "\n";
-    cout << "#(e) in FT:\t\t\t" << num_of_events_with_e_in_FT << "\n";
-    cout << "#(e) in FT:\t\t\t" << num_of_events_with_e_in_FT - num_of_events_more_then_1e << " (corrected for multi e duplications)" << "\n\n";
+    cout << "Total #(QEL events):\t\t\t" << num_of_QEL_events << "\n";
+    cout << "Total #(MEC events):\t\t\t" << num_of_MEC_events << "\n";
+    cout << "Total #(RES events):\t\t\t" << num_of_RES_events << "\n";
+    cout << "Total #(DIS events):\t\t\t" << num_of_DIS_events << "\n";
+    cout << "QEL + MEC + RES + DIS:\t\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
 
-    cout << "#(events) w/ at least 1e:\t" << num_of_events_with_at_least_1e << "\n";
-    cout << "#(events) w/ exactly 1e:\t" << num_of_events_with_exactly_1e << "\n";
-    cout << "#(events) w/ more then 1e:\t" << num_of_events_more_then_1e << "\n\n";
+    cout << "-- Counts to be added -----------------------------------------------------\n";
+    cout << "#(events) in CD:\t\t\t" << "to be added" << "\n";
+    cout << "#(events) in FD:\t\t\t" << "to be added" << "\n";
+    cout << "#(e) in CD:\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
+    cout << "#(e) in FD:\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
+    cout << "#(e) in FT:\t\t\t\t" << num_of_events_with_e_in_FT << "\n";
+    cout << "#(e) in FT:\t\t\t\t" << num_of_events_with_e_in_FT - num_of_events_more_then_1e << " (corrected for multi e duplications)" << "\n\n";
+
+    cout << "-- Events with electrons counts -------------------------------------------\n";
+    cout << "#(events) w/ at least 1e:\t\t" << num_of_events_with_at_least_1e << "\n";
+    cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n";
+    cout << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n\n";
 
     // TODO: add percentage relative to 'num_of_events_with_at_least_1e'
-    cout << "#(events) w/ 1e2X:\t\t" << num_of_events_with_1e2X << "\n";
-    cout << "#(events) w/ 1e2X QEL in CD:\t" << num_of_QEL_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X MEC in CD:\t" << num_of_MEC_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X RES in CD:\t" << num_of_RES_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X DIS in CD:\t" << num_of_DIS_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X QEL in FD:\t" << num_of_QEL_1e2X_FD_events << "\n";
-    cout << "#(events) w/ 1e2X MEC in FD:\t" << num_of_MEC_1e2X_FD_events << "\n";
-    cout << "#(events) w/ 1e2X RES in FD:\t" << num_of_RES_1e2X_FD_events << "\n";
-    cout << "#(events) w/ 1e2X DIS in FD:\t" << num_of_DIS_1e2X_FD_events << "\n\n";
-    cout << "#(events) w/ 1e & any #p:\t" << num_of_events_with_1enP << "\n\n";
-    cout << "#(events) w/ 1e1p:\t\t" << num_of_events_with_1e1p << "\n\n";
-    cout << "#(events) w/ 1e2p:\t\t" << num_of_events_with_1e2p << "\n";
-    cout << "#(events) w/ 1e2p QEL in CD:\t" << num_of_QEL_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p MEC in CD:\t" << num_of_MEC_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p RES in CD:\t" << num_of_RES_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p DIS in CD:\t" << num_of_DIS_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p & eChi2 CD:\t" << num_of_events_with_1e2p_with_eChi2_cut_CD << "\n";
-    cout << "#(events) w/ 1e2p QEL in FD:\t" << num_of_QEL_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p MEC in FD:\t" << num_of_MEC_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p RES in FD:\t" << num_of_RES_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p DIS in FD:\t" << num_of_DIS_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p & eChi2 FD:\t" << num_of_events_with_1e2p_with_eChi2_cut_FD << "\n\n";
+    cout << "-- 1e2X event counts ------------------------------------------------------\n";
+    cout << "#(events) w/ 1e2X:\t\t\t" << num_of_events_with_1e2X << "\n\n";
 
-    cout << "-- Execution variables ----------------------------------------------------\n";
+    cout << "#(events) w/ 1e2X QEL in CD:\t\t" << num_of_QEL_1e2X_CD_events << "\n";
+    cout << "#(events) w/ 1e2X MEC in CD:\t\t" << num_of_MEC_1e2X_CD_events << "\n";
+    cout << "#(events) w/ 1e2X RES in CD:\t\t" << num_of_RES_1e2X_CD_events << "\n";
+    cout << "#(events) w/ 1e2X DIS in CD:\t\t" << num_of_DIS_1e2X_CD_events << "\n";
+    cout << "QEL + MEC + RES + DIS (CD):\t\t" << num_of_QEL_1e2X_CD_events + num_of_MEC_1e2X_CD_events + num_of_RES_1e2X_CD_events + num_of_DIS_1e2X_CD_events << "\n\n";
+
+    cout << "#(events) w/ 1e2X QEL in FD:\t\t" << num_of_QEL_1e2X_FD_events << "\n";
+    cout << "#(events) w/ 1e2X MEC in FD:\t\t" << num_of_MEC_1e2X_FD_events << "\n";
+    cout << "#(events) w/ 1e2X RES in FD:\t\t" << num_of_RES_1e2X_FD_events << "\n";
+    cout << "#(events) w/ 1e2X DIS in FD:\t\t" << num_of_DIS_1e2X_FD_events << "\n";
+    cout << "QEL + MEC + RES + DIS (FD):\t\t" << num_of_QEL_1e2X_FD_events + num_of_MEC_1e2X_FD_events + num_of_RES_1e2X_FD_events + num_of_DIS_1e2X_FD_events << "\n\n";
+
+    cout << "#(events) w/ 1e2X QEL in FT:\t\t" << num_of_QEL_1e2X_FT_events << "\n";
+    cout << "#(events) w/ 1e2X MEC in FT:\t\t" << num_of_MEC_1e2X_FT_events << "\n";
+    cout << "#(events) w/ 1e2X RES in FT:\t\t" << num_of_RES_1e2X_FT_events << "\n";
+    cout << "#(events) w/ 1e2X DIS in FT:\t\t" << num_of_DIS_1e2X_FT_events << "\n";
+    cout << "QEL + MEC + RES + DIS (FT):\t\t" << num_of_QEL_1e2X_FT_events + num_of_MEC_1e2X_FT_events + num_of_RES_1e2X_FT_events + num_of_DIS_1e2X_FT_events << "\n\n";
+
+    cout << "-- 1enp event counts ------------------------------------------------------\n";
+    cout << "#(events) w/ 1e & any #p:\t\t" << num_of_events_with_1enP << "\n\n";
+
+    cout << "-- 1e1p event counts ------------------------------------------------------\n";
+    cout << "#(events) w/ 1e1p:\t\t\t" << num_of_events_with_1e1p << "\n\n";
+
+    cout << "-- 1e2p event counts ------------------------------------------------------\n";
+    cout << "#(events) w/ 1e2p:\t\t\t" << num_of_events_with_1e2p << "\n\n";
+
+    cout << "#(events) w/ 1e2p QEL in CD:\t\t" << num_of_QEL_1e2p_CD_events << "\n";
+    cout << "#(events) w/ 1e2p MEC in CD:\t\t" << num_of_MEC_1e2p_CD_events << "\n";
+    cout << "#(events) w/ 1e2p RES in CD:\t\t" << num_of_RES_1e2p_CD_events << "\n";
+    cout << "#(events) w/ 1e2p DIS in CD:\t\t" << num_of_DIS_1e2p_CD_events << "\n";
+    cout << "QEL + MEC + RES + DIS (CD):\t\t" << num_of_QEL_1e2p_CD_events + num_of_MEC_1e2p_CD_events + num_of_RES_1e2p_CD_events + num_of_DIS_1e2p_CD_events << "\n";
+    cout << "#(events) 1e2p & e Chi2 cuts CD:\t" << num_of_events_1e2p_w_eChi2_cut_only_CD << "\n";
+    cout << "#(events) 1e2p & p Chi2 cuts CD:\t" << num_of_events_1e2p_w_pChi2_cut_only_CD << "\n";
+    cout << "#(events) 1e2p & all Chi2 cuts CD:\t" << num_of_events_1e2p_w_allChi2_cuts_only_CD << "\n\n";
+
+    cout << "#(events) w/ 1e2p QEL in FD:\t\t" << num_of_QEL_1e2p_FD_events << "\n";
+    cout << "#(events) w/ 1e2p MEC in FD:\t\t" << num_of_MEC_1e2p_FD_events << "\n";
+    cout << "#(events) w/ 1e2p RES in FD:\t\t" << num_of_RES_1e2p_FD_events << "\n";
+    cout << "#(events) w/ 1e2p DIS in FD:\t\t" << num_of_DIS_1e2p_FD_events << "\n";
+    cout << "QEL + MEC + RES + DIS (FD):\t\t" << num_of_QEL_1e2p_FD_events + num_of_MEC_1e2p_FD_events + num_of_RES_1e2p_FD_events + num_of_DIS_1e2p_FD_events << "\n";
+    cout << "#(events) 1e2p & e Chi2 cuts FD:\t" << num_of_events_1e2p_w_eChi2_cut_only_FD << "\n";
+    cout << "#(events) 1e2p & p Chi2 cuts FD:\t" << num_of_events_1e2p_w_pChi2_cut_only_FD << "\n";
+    cout << "#(events) 1e2p & all Chi2 cuts FD:\t" << num_of_events_1e2p_w_allChi2_cuts_only_FD << "\n\n";
+
+    cout << "#(events) w/ 1e2p QEL in FT:\t\t" << num_of_QEL_1e2p_FT_events << "\n";
+    cout << "#(events) w/ 1e2p MEC in FT:\t\t" << num_of_MEC_1e2p_FT_events << "\n";
+    cout << "#(events) w/ 1e2p RES in FT:\t\t" << num_of_RES_1e2p_FT_events << "\n";
+    cout << "#(events) w/ 1e2p DIS in FT:\t\t" << num_of_DIS_1e2p_FT_events << "\n";
+    cout << "QEL + MEC + RES + DIS (FT):\t\t" << num_of_QEL_1e2p_FT_events + num_of_MEC_1e2p_FT_events + num_of_RES_1e2p_FT_events + num_of_DIS_1e2p_FT_events << "\n";
+    cout << "#(events) 1e2p & e Chi2 cuts FT:\t" << num_of_events_1e2p_w_eChi2_cut_only_FT << "\n";
+    cout << "#(events) 1e2p & p Chi2 cuts FT:\t" << num_of_events_1e2p_w_pChi2_cut_only_FT << "\n";
+    cout << "#(events) 1e2p & all Chi2 cuts FT:\t" << num_of_events_1e2p_w_allChi2_cuts_only_FT << "\n\n";
+
+    cout << "---------------------------------------------------------------------------\n";
+    cout << "\t\t\tExecution variables\n";
+    cout << "---------------------------------------------------------------------------\n\n";
+
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
     cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";

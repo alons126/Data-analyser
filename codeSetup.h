@@ -79,7 +79,7 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 ////</editor-fold>
 
 // TODO: to finish
-//<editor-fold desc="histPlotter1D function">
+//<editor-fold desc="histPlotter1D function (old)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
                    bool normalize_Histogram, //Normalize histogram or not
@@ -248,6 +248,183 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
     }
 
     Histogram1DCanvas->Clear();
+
+}
+//</editor-fold>
+
+//<editor-fold desc="histPlotter1D function (Chi2 for separate plots)">
+void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
+                   TCanvas *Histogram1DCanvas2, // canvas c2 of chi2 histograms
+                   TH1D *Histogram1D, //The histogram
+                   bool normalize_Histogram, //Normalize histogram or not
+                   bool custom_normalization, //Normalize histogram or not
+                   double custom_normalization_factor, //Normalize histogram or not
+                   string Histogram1DTitle1,
+                   string Histogram1DTitle2,
+                   string Histogram1DTitle3,
+                   string Particle,
+                   double titleSize,
+                   double labelSizex,
+                   double labelSizey,
+                   TList *Histogram_list,
+                   int lineWidth,
+                   bool logScalePlot,
+                   bool linearScalePlot,
+                   THStack *Histogram1DStack,
+                   string Histogram1DSaveName,
+                   string Histogram1DSaveNamePath,
+                   int kColor = 1,
+                   bool centerTitle = true,
+                   bool addToStack = false,
+                   bool showStats = true,
+                   bool title2 = false,
+                   bool apply_plot_cuts = false,
+                   double plot_cuts = 0,
+                   double plot_Xmax = 0,
+                   bool plot_max = true) {
+
+    double TitleFontSize = gStyle->GetTitleFontSize();
+    Histogram1DCanvas2->cd();
+
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    if (normalize_Histogram == true && custom_normalization == false) {
+        Histogram1D_integral = Histogram1D->Integral();
+    } else if (normalize_Histogram == true && custom_normalization == true) {
+        Histogram1D_integral = custom_normalization_factor;
+    }
+
+    if (normalize_Histogram == true) {
+        string title = Histogram1DTitle1 + " (" + Histogram1DTitle2 + ", " + Histogram1DTitle3 + ")" + " - Normalized";
+        string HistogramTitle =
+                "#splitline{" + title + "}{        (|#chi^{2}_{" + Particle + "," + Histogram1DTitle3 + "} - #bar{#chi^{2}}_{" + Particle + "," + Histogram1DTitle3 +
+                "}| #leq " + to_string(plot_cuts) + ")}";
+        Histogram1D->SetTitle(HistogramTitle.c_str());
+        Histogram1D->GetYaxis()->SetTitle("Probability (%)");
+        gStyle->SetTitleFontSize(0.04);
+        gROOT->ForceStyle();
+
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Draw();
+        }
+
+    } else if (normalize_Histogram == false) {
+        string HistogramTitle, title, subtitle;
+
+        if (title2 == false) {
+            title = Histogram1DTitle1 + " (" + Histogram1DTitle2 + ", " + Histogram1DTitle3 + ")";
+        } else {
+            title = Histogram1DTitle1 + " (" + Histogram1DTitle2 + ")";
+        }
+
+        HistogramTitle =
+                "#splitline{" + title + "}{        (|#chi^{2}_{" + Particle + "," + Histogram1DTitle3 + "} - (#chi^{2}_{" + Particle + "," + Histogram1DTitle3 +
+                "})_{max}| #leq " + to_string(plot_cuts) + ")}";
+        Histogram1D->SetTitle(HistogramTitle.c_str());
+        Histogram1D->GetYaxis()->SetTitle("Arbitrary units");
+        gStyle->SetTitleFontSize(0.04);
+        gROOT->ForceStyle();
+
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Draw();
+        }
+    }
+
+    Histogram1D->GetXaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram1D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram1D->GetYaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram1D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram1D->SetLineWidth(lineWidth);
+    Histogram_list->Add(Histogram1D);
+
+    if (showStats == false) {
+        Histogram1D->SetStats(0);
+    }
+
+    if (apply_plot_cuts == true) {
+        gPad->Update();
+        double Upper_cut = plot_cuts + plot_Xmax;
+        double Lower_cut = -plot_cuts + plot_Xmax;
+        double plot_Xmax = plot_Xmax;
+        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+        upper_cut->SetLineWidth(lineWidth);
+        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+        lower_cut->SetLineWidth(lineWidth);
+        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
+        max_location->SetLineWidth(lineWidth + 1);
+        auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3);
+
+        if (Histogram1D->Integral() != 0.) {
+            upper_cut->Draw("same");
+            upper_cut->SetLineColor(kBlue);
+//            upper_cut->SetLineColor(kMagenta);
+            lower_cut->Draw("same");
+            lower_cut->SetLineColor(kRed);
+//            lower_cut->SetLineColor(kMagenta);
+            if (plot_max == true) {
+                max_location->Draw("same");
+                max_location->SetLineColor(kGreen);
+//            lower_cut->SetLineColor(kMagenta);
+            }
+
+            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string(Upper_cut)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string(Lower_cut)).c_str(), "l");
+
+            if (plot_max == true) {
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string(plot_Xmax)).c_str(), "l");
+//            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string(max_location)).c_str(), "l");
+            }
+
+            Cut_legend->Draw("same");
+        }
+    }
+
+    if (logScalePlot == true) {
+        Histogram1DCanvas2->SetLogy(1);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + Histogram1DTitle3 + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas2->SaveAs(SaveDir);
+    }
+
+    if (linearScalePlot == true) {
+        Histogram1DCanvas2->SetLogy(0);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + Histogram1DTitle3 + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas2->SaveAs(SaveDir);
+    }
+
+    if (addToStack == true) {
+        Histogram1D->SetLineColor(kColor);
+        Histogram1D->SetStats(0);
+        Histogram1DStack->Add(Histogram1D);
+    }
+
+    Histogram1DCanvas2->Clear();
+    gStyle->SetTitleFontSize(TitleFontSize);
+    gROOT->ForceStyle();
+
+    Histogram1DCanvas1->cd();
 
 }
 //</editor-fold>
