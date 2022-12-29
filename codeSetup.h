@@ -38,6 +38,34 @@ inline const char *const BoolToString(bool b) {
 }
 //</editor-fold>
 
+//<editor-fold desc="testPrint functions">
+void testPrint() { cout << "\n"; }
+
+void testPrint(string varString = "") {
+    if (varString == "") {
+        cout << "\n";
+    } else {
+        cout << varString << "\n";
+    }
+}
+
+void testPrint(int var, string varString = "") {
+    if (varString == "") {
+        cout << "\n";
+    } else {
+        cout << varString << " = " << var << "\n";
+    }
+}
+
+void testPrint(double var, string varString = "") {
+    if (varString == "") {
+        cout << "\n";
+    } else {
+        cout << varString << " = " << var << "\n";
+    }
+}
+//</editor-fold>
+
 //<editor-fold desc="rCalc function">
 double rCalc(double x, double y, double z) {
     double r = sqrt(x * x + y * y + z * z);
@@ -664,9 +692,9 @@ std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFilePath = "/mnt/d/e4nu/hipo_data_files/";
 //std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_c12_6gev";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
