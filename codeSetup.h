@@ -73,7 +73,6 @@ double rCalc(double x, double y, double z) {
 }
 //</editor-fold>
 
-// TODO: figure out how to clear parent content appropriately
 //<editor-fold desc="MakeDirectory">
 void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
                    std::string Parent_Folder = "./plots") {
@@ -103,20 +102,6 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 }
 //</editor-fold>
 
-// TODO: to finish
-////<editor-fold desc="DirectoryChecker function">
-//void DirectoryChecker(std::string Directory) {
-//    if (IsPathExist(Directory.c_str())) {
-//        cout << Directory << " exists!\n\n";
-//    } else {
-//        string commend = "mkdir " + Directory;
-//        system(commend.c_str());
-//        cout << Directory << " does not exists! directory created.\n\n";
-//    }
-//}
-////</editor-fold>
-
-// TODO: to finish
 //<editor-fold desc="histPlotter1D function (old)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
@@ -692,9 +677,9 @@ std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFilePath = "/mnt/d/e4nu/hipo_data_files/";
 //std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_c12_6gev";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
@@ -719,6 +704,7 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 // Strucks definitions
 // ======================================================================================================================================================================
 
+// TODO: add strucks is needed
 
 // ======================================================================================================================================================================
 // Classes definitions
