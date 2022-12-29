@@ -653,6 +653,8 @@ void EventAnalyser() {
 
 // Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    // TODO: add cuts for FT (first check with Adi & Justin if need to)
+
     //<editor-fold desc="Chi2 cuts">
 
     //<editor-fold desc="Electron chi2 cuts">
@@ -2626,8 +2628,11 @@ void EventAnalyser() {
     cout << "Looping over chain files...\n\n";
 
     clas12root::HipoChain chain;
-
     chain.Add(AnalyseFileDirContent.c_str());
+
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Getting particle masses (for histograms)
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Getting particle masses">
     auto db = TDatabasePDG::Instance();
@@ -2643,7 +2648,11 @@ void EventAnalyser() {
     double m_Kminus = db->GetParticle(-321)->Mass();
     //</editor-fold>
 
-    //<editor-fold desc="Beam particle's momentum">
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Setting beam particle's momentum
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Setting beam particle's momentum">
     double Pv = sqrt(beamE * beamE - m_e * m_e);
     double Pvx = 0.; // assuming momentum of incoming lepton is on the z direction
     double Pvy = 0.; // assuming momentum of incoming lepton is on the z direction
@@ -2652,6 +2661,11 @@ void EventAnalyser() {
     TLorentzVector e_in(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Counting variable definitions
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Counting variable definitions">
     int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
 
     int num_of_events_with_e_in_CD = 0, num_of_events_with_e_in_FD = 0, num_of_events_with_e_in_FT = 0;
@@ -2673,6 +2687,11 @@ void EventAnalyser() {
     int num_of_QEL_1e2p_FT_events = 0, num_of_MEC_1e2p_FT_events = 0, num_of_RES_1e2p_FT_events = 0, num_of_DIS_1e2p_FT_events = 0;
 
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
+    //</editor-fold>
+
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Looping over each HipoChain file
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool qel, mec, res, dis;
 
@@ -2742,13 +2761,7 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            bool Electron_Chi2_cut_CD, Electron_Chi2_cut_FD;
-            bool Electron_in_CD, Electron_passing_Chi2_CD, Electron_in_FD, Electron_passing_Chi2_FD;
-            bool Proton0_in_CD, Proton0_passing_Chi2_CD, Proton0_in_FD, Proton0_passing_Chi2_FD;
-            bool Proton1_in_CD, Proton1_passing_Chi2_CD, Proton1_in_FD, Proton1_passing_Chi2_FD;
-
-//  All electrons plots
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  All electrons plots -------------------------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="All electrons plots">
 
@@ -2876,11 +2889,9 @@ void EventAnalyser() {
 
             //</editor-fold>
 
+//  1e only cut ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//  1e only plots
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="1e only plots">
+            //<editor-fold desc="1e only cut">
             if (electrons.size() >= 1) {
                 ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
                 if (electrons.size() > 1) {
@@ -3167,6 +3178,8 @@ void EventAnalyser() {
                 ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
             }
 
+//  1e2p cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
             if (protons.size() == 2) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
@@ -3220,214 +3233,113 @@ void EventAnalyser() {
 //                } // end of loop over protons vector
 //                //</editor-fold>
 
-                // TODO: add cuts for FT
-                //<editor-fold desc="Testing electron Chi2 cut separately">
-                Electron_in_CD = (electrons[0]->getRegion() == CD);
-                Electron_passing_Chi2_CD = (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD);
-                Electron_Chi2_cut_CD = (Electron_in_CD && Electron_passing_Chi2_CD);
-                Electron_in_FD = (electrons[0]->getRegion() == FD);
-                Electron_passing_Chi2_FD = (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD);
-                Electron_Chi2_cut_FD = (Electron_in_FD && Electron_passing_Chi2_FD);
+                //<editor-fold desc="Testing Chi2 cuts">
 
-//                if (Electron_in_CD && Electron_passing_Chi2_CD) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-//                    Chi2_Electron_1e2p_sChi2_cut_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                } else if (Electron_in_FD && Electron_passing_Chi2_FD) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-//                    Chi2_Electron_1e2p_sChi2_cut_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                }
+                //<editor-fold desc="Testing electron Chi2 cut separately">
+
+//                Electron_in_CD = (electrons[0]->getRegion() == CD);
+//                Electron_passing_Chi2_CD = (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD);
+//                Electron_Chi2_cut_CD = (Electron_in_CD && Electron_passing_Chi2_CD);
+//                Electron_in_FD = (electrons[0]->getRegion() == FD);
+//                Electron_passing_Chi2_FD = (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD);
+//                Electron_Chi2_cut_FD = (Electron_in_FD && Electron_passing_Chi2_FD);
+
+                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) {
+                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+                    Chi2_Electron_1e2p_sChi2_cut_CD->Fill(electrons[0]->par()->getChi2Pid());
+                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD)) {
+                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+                    Chi2_Electron_1e2p_sChi2_cut_FD->Fill(electrons[0]->par()->getChi2Pid());
+                }
                 //</editor-fold>
 
                 //<editor-fold desc="Testing proton0 Chi2 cut separately">
-                Proton0_in_CD = (protons[0]->getRegion() == CD);
-                Proton0_passing_Chi2_CD = (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD);
-                Proton0_in_FD = (protons[0]->getRegion() == FD);
-                Proton0_passing_Chi2_FD = (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD);
 
-                if (Proton0_in_CD && Proton0_passing_Chi2_CD) {
+//                Proton0_in_CD = (protons[0]->getRegion() == CD);
+//                Proton0_passing_Chi2_CD = (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD);
+//                Proton0_in_FD = (protons[0]->getRegion() == FD);
+//                Proton0_passing_Chi2_FD = (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD);
+
+                if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                     Chi2_Proton_1e2p_sChi2_cut_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if (Proton0_in_FD && Proton0_passing_Chi2_FD) {
+                } else if ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                     Chi2_Proton_1e2p_sChi2_cut_FD->Fill(protons[0]->par()->getChi2Pid());
                 }
                 //</editor-fold>
 
                 //<editor-fold desc="Testing proton1 Chi2 cut separately">
-                Proton1_in_CD = (protons[1]->getRegion() == CD);
-                Proton1_passing_Chi2_CD = (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD);
-                Proton1_in_FD = (protons[1]->getRegion() == FD);
-                Proton1_passing_Chi2_FD = (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD);
 
-                if (Proton1_in_CD && Proton1_passing_Chi2_CD) {
+//                Proton1_in_CD = (protons[1]->getRegion() == CD);
+//                Proton1_passing_Chi2_CD = (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD);
+//                Proton1_in_FD = (protons[1]->getRegion() == FD);
+//                Proton1_passing_Chi2_FD = (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD);
+
+                if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                     Chi2_Proton_1e2p_sChi2_cut_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if ((Proton1_in_FD && (Proton1_passing_Chi2_FD))) {
+                } else if ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                     Chi2_Proton_1e2p_sChi2_cut_FD->Fill(protons[1]->par()->getChi2Pid());
                 }
                 //</editor-fold>
 
+                //<editor-fold desc="Testing Chi2 cuts all at once">
+                // TODO: right now, will give 0 event in CD where there are no electrons. Figure out of to keep it that way (suggestion: switch to ||)
+                if (
+//                      Electron in CD + within Chi2 cut:
+                        ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) &&
+                        //                      Proton0 in CD + within Chi2 cut:
+                        ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)) &&
+                        //                      Proton1 in CD + within Chi2 cut
+                        ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD))
+                        ) {
 
-//                testPrint("electron pass!!!");
-
-
-                if (electrons[0]->getRegion() == CD) {
-                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) {
-                        continue;
-                    } else {
-                        ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-                        Chi2_Electron_1e2p_sChi2_cut_CD->Fill(electrons[0]->par()->getChi2Pid());
-                    }
-                } else if (electrons[0]->getRegion() == FD) {
-                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) {
-                        continue;
-                    } else {
-                        ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-                        Chi2_Electron_1e2p_sChi2_cut_FD->Fill(electrons[0]->par()->getChi2Pid());
-                    }
-                }
-
-                //<editor-fold desc="Testing electron, proton0 & proton1 Chi2 cuts all at once">
-////                if ((Electron_Chi2_cut_CD == false) || (Electron_Chi2_cut_FD == false)) { continue; }
-//                if (Electron_Chi2_cut_CD == false) {
-//                    continue;
-//                } else if (Electron_Chi2_cut_FD == false) {
-//                    continue;
-//                }
-//                if (!(Electron_in_FD && Electron_passing_Chi2_FD)) { continue;}
-
-                testPrint("electron pass!!!");
-//
-                if (!(Proton0_in_CD && Proton0_passing_Chi2_CD) || !(Proton0_in_FD && Proton0_passing_Chi2_FD)) { continue; }
-//                if (!(Proton0_in_FD && Proton0_passing_Chi2_FD)) { continue;}
-
-                if (!(Proton1_in_CD && Proton1_passing_Chi2_CD) || !(Proton1_in_FD && Proton1_passing_Chi2_FD)) { continue; }
-//                if (!(Proton1_in_FD && Proton1_passing_Chi2_FD)) { continue;}
-
-
-
-
-
-                if (Electron_in_CD) {
+                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
                     Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
-                } else if (Electron_in_FD) {
-                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
-                }
-
-                if (Proton0_in_CD) {
                     Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if (Proton0_in_FD) {
-                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
-                }
-
-                if (Proton1_in_CD) {
                     Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if (Proton1_in_FD) {
+
+                } else if (
+//                      Electron in FD + within Chi2 cut:
+                        ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD)) &&
+                        //                      Proton0 in FD + within Chi2 cut:
+                        ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)) &&
+                        //                      Proton1 in FD + within Chi2 cut
+                        ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD))
+                        ) {
+
+                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
+                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
+                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
                     Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
+
                 }
-
-
-
-
-
-
-//                if ((Electron_in_CD && Electron_passing_Chi2_CD) && (Proton0_in_CD && Proton0_passing_Chi2_CD) && (Proton1_in_CD && Proton1_passing_Chi2_CD)) {
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
-//                    Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
-//                } else if ((Electron_in_FD && Electron_passing_Chi2_FD) && (Proton0_in_FD && Proton0_passing_Chi2_FD) && (Proton1_in_FD && Proton1_passing_Chi2_FD)) {
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
-//                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
-//                }
-
-
-
-
+                //</editor-fold>
 
                 //</editor-fold>
 
-                /*
-//                if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-//                    Chi2_Electron_1e2p_sChi2_cut_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                } else if (((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-//                    Chi2_Electron_1e2p_sChi2_cut_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                }
-//
-//                if (((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
-//                    Chi2_Proton_1e2p_sChi2_cut_CD->Fill(protons[0]->par()->getChi2Pid());
-//                } else if (((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
-//                    Chi2_Proton_1e2p_sChi2_cut_FD->Fill(protons[0]->par()->getChi2Pid());
-//                }
-//
-//                if (((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[1]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
-//                    Chi2_Proton_1e2p_sChi2_cut_CD->Fill(protons[1]->par()->getChi2Pid());
-//                } else if (((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[1]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
-//                    Chi2_Proton_1e2p_sChi2_cut_FD->Fill(protons[1]->par()->getChi2Pid());
-//                }
-//
-//
-//                if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) &&
-//                    ((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD))) &&
-//                    ((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
-//                    Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
-//                } else if (((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD)) &&
-//                           ((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD))) &&
-//                           ((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
-//                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
-//                }
-*/
+                //<editor-fold desc="Applying Chi2 cuts">
+                if (electrons[0]->getRegion() == CD) {
+                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+                } else if (electrons[0]->getRegion() == FD) {
+                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+                }
 
-/// //                if (((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_CD)) &&
-//                    ((protons[0]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_CD))) &&
-//                    ((protons[1]->getRegion() == CD) && ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_CD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
-//                    Chi2_Electron_1e2p_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_CD->Fill(protons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_CD->Fill(protons[1]->par()->getChi2Pid());
-//                } else if (((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) < Chi2_Electron_cut_FD)) &&
-//                           ((protons[0]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) < Chi2_Proton_cut_FD))) &&
-//                           ((protons[1]->getRegion() == FD) && ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) < Chi2_Proton_cut_FD)))) {
-////                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
-//                    Chi2_Electron_1e2p_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_FD->Fill(protons[0]->par()->getChi2Pid());
-//                    Chi2_Proton_1e2p_FD->Fill(protons[1]->par()->getChi2Pid());
-//                }
+                // TODO: move proton blocks here to for loop to save some space
+                if (protons[0]->getRegion() == CD) {
+                    if ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+                } else if (protons[0]->getRegion() == FD) {
+                    if ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+                }
 
-//                if (electrons[0]->getRegion() == CD) {
-//                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[i]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_CD;
-//                    Chi2_Electron_1e2p_CD->Fill(electrons[i]->par()->getChi2Pid());
-//                } else if (electrons[0]->getRegion() == FD) {
-//                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[i]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                    ++num_of_events_1e2p_w_allChi2_cuts_only_FD;
-//                    Chi2_Electron_1e2p_FD->Fill(electrons[i]->par()->getChi2Pid());
-//                }
+                if (protons[1]->getRegion() == CD) {
+                    if ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+                } else if (protons[1]->getRegion() == FD) {
+                    if ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+                }
+                //</editor-fold>
 
             } // end of "protons.size() == 2" if
 
