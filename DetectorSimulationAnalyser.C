@@ -196,7 +196,8 @@ void EventAnalyser() {
     //<editor-fold desc="Vertex plots directories">
     bool create_vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
-    string Vertex_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/Vertex_plots_by_components", "Only_1e/dV_plots", "1e2p_plots", "1e2p_plots/dV_plots"};
+    string Vertex_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/Vertex_plots_by_components", "Only_1e/dV_plots", "1e2p_plots",
+                                        "1e2p_plots/dV_plots_separate_detectors", "1e2p_plots/dV_plots_both_detectors"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_vertex_Dir, Vertex_Parent_Directory, folders_name);
@@ -206,7 +207,8 @@ void EventAnalyser() {
     string Vertex_Only_1e_by_comp_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
     string Vertex_Only_1e_dV_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
     string Vertex_1e2p_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
-    string Vertex_1e2p_dV_plots_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
+    string Vertex_1e2p_dV_separate_detectors_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
+    string Vertex_1e2p_dV_both_detectors_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
 
     string Vertex_save_directories[30][3] = {{"Electron_Vx", Vertex_All_e_Directory,           "CD"},
                                              {"Electron_Vy", Vertex_All_e_Directory,           "CD"},
@@ -498,6 +500,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Chi2 cuts">
     // TODO: confirm Chi2 cut with justin
+    // TODO: see how to apply unsymmetric cuts
 
     //<editor-fold desc="Electron chi2 cuts">
 
@@ -577,20 +580,21 @@ void EventAnalyser() {
 
     //<editor-fold desc="dV cuts">
     // TODO: confirm dVz cut with justin
+    // TODO: see how to apply unsymmetric cuts
 
     double dVx_Xmax_CD;
-    double dVx_cut_CD = 4., dVx_peak_CD = -0.1; // dVx_peak_CD to be reset by dVx_Xmax_CD in second run
+    double dVx_cut_CD = 4., dVx_peak_CD = -0.01; // dVx_peak_CD to be reset by dVx_Xmax_CD in second run
     double dVy_Xmax_CD;
-    double dVy_cut_CD = 4., dVy_peak_CD = 0.1; // dVy_peak_CD to be reset by dVy_Xmax_CD in second run
+    double dVy_cut_CD = 4., dVy_peak_CD = 0.01; // dVy_peak_CD to be reset by dVy_Xmax_CD in second run
     double dVz_Xmax_CD;
-    double dVz_cut_CD = 4., dVz_peak_CD = 0.5; // dVz_peak_CD to be reset by dVz_Xmax_CD in second run
+    double dVz_cut_CD = 4., dVz_peak_CD = 0.51; // dVz_peak_CD to be reset by dVz_Xmax_CD in second run
 
     double dVx_Xmax_FD;
-    double dVx_cut_FD = 4., dVx_peak_FD = -0.1; // dVx_peak_FD to be reset by dVx_Xmax_FD in second run
+    double dVx_cut_FD = 4., dVx_peak_FD = -0.03; // dVx_peak_FD to be reset by dVx_Xmax_FD in second run
     double dVy_Xmax_FD;
-    double dVy_cut_FD = 4., dVy_peak_FD = -0.1; // dVy_peak_FD to be reset by dVy_Xmax_FD in second run
+    double dVy_cut_FD = 4., dVy_peak_FD = -0.03; // dVy_peak_FD to be reset by dVy_Xmax_FD in second run
     double dVz_Xmax_FD;
-    double dVz_cut_FD = 4., dVz_peak_FD = 0.1; // dVz_peak_FD to be reset by dVz_Xmax_FD in second run
+    double dVz_cut_FD = 4., dVz_peak_FD = -0.27; // dVz_peak_FD to be reset by dVz_Xmax_FD in second run
     //</editor-fold>
 
 //    //<editor-fold desc="Neutron Vertex cut">
@@ -1372,6 +1376,13 @@ void EventAnalyser() {
                                      1000, dV_lower_lim, dV_upper_lim);
     TH1D *deltaVz_1e2p_FD = new TH1D("dV_{z} (1e2p & All #chi^{2} cuts, FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e2p & All #chi^{2} cuts, Forward Detector);dV_{z} [cm];",
                                      1000, dV_lower_lim, dV_upper_lim);
+
+    TH1D *deltaVx_1e2p = new TH1D("dV_{x} (1e2p & All #chi^{2} cuts, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (1e2p & All #chi^{2} cuts, CD & FD);dV_{x} [cm];",
+                                  1000, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVy_1e2p = new TH1D("dV_{y} (1e2p & All #chi^{2} cuts, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e2p & All #chi^{2} cuts, CD & FD);dV_{y} [cm];",
+                                  1000, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVz_1e2p = new TH1D("dV_{z} (1e2p & All #chi^{2} cuts, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e2p & All #chi^{2} cuts, CD & FD);dV_{z} [cm];",
+                                  1000, dV_lower_lim, dV_upper_lim);
     //</editor-fold>
 
     //</editor-fold>
@@ -2512,7 +2523,7 @@ void EventAnalyser() {
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool qel, mec, res, dis;
+    bool qel, mec, res, dis; // TODO: move inside while loop
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
@@ -3094,35 +3105,66 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Fill dV plots (1e only & #chi^{2} cuts, CD & FD)">
-                double p_Vy_CD, p_Vz_CD, p_Vx_FD, p_Vy_FD, p_Vz_FD, dVx_CD, dVy_CD, dVz_CD, dVx_FD, dVy_FD, dVz_FD, p_Vx_CD;
+                double p_Vy_CD, p_Vz_CD, p_Vx_FD, p_Vy_FD, p_Vz_FD, dVx, dVy, dVz, dVx_CD, dVy_CD, dVz_CD, dVx_FD, dVy_FD, dVz_FD, p_Vx_CD;
 
+                // TODO: confirm rather or not dV should be calculated in a specific detector or in general
                 for (auto &p: protons) {
                     if (p->getRegion() == CD) {
                         p_Vx_CD = p->par()->getVx();
-                        dVx_CD = (e_Vx_CD - p_Vx_CD);
-                        deltaVx_1e2p_CD->Fill(dVx_CD);
+                        dVx_CD = e_Vx_CD - p_Vx_CD;
+                        dVx = e_Vx_CD - p_Vx_CD;
+
+                        // TODO: reexamine these vertex cuts
+                        if (fabs(dVx_peak_CD - dVx_CD) < dVx_cut_CD) {
+                            deltaVx_1e2p_CD->Fill(dVx_CD);
+                            deltaVx_1e2p->Fill(dVx);
+                        }
 
                         p_Vy_CD = p->par()->getVy();
-                        dVy_CD = (e_Vy_CD - p_Vy_CD);
-                        deltaVy_1e2p_CD->Fill(dVy_CD);
+                        dVy_CD = e_Vy_CD - p_Vy_CD;
+                        dVy = e_Vy_CD - p_Vy_CD;
+
+                        if (fabs(dVy_peak_CD - dVy_CD) < dVy_cut_CD) {
+                            deltaVy_1e2p_CD->Fill(dVy_CD);
+                            deltaVy_1e2p->Fill(dVy);
+                        }
 
                         p_Vz_CD = p->par()->getVz();
-                        dVz_CD = (e_Vz_CD - p_Vz_CD);
-                        deltaVz_1e2p_CD->Fill(dVz_CD);
+                        dVz_CD = e_Vz_CD - p_Vz_CD;
+                        dVz = e_Vz_CD - p_Vz_CD;
+
+                        if (fabs(dVz_peak_CD - dVz_CD) < dVz_cut_CD) {
+                            deltaVz_1e2p_CD->Fill(dVz_CD);
+                            deltaVz_1e2p->Fill(dVz);
+                        }
 
                     } else if (p->getRegion() == FD) {
                         p_Vx_FD = p->par()->getVx();
-                        dVx_FD = (e_Vx_FD - p_Vx_FD);
-                        deltaVx_1e2p_FD->Fill(dVx_FD);
+                        dVx_FD = e_Vx_FD - p_Vx_FD;
+                        dVx = e_Vx_FD - p_Vx_FD;
+
+                        if (fabs(dVx_peak_FD - dVx_FD) < dVx_cut_FD) {
+                            deltaVx_1e2p_FD->Fill(dVx_FD);
+                            deltaVx_1e2p->Fill(dVx);
+                        }
 
                         p_Vy_FD = p->par()->getVy();
-                        dVy_FD = (e_Vy_FD - p_Vy_FD);
-                        deltaVy_1e2p_FD->Fill(dVy_FD);
+                        dVy_FD = e_Vy_FD - p_Vy_FD;
+                        dVy = e_Vy_FD - p_Vy_FD;
+
+                        if (fabs(dVy_peak_FD - dVy_FD) < dVy_cut_FD) {
+                            deltaVy_1e2p_FD->Fill(dVy_FD);
+                            deltaVy_1e2p->Fill(dVy);
+                        }
 
                         p_Vz_FD = p->par()->getVz();
-                        dVz_FD = (e_Vz_FD - p_Vz_FD);
-                        deltaVz_1e2p_FD->Fill(dVz_FD);
+                        dVz_FD = e_Vz_FD - p_Vz_FD;
+                        dVz = e_Vz_FD - p_Vz_FD;
 
+                        if (fabs(dVz_peak_FD - dVz_FD) < dVz_cut_FD) {
+                            deltaVz_1e2p_FD->Fill(dVz_FD);
+                            deltaVz_1e2p->Fill(dVz);
+                        }
                     }
                 } // end of loop over protons vector
                 //</editor-fold>
@@ -4282,48 +4324,48 @@ void EventAnalyser() {
                                                   {"Electron V_{x}", "no #(e) cut"},
                                                   {"Electron V_{y}", "no #(e) cut"},
                                                   {"Electron V_{z}", "no #(e) cut"},
-                                                  {"Proton V_{x}", "no #(e) cut"},
-                                                  {"Proton V_{y}", "no #(e) cut"},
-                                                  {"Proton V_{z}", "no #(e) cut"},
-                                                  {"Proton V_{x}", "no #(e) cut"},
-                                                  {"Proton V_{y}", "no #(e) cut"},
-                                                  {"Proton V_{z}", "no #(e) cut"},
+                                                  {"Proton V_{x}",   "no #(e) cut"},
+                                                  {"Proton V_{y}",   "no #(e) cut"},
+                                                  {"Proton V_{z}",   "no #(e) cut"},
+                                                  {"Proton V_{x}",   "no #(e) cut"},
+                                                  {"Proton V_{y}",   "no #(e) cut"},
+                                                  {"Proton V_{z}",   "no #(e) cut"},
                                                   {"Electron V_{x}", "1e only"},
                                                   {"Electron V_{y}", "1e only"},
                                                   {"Electron V_{z}", "1e only"},
                                                   {"Electron V_{x}", "1e only"},
                                                   {"Electron V_{y}", "1e only"},
                                                   {"Electron V_{z}", "1e only"},
-                                                  {"Proton V_{x}", "1e only"},
-                                                  {"Proton V_{y}", "1e only"},
-                                                  {"Proton V_{z}", "1e only"},
-                                                  {"Proton V_{x}", "1e only"},
-                                                  {"Proton V_{y}", "1e only"},
-                                                  {"Proton V_{z}", "1e only"}};
+                                                  {"Proton V_{x}",   "1e only"},
+                                                  {"Proton V_{y}",   "1e only"},
+                                                  {"Proton V_{z}",   "1e only"},
+                                                  {"Proton V_{x}",   "1e only"},
+                                                  {"Proton V_{y}",   "1e only"},
+                                                  {"Proton V_{z}",   "1e only"}};
         double Vertex_histograms_cuts[24][2] = {{Vertex_Electron_cut_CD, 0},
                                                 {Vertex_Electron_cut_CD, 0},
                                                 {Vertex_Electron_cut_CD, 0},
                                                 {Vertex_Electron_cut_FD, 0},
                                                 {Vertex_Electron_cut_FD, 0},
                                                 {Vertex_Electron_cut_FD, 0},
-                                                {Vertex_Proton_cut_CD, 0},
-                                                {Vertex_Proton_cut_CD, 0},
-                                                {Vertex_Proton_cut_CD, 0},
-                                                {Vertex_Proton_cut_FD, 0},
-                                                {Vertex_Proton_cut_FD, 0},
-                                                {Vertex_Proton_cut_FD, 0},
+                                                {Vertex_Proton_cut_CD,   0},
+                                                {Vertex_Proton_cut_CD,   0},
+                                                {Vertex_Proton_cut_CD,   0},
+                                                {Vertex_Proton_cut_FD,   0},
+                                                {Vertex_Proton_cut_FD,   0},
+                                                {Vertex_Proton_cut_FD,   0},
                                                 {Vertex_Electron_cut_CD, 0},
                                                 {Vertex_Electron_cut_CD, 0},
                                                 {Vertex_Electron_cut_CD, 0},
                                                 {Vertex_Electron_cut_FD, 0},
                                                 {Vertex_Electron_cut_FD, 0},
                                                 {Vertex_Electron_cut_FD, 0},
-                                                {Vertex_Proton_cut_CD, 0},
-                                                {Vertex_Proton_cut_CD, 0},
-                                                {Vertex_Proton_cut_CD, 0},
-                                                {Vertex_Proton_cut_FD, 0},
-                                                {Vertex_Proton_cut_FD, 0},
-                                                {Vertex_Proton_cut_FD, 0}};
+                                                {Vertex_Proton_cut_CD,   0},
+                                                {Vertex_Proton_cut_CD,   0},
+                                                {Vertex_Proton_cut_CD,   0},
+                                                {Vertex_Proton_cut_FD,   0},
+                                                {Vertex_Proton_cut_FD,   0},
+                                                {Vertex_Proton_cut_FD,   0}};
 
         int Vertex_histograms_length = sizeof(Vertex_histograms) / sizeof(TH1D);
 
@@ -4338,24 +4380,44 @@ void EventAnalyser() {
 
         //<editor-fold desc="dV plots (1e2p, CD)">
         histPlotter1D(c1, deltaVx_1e2p_CD, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
-                      2, false, true, dVx_1e2p_Stack, "dVx", Vertex_1e2p_dV_plots_Directory, "CD", kBlue, true, true, true, false, true, dVx_cut_CD, dVx_peak_CD);
+                      2, false, true, dVx_1e2p_Stack, "dVx", Vertex_1e2p_dV_separate_detectors_Directory, "CD", kBlue, true, true, true, false, true,
+                      dVx_cut_CD, dVx_peak_CD);
 
         histPlotter1D(c1, deltaVy_1e2p_CD, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
-                      2, false, true, dVy_1e2p_Stack, "dVy", Vertex_1e2p_dV_plots_Directory, "CD", kBlue, true, true, true, false, true, dVy_cut_CD, dVy_peak_CD);
+                      2, false, true, dVy_1e2p_Stack, "dVy", Vertex_1e2p_dV_separate_detectors_Directory, "CD", kBlue, true, true, true, false, true,
+                      dVy_cut_CD, dVy_peak_CD);
 
         histPlotter1D(c1, deltaVz_1e2p_CD, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
-                      2, false, true, dVz_1e2p_Stack, "dVz", Vertex_1e2p_dV_plots_Directory, "CD", kBlue, true, true, true, false, true, dVz_cut_CD, dVz_peak_CD);
+                      2, false, true, dVz_1e2p_Stack, "dVz", Vertex_1e2p_dV_separate_detectors_Directory, "CD", kBlue, true, true, true, false, true,
+                      dVz_cut_CD, dVz_peak_CD);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (1e2p, FD)">
         histPlotter1D(c1, deltaVx_1e2p_FD, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
-                      2, false, true, dVx_1e2p_Stack, "dVx", Vertex_1e2p_dV_plots_Directory, "FD", kBlue, true, true, true, false, true, dVx_cut_FD, dVx_peak_FD);
+                      2, false, true, dVx_1e2p_Stack, "dVx", Vertex_1e2p_dV_separate_detectors_Directory, "FD", kBlue, true, true, true, false, true,
+                      dVx_cut_FD, dVx_peak_FD);
 
         histPlotter1D(c1, deltaVy_1e2p_FD, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
-                      2, false, true, dVy_1e2p_Stack, "dVy", Vertex_1e2p_dV_plots_Directory, "FD", kBlue, true, true, true, false, true, dVy_cut_FD, dVy_peak_FD);
+                      2, false, true, dVy_1e2p_Stack, "dVy", Vertex_1e2p_dV_separate_detectors_Directory, "FD", kBlue, true, true, true, false, true,
+                      dVy_cut_FD, dVy_peak_FD);
 
         histPlotter1D(c1, deltaVz_1e2p_FD, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
-                      2, false, true, dVz_1e2p_Stack, "dVz", Vertex_1e2p_dV_plots_Directory, "FD", kBlue, true, true, true, false, true, dVz_cut_FD, dVz_peak_FD);
+                      2, false, true, dVz_1e2p_Stack, "dVz", Vertex_1e2p_dV_separate_detectors_Directory, "FD", kBlue, true, true, true, false, true,
+                      dVz_cut_FD, dVz_peak_FD);
+        //</editor-fold>
+
+        //<editor-fold desc="dV plots (1e2p, CD & FD)">
+        histPlotter1D(c1, deltaVx_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, dVx_1e2p_Stack, "dVx", Vertex_1e2p_dV_both_detectors_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                      dVx_cut_FD, dVx_peak_FD);
+
+        histPlotter1D(c1, deltaVy_1e2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, dVy_1e2p_Stack, "dVy", Vertex_1e2p_dV_both_detectors_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                      dVy_cut_FD, dVy_peak_FD);
+
+        histPlotter1D(c1, deltaVz_1e2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, dVz_1e2p_Stack, "dVz", Vertex_1e2p_dV_both_detectors_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                      dVz_cut_FD, dVz_peak_FD);
         //</editor-fold>
 
     } else {
