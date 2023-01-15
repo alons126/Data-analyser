@@ -118,7 +118,7 @@ void EventAnalyser() {
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Creating directories">
-    cout << "Creating plots direcroties...\n\n";
+    cout << "Creating plots directories...\n\n";
 
     string Plots_Folder = "./plots"; // Plots_Folder = Parent_Folder
 
