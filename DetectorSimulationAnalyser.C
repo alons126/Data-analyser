@@ -1136,7 +1136,7 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Histogram definitions:
+// Histogram definitions
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Histogram definitions">
@@ -1202,81 +1202,148 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
-    THStack Chi2_Electron_Stack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
-    THStack Chi2_Proton_Stack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
+    THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
+    THStack *Chi2_Proton_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
+    THStack *Chi2_Electron_1e_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
+    THStack *Chi2_Proton_1e_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
     THStack *Chi2_Electron_1e2p_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
     THStack *Chi2_Proton_1e2p_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
 
     //<editor-fold desc="Chi2 plots (no #(e) cut)">
-    TH1D Chi2_Electron_CD("Electron #chi^{2} (no #(e) cut, CD) test", "Electron #chi^{2} (no #(e) cut, Central Detector);Electron #chi^{2};",
-                          1000, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D Chi2_Electron_FD("Electron #chi^{2} (no #(e) cut, FD) test", "Electron #chi^{2} (no #(e) cut, Forward Detector);Electron #chi^{2};",
-                          1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (no #(e) cut, CD) test", "Electron #chi^{2} (no #(e) cut, Central Detector);Electron #chi^{2};",
+                                      1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (no #(e) cut, FD) test", "Electron #chi^{2} (no #(e) cut, Forward Detector);Electron #chi^{2};",
+                                      1000, Chi2_lower_lim, Chi2_upper_lim);
 
-    TH1D Chi2_Proton_CD("Proton #chi^{2} (no #(e) cut, CD) test", "Proton #chi^{2} (no #(e) cut, Central Detector);Proton #chi^{2};",
-                        1000, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D Chi2_Proton_FD("Proton #chi^{2} (no #(e) cut, FD) test", "Proton #chi^{2} (no #(e) cut, Forward Detector);Proton #chi^{2};",
-                        1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (no #(e) cut, CD) test", "Proton #chi^{2} (no #(e) cut, Central Detector);Proton #chi^{2};",
+                                    1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (no #(e) cut, FD) test", "Proton #chi^{2} (no #(e) cut, Forward Detector);Proton #chi^{2};",
+                                    1000, Chi2_lower_lim, Chi2_upper_lim);
 //    //</editor-fold>
 
     //<editor-fold desc="Chi2 plots (1e only)">
-    TH1D Chi2_Electron_1e_CD("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
-                             1000, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D Chi2_Electron_1e_FD("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
-                             1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Electron_1e_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
+                                         1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Electron_1e_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
+                                         1000, Chi2_lower_lim, Chi2_upper_lim);
 
-    TH1D Chi2_Proton_1e_CD("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
-                           1000, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D Chi2_Proton_1e_FD("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
-                           1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Proton_1e_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
+                                       1000, Chi2_lower_lim, Chi2_upper_lim);
+    TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
+                                       1000, Chi2_lower_lim, Chi2_upper_lim);
 
     //<editor-fold desc="Applying Chi2 cuts separately">
     TH1D *Chi2_Electron_1e2p_sChi2_cut_CD = new TH1D("Electron #chi^{2} (1e2p & Electron #chi^{2} cut, CD) test",
-                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, Central Detector);Electron #chi^{2};",
+                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, CD);Electron #chi^{2};",
                                                      1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
     TH1D *Chi2_Electron_1e2p_sChi2_cut_FD = new TH1D("Electron #chi^{2} (1e2p & Electron #chi^{2} cut, FD) test",
-                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, Forward Detector);Electron #chi^{2};",
+                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, FD);Electron #chi^{2};",
                                                      1000, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
 
     TH1D *Chi2_Proton_1e2p_sChi2_cut_CD = new TH1D("Proton #chi^{2} (1e2p & Proton #chi^{2} cut, CD) test",
-                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, Central Detector);Proton #chi^{2};",
+                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, CD);Proton #chi^{2};",
                                                    1000, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
     TH1D *Chi2_Proton_1e2p_sChi2_cut_FD = new TH1D("Proton #chi^{2} (1e2p & Proton #chi^{2} cut, FD) test",
-                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, Forward Detector);Proton #chi^{2};",
+                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, FD);Proton #chi^{2};",
                                                    1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
     //</editor-fold>
 
     //<editor-fold desc="Applying all Chi2 cuts at once">
     TH1D *Chi2_Electron_1e2p_CD = new TH1D("Electron #chi^{2} (1e2p & All #chi^{2} cuts, CD) test",
-                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, Central Detector);Electron #chi^{2};",
+                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, CD);Electron #chi^{2};",
                                            1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
     TH1D *Chi2_Electron_1e2p_FD = new TH1D("Electron #chi^{2} (1e2p & All #chi^{2} cuts, FD) test",
-                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, Forward Detector);Electron #chi^{2};",
+                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, FD);Electron #chi^{2};",
                                            1000, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
 
     TH1D *Chi2_Proton_1e2p_CD = new TH1D("Proton #chi^{2} (1e2p & All #chi^{2} cuts, CD) test",
-                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, Central Detector);Proton #chi^{2};",
+                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, CD);Proton #chi^{2};",
                                          1000, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
     TH1D *Chi2_Proton_1e2p_FD = new TH1D("Proton #chi^{2} (1e2p & All #chi^{2} cuts, FD) test",
-                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, Forward Detector);Proton #chi^{2};",
+                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, FD);Proton #chi^{2};",
                                          1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
     //</editor-fold>
 
-    //<editor-fold desc="Chi2 plots (1e only) - cut test">
-    TH1D Chi2_Electron_1e_cut_test_CD("Electron #chi^{2} (1e^{-} cut test, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
-                                      1000, -2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_peak_CD, 2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_peak_CD);
-    TH1D Chi2_Electron_1e_cut_test_FD("Electron #chi^{2} (1e^{-} cut test, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
-                                      1000, -2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_peak_FD, 2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_peak_FD);
-
-    TH1D Chi2_Proton_1e_cut_test_CD("Proton #chi^{2} (1e^{-} cut test, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
-                                    1000, -2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_peak_CD, 2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_peak_CD);
-    TH1D Chi2_Proton_1e_cut_test_FD("Proton #chi^{2} (1e^{-} cut test, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
-                                    1000, -2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_peak_FD, 2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_peak_FD);
     //</editor-fold>
 
     //</editor-fold>
 
-    //</editor-fold>
+//    //<editor-fold desc="Chi2 plots">
+//    THStack Chi2_Electron_Stack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
+//    THStack Chi2_Proton_Stack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
+//    THStack *Chi2_Electron_1e2p_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
+//    THStack *Chi2_Proton_1e2p_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
+//
+//    //<editor-fold desc="Chi2 plots (no #(e) cut)">
+//    TH1D Chi2_Electron_CD("Electron #chi^{2} (no #(e) cut, CD) test", "Electron #chi^{2} (no #(e) cut, Central Detector);Electron #chi^{2};",
+//                          1000, Chi2_lower_lim, Chi2_upper_lim);
+//    TH1D Chi2_Electron_FD("Electron #chi^{2} (no #(e) cut, FD) test", "Electron #chi^{2} (no #(e) cut, Forward Detector);Electron #chi^{2};",
+//                          1000, Chi2_lower_lim, Chi2_upper_lim);
+//
+//    TH1D Chi2_Proton_CD("Proton #chi^{2} (no #(e) cut, CD) test", "Proton #chi^{2} (no #(e) cut, Central Detector);Proton #chi^{2};",
+//                        1000, Chi2_lower_lim, Chi2_upper_lim);
+//    TH1D Chi2_Proton_FD("Proton #chi^{2} (no #(e) cut, FD) test", "Proton #chi^{2} (no #(e) cut, Forward Detector);Proton #chi^{2};",
+//                        1000, Chi2_lower_lim, Chi2_upper_lim);
+////    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2 plots (1e only)">
+//    TH1D Chi2_Electron_1e_CD("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
+//                             1000, Chi2_lower_lim, Chi2_upper_lim);
+//    TH1D Chi2_Electron_1e_FD("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
+//                             1000, Chi2_lower_lim, Chi2_upper_lim);
+//
+//    TH1D Chi2_Proton_1e_CD("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
+//                           1000, Chi2_lower_lim, Chi2_upper_lim);
+//    TH1D Chi2_Proton_1e_FD("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
+//                           1000, Chi2_lower_lim, Chi2_upper_lim);
+//
+//    //<editor-fold desc="Applying Chi2 cuts separately">
+//    TH1D *Chi2_Electron_1e2p_sChi2_cut_CD = new TH1D("Electron #chi^{2} (1e2p & Electron #chi^{2} cut, CD) test",
+//                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, Central Detector);Electron #chi^{2};",
+//                                                     1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+//    TH1D *Chi2_Electron_1e2p_sChi2_cut_FD = new TH1D("Electron #chi^{2} (1e2p & Electron #chi^{2} cut, FD) test",
+//                                                     "Electron #chi^{2} (1e2p & Electron #chi^{2} cut, Forward Detector);Electron #chi^{2};",
+//                                                     1000, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+//
+//    TH1D *Chi2_Proton_1e2p_sChi2_cut_CD = new TH1D("Proton #chi^{2} (1e2p & Proton #chi^{2} cut, CD) test",
+//                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, Central Detector);Proton #chi^{2};",
+//                                                   1000, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+//    TH1D *Chi2_Proton_1e2p_sChi2_cut_FD = new TH1D("Proton #chi^{2} (1e2p & Proton #chi^{2} cut, FD) test",
+//                                                   "Proton #chi^{2} (1e2p & Proton #chi^{2} cut, Forward Detector);Proton #chi^{2};",
+//                                                   1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Applying all Chi2 cuts at once">
+//    TH1D *Chi2_Electron_1e2p_CD = new TH1D("Electron #chi^{2} (1e2p & All #chi^{2} cuts, CD) test",
+//                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, Central Detector);Electron #chi^{2};",
+//                                           1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+//    TH1D *Chi2_Electron_1e2p_FD = new TH1D("Electron #chi^{2} (1e2p & All #chi^{2} cuts, FD) test",
+//                                           "Electron #chi^{2} (1e2p & All #chi^{2} cuts, Forward Detector);Electron #chi^{2};",
+//                                           1000, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+//
+//    TH1D *Chi2_Proton_1e2p_CD = new TH1D("Proton #chi^{2} (1e2p & All #chi^{2} cuts, CD) test",
+//                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, Central Detector);Proton #chi^{2};",
+//                                         1000, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+//    TH1D *Chi2_Proton_1e2p_FD = new TH1D("Proton #chi^{2} (1e2p & All #chi^{2} cuts, FD) test",
+//                                         "Proton #chi^{2} (1e2p & All #chi^{2} cuts, Forward Detector);Proton #chi^{2};",
+//                                         1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2 plots (1e only) - cut test">
+//    TH1D Chi2_Electron_1e_cut_test_CD("Electron #chi^{2} (1e^{-} cut test, CD) test", "Electron #chi^{2} (1e^{-} cut, Central Detector);Electron #chi^{2};",
+//                                      1000, -2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_peak_CD, 2 * Chi2_Electron_cut_CD + Chi2_Electron_1e_peak_CD);
+//    TH1D Chi2_Electron_1e_cut_test_FD("Electron #chi^{2} (1e^{-} cut test, FD) test", "Electron #chi^{2} (1e^{-} cut, Forward Detector);Electron #chi^{2};",
+//                                      1000, -2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_peak_FD, 2 * Chi2_Electron_cut_FD + Chi2_Electron_1e_peak_FD);
+//
+//    TH1D Chi2_Proton_1e_cut_test_CD("Proton #chi^{2} (1e^{-} cut test, CD) test", "Proton #chi^{2} (1e^{-} cut, Central Detector);Proton #chi^{2};",
+//                                    1000, -2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_peak_CD, 2 * Chi2_Proton_cut_CD + Chi2_Proton_1e_peak_CD);
+//    TH1D Chi2_Proton_1e_cut_test_FD("Proton #chi^{2} (1e^{-} cut test, FD) test", "Proton #chi^{2} (1e^{-} cut, Forward Detector);Proton #chi^{2};",
+//                                    1000, -2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_peak_FD, 2 * Chi2_Proton_cut_FD + Chi2_Proton_1e_peak_FD);
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//    //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Vertex plots
@@ -2450,7 +2517,7 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Code execution:
+// Code execution
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Code execution">
@@ -2587,7 +2654,7 @@ void EventAnalyser() {
                 ++num_of_DIS_events;
                 dis = true;
             } else {
-                cout << "processID UNKNON.\n\n";
+                cout << "Could not identify process!\n\n";
             }
             //</editor-fold>
 
@@ -2617,7 +2684,7 @@ void EventAnalyser() {
                     P_e_histogram_CD->Fill(electrons[i]->getP());
                     Beta_vs_P_Electrons_Only_CD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
-                    Chi2_Electron_CD.Fill(electrons[i]->par()->getChi2Pid());
+                    Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
 
                     Vertex_Electron_Vx_CD_test.Fill(electrons[i]->par()->getVx());
                     Vertex_Electron_Vy_CD_test.Fill(electrons[i]->par()->getVy());
@@ -2653,7 +2720,7 @@ void EventAnalyser() {
                     P_e_histogram_FD->Fill(electrons[i]->getP());
                     Beta_vs_P_Electrons_Only_FD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
-                    Chi2_Electron_FD.Fill(electrons[i]->par()->getChi2Pid());
+                    Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
 
                     Vertex_Electron_Vx_FD_test.Fill(electrons[i]->par()->getVx());
                     Vertex_Electron_Vy_FD_test.Fill(electrons[i]->par()->getVy());
@@ -2693,13 +2760,13 @@ void EventAnalyser() {
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
                     Beta_vs_P_Protons_Only_CD.Fill(p->getP(), p->par()->getBeta());
-                    Chi2_Proton_CD.Fill(p->par()->getChi2Pid());
+                    Chi2_Proton_CD->Fill(p->par()->getChi2Pid());
                     Vertex_Proton_Vx_CD_test.Fill(p->par()->getVx());
                     Vertex_Proton_Vy_CD_test.Fill(p->par()->getVy());
                     Vertex_Proton_Vz_CD_test.Fill(p->par()->getVz());
                 } else if (p->getRegion() == FD) {
                     Beta_vs_P_Protons_Only_FD.Fill(p->getP(), p->par()->getBeta());
-                    Chi2_Proton_FD.Fill(p->par()->getChi2Pid());
+                    Chi2_Proton_FD->Fill(p->par()->getChi2Pid());
                     Vertex_Proton_Vx_FD_test.Fill(p->par()->getVx());
                     Vertex_Proton_Vy_FD_test.Fill(p->par()->getVy());
                     Vertex_Proton_Vz_FD_test.Fill(p->par()->getVz());
@@ -2809,7 +2876,7 @@ void EventAnalyser() {
                     }
 
                     e_Chi2_CD = e->par()->getChi2Pid();
-                    Chi2_Electron_1e_CD.Fill(e_Chi2_CD);
+                    Chi2_Electron_1e_CD->Fill(e_Chi2_CD);
 
                     e_Vx_CD = e->par()->getVx();
                     Vertex_Electron_1e_Vx_CD_test.Fill(e_Vx_CD);
@@ -2818,11 +2885,11 @@ void EventAnalyser() {
                     e_Vz_CD = e->par()->getVz();
                     Vertex_Electron_1e_Vz_CD_test.Fill(e_Vz_CD);
 
-                    //<editor-fold desc="Electron chi2 test (1e only, CD)">
-                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) < Chi2_Electron_cut_CD)) {
-                        Chi2_Electron_1e_cut_test_CD.Fill(e_Chi2_CD);
-                    }
-                    //</editor-fold>
+//                    //<editor-fold desc="Electron chi2 test (1e only, CD)">
+//                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) < Chi2_Electron_cut_CD)) {
+//                        Chi2_Electron_1e_cut_test_CD.Fill(e_Chi2_CD);
+//                    }
+//                    //</editor-fold>
 
                 } else if (e->getRegion() == FD) {
                     P_e_FD = e->getP();
@@ -2884,7 +2951,7 @@ void EventAnalyser() {
                     }
 
                     e_Chi2_FD = e->par()->getChi2Pid();
-                    Chi2_Electron_1e_FD.Fill(e_Chi2_FD);
+                    Chi2_Electron_1e_FD->Fill(e_Chi2_FD);
 
                     e_Vx_FD = e->par()->getVx();
                     Vertex_Electron_1e_Vx_FD_test.Fill(e_Vx_FD);
@@ -2893,11 +2960,11 @@ void EventAnalyser() {
                     e_Vz_FD = e->par()->getVz();
                     Vertex_Electron_1e_Vz_FD_test.Fill(e_Vz_FD);
 
-                    //<editor-fold desc="Electron chi2 test (1e only, FD)">
-                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) < Chi2_Electron_cut_FD)) {
-                        Chi2_Electron_1e_cut_test_FD.Fill(e_Chi2_FD);
-                    }
-                    //</editor-fold>
+//                    //<editor-fold desc="Electron chi2 test (1e only, FD)">
+//                    if ((fabs(Chi2_Electron_1e_peak_FD - e_Chi2_FD) < Chi2_Electron_cut_FD)) {
+//                        Chi2_Electron_1e_cut_test_FD.Fill(e_Chi2_FD);
+//                    }
+//                    //</editor-fold>
 
                 } else if (e->getRegion() == FT) {
 
@@ -2947,7 +3014,7 @@ void EventAnalyser() {
                     Beta_vs_P_1e_Protons_Only_CD.Fill(p->getP(), p->par()->getBeta());
 
                     p_Chi2_tmp_CD = p->par()->getChi2Pid();
-                    Chi2_Proton_1e_CD.Fill(p_Chi2_tmp_CD);
+                    Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
 
                     p_Vx_tmp_CD = p->par()->getVx();
                     Vertex_Proton_1e_Vx_CD_test.Fill(p_Vx_tmp_CD);
@@ -2956,17 +3023,17 @@ void EventAnalyser() {
                     p_Vz_tmp_CD = p->par()->getVz();
                     Vertex_Proton_1e_Vz_CD_test.Fill(p_Vz_tmp_CD);
 
-                    //<editor-fold desc="Proton chi2 test (1e only, CD)">
-                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) < Chi2_Proton_cut_CD)) {
-                        Chi2_Proton_1e_cut_test_CD.Fill(p_Chi2_tmp_CD);
-                    }
-                    //</editor-fold>
+//                    //<editor-fold desc="Proton chi2 test (1e only, CD)">
+//                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) < Chi2_Proton_cut_CD)) {
+//                        Chi2_Proton_1e_cut_test_CD.Fill(p_Chi2_tmp_CD);
+//                    }
+//                    //</editor-fold>
 
                 } else if (p->getRegion() == FD) {
                     Beta_vs_P_1e_Protons_Only_FD.Fill(p->getP(), p->par()->getBeta());
 
                     p_Chi2_tmp_FD = p->par()->getChi2Pid();
-                    Chi2_Proton_1e_FD.Fill(p_Chi2_tmp_FD);
+                    Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
 
                     p_Vx_tmp_FD = p->par()->getVx();
                     Vertex_Proton_1e_Vx_FD_test.Fill(p_Vx_tmp_FD);
@@ -2975,11 +3042,11 @@ void EventAnalyser() {
                     p_Vz_tmp_FD = p->par()->getVz();
                     Vertex_Proton_1e_Vz_FD_test.Fill(p_Vz_tmp_FD);
 
-                    //<editor-fold desc="Proton chi2 test (1e only, FD)">
-                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) < Chi2_Proton_cut_FD)) {
-                        Chi2_Proton_1e_cut_test_FD.Fill(p_Chi2_tmp_FD);
-                    }
-                    //</editor-fold>
+//                    //<editor-fold desc="Proton chi2 test (1e only, FD)">
+//                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) < Chi2_Proton_cut_FD)) {
+//                        Chi2_Proton_1e_cut_test_FD.Fill(p_Chi2_tmp_FD);
+//                    }
+//                    //</editor-fold>
 
                 }
             } // end of loop over protons vector
@@ -4097,64 +4164,122 @@ void EventAnalyser() {
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
         //<editor-fold desc="Finding Xmax">
-        Chi2_Electron_Xmax_CD = Chi2_Electron_CD.GetBinCenter(Chi2_Electron_CD.GetMaximumBin());
-        Chi2_Electron_Xmax_FD = Chi2_Electron_FD.GetBinCenter(Chi2_Electron_FD.GetMaximumBin());
-        Chi2_Proton_Xmax_CD = Chi2_Proton_CD.GetBinCenter(Chi2_Proton_CD.GetMaximumBin());
-        Chi2_Proton_Xmax_FD = Chi2_Proton_FD.GetBinCenter(Chi2_Proton_FD.GetMaximumBin());
-        Chi2_Electron_1e_Xmax_CD = Chi2_Electron_1e_CD.GetBinCenter(Chi2_Electron_1e_CD.GetMaximumBin());
-        Chi2_Electron_1e_Xmax_FD = Chi2_Electron_1e_FD.GetBinCenter(Chi2_Electron_1e_FD.GetMaximumBin());
-        Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD.GetBinCenter(Chi2_Proton_1e_CD.GetMaximumBin());
-        Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD.GetBinCenter(Chi2_Proton_1e_FD.GetMaximumBin());
+        Chi2_Electron_Xmax_CD = Chi2_Electron_CD->GetBinCenter(Chi2_Electron_CD->GetMaximumBin());
+        Chi2_Electron_Xmax_FD = Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin());
+        Chi2_Proton_Xmax_CD = Chi2_Proton_CD->GetBinCenter(Chi2_Proton_CD->GetMaximumBin());
+        Chi2_Proton_Xmax_FD = Chi2_Proton_FD->GetBinCenter(Chi2_Proton_FD->GetMaximumBin());
+        Chi2_Electron_1e_Xmax_CD = Chi2_Electron_1e_CD->GetBinCenter(Chi2_Electron_1e_CD->GetMaximumBin());
+        Chi2_Electron_1e_Xmax_FD = Chi2_Electron_1e_FD->GetBinCenter(Chi2_Electron_1e_FD->GetMaximumBin());
+        Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD->GetBinCenter(Chi2_Proton_1e_CD->GetMaximumBin());
+        Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD->GetBinCenter(Chi2_Proton_1e_FD->GetMaximumBin());
         //</editor-fold>
 
-        THStack *Chi2_Electron_Stack_ref = &Chi2_Electron_Stack, *Chi2_Proton_Stack_ref = &Chi2_Proton_Stack;
+//        THStack *Chi2_Electron_Stack_ref = &Chi2_Electron_Stack, *Chi2_Proton_Stack_ref = &Chi2_Proton_Stack;
+//
+//        TH1D *Chi2_Electron_CD_ref = &Chi2_Electron_CD, *Chi2_Electron_FD_ref = &Chi2_Electron_FD;
+//        TH1D *Chi2_Proton_CD_ref = &Chi2_Proton_CD, *Chi2_Proton_FD_ref = &Chi2_Proton_FD;
+//        TH1D *Chi2_Electron_1e_CD_ref = &Chi2_Electron_1e_CD, *Chi2_Electron_1e_FD_ref = &Chi2_Electron_1e_FD;
+//        TH1D *Chi2_Proton_1e_CD_ref = &Chi2_Proton_1e_CD, *Chi2_Proton_1e_FD_ref = &Chi2_Proton_1e_FD;
+//        TH1D *Chi2_Electron_1e_cut_test_CD_ref = &Chi2_Electron_1e_cut_test_CD, *Chi2_Electron_1e_cut_test_FD_ref = &Chi2_Electron_1e_cut_test_FD;
+//        TH1D *Chi2_Proton_1e_cut_test_CD_ref = &Chi2_Proton_1e_cut_test_CD, *Chi2_Proton_1e_cut_test_FD_ref = &Chi2_Proton_1e_cut_test_FD;
+//
+//        THStack Chi2_histogram_Stacks[12] = {*Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref,
+//                                             *Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref,
+//                                             *Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref};
+//        TH1D Chi2_histograms[12] = {*Chi2_Electron_CD_ref, *Chi2_Electron_FD_ref, *Chi2_Proton_CD_ref, *Chi2_Proton_FD_ref,
+//                                    *Chi2_Electron_1e_CD_ref, *Chi2_Electron_1e_FD_ref, *Chi2_Proton_1e_CD_ref, *Chi2_Proton_1e_FD_ref,
+//                                    *Chi2_Electron_1e_cut_test_CD_ref, *Chi2_Electron_1e_cut_test_FD_ref, *Chi2_Proton_1e_cut_test_CD_ref,
+//                                    *Chi2_Proton_1e_cut_test_FD_ref};
+//        string Chi2_histograms_titles[12][2] = {{"Electron #chi^{2}", "no #(e) cut"},
+//                                                {"Electron #chi^{2}", "no #(e) cut"},
+//                                                {"Proton #chi^{2}",   "no #(e) cut"},
+//                                                {"Proton #chi^{2}",   "no #(e) cut"},
+//                                                {"Electron #chi^{2}", "1e only"},
+//                                                {"Electron #chi^{2}", "1e only"},
+//                                                {"Proton #chi^{2}",   "1e only"},
+//                                                {"Proton #chi^{2}",   "1e only"},
+//                                                {"Electron #chi^{2}", "1e Only Cut test"},
+//                                                {"Electron #chi^{2}", "1e Only Cut test"},
+//                                                {"Proton #chi^{2}",   "1e Only Cut test"},
+//                                                {"Proton #chi^{2}",   "1e Only Cut test"}};
+//        double Chi2_histograms_cuts[12][2] = {{Chi2_Electron_cut_CD, Chi2_Electron_Xmax_CD},
+//                                              {Chi2_Electron_cut_FD, Chi2_Electron_Xmax_FD},
+//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_Xmax_CD},
+//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_Xmax_FD},
+//                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_Xmax_CD},
+//                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_Xmax_FD},
+//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_Xmax_CD},
+//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_Xmax_FD},
+//                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD}, // Chi2_Electron_1e_peak_CD and not Chi2_Electron_1e_Xmax_CD
+//                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD}, // Chi2_Electron_1e_peak_FD and not Chi2_Electron_1e_Xmax_FD
+//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_peak_CD}, // Chi2_Proton_1e_peak_CD and not Chi2_Proton_1e_Xmax_CD
+//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_peak_FD}}; // Chi2_Proton_1e_peak_FD and not Chi2_Proton_1e_Xmax_FD
+//        int Chi2_histograms_length = sizeof(Chi2_histograms) / sizeof(TH1D);
+//
+//        for (int i = 0; i < Chi2_histograms_length; ++i) {
+//            auto histogram = &Chi2_histograms[i];
+//            histPlotter1D(c1, histogram, normalized_chi2_plots, true, .1, Chi2_histograms_titles[i][0], Chi2_histograms_titles[i][1], 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, &Chi2_histogram_Stacks[i], Chi2_save_directories[i][0], Chi2_save_directories[i][1], Chi2_save_directories[i][2], kBlue, true,
+//                          true, true, false, true, Chi2_histograms_cuts[i][0], Chi2_histograms_cuts[i][1]);
+//        }
 
-        TH1D *Chi2_Electron_CD_ref = &Chi2_Electron_CD, *Chi2_Electron_FD_ref = &Chi2_Electron_FD;
-        TH1D *Chi2_Proton_CD_ref = &Chi2_Proton_CD, *Chi2_Proton_FD_ref = &Chi2_Proton_FD;
-        TH1D *Chi2_Electron_1e_CD_ref = &Chi2_Electron_1e_CD, *Chi2_Electron_1e_FD_ref = &Chi2_Electron_1e_FD;
-        TH1D *Chi2_Proton_1e_CD_ref = &Chi2_Proton_1e_CD, *Chi2_Proton_1e_FD_ref = &Chi2_Proton_1e_FD;
-        TH1D *Chi2_Electron_1e_cut_test_CD_ref = &Chi2_Electron_1e_cut_test_CD, *Chi2_Electron_1e_cut_test_FD_ref = &Chi2_Electron_1e_cut_test_FD;
-        TH1D *Chi2_Proton_1e_cut_test_CD_ref = &Chi2_Proton_1e_cut_test_CD, *Chi2_Proton_1e_cut_test_FD_ref = &Chi2_Proton_1e_cut_test_FD;
 
-        THStack Chi2_histogram_Stacks[12] = {*Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref,
-                                             *Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref,
-                                             *Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref};
-        TH1D Chi2_histograms[12] = {*Chi2_Electron_CD_ref, *Chi2_Electron_FD_ref, *Chi2_Proton_CD_ref, *Chi2_Proton_FD_ref,
-                                    *Chi2_Electron_1e_CD_ref, *Chi2_Electron_1e_FD_ref, *Chi2_Proton_1e_CD_ref, *Chi2_Proton_1e_FD_ref,
-                                    *Chi2_Electron_1e_cut_test_CD_ref, *Chi2_Electron_1e_cut_test_FD_ref, *Chi2_Proton_1e_cut_test_CD_ref,
-                                    *Chi2_Proton_1e_cut_test_FD_ref};
-        string Chi2_histograms_titles[12][2] = {{"Electron #chi^{2}", "no #(e) cut"},
-                                                {"Electron #chi^{2}", "no #(e) cut"},
-                                                {"Proton #chi^{2}",   "no #(e) cut"},
-                                                {"Proton #chi^{2}",   "no #(e) cut"},
-                                                {"Electron #chi^{2}", "1e only"},
-                                                {"Electron #chi^{2}", "1e only"},
-                                                {"Proton #chi^{2}",   "1e only"},
-                                                {"Proton #chi^{2}",   "1e only"},
-                                                {"Electron #chi^{2}", "1e Only Cut test"},
-                                                {"Electron #chi^{2}", "1e Only Cut test"},
-                                                {"Proton #chi^{2}",   "1e Only Cut test"},
-                                                {"Proton #chi^{2}",   "1e Only Cut test"}};
-        double Chi2_histograms_cuts[12][2] = {{Chi2_Electron_cut_CD, Chi2_Electron_Xmax_CD},
-                                              {Chi2_Electron_cut_FD, Chi2_Electron_Xmax_FD},
-                                              {Chi2_Proton_cut_CD,   Chi2_Proton_Xmax_CD},
-                                              {Chi2_Proton_cut_FD,   Chi2_Proton_Xmax_FD},
-                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_Xmax_CD},
-                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_Xmax_FD},
-                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_Xmax_CD},
-                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_Xmax_FD},
-                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD}, // Chi2_Electron_1e_peak_CD and not Chi2_Electron_1e_Xmax_CD
-                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD}, // Chi2_Electron_1e_peak_FD and not Chi2_Electron_1e_Xmax_FD
-                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_peak_CD}, // Chi2_Proton_1e_peak_CD and not Chi2_Proton_1e_Xmax_CD
-                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_peak_FD}}; // Chi2_Proton_1e_peak_FD and not Chi2_Proton_1e_Xmax_FD
-        int Chi2_histograms_length = sizeof(Chi2_histograms) / sizeof(TH1D);
 
-        for (int i = 0; i < Chi2_histograms_length; ++i) {
-            auto histogram = &Chi2_histograms[i];
-            histPlotter1D(c1, histogram, normalized_chi2_plots, true, .1, Chi2_histograms_titles[i][0], Chi2_histograms_titles[i][1], 0.06, 0.0425, 0.0425, plots, 2,
-                          false, true, &Chi2_histogram_Stacks[i], Chi2_save_directories[i][0], Chi2_save_directories[i][1], Chi2_save_directories[i][2], kBlue, true,
-                          true, true, false, true, Chi2_histograms_cuts[i][0], Chi2_histograms_cuts[i][1]);
-        }
+
+//
+//
+//
+
+
+
+        //<editor-fold desc="Electron chi2 (no #(e) cut)">
+        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+                      Chi2_Electron_Xmax_CD);
+
+        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+                      Chi2_Electron_Xmax_FD);
+        //</editor-fold>
+
+        //<editor-fold desc="Proton chi2 (no #(e) cut)">
+        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_Xmax_CD);
+
+        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
+        //</editor-fold>
+
+//  Electron chi2 (1e only) ----------------------------------------------------------------------------
+
+        //<editor-fold desc="Electron chi2 (1e only)">
+        histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+                      Chi2_Electron_1e_Xmax_CD);
+
+        histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+                      Chi2_Electron_1e_Xmax_FD);
+        //</editor-fold>
+
+        //<editor-fold desc="Proton chi2 (1e only)">
+        histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+                      Chi2_Proton_1e_Xmax_CD);
+
+        histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
+                      Chi2_Proton_1e_Xmax_FD);
+        //</editor-fold>
+
+
+
+
+//
+//
+//
+
+
 
         //<editor-fold desc="Testing Chi2 cuts separately">
         histPlotter1D(c1, c2, Chi2_Electron_1e2p_sChi2_cut_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & Electron #chi^{2} cut", "CD", "e",
@@ -7780,7 +7905,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Electrons in CD (no #e cuts) -------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
 
-    if (Chi2_Electron_CD.Integral() == 0.) {
+    if (Chi2_Electron_CD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_Xmax_CD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Electron_Xmax_CD (from histogram) = " << Chi2_Electron_Xmax_CD << "\n";
@@ -7789,7 +7914,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Electrons in FD (no #e cuts) -------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
 
-    if (Chi2_Electron_FD.Integral() == 0.) {
+    if (Chi2_Electron_FD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Electron_Xmax_FD (from histogram) = " << Chi2_Electron_Xmax_FD << "\n";
@@ -7798,7 +7923,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Electrons in CD (1e cut) -----------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_CD << "\n";
 
-    if (Chi2_Electron_1e_CD.Integral() == 0.) {
+    if (Chi2_Electron_1e_CD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = " << Chi2_Electron_1e_Xmax_CD << "\n";
@@ -7809,7 +7934,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Electrons in FD (1e cut) -----------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_FD << "\n";
 
-    if (Chi2_Electron_1e_FD.Integral() == 0.) {
+    if (Chi2_Electron_1e_FD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = " << Chi2_Electron_1e_Xmax_FD << "\n";
@@ -7822,7 +7947,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Protons in CD (no #e cuts) ---------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
 
-    if (Chi2_Proton_CD.Integral() == 0.) {
+    if (Chi2_Proton_CD->Integral() == 0.) {
         myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = " << Chi2_Proton_Xmax_CD << "\n";
@@ -7831,7 +7956,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Protons in FD (no #e cuts) ---------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
 
-    if (Chi2_Proton_FD.Integral() == 0.) {
+    if (Chi2_Proton_FD->Integral() == 0.) {
         myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = " << Chi2_Proton_Xmax_FD << "\n";
@@ -7840,7 +7965,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Protons in CD (1e cut) -------------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
 
-    if (Chi2_Proton_1e_CD.Integral() == 0.) {
+    if (Chi2_Proton_1e_CD->Integral() == 0.) {
         myLogFile << "Chi2_Proton_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Proton_1e_Xmax_CD (from histogram) = " << Chi2_Proton_1e_Xmax_CD << "\n";
@@ -7851,7 +7976,7 @@ void EventAnalyser() {
     myLogFile << "\n-- Protons in FD (1e cut) -------------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
 
-    if (Chi2_Proton_1e_FD.Integral() == 0.) {
+    if (Chi2_Proton_1e_FD->Integral() == 0.) {
         myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
     } else {
         myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = " << Chi2_Proton_1e_Xmax_FD << "\n";
