@@ -4174,64 +4174,6 @@ void EventAnalyser() {
         Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD->GetBinCenter(Chi2_Proton_1e_FD->GetMaximumBin());
         //</editor-fold>
 
-//        THStack *Chi2_Electron_Stack_ref = &Chi2_Electron_Stack, *Chi2_Proton_Stack_ref = &Chi2_Proton_Stack;
-//
-//        TH1D *Chi2_Electron_CD_ref = &Chi2_Electron_CD, *Chi2_Electron_FD_ref = &Chi2_Electron_FD;
-//        TH1D *Chi2_Proton_CD_ref = &Chi2_Proton_CD, *Chi2_Proton_FD_ref = &Chi2_Proton_FD;
-//        TH1D *Chi2_Electron_1e_CD_ref = &Chi2_Electron_1e_CD, *Chi2_Electron_1e_FD_ref = &Chi2_Electron_1e_FD;
-//        TH1D *Chi2_Proton_1e_CD_ref = &Chi2_Proton_1e_CD, *Chi2_Proton_1e_FD_ref = &Chi2_Proton_1e_FD;
-//        TH1D *Chi2_Electron_1e_cut_test_CD_ref = &Chi2_Electron_1e_cut_test_CD, *Chi2_Electron_1e_cut_test_FD_ref = &Chi2_Electron_1e_cut_test_FD;
-//        TH1D *Chi2_Proton_1e_cut_test_CD_ref = &Chi2_Proton_1e_cut_test_CD, *Chi2_Proton_1e_cut_test_FD_ref = &Chi2_Proton_1e_cut_test_FD;
-//
-//        THStack Chi2_histogram_Stacks[12] = {*Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref,
-//                                             *Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref,
-//                                             *Chi2_Electron_Stack_ref, *Chi2_Electron_Stack_ref, *Chi2_Proton_Stack_ref, *Chi2_Proton_Stack_ref};
-//        TH1D Chi2_histograms[12] = {*Chi2_Electron_CD_ref, *Chi2_Electron_FD_ref, *Chi2_Proton_CD_ref, *Chi2_Proton_FD_ref,
-//                                    *Chi2_Electron_1e_CD_ref, *Chi2_Electron_1e_FD_ref, *Chi2_Proton_1e_CD_ref, *Chi2_Proton_1e_FD_ref,
-//                                    *Chi2_Electron_1e_cut_test_CD_ref, *Chi2_Electron_1e_cut_test_FD_ref, *Chi2_Proton_1e_cut_test_CD_ref,
-//                                    *Chi2_Proton_1e_cut_test_FD_ref};
-//        string Chi2_histograms_titles[12][2] = {{"Electron #chi^{2}", "no #(e) cut"},
-//                                                {"Electron #chi^{2}", "no #(e) cut"},
-//                                                {"Proton #chi^{2}",   "no #(e) cut"},
-//                                                {"Proton #chi^{2}",   "no #(e) cut"},
-//                                                {"Electron #chi^{2}", "1e only"},
-//                                                {"Electron #chi^{2}", "1e only"},
-//                                                {"Proton #chi^{2}",   "1e only"},
-//                                                {"Proton #chi^{2}",   "1e only"},
-//                                                {"Electron #chi^{2}", "1e Only Cut test"},
-//                                                {"Electron #chi^{2}", "1e Only Cut test"},
-//                                                {"Proton #chi^{2}",   "1e Only Cut test"},
-//                                                {"Proton #chi^{2}",   "1e Only Cut test"}};
-//        double Chi2_histograms_cuts[12][2] = {{Chi2_Electron_cut_CD, Chi2_Electron_Xmax_CD},
-//                                              {Chi2_Electron_cut_FD, Chi2_Electron_Xmax_FD},
-//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_Xmax_CD},
-//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_Xmax_FD},
-//                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_Xmax_CD},
-//                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_Xmax_FD},
-//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_Xmax_CD},
-//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_Xmax_FD},
-//                                              {Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD}, // Chi2_Electron_1e_peak_CD and not Chi2_Electron_1e_Xmax_CD
-//                                              {Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD}, // Chi2_Electron_1e_peak_FD and not Chi2_Electron_1e_Xmax_FD
-//                                              {Chi2_Proton_cut_CD,   Chi2_Proton_1e_peak_CD}, // Chi2_Proton_1e_peak_CD and not Chi2_Proton_1e_Xmax_CD
-//                                              {Chi2_Proton_cut_FD,   Chi2_Proton_1e_peak_FD}}; // Chi2_Proton_1e_peak_FD and not Chi2_Proton_1e_Xmax_FD
-//        int Chi2_histograms_length = sizeof(Chi2_histograms) / sizeof(TH1D);
-//
-//        for (int i = 0; i < Chi2_histograms_length; ++i) {
-//            auto histogram = &Chi2_histograms[i];
-//            histPlotter1D(c1, histogram, normalized_chi2_plots, true, .1, Chi2_histograms_titles[i][0], Chi2_histograms_titles[i][1], 0.06, 0.0425, 0.0425, plots, 2,
-//                          false, true, &Chi2_histogram_Stacks[i], Chi2_save_directories[i][0], Chi2_save_directories[i][1], Chi2_save_directories[i][2], kBlue, true,
-//                          true, true, false, true, Chi2_histograms_cuts[i][0], Chi2_histograms_cuts[i][1]);
-//        }
-
-
-
-
-//
-//
-//
-
-
-
         //<editor-fold desc="Electron chi2 (no #(e) cut)">
         histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
@@ -4272,15 +4214,6 @@ void EventAnalyser() {
                       Chi2_Proton_1e_Xmax_FD);
         //</editor-fold>
 
-
-
-
-//
-//
-//
-
-
-
         //<editor-fold desc="Testing Chi2 cuts separately">
         histPlotter1D(c1, c2, Chi2_Electron_1e2p_sChi2_cut_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e2p & Electron #chi^{2} cut", "CD", "e",
                       0.06, 0.04, 0.04, plots, 2, false, true, Chi2_Electron_1e2p_Stack, "Electron_Chi2_1e2p_w_pChi2_cuts", Chi2_1e2p_Separate_Cuts_Directory,
@@ -4315,73 +4248,6 @@ void EventAnalyser() {
         histPlotter1D(c1, c2, Chi2_Proton_1e2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e2p & All #chi^{2} cuts", "FD", "p", "e",
                       0.06, 0.04, 0.04, plots, 2, false, true, Chi2_Proton_1e2p_Stack, "Proton_Chi2_1e2p_w_allChi2_cuts", Chi2_1e2p_Directory,
                       kBlue, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD, Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
-        //</editor-fold>
-
-
-        //<editor-fold desc="older chi2 plots">
-        ////  Electron chi2 (no #(e) cut) ---------------------------------------------------------------
-//
-//        //<editor-fold desc="Electron chi2 (no #(e) cut)">
-//        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
-//                      Chi2_Electron_Xmax_CD);
-//
-//        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_Stack, "Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
-//                      Chi2_Electron_Xmax_FD);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Proton chi2 (no #(e) cut)">
-//        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_Xmax_CD);
-//
-//        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Proton_Stack, "Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
-//        //</editor-fold>
-//
-////  Electron chi2 (1e only) ----------------------------------------------------------------------------
-//
-//        //<editor-fold desc="Electron chi2 (1e only)">
-//        histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
-//                      Chi2_Electron_1e_Xmax_CD);
-//
-//        histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
-//                      Chi2_Electron_1e_Xmax_FD);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Proton chi2 (1e only)">
-//        histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-//                      Chi2_Proton_1e_Xmax_CD);
-//
-//        histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
-//                      Chi2_Proton_1e_Xmax_FD);
-//        //</editor-fold>
-//
-////  Electron chi2 - test (1e only) ----------------------------------------------------------------------------
-//
-//        //<editor-fold desc="Electron chi2 (1e only)">
-//        histPlotter1D(c1, Chi2_Electron_1e_test_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true,
-//                      Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
-//
-//        histPlotter1D(c1, Chi2_Electron_1e_test_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Electron_1e_Stack, "Electron_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
-//                      Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Proton chi2 (1e only)">
-//        histPlotter1D(c1, Chi2_Proton_1e_test_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_CD", kBlue, true, true, true, false, true,
-//                      Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
-//
-//        histPlotter1D(c1, Chi2_Proton_1e_test_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Chi2_Proton_1e_Stack, "Proton_chi2", "plots/Chi2_plots/Only_1e/1e_cuts_test/", "test_FD", kRed, true, true, true, false, true,
-//                      Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
-//        //</editor-fold>
         //</editor-fold>
 
     } else {
