@@ -1175,6 +1175,8 @@ void EventAnalyser() {
                          250, 0, beamE * 1.425, 250, 0, 8);
     TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e Only Cut, Forward Detector);P [GeV];#beta",
                          250, 0, beamE * 1.425, 250, 0, 8);
+//    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e Only Cut, Forward Detector);P [GeV];#beta",
+//                         250, 0, beamE * 1.425, 250, 0, 1.2);
 //    TH2D Beta_vs_P_1e_CD("#beta vs P (All Particles, 1e only, CD)", "#beta vs P - All Particles (1e Only Cut, Central Detector);P [GeV];#beta",
 //    250, 0, beamE * 1.425, 250, 0, 2);
 //    TH2D Beta_vs_P_1e_FD("#beta vs P (All Particles, 1e only, FD)", "#beta vs P - All Particles (1e Only Cut, Forward Detector);P [GeV];#beta"
@@ -1655,6 +1657,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="E_e VS Theta_e (2p, CD & FD)">
+
+    // TODO: currect E_e VS Theta_e save name
     TH2D *E_e_VS_Theta_e_2p_CD = new TH2D("E_{e} VS #theta_{e} (All Int., CD)", "E_{e} VS #theta_{e} (All Int., 2p, CD);#theta_{e} [Deg];E_{e} [GeV]",
                                           250, 35, 140, 250, 0, beamE * 1.1);
     TH2D *E_e_VS_Theta_e_2p_QEL_CD = new TH2D("E_{e} VS #theta_{e} (QEL Only, 2p, CD)", "E_{e} VS #theta_{e} (QEL Only, 2p, CD);#theta_{e} [Deg];E_{e} [GeV]",
@@ -2675,11 +2679,13 @@ void EventAnalyser() {
 //        c12.addAtLeastPid(2212, 0);    // at least 0 proton
 //        c12.addAtLeastPid(2112, 0);    // at least 0 neutron
 ////        c12.addAtLeastPid(211,0);    // at least 0 pi+
-////        c12.addExactPid(211,0);    // at least 0 pi+
+//        c12.addExactPid(211,0);    // at least 0 pi+
 //        c12.addAtLeastPid(-211,0);    // at least 0 pi-
-////        c12.addExactPid(-211,0);    // at least 0 pi-
+//        c12.addExactPid(-211,0);    // at least 0 pi-
 //        c12.addAtLeastPid(321, 0);    // at least 0 K+
 //        c12.addAtLeastPid(-321, 0);    // at least 0 K-
+//        c12.addExactPid(321, 0);    // at least 0 K+
+//        c12.addExactPid(-321, 0);    // at least 0 K-
 //        c12.addZeroOfRestPid();  // nothing else
 
 //        c12.addExactPid(11,1);    // exactly 1 electron
