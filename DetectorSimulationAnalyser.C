@@ -38,10 +38,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 using namespace clas12;
 using namespace std;
 
-
-// TODO: finish applying chi and vertex cuts
 // TODO: finish Histogram class
-
 
 void EventAnalyser() {
 
@@ -510,30 +507,21 @@ void EventAnalyser() {
 
 // Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // TODO: add cuts for FT (first check with Adi & Justin if need to)
-
     //<editor-fold desc="Chi2 cuts">
-    // TODO: confirm Chi2 cut with justin
-    // TODO: see how to apply unsymmetric cuts
+    // TODO: confirm Chi2 cuts with justin
 
     //<editor-fold desc="Electron chi2 cuts">
 
-    //<editor-fold desc="Electrons in CD (no #e cuts)">
+    //<editor-fold desc="Electron chi2 cuts (CD)">
     double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
     double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
-    //</editor-fold>
-
-    //<editor-fold desc="Electrons in FD (no #e cuts)">
-    double Chi2_Electron_cut_FD = 15.; // 100 since electron detection is great
-    double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
-    //</editor-fold>
-
-    //<editor-fold desc="Electrons in CD (1e cut)">
     double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
     double Chi2_Electron_1e_Xmax_CD;
     //</editor-fold>
 
-    //<editor-fold desc="Electrons in FD (1e cut)">
+    //<editor-fold desc="Electron chi2 cuts (FD)">
+    double Chi2_Electron_cut_FD = 15.; // 100 since electron detection is great
+    double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
     double Chi2_Electron_1e_peak_FD = -0.05; // to fill using Chi2_Electron_1e_Xmax_FD
     double Chi2_Electron_1e_Xmax_FD;
     //</editor-fold>
@@ -542,23 +530,16 @@ void EventAnalyser() {
 
     //<editor-fold desc="Proton chi2 cuts">
 
-    //<editor-fold desc="Protons in CD (no #e cuts)">
-    // TODO: reexamine Josh's proton CD cuts (they're unsymmetrical) and apply to my code
-    double Chi2_Proton_cut_CD = 4.; // Josh's proton FD cut
+    //<editor-fold desc="Proton chi2 cuts (CD)">
+    double Chi2_Proton_cut_CD = 10.; // Josh's proton FD cut
     double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
-    //</editor-fold>
-
-    //<editor-fold desc="Protons in FD (no #e cuts)">
-    double Chi2_Proton_cut_FD = 4.; // Josh's proton FD cut
-    double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
-    //</editor-fold>
-
-    //<editor-fold desc="Protons in CD (1e cut)">
     double Chi2_Proton_1e_peak_CD = 0.45; // to fill using Chi2_Proton_1e_Xmax_CD
     double Chi2_Proton_1e_Xmax_CD;
     //</editor-fold>
 
-    //<editor-fold desc="Protons in FD (1e cut)">
+    //<editor-fold desc="Proton chi2 cuts (FD)">
+    double Chi2_Proton_cut_FD = 4.; // Josh's proton FD cut
+    double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
     double Chi2_Proton_1e_peak_FD = 0.05; // to fill using Chi2_Proton_1e_Xmax_FD
     double Chi2_Proton_1e_Xmax_FD;
     //</editor-fold>
@@ -1657,8 +1638,6 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="E_e VS Theta_e (2p, CD & FD)">
-
-    // TODO: currect E_e VS Theta_e save name
     TH2D *E_e_VS_Theta_e_2p_CD = new TH2D("E_{e} VS #theta_{e} (All Int., CD)", "E_{e} VS #theta_{e} (All Int., 2p, CD);#theta_{e} [Deg];E_{e} [GeV]",
                                           250, 35, 140, 250, 0, beamE * 1.1);
     TH2D *E_e_VS_Theta_e_2p_QEL_CD = new TH2D("E_{e} VS #theta_{e} (QEL Only, 2p, CD)", "E_{e} VS #theta_{e} (QEL Only, 2p, CD);#theta_{e} [Deg];E_{e} [GeV]",
@@ -1703,36 +1682,37 @@ void EventAnalyser() {
 //                                               "Energy Transfer (E_{l}-E_{e}) for every angle (All Interactions, 2p);E_{l}-E_{e} [GeV]",
 //                                               100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
 
+    // TODO: ask Adi if should I do ET plots around other angles
     TH1D *ETrans_15_All_Int_2p_CD = new TH1D("ET around 15#circ (All Int., 2p, CD)",
                                              "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]",
-                                             250, 0, beamE * 1.1);
+                                             100, 0, beamE * 1.1);
     TH1D *ETrans_15_QEL_2p_CD = new TH1D("ET around 15#circ (QEL Only, 2p, CD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (QEL Only, 2p, CD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_MEC_2p_CD = new TH1D("ET around 15#circ (MEC Only, 2p, CD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (MEC Only, 2p, CD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_RES_2p_CD = new TH1D("ET around 15#circ (RES Only, 2p, CD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (RES Only, 2p, CD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_DIS_2p_CD = new TH1D("ET around 15#circ (DIS Only, 2p, CD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (DIS Only, 2p, CD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_All_Int_2p_FD = new TH1D("ET around 15#circ (All Int., 2p, FD)",
                                              "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, FD);E_{l}-E_{e} [GeV]",
-                                             250, 0, beamE * 1.1);
+                                             100, 0, beamE * 1.1);
     TH1D *ETrans_15_QEL_2p_FD = new TH1D("ET around 15#circ (QEL Only, 2p, FD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (QEL Only, 2p, FD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_MEC_2p_FD = new TH1D("ET around 15#circ (MEC Only, 2p, FD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (MEC Only, 2p, FD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_RES_2p_FD = new TH1D("ET around 15#circ (RES Only, 2p, FD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (RES Only, 2p, FD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     TH1D *ETrans_15_DIS_2p_FD = new TH1D("ET around 15#circ (DIS Only, 2p, FD)",
                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (DIS Only, 2p, FD);E_{l}-E_{e} [GeV]",
-                                         250, 0, beamE * 1.1);
+                                         100, 0, beamE * 1.1);
     string ETrans_15_All_Int_2p_CD_Dir = ETrans_All_Int_15_histograms_Directory, ETrans_15_All_Int_2p_FD_Dir = ETrans_All_Int_15_histograms_Directory;
     string ETrans_15_QEL_2p_CD_Dir = ETrans_QEL_15_histograms_Directory, ETrans_15_QEL_2p_FD_Dir = ETrans_QEL_15_histograms_Directory;
     string ETrans_15_MEC_2p_CD_Dir = ETrans_MEC_15_histograms_Directory, ETrans_15_MEC_2p_FD_Dir = ETrans_MEC_15_histograms_Directory;
@@ -5184,7 +5164,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_CD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_CD_Dir + "00 Theta_e_VS_Phi_e_All_Int_2p_CD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_CD_Dir + "00 E_e_VS_Theta_e_All_Int_2p_CD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5203,7 +5183,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_FD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_FD_Dir + "00 Theta_e_VS_Phi_e_All_Int_2p_FD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_FD_Dir + "00 E_e_VS_Theta_e_All_Int_2p_FD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5222,7 +5202,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_QEL_CD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_QEL_CD_Dir + "01 Theta_e_VS_Phi_e_QEL_only_2p_CD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_QEL_CD_Dir + "01 E_e_VS_Theta_e_QEL_only_2p_CD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5241,7 +5221,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_QEL_FD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_QEL_FD_Dir + "01 Theta_e_VS_Phi_e_QEL_only_2p_FD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_QEL_FD_Dir + "01 E_e_VS_Theta_e_QEL_only_2p_FD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5260,7 +5240,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_MEC_CD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_MEC_CD_Dir + "02 Theta_e_VS_Phi_e_MEC_only_2p_CD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_MEC_CD_Dir + "02 E_e_VS_Theta_e_MEC_only_2p_CD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5279,7 +5259,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_MEC_FD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_MEC_FD_Dir + "02 Theta_e_VS_Phi_e_MEC_only_2p_FD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_MEC_FD_Dir + "02 E_e_VS_Theta_e_MEC_only_2p_FD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5298,7 +5278,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_RES_CD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_RES_CD_Dir + "03 Theta_e_VS_Phi_e_RES_only_2p_CD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_RES_CD_Dir + "03 E_e_VS_Theta_e_RES_only_2p_CD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5317,7 +5297,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_RES_FD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_RES_FD_Dir + "03 Theta_e_VS_Phi_e_RES_only_2p_FD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_RES_FD_Dir + "03 E_e_VS_Theta_e_RES_only_2p_FD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5336,7 +5316,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_DIS_CD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_DIS_CD_Dir + "04 Theta_e_VS_Phi_e_DIS_only_2p_CD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_DIS_CD_Dir + "04 E_e_VS_Theta_e_DIS_only_2p_CD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5355,7 +5335,7 @@ void EventAnalyser() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         E_e_VS_Theta_e_2p_DIS_FD->SetStats(0);
-        c1->SaveAs((E_e_VS_Theta_e_2p_DIS_FD_Dir + "04 Theta_e_VS_Phi_e_DIS_only_2p_FD.png").c_str());
+        c1->SaveAs((E_e_VS_Theta_e_2p_DIS_FD_Dir + "04 E_e_VS_Theta_e_DIS_only_2p_FD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5473,7 +5453,9 @@ void EventAnalyser() {
             ETrans_all_int_15_Stack_2p_CD->Draw("nostack");
             ETrans_all_int_15_Stack_2p_CD->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
             ETrans_all_int_15_Stack_2p_CD->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+            ETrans_all_int_15_Stack_2p_CD->GetHistogram()->GetXaxis()->CenterTitle(true);
             ETrans_all_int_15_Stack_2p_CD->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+            ETrans_all_int_15_Stack_2p_CD->GetHistogram()->GetYaxis()->CenterTitle(true);
 
             if (normalized_E_Trans15_plots) {
                 ETrans_all_int_15_Stack_2p_CD->SetTitle("ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (2p, CD) - Normalized");
@@ -5503,7 +5485,9 @@ void EventAnalyser() {
             ETrans_all_int_15_Stack_2p_FD->Draw("nostack");
             ETrans_all_int_15_Stack_2p_FD->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
             ETrans_all_int_15_Stack_2p_FD->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+            ETrans_all_int_15_Stack_2p_FD->GetHistogram()->GetXaxis()->CenterTitle(true);
             ETrans_all_int_15_Stack_2p_FD->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+            ETrans_all_int_15_Stack_2p_FD->GetHistogram()->GetYaxis()->CenterTitle(true);
 
             if (normalized_E_Trans15_plots) {
                 ETrans_all_int_15_Stack_2p_FD->SetTitle("ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (2p, FD) - Normalized");
