@@ -125,7 +125,7 @@ void EventAnalyser() {
     //<editor-fold desc="Beta VS p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "By_charge"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -135,6 +135,7 @@ void EventAnalyser() {
     string Beta_VS_P_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[0];
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
+    string Beta_VS_P_by_charge_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
 
     string Beta_vs_P_FD_save_directories[16] = {Beta_VS_P_All_e_Directory + "Beta_vs_P_All_Particles_CD.png",
                                                 Beta_VS_P_All_e_Directory + "Beta_vs_P_All_Particles_FD.png",
@@ -1208,6 +1209,15 @@ void EventAnalyser() {
     TH2D Beta_vs_P_1e_Neutrons_Only_FD("#beta vs P (Neutrons Only, 1e only, FD)", "#beta vs P - Neutrons Only (1e Only Cut, Forward Detector);P [GeV];#beta",
                                        250, 0, beamE * 1.425, 250, 0, 3);
 
+    TH2D *Beta_vs_P_by_charge_eq1_CD = new TH2D("#beta vs P for q = 1 Only (CD)", "#beta vs P for all particles with q = 1 (CD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_by_charge_eq1_FD = new TH2D("#beta vs P for q = 1 Only (FD)", "#beta vs P for all particles with q = 1 (FD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_by_charge_less1_CD = new TH2D("#beta vs P for q < 1 Only (CD)", "#beta vs P for all particles with q < 1 (CD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_by_charge_less1_FD = new TH2D("#beta vs P for q < 1 Only (FD)", "#beta vs P for all particles with q < 1 (FD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
 //    TH2D Beta_vs_P_cPions_Only_CD("#beta vs P (#pi^{#pm} Only, CD)", "#beta vs P - #pi^{#pm} Only (Central Detector);P [GeV];#beta",
 //                                  250, 0, beamE * 1.425, 250, 0, 3);
 //    TH2D Beta_vs_P_cPions_Only_FD("#beta vs P (#pi^{#pm} Only, FD)", "#beta vs P - #pi^{#pm} Only (Forward Detector);P [GeV];#beta",
@@ -1747,11 +1757,11 @@ void EventAnalyser() {
     THStack *Ecal_Stack_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
     string Ecal_Stack_2p_Dir = Ecal_stack_Directory, Ecal_Stack_2p_FD_Dir = Ecal_stack_Directory;
 
-    TH1D *Ecal_All_Int_2p = new TH1D("E_{cal} (All Int., 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
-    TH1D *Ecal_QEL_2p = new TH1D("E_{cal} (QEL only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
-    TH1D *Ecal_MEC_2p = new TH1D("E_{cal} (MEC only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
-    TH1D *Ecal_RES_2p = new TH1D("E_{cal} (RES only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
-    TH1D *Ecal_DIS_2p = new TH1D("E_{cal} (DIS only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
+    TH1D *Ecal_All_Int_2p = new TH1D("E_{cal} (All Int., 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *Ecal_QEL_2p = new TH1D("E_{cal} (QEL only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *Ecal_MEC_2p = new TH1D("E_{cal} (MEC only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *Ecal_RES_2p = new TH1D("E_{cal} (RES only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *Ecal_DIS_2p = new TH1D("E_{cal} (DIS only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
     string Ecal_All_Int_2p_Dir = Ecal_All_Int_histograms_Directory;
     string Ecal_QEL_2p_Dir = Ecal_QEL_histograms_Directory, Ecal_MEC_2p_Dir = Ecal_MEC_histograms_Directory;
     string Ecal_RES_2p_Dir = Ecal_RES_histograms_Directory, Ecal_DIS_2p_Dir = Ecal_DIS_histograms_Directory;
@@ -2714,10 +2724,25 @@ void EventAnalyser() {
 
             //<editor-fold desc="Beta vs P (no #(electron) cut, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
+
+//                cout << "\nAllParticles[i]->par()->getCharge() " << AllParticles[i]->par()->getCharge() << "\n\n";
+
                 if (AllParticles[i]->getRegion() == CD) {
                     Beta_vs_P_CD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    if (AllParticles[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_by_charge_eq1_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    } else {
+                        Beta_vs_P_by_charge_less1_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    }
                 } else if (AllParticles[i]->getRegion() == FD) {
                     Beta_vs_P_FD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    if (AllParticles[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_by_charge_eq1_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    } else {
+                        Beta_vs_P_by_charge_less1_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    }
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
@@ -4339,6 +4364,151 @@ void EventAnalyser() {
             c1->Clear();
         }
         //</editor-fold>
+
+        Beta_vs_P_by_charge_eq1_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_by_charge_eq1_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_eq1_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_eq1_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_eq1_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_eq1_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_by_charge_eq1_CD);
+        Beta_vs_P_by_charge_eq1_CD->Draw("colz");
+
+//        if (i < 4) {
+//            beta_electron->Draw("same");
+//            beta_electron_title->Draw("same");
+//            beta_proton->Draw("same");
+//            beta_neutron->Draw("same");
+//            beta_pizero->Draw("same");
+//            beta_piplus->Draw("same");
+//            beta_piminus->Draw("same");
+//            beta_Kzero->Draw("same");
+//            beta_Kplus->Draw("same");
+//            beta_Kminus->Draw("same");
+//        } else if (i >= 4 && i < 8) {
+//            beta_electron->Draw("same");
+//        } else if (i >= 8 && i < 12) {
+//            beta_proton->Draw("same");
+//        } else if (i >= 12 && i < 18) {
+//            beta_neutron->Draw("same");
+//        }
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.88);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_by_charge_Directory + "01 Beta_vs_P_q_eq_1_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Beta_vs_P_by_charge_eq1_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_by_charge_eq1_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_eq1_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_eq1_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_eq1_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_eq1_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_by_charge_eq1_FD);
+        Beta_vs_P_by_charge_eq1_FD->Draw("colz");
+
+//        if (i < 4) {
+//            beta_electron->Draw("same");
+//            beta_electron_title->Draw("same");
+//            beta_proton->Draw("same");
+//            beta_neutron->Draw("same");
+//            beta_pizero->Draw("same");
+//            beta_piplus->Draw("same");
+//            beta_piminus->Draw("same");
+//            beta_Kzero->Draw("same");
+//            beta_Kplus->Draw("same");
+//            beta_Kminus->Draw("same");
+//        } else if (i >= 4 && i < 8) {
+//            beta_electron->Draw("same");
+//        } else if (i >= 8 && i < 12) {
+//            beta_proton->Draw("same");
+//        } else if (i >= 12 && i < 18) {
+//            beta_neutron->Draw("same");
+//        }
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.88);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_by_charge_Directory + "01 Beta_vs_P_q_eq_1_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Beta_vs_P_by_charge_less1_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_by_charge_less1_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_less1_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_less1_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_less1_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_less1_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_by_charge_less1_CD);
+        Beta_vs_P_by_charge_less1_CD->Draw("colz");
+
+//        if (i < 4) {
+//            beta_electron->Draw("same");
+//            beta_electron_title->Draw("same");
+//            beta_proton->Draw("same");
+//            beta_neutron->Draw("same");
+//            beta_pizero->Draw("same");
+//            beta_piplus->Draw("same");
+//            beta_piminus->Draw("same");
+//            beta_Kzero->Draw("same");
+//            beta_Kplus->Draw("same");
+//            beta_Kminus->Draw("same");
+//        } else if (i >= 4 && i < 8) {
+//            beta_electron->Draw("same");
+//        } else if (i >= 8 && i < 12) {
+//            beta_proton->Draw("same");
+//        } else if (i >= 12 && i < 18) {
+//            beta_neutron->Draw("same");
+//        }
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.88);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_by_charge_Directory + "02 Beta_vs_P_q_less_than_1_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
+        Beta_vs_P_by_charge_less1_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_by_charge_less1_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_less1_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_less1_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_by_charge_less1_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_by_charge_less1_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_by_charge_less1_FD);
+        Beta_vs_P_by_charge_less1_FD->Draw("colz");
+
+//        if (i < 4) {
+//            beta_electron->Draw("same");
+//            beta_electron_title->Draw("same");
+//            beta_proton->Draw("same");
+//            beta_neutron->Draw("same");
+//            beta_pizero->Draw("same");
+//            beta_piplus->Draw("same");
+//            beta_piminus->Draw("same");
+//            beta_Kzero->Draw("same");
+//            beta_Kplus->Draw("same");
+//            beta_Kminus->Draw("same");
+//        } else if (i >= 4 && i < 8) {
+//            beta_electron->Draw("same");
+//        } else if (i >= 8 && i < 12) {
+//            beta_proton->Draw("same");
+//        } else if (i >= 12 && i < 18) {
+//            beta_neutron->Draw("same");
+//        }
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.88);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_by_charge_Directory + "02 Beta_vs_P_q_less_than_1_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+
 
     } else {
         cout << "\n\nBeta vs P plots are disabled by user.\n\n";
