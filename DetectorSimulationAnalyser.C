@@ -340,6 +340,24 @@ void EventAnalyser() {
     string ETrans_15_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
     //</editor-fold>
 
+    //<editor-fold desc="Ecal plots directories">
+    bool create_Ecal_Dir = true;
+    string Ecal_Parent_Directory = "Ecal_histograms";
+    string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only",
+                                      "2p/DIS_only"};
+
+    for (string folders_name: Ecal_Daughter_Folders) {
+        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name);
+    }
+
+    string Ecal_All_Int_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[2] + "/";
+    string Ecal_QEL_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[3] + "/";
+    string Ecal_MEC_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[4] + "/";
+    string Ecal_RES_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[5] + "/";
+    string Ecal_DIS_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[6] + "/";
+    string Ecal_stack_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[1] + "/";
+    //</editor-fold>
+
     //</editor-fold>
 
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -382,7 +400,7 @@ void EventAnalyser() {
 
     bool inclusive_plots = false;
 
-    bool E_cal_plots = false, other_E_cal_plots = false;
+    bool Ecal_plots = true, other_E_cal_plots = false;
 
     bool momentum_plots = false;
 
@@ -1721,25 +1739,22 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// E_cal restoration histograms
+// Ecal restoration histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="E_cal restoration histograms">
+    //<editor-fold desc="Ecal restoration histograms">
+    //TODO: confirm with Adi if Ecal should be separated to CD and FD or not
+    THStack *Ecal_Stack_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
+    string Ecal_Stack_2p_Dir = Ecal_stack_Directory, Ecal_Stack_2p_FD_Dir = Ecal_stack_Directory;
 
-    THStack *E_cal_2p_CD, *E_cal_2p_FD;
-
-    //TODO: finish setting up these histograms
-    E_cal_All_Int_2p_CD = new TH1D("E_{cal} (All Int., 2p, CD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_QEL_2p_CD = new TH1D("E_{cal} (QEL only, 2p, CD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_MEC_2p_CD = new TH1D("E_{cal} (MEC only, 2p, CD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_RES_2p_CD = new TH1D("E_{cal} (RES only, 2p, CD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_DIS_2p_CD = new TH1D("E_{cal} (DIS only, 2p, CD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-
-    E_cal_All_Int_2p_FD = new TH1D("E_{cal} (All Int., 2p, FD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_QEL_2p_FD = new TH1D("E_{cal} (QEL only, 2p, FD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_MEC_2p_FD = new TH1D("E_{cal} (MEC only, 2p, FD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_RES_2p_FD = new TH1D("E_{cal} (RES only, 2p, FD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
-    E_cal_DIS_2p_FD = new TH1D("E_{cal} (DIS only, 2p, FD)", ";E_{cal} = E_{l} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *Ecal_All_Int_2p = new TH1D("E_{cal} (All Int., 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
+    TH1D *Ecal_QEL_2p = new TH1D("E_{cal} (QEL only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
+    TH1D *Ecal_MEC_2p = new TH1D("E_{cal} (MEC only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
+    TH1D *Ecal_RES_2p = new TH1D("E_{cal} (RES only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
+    TH1D *Ecal_DIS_2p = new TH1D("E_{cal} (DIS only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.25);
+    string Ecal_All_Int_2p_Dir = Ecal_All_Int_histograms_Directory;
+    string Ecal_QEL_2p_Dir = Ecal_QEL_histograms_Directory, Ecal_MEC_2p_Dir = Ecal_MEC_histograms_Directory;
+    string Ecal_RES_2p_Dir = Ecal_RES_histograms_Directory, Ecal_DIS_2p_Dir = Ecal_DIS_histograms_Directory;
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2434,106 +2449,106 @@ void EventAnalyser() {
 
 // MicroBooNE histogram reconstruction -------------------------------------------------------------
 
-    //<editor-fold desc="MicroBooNE histogram reconstruction">
-
-    //todo: get rid of the stack in histPlotter1D() (make a default without it)
-    THStack *gamma_Lab_Stack, *gamma_mu_p_tot_Stack, dP_T_Stack;
-    THStack *gamma_Lab_weighted_Stack, *gamma_mu_p_tot_weighted_Stack, dP_T_Stack_weighted;
-
-    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (unweighted)">
-    TH1D *gamma_Lab_hist = new
-            TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, gamma_Lab_hist_lower_lim_2p, gamma_Lab_hist_upper_lim_2p);
-    TH1D *gamma_mu_p_tot = new
-            TH1D("cos(#gamma_{#mu,p_{L}+p_{R}})", "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram;cos(#gamma_{#mu,p_{L}+p_{R}})",
-                 8, gamma_mu_p_tot_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p);
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (Q4 weighted)">
-    TH1D *gamma_Lab_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) (Q^{4} weighted)", "cos(#gamma_{Lab}) Histogram (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_Lab_hist_weighted_upper_lim_1n1p);
-
-    TH1D *gamma_mu_p_tot_weighted = new
-            TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted)",
-                 "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted);cos(#gamma_{#mu,p_{L}+p_{R}})",
-                 8, gamma_mu_p_tot_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p);
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (no pions, for every interaction)">
-    TH1D *gamma_Lab_all_hist = new
-            TH1D("cos(#gamma_{Lab}) -all interactions",
-                 "cos(#gamma_{Lab}) Histogram -all interactions;cos(#gamma_{Lab})",
-                 8, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_upper_lim);
-    TH1D *gamma_Lab_all_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) -all interactions (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram -all interactions (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_all_hist_weighted_lower_lim, gamma_Lab_all_hist_weighted_upper_lim);
-
-    TH1D *gamma_Lab_QEL_hist = new
-            TH1D("cos(#gamma_{Lab}) - QEL Only", "cos(#gamma_{Lab}) Histogram - QEL Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_upper_lim);
-    TH1D *gamma_Lab_QEL_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - QEL Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - QEL Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_QEL_hist_weighted_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim);
-
-    TH1D *gamma_Lab_MEC_hist = new
-            TH1D("cos(#gamma_{Lab}) - MEC Only", "cos(#gamma_{Lab}) Histogram - MEC Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_upper_lim);
-    TH1D *gamma_Lab_MEC_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - MEC Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - MEC Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_MEC_hist_weighted_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim);
-
-    TH1D *gamma_Lab_RES_hist = new
-            TH1D("cos(#gamma_{Lab}) - RES Only", "cos(#gamma_{Lab}) Histogram - RES Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_upper_lim);
-    TH1D *gamma_Lab_RES_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - RES Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - RES Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_RES_hist_weighted_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim);
-
-    TH1D *gamma_Lab_DIS_hist = new
-            TH1D("cos(#gamma_{Lab}) - DIS Only", "cos(#gamma_{Lab}) Histogram - DIS Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_upper_lim);
-    TH1D *gamma_Lab_DIS_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - DIS Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - DIS Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_DIS_hist_weighted_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim);
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE dP_T plots (unweighted and Q4 weighted)">
-    TH1D *dP_T_hist = new
-            TH1D("#deltaP_{T}", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
-                 100, dP_T_hist_lower_lim, dP_T_hist_upper_lim);
-    TH1D *dP_T_hist_weighted = new
-            TH1D("#deltaP_{T} (Q^{4} weighted)", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
-                 100, dP_T_hist_weighted_lower_lim, dP_T_hist_weighted_upper_lim);
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
-    THStack *MomentumStack_MicroBooNE = new
-            THStack("Momentum Stack (MicroBooNE)", ";Momentum [GeV]");
-
-    TH1D *P_L_hist = new
-            TH1D("P_{L}", "Momentum of Leading Proton (P_{L});P_{L} [GeV/c]", 100, P_L_hist_lower_lim, P_L_hist_upper_lim);
-    TH1D *P_R_hist = new
-            TH1D("P_{R}", "Momentum of Recoil Proton (P_{R});P_{R} [GeV/c]", 100, P_R_hist_lower_lim, P_R_hist_upper_lim);
-    TH1D *P_lp_hist = new
-            TH1D("P_{l}", "Momentum of Lepton (P_{l});P_{l} [GeV/c]", 100, P_lp_hist_lower_lim, P_lp_hist_upper_lim);
-    TH1D *P_pion_hist = new
-            TH1D("P_{#pi^{#pm}}", "Momentum of Pions (P_{#pi^{#pm}});P_{#pi^{#pm}} [GeV/c]", 100, P_pion_hist_lower_lim, P_pion_hist_upper_lim);
-
-    string dP_T_title = "#deltaP_{T} Histogram (" + file_name + ")";
-    const char *dP_T_Title = dP_T_title.c_str();
-    dP_T_hist->SetTitle(dP_T_Title);
-
-    string dP_T_weighted_title = "#deltaP_{T} Histogram (" + file_name + ", Q^{4} weighted)";
-    const char *dP_T_weighted_Title = dP_T_weighted_title.c_str();
-    dP_T_hist_weighted->SetTitle(dP_T_weighted_Title);
-    //</editor-fold>
-
-    //</editor-fold>
+//    //<editor-fold desc="MicroBooNE histogram reconstruction">
+//
+//    //todo: get rid of the stack in histPlotter1D() (make a default without it)
+//    THStack *gamma_Lab_Stack, *gamma_mu_p_tot_Stack, dP_T_Stack;
+//    THStack *gamma_Lab_weighted_Stack, *gamma_mu_p_tot_weighted_Stack, dP_T_Stack_weighted;
+//
+//    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (unweighted)">
+//    TH1D *gamma_Lab_hist = new
+//            TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, gamma_Lab_hist_lower_lim_2p, gamma_Lab_hist_upper_lim_2p);
+//    TH1D *gamma_mu_p_tot = new
+//            TH1D("cos(#gamma_{#mu,p_{L}+p_{R}})", "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram;cos(#gamma_{#mu,p_{L}+p_{R}})",
+//                 8, gamma_mu_p_tot_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (Q4 weighted)">
+//    TH1D *gamma_Lab_hist_weighted = new
+//            TH1D("cos(#gamma_{Lab}) (Q^{4} weighted)", "cos(#gamma_{Lab}) Histogram (Q^{4} weighted);cos(#gamma_{Lab})",
+//                 8, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_Lab_hist_weighted_upper_lim_1n1p);
+//
+//    TH1D *gamma_mu_p_tot_weighted = new
+//            TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted)",
+//                 "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted);cos(#gamma_{#mu,p_{L}+p_{R}})",
+//                 8, gamma_mu_p_tot_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (no pions, for every interaction)">
+//    TH1D *gamma_Lab_all_hist = new
+//            TH1D("cos(#gamma_{Lab}) -all interactions",
+//                 "cos(#gamma_{Lab}) Histogram -all interactions;cos(#gamma_{Lab})",
+//                 8, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_upper_lim);
+//    TH1D *gamma_Lab_all_hist_weighted = new
+//            TH1D("cos(#gamma_{Lab}) -all interactions (Q^{4} weighted)",
+//                 "cos(#gamma_{Lab}) Histogram -all interactions (Q^{4} weighted);cos(#gamma_{Lab})",
+//                 8, gamma_Lab_all_hist_weighted_lower_lim, gamma_Lab_all_hist_weighted_upper_lim);
+//
+//    TH1D *gamma_Lab_QEL_hist = new
+//            TH1D("cos(#gamma_{Lab}) - QEL Only", "cos(#gamma_{Lab}) Histogram - QEL Only;cos(#gamma_{Lab})",
+//                 8, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_upper_lim);
+//    TH1D *gamma_Lab_QEL_hist_weighted = new
+//            TH1D("cos(#gamma_{Lab}) - QEL Only (Q^{4} weighted)",
+//                 "cos(#gamma_{Lab}) Histogram - QEL Only (Q^{4} weighted);cos(#gamma_{Lab})",
+//                 8, gamma_Lab_QEL_hist_weighted_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim);
+//
+//    TH1D *gamma_Lab_MEC_hist = new
+//            TH1D("cos(#gamma_{Lab}) - MEC Only", "cos(#gamma_{Lab}) Histogram - MEC Only;cos(#gamma_{Lab})",
+//                 8, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_upper_lim);
+//    TH1D *gamma_Lab_MEC_hist_weighted = new
+//            TH1D("cos(#gamma_{Lab}) - MEC Only (Q^{4} weighted)",
+//                 "cos(#gamma_{Lab}) Histogram - MEC Only (Q^{4} weighted);cos(#gamma_{Lab})",
+//                 8, gamma_Lab_MEC_hist_weighted_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim);
+//
+//    TH1D *gamma_Lab_RES_hist = new
+//            TH1D("cos(#gamma_{Lab}) - RES Only", "cos(#gamma_{Lab}) Histogram - RES Only;cos(#gamma_{Lab})",
+//                 8, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_upper_lim);
+//    TH1D *gamma_Lab_RES_hist_weighted = new
+//            TH1D("cos(#gamma_{Lab}) - RES Only (Q^{4} weighted)",
+//                 "cos(#gamma_{Lab}) Histogram - RES Only (Q^{4} weighted);cos(#gamma_{Lab})",
+//                 8, gamma_Lab_RES_hist_weighted_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim);
+//
+//    TH1D *gamma_Lab_DIS_hist = new
+//            TH1D("cos(#gamma_{Lab}) - DIS Only", "cos(#gamma_{Lab}) Histogram - DIS Only;cos(#gamma_{Lab})",
+//                 8, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_upper_lim);
+//    TH1D *gamma_Lab_DIS_hist_weighted = new
+//            TH1D("cos(#gamma_{Lab}) - DIS Only (Q^{4} weighted)",
+//                 "cos(#gamma_{Lab}) Histogram - DIS Only (Q^{4} weighted);cos(#gamma_{Lab})",
+//                 8, gamma_Lab_DIS_hist_weighted_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE dP_T plots (unweighted and Q4 weighted)">
+//    TH1D *dP_T_hist = new
+//            TH1D("#deltaP_{T}", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
+//                 100, dP_T_hist_lower_lim, dP_T_hist_upper_lim);
+//    TH1D *dP_T_hist_weighted = new
+//            TH1D("#deltaP_{T} (Q^{4} weighted)", ";#deltaP_{T} = |#bf{P}_{l,T} + #bf{P}_{L,T} + #bf{P}_{R,T}| [GeV/c]",
+//                 100, dP_T_hist_weighted_lower_lim, dP_T_hist_weighted_upper_lim);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
+//    THStack *MomentumStack_MicroBooNE = new
+//            THStack("Momentum Stack (MicroBooNE)", ";Momentum [GeV]");
+//
+//    TH1D *P_L_hist = new
+//            TH1D("P_{L}", "Momentum of Leading Proton (P_{L});P_{L} [GeV/c]", 100, P_L_hist_lower_lim, P_L_hist_upper_lim);
+//    TH1D *P_R_hist = new
+//            TH1D("P_{R}", "Momentum of Recoil Proton (P_{R});P_{R} [GeV/c]", 100, P_R_hist_lower_lim, P_R_hist_upper_lim);
+//    TH1D *P_lp_hist = new
+//            TH1D("P_{l}", "Momentum of Lepton (P_{l});P_{l} [GeV/c]", 100, P_lp_hist_lower_lim, P_lp_hist_upper_lim);
+//    TH1D *P_pion_hist = new
+//            TH1D("P_{#pi^{#pm}}", "Momentum of Pions (P_{#pi^{#pm}});P_{#pi^{#pm}} [GeV/c]", 100, P_pion_hist_lower_lim, P_pion_hist_upper_lim);
+//
+//    string dP_T_title = "#deltaP_{T} Histogram (" + file_name + ")";
+//    const char *dP_T_Title = dP_T_title.c_str();
+//    dP_T_hist->SetTitle(dP_T_Title);
+//
+//    string dP_T_weighted_title = "#deltaP_{T} Histogram (" + file_name + ", Q^{4} weighted)";
+//    const char *dP_T_weighted_Title = dP_T_weighted_title.c_str();
+//    dP_T_hist_weighted->SetTitle(dP_T_weighted_Title);
+//    //</editor-fold>
+//
+//    //</editor-fold>
 
     //</editor-fold>
 
@@ -3385,7 +3400,31 @@ void EventAnalyser() {
                     }
                 } // end of loop over electrons vector
 
+                double P_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
 
+                P_e = electrons[0]->getP();
+                E_e = sqrt(m_e * m_e + P_e * P_e);
+                Pp0 = protons[0]->getP();
+                Ep0 = sqrt(m_p * m_p + Pp0 * Pp0);
+                Pp1 = protons[1]->getP();
+                Ep1 = sqrt(m_p * m_p + Pp1 * Pp1);
+                Ecal_2p = E_e + (Ep0 - 0.938272) + (Ep1 - 0.938272);
+
+                Ecal_All_Int_2p->Fill(Ecal_2p);
+
+                if (qel) {
+                    Ecal_QEL_2p->Fill(Ecal_2p);
+
+                } else if (mec) {
+                    Ecal_MEC_2p->Fill(Ecal_2p);
+
+                } else if (res) {
+                    Ecal_RES_2p->Fill(Ecal_2p);
+
+                } else if (dis) {
+                    Ecal_DIS_2p->Fill(Ecal_2p);
+
+                }
                 //</editor-fold>
 
             } // end of "protons.size() == 2" if
@@ -5444,7 +5483,7 @@ void EventAnalyser() {
                 ETrans_all_int_15_Stack_2p_CD->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
             }
 
-            auto E_Trans_15_legend_2p_CD = new TLegend(0.625, 0.625, 0.9, 0.9);
+            auto E_Trans_15_legend_2p_CD = new TLegend(0.775, 0.625, 0.9, 0.9);
 
             TLegendEntry *E_Trans_15_all_entry_2p_stack_CD = E_Trans_15_legend_2p_CD->AddEntry(ETrans_15_All_Int_2p_CD, "All int.", "l");
             TLegendEntry *E_Trans_15_QEL_entry_2p_stack_CD = E_Trans_15_legend_2p_CD->AddEntry(ETrans_15_QEL_2p_CD, "QEL", "l");
@@ -5476,7 +5515,7 @@ void EventAnalyser() {
                 ETrans_all_int_15_Stack_2p_FD->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
             }
 
-            auto E_Trans_15_legend_2p_FD = new TLegend(0.625, 0.625, 0.9, 0.9);
+            auto E_Trans_15_legend_2p_FD = new TLegend(0.775, 0.625, 0.9, 0.9);
 
             TLegendEntry *E_Trans_15_all_entry_2p_stack_FD = E_Trans_15_legend_2p_FD->AddEntry(ETrans_15_All_Int_2p_FD, "All int.", "l");
             TLegendEntry *E_Trans_15_QEL_entry_2p_stack_FD = E_Trans_15_legend_2p_FD->AddEntry(ETrans_15_QEL_2p_FD, "QEL", "l");
@@ -5497,6 +5536,99 @@ void EventAnalyser() {
         cout << "\n\nEnergy transfer plots are disabled by user.\n\n";
     }
     //</editor - fold >
+
+
+// Ecal restorations
+// ====================================================================================================
+
+    if (Ecal_plots) {
+
+        cout << "\n\nPlotting Ecal restoration histograms...\n\n";
+
+//  E_cal_All_Int restoration ------------------------------------------------------------------------------
+
+        //<editor-fold desc="E_cal_QEL restoration (2p & 1n1p)">
+//        double E_cal_QEL_integral = E_cal_QEL_2p->Integral() + E_cal_QEL_1n1p->Integral();
+
+        histPlotter1D(c1, Ecal_All_Int_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "All Int., 2p", 0.06, 0.0425, 0.0425,
+                      plots, 4, false, true, Ecal_Stack_2p, "Ecal_restoration_All_Int", Ecal_All_Int_2p_Dir, "CD", kBlack, true, true, true);
+        //</editor-fold>
+
+//  E_cal_QEL restoration ------------------------------------------------------------------------------
+
+        //<editor-fold desc="E_cal_QEL restoration (2p & 1n1p)">
+//        double E_cal_QEL_integral = E_cal_QEL_2p->Integral() + E_cal_QEL_1n1p->Integral();
+
+        histPlotter1D(c1, Ecal_QEL_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_QEL_only", Ecal_QEL_2p_Dir, "CD", kBlue, true, true, true);
+        //</editor-fold>
+
+//  E_cal_MEC restoration ------------------------------------------------------------------------------
+
+        //<editor-fold desc="E_cal_MEC restoration (2p & 1n1p)">
+//        double E_cal_MEC_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_1n1p->Integral();
+
+        histPlotter1D(c1, Ecal_MEC_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_MEC_only", Ecal_MEC_2p_Dir, "CD", kRed, true, true, true);
+        //</editor-fold>
+
+
+//  E_cal_RES restoration ------------------------------------------------------------------------------
+
+        //<editor-fold desc="E_cal_RES restoration (2p & 1n1p)">
+//        double E_cal_RES_integral = E_cal_RES_2p->Integral() + E_cal_RES_1n1p->Integral();
+
+        histPlotter1D(c1, Ecal_RES_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "RES Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_RES_only", Ecal_RES_2p_Dir, "CD", kGreen, true, true, true);
+        //</editor-fold>
+
+
+//  E_cal_DIS restoration ------------------------------------------------------------------------------
+
+        //<editor-fold desc="E_cal_DIS restoration (2p & 1n1p)">
+//        double E_cal_DIS_integral = E_cal_DIS_2p->Integral() + E_cal_DIS_1n1p->Integral();
+
+        histPlotter1D(c1, Ecal_DIS_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_DIS_only", Ecal_DIS_2p_Dir, "CD", kMagenta, true, true, true);
+        //</editor-fold>
+
+//  Ecal stack (2p only) ------------------------------------------------------
+
+        //<editor-fold desc="Energy transfer around 15 deg stack (2p, CD)">
+        Ecal_Stack_2p->Draw("nostack");
+        Ecal_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        Ecal_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        Ecal_Stack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        Ecal_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        Ecal_Stack_2p->GetHistogram()->GetYaxis()->CenterTitle(true);
+
+        if (normalized_E_Trans15_plots) {
+            Ecal_Stack_2p->SetTitle("E_{cal} Reconstruction (2p) - Normalized");
+            Ecal_Stack_2p->GetXaxis()->SetTitle("E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
+            Ecal_Stack_2p->GetYaxis()->SetTitle("Probability (%)");
+            Ecal_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        } else {
+            Ecal_Stack_2p->GetYaxis()->SetTitle("Arbitrary units");
+            Ecal_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+        }
+
+        auto Ecal_legend_2p_CD = new TLegend(0.775, 0.625, 0.9, 0.9);
+
+        TLegendEntry *Ecal_all_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_All_Int_2p, "All int.", "l");
+        TLegendEntry *Ecal_QEL_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_QEL_2p, "QEL", "l");
+        TLegendEntry *Ecal_MEC_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_MEC_2p, "MEC", "l");
+        TLegendEntry *Ecal_RES_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_RES_2p, "RES", "l");
+        TLegendEntry *Ecal_DIS_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_DIS_2p, "DIS", "l");
+        Ecal_legend_2p_CD->Draw();
+
+        plots->Add(Ecal_Stack_2p);
+        c1->SaveAs((Ecal_Stack_2p_Dir + "Ecal_Stack_2p.png").c_str());
+        c1->Clear();
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nEcal plots are disabled by user.\n\n";
+    }
 
 
 
@@ -8303,7 +8435,7 @@ void EventAnalyser() {
     myLogFile << "ETrans_RES_plots = " << BoolToString(ETrans_RES_plots) << "\n";
     myLogFile << "ETrans_DIS_plots = " << BoolToString(ETrans_DIS_plots) << "\n";
     myLogFile << "inclusive_plots = " << BoolToString(inclusive_plots) << "\n";
-    myLogFile << "E_cal_plots = " << BoolToString(E_cal_plots) << "\n";
+    myLogFile << "E_cal_plots = " << BoolToString(Ecal_plots) << "\n";
     myLogFile << "other_E_cal_plots = " << BoolToString(other_E_cal_plots) << "\n";
     myLogFile << "momentum_plots = " << BoolToString(momentum_plots) << "\n";
     myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n\n";
