@@ -28,8 +28,8 @@ void plotter_1x1() {
 //    std::string filename2 = "spline_asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_my_tables_no_zeros.root";
 
 //    std::string filename1 = "spline_asportes_11_1000060120_2222_wfsi_SuSAv2_fixed_original_table.root";
-    std::string filename1 = "total_xsec_vA_EMMEC_MCmaster_test.root";
-    std::string filename2 = "total_xsec_vA_EMMEC_test.root";
+    std::string filename1 = "total_xsec_EMMEC_MCmaster_test.root";
+    std::string filename2 = "total_xsec_EMMEC_test_myBranch.root";
 
 
     std::string graphTitle = "Spline Comparison - SuSAv2 fix";

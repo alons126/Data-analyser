@@ -5104,7 +5104,7 @@ void gst::Loop() {
         E_cal_MEC_Stack_1n1p_and_2p = new
         THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
         E_cal_MEC_Stack_2p_and_2n = new
-        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 2n);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} + 2*E_{BE} [GeV]");
+        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 2n);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
 //        E_cal_MEC_Stack = new
 //        THStack("E_cal stack (MEC only)", "E_{cal} Histogram (MEC only, 2p and 1n1p);E_{cal} = E_{l} + T_{nuc 1} + T_{nuc 2} [GeV]");
         E_cal_RES_Stack = new
@@ -8546,7 +8546,7 @@ void gst::Loop() {
         E_cal_MEC_Stack_1n1p_and_2p_legend->Draw();
 
         plots->Add(E_cal_MEC_Stack_1n1p_and_2p);
-        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only.png");
+        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only_1n1p_and_2p.png");
         c1->Clear();
         //</editor-fold>
 
@@ -8577,7 +8577,7 @@ void gst::Loop() {
         E_cal_MEC_Stack_2p_and_2n_legend->Draw();
 
         plots->Add(E_cal_MEC_Stack_2p_and_2n);
-        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only.png");
+        c1->SaveAs("plots/E_cal_restorations/E_cal_restoration_stack_MEC_only_2p_and_2n.png");
         c1->Clear();
         //</editor-fold>
 
