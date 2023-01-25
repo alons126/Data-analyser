@@ -323,6 +323,81 @@ void EventAnalyser() {
     string E_e_VS_Theta_e_2p_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[4] + "/";
     //</editor-fold>
 
+    //<editor-fold desc="Sampling Fraction (SF) plots directories">
+    bool create_SF_Dir = true;
+    string SF_Parent_Directory = "SF_histograms";
+    string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
+
+    for (string folders_name: SF_Daughter_Folders) {
+        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name);
+    }
+
+    //TODO: add SF plots by reaction
+    string SF_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
+
+    // 1e2p - i.e. plots before all other cuts
+    // before cuts - i.e. plots before SF cuts
+    string SF_plots_1e2p_before_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
+    string SF_VS_P_e_plots_1e2p_before_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
+
+    // after cuts - i.e. plots after SF cuts
+    string SF_plots_1e2p_after_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
+    string SF_VS_P_e_plots_1e2p_after_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
+
+    // 2p - i.e. plots after SF and all other cuts
+    string SF_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[5] + "/";
+    string SF_VS_P_e_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[6] + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Number of Photo-electrons (nphe) plots directories">
+    bool create_nphe_Dir = true;
+    string nphe_Parent_Directory = "nphe_histograms";
+    string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
+
+    for (string folders_name: nphe_Daughter_Folders) {
+        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name);
+    }
+
+    //TODO: add nphe plots by reaction
+    string nphe_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/";
+
+    // 1e2p - i.e. plots before all other cuts
+    // before cuts - i.e. plots before nphe cuts
+    string nphe_plots_1e2p_before_cuts_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
+
+    // after cuts - i.e. plots after nphe cuts
+    string nphe_plots_1e2p_after_cuts_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
+
+    // 2p - i.e. plots after nphe and all other cuts
+    string nphe_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[2] + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Fiducial histograms (FH) plots directories">
+    bool create_FH_Dir = true;
+    string FH_Parent_Directory = "FH_histograms";
+    string FH_Daughter_Folders[] = {"", "1e2p", "1e2p/ECIN", "1e2p/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
+
+    for (string folders_name: FH_Daughter_Folders) {
+        MakeDirectory(create_FH_Dir, FH_Parent_Directory, folders_name);
+    }
+
+    //TODO: add FH plots by reaction
+    string FH_histograms_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/";
+
+    // 1e2p - i.e. plots before all other cuts
+    // before cuts - i.e. plots before FH cuts
+    string FH_plots_1e2p_before_cuts_ECIN_histograms_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/" + FH_Daughter_Folders[2] + "/";
+    string FH_plots_1e2p_before_cuts_PCAL_histograms_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/" + FH_Daughter_Folders[3] + "/";
+
+    // after cuts - i.e. plots after FH cuts
+    string FH_plots_1e2p_after_cuts_ECIN_histograms_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/" + FH_Daughter_Folders[2] + "/";
+    string FH_plots_1e2p_after_cuts_PCAL_histograms_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/" + FH_Daughter_Folders[3] + "/";
+
+    // 2p - i.e. plots after FH and all other cuts
+    string FH_plots_2p_cuts_histograms_ECIN_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/" + FH_Daughter_Folders[5] + "/";
+    string FH_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + FH_Parent_Directory + "/" + FH_Daughter_Folders[6] + "/";
+    //</editor-fold>
+
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
     string ETrans_Parent_Directory = "ETrans_histograms";
@@ -391,6 +466,12 @@ void EventAnalyser() {
 
     bool E_e_plots = true;
 
+    bool SF_plots = true;
+
+    bool nphe_plots = true;
+
+    bool FH_plots = true;
+
     bool ETrans_plots = true, ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
     if (ETrans_plots == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
 
@@ -424,6 +505,12 @@ void EventAnalyser() {
     bool normalized_Q2_plots = false;
 
     bool normalized_E_e_plots = false;
+
+    bool normalized_SF_plots = false;
+
+    bool normalized_nphe_plots = false;
+
+    bool normalized_FH_plots = false;
 
     bool normalized_theta_lp_plots = true;
     bool normalized_theta_p1_plots = false, normalized_theta_p2_plots = false, normalized_dtheta_2p_plots = false; // 2p
@@ -625,6 +712,40 @@ void EventAnalyser() {
 ////    double Vertex_Neutron_cut_FD = 1.;
 //    //</editor-fold>
 
+    //</editor-fold>
+
+// Sampling Fraction (SF) cuts ------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Sampling Fraction (SF) cuts">
+
+    //<editor-fold desc="Electron SF cuts (FD)">
+    // TODO: add SF cuts to output file
+    double SF_1e2p_upper_cut = 0.28;
+    double SF_1e2p_lower_cut = 0.18;
+    double SF_1e2p_Xmax; // for all e plots, no cuts applied
+    double SF_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
+    //</editor-fold>
+
+    //</editor-fold>
+
+// Number of Photo-electrons (nphe) cuts --------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Number of Photo-electrons (nphe) cuts">
+    // TODO: add nphe cuts to output file
+    double nphe_cut = 2;
+//    double nphe_1e2p_lower_cut = 0.18;
+//    double nphe_1e2p_Xmax; // for all e plots, no cuts applied
+//    double FH_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
+    //</editor-fold>
+
+// Fiducial cuts --------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Number of Photo-electrons (FH) cuts">
+    // TODO: add FH cuts to output file
+    double FH_cut = 14;
+//    double FH_1e2p_lower_cut = 0.18;
+//    double FH_1e2p_Xmax; // for all e plots, no cuts applied
+//    double FH_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
     //</editor-fold>
 
 // Histogram limits -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1420,7 +1541,9 @@ void EventAnalyser() {
 // Angle histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Theta_e --------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //<editor-fold desc="Angle histograms">
+
+    // Theta_e --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_e histograms">
     THStack *Theta_e_Stack = new THStack("#theta_{e} stack (CD & FD)", "#theta_{e} of Outgoing Electron (no #(e) cut, CD & FD);#theta_{e} [Deg];");
@@ -1576,6 +1699,8 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+    //</editor-fold>
+
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Momentum histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1628,7 +1753,7 @@ void EventAnalyser() {
     //<editor-fold desc="Energy (E_e) histograms">
 
     //<editor-fold desc="Energy (E_e) histograms (1e Only Cut, CD & FD)">
-    THStack *E_e_Stack = new THStack("E_{e} stack det sim (CD & FD)", "E_{e} Histogram (1e Only Cut, CD & FD);E_{e} [GeV]");
+    THStack *E_e_Stack = new THStack("E_{e} stack (CD & FD)", "E_{e} Histogram (1e Only Cut, CD & FD);E_{e} [GeV]");
 
     TH1D *E_e_hist_CD = new TH1D("E_{e} (1e Only Cut, CD)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *E_e_hist_FD = new TH1D("E_{e} (1e Only Cut, FD)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -1642,11 +1767,11 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Energy (E_e) histograms (2p, CD & FD)">
-    THStack *E_e_All_int_2p_Stack = new THStack("E_{e} stack det sim (All Int., 2p, CD & FD)", "E_{e} Histogram (All Int., 2p, CD & FD);E_{e} [GeV]");
-    THStack *E_e_QEL_2p_Stack = new THStack("E_{e} stack det sim (QEL Only, 2p, CD & FD)", "E_{e} Histogram (QEL Only, 2p, CD & FD);E_{e} [GeV]");
-    THStack *E_e_MEC_2p_Stack = new THStack("E_{e} stack det sim (MEC Only, 2p, CD & FD)", "E_{e} Histogram (MEC Only, 2p, CD & FD);E_{e} [GeV]");
-    THStack *E_e_RES_2p_Stack = new THStack("E_{e} stack det sim (RES Only, 2p, CD & FD)", "E_{e} Histogram (RES Only, 2p, CD & FD);E_{e} [GeV]");
-    THStack *E_e_DIS_2p_Stack = new THStack("E_{e} stack det sim (DIS Only, 2p, CD & FD)", "E_{e} Histogram (DIS Only, 2p, CD & FD);E_{e} [GeV]");
+    THStack *E_e_All_int_2p_Stack = new THStack("E_{e} stack (All Int., 2p, CD & FD)", "E_{e} Histogram (All Int., 2p, CD & FD);E_{e} [GeV]");
+    THStack *E_e_QEL_2p_Stack = new THStack("E_{e} stack (QEL Only, 2p, CD & FD)", "E_{e} Histogram (QEL Only, 2p, CD & FD);E_{e} [GeV]");
+    THStack *E_e_MEC_2p_Stack = new THStack("E_{e} stack (MEC Only, 2p, CD & FD)", "E_{e} Histogram (MEC Only, 2p, CD & FD);E_{e} [GeV]");
+    THStack *E_e_RES_2p_Stack = new THStack("E_{e} stack (RES Only, 2p, CD & FD)", "E_{e} Histogram (RES Only, 2p, CD & FD);E_{e} [GeV]");
+    THStack *E_e_DIS_2p_Stack = new THStack("E_{e} stack (DIS Only, 2p, CD & FD)", "E_{e} Histogram (DIS Only, 2p, CD & FD);E_{e} [GeV]");
 
     TH1D *E_e_2p_CD = new TH1D("E_{e} (All int., 2p, CD)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *E_e_2p_QEL_CD = new TH1D("E_{e} (QEL Only, 2p, CD)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -1696,10 +1821,149 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Sampling Fraction (SF) histograms (FD only)
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
+
+    //<editor-fold desc="SF histograms (1e2p, FD only)">
+    THStack *SF_1e2p_Stack = new THStack("SF stack (All Int., 1e2p, FD)", "Sampling fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (All Int., 1e2p, FD);f");
+
+    TH1D *SF_All_Int_1e2p_before_cuts_FD = new TH1D("SF (All Int., 1e2p, FD)",
+                                                    "Sampling Fraction (SF) Before Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P", 200, 0.05, 0.35);
+    TH1D *SF_All_Int_1e2p_after_cuts_FD = new TH1D("SF (All Int., 1e2p, FD)",
+                                                   "Sampling Fraction (SF) After Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P", 200, 0.05, 0.35);
+    string SF_All_Int_1e2p_before_cuts_FD_Dir = SF_plots_1e2p_before_cuts_histograms_Directory;
+    string SF_All_Int_1e2p_after_cuts_FD_Dir = SF_plots_1e2p_after_cuts_histograms_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="SF VS P histograms (1e2p, FD only)">
+    TH2D *SF_VS_P_e_1e2p_before_cuts_FD = new TH2D("SF VS P_{e} BC (All Int., 1e2p, FD)",
+                                                   "Sampling Fraction (SF) VS P_{e} Before Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                                   250, 0, beamE * 1.1, 250, 0.05, 0.35);
+    TH2D *SF_VS_P_e_1e2p_after_cuts_FD = new TH2D("SF VS P_{e} AC (All Int., 1e2p, FD)",
+                                                  "Sampling Fraction (SF) VS P_{e} After Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                                  250, 0, beamE * 1.1, 250, 0.05, 0.35);
+    string SF_VS_P_e_1e2p_before_cuts_FD_Dir = SF_VS_P_e_plots_1e2p_before_cuts_histograms_Directory;
+    string SF_VS_P_e_1e2p_after_cuts_FD_Dir = SF_VS_P_e_plots_1e2p_after_cuts_histograms_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="SF histograms (2p, FD only)">
+    THStack *SF_2p_Stack = new THStack("SF stack (All Int., 2p, FD)", "Sampling fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (All Int., 2p, FD);f");
+
+    TH1D *SF_All_Int_2p_FD = new TH1D("SF (All Int., 2p, FD)",
+                                      "Sampling Fraction (SF) Before Cuts (All Int., 2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P", 200, 0.05, 0.35);
+    TH2D *SF_VS_P_e_2p_FD = new TH2D("SF VS P_{e} BC (All Int., 2p, FD)",
+                                     "Sampling Fraction (SF) VS P_{e} Before Cuts (All Int., 2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                     250, 0, beamE * 1.1, 250, 0.05, 0.35);
+    string SF_All_Int_2p_FD_Dir = SF_plots_2p_cuts_histograms_Directory;
+    string SF_VS_P_e_2p_FD_Dir = SF_VS_P_e_plots_2p_cuts_histograms_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="SF VS P histograms (2p, FD only)">
+    //</editor-fold>
+
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Electron fiducial histograms (FD only)
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Electron fiducial histograms (FD only)">
+
+    //<editor-fold desc="Electron fiducial histograms (ECIN)">
+    TH2D *Vcal_VS_EoP_1e2p_before_cuts_ECIN = new TH2D("Vcal VS EoP BC (All Int., 1e2p, ECIN)",
+                                                       "ECAL V coordinate VS Sampling Fraction Before Cuts (All Int., 1e2p, ECIN);ECAL V coordinate;Sampling Fraction",
+                                                       250, 0, 30, 250, 0.05, 0.35);
+    TH2D *Vcal_VS_EoP_1e2p_after_cuts_ECIN = new TH2D("Vcal VS EoP AC (All Int., 1e2p, ECIN)",
+                                                      "ECAL V coordinate VS Sampling Fraction After Cuts (All Int., 1e2p, ECIN);ECAL V coordinate;Sampling Fraction",
+                                                      250, 0, 30, 250, 0.05, 0.35);
+    string Vcal_VS_EoP_1e2p_before_cuts_ECIN_Dir = FH_plots_1e2p_before_cuts_ECIN_histograms_Directory;
+    string Vcal_VS_EoP_1e2p_after_cuts_ECIN_Dir = FH_plots_1e2p_before_cuts_ECIN_histograms_Directory;
+
+    TH2D *Wcal_VS_EoP_1e2p_before_cuts_ECIN = new TH2D("Wcal VS EoP BC (All Int., 1e2p, ECIN)",
+                                                       "ECAL W coordinate VS Sampling Fraction Before Cuts (All Int., 1e2p, ECIN);ECAL W coordinate;Sampling Fraction",
+                                                       250, 0, 30, 250, 0.05, 0.35);
+    TH2D *Wcal_VS_EoP_1e2p_after_cuts_ECIN = new TH2D("Wcal VS EoP AC (All Int., 1e2p, ECIN)",
+                                                      "ECAL W coordinate VS Sampling Fraction After Cuts (All Int., 1e2p, ECIN);ECAL W coordinate;Sampling Fraction",
+                                                      250, 0, 30, 250, 0.05, 0.35);
+    string Wcal_VS_EoP_1e2p_before_cuts_ECIN_Dir = FH_plots_1e2p_after_cuts_ECIN_histograms_Directory;
+    string Wcal_VS_EoP_1e2p_after_cuts_ECIN_Dir = FH_plots_1e2p_after_cuts_ECIN_histograms_Directory;
+
+    TH2D *Vcal_VS_EoP_2p_ECIN = new TH2D("Vcal VS EoP (All Int., 2p, ECIN)",
+                                         "ECAL V coordinate VS Sampling Fraction (All Int., 2p, ECIN);ECAL V coordinate;Sampling Fraction",
+                                         250, 0, 30, 250, 0.05, 0.35);
+    TH2D *Wcal_VS_EoP_2p_ECIN = new TH2D("Wcal VS EoP (All Int., 2p, ECIN)",
+                                         "ECAL W coordinate VS Sampling Fraction (All Int., 2p, ECIN);ECAL W coordinate;Sampling Fraction",
+                                         250, 0, 30, 250, 0.05, 0.35);
+    string Vcal_VS_EoP_2p_ECIN_Dir = FH_plots_2p_cuts_histograms_ECIN_Directory;
+    string Wcal_VS_EoP_2p_ECIN_Dir = FH_plots_2p_cuts_histograms_ECIN_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Electron fiducial histograms (PCAL)">
+    TH2D *Vcal_VS_EoP_1e2p_before_cuts_PCAL = new TH2D("Vcal VS EoP BC (All Int., 1e2p, PCAL)",
+                                                       "ECAL V coordinate VS Sampling Fraction Before Cuts (All Int., 1e2p, PCAL);ECAL V coordinate;Sampling Fraction",
+                                                       250, 0, 30, 250, 0.05, 0.35);
+    TH2D *Vcal_VS_EoP_1e2p_after_cuts_PCAL = new TH2D("Vcal VS EoP AC (All Int., 1e2p, PCAL)",
+                                                      "ECAL V coordinate VS Sampling Fraction After Cuts (All Int., 1e2p, PCAL);ECAL V coordinate;Sampling Fraction",
+                                                      250, 0, 30, 250, 0.05, 0.35);
+    string Vcal_VS_EoP_1e2p_before_cuts_PCAL_Dir = FH_plots_1e2p_before_cuts_PCAL_histograms_Directory;
+    string Vcal_VS_EoP_1e2p_after_cuts_PCAL_Dir = FH_plots_1e2p_before_cuts_PCAL_histograms_Directory;
+
+    TH2D *Wcal_VS_EoP_1e2p_before_cuts_PCAL = new TH2D("Wcal VS EoP BC (All Int., 1e2p, PCAL)",
+                                                       "ECAL W coordinate VS Sampling Fraction Before Cuts (All Int., 1e2p, PCAL);ECAL W coordinate;Sampling Fraction",
+                                                       250, 0, 30, 250, 0.05, 0.35);
+    TH2D *Wcal_VS_EoP_1e2p_after_cuts_PCAL = new TH2D("Wcal VS EoP AC (All Int., 1e2p, PCAL)",
+                                                      "ECAL W coordinate VS Sampling Fraction After Cuts (All Int., 1e2p, PCAL);ECAL W coordinate;Sampling Fraction",
+                                                      250, 0, 30, 250, 0.05, 0.35);
+    string Wcal_VS_EoP_1e2p_before_cuts_PCAL_Dir = FH_plots_1e2p_after_cuts_PCAL_histograms_Directory;
+    string Wcal_VS_EoP_1e2p_after_cuts_PCAL_Dir = FH_plots_1e2p_after_cuts_PCAL_histograms_Directory;
+
+    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal VS EoP (All Int., 2p, PCAL)",
+                                         "ECAL V coordinate VS Sampling Fraction (All Int., 2p, PCAL);ECAL V coordinate;Sampling Fraction",
+                                         250, 0, 30, 250, 0.05, 0.35);
+    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal VS EoP (All Int., 2p, PCAL)",
+                                         "ECAL W coordinate VS Sampling Fraction (All Int., 2p, PCAL);ECAL W coordinate;Sampling Fraction",
+                                         250, 0, 30, 250, 0.05, 0.35);
+    string Vcal_VS_EoP_2p_PCAL_Dir = FH_plots_2p_cuts_histograms_PCAL_Directory;
+    string Wcal_VS_EoP_2p_PCAL_Dir = FH_plots_2p_cuts_histograms_PCAL_Directory;
+    //</editor-fold>
+
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Number of Photo-electrons (nphe) histograms (FD only)
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="nphe histograms (FD only)">
+
+    //<editor-fold desc="Number of Photo-electrons (nphe) histograms (1e2p, FD only)">
+    THStack *nphe_1e2p_Stack = new THStack("n_{phe} stack (All Int., 1e2p, FD)", "nphe Histogram (All Int., 1e2p, FD);n_{phe}");
+
+    TH1D *nphe_All_Int_1e2p_before_cuts_FD = new TH1D("n_{phe} BC (All Int., 1e2p, FD)",
+                                                      "Number of Photo-electrons in HTCC (n_{phe}) Before Cuts (All Int., 1e2p, FD);n_{phe}",
+                                                      200, 0, 50);
+    TH1D *nphe_All_Int_1e2p_after_cuts_FD = new TH1D("n_{phe} AC (All Int., 1e2p, FD)",
+                                                     "Number of Photo-electrons in HTCC (n_{phe}) After Cuts (All Int., 1e2p, FD);n_{phe}",
+                                                     200, 0, 50);
+    string nphe_All_Int_1e2p_before_cuts_FD_Dir = nphe_plots_1e2p_before_cuts_histograms_Directory;
+    string nphe_All_Int_1e2p_after_cuts_FD_Dir = nphe_plots_1e2p_after_cuts_histograms_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Number of Photo-electrons (nphe) histograms (2p, FD only)">
+    THStack *nphe_2p_Stack = new THStack("n_{phe} stack (All Int., 2p, FD)", "Number of Photo-electrons in HTCC (n_{phe}) Histogram (All Int., 2p, FD);n_{phe}");
+
+    TH1D *nphe_All_Int_2p_FD = new TH1D("n_{phe} (All Int., 2p, FD)", "Number of Photo-electrons in HTCC (n_{phe}) (All Int., 2p, FD);n_{phe}", 200, 0, 50);
+    string nphe_All_Int_2p_FD_Dir = nphe_plots_2p_cuts_histograms_Directory;
+    //</editor-fold>
+
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Energy Transfer (ET) histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Energy Transfer histograms (all interactions)">
+    //<editor-fold desc="Energy Transfer (ET) histograms">
     THStack *ETrans_all_int_15_Stack_2p_CD = new THStack("ET around 15#circ Stack (All Int., 2p, CD)",
                                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]");
     THStack *ETrans_all_int_15_Stack_2p_FD = new THStack("ET around 15#circ Stack (All Int., 2p, FD)",
@@ -1883,69 +2147,69 @@ void EventAnalyser() {
 
 //    TH1D *Theta_lp_histogram_test = new TH1D("Theta_lp_histogram_test", "Theta_lp_histogram_test;#theta_{l} [Deg];", 100, theta_lp_lower_lim_2p, theta_lp_upper_lim_2p);
 
-    TH1D *Theta_lp_histogram = new TH1D("#theta_{l} det sim (2p)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_2p, theta_lp_upper_lim_2p);
-    TH1D *Theta_p1_histogram = new TH1D("#theta_{p1} det sim (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
-    TH1D *Theta_p2_histogram = new TH1D("#theta_{p2} det sim (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
-    TH1D *dtheta_2p = new TH1D("#gamma det sim (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
+    TH1D *Theta_lp_histogram = new TH1D("#theta_{l} (2p)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_2p, theta_lp_upper_lim_2p);
+    TH1D *Theta_p1_histogram = new TH1D("#theta_{p1} (2p)", ";#theta_{p1} [Deg];", 100, theta_p1_lower_lim_2p, theta_p1_upper_lim_2p);
+    TH1D *Theta_p2_histogram = new TH1D("#theta_{p2} (2p)", ";#theta_{p2} [Deg];", 100, theta_p2_lower_lim_2p, theta_p2_upper_lim_2p);
+    TH1D *dtheta_2p = new TH1D("#gamma (2p)", ";#gamma_{Lab} = #theta_{p1} - #theta_{p2} [Deg];", 100, dtheta_lower_lim_2p, dtheta_upper_lim_2p);
 
-    TH1D *theta_lp_1n1p = new TH1D("#theta_{l} det sim (1n1p)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_1n1p, theta_lp_upper_lim_1n1p);
-    TH1D *theta_p_1n1p = new TH1D("#theta_{p} det sim (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
-    TH1D *theta_n_1n1p = new TH1D("#theta_{n} det sim (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
-    TH1D *dtheta_1n1p = new TH1D("#gamma det sim (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
+    TH1D *theta_lp_1n1p = new TH1D("#theta_{l} (1n1p)", ";#theta_{l} [Deg];", 100, theta_lp_lower_lim_1n1p, theta_lp_upper_lim_1n1p);
+    TH1D *theta_p_1n1p = new TH1D("#theta_{p} (1n1p)", ";#theta_{p} [Deg];", 100, theta_p_lower_lim_1n1p, theta_p_upper_lim_1n1p);
+    TH1D *theta_n_1n1p = new TH1D("#theta_{n} (1n1p)", ";#theta_{n} [Deg];", 100, theta_n_lower_lim_1n1p, theta_n_upper_lim_1n1p);
+    TH1D *dtheta_1n1p = new TH1D("#gamma (1n1p)", ";#gamma_{Lab} = #theta_{p} - #theta_{n} [Deg];", 100, dtheta_lower_lim_1n1p, dtheta_upper_lim_1n1p);
     //</editor-fold>
 
 // Phi histograms VVV -------------------------------------------------------------------------------------
 
     //<editor-fold desc="Phi histograms">
-    THStack *PhiStack = new THStack("#phi_{l} stack det sim (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
+    THStack *PhiStack = new THStack("#phi_{l} stack (2p & 1n1p)", "#phi_{l} of Outgoing Lepton (All Interactions, 2p and 1n1p);#phi_{l} [Deg];");
 
-    TH1D *phi_lp_2p = new TH1D("#phi_{l} det sim (2p)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *phi_p1_2p = new TH1D("#phi_{p1} det sim (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
-    TH1D *phi_p2_2p = new TH1D("#phi_{p2} det sim (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
-    TH1D *dphi_2p = new TH1D("#Delta#phi det sim (2p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
+    TH1D *phi_lp_2p = new TH1D("#phi_{l} (2p)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *phi_p1_2p = new TH1D("#phi_{p1} (2p)", ";#phi_{p1} [Deg];", 100, phi_p1_lower_lim_2p, phi_p1_upper_lim_2p);
+    TH1D *phi_p2_2p = new TH1D("#phi_{p2} (2p)", ";#phi_{p2} [Deg];", 100, phi_p2_lower_lim_2p, phi_p2_upper_lim_2p);
+    TH1D *dphi_2p = new TH1D("#Delta#phi (2p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_2p, dphi_upper_lim_2p);
 
-    TH1D *phi_lp_1n1p = new TH1D("#phi_{l} det sim (1n1p)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_1n1p, phi_lp_upper_lim_1n1p);
-    TH1D *phi_p_1n1p = new TH1D("#phi_{p} det sim (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
-    TH1D *phi_n_1n1p = new TH1D("#phi_{n} det sim (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
-    TH1D *dphi_1n1p = new TH1D("#Delta#phi det sim (1n1p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
+    TH1D *phi_lp_1n1p = new TH1D("#phi_{l} (1n1p)", ";#phi_{l} [Deg];", 100, phi_lp_lower_lim_1n1p, phi_lp_upper_lim_1n1p);
+    TH1D *phi_p_1n1p = new TH1D("#phi_{p} (1n1p)", ";#phi_{p1} [Deg];", 100, phi_p_lower_lim_1n1p, phi_p_upper_lim_1n1p);
+    TH1D *phi_n_1n1p = new TH1D("#phi_{n} (1n1p)", ";#phi_{p2} [Deg];", 100, phi_n_lower_lim_1n1p, phi_n_upper_lim_1n1p);
+    TH1D *dphi_1n1p = new TH1D("#Delta#phi (1n1p)", ";#Delta#phi [Deg];", 100, dphi_lower_lim_1n1p, dphi_upper_lim_1n1p);
     //</editor-fold>
 
 // Energy histograms VVV ----------------------------------------------------------------------------------
 
     //<editor-fold desc="Energy histograms">
-    THStack *EnergyStack = new THStack("E_{l} stack det sim (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
+    THStack *EnergyStack = new THStack("E_{l} stack (2p & 1n1p)", "Final State E_{l} (All Interactions, 2p and 1n1p);E_{l} [GeV]");
 
 //    TH1D *fsEl_histogram_test = new TH1D("fsEl/100_histogram_test", "fsEl/100_histogram_test;E_{l}/100 []", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
 
-    TH1D *fsEl_2p = new TH1D("Final State E_{l} det sim (2p)", ";E_{l} [???]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
-//    TH1D *fsEl_2p = new TH1D("Final State E_{l} det sim (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
-    TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} det sim (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
-    TH1D *fsEl_MEC_2p = new TH1D("Final State E_{l} det sim (MEC Only, 2p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_2p, fsEl_MEC_upper_lim_2p);
-    TH1D *fsEl_RES_2p = new TH1D("Final State E_{l} det sim (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
-    TH1D *fsEl_DIS_2p = new TH1D("Final State E_{l} det sim (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
-    TH2D *fsEl_VS_theta_lp_all_int_2p = new TH2D("Stat det sim (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+    TH1D *fsEl_2p = new TH1D("Final State E_{l} (2p)", ";E_{l} [???]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
+//    TH1D *fsEl_2p = new TH1D("Final State E_{l} (2p)", ";E_{l} [GeV]", 100, fsEl_lower_lim_2p, fsEl_upper_lim_2p);
+    TH1D *fsEl_QEL_2p = new TH1D("Final State E_{l} (QEL Only, 2p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_2p, fsEl_QEL_upper_lim_2p);
+    TH1D *fsEl_MEC_2p = new TH1D("Final State E_{l} (MEC Only, 2p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_2p, fsEl_MEC_upper_lim_2p);
+    TH1D *fsEl_RES_2p = new TH1D("Final State E_{l} (RES Only, 2p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_2p, fsEl_RES_upper_lim_2p);
+    TH1D *fsEl_DIS_2p = new TH1D("Final State E_{l} (DIS Only, 2p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_2p, fsEl_DIS_upper_lim_2p);
+    TH2D *fsEl_VS_theta_lp_all_int_2p = new TH2D("Stat (All Interactions, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_l_QEL_only_2p = new TH2D("Stat det sim (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+    TH2D *fsEl_VS_theta_l_QEL_only_2p = new TH2D("Stat (QEL only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                  200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_lp_MEC_only_2p = new TH2D("Stat det sim (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+    TH2D *fsEl_VS_theta_lp_MEC_only_2p = new TH2D("Stat (MEC only, 2p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                   200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
 
-    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} det sim (1n1p)", ";E_{l} [???];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
-//    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} det sim (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
-    TH1D *fsEl_QEL_1n1p = new TH1D("Final State E_{l} det sim (QEL Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_1n1p, fsEl_QEL_upper_lim_1n1p);
-    TH1D *fsEl_MEC_1n1p = new TH1D("Final State E_{l} det sim (MEC Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_1n1p, fsEl_MEC_upper_lim_1n1p);
-    TH1D *fsEl_RES_1n1p = new TH1D("Final State E_{l} det sim (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
-    TH1D *fsEl_DIS_1n1p = new TH1D("Final State E_{l} det sim (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
-    TH2D *fsEl_VS_theta_lp_all_int_1n1p = new TH2D("Stat det sim (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} (1n1p)", ";E_{l} [???];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
+//    TH1D *fsEl_1n1p = new TH1D("Final State E_{l} (1n1p)", ";E_{l} [GeV];", 100, fsEl_lower_lim_1n1p, fsEl_upper_lim_1n1p);
+    TH1D *fsEl_QEL_1n1p = new TH1D("Final State E_{l} (QEL Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_QEL_lower_lim_1n1p, fsEl_QEL_upper_lim_1n1p);
+    TH1D *fsEl_MEC_1n1p = new TH1D("Final State E_{l} (MEC Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_MEC_lower_lim_1n1p, fsEl_MEC_upper_lim_1n1p);
+    TH1D *fsEl_RES_1n1p = new TH1D("Final State E_{l} (RES Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_RES_lower_lim_1n1p, fsEl_RES_upper_lim_1n1p);
+    TH1D *fsEl_DIS_1n1p = new TH1D("Final State E_{l} (DIS Only, 1n1p)", ";E_{l} [GeV]", 100, fsEl_DIS_lower_lim_1n1p, fsEl_DIS_upper_lim_1n1p);
+    TH2D *fsEl_VS_theta_lp_all_int_1n1p = new TH2D("Stat (All Interactions, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                    200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                    200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_lp_QEL_only_1n1p = new TH2D("Stat det sim (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+    TH2D *fsEl_VS_theta_lp_QEL_only_1n1p = new TH2D("Stat (QEL only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                     200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                     200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
-    TH2D *fsEl_VS_theta_lp_MEC_only_1n1p = new TH2D("Stat det sim (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
+    TH2D *fsEl_VS_theta_lp_MEC_only_1n1p = new TH2D("Stat (MEC only, 1n1p)", ";#theta_{l} [Deg];E_{l} [GeV]",
                                                     200, fsEl_VS_theta_lp_lower_lim_1n1p_x, fsEl_VS_theta_lp_upper_lim_1n1p_x,
                                                     200, fsEl_VS_theta_lp_lower_lim_1n1p_y, fsEl_VS_theta_lp_upper_lim_1n1p_y);
 
@@ -3158,9 +3422,59 @@ void EventAnalyser() {
             if (protons.size() == 2) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-//  Testing and applying chi2 & dVz cuts ------------------------------------------------------------------------------------------------------------------------
+            //  Testing cuts --------------------------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Applying chi2 cuts">
+                //<editor-fold desc="Testing cuts">
+
+//  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Testing SF cuts (electrons only)">
+                TVector3 pp_e;
+                pp_e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / pp_e.Mag();
+
+                // SF before cuts:
+                SF_All_Int_1e2p_before_cuts_FD->Fill(EoP_e);
+                SF_VS_P_e_1e2p_before_cuts_FD->Fill(pp_e.Mag(), EoP_e);
+
+                // SF after cuts:
+                if ((EoP_e > SF_1e2p_lower_cut) && (EoP_e < SF_1e2p_upper_cut)) {
+                    SF_All_Int_1e2p_after_cuts_FD->Fill(EoP_e);
+                    SF_VS_P_e_1e2p_after_cuts_FD->Fill(pp_e.Mag(), EoP_e);
+                }
+                //</editor-fold>
+
+//  Testing FH cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Testing FH cuts (electrons only)">
+                // FH before cuts:
+                Vcal_VS_EoP_1e2p_before_cuts_ECIN->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+                Wcal_VS_EoP_1e2p_before_cuts_ECIN->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+                Vcal_VS_EoP_1e2p_before_cuts_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+                Wcal_VS_EoP_1e2p_before_cuts_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+
+                // FH after cuts:
+                if (electrons[0]->cal(ECIN)->getLv() > 14) { Vcal_VS_EoP_1e2p_after_cuts_ECIN->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+                if (electrons[0]->cal(ECIN)->getLw() > 14) { Wcal_VS_EoP_1e2p_after_cuts_ECIN->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+//                if (electrons[0]->cal(PCAL)->getLv() > 14) { Vcal_VS_EoP_1e2p_after_cuts_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+//                if (electrons[0]->cal(PCAL)->getLw() > 14) { Wcal_VS_EoP_1e2p_after_cuts_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+                //</editor-fold>
+
+//  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Testing nphe cuts (electrons only)">
+                int nphe = electrons[0]->che(HTCC)->getNphe();
+
+                // nphe before cuts:
+                nphe_All_Int_1e2p_before_cuts_FD->Fill(nphe);
+
+                // nphe after cuts:
+                if (nphe > nphe_cut) { nphe_All_Int_1e2p_after_cuts_FD->Fill(nphe); }
+                //</editor-fold>
+
+//  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Testing chi2 cuts">
 
                 //<editor-fold desc="Testing Chi2 cuts before applying">
 
@@ -3195,6 +3509,75 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //</editor-fold>
+
+                //</editor-fold>
+
+//  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Testing dV cuts">
+                double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
+                double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
+                double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
+
+                for (auto &p: protons) {
+
+                    Vx_p = p->par()->getVx();
+                    Vy_p = p->par()->getVy();
+                    Vz_p = p->par()->getVz();
+                    dVx = Vx_e - Vx_p;
+                    dVy = Vy_e - Vy_p;
+                    dVz = Vz_e - Vz_p;
+
+                    //<editor-fold desc="Testing dVx">
+                    // Here "after" = 2p
+                    if (fabs(dVx_peak - dVx) < dVx_cut) { deltaVx_before_dV_cuts_1e2p->Fill(dVx); }
+                    //</editor-fold>
+
+                    //<editor-fold desc="Testing dVy">
+                    // Here "after" = 2p
+                    if (fabs(dVy_peak - dVy) < dVy_cut) { deltaVy_before_dV_cuts_1e2p->Fill(dVy); }
+                    //</editor-fold>
+
+                    //<editor-fold desc="Testing dVz">
+                    // Here "after" = 2p
+                    if (fabs(dVz_peak - dVz) < dVz_cut) { deltaVz_before_dV_cuts_1e2p->Fill(dVz); }
+                    //</editor-fold>
+
+                } // end of loop over protons vector
+
+                if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
+                ++num_of_events_1e2p_w_dVz_cuts;
+
+                //</editor-fold>
+
+                //</editor-fold>
+
+            //  Applying cuts -------------------------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Applying cuts">
+
+//  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Applying SF cuts (electrons only)">
+                if ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut)) { continue; }
+                //</editor-fold>
+
+//  Applying FH cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Applying FH cuts (electrons only)">
+                if (electrons[0]->cal(ECIN)->getLv() < 14) { continue; }
+                if (electrons[0]->cal(ECIN)->getLw() < 14) { continue; }
+                //</editor-fold>
+
+//  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Applying nphe cuts (electrons only)">
+                if (nphe < nphe_cut) { continue; }
+                //</editor-fold>
+
+//  Testing and applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Applying chi2 cuts">
 
                 //<editor-fold desc="Applying Chi2 cuts">
                 if (electrons[0]->getRegion() == CD) {
@@ -3249,77 +3632,18 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-                //<editor-fold desc="Applying dV cuts">
-                double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
-                double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
-                double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
+//  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
 
-                for (auto &p: protons) {
-
-                    Vx_p = p->par()->getVx();
-                    Vy_p = p->par()->getVy();
-                    Vz_p = p->par()->getVz();
-                    dVx = Vx_e - Vx_p;
-                    dVy = Vy_e - Vy_p;
-                    dVz = Vz_e - Vz_p;
-
-                    //<editor-fold desc="Testing dVx">
-                    if (fabs(dVx_peak - dVx) < dVx_cut) {
-                        deltaVx_before_dV_cuts_1e2p->Fill(dVx);
-                    }
-                    //</editor-fold>
-
-                    //<editor-fold desc="Testing dVy">
-                    if (fabs(dVy_peak - dVy) < dVy_cut) {
-                        deltaVy_before_dV_cuts_1e2p->Fill(dVy);
-                    }
-                    //</editor-fold>
-
-                    //<editor-fold desc="Testing dVz">
-                    if (fabs(dVz_peak - dVz) < dVz_cut) {
-                        deltaVz_before_dV_cuts_1e2p->Fill(dVz);
-                    }
-                    //</editor-fold>
-
-                } // end of loop over protons vector
-
+                //<editor-fold desc="Applying dVz cuts">
                 if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
                 ++num_of_events_1e2p_w_dVz_cuts;
-
-                for (auto &p: protons) {
-
-                    Vx_p = p->par()->getVx();
-                    Vy_p = p->par()->getVy();
-                    Vz_p = p->par()->getVz();
-                    dVx = Vx_e - Vx_p;
-                    dVy = Vy_e - Vy_p;
-                    dVz = Vz_e - Vz_p;
-
-                    //<editor-fold desc="Testing dVx">
-                    if (fabs(dVx_peak - dVx) < dVx_cut) {
-                        deltaVx_after_dV_cuts_1e2p->Fill(dVx);
-                    }
-                    //</editor-fold>
-
-                    //<editor-fold desc="Testing dVy">
-                    if (fabs(dVy_peak - dVy) < dVy_cut) {
-                        deltaVy_after_dV_cuts_1e2p->Fill(dVy);
-                    }
-                    //</editor-fold>
-
-                    //<editor-fold desc="Testing dVz">
-                    if (fabs(dVz_peak - dVz) < dVz_cut) {
-                        deltaVz_after_dV_cuts_1e2p->Fill(dVz);
-                    }
-                    //</editor-fold>
-
-                } // end of loop over protons vector
+                //</editor-fold>
 
                 //</editor-fold>
 
-//  Fillings histograms -----------------------------------------------------------------------------------------------------------------------------------------
+            //  Fillings histograms -----------------------------------------------------------------------------------------------------------------------------------------
 
-                // Counting 2p events by reaction
+                //<editor-fold desc="Counting 2p events by reaction">
                 if (qel) {
                     ++num_of_2p_QEL_events;
                 } else if (mec) {
@@ -3329,6 +3653,7 @@ void EventAnalyser() {
                 } else if (dis) {
                     ++num_of_2p_DIS_events;
                 }
+                //</editor-fold>
 
                 for (auto &e: electrons) {
                     if (e->getRegion() == CD) {
@@ -3425,6 +3750,23 @@ void EventAnalyser() {
                     }
                 } // end of loop over electrons vector
 
+                //<editor-fold desc="Filling SF histograms">
+                SF_All_Int_2p_FD->Fill(EoP_e);
+                SF_VS_P_e_2p_FD->Fill(pp_e.Mag(), EoP_e);
+                //</editor-fold>
+
+                //<editor-fold desc="Filling FH">
+                Vcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+                Wcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+                Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+                Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+                //</editor-fold>
+
+                //<editor-fold desc="Filling nphe histograms">
+                nphe_All_Int_2p_FD->Fill(nphe);
+                //</editor-fold>
+
+                //<editor-fold desc="Filling Ecal histograms">
                 double P_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
 
                 P_e = electrons[0]->getP();
@@ -3439,17 +3781,41 @@ void EventAnalyser() {
 
                 if (qel) {
                     Ecal_QEL_2p->Fill(Ecal_2p);
-
                 } else if (mec) {
                     Ecal_MEC_2p->Fill(Ecal_2p);
-
                 } else if (res) {
                     Ecal_RES_2p->Fill(Ecal_2p);
-
                 } else if (dis) {
                     Ecal_DIS_2p->Fill(Ecal_2p);
-
                 }
+                //</editor-fold>
+
+                //<editor-fold desc="Filling dVx, dVy, dVz">
+                for (auto &p: protons) {
+
+                    Vx_p = p->par()->getVx();
+                    Vy_p = p->par()->getVy();
+                    Vz_p = p->par()->getVz();
+                    dVx = Vx_e - Vx_p;
+                    dVy = Vy_e - Vy_p;
+                    dVz = Vz_e - Vz_p;
+
+                    //<editor-fold desc="Filling dVx (2p)">
+                    // Here "after" = 2p
+                    if (fabs(dVx_peak - dVx) < dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
+                    //</editor-fold>
+
+                    //<editor-fold desc="Filling dVy (2p)">
+                    // Here "after" = 2p
+                    if (fabs(dVy_peak - dVy) < dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
+                    //</editor-fold>
+
+                    //<editor-fold desc="Filling dVz (2p)">
+                    // Here "after" = 2p
+                    if (fabs(dVz_peak - dVz) < dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+                    //</editor-fold>
+
+                } // end of loop over protons vector
                 //</editor-fold>
 
             } // end of "protons.size() == 2" if
@@ -5206,6 +5572,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+
 // Energy (E_e) histograms
 // ====================================================================================================
 
@@ -5534,9 +5901,389 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-// Energy transfer histograms (all interactions)
+
+// Sampling Fraction (SF) histograms
 // ====================================================================================================
 
+    //<editor-fold desc="Sampling Fraction (SF) histograms">
+    if (SF_plots) {
+
+        cout << "\n\nPlotting sampling fraction histograms...\n\n";
+
+//  SF histograms --------------------------------------------------------------
+
+        SF_1e2p_Xmax = SF_All_Int_1e2p_before_cuts_FD->GetBinCenter(SF_All_Int_1e2p_before_cuts_FD->GetMaximumBin());
+
+        //<editor-fold desc="SF histogram (1e2p, FD)">
+//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
+
+        histPlotter1D(c1, SF_All_Int_1e2p_before_cuts_FD, normalized_SF_plots, true, .1, "Sampling Fraction (SF) Before Cuts", "All Int., 1e2p", plots, 2, false, true,
+                      SF_1e2p_Stack, "01 SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_before_cuts_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
+                      SF_1e2p_upper_cut, SF_1e2p_Xmax);
+
+        histPlotter1D(c1, SF_All_Int_1e2p_after_cuts_FD, normalized_SF_plots, true, .1, "Sampling Fraction (SF) After cuts", "All Int., 1e2p", plots, 2, false, true,
+                      SF_1e2p_Stack, "02 SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_after_cuts_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
+                      SF_1e2p_upper_cut, SF_1e2p_Xmax);
+        //</editor-fold>
+
+        //<editor-fold desc="SF histogram (2p, FD)">
+//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
+
+        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, .1, "Sampling Fraction (SF) Before Cuts", "All Int., 2p", plots, 2, false, true,
+                      SF_2p_Stack, "SF_2p_before_SF_cuts", SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
+                      SF_1e2p_upper_cut, SF_1e2p_Xmax);
+        //</editor-fold>
+
+//  SF VS P  --------------------------------------------------------------
+
+        //<editor-fold desc="SF VS P 1e2p before cuts (FD)">
+        SF_VS_P_e_1e2p_before_cuts_FD->SetTitleSize(0.06, "xyz");
+        SF_VS_P_e_1e2p_before_cuts_FD->GetXaxis()->SetLabelSize(0.0425);
+        SF_VS_P_e_1e2p_before_cuts_FD->GetXaxis()->CenterTitle(true);
+        SF_VS_P_e_1e2p_before_cuts_FD->GetYaxis()->SetLabelSize(0.0425);
+        SF_VS_P_e_1e2p_before_cuts_FD->GetYaxis()->CenterTitle(true);
+        SF_VS_P_e_1e2p_before_cuts_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(SF_VS_P_e_1e2p_before_cuts_FD);
+        SF_VS_P_e_1e2p_before_cuts_FD->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        SF_VS_P_e_1e2p_before_cuts_FD->SetStats(0);
+        c1->SaveAs((SF_VS_P_e_1e2p_before_cuts_FD_Dir + "01 SF_VS_P_e_1e2p_before_cuts_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="SF VS P 1e2p after cuts (FD)">
+        SF_VS_P_e_1e2p_after_cuts_FD->SetTitleSize(0.06, "xyz");
+        SF_VS_P_e_1e2p_after_cuts_FD->GetXaxis()->SetLabelSize(0.0425);
+        SF_VS_P_e_1e2p_after_cuts_FD->GetXaxis()->CenterTitle(true);
+        SF_VS_P_e_1e2p_after_cuts_FD->GetYaxis()->SetLabelSize(0.0425);
+        SF_VS_P_e_1e2p_after_cuts_FD->GetYaxis()->CenterTitle(true);
+        SF_VS_P_e_1e2p_after_cuts_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(SF_VS_P_e_1e2p_after_cuts_FD);
+        SF_VS_P_e_1e2p_after_cuts_FD->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        SF_VS_P_e_1e2p_after_cuts_FD->SetStats(0);
+        c1->SaveAs((SF_VS_P_e_1e2p_after_cuts_FD_Dir + "02 SF_VS_P_e_1e2p_after_cuts_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="SF VS P 2p after all cuts (FD)">
+        SF_VS_P_e_2p_FD->SetTitleSize(0.06, "xyz");
+        SF_VS_P_e_2p_FD->GetXaxis()->SetLabelSize(0.0425);
+        SF_VS_P_e_2p_FD->GetXaxis()->CenterTitle(true);
+        SF_VS_P_e_2p_FD->GetYaxis()->SetLabelSize(0.0425);
+        SF_VS_P_e_2p_FD->GetYaxis()->CenterTitle(true);
+        SF_VS_P_e_2p_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(SF_VS_P_e_2p_FD);
+        SF_VS_P_e_2p_FD->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        SF_VS_P_e_2p_FD->SetStats(0);
+        c1->SaveAs((SF_VS_P_e_2p_FD_Dir + "SF_VS_P_e_2p_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nSampling fraction plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+
+// Electron fiducial histograms (FD only)
+// ====================================================================================================
+
+    //<editor-fold desc="Electron fiducial histograms (FD only)">
+    if (FH_plots) {
+
+        cout << "\n\nPlotting fiducial histograms...\n\n";
+
+//  FH histograms --------------------------------------------------------------
+
+        //<editor-fold desc="Vcal VS EoP 1e2p BC ECIN">
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_1e2p_before_cuts_ECIN);
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Vcal_VS_EoP_1e2p_before_cuts_ECIN->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_1e2p_before_cuts_ECIN_Dir + "01 Vcal_VS_EoP_1e2p_before_cuts_ECIN.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Vcal VS EoP 1e2p AC ECIN">
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_1e2p_after_cuts_ECIN);
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Vcal_VS_EoP_1e2p_after_cuts_ECIN->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_1e2p_after_cuts_ECIN_Dir + "02 Vcal_VS_EoP_1e2p_after_cuts_ECIN.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Wcal VS EoP 1e2p BC ECIN">
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_1e2p_before_cuts_ECIN);
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Wcal_VS_EoP_1e2p_before_cuts_ECIN->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_1e2p_before_cuts_ECIN_Dir + "03 Wcal_VS_EoP_1e2p_before_cuts_ECIN.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Wcal VS EoP 1e2p AC ECIN">
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_1e2p_after_cuts_ECIN);
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Wcal_VS_EoP_1e2p_after_cuts_ECIN->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_1e2p_after_cuts_ECIN_Dir + "04 Wcal_VS_EoP_1e2p_after_cuts_ECIN.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Vcal VS EoP 2p ECIN">
+        Vcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_2p_ECIN);
+        Vcal_VS_EoP_2p_ECIN->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Vcal_VS_EoP_2p_ECIN->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_2p_ECIN_Dir + "01 Vcal_VS_EoP_2p_ECIN.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Wcal VS EoP 2p ECIN">
+        Wcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_2p_ECIN);
+        Wcal_VS_EoP_2p_ECIN->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Wcal_VS_EoP_2p_ECIN->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_2p_ECIN_Dir + "02 Wcal_VS_EoP_2p_ECIN.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Vcal VS EoP 1e2p BC PCAL">
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_1e2p_before_cuts_PCAL);
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Vcal_VS_EoP_1e2p_before_cuts_PCAL->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_1e2p_before_cuts_PCAL_Dir + "01 Vcal_VS_EoP_1e2p_before_cuts_PCAL.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Vcal VS EoP 1e2p AC PCAL">
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_1e2p_after_cuts_PCAL);
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Vcal_VS_EoP_1e2p_after_cuts_PCAL->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_1e2p_after_cuts_PCAL_Dir + "02 Vcal_VS_EoP_1e2p_after_cuts_PCAL.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Wcal VS EoP 1e2p BC PCAL">
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_1e2p_before_cuts_PCAL);
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Wcal_VS_EoP_1e2p_before_cuts_PCAL->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_1e2p_before_cuts_PCAL_Dir + "03 Wcal_VS_EoP_1e2p_before_cuts_PCAL.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Wcal VS EoP 1e2p AC PCAL">
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_1e2p_after_cuts_PCAL);
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Wcal_VS_EoP_1e2p_after_cuts_PCAL->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_1e2p_after_cuts_PCAL_Dir + "04 Wcal_VS_EoP_1e2p_after_cuts_PCAL.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Vcal VS EoP 2p PCAL">
+        Vcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_2p_PCAL);
+        Vcal_VS_EoP_2p_PCAL->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Vcal_VS_EoP_2p_PCAL->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_2p_PCAL_Dir + "01 Vcal_VS_EoP_2p_PCAL.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Wcal VS EoP 2p PCAL">
+        Wcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_2p_PCAL);
+        Wcal_VS_EoP_2p_PCAL->Draw("colz");
+        c1->SetLogz(1);
+//        gStyle->SetStatX(0.88);
+//        gStyle->SetStatY(0.4);
+        Wcal_VS_EoP_2p_PCAL->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_2p_PCAL_Dir + "02 Wcal_VS_EoP_2p_PCAL.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nSampling fraction plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+
+// Number of Photo-electrons (nphe) histograms
+// ====================================================================================================
+
+    //<editor-fold desc="Number of Photo-electrons (nphe) histograms">
+    if (nphe_plots) {
+
+        cout << "\n\nPlotting Number of Photo-electrons (nphe) histograms...\n\n";
+
+//  Number of Photo-electrons (nphe) histograms --------------------------------------------------------------
+
+//        nphe_1e2p_Xmax = nphe_All_Int_1e2p_before_cuts_FD->GetBinCenter(nphe_All_Int_1e2p_before_cuts_FD->GetMaximumBin());
+
+        //<editor-fold desc="Number of Photo-electrons (nphe) histogram (1e2p, FD)">
+//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
+
+        histPlotter1D(c1, nphe_All_Int_1e2p_before_cuts_FD, normalized_nphe_plots, true, .1, "Number of Photo-electrons in HTCC (n_{phe}) Before Cuts", "All Int., 1e2p",
+                      plots, 2, false, true, nphe_1e2p_Stack, "01 nphe_1e2p_before_nphe_cuts", nphe_All_Int_1e2p_before_cuts_FD_Dir, "FD", kBlue, true, true, false, true,
+                      nphe_cut, 0, false);
+
+        histPlotter1D(c1, nphe_All_Int_1e2p_after_cuts_FD, normalized_nphe_plots, true, .1, "Number of Photo-electrons in HTCC (n_{phe}) After Cuts", "All Int., 1e2p",
+                      plots, 2, false, true, nphe_1e2p_Stack, "02 nphe_1e2p_after_nphe_cuts", nphe_All_Int_1e2p_after_cuts_FD_Dir, "FD", kBlue, true, true, false, true,
+                      nphe_cut, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Number of Photo-electrons (nphe) histogram (2p, FD)">
+//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
+
+        histPlotter1D(c1, nphe_All_Int_2p_FD, normalized_nphe_plots, true, .1, "Number of Photo-electrons in HTCC (n_{phe}) Before Cuts", "All Int., 2p", plots, 2, false,
+                      true, nphe_2p_Stack, "nphe_2p_before_nphe_cuts", nphe_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, nphe_cut, 0, false);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nSampling fraction plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+
+// Energy transfer histograms
+// ====================================================================================================
+
+    //<editor-fold desc="Energy transfer histograms">
     if (ETrans_all_plots) {
 
         cout << "\n\nPlotting Energy Transfer (ET) histograms...\n\n";
@@ -5705,7 +6452,7 @@ void EventAnalyser() {
     } else {
         cout << "\n\nEnergy transfer plots are disabled by user.\n\n";
     }
-    //</editor - fold >
+    //</editor-fold>
 
 
 // Ecal restorations

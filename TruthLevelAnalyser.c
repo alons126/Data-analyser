@@ -5839,8 +5839,8 @@ void gst::Loop() {
                     double P_R_2p = -1;
 
 //                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-//                    if (P_p1_2p >= 0 && P_p2_2p >= 0) {
-                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+                    if (P_p1_2p >= 0 && P_p2_2p >= 0) {
+//                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
                         double E_cal_2p;
 
                         if (BEnergyToNucleusCon == true) {
