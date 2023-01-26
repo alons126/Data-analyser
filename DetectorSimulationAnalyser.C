@@ -121,7 +121,6 @@ void EventAnalyser() {
 
     system(("rm -r " + Plots_Folder + "/*").c_str()); // clear old stuff in Parent_Folder
 
-//  todo: finish auto-generating directories for other histograms
     //<editor-fold desc="Beta VS p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
@@ -164,7 +163,6 @@ void EventAnalyser() {
         MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name);
     }
 
-    // TODO: define 'Beta_VS_P_Parent_Directory' properly, and set it as the saving dir for plots below
     string Chi2_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[0];
 
     string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/";
@@ -242,7 +240,6 @@ void EventAnalyser() {
         MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name);
     }
 
-    // TODO: add Theta_e VS Phi_e directories
     string Phi_e_All_e_Directory = Plots_Folder + "/" + Phi_e_Parent_Directory + "/" + Phi_e_Daughter_Folders[2] + "/";
 
     string Phi_e_Only_1e_cut_Directory = Plots_Folder + "/" + Phi_e_Parent_Directory + "/" + Phi_e_Daughter_Folders[3] + "/";
@@ -413,6 +410,7 @@ void EventAnalyser() {
     string ETrans_MEC_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
     string ETrans_RES_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
     string ETrans_DIS_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
+
     string ETrans_15_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
     //</editor-fold>
 
@@ -431,6 +429,7 @@ void EventAnalyser() {
     string Ecal_MEC_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[4] + "/";
     string Ecal_RES_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[5] + "/";
     string Ecal_DIS_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[6] + "/";
+
     string Ecal_stack_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[1] + "/";
     //</editor-fold>
 
@@ -588,7 +587,7 @@ void EventAnalyser() {
 // TList setup ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="TList name setup">
-    string listName = plots_path + AnalyseFileSample + plots_file_type; //todo: add if-else to choose plotsInput or file_name
+    string listName = plots_path + AnalyseFileSample + plots_file_type;
     const char *TListName = listName.c_str();
     //</editor-fold>
 
@@ -714,9 +713,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Sampling Fraction (SF) cuts ------------------------------------------------------------------------------------------------------------------------------------------
+// Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Sampling Fraction (SF) cuts">
+    //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
 
     //<editor-fold desc="Electron SF cuts (FD)">
     // TODO: add SF cuts to output file
@@ -728,9 +727,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Number of Photo-electrons (nphe) cuts --------------------------------------------------------------------------------------------------------------------------------
+// Number of Photo-electrons (nphe) cuts (electrons only, FD) -----------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Number of Photo-electrons (nphe) cuts">
+    //<editor-fold desc="Number of Photo-electrons (nphe) cuts (electrons only, FD)">
     // TODO: add nphe cuts to output file
     double nphe_cut = 2;
 //    double nphe_1e2p_lower_cut = 0.18;
@@ -740,7 +739,7 @@ void EventAnalyser() {
 
 // Fiducial cuts --------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Number of Photo-electrons (FH) cuts">
+    //<editor-fold desc="Fiducial cuts">
     // TODO: add FH cuts to output file
     double FH_cut = 14;
 //    double FH_1e2p_lower_cut = 0.18;
@@ -1891,11 +1890,9 @@ void EventAnalyser() {
     string Wcal_VS_EoP_1e2p_after_cuts_ECIN_Dir = FH_plots_1e2p_after_cuts_ECIN_histograms_Directory;
 
     TH2D *Vcal_VS_EoP_2p_ECIN = new TH2D("Vcal VS EoP (All Int., 2p, ECIN)",
-                                         "ECAL V coordinate VS Sampling Fraction (All Int., 2p, ECIN);ECAL V coordinate;Sampling Fraction",
-                                         250, 0, 30, 250, 0.05, 0.35);
+                                         "ECAL V coordinate VS Sampling Fraction (All Int., 2p, ECIN);ECAL V coordinate;Sampling Fraction", 250, 0, 30, 250, 0.05, 0.35);
     TH2D *Wcal_VS_EoP_2p_ECIN = new TH2D("Wcal VS EoP (All Int., 2p, ECIN)",
-                                         "ECAL W coordinate VS Sampling Fraction (All Int., 2p, ECIN);ECAL W coordinate;Sampling Fraction",
-                                         250, 0, 30, 250, 0.05, 0.35);
+                                         "ECAL W coordinate VS Sampling Fraction (All Int., 2p, ECIN);ECAL W coordinate;Sampling Fraction", 250, 0, 30, 250, 0.05, 0.35);
     string Vcal_VS_EoP_2p_ECIN_Dir = FH_plots_2p_cuts_histograms_ECIN_Directory;
     string Wcal_VS_EoP_2p_ECIN_Dir = FH_plots_2p_cuts_histograms_ECIN_Directory;
     //</editor-fold>
@@ -1904,27 +1901,17 @@ void EventAnalyser() {
     TH2D *Vcal_VS_EoP_1e2p_before_cuts_PCAL = new TH2D("Vcal VS EoP BC (All Int., 1e2p, PCAL)",
                                                        "ECAL V coordinate VS Sampling Fraction Before Cuts (All Int., 1e2p, PCAL);ECAL V coordinate;Sampling Fraction",
                                                        250, 0, 30, 250, 0.05, 0.35);
-    TH2D *Vcal_VS_EoP_1e2p_after_cuts_PCAL = new TH2D("Vcal VS EoP AC (All Int., 1e2p, PCAL)",
-                                                      "ECAL V coordinate VS Sampling Fraction After Cuts (All Int., 1e2p, PCAL);ECAL V coordinate;Sampling Fraction",
-                                                      250, 0, 30, 250, 0.05, 0.35);
     string Vcal_VS_EoP_1e2p_before_cuts_PCAL_Dir = FH_plots_1e2p_before_cuts_PCAL_histograms_Directory;
-    string Vcal_VS_EoP_1e2p_after_cuts_PCAL_Dir = FH_plots_1e2p_before_cuts_PCAL_histograms_Directory;
 
     TH2D *Wcal_VS_EoP_1e2p_before_cuts_PCAL = new TH2D("Wcal VS EoP BC (All Int., 1e2p, PCAL)",
                                                        "ECAL W coordinate VS Sampling Fraction Before Cuts (All Int., 1e2p, PCAL);ECAL W coordinate;Sampling Fraction",
                                                        250, 0, 30, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_1e2p_after_cuts_PCAL = new TH2D("Wcal VS EoP AC (All Int., 1e2p, PCAL)",
-                                                      "ECAL W coordinate VS Sampling Fraction After Cuts (All Int., 1e2p, PCAL);ECAL W coordinate;Sampling Fraction",
-                                                      250, 0, 30, 250, 0.05, 0.35);
     string Wcal_VS_EoP_1e2p_before_cuts_PCAL_Dir = FH_plots_1e2p_after_cuts_PCAL_histograms_Directory;
-    string Wcal_VS_EoP_1e2p_after_cuts_PCAL_Dir = FH_plots_1e2p_after_cuts_PCAL_histograms_Directory;
 
     TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal VS EoP (All Int., 2p, PCAL)",
-                                         "ECAL V coordinate VS Sampling Fraction (All Int., 2p, PCAL);ECAL V coordinate;Sampling Fraction",
-                                         250, 0, 30, 250, 0.05, 0.35);
+                                         "ECAL V coordinate VS Sampling Fraction (All Int., 2p, PCAL);ECAL V coordinate;Sampling Fraction", 250, 0, 30, 250, 0.05, 0.35);
     TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal VS EoP (All Int., 2p, PCAL)",
-                                         "ECAL W coordinate VS Sampling Fraction (All Int., 2p, PCAL);ECAL W coordinate;Sampling Fraction",
-                                         250, 0, 30, 250, 0.05, 0.35);
+                                         "ECAL W coordinate VS Sampling Fraction (All Int., 2p, PCAL);ECAL W coordinate;Sampling Fraction", 250, 0, 30, 250, 0.05, 0.35);
     string Vcal_VS_EoP_2p_PCAL_Dir = FH_plots_2p_cuts_histograms_PCAL_Directory;
     string Wcal_VS_EoP_2p_PCAL_Dir = FH_plots_2p_cuts_histograms_PCAL_Directory;
     //</editor-fold>
@@ -1941,11 +1928,9 @@ void EventAnalyser() {
     THStack *nphe_1e2p_Stack = new THStack("n_{phe} stack (All Int., 1e2p, FD)", "nphe Histogram (All Int., 1e2p, FD);n_{phe}");
 
     TH1D *nphe_All_Int_1e2p_before_cuts_FD = new TH1D("n_{phe} BC (All Int., 1e2p, FD)",
-                                                      "Number of Photo-electrons in HTCC (n_{phe}) Before Cuts (All Int., 1e2p, FD);n_{phe}",
-                                                      200, 0, 50);
+                                                      "Number of Photo-electrons in HTCC (n_{phe}) Before Cuts (All Int., 1e2p, FD);n_{phe}", 200, 0, 50);
     TH1D *nphe_All_Int_1e2p_after_cuts_FD = new TH1D("n_{phe} AC (All Int., 1e2p, FD)",
-                                                     "Number of Photo-electrons in HTCC (n_{phe}) After Cuts (All Int., 1e2p, FD);n_{phe}",
-                                                     200, 0, 50);
+                                                     "Number of Photo-electrons in HTCC (n_{phe}) After Cuts (All Int., 1e2p, FD);n_{phe}", 200, 0, 50);
     string nphe_All_Int_1e2p_before_cuts_FD_Dir = nphe_plots_1e2p_before_cuts_histograms_Directory;
     string nphe_All_Int_1e2p_after_cuts_FD_Dir = nphe_plots_1e2p_after_cuts_histograms_Directory;
     //</editor-fold>
@@ -1970,11 +1955,6 @@ void EventAnalyser() {
                                                          "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, FD);E_{l}-E_{e} [GeV]");
     string ETrans_all_int_15_Stack_2p_CD_Dir = ETrans_15_stack_Directory, ETrans_all_int_15_Stack_2p_FD_Dir = ETrans_15_stack_Directory;
 
-//    TH1D *ETrans_all_ang_all_int_2p = new TH1D("ET in all angles (all interactions, 2p)",
-//                                               "Energy Transfer (E_{l}-E_{e}) for every angle (All Interactions, 2p);E_{l}-E_{e} [GeV]",
-//                                               100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
-
-    // TODO: ask Adi if should I do ET plots around other angles
     TH1D *ETrans_15_All_Int_2p_CD = new TH1D("ET around 15#circ (All Int., 2p, CD)",
                                              "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]",
                                              100, 0, beamE * 1.1);
@@ -2901,8 +2881,8 @@ void EventAnalyser() {
     int num_of_events_1e2p_w_allChi2_cuts = 0;
 
     // 1e2p = 2p witout chi2 or dV cuts
-    // 2p = 2p with chi2 and dV cuts
-    int num_of_events_1e2p_w_dVz_cuts = 0; // = number of 2p events
+    // 2p = 1e2p with all other cuts
+    int num_of_events_2p = 0; // = number of 2p events
     int num_of_2p_QEL_events = 0, num_of_2p_MEC_events = 0, num_of_2p_RES_events = 0, num_of_2p_DIS_events = 0;
 
     int num_of_2p_events = 0, num_of_1n1p_events = 0, num_of_MicroBooNE_events = 0;
@@ -2916,17 +2896,15 @@ void EventAnalyser() {
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
-//        cout << "\nAnalysing " << chain.GetFileName(ifile) << "\n\n";
-
         clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
 
         //<editor-fold desc="Forcing cuts (inaccurate!)">
         //        c12.addAtLeastPid(11, 0);    // at least 0 electron
 //        c12.addAtLeastPid(2212, 0);    // at least 0 proton
 //        c12.addAtLeastPid(2112, 0);    // at least 0 neutron
-////        c12.addAtLeastPid(211,0);    // at least 0 pi+
-//        c12.addExactPid(211,0);    // at least 0 pi+
-//        c12.addAtLeastPid(-211,0);    // at least 0 pi-
+//        c12.addAtLeastPid(211, 0);    // at least 0 pi+
+//        c12.addExactPid(211, 0);    // at least 0 pi+
+//        c12.addAtLeastPid(-211, 0);    // at least 0 pi-
 //        c12.addExactPid(-211,0);    // at least 0 pi-
 //        c12.addAtLeastPid(321, 0);    // at least 0 K+
 //        c12.addAtLeastPid(-321, 0);    // at least 0 K-
@@ -3422,7 +3400,7 @@ void EventAnalyser() {
             if (protons.size() == 2) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-            //  Testing cuts --------------------------------------------------------------------------------------------------------------------------------------------
+                //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts">
 
@@ -3528,17 +3506,17 @@ void EventAnalyser() {
                     dVy = Vy_e - Vy_p;
                     dVz = Vz_e - Vz_p;
 
-                    //<editor-fold desc="Testing dVx">
+                    //<editor-fold desc="Testing dVx cut">
                     // Here "after" = 2p
                     if (fabs(dVx_peak - dVx) < dVx_cut) { deltaVx_before_dV_cuts_1e2p->Fill(dVx); }
                     //</editor-fold>
 
-                    //<editor-fold desc="Testing dVy">
+                    //<editor-fold desc="Testing dVy cut">
                     // Here "after" = 2p
                     if (fabs(dVy_peak - dVy) < dVy_cut) { deltaVy_before_dV_cuts_1e2p->Fill(dVy); }
                     //</editor-fold>
 
-                    //<editor-fold desc="Testing dVz">
+                    //<editor-fold desc="Testing dVz cut">
                     // Here "after" = 2p
                     if (fabs(dVz_peak - dVz) < dVz_cut) { deltaVz_before_dV_cuts_1e2p->Fill(dVz); }
                     //</editor-fold>
@@ -3546,13 +3524,11 @@ void EventAnalyser() {
                 } // end of loop over protons vector
 
                 if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
-                ++num_of_events_1e2p_w_dVz_cuts;
-
                 //</editor-fold>
 
                 //</editor-fold>
 
-            //  Applying cuts -------------------------------------------------------------------------------------------------------------------------------------------
+                //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying cuts">
 
@@ -3636,14 +3612,15 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Applying dVz cuts">
                 if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
-                ++num_of_events_1e2p_w_dVz_cuts;
                 //</editor-fold>
 
                 //</editor-fold>
 
-            //  Fillings histograms -----------------------------------------------------------------------------------------------------------------------------------------
+                //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Counting 2p events by reaction">
+                ++num_of_events_2p;
+
                 if (qel) {
                     ++num_of_2p_QEL_events;
                 } else if (mec) {
@@ -6009,6 +5986,8 @@ void EventAnalyser() {
 
 //  FH histograms --------------------------------------------------------------
 
+        //<editor-fold desc="FH histograms (ECIN)">
+
         //<editor-fold desc="Vcal VS EoP 1e2p BC ECIN">
         Vcal_VS_EoP_1e2p_before_cuts_ECIN->SetTitleSize(0.06, "xyz");
         Vcal_VS_EoP_1e2p_before_cuts_ECIN->GetXaxis()->SetLabelSize(0.0425);
@@ -6123,6 +6102,10 @@ void EventAnalyser() {
         c1->Clear();
         //</editor-fold>
 
+        //</editor-fold>
+
+        //<editor-fold desc="FH histograms (PCAL)">
+
         //<editor-fold desc="Vcal VS EoP 1e2p BC PCAL">
         Vcal_VS_EoP_1e2p_before_cuts_PCAL->SetTitleSize(0.06, "xyz");
         Vcal_VS_EoP_1e2p_before_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
@@ -6142,25 +6125,6 @@ void EventAnalyser() {
         c1->Clear();
         //</editor-fold>
 
-        //<editor-fold desc="Vcal VS EoP 1e2p AC PCAL">
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e2p_after_cuts_PCAL);
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.88);
-//        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e2p_after_cuts_PCAL->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e2p_after_cuts_PCAL_Dir + "02 Vcal_VS_EoP_1e2p_after_cuts_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
         //<editor-fold desc="Wcal VS EoP 1e2p BC PCAL">
         Wcal_VS_EoP_1e2p_before_cuts_PCAL->SetTitleSize(0.06, "xyz");
         Wcal_VS_EoP_1e2p_before_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
@@ -6175,25 +6139,6 @@ void EventAnalyser() {
 //        gStyle->SetStatY(0.4);
         Wcal_VS_EoP_1e2p_before_cuts_PCAL->SetStats(0);
         c1->SaveAs((Wcal_VS_EoP_1e2p_before_cuts_PCAL_Dir + "03 Wcal_VS_EoP_1e2p_before_cuts_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Wcal VS EoP 1e2p AC PCAL">
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e2p_after_cuts_PCAL);
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.88);
-//        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e2p_after_cuts_PCAL->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e2p_after_cuts_PCAL_Dir + "04 Wcal_VS_EoP_1e2p_after_cuts_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -6237,8 +6182,10 @@ void EventAnalyser() {
         c1->Clear();
         //</editor-fold>
 
+        //</editor-fold>
+
     } else {
-        cout << "\n\nSampling fraction plots are disabled by user.\n\n";
+        cout << "\n\nFiducial plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -6249,7 +6196,7 @@ void EventAnalyser() {
     //<editor-fold desc="Number of Photo-electrons (nphe) histograms">
     if (nphe_plots) {
 
-        cout << "\n\nPlotting Number of Photo-electrons (nphe) histograms...\n\n";
+        cout << "\n\nPlotting number of photo-electrons (nphe) histograms...\n\n";
 
 //  Number of Photo-electrons (nphe) histograms --------------------------------------------------------------
 
@@ -6275,7 +6222,7 @@ void EventAnalyser() {
         //</editor-fold>
 
     } else {
-        cout << "\n\nSampling fraction plots are disabled by user.\n\n";
+        cout << "\n\nnumber of photo-electrons (nphe) plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -6458,6 +6405,7 @@ void EventAnalyser() {
 // Ecal restorations
 // ====================================================================================================
 
+    //<editor-fold desc="Ecal restorations">
     if (Ecal_plots) {
 
         cout << "\n\nPlotting Ecal restoration histograms...\n\n";
@@ -6546,6 +6494,7 @@ void EventAnalyser() {
     } else {
         cout << "\n\nEcal plots are disabled by user.\n\n";
     }
+    //</editor-fold>
 
 
 
@@ -9651,7 +9600,7 @@ void EventAnalyser() {
     myLogFile << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n\n";
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
-    myLogFile << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_1e2p_w_dVz_cuts << "\n";
+    myLogFile << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_2p << "\n";
     myLogFile << "#(events) 2p QEL:\t" << num_of_2p_QEL_events << "\n";
     myLogFile << "#(events) 2p MEC:\t" << num_of_2p_MEC_events << "\n";
     myLogFile << "#(events) 2p RES:\t" << num_of_2p_RES_events << "\n";
@@ -9776,7 +9725,7 @@ void EventAnalyser() {
     cout << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n";
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
-    cout << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_1e2p_w_dVz_cuts << "\n";
+    cout << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_2p << "\n";
     cout << "#(events) 2p QEL:\t" << num_of_2p_QEL_events << "\n";
     cout << "#(events) 2p MEC:\t" << num_of_2p_MEC_events << "\n";
     cout << "#(events) 2p RES:\t" << num_of_2p_RES_events << "\n";
