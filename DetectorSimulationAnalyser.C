@@ -136,23 +136,6 @@ void EventAnalyser() {
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
     string Beta_VS_P_by_charge_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
-
-    string Beta_vs_P_FD_save_directories[16] = {Beta_VS_P_All_e_Directory + "Beta_vs_P_All_Particles_CD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_All_Particles_FD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_All_Particles_CD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_All_Particles_FD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Electrons_Only_CD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Electrons_Only_FD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Electrons_Only_CD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Electrons_Only_FD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Protons_Only_CD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Protons_Only_FD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Protons_Only_CD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Protons_Only_FD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Neutrons_Only_CD.png",
-                                                Beta_VS_P_All_e_Directory + "Beta_vs_P_Neutrons_Only_FD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Neutrons_Only_CD.png",
-                                                Beta_VS_P_Only_1e_Directory + "Beta_vs_P_1e_only_cut_Neutrons_Only_FD.png"};
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
@@ -1296,44 +1279,48 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P histograms">
 
-    //<editor-fold desc="Beta vs. P (all particles)">
-    TH2D Beta_vs_P_CD("#beta vs. P (All Particles, CD)", "#beta vs. P - All Particles (CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
-    TH2D Beta_vs_P_FD("#beta vs. P (All Particles, FD)", "#beta vs. P - All Particles (FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
-    TH2D Beta_vs_P_1e_CD("#beta vs. P (All Particles, 1e only, CD)", "#beta vs. P - All Particles (1e Only Cut, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
-    TH2D Beta_vs_P_1e_FD("#beta vs. P (All Particles, 1e only, FD)", "#beta vs. P - All Particles (1e Only Cut, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 8);
+    //<editor-fold desc="Beta vs. P for all particles">
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta",
+                                  250, 0, beamE * 1.425, 250, 0, 8);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs. P (All Particles, FD)", "#beta vs. P (All Particles, FD);P [GeV];#beta",
+                                  250, 0, beamE * 1.425, 250, 0, 8);
+
+    TH2D *Beta_vs_P_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, CD)", "#beta vs. P (Electrons Only, CD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0.5, 3);
+    TH2D *Beta_vs_P_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, FD)", "#beta vs. P (Electrons Only, FD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0.5, 3);
+
+    TH2D *Beta_vs_P_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, CD)", "#beta vs. P (Protons Only, CD);P [GeV];#beta",
+                                               250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, FD)", "#beta vs. P (Protons Only, FD);P [GeV];#beta",
+                                               250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, CD)", "#beta vs. P (Neutrons Only, CD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, FD)", "#beta vs. P (Neutrons Only, FD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
-    //<editor-fold desc="Beta vs. P (electrons only)">
-    TH2D Beta_vs_P_Electrons_Only_CD("#beta vs. P (Electrons Only, CD)", "#beta vs. P - Electrons Only (CD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0.5, 3);
-    TH2D Beta_vs_P_Electrons_Only_FD("#beta vs. P (Electrons Only, FD)", "#beta vs. P - Electrons Only (FD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0.5, 3);
-    TH2D Beta_vs_P_1e_Electrons_Only_CD("#beta vs. P (Electrons Only, 1e only, CD)", "#beta vs. P - Electrons Only (1e Only Cut, CD);P [GeV];#beta",
-                                        250, 0, beamE * 1.425, 250, 0.5, 3);
-    TH2D Beta_vs_P_1e_Electrons_Only_FD("#beta vs. P (Electrons Only, 1e only, FD)", "#beta vs. P - Electrons Only (1e Only Cut, FD);P [GeV];#beta",
-                                        250, 0, beamE * 1.425, 250, 0.5, 3);
-    //</editor-fold>
+    //<editor-fold desc="Beta vs. P for all particles (1e cut)">
+    TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs. P (All Particles, 1e only, CD)", "#beta vs. P (All Particles, 1e Cut, CD);P [GeV];#beta",
+                                     250, 0, beamE * 1.425, 250, 0, 8);
+    TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs. P (All Particles, 1e only, FD)", "#beta vs. P (All Particles, 1e Cut, FD);P [GeV];#beta",
+                                     250, 0, beamE * 1.425, 250, 0, 8);
 
-    //<editor-fold desc="Beta vs. P (protons only)">
-    TH2D Beta_vs_P_Protons_Only_CD("#beta vs. P (Protons Only, CD)", "#beta vs. P - Protons Only (CD);P [GeV];#beta",
-                                   250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_Protons_Only_FD("#beta vs. P (Protons Only, FD)", "#beta vs. P - Protons Only (FD);P [GeV];#beta",
-                                   250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Protons_Only_CD("#beta vs. P (Protons Only, 1e only, CD)", "#beta vs. P - Protons Only (1e Only Cut, CD);P [GeV];#beta",
-                                      250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Protons_Only_FD("#beta vs. P (Protons Only, 1e only, FD)", "#beta vs. P - Protons Only (1e Only Cut, FD);P [GeV];#beta",
-                                      250, 0, beamE * 1.425, 250, 0, 3);
-    //</editor-fold>
+    TH2D *Beta_vs_P_1e_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, 1e only, CD)", "#beta vs. P (Electrons Only, 1e Cut, CD);P [GeV];#beta",
+                                                    250, 0, beamE * 1.425, 250, 0.5, 3);
+    TH2D *Beta_vs_P_1e_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, 1e only, FD)", "#beta vs. P (Electrons Only, 1e Cut, FD);P [GeV];#beta",
+                                                    250, 0, beamE * 1.425, 250, 0.5, 3);
 
-    //<editor-fold desc="Beta vs. P (neutrons only)">
-    TH2D Beta_vs_P_Neutrons_Only_CD("#beta vs. P (Neutrons Only, CD)", "#beta vs. P - Neutrons Only (CD);P [GeV];#beta",
-                                    250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_Neutrons_Only_FD("#beta vs. P (Neutrons Only, FD)", "#beta vs. P - Neutrons Only (FD);P [GeV];#beta",
-                                    250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Neutrons_Only_CD("#beta vs. P (Neutrons Only, 1e only, CD)", "#beta vs. P - Neutrons Only (1e Only Cut, CD);P [GeV];#beta",
-                                       250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D Beta_vs_P_1e_Neutrons_Only_FD("#beta vs. P (Neutrons Only, 1e only, FD)", "#beta vs. P - Neutrons Only (1e Only Cut, FD);P [GeV];#beta",
-                                       250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 1e only, CD)", "#beta vs. P (Protons Only, 1e Cut, CD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 1e only, FD)", "#beta vs. P (Protons Only, 1e Cut, FD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, 1e only, CD)", "#beta vs. P (Neutrons Only, 1e Cut, CD);P [GeV];#beta",
+                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, 1e only, FD)", "#beta vs. P (Neutrons Only, 1e Cut, FD);P [GeV];#beta",
+                                                   250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P (by charge)">
@@ -1837,7 +1824,8 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
     //<editor-fold desc="SF histograms (1e2p, FD only)">
-    THStack *SF_1e2p_Stack = new THStack("SF stack (All Int., 1e2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (All Int., 1e2p, FD);f");
+    THStack *SF_1e2p_Stack = new THStack("SF stack (All Int., 1e2p, FD)",
+                                         "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (All Int., 1e2p, FD);f");
 
     TH1D *SF_All_Int_1e2p_BC_FD = new TH1D("SF BC (All Int., 1e2p, FD)", "Sampling Fraction f Before Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                            200, 0.1, 0.35);
@@ -2970,7 +2958,7 @@ void EventAnalyser() {
             for (int i = 0; i < AllParticles.size(); i++) {
 
                 if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_CD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
 
                     if (AllParticles[i]->par()->getCharge() == 1) {
                         Beta_vs_P_by_charge_eq1_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
@@ -2978,7 +2966,7 @@ void EventAnalyser() {
                         Beta_vs_P_by_charge_less1_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     }
                 } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_FD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
 
                     if (AllParticles[i]->par()->getCharge() == 1) {
                         Beta_vs_P_by_charge_eq1_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
@@ -2999,7 +2987,7 @@ void EventAnalyser() {
                     ++num_of_events_with_e_in_CD; // logging #e in CD
 
                     P_e_histogram_CD->Fill(electrons[i]->getP());
-                    Beta_vs_P_Electrons_Only_CD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                    Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
 
@@ -3035,7 +3023,7 @@ void EventAnalyser() {
                     ++num_of_events_with_e_in_FD; // logging #e in FD
 
                     P_e_histogram_FD->Fill(electrons[i]->getP());
-                    Beta_vs_P_Electrons_Only_FD.Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                    Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
 
@@ -3076,13 +3064,13 @@ void EventAnalyser() {
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
-                    Beta_vs_P_Protons_Only_CD.Fill(p->getP(), p->par()->getBeta());
+                    Beta_vs_P_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
                     Chi2_Proton_CD->Fill(p->par()->getChi2Pid());
                     Vertex_Proton_Vx_CD_test.Fill(p->par()->getVx());
                     Vertex_Proton_Vy_CD_test.Fill(p->par()->getVy());
                     Vertex_Proton_Vz_CD_test.Fill(p->par()->getVz());
                 } else if (p->getRegion() == FD) {
-                    Beta_vs_P_Protons_Only_FD.Fill(p->getP(), p->par()->getBeta());
+                    Beta_vs_P_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
                     Chi2_Proton_FD->Fill(p->par()->getChi2Pid());
                     Vertex_Proton_Vx_FD_test.Fill(p->par()->getVx());
                     Vertex_Proton_Vy_FD_test.Fill(p->par()->getVy());
@@ -3094,9 +3082,9 @@ void EventAnalyser() {
             //<editor-fold desc="Neutron Beta vs. P plots (no #(electron) cut, CD & FD)">
             for (auto &n: neutrons) {
                 if (n->getRegion() == CD) {
-                    Beta_vs_P_Neutrons_Only_CD.Fill(n->getP(), n->par()->getBeta());
+                    Beta_vs_P_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
                 } else if (n->getRegion() == FD) {
-                    Beta_vs_P_Neutrons_Only_FD.Fill(n->getP(), n->par()->getBeta());
+                    Beta_vs_P_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -3123,9 +3111,9 @@ void EventAnalyser() {
             //<editor-fold desc="Fill Beta vs. P (1e only, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
                 if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_1e_CD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_1e_FD.Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
@@ -3139,7 +3127,7 @@ void EventAnalyser() {
                     P_e_CD = e->getP();
                     E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
                     E_e_hist_CD->Fill(E_e_CD);
-                    Beta_vs_P_1e_Electrons_Only_CD.Fill(P_e_CD, e->par()->getBeta());
+                    Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
 
                     theta_e_1e_CD = e->getTheta() * 180.0 / 3.14159265359; // theta_e_1e_CD in deg
                     Theta_e_1e_CD->Fill(theta_e_1e_CD);
@@ -3214,7 +3202,7 @@ void EventAnalyser() {
                     P_e_FD = e->getP();
                     E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
                     E_e_hist_FD->Fill(E_e_FD);
-                    Beta_vs_P_1e_Electrons_Only_FD.Fill(P_e_FD, e->par()->getBeta());
+                    Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
 
                     theta_e_1e_FD = e->getTheta() * 180.0 / 3.14159265359; // theta_e_1e_FD in deg
                     Theta_e_1e_FD->Fill(theta_e_1e_FD);
@@ -3330,7 +3318,7 @@ void EventAnalyser() {
 
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
-                    Beta_vs_P_1e_Protons_Only_CD.Fill(p->getP(), p->par()->getBeta());
+                    Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
 
                     p_Chi2_tmp_CD = p->par()->getChi2Pid();
                     Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
@@ -3349,7 +3337,7 @@ void EventAnalyser() {
 //                    //</editor-fold>
 
                 } else if (p->getRegion() == FD) {
-                    Beta_vs_P_1e_Protons_Only_FD.Fill(p->getP(), p->par()->getBeta());
+                    Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
 
                     p_Chi2_tmp_FD = p->par()->getChi2Pid();
                     Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
@@ -3374,9 +3362,9 @@ void EventAnalyser() {
             //<editor-fold desc="Fill Neutron Beta vs. P plots (1e only, CD & FD)">
             for (auto &n: neutrons) {
                 if (n->getRegion() == CD) {
-                    Beta_vs_P_1e_Neutrons_Only_CD.Fill(n->getP(), n->par()->getBeta());
+                    Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
                 } else if (n->getRegion() == FD) {
-                    Beta_vs_P_1e_Neutrons_Only_FD.Fill(n->getP(), n->par()->getBeta());
+                    Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -3400,11 +3388,11 @@ void EventAnalyser() {
             if (protons.size() == 2) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-    //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
+                //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts">
 
-        //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing SF cuts (electrons only)">
                 TVector3 pp_e;
@@ -3422,7 +3410,7 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-        //  Testing FH cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Testing FH cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing FH cuts (electrons only)">
                 // FH before cuts:
@@ -3438,7 +3426,7 @@ void EventAnalyser() {
 //                if (electrons[0]->cal(PCAL)->getLw() > FH_cut_Lw) { Wcal_VS_EoP_1e2p_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
                 //</editor-fold>
 
-        //  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing nphe cuts (electrons only)">
                 int nphe = electrons[0]->che(HTCC)->getNphe();
@@ -3450,7 +3438,7 @@ void EventAnalyser() {
                 if (nphe >= nphe_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
                 //</editor-fold>
 
-        //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing chi2 cuts">
 
@@ -3524,7 +3512,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-        //  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing dV cuts">
                 double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
@@ -3562,30 +3550,30 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-    //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
+                //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying cuts">
 
-        //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying SF cuts (electrons only)">
                 if ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut)) { continue; }
                 //</editor-fold>
 
-        //  Applying FH cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Applying FH cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying FH cuts (electrons only)">
                 if (electrons[0]->cal(ECIN)->getLv() < FH_cut_Lv) { continue; }
                 if (electrons[0]->cal(ECIN)->getLw() < FH_cut_Lw) { continue; }
                 //</editor-fold>
 
-        //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying nphe cuts">
                 if (nphe < nphe_cut) { continue; }
                 //</editor-fold>
 
-        //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying Chi2 cuts">
                 if (electrons[0]->getRegion() == CD) {
@@ -3610,7 +3598,7 @@ void EventAnalyser() {
                 ++num_of_events_1e2p_w_allChi2_cuts;
                 //</editor-fold>
 
-        //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
+                //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying dVz cuts">
                 if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
@@ -3618,7 +3606,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-    //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
+                //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Counting 2p events by reaction">
                 ++num_of_events_2p;
@@ -3636,7 +3624,7 @@ void EventAnalyser() {
 
                 for (auto &e: electrons) {
                     if (e->getRegion() == CD) {
-//                        Beta_vs_P_2p_Electrons_Only_CD.Fill(P_e_CD, e->par()->getBeta());
+//                        Beta_vs_P_2p_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
 
                         E_e_2p_CD->Fill(E_e_CD);
                         Theta_e_2p_CD->Fill(theta_e_1e_CD);
@@ -3682,7 +3670,7 @@ void EventAnalyser() {
                         }
 
                     } else if (e->getRegion() == FD) {
-//                        Beta_vs_P_2p_Electrons_Only_FD.Fill(P_e_FD, e->par()->getBeta());
+//                        Beta_vs_P_2p_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
 
                         E_e_2p_FD->Fill(E_e_FD);
                         Theta_e_2p_FD->Fill(theta_e_1e_FD);
@@ -4615,7 +4603,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Canvas c1">
     TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
-    c1->cd();
+//    c1->cd();
     c1->SetGrid();
     c1->SetBottomMargin(0.14);
 
@@ -4639,6 +4627,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+    c1->cd();
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -4661,9 +4650,9 @@ void EventAnalyser() {
         auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, beamE);
 
         // TODO: finish adding function labels
-        TPaveText *beta_electron_title = new TPaveText(0., 0., 0.1, 0.1);
-        beta_electron_title->AddText("#font[25]{e^{-}}");
-        beta_electron_title->SetTextColor(kRed);
+//        TPaveText *beta_electron_title = new TPaveText(0., 0., 0.1, 0.1);
+//        beta_electron_title->AddText("#font[25]{e^{-}}");
+//        beta_electron_title->SetTextColor(kRed);
 //        beta_electron_title->Draw();
 
         auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p) + ")").c_str(), 0, beamE);
@@ -4678,70 +4667,383 @@ void EventAnalyser() {
 
 //  Beta vs. P histograms --------------------------------------------------------
 
-        //<editor-fold desc="Beta vs. P histograms">
-        TH2D *Beta_vs_P_CD_ref = &Beta_vs_P_CD, *Beta_vs_P_FD_ref = &Beta_vs_P_FD, *Beta_vs_P_1e_CD_ref = &Beta_vs_P_1e_CD, *Beta_vs_P_1e_FD_ref = &Beta_vs_P_1e_FD;
+        //<editor-fold desc="Beta vs. P for all particles (CD)">
+        Beta_vs_P_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_CD);
+        Beta_vs_P_CD->Draw("colz");
 
-        TH2D *Beta_vs_P_Electrons_Only_CD_ref = &Beta_vs_P_Electrons_Only_CD, *Beta_vs_P_Electrons_Only_FD_ref = &Beta_vs_P_Electrons_Only_FD, *Beta_vs_P_1e_Electrons_Only_CD_ref = &Beta_vs_P_1e_Electrons_Only_CD, *Beta_vs_P_1e_Electrons_Only_FD_ref = &Beta_vs_P_1e_Electrons_Only_FD;
-        TH2D *Beta_vs_P_Protons_Only_CD_ref = &Beta_vs_P_Protons_Only_CD, *Beta_vs_P_Protons_Only_FD_ref = &Beta_vs_P_Protons_Only_FD, *Beta_vs_P_1e_Protons_Only_CD_ref = &Beta_vs_P_1e_Protons_Only_CD, *Beta_vs_P_1e_Protons_Only_FD_ref = &Beta_vs_P_1e_Protons_Only_FD;
-        TH2D *Beta_vs_P_Neutrons_Only_CD_ref = &Beta_vs_P_Neutrons_Only_CD, *Beta_vs_P_Neutrons_Only_FD_ref = &Beta_vs_P_Neutrons_Only_FD, *Beta_vs_P_1e_Neutrons_Only_CD_ref = &Beta_vs_P_1e_Neutrons_Only_CD, *Beta_vs_P_1e_Neutrons_Only_FD_ref = &Beta_vs_P_1e_Neutrons_Only_FD;
+        beta_electron->Draw("same");
+//        beta_electron_title->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
 
-        // TODO: figure out how to automatically find the length of Beta_vs_P_histograms
-//        TH2D Beta_vs_P_histograms[12] = {*Beta_vs_P_CD_ref, *Beta_vs_P_FD_ref, *Beta_vs_P_1e_CD_ref, *Beta_vs_P_1e_FD_ref,
-//                                         *Beta_vs_P_Electrons_Only_CD_ref, *Beta_vs_P_Electrons_Only_FD_ref, *Beta_vs_P_1e_Electrons_Only_CD_ref,
-//                                         *Beta_vs_P_1e_Electrons_Only_FD_ref,
-//                                         *Beta_vs_P_Protons_Only_CD_ref, *Beta_vs_P_Protons_Only_FD_ref, *Beta_vs_P_1e_Protons_Only_CD_ref,
-//                                         *Beta_vs_P_1e_Protons_Only_FD_ref};
-        TH2D Beta_vs_P_histograms[16] = {*Beta_vs_P_CD_ref, *Beta_vs_P_FD_ref, *Beta_vs_P_1e_CD_ref, *Beta_vs_P_1e_FD_ref,
-                                         *Beta_vs_P_Electrons_Only_CD_ref, *Beta_vs_P_Electrons_Only_FD_ref, *Beta_vs_P_1e_Electrons_Only_CD_ref,
-                                         *Beta_vs_P_1e_Electrons_Only_FD_ref,
-                                         *Beta_vs_P_Protons_Only_CD_ref, *Beta_vs_P_Protons_Only_FD_ref, *Beta_vs_P_1e_Protons_Only_CD_ref,
-                                         *Beta_vs_P_1e_Protons_Only_FD_ref,
-                                         *Beta_vs_P_Neutrons_Only_CD_ref, *Beta_vs_P_Neutrons_Only_FD_ref, *Beta_vs_P_1e_Neutrons_Only_CD_ref,
-                                         *Beta_vs_P_1e_Neutrons_Only_FD_ref};
-
-        int Beta_vs_P_histograms_length = sizeof(Beta_vs_P_histograms) / sizeof(TH2D);
-//        int Beta_vs_P_histograms_length = 4;
-
-        for (int i = 0; i < Beta_vs_P_histograms_length; ++i) {
-            auto histogram = &Beta_vs_P_histograms[i];
-            histogram->SetTitleSize(0.06, "xyz");
-            histogram->GetXaxis()->SetLabelSize(0.0425);
-            histogram->GetXaxis()->CenterTitle(true);
-            histogram->GetYaxis()->SetLabelSize(0.0425);
-            histogram->GetYaxis()->CenterTitle(true);
-            histogram->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(histogram);
-            histogram->Draw("colz");
-
-            if (i < 4) {
-                beta_electron->Draw("same");
-                beta_electron_title->Draw("same");
-                beta_proton->Draw("same");
-                beta_neutron->Draw("same");
-                beta_pizero->Draw("same");
-                beta_piplus->Draw("same");
-                beta_piminus->Draw("same");
-                beta_Kzero->Draw("same");
-                beta_Kplus->Draw("same");
-                beta_Kminus->Draw("same");
-            } else if (i >= 4 && i < 8) {
-                beta_electron->Draw("same");
-            } else if (i >= 8 && i < 12) {
-                beta_proton->Draw("same");
-            } else if (i >= 12 && i < 18) {
-                beta_neutron->Draw("same");
-            }
-
-            c1->SetLogz(1);
-            gStyle->SetStatX(0.87);
-            gStyle->SetStatY(0.4);
-            c1->SaveAs(Beta_vs_P_FD_save_directories[i].c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
-        }
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "01_Beta_vs_P_All_Particles_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
         //</editor-fold>
 
+        //<editor-fold desc="Beta vs. P for all particles (FD)">
+        Beta_vs_P_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_FD);
+        Beta_vs_P_FD->Draw("colz");
+
+        beta_electron->Draw("same");
+//        beta_electron_title->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "02_Beta_vs_P_All_Particles_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, CD)">
+        Beta_vs_P_Electrons_Only_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_Electrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Electrons_Only_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_Electrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Electrons_Only_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_Electrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_Electrons_Only_CD);
+        Beta_vs_P_Electrons_Only_CD->Draw("colz");
+
+        beta_electron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "03_Beta_vs_P_Electrons_Only_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, FD)">
+        Beta_vs_P_Electrons_Only_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_Electrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Electrons_Only_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_Electrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Electrons_Only_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_Electrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_Electrons_Only_FD);
+        Beta_vs_P_Electrons_Only_FD->Draw("colz");
+
+        beta_electron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "04_Beta_vs_P_Electrons_Only_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Protons Only, CD)">
+        Beta_vs_P_Protons_Only_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_Protons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Protons_Only_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_Protons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Protons_Only_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_Protons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_Protons_Only_CD);
+        Beta_vs_P_Protons_Only_CD->Draw("colz");
+
+        beta_proton->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "05_Beta_vs_P_Protons_Only_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Protons Only, FD)">
+        Beta_vs_P_Protons_Only_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_Protons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Protons_Only_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_Protons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Protons_Only_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_Protons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_Protons_Only_FD);
+        Beta_vs_P_Protons_Only_FD->Draw("colz");
+
+        beta_proton->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "06_Beta_vs_P_Protons_Only_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, CD)">
+        Beta_vs_P_Neutrons_Only_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_Neutrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Neutrons_Only_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_Neutrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Neutrons_Only_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_Neutrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_Neutrons_Only_CD);
+        Beta_vs_P_Neutrons_Only_CD->Draw("colz");
+
+        beta_neutron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "07_Beta_vs_P_Neutrons_Only_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, FD)">
+        Beta_vs_P_Neutrons_Only_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_Neutrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Neutrons_Only_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_Neutrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_Neutrons_Only_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_Neutrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_Neutrons_Only_FD);
+        Beta_vs_P_Neutrons_Only_FD->Draw("colz");
+
+        beta_neutron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_All_e_Directory + "08_Beta_vs_P_Neutrons_Only_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+
+
+        //<editor-fold desc="Beta vs. P for all particles (1e cut, CD)">
+        Beta_vs_P_1e_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_CD);
+        Beta_vs_P_1e_CD->Draw("colz");
+
+        beta_electron->Draw("same");
+//        beta_electron_title->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "01_Beta_vs_P_1e_cut_All_Particles_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (1e cut, FD)">
+        Beta_vs_P_1e_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_FD);
+        Beta_vs_P_1e_FD->Draw("colz");
+
+        beta_electron->Draw("same");
+//        beta_electron_title->Draw("same");
+        beta_proton->Draw("same");
+        beta_neutron->Draw("same");
+        beta_pizero->Draw("same");
+        beta_piplus->Draw("same");
+        beta_piminus->Draw("same");
+        beta_Kzero->Draw("same");
+        beta_Kplus->Draw("same");
+        beta_Kminus->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "02_Beta_vs_P_1e_cut_All_Particles_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, 1e cut, CD)">
+        Beta_vs_P_1e_Electrons_Only_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_Electrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Electrons_Only_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Electrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Electrons_Only_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Electrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_Electrons_Only_CD);
+        Beta_vs_P_1e_Electrons_Only_CD->Draw("colz");
+
+        beta_electron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "03_Beta_vs_P_1e_cut_Electrons_Only_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, 1e cut, FD)">
+        Beta_vs_P_1e_Electrons_Only_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_Electrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Electrons_Only_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Electrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Electrons_Only_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Electrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_Electrons_Only_FD);
+        Beta_vs_P_1e_Electrons_Only_FD->Draw("colz");
+
+        beta_electron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "04_Beta_vs_P_1e_cut_Electrons_Only_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Protons Only, 1e cut, CD)">
+        Beta_vs_P_1e_Protons_Only_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_Protons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Protons_Only_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Protons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Protons_Only_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Protons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_Protons_Only_CD);
+        Beta_vs_P_1e_Protons_Only_CD->Draw("colz");
+
+        beta_proton->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "05_Beta_vs_P_1e_cut_Protons_Only_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Protons Only, 1e cut, FD)">
+        Beta_vs_P_1e_Protons_Only_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_Protons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Protons_Only_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Protons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Protons_Only_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Protons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_Protons_Only_FD);
+        Beta_vs_P_1e_Protons_Only_FD->Draw("colz");
+
+        beta_proton->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "06_Beta_vs_P_1e_cut_Protons_Only_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, 1e cut, CD)">
+        Beta_vs_P_1e_Neutrons_Only_CD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_Neutrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Neutrons_Only_CD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Neutrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Neutrons_Only_CD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Neutrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_Neutrons_Only_CD);
+        Beta_vs_P_1e_Neutrons_Only_CD->Draw("colz");
+
+        beta_neutron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "07_Beta_vs_P_1e_cut_Neutrons_Only_CD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, 1e cut, FD)">
+        Beta_vs_P_1e_Neutrons_Only_FD->SetTitleSize(0.06, "xyz");
+        Beta_vs_P_1e_Neutrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Neutrons_Only_FD->GetXaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Neutrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
+        Beta_vs_P_1e_Neutrons_Only_FD->GetYaxis()->CenterTitle(true);
+        Beta_vs_P_1e_Neutrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Beta_vs_P_1e_Neutrons_Only_FD);
+        Beta_vs_P_1e_Neutrons_Only_FD->Draw("colz");
+
+        beta_neutron->Draw("same");
+
+        c1->SetLogz(1);
+        gStyle->SetStatX(0.87);
+        gStyle->SetStatY(0.4);
+        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "08_Beta_vs_P_1e_cut_Neutrons_Only_FD.png").c_str());
+        gStyle->SetStatX(DefStatX);
+        gStyle->SetStatY(DefStatY);
+        c1->Clear();
+        //</editor-fold>
+
+
+
+        //<editor-fold desc="Beta vs. P for q = 1 (CD)">
         Beta_vs_P_by_charge_eq1_CD->SetTitleSize(0.06, "xyz");
         Beta_vs_P_by_charge_eq1_CD->GetXaxis()->SetLabelSize(0.0425);
         Beta_vs_P_by_charge_eq1_CD->GetXaxis()->CenterTitle(true);
@@ -4777,7 +5079,9 @@ void EventAnalyser() {
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
+        //</editor-fold>
 
+        //<editor-fold desc="Beta vs. P for q = 1 (FD)">
         Beta_vs_P_by_charge_eq1_FD->SetTitleSize(0.06, "xyz");
         Beta_vs_P_by_charge_eq1_FD->GetXaxis()->SetLabelSize(0.0425);
         Beta_vs_P_by_charge_eq1_FD->GetXaxis()->CenterTitle(true);
@@ -4813,7 +5117,9 @@ void EventAnalyser() {
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
+        //</editor-fold>
 
+        //<editor-fold desc="Beta vs. P for q less than 1 (CD)">
         Beta_vs_P_by_charge_less1_CD->SetTitleSize(0.06, "xyz");
         Beta_vs_P_by_charge_less1_CD->GetXaxis()->SetLabelSize(0.0425);
         Beta_vs_P_by_charge_less1_CD->GetXaxis()->CenterTitle(true);
@@ -4849,7 +5155,9 @@ void EventAnalyser() {
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
+        //</editor-fold>
 
+        //<editor-fold desc="Beta vs. P for q less than 1 (FD)">
         Beta_vs_P_by_charge_less1_FD->SetTitleSize(0.06, "xyz");
         Beta_vs_P_by_charge_less1_FD->GetXaxis()->SetLabelSize(0.0425);
         Beta_vs_P_by_charge_less1_FD->GetXaxis()->CenterTitle(true);
@@ -4885,7 +5193,7 @@ void EventAnalyser() {
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
-
+        //</editor-fold>
 
     } else {
         cout << "\n\nBeta vs. P plots are disabled by user.\n\n";
