@@ -182,7 +182,7 @@ void EventAnalyser() {
     bool create_vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
     string Vertex_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/Vertex_plots_by_components", "Only_1e/dV_plots",
-                                        "1e2p_dV_plots/Before_cuts", "1e2p_dV_plots/After_cuts"};
+                                        "1e2p_dV_plots/Before_cuts", "1e2p_dV_plots/After_cuts", "2p"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_vertex_Dir, Vertex_Parent_Directory, folders_name);
@@ -196,7 +196,8 @@ void EventAnalyser() {
 
     string Vertex_1e2p_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
     string Vertex_1e2p_dV_BC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
-    string Vertex_1e2p_dV_AC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
+
+    string Vertex_1e2p_dV_AC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Theta_e plots directories">
@@ -647,7 +648,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Proton chi2 cuts (FD)">
-    double Chi2_Proton_cut_FD = 4.; // Josh's proton FD cut
+    double Chi2_Proton_cut_FD = 3.; // Josh's proton FD cut
     double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
     double Chi2_Proton_1e_peak_FD = 0.05; // to fill using Chi2_Proton_1e_Xmax_FD
     double Chi2_Proton_1e_Xmax_FD;
@@ -1836,21 +1837,21 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
     //<editor-fold desc="SF histograms (1e2p, FD only)">
-    THStack *SF_1e2p_Stack = new THStack("SF stack (All Int., 1e2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (All Int., 1e2p, FD);f");
+    THStack *SF_1e2p_Stack = new THStack("SF stack (All Int., 1e2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (All Int., 1e2p, FD);f");
 
-    TH1D *SF_All_Int_1e2p_BC_FD = new TH1D("SF BC (All Int., 1e2p, FD)", "Sampling Fraction Before Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P",
+    TH1D *SF_All_Int_1e2p_BC_FD = new TH1D("SF BC (All Int., 1e2p, FD)", "Sampling Fraction f Before Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                            200, 0.1, 0.35);
-    TH1D *SF_All_Int_1e2p_AC_FD = new TH1D("SF AC (All Int., 1e2p, FD)", "Sampling Fraction After Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P",
+    TH1D *SF_All_Int_1e2p_AC_FD = new TH1D("SF AC (All Int., 1e2p, FD)", "Sampling Fraction f After Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                            200, 0.1, 0.35);
     string SF_All_Int_1e2p_BC_FD_Dir = SF_plots_1e2p_BC_histograms_Directory, SF_All_Int_1e2p_AC_FD_Dir = SF_plots_1e2p_AC_histograms_Directory;
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P histograms (1e2p, FD only)">
     TH2D *SF_VS_P_e_1e2p_BC_FD = new TH2D("SF vs. P_{e} BC (All Int., 1e2p, FD)",
-                                          "Sampling Fraction vs. P_{e} Before Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                          "Sampling Fraction f vs. P_{e} Before Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                           250, 0, beamE * 1.1, 250, 0.1, 0.35);
     TH2D *SF_VS_P_e_1e2p_AC_FD = new TH2D("SF vs. P_{e} AC (All Int., 1e2p, FD)",
-                                          "Sampling Fraction vs. P_{e} After Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                          "Sampling Fraction f vs. P_{e} After Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                           250, 0, beamE * 1.1, 250, 0.1, 0.35);
     string SF_VS_P_e_1e2p_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_histograms_Directory, SF_VS_P_e_1e2p_AC_FD_Dir = SF_VS_P_e_plots_1e2p_AC_histograms_Directory;
     //</editor-fold>
@@ -1861,7 +1862,7 @@ void EventAnalyser() {
     TH1D *SF_All_Int_2p_FD = new TH1D("SF (All Int., 2p, FD)",
                                       "Sampling Fraction f (All Int., 2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
     TH2D *SF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (All Int., 2p, FD)",
-                                     "Sampling Fraction vs. P_{e} (All Int., 2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                     "Sampling Fraction f vs. P_{e} (All Int., 2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                      250, 0, beamE * 1.1, 250, 0.1, 0.35);
     string SF_All_Int_2p_FD_Dir = SF_plots_2p_cuts_histograms_Directory, SF_VS_P_e_2p_FD_Dir = SF_VS_P_e_plots_2p_cuts_histograms_Directory;
     //</editor-fold>
@@ -3399,11 +3400,11 @@ void EventAnalyser() {
             if (protons.size() == 2) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-                //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
+    //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts">
 
-//  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing SF cuts (electrons only)">
                 TVector3 pp_e;
@@ -3421,7 +3422,7 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-//  Testing FH cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Testing FH cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing FH cuts (electrons only)">
                 // FH before cuts:
@@ -3437,7 +3438,7 @@ void EventAnalyser() {
 //                if (electrons[0]->cal(PCAL)->getLw() > FH_cut_Lw) { Wcal_VS_EoP_1e2p_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
                 //</editor-fold>
 
-//  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing nphe cuts (electrons only)">
                 int nphe = electrons[0]->che(HTCC)->getNphe();
@@ -3449,7 +3450,7 @@ void EventAnalyser() {
                 if (nphe >= nphe_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
                 //</editor-fold>
 
-//  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing chi2 cuts">
 
@@ -3523,7 +3524,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-//  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing dV cuts">
                 double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
@@ -3541,17 +3542,17 @@ void EventAnalyser() {
 
                     //<editor-fold desc="Testing dVx cut">
                     // Here "after" = 2p
-                    if (fabs(dVx_peak - dVx) < dVx_cut) { deltaVx_before_dV_cuts_1e2p->Fill(dVx); }
+                    if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_before_dV_cuts_1e2p->Fill(dVx); }
                     //</editor-fold>
 
                     //<editor-fold desc="Testing dVy cut">
                     // Here "after" = 2p
-                    if (fabs(dVy_peak - dVy) < dVy_cut) { deltaVy_before_dV_cuts_1e2p->Fill(dVy); }
+                    if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_before_dV_cuts_1e2p->Fill(dVy); }
                     //</editor-fold>
 
                     //<editor-fold desc="Testing dVz cut">
                     // Here "after" = 2p
-                    if (fabs(dVz_peak - dVz) < dVz_cut) { deltaVz_before_dV_cuts_1e2p->Fill(dVz); }
+                    if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_before_dV_cuts_1e2p->Fill(dVz); }
                     //</editor-fold>
 
                 } // end of loop over protons vector
@@ -3561,32 +3562,30 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-                //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
+    //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying cuts">
 
-//  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying SF cuts (electrons only)">
                 if ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut)) { continue; }
                 //</editor-fold>
 
-//  Applying FH cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Applying FH cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying FH cuts (electrons only)">
                 if (electrons[0]->cal(ECIN)->getLv() < FH_cut_Lv) { continue; }
                 if (electrons[0]->cal(ECIN)->getLw() < FH_cut_Lw) { continue; }
                 //</editor-fold>
 
-//  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying nphe cuts">
                 if (nphe < nphe_cut) { continue; }
                 //</editor-fold>
 
-//  Testing and applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying chi2 cuts">
+        //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying Chi2 cuts">
                 if (electrons[0]->getRegion() == CD) {
@@ -3611,10 +3610,7 @@ void EventAnalyser() {
                 ++num_of_events_1e2p_w_allChi2_cuts;
                 //</editor-fold>
 
-
-                //</editor-fold>
-
-//  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
+        //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying dVz cuts">
                 if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
@@ -3622,7 +3618,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-                //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
+    //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Counting 2p events by reaction">
                 ++num_of_events_2p;
@@ -3775,7 +3771,7 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Filling Chi2 histograms">
 
-                //<editor-fold desc="Testing electron Chi2 cut separately*">
+                //<editor-fold desc="Filling electron Chi2 cut 2p">
                 if (electrons[0]->getRegion() == CD) {
                     Chi2_Electron_2p_CD->Fill(electrons[0]->par()->getChi2Pid());
                 } else if (electrons[0]->getRegion() == FD) {
@@ -3783,7 +3779,7 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                //<editor-fold desc="Testing proton0 Chi2 cut separately*">
+                //<editor-fold desc="Filling proton0 Chi2 cut 2p">
                 if (protons[0]->getRegion() == CD) {
                     Chi2_Proton_2p_CD->Fill(protons[0]->par()->getChi2Pid());
                 } else if (protons[0]->getRegion() == FD) {
@@ -3791,7 +3787,7 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                //<editor-fold desc="Testing proton1 Chi2 cut separately*">
+                //<editor-fold desc="Filling proton1 Chi2 cut 2p">
                 if (protons[1]->getRegion() == CD) {
                     Chi2_Proton_2p_CD->Fill(protons[1]->par()->getChi2Pid());
                 } else if (protons[1]->getRegion() == FD) {
@@ -3813,17 +3809,20 @@ void EventAnalyser() {
 
                     //<editor-fold desc="Filling dVx (2p)">
                     // Here "after" = 2p
-                    if (fabs(dVx_peak - dVx) < dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
+                    deltaVx_after_dV_cuts_1e2p->Fill(dVx);
+//                    if (fabs(dVx_peak - dVx) < dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
                     //</editor-fold>
 
                     //<editor-fold desc="Filling dVy (2p)">
                     // Here "after" = 2p
-                    if (fabs(dVy_peak - dVy) < dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
+                    deltaVy_after_dV_cuts_1e2p->Fill(dVy);
+//                    if (fabs(dVy_peak - dVy) < dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
                     //</editor-fold>
 
                     //<editor-fold desc="Filling dVz (2p)">
                     // Here "after" = 2p
-                    if (fabs(dVz_peak - dVz) < dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+                    deltaVz_after_dV_cuts_1e2p->Fill(dVz);
+//                    if (fabs(dVz_peak - dVz) < dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
                     //</editor-fold>
 
                 } // end of loop over protons vector
@@ -4995,29 +4994,13 @@ void EventAnalyser() {
                       Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_CD", Chi2_2p_Directory, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_1e_peak_CD);
 
-//        histPlotter1D(c1, c2, Chi2_Electron_2p_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2, false, true,
-//                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p", Chi2_2p_Directory, kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
-//                      Chi2_Electron_1e_peak_CD);
-
         histPlotter1D(c1, Chi2_Electron_2p_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_2p_FD", Chi2_2p_Directory, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_1e_peak_FD);
 
-//        histPlotter1D(c1, c2, Chi2_Electron_2p_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2, false, true,
-//                      Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_2p", Chi2_2p_Directory, kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
-//                      Chi2_Electron_1e_peak_FD);
-
         histPlotter1D(c1, Chi2_Proton_2p_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_2p_CD", Chi2_2p_Directory, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-//        histPlotter1D(c1, c2, Chi2_Proton_2p_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false, true,
-//                      Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_2p", Chi2_2p_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-//                      Chi2_Proton_1e_peak_CD);
-
-//        histPlotter1D(c1, c2, Chi2_Proton_2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false, true,
-//                      Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_2p", Chi2_2p_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
-//                      Chi2_Proton_1e_peak_FD);
 
         histPlotter1D(c1, Chi2_Proton_2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_2p_FD", Chi2_2p_Directory, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
@@ -5059,16 +5042,16 @@ void EventAnalyser() {
                       dVz_cut, dVz_peak);
         //</editor-fold>
 
-        //<editor-fold desc="dV plots after dV cuts (1e2p, CD & FD)">
-        histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e2p w/ #chi^{2} & dV cuts", 0.06, 0.0425, 0.0425,
+        //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
+        histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVx_1e2p_after_Stack, "dVx", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVx_cut, dVx_peak);
 
-        histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "1e2p w/ #chi^{2} & dV cuts", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVy_1e2p_after_Stack, "dVy", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVy_cut, dVy_peak);
 
-        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "1e2p w/ #chi^{2} & dV cuts", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVz_1e2p_after_Stack, "dVz", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVz_cut, dVz_peak);
         //</editor-fold>
@@ -5962,11 +5945,11 @@ void EventAnalyser() {
         //<editor-fold desc="SF histogram (1e2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, .1, "Sampling Fraction (SF) Before Cuts", "All Int., 1e2p", plots, 2, false, true,
+        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f Before Cuts", "All Int., 1e2p", plots, 2, false, true,
                       SF_1e2p_Stack, "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
                       SF_1e2p_upper_cut, SF_1e2p_Xmax);
 
-        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, .1, "Sampling Fraction (SF) After cuts", "All Int., 1e2p", plots, 2, false, true,
+        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f After cuts", "All Int., 1e2p", plots, 2, false, true,
                       SF_1e2p_Stack, "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
                       SF_1e2p_upper_cut, SF_1e2p_Xmax);
         //</editor-fold>
@@ -5974,7 +5957,7 @@ void EventAnalyser() {
         //<editor-fold desc="SF histogram (2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, .1, "Sampling Fraction", "All Int., 2p", plots, 2, false, true,
+        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, .1, "Sampling Fraction f", "All Int., 2p", plots, 2, false, true,
                       SF_2p_Stack, "SF_2p_wAll_cuts", SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
                       SF_1e2p_upper_cut, SF_1e2p_Xmax);
         //</editor-fold>
