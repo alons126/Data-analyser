@@ -31,10 +31,12 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TCanvas.h>
 #include <TBenchmark.h>
 #include <iomanip>
-//#include "/home/alon/clas12root/Clas12Banks/clas12reader.h"
 #include "clas12reader.h"
-
 #include "codeSetup.h"
+
+//#include "source/classes.h"
+//#include "source/GeneralFunctions.h"
+//#include "source/HistogramPlottingFunctions.h"
 
 using namespace clas12;
 using namespace std;
@@ -600,144 +602,143 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Chi2 cuts">
-    // TODO: confirm Chi2 cuts with justin
-
-    //<editor-fold desc="Electron chi2 cuts">
-
-    //<editor-fold desc="Electron chi2 cuts (CD)">
-    double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
-    double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
-    double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
-    double Chi2_Electron_1e_Xmax_CD;
-    //</editor-fold>
-
-    //<editor-fold desc="Electron chi2 cuts (FD)">
-    double Chi2_Electron_cut_FD = 15.; // 100 since electron detection is great
-    double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
-    double Chi2_Electron_1e_peak_FD = -0.05; // to fill using Chi2_Electron_1e_Xmax_FD
-    double Chi2_Electron_1e_Xmax_FD;
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Proton chi2 cuts">
-
-    //<editor-fold desc="Proton chi2 cuts (CD)">
-    double Chi2_Proton_cut_CD = 10.; // Josh's proton FD cut
-    double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
-    double Chi2_Proton_1e_peak_CD = 0.45; // to fill using Chi2_Proton_1e_Xmax_CD
-    double Chi2_Proton_1e_Xmax_CD;
-    //</editor-fold>
-
-    //<editor-fold desc="Proton chi2 cuts (FD)">
-    double Chi2_Proton_cut_FD = 3.; // Josh's proton FD cut
-    double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
-    double Chi2_Proton_1e_peak_FD = 0.05; // to fill using Chi2_Proton_1e_Xmax_FD
-    double Chi2_Proton_1e_Xmax_FD;
-    //</editor-fold>
-
-    //</editor-fold>
-
-//    //<editor-fold desc="Neutron chi2 cuts">
-//    double Chi2_Neutron_cut_CD = 3.;
-//    double Chi2_Neutron_cut_FD = 3.;
-////    double Chi2_Neutron_cut_CD = 1.;
-////    double Chi2_Neutron_cut_FD = 1.;
+//// Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
+//
+//    //<editor-fold desc="Chi2 cuts">
+//
+//    //<editor-fold desc="Electron chi2 cuts">
+//
+//    //<editor-fold desc="Electron chi2 cuts (CD)">
+//    double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
+//    double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
+//    double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
+//    double Chi2_Electron_1e_Xmax_CD;
 //    //</editor-fold>
-
-    //</editor-fold>
-
-// Vertex cuts ----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Vertex cuts">
-
-    //<editor-fold desc="Electron Vertex cuts">
-    double Vertex_Electron_cut_CD = 3.;
-    double Vertex_Electron_1e_mean_CD = 0; // 1e mean
-    double Vertex_Electron_cut_FD = 3.;
-    double Vertex_Electron_1e_mean_FD = -0.8841; // 1e mean
-    //</editor-fold>
-
-    //<editor-fold desc="Proton Vertex cuts">
-    double Vertex_Proton_cut_CD = 3.;
-    double Vertex_Proton_1e_mean_CD = 0.698; // 1e mean
-    double Vertex_Proton_cut_FD = 3.;
-    double Vertex_Proton_1e_mean_FD = -0.0521; // 1e mean
-    //</editor-fold>
-
-    //<editor-fold desc="dV cuts">
-    // TODO: confirm dVz cut with justin
-    // TODO: see how to apply unsymmetric cuts
-
-    double dVx_Xmax_CD;
-    double dVx_cut_CD = 4., dVx_peak_CD = -0.01; // dVx_peak_CD to be reset by dVx_Xmax_CD in second run
-    double dVy_Xmax_CD;
-    double dVy_cut_CD = 4., dVy_peak_CD = 0.01; // dVy_peak_CD to be reset by dVy_Xmax_CD in second run
-    double dVz_Xmax_CD;
-    double dVz_cut_CD = 4., dVz_peak_CD = 0.51; // dVz_peak_CD to be reset by dVz_Xmax_CD in second run
-
-    double dVx_Xmax_FD;
-    double dVx_cut_FD = 4., dVx_peak_FD = -0.03; // dVx_peak_FD to be reset by dVx_Xmax_FD in second run
-    double dVy_Xmax_FD;
-    double dVy_cut_FD = 4., dVy_peak_FD = -0.03; // dVy_peak_FD to be reset by dVy_Xmax_FD in second run
-    double dVz_Xmax_FD;
-    double dVz_cut_FD = 4., dVz_peak_FD = -0.27; // dVz_peak_FD to be reset by dVz_Xmax_FD in second run
-
-    double dVx_Xmax;
-    double dVx_cut = 4., dVx_peak = -0.01; // dVx_peak to be reset by dVx_Xmax in second run
-    double dVy_Xmax;
-    double dVy_cut = 4., dVy_peak = -0.01; // dVy_peak to be reset by dVy_Xmax in second run
-    double dVz_Xmax;
-    double dVz_cut = 4., dVz_peak = -0.09; // dVz_peak to be reset by dVz_Xmax in second run
-    //</editor-fold>
-
-//    //<editor-fold desc="Neutron Vertex cut">
-//    double Vertex_Neutron_cut_CD = 3.;
-//    double Vertex_Neutron_cut_FD = 3.;
-////    double Vertex_Neutron_cut_CD = 1.;
-////    double Vertex_Neutron_cut_FD = 1.;
+//
+//    //<editor-fold desc="Electron chi2 cuts (FD)">
+//    double Chi2_Electron_cut_FD = 15.; // 100 since electron detection is great
+//    double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
+//    double Chi2_Electron_1e_peak_FD = -0.05; // to fill using Chi2_Electron_1e_Xmax_FD
+//    double Chi2_Electron_1e_Xmax_FD;
 //    //</editor-fold>
-
-    //</editor-fold>
-
-// Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
-
-    //<editor-fold desc="Electron SF cuts (FD)">
-    // TODO: add SF cuts to output file
-    double SF_1e2p_upper_cut = 0.28;
-    double SF_1e2p_lower_cut = 0.18;
-    double SF_1e2p_Xmax; // for all e plots, no cuts applied
-    double SF_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
-    //</editor-fold>
-
-    //</editor-fold>
-
-// Number of Photo-electrons (nphe) cuts (electrons only, FD) -----------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Number of Photo-electrons (nphe) cuts (electrons only, FD)">
-    // TODO: add nphe cuts to output file
-    double nphe_cut = 2;
-//    double nphe_1e2p_lower_cut = 0.18;
-//    double nphe_1e2p_Xmax; // for all e plots, no cuts applied
-//    double fiducial_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
-    //</editor-fold>
-
-// Fiducial cuts --------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Fiducial cuts">
-    // TODO: add fiducial cuts to output file
-    double fiducial_cut_Lv = 14;
-    double fiducial_cut_Lw = 14;
-//    double fiducial_1e2p_lower_cut = 0.18;
-//    double fiducial_1e2p_Xmax; // for all e plots, no cuts applied
-//    double fiducial_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
-    //</editor-fold>
-
+//
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Proton chi2 cuts">
+//
+//    //<editor-fold desc="Proton chi2 cuts (CD)">
+//    double Chi2_Proton_cut_CD = 10.; // Josh's proton FD cut
+//    double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
+//    double Chi2_Proton_1e_peak_CD = 0.45; // to fill using Chi2_Proton_1e_Xmax_CD
+//    double Chi2_Proton_1e_Xmax_CD;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Proton chi2 cuts (FD)">
+//    double Chi2_Proton_cut_FD = 3.; // Josh's proton FD cut
+//    double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
+//    double Chi2_Proton_1e_peak_FD = 0.05; // to fill using Chi2_Proton_1e_Xmax_FD
+//    double Chi2_Proton_1e_Xmax_FD;
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+////    //<editor-fold desc="Neutron chi2 cuts">
+////    double Chi2_Neutron_cut_CD = 3.;
+////    double Chi2_Neutron_cut_FD = 3.;
+//////    double Chi2_Neutron_cut_CD = 1.;
+//////    double Chi2_Neutron_cut_FD = 1.;
+////    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//// Vertex cuts ----------------------------------------------------------------------------------------------------------------------------------------------------------
+//
+//    //<editor-fold desc="Vertex cuts">
+//
+//    //<editor-fold desc="Electron Vertex cuts">
+//    double Vertex_Electron_cut_CD = 3.;
+//    double Vertex_Electron_1e_mean_CD = 0; // 1e mean
+//    double Vertex_Electron_cut_FD = 3.;
+//    double Vertex_Electron_1e_mean_FD = -0.8841; // 1e mean
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Proton Vertex cuts">
+//    double Vertex_Proton_cut_CD = 3.;
+//    double Vertex_Proton_1e_mean_CD = 0.698; // 1e mean
+//    double Vertex_Proton_cut_FD = 3.;
+//    double Vertex_Proton_1e_mean_FD = -0.0521; // 1e mean
+//    //</editor-fold>
+//
+//    //<editor-fold desc="dV cuts">
+//    // TODO: confirm dVz cut with justin
+//    // TODO: see how to apply unsymmetric cuts
+//
+//    double dVx_Xmax_CD;
+//    double dVx_cut_CD = 4., dVx_peak_CD = -0.01; // dVx_peak_CD to be reset by dVx_Xmax_CD in second run
+//    double dVy_Xmax_CD;
+//    double dVy_cut_CD = 4., dVy_peak_CD = 0.01; // dVy_peak_CD to be reset by dVy_Xmax_CD in second run
+//    double dVz_Xmax_CD;
+//    double dVz_cut_CD = 4., dVz_peak_CD = 0.51; // dVz_peak_CD to be reset by dVz_Xmax_CD in second run
+//
+//    double dVx_Xmax_FD;
+//    double dVx_cut_FD = 4., dVx_peak_FD = -0.03; // dVx_peak_FD to be reset by dVx_Xmax_FD in second run
+//    double dVy_Xmax_FD;
+//    double dVy_cut_FD = 4., dVy_peak_FD = -0.03; // dVy_peak_FD to be reset by dVy_Xmax_FD in second run
+//    double dVz_Xmax_FD;
+//    double dVz_cut_FD = 4., dVz_peak_FD = -0.27; // dVz_peak_FD to be reset by dVz_Xmax_FD in second run
+//
+//    double dVx_Xmax;
+//    double dVx_cut = 4., dVx_peak = -0.01; // dVx_peak to be reset by dVx_Xmax in second run
+//    double dVy_Xmax;
+//    double dVy_cut = 4., dVy_peak = -0.01; // dVy_peak to be reset by dVy_Xmax in second run
+//    double dVz_Xmax;
+//    double dVz_cut = 4., dVz_peak = -0.09; // dVz_peak to be reset by dVz_Xmax in second run
+//    //</editor-fold>
+//
+////    //<editor-fold desc="Neutron Vertex cut">
+////    double Vertex_Neutron_cut_CD = 3.;
+////    double Vertex_Neutron_cut_FD = 3.;
+//////    double Vertex_Neutron_cut_CD = 1.;
+//////    double Vertex_Neutron_cut_FD = 1.;
+////    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//// Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
+//
+//    //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
+//
+//    //<editor-fold desc="Electron SF cuts (FD)">
+//    // TODO: add SF cuts to output file
+//    double SF_1e2p_upper_cut = 0.28;
+//    double SF_1e2p_lower_cut = 0.18;
+//    double SF_1e2p_Xmax; // for all e plots, no cuts applied
+//    double SF_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//// Number of Photo-electrons (nphe) cuts (electrons only, FD) -----------------------------------------------------------------------------------------------------------
+//
+//    //<editor-fold desc="Number of Photo-electrons (nphe) cuts (electrons only, FD)">
+//    // TODO: add nphe cuts to output file
+//    double nphe_cut = 2;
+////    double nphe_1e2p_lower_cut = 0.18;
+////    double nphe_1e2p_Xmax; // for all e plots, no cuts applied
+////    double fiducial_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
+//    //</editor-fold>
+//
+//// Fiducial cuts --------------------------------------------------------------------------------------------------------------------------------
+//
+//    //<editor-fold desc="Fiducial cuts">
+//    // TODO: add fiducial cuts to output file
+//    double fiducial_cut_Lv = 14;
+//    double fiducial_cut_Lw = 14;
+////    double fiducial_1e2p_lower_cut = 0.18;
+////    double fiducial_1e2p_Xmax; // for all e plots, no cuts applied
+////    double fiducial_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
+//    //</editor-fold>
+//
 // Histogram limits -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Histogram limits">
@@ -5214,18 +5215,18 @@ void EventAnalyser() {
         plots->Add(Beta_vs_P_negative_particles_CD);
         Beta_vs_P_negative_particles_CD->Draw("colz");
 
-        beta_electron->SetLineColor(kBlue);
-        beta_electron->Draw("same");
-        beta_Kminus->SetLineColor(kGreen);
+        beta_Kminus->SetLineColor(kBlue);
         beta_Kminus->Draw("same");
-        beta_piminus->SetLineColor(kRed);
+        beta_piminus->SetLineColor(kGreen);
         beta_piminus->Draw("same");
+        beta_electron->SetLineColor(kRed);
+        beta_electron->Draw("same");
 
         auto Beta_vs_P_negative_particles_CD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
 
-        TLegendEntry *electrons_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_electron, "Electrons", "l");
         TLegendEntry *Kminus_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_Kminus, "Negative kaons", "l");
         TLegendEntry *piminus_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_piminus, "Negative pions", "l");
+        TLegendEntry *electrons_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_electron, "Electrons", "l");
 
         Beta_vs_P_negative_particles_CD_legend->Draw("same");
 
@@ -5248,18 +5249,18 @@ void EventAnalyser() {
         plots->Add(Beta_vs_P_negative_particles_FD);
         Beta_vs_P_negative_particles_FD->Draw("colz");
 
-        beta_electron->SetLineColor(kBlue);
-        beta_electron->Draw("same");
-        beta_Kminus->SetLineColor(kGreen);
+        beta_Kminus->SetLineColor(kBlue);
         beta_Kminus->Draw("same");
-        beta_piminus->SetLineColor(kRed);
+        beta_piminus->SetLineColor(kGreen);
         beta_piminus->Draw("same");
+        beta_electron->SetLineColor(kRed);
+        beta_electron->Draw("same");
 
         auto Beta_vs_P_negative_particles_FD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
 
-        TLegendEntry *electrons_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_electron, "Electrons", "l");
         TLegendEntry *Kminus_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_Kminus, "Negative kaons", "l");
         TLegendEntry *piminus_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_piminus, "Negative pions", "l");
+        TLegendEntry *electrons_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_electron, "Electrons", "l");
 
         Beta_vs_P_negative_particles_FD_legend->Draw("same");
 
