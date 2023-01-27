@@ -13,10 +13,6 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 
  */
 
-//#include "HipoChain.h"
-
-//#include <HipoHist.h>
-
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
@@ -34,10 +30,6 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "clas12reader.h"
 #include "codeSetup.h"
 
-//#include "source/classes.h"
-//#include "source/GeneralFunctions.h"
-//#include "source/HistogramPlottingFunctions.h"
-
 using namespace clas12;
 using namespace std;
 
@@ -51,9 +43,9 @@ void EventAnalyser() {
 
     string AnalyserVersion = "Beta version";
 
-// ======================================================================================================================================================================
-// Code settings
-// ======================================================================================================================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                         Code settings
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Code settings">
 
@@ -1106,9 +1098,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// ======================================================================================================================================================================
-// Histogram definitions
-// ======================================================================================================================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                      Histogram definitions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Histogram definitions">
 
@@ -1964,9 +1956,9 @@ void EventAnalyser() {
     cout << " done.\n\n\n";
     //</editor-fold>
 
-// ======================================================================================================================================================================
-// Code execution
-// ======================================================================================================================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                         Code execution
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Code execution">
     cout << "Looping over chain files...\n\n";
@@ -3773,9 +3765,9 @@ void EventAnalyser() {
         } // end of while
     } // end of for loop over files    //</editor-fold>
 
-// ======================================================================================================================================================================
-// Canvas definitions
-// ======================================================================================================================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                       Canvas definitions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Canvas definitions">
 
@@ -3808,12 +3800,13 @@ void EventAnalyser() {
     c1->cd();
     //</editor-fold>
 
-// ======================================================================================================================================================================
-// Histograms plots
-// ======================================================================================================================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                        Histograms plots
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Histograms plots">
 
+// ======================================================================================================================================================================
 // Beta vs. P histograms
 // ======================================================================================================================================================================
 
@@ -3826,13 +3819,6 @@ void EventAnalyser() {
 
         //<editor-fold desc="Beta vs. P TF1 plots">
         auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, beamE);
-
-        // TODO: finish adding function labels
-//        TPaveText *beta_electron_title = new TPaveText(0., 0., 0.1, 0.1);
-//        beta_electron_title->AddText("#font[25]{e^{-}}");
-//        beta_electron_title->SetTextColor(kRed);
-//        beta_electron_title->Draw();
-
         auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p * m_p) + ")").c_str(), 0, beamE);
         auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n * m_n) + ")").c_str(), 0, beamE);
         auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero * m_pizero) + ")").c_str(), 0, beamE);
@@ -3845,580 +3831,118 @@ void EventAnalyser() {
 
 //  Beta vs. P histograms --------------------------------------------------------
 
-        //<editor-fold desc="Beta vs. P for all particles (CD)">
-        Beta_vs_P_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_CD);
-        Beta_vs_P_CD->Draw("colz");
+        //<editor-fold desc="Beta vs. P plots (no cuts)">
 
-        beta_electron->Draw("same");
-//        beta_electron_title->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
+        //<editor-fold desc="Beta vs. P for all particles (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_All_e_Directory, "01_Beta_vs_P_All_Particles_CD.png", beta_electron,
+                      beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
 
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "01_Beta_vs_P_All_Particles_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_All_e_Directory, "02_Beta_vs_P_All_Particles_FD.png", beta_electron,
+                      beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (FD)">
-        Beta_vs_P_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_FD);
-        Beta_vs_P_FD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_All_e_Directory, "03_Beta_vs_P_Electrons_Only_CD.png",
+                      beta_electron, "Electrons", true);
 
-        beta_electron->Draw("same");
-//        beta_electron_title->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "02_Beta_vs_P_All_Particles_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_All_e_Directory, "04_Beta_vs_P_Electrons_Only_FD.png",
+                      beta_electron, "Electrons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, CD)">
-        Beta_vs_P_Electrons_Only_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_Electrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Electrons_Only_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_Electrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Electrons_Only_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_Electrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_Electrons_Only_CD);
-        Beta_vs_P_Electrons_Only_CD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for all particles (Protons Only, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_All_e_Directory, "05_Beta_vs_P_Protons_Only_CD.png",
+                      beta_proton, "Protons", true);
 
-        beta_electron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "03_Beta_vs_P_Electrons_Only_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_All_e_Directory, "06_Beta_vs_P_Protons_Only_FD.png",
+                      beta_proton, "Protons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, FD)">
-        Beta_vs_P_Electrons_Only_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_Electrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Electrons_Only_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_Electrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Electrons_Only_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_Electrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_Electrons_Only_FD);
-        Beta_vs_P_Electrons_Only_FD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_Neutrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_All_e_Directory, "07_Beta_vs_P_Neutrons_Only_CD.png",
+                      beta_neutron, "Neutrons", true);
 
-        beta_electron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "04_Beta_vs_P_Electrons_Only_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_Neutrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_All_e_Directory, "07_Beta_vs_P_Neutrons_Only_FD.png",
+                      beta_neutron, "Neutrons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Protons Only, CD)">
-        Beta_vs_P_Protons_Only_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_Protons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Protons_Only_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_Protons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Protons_Only_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_Protons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_Protons_Only_CD);
-        Beta_vs_P_Protons_Only_CD->Draw("colz");
-
-        beta_proton->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "05_Beta_vs_P_Protons_Only_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Protons Only, FD)">
-        Beta_vs_P_Protons_Only_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_Protons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Protons_Only_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_Protons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Protons_Only_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_Protons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_Protons_Only_FD);
-        Beta_vs_P_Protons_Only_FD->Draw("colz");
+        //<editor-fold desc="Beta vs. P plots (1e cut)">
 
-        beta_proton->Draw("same");
+        //<editor-fold desc="Beta vs. P for all particles (1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_Only_1e_Directory, "01_Beta_vs_P_1e_cut_All_Particles_CD.png",
+                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
 
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "06_Beta_vs_P_Protons_Only_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_Only_1e_Directory, "02_Beta_vs_P_1e_cut_All_Particles_FD.png",
+                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, CD)">
-        Beta_vs_P_Neutrons_Only_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_Neutrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Neutrons_Only_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_Neutrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Neutrons_Only_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_Neutrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_Neutrons_Only_CD);
-        Beta_vs_P_Neutrons_Only_CD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "03_Beta_vs_P_1e_cut_Electrons_Only_CD.png",
+                      beta_electron, "Electrons", true);
 
-        beta_neutron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "07_Beta_vs_P_Neutrons_Only_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_1e_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "04_Beta_vs_P_1e_cut_Electrons_Only_FD.png",
+                      beta_electron, "Electrons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, FD)">
-        Beta_vs_P_Neutrons_Only_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_Neutrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Neutrons_Only_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_Neutrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_Neutrons_Only_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_Neutrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_Neutrons_Only_FD);
-        Beta_vs_P_Neutrons_Only_FD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for all particles (Protons Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "05_Beta_vs_P_1e_cut_Protons_Only_CD.png",
+                      beta_proton, "Protons", true);
 
-        beta_neutron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_All_e_Directory + "08_Beta_vs_P_Neutrons_Only_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_1e_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "06_Beta_vs_P_1e_cut_Protons_Only_FD.png",
+                      beta_proton, "Protons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (1e cut, CD)">
-        Beta_vs_P_1e_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_CD);
-        Beta_vs_P_1e_CD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "07_Beta_vs_P_1e_cut_Neutrons_Only_CD.png",
+                      beta_neutron, "Neutrons", true);
 
-        beta_electron->Draw("same");
-//        beta_electron_title->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "01_Beta_vs_P_1e_cut_All_Particles_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "08_Beta_vs_P_1e_cut_Neutrons_Only_FD.png",
+                      beta_neutron, "Neutrons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (1e cut, FD)">
-        Beta_vs_P_1e_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_FD);
-        Beta_vs_P_1e_FD->Draw("colz");
-
-        beta_electron->Draw("same");
-//        beta_electron_title->Draw("same");
-        beta_proton->Draw("same");
-        beta_neutron->Draw("same");
-        beta_pizero->Draw("same");
-        beta_piplus->Draw("same");
-        beta_piminus->Draw("same");
-        beta_Kzero->Draw("same");
-        beta_Kplus->Draw("same");
-        beta_Kminus->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "02_Beta_vs_P_1e_cut_All_Particles_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, 1e cut, CD)">
-        Beta_vs_P_1e_Electrons_Only_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_Electrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Electrons_Only_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Electrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Electrons_Only_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Electrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_Electrons_Only_CD);
-        Beta_vs_P_1e_Electrons_Only_CD->Draw("colz");
+        //<editor-fold desc="Beta vs. P plots (by charge)">
 
-        beta_electron->Draw("same");
+        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_positive_particles_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Directory, "01_Beta_vs_P_q_p1_CD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
 
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "03_Beta_vs_P_1e_cut_Electrons_Only_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_positive_particles_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Directory, "01_Beta_vs_P_q_p1_FD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Electrons Only, 1e cut, FD)">
-        Beta_vs_P_1e_Electrons_Only_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_Electrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Electrons_Only_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Electrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Electrons_Only_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Electrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_Electrons_Only_FD);
-        Beta_vs_P_1e_Electrons_Only_FD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Directory, "02_Beta_vs_P_q_0_CD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
 
-        beta_electron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "04_Beta_vs_P_1e_cut_Electrons_Only_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Directory, "02_Beta_vs_P_q_0_FD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Protons Only, 1e cut, CD)">
-        Beta_vs_P_1e_Protons_Only_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_Protons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Protons_Only_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Protons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Protons_Only_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Protons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_Protons_Only_CD);
-        Beta_vs_P_1e_Protons_Only_CD->Draw("colz");
+        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_negative_particles_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Directory, "03_Beta_vs_P_q_m1_CD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
 
-        beta_proton->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "05_Beta_vs_P_1e_cut_Protons_Only_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        histPlotter2D(c1, Beta_vs_P_negative_particles_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Directory, "03_Beta_vs_P_q_m1_FD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for all particles (Protons Only, 1e cut, FD)">
-        Beta_vs_P_1e_Protons_Only_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_Protons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Protons_Only_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Protons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Protons_Only_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Protons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_Protons_Only_FD);
-        Beta_vs_P_1e_Protons_Only_FD->Draw("colz");
-
-        beta_proton->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "06_Beta_vs_P_1e_cut_Protons_Only_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, 1e cut, CD)">
-        Beta_vs_P_1e_Neutrons_Only_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_Neutrons_Only_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Neutrons_Only_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Neutrons_Only_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Neutrons_Only_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Neutrons_Only_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_Neutrons_Only_CD);
-        Beta_vs_P_1e_Neutrons_Only_CD->Draw("colz");
-
-        beta_neutron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "07_Beta_vs_P_1e_cut_Neutrons_Only_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for all particles (Neutrons Only, 1e cut, FD)">
-        Beta_vs_P_1e_Neutrons_Only_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_1e_Neutrons_Only_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Neutrons_Only_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Neutrons_Only_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_1e_Neutrons_Only_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_1e_Neutrons_Only_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_1e_Neutrons_Only_FD);
-        Beta_vs_P_1e_Neutrons_Only_FD->Draw("colz");
-
-        beta_neutron->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_Only_1e_Directory + "08_Beta_vs_P_1e_cut_Neutrons_Only_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = +1 (CD)">
-        Beta_vs_P_positive_particles_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_positive_particles_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_positive_particles_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_positive_particles_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_positive_particles_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_positive_particles_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_positive_particles_CD);
-        Beta_vs_P_positive_particles_CD->Draw("colz");
-
-        beta_proton->SetLineColor(kBlue);
-        beta_proton->Draw("same");
-        beta_Kplus->SetLineColor(kGreen);
-        beta_Kplus->Draw("same");
-        beta_piplus->SetLineColor(kRed);
-        beta_piplus->Draw("same");
-
-        auto Beta_vs_P_positive_particles_CD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-        TLegendEntry *protons_CD_entry = Beta_vs_P_positive_particles_CD_legend->AddEntry(beta_proton, "Protons", "l");
-        TLegendEntry *Kplus_CD_entry = Beta_vs_P_positive_particles_CD_legend->AddEntry(beta_Kplus, "Positive kaons", "l");
-        TLegendEntry *piplus_CD_entry = Beta_vs_P_positive_particles_CD_legend->AddEntry(beta_piplus, "Positive pions", "l");
-
-        Beta_vs_P_positive_particles_CD_legend->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_by_charge_Directory + "01_Beta_vs_P_q_p1_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = +1 (FD)">
-        Beta_vs_P_positive_particles_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_positive_particles_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_positive_particles_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_positive_particles_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_positive_particles_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_positive_particles_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_positive_particles_FD);
-        Beta_vs_P_positive_particles_FD->Draw("colz");
-
-        beta_proton->SetLineColor(kBlue);
-        beta_proton->Draw("same");
-        beta_Kplus->SetLineColor(kGreen);
-        beta_Kplus->Draw("same");
-        beta_piplus->SetLineColor(kRed);
-        beta_piplus->Draw("same");
-
-        auto Beta_vs_P_positive_particles_FD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-        TLegendEntry *protons_FD_entry = Beta_vs_P_positive_particles_FD_legend->AddEntry(beta_proton, "Protons", "l");
-        TLegendEntry *Kplus_FD_entry = Beta_vs_P_positive_particles_FD_legend->AddEntry(beta_Kplus, "Positive kaons", "l");
-        TLegendEntry *piplus_FD_entry = Beta_vs_P_positive_particles_FD_legend->AddEntry(beta_piplus, "Positive pions", "l");
-
-        Beta_vs_P_positive_particles_FD_legend->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_by_charge_Directory + "01_Beta_vs_P_q_p1_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = 0 (CD)">
-        Beta_vs_P_neutral_particles_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_neutral_particles_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_neutral_particles_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_neutral_particles_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_neutral_particles_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_neutral_particles_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_neutral_particles_CD);
-        Beta_vs_P_neutral_particles_CD->Draw("colz");
-
-        beta_neutron->Draw("same");
-        beta_neutron->SetLineColor(kBlue);
-        beta_Kzero->Draw("same");
-        beta_Kzero->SetLineColor(kGreen);
-        beta_pizero->Draw("same");
-        beta_pizero->SetLineColor(kRed);
-
-        auto Beta_vs_P_neutral_particles_CD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-        TLegendEntry *neutrons_CD_entry = Beta_vs_P_neutral_particles_CD_legend->AddEntry(beta_neutron, "Neutrons", "l");
-        TLegendEntry *Kzero_CD_entry = Beta_vs_P_neutral_particles_CD_legend->AddEntry(beta_Kzero, "Neutral kaons", "l");
-        TLegendEntry *pizero_CD_entry = Beta_vs_P_neutral_particles_CD_legend->AddEntry(beta_pizero, "Neutral pions", "l");
-
-        Beta_vs_P_neutral_particles_CD_legend->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_by_charge_Directory + "02_Beta_vs_P_q_0_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = 0 (FD)">
-        Beta_vs_P_neutral_particles_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_neutral_particles_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_neutral_particles_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_neutral_particles_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_neutral_particles_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_neutral_particles_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_neutral_particles_FD);
-        Beta_vs_P_neutral_particles_FD->Draw("colz");
-
-        beta_neutron->Draw("same");
-        beta_neutron->SetLineColor(kBlue);
-        beta_Kzero->Draw("same");
-        beta_Kzero->SetLineColor(kGreen);
-        beta_pizero->Draw("same");
-        beta_pizero->SetLineColor(kRed);
-
-        auto Beta_vs_P_neutral_particles_FD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-        TLegendEntry *neutrons_FD_entry = Beta_vs_P_neutral_particles_FD_legend->AddEntry(beta_neutron, "Neutrons", "l");
-        TLegendEntry *Kzero_FD_entry = Beta_vs_P_neutral_particles_FD_legend->AddEntry(beta_Kzero, "Neutral kaons", "l");
-        TLegendEntry *pizero_FD_entry = Beta_vs_P_neutral_particles_FD_legend->AddEntry(beta_pizero, "Neutral pions", "l");
-
-        Beta_vs_P_neutral_particles_FD_legend->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_by_charge_Directory + "02_Beta_vs_P_q_0_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = -1 (CD)">
-        Beta_vs_P_negative_particles_CD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_negative_particles_CD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_negative_particles_CD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_negative_particles_CD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_negative_particles_CD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_negative_particles_CD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_negative_particles_CD);
-        Beta_vs_P_negative_particles_CD->Draw("colz");
-
-        beta_Kminus->SetLineColor(kBlue);
-        beta_Kminus->Draw("same");
-        beta_piminus->SetLineColor(kGreen);
-        beta_piminus->Draw("same");
-        beta_electron->SetLineColor(kRed);
-        beta_electron->Draw("same");
-
-        auto Beta_vs_P_negative_particles_CD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-        TLegendEntry *Kminus_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_Kminus, "Negative kaons", "l");
-        TLegendEntry *piminus_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_piminus, "Negative pions", "l");
-        TLegendEntry *electrons_CD_entry = Beta_vs_P_negative_particles_CD_legend->AddEntry(beta_electron, "Electrons", "l");
-
-        Beta_vs_P_negative_particles_CD_legend->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_by_charge_Directory + "03_Beta_vs_P_q_m1_CD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = -1 (FD)">
-        Beta_vs_P_negative_particles_FD->SetTitleSize(0.06, "xyz");
-        Beta_vs_P_negative_particles_FD->GetXaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_negative_particles_FD->GetXaxis()->CenterTitle(true);
-        Beta_vs_P_negative_particles_FD->GetYaxis()->SetLabelSize(0.0425);
-        Beta_vs_P_negative_particles_FD->GetYaxis()->CenterTitle(true);
-        Beta_vs_P_negative_particles_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Beta_vs_P_negative_particles_FD);
-        Beta_vs_P_negative_particles_FD->Draw("colz");
-
-        beta_Kminus->SetLineColor(kBlue);
-        beta_Kminus->Draw("same");
-        beta_piminus->SetLineColor(kGreen);
-        beta_piminus->Draw("same");
-        beta_electron->SetLineColor(kRed);
-        beta_electron->Draw("same");
-
-        auto Beta_vs_P_negative_particles_FD_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-        TLegendEntry *Kminus_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_Kminus, "Negative kaons", "l");
-        TLegendEntry *piminus_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_piminus, "Negative pions", "l");
-        TLegendEntry *electrons_FD_entry = Beta_vs_P_negative_particles_FD_legend->AddEntry(beta_electron, "Electrons", "l");
-
-        Beta_vs_P_negative_particles_FD_legend->Draw("same");
-
-        c1->SetLogz(1);
-        gStyle->SetStatX(0.87);
-        gStyle->SetStatY(0.4);
-        c1->SaveAs((Beta_VS_P_by_charge_Directory + "03_Beta_vs_P_q_m1_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
         //</editor-fold>
 
     } else {
@@ -4426,6 +3950,7 @@ void EventAnalyser() {
     } // end of Beta vs. P plot if
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Chi2 plots
 // ======================================================================================================================================================================
 
@@ -4546,6 +4071,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Vertex plots
 // ======================================================================================================================================================================
 
@@ -4560,7 +4086,7 @@ void EventAnalyser() {
         dVz_Xmax = deltaVz_before_dV_cuts_1e2p->GetBinCenter(deltaVz_before_dV_cuts_1e2p->GetMaximumBin());
         //</editor-fold>
 
-        //  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
+//  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
 
         //<editor-fold desc="dV plots before dV cuts (1e2p, CD & FD)">
         histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "1e2p & All #chi^{2} cuts", 0.06, 0.0425, 0.0425,
@@ -4595,6 +4121,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Angle histograms
 // ======================================================================================================================================================================
 
@@ -5034,6 +4561,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Q2 histograms
 // ======================================================================================================================================================================
 
@@ -5109,6 +4637,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Momentum (P_e) histograms
 // ======================================================================================================================================================================
 
@@ -5136,6 +4665,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Energy (E_e) histograms
 // ======================================================================================================================================================================
 
@@ -5464,6 +4994,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Sampling Fraction (SF) histograms
 // ======================================================================================================================================================================
 
@@ -5560,6 +5091,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Electron fiducial histograms (FD only)
 // ======================================================================================================================================================================
 
@@ -5811,6 +5343,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Number of Photo-electrons (nphe) histograms
 // ======================================================================================================================================================================
 
@@ -5847,6 +5380,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Energy transfer histograms
 // ======================================================================================================================================================================
 
@@ -5945,9 +5479,9 @@ void EventAnalyser() {
 
         }
 
-        if (ETrans_All_Int_plots && ETrans_QEL_plots && ETrans_MEC_plots && ETrans_RES_plots && ETrans_DIS_plots) {
-
 //  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
+
+        if (ETrans_All_Int_plots && ETrans_QEL_plots && ETrans_MEC_plots && ETrans_RES_plots && ETrans_DIS_plots) {
 
             //<editor-fold desc="Energy transfer around 15 deg stack (2p, CD)">
             ETrans_all_int_15_Stack_2p_CD->Draw("nostack");
@@ -6021,6 +5555,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+// ======================================================================================================================================================================
 // Ecal restorations
 // ======================================================================================================================================================================
 
@@ -6114,6 +5649,7 @@ void EventAnalyser() {
         cout << "\n\nEcal plots are disabled by user.\n\n";
     }
     //</editor-fold>
+
 
 // MicroBooNE article histogram reconstructions
 // ====================================================================================================
@@ -6386,9 +5922,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// ======================================================================================================================================================================
-// Saving histogram list and finishing execution
-// ======================================================================================================================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                          Saving histogram list and finishing execution
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -6427,11 +5963,17 @@ void EventAnalyser() {
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
     myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
     myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n\n";
-    myLogFile << "BEnergyToNucleusCon = " << BoolToString(BEnergyToNucleusCon) << "\n";
-    myLogFile << "BEnergyToNucleus = " << BEnergyToNucleus << "\n";
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
     myLogFile << "m_e = " << m_e << "\n";
+    myLogFile << "m_p = " << m_p << "\n";
+    myLogFile << "m_n = " << m_n << "\n";
+    myLogFile << "m_pizero = " << m_pizero << "\n";
+    myLogFile << "m_piplus = " << m_piplus << "\n";
+    myLogFile << "m_piminus = " << m_piminus << "\n";
+    myLogFile << "m_Kzero = " << m_Kzero << "\n";
+    myLogFile << "m_Kplus = " << m_Kplus << "\n";
+    myLogFile << "m_Kminus = " << m_Kminus << "\n";
     myLogFile << "beamE = " << beamE << "\n";
     myLogFile << "Pv = " << Pv << "\n";
     myLogFile << "Pvx = " << Pvx << "\n";

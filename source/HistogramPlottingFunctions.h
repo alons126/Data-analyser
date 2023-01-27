@@ -12,6 +12,8 @@
 #include <sys/stat.h>
 #include <sstream>
 
+// histPlotter1D function -----------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="histPlotter1D function (old)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
@@ -469,7 +471,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //            plot_cut->SetLineColor(kMagenta);
             }
 
-            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut,0)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(plot_cut, ("Lower cut = " + to_string_with_precision(Cut, 0)).c_str(), "l");
 
             if (plot_max == true) {
                 TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
@@ -888,6 +890,222 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
     gROOT->ForceStyle();
 
     Histogram1DCanvas1->cd();
+
+}
+//</editor-fold>
+
+// histPlotter2D function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="histPlotter2D function (Beta vs. P plots, all particles)">
+void histPlotter2D(TCanvas *Histogram1DCanvas,
+                   TH2D *Histogram2D,
+                   double titleSize,
+                   bool centerTitle,
+                   double labelSizex,
+                   double labelSizey,
+                   double labelSizez,
+                   TList *Histogram_list,
+                   bool zlogScalePlot,
+                   string Histogram1DSaveNameDir,
+                   string Histogram1DSaveName,
+                   TF1 *Beta_function1,
+                   TF1 *Beta_function2,
+                   TF1 *Beta_function3,
+                   TF1 *Beta_function4,
+                   TF1 *Beta_function5,
+                   TF1 *Beta_function6,
+                   TF1 *Beta_function7,
+                   TF1 *Beta_function8,
+                   TF1 *Beta_function9) {
+
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
+    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    Histogram2D->SetTitleSize(titleSize, "xyz");
+    Histogram2D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram2D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram2D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetZaxis()->SetLabelSize(labelSizez);
+    Histogram_list->Add(Histogram2D);
+
+    if (Histogram2D->Integral() == 0.) {
+        TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+        displayText->SetTextSize(diplayTextSize);
+        displayText->SetFillColor(0);
+        displayText->SetTextAlign(12);
+        displayText->AddText("Empty histogram");
+        Histogram2D->Draw();
+        displayText->Draw();
+    } else if (Histogram2D->Integral() != 0.) {
+        Histogram2D->Draw("colz");
+
+        Beta_function1->Draw("same");
+        Beta_function2->Draw("same");
+        Beta_function3->Draw("same");
+        Beta_function4->Draw("same");
+        Beta_function5->Draw("same");
+        Beta_function6->Draw("same");
+        Beta_function7->Draw("same");
+        Beta_function8->Draw("same");
+        Beta_function9->Draw("same");
+    }
+
+    if (zlogScalePlot == true) {
+        Histogram1DCanvas->SetLogz(1);
+    }
+
+    gStyle->SetStatX(0.87);
+    gStyle->SetStatY(0.4);
+    Histogram1DCanvas->SaveAs((Histogram1DSaveNameDir + Histogram1DSaveName).c_str());
+    gStyle->SetStatX(DefStatX);
+    gStyle->SetStatY(DefStatY);
+    Histogram1DCanvas->Clear();
+
+}
+//</editor-fold>
+
+//<editor-fold desc="histPlotter2D function (Beta vs. P plots, single particle)">
+void histPlotter2D(TCanvas *Histogram1DCanvas,
+                   TH2D *Histogram2D,
+                   double titleSize,
+                   bool centerTitle,
+                   double labelSizex,
+                   double labelSizey,
+                   double labelSizez,
+                   TList *Histogram_list,
+                   bool zlogScalePlot,
+                   string Histogram1DSaveNameDir,
+                   string Histogram1DSaveName,
+                   TF1 *Beta_function1,
+                   string particle1,
+                   bool plot_legend) {
+
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
+    double x_1 = 0.165, y_1 = 0.3, x_2 = 0.865, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    Histogram2D->SetTitleSize(titleSize, "xyz");
+    Histogram2D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram2D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram2D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetZaxis()->SetLabelSize(labelSizez);
+    Histogram_list->Add(Histogram2D);
+
+    if (Histogram2D->Integral() == 0.) {
+        Histogram2D->SetStats(0);
+        TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+        displayText->SetTextSize(diplayTextSize);
+        displayText->SetFillColor(0);
+        displayText->SetTextAlign(12);
+        displayText->AddText("Empty histogram");
+        Histogram2D->Draw("colz");
+        displayText->Draw();
+    } else if (Histogram2D->Integral() != 0.) {
+        Histogram2D->Draw("colz");
+
+        Beta_function1->SetLineColor(kRed);
+        Beta_function1->Draw("same");
+    }
+
+    auto Beta_vs_P_legend = new TLegend(0.87, 0.725 - 0.25, 0.87 - 0.2, 0.725 - 0.3);
+
+    if ((plot_legend == true) && (Histogram2D->Integral() != 0.)) {
+
+        TLegendEntry *Beta_function1_entry = Beta_vs_P_legend->AddEntry(Beta_function1, particle1.c_str(), "l");
+
+        Beta_vs_P_legend->Draw("same");
+    }
+
+    if (zlogScalePlot == true) {
+        Histogram1DCanvas->SetLogz(1);
+    }
+
+    gStyle->SetStatX(0.87);
+    gStyle->SetStatY(0.4);
+    Histogram1DCanvas->SaveAs((Histogram1DSaveNameDir + Histogram1DSaveName).c_str());
+    gStyle->SetStatX(DefStatX);
+    gStyle->SetStatY(DefStatY);
+    Histogram1DCanvas->Clear();
+
+}
+//</editor-fold>
+
+//<editor-fold desc="histPlotter2D function (Beta vs. P plots, by charge)">
+void histPlotter2D(TCanvas *Histogram1DCanvas,
+                   TH2D *Histogram2D,
+                   double titleSize,
+                   bool centerTitle,
+                   double labelSizex,
+                   double labelSizey,
+                   double labelSizez,
+                   TList *Histogram_list,
+                   bool zlogScalePlot,
+                   string Histogram1DSaveNameDir,
+                   string Histogram1DSaveName,
+                   TF1 *Beta_function1,
+                   string particle1,
+                   TF1 *Beta_function2,
+                   string particle2,
+                   TF1 *Beta_function3,
+                   string particle3,
+                   bool plot_legend) {
+
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
+    double x_1 = 0.165, y_1 = 0.3, x_2 = 0.865, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    Histogram2D->SetTitleSize(titleSize, "xyz");
+    Histogram2D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram2D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram2D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetZaxis()->SetLabelSize(labelSizez);
+    Histogram_list->Add(Histogram2D);
+
+    if (Histogram2D->Integral() == 0.) {
+        Histogram2D->SetStats(0);
+        TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+        displayText->SetTextSize(diplayTextSize);
+        displayText->SetFillColor(0);
+        displayText->SetTextAlign(12);
+        displayText->AddText("Empty histogram");
+        Histogram2D->Draw("colz");
+        displayText->Draw();
+    } else if (Histogram2D->Integral() != 0.) {
+        Histogram2D->Draw("colz");
+
+        Beta_function1->SetLineColor(kBlue);
+        Beta_function1->Draw("same");
+        Beta_function2->SetLineColor(kGreen);
+        Beta_function2->Draw("same");
+        Beta_function3->SetLineColor(kRed);
+        Beta_function3->Draw("same");
+    }
+
+    auto Beta_vs_P_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
+
+    if ((plot_legend == true) && (Histogram2D->Integral() != 0.)) {
+
+        TLegendEntry *Beta_function1_entry = Beta_vs_P_legend->AddEntry(Beta_function1, particle1.c_str(), "l");
+        TLegendEntry *Beta_function2_entry = Beta_vs_P_legend->AddEntry(Beta_function2, particle2.c_str(), "l");
+        TLegendEntry *Beta_function3_entry = Beta_vs_P_legend->AddEntry(Beta_function3, particle3.c_str(), "l");
+
+        Beta_vs_P_legend->Draw("same");
+    }
+
+    if (zlogScalePlot == true) {
+        Histogram1DCanvas->SetLogz(1);
+    }
+
+    gStyle->SetStatX(0.87);
+    gStyle->SetStatY(0.4);
+    Histogram1DCanvas->SaveAs((Histogram1DSaveNameDir + Histogram1DSaveName).c_str());
+    gStyle->SetStatX(DefStatX);
+    gStyle->SetStatY(DefStatY);
+    Histogram1DCanvas->Clear();
 
 }
 //</editor-fold>
