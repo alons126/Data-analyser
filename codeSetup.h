@@ -47,7 +47,7 @@ std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_
 //std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
 
-std::string AnalyseFilePath = "/volatile/clas12/users/esteejus/Simulation_sigmaCM";
+std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
 std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
