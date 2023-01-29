@@ -1961,8 +1961,6 @@ void EventAnalyser() {
     //<editor-fold desc="Code execution">
     cout << "Looping over chain files...\n\n";
 
-    cout << AnalyseFileDirContent << "\n\n";
-
     clas12root::HipoChain chain;
     chain.Add(AnalyseFileDirContent.c_str());
 
@@ -1971,15 +1969,6 @@ void EventAnalyser() {
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Getting particle masses">
-//    double m_e = 0.000510999;
-//    double m_p = 0.938272;
-//    double m_n = 0.939565;
-//    double m_pizero = 0.134977;
-//    double m_piplus = 0.13957;
-//    double m_piminus = 0.13957;
-//    double m_Kzero = 0.497614;
-//    double m_Kplus = 0.493677;
-//    double m_Kminus = 0.493677;
     auto db = TDatabasePDG::Instance();
     chain.db()->turnOffQADB();
     double m_e = db->GetParticle(11)->Mass();
@@ -1993,9 +1982,7 @@ void EventAnalyser() {
     double m_Kminus = db->GetParticle(-321)->Mass();
     //</editor-fold>
 
-    cout << "TEST 1\n\n";
-
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2047,9 +2034,6 @@ void EventAnalyser() {
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool qel, mec, res, dis; // TODO: move inside while loop
-
-    cout << "TEST 2\n\n";
-
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
@@ -2125,9 +2109,10 @@ void EventAnalyser() {
             } else if (processID == 4) {
                 ++num_of_DIS_events;
                 dis = true;
-            } else {
-                cout << "Could not identify process!\n\n";
             }
+//            else {
+//                cout << "Could not identify process!\n\n";
+//            }
             //</editor-fold>
 
 //  All electrons plots -------------------------------------------------------------------------------------------------------------------------------------------------
