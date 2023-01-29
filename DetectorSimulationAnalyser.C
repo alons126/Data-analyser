@@ -1113,10 +1113,8 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P histograms">
 
     //<editor-fold desc="Beta vs. P for all particles">
-    TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta",
-                                  250, 0, beamE * 1.425, 250, 0, 8);
-    TH2D *Beta_vs_P_FD = new TH2D("#beta vs. P (All Particles, FD)", "#beta vs. P (All Particles, FD);P [GeV];#beta",
-                                  250, 0, beamE * 1.425, 250, 0, 8);
+    TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_FD = new TH2D("#beta vs. P (All Particles, FD)", "#beta vs. P (All Particles, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
 
     TH2D *Beta_vs_P_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, CD)", "#beta vs. P (Electrons Only, CD);P [GeV];#beta",
                                                  250, 0, beamE * 1.425, 250, 0.5, 3);
@@ -1136,9 +1134,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P for all particles (1e cut)">
     TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs. P (All Particles, 1e only, CD)", "#beta vs. P (All Particles, 1e Cut, CD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 8);
+                                     250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs. P (All Particles, 1e only, FD)", "#beta vs. P (All Particles, 1e Cut, FD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 8);
+                                     250, 0, beamE * 1.425, 250, 0, 3);
 
     TH2D *Beta_vs_P_1e_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, 1e only, CD)", "#beta vs. P (Electrons Only, 1e Cut, CD);P [GeV];#beta",
                                                     250, 0, beamE * 1.425, 250, 0.5, 3);
@@ -1967,7 +1965,7 @@ void EventAnalyser() {
     chain.Add(AnalyseFileDirContent.c_str());
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  Getting particle masses (for histograms)
+//  Getting particle masses for histograms
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Getting particle masses">
