@@ -58,8 +58,8 @@ void EventAnalyser() {
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
-    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
-//    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
+//    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
     //</editor-fold>
 
     //<editor-fold desc="Configure beam energy (beamE)">
@@ -120,7 +120,7 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "By_charge"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "By_charge", "By_charge/Positive_p_in_FTOF", "By_charge/Positive_p_in_CTOF"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -131,6 +131,8 @@ void EventAnalyser() {
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
     string Beta_VS_P_by_charge_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
+    string Beta_VS_P_by_charge_FTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
+    string Beta_VS_P_by_charge_CTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[5] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
@@ -1114,6 +1116,8 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P histograms">
 
     //<editor-fold desc="Beta vs. P for all particles">
+
+    //<editor-fold desc="General">
     TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_FD = new TH2D("#beta vs. P (All Particles, FD)", "#beta vs. P (All Particles, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
 
@@ -1131,6 +1135,60 @@ void EventAnalyser() {
                                                 250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, FD)", "#beta vs. P (Neutrons Only, FD);P [GeV];#beta",
                                                 250, 0, beamE * 1.425, 250, 0, 3);
+    //</editor-fold>
+
+    //<editor-fold desc="FTOF">
+    TH2D *Beta_vs_P_positive_particles_FTOF = new TH2D("#beta vs. P & q = 1 (All Particles, FTOF)", "#beta vs. P & q = 1 (All Particles, FTOF);P [GeV];#beta",
+                                                       250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Electrons_Only_FTOF = new TH2D("#beta vs. P & q = 1 (Electrons Only, FTOF)", "#beta vs. P & q = 1 (Electrons Only, FTOF);P [GeV];#beta",
+                                                   250, 0, beamE * 1.425, 250, 0.5, 3);
+
+    TH2D *Beta_vs_P_Protons_Only_FTOF = new TH2D("#beta vs. P & q = 1 (Protons Only, FTOF)", "#beta vs. P & q = 1 (Protons Only, FTOF);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Neutrons_Only_FTOF = new TH2D("#beta vs. P & q = 1 (Neutrons Only, FTOF)", "#beta vs. P & q = 1 (Neutrons Only, FTOF);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Kplus_Only_FTOF = new TH2D("#beta vs. P & q = 1 (K^{+} Only, FTOF)", "#beta vs. P & q = 1 (K^{+} Only, FTOF);P [GeV];#beta",
+                                               250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_piplus_Only_FTOF = new TH2D("#beta vs. P & q = 1 (#pi^{+} Only, FTOF)", "#beta vs. P & q = 1 (#pi^{+} Only, FTOF);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_deuteron_Only_FTOF = new TH2D("#beta vs. P & q = 1 (deuteron Only, FTOF)", "#beta vs. P & q = 1 (deuteron Only, FTOF);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Beta_0_Only_FTOF = new TH2D("#beta vs. P & q = 1 (Beta_0 Only, FTOF)", "#beta vs. P & q = 1 (Beta_0 Only, FTOF);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    //</editor-fold>
+
+    //<editor-fold desc="CTOF">
+    TH2D *Beta_vs_P_positive_particles_CTOF = new TH2D("#beta vs. P & q = 1 (All Particles, CTOF)", "#beta vs. P & q = 1 (All Particles, CTOF);P [GeV];#beta",
+                                                       250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Electrons_Only_CTOF = new TH2D("#beta vs. P & q = 1 (Electrons Only, CTOF)", "#beta vs. P & q = 1 (Electrons Only, CTOF);P [GeV];#beta",
+                                                   250, 0, beamE * 1.425, 250, 0.5, 3);
+
+    TH2D *Beta_vs_P_Protons_Only_CTOF = new TH2D("#beta vs. P & q = 1 (Protons Only, CTOF)", "#beta vs. P & q = 1 (Protons Only, CTOF);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Neutrons_Only_CTOF = new TH2D("#beta vs. P & q = 1 (Neutrons Only, CTOF)", "#beta vs. P & q = 1 (Neutrons Only, CTOF);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Kplus_Only_CTOF = new TH2D("#beta vs. P & q = 1 (K^{+} Only, CTOF)", "#beta vs. P & q = 1 (K^{+} Only, CTOF);P [GeV];#beta",
+                                               250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_piplus_Only_CTOF = new TH2D("#beta vs. P & q = 1 (#pi^{+} Only, CTOF)", "#beta vs. P & q = 1 (#pi^{+} Only, CTOF);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_deuteron_Only_CTOF = new TH2D("#beta vs. P & q = 1 (deuteron Only, CTOF)", "#beta vs. P & q = 1 (deuteron Only, CTOF);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_Beta_0_Only_CTOF = new TH2D("#beta vs. P & q = 1 (Beta_0 Only, CTOF)", "#beta vs. P & q = 1 (Beta_0 Only, CTOF);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P for all particles (1e cut)">
@@ -1206,11 +1264,6 @@ void EventAnalyser() {
                                        1000, Chi2_lower_lim, Chi2_upper_lim);
     TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, FD);Proton #chi^{2};",
                                        1000, Chi2_lower_lim, Chi2_upper_lim);
-
-
-
-
-
 
     //<editor-fold desc="Testing Chi2 before cuts">
     TH1D *Chi2_Electron_1e2p_BC_CD = new TH1D("Electron #chi^{2} BC (1e2p & Only Electron #chi^{2} cut, CD)",
@@ -1969,16 +2022,10 @@ void EventAnalyser() {
 //  Getting particle masses for histograms
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Getting particle masses">
-    double m_e = 0.000510999;
-    double m_p = 0.938272;
-    double m_n = 0.939565;
-    double m_pizero = 0.134977;
-    double m_piplus = 0.13957;
-    double m_piminus = 0.13957;
-    double m_Kzero = 0.497614;
-    double m_Kplus = 0.493677;
-    double m_Kminus = 0.493677;
+    //<editor-fold desc="Getting particle masses [GeV]">
+    double m_e = 0.000510999, m_p = 0.938272, m_n = 0.939565;
+    double m_pizero = 0.134977, m_piplus = 0.13957, m_piminus = 0.13957;
+    double m_Kzero = 0.497614, m_Kplus = 0.493677, m_Kminus = 0.493677;
 //    auto db = TDatabasePDG::Instance();
 //    chain.db()->turnOffQADB();
 //    double m_e = db->GetParticle(11)->Mass();
@@ -2087,16 +2134,16 @@ void EventAnalyser() {
         while (c12.next()) { // loop over events
             ++num_of_events; // logging Total #(events)
 
-            qel = mec = res = dis = false;
             auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
-            double processID = c12.mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
-
             auto electrons = c12.getByID(11);
             auto protons = c12.getByID(2212);
             auto neutrons = c12.getByID(2112);
             auto pizero = c12.getByID(111);
             auto piplus = c12.getByID(211);
             auto piminus = c12.getByID(-211);
+
+            qel = mec = res = dis = false;
+            double processID = c12.mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
 
             //<editor-fold desc="Log total #(events) with and without electrons">
             if (electrons.size() == 0) {
@@ -2119,10 +2166,9 @@ void EventAnalyser() {
             } else if (processID == 4) {
                 ++num_of_DIS_events;
                 dis = true;
+            } else {
+                cout << "Could not identify process!\n\n";
             }
-//            else {
-//                cout << "Could not identify process!\n\n";
-//            }
             //</editor-fold>
 
 //  All electrons plots -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2131,7 +2177,6 @@ void EventAnalyser() {
 
             //<editor-fold desc="Beta vs. P (no #(electron) cut, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
-
                 if (AllParticles[i]->getRegion() == CD) {
                     Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
 
@@ -2153,6 +2198,40 @@ void EventAnalyser() {
                         Beta_vs_P_negative_particles_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     }
                 }
+
+                if (AllParticles[i]->par()->getCharge() < 1) { continue; }
+
+                bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
+                bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
+                bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
+                bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
+
+                if (FTOF1A || FTOF1B || FTOF2) {
+                    Beta_vs_P_positive_particles_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    int PID = AllParticles[i]->getPid();
+
+                    if (PID == 11) { Beta_vs_P_Electrons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 2212) { Beta_vs_P_Protons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 211) { Beta_vs_P_piplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 321) { Beta_vs_P_Kplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 45) { Beta_vs_P_deuteron_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 0) { Beta_vs_P_Beta_0_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                }
+
+                if (CTOF) {
+                    Beta_vs_P_positive_particles_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    int PID = AllParticles[i]->getPid();
+
+                    if (PID == 11) { Beta_vs_P_Electrons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 2212) { Beta_vs_P_Protons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 211) { Beta_vs_P_piplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 321) { Beta_vs_P_Kplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 45) { Beta_vs_P_deuteron_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 0) { Beta_vs_P_Beta_0_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                }
+
             } // end of loop over AllParticles vector
             //</editor-fold>
 
@@ -3876,6 +3955,64 @@ void EventAnalyser() {
                       beta_neutron, "Neutrons", true);
         //</editor-fold>
 
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P plots (positive particles in FTOF)">
+        histPlotter2D(c1, Beta_vs_P_positive_particles_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "01_Beta_vs_P_All_Particles_FTOF.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+                      beta_Kminus);
+
+        histPlotter2D(c1, Beta_vs_P_Electrons_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "03_Beta_vs_P_Electrons_Only_FTOF.png", beta_electron, "Electrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_Protons_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "05_Beta_vs_P_Protons_Only_FTOF.png", beta_proton, "Protons", true);
+
+        histPlotter2D(c1, Beta_vs_P_Neutrons_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "07_Beta_vs_P_Neutrons_Only_FTOF.png", beta_neutron, "Neutrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_Kplus_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "08_Beta_vs_P_Kplus_Only_FTOF.png", beta_Kplus, "K^{+}", true);
+
+        histPlotter2D(c1, Beta_vs_P_piplus_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "09_Beta_vs_P_piplus_Only_FTOF.png", beta_piplus, "#pi^{+}", true);
+
+        //TODO: add TF1 plot of deuteron
+        histPlotter2D(c1, Beta_vs_P_deuteron_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "10_Beta_vs_P_deuteron_Only_FTOF.png", beta_neutron, "deuteron", false);
+
+        //TODO: add TF1 plot of beta_0
+        histPlotter2D(c1, Beta_vs_P_Beta_0_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_FTOF_Directory,
+                      "11_Beta_vs_P_Beta_0_Only_FTOF.png", beta_neutron, "Beta_0", false);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P plots (positive particles in CTOF)">
+        histPlotter2D(c1, Beta_vs_P_positive_particles_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "01_Beta_vs_P_All_Particles_CTOF.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+                      beta_Kminus);
+
+        histPlotter2D(c1, Beta_vs_P_Electrons_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "03_Beta_vs_P_Electrons_Only_CTOF.png", beta_electron, "Electrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_Protons_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "05_Beta_vs_P_Protons_Only_CTOF.png", beta_proton, "Protons", true);
+
+        histPlotter2D(c1, Beta_vs_P_Neutrons_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "07_Beta_vs_P_Neutrons_Only_CTOF.png", beta_neutron, "Neutrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_Kplus_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "08_Beta_vs_P_Kplus_Only_CTOF.png", beta_Kplus, "K^{+}", true);
+
+        histPlotter2D(c1, Beta_vs_P_piplus_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "09_Beta_vs_P_piplus_Only_CTOF.png", beta_piplus, "#pi^{+}", true);
+
+        //TODO: add TF1 plot of deuteron
+        histPlotter2D(c1, Beta_vs_P_deuteron_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "10_Beta_vs_P_deuteron_Only_CTOF.png", beta_neutron, "deuteron", false);
+
+        //TODO: add TF1 plot of beta_0
+        histPlotter2D(c1, Beta_vs_P_Beta_0_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_by_charge_CTOF_Directory,
+                      "11_Beta_vs_P_Beta_0_Only_CTOF.png", beta_neutron, "Beta_0", false);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P plots (1e cut)">
