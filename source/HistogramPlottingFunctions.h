@@ -12,7 +12,11 @@
 #include <sys/stat.h>
 #include <sstream>
 
-// histPlotter1D function -----------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
+// histPlotter1D function
+// ======================================================================================================================================================================
+
+// histPlotter1D function (old) -----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter1D function (old)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
@@ -187,6 +191,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 }
 //</editor-fold>
 
+// histPlotter1D function (unsymmetric cuts for SF plots) ---------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="histPlotter1D function (unsymmetric cuts for SF plots)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
@@ -357,6 +363,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 }
 //</editor-fold>
 
+// histPlotter1D function (one-sided cuts for nphe plots) ---------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="histPlotter1D function (one-sided cuts for nphe plots)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
@@ -518,6 +526,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
 }
 //</editor-fold>
+
+// histPlotter1D function (Chi2 for separate plots) ---------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter1D function (Chi2 for separate plots)">
 void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
@@ -695,6 +705,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 
 }
 //</editor-fold>
+
+// histPlotter1D function (applying all Chi2 cuts) ----------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter1D function (applying all Chi2 cuts)">
 void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
@@ -894,7 +906,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 }
 //</editor-fold>
 
-// histPlotter2D function -----------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
+// histPlotter2D function
+// ======================================================================================================================================================================
+
+// histPlotter2D function (Beta vs. P plots, all particles) -------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter2D function (Beta vs. P plots, all particles)">
 void histPlotter2D(TCanvas *Histogram1DCanvas,
@@ -966,6 +982,8 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
 }
 //</editor-fold>
 
+// histPlotter2D function (Beta vs. P plots, single particle) -----------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="histPlotter2D function (Beta vs. P plots, single particle)">
 void histPlotter2D(TCanvas *Histogram1DCanvas,
                    TH2D *Histogram2D,
@@ -1032,6 +1050,8 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
 
 }
 //</editor-fold>
+
+// histPlotter2D function (Beta vs. P plots, by charge) -----------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter2D function (Beta vs. P plots, by charge)">
 void histPlotter2D(TCanvas *Histogram1DCanvas,
