@@ -37,10 +37,10 @@ std::string file_name = "general_file";
 
 // hipo files:
 
-////std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-////std::string AnalyseFile = "e_on_1000060120_EMMEC_MCmaster_test.root";
-//std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
-////std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
+//std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
+//std::string AnalyseFile = "e_on_1000060120_EMMEC_MCmaster_test.root";
+std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
+//std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
 
 //std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
