@@ -423,7 +423,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_inclusive = false, calculate_2p = false, calculate_1n1p = false, calculate_MicroBooNE = false;
+    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = false;
     bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false, selection_test_MicroBooNE = false;
     //</editor-fold>
 
@@ -2631,10 +2631,10 @@ void EventAnalyser() {
 
 //  1e2p cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            if (protons.size() == 2) { // for 2p calculations
+            if ((calculate_2p == true) && (protons.size() == 2)) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-                //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
+            //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts">
 
@@ -2681,7 +2681,7 @@ void EventAnalyser() {
                 nphe_All_Int_1e2p_BC_FD->Fill(nphe);
 
                 // nphe after cuts:
-                if (nphe >= nphe_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+                if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
                 //</editor-fold>
 
                 //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
@@ -2796,49 +2796,49 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-                //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
+            //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying cuts">
 
                 //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying SF cuts (electrons only)">
-                if ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut)) { continue; }
+                if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
                 //</editor-fold>
 
                 //  Applying fiducial cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying fiducial cuts (electrons only)">
-                if (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv) { continue; }
-                if (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw) { continue; }
+                if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+                if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
                 //</editor-fold>
 
                 //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying nphe cuts">
-                if (nphe < nphe_cut) { continue; }
+                if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
                 //</editor-fold>
 
                 //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying Chi2 cuts">
                 if (electrons[0]->getRegion() == CD) {
-                    if ((fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+                    if ((apply_chi2_cuts == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
                 } else if (electrons[0]->getRegion() == FD) {
-                    if ((fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+                    if ((apply_chi2_cuts == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
                 }
 
                 // TODO: move proton blocks here to for loop to save some space
                 if (protons[0]->getRegion() == CD) {
-                    if ((fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+                    if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
                 } else if (protons[0]->getRegion() == FD) {
-                    if ((fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+                    if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
                 }
 
                 if (protons[1]->getRegion() == CD) {
-                    if ((fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+                    if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
                 } else if (protons[1]->getRegion() == FD) {
-                    if ((fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+                    if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
                 }
 
                 ++num_of_events_1e2p_w_allChi2_cuts;
@@ -2847,7 +2847,7 @@ void EventAnalyser() {
                 //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying dVz cuts">
-                if ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut)) { continue; }
+                if ((apply_dVz_cuts == true) && ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut))) { continue; }
                 //</editor-fold>
 
                 //</editor-fold>
@@ -5480,18 +5480,18 @@ void EventAnalyser() {
 
         histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, .1, "#Photo-electrons in HTCC (n_{phe} ) Before Cuts", "All Int., 1e2p",
                       plots, 2, false, true, nphe_1e2p_Stack, "01_nphe_1e2p_before_nphe_cuts", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true,
-                      nphe_cut, 0, false);
+                      nphe_lower_cut, 0, false);
 
         histPlotter1D(c1, nphe_All_Int_1e2p_AC_FD, normalized_nphe_plots, true, .1, "#Photo-electrons in HTCC (n_{phe} ) After Cuts", "All Int., 1e2p",
                       plots, 2, false, true, nphe_1e2p_Stack, "02_nphe_1e2p_after_nphe_cuts", nphe_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true,
-                      nphe_cut, 0, false);
+                      nphe_lower_cut, 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Number of Photo-electrons (nphe) histogram (2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
         histPlotter1D(c1, nphe_All_Int_2p_FD, normalized_nphe_plots, true, .1, "#Photo-electrons in HTCC (n_{phe} )", "All Int., 2p", plots, 2, false,
-                      true, nphe_2p_Stack, "nphe_2p", nphe_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, nphe_cut, 0, false);
+                      true, nphe_2p_Stack, "nphe_2p", nphe_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut, 0, false);
         //</editor-fold>
 
     } else {
@@ -6161,6 +6161,32 @@ void EventAnalyser() {
     myLogFile << "P_R_upper_lim_MicroBooNE = " << P_R_upper_lim_MicroBooNE << "\n";
     myLogFile << "P_R_lower_lim_MicroBooNE = " << P_R_lower_lim_MicroBooNE << "\n";
     myLogFile << "P_pion_upper_lim_MicroBooNE = " << P_pion_upper_lim_MicroBooNE << "\n\n\n";
+
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Sampling Fraction (SF) cuts (electrons only, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "apply_SF_cuts = " << BoolToString(apply_SF_cuts) << "\n";
+    myLogFile << "SF_1e2p_upper_cut = " << SF_1e2p_upper_cut << "\n";
+    myLogFile << "SF_1e2p_lower_cut = " << SF_1e2p_lower_cut << "\n";
+    myLogFile << "SF_1e2p_Xmax (from histogram) = " << SF_1e2p_Xmax << "\n";
+    myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n\n";
+
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Fiducial cuts (electrons only, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "apply_Lv_cut = " << BoolToString(apply_Lv_cut) << "\n";
+    myLogFile << "fiducial_cut_Lv = " << fiducial_cut_Lv << "\n";
+    myLogFile << "apply_Lw_cut = " << BoolToString(apply_Lw_cut) << "\n";
+    myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n\n";
+
+    myLogFile << "===========================================================================\n";
+    myLogFile << "Number of Photo-electrons (nphe) cuts (electrons only, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "apply_nphe_cut = " << BoolToString(apply_nphe_cut) << "\n";
+    myLogFile << "nphe_lower_cut = " << nphe_lower_cut << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Chi2 cuts\n";
