@@ -120,7 +120,7 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "By_charge", "By_charge/Positive_p_in_FTOF", "By_charge/Positive_p_in_CTOF"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "By_charge", "By_charge/Positive_hadrons_FTOF", "By_charge/Positive_hadrons_CTOF"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -2207,29 +2207,43 @@ void EventAnalyser() {
                 bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
 
                 if (FTOF1A || FTOF1B || FTOF2) {
-                    Beta_vs_P_positive_particles_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    Beta_vs_P_positive_particles_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    Beta_vs_P_positive_particles_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID);
 
                     int PID = AllParticles[i]->getPid();
 
-                    if (PID == 11) { Beta_vs_P_Electrons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 2212) { Beta_vs_P_Protons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 211) { Beta_vs_P_piplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 321) { Beta_vs_P_Kplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 45) { Beta_vs_P_deuteron_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 0) { Beta_vs_P_Beta_0_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 11) { Beta_vs_P_Electrons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 2212) { Beta_vs_P_Protons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 211) { Beta_vs_P_piplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 321) { Beta_vs_P_Kplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 45) { Beta_vs_P_deuteron_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 0) { Beta_vs_P_Beta_0_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 11) { Beta_vs_P_Electrons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 2212) { Beta_vs_P_Protons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 211) { Beta_vs_P_piplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 321) { Beta_vs_P_Kplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 45) { Beta_vs_P_deuteron_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 0) { Beta_vs_P_Beta_0_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
                 }
 
                 if (CTOF) {
-                    Beta_vs_P_positive_particles_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    Beta_vs_P_positive_particles_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    Beta_vs_P_positive_particles_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID);
 
                     int PID = AllParticles[i]->getPid();
 
-                    if (PID == 11) { Beta_vs_P_Electrons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 2212) { Beta_vs_P_Protons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 211) { Beta_vs_P_piplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 321) { Beta_vs_P_Kplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 45) { Beta_vs_P_deuteron_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-                    if (PID == 0) { Beta_vs_P_Beta_0_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 11) { Beta_vs_P_Electrons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 2212) { Beta_vs_P_Protons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 211) { Beta_vs_P_piplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 321) { Beta_vs_P_Kplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 45) { Beta_vs_P_deuteron_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+//                    if (PID == 0) { Beta_vs_P_Beta_0_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
+                    if (PID == 11) { Beta_vs_P_Electrons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 2212) { Beta_vs_P_Protons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 211) { Beta_vs_P_piplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 321) { Beta_vs_P_Kplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 45) { Beta_vs_P_deuteron_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
+                    if (PID == 0) { Beta_vs_P_Beta_0_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(),processID); }
                 }
 
             } // end of loop over AllParticles vector
@@ -2882,8 +2896,6 @@ void EventAnalyser() {
 
                 for (auto &e: electrons) {
                     if (e->getRegion() == CD) {
-//                        Beta_vs_P_2p_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
-
                         E_e_2p_CD->Fill(E_e_CD);
                         Theta_e_2p_CD->Fill(theta_e_1e_CD);
                         Phi_e_2p_CD->Fill(phi_e_1e_CD);
@@ -2928,8 +2940,6 @@ void EventAnalyser() {
                         }
 
                     } else if (e->getRegion() == FD) {
-//                        Beta_vs_P_2p_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
-
                         E_e_2p_FD->Fill(E_e_FD);
                         Theta_e_2p_FD->Fill(theta_e_1e_FD);
                         Phi_e_2p_FD->Fill(phi_e_1e_FD);
