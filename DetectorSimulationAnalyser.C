@@ -2166,8 +2166,8 @@ void EventAnalyser() {
             } else if (processID == 4) {
                 ++num_of_DIS_events;
                 dis = true;
-            } else {
-                cout << "Could not identify process!\n\n";
+//            } else {
+//                cout << "Could not identify process!\n\n";
             }
             //</editor-fold>
 
