@@ -1,8 +1,6 @@
 #define gst_cxx
 
 #include "TFile.h"
-#include "TruthLevelAnalyser.h"
-#include "codeSetup.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -13,6 +11,9 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+
+#include "codeSetup.h"
+#include "TruthLevelAnalyser.h"
 
 using namespace
 std;

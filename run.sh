@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INPUT=""
+# INPUT=""
 
 clas12root -b -q ./main.c
 
