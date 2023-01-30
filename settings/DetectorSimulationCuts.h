@@ -5,6 +5,8 @@
 #ifndef DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
 #define DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
 
+//TODO: confirm that turning all the cuts switchs off restores the before plots
+
 // Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">

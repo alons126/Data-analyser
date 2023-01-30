@@ -180,6 +180,28 @@ void EventAnalyser() {
     string Vertex_1e2p_dV_AC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
     //</editor-fold>
 
+    //<editor-fold desc="Timing plots directories">
+    bool create_timing_Dir = true;
+    string timing_Parent_Directory = "Timing_plots";
+    string timing_Daughter_Folders[] = {"", "Event_start_time", "Particle_ToF"};
+
+    for (string folders_name: timing_Daughter_Folders) {
+        MakeDirectory(create_timing_Dir, timing_Parent_Directory, folders_name);
+    }
+
+    // TODO: remove all regular timing plots
+    string timing_event_start_time_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[1] + "/";
+    string timing_Particle_ToF_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[2] + "/";
+
+//    string timing_Only_1e_by_comp_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[3] + "/";
+//    string timing_Only_1e_dV_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[4] + "/";
+//
+//    string timing_1e2p_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
+//    string timing_1e2p_dV_BC_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
+//
+//    string timing_1e2p_dV_AC_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[7] + "/";
+    //</editor-fold>
+
     //<editor-fold desc="Theta_e plots directories">
     bool create_Theta_e_Dir = true;
     string Theta_e_Parent_Directory = "Ang_histograms";
@@ -438,6 +460,8 @@ void EventAnalyser() {
 
     bool Vertex_plots = true;
 
+    bool timing_plots = true;
+
     bool Angle_plots = true, Theta_e_plots = true, Phi_e_plots = true;
     if (Angle_plots == false) { Theta_e_plots = Phi_e_plots = false; }
 
@@ -481,6 +505,8 @@ void EventAnalyser() {
 
     bool normalized_vertex_plots = false;
 
+    bool normalized_timing_plots = false;
+
     bool normalized_Angle_plots = false;
 
     bool normalized_Q2_plots = false;
@@ -511,7 +537,7 @@ void EventAnalyser() {
     bool normalized_P_lp_plots = false, normalized_P_L_plots = false, normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
-        normalized_chi2_plots = normalized_vertex_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_E_e_plots = normalized_theta_lp_plots = false;
+        normalized_chi2_plots = normalized_vertex_plots = normalized_timing_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_E_e_plots = normalized_SF_plots = normalized_nphe_plots = normalized_theta_lp_plots = normalized_fiducial_plots = normalized_theta_lp_plots = false;
 
         normalized_theta_p1_plots = normalized_theta_p2_plots = normalized_dtheta_2p_plots = false; // 2p
 
@@ -1397,6 +1423,24 @@ void EventAnalyser() {
                                                 "dV_{y}=V^{e}_{y}-V^{p}_{y} (1e2p & All #chi^{2} cuts, CD & FD);dV_{y} [cm];", 1000, dV_lower_lim, dV_upper_lim);
     TH1D *deltaVz_after_dV_cuts_1e2p = new TH1D("dV_{z} (1e2p w/ #chi^{2} & dV cuts, CD & FD)",
                                                 "dV_{z}=V^{e}_{z}-V^{p}_{z} (1e2p & All #chi^{2} cuts, CD & FD);dV_{z} [cm];", 1000, dV_lower_lim, dV_upper_lim);
+    //</editor-fold>
+
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Timing plots
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Timing plots">
+
+    //<editor-fold desc="Event Start Time (CD & FD)">
+    THStack *timing_Stack = new THStack("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];");
+
+    TH1D *Event_start_time_histogram = new TH1D("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];", 100, -100, 100);
+    string Event_start_time_histogram_Dir = timing_event_start_time_Directory;
+
+    TH1D *Particle_ToF_histogram = new TH1D("Particle ToF (CD & FD)", "Particle Time of Flight t_{ToF} (CD & FD);t_{ToF} [ns];", 100, -100, 100);
+    string Particle_ToF_histogram_Dir = timing_Particle_ToF_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -2335,6 +2379,12 @@ void EventAnalyser() {
             } // end of loop over protons vector
             //</editor-fold>
 
+            //
+
+            Event_start_time_histogram->Fill(c12.event()->getStartTime());
+
+            //
+
             //</editor-fold>
 
 //  1e cut --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2356,6 +2406,8 @@ void EventAnalyser() {
 
             //<editor-fold desc="Fill Beta vs. P (1e only, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
+                Particle_ToF_histogram->Fill(AllParticles[i]->getTime());
+
                 if (AllParticles[i]->getRegion() == CD) {
                     Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 } else if (AllParticles[i]->getRegion() == FD) {
@@ -2634,7 +2686,7 @@ void EventAnalyser() {
             if ((calculate_2p == true) && (protons.size() == 2)) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-            //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
+                //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts">
 
@@ -2796,7 +2848,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
-            //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
+                //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying cuts">
 
@@ -4237,6 +4289,40 @@ void EventAnalyser() {
 
     } else {
         cout << "\n\nVertex plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+// ======================================================================================================================================================================
+// Vertex plots
+// ======================================================================================================================================================================
+
+    //<editor-fold desc="Vertex plots">
+    if (timing_plots) {
+
+        cout << "\n\nPlotting timing plots...\n\n";
+
+//        //<editor-fold desc="Finding Xmax">
+//        dVx_Xmax = deltaVx_before_dV_cuts_1e2p->GetBinCenter(deltaVx_before_dV_cuts_1e2p->GetMaximumBin());
+//        dVy_Xmax = deltaVy_before_dV_cuts_1e2p->GetBinCenter(deltaVy_before_dV_cuts_1e2p->GetMaximumBin());
+//        dVz_Xmax = deltaVz_before_dV_cuts_1e2p->GetBinCenter(deltaVz_before_dV_cuts_1e2p->GetMaximumBin());
+//        //</editor-fold>
+
+//  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
+
+        //<editor-fold desc="dV plots before dV cuts (1e2p, CD & FD)">
+        histPlotter1D(c1, Event_start_time_histogram, normalized_timing_plots, true, .1, "Event Start Time t_{start}", "All Events", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, timing_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue);
+//                      plots, 2, false, true, Event_start_time_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, Particle_ToF_histogram, normalized_timing_plots, true, .1, "Particle Time of Flight t_{ToF}", "All Events", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, timing_Stack, "Particle_ToF", Particle_ToF_histogram_Dir, "CD & FD", kBlue);
+//                      plots, 2, false, true, Event_start_time_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVx_cut, dVx_peak);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nTiming plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
