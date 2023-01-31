@@ -194,15 +194,9 @@ void EventAnalyser() {
     string timing_Particle_ToF_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[2] + "/";
     string timing_ToF_from_beta_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[3] + "/";
     string timing_Electron_path_length_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[4] + "/";
-    string timing_Beta_VS_P_from_FTOF_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
-
-//    string timing_Only_1e_by_comp_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[3] + "/";
-//    string timing_Only_1e_dV_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[4] + "/";
-//
-//    string timing_1e2p_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
-//    string timing_1e2p_dV_BC_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
-//
-//    string timing_1e2p_dV_AC_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[7] + "/";
+    string timing_Beta_VS_P_from_FTOF1A_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
+    string timing_Beta_VS_P_from_FTOF1B_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
+    string timing_Beta_VS_P_from_FTOF2_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Theta_e plots directories">
@@ -1474,11 +1468,11 @@ void EventAnalyser() {
     //<editor-fold desc="Event Start Time (CD & FD)">
     THStack *timing_Stack = new THStack("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];");
 
-    TH1D *Event_start_time_histogram = new TH1D("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];", 250, -100, 100);
+    TH1D *Event_start_time_histogram = new TH1D("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];", 250, -1, 1);
     string Event_start_time_histogram_Dir = timing_event_start_time_Directory;
 
     //TODO: remove Particle_ToF_histogram from code (does not look to add anyting)
-    TH1D *Particle_ToF_histogram = new TH1D("Particle ToF (CD & FD)", "Particle Time of Flight t_{ToF} (CD & FD);t_{ToF} [ns];", 250, -100, 100);
+    TH1D *Particle_ToF_histogram = new TH1D("Particle ToF (CD & FD)", "Particle Time of Flight t_{ToF} (CD & FD);t_{ToF} [ns];", 250, -1, 1);
     string Particle_ToF_histogram_Dir = timing_Particle_ToF_Directory;
 
     TH1D *Electron_ToF_from_beta_histogram_CD = new TH1D("e^{-} ToF from #beta (1e Cut, CD)",
@@ -1488,14 +1482,19 @@ void EventAnalyser() {
     string Electron_ToF_from_beta_histogram_CD_Dir = timing_ToF_from_beta_Directory, Electron_ToF_from_beta_histogram_FD_Dir = timing_ToF_from_beta_Directory;
 
     TH1D *Electron_path_length_histogram_CD = new TH1D("e^{-} Path Length L (1e Cut, CD)",
-                                                       "e^{-} Path Length L (1e Cut, CD);L [???];", 250, 0, 1000);
+                                                       "e^{-} Path Length L (1e Cut, CD);L [cm?];", 250, 0, 1000);
     TH1D *Electron_path_length_histogram_FD = new TH1D("e^{-} Path Length L (1e Cut, FD)",
-                                                       "e^{-} Path Length L (1e Cut, FD);L [???];", 250, 0, 1000);
+                                                       "e^{-} Path Length L (1e Cut, FD);L [cm?];", 250, 0, 1000);
     string Electron_path_length_histogram_CD_Dir = timing_Electron_path_length_Directory, Electron_path_length_histogram_FD_Dir = timing_Electron_path_length_Directory;
 
-    TH2D *Beta_VS_P_from_FTOF_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF)", "#beta vs. P From ToF (1e Cut, FTOF);P [GeV];#beta",
-                                                   250, 0, beamE * 1.425, 250, 0, 1.1);
-    string Beta_VS_P_from_FTOF_histogram_Dir = timing_Beta_VS_P_from_FTOF_Directory;
+    TH2D *Beta_VS_P_from_FTOF1A_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF1A)", "#beta vs. P From ToF (1e Cut, FTOF1A);P [GeV];#beta",
+                                                     250, 0, beamE * 1.425, 250, 0, 2);
+    TH2D *Beta_VS_P_from_FTOF1B_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF1B)", "#beta vs. P From ToF (1e Cut, FTOF1B);P [GeV];#beta",
+                                                     250, 0, beamE * 1.425, 250, 0, 2);
+    TH2D *Beta_VS_P_from_FTOF2_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF2)", "#beta vs. P From ToF (1e Cut, FTOF2);P [GeV];#beta",
+                                                    250, 0, beamE * 1.425, 250, 0, 2);
+    string Beta_VS_P_from_FTOF1A_histogram_Dir = timing_Beta_VS_P_from_FTOF1A_Directory, Beta_VS_P_from_FTOF1B_histogram_Dir = timing_Beta_VS_P_from_FTOF1A_Directory;
+    string Beta_VS_P_from_FTOF2_histogram_Dir = timing_Beta_VS_P_from_FTOF1A_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -2475,16 +2474,38 @@ void EventAnalyser() {
                     bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
                     bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
                     bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
-                    bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
+//                    bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
 
-//                if (FTOF1B) {
-//                if (FTOF1A) {
-                    if (FTOF1A || FTOF1B || FTOF2) {
-                        double Time_of_Filght_FD = AllParticles[i]->sci(FTOF1B)->getTime();
-                        double Path_of_Filght_FD = AllParticles[i]->sci(FTOF1B)->getPath();
-                        double Beta_ToF = Path_of_Filght_FD / (c * Time_of_Filght_FD);
+                    //TODO: rename Beta_VS_P_from_FTOF plots for charged particles
+                    //TODO: add Beta_VS_P_from_CTOF plots for charged particles
+                    //TODO: add Beta_VS_P_from TOF plots for neutral particles?
+//                    if (FTOF1A) {
+                    if (FTOF1A && AllParticles[i]->par()->getCharge() != 0) {
+//                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime();
+                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime() - c12.event()->getStartTime();
+//                        double Path_of_Filght_FTOF1A = rCalc(AllParticles[i]->sci(FTOF1A)->getX(),AllParticles[i]->sci(FTOF1A)->getY(),AllParticles[i]->sci(FTOF1A)->getZ());
+                        double Path_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getPath();
+                        double Beta_ToF = Path_of_Filght_FTOF1A / (c * Time_of_Filght_FTOF1A);
 
-                        Beta_VS_P_from_FTOF_histogram->Fill(AllParticles[i]->getP(), 3.14*2 * Beta_ToF);
+                        Beta_VS_P_from_FTOF1A_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
+                    }
+
+//                    if (FTOF1B) {
+                    if (FTOF1B && AllParticles[i]->par()->getCharge() != 0) {
+                        double Time_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getTime() - c12.event()->getStartTime();
+                        double Path_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getPath();
+                        double Beta_ToF = Path_of_Filght_FTOF1B / (c * Time_of_Filght_FTOF1B);
+
+                        Beta_VS_P_from_FTOF1B_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
+                    }
+
+//                    if (FTOF2) {
+                    if (FTOF2 && AllParticles[i]->par()->getCharge() != 0) {
+                        double Time_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getTime() - c12.event()->getStartTime();
+                        double Path_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getPath();
+                        double Beta_ToF = Path_of_Filght_FTOF2 / (c * Time_of_Filght_FTOF2);
+
+                        Beta_VS_P_from_FTOF2_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
                     }
 
                 }
@@ -4573,8 +4594,16 @@ void EventAnalyser() {
         histPlotter1D(c1, Electron_path_length_histogram_FD, normalized_timing_plots, true, .1, "e^{-} Path Length L", "1e Cut", 0.06, 0.0425,
                       0.0425, plots, 2, false, true, timing_Stack, "01_Electron_path_length_FD", Electron_path_length_histogram_FD_Dir, "FD", kBlue);
 
-        histPlotter2D(c1, Beta_VS_P_from_FTOF_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF_histogram_Dir,
-                      "01_Beta_VS_P_from_FTOF.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+        histPlotter2D(c1, Beta_VS_P_from_FTOF1A_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF1A_histogram_Dir,
+                      "01_Beta_VS_P_from_FTOF1A.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+                      beta_Kminus);
+
+        histPlotter2D(c1, Beta_VS_P_from_FTOF1B_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF1B_histogram_Dir,
+                      "02_Beta_VS_P_from_FTOF1B.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+                      beta_Kminus);
+
+        histPlotter2D(c1, Beta_VS_P_from_FTOF2_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF2_histogram_Dir,
+                      "03_Beta_VS_P_from_FTOF2.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
                       beta_Kminus);
         //</editor-fold>
 
