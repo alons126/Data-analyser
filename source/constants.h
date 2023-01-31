@@ -1,0 +1,10 @@
+//
+// Created by alons on 31/01/2023.
+//
+
+#ifndef DETECTORSIMULATIONANALYSER_C_CONSTANTS_H
+#define DETECTORSIMULATIONANALYSER_C_CONSTANTS_H
+
+const double c = 29.9792458; // speed of light in cm/ns
+
+#endif //DETECTORSIMULATIONANALYSER_C_CONSTANTS_H

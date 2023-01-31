@@ -120,7 +120,7 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "By_charge", "By_charge/Positive_hadrons_FTOF", "By_charge/Positive_hadrons_CTOF"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "1e_cut", "By_charge", "By_charge/Positive_hadrons_FTOF", "By_charge/Positive_hadrons_CTOF"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -183,7 +183,7 @@ void EventAnalyser() {
     //<editor-fold desc="Timing plots directories">
     bool create_timing_Dir = true;
     string timing_Parent_Directory = "Timing_plots";
-    string timing_Daughter_Folders[] = {"", "Event_start_time", "Particle_ToF"};
+    string timing_Daughter_Folders[] = {"", "Event_start_time", "Particle_ToF", "ToF_from_beta", "Path_length", "Beta_from_FTOF"};
 
     for (string folders_name: timing_Daughter_Folders) {
         MakeDirectory(create_timing_Dir, timing_Parent_Directory, folders_name);
@@ -192,6 +192,9 @@ void EventAnalyser() {
     // TODO: remove all regular timing plots
     string timing_event_start_time_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[1] + "/";
     string timing_Particle_ToF_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[2] + "/";
+    string timing_ToF_from_beta_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[3] + "/";
+    string timing_Electron_path_length_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[4] + "/";
+    string timing_Beta_VS_P_from_FTOF_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
 
 //    string timing_Only_1e_by_comp_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[3] + "/";
 //    string timing_Only_1e_dV_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[4] + "/";
@@ -1215,6 +1218,41 @@ void EventAnalyser() {
                                                    250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_1e_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, 1e only, FD)", "#beta vs. P (Neutrons Only, 1e Cut, FD);P [GeV];#beta",
                                                    250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_piplus_Only_CD = new TH2D("#beta vs. P (#pi^{+} Only, 1e only, CD)", "#beta vs. P (#pi^{+} Only, 1e Cut, CD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_piplus_Only_FD = new TH2D("#beta vs. P (#pi^{+} Only, 1e only, FD)", "#beta vs. P (#pi^{+} Only, 1e Cut, FD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_pizero_Only_CD = new TH2D("#beta vs. P (#pi^{0} Only, 1e only, CD)", "#beta vs. P (#pi^{0} Only, 1e Cut, CD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_pizero_Only_FD = new TH2D("#beta vs. P (#pi^{0} Only, 1e only, FD)", "#beta vs. P (#pi^{0} Only, 1e Cut, FD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_piminus_Only_CD = new TH2D("#beta vs. P (#pi^{-} Only, 1e only, CD)", "#beta vs. P (#pi^{-} Only, 1e Cut, CD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_piminus_Only_FD = new TH2D("#beta vs. P (#pi^{-} Only, 1e only, FD)", "#beta vs. P (#pi^{-} Only, 1e Cut, FD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_Kplus_Only_CD = new TH2D("#beta vs. P (K^{+} Only, 1e only, CD)", "#beta vs. P (K^{+} Only, 1e Cut, CD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Kplus_Only_FD = new TH2D("#beta vs. P (K^{+} Only, 1e only, FD)", "#beta vs. P (K^{+} Only, 1e Cut, FD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_Kzero_Only_CD = new TH2D("#beta vs. P (K^{0} Only, 1e only, CD)", "#beta vs. P (K^{0} Only, 1e Cut, CD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Kzero_Only_FD = new TH2D("#beta vs. P (K^{0} Only, 1e only, FD)", "#beta vs. P (K^{0} Only, 1e Cut, FD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_Kminus_Only_CD = new TH2D("#beta vs. P (K^{-} Only, 1e only, CD)", "#beta vs. P (K^{-} Only, 1e Cut, CD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Kminus_Only_FD = new TH2D("#beta vs. P (K^{-} Only, 1e only, FD)", "#beta vs. P (K^{-} Only, 1e Cut, FD);P [GeV];#beta",
+                                                 250, 0, beamE * 1.425, 250, 0, 3);
+
+    TH2D *Beta_vs_P_1e_Photons_Only_CD = new TH2D("#beta vs. P (#gamma Only, 1e only, CD)", "#beta vs. P (#gamma Only, 1e Cut, CD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_1e_Photons_Only_FD = new TH2D("#beta vs. P (#gamma Only, 1e only, FD)", "#beta vs. P (#gamma Only, 1e Cut, FD);P [GeV];#beta",
+                                                  250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P (by charge)">
@@ -1436,11 +1474,28 @@ void EventAnalyser() {
     //<editor-fold desc="Event Start Time (CD & FD)">
     THStack *timing_Stack = new THStack("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];");
 
-    TH1D *Event_start_time_histogram = new TH1D("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];", 100, -100, 100);
+    TH1D *Event_start_time_histogram = new TH1D("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];", 250, -100, 100);
     string Event_start_time_histogram_Dir = timing_event_start_time_Directory;
 
-    TH1D *Particle_ToF_histogram = new TH1D("Particle ToF (CD & FD)", "Particle Time of Flight t_{ToF} (CD & FD);t_{ToF} [ns];", 100, -100, 100);
+    //TODO: remove Particle_ToF_histogram from code (does not look to add anyting)
+    TH1D *Particle_ToF_histogram = new TH1D("Particle ToF (CD & FD)", "Particle Time of Flight t_{ToF} (CD & FD);t_{ToF} [ns];", 250, -100, 100);
     string Particle_ToF_histogram_Dir = timing_Particle_ToF_Directory;
+
+    TH1D *Electron_ToF_from_beta_histogram_CD = new TH1D("e^{-} ToF from #beta (1e Cut, CD)",
+                                                         "e^{-} Time of Flight t_{ToF} from #beta (1e Cut, CD);t_{ToF} = L/(c*#beta) [ns];", 250, -100000, 100000);
+    TH1D *Electron_ToF_from_beta_histogram_FD = new TH1D("e^{-} ToF from #beta (1e Cut, FD)",
+                                                         "e^{-} Time of Flight t_{ToF} from #beta (1e Cut, FD);t_{ToF} = L/(c*#beta) [ns];", 250, -100000, 100000);
+    string Electron_ToF_from_beta_histogram_CD_Dir = timing_ToF_from_beta_Directory, Electron_ToF_from_beta_histogram_FD_Dir = timing_ToF_from_beta_Directory;
+
+    TH1D *Electron_path_length_histogram_CD = new TH1D("e^{-} Path Length L (1e Cut, CD)",
+                                                       "e^{-} Path Length L (1e Cut, CD);L [???];", 250, 0, 1000);
+    TH1D *Electron_path_length_histogram_FD = new TH1D("e^{-} Path Length L (1e Cut, FD)",
+                                                       "e^{-} Path Length L (1e Cut, FD);L [???];", 250, 0, 1000);
+    string Electron_path_length_histogram_CD_Dir = timing_Electron_path_length_Directory, Electron_path_length_histogram_FD_Dir = timing_Electron_path_length_Directory;
+
+    TH2D *Beta_VS_P_from_FTOF_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF)", "#beta vs. P From ToF (1e Cut, FTOF);P [GeV];#beta",
+                                                   250, 0, beamE * 1.425, 250, 0, 1.1);
+    string Beta_VS_P_from_FTOF_histogram_Dir = timing_Beta_VS_P_from_FTOF_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -2157,12 +2212,16 @@ void EventAnalyser() {
             ++num_of_events; // logging Total #(events)
 
             auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
-            auto electrons = c12.getByID(11);
-            auto protons = c12.getByID(2212);
             auto neutrons = c12.getByID(2112);
-            auto pizero = c12.getByID(111);
+            auto protons = c12.getByID(2212);
+            auto Kplus = c12.getByID(321);
+            auto Kminus = c12.getByID(-321);
+            auto Kzero = c12.getByID(311);
             auto piplus = c12.getByID(211);
             auto piminus = c12.getByID(-211);
+            auto pizero = c12.getByID(111);
+            auto electrons = c12.getByID(11);
+            auto photons = c12.getByID(22);
 
             qel = mec = res = dis = false;
             double processID = c12.mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
@@ -2351,6 +2410,16 @@ void EventAnalyser() {
             } // end of loop over electrons vector
             //</editor-fold>
 
+            //<editor-fold desc="Neutron Beta vs. P plots (no #(electron) cut, CD & FD)">
+            for (auto &n: neutrons) {
+                if (n->getRegion() == CD) {
+                    Beta_vs_P_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
+                } else if (n->getRegion() == FD) {
+                    Beta_vs_P_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
             //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
             for (auto &p: protons) {
                 if (p->getRegion() == CD) {
@@ -2365,16 +2434,6 @@ void EventAnalyser() {
                     Vertex_Proton_Vx_FD_test.Fill(p->par()->getVx());
                     Vertex_Proton_Vy_FD_test.Fill(p->par()->getVy());
                     Vertex_Proton_Vz_FD_test.Fill(p->par()->getVz());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="Neutron Beta vs. P plots (no #(electron) cut, CD & FD)">
-            for (auto &n: neutrons) {
-                if (n->getRegion() == CD) {
-                    Beta_vs_P_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
-                } else if (n->getRegion() == FD) {
-                    Beta_vs_P_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -2397,7 +2456,7 @@ void EventAnalyser() {
                 if (electrons.size() > 1) {
                     ++num_of_events_more_then_1e; // logging #(events) w/ more then 1e
                 }
-            } // applying 1e only
+            }
 
             if (electrons.size() != 1) { continue; } // applying 1e only
             ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
@@ -2412,13 +2471,29 @@ void EventAnalyser() {
                     Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                 } else if (AllParticles[i]->getRegion() == FD) {
                     Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
+                    bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
+                    bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
+                    bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
+
+//                if (FTOF1B) {
+//                if (FTOF1A) {
+                    if (FTOF1A || FTOF1B || FTOF2) {
+                        double Time_of_Filght_FD = AllParticles[i]->sci(FTOF1B)->getTime();
+                        double Path_of_Filght_FD = AllParticles[i]->sci(FTOF1B)->getPath();
+                        double Beta_ToF = Path_of_Filght_FD / (c * Time_of_Filght_FD);
+
+                        Beta_VS_P_from_FTOF_histogram->Fill(AllParticles[i]->getP(), 3.14*2 * Beta_ToF);
+                    }
+
                 }
             } // end of loop over AllParticles vector
             //</editor-fold>
 
             //<editor-fold desc="Fill Electron plots (1e only, CD & FD)">
-            double theta_e_1e_CD, phi_e_1e_CD, P_e_CD, E_e_CD, e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD;
-            double theta_e_1e_FD, phi_e_1e_FD, P_e_FD, E_e_FD, e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD;
+            double theta_e_1e_CD, phi_e_1e_CD, P_e_CD, E_e_CD, e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD, e_ToF_CD;
+            double theta_e_1e_FD, phi_e_1e_FD, P_e_FD, E_e_FD, e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD, e_ToF_FD;
 
             for (auto &e: electrons) {
                 if (e->getRegion() == CD) {
@@ -2426,6 +2501,10 @@ void EventAnalyser() {
                     E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
                     E_e_hist_CD->Fill(E_e_CD);
                     Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
+
+                    e_ToF_CD = (e->getPath()) / (c * (e->par()->getBeta()));
+                    Electron_ToF_from_beta_histogram_CD->Fill(e_ToF_CD);
+                    Electron_path_length_histogram_CD->Fill(e->getPath());
 
                     theta_e_1e_CD = e->getTheta() * 180.0 / 3.14159265359; // theta_e_1e_CD in deg
                     Theta_e_1e_CD->Fill(theta_e_1e_CD);
@@ -2501,6 +2580,10 @@ void EventAnalyser() {
                     E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
                     E_e_hist_FD->Fill(E_e_FD);
                     Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
+
+                    e_ToF_FD = (e->getPath()) / (c * (e->par()->getBeta()));
+                    Electron_ToF_from_beta_histogram_FD->Fill(e_ToF_FD);
+                    Electron_path_length_histogram_FD->Fill(e->getPath());
 
                     theta_e_1e_FD = e->getTheta() * 180.0 / 3.14159265359; // theta_e_1e_FD in deg
                     Theta_e_1e_FD->Fill(theta_e_1e_FD);
@@ -2663,6 +2746,76 @@ void EventAnalyser() {
                     Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
                 } else if (n->getRegion() == FD) {
                     Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="Kplus Beta vs. P plots (1e only, CD & FD)">
+            for (auto &Kp: Kplus) {
+                if (Kp->getRegion() == CD) {
+                    Beta_vs_P_1e_Kplus_Only_CD->Fill(Kp->getP(), Kp->par()->getBeta());
+                } else if (Kp->getRegion() == FD) {
+                    Beta_vs_P_1e_Kplus_Only_FD->Fill(Kp->getP(), Kp->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="Kminus Beta vs. P plots (1e only, CD & FD)">
+            for (auto &Km: Kminus) {
+                if (Km->getRegion() == CD) {
+                    Beta_vs_P_1e_Kminus_Only_CD->Fill(Km->getP(), Km->par()->getBeta());
+                } else if (Km->getRegion() == FD) {
+                    Beta_vs_P_1e_Kminus_Only_FD->Fill(Km->getP(), Km->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="Kzero Beta vs. P plots (1e only, CD & FD)">
+            for (auto &K0: Kzero) {
+                if (K0->getRegion() == CD) {
+                    Beta_vs_P_1e_Kzero_Only_CD->Fill(K0->getP(), K0->par()->getBeta());
+                } else if (K0->getRegion() == FD) {
+                    Beta_vs_P_1e_Kzero_Only_FD->Fill(K0->getP(), K0->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="piplus Beta vs. P plots (1e only, CD & FD)">
+            for (auto &pip: piplus) {
+                if (pip->getRegion() == CD) {
+                    Beta_vs_P_1e_piplus_Only_CD->Fill(pip->getP(), pip->par()->getBeta());
+                } else if (pip->getRegion() == FD) {
+                    Beta_vs_P_1e_piplus_Only_FD->Fill(pip->getP(), pip->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="piminus Beta vs. P plots (1e only, CD & FD)">
+            for (auto &pim: piminus) {
+                if (pim->getRegion() == CD) {
+                    Beta_vs_P_1e_piminus_Only_CD->Fill(pim->getP(), pim->par()->getBeta());
+                } else if (pim->getRegion() == FD) {
+                    Beta_vs_P_1e_piminus_Only_FD->Fill(pim->getP(), pim->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="pizero Beta vs. P plots (1e only, CD & FD)">
+            for (auto &pi0: pizero) {
+                if (pi0->getRegion() == CD) {
+                    Beta_vs_P_1e_pizero_Only_CD->Fill(pi0->getP(), pi0->par()->getBeta());
+                } else if (pi0->getRegion() == FD) {
+                    Beta_vs_P_1e_pizero_Only_FD->Fill(pi0->getP(), pi0->par()->getBeta());
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="Photons Beta vs. P plots (1e only, CD & FD)">
+            for (auto &ph: photons) {
+                if (ph->getRegion() == CD) {
+                    Beta_vs_P_1e_Photons_Only_CD->Fill(ph->getP(), ph->par()->getBeta());
+                } else if (ph->getRegion() == FD) {
+                    Beta_vs_P_1e_Photons_Only_FD->Fill(ph->getP(), ph->par()->getBeta());
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -3942,15 +4095,16 @@ void EventAnalyser() {
 //  Beta vs. P TF1 plots --------------------------------------------------------
 
         //<editor-fold desc="Beta vs. P TF1 plots">
-        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p * m_p) + ")").c_str(), 0, beamE);
         auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n * m_n) + ")").c_str(), 0, beamE);
-        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero * m_Kzero) + ")").c_str(), 0, beamE);
+        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p * m_p) + ")").c_str(), 0, beamE);
         auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus * m_Kplus) + ")").c_str(), 0, beamE);
         auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus * m_Kminus) + ")").c_str(), 0, beamE);
-        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero * m_pizero) + ")").c_str(), 0, beamE);
+        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero * m_Kzero) + ")").c_str(), 0, beamE);
         auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus * m_piplus) + ")").c_str(), 0, beamE);
         auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus * m_piminus) + ")").c_str(), 0, beamE);
-        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e) + ")").c_str(), 0, beamE);
+        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero * m_pizero) + ")").c_str(), 0, beamE);
+        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e * m_e) + ")").c_str(), 0, beamE);
+        auto *beta_photon = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(0) + ")").c_str(), 0, beamE);
         //</editor-fold>
 
 //  Beta vs. P histograms --------------------------------------------------------
@@ -4077,6 +4231,76 @@ void EventAnalyser() {
         histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
                       plots, true, Beta_VS_P_Only_1e_Directory, "04_Beta_vs_P_1e_cut_Neutrons_Only_FD.png",
                       beta_neutron, "Neutrons", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Kplus Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Kplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "05_Beta_vs_P_1e_cut_Kplus_Only_CD.png",
+                      beta_Kplus, "K^{+}", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_Kplus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "05_Beta_vs_P_1e_cut_Kplus_Only_FD.png",
+                      beta_Kplus, "K^{+}", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Kminus Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Kminus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "06_Beta_vs_P_1e_cut_Kminus_Only_CD.png",
+                      beta_Kminus, "K^{-}", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_Kminus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "06_Beta_vs_P_1e_cut_Kminus_Only_FD.png",
+                      beta_Kminus, "K^{-}", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Kzero Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Kzero_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "07_Beta_vs_P_1e_cut_Kzero_Only_CD.png",
+                      beta_Kzero, "K^{0}", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_Kzero_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "07_Beta_vs_P_1e_cut_Kzero_Only_FD.png",
+                      beta_Kzero, "K^{0}", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (piplus Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "08_Beta_vs_P_1e_cut_piplus_Only_CD.png",
+                      beta_piplus, "#pi^{+}", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "08_Beta_vs_P_1e_cut_piplus_Only_FD.png",
+                      beta_piplus, "#pi^{+}", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (piminus Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_piminus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "09_Beta_vs_P_1e_cut_piminus_Only_CD.png",
+                      beta_piminus, "#pi^{-}", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_piminus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "09_Beta_vs_P_1e_cut_piminus_Only_FD.png",
+                      beta_piminus, "#pi^{-}", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (pizero Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "10_Beta_vs_P_1e_cut_pizero_Only_CD.png",
+                      beta_pizero, "#pi^{0}", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "10_Beta_vs_P_1e_cut_pizero_Only_FD.png",
+                      beta_pizero, "#pi^{0}", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for all particles (Photons Only, 1e cut, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_1e_Photons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "11_Beta_vs_P_1e_cut_photons_Only_CD.png",
+                      beta_photon, "#gamma", true);
+
+        histPlotter2D(c1, Beta_vs_P_1e_Photons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_Only_1e_Directory, "11_Beta_vs_P_1e_cut_photons_Only_FD.png",
+                      beta_photon, "#gamma", true);
         //</editor-fold>
 
         //</editor-fold>
@@ -4293,13 +4517,30 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Vertex plots
+// Timing plots
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="Vertex plots">
+    //<editor-fold desc="Timing plots">
     if (timing_plots) {
 
         cout << "\n\nPlotting timing plots...\n\n";
+
+        //TODO: generalized the TF1 plots to be avilable to both b vs p and timing plots
+//  Beta vs. P TF1 plots --------------------------------------------------------
+
+        //<editor-fold desc="Beta vs. P TF1 plots">
+        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n * m_n) + ")").c_str(), 0, beamE);
+        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p * m_p) + ")").c_str(), 0, beamE);
+        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus * m_Kplus) + ")").c_str(), 0, beamE);
+        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus * m_Kminus) + ")").c_str(), 0, beamE);
+        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero * m_Kzero) + ")").c_str(), 0, beamE);
+        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus * m_piplus) + ")").c_str(), 0, beamE);
+        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus * m_piminus) + ")").c_str(), 0, beamE);
+        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero * m_pizero) + ")").c_str(), 0, beamE);
+        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e * m_e) + ")").c_str(), 0, beamE);
+        auto *beta_photon = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(0) + ")").c_str(), 0, beamE);
+        //</editor-fold>
+
 
 //        //<editor-fold desc="Finding Xmax">
 //        dVx_Xmax = deltaVx_before_dV_cuts_1e2p->GetBinCenter(deltaVx_before_dV_cuts_1e2p->GetMaximumBin());
@@ -4319,7 +4560,25 @@ void EventAnalyser() {
                       plots, 2, false, true, timing_Stack, "Particle_ToF", Particle_ToF_histogram_Dir, "CD & FD", kBlue);
 //                      plots, 2, false, true, Event_start_time_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue, true, true, true, false, true,
 //                      dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, Electron_ToF_from_beta_histogram_CD, normalized_timing_plots, true, .1, "e^{-} Time of Flight t_{ToF} from #beta", "1e Cut", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_ToF_from_beta_CD", Electron_ToF_from_beta_histogram_CD_Dir, "CD", kBlue);
+
+        histPlotter1D(c1, Electron_ToF_from_beta_histogram_FD, normalized_timing_plots, true, .1, "e^{-} Time of Flight t_{ToF} from #beta", "1e Cut", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_ToF_from_beta_FD", Electron_ToF_from_beta_histogram_FD_Dir, "FD", kBlue);
+
+        histPlotter1D(c1, Electron_path_length_histogram_CD, normalized_timing_plots, true, .1, "e^{-} Path Length L", "1e Cut", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_path_length_CD", Electron_path_length_histogram_CD_Dir, "CD", kBlue);
+
+        histPlotter1D(c1, Electron_path_length_histogram_FD, normalized_timing_plots, true, .1, "e^{-} Path Length L", "1e Cut", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_path_length_FD", Electron_path_length_histogram_FD_Dir, "FD", kBlue);
+
+        histPlotter2D(c1, Beta_VS_P_from_FTOF_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF_histogram_Dir,
+                      "01_Beta_VS_P_from_FTOF.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+                      beta_Kminus);
         //</editor-fold>
+
+
 
     } else {
         cout << "\n\nTiming plots are disabled by user.\n\n";

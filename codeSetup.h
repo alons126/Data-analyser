@@ -12,6 +12,7 @@
 #include "source/classes.h"
 #include "source/GeneralFunctions.h"
 #include "source/HistogramPlottingFunctions.h"
+#include "source/constants.h"
 #include "settings/DetectorSimulationCuts.h"
 
 // ======================================================================================================================================================================
@@ -44,8 +45,9 @@ std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_
 
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_3"; // my test with Justin's code; second attempt to save all part. data
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
 
