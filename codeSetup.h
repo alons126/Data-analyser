@@ -43,15 +43,15 @@ std::string file_name = "general_file";
 //std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
 ////std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
 
-std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
-//std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+//std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
+////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
+////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
+////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
 
-//std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
-//std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
+std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
+std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
 ////std::string AnalyseFileSample = "recon_c12_6gev";
@@ -60,7 +60,8 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
 //string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
 
-std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 
 
 ////// root files:
