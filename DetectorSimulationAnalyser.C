@@ -64,7 +64,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Configure beam energy (beamE)">
-    double beamE = getBeanE(AnalyseFileSample); // electron energy declaration
+    double beamE = 5.98636; // electron energy declaration
+//    double beamE = getBeanE(AnalyseFileSample); // electron energy declaration
     //</editor-fold>
 
     //<editor-fold desc="Configure target">
