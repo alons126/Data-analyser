@@ -50,8 +50,8 @@ std::string file_name = "general_file";
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
 //
-////std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
-////std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
+//std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
+//std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 //
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
 ////std::string AnalyseFileSample = "recon_c12_6gev";
