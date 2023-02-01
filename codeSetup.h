@@ -60,6 +60,8 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
 //string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
 
+std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+
 
 ////// root files:
 ////
