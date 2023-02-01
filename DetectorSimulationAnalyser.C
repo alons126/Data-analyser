@@ -28,6 +28,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TBenchmark.h>
 #include <iomanip>
 #include "clas12reader.h"
+
 #include "codeSetup.h"
 
 using namespace clas12;
@@ -58,16 +59,12 @@ void EventAnalyser() {
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
-    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+////    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
 //    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
     //</editor-fold>
 
     //<editor-fold desc="Configure beam energy (beamE)">
-    double beamE; // electron energy declaration
-
-    if (fileInput == "recon_c12_6gev.hipo") {
-        beamE = 5.98636;
-    }
+    double beamE = getBeanE(AnalyseFileSample); // electron energy declaration
     //</editor-fold>
 
     //<editor-fold desc="Configure target">
@@ -97,10 +94,9 @@ void EventAnalyser() {
     cout << "-- Execution variables ----------------------------------------------------\n";
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
-    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
+    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
+//    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
-//    cout << "filePath:\t" << filePath << "\n";
-//    cout << "fileInput:\t" << fileInput << "\n\n";
 //    cout << "fileInput:\t" << fileInput << "\n\n";
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
     cout << "Beam Energy:\t\t" << beamE << "\n\n\n\n";
@@ -1253,32 +1249,32 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P (All particles, by charge)">
     TH2D *Beta_vs_P_positive_particles_All_e_CD = new TH2D("#beta vs. P & q = +1 (All p., CD)", "#beta vs. P for all particles with q = +1 (All p., CD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                           250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_positive_particles_All_e_FD = new TH2D("#beta vs. P & q = +1 (All p., FD)", "#beta vs. P for all particles with q = +1 (All p., FD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                           250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_neutral_particles_All_e_CD = new TH2D("#beta vs. P & q = 0 (All p., CD)", "#beta vs. P for all particles with q = 0 (All p., CD);P [GeV];#beta",
-                                                         250, 0, beamE * 1.425, 250, 0, 3);
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_neutral_particles_All_e_FD = new TH2D("#beta vs. P & q = 0 (All p., FD)", "#beta vs. P for all particles with q = 0 (All p., FD);P [GeV];#beta",
-                                                         250, 0, beamE * 1.425, 250, 0, 3);
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_negative_particles_All_e_CD = new TH2D("#beta vs. P & q = -1 (All p., CD)", "#beta vs. P for all particles with q = -1 (All p., CD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                           250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_negative_particles_All_e_FD = new TH2D("#beta vs. P & q = -1 (All p., FD)", "#beta vs. P for all particles with q = -1 (All p., FD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                           250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P (1e cut, by charge)">
     TH2D *Beta_vs_P_positive_particles_1e_CD = new TH2D("#beta vs. P & q = +1 (1e cut, CD)", "#beta vs. P for all particles with q = +1 (1e cut, CD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_positive_particles_1e_FD = new TH2D("#beta vs. P & q = +1 (1e cut, FD)", "#beta vs. P for all particles with q = +1 (1e cut, FD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_neutral_particles_1e_CD = new TH2D("#beta vs. P & q = 0 (1e cut, CD)", "#beta vs. P for all particles with q = 0 (1e cut, CD);P [GeV];#beta",
-                                                         250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_neutral_particles_1e_FD = new TH2D("#beta vs. P & q = 0 (1e cut, FD)", "#beta vs. P for all particles with q = 0 (1e cut, FD);P [GeV];#beta",
-                                                         250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_negative_particles_1e_CD = new TH2D("#beta vs. P & q = -1 (1e cut, CD)", "#beta vs. P for all particles with q = -1 (1e cut, CD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_negative_particles_1e_FD = new TH2D("#beta vs. P & q = -1 (1e cut, FD)", "#beta vs. P for all particles with q = -1 (1e cut, FD);P [GeV];#beta",
-                                                          250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
     //</editor-fold>
@@ -2109,7 +2105,8 @@ void EventAnalyser() {
     cout << "Looping over chain files...\n\n";
 
     clas12root::HipoChain chain;
-    chain.Add(AnalyseFileDirContent.c_str());
+    chain.Add(AnalyseFile.c_str());
+//    chain.Add(AnalyseFileDirContent.c_str());
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -2242,10 +2239,9 @@ void EventAnalyser() {
             } else if (processID == 4) {
                 ++num_of_DIS_events;
                 dis = true;
+            } else {
+                cout << "Could not identify process!\n\n";
             }
-//            else {
-//                cout << "Could not identify process!\n\n";
-//            }
             //</editor-fold>
 
 //  All electrons plots -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -6995,7 +6991,8 @@ void EventAnalyser() {
 
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
-    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
+    cout << "AnalyseFile:\t" << AnalyseFile << "\n";
+//    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 //    cout << "filePath:\t" << filePath << "\n";
 //    cout << "fileInput:\t" << fileInput << "\n\n";

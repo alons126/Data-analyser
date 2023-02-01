@@ -34,6 +34,48 @@ void gst::Loop() {
 //  FSI settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="FSI settings">
+    cout << "Creating plots directories...\n\n";
+
+    system("rm -r ./plots"); // clear old stuff in Parent_Folder
+    system("mkdir -p ./plots");
+
+    system("mkdir -p ./plots/E_cal_restorations");
+    system("mkdir -p ./plots/E_cal_restorations/Other");
+
+    system("mkdir -p ./plots/Energy_histograms");
+    system("mkdir -p ./plots/Energy_histograms/El_histograms");
+    system("mkdir -p ./plots/Energy_histograms/El_VS_theta_l");
+
+    system("mkdir -p ./plots/Energy_transfer_histograms");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Energy_transfer_VS_q3");
+    system("mkdir -p ./plots/Energy_transfer_histograms/Inclusive_plots");
+
+    system("mkdir -p ./plots/MicroBooNE_plots");
+    system("mkdir -p ./plots/MicroBooNE_plots/gamma_lab");
+    system("mkdir -p ./plots/MicroBooNE_plots/gamma_lab/all_interactions");
+    system("mkdir -p ./plots/MicroBooNE_plots/gamma_lab/DIS_only");
+    system("mkdir -p ./plots/MicroBooNE_plots/gamma_lab/MEC_only");
+    system("mkdir -p ./plots/MicroBooNE_plots/gamma_lab/QEL_only");
+    system("mkdir -p ./plots/MicroBooNE_plots/gamma_lab/RES_only");
+    system("mkdir -p ./plots/MicroBooNE_plots/momentum_distributions");
+
+    system("mkdir -p ./plots/momentum_histograms");
+    system("mkdir -p ./plots/momentum_histograms/1n1p");
+    system("mkdir -p ./plots/momentum_histograms/2p");
+
+    system("mkdir -p ./plots/phi_histograms");
+
+    system("mkdir -p ./plots/theta_histograms");
+    //</editor-fold>
+
+//  FSI settings --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="FSI settings">
     bool FSI_status; // true == with FSI; false == no FSI
     bool custom_FSI_status = true; // set as true by default
 
@@ -5468,6 +5510,15 @@ void gst::Loop() {
         int ProtonCounter_article = 0, OtherParticleCounter_article = 0;
         int Proton_1_ind_article = -1, Proton_2_ind_article = -1;
 
+//        for (int i = 0; i < nf; i++) {
+//            if ((pdgf[i] != ePDG) && (pdgf[i] != nPDG) && (pdgf[i] != pPDG) && (pdgf[i] != pPDG) && (pdgf[i] != piplusPDG) && (pdgf[i] != piminusPDG) &&
+//                (pdgf[i] != pizeroPDG)) {
+//                cout << "\n";
+//                cout << pdgf[i] << "\n";
+//                cout << "\n";
+//            }
+//        }
+
 //  Inclusive calculations
 //  ================================================================================================
 
@@ -5515,7 +5566,7 @@ void gst::Loop() {
         }
         //</editor-fold>
 
-
+        
 //  2n FS calculations
 //  ================================================================================================
 

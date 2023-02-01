@@ -12,6 +12,39 @@
 #include <sys/stat.h>
 #include <sstream>
 
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  General functions
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="findSubstring function">
+bool findSubstring(string string1, string string2) {
+    if (string1.find(string2) != std::string::npos) {
+        return true;
+    } else {
+        return false;
+    }
+}
+//</editor-fold>
+
+//<editor-fold desc="getBeanE function">
+double getBeanE(string AnalyseFileSample) {
+    double beamE;
+
+    if ((findSubstring(AnalyseFileSample, "598636MeV") == true) || (findSubstring(AnalyseFileSample, "598636mev") == true)
+        || (findSubstring(AnalyseFileSample, "598636") == true)) {
+        beamE = 5.98636;
+    } else if ((findSubstring(AnalyseFileSample, "402962MeV") == true) || (findSubstring(AnalyseFileSample, "402962mev") == true)
+               || (findSubstring(AnalyseFileSample, "402962") == true)) {
+        beamE = 4.02962;
+    } else if ((findSubstring(AnalyseFileSample, "207052MeV") == true) || (findSubstring(AnalyseFileSample, "207052mev") == true)
+               || (findSubstring(AnalyseFileSample, "207052") == true)) {
+        beamE = 2.07052;
+    }
+
+    return beamE;
+}
+//</editor-fold>
+
 //<editor-fold desc="to_string_with_precision function">
 template<typename T>
 std::string to_string_with_precision(const T a_value, const int n = 2) {

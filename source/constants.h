@@ -23,4 +23,24 @@ double m_e = 0.000510999;
 // Speed of light in vacuum (in cm/ns):
 const double c = 29.9792458;
 
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Particle PDG
+//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+int nPDG = 2112;
+int pPDG = 2212;
+int KplusPDG = 321;
+int KminusPDG = -321;
+int KzeroPDG = 311;
+int piplusPDG = 211;
+int piminusPDG = -211;
+int pizeroPDG = 111;
+int ePDG = 11;
+int nuePDG = 12;
+int muPDG = 13;
+int numuPDG = 14;
+int tauPDG = 15;
+int nutauPDG = 16;
+int phPDG = 22;
+
 #endif //DETECTORSIMULATIONANALYSER_C_CONSTANTS_H

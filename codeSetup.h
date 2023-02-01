@@ -36,30 +36,32 @@ std::string plots_file_type = "_plots.root";
 
 std::string file_name = "general_file";
 
-// hipo files:
-
-//std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
-//std::string AnalyseFile = "e_on_1000060120_EMMEC_MCmaster_test.root";
-std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
-//std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
-
+//// hipo files:
+//
+//////std::string AnalyseFile = "/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo";
+//////std::string AnalyseFile = "e_on_1000060120_EMMEC_MCmaster_test.root";
+////std::string AnalyseFile = "/mnt/d/e4nu/hipo_data_files/recon_c12_6gev/recon_c12_6gev.hipo";
+//////std::string AnalyseFile = "/home/alon/project/recon_c12_6gev_9_torus-1.0.hipo";
+//
 //std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
+////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pions data saved
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_3"; // my test with Justin's code; second attempt to save all part. data
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
-
-std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
-std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
-
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
-//std::string AnalyseFileSample = "recon_c12_6gev";
-std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/" + "first_50_test" + "/";
+//
+////std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
+////std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
+//
+////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1"; // my test with Josh's code
+////std::string AnalyseFileSample = "recon_c12_6gev";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//
+//////    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+////    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
+//
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 
 
 //// root files:
@@ -74,6 +76,13 @@ std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "
 ////std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/" + "first_50_test" + "/";
 //
 ////std::string AnalyseFileDir = "/home/alon/project/temp/";
+
+std::string AnalyseFilePath = "mnt/d/e4nu/root_data_files/Detector_sim_truth_level_files";
+std::string AnalyseFileSample = "598636MeV_Q2_0_5";
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+
+std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_598636MeV_Q2_0_5.gst.root";
+//std::string AnalyseFile = "./e_on_1000060120_598636MeV.gst.root";
 
 // ======================================================================================================================================================================
 // BEnergyToNucleus definition
