@@ -58,8 +58,8 @@ void EventAnalyser() {
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
-//    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
-    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
+    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+//    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
     //</editor-fold>
 
     //<editor-fold desc="Configure beam energy (beamE)">
@@ -120,7 +120,8 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_p";
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "1e_cut", "By_charge", "By_charge/Positive_hadrons_FTOF", "By_charge/Positive_hadrons_CTOF"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "1e_cut", "1e_cut/By_charge", "By_charge/Positive_hadrons_FTOF",
+                                           "By_charge/Positive_hadrons_CTOF"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -129,10 +130,11 @@ void EventAnalyser() {
     // TODO: define 'Beta_VS_P_Parent_Directory' properly, and set it as the saving dir for plots below
     string Beta_VS_P_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[0];
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
-    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
-    string Beta_VS_P_by_charge_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
-    string Beta_VS_P_by_charge_FTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
-    string Beta_VS_P_by_charge_CTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[5] + "/";
+    string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
+    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
+    string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
+    string Beta_VS_P_by_charge_FTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[5] + "/";
+    string Beta_VS_P_by_charge_CTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
@@ -1249,19 +1251,34 @@ void EventAnalyser() {
                                                   250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
-    //<editor-fold desc="Beta vs. P (by charge)">
-    TH2D *Beta_vs_P_positive_particles_CD = new TH2D("#beta vs. P for q = +1 (CD)", "#beta vs. P for all particles with q = +1 (CD);P [GeV];#beta",
-                                                     250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_positive_particles_FD = new TH2D("#beta vs. P for q = +1 (FD)", "#beta vs. P for all particles with q = +1 (FD);P [GeV];#beta",
-                                                     250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_neutral_particles_CD = new TH2D("#beta vs. P for q = 0 (CD)", "#beta vs. P for all particles with q = 0 (CD);P [GeV];#beta",
-                                                    250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_neutral_particles_FD = new TH2D("#beta vs. P for q = 0 (FD)", "#beta vs. P for all particles with q = 0 (FD);P [GeV];#beta",
-                                                    250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_negative_particles_CD = new TH2D("#beta vs. P for q = -1 (CD)", "#beta vs. P for all particles with q = -1 (CD);P [GeV];#beta",
-                                                     250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_negative_particles_FD = new TH2D("#beta vs. P for q = -1 (FD)", "#beta vs. P for all particles with q = -1 (FD);P [GeV];#beta",
-                                                     250, 0, beamE * 1.425, 250, 0, 3);
+    //<editor-fold desc="Beta vs. P (All particles, by charge)">
+    TH2D *Beta_vs_P_positive_particles_All_e_CD = new TH2D("#beta vs. P & q = +1 (All p., CD)", "#beta vs. P for all particles with q = +1 (All p., CD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_positive_particles_All_e_FD = new TH2D("#beta vs. P & q = +1 (All p., FD)", "#beta vs. P for all particles with q = +1 (All p., FD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_All_e_CD = new TH2D("#beta vs. P & q = 0 (All p., CD)", "#beta vs. P for all particles with q = 0 (All p., CD);P [GeV];#beta",
+                                                         250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_All_e_FD = new TH2D("#beta vs. P & q = 0 (All p., FD)", "#beta vs. P for all particles with q = 0 (All p., FD);P [GeV];#beta",
+                                                         250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_All_e_CD = new TH2D("#beta vs. P & q = -1 (All p., CD)", "#beta vs. P for all particles with q = -1 (All p., CD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_All_e_FD = new TH2D("#beta vs. P & q = -1 (All p., FD)", "#beta vs. P for all particles with q = -1 (All p., FD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta vs. P (1e cut, by charge)">
+    TH2D *Beta_vs_P_positive_particles_1e_CD = new TH2D("#beta vs. P & q = +1 (1e cut, CD)", "#beta vs. P for all particles with q = +1 (1e cut, CD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_positive_particles_1e_FD = new TH2D("#beta vs. P & q = +1 (1e cut, FD)", "#beta vs. P for all particles with q = +1 (1e cut, FD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_1e_CD = new TH2D("#beta vs. P & q = 0 (1e cut, CD)", "#beta vs. P for all particles with q = 0 (1e cut, CD);P [GeV];#beta",
+                                                         250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_1e_FD = new TH2D("#beta vs. P & q = 0 (1e cut, FD)", "#beta vs. P for all particles with q = 0 (1e cut, FD);P [GeV];#beta",
+                                                         250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_1e_CD = new TH2D("#beta vs. P & q = -1 (1e cut, CD)", "#beta vs. P for all particles with q = -1 (1e cut, CD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_1e_FD = new TH2D("#beta vs. P & q = -1 (1e cut, FD)", "#beta vs. P for all particles with q = -1 (1e cut, FD);P [GeV];#beta",
+                                                          250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
     //</editor-fold>
@@ -2095,27 +2112,6 @@ void EventAnalyser() {
     chain.Add(AnalyseFileDirContent.c_str());
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  Getting particle masses for histograms
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Getting particle masses [GeV]">
-    double m_e = 0.000510999, m_p = 0.938272, m_n = 0.939565;
-    double m_pizero = 0.134977, m_piplus = 0.13957, m_piminus = 0.13957;
-    double m_Kzero = 0.497614, m_Kplus = 0.493677, m_Kminus = 0.493677;
-//    auto db = TDatabasePDG::Instance();
-//    chain.db()->turnOffQADB();
-//    double m_e = db->GetParticle(11)->Mass();
-//    double m_p = db->GetParticle(2212)->Mass();
-//    double m_n = db->GetParticle(2112)->Mass();
-//    double m_pizero = db->GetParticle(111)->Mass();
-//    double m_piplus = db->GetParticle(211)->Mass();
-//    double m_piminus = db->GetParticle(-211)->Mass();
-//    double m_Kzero = db->GetParticle(311)->Mass();
-//    double m_Kplus = db->GetParticle(321)->Mass();
-//    double m_Kminus = db->GetParticle(-321)->Mass();
-    //</editor-fold>
-
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2166,7 +2162,7 @@ void EventAnalyser() {
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool qel, mec, res, dis; // TODO: move inside while loop
+    bool qel, mec, res, dis;
 
     for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
 
@@ -2246,9 +2242,10 @@ void EventAnalyser() {
             } else if (processID == 4) {
                 ++num_of_DIS_events;
                 dis = true;
-            } else {
-                cout << "Could not identify process!\n\n";
             }
+//            else {
+//                cout << "Could not identify process!\n\n";
+//            }
             //</editor-fold>
 
 //  All electrons plots -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2261,21 +2258,21 @@ void EventAnalyser() {
                     Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
 
                     if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        Beta_vs_P_positive_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        Beta_vs_P_neutral_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        Beta_vs_P_negative_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     }
                 } else if (AllParticles[i]->getRegion() == FD) {
                     Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
 
                     if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        Beta_vs_P_positive_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        Beta_vs_P_neutral_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        Beta_vs_P_negative_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
                     }
                 }
 
@@ -2468,8 +2465,24 @@ void EventAnalyser() {
 
                 if (AllParticles[i]->getRegion() == CD) {
                     Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    if (AllParticles[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    }
                 } else if (AllParticles[i]->getRegion() == FD) {
                     Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                    if (AllParticles[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                    }
 
                     bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
                     bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
@@ -4326,35 +4339,69 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P plots (by charge)">
+        //<editor-fold desc="Beta vs. P plots (all particles, by charge)">
 
         //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Directory, "01_Beta_vs_P_q_p1_CD.png",
+        histPlotter2D(c1, Beta_vs_P_positive_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "01_Beta_vs_P_q_p1_All_e_CD.png",
                       beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
 
-        histPlotter2D(c1, Beta_vs_P_positive_particles_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Directory, "01_Beta_vs_P_q_p1_FD.png",
+        histPlotter2D(c1, Beta_vs_P_positive_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "01_Beta_vs_P_q_p1_All_e_FD.png",
                       beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Directory, "02_Beta_vs_P_q_0_CD.png",
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "02_Beta_vs_P_q_0_All_e_CD.png",
                       beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
 
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Directory, "02_Beta_vs_P_q_0_FD.png",
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "02_Beta_vs_P_q_0_All_e_FD.png",
                       beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_negative_particles_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Directory, "03_Beta_vs_P_q_m1_CD.png",
+        histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "03_Beta_vs_P_q_m1_All_e_CD.png",
                       beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
 
-        histPlotter2D(c1, Beta_vs_P_negative_particles_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Directory, "03_Beta_vs_P_q_m1_FD.png",
+        histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "03_Beta_vs_P_q_m1_All_e_FD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P plots (1e cut, by charge)">
+
+        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_positive_particles_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "01_Beta_vs_P_q_p1_1e_CD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+
+        histPlotter2D(c1, Beta_vs_P_positive_particles_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "01_Beta_vs_P_q_p1_1e_FD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "02_Beta_vs_P_q_0_1e_CD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "02_Beta_vs_P_q_0_1e_FD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_negative_particles_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "03_Beta_vs_P_q_m1_1e_CD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_negative_particles_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "03_Beta_vs_P_q_m1_1e_FD.png",
                       beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
         //</editor-fold>
 
