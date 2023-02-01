@@ -64,8 +64,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Configure beam energy (beamE)">
-    double beamE = 5.98636; // electron energy declaration
-//    double beamE = getBeanE(AnalyseFileSample); // electron energy declaration
+//    double beamE = 5.98636; // electron energy declaration
+    double beamE = getBeanE(AnalyseFileSample); // electron energy declaration
     //</editor-fold>
 
     //<editor-fold desc="Configure target">
@@ -7058,10 +7058,10 @@ void EventAnalyser() {
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
     cout << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_2p << "\n";
-    cout << "#(events) 2p QEL:\t" << num_of_2p_QEL_events << "\n";
-    cout << "#(events) 2p MEC:\t" << num_of_2p_MEC_events << "\n";
-    cout << "#(events) 2p RES:\t" << num_of_2p_RES_events << "\n";
-    cout << "#(events) 2p DIS:\t" << num_of_2p_DIS_events << "\n";
+    cout << "#(events) 2p QEL:\t\t\t" << num_of_2p_QEL_events << "\n";
+    cout << "#(events) 2p MEC:\t\t\t" << num_of_2p_MEC_events << "\n";
+    cout << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
+    cout << "#(events) 2p DIS:\t\t\t" << num_of_2p_DIS_events << "\n";
     cout << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n";
 
     cout << "---------------------------------------------------------------------------\n";
