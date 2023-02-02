@@ -5511,8 +5511,15 @@ void gst::Loop() {
         int Proton_1_ind_article = -1, Proton_2_ind_article = -1;
 
 //        for (int i = 0; i < nf; i++) {
-//            if ((pdgf[i] != ePDG) && (pdgf[i] != nPDG) && (pdgf[i] != pPDG) && (pdgf[i] != pPDG) && (pdgf[i] != piplusPDG) && (pdgf[i] != piminusPDG) &&
-//                (pdgf[i] != pizeroPDG)) {
+//            if ((pdgf[i] != ePDG) && (pdgf[i] != nPDG) && (pdgf[i] != pPDG)
+//                 && (pdgf[i] != piplusPDG) && (pdgf[i] != piminusPDG) && (pdgf[i] != pizeroPDG)
+//                 && (pdgf[i] != 321) && (pdgf[i] != -321) && (pdgf[i] != 311) && (pdgf[i] != -311)
+//                 && (pdgf[i] != 22) && (pdgf[i] != 3122) && (pdgf[i] != 3112) && (pdgf[i] != 3222)
+//                 && (pdgf[i] != 3212) && (pdgf[i] != -11) && (pdgf[i] != -2112) && (pdgf[i] != -2212)
+//                 && (pdgf[i] != 130) && (pdgf[i] != -3122) && (pdgf[i] != -2112) && (pdgf[i] != -2212)
+//                 && (pdgf[i] != -12) && (pdgf[i] != 13) && (pdgf[i] != -13) && (pdgf[i] != -2212)
+//                 && (abs(pdgf[i]) <= 10000)
+//                    ) {
 //                cout << "\n";
 //                cout << pdgf[i] << "\n";
 //                cout << "\n";
