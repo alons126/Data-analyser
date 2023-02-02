@@ -284,11 +284,14 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots directories">
     bool create_Momentum_Dir = true;
     string Momentum_Parent_Directory = "Momentum_histograms";
-    string Momentum_Daughter_Folders[] = {""};
+    string Momentum_Daughter_Folders[] = {"", "1e2p", "2p"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
         MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name);
     }
+
+    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
+    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
     //</editor-fold>
 
     //<editor-fold desc="E_e plots directories">
@@ -1370,7 +1373,7 @@ void EventAnalyser() {
                                             1000, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
     //</editor-fold>
 
-    //<editor-fold desc="Testing Chi2 cuts ('s' for separate)">
+    //<editor-fold desc="Testing Chi2 (2p)">
     TH1D *Chi2_Electron_2p_CD = new TH1D("Electron #chi^{2} (2p, CD)", "Electron #chi^{2} (2p, CD);Electron #chi^{2};",
                                          1000, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
     TH1D *Chi2_Electron_2p_FD = new TH1D("Electron #chi^{2} (2p, FD)", "Electron #chi^{2} (2p, FD);Electron #chi^{2};",
@@ -1705,18 +1708,45 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
-    THStack *P_e_Stack = new THStack("P_{e} stack (CD & FD)", "P_{e} Histogram (no #(e) cut, CD & FD);P_{e} [GeV];");
-    THStack *P_p_Stack = new THStack("P_{p} stack (CD & FD)", "P_{p} Histogram (no #(e) cut, CD & FD);P_{p} [GeV];");
-    THStack *P_n_Stack = new THStack("P_{n} stack (CD & FD)", "P_{n} Histogram (no #(e) cut, CD & FD);P_{n} [GeV];");
+    THStack *P_Stack_1e2p_BC_CD = new THStack("Particle Momentum BC (1e2p, CD)", "Particle Momentum Histogram BC (1e2p, CD);P [GeV];");
+    THStack *P_Stack_1e2p_AC_CD = new THStack("Particle Momentum AC (1e2p, CD)", "Particle Momentum Histogram AC (1e2p, CD);P [GeV];");
+    THStack *P_Stack_1e2p_BC_FD = new THStack("Particle Momentum BC (1e2p, FD)", "Particle Momentum Histogram BC (1e2p, FD);P [GeV];");
+    THStack *P_Stack_1e2p_AC_FD = new THStack("Particle Momentum AC (1e2p, FD)", "Particle Momentum Histogram AC (1e2p, FD);P [GeV];");
+    THStack *P_Stack_1e2p_BC = new THStack("Particle Momentum BC (1e2p, CD & FD)", "Particle Momentum Histogram BC (1e2p, CD & FD);P [GeV];");
+    THStack *P_Stack_1e2p_AC = new THStack("Particle Momentum AC (1e2p, CD & FD)", "Particle Momentum Histogram AC (1e2p, CD & FD);P [GeV];");
+    THStack *P_Stack_2p_CD = new THStack("Particle Momentum (2p, CD)", "Particle Momentum Histogram (2p, CD);P [GeV];");
+    THStack *P_Stack_2p_FD = new THStack("Particle Momentum (2p, FD)", "Particle Momentum Histogram (2p, FD);P [GeV];");
 
-    TH1D *P_e_histogram_CD = new TH1D("P_{e} (no #(e) cut, CD)", ";P_{e} [GeV];", 250, 0, beamE * 1.2);
-    TH1D *P_e_histogram_FD = new TH1D("P_{e} (no #(e) cut, FD)", ";P_{e} [GeV];", 250, 0, beamE * 1.2);
+    //<editor-fold desc="Momentum histograms before cuts">
+    TH1D *P_e_1e2p_BC_CD = new TH1D("P_{e} BC (1e2p, CD)", "P_{e} Before Cut (1e2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p, FD)", "P_{e} Before Cut (1e2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    string P_e_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, P_e_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
 
-    TH1D *P_p_histogram_CD = new TH1D("P_{p} (no #(e) cut, CD)", ";P_{p} [GeV];", 250, 0, beamE * 1.2);
-    TH1D *P_p_histogram_FD = new TH1D("P_{p} (no #(e) cut, FD)", ";P_{p} [GeV];", 250, 0, beamE * 1.2);
+    TH1D *P_p_1e2p_BC_CD = new TH1D("P_{p} BC (1e2p, CD)", "P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_p_1e2p_BC_FD = new TH1D("P_{p} BC (1e2p, FD)", "P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    string P_p_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, P_p_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
+    //</editor-fold>
 
-    TH1D *P_n_histogram_CD = new TH1D("P_{n} (no #(e) cut, CD)", ";P_{n} [GeV];", 250, 0, beamE * 1.2);
-    TH1D *P_n_histogram_FD = new TH1D("P_{n} (no #(e) cut, FD)", ";P_{n} [GeV];", 250, 0, beamE * 1.2);
+    //<editor-fold desc="Momentum histograms after cuts">
+    TH1D *P_e_1e2p_AC_CD = new TH1D("P_{e} AC (1e2p, CD)", "P_{e} After Cut (1e2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p, FD)", "P_{e} After Cut (1e2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    string P_e_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, P_e_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
+
+    TH1D *P_p_1e2p_AC_CD = new TH1D("P_{p} AC (1e2p, CD)", "P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_p_1e2p_AC_FD = new TH1D("P_{p} AC (1e2p, FD)", "P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    string P_p_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, P_p_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Momentum histograms after 2p cuts">
+    TH1D *P_e_2p_CD = new TH1D("P_{e} (2p, CD)", "P_{e} (2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_e_2p_FD = new TH1D("P_{e} (2p, FD)", "P_{e} (2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    string P_e_2p_CD_Dir = Momentum_2p_Directory, P_e_2p_FD_Dir = Momentum_2p_Directory;
+
+    TH1D *P_p_2p_CD = new TH1D("P_{p} (2p, CD)", "P_{p} (2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_p_2p_FD = new TH1D("P_{p} (2p, FD)", "P_{p} (2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    string P_p_2p_CD_Dir = Momentum_2p_Directory, P_p_2p_FD_Dir = Momentum_2p_Directory;
+    //</editor-fold>
+
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2351,7 +2381,6 @@ void EventAnalyser() {
                 if (electrons[i]->getRegion() == CD) {
                     ++num_of_events_with_e_in_CD; // logging #e in CD
 
-                    P_e_histogram_CD->Fill(electrons[i]->getP());
                     Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
@@ -2387,7 +2416,6 @@ void EventAnalyser() {
                 } else if (electrons[i]->getRegion() == FD) {
                     ++num_of_events_with_e_in_FD; // logging #e in FD
 
-                    P_e_histogram_FD->Fill(electrons[i]->getP());
                     Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
                     Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
@@ -2869,25 +2897,150 @@ void EventAnalyser() {
             if ((calculate_2p == true) && (protons.size() == 2)) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
+                //TODO: rename P_e
+                TVector3 P_e_1e2p, P_p0, P_p1; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
+                P_e_1e2p.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+                P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+                P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+
                 //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts">
 
+                //  Testing momentum cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Testing momentum cuts (electrons only)">
+
+                // momentum before cuts:
+                if (electrons[0]->getRegion() == CD) {
+                    P_e_1e2p_BC_CD->Fill(P_e_1e2p.Mag());
+                } else if (electrons[0]->getRegion() == FD) {
+                    P_e_1e2p_BC_FD->Fill(P_e_1e2p.Mag());
+                }
+
+                if (protons[0]->getRegion() == CD) {
+                    P_p_1e2p_BC_CD->Fill(P_p0.Mag());
+                } else if (protons[0]->getRegion() == FD) {
+                    P_p_1e2p_BC_FD->Fill(P_p0.Mag());
+                }
+
+                if (protons[1]->getRegion() == CD) {
+                    P_p_1e2p_BC_CD->Fill(P_p1.Mag());
+                } else if (protons[1]->getRegion() == FD) {
+                    P_p_1e2p_BC_FD->Fill(P_p1.Mag());
+                }
+
+                // momentum after cuts:
+                if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
+                    if (electrons[0]->getRegion() == CD) {
+                        P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                    } else if (electrons[0]->getRegion() == FD) {
+                        P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                    }
+                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
+                    if (P_e_1e2p.Mag() <= e_momentum_upper_cut) {
+                        if (electrons[0]->getRegion() == CD) {
+                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                        } else if (electrons[0]->getRegion() == FD) {
+                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                        }
+                    }
+                } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
+                    if (P_e_1e2p.Mag() >= e_momentum_lower_cut) {
+                        if (electrons[0]->getRegion() == CD) {
+                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                        } else if (electrons[0]->getRegion() == FD) {
+                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                        }
+                    }
+                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
+                    if ((P_e_1e2p.Mag() >= e_momentum_lower_cut) && (P_e_1e2p.Mag() <= e_momentum_upper_cut)) {
+                        if (electrons[0]->getRegion() == CD) {
+                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                        } else if (electrons[0]->getRegion() == FD) {
+                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                        }
+                    }
+                }
+
+                if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
+                    if (protons[0]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                    } else if (protons[0]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut == -1)) {
+                    if (P_p0.Mag() <= p_momentum_upper_cut) {
+                        if (protons[0]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                        } else if (protons[0]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut != -1)) {
+                    if (P_p0.Mag() >= p_momentum_lower_cut) {
+                        if (protons[0]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                        } else if (protons[0]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut != -1)) {
+                    if ((P_p0.Mag() >= p_momentum_lower_cut) && (P_p0.Mag() <= p_momentum_upper_cut)) {
+                        if (protons[0]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                        } else if (protons[0]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                        }
+                    }
+                }
+
+                if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
+                    if (protons[1]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                    } else if (protons[1]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut == -1)) {
+                    if (P_p1.Mag() <= p_momentum_upper_cut) {
+                        if (protons[1]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                        } else if (protons[1]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut != -1)) {
+                    if (P_p1.Mag() >= p_momentum_lower_cut) {
+                        if (protons[1]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                        } else if (protons[1]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut != -1)) {
+                    if ((P_p1.Mag() >= p_momentum_lower_cut) && (P_p1.Mag() <= p_momentum_upper_cut)) {
+                        if (protons[1]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                        } else if (protons[1]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                        }
+                    }
+                }
+                //</editor-fold>
+
                 //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing SF cuts (electrons only)">
-                TVector3 pp_e;
-                pp_e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
-                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / pp_e.Mag();
+                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e2p.Mag();
 
                 // SF before cuts:
                 SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-                SF_VS_P_e_1e2p_BC_FD->Fill(pp_e.Mag(), EoP_e);
+                SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e2p.Mag(), EoP_e);
 
                 // SF after cuts:
                 if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
                     SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-                    SF_VS_P_e_1e2p_AC_FD->Fill(pp_e.Mag(), EoP_e);
+                    SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag(), EoP_e);
                 }
                 //</editor-fold>
 
@@ -3035,10 +3188,117 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Applying cuts">
 
+                //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
+
+                //<editor-fold desc="Applying momentum cuts">
+                if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
+                    if (electrons[0]->getRegion() == CD) {
+                        P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                    } else if (electrons[0]->getRegion() == FD) {
+                        P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                    }
+                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
+                    if (P_e_1e2p.Mag() <= e_momentum_upper_cut) {
+                        if (electrons[0]->getRegion() == CD) {
+                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                        } else if (electrons[0]->getRegion() == FD) {
+                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                        }
+                    }
+                } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
+                    if (P_e_1e2p.Mag() >= e_momentum_lower_cut) {
+                        if (electrons[0]->getRegion() == CD) {
+                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                        } else if (electrons[0]->getRegion() == FD) {
+                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                        }
+                    }
+                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
+                    if ((P_e_1e2p.Mag() >= e_momentum_lower_cut) && (P_e_1e2p.Mag() <= e_momentum_upper_cut)) {
+                        if (electrons[0]->getRegion() == CD) {
+                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
+                        } else if (electrons[0]->getRegion() == FD) {
+                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
+                        }
+                    }
+                }
+
+                if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
+                    if (protons[0]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                    } else if (protons[0]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut == -1)) {
+                    if (P_p0.Mag() <= p_momentum_upper_cut) {
+                        if (protons[0]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                        } else if (protons[0]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut != -1)) {
+                    if (P_p0.Mag() >= p_momentum_lower_cut) {
+                        if (protons[0]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                        } else if (protons[0]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut != -1)) {
+                    if ((P_p0.Mag() >= p_momentum_lower_cut) && (P_p0.Mag() <= p_momentum_upper_cut)) {
+                        if (protons[0]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                        } else if (protons[0]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                        }
+                    }
+                }
+
+                if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
+                    if (protons[1]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                    } else if (protons[1]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut == -1)) {
+                    if (P_p1.Mag() <= p_momentum_upper_cut) {
+                        if (protons[1]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                        } else if (protons[1]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut != -1)) {
+                    if (P_p1.Mag() >= p_momentum_lower_cut) {
+                        if (protons[1]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                        } else if (protons[1]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                        }
+                    }
+                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut != -1)) {
+                    if ((P_p1.Mag() >= p_momentum_lower_cut) && (P_p1.Mag() <= p_momentum_upper_cut)) {
+                        if (protons[1]->getRegion() == CD) {
+                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                        } else if (protons[1]->getRegion() == FD) {
+                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                        }
+                    }
+                }
+                //</editor-fold>
+
                 //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying SF cuts (electrons only)">
-                if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut != -1) && (P_e_1e2p.Mag() > e_momentum_upper_cut))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut != -1) && (P_e_1e2p.Mag() < e_momentum_lower_cut))) { continue; }
+
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut != -1) && (P_p0.Mag() > p_momentum_upper_cut))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut != -1) && (P_p0.Mag() < p_momentum_lower_cut))) { continue; }
+
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut != -1) && (P_p1.Mag() > p_momentum_upper_cut))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut != -1) && (P_p1.Mag() < p_momentum_lower_cut))) { continue; }
                 //</editor-fold>
 
                 //  Applying fiducial cuts ------------------------------------------------------------------------------------------------------------------------
@@ -3100,6 +3360,26 @@ void EventAnalyser() {
                     ++num_of_2p_RES_events;
                 } else if (dis) {
                     ++num_of_2p_DIS_events;
+                }
+                //</editor-fold>
+
+                //<editor-fold desc="Filling momentum histograms">
+                if (electrons[0]->getRegion() == CD) {
+                    P_e_2p_CD->Fill(P_e_1e2p.Mag());
+                } else if (electrons[0]->getRegion() == FD) {
+                    P_e_2p_FD->Fill(P_e_1e2p.Mag());
+                }
+
+                if (protons[0]->getRegion() == CD) {
+                    P_p_2p_CD->Fill(P_p0.Mag());
+                } else if (protons[0]->getRegion() == FD) {
+                    P_p_2p_FD->Fill(P_p0.Mag());
+                }
+
+                if (protons[1]->getRegion() == CD) {
+                    P_p_2p_CD->Fill(P_p1.Mag());
+                } else if (protons[1]->getRegion() == FD) {
+                    P_p_2p_FD->Fill(P_p1.Mag());
                 }
                 //</editor-fold>
 
@@ -3188,7 +3468,7 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Filling SF histograms">
                 SF_All_Int_2p_FD->Fill(EoP_e);
-                SF_VS_P_e_2p_FD->Fill(pp_e.Mag(), EoP_e);
+                SF_VS_P_e_2p_FD->Fill(P_e_1e2p.Mag(), EoP_e);
                 //</editor-fold>
 
                 //<editor-fold desc="Filling fiducial">
@@ -3203,10 +3483,10 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Filling Ecal histograms">
-                double P_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
+                double p_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
 
-                P_e = electrons[0]->getP();
-                E_e = sqrt(m_e * m_e + P_e * P_e);
+                p_e = electrons[0]->getP();
+                E_e = sqrt(m_e * m_e + p_e * p_e);
                 Pp0 = protons[0]->getP();
                 Ep0 = sqrt(m_p * m_p + Pp0 * Pp0);
                 Pp1 = protons[1]->getP();
@@ -4427,26 +4707,76 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Momentum (P_e) histograms
+// Momentum histograms
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="P_e histograms">
+    //<editor-fold desc="Momentum histograms">
     if (Momentum_plots) {
 
-        cout << "\n\nPlotting Momentum (P_e) histograms...\n\n";
+        cout << "\n\nPlotting Momentum histograms...\n\n";
 
-//  P_e  --------------------------------------------------------------
+//  Momentum histograms (1e2p, CD & FD)  --------------------------------------------------------------
 
-        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
+//        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
 
-        //<editor-fold desc="Momentum histograms (CD)">
-        histPlotter1D(c1, P_e_histogram_CD, false, true, Momentum_integral, "P_{e}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack,
-                      "P_e_All_e", "plots/Momentum_histograms/", "CD", kBlue, true, true, true);
+        //<editor-fold desc="Momentum histograms before cuts (1e2p, CD & FD)">
+
+        //<editor-fold desc="Electrons momentum histograms (1e2p, CD & FD)">
+        histPlotter1D(c1, P_e_1e2p_BC_CD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_CD, "01_P_e_1e2p_BC_CD", P_e_1e2p_BC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+
+        histPlotter1D(c1, P_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_FD, "01_P_e_1e2p_BC_FD", P_e_1e2p_BC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
         //</editor-fold>
 
-        //<editor-fold desc="Momentum histograms (FD)">
-        histPlotter1D(c1, P_e_histogram_FD, false, true, Momentum_integral, "P_{e}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, Theta_e_Stack,
-                      "P_e_All_e", "plots/Momentum_histograms/", "FD", kBlue, true, true, true);
+        //<editor-fold desc="Protons momentum histograms (1e2p, CD & FD)">
+        histPlotter1D(c1, P_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_CD, "02_P_p_1e2p_BC_CD", P_p_1e2p_BC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+
+        histPlotter1D(c1, P_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_FD, "02_P_p_1e2p_BC_FD", P_p_1e2p_BC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histograms after cuts (1e2p, CD & FD)">
+
+        //<editor-fold desc="Electrons momentum histograms (1e2p, CD & FD)">
+        histPlotter1D(c1, P_e_1e2p_AC_CD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_CD, "03_P_e_1e2p_AC_CD", P_e_1e2p_AC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+
+        histPlotter1D(c1, P_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_FD, "03_P_e_1e2p_AC_FD", P_e_1e2p_AC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Protons momentum histograms (1e2p, CD & FD)">
+        histPlotter1D(c1, P_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_CD, "04_P_p_1e2p_AC_CD", P_p_1e2p_AC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+
+        histPlotter1D(c1, P_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", P_p_1e2p_AC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histograms after 2p cuts (CD & FD)">
+
+        //<editor-fold desc="Electrons momentum histograms (2p, CD & FD)">
+        histPlotter1D(c1, P_e_2p_CD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, P_Stack_2p_CD, "03_P_e_2p_CD", P_e_2p_CD_Dir, "CD", kBlue, true, true, false,
+                      true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+
+        histPlotter1D(c1, P_e_2p_FD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, P_Stack_2p_FD, "03_P_e_2p_FD", P_e_2p_FD_Dir, "FD", kBlue, true, true, false,
+                      true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Protons momentum histograms (2p, CD & FD)">
+        histPlotter1D(c1, P_p_2p_CD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, P_Stack_2p_CD, "04_P_p_2p_CD", P_p_2p_CD_Dir, "CD", kBlue, true, true, false,
+                      true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+
+        histPlotter1D(c1, P_p_2p_FD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, P_Stack_2p_FD, "04_P_p_2p_FD", P_p_2p_FD_Dir, "FD", kBlue, true, true, false,
+                      true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+        //</editor-fold>
+
         //</editor-fold>
 
     } else {

@@ -302,12 +302,14 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3);
 
         if (Histogram1D->Integral() != 0.) {
-            upper_cut->Draw("same");
+            if (plot_upper_cut != -1) { upper_cut->Draw("same"); }
             upper_cut->SetLineColor(kBlue);
 //            upper_cut->SetLineColor(kMagenta);
-            lower_cut->Draw("same");
+
+            if (plot_lower_cut != -1) { lower_cut->Draw("same"); }
             lower_cut->SetLineColor(kRed);
 //            lower_cut->SetLineColor(kMagenta);
+
             if (plot_max == true) {
                 max_location->Draw("same");
                 max_location->SetLineColor(kGreen);

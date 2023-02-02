@@ -49,6 +49,7 @@ std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // m
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_10"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2_first_100"; // my test with Justin's code
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_2"; // my test with Justin's code
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_4"; // my test with Justin's code; e,p,n,pi+- data saved
 
 //std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
 //std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
@@ -81,8 +82,8 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFileSample = "598636MeV_Q2_0_5";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //
-//std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_598636MeV_Q2_0_5.gst.root";
-////std::string AnalyseFile = "./e_on_1000060120_598636MeV.gst.root";
+////std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_598636MeV_Q2_0_5.gst.root";
+//std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CC_myBranch_0.gst.root";
 
 // ======================================================================================================================================================================
 // BEnergyToNucleus definition

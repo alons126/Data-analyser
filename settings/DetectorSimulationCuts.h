@@ -7,6 +7,20 @@
 
 //TODO: confirm that turning all the cuts switchs off restores the before plots
 
+// ======================================================================================================================================================================
+// Detector simulation cuts
+// ======================================================================================================================================================================
+
+// Momentum -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="Momentum">
+bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
+
+// 2p momentum cuts:
+double e_momentum_upper_cut = -1, e_momentum_lower_cut = -1;
+double p_momentum_upper_cut = -1, p_momentum_lower_cut = 0.3;
+//</editor-fold>
+
 // Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
