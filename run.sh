@@ -2,6 +2,7 @@
 
 # INPUT=""
 
+git pull
 clas12root -b -q ./main.c
 
 #runAnalyser(){
