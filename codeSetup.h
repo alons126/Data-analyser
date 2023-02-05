@@ -88,7 +88,7 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //
 ////std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_598636MeV_Q2_0_5.gst.root";
 ////std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CC_myBranch_10M.root";
-//std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CC_master_test_2_0.gst.root";
+//std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CCMEC_master_test_10M.root";
 
 // ======================================================================================================================================================================
 // BEnergyToNucleus definition

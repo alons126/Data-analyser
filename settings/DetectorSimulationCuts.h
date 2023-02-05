@@ -14,7 +14,7 @@
 // Momentum -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Momentum">
-bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
+bool apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
 
 // 2p momentum cuts:
 double e_momentum_upper_cut = -1, e_momentum_lower_cut = -1;
@@ -24,7 +24,7 @@ double p_momentum_upper_cut = -1, p_momentum_lower_cut = 0.3;
 // Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
-bool apply_SF_cuts = true;
+bool apply_SF_cuts = false;
 
 double SF_1e2p_upper_cut = 0.28;
 double SF_1e2p_lower_cut = 0.18;
@@ -35,7 +35,7 @@ double SF_1e2p_peak = 0.25; // to fill using Chi2_Electron_1e_Xmax_CD
 // Fiducial cuts --------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Fiducial cuts">
-bool apply_Lv_cut = true, apply_Lw_cut = true;
+bool apply_Lv_cut = false, apply_Lw_cut = false;
 
 double fiducial_cut_Lv = 14;
 double fiducial_cut_Lw = 14;
@@ -44,7 +44,7 @@ double fiducial_cut_Lw = 14;
 // Number of Photo-electrons (nphe) cuts (electrons only, FD) -----------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Number of Photo-electrons (nphe) cuts (electrons only, FD)">
-bool apply_nphe_cut = true;
+bool apply_nphe_cut = false;
 
 double nphe_lower_cut = 2;
 //</editor-fold>
@@ -52,7 +52,7 @@ double nphe_lower_cut = 2;
 // Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Chi2 cuts">
-bool apply_chi2_cuts = true;
+bool apply_chi2_cuts = false;
 
 //<editor-fold desc="Electron chi2 cuts">
 double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
@@ -90,7 +90,7 @@ double Chi2_Proton_1e_Xmax_FD;
 // Vertex cuts ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Vertex cuts">
-bool apply_dVz_cuts = true;
+bool apply_dVz_cuts = false;
 
 double Vertex_Electron_cut_CD = 3.;
 double Vertex_Electron_1e_mean_CD = 0; // 1e mean
