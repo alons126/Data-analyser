@@ -3161,6 +3161,11 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
+
+//            if (electrons[0]->cal(PCAL)->getEnergy() < 0.06) { continue; }
+//            if(electrons[0]->par()->getVz() < -1){continue;}
+//            if(electrons[0]->par()->getVz() > 1){continue;}
+
             //</editor-fold>
 
             //<editor-fold desc="General 1e only plots">
@@ -6165,21 +6170,18 @@ void EventAnalyser() {
         //<editor-fold desc="SF histogram (1e2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f Before Cuts", "All Int., 1e2p", plots, 2, false, true,
-                      SF_1e2p_Stack, "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
-                      SF_1e2p_upper_cut, SF_1e2p_Xmax);
+        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f Before Cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
+                      "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
 
-        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f After cuts", "All Int., 1e2p", plots, 2, false, true,
-                      SF_1e2p_Stack, "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
-                      SF_1e2p_upper_cut, SF_1e2p_Xmax);
+        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f After cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
+                      "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
         //</editor-fold>
 
         //<editor-fold desc="SF histogram (2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, .1, "Sampling Fraction f", "All Int., 2p", plots, 2, false, true,
-                      SF_2p_Stack, "SF_2p_wAll_cuts", SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_lower_cut,
-                      SF_1e2p_upper_cut, SF_1e2p_Xmax);
+        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, .1, "Sampling Fraction f", "All Int., 2p", plots, 2, false, true, SF_2p_Stack, "SF_2p_wAll_cuts",
+                      SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
         //</editor-fold>
 
 //  SF vs. P  --------------------------------------------------------------

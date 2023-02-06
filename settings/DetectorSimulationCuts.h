@@ -31,6 +31,8 @@ double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_Mic
 //<editor-fold desc="Sampling Fraction (SF) cuts (electrons only, FD)">
 bool apply_SF_cuts = true;
 
+//double SF_1e2p_upper_cut = 0.28;
+//double SF_1e2p_lower_cut = 0.22;
 double SF_1e2p_upper_cut = 0.28;
 double SF_1e2p_lower_cut = 0.18;
 double SF_1e2p_Xmax; // for all e plots, no cuts applied
