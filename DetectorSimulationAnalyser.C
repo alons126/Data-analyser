@@ -117,7 +117,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
-    string Beta_VS_P_Parent_Directory = "Beta_VS_p";
+    string Beta_VS_P_Parent_Directory = "Beta_VS_P";
     string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "min_1e_cut", "min_1e_cut/By_charge", "1e_cut", "1e_cut/By_charge",
                                            "All_e/By_charge/Positive_hadrons_FTOF", "All_e/By_charge/Positive_hadrons_CTOF", "2p", "2p/By_charge"};
 
@@ -290,7 +290,7 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots directories">
     bool create_Momentum_Dir = true;
     string Momentum_Parent_Directory = "Momentum_histograms";
-    string Momentum_Daughter_Folders[] = {"", "1e2p", "2p"};
+    string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/Cut_tests"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
         MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name);
@@ -298,6 +298,8 @@ void EventAnalyser() {
 
     string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
     string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
+    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
+    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
     //</editor-fold>
 
     //<editor-fold desc="E_e plots directories">
@@ -452,7 +454,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = false;
+    bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = true;
     bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false, selection_test_MicroBooNE = false;
     //</editor-fold>
 
@@ -1782,6 +1784,62 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
+
+    //<editor-fold desc="Momentum MicroBooNE plots">
+    THStack *P_Stack_MicroBooNE_BC_CD = new THStack("Particle Momentum BC (MicroBooNE, CD)", "Particle Momentum Histogram BC (MicroBooNE, CD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_AC_CD = new THStack("Particle Momentum AC (MicroBooNE, CD)", "Particle Momentum Histogram AC (MicroBooNE, CD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_BC_FD = new THStack("Particle Momentum BC (MicroBooNE, FD)", "Particle Momentum Histogram BC (MicroBooNE, FD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_AC_FD = new THStack("Particle Momentum AC (MicroBooNE, FD)", "Particle Momentum Histogram AC (MicroBooNE, FD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_BC = new THStack("Particle Momentum BC (MicroBooNE, CD & FD)", "Particle Momentum Histogram BC (MicroBooNE, CD & FD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_AC = new THStack("Particle Momentum AC (MicroBooNE, CD & FD)", "Particle Momentum Histogram AC (MicroBooNE, CD & FD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_CD = new THStack("Particle Momentum (MicroBooNE, CD)", "Particle Momentum Histogram (MicroBooNE, CD);P [GeV];");
+    THStack *P_Stack_MicroBooNE_FD = new THStack("Particle Momentum (MicroBooNE, FD)", "Particle Momentum Histogram (MicroBooNE, FD);P [GeV];");
+
+    //<editor-fold desc="Momentum histograms before MicroBooNE cuts test">
+    TH1D *P_e_MicroBooNE_BC_CD = new TH1D("P_{e} BC (MicroBooNE, CD)", "P_{e} Before Cut (MicroBooNE, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_e_MicroBooNE_BC_FD = new TH1D("P_{e} BC (MicroBooNE, FD)", "P_{e} Before Cut (MicroBooNE, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    string P_e_MicroBooNE_BC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_e_MicroBooNE_BC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
+
+    TH1D *P_p_MicroBooNE_BC_CD = new TH1D("P_{p} BC (MicroBooNE, CD)", "P_{p} Before Cut (MicroBooNE, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_p_MicroBooNE_BC_FD = new TH1D("P_{p} BC (MicroBooNE, FD)", "P_{p} Before Cut (MicroBooNE, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    string P_p_MicroBooNE_BC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_p_MicroBooNE_BC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
+
+    TH1D *P_cpion_MicroBooNE_BC_CD = new TH1D("P_{#pi^{#pm}} BC (MicroBooNE, CD)", "P_{#pi^{#pm}} Before Cut (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_cpion_MicroBooNE_BC_FD = new TH1D("P_{#pi^{#pm}} BC (MicroBooNE, FD)", "P_{#pi^{#pm}} Before Cut (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+    string P_cpion_MicroBooNE_BC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_cpion_MicroBooNE_BC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Momentum histograms after MicroBooNE cuts test">
+    TH1D *P_e_MicroBooNE_AC_CD = new TH1D("P_{e} AC (MicroBooNE, CD)", "P_{e} After Cut (MicroBooNE, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_e_MicroBooNE_AC_FD = new TH1D("P_{e} AC (MicroBooNE, FD)", "P_{e} After Cut (MicroBooNE, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    string P_e_MicroBooNE_AC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_e_MicroBooNE_AC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
+
+    TH1D *P_p_MicroBooNE_AC_CD = new TH1D("P_{p} AC (MicroBooNE, CD)", "P_{p} After Cut (MicroBooNE, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_p_MicroBooNE_AC_FD = new TH1D("P_{p} AC (MicroBooNE, FD)", "P_{p} After Cut (MicroBooNE, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    string P_p_MicroBooNE_AC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_p_MicroBooNE_AC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
+
+    TH1D *P_cpion_MicroBooNE_AC_CD = new TH1D("P_{#pi^{#pm}} AC (MicroBooNE, CD)", "P_{#pi^{#pm}} After Cut (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_cpion_MicroBooNE_AC_FD = new TH1D("P_{#pi^{#pm}} AC (MicroBooNE, FD)", "P_{#pi^{#pm}} After Cut (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+    string P_cpion_MicroBooNE_AC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_cpion_MicroBooNE_AC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Momentum histograms after MicroBooNE cuts">
+    TH1D *P_e_MicroBooNE_CD = new TH1D("P_{e} (MicroBooNE, CD)", "P_{e} (MicroBooNE, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_e_MicroBooNE_FD = new TH1D("P_{e} (MicroBooNE, FD)", "P_{e} (MicroBooNE, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+    string P_e_MicroBooNE_CD_Dir = Momentum_MicroBooNE_Directory, P_e_MicroBooNE_FD_Dir = Momentum_MicroBooNE_Directory;
+
+    TH1D *P_p_MicroBooNE_CD = new TH1D("P_{p} (MicroBooNE, CD)", "P_{p} (MicroBooNE, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_p_MicroBooNE_FD = new TH1D("P_{p} (MicroBooNE, FD)", "P_{p} (MicroBooNE, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    string P_p_MicroBooNE_CD_Dir = Momentum_MicroBooNE_Directory, P_p_MicroBooNE_FD_Dir = Momentum_MicroBooNE_Directory;
+
+    TH1D *P_cpion_MicroBooNE_CD = new TH1D("P_{#pi^{#pm}} (MicroBooNE, CD)", "P_{#pi^{#pm}} (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *P_cpion_MicroBooNE_FD = new TH1D("P_{#pi^{#pm}} (MicroBooNE, FD)", "P_{#pi^{#pm}} (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+    string P_cpion_MicroBooNE_CD_Dir = Momentum_MicroBooNE_Directory, P_cpion_MicroBooNE_FD_Dir = Momentum_MicroBooNE_Directory;
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Momentum 1e2p & 2p plots">
     THStack *P_Stack_1e2p_BC_CD = new THStack("Particle Momentum BC (1e2p, CD)", "Particle Momentum Histogram BC (1e2p, CD);P [GeV];");
     THStack *P_Stack_1e2p_AC_CD = new THStack("Particle Momentum AC (1e2p, CD)", "Particle Momentum Histogram AC (1e2p, CD);P [GeV];");
     THStack *P_Stack_1e2p_BC_FD = new THStack("Particle Momentum BC (1e2p, FD)", "Particle Momentum Histogram BC (1e2p, FD);P [GeV];");
@@ -1791,7 +1849,7 @@ void EventAnalyser() {
     THStack *P_Stack_2p_CD = new THStack("Particle Momentum (2p, CD)", "Particle Momentum Histogram (2p, CD);P [GeV];");
     THStack *P_Stack_2p_FD = new THStack("Particle Momentum (2p, FD)", "Particle Momentum Histogram (2p, FD);P [GeV];");
 
-    //<editor-fold desc="Momentum histograms before cuts">
+    //<editor-fold desc="Momentum histograms before 1e2p cuts">
     TH1D *P_e_1e2p_BC_CD = new TH1D("P_{e} BC (1e2p, CD)", "P_{e} Before Cut (1e2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
     TH1D *P_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p, FD)", "P_{e} Before Cut (1e2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
     string P_e_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, P_e_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
@@ -1801,7 +1859,7 @@ void EventAnalyser() {
     string P_p_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, P_p_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
     //</editor-fold>
 
-    //<editor-fold desc="Momentum histograms after cuts">
+    //<editor-fold desc="Momentum histograms after 1e2p cuts">
     TH1D *P_e_1e2p_AC_CD = new TH1D("P_{e} AC (1e2p, CD)", "P_{e} After Cut (1e2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
     TH1D *P_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p, FD)", "P_{e} After Cut (1e2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
     string P_e_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, P_e_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
@@ -1819,6 +1877,8 @@ void EventAnalyser() {
     TH1D *P_p_2p_CD = new TH1D("P_{p} (2p, CD)", "P_{p} (2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
     TH1D *P_p_2p_FD = new TH1D("P_{p} (2p, FD)", "P_{p} (2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
     string P_p_2p_CD_Dir = Momentum_2p_Directory, P_p_2p_FD_Dir = Momentum_2p_Directory;
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
@@ -1997,19 +2057,19 @@ void EventAnalyser() {
 
     //<editor-fold desc="Electron fiducial histograms (PCAL)">
     TH2D *Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. EoP BC (All Int., 1e, PCAL)",
-                                              "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
-                                              250, 0, 50, 250, 0.05, 0.35);
+                                            "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+                                            250, 0, 50, 250, 0.05, 0.35);
     TH2D *Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. EoP AC (All Int., 1e, PCAL)",
-                                              "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
-                                              250, 0, 50, 250, 0.05, 0.35);
+                                            "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+                                            250, 0, 50, 250, 0.05, 0.35);
     string Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
     TH2D *Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. EoP BC (All Int., 1e, PCAL)",
-                                              "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
-                                              250, 0, 50, 250, 0.05, 0.35);
+                                            "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+                                            250, 0, 50, 250, 0.05, 0.35);
     TH2D *Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. EoP AC (All Int., 1e, PCAL)",
-                                              "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
-                                              250, 0, 50, 250, 0.05, 0.35);
+                                            "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+                                            250, 0, 50, 250, 0.05, 0.35);
     string Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
     TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. EoP (All Int., 2p, PCAL)",
@@ -2980,30 +3040,30 @@ void EventAnalyser() {
             }
 
             // Momentum plots cuts:
-            if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
+            if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
                 if (electrons[0]->getRegion() == CD) {
                     P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
                 } else if (electrons[0]->getRegion() == FD) {
                     P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
                 }
-            } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
-                if (P_e_1e.Mag() <= e_momentum_upper_cut) {
+            } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
+                if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
                     if (electrons[0]->getRegion() == CD) {
                         P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
                     } else if (electrons[0]->getRegion() == FD) {
                         P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
                     }
                 }
-            } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
-                if (P_e_1e.Mag() >= e_momentum_lower_cut) {
+            } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
+                if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
                     if (electrons[0]->getRegion() == CD) {
                         P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
                     } else if (electrons[0]->getRegion() == FD) {
                         P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
                     }
                 }
-            } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
-                if ((P_e_1e.Mag() >= e_momentum_lower_cut) && (P_e_1e.Mag() <= e_momentum_upper_cut)) {
+            } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
+                if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
                     if (electrons[0]->getRegion() == CD) {
                         P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
                     } else if (electrons[0]->getRegion() == FD) {
@@ -3077,8 +3137,8 @@ void EventAnalyser() {
             //<editor-fold desc="Applying additional electron cuts">
 
             //<editor-fold desc="Applying momentum cuts">
-            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut != -1) && (P_e_1e.Mag() > e_momentum_upper_cut))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut != -1) && (P_e_1e.Mag() < e_momentum_lower_cut))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e_1e.Mag() > e_momentum_upper_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e_1e.Mag() < e_momentum_lower_cut_2p))) { continue; }
             //</editor-fold>
 
             //<editor-fold desc="Applying SF cuts">
@@ -3444,6 +3504,328 @@ void EventAnalyser() {
 
             //</editor-fold>
 
+//  MicroBooNE cuts -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+//            //<editor-fold desc="MicroBooNE cuts">
+//            if ((calculate_MicroBooNE == true) && ((protons.size() == 2) && (pizero.size() == 0))) {
+//                // 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons")
+//                TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
+//                P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+//                P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+//                P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+//
+//                //  Testing cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
+//
+//                //<editor-fold desc="Testing cuts (MicroBooNE)">
+//
+//                //  Testing momentum cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------
+//
+//                //<editor-fold desc="Testing momentum cuts (MicroBooNE)">
+//                // Momentum plots before and after cuts:
+//                if (electrons[0]->getRegion() == CD) {
+//                    P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
+//
+//                    if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag());
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) &&
+//                            (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE)) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
+//                    }
+//                } else if (electrons[0]->getRegion() == FD) {
+//                    P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
+//
+//                    if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag());
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) &&
+//                            (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE)) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
+//                    }
+//                }
+//
+//                if (protons[0]->getRegion() == CD) {
+//                    P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
+//
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    }
+//                } else if (protons[0]->getRegion() == FD) {
+//                    P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
+//
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    }
+//                }
+//
+//                if (protons[1]->getRegion() == CD) {
+//                    P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
+//
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    }
+//                } else if (protons[1]->getRegion() == FD) {
+//                    P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
+//
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    }
+//                }
+//
+//                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                    if (piplus[i]->getRegion() == CD) {
+//                        P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        }
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        }
+//                    }
+//                } // end of loop over piplus vector
+//
+//                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                    if (piminus[i]->getRegion() == CD) {
+//                        P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        }
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        }
+//                    }
+//                } // end of loop over piminus vector
+//                //</editor-fold>
+//
+//                //  Testing chi2 cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+//
+////                    //<editor-fold desc="Testing chi2 cuts">
+////
+//////                // Chi2 before cut
+//////                if (electrons[0]->getRegion() == CD) {
+////////                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+//////                    Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
+//////                } else if (electrons[0]->getRegion() == FD) {
+////////                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+//////                    Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
+//////                }
+////
+////                    if (protons[0]->getRegion() == CD) {
+//////                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+////                        Chi2_Proton_1e2p_BC_CD->Fill(protons[0]->par()->getChi2Pid());
+////                    } else if (protons[0]->getRegion() == FD) {
+//////                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+////                        Chi2_Proton_1e2p_BC_FD->Fill(protons[0]->par()->getChi2Pid());
+////                    }
+////
+////                    if (protons[1]->getRegion() == CD) {
+//////                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+////                        Chi2_Proton_1e2p_BC_CD->Fill(protons[1]->par()->getChi2Pid());
+////                    } else if (protons[1]->getRegion() == FD) {
+//////                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+////                        Chi2_Proton_1e2p_BC_FD->Fill(protons[1]->par()->getChi2Pid());
+////                    }
+////
+////                    // Chi2 after cut
+//////                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
+//////                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+//////                    Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
+//////                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
+//////                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+//////                    Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
+//////                }
+////
+////                    if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
+////                        ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+////                        Chi2_Proton_1e2p_AC_CD->Fill(protons[0]->par()->getChi2Pid());
+////                    } else if ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
+////                        ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+////                        Chi2_Proton_1e2p_AC_FD->Fill(protons[0]->par()->getChi2Pid());
+////                    }
+////
+////                    if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
+////                        ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+////                        Chi2_Proton_1e2p_AC_CD->Fill(protons[1]->par()->getChi2Pid());
+////                    } else if ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
+////                        ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+////                        Chi2_Proton_1e2p_AC_FD->Fill(protons[1]->par()->getChi2Pid());
+////                    }
+////                    //</editor-fold>
+//
+//                //  Testing dVz cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------------
+//
+////                    //<editor-fold desc="Testing dV cuts">
+////                    double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
+////                    double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
+////                    double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
+////
+////                    for (auto &p: protons) {
+////                        Vx_p = p->par()->getVx();
+////                        Vy_p = p->par()->getVy();
+////                        Vz_p = p->par()->getVz();
+////                        dVx = Vx_e - Vx_p;
+////                        dVy = Vy_e - Vy_p;
+////                        dVz = Vz_e - Vz_p;
+////
+////                        // Testing dVx,dVy,dVz before cuts
+////                        deltaVx_before_dV_cuts_1e2p->Fill(dVx);
+////                        deltaVy_before_dV_cuts_1e2p->Fill(dVy);
+////                        deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+////
+////                        // Testing dVx,dVy,dVz after cuts
+////                        if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
+////                        if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
+////                        if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+////                    } // end of loop over protons vector
+////                    //</editor-fold>
+//
+//                //</editor-fold>
+//
+//                //  Applying cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
+//
+//                //<editor-fold desc="Applying cuts (MicroBooNE)">
+//
+//                //  Applying momentum cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------
+//
+//                //<editor-fold desc="Applying momentum cuts (MicroBooNE)">
+//                bool skip = false;
+//
+//                if (apply_momentum_cuts_MicroBooNE == true) {
+//                    if ((e_momentum_upper_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() > e_momentum_upper_cut_MicroBooNE)) { continue; }
+//                    if ((e_momentum_lower_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() < e_momentum_lower_cut_MicroBooNE)) { continue; }
+//
+//                    if ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() > p_momentum_upper_cut_MicroBooNE)) { continue; }
+//                    if ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() < p_momentum_lower_cut_MicroBooNE)) { continue; }
+//
+//                    if ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() > p_momentum_upper_cut_MicroBooNE)) { continue; }
+//                    if ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() < p_momentum_lower_cut_MicroBooNE)) { continue; }
+//
+////                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+////                    for (int i = 0; i < piplus.size(); i++) {
+////                        P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+////                    } // end of loop over piplus vector
+////
+////                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+////                    for (int i = 0; i < piminus.size(); i++) {
+////
+////                    } // end of loop over piminus vector
+//                }
+//                //</editor-fold>
+//
+//                //  Applying chi2 cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------
+//
+////                    //<editor-fold desc="Applying Chi2 cuts (MicroBooNE)">
+////                    if (electrons[0]->getRegion() == CD) {
+////                        if ((apply_chi2_cuts == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+////                    } else if (electrons[0]->getRegion() == FD) {
+////                        if ((apply_chi2_cuts == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+////                    }
+////
+////                    // TODO: move proton blocks here to for loop to save some space
+////                    if (protons[0]->getRegion() == CD) {
+////                        if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+////                    } else if (protons[0]->getRegion() == FD) {
+////                        if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+////                    }
+////
+////                    if (protons[1]->getRegion() == CD) {
+////                        if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+////                    } else if (protons[1]->getRegion() == FD) {
+////                        if ((apply_chi2_cuts == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+////                    }
+////
+////                    ++num_of_events_1e2p_w_allChi2_cuts;
+////                    //</editor-fold>
+//
+//                //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+//
+////                    //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
+////                    if ((apply_dVz_cuts == true) && ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut))) { continue; }
+////                    //</editor-fold>
+//
+//                //</editor-fold>
+//
+//                //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
+//
+//            } // End of calculate_MicroBooNE if
+//            //</editor-fold>
+
 //  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="1e2X cut">
@@ -3491,30 +3873,30 @@ void EventAnalyser() {
                 }
 
                 // momentum after cuts:
-//                if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
+//                if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
 //                    if (electrons[0]->getRegion() == CD) {
 //                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
 //                    } else if (electrons[0]->getRegion() == FD) {
 //                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
 //                    }
-//                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
-//                    if (P_e_1e.Mag() <= e_momentum_upper_cut) {
+//                } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
+//                    if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
 //                        if (electrons[0]->getRegion() == CD) {
 //                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
 //                        } else if (electrons[0]->getRegion() == FD) {
 //                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
 //                        }
 //                    }
-//                } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
-//                    if (P_e_1e.Mag() >= e_momentum_lower_cut) {
+//                } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
+//                    if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
 //                        if (electrons[0]->getRegion() == CD) {
 //                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
 //                        } else if (electrons[0]->getRegion() == FD) {
 //                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
 //                        }
 //                    }
-//                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
-//                    if ((P_e_1e.Mag() >= e_momentum_lower_cut) && (P_e_1e.Mag() <= e_momentum_upper_cut)) {
+//                } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
+//                    if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
 //                        if (electrons[0]->getRegion() == CD) {
 //                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
 //                        } else if (electrons[0]->getRegion() == FD) {
@@ -3523,30 +3905,30 @@ void EventAnalyser() {
 //                    }
 //                }
 
-                if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
+                if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
                     if (protons[0]->getRegion() == CD) {
                         P_p_1e2p_AC_CD->Fill(P_p0.Mag());
                     } else if (protons[0]->getRegion() == FD) {
                         P_p_1e2p_AC_FD->Fill(P_p0.Mag());
                     }
-                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut == -1)) {
-                    if (P_p0.Mag() <= p_momentum_upper_cut) {
+                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
+                    if (P_p0.Mag() <= p_momentum_upper_cut_2p) {
                         if (protons[0]->getRegion() == CD) {
                             P_p_1e2p_AC_CD->Fill(P_p0.Mag());
                         } else if (protons[0]->getRegion() == FD) {
                             P_p_1e2p_AC_FD->Fill(P_p0.Mag());
                         }
                     }
-                } else if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut != -1)) {
-                    if (P_p0.Mag() >= p_momentum_lower_cut) {
+                } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
+                    if (P_p0.Mag() >= p_momentum_lower_cut_2p) {
                         if (protons[0]->getRegion() == CD) {
                             P_p_1e2p_AC_CD->Fill(P_p0.Mag());
                         } else if (protons[0]->getRegion() == FD) {
                             P_p_1e2p_AC_FD->Fill(P_p0.Mag());
                         }
                     }
-                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut != -1)) {
-                    if ((P_p0.Mag() >= p_momentum_lower_cut) && (P_p0.Mag() <= p_momentum_upper_cut)) {
+                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
+                    if ((P_p0.Mag() >= p_momentum_lower_cut_2p) && (P_p0.Mag() <= p_momentum_upper_cut_2p)) {
                         if (protons[0]->getRegion() == CD) {
                             P_p_1e2p_AC_CD->Fill(P_p0.Mag());
                         } else if (protons[0]->getRegion() == FD) {
@@ -3555,30 +3937,30 @@ void EventAnalyser() {
                     }
                 }
 
-                if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
+                if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
                     if (protons[1]->getRegion() == CD) {
                         P_p_1e2p_AC_CD->Fill(P_p1.Mag());
                     } else if (protons[1]->getRegion() == FD) {
                         P_p_1e2p_AC_FD->Fill(P_p1.Mag());
                     }
-                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut == -1)) {
-                    if (P_p1.Mag() <= p_momentum_upper_cut) {
+                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
+                    if (P_p1.Mag() <= p_momentum_upper_cut_2p) {
                         if (protons[1]->getRegion() == CD) {
                             P_p_1e2p_AC_CD->Fill(P_p1.Mag());
                         } else if (protons[1]->getRegion() == FD) {
                             P_p_1e2p_AC_FD->Fill(P_p1.Mag());
                         }
                     }
-                } else if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut != -1)) {
-                    if (P_p1.Mag() >= p_momentum_lower_cut) {
+                } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
+                    if (P_p1.Mag() >= p_momentum_lower_cut_2p) {
                         if (protons[1]->getRegion() == CD) {
                             P_p_1e2p_AC_CD->Fill(P_p1.Mag());
                         } else if (protons[1]->getRegion() == FD) {
                             P_p_1e2p_AC_FD->Fill(P_p1.Mag());
                         }
                     }
-                } else if ((p_momentum_upper_cut != -1) && (p_momentum_lower_cut != -1)) {
-                    if ((P_p1.Mag() >= p_momentum_lower_cut) && (P_p1.Mag() <= p_momentum_upper_cut)) {
+                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
+                    if ((P_p1.Mag() >= p_momentum_lower_cut_2p) && (P_p1.Mag() <= p_momentum_upper_cut_2p)) {
                         if (protons[1]->getRegion() == CD) {
                             P_p_1e2p_AC_CD->Fill(P_p1.Mag());
                         } else if (protons[1]->getRegion() == FD) {
@@ -3724,14 +4106,14 @@ void EventAnalyser() {
                 //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying momentum cuts">
-//                if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut != -1) && (P_e_1e.Mag() > e_momentum_upper_cut))) { continue; }
-//                if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut != -1) && (P_e_1e.Mag() < e_momentum_lower_cut))) { continue; }
+//                if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e_1e.Mag() > e_momentum_upper_cut_2p))) { continue; }
+//                if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e_1e.Mag() < e_momentum_lower_cut_2p))) { continue; }
 
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut != -1) && (P_p0.Mag() > p_momentum_upper_cut))) { continue; }
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut != -1) && (P_p0.Mag() < p_momentum_lower_cut))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p0.Mag() > p_momentum_upper_cut_2p))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p0.Mag() < p_momentum_lower_cut_2p))) { continue; }
 
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut != -1) && (P_p1.Mag() > p_momentum_upper_cut))) { continue; }
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut != -1) && (P_p1.Mag() < p_momentum_lower_cut))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p1.Mag() > p_momentum_upper_cut_2p))) { continue; }
+                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p1.Mag() < p_momentum_lower_cut_2p))) { continue; }
                 //</editor-fold>
 
                 //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
@@ -5276,18 +5658,18 @@ void EventAnalyser() {
 
         //<editor-fold desc="Electrons momentum histograms (1e2p, CD & FD)">
         histPlotter1D(c1, P_e_1e2p_BC_CD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_CD, "01_P_e_1e2p_BC_CD", P_e_1e2p_BC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
 
         histPlotter1D(c1, P_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_FD, "01_P_e_1e2p_BC_FD", P_e_1e2p_BC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Protons momentum histograms (1e2p, CD & FD)">
         histPlotter1D(c1, P_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_CD, "02_P_p_1e2p_BC_CD", P_p_1e2p_BC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
 
         histPlotter1D(c1, P_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_BC_FD, "02_P_p_1e2p_BC_FD", P_p_1e2p_BC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
         //</editor-fold>
 
         //</editor-fold>
@@ -5296,18 +5678,18 @@ void EventAnalyser() {
 
         //<editor-fold desc="Electrons momentum histograms (1e2p, CD & FD)">
         histPlotter1D(c1, P_e_1e2p_AC_CD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_CD, "03_P_e_1e2p_AC_CD", P_e_1e2p_AC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
 
         histPlotter1D(c1, P_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_FD, "03_P_e_1e2p_AC_FD", P_e_1e2p_AC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Protons momentum histograms (1e2p, CD & FD)">
         histPlotter1D(c1, P_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_CD, "04_P_p_1e2p_AC_CD", P_p_1e2p_AC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
 
         histPlotter1D(c1, P_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, P_Stack_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", P_p_1e2p_AC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
         //</editor-fold>
 
         //</editor-fold>
@@ -5316,18 +5698,120 @@ void EventAnalyser() {
 
         //<editor-fold desc="Electrons momentum histograms (2p, CD & FD)">
         histPlotter1D(c1, P_e_2p_CD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, P_Stack_2p_CD, "03_P_e_2p_CD", P_e_2p_CD_Dir, "CD", kBlue, true, true, false,
-                      true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+                      true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
 
         histPlotter1D(c1, P_e_2p_FD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, P_Stack_2p_FD, "03_P_e_2p_FD", P_e_2p_FD_Dir, "FD", kBlue, true, true, false,
-                      true, e_momentum_upper_cut, e_momentum_lower_cut, 0, false);
+                      true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Protons momentum histograms (2p, CD & FD)">
         histPlotter1D(c1, P_p_2p_CD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, P_Stack_2p_CD, "04_P_p_2p_CD", P_p_2p_CD_Dir, "CD", kBlue, true, true, false,
-                      true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+                      true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
 
         histPlotter1D(c1, P_p_2p_FD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, P_Stack_2p_FD, "04_P_p_2p_FD", P_p_2p_FD_Dir, "FD", kBlue, true, true, false,
-                      true, p_momentum_upper_cut, p_momentum_lower_cut, 0, false);
+                      true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
+        //</editor-fold>
+
+        //</editor-fold>
+
+//  Momentum histograms (MicroBooNE, CD & FD)  --------------------------------------------------------------
+
+//        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
+
+        //<editor-fold desc="Momentum histograms before cuts (MicroBooNE, CD & FD)">
+
+        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_e_MicroBooNE_BC_CD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
+                      "01_P_e_MicroBooNE_BC_CD", P_e_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+                      e_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_e_MicroBooNE_BC_FD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
+                      "02_P_e_MicroBooNE_BC_FD", P_e_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+                      e_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_p_MicroBooNE_BC_CD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
+                      "03_P_p_MicroBooNE_BC_CD", P_p_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+                      p_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_p_MicroBooNE_BC_FD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
+                      "04_P_p_MicroBooNE_BC_FD", P_p_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+                      p_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_cpion_MicroBooNE_BC_CD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
+                      "05_P_cpion_MicroBooNE_BC_CD", P_cpion_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_cpion_MicroBooNE_BC_FD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
+                      "06_P_cpion_MicroBooNE_BC_FD", P_cpion_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histograms after cuts (MicroBooNE, CD & FD)">
+
+        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_e_MicroBooNE_AC_CD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
+                      "01_P_e_MicroBooNE_AC_CD", P_e_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+                      e_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_e_MicroBooNE_AC_FD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
+                      "02_P_e_MicroBooNE_AC_FD", P_e_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+                      e_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_p_MicroBooNE_AC_CD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
+                      "03_P_p_MicroBooNE_AC_CD", P_p_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+                      p_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_p_MicroBooNE_AC_FD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
+                      "04_P_p_MicroBooNE_AC_FD", P_p_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+                      p_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_cpion_MicroBooNE_AC_CD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
+                      "05_P_cpion_MicroBooNE_AC_CD", P_cpion_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_cpion_MicroBooNE_AC_FD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
+                      "06_P_cpion_MicroBooNE_AC_FD", P_cpion_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histograms after MicroBooNE cuts (CD & FD)">
+
+        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_e_MicroBooNE_CD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "01_P_e_MicroBooNE_CD",
+                      P_e_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_e_MicroBooNE_FD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "02_P_e_MicroBooNE_FD",
+                      P_e_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_p_MicroBooNE_CD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "03_P_p_MicroBooNE_CD",
+                      P_p_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
+
+        histPlotter1D(c1, P_p_MicroBooNE_FD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "04_P_p_MicroBooNE_FD",
+                      P_p_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, P_cpion_MicroBooNE_CD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "05_P_cpion_MicroBooNE_CD",
+                      P_cpion_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
+                      false);
+
+        histPlotter1D(c1, P_cpion_MicroBooNE_FD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "06_P_cpion_MicroBooNE_FD",
+                      P_cpion_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
+                      false);
         //</editor-fold>
 
         //</editor-fold>
