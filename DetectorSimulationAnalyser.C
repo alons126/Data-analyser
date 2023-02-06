@@ -2601,9 +2601,6 @@ void EventAnalyser() {
 //  1e cut --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="1e cut">
-
-            //<editor-fold desc="General - 1e only cut">
-
             // Applying 1e cut:
             if (electrons.size() != 1) { continue; }
             ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
@@ -2968,18 +2965,23 @@ void EventAnalyser() {
 
             if (AllParticles.size() - electrons.size() == protons.size()) {
                 ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
-            }
 
-            if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
-            ++num_of_events_with_1e2X; // logging #(events) w/ 1e2X
-
-            if (protons.size() == 1) {
-                ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
+                if (protons.size() == 1) {
+                    ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
+                }
             }
             //</editor-fold>
 
-//  1e2p cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+            //<editor-fold desc="1e2X cut">
+            if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
+            ++num_of_events_with_1e2X; // logging #(events) w/ 1e2X
+            //</editor-fold>
+
+//  1e2p & 2p cuts ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="1e2p & 2p cuts">
             if ((calculate_2p == true) && (protons.size() == 2)) { // for 2p calculations
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
@@ -3438,7 +3440,6 @@ void EventAnalyser() {
 
                             if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_DIS_2p_CD->Fill(beamE - E_e_CD); }
                         }
-
                     } else if (e->getRegion() == FD) {
                         E_e_2p_FD->Fill(E_e_FD);
                         Theta_e_2p_FD->Fill(theta_e_1e_FD);
@@ -3565,7 +3566,7 @@ void EventAnalyser() {
                 } // end of loop over protons vector
                 //</editor-fold>
 
-            } // end of "protons.size() == 2" if
+            } // end of 1e2p & 2p cuts if
             //</editor-fold>
 
         } // end of while
