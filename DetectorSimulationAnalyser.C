@@ -109,7 +109,7 @@ void EventAnalyser() {
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Creating directories">
-    cout << "Creating plots directories...\n\n";
+    cout << "Creating plot directories...\n\n";
 
     string Plots_Folder = "./plots"; // Plots_Folder = Parent_Folder
 
@@ -386,23 +386,23 @@ void EventAnalyser() {
     //<editor-fold desc="Fiducial histograms plots directories">
     bool create_fiducial_Dir = true;
     string fiducial_Parent_Directory = "Fiducial_histograms";
-    string fiducial_Daughter_Folders[] = {"", "1e2p", "1e2p/ECIN", "1e2p/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
+    string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/ECIN", "1e_cut/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
 
     for (string folders_name: fiducial_Daughter_Folders) {
         MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name);
     }
 
-    //TODO: add fiducial plots by reaction
+    //TODO: add fiducial plots by reaction?
     string fiducial_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
 
     // 1e2p - i.e. plots before all other cuts
     // before cuts - i.e. plots before fiducial cuts
-    string fiducial_plots_1e2p_BC_ECIN_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e2p_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[3] + "/";
+    string fiducial_plots_1e_BC_ECIN_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+    string fiducial_plots_1e_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[3] + "/";
 
     // after cuts - i.e. plots after fiducial cuts
-    string fiducial_plots_1e2p_AC_ECIN_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e2p_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[3] + "/";
+    string fiducial_plots_1e_AC_ECIN_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+    string fiducial_plots_1e_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[3] + "/";
 
     // 2p - i.e. plots after fiducial and all other cuts
     string fiducial_plots_2p_cuts_histograms_ECIN_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[5] + "/";
@@ -627,510 +627,510 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Histogram limits -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Histogram limits">
-
-    //<editor-fold desc="Histogram limits for every case">
-
-    //<editor-fold desc="Chi2 plots">
-    Chi2_upper_lim = 50;
-    Chi2_lower_lim = -Chi2_upper_lim;
-    //</editor-fold>
-
-    //<editor-fold desc="Vertex plots">
-    Vertex_upper_lim = 50;
-    Vertex_lower_lim = -Vertex_upper_lim;
-
-    dV_upper_lim = 10;
-    dV_lower_lim = -dV_upper_lim;
-    //</editor-fold>
-
-    //<editor-fold desc="Theta histograms">
-
-    //<editor-fold desc="Theta histograms (2p)">
-    theta_lp_upper_lim_2p = 60;
-    theta_lp_lower_lim_2p = 0;
-    theta_p1_upper_lim_2p = 190;
-    theta_p1_lower_lim_2p = -10;
-    theta_p2_upper_lim_2p = 190;
-    theta_p2_lower_lim_2p = -10;
-    dtheta_upper_lim_2p = 190;
-    dtheta_lower_lim_2p = -10;
-    //</editor-fold>
-
-    //<editor-fold desc="Theta histograms (1n1p)">
-    theta_lp_upper_lim_1n1p = 60;
-    theta_lp_lower_lim_1n1p = 0;
-    theta_p_upper_lim_1n1p = 190;
-    theta_p_lower_lim_1n1p = -10;
-    theta_n_upper_lim_1n1p = 190;
-    theta_n_lower_lim_1n1p = -10;
-    dtheta_upper_lim_1n1p = 190;
-    dtheta_lower_lim_1n1p = -10;
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Phi histograms">
-
-    //<editor-fold desc="Phi histograms (2p)">
-    phi_lp_upper_lim_2p = 200;
-    phi_lp_lower_lim_2p = -200;
-    phi_p1_upper_lim_2p = 200;
-    phi_p1_lower_lim_2p = -200;
-    phi_p2_upper_lim_2p = 200;
-    phi_p2_lower_lim_2p = -200;
-    dphi_upper_lim_2p = 360;
-    dphi_lower_lim_2p = -360;
-    //</editor-fold>
-
-    //<editor-fold desc="Phi histograms (1n1p)">
-    phi_lp_upper_lim_1n1p = 200;
-    phi_lp_lower_lim_1n1p = -200;
-    phi_p_upper_lim_1n1p = 200;
-    phi_p_lower_lim_1n1p = -200;
-    phi_n_upper_lim_1n1p = 200;
-    phi_n_lower_lim_1n1p = -200;
-    dphi_upper_lim_1n1p = 360;
-    dphi_lower_lim_1n1p = -360;
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE plots">
-
-    //<editor-fold desc="MicroBooNE gamma plots (unweighted)">
-    gamma_Lab_hist_upper_lim_2p = 1;
-    gamma_Lab_hist_lower_lim_2p = -1;
-    gamma_mu_p_tot_upper_lim_2p = 1;
-    gamma_mu_p_tot_lower_lim_2p = -1;
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE gamma plots (Q4 weighted)">
-    gamma_Lab_hist_weighted_upper_lim_1n1p = 1;
-    gamma_Lab_hist_weighted_lower_lim_1n1p = -1;
-    gamma_mu_p_tot_weighted_upper_lim_1n1p = 1;
-    gamma_mu_p_tot_weighted_lower_lim_1n1p = -1;
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE gamma plots (no pions, for every interaction)">
-    gamma_Lab_all_hist_upper_lim = 1;
-    gamma_Lab_all_hist_lower_lim = -1;
-    gamma_Lab_all_hist_weighted_upper_lim = 1;
-    gamma_Lab_all_hist_weighted_lower_lim = -1;
-    gamma_Lab_QEL_hist_upper_lim = 1;
-    gamma_Lab_QEL_hist_lower_lim = -1;
-    gamma_Lab_QEL_hist_weighted_upper_lim = 1;
-    gamma_Lab_QEL_hist_weighted_lower_lim = -1;
-    gamma_Lab_MEC_hist_upper_lim = 1;
-    gamma_Lab_MEC_hist_lower_lim = -1;
-    gamma_Lab_MEC_hist_weighted_upper_lim = 1;
-    gamma_Lab_MEC_hist_weighted_lower_lim = -1;
-    gamma_Lab_RES_hist_upper_lim = 1;
-    gamma_Lab_RES_hist_lower_lim = -1;
-    gamma_Lab_RES_hist_weighted_upper_lim = 1;
-    gamma_Lab_RES_hist_weighted_lower_lim = -1;
-    gamma_Lab_DIS_hist_upper_lim = 1;
-    gamma_Lab_DIS_hist_lower_lim = -1;
-    gamma_Lab_DIS_hist_weighted_upper_lim = 1;
-    gamma_Lab_DIS_hist_weighted_lower_lim = -1;
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE dP_T plots">
-    dP_T_hist_upper_lim = 2;
-    dP_T_hist_lower_lim = 0;
-    dP_T_hist_weighted_upper_lim = 2;
-    dP_T_hist_weighted_lower_lim = 0;
-
-    /*
-    if (FSI_status == true) {
-        dP_T_hist_upper_lim = 2;
-        dP_T_hist_lower_lim = 0;
-        dP_T_hist_weighted_upper_lim = 2;
-        dP_T_hist_weighted_lower_lim = 0;
-    } else if (FSI_status == false) {
-        dP_T_hist_upper_lim = 2;
-        dP_T_hist_lower_lim = 0;
-        dP_T_hist_weighted_upper_lim = 2;
-        dP_T_hist_weighted_lower_lim = 0;
-    }
-     */
-    //</editor-fold>
-
-    //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
-    P_L_hist_upper_lim = 3.0;
-    P_L_hist_lower_lim = 0;
-    P_R_hist_upper_lim = 3.0;
-    P_R_hist_lower_lim = 0;
-    P_lp_hist_upper_lim = 3.0;
-    P_lp_hist_lower_lim = 0;
-    P_pion_hist_upper_lim = 0.1;
-    P_pion_hist_lower_lim = 0;
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Histogram limits by cases">
-
-    if (file_name == "general_file") {
-
-        //<editor-fold desc="12C_2222GeV_GTEST19_10b_00_000 histogram limits">
-
-        //<editor-fold desc="Energy histograms">
-
-        //<editor-fold desc="Energy histograms (2p)">
-//            fsEl_upper_lim_2p = 110.;
+//// Histogram limits -----------------------------------------------------------------------------------------------------------------------------------------------------
+//
+//    //<editor-fold desc="Histogram limits">
+//
+//    //<editor-fold desc="Histogram limits for every case">
+//
+//    //<editor-fold desc="Chi2 plots">
+//    Chi2_upper_lim = 50;
+//    Chi2_lower_lim = -Chi2_upper_lim;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Vertex plots">
+//    Vertex_upper_lim = 50;
+//    Vertex_lower_lim = -Vertex_upper_lim;
+//
+//    dV_upper_lim = 10;
+//    dV_lower_lim = -dV_upper_lim;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Theta histograms">
+//
+//    //<editor-fold desc="Theta histograms (2p)">
+//    theta_lp_upper_lim_2p = 60;
+//    theta_lp_lower_lim_2p = 0;
+//    theta_p1_upper_lim_2p = 190;
+//    theta_p1_lower_lim_2p = -10;
+//    theta_p2_upper_lim_2p = 190;
+//    theta_p2_lower_lim_2p = -10;
+//    dtheta_upper_lim_2p = 190;
+//    dtheta_lower_lim_2p = -10;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Theta histograms (1n1p)">
+//    theta_lp_upper_lim_1n1p = 60;
+//    theta_lp_lower_lim_1n1p = 0;
+//    theta_p_upper_lim_1n1p = 190;
+//    theta_p_lower_lim_1n1p = -10;
+//    theta_n_upper_lim_1n1p = 190;
+//    theta_n_lower_lim_1n1p = -10;
+//    dtheta_upper_lim_1n1p = 190;
+//    dtheta_lower_lim_1n1p = -10;
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Phi histograms">
+//
+//    //<editor-fold desc="Phi histograms (2p)">
+//    phi_lp_upper_lim_2p = 200;
+//    phi_lp_lower_lim_2p = -200;
+//    phi_p1_upper_lim_2p = 200;
+//    phi_p1_lower_lim_2p = -200;
+//    phi_p2_upper_lim_2p = 200;
+//    phi_p2_lower_lim_2p = -200;
+//    dphi_upper_lim_2p = 360;
+//    dphi_lower_lim_2p = -360;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Phi histograms (1n1p)">
+//    phi_lp_upper_lim_1n1p = 200;
+//    phi_lp_lower_lim_1n1p = -200;
+//    phi_p_upper_lim_1n1p = 200;
+//    phi_p_lower_lim_1n1p = -200;
+//    phi_n_upper_lim_1n1p = 200;
+//    phi_n_lower_lim_1n1p = -200;
+//    dphi_upper_lim_1n1p = 360;
+//    dphi_lower_lim_1n1p = -360;
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE plots">
+//
+//    //<editor-fold desc="MicroBooNE gamma plots (unweighted)">
+//    gamma_Lab_hist_upper_lim_2p = 1;
+//    gamma_Lab_hist_lower_lim_2p = -1;
+//    gamma_mu_p_tot_upper_lim_2p = 1;
+//    gamma_mu_p_tot_lower_lim_2p = -1;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE gamma plots (Q4 weighted)">
+//    gamma_Lab_hist_weighted_upper_lim_1n1p = 1;
+//    gamma_Lab_hist_weighted_lower_lim_1n1p = -1;
+//    gamma_mu_p_tot_weighted_upper_lim_1n1p = 1;
+//    gamma_mu_p_tot_weighted_lower_lim_1n1p = -1;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE gamma plots (no pions, for every interaction)">
+//    gamma_Lab_all_hist_upper_lim = 1;
+//    gamma_Lab_all_hist_lower_lim = -1;
+//    gamma_Lab_all_hist_weighted_upper_lim = 1;
+//    gamma_Lab_all_hist_weighted_lower_lim = -1;
+//    gamma_Lab_QEL_hist_upper_lim = 1;
+//    gamma_Lab_QEL_hist_lower_lim = -1;
+//    gamma_Lab_QEL_hist_weighted_upper_lim = 1;
+//    gamma_Lab_QEL_hist_weighted_lower_lim = -1;
+//    gamma_Lab_MEC_hist_upper_lim = 1;
+//    gamma_Lab_MEC_hist_lower_lim = -1;
+//    gamma_Lab_MEC_hist_weighted_upper_lim = 1;
+//    gamma_Lab_MEC_hist_weighted_lower_lim = -1;
+//    gamma_Lab_RES_hist_upper_lim = 1;
+//    gamma_Lab_RES_hist_lower_lim = -1;
+//    gamma_Lab_RES_hist_weighted_upper_lim = 1;
+//    gamma_Lab_RES_hist_weighted_lower_lim = -1;
+//    gamma_Lab_DIS_hist_upper_lim = 1;
+//    gamma_Lab_DIS_hist_lower_lim = -1;
+//    gamma_Lab_DIS_hist_weighted_upper_lim = 1;
+//    gamma_Lab_DIS_hist_weighted_lower_lim = -1;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE dP_T plots">
+//    dP_T_hist_upper_lim = 2;
+//    dP_T_hist_lower_lim = 0;
+//    dP_T_hist_weighted_upper_lim = 2;
+//    dP_T_hist_weighted_lower_lim = 0;
+//
+//    /*
+//    if (FSI_status == true) {
+//        dP_T_hist_upper_lim = 2;
+//        dP_T_hist_lower_lim = 0;
+//        dP_T_hist_weighted_upper_lim = 2;
+//        dP_T_hist_weighted_lower_lim = 0;
+//    } else if (FSI_status == false) {
+//        dP_T_hist_upper_lim = 2;
+//        dP_T_hist_lower_lim = 0;
+//        dP_T_hist_weighted_upper_lim = 2;
+//        dP_T_hist_weighted_lower_lim = 0;
+//    }
+//     */
+//    //</editor-fold>
+//
+//    //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
+//    P_L_hist_upper_lim = 3.0;
+//    P_L_hist_lower_lim = 0;
+//    P_R_hist_upper_lim = 3.0;
+//    P_R_hist_lower_lim = 0;
+//    P_lp_hist_upper_lim = 3.0;
+//    P_lp_hist_lower_lim = 0;
+//    P_pion_hist_upper_lim = 0.1;
+//    P_pion_hist_lower_lim = 0;
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Histogram limits by cases">
+//
+//    if (file_name == "general_file") {
+//
+//        //<editor-fold desc="12C_2222GeV_GTEST19_10b_00_000 histogram limits">
+//
+//        //<editor-fold desc="Energy histograms">
+//
+//        //<editor-fold desc="Energy histograms (2p)">
+////            fsEl_upper_lim_2p = 110.;
+////            fsEl_lower_lim_2p = 1;
+//        fsEl_upper_lim_2p = 300;
+//        fsEl_lower_lim_2p = -10;
+////        fsEl_upper_lim_2p = 6.5;
+////        fsEl_lower_lim_2p = 0.;
+//        fsEl_QEL_upper_lim_2p = 2.3;
+//        fsEl_QEL_lower_lim_2p = 0;
+//        fsEl_MEC_upper_lim_2p = 2.3;
+//        fsEl_MEC_lower_lim_2p = 0;
+//        fsEl_RES_upper_lim_2p = 2.3;
+//        fsEl_RES_lower_lim_2p = 0;
+//        fsEl_DIS_upper_lim_2p = 2.3;
+//        fsEl_DIS_lower_lim_2p = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
+//
+//        /*
+//        if (FSI_status == true) {
+////            fsEl_upper_lim_2p = 110.;
+////            fsEl_lower_lim_2p = 1;
+//            fsEl_upper_lim_2p = 6.;
+//            fsEl_lower_lim_2p = 0.;
+//            fsEl_QEL_upper_lim_2p = 2.3;
+//            fsEl_QEL_lower_lim_2p = 0;
+//            fsEl_MEC_upper_lim_2p = 2.3;
+//            fsEl_MEC_lower_lim_2p = 0;
+//            fsEl_RES_upper_lim_2p = 2.3;
+//            fsEl_RES_lower_lim_2p = 0;
+//            fsEl_DIS_upper_lim_2p = 2.3;
+//            fsEl_DIS_lower_lim_2p = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
+//        } else if (FSI_status == false) {
+//            fsEl_upper_lim_2p = 2.21;
 //            fsEl_lower_lim_2p = 1;
-        fsEl_upper_lim_2p = 300;
-        fsEl_lower_lim_2p = -10;
-//        fsEl_upper_lim_2p = 6.5;
-//        fsEl_lower_lim_2p = 0.;
-        fsEl_QEL_upper_lim_2p = 2.3;
-        fsEl_QEL_lower_lim_2p = 0;
-        fsEl_MEC_upper_lim_2p = 2.3;
-        fsEl_MEC_lower_lim_2p = 0;
-        fsEl_RES_upper_lim_2p = 2.3;
-        fsEl_RES_lower_lim_2p = 0;
-        fsEl_DIS_upper_lim_2p = 2.3;
-        fsEl_DIS_lower_lim_2p = 0;
-        fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
-        fsEl_VS_theta_lp_lower_lim_2p_x = 0;
-        fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
-        fsEl_VS_theta_lp_lower_lim_2p_y = 0;
-
-        /*
-        if (FSI_status == true) {
-//            fsEl_upper_lim_2p = 110.;
-//            fsEl_lower_lim_2p = 1;
-            fsEl_upper_lim_2p = 6.;
-            fsEl_lower_lim_2p = 0.;
-            fsEl_QEL_upper_lim_2p = 2.3;
-            fsEl_QEL_lower_lim_2p = 0;
-            fsEl_MEC_upper_lim_2p = 2.3;
-            fsEl_MEC_lower_lim_2p = 0;
-            fsEl_RES_upper_lim_2p = 2.3;
-            fsEl_RES_lower_lim_2p = 0;
-            fsEl_DIS_upper_lim_2p = 2.3;
-            fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
-            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
-        } else if (FSI_status == false) {
-            fsEl_upper_lim_2p = 2.21;
-            fsEl_lower_lim_2p = 1;
-            fsEl_QEL_upper_lim_2p = 2.3;
-            fsEl_QEL_lower_lim_2p = 0;
-            fsEl_MEC_upper_lim_2p = 2.3;
-            fsEl_MEC_lower_lim_2p = 0;
-            fsEl_RES_upper_lim_2p = 2.3;
-            fsEl_RES_lower_lim_2p = 0;
-            fsEl_DIS_upper_lim_2p = 2.3;
-            fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
-            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
-            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
-            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
-        }
-         */
-        //</editor-fold>
-
-        //<editor-fold desc="Energy histograms (1n1p)">
-        fsEl_upper_lim_1n1p = 300;
-        fsEl_lower_lim_1n1p = -10;
-//        fsEl_upper_lim_1n1p = 2.3;
-//        fsEl_lower_lim_1n1p = 1;
-        fsEl_QEL_upper_lim_1n1p = 2.3;
-        fsEl_QEL_lower_lim_1n1p = 0;
-        fsEl_MEC_upper_lim_1n1p = 2.3;
-        fsEl_MEC_lower_lim_1n1p = 0;
-        fsEl_RES_upper_lim_1n1p = 2.3;
-        fsEl_RES_lower_lim_1n1p = 0;
-        fsEl_DIS_upper_lim_1n1p = 2.3;
-        fsEl_DIS_lower_lim_1n1p = 0;
-        fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
-        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
-        fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
-        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
-
-        /*        if (FSI_status == true) {
-            fsEl_upper_lim_1n1p = 2.3;
-            fsEl_lower_lim_1n1p = 1;
-            fsEl_QEL_upper_lim_1n1p = 2.3;
-            fsEl_QEL_lower_lim_1n1p = 0;
-            fsEl_MEC_upper_lim_1n1p = 2.3;
-            fsEl_MEC_lower_lim_1n1p = 0;
-            fsEl_RES_upper_lim_1n1p = 2.3;
-            fsEl_RES_lower_lim_1n1p = 0;
-            fsEl_DIS_upper_lim_1n1p = 2.3;
-            fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
-        } else if (FSI_status == false) {
-            fsEl_upper_lim_1n1p = 2.3;
-            fsEl_lower_lim_1n1p = 1;
-            fsEl_QEL_upper_lim_1n1p = 2.3;
-            fsEl_QEL_lower_lim_1n1p = 0;
-            fsEl_MEC_upper_lim_1n1p = 2.3;
-            fsEl_MEC_lower_lim_1n1p = 0;
-            fsEl_RES_upper_lim_1n1p = 2.3;
-            fsEl_RES_lower_lim_1n1p = 0;
-            fsEl_DIS_upper_lim_1n1p = 2.3;
-            fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
-            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
-            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
-            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
-        }
-*/
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms">
-
-        //<editor-fold desc="Energy Transfer histograms (all interactions)">
-
-        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
-        E_Trans_all_ang_all_int_upper_lim_2p = 1.7;
-        E_Trans_all_ang_all_int_lower_lim_2p = 0;
-        E_Trans15_all_upper_lim_2p = 1.7;
-        E_Trans15_all_lower_lim_2p = 0;
-        E_Trans45_all_upper_lim_2p = 1.7;
-        E_Trans45_all_lower_lim_2p = 0;
-        E_Trans90_all_upper_lim_2p = 1.7;
-        E_Trans90_all_lower_lim_2p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
-        E_Trans_all_ang_all_int_upper_lim_1n1p = 1.7;
-        E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
-        E_Trans15_all_upper_lim_1n1p = 1.7;
-        E_Trans15_all_lower_lim_1n1p = 0;
-        E_Trans45_all_upper_lim_1n1p = 1.7;
-        E_Trans45_all_lower_lim_1n1p = 0;
-        E_Trans90_all_upper_lim_1n1p = 1.7;
-        E_Trans90_all_lower_lim_1n1p = 0;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (QEL only)">
-
-        //<editor-fold desc="Energy Transfer histograms (QEL only, 2p)">
-        E_Trans15_QEL_upper_lim_2p = 1.7;
-        E_Trans15_QEL_lower_lim_2p = 0;
-        E_Trans45_QEL_upper_lim_2p = 1.7;
-        E_Trans45_QEL_lower_lim_2p = 0;
-        E_Trans90_QEL_upper_lim_2p = 1.7;
-        E_Trans90_QEL_lower_lim_2p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (QEL only, 1n1p)">
-        E_Trans15_QEL_upper_lim_1n1p = 1.7;
-        E_Trans15_QEL_lower_lim_1n1p = 0;
-        E_Trans45_QEL_upper_lim_1n1p = 1.7;
-        E_Trans45_QEL_lower_lim_1n1p = 0;
-        E_Trans90_QEL_upper_lim_1n1p = 1.7;
-        E_Trans90_QEL_lower_lim_1n1p = 0;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (MEC only)">
-
-        //<editor-fold desc="Energy Transfer histograms (MEC only, 2p)">
-        E_Trans15_MEC_upper_lim_2p = 1.7;
-        E_Trans15_MEC_lower_lim_2p = 0;
-        E_Trans45_MEC_upper_lim_2p = 1.7;
-        E_Trans45_MEC_lower_lim_2p = 0;
-        E_Trans90_MEC_upper_lim_2p = 1.7;
-        E_Trans90_MEC_lower_lim_2p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (MEC only, 1n1p)">
-        E_Trans15_MEC_upper_lim_1n1p = 1.7;
-        E_Trans15_MEC_lower_lim_1n1p = 0;
-        E_Trans45_MEC_upper_lim_1n1p = 1.7;
-        E_Trans45_MEC_lower_lim_1n1p = 0;
-        E_Trans90_MEC_upper_lim_1n1p = 1.7;
-        E_Trans90_MEC_lower_lim_1n1p = 0;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (RES only)">
-
-        //<editor-fold desc="Energy Transfer histograms (RES only, 2p)">
-        E_Trans15_RES_upper_lim_2p = 1.7;
-        E_Trans15_RES_lower_lim_2p = 0;
-        E_Trans45_RES_upper_lim_2p = 1.7;
-        E_Trans45_RES_lower_lim_2p = 0;
-        E_Trans90_RES_upper_lim_2p = 1.7;
-        E_Trans90_RES_lower_lim_2p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (RES only, 1n1p)">
-        E_Trans15_RES_upper_lim_1n1p = 1.7;
-        E_Trans15_RES_lower_lim_1n1p = 0;
-        E_Trans45_RES_upper_lim_1n1p = 1.7;
-        E_Trans45_RES_lower_lim_1n1p = 0;
-        E_Trans90_RES_upper_lim_1n1p = 1.7;
-        E_Trans90_RES_lower_lim_1n1p = 0;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (DIS only)">
-
-        //<editor-fold desc="Energy Transfer histograms (DIS only, 2p)">
-        E_Trans15_DIS_upper_lim_2p = 1.7;
-        E_Trans15_DIS_lower_lim_2p = 0;
-        E_Trans45_DIS_upper_lim_2p = 1.7;
-        E_Trans45_DIS_lower_lim_2p = 0;
-        E_Trans90_DIS_upper_lim_2p = 1.7;
-        E_Trans90_DIS_lower_lim_2p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="Energy Transfer histograms (DIS only, 1n1p)">
-        E_Trans15_DIS_upper_lim_1n1p = 1.7;
-        E_Trans15_DIS_lower_lim_1n1p = 0;
-        E_Trans45_DIS_upper_lim_1n1p = 1.7;
-        E_Trans45_DIS_lower_lim_1n1p = 0;
-        E_Trans90_DIS_upper_lim_1n1p = 1.7;
-        E_Trans90_DIS_lower_lim_1n1p = 0;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Inclusive Energy Transfer histograms">
-        E_Trans15_all_inclusive_upper_lim = 6;
-        E_Trans15_all_inclusive_lower_lim = 0;
-        E_Trans15_QEL_inclusive_upper_lim = 6;
-        E_Trans15_QEL_inclusive_lower_lim = 0;
-        E_Trans15_MEC_inclusive_upper_lim = 6;
-        E_Trans15_MEC_inclusive_lower_lim = 0;
-        E_Trans15_RES_inclusive_upper_lim = 6;
-        E_Trans15_RES_inclusive_lower_lim = 0;
-        E_Trans15_DIS_inclusive_upper_lim = 6;
-        E_Trans15_DIS_inclusive_lower_lim = 0;
-        E_Trans_VS_q_all_inclusive_upper_lim_x = 6;
-        E_Trans_VS_q_all_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_all_inclusive_upper_lim_y = 6;
-        E_Trans_VS_q_all_inclusive_lower_lim_y = 0;
-        E_Trans_VS_q_QEL_inclusive_upper_lim_x = 6;
-        E_Trans_VS_q_QEL_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 6;
-        E_Trans_VS_q_QEL_inclusive_lower_lim_y = 0;
-        E_Trans_VS_q_MEC_inclusive_upper_lim_x = 6;
-        E_Trans_VS_q_MEC_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 6;
-        E_Trans_VS_q_MEC_inclusive_lower_lim_y = 0;
-        E_Trans_VS_q3_all_upper_lim_x_2p = 6;
-        E_Trans_VS_q3_all_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_2p = 6;
-        E_Trans_VS_q3_all_lower_lim_y_2p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_x_2p = 6;
-        E_Trans_VS_q3_QEL_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_2p = 6;
-        E_Trans_VS_q3_QEL_lower_lim_y_2p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_x_2p = 6;
-        E_Trans_VS_q3_MEC_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_2p = 6;
-        E_Trans_VS_q3_MEC_lower_lim_y_2p = 0;
-        E_Trans_VS_q3_all_upper_lim_x_1n1p = 6;
-        E_Trans_VS_q3_all_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_1n1p = 6;
-        E_Trans_VS_q3_all_lower_lim_y_1n1p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 6;
-        E_Trans_VS_q3_QEL_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 6;
-        E_Trans_VS_q3_QEL_lower_lim_y_1n1p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 6;
-        E_Trans_VS_q3_MEC_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 6;
-        E_Trans_VS_q3_MEC_lower_lim_y_1n1p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal restoration histograms">
-
-        //<editor-fold desc="E_cal range">
-        E_cal_QEL_upper_lim_range = 2.35;
-        E_cal_QEL_lower_lim_range = 2.11;
-        E_cal_MEC_upper_lim_range = 2.35;
-        E_cal_MEC_lower_lim_range = 2.11;
-        E_cal_RES_upper_lim_range = 2.35;
-        E_cal_RES_lower_lim_range = 2.11;
-        E_cal_DIS_upper_lim_range = 2.35;
-        E_cal_DIS_lower_lim_range = 2.11;
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal restoration histograms (2p)">
-        E_cal_QEL_upper_lim_2p = E_cal_QEL_upper_lim_range;
-        E_cal_QEL_lower_lim_2p = E_cal_QEL_lower_lim_range;
-        E_cal_MEC_upper_lim_2p = E_cal_MEC_upper_lim_range;
-        E_cal_MEC_lower_lim_2p = E_cal_MEC_lower_lim_range;
-        E_cal_RES_upper_lim_2p = E_cal_RES_upper_lim_range;
-        E_cal_RES_lower_lim_2p = E_cal_RES_lower_lim_range;
-        E_cal_DIS_upper_lim_2p = E_cal_DIS_upper_lim_range;
-        E_cal_DIS_lower_lim_2p = E_cal_DIS_lower_lim_range;
-        //</editor-fold>
-
-        //<editor-fold desc="E_cal restoration histograms (1n1p)">
-        E_cal_QEL_upper_lim_1n1p = E_cal_QEL_upper_lim_range;
-        E_cal_QEL_lower_lim_1n1p = E_cal_QEL_lower_lim_range;
-        E_cal_MEC_upper_lim_1n1p = E_cal_MEC_upper_lim_range;
-        E_cal_MEC_lower_lim_1n1p = E_cal_MEC_lower_lim_range;
-        E_cal_RES_upper_lim_1n1p = E_cal_RES_upper_lim_range;
-        E_cal_RES_lower_lim_1n1p = E_cal_RES_lower_lim_range;
-        E_cal_DIS_upper_lim_1n1p = E_cal_DIS_upper_lim_range;
-        E_cal_DIS_lower_lim_1n1p = E_cal_DIS_lower_lim_range;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms">
-
-        //<editor-fold desc="Momentum histograms (2p)">
-        P_L_hist_upper_lim_2p = 6.0;
-        P_L_hist_lower_lim_2p = 0;
-        P_R_hist_upper_lim_2p = 6.0;
-        P_R_hist_lower_lim_2p = 0;
-        P_lp_hist_upper_lim_2p = 6.0;
-        P_lp_hist_lower_lim_2p = 0;
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms (1n1p)">
-        P_p_hist_upper_lim_1n1p = 6.0;
-        P_p_hist_lower_lim_1n1p = 0;
-        P_n_hist_upper_lim_1n1p = 6.0;
-        P_n_hist_lower_lim_1n1p = 0;
-        P_lp_hist_upper_lim_1n1p = 6.0;
-        P_lp_hist_lower_lim_1n1p = 0;
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //</editor-fold>
-
-    }
-
-    //</editor-fold>
-
-    //</editor-fold>
+//            fsEl_QEL_upper_lim_2p = 2.3;
+//            fsEl_QEL_lower_lim_2p = 0;
+//            fsEl_MEC_upper_lim_2p = 2.3;
+//            fsEl_MEC_lower_lim_2p = 0;
+//            fsEl_RES_upper_lim_2p = 2.3;
+//            fsEl_RES_lower_lim_2p = 0;
+//            fsEl_DIS_upper_lim_2p = 2.3;
+//            fsEl_DIS_lower_lim_2p = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
+//        }
+//         */
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy histograms (1n1p)">
+//        fsEl_upper_lim_1n1p = 300;
+//        fsEl_lower_lim_1n1p = -10;
+////        fsEl_upper_lim_1n1p = 2.3;
+////        fsEl_lower_lim_1n1p = 1;
+//        fsEl_QEL_upper_lim_1n1p = 2.3;
+//        fsEl_QEL_lower_lim_1n1p = 0;
+//        fsEl_MEC_upper_lim_1n1p = 2.3;
+//        fsEl_MEC_lower_lim_1n1p = 0;
+//        fsEl_RES_upper_lim_1n1p = 2.3;
+//        fsEl_RES_lower_lim_1n1p = 0;
+//        fsEl_DIS_upper_lim_1n1p = 2.3;
+//        fsEl_DIS_lower_lim_1n1p = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//        fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//        fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
+//
+//        /*        if (FSI_status == true) {
+//            fsEl_upper_lim_1n1p = 2.3;
+//            fsEl_lower_lim_1n1p = 1;
+//            fsEl_QEL_upper_lim_1n1p = 2.3;
+//            fsEl_QEL_lower_lim_1n1p = 0;
+//            fsEl_MEC_upper_lim_1n1p = 2.3;
+//            fsEl_MEC_lower_lim_1n1p = 0;
+//            fsEl_RES_upper_lim_1n1p = 2.3;
+//            fsEl_RES_lower_lim_1n1p = 0;
+//            fsEl_DIS_upper_lim_1n1p = 2.3;
+//            fsEl_DIS_lower_lim_1n1p = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
+//        } else if (FSI_status == false) {
+//            fsEl_upper_lim_1n1p = 2.3;
+//            fsEl_lower_lim_1n1p = 1;
+//            fsEl_QEL_upper_lim_1n1p = 2.3;
+//            fsEl_QEL_lower_lim_1n1p = 0;
+//            fsEl_MEC_upper_lim_1n1p = 2.3;
+//            fsEl_MEC_lower_lim_1n1p = 0;
+//            fsEl_RES_upper_lim_1n1p = 2.3;
+//            fsEl_RES_lower_lim_1n1p = 0;
+//            fsEl_DIS_upper_lim_1n1p = 2.3;
+//            fsEl_DIS_lower_lim_1n1p = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
+//        }
+//*/
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms">
+//
+//        //<editor-fold desc="Energy Transfer histograms (all interactions)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
+//        E_Trans_all_ang_all_int_upper_lim_2p = 1.7;
+//        E_Trans_all_ang_all_int_lower_lim_2p = 0;
+//        E_Trans15_all_upper_lim_2p = 1.7;
+//        E_Trans15_all_lower_lim_2p = 0;
+//        E_Trans45_all_upper_lim_2p = 1.7;
+//        E_Trans45_all_lower_lim_2p = 0;
+//        E_Trans90_all_upper_lim_2p = 1.7;
+//        E_Trans90_all_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
+//        E_Trans_all_ang_all_int_upper_lim_1n1p = 1.7;
+//        E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
+//        E_Trans15_all_upper_lim_1n1p = 1.7;
+//        E_Trans15_all_lower_lim_1n1p = 0;
+//        E_Trans45_all_upper_lim_1n1p = 1.7;
+//        E_Trans45_all_lower_lim_1n1p = 0;
+//        E_Trans90_all_upper_lim_1n1p = 1.7;
+//        E_Trans90_all_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (QEL only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (QEL only, 2p)">
+//        E_Trans15_QEL_upper_lim_2p = 1.7;
+//        E_Trans15_QEL_lower_lim_2p = 0;
+//        E_Trans45_QEL_upper_lim_2p = 1.7;
+//        E_Trans45_QEL_lower_lim_2p = 0;
+//        E_Trans90_QEL_upper_lim_2p = 1.7;
+//        E_Trans90_QEL_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (QEL only, 1n1p)">
+//        E_Trans15_QEL_upper_lim_1n1p = 1.7;
+//        E_Trans15_QEL_lower_lim_1n1p = 0;
+//        E_Trans45_QEL_upper_lim_1n1p = 1.7;
+//        E_Trans45_QEL_lower_lim_1n1p = 0;
+//        E_Trans90_QEL_upper_lim_1n1p = 1.7;
+//        E_Trans90_QEL_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (MEC only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (MEC only, 2p)">
+//        E_Trans15_MEC_upper_lim_2p = 1.7;
+//        E_Trans15_MEC_lower_lim_2p = 0;
+//        E_Trans45_MEC_upper_lim_2p = 1.7;
+//        E_Trans45_MEC_lower_lim_2p = 0;
+//        E_Trans90_MEC_upper_lim_2p = 1.7;
+//        E_Trans90_MEC_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (MEC only, 1n1p)">
+//        E_Trans15_MEC_upper_lim_1n1p = 1.7;
+//        E_Trans15_MEC_lower_lim_1n1p = 0;
+//        E_Trans45_MEC_upper_lim_1n1p = 1.7;
+//        E_Trans45_MEC_lower_lim_1n1p = 0;
+//        E_Trans90_MEC_upper_lim_1n1p = 1.7;
+//        E_Trans90_MEC_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (RES only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (RES only, 2p)">
+//        E_Trans15_RES_upper_lim_2p = 1.7;
+//        E_Trans15_RES_lower_lim_2p = 0;
+//        E_Trans45_RES_upper_lim_2p = 1.7;
+//        E_Trans45_RES_lower_lim_2p = 0;
+//        E_Trans90_RES_upper_lim_2p = 1.7;
+//        E_Trans90_RES_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (RES only, 1n1p)">
+//        E_Trans15_RES_upper_lim_1n1p = 1.7;
+//        E_Trans15_RES_lower_lim_1n1p = 0;
+//        E_Trans45_RES_upper_lim_1n1p = 1.7;
+//        E_Trans45_RES_lower_lim_1n1p = 0;
+//        E_Trans90_RES_upper_lim_1n1p = 1.7;
+//        E_Trans90_RES_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (DIS only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (DIS only, 2p)">
+//        E_Trans15_DIS_upper_lim_2p = 1.7;
+//        E_Trans15_DIS_lower_lim_2p = 0;
+//        E_Trans45_DIS_upper_lim_2p = 1.7;
+//        E_Trans45_DIS_lower_lim_2p = 0;
+//        E_Trans90_DIS_upper_lim_2p = 1.7;
+//        E_Trans90_DIS_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (DIS only, 1n1p)">
+//        E_Trans15_DIS_upper_lim_1n1p = 1.7;
+//        E_Trans15_DIS_lower_lim_1n1p = 0;
+//        E_Trans45_DIS_upper_lim_1n1p = 1.7;
+//        E_Trans45_DIS_lower_lim_1n1p = 0;
+//        E_Trans90_DIS_upper_lim_1n1p = 1.7;
+//        E_Trans90_DIS_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Inclusive Energy Transfer histograms">
+//        E_Trans15_all_inclusive_upper_lim = 6;
+//        E_Trans15_all_inclusive_lower_lim = 0;
+//        E_Trans15_QEL_inclusive_upper_lim = 6;
+//        E_Trans15_QEL_inclusive_lower_lim = 0;
+//        E_Trans15_MEC_inclusive_upper_lim = 6;
+//        E_Trans15_MEC_inclusive_lower_lim = 0;
+//        E_Trans15_RES_inclusive_upper_lim = 6;
+//        E_Trans15_RES_inclusive_lower_lim = 0;
+//        E_Trans15_DIS_inclusive_upper_lim = 6;
+//        E_Trans15_DIS_inclusive_lower_lim = 0;
+//        E_Trans_VS_q_all_inclusive_upper_lim_x = 6;
+//        E_Trans_VS_q_all_inclusive_lower_lim_x = 0;
+//        E_Trans_VS_q_all_inclusive_upper_lim_y = 6;
+//        E_Trans_VS_q_all_inclusive_lower_lim_y = 0;
+//        E_Trans_VS_q_QEL_inclusive_upper_lim_x = 6;
+//        E_Trans_VS_q_QEL_inclusive_lower_lim_x = 0;
+//        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 6;
+//        E_Trans_VS_q_QEL_inclusive_lower_lim_y = 0;
+//        E_Trans_VS_q_MEC_inclusive_upper_lim_x = 6;
+//        E_Trans_VS_q_MEC_inclusive_lower_lim_x = 0;
+//        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 6;
+//        E_Trans_VS_q_MEC_inclusive_lower_lim_y = 0;
+//        E_Trans_VS_q3_all_upper_lim_x_2p = 6;
+//        E_Trans_VS_q3_all_lower_lim_x_2p = 0;
+//        E_Trans_VS_q3_all_upper_lim_y_2p = 6;
+//        E_Trans_VS_q3_all_lower_lim_y_2p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_x_2p = 6;
+//        E_Trans_VS_q3_QEL_lower_lim_x_2p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_y_2p = 6;
+//        E_Trans_VS_q3_QEL_lower_lim_y_2p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_x_2p = 6;
+//        E_Trans_VS_q3_MEC_lower_lim_x_2p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_y_2p = 6;
+//        E_Trans_VS_q3_MEC_lower_lim_y_2p = 0;
+//        E_Trans_VS_q3_all_upper_lim_x_1n1p = 6;
+//        E_Trans_VS_q3_all_lower_lim_x_1n1p = 0;
+//        E_Trans_VS_q3_all_upper_lim_y_1n1p = 6;
+//        E_Trans_VS_q3_all_lower_lim_y_1n1p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 6;
+//        E_Trans_VS_q3_QEL_lower_lim_x_1n1p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 6;
+//        E_Trans_VS_q3_QEL_lower_lim_y_1n1p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 6;
+//        E_Trans_VS_q3_MEC_lower_lim_x_1n1p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 6;
+//        E_Trans_VS_q3_MEC_lower_lim_y_1n1p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal restoration histograms">
+//
+//        //<editor-fold desc="E_cal range">
+//        E_cal_QEL_upper_lim_range = 2.35;
+//        E_cal_QEL_lower_lim_range = 2.11;
+//        E_cal_MEC_upper_lim_range = 2.35;
+//        E_cal_MEC_lower_lim_range = 2.11;
+//        E_cal_RES_upper_lim_range = 2.35;
+//        E_cal_RES_lower_lim_range = 2.11;
+//        E_cal_DIS_upper_lim_range = 2.35;
+//        E_cal_DIS_lower_lim_range = 2.11;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal restoration histograms (2p)">
+//        E_cal_QEL_upper_lim_2p = E_cal_QEL_upper_lim_range;
+//        E_cal_QEL_lower_lim_2p = E_cal_QEL_lower_lim_range;
+//        E_cal_MEC_upper_lim_2p = E_cal_MEC_upper_lim_range;
+//        E_cal_MEC_lower_lim_2p = E_cal_MEC_lower_lim_range;
+//        E_cal_RES_upper_lim_2p = E_cal_RES_upper_lim_range;
+//        E_cal_RES_lower_lim_2p = E_cal_RES_lower_lim_range;
+//        E_cal_DIS_upper_lim_2p = E_cal_DIS_upper_lim_range;
+//        E_cal_DIS_lower_lim_2p = E_cal_DIS_lower_lim_range;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal restoration histograms (1n1p)">
+//        E_cal_QEL_upper_lim_1n1p = E_cal_QEL_upper_lim_range;
+//        E_cal_QEL_lower_lim_1n1p = E_cal_QEL_lower_lim_range;
+//        E_cal_MEC_upper_lim_1n1p = E_cal_MEC_upper_lim_range;
+//        E_cal_MEC_lower_lim_1n1p = E_cal_MEC_lower_lim_range;
+//        E_cal_RES_upper_lim_1n1p = E_cal_RES_upper_lim_range;
+//        E_cal_RES_lower_lim_1n1p = E_cal_RES_lower_lim_range;
+//        E_cal_DIS_upper_lim_1n1p = E_cal_DIS_upper_lim_range;
+//        E_cal_DIS_lower_lim_1n1p = E_cal_DIS_lower_lim_range;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms">
+//
+//        //<editor-fold desc="Momentum histograms (2p)">
+//        P_L_hist_upper_lim_2p = 6.0;
+//        P_L_hist_lower_lim_2p = 0;
+//        P_R_hist_upper_lim_2p = 6.0;
+//        P_R_hist_lower_lim_2p = 0;
+//        P_lp_hist_upper_lim_2p = 6.0;
+//        P_lp_hist_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms (1n1p)">
+//        P_p_hist_upper_lim_1n1p = 6.0;
+//        P_p_hist_lower_lim_1n1p = 0;
+//        P_n_hist_upper_lim_1n1p = 6.0;
+//        P_n_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 6.0;
+//        P_lp_hist_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//    }
+//
+//    //</editor-fold>
+//
+//    //</editor-fold>
 
     //</editor-fold>
 
@@ -1976,7 +1976,7 @@ void EventAnalyser() {
     TH2D *Vcal_VS_EoP_1e2p_AC_ECIN = new TH2D("Vcal vs. EoP AC (All Int., 1e2p, ECIN)",
                                               "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e2p, ECIN);ECAL V coordinate [cm];Sampling Fraction",
                                               250, 0, 20, 250, 0.05, 0.35);
-    string Vcal_VS_EoP_1e2p_BC_ECIN_Dir = fiducial_plots_1e2p_BC_ECIN_histograms_Directory, Vcal_VS_EoP_1e2p_AC_ECIN_Dir = fiducial_plots_1e2p_BC_ECIN_histograms_Directory;
+    string Vcal_VS_EoP_1e2p_BC_ECIN_Dir = fiducial_plots_1e_BC_ECIN_histograms_Directory, Vcal_VS_EoP_1e2p_AC_ECIN_Dir = fiducial_plots_1e_BC_ECIN_histograms_Directory;
 
     TH2D *Wcal_VS_EoP_1e2p_BC_ECIN = new TH2D("Wcal vs. EoP BC (All Int., 1e2p, ECIN)",
                                               "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e2p, ECIN);ECAL W coordinate [cm];Sampling Fraction",
@@ -1984,7 +1984,7 @@ void EventAnalyser() {
     TH2D *Wcal_VS_EoP_1e2p_AC_ECIN = new TH2D("Wcal vs. EoP AC (All Int., 1e2p, ECIN)",
                                               "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e2p, ECIN);ECAL W coordinate [cm];Sampling Fraction",
                                               250, 0, 50, 250, 0.05, 0.35);
-    string Wcal_VS_EoP_1e2p_BC_ECIN_Dir = fiducial_plots_1e2p_AC_ECIN_histograms_Directory, Wcal_VS_EoP_1e2p_AC_ECIN_Dir = fiducial_plots_1e2p_AC_ECIN_histograms_Directory;
+    string Wcal_VS_EoP_1e2p_BC_ECIN_Dir = fiducial_plots_1e_AC_ECIN_histograms_Directory, Wcal_VS_EoP_1e2p_AC_ECIN_Dir = fiducial_plots_1e_AC_ECIN_histograms_Directory;
 
     TH2D *Vcal_VS_EoP_2p_ECIN = new TH2D("Vcal vs. EoP (All Int., 2p, ECIN)",
                                          "ECAL V coordinate vs. Sampling Fraction (All Int., 2p, ECIN);ECAL V coordinate [cm];Sampling Fraction",
@@ -1996,21 +1996,21 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Electron fiducial histograms (PCAL)">
-    TH2D *Vcal_VS_EoP_1e2p_BC_PCAL = new TH2D("Vcal vs. EoP BC (All Int., 1e2p, PCAL)",
-                                              "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e2p, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+    TH2D *Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. EoP BC (All Int., 1e, PCAL)",
+                                              "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
                                               250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Vcal_VS_EoP_1e2p_AC_PCAL = new TH2D("Vcal vs. EoP AC (All Int., 1e2p, PCAL)",
-                                              "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e2p, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+    TH2D *Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. EoP AC (All Int., 1e, PCAL)",
+                                              "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
                                               250, 0, 50, 250, 0.05, 0.35);
-    string Vcal_VS_EoP_1e2p_BC_PCAL_Dir = fiducial_plots_1e2p_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e2p_AC_PCAL_Dir = fiducial_plots_1e2p_AC_PCAL_histograms_Directory;
+    string Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
-    TH2D *Wcal_VS_EoP_1e2p_BC_PCAL = new TH2D("Wcal vs. EoP BC (All Int., 1e2p, PCAL)",
-                                              "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e2p, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+    TH2D *Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. EoP BC (All Int., 1e, PCAL)",
+                                              "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
                                               250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_1e2p_AC_PCAL = new TH2D("Wcal vs. EoP AC (All Int., 1e2p, PCAL)",
-                                              "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e2p, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+    TH2D *Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. EoP AC (All Int., 1e, PCAL)",
+                                              "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
                                               250, 0, 50, 250, 0.05, 0.35);
-    string Wcal_VS_EoP_1e2p_BC_PCAL_Dir = fiducial_plots_1e2p_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e2p_AC_PCAL_Dir = fiducial_plots_1e2p_AC_PCAL_histograms_Directory;
+    string Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
     TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. EoP (All Int., 2p, PCAL)",
                                          "ECAL V coordinate vs. Sampling Fraction (All Int., 2p, PCAL);ECAL V coordinate [cm];Sampling Fraction",
@@ -2237,7 +2237,6 @@ void EventAnalyser() {
 
     clas12root::HipoChain chain;
     chain.Add(AnalyseFile.c_str());
-//    chain.Add(AnalyseFileDirContent.c_str());
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -2333,16 +2332,10 @@ void EventAnalyser() {
             ++num_of_events; // logging Total #(events)
 
             auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
-            auto neutrons = c12.getByID(2112);
-            auto protons = c12.getByID(2212);
-            auto Kplus = c12.getByID(321);
-            auto Kminus = c12.getByID(-321);
-            auto Kzero = c12.getByID(311);
-            auto piplus = c12.getByID(211);
-            auto piminus = c12.getByID(-211);
-            auto pizero = c12.getByID(111);
-            auto electrons = c12.getByID(11);
-            auto photons = c12.getByID(22);
+            auto neutrons = c12.getByID(2112), protons = c12.getByID(2212); // Neucleons
+            auto Kplus = c12.getByID(321), Kminus = c12.getByID(-321), Kzero = c12.getByID(311); // Kaons
+            auto piplus = c12.getByID(211), piminus = c12.getByID(-211), pizero = c12.getByID(111); // Pions
+            auto electrons = c12.getByID(11), photons = c12.getByID(22);
 
             qel = mec = res = dis = false;
             double processID = c12.mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
@@ -2558,11 +2551,10 @@ void EventAnalyser() {
             } // end of loop over protons vector
             //</editor-fold>
 
-            //
-
-            Event_start_time_histogram->Fill(c12.event()->getStartTime());
-
-            //
+            //TODO: keep these TOF plots?
+//            //
+//            Event_start_time_histogram->Fill(c12.event()->getStartTime());
+//            //
 
             //</editor-fold>
 
@@ -2601,15 +2593,523 @@ void EventAnalyser() {
 //  1e cut --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="1e cut">
+
+            //<editor-fold desc="rough 1e cut">
             // Applying 1e cut:
-            if (electrons.size() != 1) { continue; }
+            if (electrons.size() != 1) { continue; } // the rough 1e cut
             ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
+
+//            //<editor-fold desc="General 1e only plots">
+//
+//            //<editor-fold desc="Fill Beta vs. P (1e only, CD & FD)">
+//            for (int i = 0; i < AllParticles.size(); i++) {
+//                //TODO: keep these TOF plots?
+////                Particle_ToF_histogram->Fill(AllParticles[i]->getTime());
+//
+//                if (AllParticles[i]->getRegion() == CD) {
+//                    Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                } else if (AllParticles[i]->getRegion() == FD) {
+//                    Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//
+//                    //TODO: keep these TOF plots?
+////                    bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
+////                    bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
+////                    bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
+//////                    bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
+//
+//                    //TODO: rename Beta_VS_P_from_FTOF plots for charged particles
+//                    //TODO: add Beta_VS_P_from_CTOF plots for charged particles
+//                    //TODO: add Beta_VS_P_from TOF plots for neutral particles?
+//////                    if (FTOF1A) {
+////                    if (FTOF1A && AllParticles[i]->par()->getCharge() != 0) {
+//////                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime();
+////                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime() - c12.event()->getStartTime();
+//////                        double Path_of_Filght_FTOF1A = rCalc(AllParticles[i]->sci(FTOF1A)->getX(),AllParticles[i]->sci(FTOF1A)->getY(),AllParticles[i]->sci(FTOF1A)->getZ());
+////                        double Path_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getPath();
+////                        double Beta_ToF = Path_of_Filght_FTOF1A / (c * Time_of_Filght_FTOF1A);
+////
+////                        Beta_VS_P_from_FTOF1A_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
+////                    }
+////
+//////                    if (FTOF1B) {
+////                    if (FTOF1B && AllParticles[i]->par()->getCharge() != 0) {
+////                        double Time_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getTime() - c12.event()->getStartTime();
+////                        double Path_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getPath();
+////                        double Beta_ToF = Path_of_Filght_FTOF1B / (c * Time_of_Filght_FTOF1B);
+////
+////                        Beta_VS_P_from_FTOF1B_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
+////                    }
+////
+//////                    if (FTOF2) {
+////                    if (FTOF2 && AllParticles[i]->par()->getCharge() != 0) {
+////                        double Time_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getTime() - c12.event()->getStartTime();
+////                        double Path_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getPath();
+////                        double Beta_ToF = Path_of_Filght_FTOF2 / (c * Time_of_Filght_FTOF2);
+////
+////                        Beta_VS_P_from_FTOF2_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
+////                    }
+//
+//                }
+//            } // end of loop over AllParticles vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Fill Electron plots (1e only, CD & FD)">
+//            double theta_e_1e_CD, phi_e_1e_CD, P_e_CD, E_e_CD, e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD, e_ToF_CD;
+//            double theta_e_1e_FD, phi_e_1e_FD, P_e_FD, E_e_FD, e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD, e_ToF_FD;
+//
+//            for (auto &e: electrons) {
+//                if (e->getRegion() == CD) {
+//                    P_e_CD = e->getP();
+//                    E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
+//                    E_e_hist_CD->Fill(E_e_CD);
+//                    Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
+//
+////                    e_ToF_CD = (e->getPath()) / (c * (e->par()->getBeta()));
+////                    Electron_ToF_from_beta_histogram_CD->Fill(e_ToF_CD);
+////                    Electron_path_length_histogram_CD->Fill(e->getPath());
+//
+//                    theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
+//                    Theta_e_1e_CD->Fill(theta_e_1e_CD);
+//                    phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
+//                    Phi_e_1e_CD->Fill(phi_e_1e_CD);
+//                    Theta_e_VS_Phi_e_1e_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
+//                    E_e_VS_Theta_e_hist_CD->Fill(theta_e_1e_CD, E_e_CD);
+//
+//                    if (AllParticles.size() == 3) {
+//                        Theta_e_1e2X_CD->Fill(theta_e_1e_CD);
+//                        Phi_e_1e2X_CD->Fill(phi_e_1e_CD);
+//
+//                        if (qel) {
+//                            ++num_of_QEL_1e2X_CD_events;
+//                            Theta_e_1e2X_QEL_CD->Fill(theta_e_1e_CD);
+//                            Phi_e_1e2X_QEL_CD->Fill(phi_e_1e_CD);
+//                        } else if (mec) {
+//                            ++num_of_MEC_1e2X_CD_events;
+//                            Theta_e_1e2X_MEC_CD->Fill(theta_e_1e_CD);
+//                            Phi_e_1e2X_MEC_CD->Fill(phi_e_1e_CD);
+//                        } else if (res) {
+//                            ++num_of_RES_1e2X_CD_events;
+//                            Theta_e_1e2X_RES_CD->Fill(theta_e_1e_CD);
+//                            Phi_e_1e2X_RES_CD->Fill(phi_e_1e_CD);
+//                        } else if (dis) {
+//                            ++num_of_DIS_1e2X_CD_events;
+//                            Theta_e_1e2X_DIS_CD->Fill(theta_e_1e_CD);
+//                            Phi_e_1e2X_DIS_CD->Fill(phi_e_1e_CD);
+//                        }
+//
+//                        if (protons.size() == 2) {
+//                            Theta_e_1e2p_CD->Fill(theta_e_1e_CD);
+//                            Phi_e_1e2p_CD->Fill(phi_e_1e_CD);
+//
+//                            if (qel) {
+//                                ++num_of_QEL_1e2p_CD_events;
+//                                Theta_e_1e2p_QEL_CD->Fill(theta_e_1e_CD);
+//                                Phi_e_1e2p_QEL_CD->Fill(phi_e_1e_CD);
+//                            } else if (mec) {
+//                                ++num_of_MEC_1e2p_CD_events;
+//                                Theta_e_1e2p_MEC_CD->Fill(theta_e_1e_CD);
+//                                Phi_e_1e2p_MEC_CD->Fill(phi_e_1e_CD);
+//                            } else if (res) {
+//                                ++num_of_RES_1e2p_CD_events;
+//                                Theta_e_1e2p_RES_CD->Fill(theta_e_1e_CD);
+//                                Phi_e_1e2p_RES_CD->Fill(phi_e_1e_CD);
+//                            } else if (dis) {
+//                                ++num_of_DIS_1e2p_CD_events;
+//                                Theta_e_1e2p_DIS_CD->Fill(theta_e_1e_CD);
+//                                Phi_e_1e2p_DIS_CD->Fill(phi_e_1e_CD);
+//                            }
+//                        }
+//                    }
+//
+//                    e_Chi2_CD = e->par()->getChi2Pid();
+//                    Chi2_Electron_1e_CD->Fill(e_Chi2_CD);
+//
+//                    e_Vx_CD = e->par()->getVx();
+//                    Vertex_Electron_1e_Vx_CD_test.Fill(e_Vx_CD);
+//                    e_Vy_CD = e->par()->getVy();
+//                    Vertex_Electron_1e_Vy_CD_test.Fill(e_Vy_CD);
+//                    e_Vz_CD = e->par()->getVz();
+//                    Vertex_Electron_1e_Vz_CD_test.Fill(e_Vz_CD);
+//
+////                    //<editor-fold desc="Electron chi2 test (1e only, CD)">
+////                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) < Chi2_Electron_cut_CD)) {
+////                        Chi2_Electron_1e_cut_test_CD.Fill(e_Chi2_CD);
+////                    }
+////                    //</editor-fold>
+//
+//                } else if (e->getRegion() == FD) {
+//                    P_e_FD = e->getP();
+//                    E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
+//                    E_e_hist_FD->Fill(E_e_FD);
+//                    Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
+//
+////                    e_ToF_FD = (e->getPath()) / (c * (e->par()->getBeta()));
+////                    Electron_ToF_from_beta_histogram_FD->Fill(e_ToF_FD);
+////                    Electron_path_length_histogram_FD->Fill(e->getPath());
+//
+//                    theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
+//                    Theta_e_1e_FD->Fill(theta_e_1e_FD);
+//                    phi_e_1e_FD = e->getPhi() * 180.0 / pi; // phi_e_1e_FD in deg
+//                    Phi_e_1e_FD->Fill(phi_e_1e_FD);
+//                    Theta_e_VS_Phi_e_1e_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
+//                    E_e_VS_Theta_e_hist_FD->Fill(theta_e_1e_FD, E_e_FD);
+//
+//                    if (AllParticles.size() == 3) {
+//                        Theta_e_1e2X_FD->Fill(theta_e_1e_FD);
+//                        Phi_e_1e2X_FD->Fill(phi_e_1e_FD);
+//
+//                        if (qel) {
+//                            ++num_of_QEL_1e2X_FD_events;
+//                            Theta_e_1e2X_QEL_FD->Fill(theta_e_1e_FD);
+//                            Phi_e_1e2X_QEL_FD->Fill(phi_e_1e_FD);
+//                        } else if (mec) {
+//                            ++num_of_MEC_1e2X_FD_events;
+//                            Theta_e_1e2X_MEC_FD->Fill(theta_e_1e_FD);
+//                            Phi_e_1e2X_MEC_FD->Fill(phi_e_1e_FD);
+//                        } else if (res) {
+//                            ++num_of_RES_1e2X_FD_events;
+//                            Theta_e_1e2X_RES_FD->Fill(theta_e_1e_FD);
+//                            Phi_e_1e2X_RES_FD->Fill(phi_e_1e_FD);
+//                        } else if (dis) {
+//                            ++num_of_DIS_1e2X_FD_events;
+//                            Theta_e_1e2X_DIS_FD->Fill(theta_e_1e_FD);
+//                            Phi_e_1e2X_DIS_FD->Fill(phi_e_1e_FD);
+//                        }
+//
+//                        if (protons.size() == 2) {
+//                            Theta_e_1e2p_FD->Fill(theta_e_1e_FD);
+//                            Phi_e_1e2p_FD->Fill(phi_e_1e_FD);
+//
+//                            if (qel) {
+//                                ++num_of_QEL_1e2p_FD_events;
+//                                Theta_e_1e2p_QEL_FD->Fill(theta_e_1e_FD);
+//                                Phi_e_1e2p_QEL_FD->Fill(phi_e_1e_FD);
+//                            } else if (mec) {
+//                                ++num_of_MEC_1e2p_FD_events;
+//                                Theta_e_1e2p_MEC_FD->Fill(theta_e_1e_FD);
+//                                Phi_e_1e2p_MEC_FD->Fill(phi_e_1e_FD);
+//                            } else if (res) {
+//                                ++num_of_RES_1e2p_FD_events;
+//                                Theta_e_1e2p_RES_FD->Fill(theta_e_1e_FD);
+//                                Phi_e_1e2p_RES_FD->Fill(phi_e_1e_FD);
+//                            } else if (dis) {
+//                                ++num_of_DIS_1e2p_FD_events;
+//                                Theta_e_1e2p_DIS_FD->Fill(theta_e_1e_FD);
+//                                Phi_e_1e2p_DIS_FD->Fill(phi_e_1e_FD);
+//                            }
+//                        }
+//                    }
+//
+//                    e_Chi2_FD = e->par()->getChi2Pid();
+//                    Chi2_Electron_1e_FD->Fill(e_Chi2_FD);
+//
+//                    e_Vx_FD = e->par()->getVx();
+//                    Vertex_Electron_1e_Vx_FD_test.Fill(e_Vx_FD);
+//                    e_Vy_FD = e->par()->getVy();
+//                    Vertex_Electron_1e_Vy_FD_test.Fill(e_Vy_FD);
+//                    e_Vz_FD = e->par()->getVz();
+//                    Vertex_Electron_1e_Vz_FD_test.Fill(e_Vz_FD);
+//                }
+//            } // end of loop over electrons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Fill Proton plots (1e only, CD & FD)">
+//            double p_Chi2_tmp_CD, p_Vx_tmp_CD, p_Vy_tmp_CD, p_Vz_tmp_CD;
+//            double p_Chi2_tmp_FD, p_Vx_tmp_FD, p_Vy_tmp_FD, p_Vz_tmp_FD;
+//
+//            for (auto &p: protons) {
+//                if (p->getRegion() == CD) {
+//                    Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
+//
+//                    p_Chi2_tmp_CD = p->par()->getChi2Pid();
+//                    Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
+//
+//                    p_Vx_tmp_CD = p->par()->getVx();
+//                    Vertex_Proton_1e_Vx_CD_test.Fill(p_Vx_tmp_CD);
+//                    p_Vy_tmp_CD = p->par()->getVy();
+//                    Vertex_Proton_1e_Vy_CD_test.Fill(p_Vy_tmp_CD);
+//                    p_Vz_tmp_CD = p->par()->getVz();
+//                    Vertex_Proton_1e_Vz_CD_test.Fill(p_Vz_tmp_CD);
+//
+////                    //<editor-fold desc="Proton chi2 test (1e only, CD)">
+////                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) < Chi2_Proton_cut_CD)) {
+////                        Chi2_Proton_1e_cut_test_CD.Fill(p_Chi2_tmp_CD);
+////                    }
+////                    //</editor-fold>
+//
+//                } else if (p->getRegion() == FD) {
+//                    Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
+//
+//                    p_Chi2_tmp_FD = p->par()->getChi2Pid();
+//                    Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
+//
+//                    p_Vx_tmp_FD = p->par()->getVx();
+//                    Vertex_Proton_1e_Vx_FD_test.Fill(p_Vx_tmp_FD);
+//                    p_Vy_tmp_FD = p->par()->getVy();
+//                    Vertex_Proton_1e_Vy_FD_test.Fill(p_Vy_tmp_FD);
+//                    p_Vz_tmp_FD = p->par()->getVz();
+//                    Vertex_Proton_1e_Vz_FD_test.Fill(p_Vz_tmp_FD);
+//
+////                    //<editor-fold desc="Proton chi2 test (1e only, FD)">
+////                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) < Chi2_Proton_cut_FD)) {
+////                        Chi2_Proton_1e_cut_test_FD.Fill(p_Chi2_tmp_FD);
+////                    }
+////                    //</editor-fold>
+//
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Fill Neutron Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &n: neutrons) {
+//                if (n->getRegion() == CD) {
+//                    Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
+//                } else if (n->getRegion() == FD) {
+//                    Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Kplus Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &Kp: Kplus) {
+//                if (Kp->getRegion() == CD) {
+//                    Beta_vs_P_1e_Kplus_Only_CD->Fill(Kp->getP(), Kp->par()->getBeta());
+//                } else if (Kp->getRegion() == FD) {
+//                    Beta_vs_P_1e_Kplus_Only_FD->Fill(Kp->getP(), Kp->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Kminus Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &Km: Kminus) {
+//                if (Km->getRegion() == CD) {
+//                    Beta_vs_P_1e_Kminus_Only_CD->Fill(Km->getP(), Km->par()->getBeta());
+//                } else if (Km->getRegion() == FD) {
+//                    Beta_vs_P_1e_Kminus_Only_FD->Fill(Km->getP(), Km->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Kzero Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &K0: Kzero) {
+//                if (K0->getRegion() == CD) {
+//                    Beta_vs_P_1e_Kzero_Only_CD->Fill(K0->getP(), K0->par()->getBeta());
+//                } else if (K0->getRegion() == FD) {
+//                    Beta_vs_P_1e_Kzero_Only_FD->Fill(K0->getP(), K0->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="piplus Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &pip: piplus) {
+//                if (pip->getRegion() == CD) {
+//                    Beta_vs_P_1e_piplus_Only_CD->Fill(pip->getP(), pip->par()->getBeta());
+//                } else if (pip->getRegion() == FD) {
+//                    Beta_vs_P_1e_piplus_Only_FD->Fill(pip->getP(), pip->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="piminus Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &pim: piminus) {
+//                if (pim->getRegion() == CD) {
+//                    Beta_vs_P_1e_piminus_Only_CD->Fill(pim->getP(), pim->par()->getBeta());
+//                } else if (pim->getRegion() == FD) {
+//                    Beta_vs_P_1e_piminus_Only_FD->Fill(pim->getP(), pim->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="pizero Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &pi0: pizero) {
+//                if (pi0->getRegion() == CD) {
+//                    Beta_vs_P_1e_pizero_Only_CD->Fill(pi0->getP(), pi0->par()->getBeta());
+//                } else if (pi0->getRegion() == FD) {
+//                    Beta_vs_P_1e_pizero_Only_FD->Fill(pi0->getP(), pi0->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Photons Beta vs. P plots (1e only, CD & FD)">
+//            for (auto &ph: photons) {
+//                if (ph->getRegion() == CD) {
+//                    Beta_vs_P_1e_Photons_Only_CD->Fill(ph->getP(), ph->par()->getBeta());
+//                } else if (ph->getRegion() == FD) {
+//                    Beta_vs_P_1e_Photons_Only_FD->Fill(ph->getP(), ph->par()->getBeta());
+//                }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //</editor-fold>
+
+            if (AllParticles.size() - electrons.size() == protons.size()) {
+                ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
+
+                if (protons.size() == 1) {
+                    ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Testing additional electron cuts">
+            TVector3 P_e_1e;
+            P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+
+            //<editor-fold desc="Testing momentum cuts">
+            // Momentum plots before cuts:
+            if (electrons[0]->getRegion() == CD) {
+                P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
+            } else if (electrons[0]->getRegion() == FD) {
+                P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
+            }
+
+            // Momentum plots cuts:
+            if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
+                if (electrons[0]->getRegion() == CD) {
+                    P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                } else if (electrons[0]->getRegion() == FD) {
+                    P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                }
+            } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
+                if (P_e_1e.Mag() <= e_momentum_upper_cut) {
+                    if (electrons[0]->getRegion() == CD) {
+                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                    } else if (electrons[0]->getRegion() == FD) {
+                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                    }
+                }
+            } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
+                if (P_e_1e.Mag() >= e_momentum_lower_cut) {
+                    if (electrons[0]->getRegion() == CD) {
+                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                    } else if (electrons[0]->getRegion() == FD) {
+                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                    }
+                }
+            } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
+                if ((P_e_1e.Mag() >= e_momentum_lower_cut) && (P_e_1e.Mag() <= e_momentum_upper_cut)) {
+                    if (electrons[0]->getRegion() == CD) {
+                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                    } else if (electrons[0]->getRegion() == FD) {
+                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                    }
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Testing SF cuts">
+            double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
+
+            // SF plots before cuts:
+            SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
+            SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
+
+            // SF plots after cuts:
+            if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
+                SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
+                SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Testing fiducial cuts">
+            // Fiducial plots before cuts:
+//            Vcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
+//            Wcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
+            Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+
+            // Fiducial plots after cuts:
+            //TODO: remove fiducial ECIN plots
+//                if (electrons[0]->cal(ECIN)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e); }
+//                if (electrons[0]->cal(ECIN)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e); }
+            if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+            if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+            //</editor-fold>
+
+            //<editor-fold desc="Testing nphe cuts">
+            int nphe = electrons[0]->che(HTCC)->getNphe();
+
+            // nphe plots before cuts:
+            nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+
+            // nphe plots after cuts:
+            if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+            //</editor-fold>
+
+            //<editor-fold desc="Testing chi2 cuts">
+            // Chi2 plots before cut
+            if (electrons[0]->getRegion() == CD) {
+//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+                Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
+            } else if (electrons[0]->getRegion() == FD) {
+//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+                Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
+            }
+
+            // Chi2 plots after cut
+            if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
+                ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+                Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
+            } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
+                ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+                Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
+            }
+            //</editor-fold>
+
+            //</editor-fold>
+
+            //<editor-fold desc="Applying additional electron cuts">
+
+            //<editor-fold desc="Applying momentum cuts">
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut != -1) && (P_e_1e.Mag() > e_momentum_upper_cut))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut != -1) && (P_e_1e.Mag() < e_momentum_lower_cut))) { continue; }
+            //</editor-fold>
+
+            //<editor-fold desc="Applying SF cuts">
+            if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+            //</editor-fold>
+
+            //<editor-fold desc="Applying fiducial cuts">
+            if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+            if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+            //</editor-fold>
+
+            //<editor-fold desc="Applying nphe cuts">
+            if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+            //</editor-fold>
+
+            //<editor-fold desc="Applying chi2 cuts">
+            if (electrons[0]->getRegion() == CD) {
+                if ((apply_chi2_cuts == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+            } else if (electrons[0]->getRegion() == FD) {
+                if ((apply_chi2_cuts == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+            }
+            //</editor-fold>
+
+            //</editor-fold>
 
             //<editor-fold desc="General 1e only plots">
 
             //<editor-fold desc="Fill Beta vs. P (1e only, CD & FD)">
             for (int i = 0; i < AllParticles.size(); i++) {
-                Particle_ToF_histogram->Fill(AllParticles[i]->getTime());
+                //TODO: keep these TOF plots?
+//                Particle_ToF_histogram->Fill(AllParticles[i]->getTime());
 
                 if (AllParticles[i]->getRegion() == CD) {
                     Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
@@ -2751,13 +3251,6 @@ void EventAnalyser() {
                     Vertex_Electron_1e_Vy_CD_test.Fill(e_Vy_CD);
                     e_Vz_CD = e->par()->getVz();
                     Vertex_Electron_1e_Vz_CD_test.Fill(e_Vz_CD);
-
-//                    //<editor-fold desc="Electron chi2 test (1e only, CD)">
-//                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) < Chi2_Electron_cut_CD)) {
-//                        Chi2_Electron_1e_cut_test_CD.Fill(e_Chi2_CD);
-//                    }
-//                    //</editor-fold>
-
                 } else if (e->getRegion() == FD) {
                     P_e_FD = e->getP();
                     E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
@@ -2851,13 +3344,6 @@ void EventAnalyser() {
                     Vertex_Proton_1e_Vy_CD_test.Fill(p_Vy_tmp_CD);
                     p_Vz_tmp_CD = p->par()->getVz();
                     Vertex_Proton_1e_Vz_CD_test.Fill(p_Vz_tmp_CD);
-
-//                    //<editor-fold desc="Proton chi2 test (1e only, CD)">
-//                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) < Chi2_Proton_cut_CD)) {
-//                        Chi2_Proton_1e_cut_test_CD.Fill(p_Chi2_tmp_CD);
-//                    }
-//                    //</editor-fold>
-
                 } else if (p->getRegion() == FD) {
                     Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
 
@@ -2870,13 +3356,6 @@ void EventAnalyser() {
                     Vertex_Proton_1e_Vy_FD_test.Fill(p_Vy_tmp_FD);
                     p_Vz_tmp_FD = p->par()->getVz();
                     Vertex_Proton_1e_Vz_FD_test.Fill(p_Vz_tmp_FD);
-
-//                    //<editor-fold desc="Proton chi2 test (1e only, FD)">
-//                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) < Chi2_Proton_cut_FD)) {
-//                        Chi2_Proton_1e_cut_test_FD.Fill(p_Chi2_tmp_FD);
-//                    }
-//                    //</editor-fold>
-
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -2963,13 +3442,6 @@ void EventAnalyser() {
 
             //</editor-fold>
 
-            if (AllParticles.size() - electrons.size() == protons.size()) {
-                ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
-
-                if (protons.size() == 1) {
-                    ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
-                }
-            }
             //</editor-fold>
 
 //  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2986,8 +3458,8 @@ void EventAnalyser() {
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
                 //TODO: rename P_e
-                TVector3 P_e_1e2p, P_p0, P_p1; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
-                P_e_1e2p.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+                TVector3 P_p0, P_p1; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
+//                P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
                 P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
                 P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
 
@@ -2999,12 +3471,12 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Testing momentum cuts (electrons only)">
 
-                // momentum before cuts:
-                if (electrons[0]->getRegion() == CD) {
-                    P_e_1e2p_BC_CD->Fill(P_e_1e2p.Mag());
-                } else if (electrons[0]->getRegion() == FD) {
-                    P_e_1e2p_BC_FD->Fill(P_e_1e2p.Mag());
-                }
+//                // momentum before cuts:
+//                if (electrons[0]->getRegion() == CD) {
+//                    P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
+//                } else if (electrons[0]->getRegion() == FD) {
+//                    P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
+//                }
 
                 if (protons[0]->getRegion() == CD) {
                     P_p_1e2p_BC_CD->Fill(P_p0.Mag());
@@ -3019,37 +3491,37 @@ void EventAnalyser() {
                 }
 
                 // momentum after cuts:
-                if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
-                    if (electrons[0]->getRegion() == CD) {
-                        P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
-                    } else if (electrons[0]->getRegion() == FD) {
-                        P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
-                    }
-                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
-                    if (P_e_1e2p.Mag() <= e_momentum_upper_cut) {
-                        if (electrons[0]->getRegion() == CD) {
-                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
-                        } else if (electrons[0]->getRegion() == FD) {
-                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
-                        }
-                    }
-                } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
-                    if (P_e_1e2p.Mag() >= e_momentum_lower_cut) {
-                        if (electrons[0]->getRegion() == CD) {
-                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
-                        } else if (electrons[0]->getRegion() == FD) {
-                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
-                        }
-                    }
-                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
-                    if ((P_e_1e2p.Mag() >= e_momentum_lower_cut) && (P_e_1e2p.Mag() <= e_momentum_upper_cut)) {
-                        if (electrons[0]->getRegion() == CD) {
-                            P_e_1e2p_AC_CD->Fill(P_e_1e2p.Mag());
-                        } else if (electrons[0]->getRegion() == FD) {
-                            P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag());
-                        }
-                    }
-                }
+//                if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut == -1)) {
+//                    if (electrons[0]->getRegion() == CD) {
+//                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+//                    } else if (electrons[0]->getRegion() == FD) {
+//                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+//                    }
+//                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut == -1)) {
+//                    if (P_e_1e.Mag() <= e_momentum_upper_cut) {
+//                        if (electrons[0]->getRegion() == CD) {
+//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+//                        } else if (electrons[0]->getRegion() == FD) {
+//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+//                        }
+//                    }
+//                } else if ((e_momentum_upper_cut == -1) && (e_momentum_lower_cut != -1)) {
+//                    if (P_e_1e.Mag() >= e_momentum_lower_cut) {
+//                        if (electrons[0]->getRegion() == CD) {
+//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+//                        } else if (electrons[0]->getRegion() == FD) {
+//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+//                        }
+//                    }
+//                } else if ((e_momentum_upper_cut != -1) && (e_momentum_lower_cut != -1)) {
+//                    if ((P_e_1e.Mag() >= e_momentum_lower_cut) && (P_e_1e.Mag() <= e_momentum_upper_cut)) {
+//                        if (electrons[0]->getRegion() == CD) {
+//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+//                        } else if (electrons[0]->getRegion() == FD) {
+//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+//                        }
+//                    }
+//                }
 
                 if ((p_momentum_upper_cut == -1) && (p_momentum_lower_cut == -1)) {
                     if (protons[0]->getRegion() == CD) {
@@ -3118,61 +3590,61 @@ void EventAnalyser() {
 
                 //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Testing SF cuts (electrons only)">
-                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e2p.Mag();
-
-                // SF before cuts:
-                SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-                SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e2p.Mag(), EoP_e);
-
-                // SF after cuts:
-                if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
-                    SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-                    SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e2p.Mag(), EoP_e);
-                }
-                //</editor-fold>
+//                //<editor-fold desc="Testing SF cuts (electrons only)">
+//                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
+//
+//                // SF before cuts:
+//                SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
+//                SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
+//
+//                // SF after cuts:
+//                if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
+//                    SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
+//                    SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+//                }
+//                //</editor-fold>
 
                 //  Testing fiducial cuts ------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Testing fiducial cuts (electrons only)">
-                // fiducial before cuts:
-                Vcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
-                Wcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
-                Vcal_VS_EoP_1e2p_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-                Wcal_VS_EoP_1e2p_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
-
-                // fiducial after cuts:
-                //TODO: remove fiducial ECIN plots
-//                if (electrons[0]->cal(ECIN)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e); }
-//                if (electrons[0]->cal(ECIN)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e); }
-                if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-                if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
-                //</editor-fold>
+//                //<editor-fold desc="Testing fiducial cuts (electrons only)">
+//                // fiducial before cuts:
+//                Vcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
+//                Wcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
+//                Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+//                Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+//
+//                // fiducial after cuts:
+//                //TODO: remove fiducial ECIN plots
+////                if (electrons[0]->cal(ECIN)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e); }
+////                if (electrons[0]->cal(ECIN)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e); }
+//                if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+//                if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+//                //</editor-fold>
 
                 //  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Testing nphe cuts (electrons only)">
-                int nphe = electrons[0]->che(HTCC)->getNphe();
-
-                // nphe before cuts:
-                nphe_All_Int_1e2p_BC_FD->Fill(nphe);
-
-                // nphe after cuts:
-                if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
-                //</editor-fold>
+//                //<editor-fold desc="Testing nphe cuts (electrons only)">
+//                int nphe = electrons[0]->che(HTCC)->getNphe();
+//
+//                // nphe before cuts:
+//                nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+//
+//                // nphe after cuts:
+//                if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+//                //</editor-fold>
 
                 //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing chi2 cuts">
 
-                // Chi2 before cut
-                if (electrons[0]->getRegion() == CD) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-                    Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
-                } else if (electrons[0]->getRegion() == FD) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-                    Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
-                }
+//                // Chi2 before cut
+//                if (electrons[0]->getRegion() == CD) {
+////                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+//                    Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                } else if (electrons[0]->getRegion() == FD) {
+////                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+//                    Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
 
                 if (protons[0]->getRegion() == CD) {
 //                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
@@ -3190,14 +3662,14 @@ void EventAnalyser() {
                     Chi2_Proton_1e2p_BC_FD->Fill(protons[1]->par()->getChi2Pid());
                 }
 
-                // Testing Chi2 after cut
-                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
-                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-                    Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
-                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-                    Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
-                }
+                // Chi2 after cut
+//                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
+//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+//                    Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
+//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+//                    Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
 
                 if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_CD;
@@ -3252,8 +3724,8 @@ void EventAnalyser() {
                 //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying momentum cuts">
-                if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut != -1) && (P_e_1e2p.Mag() > e_momentum_upper_cut))) { continue; }
-                if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut != -1) && (P_e_1e2p.Mag() < e_momentum_lower_cut))) { continue; }
+//                if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut != -1) && (P_e_1e.Mag() > e_momentum_upper_cut))) { continue; }
+//                if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut != -1) && (P_e_1e.Mag() < e_momentum_lower_cut))) { continue; }
 
                 if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut != -1) && (P_p0.Mag() > p_momentum_upper_cut))) { continue; }
                 if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut != -1) && (P_p0.Mag() < p_momentum_lower_cut))) { continue; }
@@ -3264,22 +3736,22 @@ void EventAnalyser() {
 
                 //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Applying SF cuts (electrons only)">
-                if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
-                //</editor-fold>
+//                //<editor-fold desc="Applying SF cuts (electrons only)">
+//                if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+//                //</editor-fold>
 
                 //  Applying fiducial cuts ------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Applying fiducial cuts (electrons only)">
-                if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-                if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
-                //</editor-fold>
+//                //<editor-fold desc="Applying fiducial cuts (electrons only)">
+//                if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+//                if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+//                //</editor-fold>
 
                 //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Applying nphe cuts">
-                if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
-                //</editor-fold>
+//                //<editor-fold desc="Applying nphe cuts">
+//                if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+//                //</editor-fold>
 
                 //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
@@ -3332,9 +3804,9 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Filling momentum histograms">
                 if (electrons[0]->getRegion() == CD) {
-                    P_e_2p_CD->Fill(P_e_1e2p.Mag());
+                    P_e_2p_CD->Fill(P_e_1e.Mag());
                 } else if (electrons[0]->getRegion() == FD) {
-                    P_e_2p_FD->Fill(P_e_1e2p.Mag());
+                    P_e_2p_FD->Fill(P_e_1e.Mag());
                 }
 
                 if (protons[0]->getRegion() == CD) {
@@ -3484,12 +3956,12 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Filling SF histograms">
                 SF_All_Int_2p_FD->Fill(EoP_e);
-                SF_VS_P_e_2p_FD->Fill(P_e_1e2p.Mag(), EoP_e);
+                SF_VS_P_e_2p_FD->Fill(P_e_1e.Mag(), EoP_e);
                 //</editor-fold>
 
                 //<editor-fold desc="Filling fiducial">
-                Vcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
-                Wcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
+//                Vcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
+//                Wcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
                 Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
                 Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
                 //</editor-fold>
@@ -3552,7 +4024,6 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Filling dVx, dVy, dVz">
                 for (auto &p: protons) {
-
                     Vx_p = p->par()->getVx();
                     Vy_p = p->par()->getVy();
                     Vz_p = p->par()->getVz();
@@ -4181,13 +4652,13 @@ void EventAnalyser() {
 
         //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
         histPlotter1D(c1, deltaVx_2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVx_2p_Stack,
-                      "01_dVx_AC", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+                      "01_dVx", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
 
         histPlotter1D(c1, deltaVy_2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVy_2p_Stack,
-                      "02_dVy_AC", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+                      "02_dVy", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
 
         histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVz_2p_Stack,
-                      "03_dVz_AC", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+                      "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         //</editor-fold>
 
     } else {
@@ -5303,197 +5774,197 @@ void EventAnalyser() {
 
 //  fiducial histograms --------------------------------------------------------------
 
-        //<editor-fold desc="fiducial histograms (ECIN)">
-
-        //<editor-fold desc="Vcal vs. EoP 1e2p BC ECIN">
-        Vcal_VS_EoP_1e2p_BC_ECIN->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_BC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e2p_BC_ECIN);
-        Vcal_VS_EoP_1e2p_BC_ECIN->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e2p_BC_ECIN->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e2p_BC_ECIN_Dir + "01_Vcal_VS_EoP_1e2p_BC_ECIN.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Vcal vs. EoP 1e2p AC ECIN">
-        Vcal_VS_EoP_1e2p_AC_ECIN->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_AC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e2p_AC_ECIN);
-        Vcal_VS_EoP_1e2p_AC_ECIN->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e2p_AC_ECIN->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e2p_AC_ECIN_Dir + "02_Vcal_VS_EoP_1e2p_AC_ECIN.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Wcal vs. EoP 1e2p BC ECIN">
-        Wcal_VS_EoP_1e2p_BC_ECIN->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_BC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e2p_BC_ECIN);
-        Wcal_VS_EoP_1e2p_BC_ECIN->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e2p_BC_ECIN->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e2p_BC_ECIN_Dir + "03_Wcal_VS_EoP_1e2p_BC_ECIN.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Wcal vs. EoP 1e2p AC ECIN">
-        Wcal_VS_EoP_1e2p_AC_ECIN->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_AC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e2p_AC_ECIN);
-        Wcal_VS_EoP_1e2p_AC_ECIN->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e2p_AC_ECIN->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e2p_AC_ECIN_Dir + "04_Wcal_VS_EoP_1e2p_AC_ECIN.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Vcal vs. EoP 2p ECIN">
-        Vcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_2p_ECIN);
-        Vcal_VS_EoP_2p_ECIN->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_2p_ECIN->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_2p_ECIN_Dir + "01_Vcal_VS_EoP_2p_ECIN.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Wcal vs. EoP 2p ECIN">
-        Wcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_2p_ECIN);
-        Wcal_VS_EoP_2p_ECIN->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_2p_ECIN->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_2p_ECIN_Dir + "02_Wcal_VS_EoP_2p_ECIN.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //</editor-fold>
+//        //<editor-fold desc="fiducial histograms (ECIN)">
+//
+//        //<editor-fold desc="Vcal vs. EoP 1e2p BC ECIN">
+//        Vcal_VS_EoP_1e2p_BC_ECIN->SetTitleSize(0.06, "xyz");
+//        Vcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_1e2p_BC_ECIN->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Vcal_VS_EoP_1e2p_BC_ECIN);
+//        Vcal_VS_EoP_1e2p_BC_ECIN->Draw("colz");
+//        c1->SetLogz(1);
+////        gStyle->SetStatX(0.87);
+////        gStyle->SetStatY(0.4);
+//        Vcal_VS_EoP_1e2p_BC_ECIN->SetStats(0);
+//        c1->SaveAs((Vcal_VS_EoP_1e2p_BC_ECIN_Dir + "01_Vcal_VS_EoP_1e2p_BC_ECIN.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Vcal vs. EoP 1e2p AC ECIN">
+//        Vcal_VS_EoP_1e2p_AC_ECIN->SetTitleSize(0.06, "xyz");
+//        Vcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_1e2p_AC_ECIN->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Vcal_VS_EoP_1e2p_AC_ECIN);
+//        Vcal_VS_EoP_1e2p_AC_ECIN->Draw("colz");
+//        c1->SetLogz(1);
+////        gStyle->SetStatX(0.87);
+////        gStyle->SetStatY(0.4);
+//        Vcal_VS_EoP_1e2p_AC_ECIN->SetStats(0);
+//        c1->SaveAs((Vcal_VS_EoP_1e2p_AC_ECIN_Dir + "02_Vcal_VS_EoP_1e2p_AC_ECIN.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Wcal vs. EoP 1e2p BC ECIN">
+//        Wcal_VS_EoP_1e2p_BC_ECIN->SetTitleSize(0.06, "xyz");
+//        Wcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_1e2p_BC_ECIN->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Wcal_VS_EoP_1e2p_BC_ECIN);
+//        Wcal_VS_EoP_1e2p_BC_ECIN->Draw("colz");
+//        c1->SetLogz(1);
+////        gStyle->SetStatX(0.87);
+////        gStyle->SetStatY(0.4);
+//        Wcal_VS_EoP_1e2p_BC_ECIN->SetStats(0);
+//        c1->SaveAs((Wcal_VS_EoP_1e2p_BC_ECIN_Dir + "03_Wcal_VS_EoP_1e2p_BC_ECIN.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Wcal vs. EoP 1e2p AC ECIN">
+//        Wcal_VS_EoP_1e2p_AC_ECIN->SetTitleSize(0.06, "xyz");
+//        Wcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_1e2p_AC_ECIN->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Wcal_VS_EoP_1e2p_AC_ECIN);
+//        Wcal_VS_EoP_1e2p_AC_ECIN->Draw("colz");
+//        c1->SetLogz(1);
+////        gStyle->SetStatX(0.87);
+////        gStyle->SetStatY(0.4);
+//        Wcal_VS_EoP_1e2p_AC_ECIN->SetStats(0);
+//        c1->SaveAs((Wcal_VS_EoP_1e2p_AC_ECIN_Dir + "04_Wcal_VS_EoP_1e2p_AC_ECIN.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Vcal vs. EoP 2p ECIN">
+//        Vcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
+//        Vcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Vcal_VS_EoP_2p_ECIN);
+//        Vcal_VS_EoP_2p_ECIN->Draw("colz");
+//        c1->SetLogz(1);
+////        gStyle->SetStatX(0.87);
+////        gStyle->SetStatY(0.4);
+//        Vcal_VS_EoP_2p_ECIN->SetStats(0);
+//        c1->SaveAs((Vcal_VS_EoP_2p_ECIN_Dir + "01_Vcal_VS_EoP_2p_ECIN.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Wcal vs. EoP 2p ECIN">
+//        Wcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
+//        Wcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Wcal_VS_EoP_2p_ECIN);
+//        Wcal_VS_EoP_2p_ECIN->Draw("colz");
+//        c1->SetLogz(1);
+////        gStyle->SetStatX(0.87);
+////        gStyle->SetStatY(0.4);
+//        Wcal_VS_EoP_2p_ECIN->SetStats(0);
+//        c1->SaveAs((Wcal_VS_EoP_2p_ECIN_Dir + "02_Wcal_VS_EoP_2p_ECIN.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+//        //</editor-fold>
+//
+//        //</editor-fold>
 
         //<editor-fold desc="fiducial histograms (PCAL)">
 
         //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
-        Vcal_VS_EoP_1e2p_BC_PCAL->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e2p_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_BC_PCAL->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_BC_PCAL->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e2p_BC_PCAL);
-        Vcal_VS_EoP_1e2p_BC_PCAL->Draw("colz");
+        Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_1e_BC_PCAL);
+        Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
         c1->SetLogz(1);
 //        gStyle->SetStatX(0.87);
 //        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e2p_BC_PCAL->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e2p_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e2p_BC_PCAL.png").c_str());
+        Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_BC_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
-        Wcal_VS_EoP_1e2p_BC_PCAL->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e2p_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_BC_PCAL->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_BC_PCAL->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e2p_BC_PCAL);
-        Wcal_VS_EoP_1e2p_BC_PCAL->Draw("colz");
+        Wcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_1e_BC_PCAL);
+        Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
         c1->SetLogz(1);
 //        gStyle->SetStatX(0.87);
 //        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e2p_BC_PCAL->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e2p_BC_PCAL_Dir + "03_Wcal_VS_EoP_1e2p_BC_PCAL.png").c_str());
+        Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_BC_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Vcal vs. EoP 1e2p AC PCAL">
-        Vcal_VS_EoP_1e2p_AC_PCAL->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e2p_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_AC_PCAL->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e2p_AC_PCAL->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e2p_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e2p_AC_PCAL);
-        Vcal_VS_EoP_1e2p_AC_PCAL->Draw("colz");
+        Vcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
+        Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
+        Vcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Vcal_VS_EoP_1e_AC_PCAL);
+        Vcal_VS_EoP_1e_AC_PCAL->Draw("colz");
         c1->SetLogz(1);
 //        gStyle->SetStatX(0.87);
 //        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e2p_AC_PCAL->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e2p_AC_PCAL_Dir + "01_Vcal_VS_EoP_1e2p_AC_PCAL.png").c_str());
+        Vcal_VS_EoP_1e_AC_PCAL->SetStats(0);
+        c1->SaveAs((Vcal_VS_EoP_1e_AC_PCAL_Dir + "01_Vcal_VS_EoP_1e_AC_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Wcal vs. EoP 1e2p AC PCAL">
-        Wcal_VS_EoP_1e2p_AC_PCAL->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e2p_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_AC_PCAL->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e2p_AC_PCAL->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e2p_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e2p_AC_PCAL);
-        Wcal_VS_EoP_1e2p_AC_PCAL->Draw("colz");
+        Wcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
+        Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+        Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
+        Wcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(Wcal_VS_EoP_1e_AC_PCAL);
+        Wcal_VS_EoP_1e_AC_PCAL->Draw("colz");
         c1->SetLogz(1);
 //        gStyle->SetStatX(0.87);
 //        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e2p_AC_PCAL->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e2p_AC_PCAL_Dir + "03_Wcal_VS_EoP_1e2p_AC_PCAL.png").c_str());
+        Wcal_VS_EoP_1e_AC_PCAL->SetStats(0);
+        c1->SaveAs((Wcal_VS_EoP_1e_AC_PCAL_Dir + "02_Wcal_VS_EoP_1e_AC_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -6127,7 +6598,9 @@ void EventAnalyser() {
 //                                                          Saving histogram list and finishing execution                                                              //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
+    //<editor-fold desc="Saving histogram list and finishing execution">
+
+    // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving settings to log file">
     if (delete_txt_files == true) {
@@ -6626,6 +7099,8 @@ void EventAnalyser() {
     cout << "Beam Energy:\t\t" << beamE << "\n\n";
 
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n\n";
+    //</editor-fold>
+
     //</editor-fold>
 
 }
