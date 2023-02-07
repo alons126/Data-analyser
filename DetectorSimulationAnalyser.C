@@ -118,7 +118,9 @@ void EventAnalyser() {
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_P";
     string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "min_1e_cut", "min_1e_cut/By_charge", "1e_cut", "1e_cut/By_charge",
-                                           "All_e/By_charge/Positive_hadrons_FTOF", "All_e/By_charge/Positive_hadrons_CTOF", "2p", "2p/By_charge"};
+                                           "All_e/By_charge/Positive_hadrons_FTOF", "All_e/By_charge/Positive_hadrons_CTOF", "2p", "2p/By_charge",
+                                           "MicroBooNE", "MicroBooNE/Before_cuts", "MicroBooNE/Before_cuts/By_charge", "MicroBooNE/After_cuts",
+                                           "MicroBooNE/After_cuts/By_charge"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
@@ -139,6 +141,11 @@ void EventAnalyser() {
 
     string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[9] + "/";
     string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
+
+    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[12] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[13] + "/";
+    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[14] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[15] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
@@ -1371,7 +1378,102 @@ void EventAnalyser() {
     string Beta_vs_P_positive_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_positive_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
     string Beta_vs_P_neutral_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_neutral_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
     string Beta_vs_P_negative_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_negative_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
+    //</editor-fold>
 
+    //</editor-fold>
+
+    //<editor-fold desc="Beta vs. P (MicroBooNE-BC)">
+
+    //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-BC)">
+    TH2D *Beta_vs_P_MicroBooNE_BC_CD = new TH2D("#beta vs. P (All Particles, MicroBooNE-BC, CD)", "#beta vs. P (All Particles, MicroBooNE-BC, CD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_MicroBooNE_BC_FD = new TH2D("#beta vs. P (All Particles, MicroBooNE-BC, FD)", "#beta vs. P (All Particles, MicroBooNE-BC, FD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    string Beta_vs_P_MicroBooNE_BC_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
+
+//    TH2D *Beta_vs_P_MicroBooNE_BC_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, MicroBooNE-BC, CD)",
+//                                                               "#beta vs. P (Electrons Only, MicroBooNE-BC, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0.5, 3);
+//    TH2D *Beta_vs_P_MicroBooNE_BC_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, MicroBooNE-BC, FD)",
+//                                                               "#beta vs. P (Electrons Only, MicroBooNE-BC, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0.5, 3);
+//    string Beta_vs_P_MicroBooNE_BC_Electrons_Only_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_Electrons_Only_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
+//
+//    TH2D *Beta_vs_P_MicroBooNE_BC_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-BC, CD)",
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//    TH2D *Beta_vs_P_MicroBooNE_BC_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-BC, FD)",
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//    string Beta_vs_P_MicroBooNE_BC_Protons_Only_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_Protons_Only_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Beta vs. P by charge (MicroBooNE-BC)">
+    TH2D *Beta_vs_P_positive_particles_MicroBooNE_BC_CD = new TH2D("#beta vs. P & q = +1 (MicroBooNE-BC, CD)",
+                                                                   "#beta vs. P for all particles with q = +1 (MicroBooNE-BC, CD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_positive_particles_MicroBooNE_BC_FD = new TH2D("#beta vs. P & q = +1 (MicroBooNE-BC, FD)",
+                                                                   "#beta vs. P for all particles with q = +1 (MicroBooNE-BC, FD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_MicroBooNE_BC_CD = new TH2D("#beta vs. P & q = 0 (MicroBooNE-BC, CD)",
+                                                                  "#beta vs. P for all particles with q = 0 (MicroBooNE-BC, CD);P [GeV];#beta",
+                                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_MicroBooNE_BC_FD = new TH2D("#beta vs. P & q = 0 (MicroBooNE-BC, FD)",
+                                                                  "#beta vs. P for all particles with q = 0 (MicroBooNE-BC, FD);P [GeV];#beta",
+                                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_MicroBooNE_BC_CD = new TH2D("#beta vs. P & q = -1 (MicroBooNE-BC, CD)",
+                                                                   "#beta vs. P for all particles with q = -1 (MicroBooNE-BC, CD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_MicroBooNE_BC_FD = new TH2D("#beta vs. P & q = -1 (MicroBooNE-BC, FD)",
+                                                                   "#beta vs. P for all particles with q = -1 (MicroBooNE-BC, FD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    string Beta_vs_P_positive_particles_MicroBooNE_BC_CD_Dir = Beta_VS_P_by_charge_MicroBooNE_BC_Directory, Beta_vs_P_positive_particles_MicroBooNE_BC_FD_Dir = Beta_VS_P_by_charge_MicroBooNE_BC_Directory;
+    string Beta_vs_P_neutral_particles_MicroBooNE_BC_CD_Dir = Beta_VS_P_by_charge_MicroBooNE_BC_Directory, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD_Dir = Beta_VS_P_by_charge_MicroBooNE_BC_Directory;
+    string Beta_vs_P_negative_particles_MicroBooNE_BC_CD_Dir = Beta_VS_P_by_charge_MicroBooNE_BC_Directory, Beta_vs_P_negative_particles_MicroBooNE_BC_FD_Dir = Beta_VS_P_by_charge_MicroBooNE_BC_Directory;
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Beta vs. P (MicroBooNE-AC)">
+
+    //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-AC)">
+    TH2D *Beta_vs_P_MicroBooNE_AC_CD = new TH2D("#beta vs. P (All Particles, MicroBooNE-AC, CD)", "#beta vs. P (All Particles, MicroBooNE-AC, CD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_MicroBooNE_AC_FD = new TH2D("#beta vs. P (All Particles, MicroBooNE-AC, FD)", "#beta vs. P (All Particles, MicroBooNE-AC, FD);P [GeV];#beta",
+                                                250, 0, beamE * 1.425, 250, 0, 3);
+    string Beta_vs_P_MicroBooNE_AC_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
+
+//    TH2D *Beta_vs_P_MicroBooNE_AC_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, MicroBooNE-AC, CD)",
+//                                                               "#beta vs. P (Electrons Only, MicroBooNE-AC, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0.5, 3);
+//    TH2D *Beta_vs_P_MicroBooNE_AC_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, MicroBooNE-AC, FD)",
+//                                                               "#beta vs. P (Electrons Only, MicroBooNE-AC, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0.5, 3);
+//    string Beta_vs_P_MicroBooNE_AC_Electrons_Only_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_Electrons_Only_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
+//
+//    TH2D *Beta_vs_P_MicroBooNE_AC_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-AC, CD)",
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//    TH2D *Beta_vs_P_MicroBooNE_AC_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-AC, FD)",
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//    string Beta_vs_P_MicroBooNE_AC_Protons_Only_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_Protons_Only_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Beta vs. P by charge (MicroBooNE-AC)">
+    TH2D *Beta_vs_P_positive_particles_MicroBooNE_AC_CD = new TH2D("#beta vs. P & q = +1 (MicroBooNE-AC, CD)",
+                                                                   "#beta vs. P for all particles with q = +1 (MicroBooNE-AC, CD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_positive_particles_MicroBooNE_AC_FD = new TH2D("#beta vs. P & q = +1 (MicroBooNE-AC, FD)",
+                                                                   "#beta vs. P for all particles with q = +1 (MicroBooNE-AC, FD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_MicroBooNE_AC_CD = new TH2D("#beta vs. P & q = 0 (MicroBooNE-AC, CD)",
+                                                                  "#beta vs. P for all particles with q = 0 (MicroBooNE-AC, CD);P [GeV];#beta",
+                                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_neutral_particles_MicroBooNE_AC_FD = new TH2D("#beta vs. P & q = 0 (MicroBooNE-AC, FD)",
+                                                                  "#beta vs. P for all particles with q = 0 (MicroBooNE-AC, FD);P [GeV];#beta",
+                                                                  250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_MicroBooNE_AC_CD = new TH2D("#beta vs. P & q = -1 (MicroBooNE-AC, CD)",
+                                                                   "#beta vs. P for all particles with q = -1 (MicroBooNE-AC, CD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    TH2D *Beta_vs_P_negative_particles_MicroBooNE_AC_FD = new TH2D("#beta vs. P & q = -1 (MicroBooNE-AC, FD)",
+                                                                   "#beta vs. P for all particles with q = -1 (MicroBooNE-AC, FD);P [GeV];#beta",
+                                                                   250, 0, beamE * 1.425, 250, 0, 3);
+    string Beta_vs_P_positive_particles_MicroBooNE_AC_CD_Dir = Beta_VS_P_by_charge_MicroBooNE_AC_Directory, Beta_vs_P_positive_particles_MicroBooNE_AC_FD_Dir = Beta_VS_P_by_charge_MicroBooNE_AC_Directory;
+    string Beta_vs_P_neutral_particles_MicroBooNE_AC_CD_Dir = Beta_VS_P_by_charge_MicroBooNE_AC_Directory, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD_Dir = Beta_VS_P_by_charge_MicroBooNE_AC_Directory;
+    string Beta_vs_P_negative_particles_MicroBooNE_AC_CD_Dir = Beta_VS_P_by_charge_MicroBooNE_AC_Directory, Beta_vs_P_negative_particles_MicroBooNE_AC_FD_Dir = Beta_VS_P_by_charge_MicroBooNE_AC_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -3586,6 +3688,32 @@ void EventAnalyser() {
             if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
                 ++num_of_MicroBooNE_events_BC;
 
+                //<editor-fold desc="Filling Beta vs. P (MicroBooNE-BC)">
+                for (int i = 0; i < AllParticles.size(); i++) {
+                    if (AllParticles[i]->getRegion() == CD) {
+                        Beta_vs_P_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                        if (AllParticles[i]->par()->getCharge() == 1) {
+                            Beta_vs_P_positive_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        } else if (AllParticles[i]->par()->getCharge() == 0) {
+                            Beta_vs_P_neutral_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        } else if (AllParticles[i]->par()->getCharge() == -1) {
+                            Beta_vs_P_negative_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        }
+                    } else if (AllParticles[i]->getRegion() == FD) {
+                        Beta_vs_P_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                        if (AllParticles[i]->par()->getCharge() == 1) {
+                            Beta_vs_P_positive_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        } else if (AllParticles[i]->par()->getCharge() == 0) {
+                            Beta_vs_P_neutral_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        } else if (AllParticles[i]->par()->getCharge() == -1) {
+                            Beta_vs_P_negative_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                        }
+                    }
+                } // end of loop over AllParticles vector
+                //</editor-fold>
+
                 TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
                 P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
                 P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
@@ -4097,6 +4225,32 @@ void EventAnalyser() {
                             Chi2_piminus_MicroBooNE_FD->Fill(piminus[i]->par()->getChi2Pid());
                         }
                     } // end of loop over piminus vector
+                    //</editor-fold>
+
+                    //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
+                    for (int i = 0; i < AllParticles.size(); i++) {
+                        if (AllParticles[i]->getRegion() == CD) {
+                            Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                            if (AllParticles[i]->par()->getCharge() == 1) {
+                                Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == 0) {
+                                Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == -1) {
+                                Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            }
+                        } else if (AllParticles[i]->getRegion() == FD) {
+                            Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                            if (AllParticles[i]->par()->getCharge() == 1) {
+                                Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == 0) {
+                                Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == -1) {
+                                Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            }
+                        }
+                    } // end of loop over AllParticles vector
                     //</editor-fold>
 
                 }
@@ -5134,6 +5288,142 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+        //<editor-fold desc="Beta vs. P plots (MicroBooNE-BC)">
+
+        //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-BC, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_BC_CD_Dir,
+                      "01_Beta_vs_P_MicroBooNE_BC_CD.png",
+                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+
+        histPlotter2D(c1, Beta_vs_P_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_BC_FD_Dir,
+                      "01_Beta_vs_P_MicroBooNE_BC_FD.png",
+                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+        //</editor-fold>
+
+//        //<editor-fold desc="Beta vs. P for Electrons Only (MicroBooNE-BC, CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Electrons_Only_CD_Dir, "02_Beta_vs_P_2p_Electrons_Only_CD.png",
+//                      beta_electron, "Electrons", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Electrons_Only_FD_Dir, "02_Beta_vs_P_2p_Electrons_Only_FD.png",
+//                      beta_electron, "Electrons", true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P for Protons Only (MicroBooNE-BC, CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Protons_Only_CD_Dir, "03_Beta_vs_P_2p_Protons_Only_CD.png",
+//                      beta_proton, "Protons", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Protons_Only_FD_Dir, "03_Beta_vs_P_2p_Protons_Only_FD.png",
+//                      beta_proton, "Protons", true);
+//        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P plots (by charge, MicroBooNE-BC, CD & FD)">
+
+        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true,
+                      Beta_vs_P_positive_particles_MicroBooNE_BC_CD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_BC_CD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+
+        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_positive_particles_MicroBooNE_BC_FD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_BC_FD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_BC_CD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_BC_CD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_BC_FD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_BC_CD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_BC_CD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_BC_FD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_BC_FD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P plots (MicroBooNE-AC)">
+
+        //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-AC, CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_AC_CD_Dir,
+                      "01_Beta_vs_P_MicroBooNE_AC_CD.png",
+                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+
+        histPlotter2D(c1, Beta_vs_P_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_AC_FD_Dir,
+                      "01_Beta_vs_P_MicroBooNE_AC_FD.png",
+                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+        //</editor-fold>
+
+//        //<editor-fold desc="Beta vs. P for Electrons Only (MicroBooNE-AC, CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Electrons_Only_CD_Dir, "02_Beta_vs_P_2p_Electrons_Only_CD.png",
+//                      beta_electron, "Electrons", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Electrons_Only_FD_Dir, "02_Beta_vs_P_2p_Electrons_Only_FD.png",
+//                      beta_electron, "Electrons", true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P for Protons Only (MicroBooNE-AC, CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Protons_Only_CD_Dir, "03_Beta_vs_P_2p_Protons_Only_CD.png",
+//                      beta_proton, "Protons", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_2p_Protons_Only_FD_Dir, "03_Beta_vs_P_2p_Protons_Only_FD.png",
+//                      beta_proton, "Protons", true);
+//        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P plots (by charge, MicroBooNE-AC, CD & FD)">
+
+        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true,
+                      Beta_vs_P_positive_particles_MicroBooNE_AC_CD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_AC_CD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+
+        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_positive_particles_MicroBooNE_AC_FD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_AC_FD.png",
+                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_AC_CD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_AC_CD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_AC_FD.png",
+                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        //</editor-fold>
+
+        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
+        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_AC_CD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_AC_CD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+
+        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_AC_FD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_AC_FD.png",
+                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //</editor-fold>
+
     } else {
         cout << "\n\nBeta vs. P plots are disabled by user.\n\n";
     } // end of Beta vs. P plot if
@@ -5149,7 +5439,7 @@ void EventAnalyser() {
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
         //<editor-fold desc="Finding Xmax">
-        //todo: calculate according to BC histograms?
+        //todo: calculate Xmax according to BC histograms?
         Chi2_Electron_Xmax_CD = Chi2_Electron_CD->GetBinCenter(Chi2_Electron_CD->GetMaximumBin());
         Chi2_Electron_Xmax_FD = Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin());
         Chi2_Proton_Xmax_CD = Chi2_Proton_CD->GetBinCenter(Chi2_Proton_CD->GetMaximumBin());
@@ -5283,21 +5573,21 @@ void EventAnalyser() {
                       plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
                       false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
 
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "CD", "#pi^{+}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
 
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "FD", "#pi^{+}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
 
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "CD", "#pi^{-}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
 
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "FD", "#pi^{-}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 cuts after applying (MicroBooNE)">
@@ -5317,21 +5607,21 @@ void EventAnalyser() {
                       plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
                       false, true, Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
 
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "CD", "#pi^{+}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
 
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "FD", "#pi^{+}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
 
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "CD", "#pi^{-}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
 
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "FD", "#pi^{-}", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
+                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 (MicroBooNE)">
@@ -7499,11 +7789,14 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n";
     myLogFile << "Calculation settings\n";
     myLogFile << "===========================================================================\n\n";
+
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
     myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
     myLogFile << "calculate_MicroBooNE = " << BoolToString(calculate_MicroBooNE) << "\n\n";
+
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
+
     myLogFile << "m_e = " << m_e << "\n";
     myLogFile << "m_p = " << m_p << "\n";
     myLogFile << "m_n = " << m_n << "\n";
@@ -7512,7 +7805,8 @@ void EventAnalyser() {
     myLogFile << "m_piminus = " << m_piminus << "\n";
     myLogFile << "m_Kzero = " << m_Kzero << "\n";
     myLogFile << "m_Kplus = " << m_Kplus << "\n";
-    myLogFile << "m_Kminus = " << m_Kminus << "\n";
+    myLogFile << "m_Kminus = " << m_Kminus << "\n\n";
+
     myLogFile << "beamE = " << beamE << "\n";
     myLogFile << "Pv = " << Pv << "\n";
     myLogFile << "Pvx = " << Pvx << "\n";
@@ -7579,7 +7873,7 @@ void EventAnalyser() {
     myLogFile << "P_L_upper_lim_2p* = " << p_momentum_upper_cut_2p << "\n";
     myLogFile << "P_L_lower_lim_2p* = " << p_momentum_lower_cut_2p << "\n";
     myLogFile << "P_R_upper_lim_2p* = " << p_momentum_upper_cut_2p << "\n";
-    myLogFile << "P_R_lower_lim_2p* = " << p_momentum_lower_cut_2p << "\n";
+    myLogFile << "P_R_lower_lim_2p* = " << p_momentum_lower_cut_2p << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (MicroBooNE)\n";
@@ -7589,7 +7883,7 @@ void EventAnalyser() {
     myLogFile << "e_momentum_lower_cut_MicroBooNE = " << e_momentum_lower_cut_MicroBooNE << "\n";
     myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_momentum_upper_cut_MicroBooNE << "\n";
     myLogFile << "p_momentum_lower_cut_MicroBooNE = " << p_momentum_lower_cut_MicroBooNE << "\n";
-    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_momentum_upper_cut_MicroBooNE << "\n";
+    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_momentum_upper_cut_MicroBooNE << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Sampling Fraction (SF) cuts (electrons only, FD)\n";
@@ -7725,7 +8019,7 @@ void EventAnalyser() {
         myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = " << Chi2_Proton_1e_Xmax_FD << "\n";
     }
 
-    myLogFile << "Chi2_Proton_1e_peak_FD (used in cuts) = " << Chi2_Proton_1e_peak_FD << "\n\n\n";
+    myLogFile << "Chi2_Proton_1e_peak_FD (used in cuts) = " << Chi2_Proton_1e_peak_FD << "\n";
 
     myLogFile << "\n-- Protons in CD (MicroBooNE cut) -----------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_MicroBooNE_CD = " << Chi2_Proton_cut_MicroBooNE_CD << "\n";
@@ -7795,7 +8089,7 @@ void EventAnalyser() {
         myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_FD << "\n";
     }
 
-    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_FD << "\n";
+    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_FD << "\n\n\n";
     //</editor-fold>
 
     myLogFile << "===========================================================================\n";
@@ -7940,15 +8234,15 @@ void EventAnalyser() {
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
     myLogFile << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_2p << "\n";
-    myLogFile << "#(events) 2p QEL:\t" << num_of_2p_QEL_events << "\n";
-    myLogFile << "#(events) 2p MEC:\t" << num_of_2p_MEC_events << "\n";
-    myLogFile << "#(events) 2p RES:\t" << num_of_2p_RES_events << "\n";
-    myLogFile << "#(events) 2p DIS:\t" << num_of_2p_DIS_events << "\n";
-    myLogFile << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n\n";
+    myLogFile << "#(events) 2p QEL:\t\t\t" << num_of_2p_QEL_events << "\n";
+    myLogFile << "#(events) 2p MEC:\t\t\t" << num_of_2p_MEC_events << "\n";
+    myLogFile << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
+    myLogFile << "#(events) 2p DIS:\t\t\t" << num_of_2p_DIS_events << "\n";
+    myLogFile << "QEL + MEC + RES + DIS (2p):\t\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n\n";
 
     myLogFile << "-- MicroBooNE event counts ------------------------------------------------\n";
-    myLogFile << "#(events) MicroBooNE before cuts:\t" << num_of_MicroBooNE_events_BC << "\n";
-    myLogFile << "#(events) MicroBooNE after cuts:\t" << num_of_MicroBooNE_events_AC << "\n\n";
+    myLogFile << "#(events) MicroBooNE before cuts:\t\t" << num_of_MicroBooNE_events_BC << "\n";
+    myLogFile << "#(events) MicroBooNE after cuts:\t\t" << num_of_MicroBooNE_events_AC << "\n\n";
 //    myLogFile << "#(events) 2p QEL:\t\t\t" << num_of_2p_QEL_events << "\n";
 //    myLogFile << "#(events) 2p MEC:\t\t\t" << num_of_2p_MEC_events << "\n";
 //    myLogFile << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
