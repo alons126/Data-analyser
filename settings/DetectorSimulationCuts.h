@@ -11,7 +11,9 @@
 // Detector simulation cuts
 // ======================================================================================================================================================================
 
-// Momentum -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Momentum cuts
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
 
@@ -22,9 +24,12 @@ double p_momentum_upper_cut_2p = -1, p_momentum_lower_cut_2p = 0.3;
 // MicroBooNE momentum cuts:
 double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;
 double p_momentum_upper_cut_MicroBooNE = 1, p_momentum_lower_cut_MicroBooNE = 0.3;
+//double cpion_momentum_upper_cut_MicroBooNE = 1.5, cpion_momentum_lower_cut_MicroBooNE = 0.5;
 double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1;
 
-// Sampling Fraction (SF) cuts (electrons only, FD) ---------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Sampling Fraction (SF) cuts (electrons only, FD)
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool apply_SF_cuts = true;
 
@@ -35,25 +40,33 @@ double SF_1e2p_lower_cut = 0.18;
 double SF_1e2p_Xmax; // for all e plots, no cuts applied
 double SF_1e2p_peak = 0.248125; // to fill using Chi2_Electron_1e_Xmax_CD
 
-// Fiducial cuts --------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Fiducial cuts
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool apply_Lv_cut = true, apply_Lw_cut = true;
 
 double fiducial_cut_Lv = 14;
 double fiducial_cut_Lw = 14;
 
-// Number of Photo-electrons (nphe) cuts (electrons only, FD) -----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Number of Photo-electrons (nphe) cuts (electrons only, FD)
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool apply_nphe_cut = true;
 
 double nphe_lower_cut = 2;
 
-// Chi2 cuts ------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Chi2 cuts
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Chi2 cuts">
-bool apply_chi2_cuts = true;
+bool apply_chi2_cuts_2p = true,apply_chi2_cuts_MicroBooNE = true;
 
-//<editor-fold desc="Electron chi2 cuts">
+//TODO: rename these variables
+
+//<editor-fold desc="Electron chi2 cuts (2p)">
 double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
 double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
@@ -65,7 +78,7 @@ double Chi2_Electron_1e_peak_FD = -0.05; // to fill using Chi2_Electron_1e_Xmax_
 double Chi2_Electron_1e_Xmax_FD;
 //</editor-fold>
 
-//<editor-fold desc="Proton chi2 cuts">
+//<editor-fold desc="Proton chi2 cuts (2p)">
 double Chi2_Proton_cut_CD = 10.; // Josh's proton FD cut
 double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Proton_1e_peak_CD = 0.35; // to fill using Chi2_Proton_1e_Xmax_CD
@@ -77,6 +90,48 @@ double Chi2_Proton_1e_peak_FD = -0.05; // to fill using Chi2_Proton_1e_Xmax_FD
 double Chi2_Proton_1e_Xmax_FD;
 //</editor-fold>
 
+//TODO: ask Adi if to apply neutron cuts in MicroBooNE plots
+
+//<editor-fold desc="Electron chi2 cuts (MicroBooNE)">
+double Chi2_Electron_cut_MicroBooNE_CD = Chi2_Electron_cut_CD; // 100 since electron detection is great
+double Chi2_Electron_MicroBooNE_Xmax_CD; // for all e plots, no cuts applied
+double Chi2_Electron_1e_peak_MicroBooNE_CD = Chi2_Electron_1e_peak_CD; // to fill using Chi2_Electron_1e_Xmax_CD
+
+double Chi2_Electron_cut_MicroBooNE_FD = Chi2_Electron_cut_FD; // 100 since electron detection is great
+double Chi2_Electron_MicroBooNE_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_Electron_1e_peak_MicroBooNE_FD = Chi2_Electron_1e_peak_FD; // to fill using Chi2_Electron_1e_Xmax_FD
+//</editor-fold>
+
+//<editor-fold desc="Proton chi2 cuts (MicroBooNE)">
+double Chi2_Proton_cut_MicroBooNE_CD = Chi2_Proton_cut_CD; // Josh's proton FD cut
+double Chi2_Proton_MicroBooNE_Xmax_CD; // for all e plots, no cuts applied
+double Chi2_Proton_1e_peak_MicroBooNE_CD = Chi2_Proton_1e_peak_CD; // to fill using Chi2_Proton_1e_Xmax_MicroBooNE_CD
+
+double Chi2_Proton_cut_MicroBooNE_FD = Chi2_Proton_cut_FD; // Josh's proton FD cut
+double Chi2_Proton_MicroBooNE_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_Proton_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill using Chi2_Proton_1e_Xmax_MicroBooNE_FD
+//</editor-fold>
+
+//<editor-fold desc="piplus chi2 cuts (MicroBooNE)">
+double Chi2_piplus_cut_MicroBooNE_CD = Chi2_Proton_cut_CD; // Josh's piplus FD cut
+double Chi2_piplus_MicroBooNE_Xmax_CD;
+double Chi2_piplus_1e_peak_MicroBooNE_CD = Chi2_Proton_1e_peak_CD; // to fill using Chi2_piplus_1e_Xmax_MicroBooNE_CD
+
+double Chi2_piplus_cut_MicroBooNE_FD = Chi2_Proton_cut_FD; // Josh's piplus FD cut
+double Chi2_piplus_MicroBooNE_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_piplus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill using Chi2_piplus_1e_Xmax_MicroBooNE_FD
+//</editor-fold>
+
+//<editor-fold desc="piminus chi2 cuts (MicroBooNE)">
+double Chi2_piminus_cut_MicroBooNE_CD = Chi2_Proton_cut_CD; // Josh's piminus FD cut
+double Chi2_piminus_MicroBooNE_Xmax_CD;
+double Chi2_piminus_1e_peak_MicroBooNE_CD = Chi2_Proton_1e_peak_CD; // to fill using Chi2_piminus_1e_Xmax_MicroBooNE_CD
+
+double Chi2_piminus_cut_MicroBooNE_FD = Chi2_Proton_cut_FD; // Josh's piminus FD cut
+double Chi2_piminus_MicroBooNE_Xmax_FD;
+double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill using Chi2_piminus_1e_Xmax_MicroBooNE_FD
+//</editor-fold>
+
 //    //<editor-fold desc="Neutron chi2 cuts">
 //    double Chi2_Neutron_cut_CD = 3.;
 //    double Chi2_Neutron_cut_FD = 3.;
@@ -86,7 +141,9 @@ double Chi2_Proton_1e_Xmax_FD;
 
 //</editor-fold>
 
-// Vertex cuts ----------------------------------------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Vertex cuts
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Vertex cuts">
 bool apply_dVz_cuts = true;
