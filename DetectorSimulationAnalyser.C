@@ -1385,6 +1385,8 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (MicroBooNE-BC)">
 
     //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-BC)">
+
+    // Note: here "MicroBooNE-BC" means before ALL MicroBooNE cuts!
     TH2D *Beta_vs_P_MicroBooNE_BC_CD = new TH2D("#beta vs. P (All Particles, MicroBooNE-BC, CD)", "#beta vs. P (All Particles, MicroBooNE-BC, CD);P [GeV];#beta",
                                                 250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_MicroBooNE_BC_FD = new TH2D("#beta vs. P (All Particles, MicroBooNE-BC, FD)", "#beta vs. P (All Particles, MicroBooNE-BC, FD);P [GeV];#beta",
@@ -1405,6 +1407,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (MicroBooNE-BC)">
+
+    // Note: here "MicroBooNE-BC" means before ALL MicroBooNE cuts!
     TH2D *Beta_vs_P_positive_particles_MicroBooNE_BC_CD = new TH2D("#beta vs. P & q = +1 (MicroBooNE-BC, CD)",
                                                                    "#beta vs. P for all particles with q = +1 (MicroBooNE-BC, CD);P [GeV];#beta",
                                                                    250, 0, beamE * 1.425, 250, 0, 3);
@@ -1433,6 +1437,8 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (MicroBooNE-AC)">
 
     //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-AC)">
+
+    // Note: here "MicroBooNE-BC" means after ALL MicroBooNE cuts!
     TH2D *Beta_vs_P_MicroBooNE_AC_CD = new TH2D("#beta vs. P (All Particles, MicroBooNE-AC, CD)", "#beta vs. P (All Particles, MicroBooNE-AC, CD);P [GeV];#beta",
                                                 250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_MicroBooNE_AC_FD = new TH2D("#beta vs. P (All Particles, MicroBooNE-AC, FD)", "#beta vs. P (All Particles, MicroBooNE-AC, FD);P [GeV];#beta",
@@ -1453,6 +1459,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (MicroBooNE-AC)">
+
+    // Note: here "MicroBooNE-BC" means after ALL MicroBooNE cuts!
     TH2D *Beta_vs_P_positive_particles_MicroBooNE_AC_CD = new TH2D("#beta vs. P & q = +1 (MicroBooNE-AC, CD)",
                                                                    "#beta vs. P for all particles with q = +1 (MicroBooNE-AC, CD);P [GeV];#beta",
                                                                    250, 0, beamE * 1.425, 250, 0, 3);
