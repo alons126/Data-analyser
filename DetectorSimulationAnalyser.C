@@ -105,7 +105,15 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-//  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
+// TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="TList definition">
+    TList *plots = new TList();
+
+//    TFolder *folder_test = new TFolder("folder_test_name1/folder_test_name2","folder_test_title");
+//    plots->Add(folder_test);
+
+    //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Creating directories">
     cout << "Creating plot directories...\n\n";
@@ -117,6 +125,7 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_P";
+    TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
     string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "min_1e_cut", "min_1e_cut/By_charge", "1e_cut", "1e_cut/By_charge",
                                            "All_e/By_charge/Positive_hadrons_FTOF", "All_e/By_charge/Positive_hadrons_CTOF", "2p", "2p/By_charge",
                                            "MicroBooNE", "MicroBooNE/Before_cuts", "MicroBooNE/Before_cuts/By_charge", "MicroBooNE/After_cuts",
@@ -124,7 +133,10 @@ void EventAnalyser() {
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
+        TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
     }
+
+    plots->Add(Beta_vs_P_Folder);
 
     // TODO: define 'Beta_VS_P_Parent_Directory' properly, and set it as the saving dir for plots below
     string Beta_VS_P_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[0];
@@ -151,12 +163,16 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
     string Chi2_Parent_Directory = "Chi2_plots";
+    TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
     string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test", "1e2p", "2p",
                                       "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
         MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name);
+        TFolderAdder(Chi2_Folder, Chi2_Parent_Directory, folders_name);
     }
+
+    plots->Add(Chi2_Folder);
 
     string Chi2_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[0];
 
@@ -176,16 +192,20 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots directories">
-    bool create_vertex_Dir = true;
+    bool create_Vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
+    TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
     string Vertex_Daughter_Folders[] = {"", "1e2p", "2p"};
 //    string Vertex_Daughter_Folders[] = {"", "All_e", "1e_cut", "1e_cut/Vertex_plots_by_components", "1e_cut/dV_plots", "1e2p", "2p"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
-        MakeDirectory(create_vertex_Dir, Vertex_Parent_Directory, folders_name);
+        MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name);
+        TFolderAdder(Vertex_Folder, Vertex_Parent_Directory, folders_name);
     }
 
-    // TODO: remove all regular vertex plots
+    plots->Add(Vertex_Folder);
+
+    // TODO: remove all regular Vertex plots
 //    string Vertex_All_e_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
 
 //    string Vertex_Only_1e_by_comp_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
@@ -200,11 +220,14 @@ void EventAnalyser() {
     //<editor-fold desc="Timing plots directories">
     bool create_timing_Dir = true;
     string timing_Parent_Directory = "Timing_plots";
+    TFolder *timing_Folder = new TFolder(timing_Parent_Directory.c_str(), timing_Parent_Directory.c_str());
     string timing_Daughter_Folders[] = {"", "Event_start_time", "Particle_ToF", "ToF_from_beta", "Path_length", "Beta_from_FTOF"};
 
     for (string folders_name: timing_Daughter_Folders) {
         MakeDirectory(create_timing_Dir, timing_Parent_Directory, folders_name);
     }
+
+    plots->Add(timing_Folder);
 
     // TODO: remove all regular timing plots
     string timing_event_start_time_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[1] + "/";
@@ -219,12 +242,16 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_e plots directories">
     bool create_Theta_e_Dir = true;
     string Theta_e_Parent_Directory = "Ang_histograms";
+    TFolder *Theta_e_Folder = new TFolder(Theta_e_Parent_Directory.c_str(), Theta_e_Parent_Directory.c_str());
     string Theta_e_Daughter_Folders[] = {"", "Theta_e_plots", "Theta_e_plots/All_e", "Theta_e_plots/Only_1e_cut", "Theta_e_plots/Only_1e_cut/1e2X",
                                          "Theta_e_plots/Only_1e_cut/1e2p", "2p", "2p/Theta_e_plots"};
 
     for (string folders_name: Theta_e_Daughter_Folders) {
         MakeDirectory(create_Theta_e_Dir, Theta_e_Parent_Directory, folders_name);
+        TFolderAdder(Theta_e_Folder, Theta_e_Parent_Directory, folders_name);
     }
+
+    plots->Add(Theta_e_Folder);
 
     string Theta_e_All_e_Directory = Plots_Folder + "/" + Theta_e_Parent_Directory + "/" + Theta_e_Daughter_Folders[2] + "/";
 
@@ -254,12 +281,16 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_e plots directories">
     bool create_Phi_e_Dir = true;
     string Phi_e_Parent_Directory = "Ang_histograms";
+    TFolder *Phi_e_Folder = new TFolder(Phi_e_Parent_Directory.c_str(), Phi_e_Parent_Directory.c_str());
     string Phi_e_Daughter_Folders[] = {"", "Phi_e_plots", "Phi_e_plots/All_e", "Phi_e_plots/Only_1e_cut", "Phi_e_plots/Only_1e_cut/1e2X",
                                        "Phi_e_plots/Only_1e_cut/1e2p", "2p/Phi_e_plots"};
 
     for (string folders_name: Phi_e_Daughter_Folders) {
         MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name);
+        TFolderAdder(Phi_e_Folder, Phi_e_Parent_Directory, folders_name);
     }
+
+    plots->Add(Phi_e_Folder);
 
     string Phi_e_All_e_Directory = Plots_Folder + "/" + Phi_e_Parent_Directory + "/" + Phi_e_Daughter_Folders[2] + "/";
 
@@ -287,11 +318,15 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 plots directories">
     bool create_Q2_Dir = true;
     string Q2_Parent_Directory = "Q2_histograms";
+    TFolder *Q2_Folder = new TFolder(Q2_Parent_Directory.c_str(), Q2_Parent_Directory.c_str());
     string Q2_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "1e2p_weChi2_cut"};
 
     for (string folders_name: Q2_Daughter_Folders) {
         MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name);
+        TFolderAdder(Q2_Folder, Q2_Parent_Directory, folders_name);
     }
+
+    plots->Add(Q2_Folder);
 
     string Q2_All_e_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[1] + "/";
     string Q2_Only_1e_cut_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[2] + "/";
@@ -300,6 +335,7 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots directories">
     bool create_Momentum_Dir = true;
     string Momentum_Parent_Directory = "Momentum_histograms";
+    TFolder *Momentum_Folder = new TFolder(Momentum_Parent_Directory.c_str(), Momentum_Parent_Directory.c_str());
     string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
@@ -315,11 +351,15 @@ void EventAnalyser() {
     //<editor-fold desc="E_e plots directories">
     bool create_E_e_Dir = true;
     string E_e_Parent_Directory = "Energy_histograms";
+    TFolder *E_e_Folder = new TFolder(E_e_Parent_Directory.c_str(), E_e_Parent_Directory.c_str());
     string E_e_Daughter_Folders[] = {"", "E_e_histograms", "E_e_VS_theta_e", "E_e_histograms/2p", "E_e_VS_theta_e/2p"};
 
     for (string folders_name: E_e_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name);
+        TFolderAdder(E_e_Folder, E_e_Parent_Directory, folders_name);
     }
+
+    plots->Add(E_e_Folder);
 
     string E_e_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[1] + "/";
     string E_e_QEL_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[1] + "/";
@@ -349,11 +389,15 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) plots directories">
     bool create_SF_Dir = true;
     string SF_Parent_Directory = "SF_histograms";
+    TFolder *SF_Folder = new TFolder(SF_Parent_Directory.c_str(), SF_Parent_Directory.c_str());
     string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
 
     for (string folders_name: SF_Daughter_Folders) {
         MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name);
+        TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name);
     }
+
+    plots->Add(SF_Folder);
 
     //TODO: add SF plots by reaction
     string SF_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
@@ -375,11 +419,15 @@ void EventAnalyser() {
     //<editor-fold desc="Number of Photo-electrons (nphe) plots directories">
     bool create_nphe_Dir = true;
     string nphe_Parent_Directory = "nphe_histograms";
+    TFolder *nphe_Folder = new TFolder(nphe_Parent_Directory.c_str(), nphe_Parent_Directory.c_str());
     string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
 
     for (string folders_name: nphe_Daughter_Folders) {
         MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name);
+        TFolderAdder(nphe_Folder, nphe_Parent_Directory, folders_name);
     }
+
+    plots->Add(nphe_Folder);
 
     //TODO: add nphe plots by reaction
     string nphe_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/";
@@ -398,11 +446,15 @@ void EventAnalyser() {
     //<editor-fold desc="Fiducial histograms plots directories">
     bool create_fiducial_Dir = true;
     string fiducial_Parent_Directory = "Fiducial_histograms";
+    TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
     string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/ECIN", "1e_cut/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
 
     for (string folders_name: fiducial_Daughter_Folders) {
         MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name);
+        TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name);
     }
+
+    plots->Add(fiducial_Folder);
 
     //TODO: add fiducial plots by reaction?
     string fiducial_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
@@ -424,12 +476,16 @@ void EventAnalyser() {
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
     string ETrans_Parent_Directory = "ETrans_histograms";
+    TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
     string ETrans_Daughter_Folders[] = {"", "2p", "2p/Around_15_Deg", "2p/Around_15_Deg/All_interactions", "2p/Around_15_Deg/QEL_only", "2p/Around_15_Deg/MEC_only",
                                         "2p/Around_15_Deg/RES_only", "2p/Around_15_Deg/DIS_only"};
 
     for (string folders_name: ETrans_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name);
+        TFolderAdder(ETrans_Folder, ETrans_Parent_Directory, folders_name);
     }
+
+    plots->Add(ETrans_Folder);
 
     string ETrans_All_Int_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
     string ETrans_QEL_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[4] + "/";
@@ -443,12 +499,16 @@ void EventAnalyser() {
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
     string Ecal_Parent_Directory = "Ecal_histograms";
+    TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
     string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only",
                                       "2p/DIS_only"};
 
     for (string folders_name: Ecal_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name);
+        TFolderAdder(Ecal_Folder, Ecal_Parent_Directory, folders_name);
     }
+
+    plots->Add(Ecal_Folder);
 
     string Ecal_All_Int_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[2] + "/";
     string Ecal_QEL_histograms_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[3] + "/";
@@ -2453,12 +2513,6 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="TList definition">
-    TList *plots = new TList();
-
-    cout << " done.\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
