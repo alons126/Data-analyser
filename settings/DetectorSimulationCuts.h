@@ -17,15 +17,18 @@
 
 bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
 
-// 2p momentum cuts:
+/* 2p momentum cuts */
 double e_momentum_upper_cut_2p = -1, e_momentum_lower_cut_2p = -1;
 double p_momentum_upper_cut_2p = -1, p_momentum_lower_cut_2p = 0.3;
 
-// MicroBooNE momentum cuts:
-double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;
-double p_momentum_upper_cut_MicroBooNE = 1, p_momentum_lower_cut_MicroBooNE = 0.3;
+/* MicroBooNE momentum cuts */
+double e_momentum_upper_cut_MicroBooNE = -1, e_momentum_lower_cut_MicroBooNE = -1;
+//double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;
+double p_momentum_upper_cut_MicroBooNE = -1, p_momentum_lower_cut_MicroBooNE = -1;
+//double p_momentum_upper_cut_MicroBooNE = 1, p_momentum_lower_cut_MicroBooNE = 0.3;
+double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1;
 //double cpion_momentum_upper_cut_MicroBooNE = 1.5, cpion_momentum_lower_cut_MicroBooNE = 0.5;
-double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1;
+//double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Sampling Fraction (SF) cuts (electrons only, FD)

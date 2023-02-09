@@ -2566,7 +2566,20 @@ void EventAnalyser() {
     int num_of_events_2p = 0; // = number of 2p events
     int num_of_2p_QEL_events = 0, num_of_2p_MEC_events = 0, num_of_2p_RES_events = 0, num_of_2p_DIS_events = 0;
 
-    int num_of_MicroBooNE_events_BC = 0, num_of_MicroBooNE_events_AC = 0;
+    int count = 0;
+
+    int num_of_MicroBooNE_events_BC = 0;
+    int num_of_MicroBooNE_events_BC_wNeutrons = 0;
+    int num_of_MicroBooNE_events_BC_wpi0 = 0;
+    int num_of_MicroBooNE_events_BC_wpip = 0;
+    int num_of_MicroBooNE_events_BC_wpim = 0;
+
+    int num_of_MicroBooNE_events_AC = 0;
+    int num_of_MicroBooNE_events_AC_wNeutrons = 0;
+    int num_of_MicroBooNE_events_AC_wpi0 = 0;
+    int num_of_MicroBooNE_events_AC_wpip = 0;
+    int num_of_MicroBooNE_events_AC_wpim = 0;
+
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3742,7 +3755,7 @@ void EventAnalyser() {
 //  MicroBooNE cuts -----------------------------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="MicroBooNE cuts">
-            // 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons"):
+            /* 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons") */
             int ne = electrons.size(), np = protons.size(), npi0 = pizero.size(), nn = neutrons.size(), npip = piplus.size(), npim = piminus.size();
             bool MicroBooNE_particle_selection = ((ne == 1) && (np == 2) && (npi0 == 0) && (AllParticles.size() == ne + np + nn + npi0 + npip + npim));
 
@@ -3750,7 +3763,13 @@ void EventAnalyser() {
             if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
                 ++num_of_MicroBooNE_events_BC;
 
+                if (nn != 0) { ++num_of_MicroBooNE_events_BC_wNeutrons; }
+                if (npi0 != 0) { ++num_of_MicroBooNE_events_BC_wpi0; }
+                if (npip != 0) { ++num_of_MicroBooNE_events_BC_wpip; }
+                if (npim != 0) { ++num_of_MicroBooNE_events_BC_wpim; }
+
                 //<editor-fold desc="Filling Beta vs. P (MicroBooNE-BC)">
+                /* Testing Beta vs. P before applying the MicroBooNE cuts */
                 for (int i = 0; i < AllParticles.size(); i++) {
                     if (AllParticles[i]->getRegion() == CD) {
                         Beta_vs_P_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
@@ -3776,7 +3795,8 @@ void EventAnalyser() {
                 } // end of loop over AllParticles vector
                 //</editor-fold>
 
-                TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
+                /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
+                TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE;
                 P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
                 P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
                 P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
@@ -4062,19 +4082,70 @@ void EventAnalyser() {
                 bool MicroBooNE_mom_cuts;
 
                 // Electron:
-                bool e_mom_ucut_MicroBooNE = ((e_momentum_upper_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE));
-                bool e_mom_lcut_MicroBooNE = ((e_momentum_lower_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE));
+                bool e_mom_ucut_MicroBooNE, e_mom_lcut_MicroBooNE;
+
+                if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+                    e_mom_ucut_MicroBooNE = e_mom_lcut_MicroBooNE = true;
+                } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+                    e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+                    e_mom_lcut_MicroBooNE = true;
+                } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+                    e_mom_ucut_MicroBooNE = true;
+                    e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+                } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+                    e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+                    e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+                }
+
                 bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
 
+//                bool e_mom_ucut_MicroBooNE = ((e_momentum_upper_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE));
+//                bool e_mom_lcut_MicroBooNE = ((e_momentum_lower_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE));
+//                bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
+
                 // Proton 0:
-                bool p0_mom_ucut_MicroBooNE = ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE));
-                bool p0_mom_lcut_MicroBooNE = ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE));
+                bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
+
+                if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+                    p0_mom_ucut_MicroBooNE = p0_mom_lcut_MicroBooNE = true;
+                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+                    p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+                    p0_mom_lcut_MicroBooNE = true;
+                } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+                    p0_mom_ucut_MicroBooNE = true;
+                    p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+                    p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+                    p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+                }
+
                 bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
 
+//                bool p0_mom_ucut_MicroBooNE = ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE));
+//                bool p0_mom_lcut_MicroBooNE = ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE));
+//                bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
+
                 // Proton 1:
-                bool p1_mom_ucut_MicroBooNE = ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE));
-                bool p1_mom_lcut_MicroBooNE = ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE));
+                bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
+
+                if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+                    p1_mom_ucut_MicroBooNE = p1_mom_lcut_MicroBooNE = true;
+                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+                    p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+                    p1_mom_lcut_MicroBooNE = true;
+                } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+                    p1_mom_ucut_MicroBooNE = true;
+                    p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+                    p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+                    p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+                }
+
                 bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
+
+//                bool p1_mom_ucut_MicroBooNE = ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE));
+//                bool p1_mom_lcut_MicroBooNE = ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE));
+//                bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
 
                 bool p_mom_cut_MicroBooNE = (p0_mom_cut_MicroBooNE && p1_mom_cut_MicroBooNE);
 
@@ -4088,13 +4159,34 @@ void EventAnalyser() {
                         bool temp_pip_mom_cut_MicroBooNE;
                         P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
 
-                        pcpion_mom_ucut_MicroBooNE = ((cpion_momentum_upper_cut_MicroBooNE != -1) && (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE));
-                        pcpion_mom_lcut_MicroBooNE = ((cpion_momentum_lower_cut_MicroBooNE != -1) && (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE));
+                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+                            ++count;
+
+                            pcpion_mom_ucut_MicroBooNE = pcpion_mom_lcut_MicroBooNE = true;
+                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+                            pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+                            pcpion_mom_lcut_MicroBooNE = true;
+                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+                            pcpion_mom_ucut_MicroBooNE = true;
+                            pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+                            pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+                            pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+                        }
+
                         temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
 
                         if (temp_pip_mom_cut_MicroBooNE == false) {
                             pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE;
                         }
+
+//                        pcpion_mom_ucut_MicroBooNE = ((cpion_momentum_upper_cut_MicroBooNE != -1) && (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE));
+//                        pcpion_mom_lcut_MicroBooNE = ((cpion_momentum_lower_cut_MicroBooNE != -1) && (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE));
+//                        temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
+//
+//                        if (temp_pip_mom_cut_MicroBooNE == false) {
+//                            pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE;
+//                        }
                     } // end of loop over piplus vector
                 }
 
@@ -4108,15 +4200,38 @@ void EventAnalyser() {
                         bool temp_pim_mom_cut_MicroBooNE;
                         P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
 
-                        ncpion_mom_ucut_MicroBooNE = ((cpion_momentum_upper_cut_MicroBooNE != -1) && (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE));
-                        ncpion_mom_lcut_MicroBooNE = ((cpion_momentum_lower_cut_MicroBooNE != -1) && (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE));
+                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+                            ++count;
+
+                            ncpion_mom_ucut_MicroBooNE = ncpion_mom_lcut_MicroBooNE = true;
+                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+                            ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+                            ncpion_mom_lcut_MicroBooNE = true;
+                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+                            ncpion_mom_ucut_MicroBooNE = true;
+                            ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+                            ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+                            ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+                        }
+
                         temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
 
                         if (temp_pim_mom_cut_MicroBooNE == false) {
                             pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE;
                         }
+
+//                        ncpion_mom_ucut_MicroBooNE = ((cpion_momentum_upper_cut_MicroBooNE != -1) && (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE));
+//                        ncpion_mom_lcut_MicroBooNE = ((cpion_momentum_lower_cut_MicroBooNE != -1) && (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE));
+//                        temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
+//
+//                        if (temp_pim_mom_cut_MicroBooNE == false) {
+//                            pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE;
+//                        }
                     } // end of loop over piminus vector
                 }
+
+//                cout << count << "\n";
 
                 // Total momentum cut variable:
                 MicroBooNE_mom_cuts = (e_mom_cut_MicroBooNE && p_mom_cut_MicroBooNE && pip_mom_cut_MicroBooNE && pim_mom_cut_MicroBooNE);
@@ -4125,75 +4240,75 @@ void EventAnalyser() {
                 //  Applying chi2 cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying chi2 cuts (MicroBooNE)">
-                bool MicroBooNE_chi2_cuts;
+                bool MicroBooNE_chi2_cuts = true;
 
-                // Electron:
-                bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
-                                                 && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
-                bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
-                                                 && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
-                bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
-
-                // Proton 0:
-                bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
-                bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
-                bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
-
-                // Proton 1:
-                bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
-                bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
-                bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
-
-                bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
-
-                // Positive pions:
-                bool pcpion_chi2_MicroBooNE_CD, pcpion_chi2_MicroBooNE_FD;
-                bool pip_chi2_cut_MicroBooNE = true;
-
-                if (piplus.size() > 0) {
-                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-                    for (int i = 0; i < piplus.size(); i++) {
-                        bool temp_pip_chi2_cut_MicroBooNE;
-
-                        pcpion_chi2_MicroBooNE_CD = ((piplus[i]->getRegion() == CD)
-                                                     && (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD));
-                        pcpion_chi2_MicroBooNE_FD = ((piplus[i]->getRegion() == FD)
-                                                     && (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD));
-                        temp_pip_chi2_cut_MicroBooNE = (pcpion_chi2_MicroBooNE_CD || pcpion_chi2_MicroBooNE_FD);
-
-                        if (temp_pip_chi2_cut_MicroBooNE == false) {
-                            pip_chi2_cut_MicroBooNE = temp_pip_chi2_cut_MicroBooNE;
-                        }
-                    } // end of loop over piplus vector
-                }
-
-                // Negative pions:
-                bool ncpion_chi2_MicroBooNE_CD, ncpion_chi2_MicroBooNE_FD;
-                bool pim_chi2_cut_MicroBooNE = true;
-
-                if (piminus.size() > 0) {
-                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-                    for (int i = 0; i < piminus.size(); i++) {
-                        bool temp_pim_chi2_cut_MicroBooNE;
-
-                        ncpion_chi2_MicroBooNE_CD = ((piminus[i]->getRegion() == CD)
-                                                     && (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD));
-                        ncpion_chi2_MicroBooNE_FD = ((piminus[i]->getRegion() == FD)
-                                                     && (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD));
-                        temp_pim_chi2_cut_MicroBooNE = (ncpion_chi2_MicroBooNE_CD || ncpion_chi2_MicroBooNE_FD);
-
-                        if (temp_pim_chi2_cut_MicroBooNE == false) {
-                            pim_chi2_cut_MicroBooNE = temp_pim_chi2_cut_MicroBooNE;
-                        }
-                    } // end of loop over piminus vector
-                }
-
-                // Total momentum cut variable:
-                MicroBooNE_chi2_cuts = (e_chi2_MicroBooNE_cut && p_chi2_MicroBooNE_cut && pip_chi2_cut_MicroBooNE && pim_chi2_cut_MicroBooNE);
+//                // Electron:
+//                bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
+//                                                 && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
+//                bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
+//                                                 && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
+//                bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
+//
+//                // Proton 0:
+//                bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
+//                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//                bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
+//                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//                bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
+//
+//                // Proton 1:
+//                bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
+//                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//                bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
+//                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//                bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
+//
+//                bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
+//
+//                // Positive pions:
+//                bool pcpion_chi2_MicroBooNE_CD, pcpion_chi2_MicroBooNE_FD;
+//                bool pip_chi2_cut_MicroBooNE = true;
+//
+//                if (piplus.size() > 0) {
+//                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                    for (int i = 0; i < piplus.size(); i++) {
+//                        bool temp_pip_chi2_cut_MicroBooNE;
+//
+//                        pcpion_chi2_MicroBooNE_CD = ((piplus[i]->getRegion() == CD)
+//                                                     && (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD));
+//                        pcpion_chi2_MicroBooNE_FD = ((piplus[i]->getRegion() == FD)
+//                                                     && (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD));
+//                        temp_pip_chi2_cut_MicroBooNE = (pcpion_chi2_MicroBooNE_CD || pcpion_chi2_MicroBooNE_FD);
+//
+//                        if (temp_pip_chi2_cut_MicroBooNE == false) {
+//                            pip_chi2_cut_MicroBooNE = temp_pip_chi2_cut_MicroBooNE;
+//                        }
+//                    } // end of loop over piplus vector
+//                }
+//
+//                // Negative pions:
+//                bool ncpion_chi2_MicroBooNE_CD, ncpion_chi2_MicroBooNE_FD;
+//                bool pim_chi2_cut_MicroBooNE = true;
+//
+//                if (piminus.size() > 0) {
+//                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                    for (int i = 0; i < piminus.size(); i++) {
+//                        bool temp_pim_chi2_cut_MicroBooNE;
+//
+//                        ncpion_chi2_MicroBooNE_CD = ((piminus[i]->getRegion() == CD)
+//                                                     && (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD));
+//                        ncpion_chi2_MicroBooNE_FD = ((piminus[i]->getRegion() == FD)
+//                                                     && (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD));
+//                        temp_pim_chi2_cut_MicroBooNE = (ncpion_chi2_MicroBooNE_CD || ncpion_chi2_MicroBooNE_FD);
+//
+//                        if (temp_pim_chi2_cut_MicroBooNE == false) {
+//                            pim_chi2_cut_MicroBooNE = temp_pim_chi2_cut_MicroBooNE;
+//                        }
+//                    } // end of loop over piminus vector
+//                }
+//
+//                // Total momentum cut variable:
+//                MicroBooNE_chi2_cuts = (e_chi2_MicroBooNE_cut && p_chi2_MicroBooNE_cut && pip_chi2_cut_MicroBooNE && pim_chi2_cut_MicroBooNE);
                 //</editor-fold>
 
                 //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
@@ -4210,6 +4325,11 @@ void EventAnalyser() {
                 if (((apply_momentum_cuts_MicroBooNE == true) && MicroBooNE_mom_cuts)
                     && ((apply_chi2_cuts_2p == true) && MicroBooNE_chi2_cuts)) {
                     ++num_of_MicroBooNE_events_AC;
+
+                    if (nn != 0) { ++num_of_MicroBooNE_events_AC_wNeutrons; }
+                    if (npi0 != 0) { ++num_of_MicroBooNE_events_AC_wpi0; }
+                    if (npip != 0) { ++num_of_MicroBooNE_events_AC_wpip; }
+                    if (npim != 0) { ++num_of_MicroBooNE_events_AC_wpim; }
 
                     //<editor-fold desc="Filling MicroBooNE momentum histograms">
                     if (electrons[0]->getRegion() == CD) {
@@ -4334,7 +4454,9 @@ void EventAnalyser() {
                 ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
                 //TODO: rename P_e
-                TVector3 P_p0, P_p1; // p0 corresponds to protons[0] & p1 corresponds to protons[1]
+
+                /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
+                TVector3 P_p0, P_p1;
 //                P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
                 P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
                 P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
@@ -8303,8 +8425,13 @@ void EventAnalyser() {
     myLogFile << "QEL + MEC + RES + DIS (2p):\t\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n\n";
 
     myLogFile << "-- MicroBooNE event counts ------------------------------------------------\n";
-    myLogFile << "#(events) MicroBooNE before cuts:\t\t" << num_of_MicroBooNE_events_BC << "\n";
-    myLogFile << "#(events) MicroBooNE after cuts:\t\t" << num_of_MicroBooNE_events_AC << "\n\n";
+    myLogFile << "#(events) MicroBooNE BEFORE cuts:\t\t" << num_of_MicroBooNE_events_BC << "\n";
+    myLogFile << "#(events) MicroBooNE BC with Neutrons:\t" << num_of_MicroBooNE_events_BC_wNeutrons << "\n";
+    myLogFile << "#(events) MicroBooNE BC with pi0:\t\t" << num_of_MicroBooNE_events_BC_wpi0 << "\n";
+    myLogFile << "#(events) MicroBooNE BC with pi+:\t\t" << num_of_MicroBooNE_events_BC_wpip << "\n";
+    myLogFile << "#(events) MicroBooNE BC with pi-:\t\t" << num_of_MicroBooNE_events_BC_wpim << "\n\n";
+
+    myLogFile << "#(events) MicroBooNE AFTER cuts:\t\t" << num_of_MicroBooNE_events_AC << "\n\n";
 //    myLogFile << "#(events) 2p QEL:\t\t\t" << num_of_2p_QEL_events << "\n";
 //    myLogFile << "#(events) 2p MEC:\t\t\t" << num_of_2p_MEC_events << "\n";
 //    myLogFile << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
@@ -8418,13 +8545,17 @@ void EventAnalyser() {
     cout << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n";
 
     cout << "-- MicroBooNE event counts ------------------------------------------------\n";
-    cout << "#(events) MicroBooNE before cuts:\t" << num_of_MicroBooNE_events_BC << "\n";
-    cout << "#(events) MicroBooNE after cuts:\t" << num_of_MicroBooNE_events_AC << "\n\n";
-//    cout << "#(events) 2p QEL:\t\t\t" << num_of_2p_QEL_events << "\n";
-//    cout << "#(events) 2p MEC:\t\t\t" << num_of_2p_MEC_events << "\n";
-//    cout << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
-//    cout << "#(events) 2p DIS:\t\t\t" << num_of_2p_DIS_events << "\n";
-//    cout << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n";
+    cout << "#(events) MicroBooNE BEFORE cuts:\t" << num_of_MicroBooNE_events_BC << "\n";
+    cout << "#(events) MicroBooNE BC with Neutrons:\t" << num_of_MicroBooNE_events_BC_wNeutrons << "\n";
+    cout << "#(events) MicroBooNE BC with pi0:\t" << num_of_MicroBooNE_events_BC_wpi0 << "\n";
+    cout << "#(events) MicroBooNE BC with pi+:\t" << num_of_MicroBooNE_events_BC_wpip << "\n";
+    cout << "#(events) MicroBooNE BC with pi-:\t" << num_of_MicroBooNE_events_BC_wpim << "\n\n";
+
+    cout << "#(events) MicroBooNE AFTER cuts:\t" << num_of_MicroBooNE_events_AC << "\n";
+    cout << "#(events) MicroBooNE AC with Neutrons:\t" << num_of_MicroBooNE_events_AC_wNeutrons << "\n";
+    cout << "#(events) MicroBooNE AC with pi0:\t" << num_of_MicroBooNE_events_AC_wpi0 << "\n";
+    cout << "#(events) MicroBooNE AC with pi+:\t" << num_of_MicroBooNE_events_AC_wpip << "\n";
+    cout << "#(events) MicroBooNE AC with pi-:\t" << num_of_MicroBooNE_events_AC_wpim << "\n\n";
 
     cout << "---------------------------------------------------------------------------\n";
     cout << "\t\t\tExecution variables\n";
