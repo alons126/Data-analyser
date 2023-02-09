@@ -3812,85 +3812,98 @@ void EventAnalyser() {
                 if (electrons[0]->getRegion() == CD) {
                     P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
 
-                    if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                        P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag());
-                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                        if (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
-                    } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                        if (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
-                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                        if ((P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) &&
-                            (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE)) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
-                    }
+////                    LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", "CD", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, double CutCenter);
+                    LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+
+//                    if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag());
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) &&
+//                            (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE)) { P_e_MicroBooNE_AC_CD->Fill(P_e_MicroBooNE.Mag()); }
+//                    }
                 } else if (electrons[0]->getRegion() == FD) {
                     P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
 
-                    if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                        P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag());
-                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                        if (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
-                    } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                        if (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
-                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                        if ((P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) &&
-                            (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE)) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
-                    }
+                    LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+
+//                    if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag());
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
+//                    } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE) &&
+//                            (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE)) { P_e_MicroBooNE_AC_FD->Fill(P_e_MicroBooNE.Mag()); }
+//                    }
                 }
 
                 if (protons[0]->getRegion() == CD) {
                     P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
 
-                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag());
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        if (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if ((P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
-                            && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
-                    }
+                    LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_CD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    }
                 } else if (protons[0]->getRegion() == FD) {
                     P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
 
-                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag());
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        if (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if ((P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
-                            && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
-                    }
+                    LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_FD->Fill(P_p0_MicroBooNE.Mag()); }
+//                    }
                 }
 
                 if (protons[1]->getRegion() == CD) {
                     P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
 
-                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag());
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        if (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if ((P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
-                            && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
-                    }
+                    LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_CD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    }
                 } else if (protons[1]->getRegion() == FD) {
                     P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
 
-                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag());
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                        if (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
-                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                        if ((P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
-                            && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
-                    }
+                    LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+
+//                    if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag());
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                        if (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                        if ((P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE)
+//                            && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE)) { P_p_MicroBooNE_AC_FD->Fill(P_p1_MicroBooNE.Mag()); }
+//                    }
                 }
 
                 // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
@@ -3900,29 +3913,33 @@ void EventAnalyser() {
                     if (piplus[i]->getRegion() == CD) {
                         P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
 
-                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag());
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            if (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if ((P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
-                                (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
-                        }
+                        LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_CD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        }
                     } else if (piplus[i]->getRegion() == FD) {
                         P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
 
-                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag());
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            if (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if ((P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
-                                (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
-                        }
+                        LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_FD->Fill(P_pcpion_MicroBooNE.Mag()); }
+//                        }
                     }
                 } // end of loop over piplus vector
 
@@ -3933,29 +3950,33 @@ void EventAnalyser() {
                     if (piminus[i]->getRegion() == CD) {
                         P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
 
-                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag());
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            if (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if ((P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
-                                (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
-                        }
+                        LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_CD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        }
                     } else if (piminus[i]->getRegion() == FD) {
                         P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
 
-                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag());
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            if (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            if ((P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
-                                (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
-                        }
+                        LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+
+//                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                            if ((P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE) &&
+//                                (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE)) { P_cpion_MicroBooNE_AC_FD->Fill(P_ncpion_MicroBooNE.Mag()); }
+//                        }
                     }
                 } // end of loop over piminus vector
                 //</editor-fold>
@@ -4099,10 +4120,6 @@ void EventAnalyser() {
 
                 bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
 
-//                bool e_mom_ucut_MicroBooNE = ((e_momentum_upper_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE));
-//                bool e_mom_lcut_MicroBooNE = ((e_momentum_lower_cut_MicroBooNE != -1) && (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE));
-//                bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
-
                 // Proton 0:
                 bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
 
@@ -4121,10 +4138,6 @@ void EventAnalyser() {
 
                 bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
 
-//                bool p0_mom_ucut_MicroBooNE = ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE));
-//                bool p0_mom_lcut_MicroBooNE = ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE));
-//                bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
-
                 // Proton 1:
                 bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
 
@@ -4142,10 +4155,6 @@ void EventAnalyser() {
                 }
 
                 bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
-
-//                bool p1_mom_ucut_MicroBooNE = ((p_momentum_upper_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE));
-//                bool p1_mom_lcut_MicroBooNE = ((p_momentum_lower_cut_MicroBooNE != -1) && (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE));
-//                bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
 
                 bool p_mom_cut_MicroBooNE = (p0_mom_cut_MicroBooNE && p1_mom_cut_MicroBooNE);
 
@@ -4179,14 +4188,6 @@ void EventAnalyser() {
                         if (temp_pip_mom_cut_MicroBooNE == false) {
                             pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE;
                         }
-
-//                        pcpion_mom_ucut_MicroBooNE = ((cpion_momentum_upper_cut_MicroBooNE != -1) && (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE));
-//                        pcpion_mom_lcut_MicroBooNE = ((cpion_momentum_lower_cut_MicroBooNE != -1) && (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE));
-//                        temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
-//
-//                        if (temp_pip_mom_cut_MicroBooNE == false) {
-//                            pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE;
-//                        }
                     } // end of loop over piplus vector
                 }
 
@@ -4220,14 +4221,6 @@ void EventAnalyser() {
                         if (temp_pim_mom_cut_MicroBooNE == false) {
                             pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE;
                         }
-
-//                        ncpion_mom_ucut_MicroBooNE = ((cpion_momentum_upper_cut_MicroBooNE != -1) && (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE));
-//                        ncpion_mom_lcut_MicroBooNE = ((cpion_momentum_lower_cut_MicroBooNE != -1) && (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE));
-//                        temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
-//
-//                        if (temp_pim_mom_cut_MicroBooNE == false) {
-//                            pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE;
-//                        }
                     } // end of loop over piminus vector
                 }
 
@@ -4320,6 +4313,8 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
+
+                //TODO: add on/off switch to each indeviduale microboone cut
 
 //                if ((apply_momentum_cuts_MicroBooNE == true)) {
                 if (((apply_momentum_cuts_MicroBooNE == true) && MicroBooNE_mom_cuts)
@@ -8431,12 +8426,11 @@ void EventAnalyser() {
     myLogFile << "#(events) MicroBooNE BC with pi+:\t\t" << num_of_MicroBooNE_events_BC_wpip << "\n";
     myLogFile << "#(events) MicroBooNE BC with pi-:\t\t" << num_of_MicroBooNE_events_BC_wpim << "\n\n";
 
-    myLogFile << "#(events) MicroBooNE AFTER cuts:\t\t" << num_of_MicroBooNE_events_AC << "\n\n";
-//    myLogFile << "#(events) 2p QEL:\t\t\t" << num_of_2p_QEL_events << "\n";
-//    myLogFile << "#(events) 2p MEC:\t\t\t" << num_of_2p_MEC_events << "\n";
-//    myLogFile << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
-//    myLogFile << "#(events) 2p DIS:\t\t\t" << num_of_2p_DIS_events << "\n";
-//    myLogFile << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n";
+    myLogFile << "#(events) MicroBooNE AFTER cuts:\t\t" << num_of_MicroBooNE_events_AC << "\n";
+    myLogFile << "#(events) MicroBooNE AC with Neutrons:\t" << num_of_MicroBooNE_events_AC_wNeutrons << "\n";
+    myLogFile << "#(events) MicroBooNE AC with pi0:\t\t" << num_of_MicroBooNE_events_AC_wpi0 << "\n";
+    myLogFile << "#(events) MicroBooNE AC with pi+:\t\t" << num_of_MicroBooNE_events_AC_wpip << "\n";
+    myLogFile << "#(events) MicroBooNE AC with pi-:\t\t" << num_of_MicroBooNE_events_AC_wpim << "\n\n\n";
 
     myLogFile.close();
     //</editor-fold>

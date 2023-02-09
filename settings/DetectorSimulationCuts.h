@@ -22,10 +22,11 @@ double e_momentum_upper_cut_2p = -1, e_momentum_lower_cut_2p = -1;
 double p_momentum_upper_cut_2p = -1, p_momentum_lower_cut_2p = 0.3;
 
 /* MicroBooNE momentum cuts */
-double e_momentum_upper_cut_MicroBooNE = -1, e_momentum_lower_cut_MicroBooNE = -1;
+//double e_momentum_upper_cut_MicroBooNE = -1, e_momentum_lower_cut_MicroBooNE = -1;
+double e_momentum_upper_cut_MicroBooNE = 5, e_momentum_lower_cut_MicroBooNE = 0.1;
 //double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;
-double p_momentum_upper_cut_MicroBooNE = -1, p_momentum_lower_cut_MicroBooNE = -1;
-//double p_momentum_upper_cut_MicroBooNE = 1, p_momentum_lower_cut_MicroBooNE = 0.3;
+//double p_momentum_upper_cut_MicroBooNE = -1, p_momentum_lower_cut_MicroBooNE = 0.3;
+double p_momentum_upper_cut_MicroBooNE = 1, p_momentum_lower_cut_MicroBooNE = 0.3;
 double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1;
 //double cpion_momentum_upper_cut_MicroBooNE = 1.5, cpion_momentum_lower_cut_MicroBooNE = 0.5;
 //double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1;
@@ -36,8 +37,6 @@ double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroB
 
 bool apply_SF_cuts = true;
 
-//double SF_1e2p_upper_cut = 0.28;
-//double SF_1e2p_lower_cut = 0.22;
 double SF_1e2p_upper_cut = 0.28;
 double SF_1e2p_lower_cut = 0.18;
 double SF_1e2p_Xmax; // for all e plots, no cuts applied

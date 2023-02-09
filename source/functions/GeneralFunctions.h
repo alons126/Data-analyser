@@ -12,6 +12,24 @@
 #include <sys/stat.h>
 #include <sstream>
 
+#include <cstdlib>
+#include <chrono>
+#include <TFile.h>
+#include <TTree.h>
+#include <TApplication.h>
+#include <TROOT.h>
+#include <TDatabasePDG.h>
+#include <TLorentzVector.h>
+#include <TH1.h>
+#include <TChain.h>
+#include <TCanvas.h>
+#include <TBenchmark.h>
+#include <iomanip>
+#include "clas12reader.h"
+
+using namespace clas12;
+using namespace std;
+
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  General functions
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -146,6 +164,27 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 //    }
      */
 
+}
+//</editor-fold>
+
+//<editor-fold desc="LogEventCuts function">
+void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, string CutType, double Upper_cut, double Lower_cut, double CutCenter = 0) {
+//void ApplyMomentumCuts(PN6clas1215region_particleE Particle, TH1D *Histogram1D, double Upper_cut, double Lower_cut) {
+
+    if (CutType == "momentum" || CutType == "") {
+        TVector3 P;
+        P.SetMagThetaPhi(Particle->getP(), Particle->getTheta(), Particle->getPhi());
+
+        if ((Upper_cut == -1) && (Lower_cut == -1)) {
+            Histogram1D->Fill(P.Mag());
+        } else if ((Upper_cut != -1) && (Lower_cut == -1)) {
+            if (P.Mag() <= Upper_cut) { Histogram1D->Fill(P.Mag()); }
+        } else if ((Upper_cut == -1) && (Lower_cut != -1)) {
+            if (P.Mag() >= Lower_cut) { Histogram1D->Fill(P.Mag()); }
+        } else if ((Upper_cut != -1) && (Lower_cut != -1)) {
+            if ((P.Mag() >= Lower_cut) && (P.Mag() <= Upper_cut)) { Histogram1D->Fill(P.Mag()); }
+        }
+    }
 }
 //</editor-fold>
 
