@@ -169,8 +169,6 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 
 //<editor-fold desc="LogEventCuts function">
 void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, string CutType, double Upper_cut, double Lower_cut, double CutCenter = 0) {
-//void ApplyMomentumCuts(PN6clas1215region_particleE Particle, TH1D *Histogram1D, double Upper_cut, double Lower_cut) {
-
     if (CutType == "momentum" || CutType == "") {
         TVector3 P;
         P.SetMagThetaPhi(Particle->getP(), Particle->getTheta(), Particle->getPhi());
