@@ -125,7 +125,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
-    string Beta_VS_P_Parent_Directory = "Beta_VS_P";
+    string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
     TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
     string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "min_1e_cut", "min_1e_cut/By_charge", "1e_cut", "1e_cut/By_charge",
                                            "All_e/By_charge/Positive_hadrons_FTOF", "All_e/By_charge/Positive_hadrons_CTOF", "2p", "2p/By_charge",
@@ -196,7 +196,7 @@ void EventAnalyser() {
     bool create_Vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
     TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
-    string Vertex_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE"};
+    string Vertex_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name);
@@ -211,6 +211,7 @@ void EventAnalyser() {
 
     string Vertex_dV_2p_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[2] + "/";
 
+    string Vertex_dV_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
     string Vertex_dV_MicroBooNE_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
     //</editor-fold>
 
@@ -238,7 +239,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_e plots directories">
     bool create_Theta_e_Dir = true;
-    string Theta_e_Parent_Directory = "Ang_histograms";
+    string Theta_e_Parent_Directory = "Ang_plots";
     TFolder *Theta_e_Folder = new TFolder(Theta_e_Parent_Directory.c_str(), Theta_e_Parent_Directory.c_str());
     string Theta_e_Daughter_Folders[] = {"", "Theta_e_plots", "Theta_e_plots/All_e", "Theta_e_plots/Only_1e_cut", "Theta_e_plots/Only_1e_cut/1e2X",
                                          "Theta_e_plots/Only_1e_cut/1e2p", "2p", "2p/Theta_e_plots"};
@@ -277,7 +278,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Phi_e plots directories">
     bool create_Phi_e_Dir = true;
-    string Phi_e_Parent_Directory = "Ang_histograms";
+    string Phi_e_Parent_Directory = "Ang_plots";
     TFolder *Phi_e_Folder = new TFolder(Phi_e_Parent_Directory.c_str(), Phi_e_Parent_Directory.c_str());
     string Phi_e_Daughter_Folders[] = {"", "Phi_e_plots", "Phi_e_plots/All_e", "Phi_e_plots/Only_1e_cut", "Phi_e_plots/Only_1e_cut/1e2X",
                                        "Phi_e_plots/Only_1e_cut/1e2p", "2p/Phi_e_plots"};
@@ -314,7 +315,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Q2 plots directories">
     bool create_Q2_Dir = true;
-    string Q2_Parent_Directory = "Q2_histograms";
+    string Q2_Parent_Directory = "Q2_plots";
     TFolder *Q2_Folder = new TFolder(Q2_Parent_Directory.c_str(), Q2_Parent_Directory.c_str());
     string Q2_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "1e2p_weChi2_cut"};
 
@@ -331,7 +332,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Momentum plots directories">
     bool create_Momentum_Dir = true;
-    string Momentum_Parent_Directory = "Momentum_histograms";
+    string Momentum_Parent_Directory = "Momentum_plots";
     TFolder *Momentum_Folder = new TFolder(Momentum_Parent_Directory.c_str(), Momentum_Parent_Directory.c_str());
     string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
@@ -347,9 +348,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="E_e plots directories">
     bool create_E_e_Dir = true;
-    string E_e_Parent_Directory = "Energy_histograms";
+    string E_e_Parent_Directory = "Energy_plots";
     TFolder *E_e_Folder = new TFolder(E_e_Parent_Directory.c_str(), E_e_Parent_Directory.c_str());
-    string E_e_Daughter_Folders[] = {"", "E_e_histograms", "E_e_VS_theta_e", "E_e_histograms/2p", "E_e_VS_theta_e/2p"};
+    string E_e_Daughter_Folders[] = {"", "E_e_plots", "E_e_VS_theta_e", "E_e_plots/2p", "E_e_VS_theta_e/2p"};
 
     for (string folders_name: E_e_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name);
@@ -385,7 +386,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Sampling Fraction (SF) plots directories">
     bool create_SF_Dir = true;
-    string SF_Parent_Directory = "SF_histograms";
+    string SF_Parent_Directory = "SF_plots";
     TFolder *SF_Folder = new TFolder(SF_Parent_Directory.c_str(), SF_Parent_Directory.c_str());
     string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
 
@@ -415,7 +416,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Number of Photo-electrons (nphe) plots directories">
     bool create_nphe_Dir = true;
-    string nphe_Parent_Directory = "nphe_histograms";
+    string nphe_Parent_Directory = "nphe_plots";
     TFolder *nphe_Folder = new TFolder(nphe_Parent_Directory.c_str(), nphe_Parent_Directory.c_str());
     string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
 
@@ -442,7 +443,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Fiducial histograms plots directories">
     bool create_fiducial_Dir = true;
-    string fiducial_Parent_Directory = "Fiducial_histograms";
+    string fiducial_Parent_Directory = "Fiducial_plots";
     TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
     string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/ECIN", "1e_cut/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
 
@@ -472,7 +473,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
-    string ETrans_Parent_Directory = "ETrans_histograms";
+    string ETrans_Parent_Directory = "ETrans_plots";
     TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
     string ETrans_Daughter_Folders[] = {"", "2p", "2p/Around_15_Deg", "2p/Around_15_Deg/All_interactions", "2p/Around_15_Deg/QEL_only", "2p/Around_15_Deg/MEC_only",
                                         "2p/Around_15_Deg/RES_only", "2p/Around_15_Deg/DIS_only"};
@@ -495,7 +496,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
-    string Ecal_Parent_Directory = "Ecal_histograms";
+    string Ecal_Parent_Directory = "Ecal_plots";
     TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
     string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only",
                                       "2p/DIS_only"};
@@ -1806,27 +1807,33 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="dV plots (MicroBooNE)">
-    THStack *dVx_MicroBooNE_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (MicroBooNE, CD & FD)", "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (MicroBooNE, CD & FD);dV_{x} [cm];");
-    THStack *dVy_MicroBooNE_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (MicroBooNE, CD & FD)", "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (MicroBooNE, CD & FD);dV_{y} [cm];");
-    THStack *dVz_MicroBooNE_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD)", "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD);dV_{z} [cm];");
+    THStack *dVx_MicroBooNE_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (MicroBooNE, CD & FD)",
+                                                "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (MicroBooNE, CD & FD);dV_{x} [cm];");
+    THStack *dVy_MicroBooNE_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (MicroBooNE, CD & FD)",
+                                                "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (MicroBooNE, CD & FD);dV_{y} [cm];");
+    THStack *dVz_MicroBooNE_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD)",
+                                                "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD);dV_{z} [cm];");
 
-    TH1D *deltaVx_before_dV_cuts_MicroBooNE = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)",
-                                                 "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVy_before_dV_cuts_MicroBooNE = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)",
-                                                 "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVz_before_dV_cuts_MicroBooNE = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)",
-                                                 "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];", 500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVx_MicroBooNE_BC = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                           500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVy_MicroBooNE_BC = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                           500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVz_MicroBooNE_BC = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                           500, dV_lower_lim, dV_upper_lim);
 
-    TH1D *deltaVx_after_dV_cuts_MicroBooNE = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)",
-                                                "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVy_after_dV_cuts_MicroBooNE = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)",
-                                                "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVz_after_dV_cuts_MicroBooNE = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)",
-                                                "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];", 500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVx_MicroBooNE_AC = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                           500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVy_MicroBooNE_AC = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                           500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVz_MicroBooNE_AC = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                           500, dV_lower_lim, dV_upper_lim);
 
-    TH1D *deltaVx_MicroBooNE = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVy_MicroBooNE = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVz_MicroBooNE = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];", 500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVx_MicroBooNE = new TH1D("dV_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                        500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVy_MicroBooNE = new TH1D("dV_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                        500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVz_MicroBooNE = new TH1D("dV_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                        500, dV_lower_lim, dV_upper_lim);
     //</editor-fold>
 
     //</editor-fold>
@@ -2588,16 +2595,10 @@ void EventAnalyser() {
     int count = 0;
 
     int num_of_MicroBooNE_events_BC = 0;
-    int num_of_MicroBooNE_events_BC_wNeutrons = 0;
-    int num_of_MicroBooNE_events_BC_wpi0 = 0;
-    int num_of_MicroBooNE_events_BC_wpip = 0;
-    int num_of_MicroBooNE_events_BC_wpim = 0;
+    int num_of_MicroBooNE_events_BC_wNeutrons = 0, num_of_MicroBooNE_events_BC_wpi0 = 0, num_of_MicroBooNE_events_BC_wpip = 0, num_of_MicroBooNE_events_BC_wpim = 0;
 
     int num_of_MicroBooNE_events_AC = 0;
-    int num_of_MicroBooNE_events_AC_wNeutrons = 0;
-    int num_of_MicroBooNE_events_AC_wpi0 = 0;
-    int num_of_MicroBooNE_events_AC_wpip = 0;
-    int num_of_MicroBooNE_events_AC_wpim = 0;
+    int num_of_MicroBooNE_events_AC_wNeutrons = 0, num_of_MicroBooNE_events_AC_wpi0 = 0, num_of_MicroBooNE_events_AC_wpip = 0, num_of_MicroBooNE_events_AC_wpim = 0;
 
     //</editor-fold>
 
@@ -2912,369 +2913,12 @@ void EventAnalyser() {
 
             //<editor-fold desc="1e cut">
 
+            /* Here we apply electron cut on everything that follows (MicroBooNE, 1e2X, 1e2p, etc) */
+
             //<editor-fold desc="rough 1e cut">
             // Applying 1e cut:
             if (electrons.size() != 1) { continue; } // the rough 1e cut
             ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
-
-//            //<editor-fold desc="General 1e only plots">
-//
-//            //<editor-fold desc="Fill Beta vs. P (1e only, CD & FD)">
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//                //TODO: keep these TOF plots?
-////                Particle_ToF_histogram->Fill(AllParticles[i]->getTime());
-//
-//                if (AllParticles[i]->getRegion() == CD) {
-//                    Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//
-//                    if (AllParticles[i]->par()->getCharge() == 1) {
-//                        Beta_vs_P_positive_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-//                        Beta_vs_P_neutral_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-//                        Beta_vs_P_negative_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//                    }
-//                } else if (AllParticles[i]->getRegion() == FD) {
-//                    Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//
-//                    if (AllParticles[i]->par()->getCharge() == 1) {
-//                        Beta_vs_P_positive_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-//                        Beta_vs_P_neutral_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-//                        Beta_vs_P_negative_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-//                    }
-//
-//                    //TODO: keep these TOF plots?
-////                    bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
-////                    bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
-////                    bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
-//////                    bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
-//
-//                    //TODO: rename Beta_VS_P_from_FTOF plots for charged particles
-//                    //TODO: add Beta_VS_P_from_CTOF plots for charged particles
-//                    //TODO: add Beta_VS_P_from TOF plots for neutral particles?
-//////                    if (FTOF1A) {
-////                    if (FTOF1A && AllParticles[i]->par()->getCharge() != 0) {
-//////                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime();
-////                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime() - c12.event()->getStartTime();
-//////                        double Path_of_Filght_FTOF1A = rCalc(AllParticles[i]->sci(FTOF1A)->getX(),AllParticles[i]->sci(FTOF1A)->getY(),AllParticles[i]->sci(FTOF1A)->getZ());
-////                        double Path_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getPath();
-////                        double Beta_ToF = Path_of_Filght_FTOF1A / (c * Time_of_Filght_FTOF1A);
-////
-////                        Beta_VS_P_from_FTOF1A_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
-////                    }
-////
-//////                    if (FTOF1B) {
-////                    if (FTOF1B && AllParticles[i]->par()->getCharge() != 0) {
-////                        double Time_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getTime() - c12.event()->getStartTime();
-////                        double Path_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getPath();
-////                        double Beta_ToF = Path_of_Filght_FTOF1B / (c * Time_of_Filght_FTOF1B);
-////
-////                        Beta_VS_P_from_FTOF1B_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
-////                    }
-////
-//////                    if (FTOF2) {
-////                    if (FTOF2 && AllParticles[i]->par()->getCharge() != 0) {
-////                        double Time_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getTime() - c12.event()->getStartTime();
-////                        double Path_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getPath();
-////                        double Beta_ToF = Path_of_Filght_FTOF2 / (c * Time_of_Filght_FTOF2);
-////
-////                        Beta_VS_P_from_FTOF2_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
-////                    }
-//
-//                }
-//            } // end of loop over AllParticles vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Fill Electron plots (1e only, CD & FD)">
-//            double theta_e_1e_CD, phi_e_1e_CD, P_e_CD, E_e_CD, e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD, e_ToF_CD;
-//            double theta_e_1e_FD, phi_e_1e_FD, P_e_FD, E_e_FD, e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD, e_ToF_FD;
-//
-//            for (auto &e: electrons) {
-//                if (e->getRegion() == CD) {
-//                    P_e_CD = e->getP();
-//                    E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
-//                    E_e_hist_CD->Fill(E_e_CD);
-//                    Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
-//
-////                    e_ToF_CD = (e->getPath()) / (c * (e->par()->getBeta()));
-////                    Electron_ToF_from_beta_histogram_CD->Fill(e_ToF_CD);
-////                    Electron_path_length_histogram_CD->Fill(e->getPath());
-//
-//                    theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
-//                    Theta_e_1e_CD->Fill(theta_e_1e_CD);
-//                    phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
-//                    Phi_e_1e_CD->Fill(phi_e_1e_CD);
-//                    Theta_e_VS_Phi_e_1e_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
-//                    E_e_VS_Theta_e_hist_CD->Fill(theta_e_1e_CD, E_e_CD);
-//
-//                    if (AllParticles.size() == 3) {
-//                        Theta_e_1e2X_CD->Fill(theta_e_1e_CD);
-//                        Phi_e_1e2X_CD->Fill(phi_e_1e_CD);
-//
-//                        if (qel) {
-//                            ++num_of_QEL_1e2X_CD_events;
-//                            Theta_e_1e2X_QEL_CD->Fill(theta_e_1e_CD);
-//                            Phi_e_1e2X_QEL_CD->Fill(phi_e_1e_CD);
-//                        } else if (mec) {
-//                            ++num_of_MEC_1e2X_CD_events;
-//                            Theta_e_1e2X_MEC_CD->Fill(theta_e_1e_CD);
-//                            Phi_e_1e2X_MEC_CD->Fill(phi_e_1e_CD);
-//                        } else if (res) {
-//                            ++num_of_RES_1e2X_CD_events;
-//                            Theta_e_1e2X_RES_CD->Fill(theta_e_1e_CD);
-//                            Phi_e_1e2X_RES_CD->Fill(phi_e_1e_CD);
-//                        } else if (dis) {
-//                            ++num_of_DIS_1e2X_CD_events;
-//                            Theta_e_1e2X_DIS_CD->Fill(theta_e_1e_CD);
-//                            Phi_e_1e2X_DIS_CD->Fill(phi_e_1e_CD);
-//                        }
-//
-//                        if (protons.size() == 2) {
-//                            Theta_e_1e2p_CD->Fill(theta_e_1e_CD);
-//                            Phi_e_1e2p_CD->Fill(phi_e_1e_CD);
-//
-//                            if (qel) {
-//                                ++num_of_QEL_1e2p_CD_events;
-//                                Theta_e_1e2p_QEL_CD->Fill(theta_e_1e_CD);
-//                                Phi_e_1e2p_QEL_CD->Fill(phi_e_1e_CD);
-//                            } else if (mec) {
-//                                ++num_of_MEC_1e2p_CD_events;
-//                                Theta_e_1e2p_MEC_CD->Fill(theta_e_1e_CD);
-//                                Phi_e_1e2p_MEC_CD->Fill(phi_e_1e_CD);
-//                            } else if (res) {
-//                                ++num_of_RES_1e2p_CD_events;
-//                                Theta_e_1e2p_RES_CD->Fill(theta_e_1e_CD);
-//                                Phi_e_1e2p_RES_CD->Fill(phi_e_1e_CD);
-//                            } else if (dis) {
-//                                ++num_of_DIS_1e2p_CD_events;
-//                                Theta_e_1e2p_DIS_CD->Fill(theta_e_1e_CD);
-//                                Phi_e_1e2p_DIS_CD->Fill(phi_e_1e_CD);
-//                            }
-//                        }
-//                    }
-//
-//                    e_Chi2_CD = e->par()->getChi2Pid();
-//                    Chi2_Electron_1e_CD->Fill(e_Chi2_CD);
-//
-//                    e_Vx_CD = e->par()->getVx();
-//                    Vertex_Electron_1e_Vx_CD_test.Fill(e_Vx_CD);
-//                    e_Vy_CD = e->par()->getVy();
-//                    Vertex_Electron_1e_Vy_CD_test.Fill(e_Vy_CD);
-//                    e_Vz_CD = e->par()->getVz();
-//                    Vertex_Electron_1e_Vz_CD_test.Fill(e_Vz_CD);
-//
-////                    //<editor-fold desc="Electron chi2 test (1e only, CD)">
-////                    if ((fabs(Chi2_Electron_1e_peak_CD - e_Chi2_CD) < Chi2_Electron_cut_CD)) {
-////                        Chi2_Electron_1e_cut_test_CD.Fill(e_Chi2_CD);
-////                    }
-////                    //</editor-fold>
-//
-//                } else if (e->getRegion() == FD) {
-//                    P_e_FD = e->getP();
-//                    E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
-//                    E_e_hist_FD->Fill(E_e_FD);
-//                    Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
-//
-////                    e_ToF_FD = (e->getPath()) / (c * (e->par()->getBeta()));
-////                    Electron_ToF_from_beta_histogram_FD->Fill(e_ToF_FD);
-////                    Electron_path_length_histogram_FD->Fill(e->getPath());
-//
-//                    theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
-//                    Theta_e_1e_FD->Fill(theta_e_1e_FD);
-//                    phi_e_1e_FD = e->getPhi() * 180.0 / pi; // phi_e_1e_FD in deg
-//                    Phi_e_1e_FD->Fill(phi_e_1e_FD);
-//                    Theta_e_VS_Phi_e_1e_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
-//                    E_e_VS_Theta_e_hist_FD->Fill(theta_e_1e_FD, E_e_FD);
-//
-//                    if (AllParticles.size() == 3) {
-//                        Theta_e_1e2X_FD->Fill(theta_e_1e_FD);
-//                        Phi_e_1e2X_FD->Fill(phi_e_1e_FD);
-//
-//                        if (qel) {
-//                            ++num_of_QEL_1e2X_FD_events;
-//                            Theta_e_1e2X_QEL_FD->Fill(theta_e_1e_FD);
-//                            Phi_e_1e2X_QEL_FD->Fill(phi_e_1e_FD);
-//                        } else if (mec) {
-//                            ++num_of_MEC_1e2X_FD_events;
-//                            Theta_e_1e2X_MEC_FD->Fill(theta_e_1e_FD);
-//                            Phi_e_1e2X_MEC_FD->Fill(phi_e_1e_FD);
-//                        } else if (res) {
-//                            ++num_of_RES_1e2X_FD_events;
-//                            Theta_e_1e2X_RES_FD->Fill(theta_e_1e_FD);
-//                            Phi_e_1e2X_RES_FD->Fill(phi_e_1e_FD);
-//                        } else if (dis) {
-//                            ++num_of_DIS_1e2X_FD_events;
-//                            Theta_e_1e2X_DIS_FD->Fill(theta_e_1e_FD);
-//                            Phi_e_1e2X_DIS_FD->Fill(phi_e_1e_FD);
-//                        }
-//
-//                        if (protons.size() == 2) {
-//                            Theta_e_1e2p_FD->Fill(theta_e_1e_FD);
-//                            Phi_e_1e2p_FD->Fill(phi_e_1e_FD);
-//
-//                            if (qel) {
-//                                ++num_of_QEL_1e2p_FD_events;
-//                                Theta_e_1e2p_QEL_FD->Fill(theta_e_1e_FD);
-//                                Phi_e_1e2p_QEL_FD->Fill(phi_e_1e_FD);
-//                            } else if (mec) {
-//                                ++num_of_MEC_1e2p_FD_events;
-//                                Theta_e_1e2p_MEC_FD->Fill(theta_e_1e_FD);
-//                                Phi_e_1e2p_MEC_FD->Fill(phi_e_1e_FD);
-//                            } else if (res) {
-//                                ++num_of_RES_1e2p_FD_events;
-//                                Theta_e_1e2p_RES_FD->Fill(theta_e_1e_FD);
-//                                Phi_e_1e2p_RES_FD->Fill(phi_e_1e_FD);
-//                            } else if (dis) {
-//                                ++num_of_DIS_1e2p_FD_events;
-//                                Theta_e_1e2p_DIS_FD->Fill(theta_e_1e_FD);
-//                                Phi_e_1e2p_DIS_FD->Fill(phi_e_1e_FD);
-//                            }
-//                        }
-//                    }
-//
-//                    e_Chi2_FD = e->par()->getChi2Pid();
-//                    Chi2_Electron_1e_FD->Fill(e_Chi2_FD);
-//
-//                    e_Vx_FD = e->par()->getVx();
-//                    Vertex_Electron_1e_Vx_FD_test.Fill(e_Vx_FD);
-//                    e_Vy_FD = e->par()->getVy();
-//                    Vertex_Electron_1e_Vy_FD_test.Fill(e_Vy_FD);
-//                    e_Vz_FD = e->par()->getVz();
-//                    Vertex_Electron_1e_Vz_FD_test.Fill(e_Vz_FD);
-//                }
-//            } // end of loop over electrons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Fill Proton plots (1e only, CD & FD)">
-//            double p_Chi2_tmp_CD, p_Vx_tmp_CD, p_Vy_tmp_CD, p_Vz_tmp_CD;
-//            double p_Chi2_tmp_FD, p_Vx_tmp_FD, p_Vy_tmp_FD, p_Vz_tmp_FD;
-//
-//            for (auto &p: protons) {
-//                if (p->getRegion() == CD) {
-//                    Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
-//
-//                    p_Chi2_tmp_CD = p->par()->getChi2Pid();
-//                    Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
-//
-//                    p_Vx_tmp_CD = p->par()->getVx();
-//                    Vertex_Proton_1e_Vx_CD_test.Fill(p_Vx_tmp_CD);
-//                    p_Vy_tmp_CD = p->par()->getVy();
-//                    Vertex_Proton_1e_Vy_CD_test.Fill(p_Vy_tmp_CD);
-//                    p_Vz_tmp_CD = p->par()->getVz();
-//                    Vertex_Proton_1e_Vz_CD_test.Fill(p_Vz_tmp_CD);
-//
-////                    //<editor-fold desc="Proton chi2 test (1e only, CD)">
-////                    if ((fabs(Chi2_Proton_1e_peak_CD - p_Chi2_tmp_CD) < Chi2_Proton_cut_CD)) {
-////                        Chi2_Proton_1e_cut_test_CD.Fill(p_Chi2_tmp_CD);
-////                    }
-////                    //</editor-fold>
-//
-//                } else if (p->getRegion() == FD) {
-//                    Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
-//
-//                    p_Chi2_tmp_FD = p->par()->getChi2Pid();
-//                    Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
-//
-//                    p_Vx_tmp_FD = p->par()->getVx();
-//                    Vertex_Proton_1e_Vx_FD_test.Fill(p_Vx_tmp_FD);
-//                    p_Vy_tmp_FD = p->par()->getVy();
-//                    Vertex_Proton_1e_Vy_FD_test.Fill(p_Vy_tmp_FD);
-//                    p_Vz_tmp_FD = p->par()->getVz();
-//                    Vertex_Proton_1e_Vz_FD_test.Fill(p_Vz_tmp_FD);
-//
-////                    //<editor-fold desc="Proton chi2 test (1e only, FD)">
-////                    if ((fabs(Chi2_Proton_1e_peak_FD - p_Chi2_tmp_FD) < Chi2_Proton_cut_FD)) {
-////                        Chi2_Proton_1e_cut_test_FD.Fill(p_Chi2_tmp_FD);
-////                    }
-////                    //</editor-fold>
-//
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Fill Neutron Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &n: neutrons) {
-//                if (n->getRegion() == CD) {
-//                    Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
-//                } else if (n->getRegion() == FD) {
-//                    Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Kplus Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &Kp: Kplus) {
-//                if (Kp->getRegion() == CD) {
-//                    Beta_vs_P_1e_Kplus_Only_CD->Fill(Kp->getP(), Kp->par()->getBeta());
-//                } else if (Kp->getRegion() == FD) {
-//                    Beta_vs_P_1e_Kplus_Only_FD->Fill(Kp->getP(), Kp->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Kminus Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &Km: Kminus) {
-//                if (Km->getRegion() == CD) {
-//                    Beta_vs_P_1e_Kminus_Only_CD->Fill(Km->getP(), Km->par()->getBeta());
-//                } else if (Km->getRegion() == FD) {
-//                    Beta_vs_P_1e_Kminus_Only_FD->Fill(Km->getP(), Km->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Kzero Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &K0: Kzero) {
-//                if (K0->getRegion() == CD) {
-//                    Beta_vs_P_1e_Kzero_Only_CD->Fill(K0->getP(), K0->par()->getBeta());
-//                } else if (K0->getRegion() == FD) {
-//                    Beta_vs_P_1e_Kzero_Only_FD->Fill(K0->getP(), K0->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="piplus Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &pip: piplus) {
-//                if (pip->getRegion() == CD) {
-//                    Beta_vs_P_1e_piplus_Only_CD->Fill(pip->getP(), pip->par()->getBeta());
-//                } else if (pip->getRegion() == FD) {
-//                    Beta_vs_P_1e_piplus_Only_FD->Fill(pip->getP(), pip->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="piminus Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &pim: piminus) {
-//                if (pim->getRegion() == CD) {
-//                    Beta_vs_P_1e_piminus_Only_CD->Fill(pim->getP(), pim->par()->getBeta());
-//                } else if (pim->getRegion() == FD) {
-//                    Beta_vs_P_1e_piminus_Only_FD->Fill(pim->getP(), pim->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="pizero Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &pi0: pizero) {
-//                if (pi0->getRegion() == CD) {
-//                    Beta_vs_P_1e_pizero_Only_CD->Fill(pi0->getP(), pi0->par()->getBeta());
-//                } else if (pi0->getRegion() == FD) {
-//                    Beta_vs_P_1e_pizero_Only_FD->Fill(pi0->getP(), pi0->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //<editor-fold desc="Photons Beta vs. P plots (1e only, CD & FD)">
-//            for (auto &ph: photons) {
-//                if (ph->getRegion() == CD) {
-//                    Beta_vs_P_1e_Photons_Only_CD->Fill(ph->getP(), ph->par()->getBeta());
-//                } else if (ph->getRegion() == FD) {
-//                    Beta_vs_P_1e_Photons_Only_FD->Fill(ph->getP(), ph->par()->getBeta());
-//                }
-//            } // end of loop over protons vector
-//            //</editor-fold>
-//
-//            //</editor-fold>
 
             if (AllParticles.size() - electrons.size() == protons.size()) {
                 ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
@@ -3820,11 +3464,11 @@ void EventAnalyser() {
                 P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
                 P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
 
-                //  Testing cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
+                //  Testing cuts (MicroBooNE) ---------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing cuts (MicroBooNE)">
 
-                //  Testing momentum cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------
+                //  Testing momentum cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing momentum cuts (MicroBooNE)">
                 /* Momentum plots before and after cuts */
@@ -3879,7 +3523,7 @@ void EventAnalyser() {
                 } // end of loop over piminus vector
                 //</editor-fold>
 
-                //  Testing chi2 cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+                //  Testing chi2 cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Testing chi2 before and after cuts">
                 /* Chi2 plots before and after cuts */
@@ -3958,36 +3602,34 @@ void EventAnalyser() {
                 } // end of loop over piminus vector
                 //</editor-fold>
 
-                //  Testing dVz cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------------
+                //  Testing dVz cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
 
-//                    //<editor-fold desc="Testing dV cuts">
-//                    double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
-//                    double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
-//                    double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
-//
-//                    for (auto &p: protons) {
-//                        Vx_p = p->par()->getVx();
-//                        Vy_p = p->par()->getVy();
-//                        Vz_p = p->par()->getVz();
-//                        dVx = Vx_e - Vx_p;
-//                        dVy = Vy_e - Vy_p;
-//                        dVz = Vz_e - Vz_p;
-//
-//                        // Testing dVx,dVy,dVz before cuts
-//                        deltaVx_before_dV_cuts_1e2p->Fill(dVx);
-//                        deltaVy_before_dV_cuts_1e2p->Fill(dVy);
-//                        deltaVz_before_dV_cuts_1e2p->Fill(dVz);
-//
-//                        // Testing dVx,dVy,dVz after cuts
-//                        if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
-//                        if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
-//                        if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
-//                    } // end of loop over protons vector
-//                    //</editor-fold>
+                //<editor-fold desc="Testing dV cuts before and after">
+                //TODO: check with Adi/Justin if vertex cuts should be applied on cPions as well
+                double Vx_e_MicroBooNE = electrons[0]->par()->getVx(), Vy_e_MicroBooNE = electrons[0]->par()->getVy(), Vz_e_MicroBooNE = electrons[0]->par()->getVz();
+                double Vz_p0_MicroBooNE = protons[0]->par()->getVz(), Vz_p1_MicroBooNE = protons[1]->par()->getVz();
+                double dVz0_MicroBooNE = Vz_e_MicroBooNE - Vz_p0_MicroBooNE, dVz1_MicroBooNE = Vz_e_MicroBooNE - Vz_p1_MicroBooNE;
+                double Vx_p_MicroBooNE, Vy_p_MicroBooNE, Vz_p_MicroBooNE, dVx_MicroBooNE, dVy_MicroBooNE, dVz_MicroBooNE;
+
+                for (auto &p: protons) {
+                    Vx_p_MicroBooNE = p->par()->getVx(), Vy_p_MicroBooNE = p->par()->getVy(), Vz_p_MicroBooNE = p->par()->getVz();
+                    dVx_MicroBooNE = Vx_e_MicroBooNE - Vx_p_MicroBooNE;
+                    dVy_MicroBooNE = Vy_e_MicroBooNE - Vy_p_MicroBooNE;
+                    dVz_MicroBooNE = Vz_e_MicroBooNE - Vz_p_MicroBooNE;
+
+                    // Testing dVx,dVy,dVz before cuts
+                    deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
+
+                    // Testing dVx,dVy,dVz after cuts
+                    if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { deltaVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
+                    if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { deltaVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
+                    if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { deltaVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
+                } // end of loop over protons vector
+                //</editor-fold>
 
                 //</editor-fold>
 
-                //  Applying cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
+                //  Applying cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying cuts (MicroBooNE)">
 
@@ -4184,22 +3826,53 @@ void EventAnalyser() {
 
                 //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
 
-//                    //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
-//                    if ((apply_dVz_cuts == true) && ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut))) { continue; }
-//                    //</editor-fold>
+                //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
+                bool MicroBooNE_dVz_cuts;
+
+                bool MicroBooNE_dVz0_cuts = (fabs(dVz_peak_MicroBooNE - dVz0_MicroBooNE) <= dVz_cut_MicroBooNE);
+                bool MicroBooNE_dVz1_cuts = (fabs(dVz_peak_MicroBooNE - dVz1_MicroBooNE) <= dVz_cut_MicroBooNE);
+
+                MicroBooNE_dVz_cuts = (MicroBooNE_dVz0_cuts && MicroBooNE_dVz1_cuts);
+                //</editor-fold>
 
                 //</editor-fold>
 
-                //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
+                //  Fillings histograms (MicroBooNE) --------------------------------------------------------------------------------------------------------------------
 
                 //TODO: add on/off switch to each individuale microboone cut
-                if (MicroBooNE_mom_cuts && MicroBooNE_chi2_cuts) {
+                if (MicroBooNE_mom_cuts && MicroBooNE_chi2_cuts && MicroBooNE_dVz_cuts) {
                     ++num_of_MicroBooNE_events_AC;
 
                     if (nn != 0) { ++num_of_MicroBooNE_events_AC_wNeutrons; }
                     if (npi0 != 0) { ++num_of_MicroBooNE_events_AC_wpi0; }
                     if (npip != 0) { ++num_of_MicroBooNE_events_AC_wpip; }
                     if (npim != 0) { ++num_of_MicroBooNE_events_AC_wpim; }
+
+                    //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
+                    for (int i = 0; i < AllParticles.size(); i++) {
+                        if (AllParticles[i]->getRegion() == CD) {
+                            Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                            if (AllParticles[i]->par()->getCharge() == 1) {
+                                Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == 0) {
+                                Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == -1) {
+                                Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            }
+                        } else if (AllParticles[i]->getRegion() == FD) {
+                            Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+
+                            if (AllParticles[i]->par()->getCharge() == 1) {
+                                Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == 0) {
+                                Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            } else if (AllParticles[i]->par()->getCharge() == -1) {
+                                Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+                            }
+                        }
+                    } // end of loop over AllParticles vector
+                    //</editor-fold>
 
                     //<editor-fold desc="Filling MicroBooNE momentum histograms">
                     if (electrons[0]->getRegion() == CD) {
@@ -4279,30 +3952,12 @@ void EventAnalyser() {
                     } // end of loop over piminus vector
                     //</editor-fold>
 
-                    //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
-                    for (int i = 0; i < AllParticles.size(); i++) {
-                        if (AllParticles[i]->getRegion() == CD) {
-                            Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                            if (AllParticles[i]->par()->getCharge() == 1) {
-                                Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == 0) {
-                                Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == -1) {
-                                Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            }
-                        } else if (AllParticles[i]->getRegion() == FD) {
-                            Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                            if (AllParticles[i]->par()->getCharge() == 1) {
-                                Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == 0) {
-                                Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == -1) {
-                                Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            }
-                        }
-                    } // end of loop over AllParticles vector
+                    //<editor-fold desc="Filling MicroBooNE dVz histograms">
+                    for (auto &p: protons) {
+                        deltaVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
+                        deltaVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
+                        deltaVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
+                    } // end of loop over protons vector
                     //</editor-fold>
 
                 }
@@ -5735,6 +5390,8 @@ void EventAnalyser() {
 
 //  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
 
+        //<editor-fold desc="dV plots (1e2p, CD & FD)">
+
         //<editor-fold desc="dV plots before dV cuts (1e2p, CD & FD)">
         histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
@@ -5770,6 +5427,45 @@ void EventAnalyser() {
 
         histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVz_2p_Stack,
                       "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="dV plots before dV cuts (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, deltaVx_MicroBooNE_BC, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+                      false, true, dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, deltaVy_MicroBooNE_BC, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+                      false, true, dVy_cut, dVy_peak);
+
+        histPlotter1D(c1, deltaVz_MicroBooNE_BC, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+                      false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, deltaVx_MicroBooNE_AC, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+                      false, true, dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, deltaVy_MicroBooNE_AC, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+                      false, true, dVy_cut, dVy_peak);
+
+        histPlotter1D(c1, deltaVz_MicroBooNE_AC, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+                      false, true, dVz_cut, dVz_peak);
+        //</editor-fold>
+
+        //<editor-fold desc="dV plots after dV cuts (MicroBooNE, CD & FD)">
+        histPlotter1D(c1, deltaVx_MicroBooNE, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, deltaVy_MicroBooNE, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+
+        histPlotter1D(c1, deltaVz_MicroBooNE, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         //</editor-fold>
 
     } else {

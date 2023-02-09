@@ -24,12 +24,12 @@ double p_momentum_upper_cut_2p = -1, p_momentum_lower_cut_2p = 0.3;
 /* MicroBooNE momentum cuts */
 //double e_momentum_upper_cut_MicroBooNE = -1, e_momentum_lower_cut_MicroBooNE = -1;
 double e_momentum_upper_cut_MicroBooNE = 5, e_momentum_lower_cut_MicroBooNE = 0.1;
-//double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;
+//double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1; // MicroBooNE cuts
 //double p_momentum_upper_cut_MicroBooNE = -1, p_momentum_lower_cut_MicroBooNE = 0.3;
-double p_momentum_upper_cut_MicroBooNE = 1, p_momentum_lower_cut_MicroBooNE = 0.3;
-double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1;
-//double cpion_momentum_upper_cut_MicroBooNE = 1.5, cpion_momentum_lower_cut_MicroBooNE = 0.5;
-//double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1;
+double p_momentum_upper_cut_MicroBooNE = 5, p_momentum_lower_cut_MicroBooNE = 0.3;
+//double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1; // MicroBooNE cuts
+double cpion_momentum_upper_cut_MicroBooNE = 3, cpion_momentum_lower_cut_MicroBooNE = 0.5;
+//double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1; // MicroBooNE cuts
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Sampling Fraction (SF) cuts (electrons only, FD)
@@ -57,16 +57,20 @@ double fiducial_cut_Lw = 14;
 
 bool apply_nphe_cut = true;
 
+//double nphe_lower_cut = 10;
 double nphe_lower_cut = 2;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Chi2 cuts
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="Chi2 cuts">
-bool apply_chi2_cuts_2p = true,apply_chi2_cuts_MicroBooNE = true;
+bool apply_chi2_cuts_2p = true, apply_chi2_cuts_MicroBooNE = true;
 
 //TODO: rename these variables
+
+/* NOTE: according to Josh's macros, no neutron cuts can be applied */
+
+//<editor-fold desc="Chi2 cuts (2p)">
 
 //<editor-fold desc="Electron chi2 cuts (2p)">
 double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
@@ -92,7 +96,9 @@ double Chi2_Proton_1e_peak_FD = -0.05; // to fill using Chi2_Proton_1e_Xmax_FD
 double Chi2_Proton_1e_Xmax_FD;
 //</editor-fold>
 
-//TODO: ask Adi if to apply neutron cuts in MicroBooNE plots
+//</editor-fold>
+
+//<editor-fold desc="Chi2 cuts (MicroBooNE)">
 
 //<editor-fold desc="Electron chi2 cuts (MicroBooNE)">
 double Chi2_Electron_cut_MicroBooNE_CD = Chi2_Electron_cut_CD; // 100 since electron detection is great
@@ -134,13 +140,6 @@ double Chi2_piminus_MicroBooNE_Xmax_FD;
 double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill using Chi2_piminus_1e_Xmax_MicroBooNE_FD
 //</editor-fold>
 
-//    //<editor-fold desc="Neutron chi2 cuts">
-//    double Chi2_Neutron_cut_CD = 3.;
-//    double Chi2_Neutron_cut_FD = 3.;
-////    double Chi2_Neutron_cut_CD = 1.;
-////    double Chi2_Neutron_cut_FD = 1.;
-//    //</editor-fold>
-
 //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -150,6 +149,7 @@ double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill u
 //<editor-fold desc="Vertex cuts">
 bool apply_dVz_cuts = true;
 
+//<editor-fold desc="Vertex cuts (2p)">
 double Vertex_Electron_cut_CD = 3.;
 double Vertex_Electron_1e_mean_CD = 0; // 1e mean
 double Vertex_Electron_cut_FD = 3.;
@@ -187,6 +187,33 @@ double dVz_cut = 3., dVz_peak = -0.07; // dVz_peak to be reset by dVz_Xmax in se
 ////    double Vertex_Neutron_cut_CD = 1.;
 ////    double Vertex_Neutron_cut_FD = 1.;
 //    //</editor-fold>
+//</editor-fold>
+
+//<editor-fold desc="Vertex cuts (MicroBooNE)">
+
+/* Here we use the same cuts as in 2p */
+
+//double dVx_Xmax_MicroBooNE_CD;
+double dVx_cut_MicroBooNE_CD = dVx_cut_CD, dVx_peak_MicroBooNE_CD = dVx_peak_CD;
+//double dVy_Xmax_MicroBooNE_CD;
+double dVy_cut_MicroBooNE_CD = dVy_cut_CD, dVy_peak_MicroBooNE_CD = dVy_peak_CD;
+//double dVz_Xmax_MicroBooNE_CD;
+double dVz_cut_MicroBooNE_CD = dVz_cut_CD, dVz_peak_MicroBooNE_CD = dVz_peak_CD;
+
+//double dVx_Xmax_MicroBooNE_FD;
+double dVx_cut_MicroBooNE_FD = dVx_cut_FD, dVx_peak_MicroBooNE_FD = dVx_peak_FD;
+//double dVy_Xmax_MicroBooNE_FD;
+double dVy_cut_MicroBooNE_FD = dVy_cut_FD, dVy_peak_MicroBooNE_FD = dVy_peak_FD;
+//double dVz_Xmax_MicroBooNE_FD;
+double dVz_cut_MicroBooNE_FD = dVz_cut_FD, dVz_peak_MicroBooNE_FD = dVz_peak_FD;
+
+//double dVx_MicroBooNE_Xmax;
+double dVx_cut_MicroBooNE = dVx_cut, dVx_peak_MicroBooNE = dVx_peak;
+//double dVy_MicroBooNE_Xmax;
+double dVy_cut_MicroBooNE = dVy_cut, dVy_peak_MicroBooNE = dVy_peak;
+//double dVz_MicroBooNE_Xmax;
+double dVz_cut_MicroBooNE = dVz_cut, dVz_peak_MicroBooNE = dVz_peak;
+//</editor-fold>
 
 //</editor-fold>
 
