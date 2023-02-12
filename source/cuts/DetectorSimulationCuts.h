@@ -15,7 +15,7 @@
 // Momentum cuts
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
+bool apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
 
 /* 2p momentum cuts */
 double e_momentum_upper_cut_2p = -1, e_momentum_lower_cut_2p = -1;
@@ -35,7 +35,7 @@ double cpion_momentum_upper_cut_MicroBooNE = 3, cpion_momentum_lower_cut_MicroBo
 // Sampling Fraction (SF) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_SF_cuts = true;
+bool apply_SF_cuts = false;
 
 double SF_1e2p_upper_cut = 0.28;
 double SF_1e2p_lower_cut = 0.18;
@@ -46,7 +46,7 @@ double SF_1e2p_peak = 0.248125; // to fill using Chi2_Electron_1e_Xmax_CD
 // Fiducial cuts
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_Lv_cut = true, apply_Lw_cut = true;
+bool apply_Lv_cut = false, apply_Lw_cut = false;
 
 double fiducial_cut_Lv = 14;
 double fiducial_cut_Lw = 14;
@@ -55,7 +55,7 @@ double fiducial_cut_Lw = 14;
 // Number of Photo-electrons (nphe) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_nphe_cut = true;
+bool apply_nphe_cut = false;
 
 //double nphe_lower_cut = 10;
 double nphe_lower_cut = 2;
@@ -64,7 +64,7 @@ double nphe_lower_cut = 2;
 // Chi2 cuts
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_chi2_cuts_2p = true, apply_chi2_cuts_MicroBooNE = true;
+bool apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
 
 //TODO: rename these variables
 
@@ -147,7 +147,7 @@ double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill u
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Vertex cuts">
-bool apply_dVz_cuts = true;
+bool apply_dVz_cuts = false;
 
 //<editor-fold desc="Vertex cuts (2p)">
 double Vertex_Electron_cut_CD = 3.;
