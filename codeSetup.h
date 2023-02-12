@@ -9,8 +9,9 @@
 //#include <sys/stat.h>
 //#include <sstream>
 
-#include "source/classes.h"
 #include "source/constants.h"
+#include "source/classes/GeneralClasses.h"
+#include "source/classes/Ana/clas12ana.h"
 #include "source/functions/GeneralFunctions.h"
 #include "source/functions/HistogramPlottingFunctions.h"
 #include "settings/DetectorSimulationCuts.h"
@@ -30,7 +31,13 @@ std::string Ver = "DetSim testings";
 // ======================================================================================================================================================================
 
 //<editor-fold desc="path definitions">
-std::string plots_path = "./plots/";
+std::string WorkingDirectory = GetCurrentDirectory() + "/";
+std::string plots_path = WorkingDirectory + "plots" + "/";
+//std::string plots_path = "./plots/";
+
+//std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
+//std::string SourcesDirectory = WorkingDirectory + "source" + "/";
+
 std::string plots_file_type = "_plots.root";
 //</editor-fold>
 

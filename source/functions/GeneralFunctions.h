@@ -5,6 +5,11 @@
 #ifndef DETECTORSIMULATIONANALYSER_C_GENERALFUNCTIONS_H
 #define DETECTORSIMULATIONANALYSER_C_GENERALFUNCTIONS_H
 
+//TODO: recheck which of these #include-s are needed and which aren't
+
+#include <stdio.h>
+#include <unistd.h>
+
 #include <string>
 #include <cmath>
 #include <tuple>
@@ -25,14 +30,27 @@
 #include <TCanvas.h>
 #include <TBenchmark.h>
 #include <iomanip>
+
 #include "clas12reader.h"
 
 using namespace clas12;
 using namespace std;
 
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  General functions
-//  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                      General functions                                                                              //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//<editor-fold desc="GetCurrentDirectory function">
+/* This function is used to get the directory of the main.c code */
+string GetCurrentDirectory() {
+    char pwd[PATH_MAX];
+    getcwd(pwd, sizeof(pwd));
+
+    string WorkingDirectory = pwd;
+
+    return WorkingDirectory;
+}
+//</editor-fold>
 
 //<editor-fold desc="findSubstring function">
 bool findSubstring(string string1, string string2) {
@@ -138,7 +156,7 @@ void TFolderAdder(TFolder *Histogram_List_Folder, std::string Plots_Parent_Folde
 }
 //</editor-fold>
 
-//<editor-fold desc="MakeDirectory (old)">
+//<editor-fold desc="MakeDirectory">
 void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
                    std::string Parent_Folder = "./plots") {
 

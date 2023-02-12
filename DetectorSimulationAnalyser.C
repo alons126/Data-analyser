@@ -13,6 +13,10 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 
  */
 
+//#include <unistd.h>
+//#include <stdio.h>
+//#include <limits.h>
+
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
@@ -31,8 +35,8 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 
 #include "codeSetup.h"
 
-using namespace clas12;
 using namespace std;
+using namespace clas12;
 
 // TODO: finish Histogram class
 
@@ -93,12 +97,12 @@ void EventAnalyser() {
 
     //<editor-fold desc="Execution variables">
     cout << "-- Execution variables ----------------------------------------------------\n";
+    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
+    cout << "plots_path:\t" << plots_path << "\n";
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
     cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
-//    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
-//    cout << "fileInput:\t" << fileInput << "\n\n";
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
     cout << "Beam Energy:\t\t" << beamE << "\n\n\n\n";
     //</editor-fold>
@@ -119,9 +123,9 @@ void EventAnalyser() {
     //<editor-fold desc="Creating directories">
     cout << "Creating plot directories...\n\n";
 
-    string Plots_Folder = "./plots"; // Plots_Folder = Parent_Folder
-
-    system(("rm -r " + Plots_Folder + "/*").c_str()); // clear old stuff in Parent_Folder
+    string Plots_Folder = plots_path; // Plots_Folder = Parent_Folder
+    system(("mkdir -p " + Plots_Folder).c_str()); // clear old stuff in Parent_Folder
+    system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
 
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
