@@ -2503,11 +2503,13 @@ void EventAnalyser() {
         ++num_of_events; // logging Total #(events)
 
         clasAna.Run(c12);
+
         auto AllParticles = c12->getDetParticles(); //particles are now a std::vector of particles for this event
+
         auto neutrons = c12->getByID(2112); // Neutrons
 
-        auto protons = c12->getByID(2212); // Protons
-//        auto protons = clasAna.getByPid(2212); // Protons
+//        auto protons = c12->getByID(2212); // Protons
+        auto protons = clasAna.getByPid(2212); // Protons
 
         auto Kplus = c12->getByID(321); // K+
 
@@ -2515,16 +2517,16 @@ void EventAnalyser() {
 
         auto Kzero = c12->getByID(311); // K0
 
-        auto piplus = clasAna.getByPid(211); // pi+
-//        auto piplus = c12->getByID(211); // pi+
+//        auto piplus = clasAna.getByPid(211); // pi+
+        auto piplus = c12->getByID(211); // pi+
 
-        auto piminus = c12->getByID(-211); // pi-
-//        auto piminus = clasAna.getByPid(-211); // pi-
+//        auto piminus = c12->getByID(-211); // pi-
+        auto piminus = clasAna.getByPid(-211); // pi-
 
         auto pizero = c12->getByID(111); // pi0
 
-        auto electrons = c12->getByID(11); // Electrons
-//        auto electrons = clasAna.getByPid(11); // Electrons
+//        auto electrons = c12->getByID(11); // Electrons
+        auto electrons = clasAna.getByPid(11); // Electrons
 
         auto photons = c12->getByID(22); // Photons
 
