@@ -2,12 +2,11 @@
 #ifndef ANALYSER_TRUTHLEVELANALYSER_H
 #define ANALYSER_TRUTHLEVELANALYSER_H
 
-//#include "main.c"
-
-#include "codeSetup.h"
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+
+#include "codeSetup.h"
 
 // Header file for the classes stored in the TTree if any.
 

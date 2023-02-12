@@ -1,4 +1,3 @@
-// git pull && clas12root -b -q main.c
 
 /*
 
@@ -12,10 +11,6 @@ scp -r asportes@ftp.jlab.org:/u/home/asportes/Analyser/plots -J /home/alon/proje
 scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev.hipo -J /home/alon/project/temp/
 
  */
-
-//#include <unistd.h>
-//#include <stdio.h>
-//#include <limits.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -33,7 +28,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <iomanip>
 #include "clas12reader.h"
 
-#include "codeSetup.h"
+#include "settings/codeSetup.h"
 
 using namespace std;
 using namespace clas12;
@@ -2490,64 +2485,21 @@ void EventAnalyser() {
     int num_of_events_1e2p_w_allChi2_cuts_CD = 0, num_of_events_1e2p_w_allChi2_cuts_FD = 0;
     int num_of_events_1e2p_w_allChi2_cuts = 0;
 
-    // 1e2p = 2p 1e + electron cuts only
-    // 2p = 1e2p with all other cuts
+    /* 1e2p = 2p 1e + electron cuts only; 2p = 1e2p with all other cuts */
     int num_of_events_2p = 0; // = number of 2p events
     int num_of_2p_QEL_events = 0, num_of_2p_MEC_events = 0, num_of_2p_RES_events = 0, num_of_2p_DIS_events = 0;
 
     int num_of_MicroBooNE_events_BC = 0;
     int num_of_MicroBooNE_events_BC_wNeutrons = 0, num_of_MicroBooNE_events_BC_wpi0 = 0, num_of_MicroBooNE_events_BC_wpip = 0, num_of_MicroBooNE_events_BC_wpim = 0;
-
     int num_of_MicroBooNE_events_AC = 0;
     int num_of_MicroBooNE_events_AC_wNeutrons = 0, num_of_MicroBooNE_events_AC_wpi0 = 0, num_of_MicroBooNE_events_AC_wpip = 0, num_of_MicroBooNE_events_AC_wpim = 0;
-
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool qel, mec, res, dis;
-
-//    clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
-
-    //<editor-fold desc="Forcing cuts (inaccurate!)">
-//        c12.addExactPid(11, 0);    // at least 0 electron
-//        c12.addAtLeastPid(11, 0);    // at least 0 electron
-
-//        c12.addExactPid(11, 0);    // exactly 1 proton
-//        c12.addAtLeastPid(2212, 0);    // at least 0 proton
-
-//        c12.addExactPid(11, 0);    // exactly 0 neutron
-//        c12.addAtLeastPid(2112, 0);    // at least 0 neutron
-
-//        c12.addExactPid(211, 0);    // exactly 0 pi+
-//        c12.addAtLeastPid(211, 0);    // at least 0 pi+
-
-//        c12.addExactPid(-211,0);    // exactly 0 pi-
-//        c12.addAtLeastPid(-211, 0);    // at least 0 pi-
-
-//        c12.addExactPid(321, 0);    // exactly 0 K+
-//        c12.addAtLeastPid(321, 0);    // at least 0 K+
-
-//        c12.addExactPid(-321, 0);    // exactly 0 K-
-//        c12.addAtLeastPid(-321, 0);    // at least 0 K-
-
-
-//        c12.addZeroOfRestPid();  // nothing else
-
-
-//        c12.addExactPid(11,1);    // exactly 1 electron
-//        c12.addExactPid(211,1);    // exactly 1 pi+
-//        c12.addExactPid(-211,1);    // exactly 1 pi-
-//        c12.addExactPid(2212,1);    // exactly 1 proton
-//        //c12.addExactPid(22,2);    // exactly 2 gamma
-
-//        c12.addZeroOfRestPid();  // nothing else
-    //</editor-fold>
-
     while (chain.Next()) { // loop over events
-//        while (c12.next()) { // loop over events
         ++num_of_events; // logging Total #(events)
 
         auto AllParticles = c12->getDetParticles(); //particles are now a std::vector of particles for this event
@@ -2562,11 +2514,10 @@ void EventAnalyser() {
         auto electrons = clasAna.getByPid(11); // Electrons
         auto protons = clasAna.getByPid(2212); // Protons
 
-        qel = mec = res = dis = false;
+        bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
 
         //<editor-fold desc="Log total #(events) with and without electrons">
-        //TODO: switch to short Hand If Else
         if (electrons.size() == 0) {
             ++num_of_events_without_any_e; // logging Total #(events) w/o any e
         } else {
@@ -2776,13 +2727,12 @@ void EventAnalyser() {
         if (AllParticles.size() - electrons.size() == protons.size()) {
             ++num_of_events_with_1enP; /* logging #(events) w/ 1e & any #p */
 
-            if (protons.size() == 1) {
-                ++num_of_events_with_1e1p; /* logging #(events) w/ 1e1p */
-            }
+            if (protons.size() == 1) { ++num_of_events_with_1e1p; /* logging #(events) w/ 1e1p */ }
         }
         //</editor-fold>
 
         //<editor-fold desc="Testing additional electron cuts">
+
         //TODO: all these tests are NOT 2p or 1e2p (the're moved from below and here we have no constrant on protons.size) - redefine propely to 1e or add constrant on protons.size
 
         TVector3 P_e_1e;

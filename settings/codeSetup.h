@@ -2,19 +2,12 @@
 #ifndef ANALYSER_CODESETUP_H
 #define ANALYSER_CODESETUP_H
 
-//#include <string>
-//#include <cmath>
-//#include <tuple>
-//#include <iostream>
-//#include <sys/stat.h>
-//#include <sstream>
-
-#include "source/constants.h"
-#include "source/classes/GeneralClasses.h"
-#include "source/classes/Ana/clas12ana.h"
-#include "source/cuts/DetectorSimulationCuts.h"
-#include "source/functions/GeneralFunctions.h"
-#include "source/functions/HistogramPlottingFunctions.h"
+#include "../source/constants.h"
+#include "../source/classes/GeneralClasses.h"
+#include "../source/classes/Ana/clas12ana.h"
+#include "../source/cuts/DetectorSimulationCuts.h"
+#include "../source/functions/GeneralFunctions.h"
+#include "../source/functions/HistogramPlottingFunctions.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code version                                                                                //
@@ -58,8 +51,8 @@ std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pion data saved (e,p,n only)
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5"; // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";
