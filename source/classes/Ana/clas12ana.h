@@ -441,7 +441,7 @@ void clas12ana::debugByPid(region_part_ptr p)
      }
 
 
- void clas12ana::InitDebugPlots()
+void clas12ana::InitDebugPlots()
  {
 
    for(int i = 1; i <= 6; i++)
@@ -468,7 +468,7 @@ void clas12ana::debugByPid(region_part_ptr p)
  }
 
 
- void clas12ana::WriteDebugPlots()
+void clas12ana::WriteDebugPlots()
  {
    TFile *f_debugOut = new TFile(debug_fileName,"RECREATE");
 
@@ -547,7 +547,7 @@ void clas12ana::debugByPid(region_part_ptr p)
 
 
 
- void clas12ana::Clear()
+void clas12ana::Clear()
  {
    //  particles.clear();
    electrons.clear();
@@ -566,7 +566,7 @@ void clas12ana::debugByPid(region_part_ptr p)
    event_mult = 0;
  }
 
- void clas12ana::Run(const std::unique_ptr<clas12::clas12reader>& c12)
+void clas12ana::Run(const std::unique_ptr<clas12::clas12reader>& c12)
  {
    Clear();
 

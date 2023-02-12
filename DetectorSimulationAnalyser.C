@@ -2502,17 +2502,22 @@ void EventAnalyser() {
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
 
+        clasAna.Run(c12);
         auto AllParticles = c12->getDetParticles(); //particles are now a std::vector of particles for this event
         auto neutrons = c12->getByID(2112); // Neutrons
-//            auto protons = c12->getByID(2212); // Protons
-        auto Kplus = c12->getByID(321), Kminus = c12->getByID(-321), Kzero = c12->getByID(311); // Kaons
-        auto piplus = c12->getByID(211), piminus = c12->getByID(-211), pizero = c12->getByID(111); // Pions
-//            auto electrons = c12->getByID(11); // Electrons
-        auto photons = c12->getByID(22); // Photons
-
-        clasAna.Run(c12);
-        auto electrons = clasAna.getByPid(11); // Electrons
+//        auto protons = c12->getByID(2212); // Protons
         auto protons = clasAna.getByPid(2212); // Protons
+        auto Kplus = c12->getByID(321); // K+
+        auto Kminus = c12->getByID(-321); // K-
+        auto Kzero = c12->getByID(311); // K0
+//        auto piplus = c12->getByID(211); // pi+
+        auto piplus = clasAna.getByPid(211); // pi+
+//        auto piminus = c12->getByID(-211); // pi-
+        auto piminus = clasAna.getByPid(-211); // pi-
+        auto pizero = c12->getByID(111); // pi0
+//            auto electrons = c12->getByID(11); // Electrons
+        auto electrons = clasAna.getByPid(11); // Electrons
+        auto photons = c12->getByID(22); // Photons
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
