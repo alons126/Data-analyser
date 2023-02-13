@@ -25,170 +25,162 @@ using namespace clas12;
 //  p4.SetXYZM(rp->par()->getPx(),rp->par()->getPy(),rp->par()->getPz(),p4.M());
 //}
 
-void Usage()
-{
-  std::cerr << "Usage: ./testAna inputfiles.hipo outputfile.root \n\n\n";
+void Usage() {
+    std::cerr << "Usage: ./testAna inputfiles.hipo outputfile.root \n\n\n";
 
 }
 
 
+int main(int argc, char **argv) {
 
-int main(int argc, char ** argv)
-{
-
-  if(argc < 2)
-    {
-      Usage();
-      return -1;
+    if (argc < 2) {
+        Usage();
+        return -1;
     }
 
 
-  //  TString inFile = "/cache/hallb/scratch/rg-m/LD2/prod1.4/dstdebug/recon/015566/rec_clas_015566.evio.0000*";
-  //  TString inFile = "/volatile/clas12/rg-m/48Ca/latest/dst/recon/015832/rec_clas_015832.evio.00*.hipo";
+    //  TString inFile = "/cache/hallb/scratch/rg-m/LD2/prod1.4/dstdebug/recon/015566/rec_clas_015566.evio.0000*";
+    //  TString inFile = "/volatile/clas12/rg-m/48Ca/latest/dst/recon/015832/rec_clas_015832.evio.00*.hipo";
 
-  TString inFile  = argv[1];
-  TString outFile = argv[2];
-  //  TString outFile = "test.root";
+    TString inFile = argv[1];
+    TString outFile = argv[2];
+    //  TString outFile = "test.root";
 
-  cout<<"Ouput file "<< outFile <<endl;
-
-
-  clas12ana clasAna;
-
-  //Read in target parameter files                                                                                                                                                           
-  clasAna.readInputParam("ana.par");
-  clasAna.readEcalPar("ecal.par");
-  clasAna.printParams();
+    cout << "Ouput file " << outFile << endl;
 
 
-  clas12root::HipoChain chain;
-  chain.Add(inFile);
-  chain.SetReaderTags({0});
-  chain.db()->turnOffQADB();
-  auto config_c12=chain.GetC12Reader();
+    clas12ana clasAna;
 
-  //now get reference to (unique)ptr for accessing data in loop
-  //this will point to the correct place when file changes
-  //  const std::unique_ptr<clas12::clas12reader>& c12=chain.C12ref();
-
-  int counter = 0;
-  int cutcounter = 0;
-
-  auto &c12=chain.C12ref();
-
-  auto db=TDatabasePDG::Instance();
-  double mass_p = db->GetParticle(2212)->Mass();
-  double mD = 1.8756;
-
-  double beam_E = 5.98;
-
-  //some particles
-  TLorentzVector beam(0,0,beam_E,beam_E);
-  TLorentzVector target(0,0,0,mD);
-  TLorentzVector el(0,0,0,db->GetParticle(11)->Mass());
-  TLorentzVector lead_ptr(0,0,0,db->GetParticle(2212)->Mass());
-  TLorentzVector recoil_ptr(0,0,0,db->GetParticle(2212)->Mass());
-  TLorentzVector ntr(0,0,0,db->GetParticle(2112)->Mass());
-
-  TFile *f = new TFile(outFile,"RECREATE");
-
-  TH1D *q2_h = new TH1D("q2_h","Q^2 ",1000,0, 4);
-  TH1D *xb_h = new TH1D("xb_h","x_B ",1000,0, 4);
-  TH1D *px_com = new TH1D("px_com","Px COM",1000,-500,500);
-  TH1D *py_com = new TH1D("py_com","Py COM",1000,-500,500);
-  TH1D *pz_com = new TH1D("pz_com","Pz COM",1000,-500,500);
-
-  TH1D *epp_h = new TH1D("epp_h","(e,e'pp)",100,0,2);
-  TH1D *ep_h  = new TH1D("ep_h","(e,e'p)",100,0,2);
-
-  clasAna.setEcalSFCuts();
-  clasAna.setEcalEdgeCuts();
-  clasAna.setPidCuts();
-  clasAna.setVertexCuts();
-  clasAna.setVertexCorrCuts();
-  clasAna.setDCEdgeCuts();
-  
-  clasAna.setVzcuts(-6,1);
-  clasAna.setVertexCorrCuts(-3,1);
-
-  while(chain.Next())
-    {
-      //Display completed  
-      counter++;
-
-      clasAna.Run(c12);
-      auto electrons = clasAna.getByPid(11);
-      auto protons = clasAna.getByPid(2212);
+    //Read in target parameter files
+    clasAna.readInputParam("ana.par");
+    clasAna.readEcalPar("ecal.par");
+    clasAna.printParams();
 
 
-      if(electrons.size() == 1 && protons.size() >= 1)
-	{
-	  SetLorentzVector(el,electrons[0]);
-	  //	  SetLorentzVector(ptr,protons[0]);
+    clas12root::HipoChain chain;
+    chain.Add(inFile);
+    chain.SetReaderTags({0});
+    chain.db()->turnOffQADB();
+    auto config_c12 = chain.GetC12Reader();
 
-	  TLorentzVector q = beam - el; //photon  4-vector            
-          double q2        = -q.M2(); // Q^2
-          double x_b       = q2/(2 * mass_p * (beam.E() - el.E()) ); //x-borken
+    //now get reference to (unique)ptr for accessing data in loop
+    //this will point to the correct place when file changes
+    //  const std::unique_ptr<clas12::clas12reader>& c12=chain.C12ref();
 
-	  double miss_p_l = 0;
-	  double miss_m   = 0;
-	  double theta_pq = 0;
-	  double p_q      = 0;
-	  double x_prime  = 0;
+    int counter = 0;
+    int cutcounter = 0;
 
-	  q2_h->Fill(q2);
-	  xb_h->Fill(x_b);
+    auto &c12 = chain.C12ref();
 
-	  clasAna.getLeadRecoilSRC(beam,target,el);
-	  auto lead    = clasAna.getLeadSRC();
-	  auto recoil  = clasAna.getRecoilSRC();
+    auto db = TDatabasePDG::Instance();
+    double mass_p = db->GetParticle(2212)->Mass();
+    double mD = 1.8756;
 
-	  if(lead.size() == 1)
-	    {
-	      SetLorentzVector(lead_ptr,lead[0]);
-	      TLorentzVector miss = beam + target - el - lead_ptr; //photon  4-vector            
+    double beam_E = 5.98;
 
-	      ep_h->Fill(miss.P());
+    //some particles
+    TLorentzVector beam(0, 0, beam_E, beam_E);
+    TLorentzVector target(0, 0, 0, mD);
+    TLorentzVector el(0, 0, 0, db->GetParticle(11)->Mass());
+    TLorentzVector lead_ptr(0, 0, 0, db->GetParticle(2212)->Mass());
+    TLorentzVector recoil_ptr(0, 0, 0, db->GetParticle(2212)->Mass());
+    TLorentzVector ntr(0, 0, 0, db->GetParticle(2112)->Mass());
+
+    TFile *f = new TFile(outFile, "RECREATE");
+
+    TH1D *q2_h = new TH1D("q2_h", "Q^2 ", 1000, 0, 4);
+    TH1D *xb_h = new TH1D("xb_h", "x_B ", 1000, 0, 4);
+    TH1D *px_com = new TH1D("px_com", "Px COM", 1000, -500, 500);
+    TH1D *py_com = new TH1D("py_com", "Py COM", 1000, -500, 500);
+    TH1D *pz_com = new TH1D("pz_com", "Pz COM", 1000, -500, 500);
+
+    TH1D *epp_h = new TH1D("epp_h", "(e,e'pp)", 100, 0, 2);
+    TH1D *ep_h = new TH1D("ep_h", "(e,e'p)", 100, 0, 2);
+
+    clasAna.setEcalSFCuts();
+    clasAna.setEcalEdgeCuts();
+    clasAna.setPidCuts();
+    clasAna.setVertexCuts();
+    clasAna.setVertexCorrCuts();
+    clasAna.setDCEdgeCuts();
+
+    clasAna.setVzcuts(-6, 1);
+    clasAna.setVertexCorrCuts(-3, 1);
+
+    while (chain.Next()) {
+        //Display completed
+        counter++;
+
+        clasAna.Run(c12);
+        auto electrons = clasAna.getByPid(11);
+        auto protons = clasAna.getByPid(2212);
 
 
-	      if(recoil.size() == 1)
-		{
-		  SetLorentzVector(recoil_ptr,recoil[0]);
-		  auto com_vec = clasAna.getCOM(lead_ptr,recoil_ptr,q);
-		  
-		  px_com->Fill(com_vec.X());
-		  py_com->Fill(com_vec.Y());
-		  pz_com->Fill(com_vec.Z());
+        if (electrons.size() == 1 && protons.size() >= 1) {
+            SetLorentzVector(el, electrons[0]);
+            //	  SetLorentzVector(ptr,protons[0]);
 
-		  epp_h->Fill(miss.P());
-		  
-		}
-	    }
-	  
+            TLorentzVector q = beam - el; //photon  4-vector
+            double q2 = -q.M2(); // Q^2
+            double x_b = q2 / (2 * mass_p * (beam.E() - el.E())); //x-borken
 
-	}
+            double miss_p_l = 0;
+            double miss_m = 0;
+            double theta_pq = 0;
+            double p_q = 0;
+            double x_prime = 0;
+
+            q2_h->Fill(q2);
+            xb_h->Fill(x_b);
+
+            clasAna.getLeadRecoilSRC(beam, target, el);
+            auto lead = clasAna.getLeadSRC();
+            auto recoil = clasAna.getRecoilSRC();
+
+            if (lead.size() == 1) {
+                SetLorentzVector(lead_ptr, lead[0]);
+                TLorentzVector miss = beam + target - el - lead_ptr; //photon  4-vector
+
+                ep_h->Fill(miss.P());
+
+
+                if (recoil.size() == 1) {
+                    SetLorentzVector(recoil_ptr, recoil[0]);
+                    auto com_vec = clasAna.getCOM(lead_ptr, recoil_ptr, q);
+
+                    px_com->Fill(com_vec.X());
+                    py_com->Fill(com_vec.Y());
+                    pz_com->Fill(com_vec.Z());
+
+                    epp_h->Fill(miss.P());
+
+                }
+            }
+
+
+        }
 
     }
 
 
-  //  pid_fd_debug->Write();
+    //  pid_fd_debug->Write();
 
-  clasAna.WriteDebugPlots();
+    clasAna.WriteDebugPlots();
 
-  f->cd();
+    f->cd();
 
-  q2_h->Write();
-  xb_h->Write();
+    q2_h->Write();
+    xb_h->Write();
 
-  px_com->Write();
-  py_com->Write();
-  pz_com->Write();
+    px_com->Write();
+    py_com->Write();
+    pz_com->Write();
 
-  ep_h->Write();
-  epp_h->Write();
+    ep_h->Write();
+    epp_h->Write();
 
-  f->Close();
+    f->Close();
 
-  return 0;
+    return 0;
 }
 

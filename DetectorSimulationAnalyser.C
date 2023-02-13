@@ -2480,15 +2480,15 @@ void EventAnalyser() {
     auto &c12 = chain.C12ref();             //TODO: check with Justin what is this used for
 
     /* Setting cuts */
-    clasAna.setEcalSFCuts();     // making f_ecalSFCuts = ture
-    clasAna.setEcalEdgeCuts();   // making f_ecalEdgeCuts = ture
-    clasAna.setPidCuts();        // making f_pidCuts = ture
-    clasAna.setVertexCuts();     // making f_vertexCuts = ture
-    clasAna.setVertexCorrCuts(); // making f_corr_vertexCuts = ture
-    clasAna.setDCEdgeCuts();     // making f_DCEdgeCuts = ture
+    clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
+    clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture
+    clasAna.setPidCuts();                       // making f_pidCuts = ture
+    clasAna.setVertexCuts();                    // making f_vertexCuts = ture
+    clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
+    clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture
 
-    clasAna.setVzcuts(-6, 1);
-    clasAna.setVertexCorrCuts(-3, 1);
+    clasAna.setVzcuts(-6, 1);         // setting Vz cuts?
+    clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -2541,33 +2541,43 @@ void EventAnalyser() {
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
 
+//        //TODO: see what this command gives:
+//        if (c12->getDetParticles().empty()) { continue; }
+
         clasAna.Run(c12);
 
+//        //TODO: AllParticles is without cuts! find a way to get rid of it
         auto AllParticles = c12->getDetParticles(); //particles are now a std::vector of particles for this event
 
-        auto neutrons = c12->getByID(2112); // Neutrons
+//        auto neutrons = c12->getByID(2112); // Neutrons   //TODO: neutrons is without cuts! find a way to get rid of it
+//        auto protons = c12->getByID(2212);  // Protons
+//        auto Kplus = c12->getByID(321);     // K+
+//        auto Kminus = c12->getByID(-321);   // K-
+//        auto Kzero = c12->getByID(311);     // K0         //TODO: Kzero is without cuts! find a way to get rid of it
+//        auto piplus = c12->getByID(211);    // pi+
+//        auto piminus = c12->getByID(-211);  // pi-
+//        auto pizero = c12->getByID(111);    // pi0        //TODO: pizero is without cuts! find a way to get rid of it
+//        auto electrons = c12->getByID(11);  // Electrons
+//        auto photons = c12->getByID(22);    // Photons
 
-//        auto protons = c12->getByID(2212); // Protons
-        auto protons = clasAna.getByPid(2212); // Protons
+        auto neutrons = clasAna.getByPid(2112); // Neutrons
+        auto protons = clasAna.getByPid(2212);  // Protons
+        auto Kplus = clasAna.getByPid(321);     // K+
+        auto Kminus = clasAna.getByPid(-321);   // K-
+//        auto Kzero = clasAna.getByPid(311);     // K0
+        auto piplus = clasAna.getByPid(211);    // pi+
+        auto piminus = clasAna.getByPid(-211);  // pi-
+        auto pizero = clasAna.getByPid(111);    // pi0
+        auto electrons = clasAna.getByPid(11);  // Electrons
+//        auto photons = clasAna.getByPid(22);    // Photons
 
-        auto Kplus = c12->getByID(321); // K+
+        auto neutrals = clasAna.getByPid(2112); // Neutrons
+        auto deuterons = clasAna.getByPid(45);  // Deuterons
+        auto otherpart = clasAna.getByPid(0);  // Other particles
 
-        auto Kminus = c12->getByID(-321); // K-
-
-        auto Kzero = c12->getByID(311); // K0
-
-//        auto piplus = c12->getByID(211); // pi+
-        auto piplus = clasAna.getByPid(211); // pi+
-
-//        auto piminus = c12->getByID(-211); // pi-
-        auto piminus = clasAna.getByPid(-211); // pi-
-
-        auto pizero = c12->getByID(111); // pi0
-
-//        auto electrons = c12->getByID(11); // Electrons
-        auto electrons = clasAna.getByPid(11); // Electrons
-
-        auto photons = c12->getByID(22); // Photons
+        /* Number of particles in event (= npie) */
+        int npie = neutrons.size() + protons.size() + Kplus.size() + Kminus.size() + piplus.size() + piminus.size() + pizero.size() + electrons.size() +
+                   neutrals.size() + deuterons.size() + otherpart.size();
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis

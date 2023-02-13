@@ -146,8 +146,12 @@ public:
             return kplus;
         else if (pid == -321)
             return kminus;
-        else if (pid == 0 || pid == 2112)
+        else if (pid == 2112)
             return neutrals;
+        else if (pid == 0)
+            return neutrals;
+//        else if (pid == 0 || pid == 2112)
+//            return neutrals;
         else
             return otherpart;
     }
@@ -166,8 +170,12 @@ public:
             kplus.push_back(p);
         else if (pid == -321)
             kminus.push_back(p);
-        else if (pid == 0 || pid == 2112)
+        else if (pid == 2112)
             neutrals.push_back(p);
+        else if (pid == 0)
+            neutrals.push_back(p);
+//        else if (pid == 0 || pid == 2112)
+//            neutrals.push_back(p);
         else
             otherpart.push_back(p);
 
@@ -220,15 +228,30 @@ public:
     //  std::vector<region_part_ptr> getByPidChi2(int pid, double chi2);
 
 private:
+    // My addition:
     std::vector<region_part_ptr> electrons;
     std::vector<region_part_ptr> protons;
-    std::vector<region_part_ptr> deuterons;
-    std::vector<region_part_ptr> neutrals;
+    std::vector<region_part_ptr> neutrons;
     std::vector<region_part_ptr> piplus;
     std::vector<region_part_ptr> piminus;
+    std::vector<region_part_ptr> pizero;
     std::vector<region_part_ptr> kplus;
     std::vector<region_part_ptr> kminus;
+
+    std::vector<region_part_ptr> deuterons;
+    std::vector<region_part_ptr> neutrals; // Neutral particles without neutrons
     std::vector<region_part_ptr> otherpart;
+
+    // Justin's original:
+//    std::vector<region_part_ptr> electrons;
+//    std::vector<region_part_ptr> protons;
+//    std::vector<region_part_ptr> deuterons;
+//    std::vector<region_part_ptr> neutrals;
+//    std::vector<region_part_ptr> piplus;
+//    std::vector<region_part_ptr> piminus;
+//    std::vector<region_part_ptr> kplus;
+//    std::vector<region_part_ptr> kminus;
+//    std::vector<region_part_ptr> otherpart;
 
     //SRC
     std::vector<region_part_ptr> lead_proton;
@@ -336,6 +359,10 @@ private:
     TH2D *pid_kminus_cd_debug = new TH2D("pid_kminus_cd_debug", "PID Cut K+ CD", 100, 0, 5, 100, 0, 1.2);
     TH2D *pid_neutrals_fd_debug = new TH2D("pid_neutrals_fd_debug", "PID Cut neutrals FD", 100, 0, 5, 100, 0, 1.2);
     TH2D *pid_neutrals_cd_debug = new TH2D("pid_neutrals_cd_debug", "PID Cut neutrals CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_neutrons_fd_debug = new TH2D("pid_neutrons_fd_debug", "PID Cut neutrons FD", 100, 0, 5, 100, 0, 1.2); // My addition
+    TH2D *pid_neutrons_cd_debug = new TH2D("pid_neutrons_cd_debug", "PID Cut neutrons CD", 100, 0, 5, 100, 0, 1.2); // My addition
+    TH2D *pid_pizero_fd_debug = new TH2D("pid_pizero_fd_debug", "PID Cut pizero FD", 100, 0, 5, 100, 0, 1.2); // My addition
+    TH2D *pid_pizero_cd_debug = new TH2D("pid_pizero_cd_debug", "PID Cut pizero CD", 100, 0, 5, 100, 0, 1.2); // My addition
     TH2D *pid_deuteron_fd_debug = new TH2D("pid_deuteron_fd_debug", "PID Cut deuteron FD", 100, 0, 5, 100, 0, 1.2);
     TH2D *pid_deuteron_cd_debug = new TH2D("pid_deuteron_cd_debug", "PID Cut deutereon CD", 100, 0, 5, 100, 0, 1.2);
 
@@ -422,8 +449,14 @@ void clas12ana::debugByPid(region_part_ptr p) {
             pid_kplus_fd_debug->Fill(par_mom, par_beta);
         else if (pid == -321)
             pid_kminus_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == 0 || pid == 2112)
+        else if (pid == 2112) // My addition
+            pid_neutrons_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == 111) // My addition
+            pid_pizero_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == 0) // My addition
             pid_neutrals_fd_debug->Fill(par_mom, par_beta);
+//        else if (pid == 0 || pid == 2112) // Justin's original
+//            pid_neutrals_fd_debug->Fill(par_mom, par_beta);
     } else if (is_cd) {
         if (pid == 2212)
             pid_proton_cd_debug->Fill(par_mom, par_beta);
@@ -437,8 +470,14 @@ void clas12ana::debugByPid(region_part_ptr p) {
             pid_kplus_cd_debug->Fill(par_mom, par_beta);
         else if (pid == -321)
             pid_kminus_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == 0 || pid == 2112)
+        else if (pid == 2112) // My addition
+            pid_neutrons_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == 111) // My addition
+            pid_pizero_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == 0) // My addition
             pid_neutrals_cd_debug->Fill(par_mom, par_beta);
+//        else if (pid == 0 || pid == 2112) // Justin's original
+//            pid_neutrals_cd_debug->Fill(par_mom, par_beta);
     }
 }
 
@@ -511,7 +550,9 @@ void clas12ana::WriteDebugPlots() {
     pid_piminus_fd_debug->Write();
     pid_kplus_fd_debug->Write();
     pid_kminus_fd_debug->Write();
-    pid_neutrals_fd_debug->Write();
+    pid_neutrons_fd_debug->Write(); // My addition
+    pid_pizero_fd_debug->Write(); // My addition
+    pid_neutrals_fd_debug->Write(); // Justin's original
 
     pid_proton_cd_debug->Write();
     pid_deuteron_cd_debug->Write();
@@ -519,7 +560,9 @@ void clas12ana::WriteDebugPlots() {
     pid_piminus_cd_debug->Write();
     pid_kplus_cd_debug->Write();
     pid_kminus_cd_debug->Write();
-    pid_neutrals_cd_debug->Write();
+    pid_neutrons_cd_debug->Write(); // My addition
+    pid_pizero_cd_debug->Write(); // My addition
+    pid_neutrals_cd_debug->Write(); // Justin's original
 
     pid_cd_debug->Write();
     pid_fd_debug->Write();
@@ -535,7 +578,9 @@ void clas12ana::Clear() {
     electrons.clear();
     protons.clear();
     deuterons.clear();
-    neutrals.clear();
+    pizero.clear(); // My addition
+    neutrons.clear(); // My addition
+    neutrals.clear(); // Justin's original
     piplus.clear();
     piminus.clear();
     kplus.clear();
@@ -638,7 +683,14 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             }
 
             if ((*p)->par()->getCharge() == 0) //neutrals don't follow same cuts
-                neutrals.push_back(*p);
+//                neutrals.push_back(*p); // Justin's original
+                if ((*p)->par()->getPid() == 111) { // My addition
+                    pizero.push_back(*p);
+                } else if ((*p)->par()->getPid() == 2112) { // My addition
+                    neutrons.push_back(*p);
+                } else if ((*p)->par()->getPid() == 0) { // My addition
+                    neutrals.push_back(*p);
+                }
 
             double par_mom = (*p)->par()->getP();
             double par_beta = (*p)->par()->getBeta();
