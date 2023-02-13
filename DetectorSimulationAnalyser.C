@@ -132,9 +132,9 @@ void EventAnalyser() {
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
     TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "min_1e_cut", "min_1e_cut/By_charge", "1e_cut", "1e_cut/By_charge",
-                                           "2p", "2p/By_charge", "MicroBooNE", "MicroBooNE/Before_cuts", "MicroBooNE/Before_cuts/By_charge",
-                                           "MicroBooNE/After_cuts", "MicroBooNE/After_cuts/By_charge"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "01_All_e", "01_All_e/By_charge", "02_min_1e_cut", "02_min_1e_cut/By_charge", "03_1e_cut",
+                                           "03_1e_cut/By_charge", "04_MicroBooNE", "04_MicroBooNE/Before_cuts", "04_MicroBooNE/Before_cuts/By_charge",
+                                           "04_MicroBooNE/After_cuts", "04_MicroBooNE/After_cuts/By_charge", "05_2p", "05_2p/By_charge"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
@@ -143,7 +143,6 @@ void EventAnalyser() {
 
     plots->Add(Beta_vs_P_Folder);
 
-    string Beta_VS_P_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[0];
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
 
@@ -153,13 +152,13 @@ void EventAnalyser() {
     string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[5] + "/";
     string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
 
-    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[7] + "/";
-    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
+    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[9] + "/";
+    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[11] + "/";
 
-    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
-    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[11] + "/";
-    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[12] + "/";
-    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[13] + "/";
+    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[12] + "/";
+    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[13] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
@@ -168,9 +167,6 @@ void EventAnalyser() {
     TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
     string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
                                       "05_2p"};
-//    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "02_1e_cut/BC-AC_cut_tests", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests",
-//                                      "04_1e2p", "05_2p"};
-//    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "04_1e2p", "05_2p", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
         MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name, false, Plots_Folder);
@@ -2478,18 +2474,18 @@ void EventAnalyser() {
 
     clas12root::HipoChain chain;
     chain.Add(AnalyseFile.c_str());
-    chain.SetReaderTags({0}); //TODO: check with Justin what are these tags
-    chain.db()->turnOffQADB(); //TODO: check with Justin what is this used for
+    chain.SetReaderTags({0});               //TODO: check with Justin what are these tags
+    chain.db()->turnOffQADB();              //TODO: check with Justin what is this used for
     auto config_c12 = chain.GetC12Reader(); //TODO: check with Justin what is this used for
-    auto &c12 = chain.C12ref(); //TODO: check with Justin what is this used for
+    auto &c12 = chain.C12ref();             //TODO: check with Justin what is this used for
 
     /* Setting cuts */
-    clasAna.setEcalSFCuts();
-    clasAna.setEcalEdgeCuts();
-    clasAna.setPidCuts();
-    clasAna.setVertexCuts();
-    clasAna.setVertexCorrCuts();
-    clasAna.setDCEdgeCuts();
+    clasAna.setEcalSFCuts();     // making f_ecalSFCuts = ture
+    clasAna.setEcalEdgeCuts();   // making f_ecalEdgeCuts = ture
+    clasAna.setPidCuts();        // making f_pidCuts = ture
+    clasAna.setVertexCuts();     // making f_vertexCuts = ture
+    clasAna.setVertexCorrCuts(); // making f_corr_vertexCuts = ture
+    clasAna.setDCEdgeCuts();     // making f_DCEdgeCuts = ture
 
     clasAna.setVzcuts(-6, 1);
     clasAna.setVertexCorrCuts(-3, 1);
@@ -2898,23 +2894,23 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-            //<editor-fold desc="Applying additional electron cuts">
-            /* SF cuts */
-            if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+        //<editor-fold desc="Applying additional electron cuts">
+        /* SF cuts */
+        if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
 
-            /* fiducial cuts */
-            if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-            if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+        /* fiducial cuts */
+        if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+        if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
 
-            /* nphe cuts */
-            if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+        /* nphe cuts */
+        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
 
-            /* Chi2 cuts */
-            if (electrons[0]->getRegion() == CD) {
-                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-            } else if (electrons[0]->getRegion() == FD) {
-                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-            }
+        /* Chi2 cuts */
+        if (electrons[0]->getRegion() == CD) {
+            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+        } else if (electrons[0]->getRegion() == FD) {
+            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+        }
 
 //            //TODO: see if other cuts can be applied to improve beta vs. P plots
 //            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
@@ -2935,7 +2931,7 @@ void EventAnalyser() {
 //
 //            if (vt_cut_skip == true) { continue; }
 
-            //</editor-fold>
+        //</editor-fold>
 
         //<editor-fold desc="General 1e only plots">
 
