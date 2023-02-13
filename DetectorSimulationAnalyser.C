@@ -2771,7 +2771,6 @@ void EventAnalyser() {
 //  1e cut --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1e cut">
-
         /* Here we apply electron cut on everything that follows (MicroBooNE, 1e2X, 1e2p, etc) */
 
         //<editor-fold desc="rough 1e cut">
@@ -2894,44 +2893,44 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Applying additional electron cuts">
-        /* SF cuts */
-        if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
-
-        /* fiducial cuts */
-        if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-        if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
-
-        /* nphe cuts */
-        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
-
-        /* Chi2 cuts */
-        if (electrons[0]->getRegion() == CD) {
-            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-        } else if (electrons[0]->getRegion() == FD) {
-            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-        }
-
-//            //TODO: see if other cuts can be applied to improve beta vs. P plots
-//            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
-////            if(electrons[0]->par()->getVz() < -1){continue;}
-////            if(electrons[0]->par()->getVz() > 1){continue;}
+//        //<editor-fold desc="Applying additional electron cuts">
+//        /* SF cuts */
+//        if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
 //
-//            //TODO: see if other cuts can be applied to improve beta vs. P plots
-//            double vtz_e = electrons[0]->par()->getVz();
-//            bool vt_cut_skip = false;
+//        /* fiducial cuts */
+//        if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+//        if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
 //
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
+//        /* nphe cuts */
+//        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
 //
-//                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
-////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
-////                if ((fabs(dVz_peak - dvtz) > dVz_cut) || (fabs(dVz_peak - dvtz) > dVz_cut)) { continue; }
-//            }
+//        /* Chi2 cuts */
+//        if (electrons[0]->getRegion() == CD) {
+//            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+//        } else if (electrons[0]->getRegion() == FD) {
+//            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+//        }
 //
-//            if (vt_cut_skip == true) { continue; }
-
-        //</editor-fold>
+////            //TODO: see if other cuts can be applied to improve beta vs. P plots
+////            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
+//////            if(electrons[0]->par()->getVz() < -1){continue;}
+//////            if(electrons[0]->par()->getVz() > 1){continue;}
+////
+////            //TODO: see if other cuts can be applied to improve beta vs. P plots
+////            double vtz_e = electrons[0]->par()->getVz();
+////            bool vt_cut_skip = false;
+////
+////            for (int i = 0; i < AllParticles.size(); i++) {
+////                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
+////
+////                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
+//////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
+//////                if ((fabs(dVz_peak - dvtz) > dVz_cut) || (fabs(dVz_peak - dvtz) > dVz_cut)) { continue; }
+////            }
+////
+////            if (vt_cut_skip == true) { continue; }
+//
+//        //</editor-fold>
 
         //<editor-fold desc="General 1e only plots">
 
@@ -3266,8 +3265,8 @@ void EventAnalyser() {
             } // end of loop over AllParticles vector
             //</editor-fold>
 
-            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
             TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE;
+            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
             P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
             P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
             P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
@@ -3769,7 +3768,6 @@ void EventAnalyser() {
                 //</editor-fold>
 
             }
-
         } // End of calculate_MicroBooNE if
         //</editor-fold>
 
@@ -3788,9 +3786,8 @@ void EventAnalyser() {
 
             //TODO: rename P_e
 
-            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
             TVector3 P_p0, P_p1;
-//                P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
             P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
             P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
 
@@ -3798,17 +3795,11 @@ void EventAnalyser() {
 
             //<editor-fold desc="Testing cuts">
 
-            //  Testing momentum cuts ------------------------------------------------------------------------------------------------------------------------
+            //  Testing momentum cuts (protons only) --------------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="Testing momentum cuts (electrons only)">
+            //<editor-fold desc="Testing momentum cuts (protons only)">
 
-//                // momentum before cuts:
-//                if (electrons[0]->getRegion() == CD) {
-//                    P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
-//                } else if (electrons[0]->getRegion() == FD) {
-//                    P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
-//                }
-
+            /* momentum before cuts */
             if (protons[0]->getRegion() == CD) {
                 P_p_1e2p_BC_CD->Fill(P_p0.Mag());
             } else if (protons[0]->getRegion() == FD) {
@@ -3821,39 +3812,7 @@ void EventAnalyser() {
                 P_p_1e2p_BC_FD->Fill(P_p1.Mag());
             }
 
-            // momentum after cuts:
-//                if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
-//                    if (electrons[0]->getRegion() == CD) {
-//                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                    } else if (electrons[0]->getRegion() == FD) {
-//                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                    }
-//                } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
-//                    if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
-//                        if (electrons[0]->getRegion() == CD) {
-//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                        } else if (electrons[0]->getRegion() == FD) {
-//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                        }
-//                    }
-//                } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
-//                    if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
-//                        if (electrons[0]->getRegion() == CD) {
-//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                        } else if (electrons[0]->getRegion() == FD) {
-//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                        }
-//                    }
-//                } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
-//                    if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
-//                        if (electrons[0]->getRegion() == CD) {
-//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                        } else if (electrons[0]->getRegion() == FD) {
-//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                        }
-//                    }
-//                }
-
+            /* momentum after cuts */
             if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
                 if (protons[0]->getRegion() == CD) {
                     P_p_1e2p_AC_CD->Fill(P_p0.Mag());
@@ -3919,64 +3878,11 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
+            //  Testing chi2 cuts (protons only) ------------------------------------------------------------------------------------------------------------------------
 
-//                //<editor-fold desc="Testing SF cuts (electrons only)">
-//                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
-//
-//                // SF before cuts:
-//                SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-//                SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
-//
-//                // SF after cuts:
-//                if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
-//                    SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-//                    SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
-//                }
-//                //</editor-fold>
+            //<editor-fold desc="Testing chi2 cuts (protons only)">
 
-            //  Testing fiducial cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Testing fiducial cuts (electrons only)">
-//                // fiducial before cuts:
-//                Vcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
-//                Wcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
-//                Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-//                Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
-//
-//                // fiducial after cuts:
-//                //TODO: remove fiducial ECIN plots
-////                if (electrons[0]->cal(ECIN)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e); }
-////                if (electrons[0]->cal(ECIN)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e); }
-//                if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-//                if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
-//                //</editor-fold>
-
-            //  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Testing nphe cuts (electrons only)">
-//                int nphe = electrons[0]->che(HTCC)->getNphe();
-//
-//                // nphe before cuts:
-//                nphe_All_Int_1e2p_BC_FD->Fill(nphe);
-//
-//                // nphe after cuts:
-//                if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
-//                //</editor-fold>
-
-            //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Testing chi2 cuts">
-
-//                // Chi2 before cut
-//                if (electrons[0]->getRegion() == CD) {
-////                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-//                    Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                } else if (electrons[0]->getRegion() == FD) {
-////                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-//                    Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                }
-
+            /* Chi2 before cut */
             if (protons[0]->getRegion() == CD) {
 //                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                 Chi2_Proton_1e2p_BC_CD->Fill(protons[0]->par()->getChi2Pid());
@@ -3993,15 +3899,7 @@ void EventAnalyser() {
                 Chi2_Proton_1e2p_BC_FD->Fill(protons[1]->par()->getChi2Pid());
             }
 
-            // Chi2 after cut
-//                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-//                    Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-//                    Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                }
-
+            /* Chi2 after cut */
             if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
                 ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                 Chi2_Proton_1e2p_AC_CD->Fill(protons[0]->par()->getChi2Pid());
@@ -4049,44 +3947,22 @@ void EventAnalyser() {
             //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Applying momentum cuts">
+            // Electrons:
             if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e_1e.Mag() > e_momentum_upper_cut_2p))) { continue; }
             if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e_1e.Mag() < e_momentum_lower_cut_2p))) { continue; }
 
+            // Proton 0:
             if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p0.Mag() > p_momentum_upper_cut_2p))) { continue; }
             if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p0.Mag() < p_momentum_lower_cut_2p))) { continue; }
 
+            // Proton 1:
             if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p1.Mag() > p_momentum_upper_cut_2p))) { continue; }
             if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p1.Mag() < p_momentum_lower_cut_2p))) { continue; }
             //</editor-fold>
 
-            //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Applying SF cuts (electrons only)">
-//                if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
-//                //</editor-fold>
-
-            //  Applying fiducial cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Applying fiducial cuts (electrons only)">
-//                if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-//                if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
-//                //</editor-fold>
-
-            //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Applying nphe cuts">
-//                if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
-//                //</editor-fold>
-
             //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="Applying Chi2 cuts">
-//                if (electrons[0]->getRegion() == CD) {
-//                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                } else if (electrons[0]->getRegion() == FD) {
-//                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                }
-
+            //<editor-fold desc="Applying Chi2 cuts (protons only)">
             // TODO: move proton blocks here to for loop to save some space
             if (protons[0]->getRegion() == CD) {
                 if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
@@ -4279,23 +4155,23 @@ void EventAnalyser() {
                 }
             } // end of loop over electrons vector
 
-            //<editor-fold desc="Filling SF histograms">
+            //<editor-fold desc="Filling SF histograms (2p)">
             SF_All_Int_2p_FD->Fill(EoP_e);
             SF_VS_P_e_2p_FD->Fill(P_e_1e.Mag(), EoP_e);
             //</editor-fold>
 
-            //<editor-fold desc="Filling fiducial">
+            //<editor-fold desc="Filling fiducial plots (2p)">
 //                Vcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
 //                Wcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
             Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
             Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
             //</editor-fold>
 
-            //<editor-fold desc="Filling nphe histograms">
+            //<editor-fold desc="Filling nphe plots (2p)">
             nphe_All_Int_2p_FD->Fill(nphe);
             //</editor-fold>
 
-            //<editor-fold desc="Filling Ecal histograms">
+            //<editor-fold desc="Filling Ecal histograms (2p)">
             double p_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
 
             p_e = electrons[0]->getP();
@@ -4319,7 +4195,7 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            //<editor-fold desc="Filling Chi2 histograms">
+            //<editor-fold desc="Filling Chi2 histograms (2p)">
 
             //<editor-fold desc="Filling electron Chi2 cut 2p">
             if (electrons[0]->getRegion() == CD) {
@@ -4347,7 +4223,7 @@ void EventAnalyser() {
 
             //</editor-fold>
 
-            //<editor-fold desc="Filling dVx, dVy, dVz">
+            //<editor-fold desc="Filling dVx, dVy, dVz (2p)">
             for (auto &p: protons) {
                 Vx_p = p->par()->getVx();
                 Vy_p = p->par()->getVy();

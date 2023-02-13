@@ -24,10 +24,10 @@ double p_momentum_upper_cut_2p = -1, p_momentum_lower_cut_2p = 0.3;
 /* MicroBooNE momentum cuts */
 //double e_momentum_upper_cut_MicroBooNE = -1, e_momentum_lower_cut_MicroBooNE = -1;
 double e_momentum_upper_cut_MicroBooNE = 5, e_momentum_lower_cut_MicroBooNE = 0.1;
-//double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1; // MicroBooNE cuts
+//double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;           // MicroBooNE cuts
 //double p_momentum_upper_cut_MicroBooNE = -1, p_momentum_lower_cut_MicroBooNE = 0.3;
 double p_momentum_upper_cut_MicroBooNE = 5, p_momentum_lower_cut_MicroBooNE = 0.3;
-//double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1; // MicroBooNE cuts
+//double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1;    // MicroBooNE cuts
 double cpion_momentum_upper_cut_MicroBooNE = 3, cpion_momentum_lower_cut_MicroBooNE = 0.5;
 //double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1; // MicroBooNE cuts
 
@@ -55,7 +55,7 @@ double fiducial_cut_Lw = 14;
 // Number of Photo-electrons (nphe) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_nphe_cut = false;
+bool apply_nphe_cut = true;
 
 //double nphe_lower_cut = 10;
 double nphe_lower_cut = 2;

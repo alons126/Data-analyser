@@ -769,10 +769,7 @@ void clas12ana::vertexCuts(std::vector<region_part_ptr> &particles)
 
   }
 
-
-
-
-void clas12ana::vertexCuts(region_part_ptr electron, std::vector<region_part_ptr> &particles)
+ void clas12ana::vertexCuts(region_part_ptr electron, std::vector<region_part_ptr> &particles)
   {
     particles.erase(std::remove_if(particles.begin(), particles.end(), [electron,this](const region_part_ptr& p) {
 	  return ( (electron->par()->getVz() - p->par()->getVz()) > vertex_corr_cuts.at(1) || (electron->par()->getVz() - p->par()->getVz()) < vertex_corr_cuts.at(0) );
