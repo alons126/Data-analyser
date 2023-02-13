@@ -15,7 +15,7 @@
 // Momentum cuts
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = true, apply_momentum_cuts_MicroBooNE = true;
+bool apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
 
 /* 2p momentum cuts */
 double e_momentum_upper_cut_2p = -1, e_momentum_lower_cut_2p = -1;

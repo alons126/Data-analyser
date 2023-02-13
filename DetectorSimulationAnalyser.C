@@ -35,6 +35,14 @@ using namespace clas12;
 
 // TODO: finish Histogram class
 
+/* The final states selected here are: //TODO: finish code explanation
+ * All e / no #(e) cut: Two scenarios:
+    - My cuts: plots are with no cuts
+    - With clas12ana cuts: plots are with class12ana cuts yet not constraint on #electrons
+ *  1e cut:
+ *
+ * */
+
 void EventAnalyser() {
 
     cout << "\n\n===========================================================================\n";
@@ -129,7 +137,7 @@ void EventAnalyser() {
                                            "MicroBooNE/After_cuts", "MicroBooNE/After_cuts/By_charge"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
-        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
+        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
     }
 
@@ -158,30 +166,29 @@ void EventAnalyser() {
     bool create_chi2_Dir = true;
     string Chi2_Parent_Directory = "Chi2_plots";
     TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
-    string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
+    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
+                                      "05_2p"};
+//    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "02_1e_cut/BC-AC_cut_tests", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests",
+//                                      "04_1e2p", "05_2p"};
+//    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "04_1e2p", "05_2p", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
-        MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name);
+        MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Chi2_Folder, Chi2_Parent_Directory, folders_name);
     }
 
     plots->Add(Chi2_Folder);
 
-    string Chi2_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[0];
+    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/"; // 01_All_e
 
-    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/";
+    string Chi2_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/"; // 02_1e_cut
 
-    string Chi2_Only_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/";
-    string Chi2_Only_1e_test_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/";
+    string Chi2_MicroBooNE_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/"; // 03_MicroBooNE
+    string Chi2_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/"; // 03_MicroBooNE/BC-AC_cut_tests
 
-    string Chi2_1e2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
-    string Chi2_1e2p_before_cuts_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
-    string Chi2_1e2p_after_cuts_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
+    string Chi2_1e2p_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/"; // 04_1e2p_BC-AC_cut_tests
 
-    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/";
-
-    string Chi2_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[7] + "/";
-    string Chi2_MicroBooNE_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[6] + "/";
+    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[6] + "/"; // 05_2p
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots directories">
@@ -191,7 +198,7 @@ void EventAnalyser() {
     string Vertex_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
-        MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name);
+        MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Vertex_Folder, Vertex_Parent_Directory, folders_name);
     }
 
@@ -214,7 +221,7 @@ void EventAnalyser() {
                                          "Theta_e_plots/Only_1e_cut/1e2p", "2p", "2p/Theta_e_plots"};
 
     for (string folders_name: Theta_e_Daughter_Folders) {
-        MakeDirectory(create_Theta_e_Dir, Theta_e_Parent_Directory, folders_name);
+        MakeDirectory(create_Theta_e_Dir, Theta_e_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Theta_e_Folder, Theta_e_Parent_Directory, folders_name);
     }
 
@@ -253,7 +260,7 @@ void EventAnalyser() {
                                        "Phi_e_plots/Only_1e_cut/1e2p", "2p/Phi_e_plots"};
 
     for (string folders_name: Phi_e_Daughter_Folders) {
-        MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name);
+        MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Phi_e_Folder, Phi_e_Parent_Directory, folders_name);
     }
 
@@ -289,7 +296,7 @@ void EventAnalyser() {
     string Q2_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "1e2p_weChi2_cut"};
 
     for (string folders_name: Q2_Daughter_Folders) {
-        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name);
+        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Q2_Folder, Q2_Parent_Directory, folders_name);
     }
 
@@ -306,8 +313,11 @@ void EventAnalyser() {
     string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
-        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name);
+        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(Momentum_Folder, Momentum_Parent_Directory, folders_name);
     }
+
+    plots->Add(Momentum_Folder);
 
     string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
     string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
@@ -322,7 +332,7 @@ void EventAnalyser() {
     string E_e_Daughter_Folders[] = {"", "E_e_plots", "E_e_VS_theta_e", "E_e_plots/2p", "E_e_VS_theta_e/2p"};
 
     for (string folders_name: E_e_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name);
+        MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(E_e_Folder, E_e_Parent_Directory, folders_name);
     }
 
@@ -360,7 +370,7 @@ void EventAnalyser() {
     string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
 
     for (string folders_name: SF_Daughter_Folders) {
-        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name);
+        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name);
     }
 
@@ -389,7 +399,7 @@ void EventAnalyser() {
     string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
 
     for (string folders_name: nphe_Daughter_Folders) {
-        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name);
+        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(nphe_Folder, nphe_Parent_Directory, folders_name);
     }
 
@@ -416,7 +426,7 @@ void EventAnalyser() {
     string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/ECIN", "1e_cut/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
 
     for (string folders_name: fiducial_Daughter_Folders) {
-        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name);
+        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name);
     }
 
@@ -447,7 +457,7 @@ void EventAnalyser() {
                                         "2p/Around_15_Deg/MEC_only", "2p/Around_15_Deg/RES_only", "2p/Around_15_Deg/DIS_only"};
 
     for (string folders_name: ETrans_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name);
+        MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(ETrans_Folder, ETrans_Parent_Directory, folders_name);
     }
 
@@ -469,7 +479,7 @@ void EventAnalyser() {
     string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only", "2p/DIS_only"};
 
     for (string folders_name: Ecal_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name);
+        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Ecal_Folder, Ecal_Parent_Directory, folders_name);
     }
 
@@ -654,7 +664,7 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram limits for every case">
 
     //<editor-fold desc="Chi2 plots">
-    Chi2_upper_lim = 50;
+    Chi2_upper_lim = 25;
     Chi2_lower_lim = -Chi2_upper_lim;
     //</editor-fold>
 
@@ -1465,142 +1475,175 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
-    THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
-    THStack *Chi2_Electron_1e_Stack = new THStack("Electron #chi^{2} (1e cut, CD & FD)", "Electron #chi^{2} (1e cut, CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_1e_Stack = new THStack("Proton #chi^{2} (1e cut, CD & FD)", "Proton #chi^{2} (1e cut, CD & FD);Proton #chi^{2};");
-    THStack *Chi2_Electron_1e2p_Stack = new THStack("Electron #chi^{2} (1e2p, CD & FD)", "Electron #chi^{2} (1e2p, CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_1e2p_Stack = new THStack("Proton #chi^{2} (1e2p, CD & FD)", "Proton #chi^{2} (1e2p, CD & FD);Proton #chi^{2};");
-    THStack *Chi2_Electron_MicroBooNE_Stack = new THStack("Electron #chi^{2} (MicroBooNE, CD & FD)", "Electron #chi^{2} (MicroBooNE, CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_MicroBooNE_Stack = new THStack("Proton #chi^{2} (MicroBooNE, CD & FD)", "Proton #chi^{2} (MicroBooNE, CD & FD);Proton #chi^{2};");
+
+    //<editor-fold desc="Chi2 plots (no #(e) cut)">
+    /* Plots of chi2 with no cut on number of electrons - NOT used later */
+    THStack *Chi2_Electron_Stack = new THStack("#chi^{2}_{e^{-}} (CD & FD)", "#chi^{2}_{e^{-}} Histogram (CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_Stack = new THStack("#chi^{2}_{p} (CD & FD)", "#chi^{2}_{p} Histogram (CD & FD);#chi^{2}_{p};");
+
+    TH1D *Chi2_Electron_CD = new TH1D("#chi^{2}_{e^{-}} (no #(e) cut, CD) test", "#chi^{2}_{e^{-}} Histogram (no #(e) cut, CD);#chi^{2}_{e^{-}};",
+                                      500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_FD = new TH1D("#chi^{2}_{e^{-}} (no #(e) cut, FD) test", "#chi^{2}_{e^{-}} Histogram (no #(e) cut, FD);#chi^{2}_{e^{-}};",
+                                      500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_CD = new TH1D("#chi^{2}_{p} (no #(e) cut, CD) test", "#chi^{2}_{p} Histogram (no #(e) cut, CD);#chi^{2}_{p};",
+                                    500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_FD = new TH1D("#chi^{2}_{p} (no #(e) cut, FD) test", "#chi^{2}_{p} Histogram (no #(e) cut, FD);#chi^{2}_{p};",
+                                    500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_CD_Dir = Chi2_All_e_Directory, Chi2_Electron_FD_Dir = Chi2_All_e_Directory;
+    string Chi2_Proton_CD_Dir = Chi2_All_e_Directory, Chi2_Proton_FD_Dir = Chi2_All_e_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (1e cut)">
+    /* Plots of chi2 with no cut on number of electrons - used later to apply cuts with my mechanisem (NOT Justin's ana) */
+    THStack *Chi2_Electron_1e_Stack = new THStack("#chi^{2}_{e^{-}} (1e cut, CD & FD)", "#chi^{2}_{e^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_1e_Stack = new THStack("#chi^{2}_{p} (1e cut, CD & FD)", "#chi^{2}_{p} Histogram (1e cut, CD & FD);#chi^{2}_{p};");
+
+    TH1D *Chi2_Electron_1e_CD = new TH1D("#chi^{2}_{e^{-}} (1e^{-} cut, CD) test", "#chi^{2}_{e^{-}} Histogram (1e^{-} cut, CD);#chi^{2}_{e^{-}};",
+                                         500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_1e_FD = new TH1D("#chi^{2}_{e^{-}} (1e^{-} cut, FD) test", "#chi^{2}_{e^{-}} Histogram (1e^{-} cut, FD);#chi^{2}_{e^{-}};",
+                                         500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_1e_CD = new TH1D("#chi^{2}_{p} (1e^{-} cut, CD) test", "#chi^{2}_{p} Histogram (1e^{-} cut, CD);#chi^{2}_{p};",
+                                       500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_1e_FD = new TH1D("#chi^{2}_{p} (1e^{-} cut, FD) test", "#chi^{2}_{p} Histogram (1e^{-} cut, FD);#chi^{2}_{p};",
+                                       500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_1e_CD_Dir = Chi2_1e_Directory, Chi2_Electron_1e_FD_Dir = Chi2_1e_Directory;
+    string Chi2_Proton_1e_CD_Dir = Chi2_1e_Directory, Chi2_Proton_1e_FD_Dir = Chi2_1e_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (MicroBooNE)">
+    /* Here we plot chi2 three times:
+     * First - before applying individual chi2 cuts
+     * Second - after applying individual chi2 cuts
+     * Third - after applying ALL cuts, not just individual chi2 cuts (= c-cut) */
+    THStack *Chi2_Electron_MicroBooNE_Stack = new THStack("#chi^{2}_{e^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{e^{-}} (MicroBooNE, CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_MicroBooNE_Stack = new THStack("#chi^{2}_{p} (MicroBooNE, CD & FD)", "#chi^{2}_{p} (MicroBooNE, CD & FD);#chi^{2}_{p};");
     THStack *Chi2_piplus_MicroBooNE_Stack = new THStack("#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{+}};");
     THStack *Chi2_piminus_MicroBooNE_Stack = new THStack("#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{-}};");
 
-    //<editor-fold desc="Chi2 plots (no #(e) cut)">
-    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (no #(e) cut, CD) test", "Electron #chi^{2} (no #(e) cut, CD);Electron #chi^{2};",
-                                      500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (no #(e) cut, FD) test", "Electron #chi^{2} (no #(e) cut, FD);Electron #chi^{2};",
-                                      500, Chi2_lower_lim, Chi2_upper_lim);
-
-    TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (no #(e) cut, CD) test", "Proton #chi^{2} (no #(e) cut, CD);Proton #chi^{2};",
-                                    500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (no #(e) cut, FD) test", "Proton #chi^{2} (no #(e) cut, FD);Proton #chi^{2};",
-                                    500, Chi2_lower_lim, Chi2_upper_lim);
-//    //</editor-fold>
-
-    //<editor-fold desc="Chi2 plots (1e only)">
-    TH1D *Chi2_Electron_1e_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, CD);Electron #chi^{2};",
-                                         500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Electron_1e_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, FD);Electron #chi^{2};",
-                                         500, Chi2_lower_lim, Chi2_upper_lim);
-
-    TH1D *Chi2_Proton_1e_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, CD);Proton #chi^{2};",
-                                       500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, FD);Proton #chi^{2};",
-                                       500, Chi2_lower_lim, Chi2_upper_lim);
-
-    //<editor-fold desc="Testing Chi2 before cuts (1e2p)">
-    TH1D *Chi2_Electron_1e2p_BC_CD = new TH1D("Electron #chi^{2} BC (1e2p, CD)", "Electron #chi^{2} Before Cut (1e2p, CD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_1e2p_BC_FD = new TH1D("Electron #chi^{2} BC  (1e2p, FD)", "Electron #chi^{2} Before Cut (1e2p, FD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_1e2p_BC_CD = new TH1D("Proton #chi^{2} BC (1e2p, CD)", "Proton #chi^{2} Before Cut (1e2p, CD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_1e2p_BC_FD = new TH1D("Proton #chi^{2} BC (1e2p, FD)", "Proton #chi^{2} Before Cut (1e2p, FD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    //</editor-fold>
-
-    //<editor-fold desc="Testing Chi2 after cuts (1e2p)">
-    TH1D *Chi2_Electron_1e2p_AC_CD = new TH1D("Electron #chi^{2} AC (1e2p, CD)", "Electron #chi^{2} After Cut (1e2p, CD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_1e2p_AC_FD = new TH1D("Electron #chi^{2} AC  (1e2p, FD)", "Electron #chi^{2} After Cut (1e2p, FD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_1e2p_AC_CD = new TH1D("Proton #chi^{2} AC (1e2p, CD)", "Proton #chi^{2} After Cut (1e2p, CD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_1e2p_AC_FD = new TH1D("Proton #chi^{2} AC (1e2p, FD)", "Proton #chi^{2} After Cut (1e2p, FD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    //</editor-fold>
-
-    //<editor-fold desc="Testing Chi2 (2p)">
-    TH1D *Chi2_Electron_2p_CD = new TH1D("Electron #chi^{2} (2p, CD)", "Electron #chi^{2} (2p, CD);Electron #chi^{2};",
-                                         500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_2p_FD = new TH1D("Electron #chi^{2} (2p, FD)", "Electron #chi^{2} (2p, FD);Electron #chi^{2};",
-                                         500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_2p_CD = new TH1D("Proton #chi^{2} (2p, CD)", "Proton #chi^{2} (2p, CD);Proton #chi^{2};",
-                                       500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_2p_FD = new TH1D("Proton #chi^{2} (2p, FD)", "Proton #chi^{2} (2p, FD);Proton #chi^{2};",
-                                       500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    //</editor-fold>
-
     //<editor-fold desc="Testing Chi2 before MicroBooNE cuts test">
-    TH1D *Chi2_Electron_MicroBooNE_BC_CD = new TH1D("Electron #chi^{2} BC (MicroBooNE, CD)", "Electron #chi^{2} Before Cut (MicroBooNE, CD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_MicroBooNE_BC_FD = new TH1D("Electron #chi^{2} BC  (MicroBooNE, FD)", "Electron #chi^{2} Before Cut (MicroBooNE, FD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_MicroBooNE_BC_CD = new TH1D("Proton #chi^{2} BC (MicroBooNE, CD)", "Proton #chi^{2} Before Cut (MicroBooNE, CD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_MicroBooNE_BC_FD = new TH1D("Proton #chi^{2} BC (MicroBooNE, FD)", "Proton #chi^{2} Before Cut (MicroBooNE, FD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-
-    TH1D *Chi2_piplus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, CD)", "#chi^{2}_{#pi^{+}} Before Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, CD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piplus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, FD)", "#chi^{2}_{#pi^{+}} Before Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, FD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piminus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, CD)", "#chi^{2}_{#pi^{-}} Before Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, CD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piminus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, FD)", "#chi^{2}_{#pi^{-}} Before Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, FD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+    string Chi2_Electron_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Electron_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_Proton_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Proton_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piplus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piplus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piminus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piminus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Testing Chi2 after MicroBooNE cuts test">
-    TH1D *Chi2_Electron_MicroBooNE_AC_CD = new TH1D("Electron #chi^{2} AC (MicroBooNE, CD)", "Electron #chi^{2} After Cut (MicroBooNE, CD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_MicroBooNE_AC_FD = new TH1D("Electron #chi^{2} AC  (MicroBooNE, FD)", "Electron #chi^{2} After Cut (MicroBooNE, FD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_MicroBooNE_AC_CD = new TH1D("Proton #chi^{2} AC (MicroBooNE, CD)", "Proton #chi^{2} After Cut (MicroBooNE, CD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_MicroBooNE_AC_FD = new TH1D("Proton #chi^{2} AC (MicroBooNE, FD)", "Proton #chi^{2} After Cut (MicroBooNE, FD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-
-    TH1D *Chi2_piplus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, CD)", "#chi^{2}_{#pi^{+}} After Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, CD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piplus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, FD)", "#chi^{2}_{#pi^{+}} After Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, FD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piminus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, CD)", "#chi^{2}_{#pi^{-}} After Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, CD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piminus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, FD)", "#chi^{2}_{#pi^{-}} After Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, FD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+    string Chi2_Electron_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Electron_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_Proton_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Proton_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piplus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piplus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piminus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piminus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
     //</editor-fold>
 
-    //<editor-fold desc="Testing Chi2 after MicroBooNE cuts">
-    TH1D *Chi2_Electron_MicroBooNE_CD = new TH1D("Electron #chi^{2} (MicroBooNE, CD)", "Electron #chi^{2} (MicroBooNE, CD);Electron #chi^{2};",
+    //<editor-fold desc="Chi2 plots after MicroBooNE cuts">
+    TH1D *Chi2_Electron_MicroBooNE_CD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, CD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{e^{-}};",
                                                  500, -1.5 * Chi2_Electron_cut_MicroBooNE_CD, 1.5 * Chi2_Electron_cut_MicroBooNE_CD);
-    TH1D *Chi2_Electron_MicroBooNE_FD = new TH1D("Electron #chi^{2} (MicroBooNE, FD)", "Electron #chi^{2} (MicroBooNE, FD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_FD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, FD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{e^{-}};",
                                                  500, -1.5 * Chi2_Electron_cut_MicroBooNE_FD, 1.5 * Chi2_Electron_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_Proton_MicroBooNE_CD = new TH1D("Proton #chi^{2} (MicroBooNE, CD)", "Proton #chi^{2} (MicroBooNE, CD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_CD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, CD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, CD);#chi^{2}_{p};",
                                                500, -1.5 * Chi2_Proton_cut_MicroBooNE_CD, 1.5 * Chi2_Proton_cut_MicroBooNE_CD);
-    TH1D *Chi2_Proton_MicroBooNE_FD = new TH1D("Proton #chi^{2} (MicroBooNE, FD)", "Proton #chi^{2} (MicroBooNE, FD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_FD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, FD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, FD);#chi^{2}_{p};",
                                                500, -1.5 * Chi2_Proton_cut_MicroBooNE_FD, 1.5 * Chi2_Proton_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piplus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE, CD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, CD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{+}};",
                                                500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piplus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE, FD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, FD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{+}};",
                                                500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piminus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE, CD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, CD)",
+                                                "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{-}};",
                                                 500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piminus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE, FD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, FD)",
+                                                "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{-}};",
                                                 500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+    string Chi2_Electron_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_Electron_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+    string Chi2_Proton_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_Proton_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+    string Chi2_piplus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_piplus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+    string Chi2_piminus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_piminus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
     //</editor-fold>
 
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (1e2p)">
+    THStack *Chi2_Electron_1e2p_Stack = new THStack("#chi^{2}_{e^{-}} (1e2p, CD & FD)", "#chi^{2}_{e^{-}} Histogram (1e2p, CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_1e2p_Stack = new THStack("#chi^{2}_{p} (1e2p, CD & FD)", "#chi^{2}_{p} Histogram (1e2p, CD & FD);#chi^{2}_{p};");
+
+    //<editor-fold desc="Testing Chi2 before cuts (1e2p)">
+    TH1D *Chi2_Electron_1e2p_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, CD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, FD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} BC (1e2p, CD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, CD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} BC (1e2p, FD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, FD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    string Chi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Testing Chi2 after cuts (1e2p)">
+    TH1D *Chi2_Electron_1e2p_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, CD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, FD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_1e2p_AC_CD = new TH1D("#chi^{2}_{p} AC (1e2p, CD)", "#chi^{2}_{p} Histogram After Cut (1e2p, CD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_1e2p_AC_FD = new TH1D("#chi^{2}_{p} AC (1e2p, FD)", "#chi^{2}_{p} Histogram After Cut (1e2p, FD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    string Chi2_Proton_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (2p)">
+    TH1D *Chi2_Electron_2p_CD = new TH1D("#chi^{2}_{e^{-}} (2p, CD)", "#chi^{2}_{e^{-}} Histogram (2p, CD);#chi^{2}_{e^{-}};",
+                                         500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_2p_FD = new TH1D("#chi^{2}_{e^{-}} (2p, FD)", "#chi^{2}_{e^{-}} Histogram (2p, FD);#chi^{2}_{e^{-}};",
+                                         500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_2p_CD = new TH1D("#chi^{2}_{p} (2p, CD)", "#chi^{2}_{p} Histogram (2p, CD);#chi^{2}_{p};",
+                                       500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_2p_FD = new TH1D("#chi^{2}_{p} (2p, FD)", "#chi^{2}_{p} Histogram (2p, FD);#chi^{2}_{p};",
+                                       500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_2p_CD_Dir = Chi2_2p_Directory, Chi2_Electron_2p_FD_Dir = Chi2_2p_Directory;
+    string Chi2_Proton_2p_CD_Dir = Chi2_2p_Directory, Chi2_Proton_2p_FD_Dir = Chi2_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -2517,8 +2560,8 @@ void EventAnalyser() {
 
         auto Kzero = c12->getByID(311); // K0
 
-//        auto piplus = clasAna.getByPid(211); // pi+
-        auto piplus = c12->getByID(211); // pi+
+//        auto piplus = c12->getByID(211); // pi+
+        auto piplus = clasAna.getByPid(211); // pi+
 
 //        auto piminus = c12->getByID(-211); // pi-
         auto piminus = clasAna.getByPid(-211); // pi-
@@ -2855,44 +2898,44 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-//            //<editor-fold desc="Applying additional electron cuts">
-//            /* SF cuts */
-//            if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+            //<editor-fold desc="Applying additional electron cuts">
+            /* SF cuts */
+            if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+
+            /* fiducial cuts */
+            if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+            if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+
+            /* nphe cuts */
+            if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+
+            /* Chi2 cuts */
+            if (electrons[0]->getRegion() == CD) {
+                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+            } else if (electrons[0]->getRegion() == FD) {
+                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+            }
+
+//            //TODO: see if other cuts can be applied to improve beta vs. P plots
+//            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
+////            if(electrons[0]->par()->getVz() < -1){continue;}
+////            if(electrons[0]->par()->getVz() > 1){continue;}
 //
-//            /* fiducial cuts */
-//            if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-//            if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+//            //TODO: see if other cuts can be applied to improve beta vs. P plots
+//            double vtz_e = electrons[0]->par()->getVz();
+//            bool vt_cut_skip = false;
 //
-//            /* nphe cuts */
-//            if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+//            for (int i = 0; i < AllParticles.size(); i++) {
+//                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
 //
-//            /* Chi2 cuts */
-//            if (electrons[0]->getRegion() == CD) {
-//                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//            } else if (electrons[0]->getRegion() == FD) {
-//                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+//                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
+////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
+////                if ((fabs(dVz_peak - dvtz) > dVz_cut) || (fabs(dVz_peak - dvtz) > dVz_cut)) { continue; }
 //            }
 //
-////            //TODO: see if other cuts can be applied to improve beta vs. P plots
-////            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
-//////            if(electrons[0]->par()->getVz() < -1){continue;}
-//////            if(electrons[0]->par()->getVz() > 1){continue;}
-////
-////            //TODO: see if other cuts can be applied to improve beta vs. P plots
-////            double vtz_e = electrons[0]->par()->getVz();
-////            bool vt_cut_skip = false;
-////
-////            for (int i = 0; i < AllParticles.size(); i++) {
-////                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
-////
-////                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
-//////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
-//////                if ((fabs(dVz_peak - dvtz) > dVz_cut) || (fabs(dVz_peak - dvtz) > dVz_cut)) { continue; }
-////            }
-////
-////            if (vt_cut_skip == true) { continue; }
-//
-//            //</editor-fold>
+//            if (vt_cut_skip == true) { continue; }
+
+            //</editor-fold>
 
         //<editor-fold desc="General 1e only plots">
 
@@ -4893,201 +4936,191 @@ void EventAnalyser() {
 
 //  Chi2 plots (no #(e) cut) ----------------------------------------------------------------------------
 
-        //<editor-fold desc="Electron chi2 (no #(e) cut)">
-        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_Stack, "01_Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+        //<editor-fold desc="Chi2 plots (no #(e) cut)">
+        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_Stack, "01_Electron_chi2", Chi2_Electron_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_Stack, "01_Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_Stack, "01_Electron_chi2", Chi2_Electron_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_Xmax_FD);
-        //</editor-fold>
 
-        //<editor-fold desc="Proton chi2 (no #(e) cut)">
-        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_Stack, "02_Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_Stack, "02_Proton_chi2", Chi2_Proton_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_Stack, "02_Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
+        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_Stack, "02_Proton_chi2", Chi2_Proton_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
         //</editor-fold>
 
-//  Chi2 plots (1e only) ----------------------------------------------------------------------------
+//  Chi2 plots (1e cut) ----------------------------------------------------------------------------
 
-        //<editor-fold desc="Electron chi2 (1e only)">
-        histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e_Stack, "01_Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+        //<editor-fold desc="Electron chi2 (1e cut)">
+        histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "01_Electron_chi2", Chi2_Electron_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_1e_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e_Stack, "01_Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+        histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "01_Electron_chi2", Chi2_Electron_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_1e_Xmax_FD);
-        //</editor-fold>
 
-        //<editor-fold desc="Proton chi2 (1e only)">
-        histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e_Stack, "02_Proton_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "02_Proton_chi2", Chi2_Proton_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e_Stack, "02_Proton_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "02_Proton_chi2", Chi2_Proton_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_Xmax_FD);
         //</editor-fold>
 
-        //<editor-fold desc="Testing Chi2 cuts before applying (1e2p)">
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+        //<editor-fold desc="Chi2 plots (MicroBooNE)">
 
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true,
+        //<editor-fold desc="Testing Chi2 cuts before applying (MicroBooNE)">
+        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram Before C-Cut", "MicroBooNE", "CD", "e", 0.06,
+                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_BC", Chi2_Electron_MicroBooNE_BC_CD_Dir, kBlue,
+                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram Before C-Cut", "MicroBooNE", "FD", "e", 0.06,
+                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_BC", Chi2_Electron_MicroBooNE_BC_FD_Dir, kBlue,
+                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram Before C-Cut", "MicroBooNE", "CD", "p", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_BC", Chi2_Proton_MicroBooNE_BC_CD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram Before C-Cut", "MicroBooNE", "FD", "p", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_BC", Chi2_Proton_MicroBooNE_BC_FD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Histogram Before C-Cut", "MicroBooNE", "CD", "#pi^{+}",
+                      0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_BC", Chi2_piplus_MicroBooNE_BC_CD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Histogram Before C-Cut", "MicroBooNE", "FD", "#pi^{+}",
+                      0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_BC", Chi2_piplus_MicroBooNE_BC_FD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Histogram Before C-Cut", "MicroBooNE", "CD", "#pi^{-}",
+                      0.06,
+                      0.04, 0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_BC", Chi2_piminus_MicroBooNE_BC_CD_Dir, kBlue, true,
+                      true, true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Histogram Before C-Cut", "MicroBooNE", "FD", "#pi^{-}",
+                      0.06,
+                      0.04, 0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_BC", Chi2_piminus_MicroBooNE_BC_FD_Dir, kBlue, true,
+                      true, true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+        //</editor-fold>
+
+        //<editor-fold desc="Testing Chi2 cuts after applying (MicroBooNE)">
+        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram After C-Cut", "MicroBooNE", "CD", "e", 0.06,
+                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_AC", Chi2_Electron_MicroBooNE_AC_CD_Dir, kBlue,
+                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram After C-Cut", "MicroBooNE", "FD", "e", 0.06,
+                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_AC", Chi2_Electron_MicroBooNE_AC_FD_Dir, kBlue,
+                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram After C-Cut", "MicroBooNE", "CD", "p", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_AC", Chi2_Proton_MicroBooNE_AC_CD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram After C-Cut", "MicroBooNE", "FD", "p", 0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_AC", Chi2_Proton_MicroBooNE_AC_FD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Histogram After C-Cut", "MicroBooNE", "CD", "#pi^{+}",
+                      0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_AC", Chi2_piplus_MicroBooNE_AC_CD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Histogram After C-Cut", "MicroBooNE", "FD", "#pi^{+}",
+                      0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_AC", Chi2_piplus_MicroBooNE_AC_FD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Histogram After C-Cut", "MicroBooNE", "CD", "#pi^{-}",
+                      0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_AC", Chi2_piminus_MicroBooNE_AC_CD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Histogram After C-Cut", "MicroBooNE", "FD", "#pi^{-}",
+                      0.06, 0.04,
+                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_AC", Chi2_piminus_MicroBooNE_AC_FD_Dir, kBlue, true, true,
+                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+        //</editor-fold>
+
+        //<editor-fold desc="Chi2 plots (MicroBooNE)">
+        histPlotter1D(c1, Chi2_Electron_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_CD", Chi2_Electron_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+                      Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, Chi2_Electron_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_FD", Chi2_Electron_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+                      Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, Chi2_Proton_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_CD", Chi2_Proton_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+                      Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, Chi2_Proton_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_FD", Chi2_Proton_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+                      Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, Chi2_piplus_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true,
+                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_CD", Chi2_piplus_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+                      Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, Chi2_piplus_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true,
+                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_FD", Chi2_piplus_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+                      Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+
+        histPlotter1D(c1, Chi2_piminus_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true,
+                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_CD", Chi2_piminus_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+                      Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+        histPlotter1D(c1, Chi2_piminus_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true,
+                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_FD", Chi2_piminus_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+                      Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Testing Chi2 cuts before applying (1e2p)">
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_BC", Chi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
+                      Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_BC", Chi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram Before Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_BC", Chi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram Before Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_BC", Chi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_peak_FD);
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 cuts after applying (1e2p)">
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram After Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_AC", Chi2_Electron_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram After Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_AC", Chi2_Electron_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram After Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_AC", Chi2_Proton_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram After Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_AC", Chi2_Proton_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_peak_FD);
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 (2p)">
-        histPlotter1D(c1, Chi2_Electron_2p_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_CD", Chi2_2p_Directory, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+        histPlotter1D(c1, Chi2_Electron_2p_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_CD", Chi2_Electron_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, Chi2_Electron_2p_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_FD", Chi2_2p_Directory, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
+        histPlotter1D(c1, Chi2_Electron_2p_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_FD", Chi2_Electron_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, Chi2_Proton_2p_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_CD", Chi2_2p_Directory, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, Chi2_Proton_2p_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_CD", Chi2_Proton_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, Chi2_Proton_2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_FD", Chi2_2p_Directory, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, Chi2_Proton_2p_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_FD", Chi2_Proton_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_peak_FD);
-        //</editor-fold>
-
-        //<editor-fold desc="Testing Chi2 cuts before applying (MicroBooNE)">
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "MicroBooNE", "CD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "MicroBooNE", "FD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_FD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "CD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "FD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "CD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "FD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
-        //</editor-fold>
-
-        //<editor-fold desc="Testing Chi2 cuts after applying (MicroBooNE)">
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "MicroBooNE", "CD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "MicroBooNE", "FD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_FD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "CD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "FD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "CD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "FD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
-        //</editor-fold>
-
-        //<editor-fold desc="Testing Chi2 (MicroBooNE)">
-        histPlotter1D(c1, Chi2_Electron_MicroBooNE_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_Electron_MicroBooNE_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, Chi2_Proton_MicroBooNE_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_Proton_MicroBooNE_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, Chi2_piplus_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_piplus_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, Chi2_piminus_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_piminus_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
         //</editor-fold>
 
     } else {
@@ -7155,11 +7188,11 @@ void EventAnalyser() {
 
     //<editor-fold desc="Saving settings to log file">
     if (delete_txt_files == true) {
-        system("find ./plots -type f -iname '*.txt' -delete"); // Delete existing .txt files
+        system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
     }
 
     ofstream myLogFile;
-    myLogFile.open("./plots/Run_log.txt");
+    myLogFile.open(plots_log_save_Directory.c_str());
 
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n";
     myLogFile << "// Run was with '" << file_name << "' settings mode\n";
