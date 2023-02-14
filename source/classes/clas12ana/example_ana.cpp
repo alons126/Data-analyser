@@ -26,8 +26,7 @@ using namespace clas12;
 //}
 
 void Usage() {
-    std::cerr << "Usage: ./testAna inputfiles.hipo outputfile.root \n\n\n";
-    std::cerr << "Usage: ./example_ana.cpp /volatile/clas12/users/esteejus/Simulation_sigmaCM/reconhipo/recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo /u/home/asportes/anatest.root \n\n\n";
+    std::cerr << "Usage: ./example_ana inputfiles.hipo outputfile.root \n\n\n";
 
 }
 
