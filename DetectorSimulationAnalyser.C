@@ -2548,15 +2548,6 @@ void EventAnalyser() {
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-    cout << "\n\nTEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n\n";
-
-
-
-
-
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
 
@@ -2624,6 +2615,16 @@ void EventAnalyser() {
             dis = true;
         }
         //</editor-fold>
+
+
+
+
+        cout << "\n\nTEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n\n";
+
+
+
+
+
 
 //  All particles plots (no cuts) ---------------------------------------------------------------------------------------------------------------------------------------
 
