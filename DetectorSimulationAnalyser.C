@@ -2560,24 +2560,24 @@ void EventAnalyser() {
 //        auto electrons = c12->getByID(11);  // Electrons
 //        auto photons = c12->getByID(22);    // Photons
 
-        auto neutrons = clasAna.getByPid(2112); // Neutrons
+//        auto neutrons = clasAna.getByPid(2112); // Neutrons
         auto protons = clasAna.getByPid(2212);  // Protons
         auto Kplus = clasAna.getByPid(321);     // K+
         auto Kminus = clasAna.getByPid(-321);   // K-
 //        auto Kzero = clasAna.getByPid(311);     // K0
         auto piplus = clasAna.getByPid(211);    // pi+
         auto piminus = clasAna.getByPid(-211);  // pi-
-        auto pizero = clasAna.getByPid(111);    // pi0
+//        auto pizero = clasAna.getByPid(111);    // pi0
         auto electrons = clasAna.getByPid(11);  // Electrons
 //        auto photons = clasAna.getByPid(22);    // Photons
 
-        auto neutrals = clasAna.getByPid(2112); // Neutrons
+        auto neutrals = clasAna.getByPid(0); // Neutrons
         auto deuterons = clasAna.getByPid(45);  // Deuterons
-        auto otherpart = clasAna.getByPid(0);  // Other particles
+        auto otherpart = clasAna.getByPid(311);  // Other particles
 
         /* Number of particles in event (= npie) */
-        int npie = neutrons.size() + protons.size() + Kplus.size() + Kminus.size() + piplus.size() + piminus.size() + pizero.size() + electrons.size() +
-                   neutrals.size() + deuterons.size() + otherpart.size();
+//        int npie = neutrons.size() + protons.size() + Kplus.size() + Kminus.size() + piplus.size() + piminus.size() + pizero.size() + electrons.size() +
+//                   neutrals.size() + deuterons.size() + otherpart.size();
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
@@ -2716,15 +2716,15 @@ void EventAnalyser() {
         } // end of loop over electrons vector
         //</editor-fold>
 
-        //<editor-fold desc="Neutron Beta vs. P plots (no #(electron) cut, CD & FD)">
-        for (auto &n: neutrons) {
-            if (n->getRegion() == CD) {
-                Beta_vs_P_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
-            } else if (n->getRegion() == FD) {
-                Beta_vs_P_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
-            }
-        } // end of loop over protons vector
-        //</editor-fold>
+//        //<editor-fold desc="Neutron Beta vs. P plots (no #(electron) cut, CD & FD)">
+//        for (auto &n: neutrons) {
+//            if (n->getRegion() == CD) {
+//                Beta_vs_P_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
+//            } else if (n->getRegion() == FD) {
+//                Beta_vs_P_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
+//            }
+//        } // end of loop over protons vector
+//        //</editor-fold>
 
         //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
         for (auto &p: protons) {
@@ -3148,15 +3148,15 @@ void EventAnalyser() {
         } // end of loop over protons vector
         //</editor-fold>
 
-        //<editor-fold desc="Fill Neutron Beta vs. P plots (1e only, CD & FD)">
-        for (auto &n: neutrons) {
-            if (n->getRegion() == CD) {
-                Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
-            } else if (n->getRegion() == FD) {
-                Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
-            }
-        } // end of loop over protons vector
-        //</editor-fold>
+//        //<editor-fold desc="Fill Neutron Beta vs. P plots (1e only, CD & FD)">
+//        for (auto &n: neutrons) {
+//            if (n->getRegion() == CD) {
+//                Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
+//            } else if (n->getRegion() == FD) {
+//                Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
+//            }
+//        } // end of loop over protons vector
+//        //</editor-fold>
 
         //<editor-fold desc="Kplus Beta vs. P plots (1e only, CD & FD)">
         for (auto &Kp: Kplus) {
@@ -3178,15 +3178,15 @@ void EventAnalyser() {
         } // end of loop over protons vector
         //</editor-fold>
 
-        //<editor-fold desc="Kzero Beta vs. P plots (1e only, CD & FD)">
-        for (auto &K0: Kzero) {
-            if (K0->getRegion() == CD) {
-                Beta_vs_P_1e_Kzero_Only_CD->Fill(K0->getP(), K0->par()->getBeta());
-            } else if (K0->getRegion() == FD) {
-                Beta_vs_P_1e_Kzero_Only_FD->Fill(K0->getP(), K0->par()->getBeta());
-            }
-        } // end of loop over protons vector
-        //</editor-fold>
+//        //<editor-fold desc="Kzero Beta vs. P plots (1e only, CD & FD)">
+//        for (auto &K0: Kzero) {
+//            if (K0->getRegion() == CD) {
+//                Beta_vs_P_1e_Kzero_Only_CD->Fill(K0->getP(), K0->par()->getBeta());
+//            } else if (K0->getRegion() == FD) {
+//                Beta_vs_P_1e_Kzero_Only_FD->Fill(K0->getP(), K0->par()->getBeta());
+//            }
+//        } // end of loop over protons vector
+//        //</editor-fold>
 
         //<editor-fold desc="piplus Beta vs. P plots (1e only, CD & FD)">
         for (auto &pip: piplus) {
@@ -3208,25 +3208,25 @@ void EventAnalyser() {
         } // end of loop over protons vector
         //</editor-fold>
 
-        //<editor-fold desc="pizero Beta vs. P plots (1e only, CD & FD)">
-        for (auto &pi0: pizero) {
-            if (pi0->getRegion() == CD) {
-                Beta_vs_P_1e_pizero_Only_CD->Fill(pi0->getP(), pi0->par()->getBeta());
-            } else if (pi0->getRegion() == FD) {
-                Beta_vs_P_1e_pizero_Only_FD->Fill(pi0->getP(), pi0->par()->getBeta());
-            }
-        } // end of loop over protons vector
-        //</editor-fold>
+//        //<editor-fold desc="pizero Beta vs. P plots (1e only, CD & FD)">
+//        for (auto &pi0: pizero) {
+//            if (pi0->getRegion() == CD) {
+//                Beta_vs_P_1e_pizero_Only_CD->Fill(pi0->getP(), pi0->par()->getBeta());
+//            } else if (pi0->getRegion() == FD) {
+//                Beta_vs_P_1e_pizero_Only_FD->Fill(pi0->getP(), pi0->par()->getBeta());
+//            }
+//        } // end of loop over protons vector
+//        //</editor-fold>
 
-        //<editor-fold desc="Photons Beta vs. P plots (1e only, CD & FD)">
-        for (auto &ph: photons) {
-            if (ph->getRegion() == CD) {
-                Beta_vs_P_1e_Photons_Only_CD->Fill(ph->getP(), ph->par()->getBeta());
-            } else if (ph->getRegion() == FD) {
-                Beta_vs_P_1e_Photons_Only_FD->Fill(ph->getP(), ph->par()->getBeta());
-            }
-        } // end of loop over protons vector
-        //</editor-fold>
+//        //<editor-fold desc="Photons Beta vs. P plots (1e only, CD & FD)">
+//        for (auto &ph: photons) {
+//            if (ph->getRegion() == CD) {
+//                Beta_vs_P_1e_Photons_Only_CD->Fill(ph->getP(), ph->par()->getBeta());
+//            } else if (ph->getRegion() == FD) {
+//                Beta_vs_P_1e_Photons_Only_FD->Fill(ph->getP(), ph->par()->getBeta());
+//            }
+//        } // end of loop over protons vector
+//        //</editor-fold>
 
         //</editor-fold>
 
@@ -3234,552 +3234,552 @@ void EventAnalyser() {
 
 //  MicroBooNE cuts -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="MicroBooNE cuts">
-        /* 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons") */
-        int ne = electrons.size(), np = protons.size(), npi0 = pizero.size(), nn = neutrons.size(), npip = piplus.size(), npim = piminus.size();
-        bool MicroBooNE_particle_selection = ((ne == 1) && (np == 2) && (npi0 == 0) && (AllParticles.size() == ne + np + nn + npi0 + npip + npim));
-
-//            if ((calculate_MicroBooNE == true) && ((protons.size() == 2) && (pizero.size() == 0) && (pizero.size() == 0))) {
-        if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
-            ++num_of_MicroBooNE_events_BC;
-
-            if (nn != 0) { ++num_of_MicroBooNE_events_BC_wNeutrons; }
-            if (npi0 != 0) { ++num_of_MicroBooNE_events_BC_wpi0; }
-            if (npip != 0) { ++num_of_MicroBooNE_events_BC_wpip; }
-            if (npim != 0) { ++num_of_MicroBooNE_events_BC_wpim; }
-
-            //<editor-fold desc="Filling Beta vs. P (MicroBooNE-BC)">
-            /* Testing Beta vs. P before applying the MicroBooNE cuts */
-            for (int i = 0; i < AllParticles.size(); i++) {
-                if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                }
-            } // end of loop over AllParticles vector
-            //</editor-fold>
-
-            TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE;
-            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
-            P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
-            P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
-            P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
-
-            //  Testing cuts (MicroBooNE) ---------------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Testing cuts (MicroBooNE)">
-
-            //  Testing momentum cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Testing momentum cuts (MicroBooNE)">
-            /* Momentum plots before and after cuts */
-            if (electrons[0]->getRegion() == CD) {
-                P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
-                LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
-            } else if (electrons[0]->getRegion() == FD) {
-                P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
-                LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
-            }
-
-            if (protons[0]->getRegion() == CD) {
-                P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
-                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-            } else if (protons[0]->getRegion() == FD) {
-                P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
-                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-            }
-
-            if (protons[1]->getRegion() == CD) {
-                P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
-                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-            } else if (protons[1]->getRegion() == FD) {
-                P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
-                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-            }
-
-            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-            for (int i = 0; i < piplus.size(); i++) {
-                P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
-
-                if (piplus[i]->getRegion() == CD) {
-                    P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
-                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                } else if (piplus[i]->getRegion() == FD) {
-                    P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
-                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                }
-            } // end of loop over piplus vector
-
-            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-            for (int i = 0; i < piminus.size(); i++) {
-                P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
-
-                if (piminus[i]->getRegion() == CD) {
-                    P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
-                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                } else if (piminus[i]->getRegion() == FD) {
-                    P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
-                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                }
-            } // end of loop over piminus vector
-            //</editor-fold>
-
-            //  Testing chi2 cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Testing chi2 before and after cuts">
-            /* Chi2 plots before and after cuts */
-            if (electrons[0]->getRegion() == CD) {
-                Chi2_Electron_MicroBooNE_BC_CD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD) {
-                    Chi2_Electron_MicroBooNE_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-                }
-            } else if (electrons[0]->getRegion() == FD) {
-                Chi2_Electron_MicroBooNE_BC_FD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD) {
-                    Chi2_Electron_MicroBooNE_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
-                }
-            }
-
-            if (protons[0]->getRegion() == CD) {
-                Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
-                    Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[0]->par()->getChi2Pid());
-                }
-            } else if (protons[0]->getRegion() == FD) {
-                Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
-                    Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[0]->par()->getChi2Pid());
-                }
-            }
-
-            if (protons[1]->getRegion() == CD) {
-                Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
-
-                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
-                    Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[1]->par()->getChi2Pid());
-                }
-            } else if (protons[1]->getRegion() == FD) {
-                Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
-
-                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
-                    Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[1]->par()->getChi2Pid());
-                }
-            }
-
-            for (int i = 0; i < piplus.size(); i++) {
-                if (piplus[i]->getRegion() == CD) {
-                    Chi2_piplus_MicroBooNE_BC_CD->Fill(piplus[i]->par()->getChi2Pid());
-
-                    if (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD) {
-                        Chi2_piplus_MicroBooNE_AC_CD->Fill(piplus[i]->par()->getChi2Pid());
-                    }
-                } else if (piplus[i]->getRegion() == FD) {
-                    Chi2_piplus_MicroBooNE_BC_FD->Fill(piplus[i]->par()->getChi2Pid());
-
-                    if (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD) {
-                        Chi2_piplus_MicroBooNE_AC_FD->Fill(piplus[i]->par()->getChi2Pid());
-                    }
-                }
-            } // end of loop over piplus vector
-
-            for (int i = 0; i < piminus.size(); i++) {
-                if (piminus[i]->getRegion() == CD) {
-                    Chi2_piminus_MicroBooNE_BC_CD->Fill(piminus[i]->par()->getChi2Pid());
-
-                    if (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD) {
-                        Chi2_piminus_MicroBooNE_AC_CD->Fill(piminus[i]->par()->getChi2Pid());
-                    }
-                } else if (piminus[i]->getRegion() == FD) {
-                    Chi2_piminus_MicroBooNE_BC_FD->Fill(piminus[i]->par()->getChi2Pid());
-
-                    if (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD) {
-                        Chi2_piminus_MicroBooNE_AC_FD->Fill(piminus[i]->par()->getChi2Pid());
-                    }
-                }
-            } // end of loop over piminus vector
-            //</editor-fold>
-
-            //  Testing dVz cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Testing dV cuts before and after">
-            //TODO: check with Adi/Justin if vertex cuts should be applied on cPions as well
-            double Vx_e_MicroBooNE = electrons[0]->par()->getVx(), Vy_e_MicroBooNE = electrons[0]->par()->getVy(), Vz_e_MicroBooNE = electrons[0]->par()->getVz();
-            double Vz_p0_MicroBooNE = protons[0]->par()->getVz(), Vz_p1_MicroBooNE = protons[1]->par()->getVz();
-            double dVz0_MicroBooNE = Vz_e_MicroBooNE - Vz_p0_MicroBooNE, dVz1_MicroBooNE = Vz_e_MicroBooNE - Vz_p1_MicroBooNE;
-            double Vx_p_MicroBooNE, Vy_p_MicroBooNE, Vz_p_MicroBooNE, dVx_MicroBooNE, dVy_MicroBooNE, dVz_MicroBooNE;
-
-            for (auto &p: protons) {
-                Vx_p_MicroBooNE = p->par()->getVx(), Vy_p_MicroBooNE = p->par()->getVy(), Vz_p_MicroBooNE = p->par()->getVz();
-                dVx_MicroBooNE = Vx_e_MicroBooNE - Vx_p_MicroBooNE;
-                dVy_MicroBooNE = Vy_e_MicroBooNE - Vy_p_MicroBooNE;
-                dVz_MicroBooNE = Vz_e_MicroBooNE - Vz_p_MicroBooNE;
-
-                // Testing dVx,dVy,dVz before cuts
-                deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
-
-                // Testing dVx,dVy,dVz after cuts
-                if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { deltaVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
-                if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { deltaVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
-                if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { deltaVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //  Applying cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Applying cuts (MicroBooNE)">
-
-            //  Applying momentum cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Applying momentum cuts (MicroBooNE)">
-            bool MicroBooNE_mom_cuts;
-
-            // Electron:
-            bool e_mom_ucut_MicroBooNE, e_mom_lcut_MicroBooNE;
-
-            if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                e_mom_ucut_MicroBooNE = e_mom_lcut_MicroBooNE = true;
-            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
-                e_mom_lcut_MicroBooNE = true;
-            } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                e_mom_ucut_MicroBooNE = true;
-                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
-            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
-                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
-            }
-
-            bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
-
-            // Proton 0:
-            bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
-
-            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                p0_mom_ucut_MicroBooNE = p0_mom_lcut_MicroBooNE = true;
-            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                p0_mom_lcut_MicroBooNE = true;
-            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                p0_mom_ucut_MicroBooNE = true;
-                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-            }
-
-            bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
-
-            // Proton 1:
-            bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
-
-            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                p1_mom_ucut_MicroBooNE = p1_mom_lcut_MicroBooNE = true;
-            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                p1_mom_lcut_MicroBooNE = true;
-            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                p1_mom_ucut_MicroBooNE = true;
-                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-            }
-
-            bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
-
-            bool p_mom_cut_MicroBooNE = (p0_mom_cut_MicroBooNE && p1_mom_cut_MicroBooNE);
-
-            // Positive pions:
-            bool pcpion_mom_ucut_MicroBooNE, pcpion_mom_lcut_MicroBooNE;
-            bool pip_mom_cut_MicroBooNE = true;
-
-            if (piplus.size() > 0) {
-                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-                for (int i = 0; i < piplus.size(); i++) {
-                    bool temp_pip_mom_cut_MicroBooNE;
-                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
-
-                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                        pcpion_mom_ucut_MicroBooNE = pcpion_mom_lcut_MicroBooNE = true;
-                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                        pcpion_mom_lcut_MicroBooNE = true;
-                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                        pcpion_mom_ucut_MicroBooNE = true;
-                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                    }
-
-                    temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
-
-                    if (temp_pip_mom_cut_MicroBooNE == false) { pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE; }
-                } // end of loop over piplus vector
-            }
-
-            // Negative pions:
-            bool ncpion_mom_ucut_MicroBooNE, ncpion_mom_lcut_MicroBooNE;
-            bool pim_mom_cut_MicroBooNE = true;
-
-            if (piminus.size() > 0) {
-                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-                for (int i = 0; i < piminus.size(); i++) {
-                    bool temp_pim_mom_cut_MicroBooNE;
-                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
-
-                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                        ncpion_mom_ucut_MicroBooNE = ncpion_mom_lcut_MicroBooNE = true;
-                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                        ncpion_mom_lcut_MicroBooNE = true;
-                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                        ncpion_mom_ucut_MicroBooNE = true;
-                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                    }
-
-                    temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
-
-                    if (temp_pim_mom_cut_MicroBooNE == false) { pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE; }
-                } // end of loop over piminus vector
-            }
-
-            // Total momentum cut variable:
-            MicroBooNE_mom_cuts = (e_mom_cut_MicroBooNE && p_mom_cut_MicroBooNE && pip_mom_cut_MicroBooNE && pim_mom_cut_MicroBooNE);
-            //</editor-fold>
-
-            //  Applying chi2 cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Applying chi2 cuts (MicroBooNE)">
-            bool MicroBooNE_chi2_cuts;
-
-            // Electron:
-            bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
-                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
-            bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
-                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
-            bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
-
-            // Proton 0:
-            bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
-                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
-            bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
-                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
-            bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
-
-            // Proton 1:
-            bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
-                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
-            bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
-                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
-            bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
-
-            bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
-
-            // Positive pions:
-            bool pcpion_chi2_MicroBooNE_CD, pcpion_chi2_MicroBooNE_FD;
-            bool pip_chi2_cut_MicroBooNE = true;
-
-            if (piplus.size() > 0) {
-                for (int i = 0; i < piplus.size(); i++) {
-                    bool temp_pip_chi2_cut_MicroBooNE;
-
-                    pcpion_chi2_MicroBooNE_CD = ((piplus[i]->getRegion() == CD)
-                                                 && (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD));
-                    pcpion_chi2_MicroBooNE_FD = ((piplus[i]->getRegion() == FD)
-                                                 && (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD));
-                    temp_pip_chi2_cut_MicroBooNE = (pcpion_chi2_MicroBooNE_CD || pcpion_chi2_MicroBooNE_FD);
-
-                    if (temp_pip_chi2_cut_MicroBooNE == false) { pip_chi2_cut_MicroBooNE = temp_pip_chi2_cut_MicroBooNE; }
-                } // end of loop over piplus vector
-            }
-
-            // Negative pions:
-            bool ncpion_chi2_MicroBooNE_CD, ncpion_chi2_MicroBooNE_FD;
-            bool pim_chi2_cut_MicroBooNE = true;
-
-            if (piminus.size() > 0) {
-                for (int i = 0; i < piminus.size(); i++) {
-                    bool temp_pim_chi2_cut_MicroBooNE;
-
-                    ncpion_chi2_MicroBooNE_CD = ((piminus[i]->getRegion() == CD)
-                                                 && (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD));
-                    ncpion_chi2_MicroBooNE_FD = ((piminus[i]->getRegion() == FD)
-                                                 && (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD));
-                    temp_pim_chi2_cut_MicroBooNE = (ncpion_chi2_MicroBooNE_CD || ncpion_chi2_MicroBooNE_FD);
-
-                    if (temp_pim_chi2_cut_MicroBooNE == false) { pim_chi2_cut_MicroBooNE = temp_pim_chi2_cut_MicroBooNE; }
-                } // end of loop over piminus vector
-            }
-
-            // Total chi2 cut variable:
-            MicroBooNE_chi2_cuts = (e_chi2_MicroBooNE_cut && p_chi2_MicroBooNE_cut && pip_chi2_cut_MicroBooNE && pim_chi2_cut_MicroBooNE);
-            //</editor-fold>
-
-            //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
-            bool MicroBooNE_dVz_cuts;
-
-            bool MicroBooNE_dVz0_cuts = (fabs(dVz_peak_MicroBooNE - dVz0_MicroBooNE) <= dVz_cut_MicroBooNE);
-            bool MicroBooNE_dVz1_cuts = (fabs(dVz_peak_MicroBooNE - dVz1_MicroBooNE) <= dVz_cut_MicroBooNE);
-
-            MicroBooNE_dVz_cuts = (MicroBooNE_dVz0_cuts && MicroBooNE_dVz1_cuts);
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //  Fillings histograms (MicroBooNE) --------------------------------------------------------------------------------------------------------------------
-
-            //TODO: add on/off switch to each individuale microboone cut
-            if (MicroBooNE_mom_cuts && MicroBooNE_chi2_cuts && MicroBooNE_dVz_cuts) {
-                ++num_of_MicroBooNE_events_AC;
-
-                if (nn != 0) { ++num_of_MicroBooNE_events_AC_wNeutrons; }
-                if (npi0 != 0) { ++num_of_MicroBooNE_events_AC_wpi0; }
-                if (npip != 0) { ++num_of_MicroBooNE_events_AC_wpip; }
-                if (npim != 0) { ++num_of_MicroBooNE_events_AC_wpim; }
-
-                //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
-                for (int i = 0; i < AllParticles.size(); i++) {
-                    if (AllParticles[i]->getRegion() == CD) {
-                        Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    } else if (AllParticles[i]->getRegion() == FD) {
-                        Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    }
-                } // end of loop over AllParticles vector
-                //</editor-fold>
-
-                //<editor-fold desc="Filling MicroBooNE momentum histograms">
-                if (electrons[0]->getRegion() == CD) {
-                    P_e_MicroBooNE_CD->Fill(P_e_MicroBooNE.Mag());
-                } else if (electrons[0]->getRegion() == FD) {
-                    P_e_MicroBooNE_FD->Fill(P_e_MicroBooNE.Mag());
-                }
-
-                if (protons[0]->getRegion() == CD) {
-                    P_p_MicroBooNE_CD->Fill(P_p0_MicroBooNE.Mag());
-                } else if (protons[0]->getRegion() == FD) {
-                    P_p_MicroBooNE_FD->Fill(P_p0_MicroBooNE.Mag());
-                }
-
-                if (protons[1]->getRegion() == CD) {
-                    P_p_MicroBooNE_CD->Fill(P_p1_MicroBooNE.Mag());
-                } else if (protons[1]->getRegion() == FD) {
-                    P_p_MicroBooNE_FD->Fill(P_p1_MicroBooNE.Mag());
-                }
-
-                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-                for (int i = 0; i < piplus.size(); i++) {
-                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
-
-                    if (piplus[i]->getRegion() == CD) {
-                        P_cpion_MicroBooNE_CD->Fill(P_pcpion_MicroBooNE.Mag());
-                    } else if (piplus[i]->getRegion() == FD) {
-                        P_cpion_MicroBooNE_FD->Fill(P_pcpion_MicroBooNE.Mag());
-                    }
-                } // end of loop over piplus vector
-
-                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-                for (int i = 0; i < piminus.size(); i++) {
-                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
-
-                    if (piminus[i]->getRegion() == CD) {
-                        P_cpion_MicroBooNE_CD->Fill(P_ncpion_MicroBooNE.Mag());
-                    } else if (piminus[i]->getRegion() == FD) {
-                        P_cpion_MicroBooNE_FD->Fill(P_ncpion_MicroBooNE.Mag());
-                    }
-                } // end of loop over piminus vector
-                //</editor-fold>
-
-                //<editor-fold desc="Filling MicroBooNE chi2 histograms">
-                if (electrons[0]->getRegion() == CD) {
-                    Chi2_Electron_MicroBooNE_CD->Fill(electrons[0]->par()->getChi2Pid());
-                } else if (electrons[0]->getRegion() == FD) {
-                    Chi2_Electron_MicroBooNE_FD->Fill(electrons[0]->par()->getChi2Pid());
-                }
-
-                if (protons[0]->getRegion() == CD) {
-                    Chi2_Proton_MicroBooNE_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if (protons[0]->getRegion() == FD) {
-                    Chi2_Proton_MicroBooNE_FD->Fill(protons[0]->par()->getChi2Pid());
-                }
-
-                if (protons[1]->getRegion() == CD) {
-                    Chi2_Proton_MicroBooNE_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if (protons[1]->getRegion() == FD) {
-                    Chi2_Proton_MicroBooNE_FD->Fill(protons[1]->par()->getChi2Pid());
-                }
-
-                for (int i = 0; i < piplus.size(); i++) {
-                    if (piplus[i]->getRegion() == CD) {
-                        Chi2_piplus_MicroBooNE_CD->Fill(piplus[i]->par()->getChi2Pid());
-                    } else if (piplus[i]->getRegion() == FD) {
-                        Chi2_piplus_MicroBooNE_FD->Fill(piplus[i]->par()->getChi2Pid());
-                    }
-                } // end of loop over piplus vector
-
-                for (int i = 0; i < piminus.size(); i++) {
-                    if (piminus[i]->getRegion() == CD) {
-                        Chi2_piminus_MicroBooNE_CD->Fill(piminus[i]->par()->getChi2Pid());
-                    } else if (piminus[i]->getRegion() == FD) {
-                        Chi2_piminus_MicroBooNE_FD->Fill(piminus[i]->par()->getChi2Pid());
-                    }
-                } // end of loop over piminus vector
-                //</editor-fold>
-
-                //<editor-fold desc="Filling MicroBooNE dVz histograms">
-                for (auto &p: protons) {
-                    deltaVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
-                    deltaVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
-                    deltaVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
-                } // end of loop over protons vector
-                //</editor-fold>
-
-            }
-        } // End of calculate_MicroBooNE if
-        //</editor-fold>
+//        //<editor-fold desc="MicroBooNE cuts">
+//        /* 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons") */
+//        int ne = electrons.size(), np = protons.size(), npi0 = pizero.size(), nn = neutrons.size(), npip = piplus.size(), npim = piminus.size();
+//        bool MicroBooNE_particle_selection = ((ne == 1) && (np == 2) && (npi0 == 0) && (AllParticles.size() == ne + np + nn + npi0 + npip + npim));
+//
+////            if ((calculate_MicroBooNE == true) && ((protons.size() == 2) && (pizero.size() == 0) && (pizero.size() == 0))) {
+//        if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
+//            ++num_of_MicroBooNE_events_BC;
+//
+//            if (nn != 0) { ++num_of_MicroBooNE_events_BC_wNeutrons; }
+//            if (npi0 != 0) { ++num_of_MicroBooNE_events_BC_wpi0; }
+//            if (npip != 0) { ++num_of_MicroBooNE_events_BC_wpip; }
+//            if (npim != 0) { ++num_of_MicroBooNE_events_BC_wpim; }
+//
+//            //<editor-fold desc="Filling Beta vs. P (MicroBooNE-BC)">
+//            /* Testing Beta vs. P before applying the MicroBooNE cuts */
+//            for (int i = 0; i < AllParticles.size(); i++) {
+//                if (AllParticles[i]->getRegion() == CD) {
+//                    Beta_vs_P_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                } else if (AllParticles[i]->getRegion() == FD) {
+//                    Beta_vs_P_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                }
+//            } // end of loop over AllParticles vector
+//            //</editor-fold>
+//
+//            TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE;
+//            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
+//            P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+//            P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+//            P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+//
+//            //  Testing cuts (MicroBooNE) ---------------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing cuts (MicroBooNE)">
+//
+//            //  Testing momentum cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing momentum cuts (MicroBooNE)">
+//            /* Momentum plots before and after cuts */
+//            if (electrons[0]->getRegion() == CD) {
+//                P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
+//                LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+//            } else if (electrons[0]->getRegion() == FD) {
+//                P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
+//                LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            if (protons[0]->getRegion() == CD) {
+//                P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            } else if (protons[0]->getRegion() == FD) {
+//                P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            if (protons[1]->getRegion() == CD) {
+//                P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            } else if (protons[1]->getRegion() == FD) {
+//                P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//            for (int i = 0; i < piplus.size(); i++) {
+//                P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                if (piplus[i]->getRegion() == CD) {
+//                    P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                } else if (piplus[i]->getRegion() == FD) {
+//                    P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                }
+//            } // end of loop over piplus vector
+//
+//            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//            for (int i = 0; i < piminus.size(); i++) {
+//                P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                if (piminus[i]->getRegion() == CD) {
+//                    P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                } else if (piminus[i]->getRegion() == FD) {
+//                    P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                }
+//            } // end of loop over piminus vector
+//            //</editor-fold>
+//
+//            //  Testing chi2 cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing chi2 before and after cuts">
+//            /* Chi2 plots before and after cuts */
+//            if (electrons[0]->getRegion() == CD) {
+//                Chi2_Electron_MicroBooNE_BC_CD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD) {
+//                    Chi2_Electron_MicroBooNE_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
+//            } else if (electrons[0]->getRegion() == FD) {
+//                Chi2_Electron_MicroBooNE_BC_FD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD) {
+//                    Chi2_Electron_MicroBooNE_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
+//            }
+//
+//            if (protons[0]->getRegion() == CD) {
+//                Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
+//                    Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[0]->par()->getChi2Pid());
+//                }
+//            } else if (protons[0]->getRegion() == FD) {
+//                Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
+//                    Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[0]->par()->getChi2Pid());
+//                }
+//            }
+//
+//            if (protons[1]->getRegion() == CD) {
+//                Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
+//                    Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+//            } else if (protons[1]->getRegion() == FD) {
+//                Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
+//                    Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+//            }
+//
+//            for (int i = 0; i < piplus.size(); i++) {
+//                if (piplus[i]->getRegion() == CD) {
+//                    Chi2_piplus_MicroBooNE_BC_CD->Fill(piplus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD) {
+//                        Chi2_piplus_MicroBooNE_AC_CD->Fill(piplus[i]->par()->getChi2Pid());
+//                    }
+//                } else if (piplus[i]->getRegion() == FD) {
+//                    Chi2_piplus_MicroBooNE_BC_FD->Fill(piplus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD) {
+//                        Chi2_piplus_MicroBooNE_AC_FD->Fill(piplus[i]->par()->getChi2Pid());
+//                    }
+//                }
+//            } // end of loop over piplus vector
+//
+//            for (int i = 0; i < piminus.size(); i++) {
+//                if (piminus[i]->getRegion() == CD) {
+//                    Chi2_piminus_MicroBooNE_BC_CD->Fill(piminus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD) {
+//                        Chi2_piminus_MicroBooNE_AC_CD->Fill(piminus[i]->par()->getChi2Pid());
+//                    }
+//                } else if (piminus[i]->getRegion() == FD) {
+//                    Chi2_piminus_MicroBooNE_BC_FD->Fill(piminus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD) {
+//                        Chi2_piminus_MicroBooNE_AC_FD->Fill(piminus[i]->par()->getChi2Pid());
+//                    }
+//                }
+//            } // end of loop over piminus vector
+//            //</editor-fold>
+//
+//            //  Testing dVz cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing dV cuts before and after">
+//            //TODO: check with Adi/Justin if vertex cuts should be applied on cPions as well
+//            double Vx_e_MicroBooNE = electrons[0]->par()->getVx(), Vy_e_MicroBooNE = electrons[0]->par()->getVy(), Vz_e_MicroBooNE = electrons[0]->par()->getVz();
+//            double Vz_p0_MicroBooNE = protons[0]->par()->getVz(), Vz_p1_MicroBooNE = protons[1]->par()->getVz();
+//            double dVz0_MicroBooNE = Vz_e_MicroBooNE - Vz_p0_MicroBooNE, dVz1_MicroBooNE = Vz_e_MicroBooNE - Vz_p1_MicroBooNE;
+//            double Vx_p_MicroBooNE, Vy_p_MicroBooNE, Vz_p_MicroBooNE, dVx_MicroBooNE, dVy_MicroBooNE, dVz_MicroBooNE;
+//
+//            for (auto &p: protons) {
+//                Vx_p_MicroBooNE = p->par()->getVx(), Vy_p_MicroBooNE = p->par()->getVy(), Vz_p_MicroBooNE = p->par()->getVz();
+//                dVx_MicroBooNE = Vx_e_MicroBooNE - Vx_p_MicroBooNE;
+//                dVy_MicroBooNE = Vy_e_MicroBooNE - Vy_p_MicroBooNE;
+//                dVz_MicroBooNE = Vz_e_MicroBooNE - Vz_p_MicroBooNE;
+//
+//                // Testing dVx,dVy,dVz before cuts
+//                deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
+//
+//                // Testing dVx,dVy,dVz after cuts
+//                if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { deltaVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
+//                if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { deltaVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
+//                if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { deltaVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //</editor-fold>
+//
+//            //  Applying cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying cuts (MicroBooNE)">
+//
+//            //  Applying momentum cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying momentum cuts (MicroBooNE)">
+//            bool MicroBooNE_mom_cuts;
+//
+//            // Electron:
+//            bool e_mom_ucut_MicroBooNE, e_mom_lcut_MicroBooNE;
+//
+//            if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                e_mom_ucut_MicroBooNE = e_mom_lcut_MicroBooNE = true;
+//            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+//                e_mom_lcut_MicroBooNE = true;
+//            } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                e_mom_ucut_MicroBooNE = true;
+//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+//            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
+//
+//            // Proton 0:
+//            bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
+//
+//            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p0_mom_ucut_MicroBooNE = p0_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p0_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p0_mom_ucut_MicroBooNE = true;
+//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
+//
+//            // Proton 1:
+//            bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
+//
+//            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p1_mom_ucut_MicroBooNE = p1_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p1_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p1_mom_ucut_MicroBooNE = true;
+//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
+//
+//            bool p_mom_cut_MicroBooNE = (p0_mom_cut_MicroBooNE && p1_mom_cut_MicroBooNE);
+//
+//            // Positive pions:
+//            bool pcpion_mom_ucut_MicroBooNE, pcpion_mom_lcut_MicroBooNE;
+//            bool pip_mom_cut_MicroBooNE = true;
+//
+//            if (piplus.size() > 0) {
+//                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    bool temp_pip_mom_cut_MicroBooNE;
+//                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = pcpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        pcpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = true;
+//                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    }
+//
+//                    temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
+//
+//                    if (temp_pip_mom_cut_MicroBooNE == false) { pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE; }
+//                } // end of loop over piplus vector
+//            }
+//
+//            // Negative pions:
+//            bool ncpion_mom_ucut_MicroBooNE, ncpion_mom_lcut_MicroBooNE;
+//            bool pim_mom_cut_MicroBooNE = true;
+//
+//            if (piminus.size() > 0) {
+//                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    bool temp_pim_mom_cut_MicroBooNE;
+//                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = ncpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        ncpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = true;
+//                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    }
+//
+//                    temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
+//
+//                    if (temp_pim_mom_cut_MicroBooNE == false) { pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE; }
+//                } // end of loop over piminus vector
+//            }
+//
+//            // Total momentum cut variable:
+//            MicroBooNE_mom_cuts = (e_mom_cut_MicroBooNE && p_mom_cut_MicroBooNE && pip_mom_cut_MicroBooNE && pim_mom_cut_MicroBooNE);
+//            //</editor-fold>
+//
+//            //  Applying chi2 cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying chi2 cuts (MicroBooNE)">
+//            bool MicroBooNE_chi2_cuts;
+//
+//            // Electron:
+//            bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
+//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
+//            bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
+//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
+//            bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
+//
+//            // Proton 0:
+//            bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//            bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//            bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
+//
+//            // Proton 1:
+//            bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//            bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//            bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
+//
+//            bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
+//
+//            // Positive pions:
+//            bool pcpion_chi2_MicroBooNE_CD, pcpion_chi2_MicroBooNE_FD;
+//            bool pip_chi2_cut_MicroBooNE = true;
+//
+//            if (piplus.size() > 0) {
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    bool temp_pip_chi2_cut_MicroBooNE;
+//
+//                    pcpion_chi2_MicroBooNE_CD = ((piplus[i]->getRegion() == CD)
+//                                                 && (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD));
+//                    pcpion_chi2_MicroBooNE_FD = ((piplus[i]->getRegion() == FD)
+//                                                 && (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD));
+//                    temp_pip_chi2_cut_MicroBooNE = (pcpion_chi2_MicroBooNE_CD || pcpion_chi2_MicroBooNE_FD);
+//
+//                    if (temp_pip_chi2_cut_MicroBooNE == false) { pip_chi2_cut_MicroBooNE = temp_pip_chi2_cut_MicroBooNE; }
+//                } // end of loop over piplus vector
+//            }
+//
+//            // Negative pions:
+//            bool ncpion_chi2_MicroBooNE_CD, ncpion_chi2_MicroBooNE_FD;
+//            bool pim_chi2_cut_MicroBooNE = true;
+//
+//            if (piminus.size() > 0) {
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    bool temp_pim_chi2_cut_MicroBooNE;
+//
+//                    ncpion_chi2_MicroBooNE_CD = ((piminus[i]->getRegion() == CD)
+//                                                 && (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD));
+//                    ncpion_chi2_MicroBooNE_FD = ((piminus[i]->getRegion() == FD)
+//                                                 && (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD));
+//                    temp_pim_chi2_cut_MicroBooNE = (ncpion_chi2_MicroBooNE_CD || ncpion_chi2_MicroBooNE_FD);
+//
+//                    if (temp_pim_chi2_cut_MicroBooNE == false) { pim_chi2_cut_MicroBooNE = temp_pim_chi2_cut_MicroBooNE; }
+//                } // end of loop over piminus vector
+//            }
+//
+//            // Total chi2 cut variable:
+//            MicroBooNE_chi2_cuts = (e_chi2_MicroBooNE_cut && p_chi2_MicroBooNE_cut && pip_chi2_cut_MicroBooNE && pim_chi2_cut_MicroBooNE);
+//            //</editor-fold>
+//
+//            //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
+//            bool MicroBooNE_dVz_cuts;
+//
+//            bool MicroBooNE_dVz0_cuts = (fabs(dVz_peak_MicroBooNE - dVz0_MicroBooNE) <= dVz_cut_MicroBooNE);
+//            bool MicroBooNE_dVz1_cuts = (fabs(dVz_peak_MicroBooNE - dVz1_MicroBooNE) <= dVz_cut_MicroBooNE);
+//
+//            MicroBooNE_dVz_cuts = (MicroBooNE_dVz0_cuts && MicroBooNE_dVz1_cuts);
+//            //</editor-fold>
+//
+//            //</editor-fold>
+//
+//            //  Fillings histograms (MicroBooNE) --------------------------------------------------------------------------------------------------------------------
+//
+//            //TODO: add on/off switch to each individuale microboone cut
+//            if (MicroBooNE_mom_cuts && MicroBooNE_chi2_cuts && MicroBooNE_dVz_cuts) {
+//                ++num_of_MicroBooNE_events_AC;
+//
+//                if (nn != 0) { ++num_of_MicroBooNE_events_AC_wNeutrons; }
+//                if (npi0 != 0) { ++num_of_MicroBooNE_events_AC_wpi0; }
+//                if (npip != 0) { ++num_of_MicroBooNE_events_AC_wpip; }
+//                if (npim != 0) { ++num_of_MicroBooNE_events_AC_wpim; }
+//
+//                //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
+//                for (int i = 0; i < AllParticles.size(); i++) {
+//                    if (AllParticles[i]->getRegion() == CD) {
+//                        Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                        if (AllParticles[i]->par()->getCharge() == 1) {
+//                            Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                            Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                            Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        }
+//                    } else if (AllParticles[i]->getRegion() == FD) {
+//                        Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                        if (AllParticles[i]->par()->getCharge() == 1) {
+//                            Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                            Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                            Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        }
+//                    }
+//                } // end of loop over AllParticles vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling MicroBooNE momentum histograms">
+//                if (electrons[0]->getRegion() == CD) {
+//                    P_e_MicroBooNE_CD->Fill(P_e_MicroBooNE.Mag());
+//                } else if (electrons[0]->getRegion() == FD) {
+//                    P_e_MicroBooNE_FD->Fill(P_e_MicroBooNE.Mag());
+//                }
+//
+//                if (protons[0]->getRegion() == CD) {
+//                    P_p_MicroBooNE_CD->Fill(P_p0_MicroBooNE.Mag());
+//                } else if (protons[0]->getRegion() == FD) {
+//                    P_p_MicroBooNE_FD->Fill(P_p0_MicroBooNE.Mag());
+//                }
+//
+//                if (protons[1]->getRegion() == CD) {
+//                    P_p_MicroBooNE_CD->Fill(P_p1_MicroBooNE.Mag());
+//                } else if (protons[1]->getRegion() == FD) {
+//                    P_p_MicroBooNE_FD->Fill(P_p1_MicroBooNE.Mag());
+//                }
+//
+//                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                    if (piplus[i]->getRegion() == CD) {
+//                        P_cpion_MicroBooNE_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        P_cpion_MicroBooNE_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    }
+//                } // end of loop over piplus vector
+//
+//                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                    if (piminus[i]->getRegion() == CD) {
+//                        P_cpion_MicroBooNE_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        P_cpion_MicroBooNE_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    }
+//                } // end of loop over piminus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling MicroBooNE chi2 histograms">
+//                if (electrons[0]->getRegion() == CD) {
+//                    Chi2_Electron_MicroBooNE_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                } else if (electrons[0]->getRegion() == FD) {
+//                    Chi2_Electron_MicroBooNE_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
+//
+//                if (protons[0]->getRegion() == CD) {
+//                    Chi2_Proton_MicroBooNE_CD->Fill(protons[0]->par()->getChi2Pid());
+//                } else if (protons[0]->getRegion() == FD) {
+//                    Chi2_Proton_MicroBooNE_FD->Fill(protons[0]->par()->getChi2Pid());
+//                }
+//
+//                if (protons[1]->getRegion() == CD) {
+//                    Chi2_Proton_MicroBooNE_CD->Fill(protons[1]->par()->getChi2Pid());
+//                } else if (protons[1]->getRegion() == FD) {
+//                    Chi2_Proton_MicroBooNE_FD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+//
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    if (piplus[i]->getRegion() == CD) {
+//                        Chi2_piplus_MicroBooNE_CD->Fill(piplus[i]->par()->getChi2Pid());
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        Chi2_piplus_MicroBooNE_FD->Fill(piplus[i]->par()->getChi2Pid());
+//                    }
+//                } // end of loop over piplus vector
+//
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    if (piminus[i]->getRegion() == CD) {
+//                        Chi2_piminus_MicroBooNE_CD->Fill(piminus[i]->par()->getChi2Pid());
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        Chi2_piminus_MicroBooNE_FD->Fill(piminus[i]->par()->getChi2Pid());
+//                    }
+//                } // end of loop over piminus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling MicroBooNE dVz histograms">
+//                for (auto &p: protons) {
+//                    deltaVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
+//                    deltaVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
+//                    deltaVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
+//                } // end of loop over protons vector
+//                //</editor-fold>
+//
+//            }
+//        } // End of calculate_MicroBooNE if
+//        //</editor-fold>
 
 //  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
 

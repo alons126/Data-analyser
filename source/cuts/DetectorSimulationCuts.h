@@ -35,7 +35,7 @@ double cpion_momentum_upper_cut_MicroBooNE = 3, cpion_momentum_lower_cut_MicroBo
 // Sampling Fraction (SF) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool apply_SF_cuts = false;
+bool apply_SF_cuts = false; //TODO: add to output log
 
 double SF_1e2p_upper_cut = 0.28;
 double SF_1e2p_lower_cut = 0.18;

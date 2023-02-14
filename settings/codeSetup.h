@@ -24,6 +24,7 @@ std::string Ver = "DetSim testings";
 // ======================================================================================================================================================================
 
 //<editor-fold desc="path definitions">
+/* Histogram plots output directory */
 std::string WorkingDirectory = GetCurrentDirectory() + "/";
 //std::string plots_path = WorkingDirectory + "plots_t5tot_mycuts" + "/";
 //std::string plots_path = WorkingDirectory + "plots_t5tot_mycuts_false" + "/";
@@ -31,8 +32,10 @@ std::string WorkingDirectory = GetCurrentDirectory() + "/";
 std::string plots_path = WorkingDirectory + "plots" + "/";
 //std::string plots_path = "./plots/";
 
-//std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
+/* settings directory and directories */
+std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
 
+/* source directory and directories */
 std::string SourcesDirectory = WorkingDirectory + "source" + "/";
 std::string CutsDirectory = SourcesDirectory + "cuts" + "/";
 
@@ -50,22 +53,22 @@ std::string file_name = "general_file";
 
 // hipo files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//// Local files:
-//std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
-//////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
+// Local files:
+std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
-//
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
-// ifarm files (Justin's MC files):
-std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
-std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+
+//// ifarm files (Justin's MC files):
+//std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
+//std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ////
