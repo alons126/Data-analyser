@@ -2616,16 +2616,6 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-
-
-
-        cout << "\n\nTEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n\n";
-
-
-
-
-
-
 //  All particles plots (no cuts) ---------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="All particles plots (no cuts)">
