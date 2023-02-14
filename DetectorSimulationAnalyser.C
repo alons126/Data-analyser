@@ -2489,14 +2489,6 @@ void EventAnalyser() {
     auto config_c12 = chain.GetC12Reader(); //TODO: check with Justin what is this used for
     auto &c12 = chain.C12ref();             //TODO: check with Justin what is this used for
 
-
-
-
-    cout << "\n\nTEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n\n";
-
-    
-
-
     /* Setting cuts */
     clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
     clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture
@@ -2555,6 +2547,15 @@ void EventAnalyser() {
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+    cout << "\n\nTEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST \n\n";
+
+
+
+
 
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
