@@ -32,7 +32,8 @@ void Usage() {
 }
 
 
-int main(int argc, char **argv) {
+int main() {
+//int main(int argc, char **argv) {
 
     if (argc < 2) {
         Usage();
@@ -43,9 +44,12 @@ int main(int argc, char **argv) {
     //  TString inFile = "/cache/hallb/scratch/rg-m/LD2/prod1.4/dstdebug/recon/015566/rec_clas_015566.evio.0000*";
     //  TString inFile = "/volatile/clas12/rg-m/48Ca/latest/dst/recon/015832/rec_clas_015832.evio.00*.hipo";
 
-    TString inFile = argv[1];
-    TString outFile = argv[2];
+    TString inFile = "/volatile/clas12/users/esteejus/Simulation_sigmaCM/reconhipo/recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+    TString outFile = "/u/home/asportes/anatest.root";
     //  TString outFile = "test.root";
+//    TString inFile = argv[1];
+//    TString outFile = argv[2];
+//    //  TString outFile = "test.root";
 
     cout << "Ouput file " << outFile << endl;
 
