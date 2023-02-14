@@ -26,9 +26,10 @@ void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp) {
 }
 
 void Usage() {
-    std::cerr << "Usage: ./testAna inputfiles.hipo outputfile.root \n\n\n";
-    std::cerr << "Usage: ./example_ana.cpp /volatile/clas12/users/esteejus/Simulation_sigmaCM/reconhipo/recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo /u/home/asportes/anatest.root \n\n\n";
-
+//    std::cerr << "Usage: ./example_ana2 inputfiles.hipo outputfile.root \n\n\n";
+    std::cerr << "Usage: ./example_ana2 inputfiles.hipo outputfile.root \n\n\n";
+//    std::cerr << "Usage: ./example_ana.cpp /volatile/clas12/users/esteejus/Simulation_sigmaCM/reconhipo/recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo /u/home/asportes/anatest.root \n\n\n";
+//    std::cerr << "Usage: ./monitor_en.cpp 1 5.98 /u/home/asportes/monitor_entest.root /u/home/asportes/monitor_entest.pdf example_cut_file.txt /volatile/clas12/users/esteejus/Simulation_sigmaCM/reconhipo/recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo \n\n\n";
 }
 
 
