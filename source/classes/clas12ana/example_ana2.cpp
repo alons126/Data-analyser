@@ -21,9 +21,9 @@
 using namespace std;
 using namespace clas12;
 
-//void SetLorentzVector(TLorentzVector &p4,clas12::region_part_ptr rp){
-//  p4.SetXYZM(rp->par()->getPx(),rp->par()->getPy(),rp->par()->getPz(),p4.M());
-//}
+void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp) {
+    p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), p4.M());
+}
 
 void Usage() {
     std::cerr << "Usage: ./testAna inputfiles.hipo outputfile.root \n\n\n";
@@ -35,11 +35,10 @@ void Usage() {
 int main() {
 //int main(int argc, char **argv) {
 
-    if (argc < 2) {
-        Usage();
-        return -1;
-    }
-
+//    if (argc < 2) {
+//        Usage();
+//        return -1;
+//    }
 
     //  TString inFile = "/cache/hallb/scratch/rg-m/LD2/prod1.4/dstdebug/recon/015566/rec_clas_015566.evio.0000*";
     //  TString inFile = "/volatile/clas12/rg-m/48Ca/latest/dst/recon/015832/rec_clas_015832.evio.00*.hipo";
