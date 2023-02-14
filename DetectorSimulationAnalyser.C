@@ -2484,10 +2484,10 @@ void EventAnalyser() {
 
     clas12root::HipoChain chain;
     chain.Add(AnalyseFile.c_str());
-    chain.SetReaderTags({0});               //TODO: check with Justin what are these tags
-    chain.db()->turnOffQADB();              //TODO: check with Justin what is this used for
-    auto config_c12 = chain.GetC12Reader(); //TODO: check with Justin what is this used for
-    auto &c12 = chain.C12ref();             //TODO: check with Justin what is this used for
+    chain.SetReaderTags({0});                   //TODO: check with Justin what are these tags
+    chain.db()->turnOffQADB();                  //TODO: check with Justin what is this used for
+    auto config_c12 = chain.GetC12Reader();     //TODO: check with Justin what is this used for
+    auto &c12 = chain.C12ref();                 //TODO: check with Justin what is this used for
 
     /* Setting cuts */
     clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
@@ -2620,61 +2620,61 @@ void EventAnalyser() {
 
         //<editor-fold desc="All particles plots (no cuts)">
 
-        //<editor-fold desc="Beta vs. P (no #(electron) cut, CD & FD)">
-        for (int i = 0; i < AllParticles.size(); i++) {
-            if (AllParticles[i]->getRegion() == CD) {
-                Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                if (AllParticles[i]->par()->getCharge() == 1) {
-                    Beta_vs_P_positive_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                } else if (AllParticles[i]->par()->getCharge() == 0) {
-                    Beta_vs_P_neutral_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                } else if (AllParticles[i]->par()->getCharge() == -1) {
-                    Beta_vs_P_negative_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                }
-
-                //<editor-fold desc="Beta vs. P (At least 1e cut)">
-                if (electrons.size() >= 1) {
-//                    ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                }
-                //</editor-fold>
-
-            } else if (AllParticles[i]->getRegion() == FD) {
-                Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                if (AllParticles[i]->par()->getCharge() == 1) {
-                    Beta_vs_P_positive_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                } else if (AllParticles[i]->par()->getCharge() == 0) {
-                    Beta_vs_P_neutral_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                } else if (AllParticles[i]->par()->getCharge() == -1) {
-                    Beta_vs_P_negative_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                }
-
-                //<editor-fold desc="Beta vs. P (At least 1e cut)">
-                if (electrons.size() >= 1) {
-//                    ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                }
-                //</editor-fold>
-
-            }
-        } // end of loop over AllParticles vector
-        //</editor-fold>
+//        //<editor-fold desc="Beta vs. P (no #(electron) cut, CD & FD)">
+//        for (int i = 0; i < AllParticles.size(); i++) {
+//            if (AllParticles[i]->getRegion() == CD) {
+//                Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                if (AllParticles[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                }
+//
+//                //<editor-fold desc="Beta vs. P (At least 1e cut)">
+//                if (electrons.size() >= 1) {
+////                    ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                }
+//                //</editor-fold>
+//
+//            } else if (AllParticles[i]->getRegion() == FD) {
+//                Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                if (AllParticles[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                }
+//
+//                //<editor-fold desc="Beta vs. P (At least 1e cut)">
+//                if (electrons.size() >= 1) {
+////                    ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                }
+//                //</editor-fold>
+//
+//            }
+//        } // end of loop over AllParticles vector
+//        //</editor-fold>
 
         //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
         TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
