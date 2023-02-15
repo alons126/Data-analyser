@@ -12,6 +12,10 @@
 using namespace std;
 using namespace clas12;
 
+
+/* this is clas12ana after adding {} brackets and before my bug fix */
+
+
 struct cutpar {
     string id;
     vector<double> par = {}; //pi- parameters
@@ -132,9 +136,7 @@ public:
     TVector3 getCOM(TLorentzVector l, TLorentzVector r, TLorentzVector q);
 
     std::vector<region_part_ptr> getByPid(int pid) {
-        if (pid == 11) { // My addition
-            return electrons;
-        } else if (pid == 2212) {
+        if (pid == 2212) {
             return protons;
         } else if (pid == 45) {
             return deuterons;
@@ -161,9 +163,7 @@ public:
 
     void setByPid(region_part_ptr p) {
         int pid = p->par()->getPid();
-        if (pid == 11) { // My addition
-            electrons.push_back(p);
-        } else if (pid == 2212) {
+        if (pid == 2212) {
             protons.push_back(p);
         } else if (pid == 45) {
             deuterons.push_back(p);
@@ -624,37 +624,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     auto particles = c12->getDetParticles(); //particles is now a std::vector of particles for this event
     auto electrons_det = c12->getByID(11);
 
-
-//    auto protons_det = c12->getByID(2212);   // Protons
-//    auto deuterons_det = c12->getByID(45);
-//    auto piplus_det = c12->getByID(211);     // pi+
-//    auto piminus_det = c12->getByID(-211);   // pi-
-//    auto pizero_det = c12->getByID(111);   // pi-
-//    auto Kplus_det = c12->getByID(321);      // K+
-//    auto Kminus_det = c12->getByID(-321);    // K-
-//    auto Kzero_det = c12->getByID(311);    // K-
-//    auto ph_det = c12->getByID(22);    // K-
-//    auto zero_det = c12->getByID(0);    // K-
-//    auto neutrons_det = c12->getByID(2112);    // K-
-
-
-
-
-
-//    int START = particles.size();
-//    cout << "START: particles.size() = " << START << "\n";
-//    cout << "START: electrons.size() = " << electrons.size() << "\n";
-//    cout << "START: protons.size() = " << protons.size() << "\n";
-//    cout << "START: neutrals.size() = " << neutrals.size() << "\n";
-//    cout << "START: piplus.size() = " << piplus.size() << "\n";
-//    cout << "START: piminus.size() = " << piminus.size() << "\n";
-//    cout << "START: kplus.size() = " << kplus.size() << "\n";
-//    cout << "START: kminus.size() = " << kminus.size() << "\n";
-//    cout << "START: otherpart.size() = " << otherpart.size() << "\n\n";
-
-
-
-
     /* ME: for any number of electrons */
     for (auto el = electrons_det.begin(); el != electrons_det.end();) {
 
@@ -730,30 +699,11 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     /* ME: for one electron (1e cut?) */
     if (electrons_det.size() == 1) //good trigger electron
     {
-
-
-
-//        int START_1e = particles.size();
-//        cout << "START_1e: particles.size() = " << START_1e << "\n";
-//        cout << "START_1e: electrons.size() = " << electrons.size() << "\n";
-//        cout << "START_1e: protons.size() = " << protons.size() << "\n";
-//        cout << "START_1e: deuterons.size() = " << deuterons.size() << "\n";
-//        cout << "START_1e: neutrals.size() = " << neutrals.size() << "\n";
-//        cout << "START_1e: piplus.size() = " << piplus.size() << "\n";
-//        cout << "START_1e: piminus.size() = " << piminus.size() << "\n";
-//        cout << "START_1e: kplus.size() = " << kplus.size() << "\n";
-//        cout << "START_1e: kminus.size() = " << kminus.size() << "\n";
-//        cout << "START_1e: otherpart.size() = " << otherpart.size() << "\n\n";
-
-
-
-
-
         if (debug_plots) {
             fillDCdebug(electrons_det[0], dc_hit_map_a);
         }
 
-//        electrons.push_back(electrons_det[0]);
+        electrons.push_back(electrons_det[0]);
 
         for (auto p = particles.begin(); p != particles.end();) {
 
@@ -767,19 +717,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             }
 
             if ((*p)->par()->getCharge() == 0) { //neutrals don't follow same cuts
-//                cout << (*p)->par()->getPid() << "\n";
-                setByPid(*p); // My fix
-                ++p;
-                //                if ((*p)->par()->getPid() == 0 || (*p)->par()->getPid() == 2112) { // My fix
-//                    neutrals.push_back(*p);
-//                } else {                                                           // My fix
-//                    otherpart.push_back(*p);
-//                }
-
-//                continue;
-
-
-
 
 //                if ((*p)->par()->getPid() == 111) { // My addition
 //                    pizero.push_back(*p);
@@ -789,136 +726,84 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 //                    neutrals.push_back(*p);
 //                }
 
-//                neutrals.push_back(*p); // Justin's original/
-            } else {
-                double par_mom = (*p)->par()->getP();
-                double par_beta = (*p)->par()->getBeta();
+                neutrals.push_back(*p); // Justin's original
+            }
 
-                bool is_cd = ((*p)->getRegion() == CD);
-                bool is_fd = ((*p)->getRegion() == FD);
+            double par_mom = (*p)->par()->getP();
+            double par_beta = (*p)->par()->getBeta();
 
-                //DEBUG plots
-                if (debug_plots && ((*p)->par()->getCharge() != 0) && ((*p)->par()->getPid() != 11)) {
-                    if (is_cd) {
-                        pid_cd_debug->Fill(par_mom, par_beta);
-                    }
+            bool is_cd = ((*p)->getRegion() == CD);
+            bool is_fd = ((*p)->getRegion() == FD);
 
-                    if (is_fd) {
-                        pid_fd_debug->Fill(par_mom, par_beta);
-                    }
+            //DEBUG plots
+            if (debug_plots && ((*p)->par()->getCharge() != 0) && ((*p)->par()->getPid() != 11)) {
+                if (is_cd) {
+                    pid_cd_debug->Fill(par_mom, par_beta);
                 }
 
-                //	   bool pid_cut    = checkPidCut(*p);
-                //	   bool vertex_cut = checkVertex(*p);
-                //	   bool vertex_corr_cut = checkVertexCorrelation(electrons_det[0],*p); //correlation between good electron and particles vertex
-                //	   bool dc_edge_cut     = DCEdgeCuts(*p);
-
-                /* ME: we set the f_XXX variables as true.
-                 * checkPidCut - checkes if partical is within chi2 cuts
-                 * checkVertex - checkes if Vx,Vy,Vz are within cuts
-                 * DCEdgeCuts - ???
-                 * checkVertexCorrelation - checkes if dVz,Vy,Vz are within cuts (what are the cuts?) */
-                if (!checkPidCut(*p) && f_pidCuts) //PID cuts
-                {
-                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                    p = particles.erase(p);
-                } else if (!checkVertex(*p) && f_vertexCuts) //Vertex cut
-                {
-                    cout << "Vertex cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                    p = particles.erase(p);
-                } else if (!DCEdgeCuts(*p) && f_DCEdgeCuts) //DC edge cut
-                {
-                    cout << "DC edge cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                    p = particles.erase(p);
-                } else if (!checkVertexCorrelation(electrons_det[0], *p) && f_corr_vertexCuts) //Vertex correlation cut between electron
-                {
-                    cout << "Vertex correlation cut between electron (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                    p = particles.erase(p);
-                } else //itterate
-                {
-                    setByPid(*p); // Justin's original
-
-//                    if ((*p)->par()->getPid() != 11) {
-////                        setByPid(*p); // Justin's original
-//                    }
-
-
-//                    setByPid(*p); // Justin's original
-
-                    if (debug_plots) {
-                        if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11) {
-                            el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
-                        }
-
-                        debugByPid(*p);
-
-                        if ((*p)->par()->getPid() == 2212) {
-                            fillDCdebug(*p, dc_hit_map_a_proton);
-                        }
-
-                        if ((*p)->par()->getPid() == 211) {
-                            fillDCdebug(*p, dc_hit_map_a_pion);
-                        }
-                    }
-
-                    ++p;
+                if (is_fd) {
+                    pid_fd_debug->Fill(par_mom, par_beta);
                 }
             }
 
+            //	   bool pid_cut    = checkPidCut(*p);
+            //	   bool vertex_cut = checkVertex(*p);
+            //	   bool vertex_corr_cut = checkVertexCorrelation(electrons_det[0],*p); //correlation between good electron and particles vertex
+            //	   bool dc_edge_cut     = DCEdgeCuts(*p);
+
+            /* ME: we set the f_XXX variables as true.
+             * checkPidCut - checkes if partical is within chi2 cuts
+             * checkVertex - checkes if Vx,Vy,Vz are within cuts
+             * DCEdgeCuts - ???
+             * checkVertexCorrelation - checkes if dVz,Vy,Vz are within cuts (what are the cuts?) */
+            if (!checkPidCut(*p) && f_pidCuts) //PID cuts
+            {
+                cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+                p = particles.erase(p);
+            } else if (!checkVertex(*p) && f_vertexCuts) //Vertex cut
+            {
+                cout << "Vertex cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+                p = particles.erase(p);
+            } else if (!DCEdgeCuts(*p) && f_DCEdgeCuts) //DC edge cut
+            {
+                cout << "DC edge cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+                p = particles.erase(p);
+            } else if (!checkVertexCorrelation(electrons_det[0], *p) && f_corr_vertexCuts) //Vertex correlation cut between electron
+            {
+                cout << "Vertex correlation cut between electron (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+                p = particles.erase(p);
+            } else //itterate
+            {
+                setByPid(*p);
+
+                if (debug_plots) {
+                    if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11) {
+                        el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
+                    }
+
+                    debugByPid(*p);
+
+                    if ((*p)->par()->getPid() == 2212) {
+                        fillDCdebug(*p, dc_hit_map_a_proton);
+                    }
+
+                    if ((*p)->par()->getPid() == 211) {
+                        fillDCdebug(*p, dc_hit_map_a_pion);
+                    }
+                }
+
+                ++p;
+            }
 
         }// particle loop
 
 
 
+        cout << "particles.size() = " << particles.size() << "\n\n";
 
-
-//////////////////////////////////////////////////
-//        cout << "END_1e: electrons_det.size() = " << electrons_det.size() << "\n";
-//        cout << "END_1e: protons_det.size() = " << protons_det.size() << "\n";
-//        cout << "END_1e: deuterons_det.size() = " << deuterons_det.size() << "\n";
-//        cout << "END_1e: piplus_det.size() = " << piplus_det.size() << "\n";
-//        cout << "END_1e: piminus_det.size() = " << piminus_det.size() << "\n";
-//        cout << "END_1e: pizero_det.size() = " << pizero_det.size() << "\n";
-//        cout << "END_1e: Kplus_det.size() = " << Kplus_det.size() << "\n";
-//        cout << "END_1e: Kminus_det.size() = " << Kminus_det.size() << "\n";
-//        cout << "END_1e: Kzero_det.size() = " << Kzero_det.size() << "\n";
-//        cout << "END_1e: ph_det.size() = " << ph_det.size() << "\n";
-//        cout << "END_1e: zero_det.size() = " << zero_det.size() << "\n";
-//        cout << "END_1e: neutrons_det.size() = " << neutrons_det.size() << "\n\n";
-//
-//        int END_1e = particles.size();
-//        cout << "END_1eEND_1eEND_1e: particles.size() = " << END_1e << "\n";
-//        cout << "END_1e: electrons.size() = " << electrons.size() << "\n";
-//        cout << "END_1e: protons.size() = " << protons.size() << "\n";
-//        cout << "END_1e: deuterons.size() = " << deuterons.size() << "\n";
-//        cout << "END_1e: neutrals.size() = " << neutrals.size() << "\n";
-//        cout << "END_1e: piplus.size() = " << piplus.size() << "\n";
-//        cout << "END_1e: piminus.size() = " << piminus.size() << "\n";
-//        cout << "END_1e: kplus.size() = " << kplus.size() << "\n";
-//        cout << "END_1e: kminus.size() = " << kminus.size() << "\n";
-//        cout << "END_1e: otherpart.size() = " << otherpart.size() << "\n\n";
 
 
     }// good electron loop
-
-
-    int END = particles.size();
-
-//    if (START != END) {
-//        cout << "START: particles.size() = " << START << "\n";
-//        cout << "END: particles.size() = " << END << "\n\n";
-//    }
-//    cout << "END: particles.size() = " << END << "\n";
-//    cout << "END: electrons.size() = " << electrons.size() << "\n";
-//    cout << "END: protons.size() = " << protons.size() << "\n";
-//    cout << "END: deuterons.size() = " << deuterons.size() << "\n";
-//    cout << "END: neutrals.size() = " << neutrals.size() << "\n";
-//    cout << "END: piplus.size() = " << piplus.size() << "\n";
-//    cout << "END: piminus.size() = " << piminus.size() << "\n";
-//    cout << "END: kplus.size() = " << kplus.size() << "\n";
-//    cout << "END: kminus.size() = " << kminus.size() << "\n";
-//    cout << "END: otherpart.size() = " << otherpart.size() << "\n\n";
-
 
     event_mult = (piplus.size() + piminus.size() + kplus.size() + kminus.size() + deuterons.size());
 }
