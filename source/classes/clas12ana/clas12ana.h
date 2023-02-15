@@ -694,19 +694,19 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
         */
         if (!checkEcalCuts(*el) && f_ecalSFCuts) //ECAL SF cuts
         {
-            cout << "ECAL SF cuts (electrons)\n"; // My debugging
+//            cout << "ECAL SF cuts (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else if (!EcalEdgeCuts(*el) && f_ecalEdgeCuts) //ECAL edge cuts
         {
-            cout << "ECAL edge cuts (electrons)\n"; // My debugging
+//            cout << "ECAL edge cuts (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else if (!checkVertex(*el) && f_vertexCuts) //Vertex cut
         {
-            cout << "Vertex cut (electrons)\n"; // My debugging
+//            cout << "Vertex cut (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else if (!DCEdgeCuts(*el) && f_DCEdgeCuts) //DC edge cut
         {
-            cout << "DC edge cut (electrons)\n"; // My debugging
+//            cout << "DC edge cut (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else {
             //DEBUG plots
@@ -820,19 +820,19 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                  * checkVertexCorrelation - checkes if dVz,Vy,Vz are within cuts (what are the cuts?) */
                 if (!checkPidCut(*p) && f_pidCuts) //PID cuts
                 {
-                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+//                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
                     p = particles.erase(p);
                 } else if (!checkVertex(*p) && f_vertexCuts) //Vertex cut
                 {
-                    cout << "Vertex cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+//                    cout << "Vertex cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
                     p = particles.erase(p);
                 } else if (!DCEdgeCuts(*p) && f_DCEdgeCuts) //DC edge cut
                 {
-                    cout << "DC edge cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+//                    cout << "DC edge cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
                     p = particles.erase(p);
                 } else if (!checkVertexCorrelation(electrons_det[0], *p) && f_corr_vertexCuts) //Vertex correlation cut between electron
                 {
-                    cout << "Vertex correlation cut between electron (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+//                    cout << "Vertex correlation cut between electron (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
                     p = particles.erase(p);
                 } else //itterate
                 {
@@ -864,8 +864,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                     ++p;
                 }
             }
-
-
         }// particle loop
 
 
@@ -902,8 +900,8 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     }// good electron loop
 
 
-    int END = particles.size();
-
+//    int END = particles.size();
+//
 //    if (START != END) {
 //        cout << "START: particles.size() = " << START << "\n";
 //        cout << "END: particles.size() = " << END << "\n\n";
@@ -918,6 +916,8 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 //    cout << "END: kplus.size() = " << kplus.size() << "\n";
 //    cout << "END: kminus.size() = " << kminus.size() << "\n";
 //    cout << "END: otherpart.size() = " << otherpart.size() << "\n\n";
+
+
 
 
     event_mult = (piplus.size() + piminus.size() + kplus.size() + kminus.size() + deuterons.size());
@@ -1045,6 +1045,7 @@ bool clas12ana::checkEcalCuts(region_part_ptr p) {
         //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
         //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
 
+        // TODO: make as a variable of the class
         double sf_max_cut = .28;
         double sf_min_cut = .2;
 

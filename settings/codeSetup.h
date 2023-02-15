@@ -27,13 +27,13 @@ std::string Ver = "DetSim testings";
 /* Histogram plots output directory */
 std::string WorkingDirectory = GetCurrentDirectory() + "/";
 //std::string plots_path = "./plots/"; // old plots dir command
-std::string plots_path = WorkingDirectory + "plots" + "/"; // new plots dir command
+//std::string plots_path = WorkingDirectory + "plots" + "/"; // new plots dir command
 //std::string plots_path = WorkingDirectory + "plots_t5tot_mycuts" + "/";
 //std::string plots_path = WorkingDirectory + "plots_t5tot_mycuts_false" + "/";
 //std::string plots_path = WorkingDirectory + "plots_t5tot_mycuts_false_ana" + "/";
 //std::string plots_path = WorkingDirectory + "plots_test_5_b4_customAna" + "/";
 //std::string plots_path = WorkingDirectory + "plots_test_5_with_customAna" + "/";
-//std::string plots_path = WorkingDirectory + "plots_test_customana_withmyfix" + "/";
+std::string plots_path = WorkingDirectory + "plots_test_custom_ana_with_my_fix_and_my_cuts" + "/";
 
 /* settings directory and directories */
 std::string SettingsDirectory = WorkingDirectory + "settings" + "/";

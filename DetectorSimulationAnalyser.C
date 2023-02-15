@@ -2455,22 +2455,22 @@ void EventAnalyser() {
 
     /* Setting cuts */
     // Cuts on electrons only:
-//    clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
-//    clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture
+    clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
+    clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture (fiducial cuts)
 
     // Cuts on protons and charged pions:
-//    clasAna.setPidCuts();                       // making f_pidCuts = ture
+    clasAna.setPidCuts();                       // making f_pidCuts = ture
 
     // Cuts on all particles:
-//    clasAna.setVertexCuts();                    // making f_vertexCuts = ture
+    clasAna.setVertexCuts();                    // making f_vertexCuts = ture
+    clasAna.setVzcuts(-6, 1);                   // setting Vz cuts?
 //////    clasAna.setVzcuts(-3, 3);         // setting Vz cuts?
-//    clasAna.setVzcuts(-6, 1);         // setting Vz cuts?
 
     // Cuts on charged particles:
-//    clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture (fiducial cuts)
-//    clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
+    clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture (fiducial cuts?)
+    clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
+    clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
 ////    clasAna.setVertexCorrCuts(-3, 3); // setting dVz cuts?
-//    clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -2515,22 +2515,13 @@ void EventAnalyser() {
     int num_of_MicroBooNE_events_BC_wNeutrons = 0, num_of_MicroBooNE_events_BC_wpi0 = 0, num_of_MicroBooNE_events_BC_wpip = 0, num_of_MicroBooNE_events_BC_wpim = 0;
     int num_of_MicroBooNE_events_AC = 0;
     int num_of_MicroBooNE_events_AC_wNeutrons = 0, num_of_MicroBooNE_events_AC_wpi0 = 0, num_of_MicroBooNE_events_AC_wpip = 0, num_of_MicroBooNE_events_AC_wpim = 0;
-
-
-    int diffsz = 0;
-
-
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
     int Np, Nkp, Nkm, Npip, Npim, Ne, Nd, Nn, No, Nf;
-
 
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
@@ -2543,9 +2534,9 @@ void EventAnalyser() {
         /* All of these particles are with clas12ana cuts
            Only cuts missing are nphe and momentum cuts - to be applied later */
 
-        auto AllParticles_BC = c12->getDetParticles();
-        auto protons_BC = c12->getByID(2212);   // Protons
-        auto electrons_BC = c12->getByID(11);   // Electrons
+//        auto AllParticles_BC = c12->getDetParticles();
+//        auto protons_BC = c12->getByID(2212);   // Protons
+//        auto electrons_BC = c12->getByID(11);   // Electrons
 
 //        auto neutrons = clasAna.getByPid(2112);  // Neutrons
         auto protons = clasAna.getByPid(2212);   // Protons
@@ -2620,25 +2611,7 @@ void EventAnalyser() {
         if (electrons.size() == 0) {
             ++num_of_events_without_any_e; // logging Total #(events) w/o any e
         } else {
-//            if (electrons.size() != electrons_BC.size()) {
-//                ++diffsz;
-//                cout << "\n\nelectrons_BC.size() == " << electrons_BC.size() << "\n";
-//                cout << "electrons.size() == " << electrons.size() << "\n";
-//            }
-
             ++num_of_events_with_any_e; // logging Total #(events) w/ any e
-
-            if (electrons.size() == 1) {
-                ++diffsz;
-//                cout << "\n\nelectrons_BC.size() == " << electrons_BC.size() << "\n";
-//                cout << "electrons.size() == " << electrons.size() << "\n";
-
-//                if (electrons.size() != electrons_BC.size()) {
-//                    ++diffsz;
-//                    cout << "\n\nelectrons_BC.size() == " << electrons_BC.size() << "\n";
-//                    cout << "electrons.size() == " << electrons.size() << "\n";
-//                }
-            }
         }
         //</editor-fold>
 
@@ -8318,12 +8291,6 @@ void EventAnalyser() {
     cout << "#(events) 2p RES:\t\t\t" << num_of_2p_RES_events << "\n";
     cout << "#(events) 2p DIS:\t\t\t" << num_of_2p_DIS_events << "\n";
     cout << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n";
-
-
-    cout << "diffsz:\t\t" << diffsz << "\n\n";
-
-
-
 
 //    cout << "-- MicroBooNE event counts ------------------------------------------------\n";
 //    cout << "#(events) MicroBooNE BEFORE cuts:\t" << num_of_MicroBooNE_events_BC << "\n";
