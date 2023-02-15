@@ -12,6 +12,8 @@
 using namespace std;
 using namespace clas12;
 
+/* this is clas12ana before adding {} brackets */
+
 struct cutpar {
     string id;
     vector<double> par = {}; //pi- parameters
@@ -83,7 +85,9 @@ TVector3 rotate(TVector3 vec, int sector) {
 class clas12ana : public clas12reader {
 
 public:
-    clas12ana() { Init(); };
+    clas12ana() {
+        Init();
+    };
 
     void Init();
 
@@ -132,56 +136,55 @@ public:
     TVector3 getCOM(TLorentzVector l, TLorentzVector r, TLorentzVector q);
 
     std::vector<region_part_ptr> getByPid(int pid) {
-        if (pid == 2212) {
+        if (pid == 2212)
             return protons;
-        } else if (pid == 45) {
+        else if (pid == 45)
             return deuterons;
-        } else if (pid == 211) {
+        else if (pid == 211)
             return piplus;
-        } else if (pid == -211) {
+        else if (pid == -211)
             return piminus;
-        } else if (pid == 321) {
+        else if (pid == 321)
             return kplus;
-        } else if (pid == -321) {
+        else if (pid == -321)
             return kminus;
-//        } else if (pid == 111) { // My addition
+//        else if (pid == 111) // My addition
 //            return pizero;
-//        } else if (pid == 2112) { // My addition
+//        else if (pid == 2112) // My addition
 //            return neutrons;
-//        } else if (pid == 0) { // My addition
+//        else if (pid == 0) // My addition
 //            return neutrals;
-        } else if (pid == 0 || pid == 2112) {
+        else if (pid == 0 || pid == 2112)
             return neutrals;
-        } else {
+        else
             return otherpart;
-        }
     }
 
     void setByPid(region_part_ptr p) {
         int pid = p->par()->getPid();
-        if (pid == 2212) {
+        if (pid == 2212)
             protons.push_back(p);
-        } else if (pid == 45) {
+        else if (pid == 45)
             deuterons.push_back(p);
-        } else if (pid == 211) {
+        else if (pid == 211)
             piplus.push_back(p);
-        } else if (pid == -211) {
+        else if (pid == -211)
             piminus.push_back(p);
-        } else if (pid == 321) {
+        else if (pid == 321)
             kplus.push_back(p);
-        } else if (pid == -321) {
+        else if (pid == -321)
             kminus.push_back(p);
-//        } else if (pid == 111) { // My addition
+//        else if (pid == 111) // My addition
 //            pizero.push_back(p);
-//        } else if (pid == 2112) { // My addition
+//        else if (pid == 2112) // My addition
 //            neutrons.push_back(p);
-//        } else if (pid == 0) { // My addition
+//        else if (pid == 0) // My addition
 //            neutrals.push_back(p);
-        } else if (pid == 0 || pid == 2112) {
+        else if (pid == 0 || pid == 2112)
             neutrals.push_back(p);
-        } else {
+        else
             otherpart.push_back(p);
-        }
+
     }
 
     void debugByPid(region_part_ptr p);
@@ -201,48 +204,30 @@ public:
     void setVxcuts(double min, double max) {
         vertex_x_cuts.at(0) = min;
         vertex_x_cuts.at(1) = max;
-    }
-//    void setVxcuts(double min, double max) { // My addition:
-//        vertex_x_cuts.at(0) = min;
-//        vertex_x_cuts.at(1) = max;
-//    };
+    };
 
     void setVycuts(double min, double max) {
         vertex_y_cuts.at(0) = min;
         vertex_y_cuts.at(1) = max;
-    }
-//    void setVycuts(double min, double max) { // My addition:
-//        vertex_y_cuts.at(0) = min;
-//        vertex_y_cuts.at(1) = max;
-//    };
+    };
 
-    void setVzcuts(double min, double max) { // My addition:
+    void setVzcuts(double min, double max) {
         vertex_z_cuts.at(0) = min;
         vertex_z_cuts.at(1) = max;
-    }
-//    void setVzcuts(double min, double max) {
-//        vertex_z_cuts.at(0) = min;
-//        vertex_z_cuts.at(1) = max;
-//    };
+    };
 
-    void setVertexCorrCuts(double min, double max) { // My addition:
+    void setVertexCorrCuts(double min, double max) {
         vertex_corr_cuts.at(0) = min;
         vertex_corr_cuts.at(1) = max;
-    }
-//    void setVertexCorrCuts(double min, double max) {
-//        vertex_corr_cuts.at(0) = min;
-//        vertex_corr_cuts.at(1) = max;
-//    };
+    };
 
     void fillDCdebug(region_part_ptr p, TH2D **h);
 
     void getLeadRecoilSRC(TLorentzVector beam, TLorentzVector target, TLorentzVector el);
 
-    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; } // My addition:
-//    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; };
+    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; };
 
-    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; } // My addition:
-//    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; };
+    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; };
 
     //  void getByChi2Pid(std::vector<region_part_ptr> &p,double mean, double sigma);
     std::vector<region_part_ptr> getByPid(std::vector<region_part_ptr> particles, int pid);
@@ -643,16 +628,15 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             sf_v_pcal_debug->Fill(pcal_v, el_sf);
             sf_w_pcal_debug->Fill(pcal_w, el_sf);
 
-            if (sector <= 6 && sector >= 1) {
+            if (sector <= 6 && sector >= 1)
                 sf_debug_b[sector]->Fill(el_mom, el_sf);
-            }
-
             fillDCdebug(*el, dc_hit_map_b);
         }
 
         /*
          ME: we set the f_XXX variables as true.
          * checkEcalCuts - checkes if SF is within cuts
+         * EcalEdgeCuts - checkes if Lv,Lw are within cuts
          * EcalEdgeCuts - checkes if Lv,Lw are within cuts
          * checkVertex - ???
          * DCEdgeCuts - ???
@@ -671,9 +655,8 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             el = electrons_det.erase(el);
         } else {
             //DEBUG plots
-            if (debug_plots && sector <= 6 && sector >= 1) {
+            if (debug_plots && sector <= 6 && sector >= 1)
                 sf_debug_a[sector]->Fill(el_mom, el_sf);
-            }
 
             el_vz_debug->Fill((*el)->par()->getVz());
 
@@ -691,21 +674,18 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     /* ME: for one electron (1e cut?) */
     if (electrons_det.size() == 1) //good trigger electron
     {
-        if (debug_plots) {
+        if (debug_plots)
             fillDCdebug(electrons_det[0], dc_hit_map_a);
-        }
 
         electrons.push_back(electrons_det[0]);
 
         for (auto p = particles.begin(); p != particles.end();) {
 
             if (debug_plots) {
-                if ((*p)->par()->getPid() == 2212) {
+                if ((*p)->par()->getPid() == 2212)
                     fillDCdebug(*p, dc_hit_map_b_proton);
-                }
-                if ((*p)->par()->getPid() == 211) {
+                if ((*p)->par()->getPid() == 211)
                     fillDCdebug(*p, dc_hit_map_b_pion);
-                }
             }
 
             if ((*p)->par()->getCharge() == 0) { //neutrals don't follow same cuts
@@ -729,13 +709,10 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 
             //DEBUG plots
             if (debug_plots && ((*p)->par()->getCharge() != 0) && ((*p)->par()->getPid() != 11)) {
-                if (is_cd) {
+                if (is_cd)
                     pid_cd_debug->Fill(par_mom, par_beta);
-                }
-
-                if (is_fd) {
+                if (is_fd)
                     pid_fd_debug->Fill(par_mom, par_beta);
-                }
             }
 
             //	   bool pid_cut    = checkPidCut(*p);
@@ -743,11 +720,14 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             //	   bool vertex_corr_cut = checkVertexCorrelation(electrons_det[0],*p); //correlation between good electron and particles vertex
             //	   bool dc_edge_cut     = DCEdgeCuts(*p);
 
-            /* ME: we set the f_XXX variables as true.
+            /*
+             ME: we set the f_XXX variables as true.
              * checkPidCut - checkes if partical is within chi2 cuts
              * checkVertex - checkes if Vx,Vy,Vz are within cuts
              * DCEdgeCuts - ???
-             * checkVertexCorrelation - checkes if dVz,Vy,Vz are within cuts (what are the cuts?) */
+             * checkVertexCorrelation - checkes if dVz,Vy,Vz are within cuts (what are the cuts?)
+            */
+
             if (!checkPidCut(*p) && f_pidCuts) //PID cuts
             {
                 p = particles.erase(p);
@@ -763,21 +743,15 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             } else //itterate
             {
                 setByPid(*p);
-
                 if (debug_plots) {
-                    if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11) {
+                    if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11)
                         el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
-                    }
 
                     debugByPid(*p);
-
-                    if ((*p)->par()->getPid() == 2212) {
+                    if ((*p)->par()->getPid() == 2212)
                         fillDCdebug(*p, dc_hit_map_a_proton);
-                    }
-
-                    if ((*p)->par()->getPid() == 211) {
+                    if ((*p)->par()->getPid() == 211)
                         fillDCdebug(*p, dc_hit_map_a_pion);
-                    }
                 }
 
                 ++p;
