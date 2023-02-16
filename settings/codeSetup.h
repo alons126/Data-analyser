@@ -33,7 +33,8 @@ std::string WorkingDirectory = GetCurrentDirectory() + "/";
 //std::string plots_path = WorkingDirectory + "plots_t5tot_mycuts_false_ana" + "/";
 //std::string plots_path = WorkingDirectory + "plots_test_5_b4_customAna" + "/";
 //std::string plots_path = WorkingDirectory + "plots_test_5_with_customAna" + "/";
-std::string plots_path = WorkingDirectory + "plots_test_custom_ana_with_my_fix_and_my_cuts" + "/";
+//std::string plots_path = WorkingDirectory + "plots_test_custom_ana_with_my_fix_and_my_cuts_KaonANDnpheANDneutrals" + "/";
+std::string plots_path = WorkingDirectory + "plots_T5_wAllCutsANDvertexPlots" + "/";
 
 /* settings directory and directories */
 std::string SettingsDirectory = WorkingDirectory + "settings" + "/";

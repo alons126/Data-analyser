@@ -198,7 +198,8 @@ void EventAnalyser() {
     bool create_Vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
     TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
-    string Vertex_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
+    string Vertex_Daughter_Folders[] = {"", "1e2p/Vertex_correlation_plots", "2p/Vertexcorrelation_plots", "MicroBooNE/Vertexcorrelation_plots",
+                                        "MicroBooNE/Vertexcorrelation_plots/BC-AC_cut_tests", "1e_cut/Vertex_plots"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name, false, Plots_Folder);
@@ -214,6 +215,10 @@ void EventAnalyser() {
 
     string Vertex_dV_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
     string Vertex_dV_MicroBooNE_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
+
+    string Vertex_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
+    string Vertex_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
+    string Vertex_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Theta_e plots directories">
@@ -672,7 +677,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots">
-    Vertex_upper_lim = 50;
+    Vertex_upper_lim = 7.5;
     Vertex_lower_lim = -Vertex_upper_lim;
 
     dV_upper_lim = 10;
@@ -1294,9 +1299,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P for all particles (2p)">
     TH2D *Beta_vs_P_2p_CD = new TH2D("#beta vs. P (All Particles, 2p, CD)", "#beta vs. P (All Particles, 2p, CD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 3);
+                                     250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_2p_FD = new TH2D("#beta vs. P (All Particles, 2p, FD)", "#beta vs. P (All Particles, 2p, FD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 3);
+                                     250, 0, beamE * 1.1, 250, 0, 1.5);
     string Beta_vs_P_2p_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_FD_Dir = Beta_VS_P_2p_Directory;
 
     TH2D *Beta_vs_P_2p_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, 2p, CD)", "#beta vs. P (Electrons Only, 2p, CD);P [GeV];#beta",
@@ -1314,17 +1319,17 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P by charge (2p)">
     TH2D *Beta_vs_P_positive_particles_2p_CD = new TH2D("#beta vs. P & q = +1 (2p, CD)", "#beta vs. P for all particles with q = +1 (2p, CD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_positive_particles_2p_FD = new TH2D("#beta vs. P & q = +1 (2p, FD)", "#beta vs. P for all particles with q = +1 (2p, FD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_neutral_particles_2p_CD = new TH2D("#beta vs. P & q = 0 (2p, CD)", "#beta vs. P for all particles with q = 0 (2p, CD);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_neutral_particles_2p_FD = new TH2D("#beta vs. P & q = 0 (2p, FD)", "#beta vs. P for all particles with q = 0 (2p, FD);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_negative_particles_2p_CD = new TH2D("#beta vs. P & q = -1 (2p, CD)", "#beta vs. P for all particles with q = -1 (2p, CD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_negative_particles_2p_FD = new TH2D("#beta vs. P & q = -1 (2p, FD)", "#beta vs. P for all particles with q = -1 (2p, FD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     string Beta_vs_P_positive_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_positive_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
     string Beta_vs_P_neutral_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_neutral_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
     string Beta_vs_P_negative_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_negative_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
@@ -1659,38 +1664,38 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots (1e only)">
-    THStack Vertex_Electron_1e_Vx_Stack_test("Electron V_{x} (1e only, CD & FD) test", "Electron V_{x} (1e only, CD & FD);Electron V_{x} [cm];");
-    THStack Vertex_Electron_1e_Vy_Stack_test("Electron V_{y} (1e only, CD & FD) test", "Electron V_{y} (1e only, CD & FD);Electron V_{y} [cm];");
-    THStack Vertex_Electron_1e_Vz_Stack_test("Electron V_{z} (1e only, CD & FD) test", "Electron V_{z} (1e only, CD & FD);Electron V_{z} [cm];");
-    THStack Vertex_Proton_1e_Vx_Stack_test("Proton V_{x} (1e only, CD & FD) test", "Proton V_{x} (1e only, CD & FD);Proton V_{x} [cm];");
-    THStack Vertex_Proton_1e_Vy_Stack_test("Proton V_{y} (1e only, CD & FD) test", "Proton V_{y} (1e only, CD & FD);Proton V_{y} [cm];");
-    THStack Vertex_Proton_1e_Vz_Stack_test("Proton V_{z} (1e only, CD & FD) test", "Proton V_{z} (1e only, CD & FD);Proton V_{z} [cm];");
+    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("Electron V_{x} (1e only, CD & FD) test", "Electron V_{x} (1e only, CD & FD);Electron V_{x} [cm];");
+    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("Electron V_{y} (1e only, CD & FD) test", "Electron V_{y} (1e only, CD & FD);Electron V_{y} [cm];");
+    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("Electron V_{z} (1e only, CD & FD) test", "Electron V_{z} (1e only, CD & FD);Electron V_{z} [cm];");
+    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("Proton V_{x} (1e only, CD & FD) test", "Proton V_{x} (1e only, CD & FD);Proton V_{x} [cm];");
+    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("Proton V_{y} (1e only, CD & FD) test", "Proton V_{y} (1e only, CD & FD);Proton V_{y} [cm];");
+    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("Proton V_{z} (1e only, CD & FD) test", "Proton V_{z} (1e only, CD & FD);Proton V_{z} [cm];");
 
-    TH1D Vertex_Electron_1e_Vx_CD_test("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, CD);Electron V_{x} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vy_CD_test("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, CD);Electron V_{y} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vz_CD_test("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, CD);Electron V_{z} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vx_FD_test("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, FD);Electron V_{x} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vy_FD_test("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, FD);Electron V_{y} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vz_FD_test("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, FD);Electron V_{z} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("Electron V_{x} (1e Cut, CD)", "Electron V_{x} (1e Cut, CD);Electron V_{x} [cm];",
+                                              100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("Electron V_{y} (1e Cut, CD)", "Electron V_{y} (1e Cut, CD);Electron V_{y} [cm];",
+                                              100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("Electron V_{z} (1e Cut, CD)", "Electron V_{z} (1e Cut, CD);Electron V_{z} [cm];",
+                                              100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("Electron V_{x} (1e Cut, FD)", "Electron V_{x} (1e Cut, FD);Electron V_{x} [cm];",
+                                              100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("Electron V_{y} (1e Cut, FD)", "Electron V_{y} (1e Cut, FD);Electron V_{y} [cm];",
+                                              100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("Electron V_{z} (1e Cut, FD)", "Electron V_{z} (1e Cut, FD);Electron V_{z} [cm];",
+                                              100, Vertex_lower_lim, Vertex_upper_lim);
 
-    TH1D Vertex_Proton_1e_Vx_CD_test("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, CD);Proton V_{x} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vy_CD_test("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, CD);Proton V_{y} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vz_CD_test("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, CD);Proton V_{z} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vx_FD_test("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, FD);Proton V_{x} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vy_FD_test("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, FD);Proton V_{y} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vz_FD_test("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, FD);Proton V_{z} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("Proton V_{x} (1e Cut, CD)", "Proton V_{x} (1e Cut, CD);Proton V_{x} [cm];",
+                                            100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("Proton V_{y} (1e Cut, CD)", "Proton V_{y} (1e Cut, CD);Proton V_{y} [cm];",
+                                            100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("Proton V_{z} (1e Cut, CD)", "Proton V_{z} (1e Cut, CD);Proton V_{z} [cm];",
+                                            100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("Proton V_{x} (1e Cut, FD)", "Proton V_{x} (1e Cut, FD);Proton V_{x} [cm];",
+                                            100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("Proton V_{y} (1e Cut, FD)", "Proton V_{y} (1e Cut, FD);Proton V_{y} [cm];",
+                                            100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("Proton V_{z} (1e Cut, FD)", "Proton V_{z} (1e Cut, FD);Proton V_{z} [cm];",
+                                            100, Vertex_lower_lim, Vertex_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1e2p & chi2 cuts)">
@@ -2440,18 +2445,9 @@ void EventAnalyser() {
     /* Read in target parameter files */
     clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
     clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str());
-    clasAna.printParams();
+//    clasAna.printParams();
 
-    cout << "\n\nLooping over chain files...\n\n";
 
-    clas12root::HipoChain chain;
-    chain.Add(AnalyseFile.c_str());
-    chain.SetReaderTags({0});                   //TODO: check with Justin what are these tags
-    auto config_c12 = chain.GetC12Reader();     //TODO: check with Justin what is this used for
-    auto &c12 = chain.C12ref();                 //TODO: check with Justin what is this used for
-
-    auto db = TDatabasePDG::Instance();
-    chain.db()->turnOffQADB();                  //TODO: check with Justin what is this used for
 
     /* Setting cuts */
     // Cuts on electrons only:
@@ -2463,14 +2459,48 @@ void EventAnalyser() {
 
     // Cuts on all particles:
     clasAna.setVertexCuts();                    // making f_vertexCuts = ture
-    clasAna.setVzcuts(-6, 1);                   // setting Vz cuts?
-//////    clasAna.setVzcuts(-3, 3);         // setting Vz cuts?
+    clasAna.setVzcuts(-6, 1);                   // setting Vz cuts for all (?) particles
 
     // Cuts on charged particles:
     clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture (fiducial cuts?)
     clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
     clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
 ////    clasAna.setVertexCorrCuts(-3, 3); // setting dVz cuts?
+
+    //TODO: fix dVz plots
+
+    clasAna.printParams();
+
+    cout << "\n\nLooping over chain files...\n\n";
+
+
+    clas12root::HipoChain chain;
+    chain.Add(AnalyseFile.c_str());
+    chain.SetReaderTags({0});                   //TODO: check with Justin what are these tags
+    auto config_c12 = chain.GetC12Reader();     //TODO: check with Justin what is this used for
+    auto &c12 = chain.C12ref();                 //TODO: check with Justin what is this used for
+
+    auto db = TDatabasePDG::Instance();
+    chain.db()->turnOffQADB();                  //TODO: check with Justin what is this used for
+
+//    /* Setting cuts */
+//    // Cuts on electrons only:
+//    clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
+//    clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture (fiducial cuts)
+//
+//    // Cuts on protons and charged pions:
+//    clasAna.setPidCuts();                       // making f_pidCuts = ture
+//
+//    // Cuts on all particles:
+//    clasAna.setVertexCuts();                    // making f_vertexCuts = ture
+//    clasAna.setVzcuts(-10, 10);                   // setting Vz cuts?
+////////    clasAna.setVzcuts(-3, 3);         // setting Vz cuts?
+//
+//    // Cuts on charged particles:
+//    clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture (fiducial cuts?)
+//    clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
+//    clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
+//////    clasAna.setVertexCorrCuts(-3, 3); // setting dVz cuts?
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -2632,6 +2662,8 @@ void EventAnalyser() {
         //</editor-fold>
 
 //  All particles plots -------------------------------------------------------------------------------------------------------------------------------------------------
+
+        // TODO: remove or change - clas12ana comes with 1e cut already
 
         //<editor-fold desc="All particles plots">
 
@@ -2933,83 +2965,83 @@ void EventAnalyser() {
 //        } // end of loop over pizero vector
 //        //</editor-fold>
 
-//        //<editor-fold desc="neutrals Beta vs. P plots (no #(electron) cut, CD & FD)">
-//        for (int i = 0; i < neutrals.size(); i++) {
-//            if (neutrals[i]->getRegion() == CD) {
-//                Beta_vs_P_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//
-//                if (neutrals[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                }
-//            } else if (neutrals[i]->getRegion() == FD) {
-//                Beta_vs_P_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//
-//                if (neutrals[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                }
-//            }
-//        } // end of loop over neutrals vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="deuterons Beta vs. P plots (no #(electron) cut, CD & FD)">
-//        for (int i = 0; i < deuterons.size(); i++) {
-//            if (deuterons[i]->getRegion() == CD) {
-//                Beta_vs_P_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//
-//                if (deuterons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                }
-//            } else if (deuterons[i]->getRegion() == FD) {
-//                Beta_vs_P_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//
-//                if (deuterons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                }
-//            }
-//        } // end of loop over deuterons vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="otherpart Beta vs. P plots (no #(electron) cut, CD & FD)">
-//        for (int i = 0; i < otherpart.size(); i++) {
-//            if (otherpart[i]->getRegion() == CD) {
-//                Beta_vs_P_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//
-//                if (otherpart[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                }
-//            } else if (otherpart[i]->getRegion() == FD) {
-//                Beta_vs_P_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//
-//                if (otherpart[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                }
-//            }
-//        } // end of loop over otherpart vector
-//        //</editor-fold>
+        //<editor-fold desc="neutrals Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < neutrals.size(); i++) {
+            if (neutrals[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                }
+            } else if (neutrals[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over neutrals vector
+        //</editor-fold>
+
+        //<editor-fold desc="deuterons Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < deuterons.size(); i++) {
+            if (deuterons[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                }
+            } else if (deuterons[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over deuterons vector
+        //</editor-fold>
+
+        //<editor-fold desc="otherpart Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < otherpart.size(); i++) {
+            if (otherpart[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                }
+            } else if (otherpart[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over otherpart vector
+        //</editor-fold>
 
         //</editor-fold>
 
@@ -3160,8 +3192,8 @@ void EventAnalyser() {
 //        if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
 //        if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
 
-//        /* nphe cuts */
-//        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+        /* nphe cuts */
+        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
 
 //        /* Chi2 cuts */
 //        if (electrons[0]->getRegion() == CD) {
@@ -3271,11 +3303,11 @@ void EventAnalyser() {
                 Chi2_Electron_1e_CD->Fill(e_Chi2_CD);
 
                 e_Vx_CD = e->par()->getVx();
-                Vertex_Electron_1e_Vx_CD_test.Fill(e_Vx_CD);
+                Vertex_Electron_1e_Vx_CD->Fill(e_Vx_CD);
                 e_Vy_CD = e->par()->getVy();
-                Vertex_Electron_1e_Vy_CD_test.Fill(e_Vy_CD);
+                Vertex_Electron_1e_Vy_CD->Fill(e_Vy_CD);
                 e_Vz_CD = e->par()->getVz();
-                Vertex_Electron_1e_Vz_CD_test.Fill(e_Vz_CD);
+                Vertex_Electron_1e_Vz_CD->Fill(e_Vz_CD);
             } else if (e->getRegion() == FD) {
                 P_e_FD = e->getP();
                 E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
@@ -3349,11 +3381,11 @@ void EventAnalyser() {
                 Chi2_Electron_1e_FD->Fill(e_Chi2_FD);
 
                 e_Vx_FD = e->par()->getVx();
-                Vertex_Electron_1e_Vx_FD_test.Fill(e_Vx_FD);
+                Vertex_Electron_1e_Vx_FD->Fill(e_Vx_FD);
                 e_Vy_FD = e->par()->getVy();
-                Vertex_Electron_1e_Vy_FD_test.Fill(e_Vy_FD);
+                Vertex_Electron_1e_Vy_FD->Fill(e_Vy_FD);
                 e_Vz_FD = e->par()->getVz();
-                Vertex_Electron_1e_Vz_FD_test.Fill(e_Vz_FD);
+                Vertex_Electron_1e_Vz_FD->Fill(e_Vz_FD);
             }
         } // end of loop over electrons vector
         //</editor-fold>
@@ -3379,11 +3411,11 @@ void EventAnalyser() {
                 Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
 
                 p_Vx_tmp_CD = p->par()->getVx();
-                Vertex_Proton_1e_Vx_CD_test.Fill(p_Vx_tmp_CD);
+                Vertex_Proton_1e_Vx_CD->Fill(p_Vx_tmp_CD);
                 p_Vy_tmp_CD = p->par()->getVy();
-                Vertex_Proton_1e_Vy_CD_test.Fill(p_Vy_tmp_CD);
+                Vertex_Proton_1e_Vy_CD->Fill(p_Vy_tmp_CD);
                 p_Vz_tmp_CD = p->par()->getVz();
-                Vertex_Proton_1e_Vz_CD_test.Fill(p_Vz_tmp_CD);
+                Vertex_Proton_1e_Vz_CD->Fill(p_Vz_tmp_CD);
             } else if (p->getRegion() == FD) {
                 Beta_vs_P_1e_FD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
@@ -3400,11 +3432,11 @@ void EventAnalyser() {
                 Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
 
                 p_Vx_tmp_FD = p->par()->getVx();
-                Vertex_Proton_1e_Vx_FD_test.Fill(p_Vx_tmp_FD);
+                Vertex_Proton_1e_Vx_FD->Fill(p_Vx_tmp_FD);
                 p_Vy_tmp_FD = p->par()->getVy();
-                Vertex_Proton_1e_Vy_FD_test.Fill(p_Vy_tmp_FD);
+                Vertex_Proton_1e_Vy_FD->Fill(p_Vy_tmp_FD);
                 p_Vz_tmp_FD = p->par()->getVz();
-                Vertex_Proton_1e_Vz_FD_test.Fill(p_Vz_tmp_FD);
+                Vertex_Proton_1e_Vz_FD->Fill(p_Vz_tmp_FD);
             }
         } // end of loop over protons vector
         //</editor-fold>
@@ -3579,83 +3611,83 @@ void EventAnalyser() {
 //        } // end of loop over pizero vector
 //        //</editor-fold>
 
-//        //<editor-fold desc="neutrals Beta vs. P plots (1e cut TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST, CD & FD)">
-//        for (int i = 0; i < neutrals.size(); i++) {
-//            if (neutrals[i]->getRegion() == CD) {
-//                Beta_vs_P_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//
-//                if (neutrals[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                }
-//            } else if (neutrals[i]->getRegion() == FD) {
-//                Beta_vs_P_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//
-//                if (neutrals[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                }
-//            }
-//        } // end of loop over Kplus vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="deuterons Beta vs. P plots (1e cut TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST, CD & FD)">
-//        for (int i = 0; i < deuterons.size(); i++) {
-//            if (deuterons[i]->getRegion() == CD) {
-//                Beta_vs_P_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//
-//                if (deuterons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                }
-//            } else if (deuterons[i]->getRegion() == FD) {
-//                Beta_vs_P_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//
-//                if (deuterons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                } else if (deuterons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
-//                }
-//            }
-//        } // end of loop over Kplus vector
-//        //</editor-fold>
-//
-//        //<editor-fold desc="otherpart Beta vs. P plots (1e cut TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST, CD & FD)">
-//        for (int i = 0; i < otherpart.size(); i++) {
-//            if (otherpart[i]->getRegion() == CD) {
-//                Beta_vs_P_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//
-//                if (otherpart[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                }
-//            } else if (otherpart[i]->getRegion() == FD) {
-//                Beta_vs_P_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//
-//                if (otherpart[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                } else if (otherpart[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
-//                }
-//            }
-//        } // end of loop over Kplus vector
-//        //</editor-fold>
+        //<editor-fold desc="neutrals Beta vs. P plots (1e cut TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST, CD & FD)">
+        for (int i = 0; i < neutrals.size(); i++) {
+            if (neutrals[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                }
+            } else if (neutrals[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
+
+        //<editor-fold desc="deuterons Beta vs. P plots (1e cut TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST, CD & FD)">
+        for (int i = 0; i < deuterons.size(); i++) {
+            if (deuterons[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                }
+            } else if (deuterons[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
+
+        //<editor-fold desc="otherpart Beta vs. P plots (1e cut TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST, CD & FD)">
+        for (int i = 0; i < otherpart.size(); i++) {
+            if (otherpart[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                }
+            } else if (otherpart[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
 
         //</editor-fold>
 
@@ -5675,6 +5707,40 @@ void EventAnalyser() {
         histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVz_cut, dVz_peak);
+        //</editor-fold>
+
+
+        //<editor-fold desc="Vertesx plots (1e cut, CD & FD)">
+        histPlotter1D(c1, Vertex_Electron_1e_Vx_CD, normalized_vertex_plots, true, .1, "Electron V_{x}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vx_Stack, "01_Electron_Vx", Vertex_1e_Vx_Directory, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vx_FD, normalized_vertex_plots, true, .1, "Electron V_{x}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vx_Stack, "01_Electron_Vx", Vertex_1e_Vx_Directory, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, Vertex_Electron_1e_Vy_CD, normalized_vertex_plots, true, .1, "Electron V_{y}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vy_Stack, "02_Electron_Vy", Vertex_1e_Vy_Directory, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vy_FD, normalized_vertex_plots, true, .1, "Electron V_{y}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vy_Stack, "02_Electron_Vy", Vertex_1e_Vy_Directory, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+
+        histPlotter1D(c1, Vertex_Electron_1e_Vz_CD, normalized_vertex_plots, true, .1, "Electron V_{z}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vz_Stack, "03_Electron_Vz", Vertex_1e_Vz_Directory, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vz_FD, normalized_vertex_plots, true, .1, "Electron V_{z}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vz_Stack, "03_Electron_Vz", Vertex_1e_Vz_Directory, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, Vertex_Proton_1e_Vx_CD, normalized_vertex_plots, true, .1, "Proton V_{x}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vx_Stack, "04_Proton_Vx", Vertex_1e_Vx_Directory, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vx_FD, normalized_vertex_plots, true, .1, "Proton V_{x}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vx_Stack, "04_Proton_Vx", Vertex_1e_Vx_Directory, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+
+        histPlotter1D(c1, Vertex_Proton_1e_Vy_CD, normalized_vertex_plots, true, .1, "Proton V_{y}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vy_Stack, "05_Proton_Vy", Vertex_1e_Vy_Directory, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vy_FD, normalized_vertex_plots, true, .1, "Proton V_{y}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vy_Stack, "05_Proton_Vy", Vertex_1e_Vy_Directory, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+
+        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, normalized_vertex_plots, true, .1, "Proton V_{z}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vz_Stack, "06_Proton_Vz", Vertex_1e_Vz_Directory, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, normalized_vertex_plots, true, .1, "Proton V_{z}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vz_Stack, "06_Proton_Vz", Vertex_1e_Vz_Directory, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
         //</editor-fold>
 
         //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
