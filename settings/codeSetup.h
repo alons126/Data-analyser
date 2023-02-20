@@ -2,19 +2,12 @@
 #ifndef ANALYSER_CODESETUP_H
 #define ANALYSER_CODESETUP_H
 
-//#include <string>
-//#include <cmath>
-//#include <tuple>
-//#include <iostream>
-//#include <sys/stat.h>
-//#include <sstream>
-
-#include "source/constants.h"
-#include "source/classes/GeneralClasses.h"
-#include "source/classes/Ana/clas12ana.h"
-#include "source/functions/GeneralFunctions.h"
-#include "source/functions/HistogramPlottingFunctions.h"
-#include "settings/DetectorSimulationCuts.h"
+#include "../source/constants.h"
+#include "../source/classes/GeneralClasses.h"
+#include "../source/classes/clas12ana/clas12ana.h"
+#include "../source/cuts/DetectorSimulationCuts.h"
+#include "../source/functions/GeneralFunctions.h"
+#include "../source/functions/HistogramPlottingFunctions.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code version                                                                                //
@@ -31,14 +24,22 @@ std::string Ver = "DetSim testings";
 // ======================================================================================================================================================================
 
 //<editor-fold desc="path definitions">
+/* Histogram plots output directory */
 std::string WorkingDirectory = GetCurrentDirectory() + "/";
+//std::string plots_path = "./plots/"; // old plots dir command
+//std::string plots_path = WorkingDirectory + "plots" + "/"; // new plots dir command
 std::string plots_path = WorkingDirectory + "plots" + "/";
-//std::string plots_path = "./plots/";
+//std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS" + "/";
 
-//std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
-//std::string SourcesDirectory = WorkingDirectory + "source" + "/";
+/* settings directory and directories */
+std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
+
+/* source directory and directories */
+std::string SourcesDirectory = WorkingDirectory + "source" + "/";
+std::string CutsDirectory = SourcesDirectory + "cuts" + "/";
 
 std::string plots_file_type = "_plots.root";
+std::string plots_log_save_Directory = plots_path + "/" + "Run_log.txt";
 //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -51,18 +52,20 @@ std::string file_name = "general_file";
 
 // hipo files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Local files:
+//// Local files:
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1"; // my test with Justin's code; no pion data saved (e,p,n only)
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
 std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "recon_c12_598636MeV_Q2_0_5_1*.hipo"; // only files #1 and #10
 
-//// ifarm files:
+////// ifarm files (Justin's MC files):
 //std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
 //std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
@@ -93,6 +96,8 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //                                                                    Other parameters                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//<editor-fold desc="Other parameters">
+
 // ======================================================================================================================================================================
 // BEnergyToNucleus definition
 // ======================================================================================================================================================================
@@ -113,9 +118,9 @@ double BeamEnergy;
 
 //<editor-fold desc="Histogram range variables">
 
-//<editor-fold desc="Chi2 plots">
-double Chi2_upper_lim, Chi2_lower_lim;
-//</editor-fold>
+////<editor-fold desc="Chi2 plots">
+//double Chi2_upper_lim, Chi2_lower_lim;
+////</editor-fold>
 
 //<editor-fold desc="Vertex plots">
 double Vertex_upper_lim, Vertex_lower_lim, dV_upper_lim, dV_lower_lim;
@@ -305,6 +310,8 @@ double dP_T_hist_upper_lim, dP_T_hist_lower_lim, dP_T_hist_weighted_upper_lim, d
 
 //<editor-fold desc="MicroBooNE momentum plots (for self-examination)">
 double P_L_hist_upper_lim, P_L_hist_lower_lim, P_R_hist_upper_lim, P_R_hist_lower_lim, P_lp_hist_upper_lim, P_lp_hist_lower_lim, P_pion_hist_upper_lim, P_pion_hist_lower_lim;
+//</editor-fold>
+
 //</editor-fold>
 
 //</editor-fold>

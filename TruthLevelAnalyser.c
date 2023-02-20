@@ -12,8 +12,7 @@
 #include <iomanip>
 #include <string>
 
-#include "codeSetup.h"
-#include "TruthLevelAnalyser.h"
+#include "settings/TruthLevelAnalyser.h"
 
 using namespace
 std;

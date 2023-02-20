@@ -1,0 +1,37 @@
+TCanvas *c1 = new TCanvas("c1", "c1", 1600, 1200);
+c1->Divide(2, 2);
+
+c1->cd(1);
+c1->cd(1)->SetGrid();
+gst->Draw("El","nf == 2 && mec");
+
+c1->cd(2);
+c1->cd(2)->SetGrid();
+gst->Draw("El","nf == 2 && nfp == 2 && nfn == 0 && mec");
+
+c1->cd(3);
+c1->cd(3)->SetGrid();
+gst->Draw("El","nf == 2 && nfp == 1 && nfn == 1 && mec");
+
+c1->cd(4);
+c1->cd(4)->SetGrid();
+gst->Draw("El","nf == 2 && nfp == 0 && nfn == 2 && mec");
+
+c1->cd(0);
+c1->cd(0)->SetTopMargin(1.5);
+
+TPad *PadTitle = new TPad("P","P",.1,.85,.35,.9);
+PadTitle->Draw();
+PadTitle->cd(0);
+TPaveText *pt = new TPaveText(0.,0.,1.,1.);
+pt->AddText("CCMEC with 10k events (SuSAv2 fix)");
+pt->SetTextColor(kRed);
+pt->Draw();
+
+
+c1->SaveAs("emmec.png");
+c1->Clear();
+
+
+.q
+

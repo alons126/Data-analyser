@@ -1,4 +1,3 @@
-// git pull && clas12root -b -q main.c
 
 /*
 
@@ -13,32 +12,46 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 
  */
 
-//#include <unistd.h>
-//#include <stdio.h>
-//#include <limits.h>
-
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <chrono>
+#include <vector>
+#include <typeinfo>
+#include <sstream>
+
 #include <TFile.h>
 #include <TTree.h>
-#include <TApplication.h>
-#include <TROOT.h>
-#include <TDatabasePDG.h>
 #include <TLorentzVector.h>
 #include <TH1.h>
+#include <TH2.h>
+#include <TLatex.h>
 #include <TChain.h>
 #include <TCanvas.h>
+#include <TStyle.h>
+#include <TDatabasePDG.h>
+#include <TApplication.h>
+#include <TROOT.h>
+
 #include <TBenchmark.h>
-#include <iomanip>
+
+#include "HipoChain.h"
 #include "clas12reader.h"
 
-#include "codeSetup.h"
+#include "settings/codeSetup.h"
 
 using namespace std;
 using namespace clas12;
 
 // TODO: finish Histogram class
+
+/* The final states selected here are: //TODO: finish code explanation
+ * All e / no #(e) cut: Two scenarios:
+    - My cuts: plots are with no cuts
+    - With clas12ana cuts: plots are with class12ana cuts yet not constraint on #electrons
+ *  1e cut:
+ *
+ * */
 
 void EventAnalyser() {
 
@@ -59,12 +72,10 @@ void EventAnalyser() {
     //<editor-fold desc="Input processing">
 
     //<editor-fold desc="Determine file path and name">
-    string LoadedInput = AnalyseFile; // AnalyseFile is taken from codeSetup.h
+    string LoadedInput = AnalyseFile; /* AnalyseFile is taken from codeSetup.h */
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
-////    string AnalyseFileDirContent = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
-//    string AnalyseFileDirContent = AnalyseFileDir + "*.hipo";
     //</editor-fold>
 
     //<editor-fold desc="Configure beam energy (beamE)">
@@ -84,9 +95,6 @@ void EventAnalyser() {
         ScattringTarget.SetTargetElement("C12");
         ScattringTarget.SetTargetElementPDG(1000060120);
     } else {
-//        TargetParameters ScattringTarget("UNKOWN", 0);
-        //        Target = "UNKOWN";
-//        TargetPDG = 0;
         ScattringTarget.SetTargetElement("UNKOWN");
         ScattringTarget.SetTargetElementPDG(0);
     }
@@ -98,7 +106,7 @@ void EventAnalyser() {
     //<editor-fold desc="Execution variables">
     cout << "-- Execution variables ----------------------------------------------------\n";
     cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
-    cout << "plots_path:\t" << plots_path << "\n";
+    cout << "plots_path:\t\t" << plots_path << "\n\n";
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
     cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
@@ -113,6 +121,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="TList definition">
     TList *plots = new TList();
+
+    string listName = plots_path + AnalyseFileSample + plots_file_type;
+    const char *TListName = listName.c_str();
 
     //    TFolder *folder_test = new TFolder("folder_test_name1/folder_test_name2","folder_test_title");
     //    plots->Add(folder_test);
@@ -131,85 +142,73 @@ void EventAnalyser() {
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
     TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
-    string Beta_VS_P_Daughter_Folders[] = {"", "All_e", "All_e/By_charge", "min_1e_cut", "min_1e_cut/By_charge", "1e_cut", "1e_cut/By_charge",
-                                           "All_e/By_charge/Positive_hadrons_FTOF", "All_e/By_charge/Positive_hadrons_CTOF", "2p", "2p/By_charge",
-                                           "MicroBooNE", "MicroBooNE/Before_cuts", "MicroBooNE/Before_cuts/By_charge", "MicroBooNE/After_cuts",
-                                           "MicroBooNE/After_cuts/By_charge"};
+    string Beta_VS_P_Daughter_Folders[] = {"", "01_All_e", "01_All_e/By_charge", "02_1e_cut", "02_1e_cut/By_charge", "03_MicroBooNE",
+                                           "03_MicroBooNE/Before_cuts", "03_MicroBooNE/Before_cuts/By_charge", "03_MicroBooNE/After_cuts",
+                                           "03_MicroBooNE/After_cuts/By_charge", "04_2p", "04_2p/By_charge"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
-        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name);
+        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
     }
 
     plots->Add(Beta_vs_P_Folder);
 
-    // TODO: define 'Beta_VS_P_Parent_Directory' properly, and set it as the saving dir for plots below
-    string Beta_VS_P_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[0];
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
 
-    string Beta_VS_P_min_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
-    string Beta_VS_P_by_charge_min_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
+    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
+    string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
 
-    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[5] + "/";
-    string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
-    string Beta_VS_P_by_charge_FTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[7] + "/";
-    string Beta_VS_P_by_charge_CTOF_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
+    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[7] + "/";
+    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[9] + "/";
 
-    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[9] + "/";
-    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
-
-    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[12] + "/";
-    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[13] + "/";
-    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[14] + "/";
-    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[15] + "/";
+    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
+    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[11] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
     string Chi2_Parent_Directory = "Chi2_plots";
     TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
-    string Chi2_Daughter_Folders[] = {"", "All_e", "Only_1e", "Only_1e/1e_cuts_test", "1e2p", "2p",
-                                      "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
+    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
+                                      "05_2p"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
-        MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name);
+        MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Chi2_Folder, Chi2_Parent_Directory, folders_name);
     }
 
     plots->Add(Chi2_Folder);
 
-    string Chi2_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[0];
+    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/"; // 01_All_e
 
-    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/";
+    string Chi2_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/"; // 02_1e_cut
 
-    string Chi2_Only_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/";
-    string Chi2_Only_1e_test_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/";
+    string Chi2_MicroBooNE_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/"; // 03_MicroBooNE
+    string Chi2_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/"; // 03_MicroBooNE/BC-AC_cut_tests
 
-    string Chi2_1e2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
-    string Chi2_1e2p_before_cuts_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
-    string Chi2_1e2p_after_cuts_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
+    string Chi2_1e2p_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/"; // 04_1e2p_BC-AC_cut_tests
 
-    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/";
-
-    string Chi2_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[7] + "/";
-    string Chi2_MicroBooNE_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[6] + "/";
+    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[6] + "/"; // 05_2p
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots directories">
     bool create_Vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
     TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
-    string Vertex_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
+    string Vertex_Daughter_Folders[] = {"", "1e2p/Vertex_correlation_plots", "2p/dV_plots", "MicroBooNE/dV_plots",
+                                        "MicroBooNE/dV_plots/BC-AC_cut_tests", "1e_cut/Vertex_plots/Electrons", "1e_cut/Vertex_plots/Protons",
+                                        "1e_cut/Vertex_plots/Kplus", "1e_cut/Vertex_plots/Kminus", "1e_cut/Vertex_plots/piplus", "1e_cut/Vertex_plots/piminus"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
-        MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name);
+        MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Vertex_Folder, Vertex_Parent_Directory, folders_name);
     }
 
     plots->Add(Vertex_Folder);
 
-    // TODO: remove all regular Vertex plots
     string Vertex_1e2p_dV_BC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
     string Vertex_1e2p_dV_AC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
 
@@ -217,28 +216,25 @@ void EventAnalyser() {
 
     string Vertex_dV_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
     string Vertex_dV_MicroBooNE_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
-    //</editor-fold>
 
-    //<editor-fold desc="Timing plots directories">
-    bool create_timing_Dir = true;
-    string timing_Parent_Directory = "Timing_plots";
-    TFolder *timing_Folder = new TFolder(timing_Parent_Directory.c_str(), timing_Parent_Directory.c_str());
-    string timing_Daughter_Folders[] = {"", "Event_start_time", "Particle_ToF", "ToF_from_beta", "Path_length", "Beta_from_FTOF"};
-
-    for (string folders_name: timing_Daughter_Folders) {
-        MakeDirectory(create_timing_Dir, timing_Parent_Directory, folders_name);
-    }
-
-    plots->Add(timing_Folder);
-
-    // TODO: remove all regular timing plots
-    string timing_event_start_time_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[1] + "/";
-    string timing_Particle_ToF_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[2] + "/";
-    string timing_ToF_from_beta_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[3] + "/";
-    string timing_Electron_path_length_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[4] + "/";
-    string timing_Beta_VS_P_from_FTOF1A_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
-    string timing_Beta_VS_P_from_FTOF1B_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
-    string timing_Beta_VS_P_from_FTOF2_Directory = Plots_Folder + "/" + timing_Parent_Directory + "/" + timing_Daughter_Folders[5] + "/";
+    string Vertex_Electron_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
+    string Vertex_Electron_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
+    string Vertex_Electron_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
+    string Vertex_Proton_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
+    string Vertex_Proton_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
+    string Vertex_Proton_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
+    string Vertex_Kplus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
+    string Vertex_Kplus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
+    string Vertex_Kplus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
+    string Vertex_Kminus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[8] + "/";
+    string Vertex_Kminus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[8] + "/";
+    string Vertex_Kminus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[8] + "/";
+    string Vertex_piplus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[9] + "/";
+    string Vertex_piplus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[9] + "/";
+    string Vertex_piplus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[9] + "/";
+    string Vertex_piminus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[10] + "/";
+    string Vertex_piminus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[10] + "/";
+    string Vertex_piminus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[10] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Theta_e plots directories">
@@ -249,7 +245,7 @@ void EventAnalyser() {
                                          "Theta_e_plots/Only_1e_cut/1e2p", "2p", "2p/Theta_e_plots"};
 
     for (string folders_name: Theta_e_Daughter_Folders) {
-        MakeDirectory(create_Theta_e_Dir, Theta_e_Parent_Directory, folders_name);
+        MakeDirectory(create_Theta_e_Dir, Theta_e_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Theta_e_Folder, Theta_e_Parent_Directory, folders_name);
     }
 
@@ -288,7 +284,7 @@ void EventAnalyser() {
                                        "Phi_e_plots/Only_1e_cut/1e2p", "2p/Phi_e_plots"};
 
     for (string folders_name: Phi_e_Daughter_Folders) {
-        MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name);
+        MakeDirectory(create_Phi_e_Dir, Phi_e_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Phi_e_Folder, Phi_e_Parent_Directory, folders_name);
     }
 
@@ -324,7 +320,7 @@ void EventAnalyser() {
     string Q2_Daughter_Folders[] = {"", "All_e", "Only_1e_cut", "1e2p_weChi2_cut"};
 
     for (string folders_name: Q2_Daughter_Folders) {
-        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name);
+        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Q2_Folder, Q2_Parent_Directory, folders_name);
     }
 
@@ -341,8 +337,11 @@ void EventAnalyser() {
     string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
-        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name);
+        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(Momentum_Folder, Momentum_Parent_Directory, folders_name);
     }
+
+    plots->Add(Momentum_Folder);
 
     string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
     string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
@@ -357,7 +356,7 @@ void EventAnalyser() {
     string E_e_Daughter_Folders[] = {"", "E_e_plots", "E_e_VS_theta_e", "E_e_plots/2p", "E_e_VS_theta_e/2p"};
 
     for (string folders_name: E_e_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name);
+        MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(E_e_Folder, E_e_Parent_Directory, folders_name);
     }
 
@@ -395,13 +394,12 @@ void EventAnalyser() {
     string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
 
     for (string folders_name: SF_Daughter_Folders) {
-        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name);
+        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name);
     }
 
     plots->Add(SF_Folder);
 
-    //TODO: add SF plots by reaction
     string SF_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
 
     // 1e2p - i.e. plots before all other cuts
@@ -425,7 +423,7 @@ void EventAnalyser() {
     string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
 
     for (string folders_name: nphe_Daughter_Folders) {
-        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name);
+        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(nphe_Folder, nphe_Parent_Directory, folders_name);
     }
 
@@ -449,10 +447,10 @@ void EventAnalyser() {
     bool create_fiducial_Dir = true;
     string fiducial_Parent_Directory = "Fiducial_plots";
     TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
-    string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/ECIN", "1e_cut/PCAL", "2p", "2p/ECIN", "2p/PCAL"};
+    string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/PCAL", "2p", "2p/PCAL"};
 
     for (string folders_name: fiducial_Daughter_Folders) {
-        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name);
+        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name);
     }
 
@@ -462,28 +460,23 @@ void EventAnalyser() {
     string fiducial_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
 
     // 1e2p - i.e. plots before all other cuts
-    // before cuts - i.e. plots before fiducial cuts
-    string fiducial_plots_1e_BC_ECIN_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[3] + "/";
-
-    // after cuts - i.e. plots after fiducial cuts
-    string fiducial_plots_1e_AC_ECIN_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[3] + "/";
+    // before/after cuts - i.e. plots before/after fiducial cuts
+    string fiducial_plots_1e_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+    string fiducial_plots_1e_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
 
     // 2p - i.e. plots after fiducial and all other cuts
-    string fiducial_plots_2p_cuts_histograms_ECIN_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[5] + "/";
-    string fiducial_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[6] + "/";
+    string fiducial_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[4] + "/";
     //</editor-fold>
 
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
     string ETrans_Parent_Directory = "ETrans_plots";
     TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
-    string ETrans_Daughter_Folders[] = {"", "2p", "2p/Around_15_Deg", "2p/Around_15_Deg/All_interactions", "2p/Around_15_Deg/QEL_only", "2p/Around_15_Deg/MEC_only",
-                                        "2p/Around_15_Deg/RES_only", "2p/Around_15_Deg/DIS_only"};
+    string ETrans_Daughter_Folders[] = {"", "2p", "2p/Around_15_Deg", "2p/Around_15_Deg/All_interactions", "2p/Around_15_Deg/QEL_only",
+                                        "2p/Around_15_Deg/MEC_only", "2p/Around_15_Deg/RES_only", "2p/Around_15_Deg/DIS_only"};
 
     for (string folders_name: ETrans_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name);
+        MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(ETrans_Folder, ETrans_Parent_Directory, folders_name);
     }
 
@@ -502,11 +495,10 @@ void EventAnalyser() {
     bool create_Ecal_Dir = true;
     string Ecal_Parent_Directory = "Ecal_plots";
     TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
-    string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only",
-                                      "2p/DIS_only"};
+    string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only", "2p/DIS_only"};
 
     for (string folders_name: Ecal_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name);
+        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
         TFolderAdder(Ecal_Folder, Ecal_Parent_Directory, folders_name);
     }
 
@@ -527,7 +519,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Calculation settings">
     bool calculate_inclusive = false, calculate_2p = true, calculate_1n1p = false, calculate_MicroBooNE = true;
-    bool selection_test_inclusive = false, selection_test_2p = false, selection_test_1n1p = false, selection_test_MicroBooNE = false;
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -540,8 +531,6 @@ void EventAnalyser() {
     bool Chi2_plots = true;
 
     bool Vertex_plots = true;
-
-    bool timing_plots = false;
 
     bool Angle_plots = false, Theta_e_plots = true, Phi_e_plots = true;
     if (Angle_plots == false) { Theta_e_plots = Phi_e_plots = false; }
@@ -558,7 +547,7 @@ void EventAnalyser() {
 
     bool fiducial_plots = true;
 
-    bool ETrans_plots = true, ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+    bool ETrans_plots = false, ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
     if (ETrans_plots == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
 
     bool Ecal_plots = false, other_E_cal_plots = false;
@@ -577,6 +566,32 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+// Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Plot selector">
+    bool apply_cuts = true;
+
+    /* Momentum cuts */
+    apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
+
+    /* Sampling Fraction (SF) cut */
+    apply_SF_cuts = false;
+
+    /* Edge (fiducial) cuts */
+    apply_Lv_cut = false, apply_Lw_cut = false;
+
+    /* HTCC cut */
+    apply_nphe_cut = true;
+
+    /* Chi2 cuts */
+    apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
+
+    if (apply_cuts == false) {
+        apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_Lv_cut = apply_Lw_cut = false;
+        apply_nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
+    }
+    //</editor-fold>
+
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Normalization settings">
@@ -585,8 +600,6 @@ void EventAnalyser() {
     bool normalized_chi2_plots = false;
 
     bool normalized_vertex_plots = false;
-
-    bool normalized_timing_plots = false;
 
     bool normalized_Angle_plots = false;
 
@@ -618,7 +631,7 @@ void EventAnalyser() {
     bool normalized_P_lp_plots = false, normalized_P_L_plots = false, normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
-        normalized_chi2_plots = normalized_vertex_plots = normalized_timing_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_E_e_plots = normalized_SF_plots = normalized_nphe_plots = normalized_theta_lp_plots = normalized_fiducial_plots = normalized_theta_lp_plots = false;
+        normalized_chi2_plots = normalized_vertex_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_E_e_plots = normalized_SF_plots = normalized_nphe_plots = normalized_theta_lp_plots = normalized_fiducial_plots = normalized_theta_lp_plots = false;
 
         normalized_theta_p1_plots = normalized_theta_p2_plots = normalized_dtheta_2p_plots = false; // 2p
 
@@ -654,18 +667,15 @@ void EventAnalyser() {
         cout << "\nClearing old plots...";
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
         cout << " done.\n\n";
-
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\nClearing old root files...";
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
         cout << " done.\n\n";
-
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\nClearing old plots & root files...";
         system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
         system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
         cout << " done.\n\n";
-
     } else {
         cout << "\nNo files were cleared.\n\n";
     }
@@ -673,16 +683,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// TList setup ----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="TList name setup">
-    string listName = plots_path + AnalyseFileSample + plots_file_type;
-    const char *TListName = listName.c_str();
-    //</editor-fold>
-
 // Momentum thresholds --------------------------------------------------------------------------------------------------------------------------------------------------
-
-    // TODO: add momentum cuts of 300MeV to code below
 
     //<editor-fold desc="Momentum thresholds">
 
@@ -708,16 +709,16 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram limits for every case">
 
     //<editor-fold desc="Chi2 plots">
-    Chi2_upper_lim = 50;
-    Chi2_lower_lim = -Chi2_upper_lim;
+    double Chi2_boundary = 25;
+    if (apply_cuts == true) { Chi2_boundary = 11; }
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots">
-    Vertex_upper_lim = 50;
-    Vertex_lower_lim = -Vertex_upper_lim;
+    double Vertex_boundary = 25;
+    if (apply_cuts == true) { Vertex_boundary = 7.5; }
 
-    dV_upper_lim = 10;
-    dV_lower_lim = -dV_upper_lim;
+    double dV_boundary = 25;
+    if (apply_cuts == true) { dV_boundary = 7.5; }
     //</editor-fold>
 
     //<editor-fold desc="Theta histograms">
@@ -1236,9 +1237,9 @@ void EventAnalyser() {
     string Beta_vs_P_Electrons_Only_CD_Dir = Beta_VS_P_All_e_Directory, Beta_vs_P_Electrons_Only_FD_Dir = Beta_VS_P_All_e_Directory;
 
     TH2D *Beta_vs_P_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, CD)", "#beta vs. P (Protons Only, CD);P [GeV];#beta",
-                                               250, 0, beamE * 1.425, 250, 0, 3);
+                                               250, 0, beamE * 1.1, 250, 0, 1.1);
     TH2D *Beta_vs_P_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, FD)", "#beta vs. P (Protons Only, FD);P [GeV];#beta",
-                                               250, 0, beamE * 1.425, 250, 0, 3);
+                                               250, 0, beamE * 1.1, 250, 0, 1.1);
     string Beta_vs_P_Protons_Only_CD_Dir = Beta_VS_P_All_e_Directory, Beta_vs_P_Protons_Only_FD_Dir = Beta_VS_P_All_e_Directory;
 
     TH2D *Beta_vs_P_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, CD)", "#beta vs. P (Neutrons Only, CD);P [GeV];#beta",
@@ -1246,42 +1247,6 @@ void EventAnalyser() {
     TH2D *Beta_vs_P_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, FD)", "#beta vs. P (Neutrons Only, FD);P [GeV];#beta",
                                                 250, 0, beamE * 1.425, 250, 0, 3);
     string Beta_vs_P_Neutrons_Only_CD_Dir = Beta_VS_P_All_e_Directory, Beta_vs_P_Neutrons_Only_FD_Dir = Beta_VS_P_All_e_Directory;
-    //</editor-fold>
-
-    //<editor-fold desc="Positive hadrons in FTOF">
-    TH2D *Beta_vs_P_positive_particles_FTOF = new TH2D("#beta vs. P for p. hadrons (FTOF)", "#beta vs. P for Positive Hadrons (FTOF);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_Protons_Only_FTOF = new TH2D("#beta vs. P for Protons Only (FTOF)", "#beta vs. P for Protons Only (FTOF);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_Kplus_Only_FTOF = new TH2D("#beta vs. P for K^{+} Only (FTOF)", "#beta vs. P for K^{+} Only (FTOF);P [GeV];#beta",
-                                               250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_piplus_Only_FTOF = new TH2D("#beta vs. P for #pi^{+} Only (FTOF)", "#beta vs. P for #pi^{+} Only (FTOF);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_deuteron_Only_FTOF = new TH2D("#beta vs. P for Deuteron Only (FTOF)", "#beta vs. P for Deuteron Only (FTOF);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_Beta_0_Only_FTOF = new TH2D("#beta vs. P for Beta_0 Only (FTOF)", "#beta vs. P for Beta_0 Only (FTOF);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
-    string Beta_vs_P_positive_particles_FTOF_Dir = Beta_VS_P_by_charge_FTOF_Directory, Beta_vs_P_Protons_Only_FTOF_Dir = Beta_VS_P_by_charge_FTOF_Directory;
-    string Beta_vs_P_Kplus_Only_FTOF_Dir = Beta_VS_P_by_charge_FTOF_Directory, Beta_vs_P_piplus_Only_FTOF_Dir = Beta_VS_P_by_charge_FTOF_Directory;
-    string Beta_vs_P_deuteron_Only_FTOF_Dir = Beta_VS_P_by_charge_FTOF_Directory, Beta_vs_P_Beta_0_Only_FTOF_Dir = Beta_VS_P_by_charge_FTOF_Directory;
-    //</editor-fold>
-
-    //<editor-fold desc="Positive hadrons in CTOF">
-    TH2D *Beta_vs_P_positive_particles_CTOF = new TH2D("#beta vs. P for p. hadrons (CTOF)", "#beta vs. P for Positive Hadrons (CTOF);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_Protons_Only_CTOF = new TH2D("#beta vs. P for Protons Only (CTOF)", "#beta vs. P for Protons Only (CTOF);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_Kplus_Only_CTOF = new TH2D("#beta vs. P for K^{+} Only (CTOF)", "#beta vs. P for K^{+} Only (CTOF);P [GeV];#beta",
-                                               250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_piplus_Only_CTOF = new TH2D("#beta vs. P for #pi^{+} Only (CTOF)", "#beta vs. P for #pi^{+} Only (CTOF);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_deuteron_Only_CTOF = new TH2D("#beta vs. P for Deuteron Only (CTOF)", "#beta vs. P for Deuteron Only (CTOF);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_Beta_0_Only_CTOF = new TH2D("#beta vs. P for Beta_0 Only (CTOF)", "#beta vs. P for Beta_0 Only (CTOF);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
-    string Beta_vs_P_positive_particles_CTOF_Dir = Beta_VS_P_by_charge_CTOF_Directory, Beta_vs_P_Protons_Only_CTOF_Dir = Beta_VS_P_by_charge_CTOF_Directory;
-    string Beta_vs_P_Kplus_Only_CTOF_Dir = Beta_VS_P_by_charge_CTOF_Directory, Beta_vs_P_piplus_Only_CTOF_Dir = Beta_VS_P_by_charge_CTOF_Directory;
-    string Beta_vs_P_deuteron_Only_CTOF_Dir = Beta_VS_P_by_charge_CTOF_Directory, Beta_vs_P_Beta_0_Only_CTOF_Dir = Beta_VS_P_by_charge_CTOF_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge">
@@ -1301,31 +1266,6 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-    //<editor-fold desc="Beta vs. P (at least 1e cut)">
-
-    //<editor-fold desc="Beta vs. P (by charge)">
-    TH2D *Beta_vs_P_positive_particles_min_1e_CD = new TH2D("#beta vs. P & q = +1 (min. 1e cut, CD)",
-                                                            "#beta vs. P for all particles with q = +1 (min. 1e cut, CD);P [GeV];#beta",
-                                                            250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_positive_particles_min_1e_FD = new TH2D("#beta vs. P & q = +1 (min. 1e cut, FD)",
-                                                            "#beta vs. P for all particles with q = +1 (min. 1e cut, FD);P [GeV];#beta",
-                                                            250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_neutral_particles_min_1e_CD = new TH2D("#beta vs. P & q = 0 (min. 1e cut, CD)",
-                                                           "#beta vs. P for all particles with q = 0 (min. 1e cut, CD);P [GeV];#beta",
-                                                           250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_neutral_particles_min_1e_FD = new TH2D("#beta vs. P & q = 0 (min. 1e cut, FD)",
-                                                           "#beta vs. P for all particles with q = 0 (min. 1e cut, FD);P [GeV];#beta",
-                                                           250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_negative_particles_min_1e_CD = new TH2D("#beta vs. P & q = -1 (min. 1e cut, CD)",
-                                                            "#beta vs. P for all particles with q = -1 (min. 1e cut, CD);P [GeV];#beta",
-                                                            250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_negative_particles_min_1e_FD = new TH2D("#beta vs. P & q = -1 (min. 1e cut, FD)",
-                                                            "#beta vs. P for all particles with q = -1 (min. 1e cut, FD);P [GeV];#beta",
-                                                            250, 0, beamE * 1.425, 250, 0, 3);
-    //</editor-fold>
-
-    //</editor-fold>
-
     //<editor-fold desc="Beta vs. P (1e cut)">
 
     //<editor-fold desc="Beta vs. P for all particles (1e cut)">
@@ -1340,9 +1280,9 @@ void EventAnalyser() {
                                                     250, 0, beamE * 1.425, 250, 0.5, 3);
 
     TH2D *Beta_vs_P_1e_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 1e only, CD)", "#beta vs. P (Protons Only, 1e Cut, CD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
+                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
     TH2D *Beta_vs_P_1e_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 1e only, FD)", "#beta vs. P (Protons Only, 1e Cut, FD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
+                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
 
     TH2D *Beta_vs_P_1e_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, 1e only, CD)", "#beta vs. P (Neutrons Only, 1e Cut, CD);P [GeV];#beta",
                                                    250, 0, beamE * 1.425, 250, 0, 3);
@@ -1369,20 +1309,10 @@ void EventAnalyser() {
     TH2D *Beta_vs_P_1e_Kplus_Only_FD = new TH2D("#beta vs. P (K^{+} Only, 1e only, FD)", "#beta vs. P (K^{+} Only, 1e Cut, FD);P [GeV];#beta",
                                                 250, 0, beamE * 1.425, 250, 0, 3);
 
-    TH2D *Beta_vs_P_1e_Kzero_Only_CD = new TH2D("#beta vs. P (K^{0} Only, 1e only, CD)", "#beta vs. P (K^{0} Only, 1e Cut, CD);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_1e_Kzero_Only_FD = new TH2D("#beta vs. P (K^{0} Only, 1e only, FD)", "#beta vs. P (K^{0} Only, 1e Cut, FD);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
-
     TH2D *Beta_vs_P_1e_Kminus_Only_CD = new TH2D("#beta vs. P (K^{-} Only, 1e only, CD)", "#beta vs. P (K^{-} Only, 1e Cut, CD);P [GeV];#beta",
                                                  250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_1e_Kminus_Only_FD = new TH2D("#beta vs. P (K^{-} Only, 1e only, FD)", "#beta vs. P (K^{-} Only, 1e Cut, FD);P [GeV];#beta",
                                                  250, 0, beamE * 1.425, 250, 0, 3);
-
-    TH2D *Beta_vs_P_1e_Photons_Only_CD = new TH2D("#beta vs. P (#gamma Only, 1e only, CD)", "#beta vs. P (#gamma Only, 1e Cut, CD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
-    TH2D *Beta_vs_P_1e_Photons_Only_FD = new TH2D("#beta vs. P (#gamma Only, 1e only, FD)", "#beta vs. P (#gamma Only, 1e Cut, FD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1e cut)">
@@ -1406,9 +1336,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P for all particles (2p)">
     TH2D *Beta_vs_P_2p_CD = new TH2D("#beta vs. P (All Particles, 2p, CD)", "#beta vs. P (All Particles, 2p, CD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 3);
+                                     250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_2p_FD = new TH2D("#beta vs. P (All Particles, 2p, FD)", "#beta vs. P (All Particles, 2p, FD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 3);
+                                     250, 0, beamE * 1.1, 250, 0, 1.5);
     string Beta_vs_P_2p_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_FD_Dir = Beta_VS_P_2p_Directory;
 
     TH2D *Beta_vs_P_2p_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, 2p, CD)", "#beta vs. P (Electrons Only, 2p, CD);P [GeV];#beta",
@@ -1418,25 +1348,25 @@ void EventAnalyser() {
     string Beta_vs_P_2p_Electrons_Only_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_Electrons_Only_FD_Dir = Beta_VS_P_2p_Directory;
 
     TH2D *Beta_vs_P_2p_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 2p, CD)", "#beta vs. P (Protons Only, 2p, CD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
+                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
     TH2D *Beta_vs_P_2p_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 2p, FD)", "#beta vs. P (Protons Only, 2p, FD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
+                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
     string Beta_vs_P_2p_Protons_Only_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_Protons_Only_FD_Dir = Beta_VS_P_2p_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (2p)">
     TH2D *Beta_vs_P_positive_particles_2p_CD = new TH2D("#beta vs. P & q = +1 (2p, CD)", "#beta vs. P for all particles with q = +1 (2p, CD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_positive_particles_2p_FD = new TH2D("#beta vs. P & q = +1 (2p, FD)", "#beta vs. P for all particles with q = +1 (2p, FD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_neutral_particles_2p_CD = new TH2D("#beta vs. P & q = 0 (2p, CD)", "#beta vs. P for all particles with q = 0 (2p, CD);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_neutral_particles_2p_FD = new TH2D("#beta vs. P & q = 0 (2p, FD)", "#beta vs. P for all particles with q = 0 (2p, FD);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_negative_particles_2p_CD = new TH2D("#beta vs. P & q = -1 (2p, CD)", "#beta vs. P for all particles with q = -1 (2p, CD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_negative_particles_2p_FD = new TH2D("#beta vs. P & q = -1 (2p, FD)", "#beta vs. P for all particles with q = -1 (2p, FD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.5);
     string Beta_vs_P_positive_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_positive_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
     string Beta_vs_P_neutral_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_neutral_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
     string Beta_vs_P_negative_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_negative_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
@@ -1462,9 +1392,9 @@ void EventAnalyser() {
 //    string Beta_vs_P_MicroBooNE_BC_Electrons_Only_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_Electrons_Only_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
 //
 //    TH2D *Beta_vs_P_MicroBooNE_BC_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-BC, CD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, CD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
 //    TH2D *Beta_vs_P_MicroBooNE_BC_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-BC, FD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, FD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
 //    string Beta_vs_P_MicroBooNE_BC_Protons_Only_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_Protons_Only_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
     //</editor-fold>
 
@@ -1514,9 +1444,9 @@ void EventAnalyser() {
 //    string Beta_vs_P_MicroBooNE_AC_Electrons_Only_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_Electrons_Only_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
 //
 //    TH2D *Beta_vs_P_MicroBooNE_AC_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-AC, CD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, CD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
 //    TH2D *Beta_vs_P_MicroBooNE_AC_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-AC, FD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, FD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
 //    string Beta_vs_P_MicroBooNE_AC_Protons_Only_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_Protons_Only_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
     //</editor-fold>
 
@@ -1555,142 +1485,231 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Chi2 plots">
-    THStack *Chi2_Electron_Stack = new THStack("Electron #chi^{2} (CD & FD)", "Electron #chi^{2} (CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_Stack = new THStack("Proton #chi^{2} (CD & FD)", "Proton #chi^{2} (CD & FD);Proton #chi^{2};");
-    THStack *Chi2_Electron_1e_Stack = new THStack("Electron #chi^{2} (1e cut, CD & FD)", "Electron #chi^{2} (1e cut, CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_1e_Stack = new THStack("Proton #chi^{2} (1e cut, CD & FD)", "Proton #chi^{2} (1e cut, CD & FD);Proton #chi^{2};");
-    THStack *Chi2_Electron_1e2p_Stack = new THStack("Electron #chi^{2} (1e2p, CD & FD)", "Electron #chi^{2} (1e2p, CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_1e2p_Stack = new THStack("Proton #chi^{2} (1e2p, CD & FD)", "Proton #chi^{2} (1e2p, CD & FD);Proton #chi^{2};");
-    THStack *Chi2_Electron_MicroBooNE_Stack = new THStack("Electron #chi^{2} (MicroBooNE, CD & FD)", "Electron #chi^{2} (MicroBooNE, CD & FD);Electron #chi^{2};");
-    THStack *Chi2_Proton_MicroBooNE_Stack = new THStack("Proton #chi^{2} (MicroBooNE, CD & FD)", "Proton #chi^{2} (MicroBooNE, CD & FD);Proton #chi^{2};");
+
+    //<editor-fold desc="Chi2 plots (no #(e) cut)">
+    /* Plots of chi2 with no cut on number of electrons - NOT used later */
+    THStack *Chi2_Electron_Stack = new THStack("#chi^{2}_{e^{-}} (CD & FD)", "#chi^{2}_{e^{-}} Histogram (CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_Stack = new THStack("#chi^{2}_{p} (CD & FD)", "#chi^{2}_{p} Histogram (CD & FD);#chi^{2}_{p};");
+    THStack *Chi2_Kplus_Stack = new THStack("#chi^{2}_{K^{+}} (CD & FD)", "#chi^{2}_{K^{+}} Histogram (CD & FD);#chi^{2}_{K^{+}};");
+    THStack *Chi2_Kminus_Stack = new THStack("#chi^{2}_{K^{-}} (CD & FD)", "#chi^{2}_{K^{-}} Histogram (CD & FD);#chi^{2}_{K^{-}};");
+    THStack *Chi2_piplus_Stack = new THStack("#chi^{2}_{#pi^{+}} (CD & FD)", "#chi^{2}_{#pi^{+}} Histogram (CD & FD);#chi^{2}_{#pi^{+}};");
+    THStack *Chi2_piminus_Stack = new THStack("#chi^{2}_{#pi^{-}} (CD & FD)", "#chi^{2}_{#pi^{-}} Histogram (CD & FD);#chi^{2}_{#pi^{-}};");
+
+    TH1D *Chi2_Electron_CD = new TH1D("#chi^{2}_{e^{-}} (no #(e) cut, CD)", "#chi^{2}_{e^{-}} Histogram (no #(e) cut, CD);#chi^{2}_{e^{-}};", 500, 0, beamE);
+    TH1D *Chi2_Electron_FD = new TH1D("#chi^{2}_{e^{-}} (no #(e) cut, FD)", "#chi^{2}_{e^{-}} Histogram (no #(e) cut, FD);#chi^{2}_{e^{-}};",
+                                      500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_Proton_CD = new TH1D("#chi^{2}_{p} (no #(e) cut, CD)", "#chi^{2}_{p} Histogram (no #(e) cut, CD);#chi^{2}_{p};",
+                                    500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_Proton_FD = new TH1D("#chi^{2}_{p} (no #(e) cut, FD)", "#chi^{2}_{p} Histogram (no #(e) cut, FD);#chi^{2}_{p};",
+                                    500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_Kplus_CD = new TH1D("#chi^{2}_{K^{+}} (no #(e) cut, CD)", "#chi^{2}_{K^{+}} Histogram (no #(e) cut, CD);#chi^{2}_{K^{+}};",
+                                   500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_Kplus_FD = new TH1D("#chi^{2}_{K^{+}} (no #(e) cut, FD)", "#chi^{2}_{K^{+}} Histogram (no #(e) cut, FD);#chi^{2}_{K^{+}};",
+                                   500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_Kminus_CD = new TH1D("#chi^{2}_{K^{-}} (no #(e) cut, CD)", "#chi^{2}_{K^{-}} Histogram (no #(e) cut, CD);#chi^{2}_{K^{-}};",
+                                    500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_Kminus_FD = new TH1D("#chi^{2}_{K^{-}} (no #(e) cut, FD)", "#chi^{2}_{K^{-}} Histogram (no #(e) cut, FD);#chi^{2}_{K^{-}};",
+                                    500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_piplus_CD = new TH1D("#chi^{2}_{#pi^{+}} (no #(e) cut, CD)", "#chi^{2}_{#pi^{+}} Histogram (no #(e) cut, CD);#chi^{2}_{#pi^{+}};",
+                                    500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_piplus_FD = new TH1D("#chi^{2}_{#pi^{+}} (no #(e) cut, FD)", "#chi^{2}_{#pi^{+}} Histogram (no #(e) cut, FD);#chi^{2}_{#pi^{+}};",
+                                    500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_piminus_CD = new TH1D("#chi^{2}_{#pi^{-}} (no #(e) cut, CD)", "#chi^{2}_{#pi^{-}} Histogram (no #(e) cut, CD);#chi^{2}_{#pi^{-}};",
+                                     500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_piminus_FD = new TH1D("#chi^{2}_{#pi^{-}} (no #(e) cut, FD)", "#chi^{2}_{#pi^{-}} Histogram (no #(e) cut, FD);#chi^{2}_{#pi^{-}};",
+                                     500, -Chi2_boundary, Chi2_boundary);
+    string Chi2_Electron_CD_Dir = Chi2_All_e_Directory, Chi2_Electron_FD_Dir = Chi2_All_e_Directory;
+    string Chi2_Proton_CD_Dir = Chi2_All_e_Directory, Chi2_Proton_FD_Dir = Chi2_All_e_Directory;
+    string Chi2_Kplus_CD_Dir = Chi2_All_e_Directory, Chi2_Kplus_FD_Dir = Chi2_All_e_Directory;
+    string Chi2_Kminus_CD_Dir = Chi2_All_e_Directory, Chi2_Kminus_FD_Dir = Chi2_All_e_Directory;
+    string Chi2_piplus_CD_Dir = Chi2_All_e_Directory, Chi2_piplus_FD_Dir = Chi2_All_e_Directory;
+    string Chi2_piminus_CD_Dir = Chi2_All_e_Directory, Chi2_piminus_FD_Dir = Chi2_All_e_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (1e cut)">
+    /* Plots of chi2 with no cut on number of electrons - used later to apply cuts with my mechanisem (NOT Justin's ana) */
+    THStack *Chi2_Electron_1e_Stack = new THStack("#chi^{2}_{e^{-}} (1e cut, CD & FD)", "#chi^{2}_{e^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_1e_Stack = new THStack("#chi^{2}_{p} (1e cut, CD & FD)", "#chi^{2}_{p} Histogram (1e cut, CD & FD);#chi^{2}_{p};");
+    THStack *Chi2_Kplus_1e_Stack = new THStack("#chi^{2}_{K^{+}} (1e cut, CD & FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{+}};");
+    THStack *Chi2_Kminus_1e_Stack = new THStack("#chi^{2}_{K^{-}} (1e cut, CD & FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{-}};");
+    THStack *Chi2_piplus_1e_Stack = new THStack("#chi^{2}_{#pi^{+}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{+}};");
+    THStack *Chi2_piminus_1e_Stack = new THStack("#chi^{2}_{#pi^{-}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{-}};");
+
+    TH1D *Chi2_Electron_1e_CD = new TH1D("#chi^{2}_{e^{-}} (1e cut, CD)", "#chi^{2}_{e^{-}} Histogram (1e cut, CD);#chi^{2}_{e^{-}};", 500, 0, beamE);
+    TH1D *Chi2_Electron_1e_FD = new TH1D("#chi^{2}_{e^{-}} (1e cut, FD)", "#chi^{2}_{e^{-}} Histogram (1e cut, FD);#chi^{2}_{e^{-}};",
+                                         500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_Proton_1e_CD = new TH1D("#chi^{2}_{p} (1e cut, CD)", "#chi^{2}_{p} Histogram (1e cut, CD);#chi^{2}_{p};",
+                                       500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_Proton_1e_FD = new TH1D("#chi^{2}_{p} (1e cut, FD)", "#chi^{2}_{p} Histogram (1e cut, FD);#chi^{2}_{p};",
+                                       500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_Kplus_1e_CD = new TH1D("#chi^{2}_{K^{+}} (1e cut, CD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD);#chi^{2}_{K^{+}};",
+                                      500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_Kplus_1e_FD = new TH1D("#chi^{2}_{K^{+}} (1e cut, FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, FD);#chi^{2}_{K^{+}};",
+                                      500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_Kminus_1e_CD = new TH1D("#chi^{2}_{K^{-}} (1e cut, CD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD);#chi^{2}_{K^{-}};",
+                                       500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_Kminus_1e_FD = new TH1D("#chi^{2}_{K^{-}} (1e cut, FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, FD);#chi^{2}_{K^{-}};",
+                                       500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_piplus_1e_CD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, CD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD);#chi^{2}_{#pi^{+}};",
+                                       500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_piplus_1e_FD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, FD);#chi^{2}_{#pi^{+}};",
+                                       500, -Chi2_boundary, Chi2_boundary);
+
+    TH1D *Chi2_piminus_1e_CD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, CD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD);#chi^{2}_{#pi^{-}};",
+                                        500, -Chi2_boundary, Chi2_boundary);
+    TH1D *Chi2_piminus_1e_FD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, FD);#chi^{2}_{#pi^{-}};",
+                                        500, -Chi2_boundary, Chi2_boundary);
+    string Chi2_Electron_1e_CD_Dir = Chi2_1e_Directory, Chi2_Electron_1e_FD_Dir = Chi2_1e_Directory;
+    string Chi2_Proton_1e_CD_Dir = Chi2_1e_Directory, Chi2_Proton_1e_FD_Dir = Chi2_1e_Directory;
+    string Chi2_Kplus_1e_CD_Dir = Chi2_1e_Directory, Chi2_Kplus_1e_FD_Dir = Chi2_1e_Directory;
+    string Chi2_Kminus_1e_CD_Dir = Chi2_1e_Directory, Chi2_Kminus_1e_FD_Dir = Chi2_1e_Directory;
+    string Chi2_piplus_1e_CD_Dir = Chi2_1e_Directory, Chi2_piplus_1e_FD_Dir = Chi2_1e_Directory;
+    string Chi2_piminus_1e_CD_Dir = Chi2_1e_Directory, Chi2_piminus_1e_FD_Dir = Chi2_1e_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (MicroBooNE)">
+    /* Here we plot chi2 three times:
+     * First - before applying individual chi2 cuts
+     * Second - after applying individual chi2 cuts
+     * Third - after applying ALL cuts, not just individual chi2 cuts (= c-cut) */
+    THStack *Chi2_Electron_MicroBooNE_Stack = new THStack("#chi^{2}_{e^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{e^{-}} (MicroBooNE, CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_MicroBooNE_Stack = new THStack("#chi^{2}_{p} (MicroBooNE, CD & FD)", "#chi^{2}_{p} (MicroBooNE, CD & FD);#chi^{2}_{p};");
     THStack *Chi2_piplus_MicroBooNE_Stack = new THStack("#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{+}};");
     THStack *Chi2_piminus_MicroBooNE_Stack = new THStack("#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{-}};");
 
-    //<editor-fold desc="Chi2 plots (no #(e) cut)">
-    TH1D *Chi2_Electron_CD = new TH1D("Electron #chi^{2} (no #(e) cut, CD) test", "Electron #chi^{2} (no #(e) cut, CD);Electron #chi^{2};",
-                                      500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Electron_FD = new TH1D("Electron #chi^{2} (no #(e) cut, FD) test", "Electron #chi^{2} (no #(e) cut, FD);Electron #chi^{2};",
-                                      500, Chi2_lower_lim, Chi2_upper_lim);
-
-    TH1D *Chi2_Proton_CD = new TH1D("Proton #chi^{2} (no #(e) cut, CD) test", "Proton #chi^{2} (no #(e) cut, CD);Proton #chi^{2};",
-                                    500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Proton_FD = new TH1D("Proton #chi^{2} (no #(e) cut, FD) test", "Proton #chi^{2} (no #(e) cut, FD);Proton #chi^{2};",
-                                    500, Chi2_lower_lim, Chi2_upper_lim);
-//    //</editor-fold>
-
-    //<editor-fold desc="Chi2 plots (1e only)">
-    TH1D *Chi2_Electron_1e_CD = new TH1D("Electron #chi^{2} (1e^{-} cut, CD) test", "Electron #chi^{2} (1e^{-} cut, CD);Electron #chi^{2};",
-                                         500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Electron_1e_FD = new TH1D("Electron #chi^{2} (1e^{-} cut, FD) test", "Electron #chi^{2} (1e^{-} cut, FD);Electron #chi^{2};",
-                                         500, Chi2_lower_lim, Chi2_upper_lim);
-
-    TH1D *Chi2_Proton_1e_CD = new TH1D("Proton #chi^{2} (1e^{-} cut, CD) test", "Proton #chi^{2} (1e^{-} cut, CD);Proton #chi^{2};",
-                                       500, Chi2_lower_lim, Chi2_upper_lim);
-    TH1D *Chi2_Proton_1e_FD = new TH1D("Proton #chi^{2} (1e^{-} cut, FD) test", "Proton #chi^{2} (1e^{-} cut, FD);Proton #chi^{2};",
-                                       500, Chi2_lower_lim, Chi2_upper_lim);
-
-    //<editor-fold desc="Testing Chi2 before cuts (1e2p)">
-    TH1D *Chi2_Electron_1e2p_BC_CD = new TH1D("Electron #chi^{2} BC (1e2p, CD)", "Electron #chi^{2} Before Cut (1e2p, CD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_1e2p_BC_FD = new TH1D("Electron #chi^{2} BC  (1e2p, FD)", "Electron #chi^{2} Before Cut (1e2p, FD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_1e2p_BC_CD = new TH1D("Proton #chi^{2} BC (1e2p, CD)", "Proton #chi^{2} Before Cut (1e2p, CD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_1e2p_BC_FD = new TH1D("Proton #chi^{2} BC (1e2p, FD)", "Proton #chi^{2} Before Cut (1e2p, FD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    //</editor-fold>
-
-    //<editor-fold desc="Testing Chi2 after cuts (1e2p)">
-    TH1D *Chi2_Electron_1e2p_AC_CD = new TH1D("Electron #chi^{2} AC (1e2p, CD)", "Electron #chi^{2} After Cut (1e2p, CD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_1e2p_AC_FD = new TH1D("Electron #chi^{2} AC  (1e2p, FD)", "Electron #chi^{2} After Cut (1e2p, FD);Electron #chi^{2};",
-                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_1e2p_AC_CD = new TH1D("Proton #chi^{2} AC (1e2p, CD)", "Proton #chi^{2} After Cut (1e2p, CD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_1e2p_AC_FD = new TH1D("Proton #chi^{2} AC (1e2p, FD)", "Proton #chi^{2} After Cut (1e2p, FD);Proton #chi^{2};",
-                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    //</editor-fold>
-
-    //<editor-fold desc="Testing Chi2 (2p)">
-    TH1D *Chi2_Electron_2p_CD = new TH1D("Electron #chi^{2} (2p, CD)", "Electron #chi^{2} (2p, CD);Electron #chi^{2};",
-                                         500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_2p_FD = new TH1D("Electron #chi^{2} (2p, FD)", "Electron #chi^{2} (2p, FD);Electron #chi^{2};",
-                                         500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_2p_CD = new TH1D("Proton #chi^{2} (2p, CD)", "Proton #chi^{2} (2p, CD);Proton #chi^{2};",
-                                       500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_2p_FD = new TH1D("Proton #chi^{2} (2p, FD)", "Proton #chi^{2} (2p, FD);Proton #chi^{2};",
-                                       500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    //</editor-fold>
-
     //<editor-fold desc="Testing Chi2 before MicroBooNE cuts test">
-    TH1D *Chi2_Electron_MicroBooNE_BC_CD = new TH1D("Electron #chi^{2} BC (MicroBooNE, CD)", "Electron #chi^{2} Before Cut (MicroBooNE, CD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_MicroBooNE_BC_FD = new TH1D("Electron #chi^{2} BC  (MicroBooNE, FD)", "Electron #chi^{2} Before Cut (MicroBooNE, FD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_MicroBooNE_BC_CD = new TH1D("Proton #chi^{2} BC (MicroBooNE, CD)", "Proton #chi^{2} Before Cut (MicroBooNE, CD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_MicroBooNE_BC_FD = new TH1D("Proton #chi^{2} BC (MicroBooNE, FD)", "Proton #chi^{2} Before Cut (MicroBooNE, FD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-
-    TH1D *Chi2_piplus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, CD)", "#chi^{2}_{#pi^{+}} Before Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, CD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piplus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, FD)", "#chi^{2}_{#pi^{+}} Before Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, FD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piminus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, CD)", "#chi^{2}_{#pi^{-}} Before Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, CD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piminus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, FD)", "#chi^{2}_{#pi^{-}} Before Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, FD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+    string Chi2_Electron_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Electron_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_Proton_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Proton_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piplus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piplus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piminus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piminus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Testing Chi2 after MicroBooNE cuts test">
-    TH1D *Chi2_Electron_MicroBooNE_AC_CD = new TH1D("Electron #chi^{2} AC (MicroBooNE, CD)", "Electron #chi^{2} After Cut (MicroBooNE, CD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *Chi2_Electron_MicroBooNE_AC_FD = new TH1D("Electron #chi^{2} AC  (MicroBooNE, FD)", "Electron #chi^{2} After Cut (MicroBooNE, FD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
                                                     500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-
-    TH1D *Chi2_Proton_MicroBooNE_AC_CD = new TH1D("Proton #chi^{2} AC (MicroBooNE, CD)", "Proton #chi^{2} After Cut (MicroBooNE, CD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *Chi2_Proton_MicroBooNE_AC_FD = new TH1D("Proton #chi^{2} AC (MicroBooNE, FD)", "Proton #chi^{2} After Cut (MicroBooNE, FD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
                                                   500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-
-    TH1D *Chi2_piplus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, CD)", "#chi^{2}_{#pi^{+}} After Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, CD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piplus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, FD)", "#chi^{2}_{#pi^{+}} After Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, FD)",
+                                                  "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piminus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, CD)", "#chi^{2}_{#pi^{-}} After Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, CD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piminus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, FD)", "#chi^{2}_{#pi^{-}} After Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, FD)",
+                                                   "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+    string Chi2_Electron_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Electron_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_Proton_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_Proton_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piplus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piplus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+    string Chi2_piminus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, Chi2_piminus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
     //</editor-fold>
 
-    //<editor-fold desc="Testing Chi2 after MicroBooNE cuts">
-    TH1D *Chi2_Electron_MicroBooNE_CD = new TH1D("Electron #chi^{2} (MicroBooNE, CD)", "Electron #chi^{2} (MicroBooNE, CD);Electron #chi^{2};",
+    //<editor-fold desc="Chi2 plots after MicroBooNE cuts">
+    TH1D *Chi2_Electron_MicroBooNE_CD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, CD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{e^{-}};",
                                                  500, -1.5 * Chi2_Electron_cut_MicroBooNE_CD, 1.5 * Chi2_Electron_cut_MicroBooNE_CD);
-    TH1D *Chi2_Electron_MicroBooNE_FD = new TH1D("Electron #chi^{2} (MicroBooNE, FD)", "Electron #chi^{2} (MicroBooNE, FD);Electron #chi^{2};",
+    TH1D *Chi2_Electron_MicroBooNE_FD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, FD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{e^{-}};",
                                                  500, -1.5 * Chi2_Electron_cut_MicroBooNE_FD, 1.5 * Chi2_Electron_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_Proton_MicroBooNE_CD = new TH1D("Proton #chi^{2} (MicroBooNE, CD)", "Proton #chi^{2} (MicroBooNE, CD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_CD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, CD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, CD);#chi^{2}_{p};",
                                                500, -1.5 * Chi2_Proton_cut_MicroBooNE_CD, 1.5 * Chi2_Proton_cut_MicroBooNE_CD);
-    TH1D *Chi2_Proton_MicroBooNE_FD = new TH1D("Proton #chi^{2} (MicroBooNE, FD)", "Proton #chi^{2} (MicroBooNE, FD);Proton #chi^{2};",
+    TH1D *Chi2_Proton_MicroBooNE_FD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, FD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, FD);#chi^{2}_{p};",
                                                500, -1.5 * Chi2_Proton_cut_MicroBooNE_FD, 1.5 * Chi2_Proton_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piplus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE, CD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, CD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{+}};",
                                                500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piplus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE, FD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+    TH1D *Chi2_piplus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, FD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{+}};",
                                                500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-
-    TH1D *Chi2_piminus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE, CD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, CD)",
+                                                "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{-}};",
                                                 500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *Chi2_piminus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE, FD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+    TH1D *Chi2_piminus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, FD)",
+                                                "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{-}};",
                                                 500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+    string Chi2_Electron_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_Electron_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+    string Chi2_Proton_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_Proton_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+    string Chi2_piplus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_piplus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+    string Chi2_piminus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, Chi2_piminus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
     //</editor-fold>
 
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (1e2p)">
+    THStack *Chi2_Electron_1e2p_Stack = new THStack("#chi^{2}_{e^{-}} (1e2p, CD & FD)", "#chi^{2}_{e^{-}} Histogram (1e2p, CD & FD);#chi^{2}_{e^{-}};");
+    THStack *Chi2_Proton_1e2p_Stack = new THStack("#chi^{2}_{p} (1e2p, CD & FD)", "#chi^{2}_{p} Histogram (1e2p, CD & FD);#chi^{2}_{p};");
+
+    //<editor-fold desc="Testing Chi2 before cuts (1e2p)">
+    TH1D *Chi2_Electron_1e2p_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, CD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, FD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} BC (1e2p, CD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, CD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} BC (1e2p, FD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, FD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    string Chi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Testing Chi2 after cuts (1e2p)">
+    TH1D *Chi2_Electron_1e2p_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, CD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, FD);#chi^{2}_{e^{-}};",
+                                              500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_1e2p_AC_CD = new TH1D("#chi^{2}_{p} AC (1e2p, CD)", "#chi^{2}_{p} Histogram After Cut (1e2p, CD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_1e2p_AC_FD = new TH1D("#chi^{2}_{p} AC (1e2p, FD)", "#chi^{2}_{p} Histogram After Cut (1e2p, FD);#chi^{2}_{p};",
+                                            500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    string Chi2_Proton_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2 plots (2p)">
+    TH1D *Chi2_Electron_2p_CD = new TH1D("#chi^{2}_{e^{-}} (2p, CD)", "#chi^{2}_{e^{-}} Histogram (2p, CD);#chi^{2}_{e^{-}};",
+                                         500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+    TH1D *Chi2_Electron_2p_FD = new TH1D("#chi^{2}_{e^{-}} (2p, FD)", "#chi^{2}_{e^{-}} Histogram (2p, FD);#chi^{2}_{e^{-}};",
+                                         500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+    TH1D *Chi2_Proton_2p_CD = new TH1D("#chi^{2}_{p} (2p, CD)", "#chi^{2}_{p} Histogram (2p, CD);#chi^{2}_{p};",
+                                       500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+    TH1D *Chi2_Proton_2p_FD = new TH1D("#chi^{2}_{p} (2p, FD)", "#chi^{2}_{p} Histogram (2p, FD);#chi^{2}_{p};",
+                                       500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+    string Chi2_Electron_2p_CD_Dir = Chi2_2p_Directory, Chi2_Electron_2p_FD_Dir = Chi2_2p_Directory;
+    string Chi2_Proton_2p_CD_Dir = Chi2_2p_Directory, Chi2_Proton_2p_FD_Dir = Chi2_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -1703,73 +1722,113 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots (no #(e) cut)">
     // TODO: remove the "TEST" and return to pointer vertex plots (using git backup)
-    THStack Vertex_Electron_Vx_Stack_test("Electron V_{x} (CD & FD) test", "Electron V_{x} (CD & FD);Electron V_{x} [cm];");
-    THStack Vertex_Electron_Vy_Stack_test("Electron V_{y} (CD & FD) test", "Electron V_{y} (CD & FD);Electron V_{y} [cm];");
-    THStack Vertex_Electron_Vz_Stack_test("Electron V_{z} (CD & FD) test", "Electron V_{z} (CD & FD);Electron V_{z} [cm];");
-    THStack Vertex_Proton_Vx_Stack_test("Proton V_{x} (CD & FD) test", "Proton V_{x} (CD & FD);Proton V_{x} [cm];");
-    THStack Vertex_Proton_Vy_Stack_test("Proton V_{y} (CD & FD) test", "Proton V_{y} (CD & FD);Proton V_{y} [cm];");
-    THStack Vertex_Proton_Vz_Stack_test("Proton V_{z} (CD & FD) test", "Proton V_{z} (CD & FD);Proton V_{z} [cm];");
+    THStack *Vertex_Electron_Vx_Stack = new THStack("V_{x}^{e^{-}} (CD & FD)", "V_{x}^{e^{-}} (CD & FD);V_{x}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_Vy_Stack = new THStack("V_{y}^{e^{-}} (CD & FD)", "V_{y}^{e^{-}} (CD & FD);V_{y}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_Vz_Stack = new THStack("V_{z}^{e^{-}} (CD & FD)", "V_{z}^{e^{-}} (CD & FD);V_{z}^{e^{-}} [cm];");
+    THStack *Vertex_Proton_Vx_Stack = new THStack("V_{x}^{p} (CD & FD)", "V_{x}^{p} (CD & FD);V_{x}^{p} [cm];");
+    THStack *Vertex_Proton_Vy_Stack = new THStack("V_{y}^{p} (CD & FD)", "V_{y}^{p} (CD & FD);V_{y}^{p} [cm];");
+    THStack *Vertex_Proton_Vz_Stack = new THStack("V_{z}^{p} (CD & FD)", "V_{z}^{p} (CD & FD);V_{z}^{p} [cm];");
 
-    TH1D Vertex_Electron_Vx_CD_test("Electron V_{x} (no #(e) cut, CD) test", "Electron V_{x} (no #(e) cut, CD);Electron V_{x} [cm];",
-                                    100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vy_CD_test("Electron V_{y} (no #(e) cut, CD) test", "Electron V_{y} (no #(e) cut, CD);Electron V_{y} [cm];",
-                                    100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vz_CD_test("Electron V_{z} (no #(e) cut, CD) test", "Electron V_{z} (no #(e) cut, CD);Electron V_{z} [cm];",
-                                    100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vx_FD_test("Electron V_{x} (no #(e) cut, FD) test", "Electron V_{x} (no #(e) cut, CD);Electron V_{x} [cm];",
-                                    100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vy_FD_test("Electron V_{y} (no #(e) cut, FD) test", "Electron V_{y} (no #(e) cut, CD);Electron V_{y} [cm];",
-                                    100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_Vz_FD_test("Electron V_{z} (no #(e) cut, FD) test", "Electron V_{z} (no #(e) cut, CD);Electron V_{z} [cm];",
-                                    100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_Vx_CD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, CD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
+                                           100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_Vy_CD = new TH1D("V_{y}^{e^{-}} (no #(e) cut, CD)", "V_{y}^{e^{-}} (no #(e) cut, CD);V_{y}^{e^{-}} [cm];",
+                                           100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_Vz_CD = new TH1D("V_{z}^{e^{-}} (no #(e) cut, CD)", "V_{z}^{e^{-}} (no #(e) cut, CD);V_{z}^{e^{-}} [cm];",
+                                           100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_Vx_FD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, FD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
+                                           100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_Vy_FD = new TH1D("V_{y}^{e^{-}} (no #(e) cut, FD)", "V_{y}^{e^{-}} (no #(e) cut, CD);V_{y}^{e^{-}} [cm];",
+                                           100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_Vz_FD = new TH1D("V_{z}^{e^{-}} (no #(e) cut, FD)", "V_{z}^{e^{-}} (no #(e) cut, CD);V_{z}^{e^{-}} [cm];",
+                                           100, -Vertex_boundary, Vertex_boundary);
 
-    TH1D Vertex_Proton_Vx_CD_test("Proton V_{x} (no #(e) cut, CD) test", "Proton V_{x} (no #(e) cut, CD);Proton V_{x} [cm];",
-                                  100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vy_CD_test("Proton V_{y} (no #(e) cut, CD) test", "Proton V_{y} (no #(e) cut, CD);Proton V_{y} [cm];",
-                                  100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vz_CD_test("Proton V_{z} (no #(e) cut, CD) test", "Proton V_{z} (no #(e) cut, CD);Proton V_{z} [cm];",
-                                  100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vx_FD_test("Proton V_{x} (no #(e) cut, FD) test", "Proton V_{x} (no #(e) cut, CD);Proton V_{x} [cm];",
-                                  100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vy_FD_test("Proton V_{y} (no #(e) cut, FD) test", "Proton V_{y} (no #(e) cut, CD);Proton V_{y} [cm];",
-                                  100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_Vz_FD_test("Proton V_{z} (no #(e) cut, FD) test", "Proton V_{z} (no #(e) cut, CD);Proton V_{z} [cm];",
-                                  100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_Vx_CD = new TH1D("V_{x}^{p} (no #(e) cut, CD)", "V_{x}^{p} (no #(e) cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_Vy_CD = new TH1D("V_{y}^{p} (no #(e) cut, CD)", "V_{y}^{p} (no #(e) cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_Vz_CD = new TH1D("V_{z}^{p} (no #(e) cut, CD)", "V_{z}^{p} (no #(e) cut, CD);V_{z}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_Vx_FD = new TH1D("V_{x}^{p} (no #(e) cut, FD)", "V_{x}^{p} (no #(e) cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_Vy_FD = new TH1D("V_{y}^{p} (no #(e) cut, FD)", "V_{y}^{p} (no #(e) cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_Vz_FD = new TH1D("V_{z}^{p} (no #(e) cut, FD)", "V_{z}^{p} (no #(e) cut, CD);V_{z}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots (1e only)">
-    THStack Vertex_Electron_1e_Vx_Stack_test("Electron V_{x} (1e only, CD & FD) test", "Electron V_{x} (1e only, CD & FD);Electron V_{x} [cm];");
-    THStack Vertex_Electron_1e_Vy_Stack_test("Electron V_{y} (1e only, CD & FD) test", "Electron V_{y} (1e only, CD & FD);Electron V_{y} [cm];");
-    THStack Vertex_Electron_1e_Vz_Stack_test("Electron V_{z} (1e only, CD & FD) test", "Electron V_{z} (1e only, CD & FD);Electron V_{z} [cm];");
-    THStack Vertex_Proton_1e_Vx_Stack_test("Proton V_{x} (1e only, CD & FD) test", "Proton V_{x} (1e only, CD & FD);Proton V_{x} [cm];");
-    THStack Vertex_Proton_1e_Vy_Stack_test("Proton V_{y} (1e only, CD & FD) test", "Proton V_{y} (1e only, CD & FD);Proton V_{y} [cm];");
-    THStack Vertex_Proton_1e_Vz_Stack_test("Proton V_{z} (1e only, CD & FD) test", "Proton V_{z} (1e only, CD & FD);Proton V_{z} [cm];");
+    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("V_{x}^{e^{-}} (1e only, CD & FD)", "V_{x}^{e^{-}} (1e only, CD & FD);V_{x}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("V_{y}^{e^{-}} (1e only, CD & FD)", "V_{y}^{e^{-}} (1e only, CD & FD);V_{y}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("V_{z}^{e^{-}} (1e only, CD & FD)", "V_{z}^{e^{-}} (1e only, CD & FD);V_{z}^{e^{-}} [cm];");
+    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("V_{x}^{p} (1e only, CD & FD)", "V_{x}^{p} (1e only, CD & FD);V_{x}^{p} [cm];");
+    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("V_{y}^{p} (1e only, CD & FD)", "V_{y}^{p} (1e only, CD & FD);V_{y}^{p} [cm];");
+    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("V_{z}^{p} (1e only, CD & FD)", "V_{z}^{p} (1e only, CD & FD);V_{z}^{p} [cm];");
+    THStack *Vertex_Kplus_1e_Vx_Stack = new THStack("V_{x}^{K^{+}} (1e only, CD & FD)", "V_{x}^{K^{+}} (1e only, CD & FD);V_{x}^{K^{+}} [cm];");
+    THStack *Vertex_Kplus_1e_Vy_Stack = new THStack("V_{y}^{K^{+}} (1e only, CD & FD)", "V_{y}^{K^{+}} (1e only, CD & FD);V_{y}^{K^{+}} [cm];");
+    THStack *Vertex_Kplus_1e_Vz_Stack = new THStack("V_{z}^{K^{+}} (1e only, CD & FD)", "V_{z}^{K^{+}} (1e only, CD & FD);V_{z}^{K^{+}} [cm];");
+    THStack *Vertex_Kminus_1e_Vx_Stack = new THStack("V_{x}^{K^{-}} (1e only, CD & FD)", "V_{x}^{K^{-}} (1e only, CD & FD);V_{x}^{K^{-}} [cm];");
+    THStack *Vertex_Kminus_1e_Vy_Stack = new THStack("V_{y}^{K^{-}} (1e only, CD & FD)", "V_{y}^{K^{-}} (1e only, CD & FD);V_{y}^{K^{-}} [cm];");
+    THStack *Vertex_Kminus_1e_Vz_Stack = new THStack("V_{z}^{K^{-}} (1e only, CD & FD)", "V_{z}^{K^{-}} (1e only, CD & FD);V_{z}^{K^{-}} [cm];");
+    THStack *Vertex_piplus_1e_Vx_Stack = new THStack("V_{x}^{pi^{+}} (1e only, CD & FD)", "V_{x}^{pi^{+}} (1e only, CD & FD);V_{x}^{pi^{+}} [cm];");
+    THStack *Vertex_piplus_1e_Vy_Stack = new THStack("V_{y}^{pi^{+}} (1e only, CD & FD)", "V_{y}^{pi^{+}} (1e only, CD & FD);V_{y}^{pi^{+}} [cm];");
+    THStack *Vertex_piplus_1e_Vz_Stack = new THStack("V_{z}^{pi^{+}} (1e only, CD & FD)", "V_{z}^{pi^{+}} (1e only, CD & FD);V_{z}^{pi^{+}} [cm];");
+    THStack *Vertex_piminus_1e_Vx_Stack = new THStack("V_{x}^{pi^{-}} (1e only, CD & FD)", "V_{x}^{pi^{-}} (1e only, CD & FD);V_{x}^{pi^{-}} [cm];");
+    THStack *Vertex_piminus_1e_Vy_Stack = new THStack("V_{y}^{pi^{-}} (1e only, CD & FD)", "V_{y}^{pi^{-}} (1e only, CD & FD);V_{y}^{pi^{-}} [cm];");
+    THStack *Vertex_piminus_1e_Vz_Stack = new THStack("V_{z}^{pi^{-}} (1e only, CD & FD)", "V_{z}^{pi^{-}} (1e only, CD & FD);V_{z}^{pi^{-}} [cm];");
 
-    TH1D Vertex_Electron_1e_Vx_CD_test("Electron V_{x} (1e only, CD) test", "Electron V_{x} (1e only, CD);Electron V_{x} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vy_CD_test("Electron V_{y} (1e only, CD) test", "Electron V_{y} (1e only, CD);Electron V_{y} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vz_CD_test("Electron V_{z} (1e only, CD) test", "Electron V_{z} (1e only, CD);Electron V_{z} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vx_FD_test("Electron V_{x} (1e only, FD) test", "Electron V_{x} (1e only, FD);Electron V_{x} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vy_FD_test("Electron V_{y} (1e only, FD) test", "Electron V_{y} (1e only, FD);Electron V_{y} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Electron_1e_Vz_FD_test("Electron V_{z} (1e only, FD) test", "Electron V_{z} (1e only, FD);Electron V_{z} [cm];",
-                                       100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
 
-    TH1D Vertex_Proton_1e_Vx_CD_test("Proton V_{x} (1e only, CD) test", "Proton V_{x} (1e only, CD);Proton V_{x} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vy_CD_test("Proton V_{y} (1e only, CD) test", "Proton V_{y} (1e only, CD);Proton V_{y} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vz_CD_test("Proton V_{z} (1e only, CD) test", "Proton V_{z} (1e only, CD);Proton V_{z} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vx_FD_test("Proton V_{x} (1e only, FD) test", "Proton V_{x} (1e only, FD);Proton V_{x} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vy_FD_test("Proton V_{y} (1e only, FD) test", "Proton V_{y} (1e only, FD);Proton V_{y} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
-    TH1D Vertex_Proton_1e_Vz_FD_test("Proton V_{z} (1e only, FD) test", "Proton V_{z} (1e only, FD);Proton V_{z} [cm];",
-                                     100, Vertex_lower_lim, Vertex_upper_lim);
+    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+
+    TH1D *Vertex_Kplus_1e_Vx_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vy_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vz_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vx_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vy_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vz_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+
+    TH1D *Vertex_Kminus_1e_Vx_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vy_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vz_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vx_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vy_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vz_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+
+    TH1D *Vertex_piplus_1e_Vx_CD = new TH1D("V_{x}^{pi^{+}} (1e Cut, CD)", "V_{x}^{pi^{+}} (1e Cut, CD);V_{x}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vy_CD = new TH1D("V_{y}^{pi^{+}} (1e Cut, CD)", "V_{y}^{pi^{+}} (1e Cut, CD);V_{y}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vz_CD = new TH1D("V_{z}^{pi^{+}} (1e Cut, CD)", "V_{z}^{pi^{+}} (1e Cut, CD);V_{z}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vx_FD = new TH1D("V_{x}^{pi^{+}} (1e Cut, FD)", "V_{x}^{pi^{+}} (1e Cut, FD);V_{x}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vy_FD = new TH1D("V_{y}^{pi^{+}} (1e Cut, FD)", "V_{y}^{pi^{+}} (1e Cut, FD);V_{y}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vz_FD = new TH1D("V_{z}^{pi^{+}} (1e Cut, FD)", "V_{z}^{pi^{+}} (1e Cut, FD);V_{z}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+
+    TH1D *Vertex_piminus_1e_Vx_CD = new TH1D("V_{x}^{pi^{-}} (1e Cut, CD)", "V_{x}^{pi^{-}} (1e Cut, CD);V_{x}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vy_CD = new TH1D("V_{y}^{pi^{-}} (1e Cut, CD)", "V_{y}^{pi^{-}} (1e Cut, CD);V_{y}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vz_CD = new TH1D("V_{z}^{pi^{-}} (1e Cut, CD)", "V_{z}^{pi^{-}} (1e Cut, CD);V_{z}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vx_FD = new TH1D("V_{x}^{pi^{-}} (1e Cut, FD)", "V_{x}^{pi^{-}} (1e Cut, FD);V_{x}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vy_FD = new TH1D("V_{y}^{pi^{-}} (1e Cut, FD)", "V_{y}^{pi^{-}} (1e Cut, FD);V_{y}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vz_FD = new TH1D("V_{z}^{pi^{-}} (1e Cut, FD)", "V_{z}^{pi^{-}} (1e Cut, FD);V_{z}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    string Vertex_Electron_1e_Vx_CD_Dir = Vertex_Electron_1e_Vx_Directory, Vertex_Electron_1e_Vx_FD_Dir = Vertex_Electron_1e_Vx_Directory;
+    string Vertex_Electron_1e_Vy_CD_Dir = Vertex_Electron_1e_Vy_Directory, Vertex_Electron_1e_Vy_FD_Dir = Vertex_Electron_1e_Vy_Directory;
+    string Vertex_Electron_1e_Vz_CD_Dir = Vertex_Electron_1e_Vz_Directory, Vertex_Electron_1e_Vz_FD_Dir = Vertex_Electron_1e_Vz_Directory;
+    string Vertex_Proton_1e_Vx_CD_Dir = Vertex_Proton_1e_Vx_Directory, Vertex_Proton_1e_Vx_FD_Dir = Vertex_Proton_1e_Vx_Directory;
+    string Vertex_Proton_1e_Vy_CD_Dir = Vertex_Proton_1e_Vy_Directory, Vertex_Proton_1e_Vy_FD_Dir = Vertex_Proton_1e_Vy_Directory;
+    string Vertex_Proton_1e_Vz_CD_Dir = Vertex_Proton_1e_Vz_Directory, Vertex_Proton_1e_Vz_FD_Dir = Vertex_Proton_1e_Vz_Directory;
+    string Vertex_Kplus_1e_Vx_CD_Dir = Vertex_Kplus_1e_Vx_Directory, Vertex_Kplus_1e_Vx_FD_Dir = Vertex_Kplus_1e_Vx_Directory;
+    string Vertex_Kplus_1e_Vy_CD_Dir = Vertex_Kplus_1e_Vy_Directory, Vertex_Kplus_1e_Vy_FD_Dir = Vertex_Kplus_1e_Vy_Directory;
+    string Vertex_Kplus_1e_Vz_CD_Dir = Vertex_Kplus_1e_Vz_Directory, Vertex_Kplus_1e_Vz_FD_Dir = Vertex_Kplus_1e_Vz_Directory;
+    string Vertex_Kminus_1e_Vx_CD_Dir = Vertex_Kminus_1e_Vx_Directory, Vertex_Kminus_1e_Vx_FD_Dir = Vertex_Kminus_1e_Vx_Directory;
+    string Vertex_Kminus_1e_Vy_CD_Dir = Vertex_Kminus_1e_Vy_Directory, Vertex_Kminus_1e_Vy_FD_Dir = Vertex_Kminus_1e_Vy_Directory;
+    string Vertex_Kminus_1e_Vz_CD_Dir = Vertex_Kminus_1e_Vz_Directory, Vertex_Kminus_1e_Vz_FD_Dir = Vertex_Kminus_1e_Vz_Directory;
+    string Vertex_piplus_1e_Vx_CD_Dir = Vertex_piplus_1e_Vx_Directory, Vertex_piplus_1e_Vx_FD_Dir = Vertex_piplus_1e_Vx_Directory;
+    string Vertex_piplus_1e_Vy_CD_Dir = Vertex_piplus_1e_Vy_Directory, Vertex_piplus_1e_Vy_FD_Dir = Vertex_piplus_1e_Vy_Directory;
+    string Vertex_piplus_1e_Vz_CD_Dir = Vertex_piplus_1e_Vz_Directory, Vertex_piplus_1e_Vz_FD_Dir = Vertex_piplus_1e_Vz_Directory;
+    string Vertex_piminus_1e_Vx_CD_Dir = Vertex_piminus_1e_Vx_Directory, Vertex_piminus_1e_Vx_FD_Dir = Vertex_piminus_1e_Vx_Directory;
+    string Vertex_piminus_1e_Vy_CD_Dir = Vertex_piminus_1e_Vy_Directory, Vertex_piminus_1e_Vy_FD_Dir = Vertex_piminus_1e_Vy_Directory;
+    string Vertex_piminus_1e_Vz_CD_Dir = Vertex_piminus_1e_Vz_Directory, Vertex_piminus_1e_Vz_FD_Dir = Vertex_piminus_1e_Vz_Directory;
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1e2p & chi2 cuts)">
@@ -1792,22 +1851,22 @@ void EventAnalyser() {
     THStack *dVz_2p_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (2p, CD & FD)", "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (2p, CD & FD);dV_{z} [cm];");
 
     TH1D *deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} BC (1e2p, CD & FD)",
-                                                 "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 500, dV_lower_lim, dV_upper_lim);
+                                                 "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 500, -dV_boundary, dV_boundary);
     TH1D *deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} BC (1e2p, CD & FD)",
-                                                 "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 500, dV_lower_lim, dV_upper_lim);
+                                                 "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 500, -dV_boundary, dV_boundary);
     TH1D *deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} BC (1e2p, CD & FD)",
-                                                 "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 500, dV_lower_lim, dV_upper_lim);
+                                                 "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 500, -dV_boundary, dV_boundary);
 
     TH1D *deltaVx_after_dV_cuts_1e2p = new TH1D("dV_{x} AC (1e2p, CD & FD)",
-                                                "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 500, dV_lower_lim, dV_upper_lim);
+                                                "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 500, -dV_boundary, dV_boundary);
     TH1D *deltaVy_after_dV_cuts_1e2p = new TH1D("dV_{y} AC (1e2p, CD & FD)",
-                                                "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 500, dV_lower_lim, dV_upper_lim);
+                                                "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 500, -dV_boundary, dV_boundary);
     TH1D *deltaVz_after_dV_cuts_1e2p = new TH1D("dV_{z} AC (1e2p, CD & FD)",
-                                                "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 500, dV_lower_lim, dV_upper_lim);
+                                                "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 500, -dV_boundary, dV_boundary);
 
-    TH1D *deltaVx_2p = new TH1D("dV_{x} AC (2p, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (2p, CD & FD);dV_{x} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVy_2p = new TH1D("dV_{y} AC (2p, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (2p, CD & FD);dV_{y} [cm];", 500, dV_lower_lim, dV_upper_lim);
-    TH1D *deltaVz_2p = new TH1D("dV_{z} AC (2p, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (2p, CD & FD);dV_{z} [cm];", 500, dV_lower_lim, dV_upper_lim);
+    TH1D *deltaVx_2p = new TH1D("dV_{x} AC (2p, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (2p, CD & FD);dV_{x} [cm];", 500, -dV_boundary, dV_boundary);
+    TH1D *deltaVy_2p = new TH1D("dV_{y} AC (2p, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (2p, CD & FD);dV_{y} [cm];", 500, -dV_boundary, dV_boundary);
+    TH1D *deltaVz_2p = new TH1D("dV_{z} AC (2p, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (2p, CD & FD);dV_{z} [cm];", 500, -dV_boundary, dV_boundary);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (MicroBooNE)">
@@ -1819,65 +1878,25 @@ void EventAnalyser() {
                                                 "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD);dV_{z} [cm];");
 
     TH1D *deltaVx_MicroBooNE_BC = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                           500, dV_lower_lim, dV_upper_lim);
+                                           500, -dV_boundary, dV_boundary);
     TH1D *deltaVy_MicroBooNE_BC = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                           500, dV_lower_lim, dV_upper_lim);
+                                           500, -dV_boundary, dV_boundary);
     TH1D *deltaVz_MicroBooNE_BC = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                           500, dV_lower_lim, dV_upper_lim);
+                                           500, -dV_boundary, dV_boundary);
 
     TH1D *deltaVx_MicroBooNE_AC = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                           500, dV_lower_lim, dV_upper_lim);
+                                           500, -dV_boundary, dV_boundary);
     TH1D *deltaVy_MicroBooNE_AC = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                           500, dV_lower_lim, dV_upper_lim);
+                                           500, -dV_boundary, dV_boundary);
     TH1D *deltaVz_MicroBooNE_AC = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                           500, dV_lower_lim, dV_upper_lim);
+                                           500, -dV_boundary, dV_boundary);
 
     TH1D *deltaVx_MicroBooNE = new TH1D("dV_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                        500, dV_lower_lim, dV_upper_lim);
+                                        500, -dV_boundary, dV_boundary);
     TH1D *deltaVy_MicroBooNE = new TH1D("dV_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                        500, dV_lower_lim, dV_upper_lim);
+                                        500, -dV_boundary, dV_boundary);
     TH1D *deltaVz_MicroBooNE = new TH1D("dV_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                        500, dV_lower_lim, dV_upper_lim);
-    //</editor-fold>
-
-    //</editor-fold>
-
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Timing plots
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Timing plots">
-
-    //<editor-fold desc="Event Start Time (CD & FD)">
-    THStack *timing_Stack = new THStack("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];");
-
-    TH1D *Event_start_time_histogram = new TH1D("Event Start Time (CD & FD)", "Event Start Time t_{start} (CD & FD);t_{start} [ns];", 250, -1, 1);
-    string Event_start_time_histogram_Dir = timing_event_start_time_Directory;
-
-    //TODO: remove Particle_ToF_histogram from code (does not look to add anyting)
-    TH1D *Particle_ToF_histogram = new TH1D("Particle ToF (CD & FD)", "Particle Time of Flight t_{ToF} (CD & FD);t_{ToF} [ns];", 250, -1, 1);
-    string Particle_ToF_histogram_Dir = timing_Particle_ToF_Directory;
-
-    TH1D *Electron_ToF_from_beta_histogram_CD = new TH1D("e^{-} ToF from #beta (1e Cut, CD)",
-                                                         "e^{-} Time of Flight t_{ToF} from #beta (1e Cut, CD);t_{ToF} = L/(c*#beta) [ns];", 250, -50000, 50000);
-    TH1D *Electron_ToF_from_beta_histogram_FD = new TH1D("e^{-} ToF from #beta (1e Cut, FD)",
-                                                         "e^{-} Time of Flight t_{ToF} from #beta (1e Cut, FD);t_{ToF} = L/(c*#beta) [ns];", 250, -50000, 50000);
-    string Electron_ToF_from_beta_histogram_CD_Dir = timing_ToF_from_beta_Directory, Electron_ToF_from_beta_histogram_FD_Dir = timing_ToF_from_beta_Directory;
-
-    TH1D *Electron_path_length_histogram_CD = new TH1D("e^{-} Path Length L (1e Cut, CD)",
-                                                       "e^{-} Path Length L (1e Cut, CD);L [cm?];", 250, 0, 500);
-    TH1D *Electron_path_length_histogram_FD = new TH1D("e^{-} Path Length L (1e Cut, FD)",
-                                                       "e^{-} Path Length L (1e Cut, FD);L [cm?];", 250, 0, 500);
-    string Electron_path_length_histogram_CD_Dir = timing_Electron_path_length_Directory, Electron_path_length_histogram_FD_Dir = timing_Electron_path_length_Directory;
-
-    TH2D *Beta_VS_P_from_FTOF1A_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF1A)", "#beta vs. P From ToF (1e Cut, FTOF1A);P [GeV];#beta",
-                                                     250, 0, beamE * 1.425, 250, 0, 2);
-    TH2D *Beta_VS_P_from_FTOF1B_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF1B)", "#beta vs. P From ToF (1e Cut, FTOF1B);P [GeV];#beta",
-                                                     250, 0, beamE * 1.425, 250, 0, 2);
-    TH2D *Beta_VS_P_from_FTOF2_histogram = new TH2D("#beta vs. P From ToF (1e Cut, FTOF2)", "#beta vs. P From ToF (1e Cut, FTOF2);P [GeV];#beta",
-                                                    250, 0, beamE * 1.425, 250, 0, 2);
-    string Beta_VS_P_from_FTOF1A_histogram_Dir = timing_Beta_VS_P_from_FTOF1A_Directory, Beta_VS_P_from_FTOF1B_histogram_Dir = timing_Beta_VS_P_from_FTOF1A_Directory;
-    string Beta_VS_P_from_FTOF2_histogram_Dir = timing_Beta_VS_P_from_FTOF1A_Directory;
+                                        500, -dV_boundary, dV_boundary);
     //</editor-fold>
 
     //</editor-fold>
@@ -2296,32 +2315,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Electron fiducial histograms (FD only)">
 
-    //<editor-fold desc="Electron fiducial histograms (ECIN)">
-    TH2D *Vcal_VS_EoP_1e2p_BC_ECIN = new TH2D("Vcal vs. EoP BC (All Int., 1e2p, ECIN)",
-                                              "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e2p, ECIN);ECAL V coordinate [cm];Sampling Fraction",
-                                              250, 0, 20, 250, 0.05, 0.35);
-    TH2D *Vcal_VS_EoP_1e2p_AC_ECIN = new TH2D("Vcal vs. EoP AC (All Int., 1e2p, ECIN)",
-                                              "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e2p, ECIN);ECAL V coordinate [cm];Sampling Fraction",
-                                              250, 0, 20, 250, 0.05, 0.35);
-    string Vcal_VS_EoP_1e2p_BC_ECIN_Dir = fiducial_plots_1e_BC_ECIN_histograms_Directory, Vcal_VS_EoP_1e2p_AC_ECIN_Dir = fiducial_plots_1e_BC_ECIN_histograms_Directory;
-
-    TH2D *Wcal_VS_EoP_1e2p_BC_ECIN = new TH2D("Wcal vs. EoP BC (All Int., 1e2p, ECIN)",
-                                              "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e2p, ECIN);ECAL W coordinate [cm];Sampling Fraction",
-                                              250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_1e2p_AC_ECIN = new TH2D("Wcal vs. EoP AC (All Int., 1e2p, ECIN)",
-                                              "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e2p, ECIN);ECAL W coordinate [cm];Sampling Fraction",
-                                              250, 0, 50, 250, 0.05, 0.35);
-    string Wcal_VS_EoP_1e2p_BC_ECIN_Dir = fiducial_plots_1e_AC_ECIN_histograms_Directory, Wcal_VS_EoP_1e2p_AC_ECIN_Dir = fiducial_plots_1e_AC_ECIN_histograms_Directory;
-
-    TH2D *Vcal_VS_EoP_2p_ECIN = new TH2D("Vcal vs. EoP (All Int., 2p, ECIN)",
-                                         "ECAL V coordinate vs. Sampling Fraction (All Int., 2p, ECIN);ECAL V coordinate [cm];Sampling Fraction",
-                                         250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_2p_ECIN = new TH2D("Wcal vs. EoP (All Int., 2p, ECIN)",
-                                         "ECAL W coordinate vs. Sampling Fraction (All Int., 2p, ECIN);ECAL W coordinate [cm];Sampling Fraction",
-                                         250, 0, 50, 250, 0.05, 0.35);
-    string Vcal_VS_EoP_2p_ECIN_Dir = fiducial_plots_2p_cuts_histograms_ECIN_Directory, Wcal_VS_EoP_2p_ECIN_Dir = fiducial_plots_2p_cuts_histograms_ECIN_Directory;
-    //</editor-fold>
-
     //<editor-fold desc="Electron fiducial histograms (PCAL)">
     TH2D *Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. EoP BC (All Int., 1e, PCAL)",
                                             "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
@@ -2552,10 +2545,47 @@ void EventAnalyser() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Code execution">
-    cout << "Looping over chain files...\n\n";
+    cout << "Reading target parameter files\n\n";
+
+    clas12ana clasAna;
+
+    /* Read in target parameter files */
+    clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+    clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str());
+
+    if (apply_cuts == true) {
+        // Cuts on electrons only:
+        clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
+        clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture (fiducial cuts)
+
+        // Cuts on protons and charged pions:
+        clasAna.setPidCuts();                       // making f_pidCuts = ture
+
+        // Cuts on all particles:
+        clasAna.setVertexCuts();                    // making f_vertexCuts = ture
+        clasAna.setVzcuts(-6, 1);                   // setting Vz cuts for all (?) particles
+
+        // Cuts on charged particles:
+        clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture (fiducial cuts?)
+        clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
+        clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
+//    clasAna.setVertexCorrCuts(-3, 3); // setting dVz cuts?
+
+        cout << "\n\nCuts are enabled!\n\n";
+
+        clasAna.printParams();
+    }
+
+    cout << "\n\nLooping over chain files...\n\n";
 
     clas12root::HipoChain chain;
     chain.Add(AnalyseFile.c_str());
+    chain.SetReaderTags({0});                   //TODO: check with Justin what are these tags
+    auto config_c12 = chain.GetC12Reader();     //TODO: check with Justin what is this used for
+    auto &c12 = chain.C12ref();                 //TODO: check with Justin what is this used for
+
+    auto db = TDatabasePDG::Instance();
+    chain.db()->turnOffQADB();                  //TODO: check with Justin what is this used for
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Setting beam particle's momentum
@@ -2564,7 +2594,7 @@ void EventAnalyser() {
     //<editor-fold desc="Setting beam particle's momentum">
     double Pv = sqrt(beamE * beamE - m_e * m_e), Pvx = 0., Pvy = 0., Pvz = Pv; // Assuming momentum of incoming lepton is in the z direction
 
-    TLorentzVector e_in(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
+    TLorentzVector beam(0, 0, sqrt(beamE * beamE - m_e * m_e), beamE);
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2573,14 +2603,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Counting variable definitions">
     int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
+    int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
 
-    int num_of_events_with_e_in_CD = 0, num_of_events_with_e_in_FD = 0;
+//    int num_of_events_with_e_in_CD = 0, num_of_events_with_e_in_FD = 0;
 
     int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_more_then_1e = 0;
 
-    int num_of_events_with_1enP = 0, num_of_events_with_1e2X = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
+    int num_of_events_with_1e2X = 0, num_of_events_with_1enP = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
-    int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
+    //TODO: change to 1e2X #(events) with e in det by reaction
     int num_of_QEL_1e2X_CD_events = 0, num_of_MEC_1e2X_CD_events = 0, num_of_RES_1e2X_CD_events = 0, num_of_DIS_1e2X_CD_events = 0;
     int num_of_QEL_1e2X_FD_events = 0, num_of_MEC_1e2X_FD_events = 0, num_of_RES_1e2X_FD_events = 0, num_of_DIS_1e2X_FD_events = 0;
     int num_of_QEL_1e2p_CD_events = 0, num_of_MEC_1e2p_CD_events = 0, num_of_RES_1e2p_CD_events = 0, num_of_DIS_1e2p_CD_events = 0;
@@ -2591,1978 +2622,2480 @@ void EventAnalyser() {
     int num_of_events_1e2p_w_allChi2_cuts_CD = 0, num_of_events_1e2p_w_allChi2_cuts_FD = 0;
     int num_of_events_1e2p_w_allChi2_cuts = 0;
 
-    // 1e2p = 2p witout chi2 or dV cuts
-    // 2p = 1e2p with all other cuts
+    /* 1e2p = 2p 1e + electron cuts only; 2p = 1e2p with all other cuts */
     int num_of_events_2p = 0; // = number of 2p events
     int num_of_2p_QEL_events = 0, num_of_2p_MEC_events = 0, num_of_2p_RES_events = 0, num_of_2p_DIS_events = 0;
 
-    int count = 0;
-
     int num_of_MicroBooNE_events_BC = 0;
     int num_of_MicroBooNE_events_BC_wNeutrons = 0, num_of_MicroBooNE_events_BC_wpi0 = 0, num_of_MicroBooNE_events_BC_wpip = 0, num_of_MicroBooNE_events_BC_wpim = 0;
-
     int num_of_MicroBooNE_events_AC = 0;
     int num_of_MicroBooNE_events_AC_wNeutrons = 0, num_of_MicroBooNE_events_AC_wpi0 = 0, num_of_MicroBooNE_events_AC_wpip = 0, num_of_MicroBooNE_events_AC_wpim = 0;
-
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool qel, mec, res, dis;
+    int Np, Nkp, Nkm, Npip, Npim, Ne, Nd, Nn, No, Nf;
 
-    for (int ifile = 0; ifile < chain.GetNFiles(); ++ifile) {
+    while (chain.Next()) { // loop over events
+        ++num_of_events; // logging Total #(events)
 
-        clas12reader c12{chain.GetFileName(ifile).Data()}; // open file
+        clasAna.Run(c12);
 
-        //<editor-fold desc="Forcing cuts (inaccurate!)">
-//        c12.addExactPid(11, 0);    // at least 0 electron
-//        c12.addAtLeastPid(11, 0);    // at least 0 electron
+        /* All of these particles are with clas12ana cuts
+           Only cuts missing are nphe and momentum cuts - to be applied later */
+//        auto neutrons = clasAna.getByPid(2112);  // Neutrons
+        auto protons = clasAna.getByPid(2212);   // Protons
+        auto Kplus = clasAna.getByPid(321);      // K+
+        auto Kminus = clasAna.getByPid(-321);    // K-
+        auto piplus = clasAna.getByPid(211);     // pi+
+        auto piminus = clasAna.getByPid(-211);   // pi-
+//        auto pizero = clasAna.getByPid(111);     // pi0
+        auto electrons = clasAna.getByPid(11);   // Electrons
 
-//        c12.addExactPid(11, 0);    // exactly 1 proton
-//        c12.addAtLeastPid(2212, 0);    // at least 0 proton
+        auto deuterons = clasAna.getByPid(45);   // Deuterons
+        auto neutrals = clasAna.getByPid(0);     // Neutrons
+        auto otherpart = clasAna.getByPid(311);  // Other particles
 
-//        c12.addExactPid(11, 0);    // exactly 0 neutron
-//        c12.addAtLeastPid(2112, 0);    // at least 0 neutron
+        /* Number of specific particles in event */
+        Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
+        Nd = deuterons.size(), Nn = neutrals.size(), No = otherpart.size();
 
-//        c12.addExactPid(211, 0);    // exactly 0 pi+
-//        c12.addAtLeastPid(211, 0);    // at least 0 pi+
-
-//        c12.addExactPid(-211,0);    // exactly 0 pi-
-//        c12.addAtLeastPid(-211, 0);    // at least 0 pi-
-
-//        c12.addExactPid(321, 0);    // exactly 0 K+
-//        c12.addAtLeastPid(321, 0);    // at least 0 K+
-
-//        c12.addExactPid(-321, 0);    // exactly 0 K-
-//        c12.addAtLeastPid(-321, 0);    // at least 0 K-
-
-
-//        c12.addZeroOfRestPid();  // nothing else
+        /* Total number of particles in event (= Nf) */
+        Nf = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nn + No;
 
 
-//        c12.addExactPid(11,1);    // exactly 1 electron
-//        c12.addExactPid(211,1);    // exactly 1 pi+
-//        c12.addExactPid(-211,1);    // exactly 1 pi-
-//        c12.addExactPid(2212,1);    // exactly 1 proton
-//        //c12.addExactPid(22,2);    // exactly 2 gamma
 
-//        c12.addZeroOfRestPid();  // nothing else
+//        if (Nf != 0) {
+//            cout << "Nf = " << Nf << "\n";
+//            cout << "Ne = " << Ne << "\n";
+//            cout << "Np = " << Np << "\n";
+//            cout << "Nd = " << Nd << "\n";
+//            cout << "Nn = " << Nn << "\n";
+//            cout << "Npip = " << Npip << "\n";
+//            cout << "Npim = " << Npim << "\n";
+//            cout << "Nkp = " << Nkp << "\n";
+//            cout << "Nkm = " << Nkm << "\n";
+//            cout << "No = " << No << "\n\n\n\n";
+//        }
+
+
+
+//        int Nf = neutrons.size() + protons.size() + Kplus.size() + Kminus.size() + piplus.size() + piminus.size() + pizero.size() + electrons.size() +
+//                   deuterons.size() + neutrals.size() + otherpart.size();
+
+
+//        auto AllParticles = c12->getDetParticles();
+//        auto protons = c12->getByID(2212);   // Protons
+//        auto Kplus = c12->getByID(321);      // K+
+//        auto Kminus = c12->getByID(-321);    // K-
+//        auto piplus = c12->getByID(211);     // pi+
+//        auto piminus = c12->getByID(-211);   // pi-
+//        auto electrons = c12->getByID(11);   // Electrons
+////        auto deuterons = clasAna.getByPid(45);   // Deuterons
+////        auto neutrals = clasAna.getByPid(0);     // Neutrons
+////        auto otherpart = clasAna.getByPid(311);  // Other particles
+//
+//        /* Number of specific particles in event */
+//        int Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
+//
+//        /* Total number of particles in event (= Nf) */
+//        int Nf = AllParticles.size();
+
+
+        bool qel = false, mec = false, res = false, dis = false;
+        double processID = c12->mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
+
+        //<editor-fold desc="Log total #(events) with and without electrons">
+        if (electrons.size() == 0) {
+            ++num_of_events_without_any_e; // logging Total #(events) w/o any e
+        } else {
+            ++num_of_events_with_any_e; // logging Total #(events) w/ any e
+        }
         //</editor-fold>
 
-        while (c12.next()) { // loop over events
-            ++num_of_events; // logging Total #(events)
+        //<editor-fold desc="Identify event process ID">
+        if (processID == 1) {
+            ++num_of_QEL_events;
+            qel = true;
+        } else if (processID == 2) {
+            ++num_of_MEC_events;
+            mec = true;
+        } else if (processID == 3) {
+            ++num_of_RES_events;
+            res = true;
+        } else if (processID == 4) {
+            ++num_of_DIS_events;
+            dis = true;
+        }
+        //</editor-fold>
 
-            auto AllParticles = c12.getDetParticles(); //particles are now a std::vector of particles for this event
-            auto neutrons = c12.getByID(2112), protons = c12.getByID(2212); // Neucleons
-            auto Kplus = c12.getByID(321), Kminus = c12.getByID(-321), Kzero = c12.getByID(311); // Kaons
-            auto piplus = c12.getByID(211), piminus = c12.getByID(-211), pizero = c12.getByID(111); // Pions
-            auto electrons = c12.getByID(11), photons = c12.getByID(22);
+//  All particles plots -------------------------------------------------------------------------------------------------------------------------------------------------
 
-            qel = mec = res = dis = false;
-            double processID = c12.mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis
+        // TODO: remove or change - clas12ana comes with 1e cut already
 
-            //<editor-fold desc="Log total #(events) with and without electrons">
-            //TODO: switch to short Hand If Else
-            if (electrons.size() == 0) {
-                ++num_of_events_without_any_e; // logging Total #(events) w/o any e
-            } else {
-                ++num_of_events_with_any_e; // logging Total #(events) w/ any e
+        //<editor-fold desc="All particles plots">
+
+        //<editor-fold desc="Electron plots (no #(electron) cut, CD & FD)">
+        TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
+        double theta_e_CD, phi_e_CD, Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
+        double theta_e_FD, phi_e_FD, Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
+
+        for (int i = 0; i < electrons.size(); i++) {
+            if (electrons[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+
+//                if (electrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                } else if (electrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                } else if (electrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                }
+
+                Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
+
+                Vertex_Electron_Vx_CD->Fill(electrons[i]->par()->getVx());
+                Vertex_Electron_Vy_CD->Fill(electrons[i]->par()->getVy());
+                Vertex_Electron_Vz_CD->Fill(electrons[i]->par()->getVz());
+
+                theta_e_CD = electrons[i]->getTheta() * 180.0 / pi; // theta_e_CD in deg
+                Theta_e_CD->Fill(theta_e_CD);
+                phi_e_CD = electrons[i]->getPhi() * 180.0 / pi; // phi_e_CD in deg
+                Phi_e_CD->Fill(phi_e_CD);
+                Theta_e_VS_Phi_e_CD->Fill(phi_e_CD, theta_e_CD);
+
+                Pe_CD = electrons[i]->par()->getP();
+                e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_CD * Pe_CD));
+
+                Q_CD = beam - e_out_CD;
+                Q2_CD = fabs(Q_CD.Mag2());
+                Q2_histogram_CD->Fill(Q2_CD);
+
+                if (electrons.size() == 1) {
+                    Q2_histogram_1e_CD->Fill(Q2_CD);
+                }
+
+                if (electrons.size() == 1 && Nf == 3) {
+                    Q2_histogram_1e2X_CD->Fill(Q2_CD);
+
+                    if (protons.size() == 2) {
+                        Q2_histogram_1e2p_CD->Fill(Q2_CD);
+                    }
+                }
+            } else if (electrons[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+
+//                if (electrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                } else if (electrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                } else if (electrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                }
+
+                Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
+
+                Vertex_Electron_Vx_FD->Fill(electrons[i]->par()->getVx());
+                Vertex_Electron_Vy_FD->Fill(electrons[i]->par()->getVy());
+                Vertex_Electron_Vz_FD->Fill(electrons[i]->par()->getVz());
+
+                theta_e_FD = electrons[i]->getTheta() * 180.0 / pi; // theta_e_FD in deg
+                Theta_e_FD->Fill(theta_e_FD);
+                phi_e_FD = electrons[i]->getPhi() * 180.0 / pi; // phi_e_FD in deg
+                Phi_e_FD->Fill(phi_e_FD);
+                Theta_e_VS_Phi_e_FD->Fill(phi_e_FD, theta_e_FD);
+
+                Pe_FD = electrons[i]->par()->getP();
+                e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_FD * Pe_FD));
+
+                Q_FD = beam - e_out_FD;
+                Q2_FD = fabs(Q_FD.Mag2());
+                Q2_histogram_FD->Fill(Q2_FD);
+
+                if (electrons.size() == 1) {
+                    Q2_histogram_1e_FD->Fill(Q2_FD);
+                }
+
+                if (electrons.size() == 1 && Nf == 3) {
+                    Q2_histogram_1e2X_FD->Fill(Q2_FD);
+
+                    if (protons.size() == 2) {
+                        Q2_histogram_1e2p_FD->Fill(Q2_FD);
+                    }
+                }
             }
-            //</editor-fold>
+        } // end of loop over electrons vector
+        //</editor-fold>
 
-            //<editor-fold desc="Identify event process ID">
-            if (processID == 1) {
-                ++num_of_QEL_events;
-                qel = true;
-            } else if (processID == 2) {
-                ++num_of_MEC_events;
-                mec = true;
-            } else if (processID == 3) {
-                ++num_of_RES_events;
-                res = true;
-            } else if (processID == 4) {
-                ++num_of_DIS_events;
-                dis = true;
+        //<editor-fold desc="Proton plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < protons.size(); i++) {
+            if (protons[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                Beta_vs_P_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+
+//                if (protons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+//                } else if (protons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+//                } else if (protons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+//                }
+
+                Chi2_Proton_CD->Fill(protons[i]->par()->getChi2Pid());
+
+                Vertex_Proton_Vx_CD->Fill(protons[i]->par()->getVx());
+                Vertex_Proton_Vy_CD->Fill(protons[i]->par()->getVy());
+                Vertex_Proton_Vz_CD->Fill(protons[i]->par()->getVz());
+            } else if (protons[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                Beta_vs_P_Protons_Only_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+
+//                if (protons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+//                } else if (protons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+//                } else if (protons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+//                }
+
+                Chi2_Proton_FD->Fill(protons[i]->par()->getChi2Pid());
+
+                Vertex_Proton_Vx_FD->Fill(protons[i]->par()->getVx());
+                Vertex_Proton_Vy_FD->Fill(protons[i]->par()->getVy());
+                Vertex_Proton_Vz_FD->Fill(protons[i]->par()->getVz());
             }
-//            else {
-//                cout << "Could not identify process!\n\n";
+        } // end of loop over protons vector
+        //</editor-fold>
+
+        //<editor-fold desc="Other particles plots">
+
+//        //<editor-fold desc="Neutrons Beta vs. P plots (no #(electron) cut, CD & FD)">
+//        for (int i = 0; i < neutrons.size(); i++) {
+//            if (neutrons[i]->getRegion() == CD) {
+//                Beta_vs_P_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                Beta_vs_P_Neutrons_Only_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//
+//                if (neutrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                }
+//            } else if (neutrons[i]->getRegion() == FD) {
+//                Beta_vs_P_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                Beta_vs_P_Neutrons_Only_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+
+//                if (neutrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                }
 //            }
-            //</editor-fold>
+//        } // end of loop over neutrons vector
+//        //</editor-fold>
 
-//  All particles plots (no cuts) ---------------------------------------------------------------------------------------------------------------------------------------
+        //<editor-fold desc="Kplus Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < Kplus.size(); i++) {
+            if (Kplus[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
 
-            //<editor-fold desc="All particles plots (no cuts)">
-
-            //<editor-fold desc="Beta vs. P (no #(electron) cut, CD & FD)">
-            for (int i = 0; i < AllParticles.size(); i++) {
-                if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_All_e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_All_e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                }
-
-                //TODO: keep these TOF plots?
-//                if (AllParticles[i]->par()->getCharge() < 1) { continue; }
-//
-//                bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
-//                bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
-//                bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
-//                bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
-//
-//                if (FTOF1A || FTOF1B || FTOF2) {
-//                    Beta_vs_P_positive_particles_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-////                    Beta_vs_P_positive_particles_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID);
-//
-//                    int PID = AllParticles[i]->getPid();
-//
-//                    if (PID == 2212) { Beta_vs_P_Protons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 211) { Beta_vs_P_piplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 321) { Beta_vs_P_Kplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 45) { Beta_vs_P_deuteron_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 0) { Beta_vs_P_Beta_0_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-////                    if (PID == 2212) { Beta_vs_P_Protons_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 211) { Beta_vs_P_piplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 321) { Beta_vs_P_Kplus_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 45) { Beta_vs_P_deuteron_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 0) { Beta_vs_P_Beta_0_Only_FTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-//                }
-//
-//                if (CTOF) {
-//                    Beta_vs_P_positive_particles_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-////                    Beta_vs_P_positive_particles_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID);
-//
-//                    int PID = AllParticles[i]->getPid();
-//
-//                    if (PID == 2212) { Beta_vs_P_Protons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 211) { Beta_vs_P_piplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 321) { Beta_vs_P_Kplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 45) { Beta_vs_P_deuteron_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-//                    if (PID == 0) { Beta_vs_P_Beta_0_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta()); }
-////                    if (PID == 2212) { Beta_vs_P_Protons_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 211) { Beta_vs_P_piplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 321) { Beta_vs_P_Kplus_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 45) { Beta_vs_P_deuteron_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
-////                    if (PID == 0) { Beta_vs_P_Beta_0_Only_CTOF->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta(), processID); }
+//                if (Kplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
 //                }
 
-            } // end of loop over AllParticles vector
-            //</editor-fold>
+                Chi2_Kplus_CD->Fill(Kplus[i]->par()->getChi2Pid());
+            } else if (Kplus[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
 
-            //<editor-fold desc="Theta_e & Q2 (no #(electron) cut, CD & FD)">
-            TLorentzVector e_out_CD, Q_CD, e_out_FD, Q_FD;
-            double theta_e_CD, phi_e_CD, Ee_CD, Pe_CD, Pex_CD, Pey_CD, Pez_CD, omega_CD, q_CD, qx_CD, qy_CD, qz_CD, Q2_CD;
-            double theta_e_FD, phi_e_FD, Ee_FD, Pe_FD, Pex_FD, Pey_FD, Pez_FD, omega_FD, q_FD, qx_FD, qy_FD, qz_FD, Q2_FD;
+//                if (Kplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                }
 
-            for (int i = 0; i < electrons.size(); i++) {
-                if (electrons[i]->getRegion() == CD) {
-                    ++num_of_events_with_e_in_CD; // logging #e in CD
+                Chi2_Kplus_FD->Fill(Kplus[i]->par()->getChi2Pid());
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
 
-                    Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+        //<editor-fold desc="Kminus Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < Kminus.size(); i++) {
+            if (Kminus[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
 
-                    Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
+//                if (Kminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                }
 
-                    Vertex_Electron_Vx_CD_test.Fill(electrons[i]->par()->getVx());
-                    Vertex_Electron_Vy_CD_test.Fill(electrons[i]->par()->getVy());
-                    Vertex_Electron_Vz_CD_test.Fill(electrons[i]->par()->getVz());
+                Chi2_Kminus_CD->Fill(Kminus[i]->par()->getChi2Pid());
+            } else if (Kminus[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
 
-                    theta_e_CD = electrons[i]->getTheta() * 180.0 / pi; // theta_e_CD in deg
-                    Theta_e_CD->Fill(theta_e_CD);
-                    phi_e_CD = electrons[i]->getPhi() * 180.0 / pi; // phi_e_CD in deg
-                    Phi_e_CD->Fill(phi_e_CD);
-                    Theta_e_VS_Phi_e_CD->Fill(phi_e_CD, theta_e_CD);
+//                if (Kminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                }
 
-                    Pe_CD = electrons[i]->par()->getP();
-                    e_out_CD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_CD * Pe_CD));
+                Chi2_Kminus_FD->Fill(Kminus[i]->par()->getChi2Pid());
+            }
+        } // end of loop over Kminus vector
+        //</editor-fold>
 
-                    Q_CD = e_in - e_out_CD;
-                    Q2_CD = fabs(Q_CD.Mag2());
-                    Q2_histogram_CD->Fill(Q2_CD);
+        //<editor-fold desc="piplus Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < piplus.size(); i++) {
+            if (piplus[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
 
-                    if (electrons.size() == 1) {
-                        Q2_histogram_1e_CD->Fill(Q2_CD);
-                    }
+//                if (piplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                }
 
-                    if (electrons.size() == 1 && AllParticles.size() == 3) {
-                        Q2_histogram_1e2X_CD->Fill(Q2_CD);
+                Chi2_piplus_CD->Fill(piplus[i]->par()->getChi2Pid());
+            } else if (piplus[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
 
-                        if (protons.size() == 2) {
-                            Q2_histogram_1e2p_CD->Fill(Q2_CD);
-                        }
-                    }
-                } else if (electrons[i]->getRegion() == FD) {
-                    ++num_of_events_with_e_in_FD; // logging #e in FD
+//                if (piplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                }
 
-                    Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+                Chi2_piplus_FD->Fill(piplus[i]->par()->getChi2Pid());
+            }
+        } // end of loop over piplus vector
+        //</editor-fold>
 
-                    Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
+        //<editor-fold desc="piminus Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < piminus.size(); i++) {
+            if (piminus[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
 
-                    Vertex_Electron_Vx_FD_test.Fill(electrons[i]->par()->getVx());
-                    Vertex_Electron_Vy_FD_test.Fill(electrons[i]->par()->getVy());
-                    Vertex_Electron_Vz_FD_test.Fill(electrons[i]->par()->getVz());
+//                if (piminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                }
 
-                    theta_e_FD = electrons[i]->getTheta() * 180.0 / pi; // theta_e_FD in deg
-                    Theta_e_FD->Fill(theta_e_FD);
-                    phi_e_FD = electrons[i]->getPhi() * 180.0 / pi; // phi_e_FD in deg
-                    Phi_e_FD->Fill(phi_e_FD);
-                    Theta_e_VS_Phi_e_FD->Fill(phi_e_FD, theta_e_FD);
+                Chi2_piminus_CD->Fill(piminus[i]->par()->getChi2Pid());
+            } else if (piminus[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
 
-                    Pe_FD = electrons[i]->par()->getP();
-                    e_out_FD.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + Pe_FD * Pe_FD));
+//                if (piminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                }
 
-                    Q_FD = e_in - e_out_FD;
-                    Q2_FD = fabs(Q_FD.Mag2());
-                    Q2_histogram_FD->Fill(Q2_FD);
+                Chi2_piminus_FD->Fill(piminus[i]->par()->getChi2Pid());
+            }
+        } // end of loop over piminus vector
+        //</editor-fold>
 
-                    if (electrons.size() == 1) {
-                        Q2_histogram_1e_FD->Fill(Q2_FD);
-                    }
+//        //<editor-fold desc="pizero Beta vs. P plots (no #(electron) cut, CD & FD)">
+//        for (int i = 0; i < pizero.size(); i++) {
+//            if (pizero[i]->getRegion() == CD) {
+//                Beta_vs_P_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//
+//                if (pizero[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                }
+//            } else if (pizero[i]->getRegion() == FD) {
+//                Beta_vs_P_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//
+//                if (pizero[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_All_e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_All_e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                }
+//            }
+//        } // end of loop over pizero vector
+//        //</editor-fold>
 
-                    if (electrons.size() == 1 && AllParticles.size() == 3) {
-                        Q2_histogram_1e2X_FD->Fill(Q2_FD);
+        //<editor-fold desc="neutrals Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < neutrals.size(); i++) {
+            if (neutrals[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
 
-                        if (protons.size() == 2) {
-                            Q2_histogram_1e2p_FD->Fill(Q2_FD);
-                        }
-                    }
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
                 }
-            } // end of loop over electrons vector
-            //</editor-fold>
+            } else if (neutrals[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
 
-            //<editor-fold desc="Neutron Beta vs. P plots (no #(electron) cut, CD & FD)">
-            for (auto &n: neutrons) {
-                if (n->getRegion() == CD) {
-                    Beta_vs_P_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
-                } else if (n->getRegion() == FD) {
-                    Beta_vs_P_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="Proton chi2 plots (no #(electron) cut, CD & FD)">
-            for (auto &p: protons) {
-                if (p->getRegion() == CD) {
-                    Beta_vs_P_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
-                    Chi2_Proton_CD->Fill(p->par()->getChi2Pid());
-                    Vertex_Proton_Vx_CD_test.Fill(p->par()->getVx());
-                    Vertex_Proton_Vy_CD_test.Fill(p->par()->getVy());
-                    Vertex_Proton_Vz_CD_test.Fill(p->par()->getVz());
-                } else if (p->getRegion() == FD) {
-                    Beta_vs_P_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
-                    Chi2_Proton_FD->Fill(p->par()->getChi2Pid());
-                    Vertex_Proton_Vx_FD_test.Fill(p->par()->getVx());
-                    Vertex_Proton_Vy_FD_test.Fill(p->par()->getVy());
-                    Vertex_Proton_Vz_FD_test.Fill(p->par()->getVz());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //TODO: keep these TOF plots?
-//            //
-//            Event_start_time_histogram->Fill(c12.event()->getStartTime());
-//            //
-
-            //</editor-fold>
-
-//  At least 1e cut -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="At least 1e cut">
-            if (electrons.size() >= 1) {
-                ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
-
-                for (int i = 0; i < AllParticles.size(); i++) {
-                    if (AllParticles[i]->getRegion() == CD) {
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_min_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    } else if (AllParticles[i]->getRegion() == FD) {
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_min_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    }
-                }
-
-                if (electrons.size() > 1) {
-                    ++num_of_events_more_then_1e; // logging #(events) w/ more then 1e
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
                 }
             }
-            //</editor-fold>
+        } // end of loop over neutrals vector
+        //</editor-fold>
+
+        //<editor-fold desc="deuterons Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < deuterons.size(); i++) {
+            if (deuterons[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                }
+            } else if (deuterons[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over deuterons vector
+        //</editor-fold>
+
+        //<editor-fold desc="otherpart Beta vs. P plots (no #(electron) cut, CD & FD)">
+        for (int i = 0; i < otherpart.size(); i++) {
+            if (otherpart[i]->getRegion() == CD) {
+                Beta_vs_P_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                }
+            } else if (otherpart[i]->getRegion() == FD) {
+                Beta_vs_P_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_All_e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                }
+            }
+        } // end of loop over otherpart vector
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //</editor-fold>
+
+//  At least 1e cut (log only) ------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="At least 1e cut (log only)">
+        if (electrons.size() >= 1) {
+            ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
+
+            if (electrons.size() > 1) {
+                ++num_of_events_more_then_1e; // logging #(events) w/ more then 1e
+            }
+        }
+        //</editor-fold>
 
 //  1e cut --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="1e cut">
+        //<editor-fold desc="1e cut">
+        /* Here we apply electron cut on everything that follows (MicroBooNE, 1e2X, 1e2p, etc) */
 
-            /* Here we apply electron cut on everything that follows (MicroBooNE, 1e2X, 1e2p, etc) */
+        //<editor-fold desc="rough 1e cut">
+        /* Applying rough 1e cut */
+        if (Ne != 1) { continue; } /* the rough 1e cut */
+        ++num_of_events_with_exactly_1e; /* logging #(events) w/ exactly 1e */
 
-            //<editor-fold desc="rough 1e cut">
-            // Applying 1e cut:
-            if (electrons.size() != 1) { continue; } // the rough 1e cut
-            ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
+        if (Nf - Ne == Np) {
+            ++num_of_events_with_1enP; /* logging #(events) w/ 1e & any #p 1enP */
 
-            if (AllParticles.size() - electrons.size() == protons.size()) {
-                ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p
+            if (protons.size() == 1) { ++num_of_events_with_1e1p; /* logging #(events) w/ 1e1p */ }
+        }
+        //</editor-fold>
 
-                if (protons.size() == 1) {
-                    ++num_of_events_with_1e1p; // logging #(events) w/ 1e1p
-                }
-            }
-            //</editor-fold>
+        //<editor-fold desc="Testing additional electron cuts">
 
-            //<editor-fold desc="Testing additional electron cuts">
-            TVector3 P_e_1e;
-            P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+        //TODO: all these tests are NOT 2p or 1e2p (the're moved from below and here we have no constrant on protons.size) - redefine propely to 1e or add constrant on protons.size
 
-            //<editor-fold desc="Testing momentum cuts">
-            // Momentum plots before cuts:
+        TVector3 P_e_1e;
+        P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+
+        //<editor-fold desc="Testing momentum cuts (2p)">
+        /* Momentum plots before cuts */
+        if (electrons[0]->getRegion() == CD) {
+            P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
+        } else if (electrons[0]->getRegion() == FD) {
+            P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
+        }
+
+        /* Momentum plots after cuts */
+        if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
             if (electrons[0]->getRegion() == CD) {
-                P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
+                P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
             } else if (electrons[0]->getRegion() == FD) {
-                P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
+                P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
             }
-
-            // Momentum plots cuts:
-            if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
+        } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
+            if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
                 if (electrons[0]->getRegion() == CD) {
                     P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
                 } else if (electrons[0]->getRegion() == FD) {
                     P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
                 }
-            } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
-                if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
-                    if (electrons[0]->getRegion() == CD) {
-                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-                    } else if (electrons[0]->getRegion() == FD) {
-                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-                    }
-                }
-            } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
-                if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
-                    if (electrons[0]->getRegion() == CD) {
-                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-                    } else if (electrons[0]->getRegion() == FD) {
-                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-                    }
-                }
-            } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
-                if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
-                    if (electrons[0]->getRegion() == CD) {
-                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-                    } else if (electrons[0]->getRegion() == FD) {
-                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-                    }
+            }
+        } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
+            if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
+                if (electrons[0]->getRegion() == CD) {
+                    P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                } else if (electrons[0]->getRegion() == FD) {
+                    P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
                 }
             }
-            //</editor-fold>
-
-            //<editor-fold desc="Testing SF cuts">
-            double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
-
-            // SF plots before cuts:
-            SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-            SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
-
-            // SF plots after cuts:
-            if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
-                SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-                SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+        } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
+            if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
+                if (electrons[0]->getRegion() == CD) {
+                    P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                } else if (electrons[0]->getRegion() == FD) {
+                    P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                }
             }
-            //</editor-fold>
+        }
+        //</editor-fold>
 
-            //<editor-fold desc="Testing fiducial cuts">
-            // Fiducial plots before cuts:
-//            Vcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
-//            Wcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
-            Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+        //<editor-fold desc="Testing SF cuts">
+        double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
 
-            // Fiducial plots after cuts:
-            //TODO: remove fiducial ECIN plots
-//                if (electrons[0]->cal(ECIN)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e); }
-//                if (electrons[0]->cal(ECIN)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e); }
-            if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-            if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
-            //</editor-fold>
+        /* SF plots before cuts */
+        SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
+        SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
 
-            //<editor-fold desc="Testing nphe cuts">
-            int nphe = electrons[0]->che(HTCC)->getNphe();
+        /* SF plots after cuts */
+        if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
+            SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
+            SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+        }
+        //</editor-fold>
 
-            // nphe plots before cuts:
-            nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+        //<editor-fold desc="Testing fiducial cuts">
+        /* Fiducial plots before cuts */
+        Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+        Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
-            // nphe plots after cuts:
-            if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
-            //</editor-fold>
+        /* Fiducial plots after cuts */
+        if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+        if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+        //</editor-fold>
 
-            //<editor-fold desc="Testing chi2 cuts">
-            // Chi2 plots before cut
-            if (electrons[0]->getRegion() == CD) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-                Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
-            } else if (electrons[0]->getRegion() == FD) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-                Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
-            }
+        //<editor-fold desc="Testing nphe cuts">
+        int nphe = electrons[0]->che(HTCC)->getNphe();
 
-            // Chi2 plots after cut
-            if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
-                ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-                Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-            } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
-                ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-                Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
-            }
-            //</editor-fold>
+        /* nphe plots before cuts */
+        nphe_All_Int_1e2p_BC_FD->Fill(nphe);
 
-            //</editor-fold>
+        /* nphe plots after cuts */
+        if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+        //</editor-fold>
 
-            //<editor-fold desc="Applying additional electron cuts">
-            // SF cuts:
-            if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
+        //<editor-fold desc="Testing chi2 cuts">
+        /* Chi2 plots before cut */
+        if (electrons[0]->getRegion() == CD) {
+            Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
+        } else if (electrons[0]->getRegion() == FD) {
+            Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
+        }
 
-            // fiducial cuts:
-            if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-            if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+        /* Chi2 plots after cut */
+        if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
+            ++num_of_events_1e2p_w_eChi2_cut_only_CD;
+            Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
+        } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
+            ++num_of_events_1e2p_w_eChi2_cut_only_FD;
+            Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
+        }
+        //</editor-fold>
 
-            // nphe cuts:
-            if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+        //</editor-fold>
 
-            // Chi2 cuts:
-            if (electrons[0]->getRegion() == CD) {
-                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-            } else if (electrons[0]->getRegion() == FD) {
-                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-            }
+        //<editor-fold desc="Applying additional electron cuts">
+//        /* SF cuts */
+//        if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
 
-//            //TODO: see if other cuts can be applied to improve beta vs. P plots
-//            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
-////            if(electrons[0]->par()->getVz() < -1){continue;}
-////            if(electrons[0]->par()->getVz() > 1){continue;}
+//        /* fiducial cuts */
+//        if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
+//        if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
+
+        /* nphe cuts */
+        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
+
+//        /* Chi2 cuts */
+//        if (electrons[0]->getRegion() == CD) {
+//            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
+//        } else if (electrons[0]->getRegion() == FD) {
+//            if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
+//        }
+
+////            //TODO: see if other cuts can be applied to improve beta vs. P plots
+////            if (electrons[0]->cal(PCAL)->getEnergy() < 0.07) { continue; }
+//////            if(electrons[0]->par()->getVz() < -1){continue;}
+//////            if(electrons[0]->par()->getVz() > 1){continue;}
+////
+////            //TODO: see if other cuts can be applied to improve beta vs. P plots
+////            double vtz_e = electrons[0]->par()->getVz();
+////            bool vt_cut_skip = false;
+////
+////            for (int i = 0; i < AllParticles.size(); i++) {
+////                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
+////
+////                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
+//////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
+//////                if ((fabs(dVz_peak - dvtz) > dVz_cut) || (fabs(dVz_peak - dvtz) > dVz_cut)) { continue; }
+////            }
+////
+////            if (vt_cut_skip == true) { continue; }
 //
-//            //TODO: see if other cuts can be applied to improve beta vs. P plots
-//            double vtz_e = electrons[0]->par()->getVz();
-//            bool vt_cut_skip = false;
+//        //</editor-fold>
+
+        //<editor-fold desc="Filling 1e only plots">
+
+        //<editor-fold desc="Fill Electron plots (1e only, CD & FD)">
+        double theta_e_1e_CD, theta_e_1e_FD, phi_e_1e_FD, phi_e_1e_CD, P_e_CD, P_e_FD, E_e_CD, E_e_FD;
+
+        for (auto &e: electrons) {
+            if (e->getRegion() == CD) {
+                P_e_CD = e->getP();
+                E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
+                E_e_hist_CD->Fill(E_e_CD);
+
+                Beta_vs_P_1e_CD->Fill(P_e_CD, e->par()->getBeta());
+                Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
+
+//                if (e->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
+//                } else if (e->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
+//                } else if (e->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
+//                }
+
+                theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
+                Theta_e_1e_CD->Fill(theta_e_1e_CD);
+                phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
+                Phi_e_1e_CD->Fill(phi_e_1e_CD);
+                Theta_e_VS_Phi_e_1e_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
+                E_e_VS_Theta_e_hist_CD->Fill(theta_e_1e_CD, E_e_CD);
+
+                if (Nf == 3) {
+                    Theta_e_1e2X_CD->Fill(theta_e_1e_CD);
+                    Phi_e_1e2X_CD->Fill(phi_e_1e_CD);
+
+                    if (qel) {
+                        ++num_of_QEL_1e2X_CD_events;
+                        Theta_e_1e2X_QEL_CD->Fill(theta_e_1e_CD);
+                        Phi_e_1e2X_QEL_CD->Fill(phi_e_1e_CD);
+                    } else if (mec) {
+                        ++num_of_MEC_1e2X_CD_events;
+                        Theta_e_1e2X_MEC_CD->Fill(theta_e_1e_CD);
+                        Phi_e_1e2X_MEC_CD->Fill(phi_e_1e_CD);
+                    } else if (res) {
+                        ++num_of_RES_1e2X_CD_events;
+                        Theta_e_1e2X_RES_CD->Fill(theta_e_1e_CD);
+                        Phi_e_1e2X_RES_CD->Fill(phi_e_1e_CD);
+                    } else if (dis) {
+                        ++num_of_DIS_1e2X_CD_events;
+                        Theta_e_1e2X_DIS_CD->Fill(theta_e_1e_CD);
+                        Phi_e_1e2X_DIS_CD->Fill(phi_e_1e_CD);
+                    }
+
+                    if (protons.size() == 2) {
+                        Theta_e_1e2p_CD->Fill(theta_e_1e_CD);
+                        Phi_e_1e2p_CD->Fill(phi_e_1e_CD);
+
+                        if (qel) {
+                            ++num_of_QEL_1e2p_CD_events;
+                            Theta_e_1e2p_QEL_CD->Fill(theta_e_1e_CD);
+                            Phi_e_1e2p_QEL_CD->Fill(phi_e_1e_CD);
+                        } else if (mec) {
+                            ++num_of_MEC_1e2p_CD_events;
+                            Theta_e_1e2p_MEC_CD->Fill(theta_e_1e_CD);
+                            Phi_e_1e2p_MEC_CD->Fill(phi_e_1e_CD);
+                        } else if (res) {
+                            ++num_of_RES_1e2p_CD_events;
+                            Theta_e_1e2p_RES_CD->Fill(theta_e_1e_CD);
+                            Phi_e_1e2p_RES_CD->Fill(phi_e_1e_CD);
+                        } else if (dis) {
+                            ++num_of_DIS_1e2p_CD_events;
+                            Theta_e_1e2p_DIS_CD->Fill(theta_e_1e_CD);
+                            Phi_e_1e2p_DIS_CD->Fill(phi_e_1e_CD);
+                        }
+                    }
+                }
+
+                Chi2_Electron_1e_CD->Fill(e->par()->getChi2Pid());
+
+                Vertex_Electron_1e_Vx_CD->Fill(e->par()->getVx());
+                Vertex_Electron_1e_Vy_CD->Fill(e->par()->getVy());
+                Vertex_Electron_1e_Vz_CD->Fill(e->par()->getVz());
+            } else if (e->getRegion() == FD) {
+                P_e_FD = e->getP();
+                E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
+                E_e_hist_FD->Fill(E_e_FD);
+
+                Beta_vs_P_1e_FD->Fill(P_e_FD, e->par()->getBeta());
+                Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
+
+//                if (e->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
+//                } else if (e->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
+//                } else if (e->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
+//                }
+
+                theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
+                Theta_e_1e_FD->Fill(theta_e_1e_FD);
+                phi_e_1e_FD = e->getPhi() * 180.0 / pi; // phi_e_1e_FD in deg
+                Phi_e_1e_FD->Fill(phi_e_1e_FD);
+                Theta_e_VS_Phi_e_1e_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
+                E_e_VS_Theta_e_hist_FD->Fill(theta_e_1e_FD, E_e_FD);
+
+                if (Nf == 3) {
+                    Theta_e_1e2X_FD->Fill(theta_e_1e_FD);
+                    Phi_e_1e2X_FD->Fill(phi_e_1e_FD);
+
+                    if (qel) {
+                        ++num_of_QEL_1e2X_FD_events;
+                        Theta_e_1e2X_QEL_FD->Fill(theta_e_1e_FD);
+                        Phi_e_1e2X_QEL_FD->Fill(phi_e_1e_FD);
+                    } else if (mec) {
+                        ++num_of_MEC_1e2X_FD_events;
+                        Theta_e_1e2X_MEC_FD->Fill(theta_e_1e_FD);
+                        Phi_e_1e2X_MEC_FD->Fill(phi_e_1e_FD);
+                    } else if (res) {
+                        ++num_of_RES_1e2X_FD_events;
+                        Theta_e_1e2X_RES_FD->Fill(theta_e_1e_FD);
+                        Phi_e_1e2X_RES_FD->Fill(phi_e_1e_FD);
+                    } else if (dis) {
+                        ++num_of_DIS_1e2X_FD_events;
+                        Theta_e_1e2X_DIS_FD->Fill(theta_e_1e_FD);
+                        Phi_e_1e2X_DIS_FD->Fill(phi_e_1e_FD);
+                    }
+
+                    if (protons.size() == 2) {
+                        Theta_e_1e2p_FD->Fill(theta_e_1e_FD);
+                        Phi_e_1e2p_FD->Fill(phi_e_1e_FD);
+
+                        if (qel) {
+                            ++num_of_QEL_1e2p_FD_events;
+                            Theta_e_1e2p_QEL_FD->Fill(theta_e_1e_FD);
+                            Phi_e_1e2p_QEL_FD->Fill(phi_e_1e_FD);
+                        } else if (mec) {
+                            ++num_of_MEC_1e2p_FD_events;
+                            Theta_e_1e2p_MEC_FD->Fill(theta_e_1e_FD);
+                            Phi_e_1e2p_MEC_FD->Fill(phi_e_1e_FD);
+                        } else if (res) {
+                            ++num_of_RES_1e2p_FD_events;
+                            Theta_e_1e2p_RES_FD->Fill(theta_e_1e_FD);
+                            Phi_e_1e2p_RES_FD->Fill(phi_e_1e_FD);
+                        } else if (dis) {
+                            ++num_of_DIS_1e2p_FD_events;
+                            Theta_e_1e2p_DIS_FD->Fill(theta_e_1e_FD);
+                            Phi_e_1e2p_DIS_FD->Fill(phi_e_1e_FD);
+                        }
+                    }
+                }
+
+                Chi2_Electron_1e_FD->Fill(e->par()->getChi2Pid());
+
+                Vertex_Electron_1e_Vx_FD->Fill(e->par()->getVx());
+                Vertex_Electron_1e_Vy_FD->Fill(e->par()->getVy());
+                Vertex_Electron_1e_Vz_FD->Fill(e->par()->getVz());
+            }
+        } // end of loop over electrons vector
+        //</editor-fold>
+
+        //<editor-fold desc="Fill Proton plots (1e only, CD & FD)">
+        for (auto &p: protons) {
+            if (p->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(p->getP(), p->par()->getBeta());
+                Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
+                Beta_vs_P_positive_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
+
+//                if (p->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
+//                } else if (p->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
+//                } else if (p->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
+//                }
+
+//                Chi2_Proton_1e_CD->Fill(p->par()->getChi2Pid() - (0.5561));
+                Chi2_Proton_1e_CD->Fill(p->par()->getChi2Pid());
+
+                Vertex_Proton_1e_Vx_CD->Fill(p->par()->getVx());
+                Vertex_Proton_1e_Vy_CD->Fill(p->par()->getVy());
+                Vertex_Proton_1e_Vz_CD->Fill(p->par()->getVz());
+            } else if (p->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(p->getP(), p->par()->getBeta());
+                Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
+                Beta_vs_P_positive_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
+
+//                if (p->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
+//                } else if (p->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
+//                } else if (p->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
+//                }
+
+//                Chi2_Proton_1e_FD->Fill(p->par()->getChi2Pid() - (-0.008108));
+                Chi2_Proton_1e_FD->Fill(p->par()->getChi2Pid());
+
+                Vertex_Proton_1e_Vx_FD->Fill(p->par()->getVx());
+                Vertex_Proton_1e_Vy_FD->Fill(p->par()->getVy());
+                Vertex_Proton_1e_Vz_FD->Fill(p->par()->getVz());
+            }
+        } // end of loop over protons vector
+        //</editor-fold>
+
+        //<editor-fold desc="Fill Beta vs. P (1e cut)">
+
+//        //<editor-fold desc="neutrons Beta vs. P plots (1e cut, CD & FD)">
+//        for (int i = 0; i < neutrons.size(); i++) {
+//            if (neutrons[i]->getRegion() == CD) {
+//                Beta_vs_P_1e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                Beta_vs_P_1e_Neutrons_Only_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
 //
-//            for (int i = 0; i < AllParticles.size(); i++) {
-//                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
+//                if (neutrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                }
+//            } else if (neutrons[i]->getRegion() == FD) {
+//                Beta_vs_P_1e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                Beta_vs_P_1e_Neutrons_Only_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
 //
-//                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
-////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
-////                if ((fabs(dVz_peak - dvtz) > dVz_cut) || (fabs(dVz_peak - dvtz) > dVz_cut)) { continue; }
+//                if (neutrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                }
 //            }
+//        } // end of loop over neutrons vector
+//        //</editor-fold>
+
+        //<editor-fold desc="Kplus Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < Kplus.size(); i++) {
+            if (Kplus[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                Beta_vs_P_1e_Kplus_Only_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+
+//                if (Kplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                }
+
+                Chi2_Kplus_1e_CD->Fill(Kplus[i]->par()->getChi2Pid());
+
+                Vertex_Kplus_1e_Vx_CD->Fill(Kplus[i]->par()->getVx());
+                Vertex_Kplus_1e_Vy_CD->Fill(Kplus[i]->par()->getVy());
+                Vertex_Kplus_1e_Vz_CD->Fill(Kplus[i]->par()->getVz());
+            } else if (Kplus[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                Beta_vs_P_1e_Kplus_Only_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+
+//                if (Kplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                } else if (Kplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+//                }
+
+                Chi2_Kplus_1e_FD->Fill(Kplus[i]->par()->getChi2Pid());
+
+                Vertex_Kplus_1e_Vx_FD->Fill(Kplus[i]->par()->getVx());
+                Vertex_Kplus_1e_Vy_FD->Fill(Kplus[i]->par()->getVy());
+                Vertex_Kplus_1e_Vz_FD->Fill(Kplus[i]->par()->getVz());
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
+
+        //<editor-fold desc="Kminus Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < Kminus.size(); i++) {
+            if (Kminus[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                Beta_vs_P_1e_Kminus_Only_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+
+//                if (Kminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                }
+
+                Chi2_Kminus_1e_CD->Fill(Kminus[i]->par()->getChi2Pid());
+
+                Vertex_Kminus_1e_Vx_CD->Fill(Kminus[i]->par()->getVx());
+                Vertex_Kminus_1e_Vy_CD->Fill(Kminus[i]->par()->getVy());
+                Vertex_Kminus_1e_Vz_CD->Fill(Kminus[i]->par()->getVz());
+            } else if (Kminus[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                Beta_vs_P_1e_Kminus_Only_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+
+//                if (Kminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                } else if (Kminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+//                }
+
+                Chi2_Kminus_1e_FD->Fill(Kminus[i]->par()->getChi2Pid());
+
+                Vertex_Kminus_1e_Vx_FD->Fill(Kminus[i]->par()->getVx());
+                Vertex_Kminus_1e_Vy_FD->Fill(Kminus[i]->par()->getVy());
+                Vertex_Kminus_1e_Vz_FD->Fill(Kminus[i]->par()->getVz());
+            }
+        } // end of loop over Kminus vector
+        //</editor-fold>
+
+        //<editor-fold desc="piplus Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < piplus.size(); i++) {
+            if (piplus[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                Beta_vs_P_1e_piplus_Only_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+
+//                if (piplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                }
+
+                Chi2_piplus_1e_CD->Fill(piplus[i]->par()->getChi2Pid());
+
+                Vertex_piplus_1e_Vx_CD->Fill(piplus[i]->par()->getVx());
+                Vertex_piplus_1e_Vy_CD->Fill(piplus[i]->par()->getVy());
+                Vertex_piplus_1e_Vz_CD->Fill(piplus[i]->par()->getVz());
+            } else if (piplus[i]->getRegion() == FD) {
+
+                Beta_vs_P_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                Beta_vs_P_1e_piplus_Only_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                Beta_vs_P_positive_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+
+//                if (piplus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                } else if (piplus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+//                }
+
+                Chi2_piplus_1e_FD->Fill(piplus[i]->par()->getChi2Pid());
+
+                Vertex_piplus_1e_Vx_FD->Fill(piplus[i]->par()->getVx());
+                Vertex_piplus_1e_Vy_FD->Fill(piplus[i]->par()->getVy());
+                Vertex_piplus_1e_Vz_FD->Fill(piplus[i]->par()->getVz());
+            }
+        } // end of loop over piplus vector
+        //</editor-fold>
+
+        //<editor-fold desc="piminus Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < piminus.size(); i++) {
+            if (piminus[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                Beta_vs_P_1e_piminus_Only_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+
+//                if (piminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                }
+
+                Chi2_piminus_1e_CD->Fill(piminus[i]->par()->getChi2Pid());
+
+                Vertex_piminus_1e_Vx_CD->Fill(piminus[i]->par()->getVx());
+                Vertex_piminus_1e_Vy_CD->Fill(piminus[i]->par()->getVy());
+                Vertex_piminus_1e_Vz_CD->Fill(piminus[i]->par()->getVz());
+            } else if (piminus[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                Beta_vs_P_1e_piminus_Only_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+
+//                if (piminus[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                } else if (piminus[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+//                }
+
+                Chi2_piminus_1e_FD->Fill(piminus[i]->par()->getChi2Pid());
+
+                Vertex_piminus_1e_Vx_FD->Fill(piminus[i]->par()->getVx());
+                Vertex_piminus_1e_Vy_FD->Fill(piminus[i]->par()->getVy());
+                Vertex_piminus_1e_Vz_FD->Fill(piminus[i]->par()->getVz());
+            }
+        } // end of loop over piminus vector
+        //</editor-fold>
+
+//        //<editor-fold desc="pizero Beta vs. P plots (1e cut, CD & FD)">
+//        for (int i = 0; i < pizero.size(); i++) {
+//            if (pizero[i]->getRegion() == CD) {
+//                Beta_vs_P_1e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                Beta_vs_P_1e_pizero_Only_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
 //
-//            if (vt_cut_skip == true) { continue; }
-
-            //</editor-fold>
-
-            //<editor-fold desc="General 1e only plots">
-
-            //<editor-fold desc="Fill Beta vs. P (1e only, CD & FD)">
-            for (int i = 0; i < AllParticles.size(); i++) {
-                //TODO: keep these TOF plots?
-//                Particle_ToF_histogram->Fill(AllParticles[i]->getTime());
-
-                if (AllParticles[i]->getRegion() == CD) {
-                    Beta_vs_P_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_1e_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-                } else if (AllParticles[i]->getRegion() == FD) {
-                    Beta_vs_P_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                    if (AllParticles[i]->par()->getCharge() == 1) {
-                        Beta_vs_P_positive_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == 0) {
-                        Beta_vs_P_neutral_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    } else if (AllParticles[i]->par()->getCharge() == -1) {
-                        Beta_vs_P_negative_particles_1e_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                    }
-
-                    //TODO: keep these TOF plots?
-//                    bool FTOF1A = (AllParticles[i]->sci(clas12::FTOF1A)->getDetector() == 12);
-//                    bool FTOF1B = (AllParticles[i]->sci(clas12::FTOF1B)->getDetector() == 12);
-//                    bool FTOF2 = (AllParticles[i]->sci(clas12::FTOF2)->getDetector() == 12);
-////                    bool CTOF = (AllParticles[i]->sci(clas12::CTOF)->getDetector() == 4);
-
-                    //TODO: rename Beta_VS_P_from_FTOF plots for charged particles
-                    //TODO: add Beta_VS_P_from_CTOF plots for charged particles
-                    //TODO: add Beta_VS_P_from TOF plots for neutral particles?
-////                    if (FTOF1A) {
-//                    if (FTOF1A && AllParticles[i]->par()->getCharge() != 0) {
-////                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime();
-//                        double Time_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getTime() - c12.event()->getStartTime();
-////                        double Path_of_Filght_FTOF1A = rCalc(AllParticles[i]->sci(FTOF1A)->getX(),AllParticles[i]->sci(FTOF1A)->getY(),AllParticles[i]->sci(FTOF1A)->getZ());
-//                        double Path_of_Filght_FTOF1A = AllParticles[i]->sci(FTOF1A)->getPath();
-//                        double Beta_ToF = Path_of_Filght_FTOF1A / (c * Time_of_Filght_FTOF1A);
+//                if (pizero[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                }
+//            } else if (pizero[i]->getRegion() == FD) {
+//                Beta_vs_P_1e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                Beta_vs_P_1e_pizero_Only_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
 //
-//                        Beta_VS_P_from_FTOF1A_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
-//                    }
-//
-////                    if (FTOF1B) {
-//                    if (FTOF1B && AllParticles[i]->par()->getCharge() != 0) {
-//                        double Time_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getTime() - c12.event()->getStartTime();
-//                        double Path_of_Filght_FTOF1B = AllParticles[i]->sci(FTOF1B)->getPath();
-//                        double Beta_ToF = Path_of_Filght_FTOF1B / (c * Time_of_Filght_FTOF1B);
-//
-//                        Beta_VS_P_from_FTOF1B_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
-//                    }
-//
-////                    if (FTOF2) {
-//                    if (FTOF2 && AllParticles[i]->par()->getCharge() != 0) {
-//                        double Time_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getTime() - c12.event()->getStartTime();
-//                        double Path_of_Filght_FTOF2 = AllParticles[i]->sci(FTOF2)->getPath();
-//                        double Beta_ToF = Path_of_Filght_FTOF2 / (c * Time_of_Filght_FTOF2);
-//
-//                        Beta_VS_P_from_FTOF2_histogram->Fill(AllParticles[i]->getP(), Beta_ToF);
-//                    }
+//                if (pizero[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                }
+//            }
+//        } // end of loop over pizero vector
+//        //</editor-fold>
 
+        //<editor-fold desc="neutrals Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < neutrals.size(); i++) {
+            if (neutrals[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+
+//                if (neutrals[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                } else if (neutrals[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                } else if (neutrals[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                }
+            } else if (neutrals[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+
+//                if (neutrals[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                } else if (neutrals[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                } else if (neutrals[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                }
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
+
+        //<editor-fold desc="deuterons Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < deuterons.size(); i++) {
+            if (deuterons[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
                 }
-            } // end of loop over AllParticles vector
-            //</editor-fold>
+            } else if (deuterons[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
 
-            //<editor-fold desc="Fill Electron plots (1e only, CD & FD)">
-            double theta_e_1e_CD, phi_e_1e_CD, P_e_CD, E_e_CD, e_Chi2_CD, e_Vx_CD, e_Vy_CD, e_Vz_CD, e_ToF_CD;
-            double theta_e_1e_FD, phi_e_1e_FD, P_e_FD, E_e_FD, e_Chi2_FD, e_Vx_FD, e_Vy_FD, e_Vz_FD, e_ToF_FD;
-
-            for (auto &e: electrons) {
-                if (e->getRegion() == CD) {
-                    P_e_CD = e->getP();
-                    E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
-                    E_e_hist_CD->Fill(E_e_CD);
-                    Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
-
-//                    e_ToF_CD = (e->getPath()) / (c * (e->par()->getBeta()));
-//                    Electron_ToF_from_beta_histogram_CD->Fill(e_ToF_CD);
-//                    Electron_path_length_histogram_CD->Fill(e->getPath());
-
-                    theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
-                    Theta_e_1e_CD->Fill(theta_e_1e_CD);
-                    phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
-                    Phi_e_1e_CD->Fill(phi_e_1e_CD);
-                    Theta_e_VS_Phi_e_1e_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
-                    E_e_VS_Theta_e_hist_CD->Fill(theta_e_1e_CD, E_e_CD);
-
-                    if (AllParticles.size() == 3) {
-                        Theta_e_1e2X_CD->Fill(theta_e_1e_CD);
-                        Phi_e_1e2X_CD->Fill(phi_e_1e_CD);
-
-                        if (qel) {
-                            ++num_of_QEL_1e2X_CD_events;
-                            Theta_e_1e2X_QEL_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2X_QEL_CD->Fill(phi_e_1e_CD);
-                        } else if (mec) {
-                            ++num_of_MEC_1e2X_CD_events;
-                            Theta_e_1e2X_MEC_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2X_MEC_CD->Fill(phi_e_1e_CD);
-                        } else if (res) {
-                            ++num_of_RES_1e2X_CD_events;
-                            Theta_e_1e2X_RES_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2X_RES_CD->Fill(phi_e_1e_CD);
-                        } else if (dis) {
-                            ++num_of_DIS_1e2X_CD_events;
-                            Theta_e_1e2X_DIS_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2X_DIS_CD->Fill(phi_e_1e_CD);
-                        }
-
-                        if (protons.size() == 2) {
-                            Theta_e_1e2p_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2p_CD->Fill(phi_e_1e_CD);
-
-                            if (qel) {
-                                ++num_of_QEL_1e2p_CD_events;
-                                Theta_e_1e2p_QEL_CD->Fill(theta_e_1e_CD);
-                                Phi_e_1e2p_QEL_CD->Fill(phi_e_1e_CD);
-                            } else if (mec) {
-                                ++num_of_MEC_1e2p_CD_events;
-                                Theta_e_1e2p_MEC_CD->Fill(theta_e_1e_CD);
-                                Phi_e_1e2p_MEC_CD->Fill(phi_e_1e_CD);
-                            } else if (res) {
-                                ++num_of_RES_1e2p_CD_events;
-                                Theta_e_1e2p_RES_CD->Fill(theta_e_1e_CD);
-                                Phi_e_1e2p_RES_CD->Fill(phi_e_1e_CD);
-                            } else if (dis) {
-                                ++num_of_DIS_1e2p_CD_events;
-                                Theta_e_1e2p_DIS_CD->Fill(theta_e_1e_CD);
-                                Phi_e_1e2p_DIS_CD->Fill(phi_e_1e_CD);
-                            }
-                        }
-                    }
-
-                    e_Chi2_CD = e->par()->getChi2Pid();
-                    Chi2_Electron_1e_CD->Fill(e_Chi2_CD);
-
-                    e_Vx_CD = e->par()->getVx();
-                    Vertex_Electron_1e_Vx_CD_test.Fill(e_Vx_CD);
-                    e_Vy_CD = e->par()->getVy();
-                    Vertex_Electron_1e_Vy_CD_test.Fill(e_Vy_CD);
-                    e_Vz_CD = e->par()->getVz();
-                    Vertex_Electron_1e_Vz_CD_test.Fill(e_Vz_CD);
-                } else if (e->getRegion() == FD) {
-                    P_e_FD = e->getP();
-                    E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
-                    E_e_hist_FD->Fill(E_e_FD);
-                    Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
-
-//                    e_ToF_FD = (e->getPath()) / (c * (e->par()->getBeta()));
-//                    Electron_ToF_from_beta_histogram_FD->Fill(e_ToF_FD);
-//                    Electron_path_length_histogram_FD->Fill(e->getPath());
-
-                    theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
-                    Theta_e_1e_FD->Fill(theta_e_1e_FD);
-                    phi_e_1e_FD = e->getPhi() * 180.0 / pi; // phi_e_1e_FD in deg
-                    Phi_e_1e_FD->Fill(phi_e_1e_FD);
-                    Theta_e_VS_Phi_e_1e_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
-                    E_e_VS_Theta_e_hist_FD->Fill(theta_e_1e_FD, E_e_FD);
-
-                    if (AllParticles.size() == 3) {
-                        Theta_e_1e2X_FD->Fill(theta_e_1e_FD);
-                        Phi_e_1e2X_FD->Fill(phi_e_1e_FD);
-
-                        if (qel) {
-                            ++num_of_QEL_1e2X_FD_events;
-                            Theta_e_1e2X_QEL_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2X_QEL_FD->Fill(phi_e_1e_FD);
-                        } else if (mec) {
-                            ++num_of_MEC_1e2X_FD_events;
-                            Theta_e_1e2X_MEC_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2X_MEC_FD->Fill(phi_e_1e_FD);
-                        } else if (res) {
-                            ++num_of_RES_1e2X_FD_events;
-                            Theta_e_1e2X_RES_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2X_RES_FD->Fill(phi_e_1e_FD);
-                        } else if (dis) {
-                            ++num_of_DIS_1e2X_FD_events;
-                            Theta_e_1e2X_DIS_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2X_DIS_FD->Fill(phi_e_1e_FD);
-                        }
-
-                        if (protons.size() == 2) {
-                            Theta_e_1e2p_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2p_FD->Fill(phi_e_1e_FD);
-
-                            if (qel) {
-                                ++num_of_QEL_1e2p_FD_events;
-                                Theta_e_1e2p_QEL_FD->Fill(theta_e_1e_FD);
-                                Phi_e_1e2p_QEL_FD->Fill(phi_e_1e_FD);
-                            } else if (mec) {
-                                ++num_of_MEC_1e2p_FD_events;
-                                Theta_e_1e2p_MEC_FD->Fill(theta_e_1e_FD);
-                                Phi_e_1e2p_MEC_FD->Fill(phi_e_1e_FD);
-                            } else if (res) {
-                                ++num_of_RES_1e2p_FD_events;
-                                Theta_e_1e2p_RES_FD->Fill(theta_e_1e_FD);
-                                Phi_e_1e2p_RES_FD->Fill(phi_e_1e_FD);
-                            } else if (dis) {
-                                ++num_of_DIS_1e2p_FD_events;
-                                Theta_e_1e2p_DIS_FD->Fill(theta_e_1e_FD);
-                                Phi_e_1e2p_DIS_FD->Fill(phi_e_1e_FD);
-                            }
-                        }
-                    }
-
-                    e_Chi2_FD = e->par()->getChi2Pid();
-                    Chi2_Electron_1e_FD->Fill(e_Chi2_FD);
-
-                    e_Vx_FD = e->par()->getVx();
-                    Vertex_Electron_1e_Vx_FD_test.Fill(e_Vx_FD);
-                    e_Vy_FD = e->par()->getVy();
-                    Vertex_Electron_1e_Vy_FD_test.Fill(e_Vy_FD);
-                    e_Vz_FD = e->par()->getVz();
-                    Vertex_Electron_1e_Vz_FD_test.Fill(e_Vz_FD);
+                if (deuterons[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+                } else if (deuterons[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
                 }
-            } // end of loop over electrons vector
-            //</editor-fold>
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
 
-            //<editor-fold desc="Fill Proton plots (1e only, CD & FD)">
-            double p_Chi2_tmp_CD, p_Vx_tmp_CD, p_Vy_tmp_CD, p_Vz_tmp_CD;
-            double p_Chi2_tmp_FD, p_Vx_tmp_FD, p_Vy_tmp_FD, p_Vz_tmp_FD;
+        //<editor-fold desc="otherpart Beta vs. P plots (1e cut, CD & FD)">
+        for (int i = 0; i < otherpart.size(); i++) {
+            if (otherpart[i]->getRegion() == CD) {
+                Beta_vs_P_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
 
-            for (auto &p: protons) {
-                if (p->getRegion() == CD) {
-                    Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
-
-                    p_Chi2_tmp_CD = p->par()->getChi2Pid();
-                    Chi2_Proton_1e_CD->Fill(p_Chi2_tmp_CD);
-
-                    p_Vx_tmp_CD = p->par()->getVx();
-                    Vertex_Proton_1e_Vx_CD_test.Fill(p_Vx_tmp_CD);
-                    p_Vy_tmp_CD = p->par()->getVy();
-                    Vertex_Proton_1e_Vy_CD_test.Fill(p_Vy_tmp_CD);
-                    p_Vz_tmp_CD = p->par()->getVz();
-                    Vertex_Proton_1e_Vz_CD_test.Fill(p_Vz_tmp_CD);
-                } else if (p->getRegion() == FD) {
-                    Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
-
-                    p_Chi2_tmp_FD = p->par()->getChi2Pid();
-                    Chi2_Proton_1e_FD->Fill(p_Chi2_tmp_FD);
-
-                    p_Vx_tmp_FD = p->par()->getVx();
-                    Vertex_Proton_1e_Vx_FD_test.Fill(p_Vx_tmp_FD);
-                    p_Vy_tmp_FD = p->par()->getVy();
-                    Vertex_Proton_1e_Vy_FD_test.Fill(p_Vy_tmp_FD);
-                    p_Vz_tmp_FD = p->par()->getVz();
-                    Vertex_Proton_1e_Vz_FD_test.Fill(p_Vz_tmp_FD);
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
                 }
-            } // end of loop over protons vector
-            //</editor-fold>
+            } else if (otherpart[i]->getRegion() == FD) {
+                Beta_vs_P_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
 
-            //<editor-fold desc="Fill Neutron Beta vs. P plots (1e only, CD & FD)">
-            for (auto &n: neutrons) {
-                if (n->getRegion() == CD) {
-                    Beta_vs_P_1e_Neutrons_Only_CD->Fill(n->getP(), n->par()->getBeta());
-                } else if (n->getRegion() == FD) {
-                    Beta_vs_P_1e_Neutrons_Only_FD->Fill(n->getP(), n->par()->getBeta());
+                if (otherpart[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+                } else if (otherpart[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
                 }
-            } // end of loop over protons vector
-            //</editor-fold>
+            }
+        } // end of loop over Kplus vector
+        //</editor-fold>
 
-            //<editor-fold desc="Kplus Beta vs. P plots (1e only, CD & FD)">
-            for (auto &Kp: Kplus) {
-                if (Kp->getRegion() == CD) {
-                    Beta_vs_P_1e_Kplus_Only_CD->Fill(Kp->getP(), Kp->par()->getBeta());
-                } else if (Kp->getRegion() == FD) {
-                    Beta_vs_P_1e_Kplus_Only_FD->Fill(Kp->getP(), Kp->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
+        //</editor-fold>
 
-            //<editor-fold desc="Kminus Beta vs. P plots (1e only, CD & FD)">
-            for (auto &Km: Kminus) {
-                if (Km->getRegion() == CD) {
-                    Beta_vs_P_1e_Kminus_Only_CD->Fill(Km->getP(), Km->par()->getBeta());
-                } else if (Km->getRegion() == FD) {
-                    Beta_vs_P_1e_Kminus_Only_FD->Fill(Km->getP(), Km->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
+        //</editor-fold>
 
-            //<editor-fold desc="Kzero Beta vs. P plots (1e only, CD & FD)">
-            for (auto &K0: Kzero) {
-                if (K0->getRegion() == CD) {
-                    Beta_vs_P_1e_Kzero_Only_CD->Fill(K0->getP(), K0->par()->getBeta());
-                } else if (K0->getRegion() == FD) {
-                    Beta_vs_P_1e_Kzero_Only_FD->Fill(K0->getP(), K0->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="piplus Beta vs. P plots (1e only, CD & FD)">
-            for (auto &pip: piplus) {
-                if (pip->getRegion() == CD) {
-                    Beta_vs_P_1e_piplus_Only_CD->Fill(pip->getP(), pip->par()->getBeta());
-                } else if (pip->getRegion() == FD) {
-                    Beta_vs_P_1e_piplus_Only_FD->Fill(pip->getP(), pip->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="piminus Beta vs. P plots (1e only, CD & FD)">
-            for (auto &pim: piminus) {
-                if (pim->getRegion() == CD) {
-                    Beta_vs_P_1e_piminus_Only_CD->Fill(pim->getP(), pim->par()->getBeta());
-                } else if (pim->getRegion() == FD) {
-                    Beta_vs_P_1e_piminus_Only_FD->Fill(pim->getP(), pim->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="pizero Beta vs. P plots (1e only, CD & FD)">
-            for (auto &pi0: pizero) {
-                if (pi0->getRegion() == CD) {
-                    Beta_vs_P_1e_pizero_Only_CD->Fill(pi0->getP(), pi0->par()->getBeta());
-                } else if (pi0->getRegion() == FD) {
-                    Beta_vs_P_1e_pizero_Only_FD->Fill(pi0->getP(), pi0->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //<editor-fold desc="Photons Beta vs. P plots (1e only, CD & FD)">
-            for (auto &ph: photons) {
-                if (ph->getRegion() == CD) {
-                    Beta_vs_P_1e_Photons_Only_CD->Fill(ph->getP(), ph->par()->getBeta());
-                } else if (ph->getRegion() == FD) {
-                    Beta_vs_P_1e_Photons_Only_FD->Fill(ph->getP(), ph->par()->getBeta());
-                }
-            } // end of loop over protons vector
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //</editor-fold>
+        //</editor-fold>
 
 //  MicroBooNE cuts -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="MicroBooNE cuts">
-            /* 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons") */
-            int ne = electrons.size(), np = protons.size(), npi0 = pizero.size(), nn = neutrons.size(), npip = piplus.size(), npim = piminus.size();
-            bool MicroBooNE_particle_selection = ((ne == 1) && (np == 2) && (npi0 == 0) && (AllParticles.size() == ne + np + nn + npi0 + npip + npim));
-
-//            if ((calculate_MicroBooNE == true) && ((protons.size() == 2) && (pizero.size() == 0) && (pizero.size() == 0))) {
-            if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
-                ++num_of_MicroBooNE_events_BC;
-
-                if (nn != 0) { ++num_of_MicroBooNE_events_BC_wNeutrons; }
-                if (npi0 != 0) { ++num_of_MicroBooNE_events_BC_wpi0; }
-                if (npip != 0) { ++num_of_MicroBooNE_events_BC_wpip; }
-                if (npim != 0) { ++num_of_MicroBooNE_events_BC_wpim; }
-
-                //<editor-fold desc="Filling Beta vs. P (MicroBooNE-BC)">
-                /* Testing Beta vs. P before applying the MicroBooNE cuts */
-                for (int i = 0; i < AllParticles.size(); i++) {
-                    if (AllParticles[i]->getRegion() == CD) {
-                        Beta_vs_P_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    } else if (AllParticles[i]->getRegion() == FD) {
-                        Beta_vs_P_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    }
-                } // end of loop over AllParticles vector
-                //</editor-fold>
-
-                /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
-                TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE;
-                P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
-                P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
-                P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
-
-                //  Testing cuts (MicroBooNE) ---------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Testing cuts (MicroBooNE)">
-
-                //  Testing momentum cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Testing momentum cuts (MicroBooNE)">
-                /* Momentum plots before and after cuts */
-                if (electrons[0]->getRegion() == CD) {
-                    P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
-                    LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
-                } else if (electrons[0]->getRegion() == FD) {
-                    P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
-                    LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
-                }
-
-                if (protons[0]->getRegion() == CD) {
-                    P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
-                    LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-                } else if (protons[0]->getRegion() == FD) {
-                    P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
-                    LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-                }
-
-                if (protons[1]->getRegion() == CD) {
-                    P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
-                    LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-                } else if (protons[1]->getRegion() == FD) {
-                    P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
-                    LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
-                }
-
-                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-                for (int i = 0; i < piplus.size(); i++) {
-                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
-
-                    if (piplus[i]->getRegion() == CD) {
-                        P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
-                        LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                    } else if (piplus[i]->getRegion() == FD) {
-                        P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
-                        LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                    }
-                } // end of loop over piplus vector
-
-                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-                for (int i = 0; i < piminus.size(); i++) {
-                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
-
-                    if (piminus[i]->getRegion() == CD) {
-                        P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
-                        LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                    } else if (piminus[i]->getRegion() == FD) {
-                        P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
-                        LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
-                    }
-                } // end of loop over piminus vector
-                //</editor-fold>
-
-                //  Testing chi2 cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Testing chi2 before and after cuts">
-                /* Chi2 plots before and after cuts */
-                if (electrons[0]->getRegion() == CD) {
-                    Chi2_Electron_MicroBooNE_BC_CD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                    if (fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD) {
-                        Chi2_Electron_MicroBooNE_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-                    }
-                } else if (electrons[0]->getRegion() == FD) {
-                    Chi2_Electron_MicroBooNE_BC_FD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                    if (fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD) {
-                        Chi2_Electron_MicroBooNE_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
-                    }
-                }
-
-                if (protons[0]->getRegion() == CD) {
-                    Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                    if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
-                        Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[0]->par()->getChi2Pid());
-                    }
-                } else if (protons[0]->getRegion() == FD) {
-                    Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
-
-                    if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
-                        Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[0]->par()->getChi2Pid());
-                    }
-                }
-
-                if (protons[1]->getRegion() == CD) {
-                    Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
-
-                    if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
-                        Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[1]->par()->getChi2Pid());
-                    }
-                } else if (protons[1]->getRegion() == FD) {
-                    Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
-
-                    if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
-                        Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[1]->par()->getChi2Pid());
-                    }
-                }
-
-                for (int i = 0; i < piplus.size(); i++) {
-                    if (piplus[i]->getRegion() == CD) {
-                        Chi2_piplus_MicroBooNE_BC_CD->Fill(piplus[i]->par()->getChi2Pid());
-
-                        if (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD) {
-                            Chi2_piplus_MicroBooNE_AC_CD->Fill(piplus[i]->par()->getChi2Pid());
-                        }
-                    } else if (piplus[i]->getRegion() == FD) {
-                        Chi2_piplus_MicroBooNE_BC_FD->Fill(piplus[i]->par()->getChi2Pid());
-
-                        if (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD) {
-                            Chi2_piplus_MicroBooNE_AC_FD->Fill(piplus[i]->par()->getChi2Pid());
-                        }
-                    }
-                } // end of loop over piplus vector
-
-                for (int i = 0; i < piminus.size(); i++) {
-                    if (piminus[i]->getRegion() == CD) {
-                        Chi2_piminus_MicroBooNE_BC_CD->Fill(piminus[i]->par()->getChi2Pid());
-
-                        if (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD) {
-                            Chi2_piminus_MicroBooNE_AC_CD->Fill(piminus[i]->par()->getChi2Pid());
-                        }
-                    } else if (piminus[i]->getRegion() == FD) {
-                        Chi2_piminus_MicroBooNE_BC_FD->Fill(piminus[i]->par()->getChi2Pid());
-
-                        if (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD) {
-                            Chi2_piminus_MicroBooNE_AC_FD->Fill(piminus[i]->par()->getChi2Pid());
-                        }
-                    }
-                } // end of loop over piminus vector
-                //</editor-fold>
-
-                //  Testing dVz cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Testing dV cuts before and after">
-                //TODO: check with Adi/Justin if vertex cuts should be applied on cPions as well
-                double Vx_e_MicroBooNE = electrons[0]->par()->getVx(), Vy_e_MicroBooNE = electrons[0]->par()->getVy(), Vz_e_MicroBooNE = electrons[0]->par()->getVz();
-                double Vz_p0_MicroBooNE = protons[0]->par()->getVz(), Vz_p1_MicroBooNE = protons[1]->par()->getVz();
-                double dVz0_MicroBooNE = Vz_e_MicroBooNE - Vz_p0_MicroBooNE, dVz1_MicroBooNE = Vz_e_MicroBooNE - Vz_p1_MicroBooNE;
-                double Vx_p_MicroBooNE, Vy_p_MicroBooNE, Vz_p_MicroBooNE, dVx_MicroBooNE, dVy_MicroBooNE, dVz_MicroBooNE;
-
-                for (auto &p: protons) {
-                    Vx_p_MicroBooNE = p->par()->getVx(), Vy_p_MicroBooNE = p->par()->getVy(), Vz_p_MicroBooNE = p->par()->getVz();
-                    dVx_MicroBooNE = Vx_e_MicroBooNE - Vx_p_MicroBooNE;
-                    dVy_MicroBooNE = Vy_e_MicroBooNE - Vy_p_MicroBooNE;
-                    dVz_MicroBooNE = Vz_e_MicroBooNE - Vz_p_MicroBooNE;
-
-                    // Testing dVx,dVy,dVz before cuts
-                    deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
-
-                    // Testing dVx,dVy,dVz after cuts
-                    if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { deltaVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
-                    if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { deltaVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
-                    if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { deltaVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
-                } // end of loop over protons vector
-                //</editor-fold>
-
-                //</editor-fold>
-
-                //  Applying cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying cuts (MicroBooNE)">
-
-                //  Applying momentum cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying momentum cuts (MicroBooNE)">
-                bool MicroBooNE_mom_cuts;
-
-                // Electron:
-                bool e_mom_ucut_MicroBooNE, e_mom_lcut_MicroBooNE;
-
-                if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                    e_mom_ucut_MicroBooNE = e_mom_lcut_MicroBooNE = true;
-                } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-                    e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
-                    e_mom_lcut_MicroBooNE = true;
-                } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                    e_mom_ucut_MicroBooNE = true;
-                    e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
-                } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-                    e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
-                    e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
-                }
-
-                bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
-
-                // Proton 0:
-                bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
-
-                if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                    p0_mom_ucut_MicroBooNE = p0_mom_lcut_MicroBooNE = true;
-                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                    p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                    p0_mom_lcut_MicroBooNE = true;
-                } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                    p0_mom_ucut_MicroBooNE = true;
-                    p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                    p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                    p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-                }
-
-                bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
-
-                // Proton 1:
-                bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
-
-                if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                    p1_mom_ucut_MicroBooNE = p1_mom_lcut_MicroBooNE = true;
-                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-                    p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                    p1_mom_lcut_MicroBooNE = true;
-                } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                    p1_mom_ucut_MicroBooNE = true;
-                    p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-                } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-                    p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-                    p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-                }
-
-                bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
-
-                bool p_mom_cut_MicroBooNE = (p0_mom_cut_MicroBooNE && p1_mom_cut_MicroBooNE);
-
-                // Positive pions:
-                bool pcpion_mom_ucut_MicroBooNE, pcpion_mom_lcut_MicroBooNE;
-                bool pip_mom_cut_MicroBooNE = true;
-
-                if (piplus.size() > 0) {
-                    /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-                    for (int i = 0; i < piplus.size(); i++) {
-                        bool temp_pip_mom_cut_MicroBooNE;
-                        P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
-
-                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            pcpion_mom_ucut_MicroBooNE = pcpion_mom_lcut_MicroBooNE = true;
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                            pcpion_mom_lcut_MicroBooNE = true;
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            pcpion_mom_ucut_MicroBooNE = true;
-                            pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                            pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                        }
-
-                        temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
-
-                        if (temp_pip_mom_cut_MicroBooNE == false) { pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE; }
-                    } // end of loop over piplus vector
-                }
-
-                // Negative pions:
-                bool ncpion_mom_ucut_MicroBooNE, ncpion_mom_lcut_MicroBooNE;
-                bool pim_mom_cut_MicroBooNE = true;
-
-                if (piminus.size() > 0) {
-                    /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
-                    for (int i = 0; i < piminus.size(); i++) {
-                        bool temp_pim_mom_cut_MicroBooNE;
-                        P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
-
-                        if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            ncpion_mom_ucut_MicroBooNE = ncpion_mom_lcut_MicroBooNE = true;
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-                            ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                            ncpion_mom_lcut_MicroBooNE = true;
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            ncpion_mom_ucut_MicroBooNE = true;
-                            ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                        } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-                            ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
-                            ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-                        }
-
-                        temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
-
-                        if (temp_pim_mom_cut_MicroBooNE == false) { pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE; }
-                    } // end of loop over piminus vector
-                }
-
-                // Total momentum cut variable:
-                MicroBooNE_mom_cuts = (e_mom_cut_MicroBooNE && p_mom_cut_MicroBooNE && pip_mom_cut_MicroBooNE && pim_mom_cut_MicroBooNE);
-                //</editor-fold>
-
-                //  Applying chi2 cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying chi2 cuts (MicroBooNE)">
-                bool MicroBooNE_chi2_cuts;
-
-                // Electron:
-                bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
-                                                 && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
-                bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
-                                                 && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
-                bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
-
-                // Proton 0:
-                bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
-                bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
-                bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
-
-                // Proton 1:
-                bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
-                bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
-                                                  && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
-                bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
-
-                bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
-
-                // Positive pions:
-                bool pcpion_chi2_MicroBooNE_CD, pcpion_chi2_MicroBooNE_FD;
-                bool pip_chi2_cut_MicroBooNE = true;
-
-                if (piplus.size() > 0) {
-                    for (int i = 0; i < piplus.size(); i++) {
-                        bool temp_pip_chi2_cut_MicroBooNE;
-
-                        pcpion_chi2_MicroBooNE_CD = ((piplus[i]->getRegion() == CD)
-                                                     && (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD));
-                        pcpion_chi2_MicroBooNE_FD = ((piplus[i]->getRegion() == FD)
-                                                     && (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD));
-                        temp_pip_chi2_cut_MicroBooNE = (pcpion_chi2_MicroBooNE_CD || pcpion_chi2_MicroBooNE_FD);
-
-                        if (temp_pip_chi2_cut_MicroBooNE == false) { pip_chi2_cut_MicroBooNE = temp_pip_chi2_cut_MicroBooNE; }
-                    } // end of loop over piplus vector
-                }
-
-                // Negative pions:
-                bool ncpion_chi2_MicroBooNE_CD, ncpion_chi2_MicroBooNE_FD;
-                bool pim_chi2_cut_MicroBooNE = true;
-
-                if (piminus.size() > 0) {
-                    for (int i = 0; i < piminus.size(); i++) {
-                        bool temp_pim_chi2_cut_MicroBooNE;
-
-                        ncpion_chi2_MicroBooNE_CD = ((piminus[i]->getRegion() == CD)
-                                                     && (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD));
-                        ncpion_chi2_MicroBooNE_FD = ((piminus[i]->getRegion() == FD)
-                                                     && (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD));
-                        temp_pim_chi2_cut_MicroBooNE = (ncpion_chi2_MicroBooNE_CD || ncpion_chi2_MicroBooNE_FD);
-
-                        if (temp_pim_chi2_cut_MicroBooNE == false) { pim_chi2_cut_MicroBooNE = temp_pim_chi2_cut_MicroBooNE; }
-                    } // end of loop over piminus vector
-                }
-
-                // Total chi2 cut variable:
-                MicroBooNE_chi2_cuts = (e_chi2_MicroBooNE_cut && p_chi2_MicroBooNE_cut && pip_chi2_cut_MicroBooNE && pim_chi2_cut_MicroBooNE);
-                //</editor-fold>
-
-                //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
-                bool MicroBooNE_dVz_cuts;
-
-                bool MicroBooNE_dVz0_cuts = (fabs(dVz_peak_MicroBooNE - dVz0_MicroBooNE) <= dVz_cut_MicroBooNE);
-                bool MicroBooNE_dVz1_cuts = (fabs(dVz_peak_MicroBooNE - dVz1_MicroBooNE) <= dVz_cut_MicroBooNE);
-
-                MicroBooNE_dVz_cuts = (MicroBooNE_dVz0_cuts && MicroBooNE_dVz1_cuts);
-                //</editor-fold>
-
-                //</editor-fold>
-
-                //  Fillings histograms (MicroBooNE) --------------------------------------------------------------------------------------------------------------------
-
-                //TODO: add on/off switch to each individuale microboone cut
-                if (MicroBooNE_mom_cuts && MicroBooNE_chi2_cuts && MicroBooNE_dVz_cuts) {
-                    ++num_of_MicroBooNE_events_AC;
-
-                    if (nn != 0) { ++num_of_MicroBooNE_events_AC_wNeutrons; }
-                    if (npi0 != 0) { ++num_of_MicroBooNE_events_AC_wpi0; }
-                    if (npip != 0) { ++num_of_MicroBooNE_events_AC_wpip; }
-                    if (npim != 0) { ++num_of_MicroBooNE_events_AC_wpim; }
-
-                    //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
-                    for (int i = 0; i < AllParticles.size(); i++) {
-                        if (AllParticles[i]->getRegion() == CD) {
-                            Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                            if (AllParticles[i]->par()->getCharge() == 1) {
-                                Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == 0) {
-                                Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == -1) {
-                                Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            }
-                        } else if (AllParticles[i]->getRegion() == FD) {
-                            Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                            if (AllParticles[i]->par()->getCharge() == 1) {
-                                Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == 0) {
-                                Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            } else if (AllParticles[i]->par()->getCharge() == -1) {
-                                Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                            }
-                        }
-                    } // end of loop over AllParticles vector
-                    //</editor-fold>
-
-                    //<editor-fold desc="Filling MicroBooNE momentum histograms">
-                    if (electrons[0]->getRegion() == CD) {
-                        P_e_MicroBooNE_CD->Fill(P_e_MicroBooNE.Mag());
-                    } else if (electrons[0]->getRegion() == FD) {
-                        P_e_MicroBooNE_FD->Fill(P_e_MicroBooNE.Mag());
-                    }
-
-                    if (protons[0]->getRegion() == CD) {
-                        P_p_MicroBooNE_CD->Fill(P_p0_MicroBooNE.Mag());
-                    } else if (protons[0]->getRegion() == FD) {
-                        P_p_MicroBooNE_FD->Fill(P_p0_MicroBooNE.Mag());
-                    }
-
-                    if (protons[1]->getRegion() == CD) {
-                        P_p_MicroBooNE_CD->Fill(P_p1_MicroBooNE.Mag());
-                    } else if (protons[1]->getRegion() == FD) {
-                        P_p_MicroBooNE_FD->Fill(P_p1_MicroBooNE.Mag());
-                    }
-
-                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-                    for (int i = 0; i < piplus.size(); i++) {
-                        P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
-
-                        if (piplus[i]->getRegion() == CD) {
-                            P_cpion_MicroBooNE_CD->Fill(P_pcpion_MicroBooNE.Mag());
-                        } else if (piplus[i]->getRegion() == FD) {
-                            P_cpion_MicroBooNE_FD->Fill(P_pcpion_MicroBooNE.Mag());
-                        }
-                    } // end of loop over piplus vector
-
-                    // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
-                    for (int i = 0; i < piminus.size(); i++) {
-                        P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
-
-                        if (piminus[i]->getRegion() == CD) {
-                            P_cpion_MicroBooNE_CD->Fill(P_ncpion_MicroBooNE.Mag());
-                        } else if (piminus[i]->getRegion() == FD) {
-                            P_cpion_MicroBooNE_FD->Fill(P_ncpion_MicroBooNE.Mag());
-                        }
-                    } // end of loop over piminus vector
-                    //</editor-fold>
-
-                    //<editor-fold desc="Filling MicroBooNE chi2 histograms">
-                    if (electrons[0]->getRegion() == CD) {
-                        Chi2_Electron_MicroBooNE_CD->Fill(electrons[0]->par()->getChi2Pid());
-                    } else if (electrons[0]->getRegion() == FD) {
-                        Chi2_Electron_MicroBooNE_FD->Fill(electrons[0]->par()->getChi2Pid());
-                    }
-
-                    if (protons[0]->getRegion() == CD) {
-                        Chi2_Proton_MicroBooNE_CD->Fill(protons[0]->par()->getChi2Pid());
-                    } else if (protons[0]->getRegion() == FD) {
-                        Chi2_Proton_MicroBooNE_FD->Fill(protons[0]->par()->getChi2Pid());
-                    }
-
-                    if (protons[1]->getRegion() == CD) {
-                        Chi2_Proton_MicroBooNE_CD->Fill(protons[1]->par()->getChi2Pid());
-                    } else if (protons[1]->getRegion() == FD) {
-                        Chi2_Proton_MicroBooNE_FD->Fill(protons[1]->par()->getChi2Pid());
-                    }
-
-                    for (int i = 0; i < piplus.size(); i++) {
-                        if (piplus[i]->getRegion() == CD) {
-                            Chi2_piplus_MicroBooNE_CD->Fill(piplus[i]->par()->getChi2Pid());
-                        } else if (piplus[i]->getRegion() == FD) {
-                            Chi2_piplus_MicroBooNE_FD->Fill(piplus[i]->par()->getChi2Pid());
-                        }
-                    } // end of loop over piplus vector
-
-                    for (int i = 0; i < piminus.size(); i++) {
-                        if (piminus[i]->getRegion() == CD) {
-                            Chi2_piminus_MicroBooNE_CD->Fill(piminus[i]->par()->getChi2Pid());
-                        } else if (piminus[i]->getRegion() == FD) {
-                            Chi2_piminus_MicroBooNE_FD->Fill(piminus[i]->par()->getChi2Pid());
-                        }
-                    } // end of loop over piminus vector
-                    //</editor-fold>
-
-                    //<editor-fold desc="Filling MicroBooNE dVz histograms">
-                    for (auto &p: protons) {
-                        deltaVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
-                        deltaVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
-                        deltaVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
-                    } // end of loop over protons vector
-                    //</editor-fold>
-
-                }
-
-            } // End of calculate_MicroBooNE if
-            //</editor-fold>
+//        //<editor-fold desc="MicroBooNE cuts">
+//        /* 2p with no pi0 (according to "no neutral pions of any momentum" and "any number of neutrons") */
+//        int ne = electrons.size(), np = protons.size(), npi0 = pizero.size(), nn = neutrons.size(), npip = piplus.size(), npim = piminus.size();
+//        bool MicroBooNE_particle_selection = ((ne == 1) && (np == 2) && (npi0 == 0) && (Nf == ne + np + nn + npi0 + npip + npim));
+//
+////            if ((calculate_MicroBooNE == true) && ((protons.size() == 2) && (pizero.size() == 0) && (pizero.size() == 0))) {
+//        if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
+//            ++num_of_MicroBooNE_events_BC;
+//
+//            if (nn != 0) { ++num_of_MicroBooNE_events_BC_wNeutrons; }
+//            if (npi0 != 0) { ++num_of_MicroBooNE_events_BC_wpi0; }
+//            if (npip != 0) { ++num_of_MicroBooNE_events_BC_wpip; }
+//            if (npim != 0) { ++num_of_MicroBooNE_events_BC_wpim; }
+//
+//            //<editor-fold desc="Filling Beta vs. P (MicroBooNE-BC)">
+//            /* Testing Beta vs. P before applying the MicroBooNE cuts */
+//            for (int i = 0; i < AllParticles.size(); i++) {
+//                if (AllParticles[i]->getRegion() == CD) {
+//                    Beta_vs_P_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_MicroBooNE_BC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                } else if (AllParticles[i]->getRegion() == FD) {
+//                    Beta_vs_P_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                    if (AllParticles[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_MicroBooNE_BC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                    }
+//                }
+//            } // end of loop over AllParticles vector
+//            //</editor-fold>
+//
+//            TVector3 P_e_MicroBooNE, P_p0_MicroBooNE, P_p1_MicroBooNE, P_pcpion_MicroBooNE, P_ncpion_MicroBooNE;
+//            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
+//            P_e_MicroBooNE.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+//            P_p0_MicroBooNE.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+//            P_p1_MicroBooNE.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+//
+//            //  Testing cuts (MicroBooNE) ---------------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing cuts (MicroBooNE)">
+//
+//            //  Testing momentum cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing momentum cuts (MicroBooNE)">
+//            /* Momentum plots before and after cuts */
+//            if (electrons[0]->getRegion() == CD) {
+//                P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
+//                LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+//            } else if (electrons[0]->getRegion() == FD) {
+//                P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
+//                LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            if (protons[0]->getRegion() == CD) {
+//                P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            } else if (protons[0]->getRegion() == FD) {
+//                P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            if (protons[1]->getRegion() == CD) {
+//                P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            } else if (protons[1]->getRegion() == FD) {
+//                P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
+//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//            for (int i = 0; i < piplus.size(); i++) {
+//                P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                if (piplus[i]->getRegion() == CD) {
+//                    P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                } else if (piplus[i]->getRegion() == FD) {
+//                    P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                }
+//            } // end of loop over piplus vector
+//
+//            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//            for (int i = 0; i < piminus.size(); i++) {
+//                P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                if (piminus[i]->getRegion() == CD) {
+//                    P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                } else if (piminus[i]->getRegion() == FD) {
+//                    P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                }
+//            } // end of loop over piminus vector
+//            //</editor-fold>
+//
+//            //  Testing chi2 cuts (MicroBooNE) ----------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing chi2 before and after cuts">
+//            /* Chi2 plots before and after cuts */
+//            if (electrons[0]->getRegion() == CD) {
+//                Chi2_Electron_MicroBooNE_BC_CD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD) {
+//                    Chi2_Electron_MicroBooNE_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
+//            } else if (electrons[0]->getRegion() == FD) {
+//                Chi2_Electron_MicroBooNE_BC_FD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD) {
+//                    Chi2_Electron_MicroBooNE_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
+//            }
+//
+//            if (protons[0]->getRegion() == CD) {
+//                Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
+//                    Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[0]->par()->getChi2Pid());
+//                }
+//            } else if (protons[0]->getRegion() == FD) {
+//                Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
+//                    Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[0]->par()->getChi2Pid());
+//                }
+//            }
+//
+//            if (protons[1]->getRegion() == CD) {
+//                Chi2_Proton_MicroBooNE_BC_CD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
+//                    Chi2_Proton_MicroBooNE_AC_CD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+//            } else if (protons[1]->getRegion() == FD) {
+//                Chi2_Proton_MicroBooNE_BC_FD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
+//
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
+//                    Chi2_Proton_MicroBooNE_AC_FD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+//            }
+//
+//            for (int i = 0; i < piplus.size(); i++) {
+//                if (piplus[i]->getRegion() == CD) {
+//                    Chi2_piplus_MicroBooNE_BC_CD->Fill(piplus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD) {
+//                        Chi2_piplus_MicroBooNE_AC_CD->Fill(piplus[i]->par()->getChi2Pid());
+//                    }
+//                } else if (piplus[i]->getRegion() == FD) {
+//                    Chi2_piplus_MicroBooNE_BC_FD->Fill(piplus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD) {
+//                        Chi2_piplus_MicroBooNE_AC_FD->Fill(piplus[i]->par()->getChi2Pid());
+//                    }
+//                }
+//            } // end of loop over piplus vector
+//
+//            for (int i = 0; i < piminus.size(); i++) {
+//                if (piminus[i]->getRegion() == CD) {
+//                    Chi2_piminus_MicroBooNE_BC_CD->Fill(piminus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD) {
+//                        Chi2_piminus_MicroBooNE_AC_CD->Fill(piminus[i]->par()->getChi2Pid());
+//                    }
+//                } else if (piminus[i]->getRegion() == FD) {
+//                    Chi2_piminus_MicroBooNE_BC_FD->Fill(piminus[i]->par()->getChi2Pid());
+//
+//                    if (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD) {
+//                        Chi2_piminus_MicroBooNE_AC_FD->Fill(piminus[i]->par()->getChi2Pid());
+//                    }
+//                }
+//            } // end of loop over piminus vector
+//            //</editor-fold>
+//
+//            //  Testing dVz cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Testing dV cuts before and after">
+//            //TODO: check with Adi/Justin if vertex cuts should be applied on cPions as well
+//            double Vx_e_MicroBooNE = electrons[0]->par()->getVx(), Vy_e_MicroBooNE = electrons[0]->par()->getVy(), Vz_e_MicroBooNE = electrons[0]->par()->getVz();
+//            double Vz_p0_MicroBooNE = protons[0]->par()->getVz(), Vz_p1_MicroBooNE = protons[1]->par()->getVz();
+//            double dVz0_MicroBooNE = Vz_e_MicroBooNE - Vz_p0_MicroBooNE, dVz1_MicroBooNE = Vz_e_MicroBooNE - Vz_p1_MicroBooNE;
+//            double Vx_p_MicroBooNE, Vy_p_MicroBooNE, Vz_p_MicroBooNE, dVx_MicroBooNE, dVy_MicroBooNE, dVz_MicroBooNE;
+//
+//            for (auto &p: protons) {
+//                Vx_p_MicroBooNE = p->par()->getVx(), Vy_p_MicroBooNE = p->par()->getVy(), Vz_p_MicroBooNE = p->par()->getVz();
+//                dVx_MicroBooNE = Vx_e_MicroBooNE - Vx_p_MicroBooNE;
+//                dVy_MicroBooNE = Vy_e_MicroBooNE - Vy_p_MicroBooNE;
+//                dVz_MicroBooNE = Vz_e_MicroBooNE - Vz_p_MicroBooNE;
+//
+//                // Testing dVx,dVy,dVz before cuts
+//                deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
+//
+//                // Testing dVx,dVy,dVz after cuts
+//                if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { deltaVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
+//                if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { deltaVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
+//                if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { deltaVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
+//            } // end of loop over protons vector
+//            //</editor-fold>
+//
+//            //</editor-fold>
+//
+//            //  Applying cuts (MicroBooNE) --------------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying cuts (MicroBooNE)">
+//
+//            //  Applying momentum cuts (MicroBooNE) -------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying momentum cuts (MicroBooNE)">
+//            bool MicroBooNE_mom_cuts;
+//
+//            // Electron:
+//            bool e_mom_ucut_MicroBooNE, e_mom_lcut_MicroBooNE;
+//
+//            if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                e_mom_ucut_MicroBooNE = e_mom_lcut_MicroBooNE = true;
+//            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+//                e_mom_lcut_MicroBooNE = true;
+//            } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                e_mom_ucut_MicroBooNE = true;
+//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+//            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
+//
+//            // Proton 0:
+//            bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
+//
+//            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p0_mom_ucut_MicroBooNE = p0_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p0_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p0_mom_ucut_MicroBooNE = true;
+//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
+//
+//            // Proton 1:
+//            bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
+//
+//            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p1_mom_ucut_MicroBooNE = p1_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p1_mom_lcut_MicroBooNE = true;
+//            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p1_mom_ucut_MicroBooNE = true;
+//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//            }
+//
+//            bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
+//
+//            bool p_mom_cut_MicroBooNE = (p0_mom_cut_MicroBooNE && p1_mom_cut_MicroBooNE);
+//
+//            // Positive pions:
+//            bool pcpion_mom_ucut_MicroBooNE, pcpion_mom_lcut_MicroBooNE;
+//            bool pip_mom_cut_MicroBooNE = true;
+//
+//            if (piplus.size() > 0) {
+//                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    bool temp_pip_mom_cut_MicroBooNE;
+//                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = pcpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        pcpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = true;
+//                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    }
+//
+//                    temp_pip_mom_cut_MicroBooNE = (pcpion_mom_ucut_MicroBooNE && pcpion_mom_lcut_MicroBooNE);
+//
+//                    if (temp_pip_mom_cut_MicroBooNE == false) { pip_mom_cut_MicroBooNE = temp_pip_mom_cut_MicroBooNE; }
+//                } // end of loop over piplus vector
+//            }
+//
+//            // Negative pions:
+//            bool ncpion_mom_ucut_MicroBooNE, ncpion_mom_lcut_MicroBooNE;
+//            bool pim_mom_cut_MicroBooNE = true;
+//
+//            if (piminus.size() > 0) {
+//                /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    bool temp_pim_mom_cut_MicroBooNE;
+//                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = ncpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        ncpion_mom_lcut_MicroBooNE = true;
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = true;
+//                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
+//                    }
+//
+//                    temp_pim_mom_cut_MicroBooNE = (ncpion_mom_ucut_MicroBooNE && ncpion_mom_lcut_MicroBooNE);
+//
+//                    if (temp_pim_mom_cut_MicroBooNE == false) { pim_mom_cut_MicroBooNE = temp_pim_mom_cut_MicroBooNE; }
+//                } // end of loop over piminus vector
+//            }
+//
+//            // Total momentum cut variable:
+//            MicroBooNE_mom_cuts = (e_mom_cut_MicroBooNE && p_mom_cut_MicroBooNE && pip_mom_cut_MicroBooNE && pim_mom_cut_MicroBooNE);
+//            //</editor-fold>
+//
+//            //  Applying chi2 cuts (MicroBooNE) -----------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying chi2 cuts (MicroBooNE)">
+//            bool MicroBooNE_chi2_cuts;
+//
+//            // Electron:
+//            bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
+//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
+//            bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
+//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
+//            bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
+//
+//            // Proton 0:
+//            bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//            bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//            bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
+//
+//            // Proton 1:
+//            bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//            bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//            bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
+//
+//            bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
+//
+//            // Positive pions:
+//            bool pcpion_chi2_MicroBooNE_CD, pcpion_chi2_MicroBooNE_FD;
+//            bool pip_chi2_cut_MicroBooNE = true;
+//
+//            if (piplus.size() > 0) {
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    bool temp_pip_chi2_cut_MicroBooNE;
+//
+//                    pcpion_chi2_MicroBooNE_CD = ((piplus[i]->getRegion() == CD)
+//                                                 && (fabs(Chi2_piplus_1e_peak_MicroBooNE_CD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_CD));
+//                    pcpion_chi2_MicroBooNE_FD = ((piplus[i]->getRegion() == FD)
+//                                                 && (fabs(Chi2_piplus_1e_peak_MicroBooNE_FD - piplus[i]->par()->getChi2Pid()) <= Chi2_piplus_cut_MicroBooNE_FD));
+//                    temp_pip_chi2_cut_MicroBooNE = (pcpion_chi2_MicroBooNE_CD || pcpion_chi2_MicroBooNE_FD);
+//
+//                    if (temp_pip_chi2_cut_MicroBooNE == false) { pip_chi2_cut_MicroBooNE = temp_pip_chi2_cut_MicroBooNE; }
+//                } // end of loop over piplus vector
+//            }
+//
+//            // Negative pions:
+//            bool ncpion_chi2_MicroBooNE_CD, ncpion_chi2_MicroBooNE_FD;
+//            bool pim_chi2_cut_MicroBooNE = true;
+//
+//            if (piminus.size() > 0) {
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    bool temp_pim_chi2_cut_MicroBooNE;
+//
+//                    ncpion_chi2_MicroBooNE_CD = ((piminus[i]->getRegion() == CD)
+//                                                 && (fabs(Chi2_piminus_1e_peak_MicroBooNE_CD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_CD));
+//                    ncpion_chi2_MicroBooNE_FD = ((piminus[i]->getRegion() == FD)
+//                                                 && (fabs(Chi2_piminus_1e_peak_MicroBooNE_FD - piminus[i]->par()->getChi2Pid()) <= Chi2_piminus_cut_MicroBooNE_FD));
+//                    temp_pim_chi2_cut_MicroBooNE = (ncpion_chi2_MicroBooNE_CD || ncpion_chi2_MicroBooNE_FD);
+//
+//                    if (temp_pim_chi2_cut_MicroBooNE == false) { pim_chi2_cut_MicroBooNE = temp_pim_chi2_cut_MicroBooNE; }
+//                } // end of loop over piminus vector
+//            }
+//
+//            // Total chi2 cut variable:
+//            MicroBooNE_chi2_cuts = (e_chi2_MicroBooNE_cut && p_chi2_MicroBooNE_cut && pip_chi2_cut_MicroBooNE && pim_chi2_cut_MicroBooNE);
+//            //</editor-fold>
+//
+//            //  Applying dVz cuts (MicroBooNE) ------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Applying dVz cuts (MicroBooNE)">
+//            bool MicroBooNE_dVz_cuts;
+//
+//            bool MicroBooNE_dVz0_cuts = (fabs(dVz_peak_MicroBooNE - dVz0_MicroBooNE) <= dVz_cut_MicroBooNE);
+//            bool MicroBooNE_dVz1_cuts = (fabs(dVz_peak_MicroBooNE - dVz1_MicroBooNE) <= dVz_cut_MicroBooNE);
+//
+//            MicroBooNE_dVz_cuts = (MicroBooNE_dVz0_cuts && MicroBooNE_dVz1_cuts);
+//            //</editor-fold>
+//
+//            //</editor-fold>
+//
+//            //  Fillings histograms (MicroBooNE) --------------------------------------------------------------------------------------------------------------------
+//
+//            //TODO: add on/off switch to each individuale microboone cut
+//            if (MicroBooNE_mom_cuts && MicroBooNE_chi2_cuts && MicroBooNE_dVz_cuts) {
+//                ++num_of_MicroBooNE_events_AC;
+//
+//                if (nn != 0) { ++num_of_MicroBooNE_events_AC_wNeutrons; }
+//                if (npi0 != 0) { ++num_of_MicroBooNE_events_AC_wpi0; }
+//                if (npip != 0) { ++num_of_MicroBooNE_events_AC_wpip; }
+//                if (npim != 0) { ++num_of_MicroBooNE_events_AC_wpim; }
+//
+//                //<editor-fold desc="Filling Beta vs. P (MicroBooNE-AC)">
+//                for (int i = 0; i < AllParticles.size(); i++) {
+//                    if (AllParticles[i]->getRegion() == CD) {
+//                        Beta_vs_P_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                        if (AllParticles[i]->par()->getCharge() == 1) {
+//                            Beta_vs_P_positive_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                            Beta_vs_P_neutral_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                            Beta_vs_P_negative_particles_MicroBooNE_AC_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        }
+//                    } else if (AllParticles[i]->getRegion() == FD) {
+//                        Beta_vs_P_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//
+//                        if (AllParticles[i]->par()->getCharge() == 1) {
+//                            Beta_vs_P_positive_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == 0) {
+//                            Beta_vs_P_neutral_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        } else if (AllParticles[i]->par()->getCharge() == -1) {
+//                            Beta_vs_P_negative_particles_MicroBooNE_AC_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
+//                        }
+//                    }
+//                } // end of loop over AllParticles vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling MicroBooNE momentum histograms">
+//                if (electrons[0]->getRegion() == CD) {
+//                    P_e_MicroBooNE_CD->Fill(P_e_MicroBooNE.Mag());
+//                } else if (electrons[0]->getRegion() == FD) {
+//                    P_e_MicroBooNE_FD->Fill(P_e_MicroBooNE.Mag());
+//                }
+//
+//                if (protons[0]->getRegion() == CD) {
+//                    P_p_MicroBooNE_CD->Fill(P_p0_MicroBooNE.Mag());
+//                } else if (protons[0]->getRegion() == FD) {
+//                    P_p_MicroBooNE_FD->Fill(P_p0_MicroBooNE.Mag());
+//                }
+//
+//                if (protons[1]->getRegion() == CD) {
+//                    P_p_MicroBooNE_CD->Fill(P_p1_MicroBooNE.Mag());
+//                } else if (protons[1]->getRegion() == FD) {
+//                    P_p_MicroBooNE_FD->Fill(P_p1_MicroBooNE.Mag());
+//                }
+//
+//                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
+//
+//                    if (piplus[i]->getRegion() == CD) {
+//                        P_cpion_MicroBooNE_CD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        P_cpion_MicroBooNE_FD->Fill(P_pcpion_MicroBooNE.Mag());
+//                    }
+//                } // end of loop over piplus vector
+//
+//                // Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)"):
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
+//
+//                    if (piminus[i]->getRegion() == CD) {
+//                        P_cpion_MicroBooNE_CD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        P_cpion_MicroBooNE_FD->Fill(P_ncpion_MicroBooNE.Mag());
+//                    }
+//                } // end of loop over piminus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling MicroBooNE chi2 histograms">
+//                if (electrons[0]->getRegion() == CD) {
+//                    Chi2_Electron_MicroBooNE_CD->Fill(electrons[0]->par()->getChi2Pid());
+//                } else if (electrons[0]->getRegion() == FD) {
+//                    Chi2_Electron_MicroBooNE_FD->Fill(electrons[0]->par()->getChi2Pid());
+//                }
+//
+//                if (protons[0]->getRegion() == CD) {
+//                    Chi2_Proton_MicroBooNE_CD->Fill(protons[0]->par()->getChi2Pid());
+//                } else if (protons[0]->getRegion() == FD) {
+//                    Chi2_Proton_MicroBooNE_FD->Fill(protons[0]->par()->getChi2Pid());
+//                }
+//
+//                if (protons[1]->getRegion() == CD) {
+//                    Chi2_Proton_MicroBooNE_CD->Fill(protons[1]->par()->getChi2Pid());
+//                } else if (protons[1]->getRegion() == FD) {
+//                    Chi2_Proton_MicroBooNE_FD->Fill(protons[1]->par()->getChi2Pid());
+//                }
+//
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    if (piplus[i]->getRegion() == CD) {
+//                        Chi2_piplus_MicroBooNE_CD->Fill(piplus[i]->par()->getChi2Pid());
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        Chi2_piplus_MicroBooNE_FD->Fill(piplus[i]->par()->getChi2Pid());
+//                    }
+//                } // end of loop over piplus vector
+//
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    if (piminus[i]->getRegion() == CD) {
+//                        Chi2_piminus_MicroBooNE_CD->Fill(piminus[i]->par()->getChi2Pid());
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        Chi2_piminus_MicroBooNE_FD->Fill(piminus[i]->par()->getChi2Pid());
+//                    }
+//                } // end of loop over piminus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling MicroBooNE dVz histograms">
+//                for (auto &p: protons) {
+//                    deltaVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
+//                    deltaVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
+//                    deltaVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
+//                } // end of loop over protons vector
+//                //</editor-fold>
+//
+//            }
+//        } // End of calculate_MicroBooNE if
+//        //</editor-fold>
 
 //  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="1e2X cut">
-            if (AllParticles.size() != 3) { continue; } // only 3 scattered/detected particles
-            ++num_of_events_with_1e2X; // logging #(events) w/ 1e2X
-            //</editor-fold>
+        //<editor-fold desc="1e2X cut">
+        if (Nf == 3) { ++num_of_events_with_1e2X; } // logging #(events) w/ 1e2X (only 3 scattered/detected particles)
+        //</editor-fold>
 
 //  1e2p & 2p cuts ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="1e2p & 2p cuts">
-            if ((calculate_2p == true) && (protons.size() == 2)) { // for 2p calculations
-                ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
+        //<editor-fold desc="1e2p & 2p cuts">
+//        if ((Nf == 3) && (Np == 2)) {
+//            cout << "Nf == " << Nf << "\n";
+//            cout << "Np == " << Np << "\n\n";
+//        }
 
-                //TODO: rename P_e
+        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
+            ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-                /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
-                TVector3 P_p0, P_p1;
-//                P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
-                P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
-                P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+            //TODO: rename P_e
 
-                //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
+            TVector3 P_p0, P_p1;
+            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
+            P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+            P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
 
-                //<editor-fold desc="Testing cuts">
+            //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
-                //  Testing momentum cuts ------------------------------------------------------------------------------------------------------------------------
+            //<editor-fold desc="Testing cuts">
 
-                //<editor-fold desc="Testing momentum cuts (electrons only)">
+            //  Testing momentum cuts (protons only) --------------------------------------------------------------------------------------------------------------------
 
-//                // momentum before cuts:
-//                if (electrons[0]->getRegion() == CD) {
-//                    P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
-//                } else if (electrons[0]->getRegion() == FD) {
-//                    P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
-//                }
+            //<editor-fold desc="Testing momentum cuts (protons only)">
 
+            /* momentum before cuts */
+            if (protons[0]->getRegion() == CD) {
+                P_p_1e2p_BC_CD->Fill(P_p0.Mag());
+            } else if (protons[0]->getRegion() == FD) {
+                P_p_1e2p_BC_FD->Fill(P_p0.Mag());
+            }
+
+            if (protons[1]->getRegion() == CD) {
+                P_p_1e2p_BC_CD->Fill(P_p1.Mag());
+            } else if (protons[1]->getRegion() == FD) {
+                P_p_1e2p_BC_FD->Fill(P_p1.Mag());
+            }
+
+            /* momentum after cuts */
+            if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
                 if (protons[0]->getRegion() == CD) {
-                    P_p_1e2p_BC_CD->Fill(P_p0.Mag());
+                    P_p_1e2p_AC_CD->Fill(P_p0.Mag());
                 } else if (protons[0]->getRegion() == FD) {
-                    P_p_1e2p_BC_FD->Fill(P_p0.Mag());
+                    P_p_1e2p_AC_FD->Fill(P_p0.Mag());
                 }
-
-                if (protons[1]->getRegion() == CD) {
-                    P_p_1e2p_BC_CD->Fill(P_p1.Mag());
-                } else if (protons[1]->getRegion() == FD) {
-                    P_p_1e2p_BC_FD->Fill(P_p1.Mag());
-                }
-
-                // momentum after cuts:
-//                if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
-//                    if (electrons[0]->getRegion() == CD) {
-//                        P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                    } else if (electrons[0]->getRegion() == FD) {
-//                        P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                    }
-//                } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
-//                    if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
-//                        if (electrons[0]->getRegion() == CD) {
-//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                        } else if (electrons[0]->getRegion() == FD) {
-//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                        }
-//                    }
-//                } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
-//                    if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
-//                        if (electrons[0]->getRegion() == CD) {
-//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                        } else if (electrons[0]->getRegion() == FD) {
-//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                        }
-//                    }
-//                } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
-//                    if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
-//                        if (electrons[0]->getRegion() == CD) {
-//                            P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
-//                        } else if (electrons[0]->getRegion() == FD) {
-//                            P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
-//                        }
-//                    }
-//                }
-
-                if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
+            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
+                if (P_p0.Mag() <= p_momentum_upper_cut_2p) {
                     if (protons[0]->getRegion() == CD) {
                         P_p_1e2p_AC_CD->Fill(P_p0.Mag());
                     } else if (protons[0]->getRegion() == FD) {
                         P_p_1e2p_AC_FD->Fill(P_p0.Mag());
                     }
-                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
-                    if (P_p0.Mag() <= p_momentum_upper_cut_2p) {
-                        if (protons[0]->getRegion() == CD) {
-                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                        } else if (protons[0]->getRegion() == FD) {
-                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                        }
-                    }
-                } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
-                    if (P_p0.Mag() >= p_momentum_lower_cut_2p) {
-                        if (protons[0]->getRegion() == CD) {
-                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                        } else if (protons[0]->getRegion() == FD) {
-                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                        }
-                    }
-                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
-                    if ((P_p0.Mag() >= p_momentum_lower_cut_2p) && (P_p0.Mag() <= p_momentum_upper_cut_2p)) {
-                        if (protons[0]->getRegion() == CD) {
-                            P_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                        } else if (protons[0]->getRegion() == FD) {
-                            P_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                        }
+                }
+            } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
+                if (P_p0.Mag() >= p_momentum_lower_cut_2p) {
+                    if (protons[0]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                    } else if (protons[0]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p0.Mag());
                     }
                 }
+            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
+                if ((P_p0.Mag() >= p_momentum_lower_cut_2p) && (P_p0.Mag() <= p_momentum_upper_cut_2p)) {
+                    if (protons[0]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p0.Mag());
+                    } else if (protons[0]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p0.Mag());
+                    }
+                }
+            }
 
-                if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
+            if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
+                if (protons[1]->getRegion() == CD) {
+                    P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                } else if (protons[1]->getRegion() == FD) {
+                    P_p_1e2p_AC_FD->Fill(P_p1.Mag());
+                }
+            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
+                if (P_p1.Mag() <= p_momentum_upper_cut_2p) {
                     if (protons[1]->getRegion() == CD) {
                         P_p_1e2p_AC_CD->Fill(P_p1.Mag());
                     } else if (protons[1]->getRegion() == FD) {
                         P_p_1e2p_AC_FD->Fill(P_p1.Mag());
                     }
-                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
-                    if (P_p1.Mag() <= p_momentum_upper_cut_2p) {
-                        if (protons[1]->getRegion() == CD) {
-                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                        } else if (protons[1]->getRegion() == FD) {
-                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                        }
-                    }
-                } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
-                    if (P_p1.Mag() >= p_momentum_lower_cut_2p) {
-                        if (protons[1]->getRegion() == CD) {
-                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                        } else if (protons[1]->getRegion() == FD) {
-                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                        }
-                    }
-                } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
-                    if ((P_p1.Mag() >= p_momentum_lower_cut_2p) && (P_p1.Mag() <= p_momentum_upper_cut_2p)) {
-                        if (protons[1]->getRegion() == CD) {
-                            P_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                        } else if (protons[1]->getRegion() == FD) {
-                            P_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                        }
+                }
+            } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
+                if (P_p1.Mag() >= p_momentum_lower_cut_2p) {
+                    if (protons[1]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                    } else if (protons[1]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p1.Mag());
                     }
                 }
-                //</editor-fold>
-
-                //  Testing SF cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Testing SF cuts (electrons only)">
-//                double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
-//
-//                // SF before cuts:
-//                SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-//                SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
-//
-//                // SF after cuts:
-//                if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
-//                    SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-//                    SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
-//                }
-//                //</editor-fold>
-
-                //  Testing fiducial cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Testing fiducial cuts (electrons only)">
-//                // fiducial before cuts:
-//                Vcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
-//                Wcal_VS_EoP_1e2p_BC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
-//                Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-//                Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
-//
-//                // fiducial after cuts:
-//                //TODO: remove fiducial ECIN plots
-////                if (electrons[0]->cal(ECIN)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e); }
-////                if (electrons[0]->cal(ECIN)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e2p_AC_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e); }
-//                if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-//                if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
-//                //</editor-fold>
-
-                //  Testing nphe cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Testing nphe cuts (electrons only)">
-//                int nphe = electrons[0]->che(HTCC)->getNphe();
-//
-//                // nphe before cuts:
-//                nphe_All_Int_1e2p_BC_FD->Fill(nphe);
-//
-//                // nphe after cuts:
-//                if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
-//                //</editor-fold>
-
-                //  Testing chi2 cuts ------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Testing chi2 cuts">
-
-//                // Chi2 before cut
-//                if (electrons[0]->getRegion() == CD) {
-////                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-//                    Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                } else if (electrons[0]->getRegion() == FD) {
-////                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-//                    Chi2_Electron_1e2p_BC_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                }
-
-                if (protons[0]->getRegion() == CD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
-                    Chi2_Proton_1e2p_BC_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if (protons[0]->getRegion() == FD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
-                    Chi2_Proton_1e2p_BC_FD->Fill(protons[0]->par()->getChi2Pid());
-                }
-
-                if (protons[1]->getRegion() == CD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
-                    Chi2_Proton_1e2p_BC_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if (protons[1]->getRegion() == FD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
-                    Chi2_Proton_1e2p_BC_FD->Fill(protons[1]->par()->getChi2Pid());
-                }
-
-                // Chi2 after cut
-//                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_CD;
-//                    Chi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-//                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
-//                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
-//                    Chi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
-//                }
-
-                if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
-                    Chi2_Proton_1e2p_AC_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
-                    Chi2_Proton_1e2p_AC_FD->Fill(protons[0]->par()->getChi2Pid());
-                }
-
-                if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
-                    Chi2_Proton_1e2p_AC_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
-                    Chi2_Proton_1e2p_AC_FD->Fill(protons[1]->par()->getChi2Pid());
-                }
-                //</editor-fold>
-
-                //  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Testing dV cuts">
-                double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
-                double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
-                double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
-
-                for (auto &p: protons) {
-                    Vx_p = p->par()->getVx(), Vy_p = p->par()->getVy(), Vz_p = p->par()->getVz();
-                    dVx = Vx_e - Vx_p, dVy = Vy_e - Vy_p, dVz = Vz_e - Vz_p;
-
-                    // Testing dVx,dVy,dVz before cuts
-                    deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
-
-                    // Testing dVx,dVy,dVz after cuts
-                    if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
-                    if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
-                    if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
-                } // end of loop over protons vector
-                //</editor-fold>
-
-                //</editor-fold>
-
-                //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying cuts">
-
-                //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying momentum cuts">
-                if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e_1e.Mag() > e_momentum_upper_cut_2p))) { continue; }
-                if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e_1e.Mag() < e_momentum_lower_cut_2p))) { continue; }
-
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p0.Mag() > p_momentum_upper_cut_2p))) { continue; }
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p0.Mag() < p_momentum_lower_cut_2p))) { continue; }
-
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p1.Mag() > p_momentum_upper_cut_2p))) { continue; }
-                if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p1.Mag() < p_momentum_lower_cut_2p))) { continue; }
-                //</editor-fold>
-
-                //  Applying SF cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Applying SF cuts (electrons only)">
-//                if ((apply_SF_cuts == true) && ((EoP_e < SF_1e2p_lower_cut) || (EoP_e > SF_1e2p_upper_cut))) { continue; }
-//                //</editor-fold>
-
-                //  Applying fiducial cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Applying fiducial cuts (electrons only)">
-//                if ((apply_Lv_cut == true) && (electrons[0]->cal(PCAL)->getLv() < fiducial_cut_Lv)) { continue; }
-//                if ((apply_Lw_cut == true) && (electrons[0]->cal(PCAL)->getLw() < fiducial_cut_Lw)) { continue; }
-//                //</editor-fold>
-
-                //  Applying nphe cuts ------------------------------------------------------------------------------------------------------------------------
-
-//                //<editor-fold desc="Applying nphe cuts">
-//                if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
-//                //</editor-fold>
-
-                //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying Chi2 cuts">
-//                if (electrons[0]->getRegion() == CD) {
-//                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_CD)) { continue; }
-//                } else if (electrons[0]->getRegion() == FD) {
-//                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) > Chi2_Electron_cut_FD)) { continue; }
-//                }
-
-                // TODO: move proton blocks here to for loop to save some space
-                if (protons[0]->getRegion() == CD) {
-                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
-                } else if (protons[0]->getRegion() == FD) {
-                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
-                }
-
-                if (protons[1]->getRegion() == CD) {
-                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
-                } else if (protons[1]->getRegion() == FD) {
-                    if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
-                }
-
-                ++num_of_events_1e2p_w_allChi2_cuts;
-                //</editor-fold>
-
-                //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Applying dVz cuts">
-                if ((apply_dVz_cuts == true) && ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut))) { continue; }
-                //</editor-fold>
-
-                //</editor-fold>
-
-                //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
-
-                //<editor-fold desc="Counting 2p events by reaction">
-                ++num_of_events_2p;
-
-                if (qel) {
-                    ++num_of_2p_QEL_events;
-                } else if (mec) {
-                    ++num_of_2p_MEC_events;
-                } else if (res) {
-                    ++num_of_2p_RES_events;
-                } else if (dis) {
-                    ++num_of_2p_DIS_events;
-                }
-                //</editor-fold>
-
-                //<editor-fold desc="Filling momentum histograms">
-                if (electrons[0]->getRegion() == CD) {
-                    P_e_2p_CD->Fill(P_e_1e.Mag());
-                } else if (electrons[0]->getRegion() == FD) {
-                    P_e_2p_FD->Fill(P_e_1e.Mag());
-                }
-
-                if (protons[0]->getRegion() == CD) {
-                    P_p_2p_CD->Fill(P_p0.Mag());
-                } else if (protons[0]->getRegion() == FD) {
-                    P_p_2p_FD->Fill(P_p0.Mag());
-                }
-
-                if (protons[1]->getRegion() == CD) {
-                    P_p_2p_CD->Fill(P_p1.Mag());
-                } else if (protons[1]->getRegion() == FD) {
-                    P_p_2p_FD->Fill(P_p1.Mag());
-                }
-                //</editor-fold>
-
-                //<editor-fold desc="Filling Beta vs. P plots (2p)">
-
-                //<editor-fold desc="Filling Beta vs. P plots (all particles + by charge, CD & FD)">
-                for (int i = 0; i < AllParticles.size(); i++) {
-                    if (AllParticles[i]->getRegion() == CD) {
-                        Beta_vs_P_2p_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_2p_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_2p_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_2p_CD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
-                    } else if (AllParticles[i]->getRegion() == FD) {
-                        Beta_vs_P_2p_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-
-                        if (AllParticles[i]->par()->getCharge() == 1) {
-                            Beta_vs_P_positive_particles_2p_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == 0) {
-                            Beta_vs_P_neutral_particles_2p_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        } else if (AllParticles[i]->par()->getCharge() == -1) {
-                            Beta_vs_P_negative_particles_2p_FD->Fill(AllParticles[i]->getP(), AllParticles[i]->par()->getBeta());
-                        }
+            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
+                if ((P_p1.Mag() >= p_momentum_lower_cut_2p) && (P_p1.Mag() <= p_momentum_upper_cut_2p)) {
+                    if (protons[1]->getRegion() == CD) {
+                        P_p_1e2p_AC_CD->Fill(P_p1.Mag());
+                    } else if (protons[1]->getRegion() == FD) {
+                        P_p_1e2p_AC_FD->Fill(P_p1.Mag());
                     }
-                } // end of loop over AllParticles vector
-                //</editor-fold>
-
-                //<editor-fold desc="Filling Beta vs. P plots (Electrons only, CD & FD)">
-                for (auto &e: electrons) {
-                    if (e->getRegion() == CD) {
-                        Beta_vs_P_2p_Electrons_Only_CD->Fill(e->getP(), e->par()->getBeta());
-                    } else if (e->getRegion() == FD) {
-                        Beta_vs_P_2p_Electrons_Only_FD->Fill(e->getP(), e->par()->getBeta());
-                    }
-                } // end of loop over electrons vector
-                //</editor-fold>
-
-                //<editor-fold desc="Filling Beta vs. P plots (Protons only, CD & FD)">
-                for (auto &p: protons) {
-                    if (p->getRegion() == CD) {
-                        Beta_vs_P_2p_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
-                    } else if (p->getRegion() == FD) {
-                        Beta_vs_P_2p_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
-                    }
-                } // end of loop over protons vector
-                //</editor-fold>
-
-                //</editor-fold>
-
-                for (auto &e: electrons) {
-                    if (e->getRegion() == CD) {
-                        E_e_2p_CD->Fill(E_e_CD);
-                        Theta_e_2p_CD->Fill(theta_e_1e_CD);
-                        Phi_e_2p_CD->Fill(phi_e_1e_CD);
-
-                        Theta_e_VS_Phi_e_2p_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
-                        E_e_VS_Theta_e_2p_CD->Fill(theta_e_1e_CD, E_e_CD);
-
-                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_All_Int_2p_CD->Fill(beamE - E_e_CD); }
-
-                        if (qel) {
-                            Theta_e_2p_QEL_CD->Fill(theta_e_1e_CD);
-                            Phi_e_2p_QEL_CD->Fill(phi_e_1e_CD);
-                            E_e_2p_QEL_CD->Fill(E_e_CD);
-                            E_e_VS_Theta_e_2p_QEL_CD->Fill(theta_e_1e_CD, E_e_CD);
-
-                            if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_QEL_2p_CD->Fill(beamE - E_e_CD); }
-                        } else if (mec) {
-                            Theta_e_2p_MEC_CD->Fill(theta_e_1e_CD);
-                            Phi_e_2p_MEC_CD->Fill(phi_e_1e_CD);
-                            E_e_2p_MEC_CD->Fill(E_e_CD);
-                            E_e_VS_Theta_e_2p_MEC_CD->Fill(theta_e_1e_CD, E_e_CD);
-
-                            if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_MEC_2p_CD->Fill(beamE - E_e_CD); }
-                        } else if (res) {
-                            Theta_e_2p_RES_CD->Fill(theta_e_1e_CD);
-                            Phi_e_2p_RES_CD->Fill(phi_e_1e_CD);
-                            E_e_2p_RES_CD->Fill(E_e_CD);
-                            E_e_VS_Theta_e_2p_RES_CD->Fill(theta_e_1e_CD, E_e_CD);
-
-                            if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_RES_2p_CD->Fill(beamE - E_e_CD); }
-                        } else if (dis) {
-                            Theta_e_2p_DIS_CD->Fill(theta_e_1e_CD);
-                            Phi_e_2p_DIS_CD->Fill(phi_e_1e_CD);
-                            E_e_2p_DIS_CD->Fill(E_e_CD);
-                            E_e_VS_Theta_e_2p_DIS_CD->Fill(theta_e_1e_CD, E_e_CD);
-
-                            if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_DIS_2p_CD->Fill(beamE - E_e_CD); }
-                        }
-                    } else if (e->getRegion() == FD) {
-                        E_e_2p_FD->Fill(E_e_FD);
-                        Theta_e_2p_FD->Fill(theta_e_1e_FD);
-                        Phi_e_2p_FD->Fill(phi_e_1e_FD);
-
-                        Theta_e_VS_Phi_e_2p_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
-                        E_e_VS_Theta_e_2p_FD->Fill(theta_e_1e_FD, E_e_FD);
-
-                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_All_Int_2p_FD->Fill(beamE - E_e_FD); }
-
-                        if (qel) {
-                            Theta_e_2p_QEL_FD->Fill(theta_e_1e_FD);
-                            Phi_e_2p_QEL_FD->Fill(phi_e_1e_FD);
-                            E_e_2p_QEL_FD->Fill(E_e_FD);
-                            E_e_VS_Theta_e_2p_QEL_FD->Fill(theta_e_1e_FD, E_e_FD);
-
-                            if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_QEL_2p_FD->Fill(beamE - E_e_FD); }
-                        } else if (mec) {
-                            Theta_e_2p_MEC_FD->Fill(theta_e_1e_FD);
-                            Phi_e_2p_MEC_FD->Fill(phi_e_1e_FD);
-                            E_e_2p_MEC_FD->Fill(E_e_FD);
-                            E_e_VS_Theta_e_2p_MEC_FD->Fill(theta_e_1e_FD, E_e_FD);
-
-                            if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_MEC_2p_FD->Fill(beamE - E_e_FD); }
-                        } else if (res) {
-                            Theta_e_2p_RES_FD->Fill(theta_e_1e_FD);
-                            Phi_e_2p_RES_FD->Fill(phi_e_1e_FD);
-                            E_e_2p_RES_FD->Fill(E_e_FD);
-                            E_e_VS_Theta_e_2p_RES_FD->Fill(theta_e_1e_FD, E_e_FD);
-
-                            if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_RES_2p_FD->Fill(beamE - E_e_FD); }
-                        } else if (dis) {
-                            Theta_e_2p_DIS_FD->Fill(theta_e_1e_FD);
-                            Phi_e_2p_DIS_FD->Fill(phi_e_1e_FD);
-                            E_e_2p_DIS_FD->Fill(E_e_FD);
-                            E_e_VS_Theta_e_2p_DIS_FD->Fill(theta_e_1e_FD, E_e_FD);
-
-                            if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_DIS_2p_FD->Fill(beamE - E_e_FD); }
-                        }
-                    }
-                } // end of loop over electrons vector
-
-                //<editor-fold desc="Filling SF histograms">
-                SF_All_Int_2p_FD->Fill(EoP_e);
-                SF_VS_P_e_2p_FD->Fill(P_e_1e.Mag(), EoP_e);
-                //</editor-fold>
-
-                //<editor-fold desc="Filling fiducial">
-//                Vcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLv(), EoP_e);
-//                Wcal_VS_EoP_2p_ECIN->Fill(electrons[0]->cal(ECIN)->getLw(), EoP_e);
-                Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-                Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
-                //</editor-fold>
-
-                //<editor-fold desc="Filling nphe histograms">
-                nphe_All_Int_2p_FD->Fill(nphe);
-                //</editor-fold>
-
-                //<editor-fold desc="Filling Ecal histograms">
-                double p_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
-
-                p_e = electrons[0]->getP();
-                E_e = sqrt(m_e * m_e + p_e * p_e);
-                Pp0 = protons[0]->getP();
-                Ep0 = sqrt(m_p * m_p + Pp0 * Pp0);
-                Pp1 = protons[1]->getP();
-                Ep1 = sqrt(m_p * m_p + Pp1 * Pp1);
-                Ecal_2p = E_e + (Ep0 - m_p) + (Ep1 - m_p);
-
-                Ecal_All_Int_2p->Fill(Ecal_2p);
-
-                if (qel) {
-                    Ecal_QEL_2p->Fill(Ecal_2p);
-                } else if (mec) {
-                    Ecal_MEC_2p->Fill(Ecal_2p);
-                } else if (res) {
-                    Ecal_RES_2p->Fill(Ecal_2p);
-                } else if (dis) {
-                    Ecal_DIS_2p->Fill(Ecal_2p);
                 }
-                //</editor-fold>
-
-                //<editor-fold desc="Filling Chi2 histograms">
-
-                //<editor-fold desc="Filling electron Chi2 cut 2p">
-                if (electrons[0]->getRegion() == CD) {
-                    Chi2_Electron_2p_CD->Fill(electrons[0]->par()->getChi2Pid());
-                } else if (electrons[0]->getRegion() == FD) {
-                    Chi2_Electron_2p_FD->Fill(electrons[0]->par()->getChi2Pid());
-                }
-                //</editor-fold>
-
-                //<editor-fold desc="Filling proton0 Chi2 cut 2p">
-                if (protons[0]->getRegion() == CD) {
-                    Chi2_Proton_2p_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if (protons[0]->getRegion() == FD) {
-                    Chi2_Proton_2p_FD->Fill(protons[0]->par()->getChi2Pid());
-                }
-                //</editor-fold>
-
-                //<editor-fold desc="Filling proton1 Chi2 cut 2p">
-                if (protons[1]->getRegion() == CD) {
-                    Chi2_Proton_2p_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if (protons[1]->getRegion() == FD) {
-                    Chi2_Proton_2p_FD->Fill(protons[1]->par()->getChi2Pid());
-                }
-                //</editor-fold>
-
-                //</editor-fold>
-
-                //<editor-fold desc="Filling dVx, dVy, dVz">
-                for (auto &p: protons) {
-                    Vx_p = p->par()->getVx();
-                    Vy_p = p->par()->getVy();
-                    Vz_p = p->par()->getVz();
-                    dVx = Vx_e - Vx_p;
-                    dVy = Vy_e - Vy_p;
-                    dVz = Vz_e - Vz_p;
-
-                    deltaVx_2p->Fill(dVx);
-                    deltaVy_2p->Fill(dVy);
-                    deltaVz_2p->Fill(dVz);
-                } // end of loop over protons vector
-                //</editor-fold>
-
-            } // end of 1e2p & 2p cuts if
+            }
             //</editor-fold>
 
-        } // end of while
-    } // end of for loop over files
+            //  Testing chi2 cuts (protons only) ------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Testing chi2 cuts (protons only)">
+
+            /* Chi2 before cut */
+            if (protons[0]->getRegion() == CD) {
+//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+                Chi2_Proton_1e2p_BC_CD->Fill(protons[0]->par()->getChi2Pid());
+            } else if (protons[0]->getRegion() == FD) {
+//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+                Chi2_Proton_1e2p_BC_FD->Fill(protons[0]->par()->getChi2Pid());
+            }
+
+            if (protons[1]->getRegion() == CD) {
+//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+                Chi2_Proton_1e2p_BC_CD->Fill(protons[1]->par()->getChi2Pid());
+            } else if (protons[1]->getRegion() == FD) {
+//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+                Chi2_Proton_1e2p_BC_FD->Fill(protons[1]->par()->getChi2Pid());
+            }
+
+            /* Chi2 after cut */
+            if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
+                ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+                Chi2_Proton_1e2p_AC_CD->Fill(protons[0]->par()->getChi2Pid());
+            } else if ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
+                ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+                Chi2_Proton_1e2p_AC_FD->Fill(protons[0]->par()->getChi2Pid());
+            }
+
+            if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
+                ++num_of_events_1e2p_w_pChi2_cut_only_CD;
+                Chi2_Proton_1e2p_AC_CD->Fill(protons[1]->par()->getChi2Pid());
+            } else if ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
+                ++num_of_events_1e2p_w_pChi2_cut_only_FD;
+                Chi2_Proton_1e2p_AC_FD->Fill(protons[1]->par()->getChi2Pid());
+            }
+            //</editor-fold>
+
+            //  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Testing dV cuts">
+            double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
+            double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
+            double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
+
+            for (auto &p: protons) {
+                Vx_p = p->par()->getVx(), Vy_p = p->par()->getVy(), Vz_p = p->par()->getVz();
+                dVx = Vx_e - Vx_p, dVy = Vy_e - Vy_p, dVz = Vz_e - Vz_p;
+
+                // Testing dVx,dVy,dVz before cuts
+                deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+
+                // Testing dVx,dVy,dVz after cuts
+                if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
+                if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
+                if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //</editor-fold>
+
+            //  Applying cuts ---------------------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Applying cuts">
+
+            //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Applying momentum cuts">
+            // Electrons:
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e_1e.Mag() > e_momentum_upper_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e_1e.Mag() < e_momentum_lower_cut_2p))) { continue; }
+
+            // Proton 0:
+            if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p0.Mag() > p_momentum_upper_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p0.Mag() < p_momentum_lower_cut_2p))) { continue; }
+
+            // Proton 1:
+            if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p1.Mag() > p_momentum_upper_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p1.Mag() < p_momentum_lower_cut_2p))) { continue; }
+            //</editor-fold>
+
+            //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Applying Chi2 cuts (protons only)">
+            // TODO: move proton blocks here to for loop to save some space
+            if (protons[0]->getRegion() == CD) {
+                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+            } else if (protons[0]->getRegion() == FD) {
+                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+            }
+
+            if (protons[1]->getRegion() == CD) {
+                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
+            } else if (protons[1]->getRegion() == FD) {
+                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
+            }
+
+            ++num_of_events_1e2p_w_allChi2_cuts;
+            //</editor-fold>
+
+            //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Applying dVz cuts">
+            if ((apply_dVz_cuts == true) && ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut))) { continue; }
+            //</editor-fold>
+
+            //</editor-fold>
+
+            //  Fillings histograms ---------------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Counting 2p events by reaction">
+            ++num_of_events_2p;
+
+            if (qel) {
+                ++num_of_2p_QEL_events;
+            } else if (mec) {
+                ++num_of_2p_MEC_events;
+            } else if (res) {
+                ++num_of_2p_RES_events;
+            } else if (dis) {
+                ++num_of_2p_DIS_events;
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Filling momentum histograms">
+            if (electrons[0]->getRegion() == CD) {
+                P_e_2p_CD->Fill(P_e_1e.Mag());
+            } else if (electrons[0]->getRegion() == FD) {
+                P_e_2p_FD->Fill(P_e_1e.Mag());
+            }
+
+            if (protons[0]->getRegion() == CD) {
+                P_p_2p_CD->Fill(P_p0.Mag());
+            } else if (protons[0]->getRegion() == FD) {
+                P_p_2p_FD->Fill(P_p0.Mag());
+            }
+
+            if (protons[1]->getRegion() == CD) {
+                P_p_2p_CD->Fill(P_p1.Mag());
+            } else if (protons[1]->getRegion() == FD) {
+                P_p_2p_FD->Fill(P_p1.Mag());
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Filling Beta vs. P plots (2p)">
+
+            //<editor-fold desc="Beta vs. P from electrons (2p, CD & FD)">
+            if (electrons[0]->getRegion() == CD) {
+                Beta_vs_P_2p_CD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                Beta_vs_P_2p_Electrons_Only_CD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+
+                if (electrons[0]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_2p_CD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                } else if (electrons[0]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_2p_CD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                } else if (electrons[0]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_2p_CD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                }
+            } else if (electrons[0]->getRegion() == FD) {
+                Beta_vs_P_2p_FD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                Beta_vs_P_2p_Electrons_Only_FD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+
+                if (electrons[0]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_2p_FD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                } else if (electrons[0]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_2p_FD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                } else if (electrons[0]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_2p_FD->Fill(electrons[0]->getP(), electrons[0]->par()->getBeta());
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Beta vs. P from protons (2p, CD & FD)">
+            for (int i = 0; i < protons.size(); i++) {
+                if (protons[i]->getRegion() == CD) {
+                    Beta_vs_P_2p_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    Beta_vs_P_2p_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+
+                    if (protons[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    } else if (protons[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    } else if (protons[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    }
+                } else if (protons[i]->getRegion() == FD) {
+                    Beta_vs_P_2p_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    Beta_vs_P_2p_Protons_Only_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+
+                    if (protons[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    } else if (protons[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    } else if (protons[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
+                    }
+                }
+            } // end of loop over protons vector
+            //</editor-fold>
+
+            //<editor-fold desc="Beta vs. P from other particles (2p, CD & FD)">
+            /* This is for self-consistency. Contributions from other particles should be zero */
+
+//        //<editor-fold desc="Beta vs. P from neutrons (2p, CD & FD)">
+//        for (int i = 0; i < neutrons.size(); i++) {
+//            if (neutrons[i]->getRegion() == CD) {
+//                Beta_vs_P_2p_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//
+//                if (neutrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_2p_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_2p_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_2p_CD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                }
+//            } else if (neutrons[i]->getRegion() == FD) {
+//                Beta_vs_P_2p_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//
+//                if (neutrons[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_2p_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_2p_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                } else if (neutrons[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_2p_FD->Fill(neutrons[i]->getP(), neutrons[i]->par()->getBeta());
+//                }
+//            }
+//        } // end of loop over neutrons vector
+//        //</editor-fold>
+
+            //<editor-fold desc="Beta vs. P from Kplus (2p, CD & FD)">
+            for (int i = 0; i < Kplus.size(); i++) {
+                if (Kplus[i]->getRegion() == CD) {
+                    Beta_vs_P_2p_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+
+                    if (Kplus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                    } else if (Kplus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                    } else if (Kplus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                    }
+                } else if (Kplus[i]->getRegion() == FD) {
+                    Beta_vs_P_2p_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+
+                    if (Kplus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                    } else if (Kplus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                    } else if (Kplus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
+                    }
+                }
+            } // end of loop over Kplus vector
+            //</editor-fold>
+
+            //<editor-fold desc="Beta vs. P from Kminus (2p, CD & FD)">
+            for (int i = 0; i < Kminus.size(); i++) {
+                if (Kminus[i]->getRegion() == CD) {
+                    Beta_vs_P_2p_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+
+                    if (Kminus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                    } else if (Kminus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                    } else if (Kminus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                    }
+                } else if (Kminus[i]->getRegion() == FD) {
+                    Beta_vs_P_2p_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+
+                    if (Kminus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                    } else if (Kminus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                    } else if (Kminus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
+                    }
+                }
+            } // end of loop over Kminus vector
+            //</editor-fold>
+
+            //<editor-fold desc="Beta vs. P from piplus (2p, CD & FD)">
+            for (int i = 0; i < piplus.size(); i++) {
+                if (piplus[i]->getRegion() == CD) {
+                    Beta_vs_P_2p_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+
+                    if (piplus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                    } else if (piplus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                    } else if (piplus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                    }
+                } else if (piplus[i]->getRegion() == FD) {
+                    Beta_vs_P_2p_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+
+                    if (piplus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                    } else if (piplus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                    } else if (piplus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+                    }
+                }
+            } // end of loop over piplus vector
+            //</editor-fold>
+
+            //<editor-fold desc="Beta vs. P from piminus (2p, CD & FD)">
+            for (int i = 0; i < piminus.size(); i++) {
+                if (piminus[i]->getRegion() == CD) {
+                    Beta_vs_P_2p_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+
+                    if (piminus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                    } else if (piminus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                    } else if (piminus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                    }
+                } else if (piminus[i]->getRegion() == FD) {
+                    Beta_vs_P_2p_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+
+                    if (piminus[i]->par()->getCharge() == 1) {
+                        Beta_vs_P_positive_particles_2p_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                    } else if (piminus[i]->par()->getCharge() == 0) {
+                        Beta_vs_P_neutral_particles_2p_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                    } else if (piminus[i]->par()->getCharge() == -1) {
+                        Beta_vs_P_negative_particles_2p_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+                    }
+                }
+            } // end of loop over piminus vector
+            //</editor-fold>
+
+//        //<editor-fold desc="Beta vs. P from pizero (2p, CD & FD)">
+//        for (int i = 0; i < pizero.size(); i++) {
+//            if (pizero[i]->getRegion() == CD) {
+//                Beta_vs_P_2p_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//
+//                if (pizero[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_2p_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_2p_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_2p_CD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                }
+//            } else if (pizero[i]->getRegion() == FD) {
+//                Beta_vs_P_2p_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//
+//                if (pizero[i]->par()->getCharge() == 1) {
+//                    Beta_vs_P_positive_particles_2p_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == 0) {
+//                    Beta_vs_P_neutral_particles_2p_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                } else if (pizero[i]->par()->getCharge() == -1) {
+//                    Beta_vs_P_negative_particles_2p_FD->Fill(pizero[i]->getP(), pizero[i]->par()->getBeta());
+//                }
+//            }
+//        } // end of loop over pizero vector
+//        //</editor-fold>
+
+//            //<editor-fold desc="Beta vs. P from neutrals (2p, CD & FD)">
+//            for (int i = 0; i < neutrals.size(); i++) {
+//                if (neutrals[i]->getRegion() == CD) {
+//                    Beta_vs_P_2p_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//
+//                    if (neutrals[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_2p_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                    } else if (neutrals[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_2p_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                    } else if (neutrals[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_2p_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                    }
+//                } else if (neutrals[i]->getRegion() == FD) {
+//                    Beta_vs_P_2p_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//
+//                    if (neutrals[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_2p_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                    } else if (neutrals[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_2p_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                    } else if (neutrals[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_2p_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                    }
+//                }
+//            } // end of loop over neutrals vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Beta vs. P from deuterons (2p, CD & FD)">
+//            for (int i = 0; i < deuterons.size(); i++) {
+//                if (deuterons[i]->getRegion() == CD) {
+//                    Beta_vs_P_2p_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//
+//                    if (deuterons[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_2p_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//                    } else if (deuterons[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_2p_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//                    } else if (deuterons[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_2p_CD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//                    }
+//                } else if (deuterons[i]->getRegion() == FD) {
+//                    Beta_vs_P_2p_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//
+//                    if (deuterons[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_2p_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//                    } else if (deuterons[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_2p_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//                    } else if (deuterons[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_2p_FD->Fill(deuterons[i]->getP(), deuterons[i]->par()->getBeta());
+//                    }
+//                }
+//            } // end of loop over deuterons vector
+//            //</editor-fold>
+//
+//            //<editor-fold desc="Beta vs. P from otherpart (2p, CD & FD)">
+//            for (int i = 0; i < otherpart.size(); i++) {
+//                if (otherpart[i]->getRegion() == CD) {
+//                    Beta_vs_P_2p_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//
+//                    if (otherpart[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_2p_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//                    } else if (otherpart[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_2p_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//                    } else if (otherpart[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_2p_CD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//                    }
+//                } else if (otherpart[i]->getRegion() == FD) {
+//                    Beta_vs_P_2p_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//
+//                    if (otherpart[i]->par()->getCharge() == 1) {
+//                        Beta_vs_P_positive_particles_2p_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//                    } else if (otherpart[i]->par()->getCharge() == 0) {
+//                        Beta_vs_P_neutral_particles_2p_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//                    } else if (otherpart[i]->par()->getCharge() == -1) {
+//                        Beta_vs_P_negative_particles_2p_FD->Fill(otherpart[i]->getP(), otherpart[i]->par()->getBeta());
+//                    }
+//                }
+//            } // end of loop over otherpart vector
+//            //</editor-fold>
+
+            //</editor-fold>
+
+            for (auto &e: electrons) {
+                if (e->getRegion() == CD) {
+                    E_e_2p_CD->Fill(E_e_CD);
+                    Theta_e_2p_CD->Fill(theta_e_1e_CD);
+                    Phi_e_2p_CD->Fill(phi_e_1e_CD);
+
+                    Theta_e_VS_Phi_e_2p_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
+                    E_e_VS_Theta_e_2p_CD->Fill(theta_e_1e_CD, E_e_CD);
+
+                    if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_All_Int_2p_CD->Fill(beamE - E_e_CD); }
+
+                    if (qel) {
+                        Theta_e_2p_QEL_CD->Fill(theta_e_1e_CD);
+                        Phi_e_2p_QEL_CD->Fill(phi_e_1e_CD);
+                        E_e_2p_QEL_CD->Fill(E_e_CD);
+                        E_e_VS_Theta_e_2p_QEL_CD->Fill(theta_e_1e_CD, E_e_CD);
+
+                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_QEL_2p_CD->Fill(beamE - E_e_CD); }
+                    } else if (mec) {
+                        Theta_e_2p_MEC_CD->Fill(theta_e_1e_CD);
+                        Phi_e_2p_MEC_CD->Fill(phi_e_1e_CD);
+                        E_e_2p_MEC_CD->Fill(E_e_CD);
+                        E_e_VS_Theta_e_2p_MEC_CD->Fill(theta_e_1e_CD, E_e_CD);
+
+                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_MEC_2p_CD->Fill(beamE - E_e_CD); }
+                    } else if (res) {
+                        Theta_e_2p_RES_CD->Fill(theta_e_1e_CD);
+                        Phi_e_2p_RES_CD->Fill(phi_e_1e_CD);
+                        E_e_2p_RES_CD->Fill(E_e_CD);
+                        E_e_VS_Theta_e_2p_RES_CD->Fill(theta_e_1e_CD, E_e_CD);
+
+                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_RES_2p_CD->Fill(beamE - E_e_CD); }
+                    } else if (dis) {
+                        Theta_e_2p_DIS_CD->Fill(theta_e_1e_CD);
+                        Phi_e_2p_DIS_CD->Fill(phi_e_1e_CD);
+                        E_e_2p_DIS_CD->Fill(E_e_CD);
+                        E_e_VS_Theta_e_2p_DIS_CD->Fill(theta_e_1e_CD, E_e_CD);
+
+                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_DIS_2p_CD->Fill(beamE - E_e_CD); }
+                    }
+                } else if (e->getRegion() == FD) {
+                    E_e_2p_FD->Fill(E_e_FD);
+                    Theta_e_2p_FD->Fill(theta_e_1e_FD);
+                    Phi_e_2p_FD->Fill(phi_e_1e_FD);
+
+                    Theta_e_VS_Phi_e_2p_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
+                    E_e_VS_Theta_e_2p_FD->Fill(theta_e_1e_FD, E_e_FD);
+
+                    if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_All_Int_2p_FD->Fill(beamE - E_e_FD); }
+
+                    if (qel) {
+                        Theta_e_2p_QEL_FD->Fill(theta_e_1e_FD);
+                        Phi_e_2p_QEL_FD->Fill(phi_e_1e_FD);
+                        E_e_2p_QEL_FD->Fill(E_e_FD);
+                        E_e_VS_Theta_e_2p_QEL_FD->Fill(theta_e_1e_FD, E_e_FD);
+
+                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_QEL_2p_FD->Fill(beamE - E_e_FD); }
+                    } else if (mec) {
+                        Theta_e_2p_MEC_FD->Fill(theta_e_1e_FD);
+                        Phi_e_2p_MEC_FD->Fill(phi_e_1e_FD);
+                        E_e_2p_MEC_FD->Fill(E_e_FD);
+                        E_e_VS_Theta_e_2p_MEC_FD->Fill(theta_e_1e_FD, E_e_FD);
+
+                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_MEC_2p_FD->Fill(beamE - E_e_FD); }
+                    } else if (res) {
+                        Theta_e_2p_RES_FD->Fill(theta_e_1e_FD);
+                        Phi_e_2p_RES_FD->Fill(phi_e_1e_FD);
+                        E_e_2p_RES_FD->Fill(E_e_FD);
+                        E_e_VS_Theta_e_2p_RES_FD->Fill(theta_e_1e_FD, E_e_FD);
+
+                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_RES_2p_FD->Fill(beamE - E_e_FD); }
+                    } else if (dis) {
+                        Theta_e_2p_DIS_FD->Fill(theta_e_1e_FD);
+                        Phi_e_2p_DIS_FD->Fill(phi_e_1e_FD);
+                        E_e_2p_DIS_FD->Fill(E_e_FD);
+                        E_e_VS_Theta_e_2p_DIS_FD->Fill(theta_e_1e_FD, E_e_FD);
+
+                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_DIS_2p_FD->Fill(beamE - E_e_FD); }
+                    }
+                }
+            } // end of loop over electrons vector
+
+            //<editor-fold desc="Filling SF histograms (2p)">
+            SF_All_Int_2p_FD->Fill(EoP_e);
+            SF_VS_P_e_2p_FD->Fill(P_e_1e.Mag(), EoP_e);
+            //</editor-fold>
+
+            //<editor-fold desc="Filling fiducial plots (2p)">
+            Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+            //</editor-fold>
+
+            //<editor-fold desc="Filling nphe plots (2p)">
+            nphe_All_Int_2p_FD->Fill(nphe);
+            //</editor-fold>
+
+            //<editor-fold desc="Filling Ecal histograms (2p)">
+            double p_e, E_e, Pp0, Ep0, Pp1, Ep1, Ecal_2p;
+
+            p_e = electrons[0]->getP();
+            E_e = sqrt(m_e * m_e + p_e * p_e);
+            Pp0 = protons[0]->getP();
+            Ep0 = sqrt(m_p * m_p + Pp0 * Pp0);
+            Pp1 = protons[1]->getP();
+            Ep1 = sqrt(m_p * m_p + Pp1 * Pp1);
+            Ecal_2p = E_e + (Ep0 - m_p) + (Ep1 - m_p);
+
+            Ecal_All_Int_2p->Fill(Ecal_2p);
+
+            if (qel) {
+                Ecal_QEL_2p->Fill(Ecal_2p);
+            } else if (mec) {
+                Ecal_MEC_2p->Fill(Ecal_2p);
+            } else if (res) {
+                Ecal_RES_2p->Fill(Ecal_2p);
+            } else if (dis) {
+                Ecal_DIS_2p->Fill(Ecal_2p);
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Filling Chi2 histograms (2p)">
+
+            //<editor-fold desc="Filling electron Chi2 cut 2p">
+            if (electrons[0]->getRegion() == CD) {
+                Chi2_Electron_2p_CD->Fill(electrons[0]->par()->getChi2Pid());
+            } else if (electrons[0]->getRegion() == FD) {
+                Chi2_Electron_2p_FD->Fill(electrons[0]->par()->getChi2Pid());
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Filling proton0 Chi2 cut 2p">
+            if (protons[0]->getRegion() == CD) {
+                Chi2_Proton_2p_CD->Fill(protons[0]->par()->getChi2Pid());
+            } else if (protons[0]->getRegion() == FD) {
+                Chi2_Proton_2p_FD->Fill(protons[0]->par()->getChi2Pid());
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Filling proton1 Chi2 cut 2p">
+            if (protons[1]->getRegion() == CD) {
+                Chi2_Proton_2p_CD->Fill(protons[1]->par()->getChi2Pid());
+            } else if (protons[1]->getRegion() == FD) {
+                Chi2_Proton_2p_FD->Fill(protons[1]->par()->getChi2Pid());
+            }
+            //</editor-fold>
+
+            //</editor-fold>
+
+            //<editor-fold desc="Filling dVx, dVy, dVz (2p)">
+            for (auto &p: protons) {
+                Vx_p = p->par()->getVx();
+                Vy_p = p->par()->getVy();
+                Vz_p = p->par()->getVz();
+                dVx = Vx_e - Vx_p;
+                dVy = Vy_e - Vy_p;
+                dVz = Vz_e - Vz_p;
+
+                deltaVx_2p->Fill(dVx);
+                deltaVy_2p->Fill(dVy);
+                deltaVz_2p->Fill(dVz);
+            } // end of loop over protons vector
+            //</editor-fold>
+
+        } // end of 1e2p & 2p cuts if
+        //</editor-fold>
+
+    } // end of while
     // </editor-fold>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4670,52 +5203,6 @@ void EventAnalyser() {
                       beta_neutron, "Neutrons", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P plots (positive hadrons in FTOF)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_positive_particles_FTOF_Dir, "01_Beta_vs_P_All_Particles_FTOF.png",
-                      beta_proton, "Protons", beta_Kplus, "K^{+}", beta_piplus, "#pi^{+}", true);
-
-        histPlotter2D(c1, Beta_vs_P_Protons_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_Protons_Only_FTOF_Dir,
-                      "02_Beta_vs_P_Protons_Only_FTOF.png", beta_proton, "Protons", true);
-
-        histPlotter2D(c1, Beta_vs_P_Kplus_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_Kplus_Only_FTOF_Dir,
-                      "03_Beta_vs_P_Kplus_Only_FTOF.png", beta_Kplus, "K^{+}", true);
-
-        histPlotter2D(c1, Beta_vs_P_piplus_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_piplus_Only_FTOF_Dir,
-                      "04_Beta_vs_P_piplus_Only_FTOF.png", beta_piplus, "#pi^{+}", true);
-
-        //TODO: add TF1 plot of Deuteron
-        histPlotter2D(c1, Beta_vs_P_deuteron_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_deuteron_Only_FTOF_Dir,
-                      "05_Beta_vs_P_Deuteron_Only_FTOF.png", beta_neutron, "Deuteron", false);
-
-        //TODO: add TF1 plot of beta_0
-        histPlotter2D(c1, Beta_vs_P_Beta_0_Only_FTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_Beta_0_Only_FTOF_Dir,
-                      "06_Beta_vs_P_Beta_0_Only_FTOF.png", beta_neutron, "Beta_0", false);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P plots (positive hadrons in CTOF)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_positive_particles_CTOF_Dir, "01_Beta_vs_P_All_Particles_CTOF.png",
-                      beta_proton, "Protons", beta_Kplus, "K^{+}", beta_piplus, "#pi^{+}", true);
-
-        histPlotter2D(c1, Beta_vs_P_Protons_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_Protons_Only_CTOF_Dir,
-                      "02_Beta_vs_P_Protons_Only_CTOF.png", beta_proton, "Protons", true);
-
-        histPlotter2D(c1, Beta_vs_P_Kplus_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_Kplus_Only_CTOF_Dir,
-                      "03_Beta_vs_P_Kplus_Only_CTOF.png", beta_Kplus, "K^{+}", true);
-
-        histPlotter2D(c1, Beta_vs_P_piplus_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_piplus_Only_CTOF_Dir,
-                      "04_Beta_vs_P_piplus_Only_CTOF.png", beta_piplus, "#pi^{+}", true);
-
-        //TODO: add TF1 plot of Deuteron
-        histPlotter2D(c1, Beta_vs_P_deuteron_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_deuteron_Only_CTOF_Dir,
-                      "05_Beta_vs_P_Deuteron_Only_CTOF.png", beta_neutron, "Deuteron", false);
-
-        //TODO: add TF1 plot of beta_0
-        histPlotter2D(c1, Beta_vs_P_Beta_0_Only_CTOF, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_Beta_0_Only_CTOF_Dir,
-                      "06_Beta_vs_P_Beta_0_Only_CTOF.png", beta_neutron, "Beta_0", false);
-        //</editor-fold>
-
         //<editor-fold desc="Beta vs. P plots (all particles, by charge)">
 
         //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
@@ -4745,44 +5232,6 @@ void EventAnalyser() {
 
         histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
                       plots, true, Beta_VS_P_by_charge_All_e_Directory, "03_Beta_vs_P_q_m1_All_e_FD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P plots (at least 1e cut)">
-
-        //<editor-fold desc="Beta vs. P plots (by charge, CD & FD)">
-
-        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_min_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_min_1e_Directory, "01_Beta_vs_P_q_p1_min_1e_CD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-
-        histPlotter2D(c1, Beta_vs_P_positive_particles_min_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_min_1e_Directory, "01_Beta_vs_P_q_p1_min_1e_FD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_min_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_min_1e_Directory, "02_Beta_vs_P_q_0_min_1e_CD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_min_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_min_1e_Directory, "02_Beta_vs_P_q_0_min_1e_FD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_negative_particles_min_1e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_min_1e_Directory, "03_Beta_vs_P_q_m1_min_1e_CD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
-
-        histPlotter2D(c1, Beta_vs_P_negative_particles_min_1e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_min_1e_Directory, "03_Beta_vs_P_q_m1_min_1e_FD.png",
                       beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
         //</editor-fold>
 
@@ -4850,16 +5299,6 @@ void EventAnalyser() {
                       beta_Kminus, "K^{-}", true);
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P for Kzero Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Kzero_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "07_Beta_vs_P_1e_cut_Kzero_Only_CD.png",
-                      beta_Kzero, "K^{0}", true);
-
-        histPlotter2D(c1, Beta_vs_P_1e_Kzero_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "07_Beta_vs_P_1e_cut_Kzero_Only_FD.png",
-                      beta_Kzero, "K^{0}", true);
-        //</editor-fold>
-
         //<editor-fold desc="Beta vs. P for piplus Only (1e cut, CD & FD)">
         histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
                       plots, true, Beta_VS_P_Only_1e_Directory, "08_Beta_vs_P_1e_cut_piplus_Only_CD.png",
@@ -4888,16 +5327,6 @@ void EventAnalyser() {
         histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
                       plots, true, Beta_VS_P_Only_1e_Directory, "10_Beta_vs_P_1e_cut_pizero_Only_FD.png",
                       beta_pizero, "#pi^{0}", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for Photons Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Photons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "11_Beta_vs_P_1e_cut_photons_Only_CD.png",
-                      beta_photon, "#gamma", true);
-
-        histPlotter2D(c1, Beta_vs_P_1e_Photons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "11_Beta_vs_P_1e_cut_photons_Only_FD.png",
-                      beta_photon, "#gamma", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P plots (by charge, 1e cut, CD & FD)">
@@ -5002,141 +5431,141 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Beta vs. P plots (MicroBooNE-BC)">
-
-        //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-BC, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_BC_CD_Dir,
-                      "01_Beta_vs_P_MicroBooNE_BC_CD.png",
-                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
-
-        histPlotter2D(c1, Beta_vs_P_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_BC_FD_Dir,
-                      "01_Beta_vs_P_MicroBooNE_BC_FD.png",
-                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
-        //</editor-fold>
-
-//        //<editor-fold desc="Beta vs. P for Electrons Only (MicroBooNE-BC, CD & FD)">
-//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Electrons_Only_CD_Dir, "02_Beta_vs_P_2p_Electrons_Only_CD.png",
-//                      beta_electron, "Electrons", true);
+//        //<editor-fold desc="Beta vs. P plots (MicroBooNE-BC)">
 //
-//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Electrons_Only_FD_Dir, "02_Beta_vs_P_2p_Electrons_Only_FD.png",
-//                      beta_electron, "Electrons", true);
+//        //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-BC, CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_BC_CD_Dir,
+//                      "01_Beta_vs_P_MicroBooNE_BC_CD.png",
+//                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+//
+//        histPlotter2D(c1, Beta_vs_P_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_BC_FD_Dir,
+//                      "01_Beta_vs_P_MicroBooNE_BC_FD.png",
+//                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Beta vs. P for Protons Only (MicroBooNE-BC, CD & FD)">
-//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Protons_Only_CD_Dir, "03_Beta_vs_P_2p_Protons_Only_CD.png",
-//                      beta_proton, "Protons", true);
+////        //<editor-fold desc="Beta vs. P for Electrons Only (MicroBooNE-BC, CD & FD)">
+////        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Electrons_Only_CD_Dir, "02_Beta_vs_P_2p_Electrons_Only_CD.png",
+////                      beta_electron, "Electrons", true);
+////
+////        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Electrons_Only_FD_Dir, "02_Beta_vs_P_2p_Electrons_Only_FD.png",
+////                      beta_electron, "Electrons", true);
+////        //</editor-fold>
+////
+////        //<editor-fold desc="Beta vs. P for Protons Only (MicroBooNE-BC, CD & FD)">
+////        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Protons_Only_CD_Dir, "03_Beta_vs_P_2p_Protons_Only_CD.png",
+////                      beta_proton, "Protons", true);
+////
+////        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Protons_Only_FD_Dir, "03_Beta_vs_P_2p_Protons_Only_FD.png",
+////                      beta_proton, "Protons", true);
+////        //</editor-fold>
 //
-//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Protons_Only_FD_Dir, "03_Beta_vs_P_2p_Protons_Only_FD.png",
-//                      beta_proton, "Protons", true);
-//        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P plots (by charge, MicroBooNE-BC, CD & FD)">
-
-        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true,
-                      Beta_vs_P_positive_particles_MicroBooNE_BC_CD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_BC_CD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-
-        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_positive_particles_MicroBooNE_BC_FD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_BC_FD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_BC_CD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_BC_CD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_BC_FD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_BC_CD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_BC_CD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
-
-        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_BC_FD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_BC_FD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P plots (MicroBooNE-AC)">
-
-        //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-AC, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_AC_CD_Dir,
-                      "01_Beta_vs_P_MicroBooNE_AC_CD.png",
-                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
-
-        histPlotter2D(c1, Beta_vs_P_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_AC_FD_Dir,
-                      "01_Beta_vs_P_MicroBooNE_AC_FD.png",
-                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
-        //</editor-fold>
-
-//        //<editor-fold desc="Beta vs. P for Electrons Only (MicroBooNE-AC, CD & FD)">
-//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Electrons_Only_CD_Dir, "02_Beta_vs_P_2p_Electrons_Only_CD.png",
-//                      beta_electron, "Electrons", true);
+//        //<editor-fold desc="Beta vs. P plots (by charge, MicroBooNE-BC, CD & FD)">
 //
-//        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Electrons_Only_FD_Dir, "02_Beta_vs_P_2p_Electrons_Only_FD.png",
-//                      beta_electron, "Electrons", true);
+//        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true,
+//                      Beta_vs_P_positive_particles_MicroBooNE_BC_CD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_BC_CD.png",
+//                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_positive_particles_MicroBooNE_BC_FD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_BC_FD.png",
+//                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
 //        //</editor-fold>
 //
-//        //<editor-fold desc="Beta vs. P for Protons Only (MicroBooNE-AC, CD & FD)">
-//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Protons_Only_CD_Dir, "03_Beta_vs_P_2p_Protons_Only_CD.png",
-//                      beta_proton, "Protons", true);
+//        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_BC_CD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_BC_CD.png",
+//                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
 //
-//        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-//                      plots, true, Beta_vs_P_2p_Protons_Only_FD_Dir, "03_Beta_vs_P_2p_Protons_Only_FD.png",
-//                      beta_proton, "Protons", true);
+//        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_BC_FD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_BC_FD.png",
+//                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
 //        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P plots (by charge, MicroBooNE-AC, CD & FD)">
-
-        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true,
-                      Beta_vs_P_positive_particles_MicroBooNE_AC_CD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_AC_CD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-
-        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_positive_particles_MicroBooNE_AC_FD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_AC_FD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_AC_CD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_AC_CD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_AC_FD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-        //</editor-fold>
-
-        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_AC_CD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_AC_CD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
-
-        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_AC_FD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_AC_FD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_BC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_BC_CD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_BC_CD.png",
+//                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_BC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_BC_FD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_BC_FD.png",
+//                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P plots (MicroBooNE-AC)">
+//
+//        //<editor-fold desc="Beta vs. P for all particles (MicroBooNE-AC, CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_AC_CD_Dir,
+//                      "01_Beta_vs_P_MicroBooNE_AC_CD.png",
+//                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+//
+//        histPlotter2D(c1, Beta_vs_P_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_MicroBooNE_AC_FD_Dir,
+//                      "01_Beta_vs_P_MicroBooNE_AC_FD.png",
+//                      beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
+//        //</editor-fold>
+//
+////        //<editor-fold desc="Beta vs. P for Electrons Only (MicroBooNE-AC, CD & FD)">
+////        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Electrons_Only_CD_Dir, "02_Beta_vs_P_2p_Electrons_Only_CD.png",
+////                      beta_electron, "Electrons", true);
+////
+////        histPlotter2D(c1, Beta_vs_P_2p_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Electrons_Only_FD_Dir, "02_Beta_vs_P_2p_Electrons_Only_FD.png",
+////                      beta_electron, "Electrons", true);
+////        //</editor-fold>
+////
+////        //<editor-fold desc="Beta vs. P for Protons Only (MicroBooNE-AC, CD & FD)">
+////        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Protons_Only_CD_Dir, "03_Beta_vs_P_2p_Protons_Only_CD.png",
+////                      beta_proton, "Protons", true);
+////
+////        histPlotter2D(c1, Beta_vs_P_2p_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+////                      plots, true, Beta_vs_P_2p_Protons_Only_FD_Dir, "03_Beta_vs_P_2p_Protons_Only_FD.png",
+////                      beta_proton, "Protons", true);
+////        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P plots (by charge, MicroBooNE-AC, CD & FD)">
+//
+//        //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true,
+//                      Beta_vs_P_positive_particles_MicroBooNE_AC_CD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_AC_CD.png",
+//                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_positive_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_positive_particles_MicroBooNE_AC_FD_Dir, "01_Beta_vs_P_q_p1_MicroBooNE_AC_FD.png",
+//                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_AC_CD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_AC_CD.png",
+//                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_neutral_particles_MicroBooNE_AC_FD_Dir, "02_Beta_vs_P_q_0_MicroBooNE_AC_FD.png",
+//                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
+//        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_AC_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_AC_CD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_AC_CD.png",
+//                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+//
+//        histPlotter2D(c1, Beta_vs_P_negative_particles_MicroBooNE_AC_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
+//                      plots, true, Beta_vs_P_negative_particles_MicroBooNE_AC_FD_Dir, "03_Beta_vs_P_q_m1_MicroBooNE_AC_FD.png",
+//                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //</editor-fold>
 
     } else {
         cout << "\n\nBeta vs. P plots are disabled by user.\n\n";
@@ -5148,6 +5577,11 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Chi2 plots">
+    double Chi2_Kplus_Xmax_CD, Chi2_Kplus_Xmax_FD, Chi2_Kminus_Xmax_CD, Chi2_Kminus_Xmax_FD;
+    double Chi2_piplus_Xmax_CD, Chi2_piplus_Xmax_FD, Chi2_piminus_Xmax_CD, Chi2_piminus_Xmax_FD;
+    double Chi2_Kplus_1e_Xmax_CD, Chi2_Kplus_1e_Xmax_FD, Chi2_Kminus_1e_Xmax_CD, Chi2_Kminus_1e_Xmax_FD;
+    double Chi2_piplus_1e_Xmax_CD, Chi2_piplus_1e_Xmax_FD, Chi2_piminus_1e_Xmax_CD, Chi2_piminus_1e_Xmax_FD;
+
     if (Chi2_plots) {
 
         cout << "\n\nPlotting Chi2 plots...\n\n";
@@ -5158,10 +5592,26 @@ void EventAnalyser() {
         Chi2_Electron_Xmax_FD = Chi2_Electron_FD->GetBinCenter(Chi2_Electron_FD->GetMaximumBin());
         Chi2_Proton_Xmax_CD = Chi2_Proton_CD->GetBinCenter(Chi2_Proton_CD->GetMaximumBin());
         Chi2_Proton_Xmax_FD = Chi2_Proton_FD->GetBinCenter(Chi2_Proton_FD->GetMaximumBin());
+        Chi2_Kplus_Xmax_CD = Chi2_Kplus_CD->GetBinCenter(Chi2_Kplus_CD->GetMaximumBin());
+        Chi2_Kplus_Xmax_FD = Chi2_Kplus_FD->GetBinCenter(Chi2_Kplus_FD->GetMaximumBin());
+        Chi2_Kminus_Xmax_CD = Chi2_Kminus_CD->GetBinCenter(Chi2_Kminus_CD->GetMaximumBin());
+        Chi2_Kminus_Xmax_FD = Chi2_Kminus_FD->GetBinCenter(Chi2_Kminus_FD->GetMaximumBin());
+        Chi2_piplus_Xmax_CD = Chi2_piplus_CD->GetBinCenter(Chi2_piplus_CD->GetMaximumBin());
+        Chi2_piplus_Xmax_FD = Chi2_piplus_FD->GetBinCenter(Chi2_piplus_FD->GetMaximumBin());
+        Chi2_piminus_Xmax_CD = Chi2_piminus_CD->GetBinCenter(Chi2_piminus_CD->GetMaximumBin());
+        Chi2_piminus_Xmax_FD = Chi2_piminus_FD->GetBinCenter(Chi2_piminus_FD->GetMaximumBin());
         Chi2_Electron_1e_Xmax_CD = Chi2_Electron_1e_CD->GetBinCenter(Chi2_Electron_1e_CD->GetMaximumBin());
         Chi2_Electron_1e_Xmax_FD = Chi2_Electron_1e_FD->GetBinCenter(Chi2_Electron_1e_FD->GetMaximumBin());
         Chi2_Proton_1e_Xmax_CD = Chi2_Proton_1e_CD->GetBinCenter(Chi2_Proton_1e_CD->GetMaximumBin());
         Chi2_Proton_1e_Xmax_FD = Chi2_Proton_1e_FD->GetBinCenter(Chi2_Proton_1e_FD->GetMaximumBin());
+        Chi2_Kplus_1e_Xmax_CD = Chi2_Kplus_1e_CD->GetBinCenter(Chi2_Kplus_1e_CD->GetMaximumBin());
+        Chi2_Kplus_1e_Xmax_FD = Chi2_Kplus_1e_FD->GetBinCenter(Chi2_Kplus_1e_FD->GetMaximumBin());
+        Chi2_Kminus_1e_Xmax_CD = Chi2_Kminus_1e_CD->GetBinCenter(Chi2_Kminus_1e_CD->GetMaximumBin());
+        Chi2_Kminus_1e_Xmax_FD = Chi2_Kminus_1e_FD->GetBinCenter(Chi2_Kminus_1e_FD->GetMaximumBin());
+        Chi2_piplus_1e_Xmax_CD = Chi2_piplus_1e_CD->GetBinCenter(Chi2_piplus_1e_CD->GetMaximumBin());
+        Chi2_piplus_1e_Xmax_FD = Chi2_piplus_1e_FD->GetBinCenter(Chi2_piplus_1e_FD->GetMaximumBin());
+        Chi2_piminus_1e_Xmax_CD = Chi2_piminus_1e_CD->GetBinCenter(Chi2_piminus_1e_CD->GetMaximumBin());
+        Chi2_piminus_1e_Xmax_FD = Chi2_piminus_1e_FD->GetBinCenter(Chi2_piminus_1e_FD->GetMaximumBin());
 
         Chi2_Electron_MicroBooNE_Xmax_CD = Chi2_Electron_MicroBooNE_CD->GetBinCenter(Chi2_Electron_MicroBooNE_CD->GetMaximumBin());
         Chi2_Electron_MicroBooNE_Xmax_FD = Chi2_Electron_MicroBooNE_FD->GetBinCenter(Chi2_Electron_MicroBooNE_FD->GetMaximumBin());
@@ -5175,201 +5625,258 @@ void EventAnalyser() {
 
 //  Chi2 plots (no #(e) cut) ----------------------------------------------------------------------------
 
-        //<editor-fold desc="Electron chi2 (no #(e) cut)">
-        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_Stack, "01_Electron_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+        //<editor-fold desc="Chi2 plots (no #(e) cut)">
+        histPlotter1D(c1, Chi2_Electron_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_Stack, "01_Electron_chi2", Chi2_Electron_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_Stack, "01_Electron_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+        histPlotter1D(c1, Chi2_Electron_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_Stack, "01_Electron_chi2", Chi2_Electron_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_Stack, "02_Proton_chi2", Chi2_Proton_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_Xmax_CD);
+        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_Stack, "02_Proton_chi2", Chi2_Proton_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
+//        histPlotter1D(c1, Chi2_Proton_CD, true, true, 1/Chi2_Proton_CD->Integral(), "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Chi2_Proton_Stack, "02_Proton_chi2", Chi2_Proton_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_Xmax_CD);
+//        histPlotter1D(c1, Chi2_Proton_FD, true, true, 1/Chi2_Proton_FD->Integral(), "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Chi2_Proton_Stack, "02_Proton_chi2", Chi2_Proton_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_Kplus_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kplus_Stack, "03_Kplus_chi2", Chi2_Kplus_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_Kplus_Stack, "03_Kplus_chi2", Chi2_Kplus_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kplus_cut_CD, Chi2_Kplus_Xmax_CD);
+        histPlotter1D(c1, Chi2_Kplus_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kplus_Stack, "03_Kplus_chi2", Chi2_Kplus_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_Kplus_Stack, "03_Kplus_chi2", Chi2_Kplus_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kplus_cut_FD, Chi2_Kplus_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_Kminus_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kminus_Stack, "04_Kminus_chi2", Chi2_Kminus_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_Kminus_Stack, "04_Kminus_chi2", Chi2_Kminus_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_CD, Chi2_Kminus_Xmax_CD);
+        histPlotter1D(c1, Chi2_Kminus_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kminus_Stack, "04_Kminus_chi2", Chi2_Kminus_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_Kminus_Stack, "04_Kminus_chi2", Chi2_Kminus_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cut_FD, Chi2_Kminus_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_piplus_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piplus_Stack, "03_piplus_chi2", Chi2_piplus_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_piplus_Stack, "03_piplus_chi2", Chi2_piplus_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cut_CD, Chi2_piplus_Xmax_CD);
+        histPlotter1D(c1, Chi2_piplus_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piplus_Stack, "03_piplus_chi2", Chi2_piplus_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_piplus_Stack, "03_piplus_chi2", Chi2_piplus_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cut_FD, Chi2_piplus_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_piminus_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piminus_Stack, "04_piminus_chi2", Chi2_piminus_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_piminus_Stack, "04_piminus_chi2", Chi2_piminus_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piminus_cut_CD, Chi2_piminus_Xmax_CD);
+        histPlotter1D(c1, Chi2_piminus_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piminus_Stack, "04_piminus_chi2", Chi2_piminus_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_piminus_Stack, "04_piminus_chi2", Chi2_piminus_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piminus_cut_FD, Chi2_piminus_Xmax_FD);
         //</editor-fold>
 
-        //<editor-fold desc="Proton chi2 (no #(e) cut)">
-        histPlotter1D(c1, Chi2_Proton_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_Stack, "02_Proton_chi2", "plots/Chi2_plots/All_e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-                      Chi2_Proton_Xmax_CD);
+//  Chi2 plots (1e cut) ----------------------------------------------------------------------------
 
-        histPlotter1D(c1, Chi2_Proton_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_Stack, "02_Proton_chi2", "plots/Chi2_plots/All_e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
-        //</editor-fold>
-
-//  Chi2 plots (1e only) ----------------------------------------------------------------------------
-
-        //<editor-fold desc="Electron chi2 (1e only)">
-        histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e_Stack, "01_Electron_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+        //<editor-fold desc="Electron chi2 (1e cut)">
+        histPlotter1D(c1, Chi2_Electron_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "01_Electron_chi2", Chi2_Electron_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_1e_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e_Stack, "01_Electron_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+        histPlotter1D(c1, Chi2_Electron_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e_Stack, "01_Electron_chi2", Chi2_Electron_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_1e_Xmax_FD);
-        //</editor-fold>
 
-        //<editor-fold desc="Proton chi2 (1e only)">
-        histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e_Stack, "02_Proton_chi2", "plots/Chi2_plots/Only_1e/", "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, Chi2_Proton_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "02_Proton_chi2", Chi2_Proton_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_Xmax_CD);
-
-        histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "1e only", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e_Stack, "02_Proton_chi2", "plots/Chi2_plots/Only_1e/", "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, Chi2_Proton_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e_Stack, "02_Proton_chi2", Chi2_Proton_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_Kplus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kplus_cut_CD,
+//                      Chi2_Kplus_1e_Xmax_CD);
+        histPlotter1D(c1, Chi2_Kplus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kplus_cut_FD,
+//                      Chi2_Kplus_1e_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_Kminus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_CD,
+//                      Chi2_Kminus_1e_Xmax_CD);
+        histPlotter1D(c1, Chi2_Kminus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cut_FD,
+//                      Chi2_Kminus_1e_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_piplus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cut_CD,
+//                      Chi2_piplus_1e_Xmax_CD);
+        histPlotter1D(c1, Chi2_piplus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cut_FD,
+//                      Chi2_piplus_1e_Xmax_FD);
+
+        histPlotter1D(c1, Chi2_piminus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piminus_cut_CD,
+//                      Chi2_piminus_1e_Xmax_CD);
+        histPlotter1D(c1, Chi2_piminus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_FD_Dir, "FD", kRed, true, true, true, false);
+//                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piminus_cut_FD,
+//                      Chi2_piminus_1e_Xmax_FD);
         //</editor-fold>
+
+//        //<editor-fold desc="Chi2 plots (MicroBooNE)">
+//
+//        //<editor-fold desc="Testing Chi2 cuts before applying (MicroBooNE)">
+//        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before C-Cut", "MicroBooNE", "CD", "e", 0.06,
+//                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_BC", Chi2_Electron_MicroBooNE_BC_CD_Dir, kBlue,
+//                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before C-Cut", "MicroBooNE", "FD", "e", 0.06,
+//                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_BC", Chi2_Electron_MicroBooNE_BC_FD_Dir, kBlue,
+//                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before C-Cut", "MicroBooNE", "CD", "p", 0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_BC", Chi2_Proton_MicroBooNE_BC_CD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before C-Cut", "MicroBooNE", "FD", "p", 0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_BC", Chi2_Proton_MicroBooNE_BC_FD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram Before C-Cut", "MicroBooNE", "CD", "#pi^{+}",
+//                      0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_BC", Chi2_piplus_MicroBooNE_BC_CD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram Before C-Cut", "MicroBooNE", "FD", "#pi^{+}",
+//                      0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_BC", Chi2_piplus_MicroBooNE_BC_FD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram Before C-Cut", "MicroBooNE", "CD", "#pi^{-}",
+//                      0.06,
+//                      0.04, 0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_BC", Chi2_piminus_MicroBooNE_BC_CD_Dir, kBlue, true,
+//                      true, true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram Before C-Cut", "MicroBooNE", "FD", "#pi^{-}",
+//                      0.06,
+//                      0.04, 0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_BC", Chi2_piminus_MicroBooNE_BC_FD_Dir, kBlue, true,
+//                      true, true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Testing Chi2 cuts after applying (MicroBooNE)">
+//        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram After C-Cut", "MicroBooNE", "CD", "e", 0.06,
+//                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_AC", Chi2_Electron_MicroBooNE_AC_CD_Dir, kBlue,
+//                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram After C-Cut", "MicroBooNE", "FD", "e", 0.06,
+//                      0.04, 0.04, plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_AC", Chi2_Electron_MicroBooNE_AC_FD_Dir, kBlue,
+//                      true, true, true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram After C-Cut", "MicroBooNE", "CD", "p", 0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_AC", Chi2_Proton_MicroBooNE_AC_CD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram After C-Cut", "MicroBooNE", "FD", "p", 0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_AC", Chi2_Proton_MicroBooNE_AC_FD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram After C-Cut", "MicroBooNE", "CD", "#pi^{+}",
+//                      0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_AC", Chi2_piplus_MicroBooNE_AC_CD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram After C-Cut", "MicroBooNE", "FD", "#pi^{+}",
+//                      0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_AC", Chi2_piplus_MicroBooNE_AC_FD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram After C-Cut", "MicroBooNE", "CD", "#pi^{-}",
+//                      0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_AC", Chi2_piminus_MicroBooNE_AC_CD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram After C-Cut", "MicroBooNE", "FD", "#pi^{-}",
+//                      0.06, 0.04,
+//                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_AC", Chi2_piminus_MicroBooNE_AC_FD_Dir, kBlue, true, true,
+//                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Chi2 plots (MicroBooNE)">
+//        histPlotter1D(c1, Chi2_Electron_MicroBooNE_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+//                      true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_CD", Chi2_Electron_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+//                      Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, Chi2_Electron_MicroBooNE_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+//                      true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_FD", Chi2_Electron_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+//                      Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, Chi2_Proton_MicroBooNE_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_CD", Chi2_Proton_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+//                      Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, Chi2_Proton_MicroBooNE_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_FD", Chi2_Proton_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+//                      Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, Chi2_piplus_MicroBooNE_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+//                      true,
+//                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_CD", Chi2_piplus_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+//                      Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, Chi2_piplus_MicroBooNE_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false,
+//                      true,
+//                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_FD", Chi2_piplus_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+//                      Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
+//
+//        histPlotter1D(c1, Chi2_piminus_MicroBooNE_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true,
+//                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_CD", Chi2_piminus_MicroBooNE_CD_Dir, "CD", kBlue, true, true, true, false, true,
+//                      Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
+//        histPlotter1D(c1, Chi2_piminus_MicroBooNE_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true,
+//                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_FD", Chi2_piminus_MicroBooNE_FD_Dir, "FD", kBlue, true, true, true, false, true,
+//                      Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
+//        //</editor-fold>
+//
+//        //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 cuts before applying (1e2p)">
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_BC", Chi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_BC", Chi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_BC", Chi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_BC", Chi2_1e2p_before_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_BC", Chi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_peak_FD);
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 cuts after applying (1e2p)">
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram After Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_AC", Chi2_Electron_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
-                      false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true,
+        histPlotter1D(c1, c2, Chi2_Electron_1e2p_AC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram After Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
+                      plots, 2, false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p_AC", Chi2_Electron_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
                       Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram After Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p_AC", Chi2_Proton_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                      true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_AC", Chi2_1e2p_after_cuts_Directory, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, c2, Chi2_Proton_1e2p_AC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram After Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2,
+                      false, true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_AC", Chi2_Proton_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_peak_FD);
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 (2p)">
-        histPlotter1D(c1, Chi2_Electron_2p_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_CD", Chi2_2p_Directory, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+        histPlotter1D(c1, Chi2_Electron_2p_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_CD", Chi2_Electron_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
                       Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, Chi2_Electron_2p_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_FD", Chi2_2p_Directory, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
+        histPlotter1D(c1, Chi2_Electron_2p_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_2p_FD", Chi2_Electron_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
                       Chi2_Electron_1e_peak_FD);
 
-        histPlotter1D(c1, Chi2_Proton_2p_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_CD", Chi2_2p_Directory, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+        histPlotter1D(c1, Chi2_Proton_2p_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_CD", Chi2_Proton_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
                       Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, Chi2_Proton_2p_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_FD", Chi2_2p_Directory, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+        histPlotter1D(c1, Chi2_Proton_2p_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Chi2_Proton_1e2p_Stack, "02_Proton_Chi2_2p_FD", Chi2_Proton_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
                       Chi2_Proton_1e_peak_FD);
-        //</editor-fold>
-
-        //<editor-fold desc="Testing Chi2 cuts before applying (MicroBooNE)">
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "MicroBooNE", "CD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} Before Cut", "MicroBooNE", "FD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_FD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} Before Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "CD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} Before Cut", "MicroBooNE", "FD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "CD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_BC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} Before Cut", "MicroBooNE", "FD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_BC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
-        //</editor-fold>
-
-        //<editor-fold desc="Testing Chi2 cuts after applying (MicroBooNE)">
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "MicroBooNE", "CD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Electron_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2} After Cut", "MicroBooNE", "FD", "e", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Electron_MicroBooNE_Stack, "02_Electron_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_FD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "MicroBooNE", "CD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "03_Proton_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
-
-        histPlotter1D(c1, c2, Chi2_Proton_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2} After Cut", "MicroBooNE", "FD", "p", 0.06, 0.04, 0.04,
-                      plots, 2, false, true, Chi2_Proton_MicroBooNE_Stack, "04_Proton_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true, true,
-                      false, true, Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "CD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "05_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piplus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}} After Cut", "MicroBooNE", "FD", "#pi^{+}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piplus_MicroBooNE_Stack, "06_piplus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "CD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "07_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, c2, Chi2_piminus_MicroBooNE_AC_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}} After Cut", "MicroBooNE", "FD", "#pi^{-}", 0.06, 0.04,
-                      0.04, plots, 2, false, true, Chi2_piminus_MicroBooNE_Stack, "08_piminus_Chi2_MicroBooNE_AC", Chi2_MicroBooNE_cut_tests_Directory, kBlue, true, true,
-                      true, false, true, Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
-        //</editor-fold>
-
-        //<editor-fold desc="Testing Chi2 (MicroBooNE)">
-        histPlotter1D(c1, Chi2_Electron_MicroBooNE_CD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_MicroBooNE_CD, Chi2_Electron_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_Electron_MicroBooNE_FD, normalized_chi2_plots, true, .1, "Electron #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Electron_MicroBooNE_Stack, "01_Electron_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_Electron_cut_MicroBooNE_FD, Chi2_Electron_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, Chi2_Proton_MicroBooNE_CD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_Proton_cut_MicroBooNE_CD, Chi2_Proton_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_Proton_MicroBooNE_FD, normalized_chi2_plots, true, .1, "Proton #chi^{2}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Proton_MicroBooNE_Stack, "02_Proton_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_Proton_cut_MicroBooNE_FD, Chi2_Proton_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, Chi2_piplus_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_piplus_cut_MicroBooNE_CD, Chi2_piplus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_piplus_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{+}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piplus_MicroBooNE_Stack, "03_piplus_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_piplus_cut_MicroBooNE_FD, Chi2_piplus_1e_peak_MicroBooNE_FD);
-
-        histPlotter1D(c1, Chi2_piminus_MicroBooNE_CD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_CD", Chi2_MicroBooNE_Directory, "CD", kBlue, true, true, true, false, true,
-                      Chi2_piminus_cut_MicroBooNE_CD, Chi2_piminus_1e_peak_MicroBooNE_CD);
-
-        histPlotter1D(c1, Chi2_piminus_MicroBooNE_FD, normalized_chi2_plots, true, .1, "#chi^{2}_{#pi^{-}}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piminus_MicroBooNE_Stack, "03_piminus_Chi2_MicroBooNE_FD", Chi2_MicroBooNE_Directory, "FD", kBlue, true, true, true, false, true,
-                      Chi2_piminus_cut_MicroBooNE_FD, Chi2_piminus_1e_peak_MicroBooNE_FD);
         //</editor-fold>
 
     } else {
@@ -5387,6 +5894,42 @@ void EventAnalyser() {
         cout << "\n\nPlotting Vertex plots...\n\n";
 
         //<editor-fold desc="Finding Xmax">
+        double Vertex_Electron_1e_Vx_Xmax_CD = Vertex_Electron_1e_Vx_CD->GetBinCenter(Vertex_Electron_1e_Vx_CD->GetMaximumBin());
+        double Vertex_Electron_1e_Vy_Xmax_CD = Vertex_Electron_1e_Vy_CD->GetBinCenter(Vertex_Electron_1e_Vy_CD->GetMaximumBin());
+        double Vertex_Electron_1e_Vz_Xmax_CD = Vertex_Electron_1e_Vz_CD->GetBinCenter(Vertex_Electron_1e_Vz_CD->GetMaximumBin());
+        double Vertex_Electron_1e_Vx_Xmax_FD = Vertex_Electron_1e_Vx_FD->GetBinCenter(Vertex_Electron_1e_Vx_FD->GetMaximumBin());
+        double Vertex_Electron_1e_Vy_Xmax_FD = Vertex_Electron_1e_Vy_FD->GetBinCenter(Vertex_Electron_1e_Vy_FD->GetMaximumBin());
+        double Vertex_Electron_1e_Vz_Xmax_FD = Vertex_Electron_1e_Vz_FD->GetBinCenter(Vertex_Electron_1e_Vz_FD->GetMaximumBin());
+        double Vertex_Proton_1e_Vx_Xmax_CD = Vertex_Proton_1e_Vx_CD->GetBinCenter(Vertex_Proton_1e_Vx_CD->GetMaximumBin());
+        double Vertex_Proton_1e_Vy_Xmax_CD = Vertex_Proton_1e_Vy_CD->GetBinCenter(Vertex_Proton_1e_Vy_CD->GetMaximumBin());
+        double Vertex_Proton_1e_Vz_Xmax_CD = Vertex_Proton_1e_Vz_CD->GetBinCenter(Vertex_Proton_1e_Vz_CD->GetMaximumBin());
+        double Vertex_Proton_1e_Vx_Xmax_FD = Vertex_Proton_1e_Vx_FD->GetBinCenter(Vertex_Proton_1e_Vx_FD->GetMaximumBin());
+        double Vertex_Proton_1e_Vy_Xmax_FD = Vertex_Proton_1e_Vy_FD->GetBinCenter(Vertex_Proton_1e_Vy_FD->GetMaximumBin());
+        double Vertex_Proton_1e_Vz_Xmax_FD = Vertex_Proton_1e_Vz_FD->GetBinCenter(Vertex_Proton_1e_Vz_FD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vx_Xmax_CD = Vertex_Kplus_1e_Vx_CD->GetBinCenter(Vertex_Kplus_1e_Vx_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vy_Xmax_CD = Vertex_Kplus_1e_Vy_CD->GetBinCenter(Vertex_Kplus_1e_Vy_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vz_Xmax_CD = Vertex_Kplus_1e_Vz_CD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vx_Xmax_FD = Vertex_Kplus_1e_Vx_FD->GetBinCenter(Vertex_Kplus_1e_Vx_FD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vy_Xmax_FD = Vertex_Kplus_1e_Vy_FD->GetBinCenter(Vertex_Kplus_1e_Vy_FD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vz_Xmax_FD = Vertex_Kplus_1e_Vz_FD->GetBinCenter(Vertex_Kplus_1e_Vz_FD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vx_Xmax_CD = Vertex_Kminus_1e_Vx_CD->GetBinCenter(Vertex_Kminus_1e_Vx_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vy_Xmax_CD = Vertex_Kminus_1e_Vy_CD->GetBinCenter(Vertex_Kminus_1e_Vy_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vz_Xmax_CD = Vertex_Kminus_1e_Vz_CD->GetBinCenter(Vertex_Kminus_1e_Vz_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vx_Xmax_FD = Vertex_Kminus_1e_Vx_FD->GetBinCenter(Vertex_Kminus_1e_Vx_FD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vy_Xmax_FD = Vertex_Kminus_1e_Vy_FD->GetBinCenter(Vertex_Kminus_1e_Vy_FD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vz_Xmax_FD = Vertex_Kminus_1e_Vz_FD->GetBinCenter(Vertex_Kminus_1e_Vz_FD->GetMaximumBin());
+        double Vertex_piplus_1e_Vx_Xmax_CD = Vertex_piplus_1e_Vx_CD->GetBinCenter(Vertex_piplus_1e_Vx_CD->GetMaximumBin());
+        double Vertex_piplus_1e_Vy_Xmax_CD = Vertex_piplus_1e_Vy_CD->GetBinCenter(Vertex_piplus_1e_Vy_CD->GetMaximumBin());
+        double Vertex_piplus_1e_Vz_Xmax_CD = Vertex_piplus_1e_Vz_CD->GetBinCenter(Vertex_piplus_1e_Vz_CD->GetMaximumBin());
+        double Vertex_piplus_1e_Vx_Xmax_FD = Vertex_piplus_1e_Vx_FD->GetBinCenter(Vertex_piplus_1e_Vx_FD->GetMaximumBin());
+        double Vertex_piplus_1e_Vy_Xmax_FD = Vertex_piplus_1e_Vy_FD->GetBinCenter(Vertex_piplus_1e_Vy_FD->GetMaximumBin());
+        double Vertex_piplus_1e_Vz_Xmax_FD = Vertex_piplus_1e_Vz_FD->GetBinCenter(Vertex_piplus_1e_Vz_FD->GetMaximumBin());
+        double Vertex_piminus_1e_Vx_Xmax_CD = Vertex_piminus_1e_Vx_CD->GetBinCenter(Vertex_piminus_1e_Vx_CD->GetMaximumBin());
+        double Vertex_piminus_1e_Vy_Xmax_CD = Vertex_piminus_1e_Vy_CD->GetBinCenter(Vertex_piminus_1e_Vy_CD->GetMaximumBin());
+        double Vertex_piminus_1e_Vz_Xmax_CD = Vertex_piminus_1e_Vz_CD->GetBinCenter(Vertex_piminus_1e_Vz_CD->GetMaximumBin());
+        double Vertex_piminus_1e_Vx_Xmax_FD = Vertex_piminus_1e_Vx_FD->GetBinCenter(Vertex_piminus_1e_Vx_FD->GetMaximumBin());
+        double Vertex_piminus_1e_Vy_Xmax_FD = Vertex_piminus_1e_Vy_FD->GetBinCenter(Vertex_piminus_1e_Vy_FD->GetMaximumBin());
+        double Vertex_piminus_1e_Vz_Xmax_FD = Vertex_piminus_1e_Vz_FD->GetBinCenter(Vertex_piminus_1e_Vz_FD->GetMaximumBin());
         dVx_Xmax = deltaVx_before_dV_cuts_1e2p->GetBinCenter(deltaVx_before_dV_cuts_1e2p->GetMaximumBin());
         dVy_Xmax = deltaVy_before_dV_cuts_1e2p->GetBinCenter(deltaVy_before_dV_cuts_1e2p->GetMaximumBin());
         dVz_Xmax = deltaVz_before_dV_cuts_1e2p->GetBinCenter(deltaVz_before_dV_cuts_1e2p->GetMaximumBin());
@@ -5394,163 +5937,190 @@ void EventAnalyser() {
 
 //  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
 
+        //<editor-fold desc="Vertesx plots (1e cut, CD & FD)">
+        histPlotter1D(c1, Vertex_Electron_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vx_Stack, "01_Electron_Vx", Vertex_Electron_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vx_Stack, "01_Electron_Vx", Vertex_Electron_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vy_Stack, "02_Electron_Vy", Vertex_Electron_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vy_Stack, "02_Electron_Vy", Vertex_Electron_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vz_Stack, "03_Electron_Vz", Vertex_Electron_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Electron_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Electron_1e_Vz_Stack, "03_Electron_Vz", Vertex_Electron_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, Vertex_Proton_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vx_Stack, "01_Proton_Vx", Vertex_Proton_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vx_Stack, "01_Proton_Vx", Vertex_Proton_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vy_Stack, "02_Proton_Vy", Vertex_Proton_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vy_Stack, "02_Proton_Vy", Vertex_Proton_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, Vertex_Kplus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, Vertex_Kminus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, Vertex_piplus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_piplus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_piplus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_piplus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_piplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_piplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+
+        histPlotter1D(c1, Vertex_piminus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_piminus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, Vertex_piminus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_piminus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, Vertex_piminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_piminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        //</editor-fold>
+
         //<editor-fold desc="dV plots (1e2p, CD & FD)">
 
         //<editor-fold desc="dV plots before dV cuts (1e2p, CD & FD)">
-        histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVx_cut, dVx_peak);
 
-        histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVy_1e2p_before_Stack, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVy_cut, dVy_peak);
 
-        histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVz_1e2p_before_Stack, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVz_cut, dVz_peak);
 
-        histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVx_1e2p_after_Stack, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVx_cut, dVx_peak);
 
-        histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVy_1e2p_after_Stack, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVy_cut, dVy_peak);
 
-        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                       dVz_cut, dVz_peak);
         //</editor-fold>
 
         //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
-        histPlotter1D(c1, deltaVx_2p, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVx_2p_Stack,
+        histPlotter1D(c1, deltaVx_2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVx_2p_Stack,
                       "01_dVx", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
 
-        histPlotter1D(c1, deltaVy_2p, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVy_2p_Stack,
+        histPlotter1D(c1, deltaVy_2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVy_2p_Stack,
                       "02_dVy", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
 
-        histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVz_2p_Stack,
+        histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVz_2p_Stack,
                       "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         //</editor-fold>
 
         //</editor-fold>
 
-        //<editor-fold desc="dV plots before dV cuts (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, deltaVx_MicroBooNE_BC, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
-                      false, true, dVx_cut, dVx_peak);
-
-        histPlotter1D(c1, deltaVy_MicroBooNE_BC, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
-                      false, true, dVy_cut, dVy_peak);
-
-        histPlotter1D(c1, deltaVz_MicroBooNE_BC, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
-                      false, true, dVz_cut, dVz_peak);
-
-        histPlotter1D(c1, deltaVx_MicroBooNE_AC, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
-                      false, true, dVx_cut, dVx_peak);
-
-        histPlotter1D(c1, deltaVy_MicroBooNE_AC, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
-                      false, true, dVy_cut, dVy_peak);
-
-        histPlotter1D(c1, deltaVz_MicroBooNE_AC, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
-                      false, true, dVz_cut, dVz_peak);
-        //</editor-fold>
-
-        //<editor-fold desc="dV plots after dV cuts (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, deltaVx_MicroBooNE, normalized_vertex_plots, true, .1, "dV_{x}=V^{e}_{x}-V^{p}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-
-        histPlotter1D(c1, deltaVy_MicroBooNE, normalized_vertex_plots, true, .1, "dV_{y}=V^{e}_{y}-V^{p}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-
-        histPlotter1D(c1, deltaVz_MicroBooNE, normalized_vertex_plots, true, .1, "dV_{z}=V^{e}_{z}-V^{p}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        //</editor-fold>
+//        //<editor-fold desc="dV plots before dV cuts (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, deltaVx_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//                      false, true, dVx_cut, dVx_peak);
+//
+//        histPlotter1D(c1, deltaVy_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//                      false, true, dVy_cut, dVy_peak);
+//
+//        histPlotter1D(c1, deltaVz_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//                      false, true, dVz_cut, dVz_peak);
+//
+//        histPlotter1D(c1, deltaVx_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//                      false, true, dVx_cut, dVx_peak);
+//
+//        histPlotter1D(c1, deltaVy_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//                      false, true, dVy_cut, dVy_peak);
+//
+//        histPlotter1D(c1, deltaVz_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//                      false, true, dVz_cut, dVz_peak);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="dV plots after dV cuts (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, deltaVx_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+//
+//        histPlotter1D(c1, deltaVy_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+//
+//        histPlotter1D(c1, deltaVz_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        //</editor-fold>
 
     } else {
         cout << "\n\nVertex plots are disabled by user.\n\n";
-    }
-    //</editor-fold>
-
-// ======================================================================================================================================================================
-// Timing plots
-// ======================================================================================================================================================================
-
-    //<editor-fold desc="Timing plots">
-    if (timing_plots) {
-
-        cout << "\n\nPlotting timing plots...\n\n";
-
-        //TODO: generalized the TF1 plots to be avilable to both b vs p and timing plots
-//  Beta vs. P TF1 plots --------------------------------------------------------
-
-        //<editor-fold desc="Beta vs. P TF1 plots">
-        auto *beta_neutron = new TF1("beta_neutron", ("x/sqrt(x*x + " + to_string(m_n * m_n) + ")").c_str(), 0, beamE);
-        auto *beta_proton = new TF1("beta_proton", ("x/sqrt(x*x + " + to_string(m_p * m_p) + ")").c_str(), 0, beamE);
-        auto *beta_Kplus = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kplus * m_Kplus) + ")").c_str(), 0, beamE);
-        auto *beta_Kminus = new TF1("beta_Kminus", ("x/sqrt(x*x + " + to_string(m_Kminus * m_Kminus) + ")").c_str(), 0, beamE);
-        auto *beta_Kzero = new TF1("beta_Kplus", ("x/sqrt(x*x + " + to_string(m_Kzero * m_Kzero) + ")").c_str(), 0, beamE);
-        auto *beta_piplus = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_piplus * m_piplus) + ")").c_str(), 0, beamE);
-        auto *beta_piminus = new TF1("beta_piminus", ("x/sqrt(x*x + " + to_string(m_piminus * m_piminus) + ")").c_str(), 0, beamE);
-        auto *beta_pizero = new TF1("beta_piplus", ("x/sqrt(x*x + " + to_string(m_pizero * m_pizero) + ")").c_str(), 0, beamE);
-        auto *beta_electron = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(m_e * m_e) + ")").c_str(), 0, beamE);
-        auto *beta_photon = new TF1("beta_electron", ("x/sqrt(x*x + " + to_string(0) + ")").c_str(), 0, beamE);
-        //</editor-fold>
-
-
-//        //<editor-fold desc="Finding Xmax">
-//        dVx_Xmax = deltaVx_before_dV_cuts_1e2p->GetBinCenter(deltaVx_before_dV_cuts_1e2p->GetMaximumBin());
-//        dVy_Xmax = deltaVy_before_dV_cuts_1e2p->GetBinCenter(deltaVy_before_dV_cuts_1e2p->GetMaximumBin());
-//        dVz_Xmax = deltaVz_before_dV_cuts_1e2p->GetBinCenter(deltaVz_before_dV_cuts_1e2p->GetMaximumBin());
-//        //</editor-fold>
-
-//  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
-
-        //<editor-fold desc="dV plots before dV cuts (1e2p, CD & FD)">
-        histPlotter1D(c1, Event_start_time_histogram, normalized_timing_plots, true, .1, "Event Start Time t_{start}", "All Events", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, timing_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue);
-//                      plots, 2, false, true, Event_start_time_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue, true, true, true, false, true,
-//                      dVx_cut, dVx_peak);
-
-        histPlotter1D(c1, Particle_ToF_histogram, normalized_timing_plots, true, .1, "Particle Time of Flight t_{ToF}", "All Events", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, timing_Stack, "Particle_ToF", Particle_ToF_histogram_Dir, "CD & FD", kBlue);
-//                      plots, 2, false, true, Event_start_time_Stack, "Event_start_time", Event_start_time_histogram_Dir, "CD & FD", kBlue, true, true, true, false, true,
-//                      dVx_cut, dVx_peak);
-
-        histPlotter1D(c1, Electron_ToF_from_beta_histogram_CD, normalized_timing_plots, true, .1, "e^{-} Time of Flight t_{ToF} from #beta", "1e Cut", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_ToF_from_beta_CD", Electron_ToF_from_beta_histogram_CD_Dir, "CD", kBlue);
-
-        histPlotter1D(c1, Electron_ToF_from_beta_histogram_FD, normalized_timing_plots, true, .1, "e^{-} Time of Flight t_{ToF} from #beta", "1e Cut", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_ToF_from_beta_FD", Electron_ToF_from_beta_histogram_FD_Dir, "FD", kBlue);
-
-        histPlotter1D(c1, Electron_path_length_histogram_CD, normalized_timing_plots, true, .1, "e^{-} Path Length L", "1e Cut", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_path_length_CD", Electron_path_length_histogram_CD_Dir, "CD", kBlue);
-
-        histPlotter1D(c1, Electron_path_length_histogram_FD, normalized_timing_plots, true, .1, "e^{-} Path Length L", "1e Cut", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, timing_Stack, "01_Electron_path_length_FD", Electron_path_length_histogram_FD_Dir, "FD", kBlue);
-
-        histPlotter2D(c1, Beta_VS_P_from_FTOF1A_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF1A_histogram_Dir,
-                      "01_Beta_VS_P_from_FTOF1A.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
-                      beta_Kminus);
-
-        histPlotter2D(c1, Beta_VS_P_from_FTOF1B_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF1B_histogram_Dir,
-                      "02_Beta_VS_P_from_FTOF1B.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
-                      beta_Kminus);
-
-        histPlotter2D(c1, Beta_VS_P_from_FTOF2_histogram, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_from_FTOF2_histogram_Dir,
-                      "03_Beta_VS_P_from_FTOF2.png", beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
-                      beta_Kminus);
-        //</editor-fold>
-
-
-
-    } else {
-        cout << "\n\nTiming plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -6143,107 +6713,107 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-//  Momentum histograms (MicroBooNE, CD & FD)  --------------------------------------------------------------
-
-//        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
-
-        //<editor-fold desc="Momentum histograms before cuts (MicroBooNE, CD & FD)">
-
-        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_e_MicroBooNE_BC_CD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
-                      "01_P_e_MicroBooNE_BC_CD", P_e_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-                      e_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_e_MicroBooNE_BC_FD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
-                      "02_P_e_MicroBooNE_BC_FD", P_e_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-                      e_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_p_MicroBooNE_BC_CD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
-                      "03_P_p_MicroBooNE_BC_CD", P_p_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-                      p_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_p_MicroBooNE_BC_FD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
-                      "04_P_p_MicroBooNE_BC_FD", P_p_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-                      p_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_cpion_MicroBooNE_BC_CD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
-                      "05_P_cpion_MicroBooNE_BC_CD", P_cpion_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
-                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_cpion_MicroBooNE_BC_FD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
-                      "06_P_cpion_MicroBooNE_BC_FD", P_cpion_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
-                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms after cuts (MicroBooNE, CD & FD)">
-
-        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_e_MicroBooNE_AC_CD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
-                      "01_P_e_MicroBooNE_AC_CD", P_e_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-                      e_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_e_MicroBooNE_AC_FD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
-                      "02_P_e_MicroBooNE_AC_FD", P_e_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-                      e_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_p_MicroBooNE_AC_CD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
-                      "03_P_p_MicroBooNE_AC_CD", P_p_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-                      p_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_p_MicroBooNE_AC_FD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
-                      "04_P_p_MicroBooNE_AC_FD", P_p_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-                      p_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_cpion_MicroBooNE_AC_CD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
-                      "05_P_cpion_MicroBooNE_AC_CD", P_cpion_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
-                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_cpion_MicroBooNE_AC_FD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
-                      "06_P_cpion_MicroBooNE_AC_FD", P_cpion_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
-                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms after MicroBooNE cuts (CD & FD)">
-
-        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_e_MicroBooNE_CD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "01_P_e_MicroBooNE_CD",
-                      P_e_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_e_MicroBooNE_FD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "02_P_e_MicroBooNE_FD",
-                      P_e_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_p_MicroBooNE_CD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "03_P_p_MicroBooNE_CD",
-                      P_p_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
-
-        histPlotter1D(c1, P_p_MicroBooNE_FD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "04_P_p_MicroBooNE_FD",
-                      P_p_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
-        histPlotter1D(c1, P_cpion_MicroBooNE_CD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "05_P_cpion_MicroBooNE_CD",
-                      P_cpion_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
-                      false);
-
-        histPlotter1D(c1, P_cpion_MicroBooNE_FD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "06_P_cpion_MicroBooNE_FD",
-                      P_cpion_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
-                      false);
-        //</editor-fold>
-
-        //</editor-fold>
+////  Momentum histograms (MicroBooNE, CD & FD)  --------------------------------------------------------------
+//
+////        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
+//
+//        //<editor-fold desc="Momentum histograms before cuts (MicroBooNE, CD & FD)">
+//
+//        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_e_MicroBooNE_BC_CD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
+//                      "01_P_e_MicroBooNE_BC_CD", P_e_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_e_MicroBooNE_BC_FD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
+//                      "02_P_e_MicroBooNE_BC_FD", P_e_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_p_MicroBooNE_BC_CD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
+//                      "03_P_p_MicroBooNE_BC_CD", P_p_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_p_MicroBooNE_BC_FD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
+//                      "04_P_p_MicroBooNE_BC_FD", P_p_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_cpion_MicroBooNE_BC_CD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
+//                      "05_P_cpion_MicroBooNE_BC_CD", P_cpion_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_cpion_MicroBooNE_BC_FD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
+//                      "06_P_cpion_MicroBooNE_BC_FD", P_cpion_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms after cuts (MicroBooNE, CD & FD)">
+//
+//        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_e_MicroBooNE_AC_CD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
+//                      "01_P_e_MicroBooNE_AC_CD", P_e_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_e_MicroBooNE_AC_FD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
+//                      "02_P_e_MicroBooNE_AC_FD", P_e_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
+//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_p_MicroBooNE_AC_CD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
+//                      "03_P_p_MicroBooNE_AC_CD", P_p_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_p_MicroBooNE_AC_FD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
+//                      "04_P_p_MicroBooNE_AC_FD", P_p_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
+//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_cpion_MicroBooNE_AC_CD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
+//                      "05_P_cpion_MicroBooNE_AC_CD", P_cpion_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_cpion_MicroBooNE_AC_FD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
+//                      "06_P_cpion_MicroBooNE_AC_FD", P_cpion_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms after MicroBooNE cuts (CD & FD)">
+//
+//        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_e_MicroBooNE_CD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "01_P_e_MicroBooNE_CD",
+//                      P_e_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_e_MicroBooNE_FD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "02_P_e_MicroBooNE_FD",
+//                      P_e_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_p_MicroBooNE_CD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "03_P_p_MicroBooNE_CD",
+//                      P_p_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
+//
+//        histPlotter1D(c1, P_p_MicroBooNE_FD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "04_P_p_MicroBooNE_FD",
+//                      P_p_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
+//        //</editor-fold>
+//
+//        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
+//        histPlotter1D(c1, P_cpion_MicroBooNE_CD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "05_P_cpion_MicroBooNE_CD",
+//                      P_cpion_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
+//                      false);
+//
+//        histPlotter1D(c1, P_cpion_MicroBooNE_FD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "06_P_cpion_MicroBooNE_FD",
+//                      P_cpion_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
+//                      false);
+//        //</editor-fold>
+//
+//        //</editor-fold>
 
     } else {
         cout << "\n\nMomentum (P_e) plots are disabled by user.\n\n";
@@ -6595,17 +7165,17 @@ void EventAnalyser() {
         //<editor-fold desc="SF histogram (1e2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f Before Cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
+        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
                       "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
 
-        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, .1, "Sampling Fraction f After cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
+        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f After cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
                       "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
         //</editor-fold>
 
         //<editor-fold desc="SF histogram (2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, .1, "Sampling Fraction f", "All Int., 2p", plots, 2, false, true, SF_2p_Stack, "SF_2p_wAll_cuts",
+        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "All Int., 2p", plots, 2, false, true, SF_2p_Stack, "SF_2p_wAll_cuts",
                       SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
         //</editor-fold>
 
@@ -6683,124 +7253,6 @@ void EventAnalyser() {
         cout << "\n\nPlotting fiducial histograms...\n\n";
 
 //  fiducial histograms --------------------------------------------------------------
-
-//        //<editor-fold desc="fiducial histograms (ECIN)">
-//
-//        //<editor-fold desc="Vcal vs. EoP 1e2p BC ECIN">
-//        Vcal_VS_EoP_1e2p_BC_ECIN->SetTitleSize(0.06, "xyz");
-//        Vcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_1e2p_BC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Vcal_VS_EoP_1e2p_BC_ECIN);
-//        Vcal_VS_EoP_1e2p_BC_ECIN->Draw("colz");
-//        c1->SetLogz(1);
-////        gStyle->SetStatX(0.87);
-////        gStyle->SetStatY(0.4);
-//        Vcal_VS_EoP_1e2p_BC_ECIN->SetStats(0);
-//        c1->SaveAs((Vcal_VS_EoP_1e2p_BC_ECIN_Dir + "01_Vcal_VS_EoP_1e2p_BC_ECIN.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Vcal vs. EoP 1e2p AC ECIN">
-//        Vcal_VS_EoP_1e2p_AC_ECIN->SetTitleSize(0.06, "xyz");
-//        Vcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_1e2p_AC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Vcal_VS_EoP_1e2p_AC_ECIN);
-//        Vcal_VS_EoP_1e2p_AC_ECIN->Draw("colz");
-//        c1->SetLogz(1);
-////        gStyle->SetStatX(0.87);
-////        gStyle->SetStatY(0.4);
-//        Vcal_VS_EoP_1e2p_AC_ECIN->SetStats(0);
-//        c1->SaveAs((Vcal_VS_EoP_1e2p_AC_ECIN_Dir + "02_Vcal_VS_EoP_1e2p_AC_ECIN.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Wcal vs. EoP 1e2p BC ECIN">
-//        Wcal_VS_EoP_1e2p_BC_ECIN->SetTitleSize(0.06, "xyz");
-//        Wcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_1e2p_BC_ECIN->GetXaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_1e2p_BC_ECIN->GetYaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_1e2p_BC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Wcal_VS_EoP_1e2p_BC_ECIN);
-//        Wcal_VS_EoP_1e2p_BC_ECIN->Draw("colz");
-//        c1->SetLogz(1);
-////        gStyle->SetStatX(0.87);
-////        gStyle->SetStatY(0.4);
-//        Wcal_VS_EoP_1e2p_BC_ECIN->SetStats(0);
-//        c1->SaveAs((Wcal_VS_EoP_1e2p_BC_ECIN_Dir + "03_Wcal_VS_EoP_1e2p_BC_ECIN.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Wcal vs. EoP 1e2p AC ECIN">
-//        Wcal_VS_EoP_1e2p_AC_ECIN->SetTitleSize(0.06, "xyz");
-//        Wcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_1e2p_AC_ECIN->GetXaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_1e2p_AC_ECIN->GetYaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_1e2p_AC_ECIN->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Wcal_VS_EoP_1e2p_AC_ECIN);
-//        Wcal_VS_EoP_1e2p_AC_ECIN->Draw("colz");
-//        c1->SetLogz(1);
-////        gStyle->SetStatX(0.87);
-////        gStyle->SetStatY(0.4);
-//        Wcal_VS_EoP_1e2p_AC_ECIN->SetStats(0);
-//        c1->SaveAs((Wcal_VS_EoP_1e2p_AC_ECIN_Dir + "04_Wcal_VS_EoP_1e2p_AC_ECIN.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Vcal vs. EoP 2p ECIN">
-//        Vcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
-//        Vcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Vcal_VS_EoP_2p_ECIN);
-//        Vcal_VS_EoP_2p_ECIN->Draw("colz");
-//        c1->SetLogz(1);
-////        gStyle->SetStatX(0.87);
-////        gStyle->SetStatY(0.4);
-//        Vcal_VS_EoP_2p_ECIN->SetStats(0);
-//        c1->SaveAs((Vcal_VS_EoP_2p_ECIN_Dir + "01_Vcal_VS_EoP_2p_ECIN.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //<editor-fold desc="Wcal vs. EoP 2p ECIN">
-//        Wcal_VS_EoP_2p_ECIN->SetTitleSize(0.06, "xyz");
-//        Wcal_VS_EoP_2p_ECIN->GetXaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_2p_ECIN->GetXaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_2p_ECIN->GetYaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_2p_ECIN->GetYaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_2p_ECIN->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Wcal_VS_EoP_2p_ECIN);
-//        Wcal_VS_EoP_2p_ECIN->Draw("colz");
-//        c1->SetLogz(1);
-////        gStyle->SetStatX(0.87);
-////        gStyle->SetStatY(0.4);
-//        Wcal_VS_EoP_2p_ECIN->SetStats(0);
-//        c1->SaveAs((Wcal_VS_EoP_2p_ECIN_Dir + "02_Wcal_VS_EoP_2p_ECIN.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-//        //</editor-fold>
-//
-//        //</editor-fold>
 
         //<editor-fold desc="fiducial histograms (PCAL)">
 
@@ -6941,11 +7393,11 @@ void EventAnalyser() {
         //<editor-fold desc="Number of Photo-electrons (nphe) histogram (1e2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, .1, "#Photo-electrons in HTCC (n_{phe} ) Before Cuts", "All Int., 1e2p",
+        histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) Before Cuts", "All Int., 1e2p",
                       plots, 2, false, true, nphe_1e2p_Stack, "01_nphe_1e2p_before_nphe_cuts", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true,
                       nphe_lower_cut, 0, false);
 
-        histPlotter1D(c1, nphe_All_Int_1e2p_AC_FD, normalized_nphe_plots, true, .1, "#Photo-electrons in HTCC (n_{phe} ) After Cuts", "All Int., 1e2p",
+        histPlotter1D(c1, nphe_All_Int_1e2p_AC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) After Cuts", "All Int., 1e2p",
                       plots, 2, false, true, nphe_1e2p_Stack, "02_nphe_1e2p_after_nphe_cuts", nphe_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true,
                       nphe_lower_cut, 0, false);
         //</editor-fold>
@@ -6953,7 +7405,7 @@ void EventAnalyser() {
         //<editor-fold desc="Number of Photo-electrons (nphe) histogram (2p, FD)">
 //        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
 
-        histPlotter1D(c1, nphe_All_Int_2p_FD, normalized_nphe_plots, true, .1, "#Photo-electrons in HTCC (n_{phe} )", "All Int., 2p", plots, 2, false,
+        histPlotter1D(c1, nphe_All_Int_2p_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} )", "All Int., 2p", plots, 2, false,
                       true, nphe_2p_Stack, "nphe_2p", nphe_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut, 0, false);
         //</editor-fold>
 
@@ -7510,15 +7962,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Saving histogram list and finishing execution">
 
-    // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
+// Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving settings to log file">
     if (delete_txt_files == true) {
-        system("find ./plots -type f -iname '*.txt' -delete"); // Delete existing .txt files
+        system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
     }
 
     ofstream myLogFile;
-    myLogFile.open("./plots/Run_log.txt");
+    myLogFile.open(plots_log_save_Directory.c_str());
 
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n";
     myLogFile << "// Run was with '" << file_name << "' settings mode\n";
@@ -7671,6 +8123,8 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n\n";
 
     //<editor-fold desc="Chi2_Electron">
+    myLogFile << "\n-- Electrons --------------------------------------------------------------" << "\n\n";
+
     myLogFile << "\n-- Electrons in CD (no #e cuts) -------------------------------------------" << "\n";
     myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
 
@@ -7736,6 +8190,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Chi2_Proton">
+    myLogFile << "\n\n-- Protons ----------------------------------------------------------------" << "\n\n";
+
     myLogFile << "\n-- Protons in CD (no #e cuts) ---------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
 
@@ -7745,6 +8201,8 @@ void EventAnalyser() {
         myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = " << Chi2_Proton_Xmax_CD << "\n";
     }
 
+    myLogFile << "Chi2 Proton mean CD (from histogram) = " << to_string_with_precision(Chi2_Proton_CD->GetMean(), 20) << "\n";
+
     myLogFile << "\n-- Protons in FD (no #e cuts) ---------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
 
@@ -7753,6 +8211,8 @@ void EventAnalyser() {
     } else {
         myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = " << Chi2_Proton_Xmax_FD << "\n";
     }
+
+    myLogFile << "Chi2 Proton mean FD (from histogram) = " << to_string_with_precision(Chi2_Proton_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in CD (1e cut) -------------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
@@ -7764,6 +8224,7 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_Proton_1e_peak_CD (used in cuts) = " << Chi2_Proton_1e_peak_CD << "\n";
+    myLogFile << "Chi2 Proton 1e mean CD (from histogram) = " << to_string_with_precision(Chi2_Proton_1e_CD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in FD (1e cut) -------------------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
@@ -7775,6 +8236,7 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_Proton_1e_peak_FD (used in cuts) = " << Chi2_Proton_1e_peak_FD << "\n";
+    myLogFile << "Chi2 Proton 1e mean FD (from histogram) = " << to_string_with_precision(Chi2_Proton_1e_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in CD (MicroBooNE cut) -----------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_MicroBooNE_CD = " << Chi2_Proton_cut_MicroBooNE_CD << "\n";
@@ -7786,6 +8248,7 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_CD << "\n";
+    myLogFile << "Chi2 Proton 1e MicroBooNE mean CD (from histogram) = " << to_string_with_precision(Chi2_Proton_MicroBooNE_CD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in FD (MicroBooNE cut) -----------------------------------------" << "\n";
     myLogFile << "Chi2_Proton_cut_MicroBooNE_FD = " << Chi2_Proton_cut_MicroBooNE_FD << "\n";
@@ -7797,10 +8260,69 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_FD << "\n";
+    myLogFile << "Chi2 Proton 1e MicroBooNE mean FD (from histogram) = " << to_string_with_precision(Chi2_Proton_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
-    //<editor-fold desc="Chi2_piplus (MicroBooNE only)">
-    myLogFile << "\n-- pipluss in CD (MicroBooNE cut) -----------------------------------------------" << "\n";
+    //<editor-fold desc="Chi2_Kplus">
+    myLogFile << "\n\n-- K+ --------------------------------------------------------------------" << "\n\n";
+
+    myLogFile << "\n-- Kplus in CD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kplus_Xmax_CD (used in cuts) = " << Chi2_Kplus_Xmax_CD << "\n";
+    myLogFile << "Chi2 K+ mean CD (from histogram) = " << to_string_with_precision(Chi2_Kplus_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- Kplus in FD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kplus_Xmax_FD (used in cuts) = " << Chi2_Kplus_Xmax_FD << "\n";
+    myLogFile << "Chi2 K+ mean FD (from histogram) = " << to_string_with_precision(Chi2_Kplus_FD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- Kplus in CD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kplus_1e_Xmax_CD (used in cuts) = " << Chi2_Kplus_1e_Xmax_CD << "\n";
+    myLogFile << "Chi2 K+ mean CD (from histogram) = " << to_string_with_precision(Chi2_Kplus_1e_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- Kplus in FD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kplus_1e_Xmax_FD (used in cuts) = " << Chi2_Kplus_1e_Xmax_FD << "\n";
+    myLogFile << "Chi2 K+ mean FD (from histogram) = " << to_string_with_precision(Chi2_Kplus_1e_FD->GetMean(), 20) << "\n";
+    //</editor-fold>
+
+    //<editor-fold desc="Chi2_Kminus">
+    myLogFile << "\n\n-- K- --------------------------------------------------------------------" << "\n\n";
+
+    myLogFile << "\n-- Kminus in CD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kminus_Xmax_CD (used in cuts) = " << Chi2_Kminus_Xmax_CD << "\n";
+    myLogFile << "Chi2 K- mean CD (from histogram) = " << to_string_with_precision(Chi2_Kminus_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- Kminus in FD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kminus_Xmax_FD (used in cuts) = " << Chi2_Kminus_Xmax_FD << "\n";
+    myLogFile << "Chi2 K- mean FD (from histogram) = " << to_string_with_precision(Chi2_Kminus_FD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- Kminus in CD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kminus_1e_Xmax_CD (used in cuts) = " << Chi2_Kminus_1e_Xmax_CD << "\n";
+    myLogFile << "Chi2 K- mean CD (from histogram) = " << to_string_with_precision(Chi2_Kminus_1e_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- Kminus in FD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kminus_1e_Xmax_FD (used in cuts) = " << Chi2_Kminus_1e_Xmax_FD << "\n";
+    myLogFile << "Chi2 K- mean FD (from histogram) = " << to_string_with_precision(Chi2_Kminus_1e_FD->GetMean(), 20) << "\n";
+//</editor-fold>
+
+    //<editor-fold desc="Chi2_piplus">
+    myLogFile << "\n\n-- pi+ --------------------------------------------------------------------" << "\n\n";
+
+    myLogFile << "\n-- piplus in CD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piplus_Xmax_CD (used in cuts) = " << Chi2_piplus_Xmax_CD << "\n";
+    myLogFile << "Chi2 pi+ mean CD (from histogram) = " << to_string_with_precision(Chi2_piplus_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piplus in FD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piplus_Xmax_FD (used in cuts) = " << Chi2_piplus_Xmax_FD << "\n";
+    myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(Chi2_piplus_FD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piplus in CD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piplus_1e_Xmax_CD (used in cuts) = " << Chi2_piplus_1e_Xmax_CD << "\n";
+    myLogFile << "Chi2 pi+ mean CD (from histogram) = " << to_string_with_precision(Chi2_piplus_1e_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piplus in FD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piplus_1e_Xmax_FD (used in cuts) = " << Chi2_piplus_1e_Xmax_FD << "\n";
+    myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(Chi2_piplus_1e_FD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piplus in CD (MicroBooNE cut) ------------------------------------------" << "\n";
     myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
 
     if (Chi2_piplus_MicroBooNE_CD->Integral() == 0.) {
@@ -7810,8 +8332,9 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_piplus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_CD << "\n";
+    myLogFile << "Chi2 pi+ MicroBooNE mean CD (from histogram) = " << to_string_with_precision(Chi2_piplus_MicroBooNE_CD->GetMean(), 20) << "\n";
 
-    myLogFile << "\n-- pipluss in FD (MicroBooNE cut) -----------------------------------------------" << "\n";
+    myLogFile << "\n-- piplus in FD (MicroBooNE cut) ------------------------------------------" << "\n";
     myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
 
     if (Chi2_piplus_MicroBooNE_FD->Integral() == 0.) {
@@ -7821,10 +8344,29 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_piplus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_FD << "\n";
+    myLogFile << "Chi2 pi+ MicroBooNE mean FD (from histogram) = " << to_string_with_precision(Chi2_piplus_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
-    //<editor-fold desc="Chi2_piminus (MicroBooNE only)">
-    myLogFile << "\n-- piminus in CD (MicroBooNE cut) -----------------------------------------------" << "\n";
+    //<editor-fold desc="Chi2_piminus">
+    myLogFile << "\n\n-- pi- --------------------------------------------------------------------" << "\n\n";
+
+    myLogFile << "\n-- piminus in CD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piminus_Xmax_CD (used in cuts) = " << Chi2_piminus_Xmax_CD << "\n";
+    myLogFile << "Chi2 pi+ mean CD (from histogram) = " << to_string_with_precision(Chi2_piminus_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piminus in FD -----------------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piminus_Xmax_FD (used in cuts) = " << Chi2_piminus_Xmax_FD << "\n";
+    myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(Chi2_piminus_FD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piminus in CD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piminus_1e_Xmax_CD (used in cuts) = " << Chi2_piminus_1e_Xmax_CD << "\n";
+    myLogFile << "Chi2 pi- mean CD (from histogram) = " << to_string_with_precision(Chi2_piminus_1e_CD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piminus in FD (1e cut) --------------------------------------------------" << "\n";
+    myLogFile << "Chi2_piminus_1e_Xmax_FD (used in cuts) = " << Chi2_piminus_1e_Xmax_FD << "\n";
+    myLogFile << "Chi2 pi- mean FD (from histogram) = " << to_string_with_precision(Chi2_piminus_1e_FD->GetMean(), 20) << "\n";
+
+    myLogFile << "\n-- piminus in CD (MicroBooNE cut) -----------------------------------------" << "\n";
     myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
 
     if (Chi2_piminus_MicroBooNE_CD->Integral() == 0.) {
@@ -7834,8 +8376,9 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_piminus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_CD << "\n";
+    myLogFile << "Chi2 pi- MicroBooNE mean CD (from histogram) = " << to_string_with_precision(Chi2_piminus_MicroBooNE_CD->GetMean(), 20) << "\n";
 
-    myLogFile << "\n-- piminus in FD (MicroBooNE cut) -----------------------------------------------" << "\n";
+    myLogFile << "\n-- piminus in FD (MicroBooNE cut) -----------------------------------------" << "\n";
     myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
 
     if (Chi2_piminus_MicroBooNE_FD->Integral() == 0.) {
@@ -7845,6 +8388,7 @@ void EventAnalyser() {
     }
 
     myLogFile << "Chi2_piminus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_FD << "\n\n\n";
+    myLogFile << "Chi2 pi- MicroBooNE mean FD (from histogram) = " << to_string_with_precision(Chi2_piminus_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
     myLogFile << "===========================================================================\n";
@@ -7927,16 +8471,16 @@ void EventAnalyser() {
     myLogFile << "Total #(DIS events):\t\t\t\t" << num_of_DIS_events << "\n";
     myLogFile << "QEL + MEC + RES + DIS:\t\t\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
 
-    myLogFile << "-- Counts to be added -----------------------------------------------------\n";
-    myLogFile << "#(events) in CD*:\t\t\t\t\t" << "to be added" << "\n";
-    myLogFile << "#(events) in FD*:\t\t\t\t\t" << "to be added" << "\n";
-    myLogFile << "#(e) in CD*:\t\t\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
-    myLogFile << "#(e) in FD*:\t\t\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
+//    myLogFile << "-- Counts to be added -----------------------------------------------------\n";
+//    myLogFile << "#(events) in CD*:\t\t\t\t\t" << "to be added" << "\n";
+//    myLogFile << "#(events) in FD*:\t\t\t\t\t" << "to be added" << "\n";
+//    myLogFile << "#(e) in CD*:\t\t\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
+//    myLogFile << "#(e) in FD*:\t\t\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
 
     myLogFile << "-- Events with electrons counts -------------------------------------------\n";
     myLogFile << "#(events) w/ at least 1e:\t\t\t" << num_of_events_with_at_least_1e << "\n";
-    myLogFile << "#(events) w/ exactly 1e:\t\t\t\t" << num_of_events_with_exactly_1e << "\n";
     myLogFile << "#(events) w/ more then 1e:\t\t\t" << num_of_events_more_then_1e << "\n\n";
+    myLogFile << "#(events) w/ exactly 1e:\t\t\t\t" << num_of_events_with_exactly_1e << "\n";
 
     // TODO: add percentage relative to 'num_of_events_with_at_least_1e'
     myLogFile << "-- 1e2X event counts ------------------------------------------------------\n";
@@ -8046,16 +8590,16 @@ void EventAnalyser() {
     cout << "Total #(DIS events):\t\t\t" << num_of_DIS_events << "\n";
     cout << "QEL + MEC + RES + DIS:\t\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
 
-    cout << "-- Counts to be added -----------------------------------------------------\n";
-    cout << "#(events) in CD*:\t\t\t" << "to be added" << "\n";
-    cout << "#(events) in FD*:\t\t\t" << "to be added" << "\n";
-    cout << "#(e) in CD*:\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
-    cout << "#(e) in FD*:\t\t\t\t" << num_of_events_with_e_in_FD << "\n";
+//    cout << "-- Counts to be added -----------------------------------------------------\n";
+//    cout << "#(events) in CD*:\t\t\t" << "to be added" << "\n";
+//    cout << "#(events) in FD*:\t\t\t" << "to be added" << "\n";
+//    cout << "#(e) in CD*:\t\t\t\t" << num_of_events_with_e_in_CD << "\n";
+//    cout << "#(e) in FD*:\t\t\t\t" << num_of_events_with_e_in_FD << "\n\n";
 
     cout << "-- Events with electrons counts -------------------------------------------\n";
     cout << "#(events) w/ at least 1e:\t\t" << num_of_events_with_at_least_1e << "\n";
-    cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n";
-    cout << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n\n";
+    cout << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n";
+    cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n\n";
 
     // TODO: add percentage relative to 'num_of_events_with_at_least_1e'
     cout << "-- 1e2X event counts ------------------------------------------------------\n";
@@ -8114,23 +8658,25 @@ void EventAnalyser() {
     cout << "#(events) 2p DIS:\t\t\t" << num_of_2p_DIS_events << "\n";
     cout << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_2p_QEL_events + num_of_2p_MEC_events + num_of_2p_RES_events + num_of_2p_DIS_events << "\n\n";
 
-    cout << "-- MicroBooNE event counts ------------------------------------------------\n";
-    cout << "#(events) MicroBooNE BEFORE cuts:\t" << num_of_MicroBooNE_events_BC << "\n";
-    cout << "#(events) MicroBooNE BC with Neutrons:\t" << num_of_MicroBooNE_events_BC_wNeutrons << "\n";
-    cout << "#(events) MicroBooNE BC with pi0:\t" << num_of_MicroBooNE_events_BC_wpi0 << "\n";
-    cout << "#(events) MicroBooNE BC with pi+:\t" << num_of_MicroBooNE_events_BC_wpip << "\n";
-    cout << "#(events) MicroBooNE BC with pi-:\t" << num_of_MicroBooNE_events_BC_wpim << "\n\n";
+//    cout << "-- MicroBooNE event counts ------------------------------------------------\n";
+//    cout << "#(events) MicroBooNE BEFORE cuts:\t" << num_of_MicroBooNE_events_BC << "\n";
+//    cout << "#(events) MicroBooNE BC with Neutrons:\t" << num_of_MicroBooNE_events_BC_wNeutrons << "\n";
+//    cout << "#(events) MicroBooNE BC with pi0:\t" << num_of_MicroBooNE_events_BC_wpi0 << "\n";
+//    cout << "#(events) MicroBooNE BC with pi+:\t" << num_of_MicroBooNE_events_BC_wpip << "\n";
+//    cout << "#(events) MicroBooNE BC with pi-:\t" << num_of_MicroBooNE_events_BC_wpim << "\n\n";
 
-    cout << "#(events) MicroBooNE AFTER cuts:\t" << num_of_MicroBooNE_events_AC << "\n";
-    cout << "#(events) MicroBooNE AC with Neutrons:\t" << num_of_MicroBooNE_events_AC_wNeutrons << "\n";
-    cout << "#(events) MicroBooNE AC with pi0:\t" << num_of_MicroBooNE_events_AC_wpi0 << "\n";
-    cout << "#(events) MicroBooNE AC with pi+:\t" << num_of_MicroBooNE_events_AC_wpip << "\n";
-    cout << "#(events) MicroBooNE AC with pi-:\t" << num_of_MicroBooNE_events_AC_wpim << "\n\n";
+//    cout << "#(events) MicroBooNE AFTER cuts:\t" << num_of_MicroBooNE_events_AC << "\n";
+//    cout << "#(events) MicroBooNE AC with Neutrons:\t" << num_of_MicroBooNE_events_AC_wNeutrons << "\n";
+//    cout << "#(events) MicroBooNE AC with pi0:\t" << num_of_MicroBooNE_events_AC_wpi0 << "\n";
+//    cout << "#(events) MicroBooNE AC with pi+:\t" << num_of_MicroBooNE_events_AC_wpip << "\n";
+//    cout << "#(events) MicroBooNE AC with pi-:\t" << num_of_MicroBooNE_events_AC_wpim << "\n\n";
 
     cout << "---------------------------------------------------------------------------\n";
     cout << "\t\t\tExecution variables\n";
     cout << "---------------------------------------------------------------------------\n\n";
 
+    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
+    cout << "plots_path:\t\t" << plots_path << "\n\n";
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
     cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";

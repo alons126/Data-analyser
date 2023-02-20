@@ -38,5 +38,9 @@ int main() {
     auto elapsed_time_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     double elapsed_time_minutes = elapsed_time_seconds.count() / 60;
 
-    std::cout << "Running time:\t" << elapsed_time_seconds.count() << " seconds\n\n";
+    if (elapsed_time_seconds.count() < 60) {
+        std::cout << "Running time:\t" << elapsed_time_seconds.count() << " seconds\n\n";
+    } else {
+        std::cout << "Running time:\t" << to_string_with_precision(elapsed_time_minutes, 3) << " minutes\n\n";
+    }
 }

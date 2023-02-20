@@ -53,6 +53,8 @@ string GetCurrentDirectory() {
 //</editor-fold>
 
 //<editor-fold desc="findSubstring function">
+/* This function is used in getBeanE */
+
 bool findSubstring(string string1, string string2) {
     if (string1.find(string2) != std::string::npos) {
         return true;
@@ -82,53 +84,14 @@ double getBeanE(string AnalyseFileSample) {
 //</editor-fold>
 
 //<editor-fold desc="to_string_with_precision function">
+/* This function is used in the plotting functions */
+
 template<typename T>
 std::string to_string_with_precision(const T a_value, const int n = 2) {
     std::ostringstream out;
     out.precision(n);
     out << std::fixed << a_value;
     return out.str();
-}
-//</editor-fold>
-
-//<editor-fold desc="BoolToString function">
-inline const char *const BoolToString(bool b) {
-    return b ? "true" : "false";
-}
-//</editor-fold>
-
-//<editor-fold desc="testPrint functions">
-void testPrint() { cout << "\n"; }
-
-void testPrint(string varString = "") {
-    if (varString == "") {
-        cout << "\n";
-    } else {
-        cout << varString << "\n";
-    }
-}
-
-void testPrint(int var, string varString = "") {
-    if (varString == "") {
-        cout << "\n";
-    } else {
-        cout << varString << " = " << var << "\n";
-    }
-}
-
-void testPrint(double var, string varString = "") {
-    if (varString == "") {
-        cout << "\n";
-    } else {
-        cout << varString << " = " << var << "\n";
-    }
-}
-//</editor-fold>
-
-//<editor-fold desc="rCalc function">
-double rCalc(double x, double y, double z) {
-    double r = sqrt(x * x + y * y + z * z);
-    return r;
 }
 //</editor-fold>
 
@@ -185,6 +148,19 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 }
 //</editor-fold>
 
+//<editor-fold desc="SetLorentzVector function">
+void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp) {
+    p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), p4.M());
+}
+//</editor-fold>
+
+//<editor-fold desc="rCalc function">
+double rCalc(double x, double y, double z) {
+    double r = sqrt(x * x + y * y + z * z);
+    return r;
+}
+//</editor-fold>
+
 //<editor-fold desc="LogEventCuts function">
 void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, string CutType, double Upper_cut, double Lower_cut, double CutCenter = 0) {
     if (CutType == "momentum" || CutType == "") {
@@ -200,6 +176,40 @@ void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, string Cu
         } else if ((Upper_cut != -1) && (Lower_cut != -1)) {
             if ((P.Mag() >= Lower_cut) && (P.Mag() <= Upper_cut)) { Histogram1D->Fill(P.Mag()); }
         }
+    }
+}
+//</editor-fold>
+
+//<editor-fold desc="BoolToString function">
+inline const char *const BoolToString(bool b) {
+    return b ? "true" : "false";
+}
+//</editor-fold>
+
+//<editor-fold desc="testPrint functions">
+void testPrint() { cout << "\n"; }
+
+void testPrint(string varString = "") {
+    if (varString == "") {
+        cout << "\n";
+    } else {
+        cout << varString << "\n";
+    }
+}
+
+void testPrint(int var, string varString = "") {
+    if (varString == "") {
+        cout << "\n";
+    } else {
+        cout << varString << " = " << var << "\n";
+    }
+}
+
+void testPrint(double var, string varString = "") {
+    if (varString == "") {
+        cout << "\n";
+    } else {
+        cout << varString << " = " << var << "\n";
     }
 }
 //</editor-fold>
