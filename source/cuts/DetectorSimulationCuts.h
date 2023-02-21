@@ -38,7 +38,8 @@ double cpion_momentum_upper_cut_MicroBooNE = 3, cpion_momentum_lower_cut_MicroBo
 bool apply_SF_cuts = false; //TODO: add to output log
 
 double SF_1e2p_upper_cut = 0.28;
-double SF_1e2p_lower_cut = 0.18;
+double SF_1e2p_lower_cut = 0.20; // SF cut from clas12ana
+//double SF_1e2p_lower_cut = 0.18; // SF cut from rgm monitoring folder
 double SF_1e2p_Xmax; // for all e plots, no cuts applied
 double SF_1e2p_peak = 0.248125; // to fill using Chi2_Electron_1e_Xmax_CD
 
@@ -148,7 +149,13 @@ double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill u
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Vertex cuts">
-bool apply_dVz_cuts = false;
+bool apply_Vz_cuts = false, apply_dVz_cuts = false;
+
+//<editor-fold desc="Vertex cuts (all particles except electrons)">
+vector<double> Vz_cuts = {-6, 1}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_CD = {Vz_cuts.at(0), Vz_cuts.at(1), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_FD = {Vz_cuts.at(0), Vz_cuts.at(1), 0}; // {min cut, max cut, max location}
+//</editor-fold>
 
 //<editor-fold desc="Vertex cuts (2p)">
 double Vertex_Electron_cut_CD = 3.;
@@ -215,6 +222,13 @@ double dVy_cut_MicroBooNE = dVy_cut, dVy_peak_MicroBooNE = dVy_peak;
 //double dVz_MicroBooNE_Xmax;
 double dVz_cut_MicroBooNE = dVz_cut, dVz_peak_MicroBooNE = dVz_peak;
 //</editor-fold>
+
+//<editor-fold desc="Vertex correlation (dV) cuts (all particles except electrons)">
+vector<double> dVz_cuts = {-3, 1}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_CD = {Vz_cuts.at(0), Vz_cuts.at(1), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_FD = {Vz_cuts.at(0), Vz_cuts.at(1), 0}; // {min cut, max cut, max location}
+//</editor-fold>
+
 
 //</editor-fold>
 

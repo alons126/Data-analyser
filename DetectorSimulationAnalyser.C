@@ -129,6 +129,47 @@ void EventAnalyser() {
     //    plots->Add(folder_test);
     //</editor-fold>
 
+// Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Cuts settings">
+    bool apply_cuts = true;
+
+    /* Momentum cuts */
+    apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
+
+    /* Sampling Fraction (SF) cut */
+    apply_SF_cuts = false;
+
+    /* Edge (fiducial) cuts */
+    apply_Lv_cut = false, apply_Lw_cut = false;
+
+    /* HTCC cut */
+    apply_nphe_cut = true;
+
+    /* Chi2 cuts */
+    apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
+
+    if (apply_cuts == false) {
+        apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_Lv_cut = apply_Lw_cut = false;
+        apply_nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
+    }
+
+    if (apply_cuts == true) {
+        cout << "Cuts application is enabled. Cut settings:\n";
+        cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
+        cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n";
+        cout << "apply_momentum_cuts_MicroBooNE:\t" << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n";
+        cout << "apply_SF_cuts:\t\t\t" << BoolToString(apply_SF_cuts) << "\n";
+        cout << "apply_Lv_cut:\t\t\t" << BoolToString(apply_Lv_cut) << "\n";
+        cout << "apply_Lw_cut:\t\t\t" << BoolToString(apply_Lw_cut) << "\n";
+        cout << "apply_nphe_cut:\t\t\t" << BoolToString(apply_nphe_cut) << "\n";
+        cout << "apply_chi2_cuts_2p:\t\t" << BoolToString(apply_chi2_cuts_2p) << "\n";
+        cout << "apply_chi2_cuts_MicroBooNE:\t" << BoolToString(apply_chi2_cuts_MicroBooNE) << "\n\n\n";
+    } else {
+        cout << "Cuts application is disabled.\n\n";
+    }
+    //</editor-fold>
+
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Creating directories">
@@ -198,9 +239,11 @@ void EventAnalyser() {
     bool create_Vertex_Dir = true;
     string Vertex_Parent_Directory = "Vertex_plots";
     TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
-    string Vertex_Daughter_Folders[] = {"", "1e2p/Vertex_correlation_plots", "2p/dV_plots", "MicroBooNE/dV_plots",
-                                        "MicroBooNE/dV_plots/BC-AC_cut_tests", "1e_cut/Vertex_plots/Electrons", "1e_cut/Vertex_plots/Protons",
-                                        "1e_cut/Vertex_plots/Kplus", "1e_cut/Vertex_plots/Kminus", "1e_cut/Vertex_plots/piplus", "1e_cut/Vertex_plots/piminus"};
+    string Vertex_Daughter_Folders[] = {"", "02_dV_plots/02_1e2p", "02_dV_plots/03_2p", "02_dV_plots/01_MicroBooNE",
+                                        "02_dV_plots/01_MicroBooNE/BC-AC_cut_tests", "01_Vertex_components_plots/1e_cut/01_Electrons",
+                                        "01_Vertex_components_plots/1e_cut/02_Protons", "01_Vertex_components_plots/1e_cut/03_Kplus",
+                                        "01_Vertex_components_plots/1e_cut/04_Kminus", "01_Vertex_components_plots/1e_cut/05_Piplus",
+                                        "01_Vertex_components_plots/1e_cut/06_Piminus"};
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name, false, Plots_Folder);
@@ -493,7 +536,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
-    string Ecal_Parent_Directory = "Ecal_plots";
+    string Ecal_Parent_Directory = "Ecal_rec_plots";
     TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
     string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only", "2p/DIS_only"};
 
@@ -564,32 +607,6 @@ void EventAnalyser() {
     bool MicroBooNE_plots = false;
     //</editor-fold>
 
-    //</editor-fold>
-
-// Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Plot selector">
-    bool apply_cuts = true;
-
-    /* Momentum cuts */
-    apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
-
-    /* Sampling Fraction (SF) cut */
-    apply_SF_cuts = false;
-
-    /* Edge (fiducial) cuts */
-    apply_Lv_cut = false, apply_Lw_cut = false;
-
-    /* HTCC cut */
-    apply_nphe_cut = true;
-
-    /* Chi2 cuts */
-    apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
-
-    if (apply_cuts == false) {
-        apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_Lv_cut = apply_Lw_cut = false;
-        apply_nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
-    }
     //</editor-fold>
 
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -708,18 +725,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Histogram limits for every case">
 
-    //<editor-fold desc="Chi2 plots">
-    double Chi2_boundary = 25;
-    if (apply_cuts == true) { Chi2_boundary = 11; }
-    //</editor-fold>
+    /* Chi2 plots */
+    double Chi2_boundary = 35;
+    if (apply_cuts == true) { Chi2_boundary = 15; }
 
-    //<editor-fold desc="Vertex plots">
+    /* Vertex plots */
     double Vertex_boundary = 25;
-    if (apply_cuts == true) { Vertex_boundary = 7.5; }
-
     double dV_boundary = 25;
+    if (apply_cuts == true) { Vertex_boundary = 7.5; }
     if (apply_cuts == true) { dV_boundary = 7.5; }
-    //</editor-fold>
 
     //<editor-fold desc="Theta histograms">
 
@@ -1721,13 +1735,12 @@ void EventAnalyser() {
     //<editor-fold desc="Vertex plots">
 
     //<editor-fold desc="Vertex plots (no #(e) cut)">
-    // TODO: remove the "TEST" and return to pointer vertex plots (using git backup)
-    THStack *Vertex_Electron_Vx_Stack = new THStack("V_{x}^{e^{-}} (CD & FD)", "V_{x}^{e^{-}} (CD & FD);V_{x}^{e^{-}} [cm];");
-    THStack *Vertex_Electron_Vy_Stack = new THStack("V_{y}^{e^{-}} (CD & FD)", "V_{y}^{e^{-}} (CD & FD);V_{y}^{e^{-}} [cm];");
-    THStack *Vertex_Electron_Vz_Stack = new THStack("V_{z}^{e^{-}} (CD & FD)", "V_{z}^{e^{-}} (CD & FD);V_{z}^{e^{-}} [cm];");
-    THStack *Vertex_Proton_Vx_Stack = new THStack("V_{x}^{p} (CD & FD)", "V_{x}^{p} (CD & FD);V_{x}^{p} [cm];");
-    THStack *Vertex_Proton_Vy_Stack = new THStack("V_{y}^{p} (CD & FD)", "V_{y}^{p} (CD & FD);V_{y}^{p} [cm];");
-    THStack *Vertex_Proton_Vz_Stack = new THStack("V_{z}^{p} (CD & FD)", "V_{z}^{p} (CD & FD);V_{z}^{p} [cm];");
+    THStack *Vertex_Electron_Vx_Stack = new THStack("V_{x}^{e^{-}} (no #(e) cut, CD & FD)", "V_{x}^{e^{-}} (no #(e) cut, CD & FD);V_{x}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_Vy_Stack = new THStack("V_{y}^{e^{-}} (no #(e) cut, CD & FD)", "V_{y}^{e^{-}} (no #(e) cut, CD & FD);V_{y}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_Vz_Stack = new THStack("V_{z}^{e^{-}} (no #(e) cut, CD & FD)", "V_{z}^{e^{-}} (no #(e) cut, CD & FD);V_{z}^{e^{-}} [cm];");
+    THStack *Vertex_Proton_Vx_Stack = new THStack("V_{x}^{p} (no #(e) cut, CD & FD)", "V_{x}^{p} (no #(e) cut, CD & FD);V_{x}^{p} [cm];");
+    THStack *Vertex_Proton_Vy_Stack = new THStack("V_{y}^{p} (no #(e) cut, CD & FD)", "V_{y}^{p} (no #(e) cut, CD & FD);V_{y}^{p} [cm];");
+    THStack *Vertex_Proton_Vz_Stack = new THStack("V_{z}^{p} (no #(e) cut, CD & FD)", "V_{z}^{p} (no #(e) cut, CD & FD);V_{z}^{p} [cm];");
 
     TH1D *Vertex_Electron_Vx_CD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, CD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
                                            100, -Vertex_boundary, Vertex_boundary);
@@ -1751,66 +1764,72 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots (1e only)">
-    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("V_{x}^{e^{-}} (1e only, CD & FD)", "V_{x}^{e^{-}} (1e only, CD & FD);V_{x}^{e^{-}} [cm];");
-    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("V_{y}^{e^{-}} (1e only, CD & FD)", "V_{y}^{e^{-}} (1e only, CD & FD);V_{y}^{e^{-}} [cm];");
-    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("V_{z}^{e^{-}} (1e only, CD & FD)", "V_{z}^{e^{-}} (1e only, CD & FD);V_{z}^{e^{-}} [cm];");
-    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("V_{x}^{p} (1e only, CD & FD)", "V_{x}^{p} (1e only, CD & FD);V_{x}^{p} [cm];");
-    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("V_{y}^{p} (1e only, CD & FD)", "V_{y}^{p} (1e only, CD & FD);V_{y}^{p} [cm];");
-    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("V_{z}^{p} (1e only, CD & FD)", "V_{z}^{p} (1e only, CD & FD);V_{z}^{p} [cm];");
-    THStack *Vertex_Kplus_1e_Vx_Stack = new THStack("V_{x}^{K^{+}} (1e only, CD & FD)", "V_{x}^{K^{+}} (1e only, CD & FD);V_{x}^{K^{+}} [cm];");
-    THStack *Vertex_Kplus_1e_Vy_Stack = new THStack("V_{y}^{K^{+}} (1e only, CD & FD)", "V_{y}^{K^{+}} (1e only, CD & FD);V_{y}^{K^{+}} [cm];");
-    THStack *Vertex_Kplus_1e_Vz_Stack = new THStack("V_{z}^{K^{+}} (1e only, CD & FD)", "V_{z}^{K^{+}} (1e only, CD & FD);V_{z}^{K^{+}} [cm];");
-    THStack *Vertex_Kminus_1e_Vx_Stack = new THStack("V_{x}^{K^{-}} (1e only, CD & FD)", "V_{x}^{K^{-}} (1e only, CD & FD);V_{x}^{K^{-}} [cm];");
-    THStack *Vertex_Kminus_1e_Vy_Stack = new THStack("V_{y}^{K^{-}} (1e only, CD & FD)", "V_{y}^{K^{-}} (1e only, CD & FD);V_{y}^{K^{-}} [cm];");
-    THStack *Vertex_Kminus_1e_Vz_Stack = new THStack("V_{z}^{K^{-}} (1e only, CD & FD)", "V_{z}^{K^{-}} (1e only, CD & FD);V_{z}^{K^{-}} [cm];");
-    THStack *Vertex_piplus_1e_Vx_Stack = new THStack("V_{x}^{pi^{+}} (1e only, CD & FD)", "V_{x}^{pi^{+}} (1e only, CD & FD);V_{x}^{pi^{+}} [cm];");
-    THStack *Vertex_piplus_1e_Vy_Stack = new THStack("V_{y}^{pi^{+}} (1e only, CD & FD)", "V_{y}^{pi^{+}} (1e only, CD & FD);V_{y}^{pi^{+}} [cm];");
-    THStack *Vertex_piplus_1e_Vz_Stack = new THStack("V_{z}^{pi^{+}} (1e only, CD & FD)", "V_{z}^{pi^{+}} (1e only, CD & FD);V_{z}^{pi^{+}} [cm];");
-    THStack *Vertex_piminus_1e_Vx_Stack = new THStack("V_{x}^{pi^{-}} (1e only, CD & FD)", "V_{x}^{pi^{-}} (1e only, CD & FD);V_{x}^{pi^{-}} [cm];");
-    THStack *Vertex_piminus_1e_Vy_Stack = new THStack("V_{y}^{pi^{-}} (1e only, CD & FD)", "V_{y}^{pi^{-}} (1e only, CD & FD);V_{y}^{pi^{-}} [cm];");
-    THStack *Vertex_piminus_1e_Vz_Stack = new THStack("V_{z}^{pi^{-}} (1e only, CD & FD)", "V_{z}^{pi^{-}} (1e only, CD & FD);V_{z}^{pi^{-}} [cm];");
+    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("V_{x}^{e^{-}} (1e Only, CD & FD)", "V_{x}^{e^{-}} (1e Only, CD & FD);V_{x}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("V_{y}^{e^{-}} (1e Only, CD & FD)", "V_{y}^{e^{-}} (1e Only, CD & FD);V_{y}^{e^{-}} [cm];");
+    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("V_{z}^{e^{-}} (1e Only, CD & FD)", "V_{z}^{e^{-}} (1e Only, CD & FD);V_{z}^{e^{-}} [cm];");
+    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("V_{x}^{p} (1e Only, CD & FD)", "V_{x}^{p} (1e Only, CD & FD);V_{x}^{p} [cm];");
+    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("V_{y}^{p} (1e Only, CD & FD)", "V_{y}^{p} (1e Only, CD & FD);V_{y}^{p} [cm];");
+    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("V_{z}^{p} (1e Only, CD & FD)", "V_{z}^{p} (1e Only, CD & FD);V_{z}^{p} [cm];");
+    THStack *Vertex_Kplus_1e_Vx_Stack = new THStack("V_{x}^{K^{+}} (1e Only, CD & FD)", "V_{x}^{K^{+}} (1e Only, CD & FD);V_{x}^{K^{+}} [cm];");
+    THStack *Vertex_Kplus_1e_Vy_Stack = new THStack("V_{y}^{K^{+}} (1e Only, CD & FD)", "V_{y}^{K^{+}} (1e Only, CD & FD);V_{y}^{K^{+}} [cm];");
+    THStack *Vertex_Kplus_1e_Vz_Stack = new THStack("V_{z}^{K^{+}} (1e Only, CD & FD)", "V_{z}^{K^{+}} (1e Only, CD & FD);V_{z}^{K^{+}} [cm];");
+    THStack *Vertex_Kminus_1e_Vx_Stack = new THStack("V_{x}^{K^{-}} (1e Only, CD & FD)", "V_{x}^{K^{-}} (1e Only, CD & FD);V_{x}^{K^{-}} [cm];");
+    THStack *Vertex_Kminus_1e_Vy_Stack = new THStack("V_{y}^{K^{-}} (1e Only, CD & FD)", "V_{y}^{K^{-}} (1e Only, CD & FD);V_{y}^{K^{-}} [cm];");
+    THStack *Vertex_Kminus_1e_Vz_Stack = new THStack("V_{z}^{K^{-}} (1e Only, CD & FD)", "V_{z}^{K^{-}} (1e Only, CD & FD);V_{z}^{K^{-}} [cm];");
+    THStack *Vertex_piplus_1e_Vx_Stack = new THStack("V_{x}^{#pi^{+}} (1e Only, CD & FD)", "V_{x}^{#pi^{+}} (1e Only, CD & FD);V_{x}^{#pi^{+}} [cm];");
+    THStack *Vertex_piplus_1e_Vy_Stack = new THStack("V_{y}^{#pi^{+}} (1e Only, CD & FD)", "V_{y}^{#pi^{+}} (1e Only, CD & FD);V_{y}^{#pi^{+}} [cm];");
+    THStack *Vertex_piplus_1e_Vz_Stack = new THStack("V_{z}^{#pi^{+}} (1e Only, CD & FD)", "V_{z}^{#pi^{+}} (1e Only, CD & FD);V_{z}^{#pi^{+}} [cm];");
+    THStack *Vertex_piminus_1e_Vx_Stack = new THStack("V_{x}^{#pi^{-}} (1e Only, CD & FD)", "V_{x}^{#pi^{-}} (1e Only, CD & FD);V_{x}^{#pi^{-}} [cm];");
+    THStack *Vertex_piminus_1e_Vy_Stack = new THStack("V_{y}^{#pi^{-}} (1e Only, CD & FD)", "V_{y}^{#pi^{-}} (1e Only, CD & FD);V_{y}^{#pi^{-}} [cm];");
+    THStack *Vertex_piminus_1e_Vz_Stack = new THStack("V_{z}^{#pi^{-}} (1e Only, CD & FD)", "V_{z}^{#pi^{-}} (1e Only, CD & FD);V_{z}^{#pi^{-}} [cm];");
 
-    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
 
-    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
 
-    TH1D *Vertex_Kplus_1e_Vx_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vy_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vz_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vx_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vy_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vz_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vx_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vy_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vz_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vx_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vy_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kplus_1e_Vz_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
 
-    TH1D *Vertex_Kminus_1e_Vx_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vy_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vz_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vx_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vy_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vz_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vx_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vy_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vz_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vx_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vy_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_Kminus_1e_Vz_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
 
-    TH1D *Vertex_piplus_1e_Vx_CD = new TH1D("V_{x}^{pi^{+}} (1e Cut, CD)", "V_{x}^{pi^{+}} (1e Cut, CD);V_{x}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vy_CD = new TH1D("V_{y}^{pi^{+}} (1e Cut, CD)", "V_{y}^{pi^{+}} (1e Cut, CD);V_{y}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vz_CD = new TH1D("V_{z}^{pi^{+}} (1e Cut, CD)", "V_{z}^{pi^{+}} (1e Cut, CD);V_{z}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vx_FD = new TH1D("V_{x}^{pi^{+}} (1e Cut, FD)", "V_{x}^{pi^{+}} (1e Cut, FD);V_{x}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vy_FD = new TH1D("V_{y}^{pi^{+}} (1e Cut, FD)", "V_{y}^{pi^{+}} (1e Cut, FD);V_{y}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vz_FD = new TH1D("V_{z}^{pi^{+}} (1e Cut, FD)", "V_{z}^{pi^{+}} (1e Cut, FD);V_{z}^{pi^{+}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vx_CD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, CD)", "V_{x}^{#pi^{+}} (1e Cut, CD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vy_CD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, CD)", "V_{y}^{#pi^{+}} (1e Cut, CD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vz_CD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, CD)", "V_{z}^{#pi^{+}} (1e Cut, CD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vx_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vy_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piplus_1e_Vz_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
 
-    TH1D *Vertex_piminus_1e_Vx_CD = new TH1D("V_{x}^{pi^{-}} (1e Cut, CD)", "V_{x}^{pi^{-}} (1e Cut, CD);V_{x}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vy_CD = new TH1D("V_{y}^{pi^{-}} (1e Cut, CD)", "V_{y}^{pi^{-}} (1e Cut, CD);V_{y}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vz_CD = new TH1D("V_{z}^{pi^{-}} (1e Cut, CD)", "V_{z}^{pi^{-}} (1e Cut, CD);V_{z}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vx_FD = new TH1D("V_{x}^{pi^{-}} (1e Cut, FD)", "V_{x}^{pi^{-}} (1e Cut, FD);V_{x}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vy_FD = new TH1D("V_{y}^{pi^{-}} (1e Cut, FD)", "V_{y}^{pi^{-}} (1e Cut, FD);V_{y}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vz_FD = new TH1D("V_{z}^{pi^{-}} (1e Cut, FD)", "V_{z}^{pi^{-}} (1e Cut, FD);V_{z}^{pi^{-}} [cm];", 500, -Vertex_boundary, Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vx_CD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, CD)", "V_{x}^{#pi^{-}} (1e Cut, CD);V_{x}^{#pi^{-}} [cm];", 250, -Vertex_boundary,
+                                             Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vy_CD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, CD)", "V_{y}^{#pi^{-}} (1e Cut, CD);V_{y}^{#pi^{-}} [cm];", 250, -Vertex_boundary,
+                                             Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vz_CD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, CD)", "V_{z}^{#pi^{-}} (1e Cut, CD);V_{z}^{#pi^{-}} [cm];", 250, -Vertex_boundary,
+                                             Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vx_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];", 250, -Vertex_boundary,
+                                             Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vy_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];", 250, -Vertex_boundary,
+                                             Vertex_boundary);
+    TH1D *Vertex_piminus_1e_Vz_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];", 250, -Vertex_boundary,
+                                             Vertex_boundary);
     string Vertex_Electron_1e_Vx_CD_Dir = Vertex_Electron_1e_Vx_Directory, Vertex_Electron_1e_Vx_FD_Dir = Vertex_Electron_1e_Vx_Directory;
     string Vertex_Electron_1e_Vy_CD_Dir = Vertex_Electron_1e_Vy_Directory, Vertex_Electron_1e_Vy_FD_Dir = Vertex_Electron_1e_Vy_Directory;
     string Vertex_Electron_1e_Vz_CD_Dir = Vertex_Electron_1e_Vz_Directory, Vertex_Electron_1e_Vz_FD_Dir = Vertex_Electron_1e_Vz_Directory;
@@ -1832,71 +1851,85 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1e2p & chi2 cuts)">
-    THStack *dVx_1e2p_before_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e2p & All #chi^{2} cuts, CD & FD)",
-                                                 "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e2p & All #chi^{2} cuts, CD & FD) test;dV_{x} [cm];");
-    THStack *dVy_1e2p_before_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e2p & All #chi^{2} cuts, CD & FD)",
-                                                 "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e2p & All #chi^{2} cuts, CD & FD) test;dV_{y} [cm];");
-    THStack *dVz_1e2p_before_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e2p & All #chi^{2} cuts, CD & FD)",
-                                                 "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e2p & All #chi^{2} cuts, CD & FD) test;dV_{z} [cm];");
+    THStack *dVx_1e2p_before_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD) test;dV_{x} [cm];");
+    THStack *dVy_1e2p_before_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD) test;dV_{y} [cm];");
+    THStack *dVz_1e2p_before_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD) test;dV_{z} [cm];");
 
-    THStack *dVx_1e2p_after_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e2p & All #chi^{2} cuts, CD & FD)",
-                                                "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (1e2p & All #chi^{2} cuts, CD & FD) test;dV_{x} [cm];");
-    THStack *dVy_1e2p_after_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e2p & All #chi^{2} cuts, CD & FD)",
-                                                "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (1e2p & All #chi^{2} cuts, CD & FD) test;dV_{y} [cm];");
-    THStack *dVz_1e2p_after_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e2p & All #chi^{2} cuts, CD & FD)",
-                                                "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (1e2p & All #chi^{2} cuts, CD & FD) test;dV_{z} [cm];");
+    THStack *dVx_1e2p_after_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD) test;dV_{x} [cm];");
+    THStack *dVy_1e2p_after_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD) test;dV_{y} [cm];");
+    THStack *dVz_1e2p_after_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD) test;dV_{z} [cm];");
 
-    THStack *dVx_2p_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (2p, CD & FD)", "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (2p, CD & FD);dV_{x} [cm];");
-    THStack *dVy_2p_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (2p, CD & FD)", "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (2p, CD & FD);dV_{y} [cm];");
-    THStack *dVz_2p_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (2p, CD & FD)", "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (2p, CD & FD);dV_{z} [cm];");
+    THStack *dVx_2p_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD);dV_{x} [cm];");
+    THStack *dVy_2p_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD);dV_{y} [cm];");
+    THStack *dVz_2p_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD);dV_{z} [cm];");
 
-    TH1D *deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} BC (1e2p, CD & FD)",
-                                                 "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 500, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} BC (1e2p, CD & FD)",
-                                                 "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 500, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} BC (1e2p, CD & FD)",
-                                                 "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 500, -dV_boundary, dV_boundary);
+    TH1D *deltaVx_before_dV_cuts_1e2p, *deltaVy_before_dV_cuts_1e2p, *deltaVz_before_dV_cuts_1e2p;
+    TH1D *deltaVx_after_dV_cuts_1e2p, *deltaVy_after_dV_cuts_1e2p, *deltaVz_after_dV_cuts_1e2p;
 
-    TH1D *deltaVx_after_dV_cuts_1e2p = new TH1D("dV_{x} AC (1e2p, CD & FD)",
-                                                "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 500, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_after_dV_cuts_1e2p = new TH1D("dV_{y} AC (1e2p, CD & FD)",
-                                                "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 500, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_after_dV_cuts_1e2p = new TH1D("dV_{z} AC (1e2p, CD & FD)",
-                                                "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 500, -dV_boundary, dV_boundary);
+    if (apply_cuts == false) {
+        deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];",
+                                               250, -dV_boundary, dV_boundary);
+        deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];",
+                                               250, -dV_boundary, dV_boundary);
+        deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];",
+                                               250, -dV_boundary, dV_boundary);
 
-    TH1D *deltaVx_2p = new TH1D("dV_{x} AC (2p, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (2p, CD & FD);dV_{x} [cm];", 500, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_2p = new TH1D("dV_{y} AC (2p, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (2p, CD & FD);dV_{y} [cm];", 500, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_2p = new TH1D("dV_{z} AC (2p, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (2p, CD & FD);dV_{z} [cm];", 500, -dV_boundary, dV_boundary);
+        deltaVx_after_dV_cuts_1e2p = new TH1D("dV_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];",
+                                              250, -dV_boundary, dV_boundary);
+        deltaVy_after_dV_cuts_1e2p = new TH1D("dV_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];",
+                                              250, -dV_boundary, dV_boundary);
+        deltaVz_after_dV_cuts_1e2p = new TH1D("dV_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];",
+                                              250, -dV_boundary, dV_boundary);
+    } else {
+        deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+        deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+        deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
+    }
+
+//    TH1D *deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} BC (1e2p, CD & FD)",
+//                                                 "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+//    TH1D *deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} BC (1e2p, CD & FD)",
+//                                                 "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+//    TH1D *deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} BC (1e2p, CD & FD)",
+//                                                 "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
+//
+//    TH1D *deltaVx_after_dV_cuts_1e2p = new TH1D("dV_{x} AC (1e2p, CD & FD)",
+//                                                "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+//    TH1D *deltaVy_after_dV_cuts_1e2p = new TH1D("dV_{y} AC (1e2p, CD & FD)",
+//                                                "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+//    TH1D *deltaVz_after_dV_cuts_1e2p = new TH1D("dV_{z} AC (1e2p, CD & FD)",
+//                                                "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
+
+    TH1D *deltaVx_2p = new TH1D("dV_{x} AC (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+    TH1D *deltaVy_2p = new TH1D("dV_{y} AC (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+    TH1D *deltaVz_2p = new TH1D("dV_{z} AC (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
     //</editor-fold>
 
     //<editor-fold desc="dV plots (MicroBooNE)">
-    THStack *dVx_MicroBooNE_Stack = new THStack("dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (MicroBooNE, CD & FD)",
-                                                "dV_{x}=|V^{e}_{x}-dV^{p}_{x}| (MicroBooNE, CD & FD);dV_{x} [cm];");
-    THStack *dVy_MicroBooNE_Stack = new THStack("dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (MicroBooNE, CD & FD)",
-                                                "dV_{y}=|V^{e}_{y}-dV^{p}_{y}| (MicroBooNE, CD & FD);dV_{y} [cm];");
-    THStack *dVz_MicroBooNE_Stack = new THStack("dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD)",
-                                                "dV_{z}=|V^{e}_{z}-dV^{p}_{z}| (MicroBooNE, CD & FD);dV_{z} [cm];");
+    THStack *dVx_MicroBooNE_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];");
+    THStack *dVy_MicroBooNE_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];");
+    THStack *dVz_MicroBooNE_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];");
 
-    TH1D *deltaVx_MicroBooNE_BC = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                           500, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_MicroBooNE_BC = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                           500, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_MicroBooNE_BC = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                           500, -dV_boundary, dV_boundary);
+    TH1D *deltaVx_MicroBooNE_BC = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                           250, -dV_boundary, dV_boundary);
+    TH1D *deltaVy_MicroBooNE_BC = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                           250, -dV_boundary, dV_boundary);
+    TH1D *deltaVz_MicroBooNE_BC = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                           250, -dV_boundary, dV_boundary);
 
-    TH1D *deltaVx_MicroBooNE_AC = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                           500, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_MicroBooNE_AC = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                           500, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_MicroBooNE_AC = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                           500, -dV_boundary, dV_boundary);
+    TH1D *deltaVx_MicroBooNE_AC = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                           250, -dV_boundary, dV_boundary);
+    TH1D *deltaVy_MicroBooNE_AC = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                           250, -dV_boundary, dV_boundary);
+    TH1D *deltaVz_MicroBooNE_AC = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                           250, -dV_boundary, dV_boundary);
 
-    TH1D *deltaVx_MicroBooNE = new TH1D("dV_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{e}_{x}-V^{p}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                        500, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_MicroBooNE = new TH1D("dV_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{e}_{y}-V^{p}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                        500, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_MicroBooNE = new TH1D("dV_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{e}_{z}-V^{p}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                        500, -dV_boundary, dV_boundary);
+    TH1D *deltaVx_MicroBooNE = new TH1D("dV_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                        250, -dV_boundary, dV_boundary);
+    TH1D *deltaVy_MicroBooNE = new TH1D("dV_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                        250, -dV_boundary, dV_boundary);
+    TH1D *deltaVz_MicroBooNE = new TH1D("dV_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                        250, -dV_boundary, dV_boundary);
     //</editor-fold>
 
     //</editor-fold>
@@ -2314,33 +2347,29 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Electron fiducial histograms (FD only)">
-
-    //<editor-fold desc="Electron fiducial histograms (PCAL)">
-    TH2D *Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. EoP BC (All Int., 1e, PCAL)",
-                                            "ECAL V coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+    TH2D *Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
+                                            "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                             250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. EoP AC (All Int., 1e, PCAL)",
-                                            "ECAL V coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+    TH2D *Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
+                                            "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                             250, 0, 50, 250, 0.05, 0.35);
     string Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
-    TH2D *Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. EoP BC (All Int., 1e, PCAL)",
-                                            "ECAL W coordinate vs. Sampling Fraction Before Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+    TH2D *Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
+                                            "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                             250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. EoP AC (All Int., 1e, PCAL)",
-                                            "ECAL W coordinate vs. Sampling Fraction After Cuts (All Int., 1e, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+    TH2D *Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
+                                            "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                             250, 0, 50, 250, 0.05, 0.35);
     string Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
-    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. EoP (All Int., 2p, PCAL)",
-                                         "ECAL V coordinate vs. Sampling Fraction (All Int., 2p, PCAL);ECAL V coordinate [cm];Sampling Fraction",
+    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)",
+                                         "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                          250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. EoP (All Int., 2p, PCAL)",
-                                         "ECAL W coordinate vs. Sampling Fraction (All Int., 2p, PCAL);ECAL W coordinate [cm];Sampling Fraction",
+    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)",
+                                         "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                          250, 0, 50, 250, 0.05, 0.35);
     string Vcal_VS_EoP_2p_PCAL_Dir = fiducial_plots_2p_cuts_histograms_PCAL_Directory, Wcal_VS_EoP_2p_PCAL_Dir = fiducial_plots_2p_cuts_histograms_PCAL_Directory;
-    //</editor-fold>
-
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2555,23 +2584,22 @@ void EventAnalyser() {
 
     if (apply_cuts == true) {
         // Cuts on electrons only:
-        clasAna.setEcalSFCuts();                    // making f_ecalSFCuts = ture
-        clasAna.setEcalEdgeCuts();                  // making f_ecalEdgeCuts = ture (fiducial cuts)
+        clasAna.setEcalSFCuts();                                        // making f_ecalSFCuts = ture
+        clasAna.setEcalEdgeCuts();                                          // making f_ecalEdgeCuts = ture (fiducial cuts)
 
         // Cuts on protons and charged pions:
-        clasAna.setPidCuts();                       // making f_pidCuts = ture
+        clasAna.setPidCuts();                                           // making f_pidCuts = ture
 
         // Cuts on all particles:
-        clasAna.setVertexCuts();                    // making f_vertexCuts = ture
-        clasAna.setVzcuts(-6, 1);                   // setting Vz cuts for all (?) particles
+        clasAna.setVertexCuts();                                        // making f_vertexCuts = ture
+        clasAna.setVzcuts(Vz_cuts.at(0), Vz_cuts.at(1)); // setting Vz cuts for all (charged?) particles
 
         // Cuts on charged particles:
-        clasAna.setDCEdgeCuts();                    // making f_DCEdgeCuts = ture (fiducial cuts?)
-        clasAna.setVertexCorrCuts();                // making f_corr_vertexCuts = ture
-        clasAna.setVertexCorrCuts(-3, 1); // setting dVz cuts?
-//    clasAna.setVertexCorrCuts(-3, 3); // setting dVz cuts?
-
-        cout << "\n\nCuts are enabled!\n\n";
+        clasAna.setDCEdgeCuts();                                        // making f_DCEdgeCuts = ture (fiducial cuts?)
+        clasAna.setVertexCorrCuts();                                    // making f_corr_vertexCuts = ture
+        clasAna.setVertexCorrCuts(dVz_cuts.at(0), dVz_cuts.at(1));  // setting dVz cuts?
+//        clasAna.setVertexCorrCuts(-2, 1);                      // setting dVz cuts?
+//        clasAna.setVertexCorrCuts(-3, 3);  // setting dVz cuts?
 
         clasAna.printParams();
     }
@@ -3301,7 +3329,7 @@ void EventAnalyser() {
 ////            bool vt_cut_skip = false;
 ////
 ////            for (int i = 0; i < AllParticles.size(); i++) {
-////                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_e - vtz_part;
+////                double vtz_part = AllParticles[i]->par()->getVz(), dvtz = vtz_part - vtz_e;
 ////
 ////                if (fabs(0 - dvtz) > 3.) { vt_cut_skip = true; }
 //////                if (fabs(dVz_peak - dvtz) > dVz_cut) { vt_cut_skip = true; }
@@ -4022,14 +4050,14 @@ void EventAnalyser() {
 //            //TODO: check with Adi/Justin if vertex cuts should be applied on cPions as well
 //            double Vx_e_MicroBooNE = electrons[0]->par()->getVx(), Vy_e_MicroBooNE = electrons[0]->par()->getVy(), Vz_e_MicroBooNE = electrons[0]->par()->getVz();
 //            double Vz_p0_MicroBooNE = protons[0]->par()->getVz(), Vz_p1_MicroBooNE = protons[1]->par()->getVz();
-//            double dVz0_MicroBooNE = Vz_e_MicroBooNE - Vz_p0_MicroBooNE, dVz1_MicroBooNE = Vz_e_MicroBooNE - Vz_p1_MicroBooNE;
+//            double dVz0_MicroBooNE = Vz_p0_MicroBooNE - Vz_e_MicroBooNE, dVz1_MicroBooNE = Vz_p1_MicroBooNE - Vz_e_MicroBooNE;
 //            double Vx_p_MicroBooNE, Vy_p_MicroBooNE, Vz_p_MicroBooNE, dVx_MicroBooNE, dVy_MicroBooNE, dVz_MicroBooNE;
 //
 //            for (auto &p: protons) {
 //                Vx_p_MicroBooNE = p->par()->getVx(), Vy_p_MicroBooNE = p->par()->getVy(), Vz_p_MicroBooNE = p->par()->getVz();
-//                dVx_MicroBooNE = Vx_e_MicroBooNE - Vx_p_MicroBooNE;
-//                dVy_MicroBooNE = Vy_e_MicroBooNE - Vy_p_MicroBooNE;
-//                dVz_MicroBooNE = Vz_e_MicroBooNE - Vz_p_MicroBooNE;
+//                dVx_MicroBooNE = Vx_p_MicroBooNE - Vx_e_MicroBooNE;
+//                dVy_MicroBooNE = Vy_p_MicroBooNE - Vy_e_MicroBooNE;
+//                dVz_MicroBooNE = Vz_p_MicroBooNE - Vz_e_MicroBooNE;
 //
 //                // Testing dVx,dVy,dVz before cuts
 //                deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
@@ -4495,18 +4523,14 @@ void EventAnalyser() {
 
             /* Chi2 before cut */
             if (protons[0]->getRegion() == CD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                 Chi2_Proton_1e2p_BC_CD->Fill(protons[0]->par()->getChi2Pid());
             } else if (protons[0]->getRegion() == FD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                 Chi2_Proton_1e2p_BC_FD->Fill(protons[0]->par()->getChi2Pid());
             }
 
             if (protons[1]->getRegion() == CD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                 Chi2_Proton_1e2p_BC_CD->Fill(protons[1]->par()->getChi2Pid());
             } else if (protons[1]->getRegion() == FD) {
-//                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                 Chi2_Proton_1e2p_BC_FD->Fill(protons[1]->par()->getChi2Pid());
             }
 
@@ -4532,20 +4556,31 @@ void EventAnalyser() {
 
             //<editor-fold desc="Testing dV cuts">
             double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
-            double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_e - Vz_p0, dVz1 = Vz_e - Vz_p1;
+            double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_p0 - Vz_e, dVz1 = Vz_p1 - Vz_e;
             double Vx_p, Vy_p, Vz_p, dVx, dVy, dVz;
 
             for (auto &p: protons) {
                 Vx_p = p->par()->getVx(), Vy_p = p->par()->getVy(), Vz_p = p->par()->getVz();
-                dVx = Vx_e - Vx_p, dVy = Vy_e - Vy_p, dVz = Vz_e - Vz_p;
+                dVx = Vx_p - Vx_e, dVy = Vy_p - Vy_e, dVz = Vz_p - Vz_e;
 
                 // Testing dVx,dVy,dVz before cuts
-                deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+                if (apply_cuts == false) {
+                    deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
 
-                // Testing dVx,dVy,dVz after cuts
-                if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
-                if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
-                if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+                    // Testing dVx,dVy,dVz after cuts
+                    if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
+                    if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
+                    if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+                } else {
+                    deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+                }
+
+//                deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+
+//                // Testing dVx,dVy,dVz after cuts
+//                if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
+//                if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
+//                if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
             } // end of loop over protons vector
             //</editor-fold>
 
@@ -5082,9 +5117,9 @@ void EventAnalyser() {
                 Vx_p = p->par()->getVx();
                 Vy_p = p->par()->getVy();
                 Vz_p = p->par()->getVz();
-                dVx = Vx_e - Vx_p;
-                dVy = Vy_e - Vy_p;
-                dVz = Vz_e - Vz_p;
+                dVx = Vx_p - Vx_e;
+                dVy = Vy_p - Vy_e;
+                dVz = Vz_p - Vz_e;
 
                 deltaVx_2p->Fill(dVx);
                 deltaVy_2p->Fill(dVy);
@@ -5908,10 +5943,12 @@ void EventAnalyser() {
         double Vertex_Proton_1e_Vz_Xmax_FD = Vertex_Proton_1e_Vz_FD->GetBinCenter(Vertex_Proton_1e_Vz_FD->GetMaximumBin());
         double Vertex_Kplus_1e_Vx_Xmax_CD = Vertex_Kplus_1e_Vx_CD->GetBinCenter(Vertex_Kplus_1e_Vx_CD->GetMaximumBin());
         double Vertex_Kplus_1e_Vy_Xmax_CD = Vertex_Kplus_1e_Vy_CD->GetBinCenter(Vertex_Kplus_1e_Vy_CD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vz_Xmax_CD = Vertex_Kplus_1e_Vz_CD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
+//        Vz_cuts.at(2) = Vertex_Kplus_1e_Vz_CD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vz_Xmax_CD = Vertex_Kplus_1e_Vz_FD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
         double Vertex_Kplus_1e_Vx_Xmax_FD = Vertex_Kplus_1e_Vx_FD->GetBinCenter(Vertex_Kplus_1e_Vx_FD->GetMaximumBin());
         double Vertex_Kplus_1e_Vy_Xmax_FD = Vertex_Kplus_1e_Vy_FD->GetBinCenter(Vertex_Kplus_1e_Vy_FD->GetMaximumBin());
         double Vertex_Kplus_1e_Vz_Xmax_FD = Vertex_Kplus_1e_Vz_FD->GetBinCenter(Vertex_Kplus_1e_Vz_FD->GetMaximumBin());
+//        Vz_cuts.at(2) = Vertex_Kplus_1e_Vz_CD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
         double Vertex_Kminus_1e_Vx_Xmax_CD = Vertex_Kminus_1e_Vx_CD->GetBinCenter(Vertex_Kminus_1e_Vx_CD->GetMaximumBin());
         double Vertex_Kminus_1e_Vy_Xmax_CD = Vertex_Kminus_1e_Vy_CD->GetBinCenter(Vertex_Kminus_1e_Vy_CD->GetMaximumBin());
         double Vertex_Kminus_1e_Vz_Xmax_CD = Vertex_Kminus_1e_Vz_CD->GetBinCenter(Vertex_Kminus_1e_Vz_CD->GetMaximumBin());
@@ -5959,163 +5996,201 @@ void EventAnalyser() {
                       Vertex_Proton_1e_Vy_Stack, "02_Proton_Vy", Vertex_Proton_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
         histPlotter1D(c1, Vertex_Proton_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Proton_1e_Vy_Stack, "02_Proton_Vy", Vertex_Proton_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, Vertex_Proton_1e_Vz_Stack,
+                      "03_Proton_Vz", Vertex_Proton_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Proton_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, Vertex_Proton_1e_Vz_Stack,
+                      "03_Proton_Vz", Vertex_Proton_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Proton_1e_Vz_Xmax_FD);
 
         histPlotter1D(c1, Vertex_Kplus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
         histPlotter1D(c1, Vertex_Kplus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
         histPlotter1D(c1, Vertex_Kplus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
         histPlotter1D(c1, Vertex_Kplus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_Kplus_1e_Vz_Stack, "03_Kplus_Vz", Vertex_Kplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, Vertex_Kplus_1e_Vz_Stack,
+                      "03_Kplus_Vz", Vertex_Kplus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kplus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, Vertex_Kplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, Vertex_Kplus_1e_Vz_Stack,
+                      "03_Kplus_Vz", Vertex_Kplus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kplus_1e_Vz_Xmax_FD);
 
         histPlotter1D(c1, Vertex_Kminus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
         histPlotter1D(c1, Vertex_Kminus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
         histPlotter1D(c1, Vertex_Kminus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
         histPlotter1D(c1, Vertex_Kminus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_Kminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+////                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_Kminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+////                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, Vertex_Kminus_1e_Vz_Stack,
+                      "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kminus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, Vertex_Kminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, Vertex_Kminus_1e_Vz_Stack,
+                      "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kminus_1e_Vz_Xmax_FD);
 
-        histPlotter1D(c1, Vertex_piplus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piplus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_piplus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piplus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_piplus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piplus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_piplus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piplus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_piplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_piplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_piplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+////                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_piplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+////                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_piplus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, Vertex_piplus_1e_Vz_Stack,
+                      "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piplus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, Vertex_piplus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, Vertex_piplus_1e_Vz_Stack,
+                      "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piplus_1e_Vz_Xmax_FD);
 
-        histPlotter1D(c1, Vertex_piminus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piminus_1e_Vx_CD, normalized_vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_piminus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piminus_1e_Vx_FD, normalized_vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_piminus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piminus_1e_Vy_CD, normalized_vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_piminus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+        histPlotter1D(c1, Vertex_piminus_1e_Vy_FD, normalized_vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_piminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_piminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_piminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
+////                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, Vertex_piminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
+////                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, Vertex_piminus_1e_Vz_CD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, Vertex_piminus_1e_Vz_Stack,
+                      "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piminus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, Vertex_piminus_1e_Vz_FD, normalized_vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, Vertex_piminus_1e_Vz_Stack,
+                      "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piminus_1e_Vz_Xmax_CD);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (1e2p, CD & FD)">
 
         //<editor-fold desc="dV plots before dV cuts (1e2p, CD & FD)">
-        histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
-                      dVx_cut, dVx_peak);
+        if (apply_cuts == false) {
+            histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                          dVx_cut, dVx_peak);
+//        histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "1e2p", plots, 2, false, true,
+//                      dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0),
+//                      Vertex_Proton_1e_Vz_Xmax_CD);
+            histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, dVy_1e2p_before_Stack, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                          dVy_cut, dVy_peak);
+            histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, dVz_1e2p_before_Stack, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                          dVz_cut, dVz_peak);
 
-        histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVy_1e2p_before_Stack, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
-                      dVy_cut, dVy_peak);
+            histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, dVx_1e2p_after_Stack, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                          dVx_cut, dVx_peak);
+            histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, dVy_1e2p_after_Stack, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+                          dVy_cut, dVy_peak);
+//        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVz_cut, dVz_peak);
+            histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", plots, 2, false, true,
+                          dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
+                          dVz_peak);
+        } else {
+            histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, dVx_1e2p_before_Stack, "01_dVx", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+            histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, dVy_1e2p_before_Stack, "02_dVy", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+            histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "1e2p", plots, 2, false, true,
+                          dVy_1e2p_before_Stack, "03_dVz", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
+                          dVz_peak);
+        }
 
-        histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVz_1e2p_before_Stack, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
-                      dVz_cut, dVz_peak);
-
-        histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVx_1e2p_after_Stack, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
-                      dVx_cut, dVx_peak);
-
-        histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVy_1e2p_after_Stack, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
-                      dVy_cut, dVy_peak);
-
-        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
-                      dVz_cut, dVz_peak);
+//        histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVx_cut, dVx_peak);
+////        histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "1e2p", plots, 2, false, true,
+////                      dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0),
+////                      Vertex_Proton_1e_Vz_Xmax_CD);
+//        histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVy_1e2p_before_Stack, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVy_cut, dVy_peak);
+//        histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVz_1e2p_before_Stack, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVz_cut, dVz_peak);
+//
+//        histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVx_1e2p_after_Stack, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVx_cut, dVx_peak);
+//        histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, dVy_1e2p_after_Stack, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+//                      dVy_cut, dVy_peak);
+////        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+////                      plots, 2, false, true, dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+////                      dVz_cut, dVz_peak);
+//        histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", plots, 2, false, true,
+//                      dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
+//                      dVz_peak);
         //</editor-fold>
 
         //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
-        histPlotter1D(c1, deltaVx_2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVx_2p_Stack,
-                      "01_dVx", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, deltaVx_2p, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      dVx_2p_Stack, "01_dVx", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
 
-        histPlotter1D(c1, deltaVy_2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVy_2p_Stack,
-                      "02_dVy", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, deltaVy_2p, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      dVy_2p_Stack, "02_dVy", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
 
-        histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, dVz_2p_Stack,
-                      "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      dVz_2p_Stack, "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, deltaVz_2p, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", plots, 2, false, true, dVz_2p_Stack, "03_dVz",
+                      Vertex_dV_2p_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0), dVz_peak);
         //</editor-fold>
 
         //</editor-fold>
 
 //        //<editor-fold desc="dV plots before dV cuts (MicroBooNE, CD & FD)">
-//        histPlotter1D(c1, deltaVx_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, deltaVx_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVx_cut, dVx_peak);
 //
-//        histPlotter1D(c1, deltaVy_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, deltaVy_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVy_cut, dVy_peak);
 //
-//        histPlotter1D(c1, deltaVz_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, deltaVz_MicroBooNE_BC, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVz_cut, dVz_peak);
 //
-//        histPlotter1D(c1, deltaVx_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, deltaVx_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVx_cut, dVx_peak);
 //
-//        histPlotter1D(c1, deltaVy_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, deltaVy_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVy_cut, dVy_peak);
 //
-//        histPlotter1D(c1, deltaVz_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, deltaVz_MicroBooNE_AC, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVz_cut, dVz_peak);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="dV plots after dV cuts (MicroBooNE, CD & FD)">
-//        histPlotter1D(c1, deltaVx_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{x}=V^{e}_{x}-V^{p}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//        histPlotter1D(c1, deltaVx_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
 //                      dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
 //
-//        histPlotter1D(c1, deltaVy_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{y}=V^{e}_{y}-V^{p}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//        histPlotter1D(c1, deltaVy_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
 //                      dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
 //
-//        histPlotter1D(c1, deltaVz_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{z}=V^{e}_{z}-V^{p}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//        histPlotter1D(c1, deltaVz_MicroBooNE, normalized_vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
 //                      dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
 //        //</editor-fold>
 
