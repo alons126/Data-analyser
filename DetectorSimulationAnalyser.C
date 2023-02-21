@@ -7312,7 +7312,7 @@ void EventAnalyser() {
 
 //  fiducial histograms --------------------------------------------------------------
 
-        if (apply_cuts == true) {
+        if (apply_cuts == false) {
 
             //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
             Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
