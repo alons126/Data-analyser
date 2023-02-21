@@ -132,25 +132,28 @@ void EventAnalyser() {
 // Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts settings">
-    bool apply_cuts = false;
+    bool apply_cuts = false; //TODO: add to output log
 
     /* Momentum cuts */
-    apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
+    bool apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
 
     /* Sampling Fraction (SF) cut */
-    apply_SF_cuts = false;
+    bool apply_SF_cuts = false;
 
     /* Edge (fiducial) cuts */
-    apply_Lv_cut = false, apply_Lw_cut = false;
+    bool apply_Lv_cut = false, apply_Lw_cut = false;
 
     /* HTCC cut */
-    apply_nphe_cut = true;
+    bool apply_nphe_cut = true;
 
     /* Chi2 cuts */
-    apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
+    bool apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
+
+    /* Vertex cuts */
+    bool apply_Vz_cuts = false, apply_dVz_cuts = false;
 
     if (apply_cuts == false) {
-        apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_Lv_cut = apply_Lw_cut = false;
+        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_Lv_cut = apply_Lw_cut = false;
         apply_nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
     }
 
@@ -1692,35 +1695,35 @@ void EventAnalyser() {
 
     if (apply_cuts == false) {
         Chi2_Electron_1e2p_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, CD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+                                            500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
         Chi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, FD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                            500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
         Chi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} BC (1e2p, CD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, CD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                          500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
         Chi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} BC (1e2p, FD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, FD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                          500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
         Chi2_Electron_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
         Chi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
 
         Chi2_Electron_1e2p_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, CD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+                                            500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
         Chi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, FD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                            500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
         Chi2_Proton_1e2p_AC_CD = new TH1D("#chi^{2}_{p} AC (1e2p, CD)", "#chi^{2}_{p} Histogram After Cut (1e2p, CD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                          500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
         Chi2_Proton_1e2p_AC_FD = new TH1D("#chi^{2}_{p} AC (1e2p, FD)", "#chi^{2}_{p} Histogram After Cut (1e2p, FD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                          500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
         Chi2_Electron_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
         Chi2_Proton_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
     } else {
         Chi2_Electron_1e2p_BC_CD = new TH1D("#chi^{2}_{e^{-}} (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram (1e2p, CD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+                                            500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
         Chi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e^{-}} (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram (1e2p, FD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                            500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
         Chi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} (1e2p, CD)", "#chi^{2}_{p} Histogram (1e2p, CD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                          500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
         Chi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} (1e2p, FD)", "#chi^{2}_{p} Histogram (1e2p, FD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                          500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
         Chi2_Electron_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
         Chi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, Chi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
     }
@@ -2314,24 +2317,38 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
     //<editor-fold desc="SF histograms (1e2p, FD only)">
-    THStack *SF_1e2p_Stack = new THStack("SF stack (All Int., 1e2p, FD)",
-                                         "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (All Int., 1e2p, FD);f");
+    THStack *SF_1e2p_Stack = new THStack("SF stack (1e2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e2p, FD);f");
 
-    TH1D *SF_All_Int_1e2p_BC_FD = new TH1D("SF BC (All Int., 1e2p, FD)", "Sampling Fraction f Before Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                           200, 0.1, 0.35);
-    TH1D *SF_All_Int_1e2p_AC_FD = new TH1D("SF AC (All Int., 1e2p, FD)", "Sampling Fraction f After Cuts (All Int., 1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                           200, 0.1, 0.35);
-    string SF_All_Int_1e2p_BC_FD_Dir = SF_plots_1e2p_BC_histograms_Directory, SF_All_Int_1e2p_AC_FD_Dir = SF_plots_1e2p_AC_histograms_Directory;
+    TH1D *SF_All_Int_1e2p_BC_FD, *SF_All_Int_1e2p_AC_FD;
+    string SF_All_Int_1e2p_BC_FD_Dir, SF_All_Int_1e2p_AC_FD_Dir;
+
+    if (apply_cuts == false) {
+        SF_All_Int_1e2p_BC_FD = new TH1D("SF BC (1e2p, FD)", "Sampling Fraction f Before Cuts (1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+        SF_All_Int_1e2p_AC_FD = new TH1D("SF AC (1e2p, FD)", "Sampling Fraction f After Cuts (1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+        SF_All_Int_1e2p_BC_FD_Dir = SF_plots_1e2p_BC_histograms_Directory, SF_All_Int_1e2p_AC_FD_Dir = SF_plots_1e2p_AC_histograms_Directory;
+    } else {
+        SF_All_Int_1e2p_BC_FD = new TH1D("SF (1e2p, FD)", "Sampling Fraction f (1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+        SF_All_Int_1e2p_BC_FD_Dir = SF_plots_1e2p_BC_histograms_Directory;
+    }
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P histograms (1e2p, FD only)">
-    TH2D *SF_VS_P_e_1e2p_BC_FD = new TH2D("SF vs. P_{e} BC (All Int., 1e2p, FD)",
-                                          "Sampling Fraction f vs. P_{e} Before Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                          250, 0, beamE * 1.1, 250, 0.1, 0.35);
-    TH2D *SF_VS_P_e_1e2p_AC_FD = new TH2D("SF vs. P_{e} AC (All Int., 1e2p, FD)",
-                                          "Sampling Fraction f vs. P_{e} After Cuts (All Int., 1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                          250, 0, beamE * 1.1, 250, 0.1, 0.35);
-    string SF_VS_P_e_1e2p_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_histograms_Directory, SF_VS_P_e_1e2p_AC_FD_Dir = SF_VS_P_e_plots_1e2p_AC_histograms_Directory;
+    TH2D *SF_VS_P_e_1e2p_BC_FD, *SF_VS_P_e_1e2p_AC_FD;
+    string SF_VS_P_e_1e2p_BC_FD_Dir, SF_VS_P_e_1e2p_AC_FD_Dir;
+
+    if (apply_cuts == false) {
+        SF_VS_P_e_1e2p_BC_FD = new TH2D("SF vs. P_{e} BC (1e2p, FD)",
+                                        "Sampling Fraction f vs. P_{e} Before Cuts (1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                        250, 0, beamE * 1.1, 250, 0.1, 0.35);
+        SF_VS_P_e_1e2p_AC_FD = new TH2D("SF vs. P_{e} AC (1e2p, FD)",
+                                        "Sampling Fraction f vs. P_{e} After Cuts (1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                        250, 0, beamE * 1.1, 250, 0.1, 0.35);
+        SF_VS_P_e_1e2p_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_histograms_Directory, SF_VS_P_e_1e2p_AC_FD_Dir = SF_VS_P_e_plots_1e2p_AC_histograms_Directory;
+    } else {
+        SF_VS_P_e_1e2p_BC_FD = new TH2D("SF vs. P_{e} (1e2p, FD)", "Sampling Fraction f vs. P_{e} (1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                        250, 0, beamE * 1.1, 250, 0.1, 0.35);
+        SF_VS_P_e_1e2p_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_histograms_Directory;
+    }
     //</editor-fold>
 
     //<editor-fold desc="SF histograms (2p, FD only)">
@@ -2352,27 +2369,38 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Electron fiducial histograms (FD only)">
-    TH2D *Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
-                                            "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-                                            250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
-                                            "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-                                            250, 0, 50, 250, 0.05, 0.35);
-    string Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
+    TH2D *Vcal_VS_EoP_1e_BC_PCAL, *Vcal_VS_EoP_1e_AC_PCAL, *Wcal_VS_EoP_1e_BC_PCAL, *Wcal_VS_EoP_1e_AC_PCAL;
+    string Vcal_VS_EoP_1e_BC_PCAL_Dir, Vcal_VS_EoP_1e_AC_PCAL_Dir, Wcal_VS_EoP_1e_BC_PCAL_Dir, Wcal_VS_EoP_1e_AC_PCAL_Dir;
 
-    TH2D *Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
-                                            "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-                                            250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
-                                            "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-                                            250, 0, 50, 250, 0.05, 0.35);
-    string Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
+    if (apply_cuts == false) {
+        Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
+                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+                                          250, 0, 50, 250, 0.05, 0.35);
+        Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
+                                          "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+                                          250, 0, 50, 250, 0.05, 0.35);
+        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
 
-    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)",
-                                         "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+        Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
+                                          "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+                                          250, 0, 50, 250, 0.05, 0.35);
+        Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
+                                          "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+                                          250, 0, 50, 250, 0.05, 0.35);
+        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
+    } else {
+        Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+                                          250, 0, 50, 250, 0.05, 0.35);
+        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory;
+
+        Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+                                          250, 0, 50, 250, 0.05, 0.35);
+        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory;
+    }
+
+    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                          250, 0, 50, 250, 0.05, 0.35);
-    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)",
-                                         "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                          250, 0, 50, 250, 0.05, 0.35);
     string Vcal_VS_EoP_2p_PCAL_Dir = fiducial_plots_2p_cuts_histograms_PCAL_Directory, Wcal_VS_EoP_2p_PCAL_Dir = fiducial_plots_2p_cuts_histograms_PCAL_Directory;
     //</editor-fold>
@@ -2384,11 +2412,19 @@ void EventAnalyser() {
     //<editor-fold desc="nphe histograms (FD only)">
 
     //<editor-fold desc="Number of Photo-electrons (nphe) histograms (1e2p, FD only)">
-    THStack *nphe_1e2p_Stack = new THStack("n_{phe} stack (All Int., 1e2p, FD)", "nphe Histogram (All Int., 1e2p, FD);n_{phe}");
+    THStack *nphe_1e2p_Stack = new THStack("n_{phe} stack (1e2p, FD)", "nphe Histogram (All Int., 1e2p, FD);n_{phe}");
 
-    TH1D *nphe_All_Int_1e2p_BC_FD = new TH1D("n_{phe} BC (All Int., 1e2p, FD)", "#Photo-electrons in HTCC n_{phe} Before Cuts (All Int., 1e2p, FD);n_{phe}", 200, 0, 40);
-    TH1D *nphe_All_Int_1e2p_AC_FD = new TH1D("n_{phe} AC (All Int., 1e2p, FD)", "#Photo-electrons in HTCC (n_{phe}) After Cuts (All Int., 1e2p, FD);n_{phe}", 200, 0, 40);
-    string nphe_All_Int_1e2p_BC_FD_Dir = nphe_plots_1e2p_BC_histograms_Directory, nphe_All_Int_1e2p_AC_FD_Dir = nphe_plots_1e2p_AC_histograms_Directory;
+    TH1D *nphe_All_Int_1e2p_BC_FD, *nphe_All_Int_1e2p_AC_FD;
+    string nphe_All_Int_1e2p_BC_FD_Dir, nphe_All_Int_1e2p_AC_FD_Dir;
+
+    if (apply_cuts == false) {
+        nphe_All_Int_1e2p_BC_FD = new TH1D("n_{phe} BC (1e2p, FD)", "#Photo-electrons in HTCC n_{phe} Before Cuts (1e2p, FD);n_{phe}", 200, 0, 40);
+        nphe_All_Int_1e2p_AC_FD = new TH1D("n_{phe} AC (1e2p, FD)", "#Photo-electrons in HTCC (n_{phe}) After Cuts (1e2p, FD);n_{phe}", 200, 0, 40);
+        nphe_All_Int_1e2p_BC_FD_Dir = nphe_plots_1e2p_BC_histograms_Directory, nphe_All_Int_1e2p_AC_FD_Dir = nphe_plots_1e2p_AC_histograms_Directory;
+    } else {
+        nphe_All_Int_1e2p_BC_FD = new TH1D("n_{phe} (1e2p, FD)", "#Photo-electrons in HTCC n_{phe} (1e2p, FD);n_{phe}", 200, 0, 40);
+        nphe_All_Int_1e2p_BC_FD_Dir = nphe_plots_1e2p_BC_histograms_Directory, nphe_All_Int_1e2p_AC_FD_Dir = nphe_plots_1e2p_AC_histograms_Directory;
+    }
     //</editor-fold>
 
     //<editor-fold desc="Number of Photo-electrons (nphe) histograms (2p, FD only)">
@@ -3255,43 +3291,55 @@ void EventAnalyser() {
         //<editor-fold desc="Testing SF cuts">
         double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
 
-        /* SF plots before cuts */
-        SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-        SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
+        if (apply_cuts == false) {
+            /* SF plots before cuts */
+            SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
+            SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
 
-        /* SF plots after cuts */
-        if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
-            SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-            SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+            /* SF plots after cuts */
+            if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
+                SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
+                SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+            }
+        } else {
+            SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
+            SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
         }
         //</editor-fold>
 
         //<editor-fold desc="Testing fiducial cuts">
-        /* Fiducial plots before cuts */
-        Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-        Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+        if (apply_cuts == false) {
+            /* Fiducial plots before cuts */
+            Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
-        /* Fiducial plots after cuts */
-        if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-        if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+            /* Fiducial plots after cuts */
+            if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+            if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+        } else {
+            Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+        }
         //</editor-fold>
 
         //<editor-fold desc="Testing nphe cuts">
         int nphe = electrons[0]->che(HTCC)->getNphe();
 
-        /* nphe plots before cuts */
-        nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+        if (apply_cuts == false) {
+            /* nphe plots before cuts */
+            nphe_All_Int_1e2p_BC_FD->Fill(nphe);
 
-        /* nphe plots after cuts */
-        if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+            /* nphe plots after cuts */
+            if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+        } else {
+            nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+        }
         //</editor-fold>
 
         //</editor-fold>
 
-        //<editor-fold desc="Applying additional electron cuts">
-        /* nphe cuts */
+        /* Applying nphe cuts */
         if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
-        //</editor-fold>
 
         //<editor-fold desc="Filling 1e only plots">
 
@@ -4472,8 +4520,8 @@ void EventAnalyser() {
             //  Testing chi2 cuts (protons only) ------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Testing chi2 cuts (protons only)">
-            /* Chi2 before cut */
             if (apply_cuts == false) {
+                /* Chi2 before cut */
                 if (electrons[0]->getRegion() == CD) {
                     Chi2_Electron_1e2p_BC_CD->Fill(electrons[0]->par()->getChi2Pid());
                 } else if (electrons[0]->getRegion() == FD) {
@@ -4548,11 +4596,11 @@ void EventAnalyser() {
                 Vx_p = p->par()->getVx(), Vy_p = p->par()->getVy(), Vz_p = p->par()->getVz();
                 dVx = Vx_p - Vx_e, dVy = Vy_p - Vy_e, dVz = Vz_p - Vz_e;
 
-                // Testing dVx,dVy,dVz before cuts
                 if (apply_cuts == false) {
+                    /* Testing dVx,dVy,dVz before cuts */
                     deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
 
-                    // Testing dVx,dVy,dVz after cuts
+                    /* Testing dVx,dVy,dVz after cuts */
                     if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
                     if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
                     if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
@@ -5158,7 +5206,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P histograms">
     if (Beta_vs_P_plots) {
-
         cout << "\n\nPlotting Beta vs. P histograms...\n\n";
 
 //  Beta vs. P TF1 plots --------------------------------------------------------
@@ -5596,7 +5643,6 @@ void EventAnalyser() {
     double Chi2_piplus_1e_Xmax_CD, Chi2_piplus_1e_Xmax_FD, Chi2_piminus_1e_Xmax_CD, Chi2_piminus_1e_Xmax_FD;
 
     if (Chi2_plots) {
-
         cout << "\n\nPlotting Chi2 plots...\n\n";
 
         //<editor-fold desc="Finding Xmax">
@@ -5690,40 +5736,24 @@ void EventAnalyser() {
                       Chi2_Proton_1e_Xmax_FD);
 
         histPlotter1D(c1, Chi2_Kplus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kplus_cut_CD,
-//                      Chi2_Kplus_1e_Xmax_CD);
+                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_Kplus_1e_Xmax_CD);
         histPlotter1D(c1, Chi2_Kplus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_FD_Dir, "FD", kRed, true, true, true, false);
-//                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kplus_cut_FD,
-//                      Chi2_Kplus_1e_Xmax_FD);
+                      Chi2_Kplus_1e_Stack, "03_Kplus_chi2", Chi2_Kplus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_Kplus_1e_Xmax_FD);
 
         histPlotter1D(c1, Chi2_Kminus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_CD,
-//                      Chi2_Kminus_1e_Xmax_CD);
+                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_Kminus_1e_Xmax_CD);
         histPlotter1D(c1, Chi2_Kminus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_FD_Dir, "FD", kRed, true, true, true, false);
-//                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cut_FD,
-//                      Chi2_Kminus_1e_Xmax_FD);
+                      Chi2_Kminus_1e_Stack, "04_Kminus_chi2", Chi2_Kminus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_Kminus_1e_Xmax_FD);
 
         histPlotter1D(c1, Chi2_piplus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cut_CD,
-//                      Chi2_piplus_1e_Xmax_CD);
+                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_piplus_1e_Xmax_CD);
         histPlotter1D(c1, Chi2_piplus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_FD_Dir, "FD", kRed, true, true, true, false);
-//                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cut_FD,
-//                      Chi2_piplus_1e_Xmax_FD);
+                      Chi2_piplus_1e_Stack, "05_piplus_chi2", Chi2_piplus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_piplus_1e_Xmax_FD);
 
         histPlotter1D(c1, Chi2_piminus_1e_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_CD_Dir, "CD", kBlue, true, true, true, false);
-//                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piminus_cut_CD,
-//                      Chi2_piminus_1e_Xmax_CD);
+                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_piminus_1e_Xmax_CD);
         histPlotter1D(c1, Chi2_piminus_1e_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_FD_Dir, "FD", kRed, true, true, true, false);
-//                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piminus_cut_FD,
-//                      Chi2_piminus_1e_Xmax_FD);
+                      Chi2_piminus_1e_Stack, "06_piminus_chi2", Chi2_piminus_1e_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_piminus_1e_Xmax_FD);
         //</editor-fold>
 
 //        //<editor-fold desc="Chi2 plots (MicroBooNE)">
@@ -5832,6 +5862,7 @@ void EventAnalyser() {
 //
 //        //</editor-fold>
 
+        //<editor-fold desc="Chi2 plots (1e2p)">
         if (apply_cuts == false) {
             histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
                           plots, 2, false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p_BC", Chi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
@@ -5861,20 +5892,21 @@ void EventAnalyser() {
                           2, false, true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p_AC", Chi2_Proton_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
                           Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
         } else {
-            histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
-                          plots, 2, false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p", Chi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
+            histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2,
+                          false, true, Chi2_Electron_1e2p_Stack, "01_Electron_Chi2_1e2p", Chi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
                           Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
-            histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
-                          plots, 2, false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p", Chi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
+            histPlotter1D(c1, c2, Chi2_Electron_1e2p_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
+                          false, true, Chi2_Electron_1e2p_Stack, "02_Electron_Chi2_1e2p", Chi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
                           Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
 
-            histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2,
-                          false, true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p", Chi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
-            histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2,
-                          false, true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p", Chi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
+            histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
+                          true, Chi2_Proton_1e2p_Stack, "03_Proton_Chi2_1e2p", Chi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+                          Chi2_Proton_1e_peak_CD);
+            histPlotter1D(c1, c2, Chi2_Proton_1e2p_BC_FD, normalized_chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
+                          true, Chi2_Proton_1e2p_Stack, "04_Proton_Chi2_1e2p", Chi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+                          Chi2_Proton_1e_peak_FD);
         }
+        //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 (2p)">
         histPlotter1D(c1, Chi2_Electron_2p_CD, normalized_chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -5903,7 +5935,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots">
     if (Vertex_plots) {
-
         cout << "\n\nPlotting Vertex plots...\n\n";
 
         //<editor-fold desc="Finding Xmax">
@@ -6147,7 +6178,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Angle histograms">
     if (Theta_e_plots) {
-
         cout << "\n\nPlotting Angle histograms...\n\n";
 
 //  Theta_e (CD & FD) --------------------------------------------------------------
@@ -6587,7 +6617,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Q2 histograms">
     if (Q2_plots) {
-
         cout << "\n\nPlotting Q2 histograms...\n\n";
 
 //  Q2 (CD & FD) --------------------------------------------------------------
@@ -6663,7 +6692,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Momentum histograms">
     if (Momentum_plots) {
-
         cout << "\n\nPlotting Momentum histograms...\n\n";
 
 //  Momentum histograms (1e2p, CD & FD)  --------------------------------------------------------------
@@ -6843,7 +6871,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Energy (E_e) histograms">
     if (E_e_plots) {
-
         cout << "\n\nPlotting Energy (E_e) histograms...\n\n";
 
 //  E_e  --------------------------------------------------------------
@@ -7172,71 +7199,86 @@ void EventAnalyser() {
 
     //<editor-fold desc="Sampling Fraction (SF) histograms">
     if (SF_plots) {
-
         cout << "\n\nPlotting Sampling Fraction histograms...\n\n";
 
 //  SF histograms --------------------------------------------------------------
 
         SF_1e2p_Xmax = SF_All_Int_1e2p_BC_FD->GetBinCenter(SF_All_Int_1e2p_BC_FD->GetMaximumBin());
 
-        //<editor-fold desc="SF histogram (1e2p, FD)">
-//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
+        //<editor-fold desc="SF and SF vs. P histograms (1e2p, FD)">
+        if (apply_cuts == false) {
+            histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "1e2p", plots, 2, false, true, SF_1e2p_Stack,
+                          "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut,
+                          SF_1e2p_Xmax);
 
-        histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
-                      "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
+            histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f After cuts", "1e2p", plots, 2, false, true, SF_1e2p_Stack,
+                          "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut,
+                          SF_1e2p_Xmax);
 
-        histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f After cuts", "All Int., 1e2p", plots, 2, false, true, SF_1e2p_Stack,
-                      "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
+            //<editor-fold desc="SF vs. P 1e2p before cuts (FD)">
+            SF_VS_P_e_1e2p_BC_FD->SetTitleSize(0.06, "xyz");
+            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->CenterTitle(true);
+            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->CenterTitle(true);
+            SF_VS_P_e_1e2p_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(SF_VS_P_e_1e2p_BC_FD);
+            SF_VS_P_e_1e2p_BC_FD->Draw("colz");
+            c1->SetLogz(1);
+            SF_VS_P_e_1e2p_BC_FD->SetStats(0);
+            c1->SaveAs((SF_VS_P_e_1e2p_BC_FD_Dir + "01_SF_VS_P_e_1e2p_BC_FD.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
+
+            //<editor-fold desc="SF vs. P 1e2p after cuts (FD)">
+            SF_VS_P_e_1e2p_AC_FD->SetTitleSize(0.06, "xyz");
+            SF_VS_P_e_1e2p_AC_FD->GetXaxis()->SetLabelSize(0.0425);
+            SF_VS_P_e_1e2p_AC_FD->GetXaxis()->CenterTitle(true);
+            SF_VS_P_e_1e2p_AC_FD->GetYaxis()->SetLabelSize(0.0425);
+            SF_VS_P_e_1e2p_AC_FD->GetYaxis()->CenterTitle(true);
+            SF_VS_P_e_1e2p_AC_FD->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(SF_VS_P_e_1e2p_AC_FD);
+            SF_VS_P_e_1e2p_AC_FD->Draw("colz");
+            c1->SetLogz(1);
+            SF_VS_P_e_1e2p_AC_FD->SetStats(0);
+            c1->SaveAs((SF_VS_P_e_1e2p_AC_FD_Dir + "02_SF_VS_P_e_1e2p_AC_FD.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
+
+        } else {
+            histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "1e2p", plots, 2, false, true, SF_1e2p_Stack, "01_SF_1e2p",
+                          SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
+
+            //<editor-fold desc="SF vs. P 1e2p (FD)">
+            SF_VS_P_e_1e2p_BC_FD->SetTitleSize(0.06, "xyz");
+            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->CenterTitle(true);
+            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->CenterTitle(true);
+            SF_VS_P_e_1e2p_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(SF_VS_P_e_1e2p_BC_FD);
+            SF_VS_P_e_1e2p_BC_FD->Draw("colz");
+            c1->SetLogz(1);
+            SF_VS_P_e_1e2p_BC_FD->SetStats(0);
+            c1->SaveAs((SF_VS_P_e_1e2p_BC_FD_Dir + "01_SF_VS_P_e_1e2p_FD.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
+
+        }
         //</editor-fold>
 
         //<editor-fold desc="SF histogram (2p, FD)">
-//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
-
         histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "All Int., 2p", plots, 2, false, true, SF_2p_Stack, "SF_2p_wAll_cuts",
                       SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
         //</editor-fold>
 
-//  SF vs. P  --------------------------------------------------------------
-
-        //<editor-fold desc="SF vs. P 1e2p before cuts (FD)">
-        SF_VS_P_e_1e2p_BC_FD->SetTitleSize(0.06, "xyz");
-        SF_VS_P_e_1e2p_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-        SF_VS_P_e_1e2p_BC_FD->GetXaxis()->CenterTitle(true);
-        SF_VS_P_e_1e2p_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-        SF_VS_P_e_1e2p_BC_FD->GetYaxis()->CenterTitle(true);
-        SF_VS_P_e_1e2p_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(SF_VS_P_e_1e2p_BC_FD);
-        SF_VS_P_e_1e2p_BC_FD->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        SF_VS_P_e_1e2p_BC_FD->SetStats(0);
-        c1->SaveAs((SF_VS_P_e_1e2p_BC_FD_Dir + "01_SF_VS_P_e_1e2p_BC_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="SF vs. P 1e2p after cuts (FD)">
-        SF_VS_P_e_1e2p_AC_FD->SetTitleSize(0.06, "xyz");
-        SF_VS_P_e_1e2p_AC_FD->GetXaxis()->SetLabelSize(0.0425);
-        SF_VS_P_e_1e2p_AC_FD->GetXaxis()->CenterTitle(true);
-        SF_VS_P_e_1e2p_AC_FD->GetYaxis()->SetLabelSize(0.0425);
-        SF_VS_P_e_1e2p_AC_FD->GetYaxis()->CenterTitle(true);
-        SF_VS_P_e_1e2p_AC_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(SF_VS_P_e_1e2p_AC_FD);
-        SF_VS_P_e_1e2p_AC_FD->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        SF_VS_P_e_1e2p_AC_FD->SetStats(0);
-        c1->SaveAs((SF_VS_P_e_1e2p_AC_FD_Dir + "02_SF_VS_P_e_1e2p_AC_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="SF vs. P 2p after all cuts (FD)">
+        //<editor-fold desc="SF vs. P (2p, FD)">
         SF_VS_P_e_2p_FD->SetTitleSize(0.06, "xyz");
         SF_VS_P_e_2p_FD->GetXaxis()->SetLabelSize(0.0425);
         SF_VS_P_e_2p_FD->GetXaxis()->CenterTitle(true);
@@ -7266,88 +7308,117 @@ void EventAnalyser() {
 
     //<editor-fold desc="Electron fiducial histograms (FD only)">
     if (fiducial_plots) {
-
         cout << "\n\nPlotting fiducial histograms...\n\n";
 
 //  fiducial histograms --------------------------------------------------------------
 
-        //<editor-fold desc="fiducial histograms (PCAL)">
+        if (apply_cuts == true) {
 
-        //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
-        Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e_BC_PCAL);
-        Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_BC_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
+            //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
+            Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
+            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
+            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
+            Vcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(Vcal_VS_EoP_1e_BC_PCAL);
+            Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
+            c1->SetLogz(1);
+            Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
+            c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_BC_PCAL.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
 
-        //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
-        Wcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e_BC_PCAL);
-        Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_BC_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
+            //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
+            Wcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
+            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
+            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
+            Wcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(Wcal_VS_EoP_1e_BC_PCAL);
+            Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
+            c1->SetLogz(1);
+            Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
+            c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_BC_PCAL.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
 
-        //<editor-fold desc="Vcal vs. EoP 1e2p AC PCAL">
-        Vcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_1e_AC_PCAL);
-        Vcal_VS_EoP_1e_AC_PCAL->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Vcal_VS_EoP_1e_AC_PCAL->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_1e_AC_PCAL_Dir + "01_Vcal_VS_EoP_1e_AC_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
+            //<editor-fold desc="Vcal vs. EoP 1e2p AC PCAL">
+            Vcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
+            Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+            Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
+            Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+            Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
+            Vcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(Vcal_VS_EoP_1e_AC_PCAL);
+            Vcal_VS_EoP_1e_AC_PCAL->Draw("colz");
+            c1->SetLogz(1);
+            Vcal_VS_EoP_1e_AC_PCAL->SetStats(0);
+            c1->SaveAs((Vcal_VS_EoP_1e_AC_PCAL_Dir + "01_Vcal_VS_EoP_1e_AC_PCAL.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
 
-        //<editor-fold desc="Wcal vs. EoP 1e2p AC PCAL">
-        Wcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_1e_AC_PCAL);
-        Wcal_VS_EoP_1e_AC_PCAL->Draw("colz");
-        c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
-        Wcal_VS_EoP_1e_AC_PCAL->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_1e_AC_PCAL_Dir + "02_Wcal_VS_EoP_1e_AC_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
-        //</editor-fold>
+            //<editor-fold desc="Wcal vs. EoP 1e2p AC PCAL">
+            Wcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
+            Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+            Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
+            Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+            Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
+            Wcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(Wcal_VS_EoP_1e_AC_PCAL);
+            Wcal_VS_EoP_1e_AC_PCAL->Draw("colz");
+            c1->SetLogz(1);
+            Wcal_VS_EoP_1e_AC_PCAL->SetStats(0);
+            c1->SaveAs((Wcal_VS_EoP_1e_AC_PCAL_Dir + "02_Wcal_VS_EoP_1e_AC_PCAL.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
+
+        } else {
+
+            //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
+            Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
+            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
+            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
+            Vcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(Vcal_VS_EoP_1e_BC_PCAL);
+            Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
+            c1->SetLogz(1);
+            Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
+            c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_BC_PCAL.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
+
+            //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
+            Wcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
+            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
+            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
+            Wcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(Wcal_VS_EoP_1e_BC_PCAL);
+            Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
+            c1->SetLogz(1);
+            Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
+            c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_BC_PCAL.png").c_str());
+            gStyle->SetStatX(DefStatX);
+            gStyle->SetStatY(DefStatY);
+            c1->Clear();
+            //</editor-fold>
+
+        }
 
         //<editor-fold desc="Vcal vs. EoP 2p PCAL">
         Vcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
@@ -7387,8 +7458,6 @@ void EventAnalyser() {
         c1->Clear();
         //</editor-fold>
 
-        //</editor-fold>
-
     } else {
         cout << "\n\nFiducial plots are disabled by user.\n\n";
     }
@@ -7400,28 +7469,24 @@ void EventAnalyser() {
 
     //<editor-fold desc="Number of Photo-electrons (nphe) histograms">
     if (nphe_plots) {
-
         cout << "\n\nPlotting number of photo-electrons (nphe) histograms...\n\n";
 
-//  Number of Photo-electrons (nphe) histograms --------------------------------------------------------------
-
-//        nphe_1e2p_Xmax = nphe_All_Int_1e2p_BC_FD->GetBinCenter(nphe_All_Int_1e2p_BC_FD->GetMaximumBin());
-
         //<editor-fold desc="Number of Photo-electrons (nphe) histogram (1e2p, FD)">
-//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
+        if (apply_cuts == false) {
+            histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) Before Cuts", "1e2p", plots, 2,
+                          false, true, nphe_1e2p_Stack, "01_nphe_1e2p_before_nphe_cuts", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true,
+                          nphe_lower_cut, 0, false);
 
-        histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) Before Cuts", "All Int., 1e2p",
-                      plots, 2, false, true, nphe_1e2p_Stack, "01_nphe_1e2p_before_nphe_cuts", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true,
-                      nphe_lower_cut, 0, false);
-
-        histPlotter1D(c1, nphe_All_Int_1e2p_AC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) After Cuts", "All Int., 1e2p",
-                      plots, 2, false, true, nphe_1e2p_Stack, "02_nphe_1e2p_after_nphe_cuts", nphe_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true,
-                      nphe_lower_cut, 0, false);
+            histPlotter1D(c1, nphe_All_Int_1e2p_AC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) After Cuts", "1e2p", plots, 2,
+                          false, true, nphe_1e2p_Stack, "02_nphe_1e2p_after_nphe_cuts", nphe_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut,
+                          0, false);
+        } else {
+            histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} )", "1e2p", plots, 2, false, true,
+                          nphe_1e2p_Stack, "01_nphe_1e2p", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut, 0, false);
+        }
         //</editor-fold>
 
         //<editor-fold desc="Number of Photo-electrons (nphe) histogram (2p, FD)">
-//        double E_e_integral = E_e_hist_CD->Integral() + E_e_hist_FD->Integral();
-
         histPlotter1D(c1, nphe_All_Int_2p_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} )", "All Int., 2p", plots, 2, false,
                       true, nphe_2p_Stack, "nphe_2p", nphe_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut, 0, false);
         //</editor-fold>
