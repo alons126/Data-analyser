@@ -39,6 +39,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "clas12reader.h"
 
 #include "settings/codeSetup.h"
+#include "source/classes/hPlots/hPlot1D.h"
 
 using namespace std;
 using namespace clas12;
