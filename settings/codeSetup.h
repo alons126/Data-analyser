@@ -30,6 +30,7 @@ std::string WorkingDirectory = GetCurrentDirectory() + "/";
 //std::string plots_path = WorkingDirectory + "plots" + "/"; // new plots dir command
 //std::string plots_path = WorkingDirectory + "plots" + "/";
 //std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS" + "/";
+//std::string plots_path = WorkingDirectory + "plots_T5tot_NO_CUTS" + "/";
 std::string plots_path = WorkingDirectory + "plots" + "/";
 
 /* settings directory and directories */

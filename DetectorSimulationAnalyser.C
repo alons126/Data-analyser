@@ -2785,14 +2785,6 @@ void EventAnalyser() {
                 Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
 
-//                if (electrons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                } else if (electrons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                } else if (electrons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                }
-
                 Chi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
 
                 Vertex_Electron_Vx_CD->Fill(electrons[i]->par()->getVx());
@@ -2827,14 +2819,6 @@ void EventAnalyser() {
                 Beta_vs_P_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
                 Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-
-//                if (electrons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                } else if (electrons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                } else if (electrons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                }
 
                 Chi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
 
@@ -2877,14 +2861,6 @@ void EventAnalyser() {
                 Beta_vs_P_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
 
-//                if (protons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-//                } else if (protons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-//                } else if (protons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-//                }
-
                 Chi2_Proton_CD->Fill(protons[i]->par()->getChi2Pid());
 
                 Vertex_Proton_Vx_CD->Fill(protons[i]->par()->getVx());
@@ -2894,14 +2870,6 @@ void EventAnalyser() {
                 Beta_vs_P_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_Protons_Only_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-
-//                if (protons[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-//                } else if (protons[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-//                } else if (protons[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
-//                }
 
                 Chi2_Proton_FD->Fill(protons[i]->par()->getChi2Pid());
 
@@ -2948,26 +2916,10 @@ void EventAnalyser() {
                 Beta_vs_P_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
 
-//                if (Kplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                }
-
                 Chi2_Kplus_CD->Fill(Kplus[i]->par()->getChi2Pid());
             } else if (Kplus[i]->getRegion() == FD) {
                 Beta_vs_P_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-
-//                if (Kplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                }
 
                 Chi2_Kplus_FD->Fill(Kplus[i]->par()->getChi2Pid());
             }
@@ -2980,26 +2932,10 @@ void EventAnalyser() {
                 Beta_vs_P_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
 
-//                if (Kminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                }
-
                 Chi2_Kminus_CD->Fill(Kminus[i]->par()->getChi2Pid());
             } else if (Kminus[i]->getRegion() == FD) {
                 Beta_vs_P_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-
-//                if (Kminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                }
 
                 Chi2_Kminus_FD->Fill(Kminus[i]->par()->getChi2Pid());
             }
@@ -3012,26 +2948,10 @@ void EventAnalyser() {
                 Beta_vs_P_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
 
-//                if (piplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                }
-
                 Chi2_piplus_CD->Fill(piplus[i]->par()->getChi2Pid());
             } else if (piplus[i]->getRegion() == FD) {
                 Beta_vs_P_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-
-//                if (piplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                }
 
                 Chi2_piplus_FD->Fill(piplus[i]->par()->getChi2Pid());
             }
@@ -3044,26 +2964,10 @@ void EventAnalyser() {
                 Beta_vs_P_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
 
-//                if (piminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                }
-
                 Chi2_piminus_CD->Fill(piminus[i]->par()->getChi2Pid());
             } else if (piminus[i]->getRegion() == FD) {
                 Beta_vs_P_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-
-//                if (piminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_All_e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                }
 
                 Chi2_piminus_FD->Fill(piminus[i]->par()->getChi2Pid());
             }
@@ -3208,8 +3112,11 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Testing additional electron cuts">
+        /* Here we plot cut histograms:
+         * If cuts are turned off (apply_cuts == false) - we plot each cut parameter before and after the cut.
+         * If cuts are applied (apply_cuts == true), we plot the parameters for the 1e cut only */
 
-        //TODO: all these tests are NOT 2p or 1e2p (the're moved from below and here we have no constrant on protons.size) - redefine propely to 1e or add constrant on protons.size
+        //TODO: all these tests are NOT 2p or 1e2p (they were moved here from below and here we have no constraint on protons.size) - redefine propely to 1e or add constrant on protons.size
 
         TVector3 P_e_1e;
         P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
@@ -3324,14 +3231,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
 
-//                if (e->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
-//                } else if (e->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
-//                } else if (e->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
-//                }
-
                 theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
                 Theta_e_1e_CD->Fill(theta_e_1e_CD);
                 phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
@@ -3398,14 +3297,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_FD->Fill(P_e_FD, e->par()->getBeta());
                 Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
-
-//                if (e->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
-//                } else if (e->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
-//                } else if (e->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
-//                }
 
                 theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
                 Theta_e_1e_FD->Fill(theta_e_1e_FD);
@@ -3476,15 +3367,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
 
-//                if (p->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
-//                } else if (p->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
-//                } else if (p->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(p->getP(), p->par()->getBeta());
-//                }
-
-//                Chi2_Proton_1e_CD->Fill(p->par()->getChi2Pid() - (0.5561));
                 Chi2_Proton_1e_CD->Fill(p->par()->getChi2Pid());
 
                 Vertex_Proton_1e_Vx_CD->Fill(p->par()->getVx());
@@ -3495,15 +3377,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
 
-//                if (p->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
-//                } else if (p->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
-//                } else if (p->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(p->getP(), p->par()->getBeta());
-//                }
-
-//                Chi2_Proton_1e_FD->Fill(p->par()->getChi2Pid() - (-0.008108));
                 Chi2_Proton_1e_FD->Fill(p->par()->getChi2Pid());
 
                 Vertex_Proton_1e_Vx_FD->Fill(p->par()->getVx());
@@ -3550,14 +3423,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Kplus_Only_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
 
-//                if (Kplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                }
-
                 Chi2_Kplus_1e_CD->Fill(Kplus[i]->par()->getChi2Pid());
 
                 Vertex_Kplus_1e_Vx_CD->Fill(Kplus[i]->par()->getVx());
@@ -3567,14 +3432,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_1e_Kplus_Only_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-
-//                if (Kplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                } else if (Kplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
-//                }
 
                 Chi2_Kplus_1e_FD->Fill(Kplus[i]->par()->getChi2Pid());
 
@@ -3592,14 +3449,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Kminus_Only_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
 
-//                if (Kminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                }
-
                 Chi2_Kminus_1e_CD->Fill(Kminus[i]->par()->getChi2Pid());
 
                 Vertex_Kminus_1e_Vx_CD->Fill(Kminus[i]->par()->getVx());
@@ -3609,14 +3458,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_1e_Kminus_Only_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-
-//                if (Kminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                } else if (Kminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
-//                }
 
                 Chi2_Kminus_1e_FD->Fill(Kminus[i]->par()->getChi2Pid());
 
@@ -3634,32 +3475,15 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piplus_Only_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
 
-//                if (piplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                }
-
                 Chi2_piplus_1e_CD->Fill(piplus[i]->par()->getChi2Pid());
 
                 Vertex_piplus_1e_Vx_CD->Fill(piplus[i]->par()->getVx());
                 Vertex_piplus_1e_Vy_CD->Fill(piplus[i]->par()->getVy());
                 Vertex_piplus_1e_Vz_CD->Fill(piplus[i]->par()->getVz());
             } else if (piplus[i]->getRegion() == FD) {
-
                 Beta_vs_P_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_1e_piplus_Only_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-
-//                if (piplus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                } else if (piplus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
-//                }
 
                 Chi2_piplus_1e_FD->Fill(piplus[i]->par()->getChi2Pid());
 
@@ -3677,14 +3501,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piminus_Only_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
 
-//                if (piminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                }
-
                 Chi2_piminus_1e_CD->Fill(piminus[i]->par()->getChi2Pid());
 
                 Vertex_piminus_1e_Vx_CD->Fill(piminus[i]->par()->getVx());
@@ -3694,14 +3510,6 @@ void EventAnalyser() {
                 Beta_vs_P_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_1e_piminus_Only_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-
-//                if (piminus[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                } else if (piminus[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
-//                }
 
                 Chi2_piminus_1e_FD->Fill(piminus[i]->par()->getChi2Pid());
 
@@ -3744,26 +3552,25 @@ void EventAnalyser() {
         for (int i = 0; i < neutrals.size(); i++) {
             if (neutrals[i]->getRegion() == CD) {
                 Beta_vs_P_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-                Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
 
-//                if (neutrals[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                }
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_CD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                }
             } else if (neutrals[i]->getRegion() == FD) {
                 Beta_vs_P_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-                Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+//                Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
 
-//                if (neutrals[i]->par()->getCharge() == 1) {
-//                    Beta_vs_P_positive_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == 0) {
-//                    Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                } else if (neutrals[i]->par()->getCharge() == -1) {
-//                    Beta_vs_P_negative_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
-//                }
+                if (neutrals[i]->par()->getCharge() == 1) {
+                    Beta_vs_P_positive_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == 0) {
+                    Beta_vs_P_neutral_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                } else if (neutrals[i]->par()->getCharge() == -1) {
+                    Beta_vs_P_negative_particles_1e_FD->Fill(neutrals[i]->getP(), neutrals[i]->par()->getBeta());
+                }
             }
         } // end of loop over Kplus vector
         //</editor-fold>

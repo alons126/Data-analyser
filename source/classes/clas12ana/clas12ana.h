@@ -12,8 +12,6 @@
 using namespace std;
 using namespace clas12;
 
-/* to be used to restore my clas12ana changes */
-
 struct cutpar {
     string id;
     vector<double> par = {}; //pi- parameters
@@ -737,24 +735,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     if (electrons_det.size() == 1) //good trigger electron
     {
 
-
-
-//        int START_1e = particles.size();
-//        cout << "START_1e: particles.size() = " << START_1e << "\n";
-//        cout << "START_1e: electrons.size() = " << electrons.size() << "\n";
-//        cout << "START_1e: protons.size() = " << protons.size() << "\n";
-//        cout << "START_1e: deuterons.size() = " << deuterons.size() << "\n";
-//        cout << "START_1e: neutrals.size() = " << neutrals.size() << "\n";
-//        cout << "START_1e: piplus.size() = " << piplus.size() << "\n";
-//        cout << "START_1e: piminus.size() = " << piminus.size() << "\n";
-//        cout << "START_1e: kplus.size() = " << kplus.size() << "\n";
-//        cout << "START_1e: kminus.size() = " << kminus.size() << "\n";
-//        cout << "START_1e: otherpart.size() = " << otherpart.size() << "\n\n";
-
-
-
-
-
         if (debug_plots) {
             fillDCdebug(electrons_det[0], dc_hit_map_a);
         }
@@ -773,27 +753,8 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             }
 
             if ((*p)->par()->getCharge() == 0) { //neutrals don't follow same cuts
-//                cout << (*p)->par()->getPid() << "\n";
                 setByPid(*p); // My fix
-                ++p;
-                //                if ((*p)->par()->getPid() == 0 || (*p)->par()->getPid() == 2112) { // My fix
-//                    neutrals.push_back(*p);
-//                } else {                                                           // My fix
-//                    otherpart.push_back(*p);
-//                }
-
-//                continue;
-
-
-
-
-//                if ((*p)->par()->getPid() == 111) { // My addition
-//                    pizero.push_back(*p);
-//                } else if ((*p)->par()->getPid() == 2112) { // My addition
-//                    neutrons.push_back(*p);
-//                } else if ((*p)->par()->getPid() == 0) { // My addition
-//                    neutrals.push_back(*p);
-//                }
+                ++p; // My fix
 
 //                neutrals.push_back(*p); // Justin's original/
             } else {
@@ -844,13 +805,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                 {
                     setByPid(*p); // Justin's original
 
-//                    if ((*p)->par()->getPid() != 11) {
-////                        setByPid(*p); // Justin's original
-//                    }
-
-
-//                    setByPid(*p); // Justin's original
-
                     if (debug_plots) {
                         if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11) {
                             el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
@@ -871,60 +825,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                 }
             }
         }// particle loop
-
-
-
-
-
-//////////////////////////////////////////////////
-//        cout << "END_1e: electrons_det.size() = " << electrons_det.size() << "\n";
-//        cout << "END_1e: protons_det.size() = " << protons_det.size() << "\n";
-//        cout << "END_1e: deuterons_det.size() = " << deuterons_det.size() << "\n";
-//        cout << "END_1e: piplus_det.size() = " << piplus_det.size() << "\n";
-//        cout << "END_1e: piminus_det.size() = " << piminus_det.size() << "\n";
-//        cout << "END_1e: pizero_det.size() = " << pizero_det.size() << "\n";
-//        cout << "END_1e: Kplus_det.size() = " << Kplus_det.size() << "\n";
-//        cout << "END_1e: Kminus_det.size() = " << Kminus_det.size() << "\n";
-//        cout << "END_1e: Kzero_det.size() = " << Kzero_det.size() << "\n";
-//        cout << "END_1e: ph_det.size() = " << ph_det.size() << "\n";
-//        cout << "END_1e: zero_det.size() = " << zero_det.size() << "\n";
-//        cout << "END_1e: neutrons_det.size() = " << neutrons_det.size() << "\n\n";
-//
-//        int END_1e = particles.size();
-//        cout << "END_1eEND_1eEND_1e: particles.size() = " << END_1e << "\n";
-//        cout << "END_1e: electrons.size() = " << electrons.size() << "\n";
-//        cout << "END_1e: protons.size() = " << protons.size() << "\n";
-//        cout << "END_1e: deuterons.size() = " << deuterons.size() << "\n";
-//        cout << "END_1e: neutrals.size() = " << neutrals.size() << "\n";
-//        cout << "END_1e: piplus.size() = " << piplus.size() << "\n";
-//        cout << "END_1e: piminus.size() = " << piminus.size() << "\n";
-//        cout << "END_1e: kplus.size() = " << kplus.size() << "\n";
-//        cout << "END_1e: kminus.size() = " << kminus.size() << "\n";
-//        cout << "END_1e: otherpart.size() = " << otherpart.size() << "\n\n";
-
-
     }// good electron loop
-
-
-//    int END = particles.size();
-//
-//    if (START != END) {
-//        cout << "START: particles.size() = " << START << "\n";
-//        cout << "END: particles.size() = " << END << "\n\n";
-//    }
-//    cout << "END: particles.size() = " << END << "\n";
-//    cout << "END: electrons.size() = " << electrons.size() << "\n";
-//    cout << "END: protons.size() = " << protons.size() << "\n";
-//    cout << "END: deuterons.size() = " << deuterons.size() << "\n";
-//    cout << "END: neutrals.size() = " << neutrals.size() << "\n";
-//    cout << "END: piplus.size() = " << piplus.size() << "\n";
-//    cout << "END: piminus.size() = " << piminus.size() << "\n";
-//    cout << "END: kplus.size() = " << kplus.size() << "\n";
-//    cout << "END: kminus.size() = " << kminus.size() << "\n";
-//    cout << "END: otherpart.size() = " << otherpart.size() << "\n\n";
-
-
-
 
     event_mult = (piplus.size() + piminus.size() + kplus.size() + kminus.size() + deuterons.size());
 }
