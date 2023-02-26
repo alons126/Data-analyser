@@ -739,6 +739,12 @@ void EventAnalyser() {
     if (apply_cuts == true) { Vertex_boundary = 7.5; }
     if (apply_cuts == true) { dV_boundary = 7.5; }
 
+    /* Beta vs. P plots */
+    double Beta_boundary = 3;
+    double P_boundary = beamE * 1.425;
+    if (apply_cuts == true) { Beta_boundary = 1.1; }
+    if (apply_cuts == true) { P_boundary = beamE * 1.1; }
+
     //<editor-fold desc="Theta histograms">
 
     //<editor-fold desc="Theta histograms (2p)">
@@ -1288,64 +1294,64 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P for all particles (1e cut)">
     TH2D *Beta_vs_P_1e_CD = new TH2D("#beta vs. P (All Particles, 1e only, CD)", "#beta vs. P (All Particles, 1e Cut, CD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 3);
+                                     250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_1e_FD = new TH2D("#beta vs. P (All Particles, 1e only, FD)", "#beta vs. P (All Particles, 1e Cut, FD);P [GeV];#beta",
-                                     250, 0, beamE * 1.425, 250, 0, 3);
+                                     250, 0, beamE * 1.1, 250, 0, 1.7);
 
     TH2D *Beta_vs_P_1e_Electrons_Only_CD = new TH2D("#beta vs. P (Electrons Only, 1e only, CD)", "#beta vs. P (Electrons Only, 1e Cut, CD);P [GeV];#beta",
-                                                    250, 0, beamE * 1.425, 250, 0.5, 3);
+                                                    250, 0, beamE * 1.425, 250, 0.5, 1.7);
     TH2D *Beta_vs_P_1e_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, 1e only, FD)", "#beta vs. P (Electrons Only, 1e Cut, FD);P [GeV];#beta",
-                                                    250, 0, beamE * 1.425, 250, 0.5, 3);
+                                                    250, 0, beamE * 1.425, 250, 0.5, 1.7);
 
     TH2D *Beta_vs_P_1e_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 1e only, CD)", "#beta vs. P (Protons Only, 1e Cut, CD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
+                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 1e only, FD)", "#beta vs. P (Protons Only, 1e Cut, FD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
+                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
 
     TH2D *Beta_vs_P_1e_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, 1e only, CD)", "#beta vs. P (Neutrons Only, 1e Cut, CD);P [GeV];#beta",
-                                                   250, 0, beamE * 1.425, 250, 0, 3);
+                                                   250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, 1e only, FD)", "#beta vs. P (Neutrons Only, 1e Cut, FD);P [GeV];#beta",
-                                                   250, 0, beamE * 1.425, 250, 0, 3);
+                                                   250, 0, P_boundary, 250, 0, Beta_boundary);
 
     TH2D *Beta_vs_P_1e_piplus_Only_CD = new TH2D("#beta vs. P (#pi^{+} Only, 1e only, CD)", "#beta vs. P (#pi^{+} Only, 1e Cut, CD);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
+                                                 250, 0, P_boundary, 250, 0, 1.7);
     TH2D *Beta_vs_P_1e_piplus_Only_FD = new TH2D("#beta vs. P (#pi^{+} Only, 1e only, FD)", "#beta vs. P (#pi^{+} Only, 1e Cut, FD);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
+                                                 250, 0, P_boundary, 250, 0, 1.7);
 
     TH2D *Beta_vs_P_1e_pizero_Only_CD = new TH2D("#beta vs. P (#pi^{0} Only, 1e only, CD)", "#beta vs. P (#pi^{0} Only, 1e Cut, CD);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
+                                                 250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_pizero_Only_FD = new TH2D("#beta vs. P (#pi^{0} Only, 1e only, FD)", "#beta vs. P (#pi^{0} Only, 1e Cut, FD);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
+                                                 250, 0, P_boundary, 250, 0, Beta_boundary);
 
     TH2D *Beta_vs_P_1e_piminus_Only_CD = new TH2D("#beta vs. P (#pi^{-} Only, 1e only, CD)", "#beta vs. P (#pi^{-} Only, 1e Cut, CD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
+                                                  250, 0, P_boundary, 250, 0, 1.7);
     TH2D *Beta_vs_P_1e_piminus_Only_FD = new TH2D("#beta vs. P (#pi^{-} Only, 1e only, FD)", "#beta vs. P (#pi^{-} Only, 1e Cut, FD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.425, 250, 0, 3);
+                                                  250, 0, P_boundary, 250, 0, 1.7);
 
     TH2D *Beta_vs_P_1e_Kplus_Only_CD = new TH2D("#beta vs. P (K^{+} Only, 1e only, CD)", "#beta vs. P (K^{+} Only, 1e Cut, CD);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
+                                                250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Kplus_Only_FD = new TH2D("#beta vs. P (K^{+} Only, 1e only, FD)", "#beta vs. P (K^{+} Only, 1e Cut, FD);P [GeV];#beta",
-                                                250, 0, beamE * 1.425, 250, 0, 3);
+                                                250, 0, P_boundary, 250, 0, Beta_boundary);
 
     TH2D *Beta_vs_P_1e_Kminus_Only_CD = new TH2D("#beta vs. P (K^{-} Only, 1e only, CD)", "#beta vs. P (K^{-} Only, 1e Cut, CD);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
+                                                 250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Kminus_Only_FD = new TH2D("#beta vs. P (K^{-} Only, 1e only, FD)", "#beta vs. P (K^{-} Only, 1e Cut, FD);P [GeV];#beta",
-                                                 250, 0, beamE * 1.425, 250, 0, 3);
+                                                 250, 0, P_boundary, 250, 0, Beta_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1e cut)">
     TH2D *Beta_vs_P_positive_particles_1e_CD = new TH2D("#beta vs. P & q = +1 (1e cut, CD)", "#beta vs. P for all particles with q = +1 (1e cut, CD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_positive_particles_1e_FD = new TH2D("#beta vs. P & q = +1 (1e cut, FD)", "#beta vs. P for all particles with q = +1 (1e cut, FD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_neutral_particles_1e_CD = new TH2D("#beta vs. P & q = 0 (1e cut, CD)", "#beta vs. P for all particles with q = 0 (1e cut, CD);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_neutral_particles_1e_FD = new TH2D("#beta vs. P & q = 0 (1e cut, FD)", "#beta vs. P for all particles with q = 0 (1e cut, FD);P [GeV];#beta",
-                                                       250, 0, beamE * 1.425, 250, 0, 3);
+                                                       250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_negative_particles_1e_CD = new TH2D("#beta vs. P & q = -1 (1e cut, CD)", "#beta vs. P for all particles with q = -1 (1e cut, CD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_negative_particles_1e_FD = new TH2D("#beta vs. P & q = -1 (1e cut, FD)", "#beta vs. P for all particles with q = -1 (1e cut, FD);P [GeV];#beta",
-                                                        250, 0, beamE * 1.425, 250, 0, 3);
+                                                        250, 0, beamE * 1.1, 250, 0, 1.7);
     //</editor-fold>
 
     //</editor-fold>
@@ -1366,9 +1372,9 @@ void EventAnalyser() {
     string Beta_vs_P_2p_Electrons_Only_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_Electrons_Only_FD_Dir = Beta_VS_P_2p_Directory;
 
     TH2D *Beta_vs_P_2p_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 2p, CD)", "#beta vs. P (Protons Only, 2p, CD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
+                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_2p_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 2p, FD)", "#beta vs. P (Protons Only, 2p, FD);P [GeV];#beta",
-                                                  250, 0, beamE * 1.1, 250, 0, 1.1);
+                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
     string Beta_vs_P_2p_Protons_Only_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_Protons_Only_FD_Dir = Beta_VS_P_2p_Directory;
     //</editor-fold>
 
@@ -1410,9 +1416,9 @@ void EventAnalyser() {
 //    string Beta_vs_P_MicroBooNE_BC_Electrons_Only_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_Electrons_Only_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
 //
 //    TH2D *Beta_vs_P_MicroBooNE_BC_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-BC, CD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, CD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, CD);P [GeV];#beta", 250, 0, P_boundary, 250, 0, Beta_boundary);
 //    TH2D *Beta_vs_P_MicroBooNE_BC_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-BC, FD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, FD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-BC, FD);P [GeV];#beta", 250, 0, P_boundary, 250, 0, Beta_boundary);
 //    string Beta_vs_P_MicroBooNE_BC_Protons_Only_CD_Dir = Beta_VS_P_MicroBooNE_BC_Directory, Beta_vs_P_MicroBooNE_BC_Protons_Only_FD_Dir = Beta_VS_P_MicroBooNE_BC_Directory;
     //</editor-fold>
 
@@ -1462,9 +1468,9 @@ void EventAnalyser() {
 //    string Beta_vs_P_MicroBooNE_AC_Electrons_Only_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_Electrons_Only_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
 //
 //    TH2D *Beta_vs_P_MicroBooNE_AC_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-AC, CD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, CD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, CD);P [GeV];#beta", 250, 0, P_boundary, 250, 0, Beta_boundary);
 //    TH2D *Beta_vs_P_MicroBooNE_AC_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, MicroBooNE-AC, FD)",
-//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, FD);P [GeV];#beta", 250, 0, beamE * 1.1, 250, 0, 1.1);
+//                                                             "#beta vs. P (Protons Only, MicroBooNE-AC, FD);P [GeV];#beta", 250, 0, P_boundary, 250, 0, Beta_boundary);
 //    string Beta_vs_P_MicroBooNE_AC_Protons_Only_CD_Dir = Beta_VS_P_MicroBooNE_AC_Directory, Beta_vs_P_MicroBooNE_AC_Protons_Only_FD_Dir = Beta_VS_P_MicroBooNE_AC_Directory;
     //</editor-fold>
 
@@ -2734,45 +2740,6 @@ void EventAnalyser() {
 
         /* Total number of particles in event (= Nf) */
         Nf = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nn + No;
-
-
-
-//        if (Nf != 0) {
-//            cout << "Nf = " << Nf << "\n";
-//            cout << "Ne = " << Ne << "\n";
-//            cout << "Np = " << Np << "\n";
-//            cout << "Nd = " << Nd << "\n";
-//            cout << "Nn = " << Nn << "\n";
-//            cout << "Npip = " << Npip << "\n";
-//            cout << "Npim = " << Npim << "\n";
-//            cout << "Nkp = " << Nkp << "\n";
-//            cout << "Nkm = " << Nkm << "\n";
-//            cout << "No = " << No << "\n\n\n\n";
-//        }
-
-
-
-//        int Nf = neutrons.size() + protons.size() + Kplus.size() + Kminus.size() + piplus.size() + piminus.size() + pizero.size() + electrons.size() +
-//                   deuterons.size() + neutrals.size() + otherpart.size();
-
-
-//        auto AllParticles = c12->getDetParticles();
-//        auto protons = c12->getByID(2212);   // Protons
-//        auto Kplus = c12->getByID(321);      // K+
-//        auto Kminus = c12->getByID(-321);    // K-
-//        auto piplus = c12->getByID(211);     // pi+
-//        auto piminus = c12->getByID(-211);   // pi-
-//        auto electrons = c12->getByID(11);   // Electrons
-////        auto deuterons = clasAna.getByPid(45);   // Deuterons
-////        auto neutrals = clasAna.getByPid(0);     // Neutrons
-////        auto otherpart = clasAna.getByPid(311);  // Other particles
-//
-//        /* Number of specific particles in event */
-//        int Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
-//
-//        /* Total number of particles in event (= Nf) */
-//        int Nf = AllParticles.size();
-
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1,2,3,4 = type = qel, mec, res, dis

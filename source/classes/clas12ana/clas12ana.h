@@ -12,6 +12,8 @@
 using namespace std;
 using namespace clas12;
 
+/* to be used to restore my clas12ana changes */
+
 struct cutpar {
     string id;
     vector<double> par = {}; //pi- parameters
