@@ -95,7 +95,7 @@ std::string to_string_with_precision(const T a_value, const int n = 2) {
 }
 //</editor-fold>
 
-//<editor-fold desc="TFolderAdder function">
+//<editor-fold desc="TFolderAdder function (regular)">
 void TFolderAdder(TFolder *Histogram_List_Folder, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder) {
     if (Plots_Daughter_Folder != "") {
         if (Plots_Daughter_Folder.find_first_of('/') != 0) {

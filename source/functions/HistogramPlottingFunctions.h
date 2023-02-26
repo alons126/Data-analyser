@@ -912,6 +912,60 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 //                                                                   histPlotter2D function                                                                            //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// histPlotter2D function (regular) -------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="histPlotter2D function (regular)">
+//TODO: add this to histogram class
+void histPlotter2D(TCanvas *Histogram1DCanvas,
+                   TH2D *Histogram2D,
+                   double titleSize,
+                   bool centerTitle,
+                   double labelSizex,
+                   double labelSizey,
+                   double labelSizez,
+                   TList *Histogram_list,
+                   bool zlogScalePlot,
+                   string Histogram1DSaveNameDir,
+                   string Histogram1DSaveName) {
+
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
+    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    Histogram2D->SetTitleSize(titleSize, "xyz");
+    Histogram2D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram2D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram2D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram2D->GetZaxis()->SetLabelSize(labelSizez);
+    Histogram_list->Add(Histogram2D);
+
+    if (Histogram2D->Integral() == 0.) {
+        Histogram2D->SetStats(0);
+        TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+        displayText->SetTextSize(diplayTextSize);
+        displayText->SetFillColor(0);
+        displayText->SetTextAlign(12);
+        displayText->AddText("Empty histogram");
+        Histogram2D->Draw();
+        displayText->Draw();
+    } else if (Histogram2D->Integral() != 0.) {
+        Histogram2D->Draw("colz");
+    }
+
+    if (zlogScalePlot == true) {
+        Histogram1DCanvas->SetLogz(1);
+    }
+
+    gStyle->SetStatX(0.87);
+    gStyle->SetStatY(0.875);
+    Histogram1DCanvas->SaveAs((Histogram1DSaveNameDir + Histogram1DSaveName + ".png").c_str());
+    gStyle->SetStatX(DefStatX);
+    gStyle->SetStatY(DefStatY);
+    Histogram1DCanvas->Clear();
+}
+//</editor-fold>
+
 // histPlotter2D function (Beta vs. P plots, all particles) -------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter2D function (Beta vs. P plots, all particles)">
