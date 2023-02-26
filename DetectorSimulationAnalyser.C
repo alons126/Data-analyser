@@ -183,39 +183,12 @@ void EventAnalyser() {
     system(("mkdir -p " + Plots_Folder).c_str()); // clear old stuff in Parent_Folder
     system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
 
-    //<editor-fold desc="Beta vs. p plots directories">
-    bool create_Beta_vs_P_Dir = true;
-    string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
-    TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
-    string Beta_VS_P_Daughter_Folders[] = {"", "01_All_e", "01_All_e/By_charge", "02_1e_cut", "02_1e_cut/By_charge", "03_MicroBooNE",
-                                           "03_MicroBooNE/Before_cuts", "03_MicroBooNE/Before_cuts/By_charge", "03_MicroBooNE/After_cuts",
-                                           "03_MicroBooNE/After_cuts/By_charge", "04_2p", "04_2p/By_charge"};
-
-    for (string folders_name: Beta_VS_P_Daughter_Folders) {
-        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
-    }
-
-    plots->Add(Beta_vs_P_Folder);
-
-    string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
-    string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
-
-    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
-    string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
-
-    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
-    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[7] + "/";
-    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
-    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[9] + "/";
-
-    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
-    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[11] + "/";
-    //</editor-fold>
+    //<editor-fold desc="Cut parameters plots directories">
 
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
-    string Chi2_Parent_Directory = "Chi2_plots";
+    string Chi2_Parent_Directory = "Cut_parameters_plots/Chi2_plots";
+//    string Chi2_Parent_Directory = "Chi2_plots";
     TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
     string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
                                       "05_2p"};
@@ -241,7 +214,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots directories">
     bool create_Vertex_Dir = true;
-    string Vertex_Parent_Directory = "Vertex_plots";
+    string Vertex_Parent_Directory = "Cut_parameters_plots/Vertex_plots";
+//    string Vertex_Parent_Directory = "Vertex_plots";
     TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
     string Vertex_Daughter_Folders[] = {"", "02_dV_plots/02_1e2p", "02_dV_plots/03_2p", "02_dV_plots/01_MicroBooNE",
                                         "02_dV_plots/01_MicroBooNE/BC-AC_cut_tests", "01_Vertex_components_plots/1e_cut/01_Electrons",
@@ -282,6 +256,142 @@ void EventAnalyser() {
     string Vertex_piminus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[10] + "/";
     string Vertex_piminus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[10] + "/";
     string Vertex_piminus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[10] + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Momentum plots directories">
+    bool create_Momentum_Dir = true;
+    string Momentum_Parent_Directory = "Cut_parameters_plots/Momentum_plots";
+//    string Momentum_Parent_Directory = "Momentum_plots";
+    TFolder *Momentum_Folder = new TFolder(Momentum_Parent_Directory.c_str(), Momentum_Parent_Directory.c_str());
+    string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
+
+    for (string folders_name: Momentum_Daughter_Folders) {
+        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(Momentum_Folder, Momentum_Parent_Directory, folders_name);
+    }
+
+    plots->Add(Momentum_Folder);
+
+    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
+    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
+    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
+    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Fiducial histograms plots directories">
+    bool create_fiducial_Dir = true;
+    string fiducial_Parent_Directory = "Cut_parameters_plots/Fiducial_plots";
+//    string fiducial_Parent_Directory = "Fiducial_plots";
+    TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
+    string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/PCAL", "2p", "2p/PCAL"};
+
+    for (string folders_name: fiducial_Daughter_Folders) {
+        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name);
+    }
+
+    plots->Add(fiducial_Folder);
+
+    //TODO: add fiducial plots by reaction?
+    string fiducial_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
+
+    // 1e2p - i.e. plots before all other cuts
+    // before/after cuts - i.e. plots before/after fiducial cuts
+    string fiducial_plots_1e_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+    string fiducial_plots_1e_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+
+    // 2p - i.e. plots after fiducial and all other cuts
+    string fiducial_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[4] + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Sampling Fraction (SF) plots directories">
+    bool create_SF_Dir = true;
+    string SF_Parent_Directory = "Cut_parameters_plots/SF_plots";
+//    string SF_Parent_Directory = "SF_plots";
+    TFolder *SF_Folder = new TFolder(SF_Parent_Directory.c_str(), SF_Parent_Directory.c_str());
+    string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
+
+    for (string folders_name: SF_Daughter_Folders) {
+        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name);
+    }
+
+    plots->Add(SF_Folder);
+
+    string SF_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
+
+    // 1e2p - i.e. plots before all other cuts
+    // before cuts - i.e. plots before SF cuts
+    string SF_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
+    string SF_VS_P_e_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
+
+    // after cuts - i.e. plots after SF cuts
+    string SF_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
+    string SF_VS_P_e_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
+
+    // 2p - i.e. plots after SF and all other cuts
+    string SF_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[5] + "/";
+    string SF_VS_P_e_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[6] + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Number of Photo-electrons (nphe) plots directories">
+    bool create_nphe_Dir = true;
+    string nphe_Parent_Directory = "Cut_parameters_plots/nphe_plots";
+//    string nphe_Parent_Directory = "nphe_plots";
+    TFolder *nphe_Folder = new TFolder(nphe_Parent_Directory.c_str(), nphe_Parent_Directory.c_str());
+    string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
+
+    for (string folders_name: nphe_Daughter_Folders) {
+        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(nphe_Folder, nphe_Parent_Directory, folders_name);
+    }
+
+    plots->Add(nphe_Folder);
+
+    //TODO: add nphe plots by reaction
+    string nphe_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/";
+
+    // 1e2p - i.e. plots before all other cuts
+    // before cuts - i.e. plots before nphe cuts
+    string nphe_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
+
+    // after cuts - i.e. plots after nphe cuts
+    string nphe_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
+
+    // 2p - i.e. plots after nphe and all other cuts
+    string nphe_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[2] + "/";
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Beta vs. p plots directories">
+    bool create_Beta_vs_P_Dir = true;
+    string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
+    TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
+    string Beta_VS_P_Daughter_Folders[] = {"", "01_All_e", "01_All_e/By_charge", "02_1e_cut", "02_1e_cut/By_charge", "03_MicroBooNE",
+                                           "03_MicroBooNE/Before_cuts", "03_MicroBooNE/Before_cuts/By_charge", "03_MicroBooNE/After_cuts",
+                                           "03_MicroBooNE/After_cuts/By_charge", "04_2p", "04_2p/By_charge"};
+
+    for (string folders_name: Beta_VS_P_Daughter_Folders) {
+        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
+    }
+
+    plots->Add(Beta_vs_P_Folder);
+
+    string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
+    string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
+
+    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
+    string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
+
+    string Beta_VS_P_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_BC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[7] + "/";
+    string Beta_VS_P_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
+    string Beta_VS_P_by_charge_MicroBooNE_AC_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[9] + "/";
+
+    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[10] + "/";
+    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[11] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Theta_e plots directories">
@@ -377,25 +487,6 @@ void EventAnalyser() {
     string Q2_Only_1e_cut_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[2] + "/";
     //</editor-fold>
 
-    //<editor-fold desc="Momentum plots directories">
-    bool create_Momentum_Dir = true;
-    string Momentum_Parent_Directory = "Momentum_plots";
-    TFolder *Momentum_Folder = new TFolder(Momentum_Parent_Directory.c_str(), Momentum_Parent_Directory.c_str());
-    string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
-
-    for (string folders_name: Momentum_Daughter_Folders) {
-        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Momentum_Folder, Momentum_Parent_Directory, folders_name);
-    }
-
-    plots->Add(Momentum_Folder);
-
-    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
-    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
-    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
-    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
-    //</editor-fold>
-
     //<editor-fold desc="E_e plots directories">
     bool create_E_e_Dir = true;
     string E_e_Parent_Directory = "Energy_plots";
@@ -432,87 +523,6 @@ void EventAnalyser() {
     string E_e_VS_Theta_e_2p_MEC_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[4] + "/";
     string E_e_VS_Theta_e_2p_RES_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[4] + "/";
     string E_e_VS_Theta_e_2p_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[4] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Sampling Fraction (SF) plots directories">
-    bool create_SF_Dir = true;
-    string SF_Parent_Directory = "SF_plots";
-    TFolder *SF_Folder = new TFolder(SF_Parent_Directory.c_str(), SF_Parent_Directory.c_str());
-    string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
-
-    for (string folders_name: SF_Daughter_Folders) {
-        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name);
-    }
-
-    plots->Add(SF_Folder);
-
-    string SF_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
-
-    // 1e2p - i.e. plots before all other cuts
-    // before cuts - i.e. plots before SF cuts
-    string SF_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
-    string SF_VS_P_e_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
-
-    // after cuts - i.e. plots after SF cuts
-    string SF_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
-    string SF_VS_P_e_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
-
-    // 2p - i.e. plots after SF and all other cuts
-    string SF_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[5] + "/";
-    string SF_VS_P_e_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[6] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Number of Photo-electrons (nphe) plots directories">
-    bool create_nphe_Dir = true;
-    string nphe_Parent_Directory = "nphe_plots";
-    TFolder *nphe_Folder = new TFolder(nphe_Parent_Directory.c_str(), nphe_Parent_Directory.c_str());
-    string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
-
-    for (string folders_name: nphe_Daughter_Folders) {
-        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(nphe_Folder, nphe_Parent_Directory, folders_name);
-    }
-
-    plots->Add(nphe_Folder);
-
-    //TODO: add nphe plots by reaction
-    string nphe_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/";
-
-    // 1e2p - i.e. plots before all other cuts
-    // before cuts - i.e. plots before nphe cuts
-    string nphe_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
-
-    // after cuts - i.e. plots after nphe cuts
-    string nphe_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
-
-    // 2p - i.e. plots after nphe and all other cuts
-    string nphe_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[2] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Fiducial histograms plots directories">
-    bool create_fiducial_Dir = true;
-    string fiducial_Parent_Directory = "Fiducial_plots";
-    TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
-    string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/PCAL", "2p", "2p/PCAL"};
-
-    for (string folders_name: fiducial_Daughter_Folders) {
-        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name);
-    }
-
-    plots->Add(fiducial_Folder);
-
-    //TODO: add fiducial plots by reaction?
-    string fiducial_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
-
-    // 1e2p - i.e. plots before all other cuts
-    // before/after cuts - i.e. plots before/after fiducial cuts
-    string fiducial_plots_1e_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-
-    // 2p - i.e. plots after fiducial and all other cuts
-    string fiducial_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[4] + "/";
     //</editor-fold>
 
     //<editor-fold desc="ETrans plots directories">
@@ -579,7 +589,8 @@ void EventAnalyser() {
 
     bool Vertex_plots = true;
 
-    bool Angle_plots = false, Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots = true;
+    bool Theta_e_plots = true, Phi_e_plots = true;
     if (Angle_plots == false) { Theta_e_plots = Phi_e_plots = false; }
 
     bool Q2_plots = true;
@@ -594,7 +605,8 @@ void EventAnalyser() {
 
     bool fiducial_plots = true;
 
-    bool ETrans_plots = false, ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+    bool ETrans_plots = false;
+    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
     if (ETrans_plots == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
 
     bool Ecal_plots = false, other_E_cal_plots = false;
@@ -1964,52 +1976,52 @@ void EventAnalyser() {
     TH1D *Theta_e_FD = new TH1D("#theta_{e} (no #(e) cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string Theta_e_CD_Dir = Theta_e_All_e_Directory, Theta_e_FD_Dir = Theta_e_All_e_Directory;
 
-    TH1D *Theta_e_1e_CD = new TH1D("#theta_{e} (1e Only Cut, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e_FD = new TH1D("#theta_{e} (1e Only Cut, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_1e_CD = new TH1D("#theta_{e} (1e Only Cut, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e_FD = new TH1D("#theta_{e} (1e Only Cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string Theta_e_1e_CD_Dir = Theta_e_Only_1e_cut_Directory, Theta_e_1e_FD_Dir = Theta_e_Only_1e_cut_Directory;
 
-    TH1D *Theta_e_1e2X_CD = new TH1D("#theta_{e} for 1e2X (All int., CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2X_QEL_CD = new TH1D("#theta_{e} for 1e2X (QEL Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2X_MEC_CD = new TH1D("#theta_{e} for 1e2X (MEC Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2X_RES_CD = new TH1D("#theta_{e} for 1e2X (RES Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2X_DIS_CD = new TH1D("#theta_{e} for 1e2X (DIS Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2X_FD = new TH1D("#theta_{e} for 1e2X (All int., FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2X_QEL_FD = new TH1D("#theta_{e} for 1e2X (QEL Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2X_MEC_FD = new TH1D("#theta_{e} for 1e2X (MEC Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2X_RES_FD = new TH1D("#theta_{e} for 1e2X (RES Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2X_DIS_FD = new TH1D("#theta_{e} for 1e2X (DIS Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_1e2X_CD = new TH1D("#theta_{e} for 1e2X (All int., CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2X_QEL_CD = new TH1D("#theta_{e} for 1e2X (QEL Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2X_MEC_CD = new TH1D("#theta_{e} for 1e2X (MEC Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2X_RES_CD = new TH1D("#theta_{e} for 1e2X (RES Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2X_DIS_CD = new TH1D("#theta_{e} for 1e2X (DIS Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2X_FD = new TH1D("#theta_{e} for 1e2X (All int., FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2X_QEL_FD = new TH1D("#theta_{e} for 1e2X (QEL Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2X_MEC_FD = new TH1D("#theta_{e} for 1e2X (MEC Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2X_RES_FD = new TH1D("#theta_{e} for 1e2X (RES Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2X_DIS_FD = new TH1D("#theta_{e} for 1e2X (DIS Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string Theta_e_1e2X_CD_Dir = Theta_e_Only_1e2X_Directory, Theta_e_1e2X_FD_Dir = Theta_e_Only_1e2X_Directory;
     string Theta_e_1e2X_QEL_CD_Dir = Theta_e_Only_1e2X_QEL_Directory, Theta_e_1e2X_QEL_FD_Dir = Theta_e_Only_1e2X_QEL_Directory;
     string Theta_e_1e2X_MEC_CD_Dir = Theta_e_Only_1e2X_MEC_Directory, Theta_e_1e2X_MEC_FD_Dir = Theta_e_Only_1e2X_MEC_Directory;
     string Theta_e_1e2X_RES_CD_Dir = Theta_e_Only_1e2X_RES_Directory, Theta_e_1e2X_RES_FD_Dir = Theta_e_Only_1e2X_RES_Directory;
     string Theta_e_1e2X_DIS_CD_Dir = Theta_e_Only_1e2X_DIS_Directory, Theta_e_1e2X_DIS_FD_Dir = Theta_e_Only_1e2X_DIS_Directory;
 
-    TH1D *Theta_e_1e2p_CD = new TH1D("#theta_{e} 1e2p (All int.,CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2p_QEL_CD = new TH1D("#theta_{e} for 1e2p (QEL Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2p_MEC_CD = new TH1D("#theta_{e} for 1e2p (MEC Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2p_RES_CD = new TH1D("#theta_{e} for 1e2p (RES Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2p_DIS_CD = new TH1D("#theta_{e} for 1e2p (DIS Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_1e2p_FD = new TH1D("#theta_{e} 1e2p (All int.,FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2p_QEL_FD = new TH1D("#theta_{e} for 1e2p (QEL Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2p_MEC_FD = new TH1D("#theta_{e} for 1e2p (MEC Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2p_RES_FD = new TH1D("#theta_{e} for 1e2p (RES Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_1e2p_DIS_FD = new TH1D("#theta_{e} for 1e2p (DIS Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_1e2p_CD = new TH1D("#theta_{e} 1e2p (All int.,CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2p_QEL_CD = new TH1D("#theta_{e} for 1e2p (QEL Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2p_MEC_CD = new TH1D("#theta_{e} for 1e2p (MEC Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2p_RES_CD = new TH1D("#theta_{e} for 1e2p (RES Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2p_DIS_CD = new TH1D("#theta_{e} for 1e2p (DIS Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_1e2p_FD = new TH1D("#theta_{e} 1e2p (All int.,FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2p_QEL_FD = new TH1D("#theta_{e} for 1e2p (QEL Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2p_MEC_FD = new TH1D("#theta_{e} for 1e2p (MEC Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2p_RES_FD = new TH1D("#theta_{e} for 1e2p (RES Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_1e2p_DIS_FD = new TH1D("#theta_{e} for 1e2p (DIS Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string Theta_e_1e2p_CD_Dir = Theta_e_Only_1e2p_Directory, Theta_e_1e2p_FD_Dir = Theta_e_Only_1e2p_Directory;
     string Theta_e_1e2p_QEL_CD_Dir = Theta_e_Only_1e2p_QEL_Directory, Theta_e_1e2p_QEL_FD_Dir = Theta_e_Only_1e2p_QEL_Directory;
     string Theta_e_1e2p_MEC_CD_Dir = Theta_e_Only_1e2p_MEC_Directory, Theta_e_1e2p_MEC_FD_Dir = Theta_e_Only_1e2p_MEC_Directory;
     string Theta_e_1e2p_RES_CD_Dir = Theta_e_Only_1e2p_RES_Directory, Theta_e_1e2p_RES_FD_Dir = Theta_e_Only_1e2p_RES_Directory;
     string Theta_e_1e2p_DIS_CD_Dir = Theta_e_Only_1e2p_DIS_Directory, Theta_e_1e2p_DIS_FD_Dir = Theta_e_Only_1e2p_DIS_Directory;
 
-    TH1D *Theta_e_2p_CD = new TH1D("#theta_{e} 2p (All int.,CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_2p_QEL_CD = new TH1D("#theta_{e} for 2p (QEL Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_2p_MEC_CD = new TH1D("#theta_{e} for 2p (MEC Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_2p_RES_CD = new TH1D("#theta_{e} for 2p (RES Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_2p_DIS_CD = new TH1D("#theta_{e} for 2p (DIS Only, CD)", ";#theta_{e} [Deg];", 100, 35, 140);
-    TH1D *Theta_e_2p_FD = new TH1D("#theta_{e} 2p (All int.,FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_2p_QEL_FD = new TH1D("#theta_{e} for 2p (QEL Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_2p_MEC_FD = new TH1D("#theta_{e} for 2p (MEC Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_2p_RES_FD = new TH1D("#theta_{e} for 2p (RES Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
-    TH1D *Theta_e_2p_DIS_FD = new TH1D("#theta_{e} for 2p (DIS Only, FD)", ";#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *Theta_e_2p_CD = new TH1D("#theta_{e} 2p (All int.,CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_2p_QEL_CD = new TH1D("#theta_{e} for 2p (QEL Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_2p_MEC_CD = new TH1D("#theta_{e} for 2p (MEC Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_2p_RES_CD = new TH1D("#theta_{e} for 2p (RES Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_2p_DIS_CD = new TH1D("#theta_{e} for 2p (DIS Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
+    TH1D *Theta_e_2p_FD = new TH1D("#theta_{e} 2p (All int.,FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_2p_QEL_FD = new TH1D("#theta_{e} for 2p (QEL Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_2p_MEC_FD = new TH1D("#theta_{e} for 2p (MEC Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_2p_RES_FD = new TH1D("#theta_{e} for 2p (RES Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
+    TH1D *Theta_e_2p_DIS_FD = new TH1D("#theta_{e} for 2p (DIS Only, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string Theta_e_2p_CD_Dir = Theta_e_Only_2p_Directory, Theta_e_2p_FD_Dir = Theta_e_Only_2p_Directory;
     string Theta_e_2p_QEL_CD_Dir = Theta_e_Only_2p_QEL_Directory, Theta_e_2p_QEL_FD_Dir = Theta_e_Only_2p_QEL_Directory;
     string Theta_e_2p_MEC_CD_Dir = Theta_e_Only_2p_MEC_Directory, Theta_e_2p_MEC_FD_Dir = Theta_e_Only_2p_MEC_Directory;
@@ -2026,52 +2038,52 @@ void EventAnalyser() {
     TH1D *Phi_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string Phi_e_CD_Dir = Phi_e_All_e_Directory, Phi_e_FD_Dir = Phi_e_All_e_Directory;
 
-    TH1D *Phi_e_1e_CD = new TH1D("#phi_{e} (1e Only Cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e_FD = new TH1D("#phi_{e} (1e Only Cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e_CD = new TH1D("#phi_{e} (1e Only Cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e_FD = new TH1D("#phi_{e} (1e Only Cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string Phi_e_1e_CD_Dir = Phi_e_Only_1e_cut_Directory, Phi_e_1e_FD_Dir = Phi_e_Only_1e_cut_Directory;
 
-    TH1D *Phi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All int.,CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All int.,FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All int.,CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All int.,FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string Phi_e_1e2X_CD_Dir = Phi_e_Only_1e2X_cut_Directory, Phi_e_1e2X_FD_Dir = Phi_e_Only_1e2X_cut_Directory;
     string Phi_e_1e2X_QEL_CD_Dir = Phi_e_Only_1e2X_QEL_Directory, Phi_e_1e2X_QEL_FD_Dir = Phi_e_Only_1e2X_QEL_Directory;
     string Phi_e_1e2X_MEC_CD_Dir = Phi_e_Only_1e2X_MEC_Directory, Phi_e_1e2X_MEC_FD_Dir = Phi_e_Only_1e2X_MEC_Directory;
     string Phi_e_1e2X_RES_CD_Dir = Phi_e_Only_1e2X_RES_Directory, Phi_e_1e2X_RES_FD_Dir = Phi_e_Only_1e2X_RES_Directory;
     string Phi_e_1e2X_DIS_CD_Dir = Phi_e_Only_1e2X_DIS_Directory, Phi_e_1e2X_DIS_FD_Dir = Phi_e_Only_1e2X_DIS_Directory;
 
-    TH1D *Phi_e_1e2p_CD = new TH1D("#phi_{e} 1e2p (All int.,CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_QEL_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_MEC_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_RES_CD = new TH1D("#phi_{e} for 1e2p (RES Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_DIS_CD = new TH1D("#phi_{e} for 1e2p (DIS Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_FD = new TH1D("#phi_{e} 1e2p (All int.,FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_QEL_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_MEC_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_RES_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_1e2p_DIS_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_CD = new TH1D("#phi_{e} 1e2p (All int.,CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_QEL_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_MEC_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_RES_CD = new TH1D("#phi_{e} for 1e2p (RES Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_DIS_CD = new TH1D("#phi_{e} for 1e2p (DIS Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_FD = new TH1D("#phi_{e} 1e2p (All int.,FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_QEL_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_MEC_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_RES_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_1e2p_DIS_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string Phi_e_1e2p_CD_Dir = Phi_e_Only_1e2p_Directory, Phi_e_1e2p_FD_Dir = Phi_e_Only_1e2p_Directory;
     string Phi_e_1e2p_QEL_CD_Dir = Phi_e_Only_1e2p_QEL_Directory, Phi_e_1e2p_QEL_FD_Dir = Phi_e_Only_1e2p_QEL_Directory;
     string Phi_e_1e2p_MEC_CD_Dir = Phi_e_Only_1e2p_MEC_Directory, Phi_e_1e2p_MEC_FD_Dir = Phi_e_Only_1e2p_MEC_Directory;
     string Phi_e_1e2p_RES_CD_Dir = Phi_e_Only_1e2p_RES_Directory, Phi_e_1e2p_RES_FD_Dir = Phi_e_Only_1e2p_RES_Directory;
     string Phi_e_1e2p_DIS_CD_Dir = Phi_e_Only_1e2p_DIS_Directory, Phi_e_1e2p_DIS_FD_Dir = Phi_e_Only_1e2p_DIS_Directory;
 
-    TH1D *Phi_e_2p_CD = new TH1D("#phi_{e} 2p (All int.,CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_QEL_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_MEC_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_RES_CD = new TH1D("#phi_{e} for 2p (RES Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_DIS_CD = new TH1D("#phi_{e} for 2p (DIS Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_FD = new TH1D("#phi_{e} 2p (All int.,FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_QEL_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_MEC_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_RES_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *Phi_e_2p_DIS_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_CD = new TH1D("#phi_{e} 2p (All int.,CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_QEL_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_MEC_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_RES_CD = new TH1D("#phi_{e} for 2p (RES Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_DIS_CD = new TH1D("#phi_{e} for 2p (DIS Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_FD = new TH1D("#phi_{e} 2p (All int.,FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_QEL_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_MEC_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_RES_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *Phi_e_2p_DIS_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string Phi_e_2p_CD_Dir = Phi_e_Only_2p_Directory, Phi_e_2p_FD_Dir = Phi_e_Only_2p_Directory;
     string Phi_e_2p_QEL_CD_Dir = Phi_e_Only_2p_QEL_Directory, Phi_e_2p_QEL_FD_Dir = Phi_e_Only_2p_QEL_Directory;
     string Phi_e_2p_MEC_CD_Dir = Phi_e_Only_2p_MEC_Directory, Phi_e_2p_MEC_FD_Dir = Phi_e_Only_2p_MEC_Directory;
@@ -3111,6 +3123,13 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
+        TVector3 P_e_1e;
+        P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
+        double P_e = P_e_1e.Mag();
+        double E_e = sqrt(m_e * m_e + P_e * P_e);
+        double Theta_e = P_e_1e.Theta() * 180.0 / pi; // Theta_e in deg
+        double Phi_e = P_e_1e.Phi() * 180.0 / pi; // Phi_e in deg
+
         //<editor-fold desc="Testing additional electron cuts">
         /* Here we plot cut histograms:
          * If cuts are turned off (apply_cuts == false) - we plot each cut parameter before and after the cut.
@@ -3118,67 +3137,64 @@ void EventAnalyser() {
 
         //TODO: all these tests are NOT 2p or 1e2p (they were moved here from below and here we have no constraint on protons.size) - redefine propely to 1e or add constrant on protons.size
 
-        TVector3 P_e_1e;
-        P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
-
         //<editor-fold desc="Testing momentum cuts (2p)">
         /* Momentum plots before cuts */
         if (electrons[0]->getRegion() == CD) {
-            P_e_1e2p_BC_CD->Fill(P_e_1e.Mag());
+            P_e_1e2p_BC_CD->Fill(P_e);
         } else if (electrons[0]->getRegion() == FD) {
-            P_e_1e2p_BC_FD->Fill(P_e_1e.Mag());
+            P_e_1e2p_BC_FD->Fill(P_e);
         }
 
         /* Momentum plots after cuts */
         if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
             if (electrons[0]->getRegion() == CD) {
-                P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                P_e_1e2p_AC_CD->Fill(P_e);
             } else if (electrons[0]->getRegion() == FD) {
-                P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                P_e_1e2p_AC_FD->Fill(P_e);
             }
         } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
-            if (P_e_1e.Mag() <= e_momentum_upper_cut_2p) {
+            if (P_e <= e_momentum_upper_cut_2p) {
                 if (electrons[0]->getRegion() == CD) {
-                    P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                    P_e_1e2p_AC_CD->Fill(P_e);
                 } else if (electrons[0]->getRegion() == FD) {
-                    P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                    P_e_1e2p_AC_FD->Fill(P_e);
                 }
             }
         } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
-            if (P_e_1e.Mag() >= e_momentum_lower_cut_2p) {
+            if (P_e >= e_momentum_lower_cut_2p) {
                 if (electrons[0]->getRegion() == CD) {
-                    P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                    P_e_1e2p_AC_CD->Fill(P_e);
                 } else if (electrons[0]->getRegion() == FD) {
-                    P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                    P_e_1e2p_AC_FD->Fill(P_e);
                 }
             }
         } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
-            if ((P_e_1e.Mag() >= e_momentum_lower_cut_2p) && (P_e_1e.Mag() <= e_momentum_upper_cut_2p)) {
+            if ((P_e >= e_momentum_lower_cut_2p) && (P_e <= e_momentum_upper_cut_2p)) {
                 if (electrons[0]->getRegion() == CD) {
-                    P_e_1e2p_AC_CD->Fill(P_e_1e.Mag());
+                    P_e_1e2p_AC_CD->Fill(P_e);
                 } else if (electrons[0]->getRegion() == FD) {
-                    P_e_1e2p_AC_FD->Fill(P_e_1e.Mag());
+                    P_e_1e2p_AC_FD->Fill(P_e);
                 }
             }
         }
         //</editor-fold>
 
         //<editor-fold desc="Testing SF cuts">
-        double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e_1e.Mag();
+        double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e;
 
         if (apply_cuts == false) {
             /* SF plots before cuts */
             SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-            SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
+            SF_VS_P_e_1e2p_BC_FD->Fill(P_e, EoP_e);
 
             /* SF plots after cuts */
             if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
                 SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-                SF_VS_P_e_1e2p_AC_FD->Fill(P_e_1e.Mag(), EoP_e);
+                SF_VS_P_e_1e2p_AC_FD->Fill(P_e, EoP_e);
             }
         } else {
             SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-            SF_VS_P_e_1e2p_BC_FD->Fill(P_e_1e.Mag(), EoP_e);
+            SF_VS_P_e_1e2p_BC_FD->Fill(P_e, EoP_e);
         }
         //</editor-fold>
 
@@ -3223,63 +3239,65 @@ void EventAnalyser() {
 
         for (auto &e: electrons) {
             if (e->getRegion() == CD) {
-                P_e_CD = e->getP();
-                E_e_CD = sqrt(m_e * m_e + P_e_CD * P_e_CD);
-                E_e_hist_CD->Fill(E_e_CD);
+//                P_e = e->getP();
+//                E_e = sqrt(m_e * m_e + P_e * P_e);
+                E_e_hist_CD->Fill(E_e);
 
-                Beta_vs_P_1e_CD->Fill(P_e_CD, e->par()->getBeta());
-                Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e_CD, e->par()->getBeta());
-                Beta_vs_P_negative_particles_1e_CD->Fill(P_e_CD, e->par()->getBeta());
+                Beta_vs_P_1e_CD->Fill(P_e, e->par()->getBeta());
+                Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e, e->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_CD->Fill(P_e, e->par()->getBeta());
 
-                theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
-                Theta_e_1e_CD->Fill(theta_e_1e_CD);
-                phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
-                Phi_e_1e_CD->Fill(phi_e_1e_CD);
-                Theta_e_VS_Phi_e_1e_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
-                E_e_VS_Theta_e_hist_CD->Fill(theta_e_1e_CD, E_e_CD);
+                Theta_e_1e_CD->Fill(Theta_e);
+//                theta_e_1e_CD = e->getTheta() * 180.0 / pi; // theta_e_1e_CD in deg
+//                Theta_e_1e_CD->Fill(theta_e_1e_CD);
+                Phi_e_1e_CD->Fill(Phi_e);
+//                phi_e_1e_CD = e->getPhi() * 180.0 / pi; // phi_e_1e_CD in deg
+//                Phi_e_1e_CD->Fill(phi_e_1e_CD);
+                Theta_e_VS_Phi_e_1e_CD->Fill(Phi_e, Theta_e);
+                E_e_VS_Theta_e_hist_CD->Fill(Theta_e, E_e);
 
                 if (Nf == 3) {
-                    Theta_e_1e2X_CD->Fill(theta_e_1e_CD);
-                    Phi_e_1e2X_CD->Fill(phi_e_1e_CD);
+                    Theta_e_1e2X_CD->Fill(Theta_e);
+                    Phi_e_1e2X_CD->Fill(Phi_e);
 
                     if (qel) {
                         ++num_of_QEL_1e2X_CD_events;
-                        Theta_e_1e2X_QEL_CD->Fill(theta_e_1e_CD);
-                        Phi_e_1e2X_QEL_CD->Fill(phi_e_1e_CD);
+                        Theta_e_1e2X_QEL_CD->Fill(Theta_e);
+                        Phi_e_1e2X_QEL_CD->Fill(Phi_e);
                     } else if (mec) {
                         ++num_of_MEC_1e2X_CD_events;
-                        Theta_e_1e2X_MEC_CD->Fill(theta_e_1e_CD);
-                        Phi_e_1e2X_MEC_CD->Fill(phi_e_1e_CD);
+                        Theta_e_1e2X_MEC_CD->Fill(Theta_e);
+                        Phi_e_1e2X_MEC_CD->Fill(Phi_e);
                     } else if (res) {
                         ++num_of_RES_1e2X_CD_events;
-                        Theta_e_1e2X_RES_CD->Fill(theta_e_1e_CD);
-                        Phi_e_1e2X_RES_CD->Fill(phi_e_1e_CD);
+                        Theta_e_1e2X_RES_CD->Fill(Theta_e);
+                        Phi_e_1e2X_RES_CD->Fill(Phi_e);
                     } else if (dis) {
                         ++num_of_DIS_1e2X_CD_events;
-                        Theta_e_1e2X_DIS_CD->Fill(theta_e_1e_CD);
-                        Phi_e_1e2X_DIS_CD->Fill(phi_e_1e_CD);
+                        Theta_e_1e2X_DIS_CD->Fill(Theta_e);
+                        Phi_e_1e2X_DIS_CD->Fill(Phi_e);
                     }
 
                     if (protons.size() == 2) {
-                        Theta_e_1e2p_CD->Fill(theta_e_1e_CD);
-                        Phi_e_1e2p_CD->Fill(phi_e_1e_CD);
+                        Theta_e_1e2p_CD->Fill(Theta_e);
+                        Phi_e_1e2p_CD->Fill(Phi_e);
 
                         if (qel) {
                             ++num_of_QEL_1e2p_CD_events;
-                            Theta_e_1e2p_QEL_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2p_QEL_CD->Fill(phi_e_1e_CD);
+                            Theta_e_1e2p_QEL_CD->Fill(Theta_e);
+                            Phi_e_1e2p_QEL_CD->Fill(Phi_e);
                         } else if (mec) {
                             ++num_of_MEC_1e2p_CD_events;
-                            Theta_e_1e2p_MEC_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2p_MEC_CD->Fill(phi_e_1e_CD);
+                            Theta_e_1e2p_MEC_CD->Fill(Theta_e);
+                            Phi_e_1e2p_MEC_CD->Fill(Phi_e);
                         } else if (res) {
                             ++num_of_RES_1e2p_CD_events;
-                            Theta_e_1e2p_RES_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2p_RES_CD->Fill(phi_e_1e_CD);
+                            Theta_e_1e2p_RES_CD->Fill(Theta_e);
+                            Phi_e_1e2p_RES_CD->Fill(Phi_e);
                         } else if (dis) {
                             ++num_of_DIS_1e2p_CD_events;
                             Theta_e_1e2p_DIS_CD->Fill(theta_e_1e_CD);
-                            Phi_e_1e2p_DIS_CD->Fill(phi_e_1e_CD);
+                            Phi_e_1e2p_DIS_CD->Fill(Phi_e);
                         }
                     }
                 }
@@ -3290,63 +3308,65 @@ void EventAnalyser() {
                 Vertex_Electron_1e_Vy_CD->Fill(e->par()->getVy());
                 Vertex_Electron_1e_Vz_CD->Fill(e->par()->getVz());
             } else if (e->getRegion() == FD) {
-                P_e_FD = e->getP();
-                E_e_FD = sqrt(m_e * m_e + P_e_FD * P_e_FD);
-                E_e_hist_FD->Fill(E_e_FD);
+//                P_e = e->getP();
+//                E_e = sqrt(m_e * m_e + P_e * P_e);
+                E_e_hist_FD->Fill(E_e);
 
-                Beta_vs_P_1e_FD->Fill(P_e_FD, e->par()->getBeta());
-                Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e_FD, e->par()->getBeta());
-                Beta_vs_P_negative_particles_1e_FD->Fill(P_e_FD, e->par()->getBeta());
+                Beta_vs_P_1e_FD->Fill(P_e, e->par()->getBeta());
+                Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e, e->par()->getBeta());
+                Beta_vs_P_negative_particles_1e_FD->Fill(P_e, e->par()->getBeta());
 
-                theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
-                Theta_e_1e_FD->Fill(theta_e_1e_FD);
-                phi_e_1e_FD = e->getPhi() * 180.0 / pi; // phi_e_1e_FD in deg
-                Phi_e_1e_FD->Fill(phi_e_1e_FD);
-                Theta_e_VS_Phi_e_1e_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
-                E_e_VS_Theta_e_hist_FD->Fill(theta_e_1e_FD, E_e_FD);
+                Theta_e_1e_FD->Fill(Theta_e);
+//                theta_e_1e_FD = e->getTheta() * 180.0 / pi; // theta_e_1e_FD in deg
+//                Theta_e_1e_FD->Fill(theta_e_1e_FD);
+                Phi_e_1e_FD->Fill(Phi_e);
+//                phi_e_1e_FD = e->getPhi() * 180.0 / pi; // phi_e_1e_FD in deg
+//                Phi_e_1e_FD->Fill(phi_e_1e_FD);
+                Theta_e_VS_Phi_e_1e_FD->Fill(Phi_e, Theta_e);
+                E_e_VS_Theta_e_hist_FD->Fill(Theta_e, E_e);
 
                 if (Nf == 3) {
-                    Theta_e_1e2X_FD->Fill(theta_e_1e_FD);
-                    Phi_e_1e2X_FD->Fill(phi_e_1e_FD);
+                    Theta_e_1e2X_FD->Fill(Theta_e);
+                    Phi_e_1e2X_FD->Fill(Phi_e);
 
                     if (qel) {
                         ++num_of_QEL_1e2X_FD_events;
-                        Theta_e_1e2X_QEL_FD->Fill(theta_e_1e_FD);
-                        Phi_e_1e2X_QEL_FD->Fill(phi_e_1e_FD);
+                        Theta_e_1e2X_QEL_FD->Fill(Theta_e);
+                        Phi_e_1e2X_QEL_FD->Fill(Phi_e);
                     } else if (mec) {
                         ++num_of_MEC_1e2X_FD_events;
-                        Theta_e_1e2X_MEC_FD->Fill(theta_e_1e_FD);
-                        Phi_e_1e2X_MEC_FD->Fill(phi_e_1e_FD);
+                        Theta_e_1e2X_MEC_FD->Fill(Theta_e);
+                        Phi_e_1e2X_MEC_FD->Fill(Phi_e);
                     } else if (res) {
                         ++num_of_RES_1e2X_FD_events;
-                        Theta_e_1e2X_RES_FD->Fill(theta_e_1e_FD);
-                        Phi_e_1e2X_RES_FD->Fill(phi_e_1e_FD);
+                        Theta_e_1e2X_RES_FD->Fill(Theta_e);
+                        Phi_e_1e2X_RES_FD->Fill(Phi_e);
                     } else if (dis) {
                         ++num_of_DIS_1e2X_FD_events;
-                        Theta_e_1e2X_DIS_FD->Fill(theta_e_1e_FD);
-                        Phi_e_1e2X_DIS_FD->Fill(phi_e_1e_FD);
+                        Theta_e_1e2X_DIS_FD->Fill(Theta_e);
+                        Phi_e_1e2X_DIS_FD->Fill(Phi_e);
                     }
 
                     if (protons.size() == 2) {
-                        Theta_e_1e2p_FD->Fill(theta_e_1e_FD);
-                        Phi_e_1e2p_FD->Fill(phi_e_1e_FD);
+                        Theta_e_1e2p_FD->Fill(Theta_e);
+                        Phi_e_1e2p_FD->Fill(Phi_e);
 
                         if (qel) {
                             ++num_of_QEL_1e2p_FD_events;
-                            Theta_e_1e2p_QEL_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2p_QEL_FD->Fill(phi_e_1e_FD);
+                            Theta_e_1e2p_QEL_FD->Fill(Theta_e);
+                            Phi_e_1e2p_QEL_FD->Fill(Phi_e);
                         } else if (mec) {
                             ++num_of_MEC_1e2p_FD_events;
-                            Theta_e_1e2p_MEC_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2p_MEC_FD->Fill(phi_e_1e_FD);
+                            Theta_e_1e2p_MEC_FD->Fill(Theta_e);
+                            Phi_e_1e2p_MEC_FD->Fill(Phi_e);
                         } else if (res) {
                             ++num_of_RES_1e2p_FD_events;
-                            Theta_e_1e2p_RES_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2p_RES_FD->Fill(phi_e_1e_FD);
+                            Theta_e_1e2p_RES_FD->Fill(Theta_e);
+                            Phi_e_1e2p_RES_FD->Fill(Phi_e);
                         } else if (dis) {
                             ++num_of_DIS_1e2p_FD_events;
-                            Theta_e_1e2p_DIS_FD->Fill(theta_e_1e_FD);
-                            Phi_e_1e2p_DIS_FD->Fill(phi_e_1e_FD);
+                            Theta_e_1e2p_DIS_FD->Fill(Theta_e);
+                            Phi_e_1e2p_DIS_FD->Fill(Phi_e);
                         }
                     }
                 }
@@ -4395,8 +4415,8 @@ void EventAnalyser() {
 
             //<editor-fold desc="Applying momentum cuts">
             // Electrons:
-            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e_1e.Mag() > e_momentum_upper_cut_2p))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e_1e.Mag() < e_momentum_lower_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e > e_momentum_upper_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e < e_momentum_lower_cut_2p))) { continue; }
 
             // Proton 0:
             if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p0.Mag() > p_momentum_upper_cut_2p))) { continue; }
@@ -4452,9 +4472,9 @@ void EventAnalyser() {
 
             //<editor-fold desc="Filling momentum histograms">
             if (electrons[0]->getRegion() == CD) {
-                P_e_2p_CD->Fill(P_e_1e.Mag());
+                P_e_2p_CD->Fill(P_e);
             } else if (electrons[0]->getRegion() == FD) {
-                P_e_2p_FD->Fill(P_e_1e.Mag());
+                P_e_2p_FD->Fill(P_e);
             }
 
             if (protons[0]->getRegion() == CD) {
@@ -4767,89 +4787,89 @@ void EventAnalyser() {
 
             for (auto &e: electrons) {
                 if (e->getRegion() == CD) {
-                    E_e_2p_CD->Fill(E_e_CD);
-                    Theta_e_2p_CD->Fill(theta_e_1e_CD);
-                    Phi_e_2p_CD->Fill(phi_e_1e_CD);
+                    E_e_2p_CD->Fill(E_e);
+                    Theta_e_2p_CD->Fill(Theta_e);
+                    Phi_e_2p_CD->Fill(Phi_e);
 
-                    Theta_e_VS_Phi_e_2p_CD->Fill(phi_e_1e_CD, theta_e_1e_CD);
-                    E_e_VS_Theta_e_2p_CD->Fill(theta_e_1e_CD, E_e_CD);
+                    Theta_e_VS_Phi_e_2p_CD->Fill(Phi_e, Theta_e);
+                    E_e_VS_Theta_e_2p_CD->Fill(Theta_e, E_e);
 
-                    if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_All_Int_2p_CD->Fill(beamE - E_e_CD); }
+                    if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_All_Int_2p_CD->Fill(beamE - E_e); }
 
                     if (qel) {
-                        Theta_e_2p_QEL_CD->Fill(theta_e_1e_CD);
-                        Phi_e_2p_QEL_CD->Fill(phi_e_1e_CD);
-                        E_e_2p_QEL_CD->Fill(E_e_CD);
-                        E_e_VS_Theta_e_2p_QEL_CD->Fill(theta_e_1e_CD, E_e_CD);
+                        Theta_e_2p_QEL_CD->Fill(Theta_e);
+                        Phi_e_2p_QEL_CD->Fill(Phi_e);
+                        E_e_2p_QEL_CD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_QEL_CD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_QEL_2p_CD->Fill(beamE - E_e_CD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_QEL_2p_CD->Fill(beamE - E_e); }
                     } else if (mec) {
-                        Theta_e_2p_MEC_CD->Fill(theta_e_1e_CD);
-                        Phi_e_2p_MEC_CD->Fill(phi_e_1e_CD);
-                        E_e_2p_MEC_CD->Fill(E_e_CD);
-                        E_e_VS_Theta_e_2p_MEC_CD->Fill(theta_e_1e_CD, E_e_CD);
+                        Theta_e_2p_MEC_CD->Fill(Theta_e);
+                        Phi_e_2p_MEC_CD->Fill(Phi_e);
+                        E_e_2p_MEC_CD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_MEC_CD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_MEC_2p_CD->Fill(beamE - E_e_CD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_MEC_2p_CD->Fill(beamE - E_e); }
                     } else if (res) {
-                        Theta_e_2p_RES_CD->Fill(theta_e_1e_CD);
-                        Phi_e_2p_RES_CD->Fill(phi_e_1e_CD);
-                        E_e_2p_RES_CD->Fill(E_e_CD);
-                        E_e_VS_Theta_e_2p_RES_CD->Fill(theta_e_1e_CD, E_e_CD);
+                        Theta_e_2p_RES_CD->Fill(Theta_e);
+                        Phi_e_2p_RES_CD->Fill(Phi_e);
+                        E_e_2p_RES_CD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_RES_CD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_RES_2p_CD->Fill(beamE - E_e_CD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_RES_2p_CD->Fill(beamE - E_e); }
                     } else if (dis) {
-                        Theta_e_2p_DIS_CD->Fill(theta_e_1e_CD);
-                        Phi_e_2p_DIS_CD->Fill(phi_e_1e_CD);
-                        E_e_2p_DIS_CD->Fill(E_e_CD);
-                        E_e_VS_Theta_e_2p_DIS_CD->Fill(theta_e_1e_CD, E_e_CD);
+                        Theta_e_2p_DIS_CD->Fill(Theta_e);
+                        Phi_e_2p_DIS_CD->Fill(Phi_e);
+                        E_e_2p_DIS_CD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_DIS_CD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_CD >= 14.0 && theta_e_1e_CD <= 16.0) { ETrans_15_DIS_2p_CD->Fill(beamE - E_e_CD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_DIS_2p_CD->Fill(beamE - E_e); }
                     }
                 } else if (e->getRegion() == FD) {
-                    E_e_2p_FD->Fill(E_e_FD);
-                    Theta_e_2p_FD->Fill(theta_e_1e_FD);
-                    Phi_e_2p_FD->Fill(phi_e_1e_FD);
+                    E_e_2p_FD->Fill(E_e);
+                    Theta_e_2p_FD->Fill(Theta_e);
+                    Phi_e_2p_FD->Fill(Phi_e);
 
-                    Theta_e_VS_Phi_e_2p_FD->Fill(phi_e_1e_FD, theta_e_1e_FD);
-                    E_e_VS_Theta_e_2p_FD->Fill(theta_e_1e_FD, E_e_FD);
+                    Theta_e_VS_Phi_e_2p_FD->Fill(Phi_e, Theta_e);
+                    E_e_VS_Theta_e_2p_FD->Fill(Theta_e, E_e);
 
-                    if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_All_Int_2p_FD->Fill(beamE - E_e_FD); }
+                    if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_All_Int_2p_FD->Fill(beamE - E_e); }
 
                     if (qel) {
-                        Theta_e_2p_QEL_FD->Fill(theta_e_1e_FD);
-                        Phi_e_2p_QEL_FD->Fill(phi_e_1e_FD);
-                        E_e_2p_QEL_FD->Fill(E_e_FD);
-                        E_e_VS_Theta_e_2p_QEL_FD->Fill(theta_e_1e_FD, E_e_FD);
+                        Theta_e_2p_QEL_FD->Fill(Theta_e);
+                        Phi_e_2p_QEL_FD->Fill(Phi_e);
+                        E_e_2p_QEL_FD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_QEL_FD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_QEL_2p_FD->Fill(beamE - E_e_FD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_QEL_2p_FD->Fill(beamE - E_e); }
                     } else if (mec) {
-                        Theta_e_2p_MEC_FD->Fill(theta_e_1e_FD);
-                        Phi_e_2p_MEC_FD->Fill(phi_e_1e_FD);
-                        E_e_2p_MEC_FD->Fill(E_e_FD);
-                        E_e_VS_Theta_e_2p_MEC_FD->Fill(theta_e_1e_FD, E_e_FD);
+                        Theta_e_2p_MEC_FD->Fill(Theta_e);
+                        Phi_e_2p_MEC_FD->Fill(Phi_e);
+                        E_e_2p_MEC_FD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_MEC_FD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_MEC_2p_FD->Fill(beamE - E_e_FD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_MEC_2p_FD->Fill(beamE - E_e); }
                     } else if (res) {
-                        Theta_e_2p_RES_FD->Fill(theta_e_1e_FD);
-                        Phi_e_2p_RES_FD->Fill(phi_e_1e_FD);
-                        E_e_2p_RES_FD->Fill(E_e_FD);
-                        E_e_VS_Theta_e_2p_RES_FD->Fill(theta_e_1e_FD, E_e_FD);
+                        Theta_e_2p_RES_FD->Fill(Theta_e);
+                        Phi_e_2p_RES_FD->Fill(Phi_e);
+                        E_e_2p_RES_FD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_RES_FD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_RES_2p_FD->Fill(beamE - E_e_FD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_RES_2p_FD->Fill(beamE - E_e); }
                     } else if (dis) {
-                        Theta_e_2p_DIS_FD->Fill(theta_e_1e_FD);
-                        Phi_e_2p_DIS_FD->Fill(phi_e_1e_FD);
-                        E_e_2p_DIS_FD->Fill(E_e_FD);
-                        E_e_VS_Theta_e_2p_DIS_FD->Fill(theta_e_1e_FD, E_e_FD);
+                        Theta_e_2p_DIS_FD->Fill(Theta_e);
+                        Phi_e_2p_DIS_FD->Fill(Phi_e);
+                        E_e_2p_DIS_FD->Fill(E_e);
+                        E_e_VS_Theta_e_2p_DIS_FD->Fill(Theta_e, E_e);
 
-                        if (theta_e_1e_FD >= 14.0 && theta_e_1e_FD <= 16.0) { ETrans_15_DIS_2p_FD->Fill(beamE - E_e_FD); }
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { ETrans_15_DIS_2p_FD->Fill(beamE - E_e); }
                     }
                 }
             } // end of loop over electrons vector
 
             //<editor-fold desc="Filling SF histograms (2p)">
             SF_All_Int_2p_FD->Fill(EoP_e);
-            SF_VS_P_e_2p_FD->Fill(P_e_1e.Mag(), EoP_e);
+            SF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
             //</editor-fold>
 
             //<editor-fold desc="Filling fiducial plots (2p)">
