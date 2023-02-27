@@ -291,19 +291,19 @@ double P_p_hist_upper_lim_1n1p, P_p_hist_lower_lim_1n1p, P_n_hist_upper_lim_1n1p
 //<editor-fold desc="MicroBooNE plots">
 
 //<editor-fold desc="MicroBooNE gamma plots (unweighted)">
-double gamma_Lab_hist_upper_lim_2p, gamma_Lab_hist_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p, gamma_mu_p_tot_lower_lim_2p;
+double Gamma_Lab_upper_lim, Gamma_Lab_lower_lim, Gamma_mu_p_tot_upper_lim, Gamma_mu_p_tot_lower_lim;
 //</editor-fold>
 
 //<editor-fold desc="MicroBooNE gamma plots (Q4 weighted)">
-double gamma_Lab_hist_weighted_upper_lim_1n1p, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p, gamma_mu_p_tot_weighted_lower_lim_1n1p;
+double Gamma_Lab_weighted_upper_lim, Gamma_Lab_weighted_lower_lim, Gamma_mu_p_tot_weighted_upper_lim, Gamma_mu_p_tot_weighted_lower_lim;
 //</editor-fold>
 
-//<editor-fold desc="MicroBooNE gamma plots (no pions, for every interaction)">
-double gamma_Lab_all_hist_upper_lim, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_weighted_upper_lim, gamma_Lab_all_hist_weighted_lower_lim;
-double gamma_Lab_QEL_hist_upper_lim, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim, gamma_Lab_QEL_hist_weighted_lower_lim;
-double gamma_Lab_MEC_hist_upper_lim, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim, gamma_Lab_MEC_hist_weighted_lower_lim;
-double gamma_Lab_RES_hist_upper_lim, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim, gamma_Lab_RES_hist_weighted_lower_lim;
-double gamma_Lab_DIS_hist_upper_lim, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim, gamma_Lab_DIS_hist_weighted_lower_lim;
+//<editor-fold desc="MicroBooNE gamma plots (all int., no pions)">
+double Gamma_Lab_noPions_All_Int_upper_lim, Gamma_Lab_noPions_All_Int_lower_lim, Gamma_Lab_noPions_All_Int_weighted_upper_lim, Gamma_Lab_noPions_All_Int_weighted_lower_lim;
+double Gamma_Lab_noPions_QEL_upper_lim, Gamma_Lab_noPions_QEL_lower_lim, Gamma_Lab_noPions_QEL_weighted_upper_lim, Gamma_Lab_noPions_QEL_weighted_lower_lim;
+double Gamma_Lab_noPions_MEC_upper_lim, Gamma_Lab_noPions_MEC_lower_lim, Gamma_Lab_noPions_MEC_weighted_upper_lim, Gamma_Lab_noPions_MEC_weighted_lower_lim;
+double Gamma_Lab_noPions_RES_upper_lim, Gamma_Lab_noPions_RES_lower_lim, Gamma_Lab_noPions_RES_weighted_upper_lim, Gamma_Lab_noPions_RES_weighted_lower_lim;
+double Gamma_Lab_noPions_DIS_upper_lim, Gamma_Lab_noPions_DIS_lower_lim, Gamma_Lab_noPions_DIS_weighted_upper_lim, Gamma_Lab_noPions_DIS_weighted_lower_lim;
 //</editor-fold>
 
 //<editor-fold desc="MicroBooNE dP_T plots">

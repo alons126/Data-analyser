@@ -788,40 +788,40 @@ void EventAnalyser() {
     //<editor-fold desc="MicroBooNE plots">
 
     //<editor-fold desc="MicroBooNE gamma plots (unweighted)">
-    gamma_Lab_hist_upper_lim_2p = 1;
-    gamma_Lab_hist_lower_lim_2p = -1;
-    gamma_mu_p_tot_upper_lim_2p = 1;
-    gamma_mu_p_tot_lower_lim_2p = -1;
+    Gamma_Lab_upper_lim = 1;
+    Gamma_Lab_lower_lim = -1;
+    Gamma_mu_p_tot_upper_lim = 1;
+    Gamma_mu_p_tot_lower_lim = -1;
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE gamma plots (Q4 weighted)">
-    gamma_Lab_hist_weighted_upper_lim_1n1p = 1;
-    gamma_Lab_hist_weighted_lower_lim_1n1p = -1;
-    gamma_mu_p_tot_weighted_upper_lim_1n1p = 1;
-    gamma_mu_p_tot_weighted_lower_lim_1n1p = -1;
+    Gamma_Lab_weighted_upper_lim = 1;
+    Gamma_Lab_weighted_lower_lim = -1;
+    Gamma_mu_p_tot_weighted_upper_lim = 1;
+    Gamma_mu_p_tot_weighted_lower_lim = -1;
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE gamma plots (no pions, for every interaction)">
-    gamma_Lab_all_hist_upper_lim = 1;
-    gamma_Lab_all_hist_lower_lim = -1;
-    gamma_Lab_all_hist_weighted_upper_lim = 1;
-    gamma_Lab_all_hist_weighted_lower_lim = -1;
-    gamma_Lab_QEL_hist_upper_lim = 1;
-    gamma_Lab_QEL_hist_lower_lim = -1;
-    gamma_Lab_QEL_hist_weighted_upper_lim = 1;
-    gamma_Lab_QEL_hist_weighted_lower_lim = -1;
-    gamma_Lab_MEC_hist_upper_lim = 1;
-    gamma_Lab_MEC_hist_lower_lim = -1;
-    gamma_Lab_MEC_hist_weighted_upper_lim = 1;
-    gamma_Lab_MEC_hist_weighted_lower_lim = -1;
-    gamma_Lab_RES_hist_upper_lim = 1;
-    gamma_Lab_RES_hist_lower_lim = -1;
-    gamma_Lab_RES_hist_weighted_upper_lim = 1;
-    gamma_Lab_RES_hist_weighted_lower_lim = -1;
-    gamma_Lab_DIS_hist_upper_lim = 1;
-    gamma_Lab_DIS_hist_lower_lim = -1;
-    gamma_Lab_DIS_hist_weighted_upper_lim = 1;
-    gamma_Lab_DIS_hist_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_All_Int_upper_lim = 1;
+    Gamma_Lab_noPions_All_Int_lower_lim = -1;
+    Gamma_Lab_noPions_All_Int_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_All_Int_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_QEL_upper_lim = 1;
+    Gamma_Lab_noPions_QEL_lower_lim = -1;
+    Gamma_Lab_noPions_QEL_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_QEL_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_MEC_upper_lim = 1;
+    Gamma_Lab_noPions_MEC_lower_lim = -1;
+    Gamma_Lab_noPions_MEC_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_MEC_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_RES_upper_lim = 1;
+    Gamma_Lab_noPions_RES_lower_lim = -1;
+    Gamma_Lab_noPions_RES_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_RES_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_DIS_upper_lim = 1;
+    Gamma_Lab_noPions_DIS_lower_lim = -1;
+    Gamma_Lab_noPions_DIS_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_DIS_weighted_lower_lim = -1;
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE dP_T plots">
@@ -2178,14 +2178,17 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_e histograms">
     THStack *sTheta_e = new THStack("#theta_{e} stack (CD & FD)", "#theta_{e} of Outgoing Electron (no #(e) cut, CD & FD);#theta_{e} [Deg];");
 
+    /* Theta_e histograms (no #(e) cut) */
     TH1D *hTheta_e_All_e_CD = new TH1D("#theta_{e} (no #(e) cut, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_All_e_FD = new TH1D("#theta_{e} (no #(e) cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string hTheta_e_All_e_CD_Dir = Theta_e_All_e_Directory, hTheta_e_All_e_FD_Dir = Theta_e_All_e_Directory;
 
+    /* Theta_e histograms (1e cut) */
     TH1D *hTheta_e_1e_cut_CD = new TH1D("#theta_{e} (1e Cut, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_1e_cut_FD = new TH1D("#theta_{e} (1e Cut, FD)", ";#theta_{e} [Deg];", 250, 0, 50);
     string hTheta_e_1e_cut_CD_Dir = Theta_e_1e_cut_Directory, hTheta_e_1e_cut_FD_Dir = Theta_e_1e_cut_Directory;
 
+    /* Theta_e histograms (1e2X) */
     TH1D *hTheta_e_1e2X_CD = new TH1D("#theta_{e} for 1e2X (All int., CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_1e2X_QEL_CD = new TH1D("#theta_{e} for 1e2X (QEL Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_1e2X_MEC_CD = new TH1D("#theta_{e} for 1e2X (MEC Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
@@ -2202,6 +2205,7 @@ void EventAnalyser() {
     string hTheta_e_1e2X_RES_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_1e2X_RES_FD_Dir = Theta_e_1e2X_Directory;
     string hTheta_e_1e2X_DIS_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_1e2X_DIS_FD_Dir = Theta_e_1e2X_Directory;
 
+    /* Theta_e histograms (1e2p) */
     TH1D *hTheta_e_1e2p_CD = new TH1D("#theta_{e} 1e2p (All int.,CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_1e2p_QEL_CD = new TH1D("#theta_{e} for 1e2p (QEL Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_1e2p_MEC_CD = new TH1D("#theta_{e} for 1e2p (MEC Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
@@ -2218,6 +2222,7 @@ void EventAnalyser() {
     string hTheta_e_1e2p_RES_CD_Dir = Theta_e_1e2p_Directory, hTheta_e_1e2p_RES_FD_Dir = Theta_e_1e2p_Directory;
     string hTheta_e_1e2p_DIS_CD_Dir = Theta_e_1e2p_Directory, hTheta_e_1e2p_DIS_FD_Dir = Theta_e_1e2p_Directory;
 
+    /* Theta_e histograms (2p) */
     TH1D *hTheta_e_2p_CD = new TH1D("#theta_{e} 2p (All int.,CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_2p_QEL_CD = new TH1D("#theta_{e} for 2p (QEL Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
     TH1D *hTheta_e_2p_MEC_CD = new TH1D("#theta_{e} for 2p (MEC Only, CD)", ";#theta_{e} [Deg];", 250, 35, 140);
@@ -2240,14 +2245,17 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_e histograms">
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
+    /* Phi_e histograms (no #(e) cut) */
     TH1D *hPhi_e_All_e_CD = new TH1D("#phi_{e} (no #(e) cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string hPhi_e_All_e_CD_Dir = Phi_e_All_e_Directory, hPhi_e_All_e_FD_Dir = Phi_e_All_e_Directory;
 
+    /* Phi_e histograms (1e cut) */
     TH1D *hPhi_e_1e_cut_CD = new TH1D("#phi_{e} (1e Cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string hPhi_e_1e_cut_CD_Dir = Phi_e_1e_cut_Directory, hPhi_e_1e_cut_FD_Dir = Phi_e_1e_cut_Directory;
 
+    /* Phi_e histograms (1e2X) */
     TH1D *hPhi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All int.,CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
@@ -2264,6 +2272,7 @@ void EventAnalyser() {
     string hPhi_e_1e2X_RES_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_RES_FD_Dir = Phi_e_1e2X_Directory;
     string hPhi_e_1e2X_DIS_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_DIS_FD_Dir = Phi_e_1e2X_Directory;
 
+    /* Phi_e histograms (1e2p) */
     TH1D *hPhi_e_1e2p_CD = new TH1D("#phi_{e} 1e2p (All int.,CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_1e2p_QEL_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_1e2p_MEC_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
@@ -2280,6 +2289,7 @@ void EventAnalyser() {
     string hPhi_e_1e2p_RES_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_1e2p_RES_FD_Dir = Phi_e_1e2p_Directory;
     string hPhi_e_1e2p_DIS_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_1e2p_DIS_FD_Dir = Phi_e_1e2p_Directory;
 
+    /* Phi_e histograms (2p) */
     TH1D *hPhi_e_2p_CD = new TH1D("#phi_{e} 2p (All int.,CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_2p_QEL_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     TH1D *hPhi_e_2p_MEC_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
@@ -2300,25 +2310,21 @@ void EventAnalyser() {
 // Theta_e vs. Phi_e -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_e vs. Phi_e">
-
-    //<editor-fold desc="Theta_e vs. Phi_e histograms (no #(e) cut)">
+    /* Theta_e vs. Phi_e histograms (no #(e) cut) */
     TH2D *hTheta_e_VS_Phi_e_All_e_CD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, CD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
     TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
     string hTheta_e_VS_Phi_e_All_e_CD_Dir = Theta_e_VS_Phi_e_All_e_Directory, hTheta_e_VS_Phi_e_All_e_FD_Dir = Theta_e_VS_Phi_e_All_e_Directory;
-    //</editor-fold>
 
-    //<editor-fold desc="Theta_e vs. Phi_e histograms (1e cut)">
-    TH2D *hTheta_e_VS_Phi_e_1e_cut_CD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, CD)",
-                                                 "#theta_{e} vs. #phi_{e}  (1e Cut, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
+    /* Theta_e vs. Phi_e histograms (1e cut) */
+    TH2D *hTheta_e_VS_Phi_e_1e_cut_CD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, CD)", "#theta_{e} vs. #phi_{e}  (1e Cut, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                  250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
     TH2D *hTheta_e_VS_Phi_e_1e_cut_FD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, FD)", "#theta_{e} vs. #phi_{e} (1e Cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                  250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
     string hTheta_e_VS_Phi_e_1e_cut_CD_Dir = Theta_e_VS_Phi_e_1e_cut_Directory, hTheta_e_VS_Phi_e_1e_cut_FD_Dir = Theta_e_VS_Phi_e_1e_cut_Directory;
-    //</editor-fold>
 
-    //<editor-fold desc="Theta_e vs. Phi_e histograms (2p)">
+    /* Theta_e vs. Phi_e histograms (2p) */
     TH2D *hTheta_e_VS_Phi_e_2p_CD = new TH2D("#theta_{e} vs. #phi_{e} (All int., 2p, CD)", "#theta_{e} vs. #phi_{e} (All int., 2p, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                              250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
     TH2D *hTheta_e_VS_Phi_e_2p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All int., 2p, FD)", "#theta_{e} vs. #phi_{e} (All int., 2p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
@@ -2328,40 +2334,43 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-    //</editor-fold>
-
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Q2 histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Q2 histograms">
+    /* Q2 histograms (no #(e) cut) */
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}];");
-    THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}];");
-    THStack *sQ2_MicroBooNE = new THStack("Q^{2} (MicroBooNE ,CD & FD)", "Q^{2} Histogram (MicroBooNE, CD & FD);Q^{2} [GeV^{2}];");
-    THStack *sQ2_1e2X = new THStack("Q^{2} (1e2X, CD & FD)", "Q^{2} (1e2X, CD & FD);Q^{2} [GeV^{2}];");
-    THStack *sQ2_1e2p = new THStack("Q^{2} (1e2p, CD & FD)", "Q^{2} (1e2p, CD & FD);Q^{2} [GeV^{2}];");
-    THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}];");
-
     TH1D *hQ2_All_e_CD = new TH1D("Q^{2} (no #(e) cut, CD)", "Q^{2} (no #(e) cut, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     string hQ2_All_e_CD_Dir = Q2_All_e_Directory, hQ2_All_e_FD_Dir = Q2_All_e_Directory;
 
+    /* Q2 histograms (1e cut) */
+    THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_1e_cut_CD = new TH1D("Q^{2} (1e Cut, CD)", "Q^{2} (1e Cut, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     string hQ2_1e_cut_CD_Dir = Q2_1e_cut_Directory, hQ2_1e_cut_FD_Dir = Q2_1e_cut_Directory;
 
+    /* Q2 histograms (MicroBooNE) */
+//    THStack *sQ2_MicroBooNE = new THStack("Q^{2} (MicroBooNE ,CD & FD)", "Q^{2} Histogram (MicroBooNE, CD & FD);Q^{2} [GeV^{2}];");
 //    TH1D *hQ2_MicroBooNE_CD = new TH1D("Q^{2} (MicroBooNE, CD)", "Q^{2} (MicroBooNE, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
 //    TH1D *hQ2_MicroBooNE_FD = new TH1D("Q^{2} (MicroBooNE, FD)", "Q^{2} (MicroBooNE, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
 //    string hQ2_MicroBooNE_CD_Dir = Q2_MicroBooNE_Directory, hQ2_MicroBooNE_FD_Dir = Q2_MicroBooNE_Directory;
 
+    /* Q2 histograms (1e2X) */
+    THStack *sQ2_1e2X = new THStack("Q^{2} (1e2X, CD & FD)", "Q^{2} (1e2X, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_1e2X_CD = new TH1D("Q^{2} (1e2X, CD)", "Q^{2} (1e2X, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     TH1D *hQ2_1e2X_FD = new TH1D("Q^{2} (1e2X, FD)", "Q^{2} (1e2X, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     string hQ2_1e2X_CD_Dir = Q2_1e2X_Directory, hQ2_1e2X_FD_Dir = Q2_1e2X_Directory;
 
+    /* Q2 histograms (1e2p) */
+    THStack *sQ2_1e2p = new THStack("Q^{2} (1e2p, CD & FD)", "Q^{2} (1e2p, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_1e2p_CD = new TH1D("Q^{2} (1e2p, CD)", "Q^{2} (1e2p, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     TH1D *hQ2_1e2p_FD = new TH1D("Q^{2} (1e2p, FD)", "Q^{2} (1e2p, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     string hQ2_1e2p_CD_Dir = Q2_1e2p_Directory, hQ2_1e2p_FD_Dir = Q2_1e2p_Directory;
 
+    /* Q2 histograms (2p) */
+    THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_2p_CD = new TH1D("Q^{2} (2p, CD)", "Q^{2} (2p, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
     string hQ2_2p_CD_Dir = Q2_2p_Directory, hQ2_2p_FD_Dir = Q2_2p_Directory;
@@ -2372,10 +2381,8 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Energy (E_e) histograms">
-
-    //<editor-fold desc="Energy (E_e) histograms (1e cut, CD & FD)">
+    /* Energy (E_e) histograms (1e cut, CD & FD) */
     THStack *sE_e_1e_cut = new THStack("E_{e} stack (CD & FD)", "E_{e} Histogram (1e Cut, CD & FD);E_{e} [GeV]");
-
     TH1D *hE_e_1e_cut_CD = new TH1D("E_{e} (1e Cut, CD)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hE_e_1e_cut_FD = new TH1D("E_{e} (1e Cut, FD)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hE_e_1e_cut_CD_Dir = E_e_histograms_Directory, hE_e_1e_cut_FD_Dir = E_e_histograms_Directory;
@@ -2385,9 +2392,8 @@ void EventAnalyser() {
     TH2D *hE_e_VS_Theta_e_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (1e Cut, FD)", "E_{e} vs. #theta_{e} (1e Cut, FD);#theta_{e} [Deg];E_{e} [GeV]",
                                                250, 0, 50, 250, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_1e_cut_CD_Dir = E_e_VS_Theta_e_histograms_Directory, hE_e_VS_Theta_e_1e_cut_FD_Dir = E_e_VS_Theta_e_histograms_Directory;
-    //</editor-fold>
 
-    //<editor-fold desc="Energy (E_e) histograms (2p, CD & FD)">
+    /* Energy (E_e) histograms (2p, CD & FD) */
     THStack *sE_e_All_int_2p = new THStack("E_{e} stack (All Int., 2p, CD & FD)", "E_{e} Histogram (All Int., 2p, CD & FD);E_{e} [GeV]");
     THStack *sE_e_QEL_2p = new THStack("E_{e} stack (QEL Only, 2p, CD & FD)", "E_{e} Histogram (QEL Only, 2p, CD & FD);E_{e} [GeV]");
     THStack *sE_e_MEC_2p = new THStack("E_{e} stack (MEC Only, 2p, CD & FD)", "E_{e} Histogram (MEC Only, 2p, CD & FD);E_{e} [GeV]");
@@ -2409,9 +2415,8 @@ void EventAnalyser() {
     string hE_e_MEC_2p_CD_Dir = E_e_2p_MEC_histograms_Directory, hE_e_MEC_2p_FD_Dir = E_e_2p_MEC_histograms_Directory;
     string hE_e_RES_2p_CD_Dir = E_e_2p_RES_histograms_Directory, hE_e_RES_2p_FD_Dir = E_e_2p_RES_histograms_Directory;
     string hE_e_DIS_2p_CD_Dir = E_e_2p_DIS_histograms_Directory, hE_e_DIS_2p_FD_Dir = E_e_2p_DIS_histograms_Directory;
-    //</editor-fold>
 
-    //<editor-fold desc="E_e vs. Theta_e (2p, CD & FD)">
+    /* E_e vs. Theta_e (2p, CD & FD) */
     TH2D *hE_e_VS_Theta_e_All_Int_2p_CD = new TH2D("E_{e} vs. #theta_{e} (All Int., CD)", "E_{e} vs. #theta_{e} (All Int., 2p, CD);#theta_{e} [Deg];E_{e} [GeV]",
                                                    250, 35, 140, 250, 0, beamE * 1.1);
     TH2D *hE_e_VS_Theta_e_QEL_2p_CD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 2p, CD)", "E_{e} vs. #theta_{e} (QEL Only, 2p, CD);#theta_{e} [Deg];E_{e} [GeV]",
@@ -2439,48 +2444,47 @@ void EventAnalyser() {
     string hE_e_VS_Theta_e_DIS_2p_CD_Dir = E_e_VS_Theta_e_2p_DIS_histograms_Directory, hE_e_VS_Theta_e_DIS_2p_FD_Dir = E_e_VS_Theta_e_2p_DIS_histograms_Directory;
     //</editor-fold>
 
-    //</editor-fold>
-
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Energy Transfer (ET) histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
+    /* ET around 15 Deg */
     THStack *sET15_All_Int_2p_CD = new THStack("ET around 15#circ (All Int., 2p, CD)",
-                                               "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]");
+                                               "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]");
     THStack *sET15_All_Int_2p_FD = new THStack("ET around 15#circ (All Int., 2p, FD)",
-                                               "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, FD);E_{l}-E_{e} [GeV]");
+                                               "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, FD);E_{l}-E_{e} [GeV]");
     string sET15_All_Int_2p_CD_Dir = ETrans_15_stack_Directory, sET15_All_Int_2p_FD_Dir = ETrans_15_stack_Directory;
 
     TH1D *hET15_All_Int_2p_CD = new TH1D("ET around 15#circ (All Int., 2p, CD)",
-                                         "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]",
+                                         "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{l}-E_{e} [GeV]",
                                          100, 0, beamE * 1.1);
     TH1D *hET15_QEL_2p_CD = new TH1D("ET around 15#circ (QEL Only, 2p, CD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (QEL Only, 2p, CD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (QEL Only, 2p, CD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_MEC_2p_CD = new TH1D("ET around 15#circ (MEC Only, 2p, CD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (MEC Only, 2p, CD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (MEC Only, 2p, CD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_RES_2p_CD = new TH1D("ET around 15#circ (RES Only, 2p, CD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (RES Only, 2p, CD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (RES Only, 2p, CD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_DIS_2p_CD = new TH1D("ET around 15#circ (DIS Only, 2p, CD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (DIS Only, 2p, CD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, CD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_All_Int_2p_FD = new TH1D("ET around 15#circ (All Int., 2p, FD)",
-                                         "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (All Int., 2p, FD);E_{l}-E_{e} [GeV]",
+                                         "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, FD);E_{l}-E_{e} [GeV]",
                                          100, 0, beamE * 1.1);
     TH1D *hET15_QEL_2p_FD = new TH1D("ET around 15#circ (QEL Only, 2p, FD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (QEL Only, 2p, FD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (QEL Only, 2p, FD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_MEC_2p_FD = new TH1D("ET around 15#circ (MEC Only, 2p, FD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (MEC Only, 2p, FD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (MEC Only, 2p, FD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_RES_2p_FD = new TH1D("ET around 15#circ (RES Only, 2p, FD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (RES Only, 2p, FD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (RES Only, 2p, FD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     TH1D *hET15_DIS_2p_FD = new TH1D("ET around 15#circ (DIS Only, 2p, FD)",
-                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{l} #leq 16#circ (DIS Only, 2p, FD);E_{l}-E_{e} [GeV]",
+                                     "ET (E_{l}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, FD);E_{l}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
     string hET15_All_Int_2p_CD_Dir = ETrans_All_Int_15_histograms_Directory, hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_histograms_Directory;
     string hET15_QEL_2p_CD_Dir = ETrans_QEL_15_histograms_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_histograms_Directory;
@@ -2495,17 +2499,17 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal restoration histograms">
     //TODO: confirm with Adi if Ecal should be separated to CD and FD or not
-    THStack *Ecal_Stack_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
-    string Ecal_Stack_2p_Dir = Ecal_stack_Directory, Ecal_Stack_2p_FD_Dir = Ecal_stack_Directory;
+    THStack *sEcal_All_Int_2p = new THStack("E_{cal} Rec. (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
+    string sEcal_All_Int_2p_Dir = Ecal_stack_Directory, sEcal_All_Int_2p_FD_Dir = Ecal_stack_Directory;
 
-    TH1D *Ecal_All_Int_2p = new TH1D("E_{cal} (All Int., 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
-    TH1D *Ecal_QEL_2p = new TH1D("E_{cal} (QEL only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
-    TH1D *Ecal_MEC_2p = new TH1D("E_{cal} (MEC only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
-    TH1D *Ecal_RES_2p = new TH1D("E_{cal} (RES only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
-    TH1D *Ecal_DIS_2p = new TH1D("E_{cal} (DIS only, 2p, CD)", ";E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
-    string Ecal_All_Int_2p_Dir = Ecal_All_Int_histograms_Directory;
-    string Ecal_QEL_2p_Dir = Ecal_QEL_histograms_Directory, Ecal_MEC_2p_Dir = Ecal_MEC_histograms_Directory;
-    string Ecal_RES_2p_Dir = Ecal_RES_histograms_Directory, Ecal_DIS_2p_Dir = Ecal_DIS_histograms_Directory;
+    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} Rec. (All Int., 2p, CD)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} Rec. (QEL only, 2p, CD)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} Rec. (MEC only, 2p, CD)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *hEcal_RES_2p = new TH1D("E_{cal} Rec. (RES only, 2p, CD)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} Rec. (DIS only, 2p, CD)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]", 100, 0, beamE * 1.35);
+    string hEcal_All_Int_2p_Dir = Ecal_All_Int_histograms_Directory;
+    string hEcal_QEL_2p_Dir = Ecal_QEL_histograms_Directory, hEcal_MEC_2p_Dir = Ecal_MEC_histograms_Directory;
+    string hEcal_RES_2p_Dir = Ecal_RES_histograms_Directory, hEcal_DIS_2p_Dir = Ecal_DIS_histograms_Directory;
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2515,69 +2519,62 @@ void EventAnalyser() {
     //<editor-fold desc="MicroBooNE histogram reconstruction">
 
     //TODO: finish setting up these histograms
-    THStack *gamma_Lab_Stack, *gamma_mu_p_tot_Stack, dP_T_Stack;
-    THStack *gamma_Lab_weighted_Stack, *gamma_mu_p_tot_weighted_Stack, dP_T_Stack_weighted;
+    THStack *sGamma_Lab, *sGamma_mu_p_tot, *sdP_T, *sGamma_Lab_weighted, *sGamma_mu_p_tot_weighted_Stack, *sdP_T_weighted;
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (unweighted)">
-    TH1D *gamma_Lab_hist = new
-            TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, gamma_Lab_hist_lower_lim_2p, gamma_Lab_hist_upper_lim_2p);
-    TH1D *gamma_mu_p_tot = new
-            TH1D("cos(#gamma_{#mu,p_{L}+p_{R}})", "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram;cos(#gamma_{#mu,p_{L}+p_{R}})",
-                 8, gamma_mu_p_tot_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p);
+    TH1D *hGamma_Lab_All_Int = new TH1D("cos(#gamma_{Lab}) (All Int., MicroBooNE)",
+                                        "cos(#gamma_{Lab}) Histogram (All Int., MicroBooNE);cos(#gamma_{Lab})",
+                                        8, Gamma_Lab_lower_lim, Gamma_Lab_upper_lim);
+    TH1D *hGamma_mu_p_tot = new TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (All Int., MicroBooNE)",
+                                     "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (All Int., MicroBooNE);cos(#gamma_{#mu,p_{L}+p_{R}})",
+                                     8, Gamma_mu_p_tot_lower_lim, Gamma_mu_p_tot_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (Q4 weighted)">
-    TH1D *gamma_Lab_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) (Q^{4} weighted)", "cos(#gamma_{Lab}) Histogram (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_Lab_hist_weighted_upper_lim_1n1p);
+    TH1D *hGamma_Lab_weighted = new TH1D("cos(#gamma_{Lab}) (Q^{4} weighted, All Int., MicroBooNE)",
+                                         "cos(#gamma_{Lab}) Histogram (Q^{4} weighted, All Int., MicroBooNE);cos(#gamma_{Lab})",
+                                         8, Gamma_Lab_weighted_lower_lim, Gamma_Lab_weighted_upper_lim);
 
-    TH1D *gamma_mu_p_tot_weighted = new
-            TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted)",
-                 "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted);cos(#gamma_{#mu,p_{L}+p_{R}})",
-                 8, gamma_mu_p_tot_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p);
+    TH1D *hGamma_mu_p_tot_weighted = new TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted, All Int., MicroBooNE)",
+                                              "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted, All Int., MicroBooNE);cos(#gamma_{#mu,p_{L}+p_{R}})",
+                                              8, Gamma_mu_p_tot_weighted_lower_lim, Gamma_mu_p_tot_weighted_upper_lim);
     //</editor-fold>
 
-    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (no pions, for every interaction)">
-    TH1D *gamma_Lab_all_hist = new
-            TH1D("cos(#gamma_{Lab}) -all interactions",
-                 "cos(#gamma_{Lab}) Histogram -all interactions;cos(#gamma_{Lab})",
-                 8, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_upper_lim);
-    TH1D *gamma_Lab_all_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) -all interactions (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram -all interactions (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_all_hist_weighted_lower_lim, gamma_Lab_all_hist_weighted_upper_lim);
+    //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (All Int., no pions)">
+    TH1D *hGamma_Lab_All_Int_noPions = new TH1D("cos(#gamma_{Lab}) w/o pions (All Int., MicroBooNE)",
+                                                "cos(#gamma_{Lab}) w/o Pions Histogram (All Int., MicroBooNE);cos(#gamma_{Lab})",
+                                                8, Gamma_Lab_noPions_All_Int_lower_lim, Gamma_Lab_noPions_All_Int_upper_lim);
+    TH1D *hGamma_Lab_All_Int_noPions_weighted = new TH1D("cos(#gamma_{Lab}) w/o pions (Q^{4} weighted, All Int., MicroBooNE)",
+                                                         "cos(#gamma_{Lab}) Histogram  w/o pions (Q^{4} weighted, All Int., MicroBooNE);cos(#gamma_{Lab})",
+                                                         8, Gamma_Lab_noPions_All_Int_weighted_lower_lim, Gamma_Lab_noPions_All_Int_weighted_upper_lim);
 
-    TH1D *gamma_Lab_QEL_hist = new
-            TH1D("cos(#gamma_{Lab}) - QEL Only", "cos(#gamma_{Lab}) Histogram - QEL Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_upper_lim);
-    TH1D *gamma_Lab_QEL_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - QEL Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - QEL Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_QEL_hist_weighted_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim);
+    TH1D *hGamma_Lab_QEL_noPions = new TH1D("cos(#gamma_{Lab}) w/o Pions (QEL Only, MicroBooNE)",
+                                            "cos(#gamma_{Lab}) Histogram w/o Pions (QEL Only, MicroBooNE);cos(#gamma_{Lab})",
+                                            8, Gamma_Lab_noPions_QEL_lower_lim, Gamma_Lab_noPions_QEL_upper_lim);
+    TH1D *hGamma_Lab_QEL_noPions_weighted = new TH1D("cos(#gamma_{Lab}) w/o Pions (Q^{4} weighted, QEL Only, MicroBooNE)",
+                                                     "cos(#gamma_{Lab}) Histogram w/o Pions (Q^{4} weighted, QEL Only, MicroBooNE);cos(#gamma_{Lab})",
+                                                     8, Gamma_Lab_noPions_QEL_weighted_lower_lim, Gamma_Lab_noPions_QEL_weighted_upper_lim);
 
-    TH1D *gamma_Lab_MEC_hist = new
-            TH1D("cos(#gamma_{Lab}) - MEC Only", "cos(#gamma_{Lab}) Histogram - MEC Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_upper_lim);
-    TH1D *gamma_Lab_MEC_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - MEC Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - MEC Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_MEC_hist_weighted_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim);
+    TH1D *hGamma_Lab_MEC_noPions = new TH1D("cos(#gamma_{Lab}) w/o Pions (MEC Only, MicroBooNE)",
+                                            "cos(#gamma_{Lab}) Histogram w/o Pions (MEC Only, MicroBooNE);cos(#gamma_{Lab})",
+                                            8, Gamma_Lab_noPions_MEC_lower_lim, Gamma_Lab_noPions_MEC_upper_lim);
+    TH1D *hGamma_Lab_MEC_noPions_weighted = new TH1D("cos(#gamma_{Lab}) w/o Pions (Q^{4} weighted, MEC Only, MicroBooNE)",
+                                                     "cos(#gamma_{Lab}) Histogram w/o Pions (Q^{4} weighted, MEC Only, MicroBooNE);cos(#gamma_{Lab})",
+                                                     8, Gamma_Lab_noPions_MEC_weighted_lower_lim, Gamma_Lab_noPions_MEC_weighted_upper_lim);
 
-    TH1D *gamma_Lab_RES_hist = new
-            TH1D("cos(#gamma_{Lab}) - RES Only", "cos(#gamma_{Lab}) Histogram - RES Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_upper_lim);
-    TH1D *gamma_Lab_RES_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - RES Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - RES Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_RES_hist_weighted_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim);
+    TH1D *hGamma_Lab_RES_noPions = new TH1D("cos(#gamma_{Lab}) w/o Pions (RES Only, MicroBooNE)",
+                                            "cos(#gamma_{Lab}) Histogram w/o Pions (RES Only, MicroBooNE);cos(#gamma_{Lab})",
+                                            8, Gamma_Lab_noPions_RES_lower_lim, Gamma_Lab_noPions_RES_upper_lim);
+    TH1D *hGamma_Lab_RES_noPions_weighted = new TH1D("cos(#gamma_{Lab}) w/o Pions (Q^{4} weighted, RES Only, MicroBooNE)",
+                                                     "cos(#gamma_{Lab}) Histogram w/o Pions (Q^{4} weighted, RES Only, MicroBooNE);cos(#gamma_{Lab})",
+                                                     8, Gamma_Lab_noPions_RES_weighted_lower_lim, Gamma_Lab_noPions_RES_weighted_upper_lim);
 
-    TH1D *gamma_Lab_DIS_hist = new
-            TH1D("cos(#gamma_{Lab}) - DIS Only", "cos(#gamma_{Lab}) Histogram - DIS Only;cos(#gamma_{Lab})",
-                 8, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_upper_lim);
-    TH1D *gamma_Lab_DIS_hist_weighted = new
-            TH1D("cos(#gamma_{Lab}) - DIS Only (Q^{4} weighted)",
-                 "cos(#gamma_{Lab}) Histogram - DIS Only (Q^{4} weighted);cos(#gamma_{Lab})",
-                 8, gamma_Lab_DIS_hist_weighted_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim);
+    TH1D *hGamma_Lab_DIS_noPions = new TH1D("cos(#gamma_{Lab}) w/o Pions (RES Only, MicroBooNE)",
+                                            "cos(#gamma_{Lab}) Histogram w/o Pions (RES Only, MicroBooNE);cos(#gamma_{Lab})",
+                                            8, Gamma_Lab_noPions_DIS_lower_lim, Gamma_Lab_noPions_DIS_upper_lim);
+    TH1D *hGamma_Lab_DIS_noPions_weighted = new TH1D("cos(#gamma_{Lab}) w/o Pions (Q^{4} weighted, RES Only, MicroBooNE)",
+                                                     "cos(#gamma_{Lab}) Histogram w/o Pions (Q^{4} weighted, RES Only, MicroBooNE);cos(#gamma_{Lab})",
+                                                     8, Gamma_Lab_noPions_DIS_weighted_lower_lim, Gamma_Lab_noPions_DIS_weighted_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE dP_T plots (unweighted and Q4 weighted)">
@@ -4829,16 +4826,16 @@ void EventAnalyser() {
             Ep1 = sqrt(m_p * m_p + Pp1 * Pp1);
             Ecal_2p = E_e + (Ep0 - m_p) + (Ep1 - m_p);
 
-            Ecal_All_Int_2p->Fill(Ecal_2p);
+            hEcal_All_Int_2p->Fill(Ecal_2p);
 
             if (qel) {
-                Ecal_QEL_2p->Fill(Ecal_2p);
+                hEcal_QEL_2p->Fill(Ecal_2p);
             } else if (mec) {
-                Ecal_MEC_2p->Fill(Ecal_2p);
+                hEcal_MEC_2p->Fill(Ecal_2p);
             } else if (res) {
-                Ecal_RES_2p->Fill(Ecal_2p);
+                hEcal_RES_2p->Fill(Ecal_2p);
             } else if (dis) {
-                Ecal_DIS_2p->Fill(Ecal_2p);
+                hEcal_DIS_2p->Fill(Ecal_2p);
             }
             //</editor-fold>
 
@@ -7097,7 +7094,7 @@ void EventAnalyser() {
 
             cout << "\n\nPlotting ET for all interactions...\n\n";
 
-            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (all interactions)">
+            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{e} <= 16[Deg] (all interactions)">
             double ETrans15_All_Int_integral_2p = hET15_All_Int_2p_CD->Integral() + hET15_All_Int_2p_FD->Integral();
 
             histPlotter1D(c1, hET15_All_Int_2p_CD, normalized_E_Trans15_plots, true, ETrans15_All_Int_integral_2p,
@@ -7115,7 +7112,7 @@ void EventAnalyser() {
 
             cout << "\n\nPlotting ET for QEL only...\n\n";
 
-            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (QEL only)">
+            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{e} <= 16[Deg] (QEL only)">
             double ETrans15_QEL_integral_2p = hET15_QEL_2p_CD->Integral() + hET15_QEL_2p_FD->Integral();
 
             histPlotter1D(c1, hET15_QEL_2p_CD, normalized_E_Trans15_plots, true, ETrans15_QEL_integral_2p,
@@ -7133,7 +7130,7 @@ void EventAnalyser() {
 
             cout << "\n\nPlotting ET for MEC only...\n\n";
 
-            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (MEC only)">
+            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{e} <= 16[Deg] (MEC only)">
             double ETrans15_MEC_integral_2p = hET15_MEC_2p_CD->Integral() + hET15_MEC_2p_FD->Integral();
 
             histPlotter1D(c1, hET15_MEC_2p_CD, normalized_E_Trans15_plots, true, ETrans15_MEC_integral_2p,
@@ -7151,7 +7148,7 @@ void EventAnalyser() {
 
             cout << "\n\nPlotting ET for RES only...\n\n";
 
-            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (RES only)">
+            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{e} <= 16[Deg] (RES only)">
             double ETrans15_RES_integral_2p = hET15_RES_2p_CD->Integral() + hET15_RES_2p_FD->Integral();
 
             histPlotter1D(c1, hET15_RES_2p_CD, normalized_E_Trans15_plots, true, ETrans15_RES_integral_2p,
@@ -7169,7 +7166,7 @@ void EventAnalyser() {
 
             cout << "\n\nPlotting ET for DIS only...\n\n";
 
-            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{l} <= 16[Deg] (DIS only)">
+            //<editor-fold desc="ET (beamE-E_e) in the angle range 14[Deg] <= theta_{e} <= 16[Deg] (DIS only)">
             double ETrans15_DIS_integral_2p = hET15_DIS_2p_CD->Integral() + hET15_DIS_2p_FD->Integral();
 
             histPlotter1D(c1, hET15_DIS_2p_CD, normalized_E_Trans15_plots, true, ETrans15_DIS_integral_2p,
@@ -7273,8 +7270,8 @@ void EventAnalyser() {
         //<editor-fold desc="E_cal_QEL restoration (2p & 1n1p)">
 //        double E_cal_QEL_integral = E_cal_QEL_2p->Integral() + E_cal_QEL_1n1p->Integral();
 
-        histPlotter1D(c1, Ecal_All_Int_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "All Int., 2p", 0.06, 0.0425, 0.0425,
-                      plots, 4, false, true, Ecal_Stack_2p, "Ecal_restoration_All_Int", Ecal_All_Int_2p_Dir, "CD", kBlack, true, true, true);
+        histPlotter1D(c1, hEcal_All_Int_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "All Int., 2p", 0.06, 0.0425, 0.0425,
+                      plots, 4, false, true, sEcal_All_Int_2p, "Ecal_restoration_All_Int", hEcal_All_Int_2p_Dir, "CD", kBlack, true, true, true);
         //</editor-fold>
 
 //  E_cal_QEL restoration ------------------------------------------------------------------------------
@@ -7282,8 +7279,8 @@ void EventAnalyser() {
         //<editor-fold desc="E_cal_QEL restoration (2p & 1n1p)">
 //        double E_cal_QEL_integral = E_cal_QEL_2p->Integral() + E_cal_QEL_1n1p->Integral();
 
-        histPlotter1D(c1, Ecal_QEL_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_QEL_only", Ecal_QEL_2p_Dir, "CD", kBlue, true, true, true);
+        histPlotter1D(c1, hEcal_QEL_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sEcal_All_Int_2p, "Ecal_restoration_QEL_only", hEcal_QEL_2p_Dir, "CD", kBlue, true, true, true);
         //</editor-fold>
 
 //  E_cal_MEC restoration ------------------------------------------------------------------------------
@@ -7291,8 +7288,8 @@ void EventAnalyser() {
         //<editor-fold desc="E_cal_MEC restoration (2p & 1n1p)">
 //        double E_cal_MEC_integral = E_cal_MEC_2p->Integral() + E_cal_MEC_1n1p->Integral();
 
-        histPlotter1D(c1, Ecal_MEC_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_MEC_only", Ecal_MEC_2p_Dir, "CD", kRed, true, true, true);
+        histPlotter1D(c1, hEcal_MEC_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sEcal_All_Int_2p, "Ecal_restoration_MEC_only", hEcal_MEC_2p_Dir, "CD", kRed, true, true, true);
         //</editor-fold>
 
 
@@ -7301,8 +7298,8 @@ void EventAnalyser() {
         //<editor-fold desc="E_cal_RES restoration (2p & 1n1p)">
 //        double E_cal_RES_integral = E_cal_RES_2p->Integral() + E_cal_RES_1n1p->Integral();
 
-        histPlotter1D(c1, Ecal_RES_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "RES Only, 2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_RES_only", Ecal_RES_2p_Dir, "CD", kGreen, true, true, true);
+        histPlotter1D(c1, hEcal_RES_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "RES Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sEcal_All_Int_2p, "Ecal_restoration_RES_only", hEcal_RES_2p_Dir, "CD", kGreen, true, true, true);
         //</editor-fold>
 
 
@@ -7311,41 +7308,41 @@ void EventAnalyser() {
         //<editor-fold desc="E_cal_DIS restoration (2p & 1n1p)">
 //        double E_cal_DIS_integral = E_cal_DIS_2p->Integral() + E_cal_DIS_1n1p->Integral();
 
-        histPlotter1D(c1, Ecal_DIS_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, Ecal_Stack_2p, "Ecal_restoration_DIS_only", Ecal_DIS_2p_Dir, "CD", kMagenta, true, true, true);
+        histPlotter1D(c1, hEcal_DIS_2p, normalized_E_cal_plots, true, 1., "E_{cal} Histogram", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sEcal_All_Int_2p, "Ecal_restoration_DIS_only", hEcal_DIS_2p_Dir, "CD", kMagenta, true, true, true);
         //</editor-fold>
 
 //  Ecal stack (2p only) ------------------------------------------------------
 
         //<editor-fold desc="Energy transfer around 15 deg stack (2p, CD)">
-        Ecal_Stack_2p->Draw("nostack");
-        Ecal_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Ecal_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Ecal_Stack_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
-        Ecal_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-        Ecal_Stack_2p->GetHistogram()->GetYaxis()->CenterTitle(true);
+        sEcal_All_Int_2p->Draw("nostack");
+        sEcal_All_Int_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+        sEcal_All_Int_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+        sEcal_All_Int_2p->GetHistogram()->GetXaxis()->CenterTitle(true);
+        sEcal_All_Int_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        sEcal_All_Int_2p->GetHistogram()->GetYaxis()->CenterTitle(true);
 
         if (normalized_E_Trans15_plots) {
-            Ecal_Stack_2p->SetTitle("E_{cal} Reconstruction (2p) - Normalized");
-            Ecal_Stack_2p->GetXaxis()->SetTitle("E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
-            Ecal_Stack_2p->GetYaxis()->SetTitle("Probability (%)");
-            Ecal_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+            sEcal_All_Int_2p->SetTitle("E_{cal} Reconstruction (2p) - Normalized");
+            sEcal_All_Int_2p->GetXaxis()->SetTitle("E_{cal} = E_{e} + T_{p1} + T_{p2} [GeV]");
+            sEcal_All_Int_2p->GetYaxis()->SetTitle("Probability (%)");
+            sEcal_All_Int_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         } else {
-            Ecal_Stack_2p->GetYaxis()->SetTitle("Arbitrary units");
-            Ecal_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+            sEcal_All_Int_2p->GetYaxis()->SetTitle("Arbitrary units");
+            sEcal_All_Int_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
         }
 
         auto Ecal_legend_2p_CD = new TLegend(0.775, 0.625, 0.9, 0.9);
 
-        TLegendEntry *Ecal_all_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_All_Int_2p, "All int.", "l");
-        TLegendEntry *Ecal_QEL_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_QEL_2p, "QEL", "l");
-        TLegendEntry *Ecal_MEC_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_MEC_2p, "MEC", "l");
-        TLegendEntry *Ecal_RES_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_RES_2p, "RES", "l");
-        TLegendEntry *Ecal_DIS_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(Ecal_DIS_2p, "DIS", "l");
+        TLegendEntry *Ecal_all_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(hEcal_All_Int_2p, "All int.", "l");
+        TLegendEntry *Ecal_QEL_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(hEcal_QEL_2p, "QEL", "l");
+        TLegendEntry *Ecal_MEC_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(hEcal_MEC_2p, "MEC", "l");
+        TLegendEntry *Ecal_RES_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(hEcal_RES_2p, "RES", "l");
+        TLegendEntry *Ecal_DIS_entry_2p_stack_CD = Ecal_legend_2p_CD->AddEntry(hEcal_DIS_2p, "DIS", "l");
         Ecal_legend_2p_CD->Draw();
 
-        plots->Add(Ecal_Stack_2p);
-        c1->SaveAs((Ecal_Stack_2p_Dir + "Ecal_Stack_2p.png").c_str());
+        plots->Add(sEcal_All_Int_2p);
+        c1->SaveAs((sEcal_All_Int_2p_Dir + "sEcal_All_Int_2p.png").c_str());
         c1->Clear();
         //</editor-fold>
 
@@ -7411,28 +7408,28 @@ void EventAnalyser() {
 
 // Unweighted plots -----------------------------------------------------------------------------
 
-        gamma_Lab_hist->Draw();
-        gamma_Lab_hist->SetTitleSize(0.06);
-        gamma_Lab_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_hist->GetYaxis()->SetLabelSize(0.0425);
-//        gamma_Lab_hist->GetYaxis()->SetLimits(0., 3.);
-        plots->Add(gamma_Lab_hist);
-        gamma_Lab_hist->SetLineWidth(2);
-        gamma_Lab_hist->SetLineColor(kBlue);
-//        gamma_Lab_hist->SetStats(0);
+        hGamma_Lab_All_Int->Draw();
+        hGamma_Lab_All_Int->SetTitleSize(0.06);
+        hGamma_Lab_All_Int->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_All_Int->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_All_Int->GetYaxis()->SetLabelSize(0.0425);
+//        hGamma_Lab_All_Int->GetYaxis()->SetLimits(0., 3.);
+        plots->Add(hGamma_Lab_All_Int);
+        hGamma_Lab_All_Int->SetLineWidth(2);
+        hGamma_Lab_All_Int->SetLineColor(kBlue);
+//        hGamma_Lab_All_Int->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab.png");
         c1->Clear();
 
-        gamma_mu_p_tot->Draw();
-        gamma_mu_p_tot->SetTitleSize(0.06);
-        gamma_mu_p_tot->GetXaxis()->SetLabelSize(0.0425);
-        gamma_mu_p_tot->GetXaxis()->CenterTitle(true);
-        gamma_mu_p_tot->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_mu_p_tot);
-        gamma_mu_p_tot->SetLineWidth(2);
-        gamma_mu_p_tot->SetLineColor(kBlue);
-//        gamma_mu_p_tot->SetStats(0);
+        hGamma_mu_p_tot->Draw();
+        hGamma_mu_p_tot->SetTitleSize(0.06);
+        hGamma_mu_p_tot->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_mu_p_tot->GetXaxis()->CenterTitle(true);
+        hGamma_mu_p_tot->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_mu_p_tot);
+        hGamma_mu_p_tot->SetLineWidth(2);
+        hGamma_mu_p_tot->SetLineColor(kBlue);
+//        hGamma_mu_p_tot->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot.png");
         c1->Clear();
 
@@ -7448,93 +7445,93 @@ void EventAnalyser() {
         c1->SaveAs("plots/MicroBooNE_plots/dP_T_histogram.png");
         c1->Clear();
 
-        gamma_Lab_all_hist->Draw();
-        gamma_Lab_all_hist->SetTitleSize(0.06);
-        gamma_Lab_all_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_all_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_all_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_all_hist);
-        gamma_Lab_all_hist->SetLineWidth(2);
-        gamma_Lab_all_hist->SetLineColor(kBlue);
-//        gamma_Lab_all_hist->SetStats(0);
+        hGamma_Lab_All_Int_noPions->Draw();
+        hGamma_Lab_All_Int_noPions->SetTitleSize(0.06);
+        hGamma_Lab_All_Int_noPions->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_All_Int_noPions->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_All_Int_noPions->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_All_Int_noPions);
+        hGamma_Lab_All_Int_noPions->SetLineWidth(2);
+        hGamma_Lab_All_Int_noPions->SetLineColor(kBlue);
+//        hGamma_Lab_All_Int_noPions->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all.png");
         c1->Clear();
 
         /*
-        gamma_Lab_QEL_hist->Draw();
-        gamma_Lab_QEL_hist->SetTitleSize(0.06);
-        gamma_Lab_QEL_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_QEL_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_QEL_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_QEL_hist);
-        gamma_Lab_QEL_hist->SetLineWidth(2);
-        gamma_Lab_QEL_hist->SetLineColor(kBlue);
-//        gamma_Lab_QEL_hist->SetStats(0);
+        hGamma_Lab_QEL_noPions->Draw();
+        hGamma_Lab_QEL_noPions->SetTitleSize(0.06);
+        hGamma_Lab_QEL_noPions->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_QEL_noPions->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_QEL_noPions->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_QEL_noPions);
+        hGamma_Lab_QEL_noPions->SetLineWidth(2);
+        hGamma_Lab_QEL_noPions->SetLineColor(kBlue);
+//        hGamma_Lab_QEL_noPions->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL.png");
         c1->Clear();
 
-        gamma_Lab_MEC_hist->Draw();
-        gamma_Lab_MEC_hist->SetTitleSize(0.06);
-        gamma_Lab_MEC_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_MEC_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_MEC_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_MEC_hist);
-        gamma_Lab_MEC_hist->SetLineWidth(2);
-        gamma_Lab_MEC_hist->SetLineColor(kBlue);
-//        gamma_Lab_MEC_hist->SetStats(0);
+        hGamma_Lab_MEC_noPions->Draw();
+        hGamma_Lab_MEC_noPions->SetTitleSize(0.06);
+        hGamma_Lab_MEC_noPions->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_MEC_noPions->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_MEC_noPions->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_MEC_noPions);
+        hGamma_Lab_MEC_noPions->SetLineWidth(2);
+        hGamma_Lab_MEC_noPions->SetLineColor(kBlue);
+//        hGamma_Lab_MEC_noPions->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC.png");
         c1->Clear();
 
-        gamma_Lab_RES_hist->Draw();
-        gamma_Lab_RES_hist->SetTitleSize(0.06);
-        gamma_Lab_RES_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_RES_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_RES_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_RES_hist);
-        gamma_Lab_RES_hist->SetLineWidth(2);
-        gamma_Lab_RES_hist->SetLineColor(kBlue);
-//        gamma_Lab_RES_hist->SetStats(0);
+        hGamma_Lab_RES_noPions->Draw();
+        hGamma_Lab_RES_noPions->SetTitleSize(0.06);
+        hGamma_Lab_RES_noPions->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_RES_noPions->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_RES_noPions->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_RES_noPions);
+        hGamma_Lab_RES_noPions->SetLineWidth(2);
+        hGamma_Lab_RES_noPions->SetLineColor(kBlue);
+//        hGamma_Lab_RES_noPions->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES.png");
         c1->Clear();
 
-        gamma_Lab_DIS_hist->Draw();
-        gamma_Lab_DIS_hist->SetTitleSize(0.06);
-        gamma_Lab_DIS_hist->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_DIS_hist->GetXaxis()->CenterTitle(true);
-        gamma_Lab_DIS_hist->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_DIS_hist);
-        gamma_Lab_DIS_hist->SetLineWidth(2);
-        gamma_Lab_DIS_hist->SetLineColor(kBlue);
-//        gamma_Lab_DIS_hist->SetStats(0);
+        hGamma_Lab_DIS_noPions->Draw();
+        hGamma_Lab_DIS_noPions->SetTitleSize(0.06);
+        hGamma_Lab_DIS_noPions->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_DIS_noPions->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_DIS_noPions->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_DIS_noPions);
+        hGamma_Lab_DIS_noPions->SetLineWidth(2);
+        hGamma_Lab_DIS_noPions->SetLineColor(kBlue);
+//        hGamma_Lab_DIS_noPions->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS.png");
         c1->Clear();
         */
 
 // Weighted plots -------------------------------------------------------------------------------
 
-        gamma_Lab_hist_weighted->Draw();
-        gamma_Lab_hist_weighted->Sumw2();
-        gamma_Lab_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_hist_weighted);
-        gamma_Lab_hist_weighted->SetLineWidth(2);
-        gamma_Lab_hist_weighted->SetLineColor(kBlue);
-        gamma_Lab_hist_weighted->SetStats(0);
+        hGamma_Lab_weighted->Draw();
+        hGamma_Lab_weighted->Sumw2();
+        hGamma_Lab_weighted->SetTitleSize(0.06);
+        hGamma_Lab_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_weighted);
+        hGamma_Lab_weighted->SetLineWidth(2);
+        hGamma_Lab_weighted->SetLineColor(kBlue);
+        hGamma_Lab_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_Lab_weighted.png");
         c1->Clear();
 
-        gamma_mu_p_tot_weighted->Draw();
-        gamma_mu_p_tot_weighted->Sumw2();
-        gamma_mu_p_tot_weighted->SetTitleSize(0.06);
-        gamma_mu_p_tot_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_mu_p_tot_weighted->GetXaxis()->CenterTitle(true);
-        gamma_mu_p_tot_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_mu_p_tot_weighted);
-        gamma_mu_p_tot_weighted->SetLineWidth(2);
-        gamma_mu_p_tot_weighted->SetLineColor(kBlue);
-        gamma_mu_p_tot_weighted->SetStats(0);
+        hGamma_mu_p_tot_weighted->Draw();
+        hGamma_mu_p_tot_weighted->Sumw2();
+        hGamma_mu_p_tot_weighted->SetTitleSize(0.06);
+        hGamma_mu_p_tot_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_mu_p_tot_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_mu_p_tot_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_mu_p_tot_weighted);
+        hGamma_mu_p_tot_weighted->SetLineWidth(2);
+        hGamma_mu_p_tot_weighted->SetLineColor(kBlue);
+        hGamma_mu_p_tot_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_mu_p_tot_weighted.png");
         c1->Clear();
 
@@ -7552,69 +7549,69 @@ void EventAnalyser() {
         c1->Clear();
 
 
-        gamma_Lab_all_hist_weighted->Draw();
-        gamma_Lab_all_hist_weighted->Sumw2();
-        gamma_Lab_all_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_all_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_all_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_all_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_all_hist_weighted);
-        gamma_Lab_all_hist_weighted->SetLineWidth(2);
-        gamma_Lab_all_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_all_hist_weighted->SetStats(0);
+        hGamma_Lab_All_Int_noPions_weighted->Draw();
+        hGamma_Lab_All_Int_noPions_weighted->Sumw2();
+        hGamma_Lab_All_Int_noPions_weighted->SetTitleSize(0.06);
+        hGamma_Lab_All_Int_noPions_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_All_Int_noPions_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_All_Int_noPions_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_All_Int_noPions_weighted);
+        hGamma_Lab_All_Int_noPions_weighted->SetLineWidth(2);
+        hGamma_Lab_All_Int_noPions_weighted->SetLineColor(kBlue);
+//        hGamma_Lab_All_Int_noPions_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/all_interactions/gamma_Lab_all_weighted.png");
         c1->Clear();
 
         /*
-        gamma_Lab_QEL_hist_weighted->Draw();
-        gamma_Lab_QEL_hist_weighted->Sumw2();
-        gamma_Lab_QEL_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_QEL_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_QEL_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_QEL_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_QEL_hist_weighted);
-        gamma_Lab_QEL_hist_weighted->SetLineWidth(2);
-        gamma_Lab_QEL_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_QEL_hist_weighted->SetStats(0);
+        hGamma_Lab_QEL_noPions_weighted->Draw();
+        hGamma_Lab_QEL_noPions_weighted->Sumw2();
+        hGamma_Lab_QEL_noPions_weighted->SetTitleSize(0.06);
+        hGamma_Lab_QEL_noPions_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_QEL_noPions_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_QEL_noPions_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_QEL_noPions_weighted);
+        hGamma_Lab_QEL_noPions_weighted->SetLineWidth(2);
+        hGamma_Lab_QEL_noPions_weighted->SetLineColor(kBlue);
+//        hGamma_Lab_QEL_noPions_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/QEL_only/gamma_Lab_QEL_weighted.png");
         c1->Clear();
 
-        gamma_Lab_MEC_hist_weighted->Draw();
-        gamma_Lab_MEC_hist_weighted->Sumw2();
-        gamma_Lab_MEC_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_MEC_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_MEC_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_MEC_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_MEC_hist_weighted);
-        gamma_Lab_MEC_hist_weighted->SetLineWidth(2);
-        gamma_Lab_MEC_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_MEC_hist_weighted->SetStats(0);
+        hGamma_Lab_MEC_noPions_weighted->Draw();
+        hGamma_Lab_MEC_noPions_weighted->Sumw2();
+        hGamma_Lab_MEC_noPions_weighted->SetTitleSize(0.06);
+        hGamma_Lab_MEC_noPions_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_MEC_noPions_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_MEC_noPions_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_MEC_noPions_weighted);
+        hGamma_Lab_MEC_noPions_weighted->SetLineWidth(2);
+        hGamma_Lab_MEC_noPions_weighted->SetLineColor(kBlue);
+//        hGamma_Lab_MEC_noPions_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/MEC_only/gamma_Lab_MEC_weighted.png");
         c1->Clear();
 
-        gamma_Lab_RES_hist_weighted->Draw();
-        gamma_Lab_RES_hist_weighted->Sumw2();
-        gamma_Lab_RES_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_RES_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_RES_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_RES_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_RES_hist_weighted);
-        gamma_Lab_RES_hist_weighted->SetLineWidth(2);
-        gamma_Lab_RES_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_RES_hist_weighted->SetStats(0);
+        hGamma_Lab_RES_noPions_weighted->Draw();
+        hGamma_Lab_RES_noPions_weighted->Sumw2();
+        hGamma_Lab_RES_noPions_weighted->SetTitleSize(0.06);
+        hGamma_Lab_RES_noPions_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_RES_noPions_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_RES_noPions_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_RES_noPions_weighted);
+        hGamma_Lab_RES_noPions_weighted->SetLineWidth(2);
+        hGamma_Lab_RES_noPions_weighted->SetLineColor(kBlue);
+//        hGamma_Lab_RES_noPions_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/RES_only/gamma_Lab_RES_weighted.png");
         c1->Clear();
 
-        gamma_Lab_DIS_hist_weighted->Draw();
-        gamma_Lab_DIS_hist_weighted->Sumw2();
-        gamma_Lab_DIS_hist_weighted->SetTitleSize(0.06);
-        gamma_Lab_DIS_hist_weighted->GetXaxis()->SetLabelSize(0.0425);
-        gamma_Lab_DIS_hist_weighted->GetXaxis()->CenterTitle(true);
-        gamma_Lab_DIS_hist_weighted->GetYaxis()->SetLabelSize(0.0425);
-        plots->Add(gamma_Lab_DIS_hist_weighted);
-        gamma_Lab_DIS_hist_weighted->SetLineWidth(2);
-        gamma_Lab_DIS_hist_weighted->SetLineColor(kBlue);
-//        gamma_Lab_DIS_hist_weighted->SetStats(0);
+        hGamma_Lab_DIS_noPions_weighted->Draw();
+        hGamma_Lab_DIS_noPions_weighted->Sumw2();
+        hGamma_Lab_DIS_noPions_weighted->SetTitleSize(0.06);
+        hGamma_Lab_DIS_noPions_weighted->GetXaxis()->SetLabelSize(0.0425);
+        hGamma_Lab_DIS_noPions_weighted->GetXaxis()->CenterTitle(true);
+        hGamma_Lab_DIS_noPions_weighted->GetYaxis()->SetLabelSize(0.0425);
+        plots->Add(hGamma_Lab_DIS_noPions_weighted);
+        hGamma_Lab_DIS_noPions_weighted->SetLineWidth(2);
+        hGamma_Lab_DIS_noPions_weighted->SetLineColor(kBlue);
+//        hGamma_Lab_DIS_noPions_weighted->SetStats(0);
         c1->SaveAs("plots/MicroBooNE_plots/gamma_lab/DIS_only/gamma_Lab_DIS_weighted.png");
         c1->Clear();
         */

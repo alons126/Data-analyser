@@ -550,40 +550,40 @@ void gst::Loop() {
     //<editor-fold desc="MicroBooNE plots">
 
     //<editor-fold desc="MicroBooNE gamma plots (unweighted)">
-    gamma_Lab_hist_upper_lim_2p = 1;
-    gamma_Lab_hist_lower_lim_2p = -1;
-    gamma_mu_p_tot_upper_lim_2p = 1;
-    gamma_mu_p_tot_lower_lim_2p = -1;
+    Gamma_Lab_upper_lim = 1;
+    Gamma_Lab_lower_lim = -1;
+    Gamma_mu_p_tot_upper_lim = 1;
+    Gamma_mu_p_tot_lower_lim = -1;
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE gamma plots (Q4 weighted)">
-    gamma_Lab_hist_weighted_upper_lim_1n1p = 1;
-    gamma_Lab_hist_weighted_lower_lim_1n1p = -1;
-    gamma_mu_p_tot_weighted_upper_lim_1n1p = 1;
-    gamma_mu_p_tot_weighted_lower_lim_1n1p = -1;
+    Gamma_Lab_weighted_upper_lim = 1;
+    Gamma_Lab_weighted_lower_lim = -1;
+    Gamma_mu_p_tot_weighted_upper_lim = 1;
+    Gamma_mu_p_tot_weighted_lower_lim = -1;
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE gamma plots (no pions, for every interaction)">
-    gamma_Lab_all_hist_upper_lim = 1;
-    gamma_Lab_all_hist_lower_lim = -1;
-    gamma_Lab_all_hist_weighted_upper_lim = 1;
-    gamma_Lab_all_hist_weighted_lower_lim = -1;
-    gamma_Lab_QEL_hist_upper_lim = 1;
-    gamma_Lab_QEL_hist_lower_lim = -1;
-    gamma_Lab_QEL_hist_weighted_upper_lim = 1;
-    gamma_Lab_QEL_hist_weighted_lower_lim = -1;
-    gamma_Lab_MEC_hist_upper_lim = 1;
-    gamma_Lab_MEC_hist_lower_lim = -1;
-    gamma_Lab_MEC_hist_weighted_upper_lim = 1;
-    gamma_Lab_MEC_hist_weighted_lower_lim = -1;
-    gamma_Lab_RES_hist_upper_lim = 1;
-    gamma_Lab_RES_hist_lower_lim = -1;
-    gamma_Lab_RES_hist_weighted_upper_lim = 1;
-    gamma_Lab_RES_hist_weighted_lower_lim = -1;
-    gamma_Lab_DIS_hist_upper_lim = 1;
-    gamma_Lab_DIS_hist_lower_lim = -1;
-    gamma_Lab_DIS_hist_weighted_upper_lim = 1;
-    gamma_Lab_DIS_hist_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_All_Int_upper_lim = 1;
+    Gamma_Lab_noPions_All_Int_lower_lim = -1;
+    Gamma_Lab_noPions_All_Int_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_All_Int_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_QEL_upper_lim = 1;
+    Gamma_Lab_noPions_QEL_lower_lim = -1;
+    Gamma_Lab_noPions_QEL_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_QEL_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_MEC_upper_lim = 1;
+    Gamma_Lab_noPions_MEC_lower_lim = -1;
+    Gamma_Lab_noPions_MEC_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_MEC_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_RES_upper_lim = 1;
+    Gamma_Lab_noPions_RES_lower_lim = -1;
+    Gamma_Lab_noPions_RES_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_RES_weighted_lower_lim = -1;
+    Gamma_Lab_noPions_DIS_upper_lim = 1;
+    Gamma_Lab_noPions_DIS_lower_lim = -1;
+    Gamma_Lab_noPions_DIS_weighted_upper_lim = 1;
+    Gamma_Lab_noPions_DIS_weighted_lower_lim = -1;
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE dP_T plots">
@@ -5358,64 +5358,64 @@ void gst::Loop() {
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (unweighted)">
     TH1D *gamma_Lab_hist = new
-    TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, gamma_Lab_hist_lower_lim_2p, gamma_Lab_hist_upper_lim_2p);
+    TH1D("cos(#gamma_{Lab})", "cos(#gamma_{Lab}) Histogram;cos(#gamma_{Lab})", 8, Gamma_Lab_lower_lim, Gamma_Lab_upper_lim);
     TH1D *gamma_mu_p_tot = new
     TH1D("cos(#gamma_{#mu,p_{L}+p_{R}})", "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram;cos(#gamma_{#mu,p_{L}+p_{R}})",
-         8, gamma_mu_p_tot_lower_lim_2p, gamma_mu_p_tot_upper_lim_2p);
+         8, Gamma_mu_p_tot_lower_lim, Gamma_mu_p_tot_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (Q4 weighted)">
     TH1D *gamma_Lab_hist_weighted = new
     TH1D("cos(#gamma_{Lab}) (Q^{4} weighted)", "cos(#gamma_{Lab}) Histogram (Q^{4} weighted);cos(#gamma_{Lab})",
-         8, gamma_Lab_hist_weighted_lower_lim_1n1p, gamma_Lab_hist_weighted_upper_lim_1n1p);
+         8, Gamma_Lab_weighted_lower_lim, Gamma_Lab_weighted_upper_lim);
 
     TH1D *gamma_mu_p_tot_weighted = new
     TH1D("cos(#gamma_{#mu,p_{L}+p_{R}}) (Q^{4} weighted)",
          "cos(#gamma_{#mu,p_{L}+p_{R}}) Histogram (Q^{4} weighted);cos(#gamma_{#mu,p_{L}+p_{R}})",
-         8, gamma_mu_p_tot_weighted_lower_lim_1n1p, gamma_mu_p_tot_weighted_upper_lim_1n1p);
+         8, Gamma_mu_p_tot_weighted_lower_lim, Gamma_mu_p_tot_weighted_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE gamma plots (no pions, for every interaction)">
     TH1D *gamma_Lab_all_hist = new
     TH1D("cos(#gamma_{Lab}) -all interactions",
          "cos(#gamma_{Lab}) Histogram -all interactions;cos(#gamma_{Lab})",
-         8, gamma_Lab_all_hist_lower_lim, gamma_Lab_all_hist_upper_lim);
+         8, Gamma_Lab_noPions_All_Int_lower_lim, Gamma_Lab_noPions_All_Int_upper_lim);
     TH1D *gamma_Lab_all_hist_weighted = new
     TH1D("cos(#gamma_{Lab}) -all interactions (Q^{4} weighted)",
          "cos(#gamma_{Lab}) Histogram -all interactions (Q^{4} weighted);cos(#gamma_{Lab})",
-         8, gamma_Lab_all_hist_weighted_lower_lim, gamma_Lab_all_hist_weighted_upper_lim);
+         8, Gamma_Lab_noPions_All_Int_weighted_lower_lim, Gamma_Lab_noPions_All_Int_weighted_upper_lim);
 
     TH1D *gamma_Lab_QEL_hist = new
     TH1D("cos(#gamma_{Lab}) - QEL Only", "cos(#gamma_{Lab}) Histogram - QEL Only;cos(#gamma_{Lab})",
-         8, gamma_Lab_QEL_hist_lower_lim, gamma_Lab_QEL_hist_upper_lim);
+         8, Gamma_Lab_noPions_QEL_lower_lim, Gamma_Lab_noPions_QEL_upper_lim);
     TH1D *gamma_Lab_QEL_hist_weighted = new
     TH1D("cos(#gamma_{Lab}) - QEL Only (Q^{4} weighted)",
          "cos(#gamma_{Lab}) Histogram - QEL Only (Q^{4} weighted);cos(#gamma_{Lab})",
-         8, gamma_Lab_QEL_hist_weighted_lower_lim, gamma_Lab_QEL_hist_weighted_upper_lim);
+         8, Gamma_Lab_noPions_QEL_weighted_lower_lim, Gamma_Lab_noPions_QEL_weighted_upper_lim);
 
     TH1D *gamma_Lab_MEC_hist = new
     TH1D("cos(#gamma_{Lab}) - MEC Only", "cos(#gamma_{Lab}) Histogram - MEC Only;cos(#gamma_{Lab})",
-         8, gamma_Lab_MEC_hist_lower_lim, gamma_Lab_MEC_hist_upper_lim);
+         8, Gamma_Lab_noPions_MEC_lower_lim, Gamma_Lab_noPions_MEC_upper_lim);
     TH1D *gamma_Lab_MEC_hist_weighted = new
     TH1D("cos(#gamma_{Lab}) - MEC Only (Q^{4} weighted)",
          "cos(#gamma_{Lab}) Histogram - MEC Only (Q^{4} weighted);cos(#gamma_{Lab})",
-         8, gamma_Lab_MEC_hist_weighted_lower_lim, gamma_Lab_MEC_hist_weighted_upper_lim);
+         8, Gamma_Lab_noPions_MEC_weighted_lower_lim, Gamma_Lab_noPions_MEC_weighted_upper_lim);
 
     TH1D *gamma_Lab_RES_hist = new
     TH1D("cos(#gamma_{Lab}) - RES Only", "cos(#gamma_{Lab}) Histogram - RES Only;cos(#gamma_{Lab})",
-         8, gamma_Lab_RES_hist_lower_lim, gamma_Lab_RES_hist_upper_lim);
+         8, Gamma_Lab_noPions_RES_lower_lim, Gamma_Lab_noPions_RES_upper_lim);
     TH1D *gamma_Lab_RES_hist_weighted = new
     TH1D("cos(#gamma_{Lab}) - RES Only (Q^{4} weighted)",
          "cos(#gamma_{Lab}) Histogram - RES Only (Q^{4} weighted);cos(#gamma_{Lab})",
-         8, gamma_Lab_RES_hist_weighted_lower_lim, gamma_Lab_RES_hist_weighted_upper_lim);
+         8, Gamma_Lab_noPions_RES_weighted_lower_lim, Gamma_Lab_noPions_RES_weighted_upper_lim);
 
     TH1D *gamma_Lab_DIS_hist = new
     TH1D("cos(#gamma_{Lab}) - DIS Only", "cos(#gamma_{Lab}) Histogram - DIS Only;cos(#gamma_{Lab})",
-         8, gamma_Lab_DIS_hist_lower_lim, gamma_Lab_DIS_hist_upper_lim);
+         8, Gamma_Lab_noPions_DIS_lower_lim, Gamma_Lab_noPions_DIS_upper_lim);
     TH1D *gamma_Lab_DIS_hist_weighted = new
     TH1D("cos(#gamma_{Lab}) - DIS Only (Q^{4} weighted)",
          "cos(#gamma_{Lab}) Histogram - DIS Only (Q^{4} weighted);cos(#gamma_{Lab})",
-         8, gamma_Lab_DIS_hist_weighted_lower_lim, gamma_Lab_DIS_hist_weighted_upper_lim);
+         8, Gamma_Lab_noPions_DIS_weighted_lower_lim, Gamma_Lab_noPions_DIS_weighted_upper_lim);
     //</editor-fold>
 
     //<editor-fold desc="MicroBooNE histogram reconstruction - MicroBooNE dP_T plots (unweighted and Q4 weighted)">
