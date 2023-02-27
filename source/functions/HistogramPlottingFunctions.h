@@ -50,7 +50,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
 //    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
 //    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
@@ -222,7 +223,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
 //    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
 //    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
@@ -395,7 +397,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
 //    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
 //    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
@@ -566,7 +569,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
     Histogram1DCanvas2->cd();
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
     if (normalize_Histogram == true && custom_normalization == false) {
@@ -748,7 +752,8 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
     Histogram1DCanvas2->cd();
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
     if (normalize_Histogram == true && custom_normalization == false) {
@@ -909,6 +914,102 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 //</editor-fold>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                   stackPlotter1D function                                                                            //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// stackPlotter1D function (regular) -----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="stackPlotter1D">
+void stackPlotter1D(TCanvas *Histogram1DCanvas,
+                    THStack *Histogram1DStack,
+                    bool normalize_Histogram,
+                    string Histogram1DTitle,
+                    string Histogram1DTitleReactions,
+                    TList *Histogram_list,
+                    TH1D *H1D_All_Int,
+                    TH1D *H1D_QEL,
+                    TH1D *H1D_MEC,
+                    TH1D *H1D_RES,
+                    TH1D *H1D_DIS,
+                    string Histogram1DStackSaveName,
+                    string Histogram1DStackSaveNamePath,
+                    string finalState) {
+
+    //  Normalization factor:
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double diplayTextSize = 0.1225, TitleSize = 0.06, LabelSize = 0.0425;
+    bool centerTitle = true;
+    string xLable = H1D_All_Int->GetXaxis()->GetTitle();
+
+    H1D_All_Int->SetLineWidth(4), H1D_All_Int->SetLineColor(kBlack), H1D_All_Int->SetLineStyle(5);
+    H1D_QEL->SetLineWidth(2), H1D_QEL->SetLineColor(kBlue);
+    H1D_MEC->SetLineWidth(2), H1D_MEC->SetLineColor(kRed);
+    H1D_RES->SetLineWidth(2), H1D_RES->SetLineColor(kGreen);
+    H1D_DIS->SetLineWidth(2), H1D_DIS->SetLineColor(kMagenta);
+//    H1D_DIS->SetLineColor(kCyan);
+
+    Histogram1DStack->Draw("nostack");
+    Histogram1DStack->GetHistogram()->GetXaxis()->SetTitleSize(TitleSize);
+    Histogram1DStack->GetHistogram()->GetXaxis()->SetLabelSize(LabelSize);
+    Histogram1DStack->GetHistogram()->GetXaxis()->CenterTitle(centerTitle);
+    Histogram1DStack->GetHistogram()->GetYaxis()->SetLabelSize(LabelSize);
+    Histogram1DStack->GetHistogram()->GetYaxis()->CenterTitle(centerTitle);
+
+    if (normalize_Histogram == true) {
+        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        const char *HistogramTitle = title.c_str();
+
+        Histogram1DStack->SetTitle(HistogramTitle);
+//        Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
+        Histogram1DStack->GetYaxis()->SetTitle("Probability (%)");
+        Histogram1DStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
+
+        if (H1D_All_Int->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1DStack->Draw();
+            displayText->Draw();
+        }
+    } else {
+        if (H1D_All_Int->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1DStack->Draw();
+            displayText->Draw();
+        } else if (H1D_All_Int->Integral() != 0.) {
+//            Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
+            Histogram1DStack->GetYaxis()->SetTitle("Arbitrary units (#Events)");
+            Histogram1DStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
+        }
+    }
+
+    auto Histogram1DStackLegend = new TLegend(0.77, 0.624, 0.875, 0.89);
+//    auto Histogram1DStackLegend = new TLegend(0.775, 0.625, 0.9, 0.9);
+
+    if (H1D_All_Int->Integral() != 0.) {
+        TLegendEntry *H1D_All_Int_Entry = Histogram1DStackLegend->AddEntry(H1D_All_Int, "All int.", "l");
+        TLegendEntry *H1D_QEL_Entry = Histogram1DStackLegend->AddEntry(H1D_QEL, "QEL", "l");
+        TLegendEntry *H1D_MEC_Entry = Histogram1DStackLegend->AddEntry(H1D_MEC, "MEC", "l");
+        TLegendEntry *H1D_RES_Entry = Histogram1DStackLegend->AddEntry(H1D_RES, "RES", "l");
+        TLegendEntry *H1D_DIS_Entry = Histogram1DStackLegend->AddEntry(H1D_DIS, "DIS", "l");
+        Histogram1DStackLegend->Draw();
+    }
+
+    Histogram_list->Add(Histogram1DStack);
+    Histogram1DCanvas->SaveAs((Histogram1DStackSaveNamePath + Histogram1DStackSaveName + "_" + Histogram1DTitleReactions + "_" + finalState + ".png").c_str());
+    Histogram1DCanvas->Clear();
+}
+//</editor-fold>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                   histPlotter2D function                                                                            //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -929,7 +1030,8 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
                    string Histogram1DSaveName) {
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
     Histogram2D->SetTitleSize(titleSize, "xyz");
@@ -991,7 +1093,8 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
                    TF1 *Beta_function9) {
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
     Histogram2D->SetTitleSize(titleSize, "xyz");
