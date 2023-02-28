@@ -40,8 +40,11 @@ using namespace std;
 //                                                                      General functions                                                                              //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// GetCurrentDirectory function -----------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="GetCurrentDirectory function">
-/* This function is used to get the directory of the main.c code */
+/* Usage: get the directory of the main.c code */
+
 string GetCurrentDirectory() {
     char pwd[PATH_MAX];
     getcwd(pwd, sizeof(pwd));
@@ -52,8 +55,10 @@ string GetCurrentDirectory() {
 }
 //</editor-fold>
 
+// findSubstring function -----------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="findSubstring function">
-/* This function is used in getBeanE */
+/* Usage: in getBeanE */
 
 bool findSubstring(string string1, string string2) {
     if (string1.find(string2) != std::string::npos) {
@@ -64,7 +69,11 @@ bool findSubstring(string string1, string string2) {
 }
 //</editor-fold>
 
+// getBeanE function ----------------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="getBeanE function">
+/* Usage: get beamE from AnalyseFileSample */
+
 double getBeanE(string AnalyseFileSample) {
     double beamE;
 
@@ -83,8 +92,10 @@ double getBeanE(string AnalyseFileSample) {
 }
 //</editor-fold>
 
+// to_string_with_precision function ------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="to_string_with_precision function">
-/* This function is used in the plotting functions */
+/* Usage: convert a number to string with n figures after the decimal point in the plotting functions */
 
 template<typename T>
 std::string to_string_with_precision(const T a_value, const int n = 2) {
@@ -95,7 +106,11 @@ std::string to_string_with_precision(const T a_value, const int n = 2) {
 }
 //</editor-fold>
 
+// TFolderAdder function ------------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="TFolderAdder function (regular)">
+/* Usage: recursively create TFolder and sub-folders in TList. */
+
 void TFolderAdder(TFolder *Histogram_List_Folder, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder) {
     if (Plots_Daughter_Folder != "") {
         if (Plots_Daughter_Folder.find_first_of('/') != 0) {
@@ -119,7 +134,11 @@ void TFolderAdder(TFolder *Histogram_List_Folder, std::string Plots_Parent_Folde
 }
 //</editor-fold>
 
-//<editor-fold desc="MakeDirectory">
+// MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="MakeDirectory function">
+/* Usage: made directory for plots. */
+
 void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
                    std::string Parent_Folder = "./plots") {
 
@@ -148,20 +167,32 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 }
 //</editor-fold>
 
+// SetLorentzVector function --------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="SetLorentzVector function">
+/* Usage:  */
+
 void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp) {
     p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), p4.M());
 }
 //</editor-fold>
 
+// rCalc function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="rCalc function">
+/* Usage: calculate vector magnitude, given x,y,z components. */
+
 double rCalc(double x, double y, double z) {
     double r = sqrt(x * x + y * y + z * z);
     return r;
 }
 //</editor-fold>
 
-//<editor-fold desc="LogEventCuts function">
+// LogEventCuts functions -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="LogEventCuts function (original/MicroBooNE)">
+/* Usage: in cut parameter testings, log to an AC histogram given the cuts. May be applied to other cuts in the future. */
+
 void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, string CutType, double Upper_cut, double Lower_cut, double CutCenter = 0) {
     if (CutType == "momentum" || CutType == "") {
         TVector3 P;
@@ -180,13 +211,38 @@ void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, string Cu
 }
 //</editor-fold>
 
-//<editor-fold desc="BoolToString function">
-inline const char *const BoolToString(bool b) {
-    return b ? "true" : "false";
+//<editor-fold desc="LogEventCuts function (1e2p and 2p)">
+/* Usage: in cut parameter testings, log to an AC histogram given the cuts. */
+
+void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, double Lower_cut, double Upper_cut, double CutCenter = 0) {
+    TVector3 P;
+    P.SetMagThetaPhi(Particle->getP(), Particle->getTheta(), Particle->getPhi());
+
+    if ((Upper_cut == -1) && (Lower_cut == -1)) {
+        Histogram1D->Fill(P.Mag());
+    } else if ((Upper_cut != -1) && (Lower_cut == -1)) {
+        if (P.Mag() <= Upper_cut) { Histogram1D->Fill(P.Mag()); }
+    } else if ((Upper_cut == -1) && (Lower_cut != -1)) {
+        if (P.Mag() >= Lower_cut) { Histogram1D->Fill(P.Mag()); }
+    } else if ((Upper_cut != -1) && (Lower_cut != -1)) {
+        if ((P.Mag() >= Lower_cut) && (P.Mag() <= Upper_cut)) { Histogram1D->Fill(P.Mag()); }
+    }
 }
 //</editor-fold>
 
+// BoolToString function ------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="BoolToString function">
+/* Usage: convert bool variables to string. Used to log settings to file. */
+
+inline const char *const BoolToString(bool b) { return b ? "true" : "false"; }
+//</editor-fold>
+
+// testPrint functions --------------------------------------------------------------------------------------------------------------------------------------------------
+
 //<editor-fold desc="testPrint functions">
+/* Usage: general functions used to print variables. */
+
 void testPrint() { cout << "\n"; }
 
 void testPrint(string varString = "") {

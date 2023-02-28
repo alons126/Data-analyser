@@ -367,9 +367,9 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 }
 //</editor-fold>
 
-// histPlotter1D function (one-sided cuts for nphe plots) ---------------------------------------------------------------------------------------------------------------
+// histPlotter1D function (one-sided cuts for Nphe plots) ---------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="histPlotter1D function (one-sided cuts for nphe plots)">
+//<editor-fold desc="histPlotter1D function (one-sided cuts for Nphe plots)">
 void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
                    TH1D *Histogram1D, //The histogram
                    bool normalize_Histogram, //Normalize histogram or not

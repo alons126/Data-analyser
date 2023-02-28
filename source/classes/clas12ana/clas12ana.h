@@ -127,6 +127,10 @@ public:
 
     void setVertexCorrCuts(bool flag = true) { f_corr_vertexCuts = flag; };
 
+    void setNpheCuts(bool flag = true) { f_NpheCuts = flag; }; // My addition
+
+    double getNpheCuts() { return htcc_Nphe_cut; }; // My addition
+
     void ecalCuts(std::vector<region_part_ptr> &particles);
 
     void vertexCuts(std::vector<region_part_ptr> &particles);
@@ -196,6 +200,8 @@ public:
 
     bool EcalEdgeCuts(region_part_ptr p);
 
+    bool HTCCNpheCuts(region_part_ptr p); // My addition
+
     bool checkEcalCuts(region_part_ptr p);
 
     bool checkPidCut(region_part_ptr p);
@@ -206,41 +212,25 @@ public:
 
     bool DCEdgeCuts(region_part_ptr p);
 
-    void setVxcuts(double min, double max) {
+    void setVxcuts(double min, double max) { // My addition:
         vertex_x_cuts.at(0) = min;
         vertex_x_cuts.at(1) = max;
-    }
-//    void setVxcuts(double min, double max) { // My addition:
-//        vertex_x_cuts.at(0) = min;
-//        vertex_x_cuts.at(1) = max;
-//    };
+    };
 
-    void setVycuts(double min, double max) {
+    void setVycuts(double min, double max) { // My addition:
         vertex_y_cuts.at(0) = min;
         vertex_y_cuts.at(1) = max;
-    }
-//    void setVycuts(double min, double max) { // My addition:
-//        vertex_y_cuts.at(0) = min;
-//        vertex_y_cuts.at(1) = max;
-//    };
+    };
 
-    void setVzcuts(double min, double max) { // My addition:
+    void setVzcuts(double min, double max) {
         vertex_z_cuts.at(0) = min;
         vertex_z_cuts.at(1) = max;
-    }
-//    void setVzcuts(double min, double max) {
-//        vertex_z_cuts.at(0) = min;
-//        vertex_z_cuts.at(1) = max;
-//    };
+    };
 
-    void setVertexCorrCuts(double min, double max) { // My addition:
+    void setVertexCorrCuts(double min, double max) {
         vertex_corr_cuts.at(0) = min;
         vertex_corr_cuts.at(1) = max;
-    }
-//    void setVertexCorrCuts(double min, double max) {
-//        vertex_corr_cuts.at(0) = min;
-//        vertex_corr_cuts.at(1) = max;
-//    };
+    };
 
     void fillDCdebug(region_part_ptr p, TH2D **h);
 
@@ -304,6 +294,7 @@ private:
     bool f_pidCuts = false;
     bool f_vertexCuts = false;
     bool f_corr_vertexCuts = false;
+    bool f_NpheCuts = false; // My addition
 
     //  map<int,vector<double> > test_cuts;
     //  map<int,int> test_cuts;
@@ -313,6 +304,8 @@ private:
     vector<double> vertex_z_cuts = {-99, 99};
     map<string, vector<double> > vertex_cuts; //map< x,y,z, {min,max}>
     vector<double> vertex_corr_cuts = {-99, 99}; //electron vertex <-> particle vertex correlation cuts
+
+    double htcc_Nphe_cut = 2; // My addition
 
     double ecal_edge_cut = 14;
     double dc_edge_cut = 10;
@@ -628,37 +621,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     auto particles = c12->getDetParticles(); //particles is now a std::vector of particles for this event
     auto electrons_det = c12->getByID(11);
 
-
-//    auto protons_det = c12->getByID(2212);   // Protons
-//    auto deuterons_det = c12->getByID(45);
-//    auto piplus_det = c12->getByID(211);     // pi+
-//    auto piminus_det = c12->getByID(-211);   // pi-
-//    auto pizero_det = c12->getByID(111);   // pi-
-//    auto Kplus_det = c12->getByID(321);      // K+
-//    auto Kminus_det = c12->getByID(-321);    // K-
-//    auto Kzero_det = c12->getByID(311);    // K-
-//    auto ph_det = c12->getByID(22);    // K-
-//    auto zero_det = c12->getByID(0);    // K-
-//    auto neutrons_det = c12->getByID(2112);    // K-
-
-
-
-
-
-//    int START = particles.size();
-//    cout << "START: particles.size() = " << START << "\n";
-//    cout << "START: electrons.size() = " << electrons.size() << "\n";
-//    cout << "START: protons.size() = " << protons.size() << "\n";
-//    cout << "START: neutrals.size() = " << neutrals.size() << "\n";
-//    cout << "START: piplus.size() = " << piplus.size() << "\n";
-//    cout << "START: piminus.size() = " << piminus.size() << "\n";
-//    cout << "START: kplus.size() = " << kplus.size() << "\n";
-//    cout << "START: kminus.size() = " << kminus.size() << "\n";
-//    cout << "START: otherpart.size() = " << otherpart.size() << "\n\n";
-
-
-
-
     /* ME: for any number of electrons */
     for (auto el = electrons_det.begin(); el != electrons_det.end();) {
 
@@ -703,6 +665,10 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
         } else if (!EcalEdgeCuts(*el) && f_ecalEdgeCuts) //ECAL edge cuts
         {
 //            cout << "ECAL edge cuts (electrons)\n"; // My debugging
+            el = electrons_det.erase(el);
+        } else if (!HTCCNpheCuts(*el) && f_NpheCuts) //HTCC Nphe cuts (my addition)
+        {
+//            cout << "HTCC Nphe cuts (electrons)\n"; // My addition
             el = electrons_det.erase(el);
         } else if (!checkVertex(*el) && f_vertexCuts) //Vertex cut
         {
@@ -938,6 +904,21 @@ bool clas12ana::EcalEdgeCuts(region_part_ptr p) {
             return false;
     } else
         return true;
+}
+
+bool clas12ana::HTCCNpheCuts(region_part_ptr p) {
+    //true if inside cut
+    double Nphe = p->che(HTCC)->getNphe();
+
+    if (p->par()->getPid() == 11) {
+        if (Nphe > htcc_Nphe_cut) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
 }
 
 bool clas12ana::checkEcalCuts(region_part_ptr p) {

@@ -91,7 +91,7 @@ public:
                        bool showStats = true, bool title2 = false, bool apply_plot_cuts = false, double plot_upper_cut = 0, double plot_lower_cut = 0,
                        double plot_Xmax = 0, bool plot_max = true);
 
-    // histPlotter1D function (one-sided cuts for nphe plots):
+    // histPlotter1D function (one-sided cuts for Nphe plots):
     void histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                        string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
                        THStack *Histogram1DStack, string Histogram1DSaveName, string Histogram1DSaveNamePath, string finalState, int kColor = 1, bool addToStack = false,
@@ -644,9 +644,9 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 }
 //</editor-fold>
 
-// histPlotter1D function (one-sided cuts for nphe plots) ---------------------------------------------------------------------------------------------------------------
+// histPlotter1D function (one-sided cuts for Nphe plots) ---------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="histPlotter1D function (one-sided cuts for nphe plots)">
+//<editor-fold desc="histPlotter1D function (one-sided cuts for Nphe plots)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                             string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list, int lineWidth, bool logScalePlot, bool linearScalePlot,
                             THStack *Histogram1DStack, string Histogram1DSaveName, string Histogram1DSaveNamePath, string finalState, int kColor = 1,

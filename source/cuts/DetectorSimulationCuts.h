@@ -15,27 +15,24 @@
 // Momentum cuts
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-/* 2p momentum cuts */
-double e_momentum_upper_cut_2p = -1, e_momentum_lower_cut_2p = -1;
-double p_momentum_upper_cut_2p = -1, p_momentum_lower_cut_2p = 0.3;
+/* 2p momentum cuts (CD & FD):
+ * Protons: get a minimal momentum cut of 0.3 [GeV] = 300 [MeV] */
+vector<double> e_mom_cuts_2p = {-1, -1}; // {lower cut, upper cut};
+vector<double> p_mom_cuts_2p = {0.3, -1}; // {lower cut, upper cut};
 
 /* MicroBooNE momentum cuts */
-//double e_momentum_upper_cut_MicroBooNE = -1, e_momentum_lower_cut_MicroBooNE = -1;
-double e_momentum_upper_cut_MicroBooNE = 5, e_momentum_lower_cut_MicroBooNE = 0.1;
-//double e_momentum_upper_cut_MicroBooNE = 1.2, e_momentum_lower_cut_MicroBooNE = 0.1;           // MicroBooNE cuts
-//double p_momentum_upper_cut_MicroBooNE = -1, p_momentum_lower_cut_MicroBooNE = 0.3;
-double p_momentum_upper_cut_MicroBooNE = 5, p_momentum_lower_cut_MicroBooNE = 0.3;
-//double cpion_momentum_upper_cut_MicroBooNE = -1, cpion_momentum_lower_cut_MicroBooNE = -1;    // MicroBooNE cuts
-double cpion_momentum_upper_cut_MicroBooNE = 3, cpion_momentum_lower_cut_MicroBooNE = 0.5;
-//double cpion_momentum_upper_cut_MicroBooNE = 0.065, cpion_momentum_lower_cut_MicroBooNE = -1; // MicroBooNE cuts
+vector<double> e_mom_cuts_MicroBooNE = {0.1, 5}; // {lower cut, upper cut};
+//vector<double> e_mom_cuts_MicroBooNE = {0.1, 1.2}; // {lower cut, upper cut}; // MicroBooNE cuts
+vector<double> p_mom_cuts_MicroBooNE = {0.3, -1}; // {lower cut, upper cut}; // MicroBooNE cuts
+vector<double> cpion_mom_cuts_MicroBooNE = {0.5, 3}; // {lower cut, upper cut};
+//vector<double> cpion_mom_cuts_MicroBooNE = {-1, 0.065}; // {lower cut, upper cut}; // MicroBooNE cuts
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Sampling Fraction (SF) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-double SF_1e2p_upper_cut = 0.28;
-double SF_1e2p_lower_cut = 0.20; // SF cut from clas12ana
-//double SF_1e2p_lower_cut = 0.18; // SF cut from rgm monitoring folder
+double SF_1e_lower_cut = 0.20, SF_1e_upper_cut = 0.28; // SF cut from clas12ana
+//double SF_1e_lower_cut = 0.18; // SF cut from rgm monitoring folder
 double SF_1e2p_Xmax; // for all e plots, no cuts applied
 double SF_1e2p_peak = 0.248125; // to fill using Chi2_Electron_1e_Xmax_CD
 
@@ -47,11 +44,11 @@ double fiducial_cut_Lv = 14;
 double fiducial_cut_Lw = 14;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Number of Photo-electrons (nphe) cuts (electrons only, FD)
+// Number of Photo-electrons (Nphe) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//double nphe_lower_cut = 10;
-double nphe_lower_cut = 2;
+double Nphe_lower_cut = 10;
+//double Nphe_lower_cut = 2;
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Chi2 cuts

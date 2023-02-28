@@ -133,19 +133,22 @@ void EventAnalyser() {
 // Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts settings">
-    bool apply_cuts = false; //TODO: add to output log
+    bool apply_cuts = true; //TODO: add to output log
 
     /* Momentum cuts */
-    bool apply_momentum_cuts_2p = false, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
+    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = false;
 
     /* Sampling Fraction (SF) cut */
     bool apply_SF_cuts = false;
 
-    /* Edge (fiducial) cuts */
-    bool apply_Lv_cut = false, apply_Lw_cut = false;
+    /* ECAL edge (fiducial) cuts */
+    bool apply_ECAL_fiducial_cut = false;
+
+    /* DC edge (fiducial) cuts */
+    bool apply_DC_fiducial_cut = false;
 
     /* HTCC cut */
-    bool apply_nphe_cut = true;
+    bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
     bool apply_chi2_cuts_2p = false, apply_chi2_cuts_MicroBooNE = false;
@@ -156,17 +159,17 @@ void EventAnalyser() {
     if (apply_cuts == false) {
         cout << "Cuts application is disabled.\n\n\n";
 
-        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_Lv_cut = apply_Lw_cut = false;
-        apply_nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
+        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_ECAL_fiducial_cut = apply_DC_fiducial_cut = false;
+        apply_Nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
     } else {
         cout << "Cuts application is enabled. Cut settings:\n";
         cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
         cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n";
         cout << "apply_momentum_cuts_MicroBooNE:\t" << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n";
         cout << "apply_SF_cuts:\t\t\t" << BoolToString(apply_SF_cuts) << "\n";
-        cout << "apply_Lv_cut:\t\t\t" << BoolToString(apply_Lv_cut) << "\n";
-        cout << "apply_Lw_cut:\t\t\t" << BoolToString(apply_Lw_cut) << "\n";
-        cout << "apply_nphe_cut:\t\t\t" << BoolToString(apply_nphe_cut) << "\n";
+        cout << "apply_ECAL_fiducial_cut:\t" << BoolToString(apply_ECAL_fiducial_cut) << "\n";
+        cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
+        cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
         cout << "apply_chi2_cuts_2p:\t\t" << BoolToString(apply_chi2_cuts_2p) << "\n";
         cout << "apply_chi2_cuts_MicroBooNE:\t" << BoolToString(apply_chi2_cuts_MicroBooNE) << "\n\n\n";
     }
@@ -185,7 +188,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
-    string Chi2_Parent_Directory = "Cut_parameters_plots/Chi2_plots";
+    string Chi2_Parent_Directory = "01_Cuts_plots/01_Chi2_plots";
 //    string Chi2_Parent_Directory = "Chi2_plots";
     TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
     string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
@@ -212,7 +215,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots directories">
     bool create_Vertex_Dir = true;
-    string Vertex_Parent_Directory = "Cut_parameters_plots/Vertex_plots";
+    string Vertex_Parent_Directory = "01_Cuts_plots/02_Vertex_plots";
 //    string Vertex_Parent_Directory = "Vertex_plots";
     TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
     string Vertex_Daughter_Folders[] = {"", "02_dV_plots/02_1e2p", "02_dV_plots/03_2p", "02_dV_plots/01_MicroBooNE",
@@ -258,7 +261,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Fiducial histograms plots directories">
     bool create_fiducial_Dir = true;
-    string fiducial_Parent_Directory = "Cut_parameters_plots/Fiducial_plots";
+    string fiducial_Parent_Directory = "01_Cuts_plots/03_Fiducial_plots";
 //    string fiducial_Parent_Directory = "Fiducial_plots";
     TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
     string fiducial_Daughter_Folders[] = {"", "1e_cut", "1e_cut/PCAL", "2p", "2p/PCAL"};
@@ -271,12 +274,12 @@ void EventAnalyser() {
     plots->Add(fiducial_Folder);
 
     //TODO: add fiducial plots by reaction?
-    string fiducial_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
+    string fiducial_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
 
     // 1e2p - i.e. plots before all other cuts
     // before/after cuts - i.e. plots before/after fiducial cuts
-    string fiducial_plots_1e_BC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e_AC_PCAL_histograms_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+    string fiducial_plots_1e_BC_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
+    string fiducial_plots_1e_AC_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
 
     // 2p - i.e. plots after fiducial and all other cuts
     string fiducial_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[4] + "/";
@@ -284,7 +287,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Sampling Fraction (SF) plots directories">
     bool create_SF_Dir = true;
-    string SF_Parent_Directory = "Cut_parameters_plots/SF_plots";
+    string SF_Parent_Directory = "01_Cuts_plots/04_SF_plots";
 //    string SF_Parent_Directory = "SF_plots";
     TFolder *SF_Folder = new TFolder(SF_Parent_Directory.c_str(), SF_Parent_Directory.c_str());
     string SF_Daughter_Folders[] = {"", "1e2p", "1e2p/SF_plots", "1e2p/SF_VS_P_e_plots", "2p", "2p/SF_plots", "2p/SF_VS_P_e_plots"};
@@ -296,56 +299,55 @@ void EventAnalyser() {
 
     plots->Add(SF_Folder);
 
-    string SF_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
+    string SF_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
 
     // 1e2p - i.e. plots before all other cuts
     // before cuts - i.e. plots before SF cuts
-    string SF_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
-    string SF_VS_P_e_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
+    string SF_plots_1e2p_BC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
+    string SF_VS_P_e_plots_1e2p_BC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
 
     // after cuts - i.e. plots after SF cuts
-    string SF_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
-    string SF_VS_P_e_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
+    string SF_plots_1e2p_AC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
+    string SF_VS_P_e_plots_1e2p_AC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
 
     // 2p - i.e. plots after SF and all other cuts
-    string SF_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[5] + "/";
-    string SF_VS_P_e_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[6] + "/";
+    string SF_plots_2p_cuts_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[5] + "/";
+    string SF_VS_P_e_plots_2p_cuts_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[6] + "/";
     //</editor-fold>
 
-    //<editor-fold desc="Number of Photo-electrons (nphe) plots directories">
-    bool create_nphe_Dir = true;
-    string nphe_Parent_Directory = "Cut_parameters_plots/nphe_plots";
-//    string nphe_Parent_Directory = "nphe_plots";
-    TFolder *nphe_Folder = new TFolder(nphe_Parent_Directory.c_str(), nphe_Parent_Directory.c_str());
-    string nphe_Daughter_Folders[] = {"", "1e2p", "2p",};
+    //<editor-fold desc="Number of Photo-electrons (Nphe) plots directories">
+    bool create_Nphe_Dir = true;
+    string Nphe_Parent_Directory = "01_Cuts_plots/05_Nphe_plots";
+//    string Nphe_Parent_Directory = "Nphe_plots";
+    TFolder *Nphe_Folder = new TFolder(Nphe_Parent_Directory.c_str(), Nphe_Parent_Directory.c_str());
+    string Nphe_Daughter_Folders[] = {"", "01_1e_cut", "02_2p",};
 
-    for (string folders_name: nphe_Daughter_Folders) {
-        MakeDirectory(create_nphe_Dir, nphe_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(nphe_Folder, nphe_Parent_Directory, folders_name);
+    for (string folders_name: Nphe_Daughter_Folders) {
+        MakeDirectory(create_Nphe_Dir, Nphe_Parent_Directory, folders_name, false, Plots_Folder);
+        TFolderAdder(Nphe_Folder, Nphe_Parent_Directory, folders_name);
     }
 
-    plots->Add(nphe_Folder);
+    plots->Add(Nphe_Folder);
 
-    //TODO: add nphe plots by reaction
-    string nphe_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/";
+    string Nphe_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/";
 
     // 1e2p - i.e. plots before all other cuts
-    // before cuts - i.e. plots before nphe cuts
-    string nphe_plots_1e2p_BC_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
+    // before cuts - i.e. plots before Nphe cuts
+    string Nphe_1e_cut_BC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/";
 
-    // after cuts - i.e. plots after nphe cuts
-    string nphe_plots_1e2p_AC_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[1] + "/";
+    // after cuts - i.e. plots after Nphe cuts
+    string Nphe_1e_cut_AC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/";
 
-    // 2p - i.e. plots after nphe and all other cuts
-    string nphe_plots_2p_cuts_histograms_Directory = Plots_Folder + "/" + nphe_Parent_Directory + "/" + nphe_Daughter_Folders[2] + "/";
+    // 2p - i.e. plots after Nphe and all other cuts
+    string Nphe_2p_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[2] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots directories">
     bool create_Momentum_Dir = true;
-    string Momentum_Parent_Directory = "Cut_parameters_plots/Momentum_plots";
+    string Momentum_Parent_Directory = "01_Cuts_plots/06_Momentum_plots";
 //    string Momentum_Parent_Directory = "Momentum_plots";
     TFolder *Momentum_Folder = new TFolder(Momentum_Parent_Directory.c_str(), Momentum_Parent_Directory.c_str());
-    string Momentum_Daughter_Folders[] = {"", "1e2p", "2p", "MicroBooNE", "MicroBooNE/BC-AC_cut_tests"};
+    string Momentum_Daughter_Folders[] = {"", "01_MicroBooNE", "01_MicroBooNE/BC-AC_cut_tests", "02_1e2p", "03_2p"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
         MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
@@ -354,10 +356,12 @@ void EventAnalyser() {
 
     plots->Add(Momentum_Folder);
 
-    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
-    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
-    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
-    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
+    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
+    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
+
+    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
+
+    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
     //</editor-fold>
 
     //</editor-fold>
@@ -485,35 +489,35 @@ void EventAnalyser() {
 //    string E_e_DIS_1e_cut_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[2] + "/";
 
     string E_e_VS_Theta_e_All_Int_1e_cut_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
-//    string E_e_VS_Theta_e_1e_cut_QEL_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
-//    string E_e_VS_Theta_e_1e_cut_MEC_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
-//    string E_e_VS_Theta_e_1e_cut_RES_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
-//    string E_e_VS_Theta_e_1e_cut_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
+//    string E_e_VS_Theta_e_1e_cut_QEL_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
+//    string E_e_VS_Theta_e_1e_cut_MEC_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
+//    string E_e_VS_Theta_e_1e_cut_RES_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
+//    string E_e_VS_Theta_e_1e_cut_DIS_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
 
     string E_e_All_Int_MicroBooNE_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
-//    string E_e_MicroBooNE_QEL_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
-//    string E_e_MicroBooNE_MEC_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
-//    string E_e_MicroBooNE_RES_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
-//    string E_e_MicroBooNE_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
+//    string E_e_MicroBooNE_QEL_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
+//    string E_e_MicroBooNE_MEC_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
+//    string E_e_MicroBooNE_RES_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
+//    string E_e_MicroBooNE_DIS_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
 
     string E_e_VS_Theta_e_All_Int_MicroBooNE_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
-//    string E_e_VS_Theta_e_MicroBooNE_QEL_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
-//    string E_e_VS_Theta_e_MicroBooNE_MEC_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
-//    string E_e_VS_Theta_e_MicroBooNE_RES_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
-//    string E_e_VS_Theta_e_MicroBooNE_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
+//    string E_e_VS_Theta_e_MicroBooNE_QEL_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
+//    string E_e_VS_Theta_e_MicroBooNE_MEC_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
+//    string E_e_VS_Theta_e_MicroBooNE_RES_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
+//    string E_e_VS_Theta_e_MicroBooNE_DIS_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
 
     string E_e_All_Int_2p_stack_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[7] + "/";
     string E_e_All_Int_2p_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
-//    string E_e_2p_QEL_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
-//    string E_e_2p_MEC_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
-//    string E_e_2p_RES_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
-//    string E_e_2p_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
+//    string E_e_2p_QEL_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
+//    string E_e_2p_MEC_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
+//    string E_e_2p_RES_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
+//    string E_e_2p_DIS_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[8] + "/";
 
     string E_e_VS_Theta_e_All_Int_2p_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
-//    string E_e_VS_Theta_e_2p_QEL_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
-//    string E_e_VS_Theta_e_2p_MEC_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
-//    string E_e_VS_Theta_e_2p_RES_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
-//    string E_e_VS_Theta_e_2p_DIS_histograms_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
+//    string E_e_VS_Theta_e_2p_QEL_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
+//    string E_e_VS_Theta_e_2p_MEC_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
+//    string E_e_VS_Theta_e_2p_RES_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
+//    string E_e_VS_Theta_e_2p_DIS_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[9] + "/";
     //</editor-fold>
 
     //<editor-fold desc="ETrans plots directories">
@@ -533,11 +537,11 @@ void EventAnalyser() {
     plots->Add(ETrans_Folder);
 
     string ETrans_15_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
-    string ETrans_All_Int_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
-    string ETrans_QEL_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[4] + "/";
-    string ETrans_MEC_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
-    string ETrans_RES_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
-    string ETrans_DIS_15_histograms_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
+    string ETrans_All_Int_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
+    string ETrans_QEL_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[4] + "/";
+    string ETrans_MEC_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
+    string ETrans_RES_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
+    string ETrans_DIS_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
 
     //</editor-fold>
 
@@ -577,12 +581,7 @@ void EventAnalyser() {
     bool wider_margin = true;
 
     /* Cut parameter plots */
-    bool Chi2_plots = true;
-    bool Vertex_plots = true;
-    bool fiducial_plots = true;
-    bool SF_plots = true;
-    bool nphe_plots = true;
-    bool Momentum_plots = true;
+    bool Chi2_plots = true, Vertex_plots = true, fiducial_plots = true, SF_plots = true, Nphe_plots = true, Momentum_plots = true;
 
     /* Beta vs. P plots */
     bool Beta_vs_P_plots = true;
@@ -615,11 +614,7 @@ void EventAnalyser() {
     //<editor-fold desc="Normalization settings">
     bool normalize_master = false;
 
-    bool normalized_chi2_plots = false;
-    bool normalized_vertex_plots = false;
-    bool normalized_fiducial_plots = false;
-    bool normalized_SF_plots = false;
-    bool normalized_nphe_plots = false;
+    bool normalized_chi2_plots = false, normalized_vertex_plots = false, normalized_fiducial_plots = false, normalized_SF_plots = false, normalized_Nphe_plots = false;
 
     bool normalized_Angle_plots = false;
 
@@ -645,7 +640,7 @@ void EventAnalyser() {
     bool normalized_P_lp_plots = false, normalized_P_L_plots = false, normalized_P_R_plots = false; // 2p & 1n1p
 
     if (normalize_master == false) {
-        normalized_chi2_plots = normalized_vertex_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_E_e_plots = normalized_SF_plots = normalized_nphe_plots = normalized_theta_lp_plots = normalized_fiducial_plots = normalized_theta_lp_plots = false;
+        normalized_chi2_plots = normalized_vertex_plots = normalized_Angle_plots = normalized_Q2_plots = normalized_E_e_plots = normalized_SF_plots = normalized_Nphe_plots = normalized_theta_lp_plots = normalized_fiducial_plots = normalized_theta_lp_plots = false;
 
         normalized_theta_p1_plots = normalized_theta_p2_plots = normalized_dtheta_2p_plots = false; // 2p
 
@@ -1693,7 +1688,7 @@ void EventAnalyser() {
         Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
                                           "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, 0.05, 0.35);
-        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
+        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_Directory;
 
         Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
                                           "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
@@ -1701,15 +1696,15 @@ void EventAnalyser() {
         Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
                                           "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, 0.05, 0.35);
-        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_histograms_Directory;
+        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_Directory;
     } else {
         Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, 0.05, 0.35);
-        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory;
+        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory;
 
         Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, 0.05, 0.35);
-        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_histograms_Directory;
+        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory;
     }
 
     TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
@@ -1725,81 +1720,79 @@ void EventAnalyser() {
 
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
-    //<editor-fold desc="SF histograms (1e2p, FD only)">
-    THStack *SF_1e2p_Stack = new THStack("SF stack (1e2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e2p, FD);f");
+    //<editor-fold desc="SF histograms (1e cut, FD only)">
+    THStack *sSF_1e_cut_FD = new THStack("SF (1e Cut, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e Cut, FD);f");
 
-    TH1D *SF_All_Int_1e2p_BC_FD, *SF_All_Int_1e2p_AC_FD;
-    string SF_All_Int_1e2p_BC_FD_Dir, SF_All_Int_1e2p_AC_FD_Dir;
+    TH1D *hSF_1e_cut_BC_FD, *hSF_1e_cut_AC_FD;
+    string hSF_1e_cut_BC_FD_Dir, hSF_1e_cut_AC_FD_Dir;
 
     if (apply_cuts == false) {
-        SF_All_Int_1e2p_BC_FD = new TH1D("SF BC (1e2p, FD)", "Sampling Fraction f Before Cuts (1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
-        SF_All_Int_1e2p_AC_FD = new TH1D("SF AC (1e2p, FD)", "Sampling Fraction f After Cuts (1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
-        SF_All_Int_1e2p_BC_FD_Dir = SF_plots_1e2p_BC_histograms_Directory, SF_All_Int_1e2p_AC_FD_Dir = SF_plots_1e2p_AC_histograms_Directory;
+        hSF_1e_cut_BC_FD = new TH1D("SF BC (1e Cut, FD)", "Sampling Fraction f Before Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+        hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+        hSF_1e_cut_BC_FD_Dir = SF_plots_1e2p_BC_Directory, hSF_1e_cut_AC_FD_Dir = SF_plots_1e2p_AC_Directory;
     } else {
-        SF_All_Int_1e2p_BC_FD = new TH1D("SF (1e2p, FD)", "Sampling Fraction f (1e2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
-        SF_All_Int_1e2p_BC_FD_Dir = SF_plots_1e2p_BC_histograms_Directory;
+        hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+        hSF_1e_cut_BC_FD_Dir = SF_plots_1e2p_BC_Directory;
     }
     //</editor-fold>
 
-    //<editor-fold desc="SF vs. P histograms (1e2p, FD only)">
-    TH2D *SF_VS_P_e_1e2p_BC_FD, *SF_VS_P_e_1e2p_AC_FD;
-    string SF_VS_P_e_1e2p_BC_FD_Dir, SF_VS_P_e_1e2p_AC_FD_Dir;
+    //<editor-fold desc="SF vs. P histograms (1e cut, FD only)">
+    TH2D *hSF_VS_P_e_1e_cut_BC_FD, *hSF_VS_P_e_1e_cut_AC_FD;
+    string hSF_VS_P_e_1e_cut_BC_FD_Dir, hSF_VS_P_e_1e_cut_AC_FD_Dir;
 
     if (apply_cuts == false) {
-        SF_VS_P_e_1e2p_BC_FD = new TH2D("SF vs. P_{e} BC (1e2p, FD)",
-                                        "Sampling Fraction f vs. P_{e} Before Cuts (1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                        250, 0, beamE * 1.1, 250, 0.1, 0.35);
-        SF_VS_P_e_1e2p_AC_FD = new TH2D("SF vs. P_{e} AC (1e2p, FD)",
-                                        "Sampling Fraction f vs. P_{e} After Cuts (1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                        250, 0, beamE * 1.1, 250, 0.1, 0.35);
-        SF_VS_P_e_1e2p_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_histograms_Directory, SF_VS_P_e_1e2p_AC_FD_Dir = SF_VS_P_e_plots_1e2p_AC_histograms_Directory;
+        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} BC (1e Cut, FD)",
+                                           "Sampling Fraction f vs. P_{e} Before Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                           250, 0, beamE * 1.1, 250, 0.1, 0.35);
+        hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
+                                       "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                       250, 0, beamE * 1.1, 250, 0.1, 0.35);
+        hSF_VS_P_e_1e_cut_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_Directory, hSF_VS_P_e_1e_cut_AC_FD_Dir = SF_VS_P_e_plots_1e2p_AC_Directory;
     } else {
-        SF_VS_P_e_1e2p_BC_FD = new TH2D("SF vs. P_{e} (1e2p, FD)", "Sampling Fraction f vs. P_{e} (1e2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                        250, 0, beamE * 1.1, 250, 0.1, 0.35);
-        SF_VS_P_e_1e2p_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_histograms_Directory;
+        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                           250, 0, beamE * 1.1, 250, 0.1, 0.35);
+        hSF_VS_P_e_1e_cut_BC_FD_Dir = SF_VS_P_e_plots_1e2p_BC_Directory;
     }
     //</editor-fold>
 
     //<editor-fold desc="SF histograms (2p, FD only)">
-    THStack *SF_2p_Stack = new THStack("SF stack (All Int., 2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (All Int., 2p, FD);f");
+    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
 
-    TH1D *SF_All_Int_2p_FD = new TH1D("SF (All Int., 2p, FD)",
-                                      "Sampling Fraction f (All Int., 2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
-    TH2D *SF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (All Int., 2p, FD)",
-                                     "Sampling Fraction f vs. P_{e} (All Int., 2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 200, 0.1, 0.35);
+    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                      250, 0, beamE * 1.1, 250, 0.1, 0.35);
-    string SF_All_Int_2p_FD_Dir = SF_plots_2p_cuts_histograms_Directory, SF_VS_P_e_2p_FD_Dir = SF_VS_P_e_plots_2p_cuts_histograms_Directory;
+    string hSF_2p_FD_Dir = SF_plots_2p_cuts_Directory, hSF_VS_P_e_2p_FD_Dir = SF_VS_P_e_plots_2p_cuts_Directory;
     //</editor-fold>
 
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Number of Photo-electrons (nphe) histograms (FD only)
+// Number of Photo-electrons (Nphe) histograms (FD only)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="nphe histograms (FD only)">
+    //<editor-fold desc="Nphe histograms (FD only)">
 
-    //<editor-fold desc="Number of Photo-electrons (nphe) histograms (1e2p, FD only)">
-    THStack *nphe_1e2p_Stack = new THStack("n_{phe} stack (1e2p, FD)", "nphe Histogram (All Int., 1e2p, FD);n_{phe}");
+    //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (1e cut, FD only)">
+    THStack *sNphe_1e_cut_FD = new THStack("N_{phe} (1e Cut, FD)", "Nphe Histogram (All Int., 1e Cut, FD);N_{phe}");
 
-    TH1D *nphe_All_Int_1e2p_BC_FD, *nphe_All_Int_1e2p_AC_FD;
-    string nphe_All_Int_1e2p_BC_FD_Dir, nphe_All_Int_1e2p_AC_FD_Dir;
+    TH1D *hNphe_1e_cut_BC_FD, *hNphe_1e_cut_AC_FD;
+    string hNphe_1e_cut_BC_FD_Dir, hNphe_1e_cut_AC_FD_Dir;
 
     if (apply_cuts == false) {
-        nphe_All_Int_1e2p_BC_FD = new TH1D("n_{phe} BC (1e2p, FD)", "#Photo-electrons in HTCC n_{phe} Before Cuts (1e2p, FD);n_{phe}", 200, 0, 40);
-        nphe_All_Int_1e2p_AC_FD = new TH1D("n_{phe} AC (1e2p, FD)", "#Photo-electrons in HTCC (n_{phe}) After Cuts (1e2p, FD);n_{phe}", 200, 0, 40);
-        nphe_All_Int_1e2p_BC_FD_Dir = nphe_plots_1e2p_BC_histograms_Directory, nphe_All_Int_1e2p_AC_FD_Dir = nphe_plots_1e2p_AC_histograms_Directory;
+        hNphe_1e_cut_BC_FD = new TH1D("N_{phe} BC (1e Cut, FD)", "#Photo-electrons in HTCC (N_{phe}) Before Cuts (1e Cut, FD);N_{phe}", 200, 0, 40);
+        hNphe_1e_cut_AC_FD = new TH1D("N_{phe} AC (1e Cut, FD)", "#Photo-electrons in HTCC (N_{phe}) After Cuts (1e Cut, FD);N_{phe}", 200, 0, 40);
+        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
     } else {
-        nphe_All_Int_1e2p_BC_FD = new TH1D("n_{phe} (1e2p, FD)", "#Photo-electrons in HTCC n_{phe} (1e2p, FD);n_{phe}", 200, 0, 40);
-        nphe_All_Int_1e2p_BC_FD_Dir = nphe_plots_1e2p_BC_histograms_Directory, nphe_All_Int_1e2p_AC_FD_Dir = nphe_plots_1e2p_AC_histograms_Directory;
+        hNphe_1e_cut_BC_FD = new TH1D("N_{phe} (1e Cut, FD)", "#Photo-electrons in HTCC N_{phe} (1e Cut, FD);N_{phe}", 200, 0, 40);
+        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
     }
     //</editor-fold>
 
-    //<editor-fold desc="Number of Photo-electrons (nphe) histograms (2p, FD only)">
-    THStack *nphe_2p_Stack = new THStack("n_{phe} stack (All Int., 2p, FD)", "#Photo-electrons in HTCC (n_{phe} ) Histogram (All Int., 2p, FD);n_{phe}");
+    //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (2p, FD only)">
+    THStack *sNphe_2p_FD = new THStack("N_{phe} (2p, FD)", "#Photo-electrons in HTCC (N_{phe}) Histogram (2p, FD);N_{phe}");
 
-    TH1D *nphe_All_Int_2p_FD = new TH1D("n_{phe} (All Int., 2p, FD)", "#Photo-electrons in HTCC (n_{phe} ) (All Int., 2p, FD);n_{phe}", 200, 0, 40);
-    string nphe_All_Int_2p_FD_Dir = nphe_plots_2p_cuts_histograms_Directory;
+    TH1D *hNphe_2p_FD = new TH1D("N_{phe} (2p, FD)", "#Photo-electrons in HTCC (N_{phe}) (2p, FD);N_{phe}", 200, 0, 40);
+    string hNphe_2p_FD_Dir = Nphe_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -1809,6 +1802,7 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Momentum histograms">
+    /* Here are the definitions for the momentum plots. These are used to check that momentum cuts were applied in MicroBooNE, 1e2p and 2p plots. */
 
 //    //<editor-fold desc="Momentum MicroBooNE plots">
 //    THStack *P_Stack_MicroBooNE_BC_CD = new THStack("Particle Momentum BC (MicroBooNE, CD)", "Particle Momentum Histogram BC (MicroBooNE, CD);P [GeV];");
@@ -2488,11 +2482,11 @@ void EventAnalyser() {
     TH1D *hET15_DIS_2p_FD = new TH1D("ET around 15#circ (DIS Only, 2p, FD)",
                                      "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, FD);E_{beam}-E_{e} [GeV]",
                                      100, 0, beamE * 1.1);
-    string hET15_All_Int_2p_CD_Dir = ETrans_All_Int_15_histograms_Directory, hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_histograms_Directory;
-    string hET15_QEL_2p_CD_Dir = ETrans_QEL_15_histograms_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_histograms_Directory;
-    string hET15_MEC_2p_CD_Dir = ETrans_MEC_15_histograms_Directory, hET15_MEC_2p_FD_Dir = ETrans_MEC_15_histograms_Directory;
-    string hET15_RES_2p_CD_Dir = ETrans_RES_15_histograms_Directory, hET15_RES_2p_FD_Dir = ETrans_RES_15_histograms_Directory;
-    string hET15_DIS_2p_CD_Dir = ETrans_DIS_15_histograms_Directory, hET15_DIS_2p_FD_Dir = ETrans_DIS_15_histograms_Directory;
+    string hET15_All_Int_2p_CD_Dir = ETrans_All_Int_15_Directory, hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_Directory;
+    string hET15_QEL_2p_CD_Dir = ETrans_QEL_15_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_Directory;
+    string hET15_MEC_2p_CD_Dir = ETrans_MEC_15_Directory, hET15_MEC_2p_FD_Dir = ETrans_MEC_15_Directory;
+    string hET15_RES_2p_CD_Dir = ETrans_RES_15_Directory, hET15_RES_2p_FD_Dir = ETrans_RES_15_Directory;
+    string hET15_DIS_2p_CD_Dir = ETrans_DIS_15_Directory, hET15_DIS_2p_FD_Dir = ETrans_DIS_15_Directory;
     string tET15 = "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ";
     //</editor-fold>
 
@@ -2628,26 +2622,31 @@ void EventAnalyser() {
 
     clas12ana clasAna;
 
-    /* Read in target parameter files */
-    clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
-    clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str());
-
     if (apply_cuts == true) {
+        /* Read in target parameter files */
+        clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str());
+
         // Cuts on electrons only:
-        clasAna.setEcalSFCuts();                                                   // making f_ecalSFCuts = ture
-        clasAna.setEcalEdgeCuts();                                                 // making f_ecalEdgeCuts = ture (fiducial cuts)
+        if (apply_SF_cuts == true) { clasAna.setEcalSFCuts(); }                        // making f_ecalSFCuts = ture
+        if (apply_ECAL_fiducial_cut == true) { clasAna.setEcalEdgeCuts(); }            // making f_ecalEdgeCuts = ture (ECAL fiducial cuts)
+        if (apply_Nphe_cut == true) { clasAna.setNpheCuts(); }                         // making f_NpheCuts = ture (HTCC cuts)
 
         // Cuts on protons and charged pions:
-        clasAna.setPidCuts();                                                      // making f_pidCuts = ture
+        if (apply_chi2_cuts_2p == true) { clasAna.setPidCuts(); }                      // making f_pidCuts = ture
 
         // Cuts on all particles:
-        clasAna.setVertexCuts();                                                   // making f_vertexCuts = ture
-        clasAna.setVzcuts(Vz_cuts.at(0), Vz_cuts.at(1));            // setting Vz cuts for all (charged?) particles
+        if (apply_Vz_cuts == true) {
+            clasAna.setVertexCuts();                                                   // making f_vertexCuts = ture
+            clasAna.setVzcuts(Vz_cuts.at(0), Vz_cuts.at(1));                           // setting Vz cuts for all (charged?) particles
+        }
 
         // Cuts on charged particles:
-        clasAna.setDCEdgeCuts();                                                   // making f_DCEdgeCuts = ture (fiducial cuts?)
-        clasAna.setVertexCorrCuts();                                               // making f_corr_vertexCuts = ture
-        clasAna.setVertexCorrCuts(dVz_cuts.at(0), dVz_cuts.at(1));  // setting dVz cuts?
+        if (apply_DC_fiducial_cut == true) { clasAna.setDCEdgeCuts(); }                // making f_DCEdgeCuts = ture (DC fiducial cuts?)
+        if (apply_dVz_cuts == true) {
+            clasAna.setVertexCorrCuts();                                               // making f_corr_vertexCuts = ture
+            clasAna.setVertexCorrCuts(dVz_cuts.at(0), dVz_cuts.at(1));                 // setting dVz cuts?
+        }
 
         clasAna.printParams();
     }
@@ -2720,7 +2719,7 @@ void EventAnalyser() {
         clasAna.Run(c12);
 
         /* All of these particles are with clas12ana cuts
-           Only cuts missing are nphe and momentum cuts - to be applied later */
+           Only cuts missing are Nphe and momentum cuts - to be applied later */
 //        auto neutrons = clasAna.getByPid(2112);  // Neutrons
         auto protons = clasAna.getByPid(2212);   // Protons
         auto Kplus = clasAna.getByPid(321);      // K+
@@ -3098,8 +3097,7 @@ void EventAnalyser() {
         /* Electron variables */
         TVector3 P_e_1e;
         P_e_1e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
-        double P_e = P_e_1e.Mag();
-        double E_e = sqrt(m_e * m_e + P_e * P_e);
+        double P_e = P_e_1e.Mag(), E_e = sqrt(m_e * m_e + P_e * P_e);
         double Theta_e = P_e_1e.Theta() * 180.0 / pi; // Theta_e in deg
         double Phi_e = P_e_1e.Phi() * 180.0 / pi; // Phi_e in deg
 
@@ -3110,68 +3108,19 @@ void EventAnalyser() {
 
         //TODO: all these tests are NOT 2p or 1e2p (they were moved here from below and here we have no constraint on protons.size) - redefine propely to 1e or add constrant on protons.size
 
-        //<editor-fold desc="Testing momentum cuts (2p)">
-        /* Momentum plots before cuts */
-        if (electrons[0]->getRegion() == CD) {
-            hP_e_1e2p_BC_CD->Fill(P_e);
-        } else if (electrons[0]->getRegion() == FD) {
-            hP_e_1e2p_BC_FD->Fill(P_e);
-        }
-
-        /* Momentum plots after cuts */
-        if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p == -1)) {
-            if (electrons[0]->getRegion() == CD) {
-                hP_e_1e2p_AC_CD->Fill(P_e);
-            } else if (electrons[0]->getRegion() == FD) {
-                hP_e_1e2p_AC_FD->Fill(P_e);
-            }
-        } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p == -1)) {
-            if (P_e <= e_momentum_upper_cut_2p) {
-                if (electrons[0]->getRegion() == CD) {
-                    hP_e_1e2p_AC_CD->Fill(P_e);
-                } else if (electrons[0]->getRegion() == FD) {
-                    hP_e_1e2p_AC_FD->Fill(P_e);
-                }
-            }
-        } else if ((e_momentum_upper_cut_2p == -1) && (e_momentum_lower_cut_2p != -1)) {
-            if (P_e >= e_momentum_lower_cut_2p) {
-                if (electrons[0]->getRegion() == CD) {
-                    hP_e_1e2p_AC_CD->Fill(P_e);
-                } else if (electrons[0]->getRegion() == FD) {
-                    hP_e_1e2p_AC_FD->Fill(P_e);
-                }
-            }
-        } else if ((e_momentum_upper_cut_2p != -1) && (e_momentum_lower_cut_2p != -1)) {
-            if ((P_e >= e_momentum_lower_cut_2p) && (P_e <= e_momentum_upper_cut_2p)) {
-                if (electrons[0]->getRegion() == CD) {
-                    hP_e_1e2p_AC_CD->Fill(P_e);
-                } else if (electrons[0]->getRegion() == FD) {
-                    hP_e_1e2p_AC_FD->Fill(P_e);
-                }
-            }
-        }
-        //</editor-fold>
-
-        //<editor-fold desc="Testing SF cuts">
+        //<editor-fold desc="Testing cuts">
+        /* Testing SF cuts */
         double EoP_e = (electrons[0]->cal(PCAL)->getEnergy() + electrons[0]->cal(ECIN)->getEnergy() + electrons[0]->cal(ECOUT)->getEnergy()) / P_e;
 
         if (apply_cuts == false) {
             /* SF plots before cuts */
-            SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-            SF_VS_P_e_1e2p_BC_FD->Fill(P_e, EoP_e);
+            hSF_1e_cut_BC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_BC_FD->Fill(P_e, EoP_e);
 
             /* SF plots after cuts */
-            if ((EoP_e >= SF_1e2p_lower_cut) && (EoP_e <= SF_1e2p_upper_cut)) {
-                SF_All_Int_1e2p_AC_FD->Fill(EoP_e);
-                SF_VS_P_e_1e2p_AC_FD->Fill(P_e, EoP_e);
-            }
-        } else {
-            SF_All_Int_1e2p_BC_FD->Fill(EoP_e);
-            SF_VS_P_e_1e2p_BC_FD->Fill(P_e, EoP_e);
-        }
-        //</editor-fold>
+            if ((EoP_e >= SF_1e_lower_cut) && (EoP_e <= SF_1e_upper_cut)) { hSF_1e_cut_AC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_AC_FD->Fill(P_e, EoP_e); }
+        } else { hSF_1e_cut_BC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_BC_FD->Fill(P_e, EoP_e); }
 
-        //<editor-fold desc="Testing fiducial cuts">
+        /* Testing fiducial cuts */
         if (apply_cuts == false) {
             /* Fiducial plots before cuts */
             Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
@@ -3184,27 +3133,21 @@ void EventAnalyser() {
             Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
             Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
         }
-        //</editor-fold>
 
-        //<editor-fold desc="Testing nphe cuts">
-        int nphe = electrons[0]->che(HTCC)->getNphe();
+        /* Testing Nphe cuts */
+        int Nphe = electrons[0]->che(HTCC)->getNphe();
 
         if (apply_cuts == false) {
-            /* nphe plots before cuts */
-            nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+            /* Nphe plots before cuts */
+            hNphe_1e_cut_BC_FD->Fill(Nphe);
 
-            /* nphe plots after cuts */
-            if (nphe >= nphe_lower_cut) { nphe_All_Int_1e2p_AC_FD->Fill(nphe); }
+            /* Nphe plots after cuts */
+            if (Nphe >= clasAna.getNpheCuts()) { hNphe_1e_cut_AC_FD->Fill(Nphe); }
         } else {
-            nphe_All_Int_1e2p_BC_FD->Fill(nphe);
+            hNphe_1e_cut_BC_FD->Fill(Nphe);
         }
         //</editor-fold>
 
-        //</editor-fold>
-
-        //<editor-fold desc="Applying nphe cut">
-        /* Applying nphe cut */
-        if ((apply_nphe_cut == true) && (nphe < nphe_lower_cut)) { continue; }
         //</editor-fold>
 
         //<editor-fold desc="Filling 1e only plots">
@@ -3367,7 +3310,7 @@ void EventAnalyser() {
         } // end of loop over protons vector
         //</editor-fold>
 
-        //<editor-fold desc="Fill Beta vs. P (1e cut)">
+        //<editor-fold desc="Fill Beta vs. P for other particles (1e cut, CD & FD)">
 
 //        //<editor-fold desc="neutrons Beta vs. P plots (1e cut, CD & FD)">
 //        for (int i = 0; i < neutrons.size(); i++) {
@@ -3673,26 +3616,26 @@ void EventAnalyser() {
 //            /* Momentum plots before and after cuts */
 //            if (electrons[0]->getRegion() == CD) {
 //                P_e_MicroBooNE_BC_CD->Fill(P_e_MicroBooNE.Mag());
-//                LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+//                LogEventCuts(P_e_MicroBooNE_AC_CD, electrons[0], "", e_mom_cuts_MicroBooNE.at(1), e_mom_cuts_MicroBooNE.at(0));
 //            } else if (electrons[0]->getRegion() == FD) {
 //                P_e_MicroBooNE_BC_FD->Fill(P_e_MicroBooNE.Mag());
-//                LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE);
+//                LogEventCuts(P_e_MicroBooNE_AC_FD, electrons[0], "", e_mom_cuts_MicroBooNE.at(1), e_mom_cuts_MicroBooNE.at(0));
 //            }
 //
 //            if (protons[0]->getRegion() == CD) {
 //                P_p_MicroBooNE_BC_CD->Fill(P_p0_MicroBooNE.Mag());
-//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[0], "", p_mom_cuts_MicroBooNE.at(1), p_mom_cuts_MicroBooNE.at(0));
 //            } else if (protons[0]->getRegion() == FD) {
 //                P_p_MicroBooNE_BC_FD->Fill(P_p0_MicroBooNE.Mag());
-//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[0], "", p_mom_cuts_MicroBooNE.at(1), p_mom_cuts_MicroBooNE.at(0));
 //            }
 //
 //            if (protons[1]->getRegion() == CD) {
 //                P_p_MicroBooNE_BC_CD->Fill(P_p1_MicroBooNE.Mag());
-//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//                LogEventCuts(P_p_MicroBooNE_AC_CD, protons[1], "", p_mom_cuts_MicroBooNE.at(1), p_mom_cuts_MicroBooNE.at(0));
 //            } else if (protons[1]->getRegion() == FD) {
 //                P_p_MicroBooNE_BC_FD->Fill(P_p1_MicroBooNE.Mag());
-//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE);
+//                LogEventCuts(P_p_MicroBooNE_AC_FD, protons[1], "", p_mom_cuts_MicroBooNE.at(1), p_mom_cuts_MicroBooNE.at(0));
 //            }
 //
 //            /* Pion momentum modulus (according to "no charged pions with momentum above 65 MeV/c (= 0.065 GeV)") */
@@ -3701,10 +3644,10 @@ void EventAnalyser() {
 //
 //                if (piplus[i]->getRegion() == CD) {
 //                    P_cpion_MicroBooNE_BC_CD->Fill(P_pcpion_MicroBooNE.Mag());
-//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piplus[i], "", cpion_mom_cuts_MicroBooNE(1), cpion_momentum_lower_cut_MicroBooNE);
 //                } else if (piplus[i]->getRegion() == FD) {
 //                    P_cpion_MicroBooNE_BC_FD->Fill(P_pcpion_MicroBooNE.Mag());
-//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piplus[i], "", cpion_mom_cuts_MicroBooNE(1), cpion_momentum_lower_cut_MicroBooNE);
 //                }
 //            } // end of loop over piplus vector
 //
@@ -3714,10 +3657,10 @@ void EventAnalyser() {
 //
 //                if (piminus[i]->getRegion() == CD) {
 //                    P_cpion_MicroBooNE_BC_CD->Fill(P_ncpion_MicroBooNE.Mag());
-//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_CD, piminus[i], "", cpion_mom_cuts_MicroBooNE(1), cpion_momentum_lower_cut_MicroBooNE);
 //                } else if (piminus[i]->getRegion() == FD) {
 //                    P_cpion_MicroBooNE_BC_FD->Fill(P_ncpion_MicroBooNE.Mag());
-//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE);
+//                    LogEventCuts(P_cpion_MicroBooNE_AC_FD, piminus[i], "", cpion_mom_cuts_MicroBooNE(1), cpion_momentum_lower_cut_MicroBooNE);
 //                }
 //            } // end of loop over piminus vector
 //            //</editor-fold>
@@ -3840,17 +3783,17 @@ void EventAnalyser() {
 //            // Electron:
 //            bool e_mom_ucut_MicroBooNE, e_mom_lcut_MicroBooNE;
 //
-//            if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
+//            if ((e_mom_cuts_MicroBooNE.at(1) == -1) && (e_mom_cuts_MicroBooNE.at(0) == -1)) {
 //                e_mom_ucut_MicroBooNE = e_mom_lcut_MicroBooNE = true;
-//            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE == -1)) {
-//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
+//            } else if ((e_mom_cuts_MicroBooNE.at(1) != -1) && (e_mom_cuts_MicroBooNE.at(0) == -1)) {
+//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_mom_cuts_MicroBooNE.at(1));
 //                e_mom_lcut_MicroBooNE = true;
-//            } else if ((e_momentum_upper_cut_MicroBooNE == -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
+//            } else if ((e_mom_cuts_MicroBooNE.at(1) == -1) && (e_mom_cuts_MicroBooNE.at(0) != -1)) {
 //                e_mom_ucut_MicroBooNE = true;
-//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
-//            } else if ((e_momentum_upper_cut_MicroBooNE != -1) && (e_momentum_lower_cut_MicroBooNE != -1)) {
-//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_momentum_upper_cut_MicroBooNE);
-//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_momentum_lower_cut_MicroBooNE);
+//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_mom_cuts_MicroBooNE.at(0));
+//            } else if ((e_mom_cuts_MicroBooNE.at(1) != -1) && (e_mom_cuts_MicroBooNE.at(0) != -1)) {
+//                e_mom_ucut_MicroBooNE = (P_e_MicroBooNE.Mag() <= e_mom_cuts_MicroBooNE.at(1));
+//                e_mom_lcut_MicroBooNE = (P_e_MicroBooNE.Mag() >= e_mom_cuts_MicroBooNE.at(0));
 //            }
 //
 //            bool e_mom_cut_MicroBooNE = (e_mom_ucut_MicroBooNE && e_mom_lcut_MicroBooNE);
@@ -3858,17 +3801,17 @@ void EventAnalyser() {
 //            // Proton 0:
 //            bool p0_mom_ucut_MicroBooNE, p0_mom_lcut_MicroBooNE;
 //
-//            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//            if ((p_mom_cuts_MicroBooNE.at(1) == -1) && (p_mom_cuts_MicroBooNE.at(0) == -1)) {
 //                p0_mom_ucut_MicroBooNE = p0_mom_lcut_MicroBooNE = true;
-//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//            } else if ((p_mom_cuts_MicroBooNE.at(1) != -1) && (p_mom_cuts_MicroBooNE.at(0) == -1)) {
+//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_mom_cuts_MicroBooNE.at(1));
 //                p0_mom_lcut_MicroBooNE = true;
-//            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//            } else if ((p_mom_cuts_MicroBooNE.at(1) == -1) && (p_mom_cuts_MicroBooNE.at(0) != -1)) {
 //                p0_mom_ucut_MicroBooNE = true;
-//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_mom_cuts_MicroBooNE.at(0));
+//            } else if ((p_mom_cuts_MicroBooNE.at(1) != -1) && (p_mom_cuts_MicroBooNE.at(0) != -1)) {
+//                p0_mom_ucut_MicroBooNE = (P_p0_MicroBooNE.Mag() <= p_mom_cuts_MicroBooNE.at(1));
+//                p0_mom_lcut_MicroBooNE = (P_p0_MicroBooNE.Mag() >= p_mom_cuts_MicroBooNE.at(0));
 //            }
 //
 //            bool p0_mom_cut_MicroBooNE = (p0_mom_ucut_MicroBooNE && p0_mom_lcut_MicroBooNE);
@@ -3876,17 +3819,17 @@ void EventAnalyser() {
 //            // Proton 1:
 //            bool p1_mom_ucut_MicroBooNE, p1_mom_lcut_MicroBooNE;
 //
-//            if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
+//            if ((p_mom_cuts_MicroBooNE.at(1) == -1) && (p_mom_cuts_MicroBooNE.at(0) == -1)) {
 //                p1_mom_ucut_MicroBooNE = p1_mom_lcut_MicroBooNE = true;
-//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE == -1)) {
-//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
+//            } else if ((p_mom_cuts_MicroBooNE.at(1) != -1) && (p_mom_cuts_MicroBooNE.at(0) == -1)) {
+//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_mom_cuts_MicroBooNE.at(1));
 //                p1_mom_lcut_MicroBooNE = true;
-//            } else if ((p_momentum_upper_cut_MicroBooNE == -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
+//            } else if ((p_mom_cuts_MicroBooNE.at(1) == -1) && (p_mom_cuts_MicroBooNE.at(0) != -1)) {
 //                p1_mom_ucut_MicroBooNE = true;
-//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
-//            } else if ((p_momentum_upper_cut_MicroBooNE != -1) && (p_momentum_lower_cut_MicroBooNE != -1)) {
-//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_momentum_upper_cut_MicroBooNE);
-//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_momentum_lower_cut_MicroBooNE);
+//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_mom_cuts_MicroBooNE.at(0));
+//            } else if ((p_mom_cuts_MicroBooNE.at(1) != -1) && (p_mom_cuts_MicroBooNE.at(0) != -1)) {
+//                p1_mom_ucut_MicroBooNE = (P_p1_MicroBooNE.Mag() <= p_mom_cuts_MicroBooNE.at(1));
+//                p1_mom_lcut_MicroBooNE = (P_p1_MicroBooNE.Mag() >= p_mom_cuts_MicroBooNE.at(0));
 //            }
 //
 //            bool p1_mom_cut_MicroBooNE = (p1_mom_ucut_MicroBooNE && p1_mom_lcut_MicroBooNE);
@@ -3903,16 +3846,16 @@ void EventAnalyser() {
 //                    bool temp_pip_mom_cut_MicroBooNE;
 //                    P_pcpion_MicroBooNE.SetMagThetaPhi(piplus[i]->getP(), piplus[i]->getTheta(), piplus[i]->getPhi());
 //
-//                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                    if ((cpion_mom_cuts_MicroBooNE(1) == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
 //                        pcpion_mom_ucut_MicroBooNE = pcpion_mom_lcut_MicroBooNE = true;
-//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                    } else if ((cpion_mom_cuts_MicroBooNE(1) != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_mom_cuts_MicroBooNE(1));
 //                        pcpion_mom_lcut_MicroBooNE = true;
-//                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                    } else if ((cpion_mom_cuts_MicroBooNE(1) == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
 //                        pcpion_mom_ucut_MicroBooNE = true;
 //                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                    } else if ((cpion_mom_cuts_MicroBooNE(1) != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        pcpion_mom_ucut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() <= cpion_mom_cuts_MicroBooNE(1));
 //                        pcpion_mom_lcut_MicroBooNE = (P_pcpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
 //                    }
 //
@@ -3932,16 +3875,16 @@ void EventAnalyser() {
 //                    bool temp_pim_mom_cut_MicroBooNE;
 //                    P_ncpion_MicroBooNE.SetMagThetaPhi(piminus[i]->getP(), piminus[i]->getTheta(), piminus[i]->getPhi());
 //
-//                    if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                    if ((cpion_mom_cuts_MicroBooNE(1) == -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
 //                        ncpion_mom_ucut_MicroBooNE = ncpion_mom_lcut_MicroBooNE = true;
-//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
-//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                    } else if ((cpion_mom_cuts_MicroBooNE(1) != -1) && (cpion_momentum_lower_cut_MicroBooNE == -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_mom_cuts_MicroBooNE(1));
 //                        ncpion_mom_lcut_MicroBooNE = true;
-//                    } else if ((cpion_momentum_upper_cut_MicroBooNE == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                    } else if ((cpion_mom_cuts_MicroBooNE(1) == -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
 //                        ncpion_mom_ucut_MicroBooNE = true;
 //                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
-//                    } else if ((cpion_momentum_upper_cut_MicroBooNE != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
-//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_momentum_upper_cut_MicroBooNE);
+//                    } else if ((cpion_mom_cuts_MicroBooNE(1) != -1) && (cpion_momentum_lower_cut_MicroBooNE != -1)) {
+//                        ncpion_mom_ucut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() <= cpion_mom_cuts_MicroBooNE(1));
 //                        ncpion_mom_lcut_MicroBooNE = (P_ncpion_MicroBooNE.Mag() >= cpion_momentum_lower_cut_MicroBooNE);
 //                    }
 //
@@ -4187,82 +4130,29 @@ void EventAnalyser() {
             //  Testing momentum cuts (protons only) --------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Testing momentum cuts (protons only)">
-            /* momentum before cuts */
+            /* momentum before and after cuts */
+            if (electrons[0]->getRegion() == CD) {
+                hP_e_1e2p_BC_CD->Fill(P_e); // momentum before cuts
+                LogEventCuts(hP_e_1e2p_AC_CD, electrons[0], e_mom_cuts_2p.at(0), e_mom_cuts_2p.at(1)); // momentum after cuts
+            } else if (electrons[0]->getRegion() == FD) {
+                hP_e_1e2p_BC_FD->Fill(P_e); // momentum before cuts
+                LogEventCuts(hP_e_1e2p_AC_FD, electrons[0], e_mom_cuts_2p.at(0), e_mom_cuts_2p.at(1)); // momentum after cuts
+            }
+
             if (protons[0]->getRegion() == CD) {
-                hP_p_1e2p_BC_CD->Fill(P_p0.Mag());
+                hP_p_1e2p_BC_CD->Fill(P_p0.Mag()); // momentum before cuts
+                LogEventCuts(hP_p_1e2p_AC_CD, protons[0], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             } else if (protons[0]->getRegion() == FD) {
-                hP_p_1e2p_BC_FD->Fill(P_p0.Mag());
+                hP_p_1e2p_BC_FD->Fill(P_p0.Mag()); // momentum before cuts
+                LogEventCuts(hP_p_1e2p_AC_FD, protons[0], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             }
 
             if (protons[1]->getRegion() == CD) {
-                hP_p_1e2p_BC_CD->Fill(P_p1.Mag());
+                hP_p_1e2p_BC_CD->Fill(P_p1.Mag()); // momentum before cuts
+                LogEventCuts(hP_p_1e2p_AC_CD, protons[1], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             } else if (protons[1]->getRegion() == FD) {
-                hP_p_1e2p_BC_FD->Fill(P_p1.Mag());
-            }
-
-            /* momentum after cuts */
-            if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
-                if (protons[0]->getRegion() == CD) {
-                    hP_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                } else if (protons[0]->getRegion() == FD) {
-                    hP_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                }
-            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
-                if (P_p0.Mag() <= p_momentum_upper_cut_2p) {
-                    if (protons[0]->getRegion() == CD) {
-                        hP_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                    } else if (protons[0]->getRegion() == FD) {
-                        hP_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                    }
-                }
-            } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
-                if (P_p0.Mag() >= p_momentum_lower_cut_2p) {
-                    if (protons[0]->getRegion() == CD) {
-                        hP_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                    } else if (protons[0]->getRegion() == FD) {
-                        hP_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                    }
-                }
-            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
-                if ((P_p0.Mag() >= p_momentum_lower_cut_2p) && (P_p0.Mag() <= p_momentum_upper_cut_2p)) {
-                    if (protons[0]->getRegion() == CD) {
-                        hP_p_1e2p_AC_CD->Fill(P_p0.Mag());
-                    } else if (protons[0]->getRegion() == FD) {
-                        hP_p_1e2p_AC_FD->Fill(P_p0.Mag());
-                    }
-                }
-            }
-
-            if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p == -1)) {
-                if (protons[1]->getRegion() == CD) {
-                    hP_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                } else if (protons[1]->getRegion() == FD) {
-                    hP_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                }
-            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p == -1)) {
-                if (P_p1.Mag() <= p_momentum_upper_cut_2p) {
-                    if (protons[1]->getRegion() == CD) {
-                        hP_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                    } else if (protons[1]->getRegion() == FD) {
-                        hP_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                    }
-                }
-            } else if ((p_momentum_upper_cut_2p == -1) && (p_momentum_lower_cut_2p != -1)) {
-                if (P_p1.Mag() >= p_momentum_lower_cut_2p) {
-                    if (protons[1]->getRegion() == CD) {
-                        hP_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                    } else if (protons[1]->getRegion() == FD) {
-                        hP_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                    }
-                }
-            } else if ((p_momentum_upper_cut_2p != -1) && (p_momentum_lower_cut_2p != -1)) {
-                if ((P_p1.Mag() >= p_momentum_lower_cut_2p) && (P_p1.Mag() <= p_momentum_upper_cut_2p)) {
-                    if (protons[1]->getRegion() == CD) {
-                        hP_p_1e2p_AC_CD->Fill(P_p1.Mag());
-                    } else if (protons[1]->getRegion() == FD) {
-                        hP_p_1e2p_AC_FD->Fill(P_p1.Mag());
-                    }
-                }
+                hP_p_1e2p_BC_FD->Fill(P_p1.Mag()); // momentum before cuts
+                LogEventCuts(hP_p_1e2p_AC_FD, protons[1], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             }
             //</editor-fold>
 
@@ -4369,16 +4259,16 @@ void EventAnalyser() {
 
             //<editor-fold desc="Applying momentum cuts">
             // Electrons:
-            if ((apply_momentum_cuts_2p == true) && ((e_momentum_upper_cut_2p != -1) && (P_e > e_momentum_upper_cut_2p))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((e_momentum_lower_cut_2p != -1) && (P_e < e_momentum_lower_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_mom_cuts_2p.at(1) != -1) && (P_e > e_mom_cuts_2p.at(1)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((e_mom_cuts_2p.at(0) != -1) && (P_e < e_mom_cuts_2p.at(0)))) { continue; }
 
             // Proton 0:
-            if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p0.Mag() > p_momentum_upper_cut_2p))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p0.Mag() < p_momentum_lower_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p0.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p0.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
 
             // Proton 1:
-            if ((apply_momentum_cuts_2p == true) && ((p_momentum_upper_cut_2p != -1) && (P_p1.Mag() > p_momentum_upper_cut_2p))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((p_momentum_lower_cut_2p != -1) && (P_p1.Mag() < p_momentum_lower_cut_2p))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p1.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p1.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
             //</editor-fold>
 
             //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
@@ -4456,16 +4346,10 @@ void EventAnalyser() {
 
             //<editor-fold desc="Filling dVx, dVy, dVz (2p)">
             for (auto &p: protons) {
-                Vx_p = p->par()->getVx();
-                Vy_p = p->par()->getVy();
-                Vz_p = p->par()->getVz();
-                dVx = Vx_p - Vx_e;
-                dVy = Vy_p - Vy_e;
-                dVz = Vz_p - Vz_e;
+                Vx_p = p->par()->getVx(), Vy_p = p->par()->getVy(), Vz_p = p->par()->getVz();
+                dVx = Vx_p - Vx_e, dVy = Vy_p - Vy_e, dVz = Vz_p - Vz_e;
 
-                deltaVx_2p->Fill(dVx);
-                deltaVy_2p->Fill(dVy);
-                deltaVz_2p->Fill(dVz);
+                deltaVx_2p->Fill(dVx), deltaVy_2p->Fill(dVy), deltaVz_2p->Fill(dVz);
             } // end of loop over protons vector
             //</editor-fold>
 
@@ -4475,12 +4359,12 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Filling SF histograms (2p)">
-            SF_All_Int_2p_FD->Fill(EoP_e);
-            SF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
+            hSF_2p_FD->Fill(EoP_e);
+            hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
             //</editor-fold>
 
-            //<editor-fold desc="Filling nphe plots (2p)">
-            nphe_All_Int_2p_FD->Fill(nphe);
+            //<editor-fold desc="Filling Nphe plots (2p)">
+            hNphe_2p_FD->Fill(Nphe);
             //</editor-fold>
 
             //<editor-fold desc="Filling momentum histograms">
@@ -5610,68 +5494,66 @@ void EventAnalyser() {
 
 //  SF histograms --------------------------------------------------------------
 
-        SF_1e2p_Xmax = SF_All_Int_1e2p_BC_FD->GetBinCenter(SF_All_Int_1e2p_BC_FD->GetMaximumBin());
+        SF_1e2p_Xmax = hSF_1e_cut_BC_FD->GetBinCenter(hSF_1e_cut_BC_FD->GetMaximumBin());
 
-        //<editor-fold desc="SF and SF vs. P histograms (1e2p, FD)">
+        //<editor-fold desc="SF and SF vs. P histograms (1e cut, FD)">
         if (apply_cuts == false) {
-            histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "1e2p", plots, 2, false, true, SF_1e2p_Stack,
-                          "01_SF_1e2p_before_SF_cuts", SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut,
-                          SF_1e2p_Xmax);
+            histPlotter1D(c1, hSF_1e_cut_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
+                          "01_SF_1e_cut_before_SF_cuts", hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e_upper_cut, SF_1e_lower_cut, SF_1e2p_Xmax);
 
-            histPlotter1D(c1, SF_All_Int_1e2p_AC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f After cuts", "1e2p", plots, 2, false, true, SF_1e2p_Stack,
-                          "02_SF_1e2p_after_SF_cuts", SF_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut,
-                          SF_1e2p_Xmax);
+            histPlotter1D(c1, hSF_1e_cut_AC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f After cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
+                          "02_SF_1e_cut_after_SF_cuts", hSF_1e_cut_AC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e_upper_cut, SF_1e_lower_cut, SF_1e2p_Xmax);
 
-            //<editor-fold desc="SF vs. P 1e2p before cuts (FD)">
-            SF_VS_P_e_1e2p_BC_FD->SetTitleSize(0.06, "xyz");
-            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->CenterTitle(true);
-            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->CenterTitle(true);
-            SF_VS_P_e_1e2p_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(SF_VS_P_e_1e2p_BC_FD);
-            SF_VS_P_e_1e2p_BC_FD->Draw("colz");
+            //<editor-fold desc="SF vs. P before cuts (1e cut, FD)">
+            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
+            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
+            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
+            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
+            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
             c1->SetLogz(1);
-            SF_VS_P_e_1e2p_BC_FD->SetStats(0);
-            c1->SaveAs((SF_VS_P_e_1e2p_BC_FD_Dir + "01_SF_VS_P_e_1e2p_BC_FD.png").c_str());
+            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
+            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_BC_FD.png").c_str());
             gStyle->SetStatX(DefStatX);
             gStyle->SetStatY(DefStatY);
             c1->Clear();
             //</editor-fold>
 
-            //<editor-fold desc="SF vs. P 1e2p after cuts (FD)">
-            SF_VS_P_e_1e2p_AC_FD->SetTitleSize(0.06, "xyz");
-            SF_VS_P_e_1e2p_AC_FD->GetXaxis()->SetLabelSize(0.0425);
-            SF_VS_P_e_1e2p_AC_FD->GetXaxis()->CenterTitle(true);
-            SF_VS_P_e_1e2p_AC_FD->GetYaxis()->SetLabelSize(0.0425);
-            SF_VS_P_e_1e2p_AC_FD->GetYaxis()->CenterTitle(true);
-            SF_VS_P_e_1e2p_AC_FD->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(SF_VS_P_e_1e2p_AC_FD);
-            SF_VS_P_e_1e2p_AC_FD->Draw("colz");
+            //<editor-fold desc="SF vs. P after cuts (1e cut, FD)">
+            hSF_VS_P_e_1e_cut_AC_FD->SetTitleSize(0.06, "xyz");
+            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->SetLabelSize(0.0425);
+            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->CenterTitle(true);
+            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->SetLabelSize(0.0425);
+            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->CenterTitle(true);
+            hSF_VS_P_e_1e_cut_AC_FD->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(hSF_VS_P_e_1e_cut_AC_FD);
+            hSF_VS_P_e_1e_cut_AC_FD->Draw("colz");
             c1->SetLogz(1);
-            SF_VS_P_e_1e2p_AC_FD->SetStats(0);
-            c1->SaveAs((SF_VS_P_e_1e2p_AC_FD_Dir + "02_SF_VS_P_e_1e2p_AC_FD.png").c_str());
+            hSF_VS_P_e_1e_cut_AC_FD->SetStats(0);
+            c1->SaveAs((hSF_VS_P_e_1e_cut_AC_FD_Dir + "02_SF_VS_P_e_1e_cut_AC_FD.png").c_str());
             gStyle->SetStatX(DefStatX);
             gStyle->SetStatY(DefStatY);
             c1->Clear();
             //</editor-fold>
 
         } else {
-            histPlotter1D(c1, SF_All_Int_1e2p_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "1e2p", plots, 2, false, true, SF_1e2p_Stack, "01_SF_1e2p",
-                          SF_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
+            histPlotter1D(c1, hSF_1e_cut_BC_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD, "01_SF_1e2p",
+                          hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e_upper_cut, SF_1e_lower_cut, SF_1e2p_Xmax);
 
             //<editor-fold desc="SF vs. P 1e2p (FD)">
-            SF_VS_P_e_1e2p_BC_FD->SetTitleSize(0.06, "xyz");
-            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-            SF_VS_P_e_1e2p_BC_FD->GetXaxis()->CenterTitle(true);
-            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-            SF_VS_P_e_1e2p_BC_FD->GetYaxis()->CenterTitle(true);
-            SF_VS_P_e_1e2p_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(SF_VS_P_e_1e2p_BC_FD);
-            SF_VS_P_e_1e2p_BC_FD->Draw("colz");
+            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
+            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
+            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
+            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
+            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
             c1->SetLogz(1);
-            SF_VS_P_e_1e2p_BC_FD->SetStats(0);
-            c1->SaveAs((SF_VS_P_e_1e2p_BC_FD_Dir + "01_SF_VS_P_e_1e2p_FD.png").c_str());
+            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
+            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_FD.png").c_str());
             gStyle->SetStatX(DefStatX);
             gStyle->SetStatY(DefStatY);
             c1->Clear();
@@ -5681,24 +5563,24 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="SF histogram (2p, FD)">
-        histPlotter1D(c1, SF_All_Int_2p_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "All Int., 2p", plots, 2, false, true, SF_2p_Stack, "SF_2p_wAll_cuts",
-                      SF_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e2p_upper_cut, SF_1e2p_lower_cut, SF_1e2p_Xmax);
+        histPlotter1D(c1, hSF_2p_FD, normalized_SF_plots, true, 1., "Sampling Fraction f", "All Int., 2p", plots, 2, false, true, sSF_2p_FD, "SF_2p_wAll_cuts",
+                      hSF_2p_FD_Dir, "FD", kBlue, true, true, false, true, SF_1e_upper_cut, SF_1e_lower_cut, SF_1e2p_Xmax);
         //</editor-fold>
 
         //<editor-fold desc="SF vs. P (2p, FD)">
-        SF_VS_P_e_2p_FD->SetTitleSize(0.06, "xyz");
-        SF_VS_P_e_2p_FD->GetXaxis()->SetLabelSize(0.0425);
-        SF_VS_P_e_2p_FD->GetXaxis()->CenterTitle(true);
-        SF_VS_P_e_2p_FD->GetYaxis()->SetLabelSize(0.0425);
-        SF_VS_P_e_2p_FD->GetYaxis()->CenterTitle(true);
-        SF_VS_P_e_2p_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(SF_VS_P_e_2p_FD);
-        SF_VS_P_e_2p_FD->Draw("colz");
+        hSF_VS_P_e_2p_FD->SetTitleSize(0.06, "xyz");
+        hSF_VS_P_e_2p_FD->GetXaxis()->SetLabelSize(0.0425);
+        hSF_VS_P_e_2p_FD->GetXaxis()->CenterTitle(true);
+        hSF_VS_P_e_2p_FD->GetYaxis()->SetLabelSize(0.0425);
+        hSF_VS_P_e_2p_FD->GetYaxis()->CenterTitle(true);
+        hSF_VS_P_e_2p_FD->GetZaxis()->SetLabelSize(0.0425);
+        plots->Add(hSF_VS_P_e_2p_FD);
+        hSF_VS_P_e_2p_FD->Draw("colz");
         c1->SetLogz(1);
 //        gStyle->SetStatX(0.87);
 //        gStyle->SetStatY(0.4);
-        SF_VS_P_e_2p_FD->SetStats(0);
-        c1->SaveAs((SF_VS_P_e_2p_FD_Dir + "SF_VS_P_e_2p_FD.png").c_str());
+        hSF_VS_P_e_2p_FD->SetStats(0);
+        c1->SaveAs((hSF_VS_P_e_2p_FD_Dir + "hSF_VS_P_e_2p_FD.png").c_str());
         gStyle->SetStatX(DefStatX);
         gStyle->SetStatY(DefStatY);
         c1->Clear();
@@ -5710,35 +5592,35 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Number of Photo-electrons (nphe) histograms
+// Number of Photo-electrons (Nphe) histograms
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="Number of Photo-electrons (nphe) histograms">
-    if (nphe_plots) {
-        cout << "\n\nPlotting number of photo-electrons (nphe) histograms...\n\n";
+    //<editor-fold desc="Number of Photo-electrons (Nphe) histograms">
+    if (Nphe_plots) {
+        cout << "\n\nPlotting number of photo-electrons (Nphe) histograms...\n\n";
 
-        //<editor-fold desc="Number of Photo-electrons (nphe) histogram (1e2p, FD)">
+        //<editor-fold desc="Number of Photo-electrons (Nphe) histogram (1e cut, FD)">
         if (apply_cuts == false) {
-            histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) Before Cuts", "1e2p", plots, 2,
-                          false, true, nphe_1e2p_Stack, "01_nphe_1e2p_before_nphe_cuts", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true,
-                          nphe_lower_cut, 0, false);
+            histPlotter1D(c1, hNphe_1e_cut_BC_FD, normalized_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe}) Before Cuts", "1e Cut", plots, 2, false, true,
+                          sNphe_1e_cut_FD, "01_Nphe_1e_cut_before_Nphe_cuts", hNphe_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0,
+                          false);
 
-            histPlotter1D(c1, nphe_All_Int_1e2p_AC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} ) After Cuts", "1e2p", plots, 2,
-                          false, true, nphe_1e2p_Stack, "02_nphe_1e2p_after_nphe_cuts", nphe_All_Int_1e2p_AC_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut,
-                          0, false);
+            histPlotter1D(c1, hNphe_1e_cut_AC_FD, normalized_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe}) After Cuts", "1e Cut", plots, 2, false, true,
+                          sNphe_1e_cut_FD, "02_Nphe_1e_cut_after_Nphe_cuts", hNphe_1e_cut_AC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0,
+                          false);
         } else {
-            histPlotter1D(c1, nphe_All_Int_1e2p_BC_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} )", "1e2p", plots, 2, false, true,
-                          nphe_1e2p_Stack, "01_nphe_1e2p", nphe_All_Int_1e2p_BC_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut, 0, false);
+            histPlotter1D(c1, hNphe_1e_cut_BC_FD, normalized_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe})", "1e Cut", plots, 2, false, true, sNphe_1e_cut_FD,
+                          "01_Nphe_1e_cut", hNphe_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
         }
         //</editor-fold>
 
-        //<editor-fold desc="Number of Photo-electrons (nphe) histogram (2p, FD)">
-        histPlotter1D(c1, nphe_All_Int_2p_FD, normalized_nphe_plots, true, 1., "#Photo-electrons in HTCC (n_{phe} )", "All Int., 2p", plots, 2, false,
-                      true, nphe_2p_Stack, "nphe_2p", nphe_All_Int_2p_FD_Dir, "FD", kBlue, true, true, false, true, nphe_lower_cut, 0, false);
+        //<editor-fold desc="Number of Photo-electrons (Nphe) histogram (2p, FD)">
+        histPlotter1D(c1, hNphe_2p_FD, normalized_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe} )", "All Int., 2p", plots, 2, false, true, sNphe_2p_FD,
+                      "Nphe_2p", hNphe_2p_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
         //</editor-fold>
 
     } else {
-        cout << "\n\nnumber of photo-electrons (nphe) plots are disabled by user.\n\n";
+        cout << "\n\nnumber of photo-electrons (Nphe) plots are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -5752,66 +5634,38 @@ void EventAnalyser() {
 
 //  Momentum histograms (1e2p, CD & FD)  --------------------------------------------------------------
 
-//        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
+        //<editor-fold desc="Momentum histograms before & after cuts (1e2p, CD & FD)">
+        histPlotter1D(c1, hP_e_1e2p_BC_CD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "01_P_e_1e2p_BC_CD", hP_e_1e2p_BC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_e_1e2p_AC_CD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "01_P_e_1e2p_AC_CD", hP_e_1e2p_AC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
 
-        //<editor-fold desc="Momentum histograms before cuts (1e2p, CD & FD)">
+        histPlotter1D(c1, hP_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "02_P_e_1e2p_BC_FD", hP_e_1e2p_BC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "02_P_e_1e2p_AC_FD", hP_e_1e2p_AC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
 
-        //<editor-fold desc="Electrons momentum histograms (1e2p, CD & FD)">
-        histPlotter1D(c1, hP_e_1e2p_BC_CD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "01_hP_e_1e2p_BC_CD", hP_e_1e2p_BC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
+        histPlotter1D(c1, hP_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "03_P_p_1e2p_BC_CD", hP_p_1e2p_BC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "03_P_p_1e2p_AC_CD", hP_p_1e2p_AC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
 
-        histPlotter1D(c1, hP_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "01_P_e_1e2p_BC_FD", hP_e_1e2p_BC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="Protons momentum histograms (1e2p, CD & FD)">
-        histPlotter1D(c1, hP_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "02_hP_p_1e2p_BC_CD", hP_p_1e2p_BC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
-
-        histPlotter1D(c1, hP_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "02_hP_p_1e2p_BC_FD", hP_p_1e2p_BC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
-        //</editor-fold>
-
-        //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms after cuts (1e2p, CD & FD)">
-
-        //<editor-fold desc="Electrons momentum histograms (1e2p, CD & FD)">
-        histPlotter1D(c1, hP_e_1e2p_AC_CD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "03_hP_e_1e2p_AC_CD", hP_e_1e2p_AC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
-
-        histPlotter1D(c1, hP_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "03_P_e_1e2p_AC_FD", hP_e_1e2p_AC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="Protons momentum histograms (1e2p, CD & FD)">
-        histPlotter1D(c1, hP_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "04_P_p_1e2p_AC_CD", hP_p_1e2p_AC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
-
+        histPlotter1D(c1, hP_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "04_P_p_1e2p_BC_FD", hP_p_1e2p_BC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
         histPlotter1D(c1, hP_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", hP_p_1e2p_AC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
+                      "FD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
         //</editor-fold>
 
-        //</editor-fold>
+        //<editor-fold desc="Momentum histograms before & after cuts (2p, CD & FD)">
+        histPlotter1D(c1, hP_e_2p_CD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, sP_2p_CD, "01_P_e_2p_CD", hP_e_2p_CD_Dir, "CD", kBlue, true, true, false,
+                      true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_e_2p_FD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, sP_2p_FD, "01_P_e_2p_FD", hP_e_2p_FD_Dir, "FD", kBlue, true, true, false,
+                      true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
 
-        //<editor-fold desc="Momentum histograms after 2p cuts (CD & FD)">
-
-        //<editor-fold desc="Electrons momentum histograms (2p, CD & FD)">
-        histPlotter1D(c1, hP_e_2p_CD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, sP_2p_CD, "03_P_e_2p_CD", hP_e_2p_CD_Dir, "CD", kBlue, true, true, false,
-                      true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
-
-        histPlotter1D(c1, hP_e_2p_FD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, sP_2p_FD, "03_P_e_2p_FD", hP_e_2p_FD_Dir, "FD", kBlue, true, true, false,
-                      true, e_momentum_upper_cut_2p, e_momentum_lower_cut_2p, 0, false);
-        //</editor-fold>
-
-        //<editor-fold desc="Protons momentum histograms (2p, CD & FD)">
-        histPlotter1D(c1, hP_p_2p_CD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, sP_2p_CD, "04_P_p_2p_CD", hP_p_2p_CD_Dir, "CD", kBlue, true, true, false,
-                      true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
-
-        histPlotter1D(c1, hP_p_2p_FD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, sP_2p_FD, "04_P_p_2p_FD", hP_p_2p_FD_Dir, "FD", kBlue, true, true, false,
-                      true, p_momentum_upper_cut_2p, p_momentum_lower_cut_2p, 0, false);
-        //</editor-fold>
-
+        histPlotter1D(c1, hP_p_2p_CD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, sP_2p_CD, "02_P_p_2p_CD", hP_p_2p_CD_Dir, "CD", kBlue, true, true, false,
+                      true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_2p_FD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, sP_2p_FD, "02_P_p_2p_FD", hP_p_2p_FD_Dir, "FD", kBlue, true, true, false,
+                      true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
         //</editor-fold>
 
 ////  Momentum histograms (MicroBooNE, CD & FD)  --------------------------------------------------------------
@@ -5822,31 +5676,31 @@ void EventAnalyser() {
 //
 //        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_e_MicroBooNE_BC_CD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
-//                      "01_P_e_MicroBooNE_BC_CD", P_e_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "01_P_e_MicroBooNE_BC_CD", P_e_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, e_mom_cuts_MicroBooNE.at(1),
+//                      e_mom_cuts_MicroBooNE.at(0), 0, false);
 //
 //        histPlotter1D(c1, P_e_MicroBooNE_BC_FD, false, true, 1., "P_{e} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
-//                      "02_P_e_MicroBooNE_BC_FD", P_e_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "02_P_e_MicroBooNE_BC_FD", P_e_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, e_mom_cuts_MicroBooNE.at(1),
+//                      e_mom_cuts_MicroBooNE.at(0), 0, false);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_p_MicroBooNE_BC_CD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
-//                      "03_P_p_MicroBooNE_BC_CD", P_p_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "03_P_p_MicroBooNE_BC_CD", P_p_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, p_mom_cuts_MicroBooNE.at(1),
+//                      p_mom_cuts_MicroBooNE.at(0), 0, false);
 //
 //        histPlotter1D(c1, P_p_MicroBooNE_BC_FD, false, true, 1., "P_{p} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
-//                      "04_P_p_MicroBooNE_BC_FD", P_p_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "04_P_p_MicroBooNE_BC_FD", P_p_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, p_mom_cuts_MicroBooNE.at(1),
+//                      p_mom_cuts_MicroBooNE.at(0), 0, false);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_cpion_MicroBooNE_BC_CD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_CD,
-//                      "05_P_cpion_MicroBooNE_BC_CD", P_cpion_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      "05_P_cpion_MicroBooNE_BC_CD", P_cpion_MicroBooNE_BC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_mom_cuts_MicroBooNE(1),
 //                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
 //
 //        histPlotter1D(c1, P_cpion_MicroBooNE_BC_FD, false, true, 1., "P_{#pi^{#pm}} Before Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_BC_FD,
-//                      "06_P_cpion_MicroBooNE_BC_FD", P_cpion_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      "06_P_cpion_MicroBooNE_BC_FD", P_cpion_MicroBooNE_BC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_mom_cuts_MicroBooNE(1),
 //                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
 //        //</editor-fold>
 //
@@ -5856,31 +5710,31 @@ void EventAnalyser() {
 //
 //        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_e_MicroBooNE_AC_CD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
-//                      "01_P_e_MicroBooNE_AC_CD", P_e_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "01_P_e_MicroBooNE_AC_CD", P_e_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, e_mom_cuts_MicroBooNE.at(1),
+//                      e_mom_cuts_MicroBooNE.at(0), 0, false);
 //
 //        histPlotter1D(c1, P_e_MicroBooNE_AC_FD, false, true, 1., "P_{e} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
-//                      "02_P_e_MicroBooNE_AC_FD", P_e_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE,
-//                      e_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "02_P_e_MicroBooNE_AC_FD", P_e_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, e_mom_cuts_MicroBooNE.at(1),
+//                      e_mom_cuts_MicroBooNE.at(0), 0, false);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_p_MicroBooNE_AC_CD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
-//                      "03_P_p_MicroBooNE_AC_CD", P_p_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "03_P_p_MicroBooNE_AC_CD", P_p_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, p_mom_cuts_MicroBooNE.at(1),
+//                      p_mom_cuts_MicroBooNE.at(0), 0, false);
 //
 //        histPlotter1D(c1, P_p_MicroBooNE_AC_FD, false, true, 1., "P_{p} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
-//                      "04_P_p_MicroBooNE_AC_FD", P_p_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE,
-//                      p_momentum_lower_cut_MicroBooNE, 0, false);
+//                      "04_P_p_MicroBooNE_AC_FD", P_p_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, p_mom_cuts_MicroBooNE.at(1),
+//                      p_mom_cuts_MicroBooNE.at(0), 0, false);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_cpion_MicroBooNE_AC_CD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_CD,
-//                      "05_P_cpion_MicroBooNE_AC_CD", P_cpion_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      "05_P_cpion_MicroBooNE_AC_CD", P_cpion_MicroBooNE_AC_CD_Dir, "CD", kBlue, true, true, false, true, cpion_mom_cuts_MicroBooNE(1),
 //                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
 //
 //        histPlotter1D(c1, P_cpion_MicroBooNE_AC_FD, false, true, 1., "P_{#pi^{#pm}} After Cut", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_AC_FD,
-//                      "06_P_cpion_MicroBooNE_AC_FD", P_cpion_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE,
+//                      "06_P_cpion_MicroBooNE_AC_FD", P_cpion_MicroBooNE_AC_FD_Dir, "FD", kBlue, true, true, false, true, cpion_mom_cuts_MicroBooNE(1),
 //                      cpion_momentum_lower_cut_MicroBooNE, 0, false);
 //        //</editor-fold>
 //
@@ -5890,27 +5744,27 @@ void EventAnalyser() {
 //
 //        //<editor-fold desc="Electrons momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_e_MicroBooNE_CD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "01_P_e_MicroBooNE_CD",
-//                      P_e_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
+//                      P_e_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, e_mom_cuts_MicroBooNE.at(1), e_mom_cuts_MicroBooNE.at(0), 0, false);
 //
 //        histPlotter1D(c1, P_e_MicroBooNE_FD, false, true, 1., "P_{e}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "02_P_e_MicroBooNE_FD",
-//                      P_e_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, e_momentum_upper_cut_MicroBooNE, e_momentum_lower_cut_MicroBooNE, 0, false);
+//                      P_e_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, e_mom_cuts_MicroBooNE.at(1), e_mom_cuts_MicroBooNE.at(0), 0, false);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Protons momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_p_MicroBooNE_CD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "03_P_p_MicroBooNE_CD",
-//                      P_p_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
+//                      P_p_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, p_mom_cuts_MicroBooNE.at(1), p_mom_cuts_MicroBooNE.at(0), 0, false);
 //
 //        histPlotter1D(c1, P_p_MicroBooNE_FD, false, true, 1., "P_{p}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "04_P_p_MicroBooNE_FD",
-//                      P_p_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, p_momentum_upper_cut_MicroBooNE, p_momentum_lower_cut_MicroBooNE, 0, false);
+//                      P_p_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, p_mom_cuts_MicroBooNE.at(1), p_mom_cuts_MicroBooNE.at(0), 0, false);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="cPions momentum histograms (MicroBooNE, CD & FD)">
 //        histPlotter1D(c1, P_cpion_MicroBooNE_CD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_CD, "05_P_cpion_MicroBooNE_CD",
-//                      P_cpion_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
+//                      P_cpion_MicroBooNE_CD_Dir, "CD", kBlue, true, true, false, true, cpion_mom_cuts_MicroBooNE(1), cpion_momentum_lower_cut_MicroBooNE, 0,
 //                      false);
 //
 //        histPlotter1D(c1, P_cpion_MicroBooNE_FD, false, true, 1., "P_{#pi^{#pm}}", "MicroBooNE", plots, 2, false, true, P_Stack_MicroBooNE_FD, "06_P_cpion_MicroBooNE_FD",
-//                      P_cpion_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, cpion_momentum_upper_cut_MicroBooNE, cpion_momentum_lower_cut_MicroBooNE, 0,
+//                      P_cpion_MicroBooNE_FD_Dir, "FD", kBlue, true, true, false, true, cpion_mom_cuts_MicroBooNE(1), cpion_momentum_lower_cut_MicroBooNE, 0,
 //                      false);
 //        //</editor-fold>
 //
@@ -7549,48 +7403,48 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (2p)\n";
     myLogFile << "===========================================================================\n\n";
-    myLogFile << "e_momentum_upper_cut_2p = " << e_momentum_upper_cut_2p << "\n";
-    myLogFile << "e_momentum_lower_cut_2p = " << e_momentum_lower_cut_2p << "\n";
-    myLogFile << "P_L_upper_lim_2p* = " << p_momentum_upper_cut_2p << "\n";
-    myLogFile << "P_L_lower_lim_2p* = " << p_momentum_lower_cut_2p << "\n";
-    myLogFile << "P_R_upper_lim_2p* = " << p_momentum_upper_cut_2p << "\n";
-    myLogFile << "P_R_lower_lim_2p* = " << p_momentum_lower_cut_2p << "\n\n\n";
+    myLogFile << "e_mom_cuts_2p.at(0) = " << e_mom_cuts_2p.at(0) << "\n";
+    myLogFile << "e_mom_cuts_2p.at(1) = " << e_mom_cuts_2p.at(1) << "\n";
+    myLogFile << "P_L_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
+    myLogFile << "P_L_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n";
+    myLogFile << "P_R_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n\n\n";
+    myLogFile << "P_R_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Momentum thresholds (MicroBooNE)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "e_momentum_upper_cut_MicroBooNE = " << e_momentum_upper_cut_MicroBooNE << "\n";
-    myLogFile << "e_momentum_lower_cut_MicroBooNE = " << e_momentum_lower_cut_MicroBooNE << "\n";
-    myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_momentum_upper_cut_MicroBooNE << "\n";
-    myLogFile << "p_momentum_lower_cut_MicroBooNE = " << p_momentum_lower_cut_MicroBooNE << "\n";
-    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_momentum_upper_cut_MicroBooNE << "\n\n\n";
+    myLogFile << "e_momentum_lower_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(0) << "\n";
+    myLogFile << "e_momentum_upper_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(1) << "\n";
+    myLogFile << "p_momentum_lower_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(0) << "\n";
+    myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(1) << "\n";
+    myLogFile << "cpion_momentum_lower_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(0) << "\n\n\n";
+    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(1) << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Sampling Fraction (SF) cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "apply_SF_cuts = " << BoolToString(apply_SF_cuts) << "\n";
-    myLogFile << "SF_1e2p_upper_cut = " << SF_1e2p_upper_cut << "\n";
-    myLogFile << "SF_1e2p_lower_cut = " << SF_1e2p_lower_cut << "\n";
+    myLogFile << "SF_1e_upper_cut = " << SF_1e_upper_cut << "\n";
+    myLogFile << "SF_1e_lower_cut = " << SF_1e_lower_cut << "\n";
     myLogFile << "SF_1e2p_Xmax (from histogram) = " << SF_1e2p_Xmax << "\n";
     myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
-    myLogFile << "Fiducial cuts (electrons only, FD)\n";
+    myLogFile << "ECAL fiducial cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "apply_Lv_cut = " << BoolToString(apply_Lv_cut) << "\n";
+    myLogFile << "apply_ECAL_fiducial_cut = " << BoolToString(apply_ECAL_fiducial_cut) << "\n";
     myLogFile << "fiducial_cut_Lv = " << fiducial_cut_Lv << "\n";
-    myLogFile << "apply_Lw_cut = " << BoolToString(apply_Lw_cut) << "\n";
     myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
-    myLogFile << "Number of Photo-electrons (nphe) cuts (electrons only, FD)\n";
+    myLogFile << "Number of Photo-electrons (Nphe) cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "apply_nphe_cut = " << BoolToString(apply_nphe_cut) << "\n";
-    myLogFile << "nphe_lower_cut = " << nphe_lower_cut << "\n\n\n";
+    myLogFile << "apply_Nphe_cut = " << BoolToString(apply_Nphe_cut) << "\n";
+    myLogFile << "Nphe_lower_cut = " << clasAna.getNpheCuts() << "\n\n\n";
 
     myLogFile << "===========================================================================\n";
     myLogFile << "Chi2 cuts\n";
@@ -8151,12 +8005,14 @@ void EventAnalyser() {
 
     cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
     cout << "plots_path:\t\t" << plots_path << "\n\n";
+
     cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
     cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
-    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
-//    cout << "AnalyseFileDirContent:\t" << AnalyseFileDirContent << "\n";
+    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n\n";
+
+    cout << "apply_cuts:\t\t'" << BoolToString(apply_cuts) << "'\n";
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
-//    cout << "filePath:\t" << filePath << "\n";
+
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
     cout << "Beam Energy:\t\t" << beamE << "\n\n";
 
