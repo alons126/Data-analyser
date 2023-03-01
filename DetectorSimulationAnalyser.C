@@ -2405,27 +2405,27 @@ void EventAnalyser() {
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
     /* ET around 15 Deg */
-    THStack *sET15_All_Int_2p_CD = new THStack("ET around 15#circ (All Int., 2p, CD)",
-                                               "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]");
+//    THStack *sET15_All_Int_2p_CD = new THStack("ET around 15#circ (All Int., 2p, CD)",
+//                                               "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]");
     THStack *sET15_All_Int_2p_FD = new THStack("ET around 15#circ (All Int., 2p, FD)",
                                                "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, FD);E_{beam}-E_{e} [GeV]");
     string sET15_All_Int_2p_CD_Dir = ETrans_15_stack_Directory, sET15_All_Int_2p_FD_Dir = ETrans_15_stack_Directory;
 
-    TH1D *hET15_All_Int_2p_CD = new TH1D("ET around 15#circ (All Int., 2p, CD)",
-                                         "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]",
-                                         100, 0, beamE * 1.1);
-    TH1D *hET15_QEL_2p_CD = new TH1D("ET around 15#circ (QEL Only, 2p, CD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (QEL Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
-    TH1D *hET15_MEC_2p_CD = new TH1D("ET around 15#circ (MEC Only, 2p, CD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (MEC Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
-    TH1D *hET15_RES_2p_CD = new TH1D("ET around 15#circ (RES Only, 2p, CD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (RES Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
-    TH1D *hET15_DIS_2p_CD = new TH1D("ET around 15#circ (DIS Only, 2p, CD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
+//    TH1D *hET15_All_Int_2p_CD = new TH1D("ET around 15#circ (All Int., 2p, CD)",
+//                                         "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]",
+//                                         100, 0, beamE * 1.1);
+//    TH1D *hET15_QEL_2p_CD = new TH1D("ET around 15#circ (QEL Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (QEL Only, 2p, CD);E_{beam}-E_{e} [GeV]",
+//                                     100, 0, beamE * 1.1);
+//    TH1D *hET15_MEC_2p_CD = new TH1D("ET around 15#circ (MEC Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (MEC Only, 2p, CD);E_{beam}-E_{e} [GeV]",
+//                                     100, 0, beamE * 1.1);
+//    TH1D *hET15_RES_2p_CD = new TH1D("ET around 15#circ (RES Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (RES Only, 2p, CD);E_{beam}-E_{e} [GeV]",
+//                                     100, 0, beamE * 1.1);
+//    TH1D *hET15_DIS_2p_CD = new TH1D("ET around 15#circ (DIS Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, CD);E_{beam}-E_{e} [GeV]",
+//                                     100, 0, beamE * 1.1);
     TH1D *hET15_All_Int_2p_FD = new TH1D("ET around 15#circ (All Int., 2p, FD)",
                                          "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, FD);E_{beam}-E_{e} [GeV]",
                                          100, 0, beamE * 1.1);
@@ -6859,46 +6859,51 @@ void EventAnalyser() {
         cout << "\n\nPlotting Energy Transfer (ET) histograms...\n\n";
 
         if (ETrans_All_Int_plots) {
-            double ETrans15_All_Int_integral_2p = hET15_All_Int_2p_CD->Integral() + hET15_All_Int_2p_FD->Integral();
+            double ETrans15_All_Int_integral_2p = hET15_All_Int_2p_FD->Integral();
+//            double ETrans15_All_Int_integral_2p = hET15_All_Int_2p_CD->Integral() + hET15_All_Int_2p_FD->Integral();
 
-            histPlotter1D(c1, hET15_All_Int_2p_CD, norm_ET_plots, true, ETrans15_All_Int_integral_2p, tET15, "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_CD, "ETrans_15_All_Int_2p", hET15_All_Int_2p_CD_Dir, "CD", kBlack, true, true, true);
+//            histPlotter1D(c1, hET15_All_Int_2p_CD, norm_ET_plots, true, ETrans15_All_Int_integral_2p, tET15, "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_2p_CD, "ETrans_15_All_Int_2p", hET15_All_Int_2p_CD_Dir, "CD", kBlack, true, true, true);
             histPlotter1D(c1, hET15_All_Int_2p_FD, norm_ET_plots, true, ETrans15_All_Int_integral_2p, tET15, "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sET15_All_Int_2p_FD, "ETrans_15_All_Int_2p", hET15_All_Int_2p_FD_Dir, "FD", kBlack, true, true, true);
         }
 
         if (ETrans_QEL_plots) {
-            double ETrans15_QEL_integral_2p = hET15_QEL_2p_CD->Integral() + hET15_QEL_2p_FD->Integral();
+            double ETrans15_QEL_integral_2p = hET15_QEL_2p_FD->Integral();
+//            double ETrans15_QEL_integral_2p = hET15_QEL_2p_CD->Integral() + hET15_QEL_2p_FD->Integral();
 
-            histPlotter1D(c1, hET15_QEL_2p_CD, norm_ET_plots, true, ETrans15_QEL_integral_2p, tET15, "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_CD, "ETrans_15_QEL_2p", hET15_QEL_2p_CD_Dir, "CD", kBlue, true, true, true);
+//            histPlotter1D(c1, hET15_QEL_2p_CD, norm_ET_plots, true, ETrans15_QEL_integral_2p, tET15, "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_2p_CD, "ETrans_15_QEL_Only_2p", hET15_QEL_2p_CD_Dir, "CD", kBlue, true, true, true);
             histPlotter1D(c1, hET15_QEL_2p_FD, norm_ET_plots, true, ETrans15_QEL_integral_2p, tET15, "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_FD, "ETrans_15_QEL_2p", hET15_QEL_2p_FD_Dir, "FD", kBlue, true, true, true);
+                          sET15_All_Int_2p_FD, "ETrans_15_QEL_Only_2p", hET15_QEL_2p_FD_Dir, "FD", kBlue, true, true, true);
         }
 
         if (ETrans_MEC_plots) {
-            double ETrans15_MEC_integral_2p = hET15_MEC_2p_CD->Integral() + hET15_MEC_2p_FD->Integral();
+            double ETrans15_MEC_integral_2p = hET15_MEC_2p_FD->Integral();
+//            double ETrans15_MEC_integral_2p = hET15_MEC_2p_CD->Integral() + hET15_MEC_2p_FD->Integral();
 
-            histPlotter1D(c1, hET15_MEC_2p_CD, norm_ET_plots, true, ETrans15_MEC_integral_2p, tET15, "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_CD, "ETrans_15_MEC_2p", hET15_MEC_2p_CD_Dir, "CD", kRed, true, true, true);
+//            histPlotter1D(c1, hET15_MEC_2p_CD, norm_ET_plots, true, ETrans15_MEC_integral_2p, tET15, "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_2p_CD, "ETrans_15_MEC_Only_2p", hET15_MEC_2p_CD_Dir, "CD", kRed, true, true, true);
             histPlotter1D(c1, hET15_MEC_2p_FD, norm_ET_plots, true, ETrans15_MEC_integral_2p, tET15, "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_FD, "ETrans_15_MEC_2p", hET15_MEC_2p_FD_Dir, "FD", kRed, true, true, true);
+                          sET15_All_Int_2p_FD, "ETrans_15_MEC_Only_2p", hET15_MEC_2p_FD_Dir, "FD", kRed, true, true, true);
         }
 
         if (ETrans_RES_plots) {
-            double ETrans15_RES_integral_2p = hET15_RES_2p_CD->Integral() + hET15_RES_2p_FD->Integral();
+            double ETrans15_RES_integral_2p = hET15_RES_2p_FD->Integral();
+//            double ETrans15_RES_integral_2p = hET15_RES_2p_CD->Integral() + hET15_RES_2p_FD->Integral();
 
-            histPlotter1D(c1, hET15_RES_2p_CD, norm_ET_plots, true, ETrans15_RES_integral_2p, tET15, "RES Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_CD, "ETrans_15_RES_2p", hET15_RES_2p_CD_Dir, "CD", kGreen, true, true, true);
+//            histPlotter1D(c1, hET15_RES_2p_CD, norm_ET_plots, true, ETrans15_RES_integral_2p, tET15, "RES Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_2p_CD, "ETrans_15_RES_2p", hET15_RES_2p_CD_Dir, "CD", kGreen, true, true, true);
             histPlotter1D(c1, hET15_RES_2p_FD, norm_ET_plots, true, ETrans15_RES_integral_2p, tET15, "RES Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sET15_All_Int_2p_FD, "ETrans_15_RES_2p", hET15_RES_2p_FD_Dir, "FD", kGreen, true, true, true);
         }
 
         if (ETrans_DIS_plots) {
-            double ETrans15_DIS_integral_2p = hET15_DIS_2p_CD->Integral() + hET15_DIS_2p_FD->Integral();
+            double ETrans15_DIS_integral_2p = hET15_DIS_2p_FD->Integral();
+//            double ETrans15_DIS_integral_2p = hET15_DIS_2p_CD->Integral() + hET15_DIS_2p_FD->Integral();
 
-            histPlotter1D(c1, hET15_DIS_2p_CD, norm_ET_plots, true, ETrans15_DIS_integral_2p, tET15, "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sET15_All_Int_2p_CD, "ETrans_15_DIS_2p", hET15_DIS_2p_CD_Dir, "CD", kMagenta, true, true, true);
+//            histPlotter1D(c1, hET15_DIS_2p_CD, norm_ET_plots, true, ETrans15_DIS_integral_2p, tET15, "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_2p_CD, "ETrans_15_DIS_2p", hET15_DIS_2p_CD_Dir, "CD", kMagenta, true, true, true);
             histPlotter1D(c1, hET15_DIS_2p_FD, norm_ET_plots, true, ETrans15_DIS_integral_2p, tET15, "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sET15_All_Int_2p_FD, "ETrans_15_DIS_2p", hET15_DIS_2p_FD_Dir, "FD", kMagenta, true, true, true);
         }
@@ -6906,8 +6911,8 @@ void EventAnalyser() {
 //  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
 
         if (ETrans_All_Int_plots && ETrans_QEL_plots && ETrans_MEC_plots && ETrans_RES_plots && ETrans_DIS_plots) {
-            stackPlotter1D(c1, sET15_All_Int_2p_CD, norm_ET_plots, tET15, "2p", plots, hET15_All_Int_2p_CD, hET15_QEL_2p_CD, hET15_MEC_2p_CD,
-                           hET15_RES_2p_CD, hET15_DIS_2p_CD, "01_ET15_stack", sET15_All_Int_2p_CD_Dir, "CD");
+//            stackPlotter1D(c1, sET15_All_Int_2p_CD, norm_ET_plots, tET15, "2p", plots, hET15_All_Int_2p_CD, hET15_QEL_2p_CD, hET15_MEC_2p_CD,
+//                           hET15_RES_2p_CD, hET15_DIS_2p_CD, "01_ET15_stack", sET15_All_Int_2p_CD_Dir, "CD");
             stackPlotter1D(c1, sET15_All_Int_2p_FD, norm_ET_plots, tET15, "2p", plots, hET15_All_Int_2p_FD, hET15_QEL_2p_FD, hET15_MEC_2p_FD,
                            hET15_RES_2p_FD, hET15_DIS_2p_FD, "02_ET15_stack", sET15_All_Int_2p_FD_Dir, "FD");
         }
