@@ -530,7 +530,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
-    string ETrans_Parent_Directory = "ETrans_plots";
+    string ETrans_Parent_Directory = "06_ET_plots";
     TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
     string ETrans_Daughter_Folders[] = {"", "01_2p", "01_2p/01_Around_15_Deg", "01_2p/01_Around_15_Deg/All_interactions", "01_2p/01_Around_15_Deg/QEL_only",
                                         "01_2p/01_Around_15_Deg/MEC_only", "01_2p/01_Around_15_Deg/RES_only", "01_2p/01_Around_15_Deg/DIS_only"};
@@ -555,7 +555,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
-    string Ecal_Parent_Directory = "Ecal_rec_plots";
+    string Ecal_Parent_Directory = "07_Ecal_rec_plots";
     TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
     string Ecal_Daughter_Folders[] = {"", "2p", "2p/All_interactions", "2p/QEL_only", "2p/MEC_only", "2p/RES_only", "2p/DIS_only"};
 
@@ -2405,48 +2405,38 @@ void EventAnalyser() {
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
     /* ET around 15 Deg */
-//    THStack *sET15_All_Int_2p_CD = new THStack("ET around 15#circ (All Int., 2p, CD)",
-//                                               "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]");
-    THStack *sET15_All_Int_2p_FD = new THStack("ET around 15#circ (All Int., 2p, FD)",
-                                               "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, FD);E_{beam}-E_{e} [GeV]");
+//    THStack *sET15_All_Int_2p_CD = new THStack("ET around #theta_{e} = 15#circ (All Int., 2p, CD)",
+//                                               "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]");
+    THStack *sET15_All_Int_2p_FD = new THStack("ET around #theta_{e} = 15#circ (All Int., 2p, FD)",
+                                               "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (All Int., 2p, FD);E_{beam}-E_{e} [GeV]");
     string sET15_All_Int_2p_CD_Dir = ETrans_15_stack_Directory, sET15_All_Int_2p_FD_Dir = ETrans_15_stack_Directory;
 
-//    TH1D *hET15_All_Int_2p_CD = new TH1D("ET around 15#circ (All Int., 2p, CD)",
-//                                         "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]",
-//                                         100, 0, beamE * 1.1);
-//    TH1D *hET15_QEL_2p_CD = new TH1D("ET around 15#circ (QEL Only, 2p, CD)",
-//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (QEL Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-//                                     100, 0, beamE * 1.1);
-//    TH1D *hET15_MEC_2p_CD = new TH1D("ET around 15#circ (MEC Only, 2p, CD)",
-//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (MEC Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-//                                     100, 0, beamE * 1.1);
-//    TH1D *hET15_RES_2p_CD = new TH1D("ET around 15#circ (RES Only, 2p, CD)",
-//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (RES Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-//                                     100, 0, beamE * 1.1);
-//    TH1D *hET15_DIS_2p_CD = new TH1D("ET around 15#circ (DIS Only, 2p, CD)",
-//                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, CD);E_{beam}-E_{e} [GeV]",
-//                                     100, 0, beamE * 1.1);
-    TH1D *hET15_All_Int_2p_FD = new TH1D("ET around 15#circ (All Int., 2p, FD)",
-                                         "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (All Int., 2p, FD);E_{beam}-E_{e} [GeV]",
-                                         100, 0, beamE * 1.1);
-    TH1D *hET15_QEL_2p_FD = new TH1D("ET around 15#circ (QEL Only, 2p, FD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (QEL Only, 2p, FD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
-    TH1D *hET15_MEC_2p_FD = new TH1D("ET around 15#circ (MEC Only, 2p, FD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (MEC Only, 2p, FD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
-    TH1D *hET15_RES_2p_FD = new TH1D("ET around 15#circ (RES Only, 2p, FD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (RES Only, 2p, FD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
-    TH1D *hET15_DIS_2p_FD = new TH1D("ET around 15#circ (DIS Only, 2p, FD)",
-                                     "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ (DIS Only, 2p, FD);E_{beam}-E_{e} [GeV]",
-                                     100, 0, beamE * 1.1);
+//    TH1D *hET15_All_Int_2p_CD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 2p, CD)",
+//                                         "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (All Int., 2p, CD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_QEL_2p_CD = new TH1D("ET around #theta_{e} = 15#circ (QEL Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (QEL Only, 2p, CD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_MEC_2p_CD = new TH1D("ET around #theta_{e} = 15#circ (MEC Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (MEC Only, 2p, CD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_RES_2p_CD = new TH1D("ET around #theta_{e} = 15#circ (RES Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (RES Only, 2p, CD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_DIS_2p_CD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 2p, CD)",
+//                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (DIS Only, 2p, CD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_All_Int_2p_FD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 2p, FD)",
+                                         "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (All Int., 2p, FD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_QEL_2p_FD = new TH1D("ET around #theta_{e} = 15#circ (QEL Only, 2p, FD)",
+                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (QEL Only, 2p, FD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_MEC_2p_FD = new TH1D("ET around #theta_{e} = 15#circ (MEC Only, 2p, FD)",
+                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (MEC Only, 2p, FD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_RES_2p_FD = new TH1D("ET around #theta_{e} = 15#circ (RES Only, 2p, FD)",
+                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (RES Only, 2p, FD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_DIS_2p_FD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 2p, FD)",
+                                     "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ (DIS Only, 2p, FD);E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hET15_All_Int_2p_CD_Dir = ETrans_All_Int_15_Directory, hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_Directory;
     string hET15_QEL_2p_CD_Dir = ETrans_QEL_15_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_Directory;
     string hET15_MEC_2p_CD_Dir = ETrans_MEC_15_Directory, hET15_MEC_2p_FD_Dir = ETrans_MEC_15_Directory;
     string hET15_RES_2p_CD_Dir = ETrans_RES_15_Directory, hET15_RES_2p_FD_Dir = ETrans_RES_15_Directory;
     string hET15_DIS_2p_CD_Dir = ETrans_DIS_15_Directory, hET15_DIS_2p_FD_Dir = ETrans_DIS_15_Directory;
-    string tET15 = "ET (E_{beam}-E_{e}) in the Angle Range 14#circ #leq #theta_{e} #leq 16#circ";
+    string tET15 = "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ";
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2458,15 +2448,15 @@ void EventAnalyser() {
     THStack *sEcal_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]");
     string sEcal_2p_Dir = Ecal_stack_2p_Directory;
 
-    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} Reconstruction (All Int., 2p)", "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
+    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} rec. (All Int., 2p)", "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} Reconstruction (QEL only, 2p)", "E_{cal} Reconstruction (QEL only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
+    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} rec. (QEL only, 2p)", "E_{cal} Reconstruction (QEL only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} Reconstruction (MEC only, 2p)", "E_{cal} Reconstruction (MEC only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
+    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} rec. (MEC only, 2p)", "E_{cal} Reconstruction (MEC only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_2p = new TH1D("E_{cal} Reconstruction (RES only, 2p)", "E_{cal} Reconstruction (RES only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
+    TH1D *hEcal_RES_2p = new TH1D("E_{cal} rec. (RES only, 2p)", "E_{cal} Reconstruction (RES only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} Reconstruction (DIS only, 2p)", "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
+    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} rec. (DIS only, 2p)", "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{L}} + T_{p_{R}} [GeV]",
                                   100, 0, beamE * 1.35);
     string hEcal_All_Int_2p_Dir = Ecal_All_Int_2p_Directory, hEcal_QEL_2p_Dir = Ecal_QEL_2p_Directory, hEcal_MEC_2p_Dir = Ecal_MEC_2p_Directory;
     string hEcal_RES_2p_Dir = Ecal_RES_2p_Directory, hEcal_DIS_2p_Dir = Ecal_DIS_2p_Directory;
@@ -4674,17 +4664,16 @@ void EventAnalyser() {
             }
 
             Ecal_2p = E_e + (E_Leading - m_p) + (E_Recoil - m_p);
-
-            hEcal_All_Int_2p->Fill(Ecal_2p);
+            hEcal_All_Int_2p->Fill(Ecal_2p); // Fill Ecal for all interactions
 
             if (qel) {
-                hEcal_QEL_2p->Fill(Ecal_2p);
+                hEcal_QEL_2p->Fill(Ecal_2p); // Fill Ecal for QEL only
             } else if (mec) {
-                hEcal_MEC_2p->Fill(Ecal_2p);
+                hEcal_MEC_2p->Fill(Ecal_2p); // Fill Ecal for MEC only
             } else if (res) {
-                hEcal_RES_2p->Fill(Ecal_2p);
+                hEcal_RES_2p->Fill(Ecal_2p); // Fill Ecal for RES only
             } else if (dis) {
-                hEcal_DIS_2p->Fill(Ecal_2p);
+                hEcal_DIS_2p->Fill(Ecal_2p); // Fill Ecal for DIS only
             }
             //</editor-fold>
 
