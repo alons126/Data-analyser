@@ -986,7 +986,7 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
             displayText->Draw();
         } else if (H1D_All_Int->Integral() != 0.) {
 //            Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
-            Histogram1DStack->GetYaxis()->SetTitle("Arbitrary units (#Events)");
+            Histogram1DStack->GetYaxis()->SetTitle("Arbitrary units (#events)");
             Histogram1DStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
         }
     }

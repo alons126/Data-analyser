@@ -175,6 +175,11 @@ void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::
 void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp) {
     p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), p4.M());
 }
+
+void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp, double mass) {
+    double P = rp->par()->getP();
+    p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), sqrt(mass * mass + P * P));
+}
 //</editor-fold>
 
 // rCalc function -------------------------------------------------------------------------------------------------------------------------------------------------------
