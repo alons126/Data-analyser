@@ -134,13 +134,13 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts settings">
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = false;
+    bool apply_cuts = true;
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_2p = true, apply_chi2_cuts_MicroBooNE = true;
+    bool apply_chi2_cuts_1e_cut = false, apply_chi2_cuts_MicroBooNE = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -155,17 +155,17 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Momentum cuts */
-    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = false, apply_momentum_cuts_MicroBooNE = true;
+    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_MicroBooNE = true;
 
     if (apply_cuts == false) {
         cout << "Cuts are disabled.\n\n\n";
 
-        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
-        apply_Nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
+        apply_momentum_cuts_2p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
+        apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_chi2_cuts_MicroBooNE = false;
     } else {
         cout << "Cuts are enabled. Cut settings:\n";
         cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
-        cout << "apply_chi2_cuts_2p:\t\t" << BoolToString(apply_chi2_cuts_2p) << "\n";
+        cout << "apply_chi2_cuts_1e_cut:\t\t" << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
         cout << "apply_chi2_cuts_MicroBooNE:\t" << BoolToString(apply_chi2_cuts_MicroBooNE) << "\n";
         cout << "apply_Vz_cuts:\t\t\t" << BoolToString(apply_Vz_cuts) << "\n";
         cout << "apply_dVz_cuts:\t\t\t" << BoolToString(apply_dVz_cuts) << "\n";
@@ -173,7 +173,6 @@ void EventAnalyser() {
         cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
         cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
         cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
-        cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n";
         cout << "apply_momentum_cuts_MicroBooNE:\t" << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n\n";
     }
     //</editor-fold>
@@ -654,18 +653,18 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram limits for every case">
     /* Chi2 plots */
     double Chi2_boundary = 15;
-    if (apply_cuts == true) { Chi2_boundary = 7.5; }
+    if (apply_cuts == true) { Chi2_boundary = 10; }
 
     /* Vertex plots */
     double Vertex_boundary = 25;
-    double dV_boundary = 25;
     if (apply_cuts == true) { Vertex_boundary = 7.5; }
+    double dV_boundary = 25;
     if (apply_cuts == true) { dV_boundary = 7.5; }
 
     /* Beta vs. P plots */
     double Beta_boundary = 3;
-    double P_boundary = beamE * 1.425;
     if (apply_cuts == true) { Beta_boundary = 1.1; }
+    double P_boundary = beamE * 1.425;
     if (apply_cuts == true) { P_boundary = beamE * 1.1; }
 
 //    //<editor-fold desc="Theta histograms">
@@ -1743,44 +1742,44 @@ void EventAnalyser() {
 //    THStack *P_Stack_MicroBooNE_FD = new THStack("Particle Momentum (MicroBooNE, FD)", "Particle Momentum Histogram (MicroBooNE, FD);P [GeV];");
 //
 //    //<editor-fold desc="Momentum histograms before MicroBooNE cuts test">
-//    TH1D *P_e_MicroBooNE_BC_CD = new TH1D("P_{e} BC (MicroBooNE, CD)", "P_{e} Before Cut (MicroBooNE, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_e_MicroBooNE_BC_FD = new TH1D("P_{e} BC (MicroBooNE, FD)", "P_{e} Before Cut (MicroBooNE, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_e_MicroBooNE_BC_CD = new TH1D("P_{e} BC (MicroBooNE, CD)", "P_{e} Before Cut (MicroBooNE, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_e_MicroBooNE_BC_FD = new TH1D("P_{e} BC (MicroBooNE, FD)", "P_{e} Before Cut (MicroBooNE, FD);P_{e} [GeV];", 250, 0, beamE * 1.1);
 //    string P_e_MicroBooNE_BC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_e_MicroBooNE_BC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
 //
-//    TH1D *P_p_MicroBooNE_BC_CD = new TH1D("P_{p} BC (MicroBooNE, CD)", "P_{p} Before Cut (MicroBooNE, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_p_MicroBooNE_BC_FD = new TH1D("P_{p} BC (MicroBooNE, FD)", "P_{p} Before Cut (MicroBooNE, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_p_MicroBooNE_BC_CD = new TH1D("P_{p} BC (MicroBooNE, CD)", "P_{p} Before Cut (MicroBooNE, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_p_MicroBooNE_BC_FD = new TH1D("P_{p} BC (MicroBooNE, FD)", "P_{p} Before Cut (MicroBooNE, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
 //    string P_p_MicroBooNE_BC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_p_MicroBooNE_BC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
 //
-//    TH1D *P_cpion_MicroBooNE_BC_CD = new TH1D("P_{#pi^{#pm}} BC (MicroBooNE, CD)", "P_{#pi^{#pm}} Before Cut (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_cpion_MicroBooNE_BC_FD = new TH1D("P_{#pi^{#pm}} BC (MicroBooNE, FD)", "P_{#pi^{#pm}} Before Cut (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_cpion_MicroBooNE_BC_CD = new TH1D("P_{#pi^{#pm}} BC (MicroBooNE, CD)", "P_{#pi^{#pm}} Before Cut (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_cpion_MicroBooNE_BC_FD = new TH1D("P_{#pi^{#pm}} BC (MicroBooNE, FD)", "P_{#pi^{#pm}} Before Cut (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, beamE * 1.1);
 //    string P_cpion_MicroBooNE_BC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_cpion_MicroBooNE_BC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
 //    //</editor-fold>
 //
 //    //<editor-fold desc="Momentum histograms after MicroBooNE cuts test">
-//    TH1D *P_e_MicroBooNE_AC_CD = new TH1D("P_{e} AC (MicroBooNE, CD)", "P_{e} After Cut (MicroBooNE, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_e_MicroBooNE_AC_FD = new TH1D("P_{e} AC (MicroBooNE, FD)", "P_{e} After Cut (MicroBooNE, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_e_MicroBooNE_AC_CD = new TH1D("P_{e} AC (MicroBooNE, CD)", "P_{e} After Cut (MicroBooNE, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_e_MicroBooNE_AC_FD = new TH1D("P_{e} AC (MicroBooNE, FD)", "P_{e} After Cut (MicroBooNE, FD);P_{e} [GeV];", 250, 0, beamE * 1.1);
 //    string P_e_MicroBooNE_AC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_e_MicroBooNE_AC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
 //
-//    TH1D *P_p_MicroBooNE_AC_CD = new TH1D("P_{p} AC (MicroBooNE, CD)", "P_{p} After Cut (MicroBooNE, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_p_MicroBooNE_AC_FD = new TH1D("P_{p} AC (MicroBooNE, FD)", "P_{p} After Cut (MicroBooNE, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_p_MicroBooNE_AC_CD = new TH1D("P_{p} AC (MicroBooNE, CD)", "P_{p} After Cut (MicroBooNE, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_p_MicroBooNE_AC_FD = new TH1D("P_{p} AC (MicroBooNE, FD)", "P_{p} After Cut (MicroBooNE, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
 //    string P_p_MicroBooNE_AC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_p_MicroBooNE_AC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
 //
-//    TH1D *P_cpion_MicroBooNE_AC_CD = new TH1D("P_{#pi^{#pm}} AC (MicroBooNE, CD)", "P_{#pi^{#pm}} After Cut (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_cpion_MicroBooNE_AC_FD = new TH1D("P_{#pi^{#pm}} AC (MicroBooNE, FD)", "P_{#pi^{#pm}} After Cut (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_cpion_MicroBooNE_AC_CD = new TH1D("P_{#pi^{#pm}} AC (MicroBooNE, CD)", "P_{#pi^{#pm}} After Cut (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_cpion_MicroBooNE_AC_FD = new TH1D("P_{#pi^{#pm}} AC (MicroBooNE, FD)", "P_{#pi^{#pm}} After Cut (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, beamE * 1.1);
 //    string P_cpion_MicroBooNE_AC_CD_Dir = Momentum_MicroBooNE_cut_tests_Directory, P_cpion_MicroBooNE_AC_FD_Dir = Momentum_MicroBooNE_cut_tests_Directory;
 //    //</editor-fold>
 //
 //    //<editor-fold desc="Momentum histograms after MicroBooNE cuts">
-//    TH1D *P_e_MicroBooNE_CD = new TH1D("P_{e} (MicroBooNE, CD)", "P_{e} (MicroBooNE, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_e_MicroBooNE_FD = new TH1D("P_{e} (MicroBooNE, FD)", "P_{e} (MicroBooNE, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_e_MicroBooNE_CD = new TH1D("P_{e} (MicroBooNE, CD)", "P_{e} (MicroBooNE, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_e_MicroBooNE_FD = new TH1D("P_{e} (MicroBooNE, FD)", "P_{e} (MicroBooNE, FD);P_{e} [GeV];", 250, 0, beamE * 1.1);
 //    string P_e_MicroBooNE_CD_Dir = Momentum_MicroBooNE_Directory, P_e_MicroBooNE_FD_Dir = Momentum_MicroBooNE_Directory;
 //
-//    TH1D *P_p_MicroBooNE_CD = new TH1D("P_{p} (MicroBooNE, CD)", "P_{p} (MicroBooNE, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_p_MicroBooNE_FD = new TH1D("P_{p} (MicroBooNE, FD)", "P_{p} (MicroBooNE, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_p_MicroBooNE_CD = new TH1D("P_{p} (MicroBooNE, CD)", "P_{p} (MicroBooNE, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_p_MicroBooNE_FD = new TH1D("P_{p} (MicroBooNE, FD)", "P_{p} (MicroBooNE, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
 //    string P_p_MicroBooNE_CD_Dir = Momentum_MicroBooNE_Directory, P_p_MicroBooNE_FD_Dir = Momentum_MicroBooNE_Directory;
 //
-//    TH1D *P_cpion_MicroBooNE_CD = new TH1D("P_{#pi^{#pm}} (MicroBooNE, CD)", "P_{#pi^{#pm}} (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
-//    TH1D *P_cpion_MicroBooNE_FD = new TH1D("P_{#pi^{#pm}} (MicroBooNE, FD)", "P_{#pi^{#pm}} (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *P_cpion_MicroBooNE_CD = new TH1D("P_{#pi^{#pm}} (MicroBooNE, CD)", "P_{#pi^{#pm}} (MicroBooNE, CD);P_{#pi^{#pm}} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *P_cpion_MicroBooNE_FD = new TH1D("P_{#pi^{#pm}} (MicroBooNE, FD)", "P_{#pi^{#pm}} (MicroBooNE, FD);P_{#pi^{#pm}} [GeV];", 250, 0, beamE * 1.1);
 //    string P_cpion_MicroBooNE_CD_Dir = Momentum_MicroBooNE_Directory, P_cpion_MicroBooNE_FD_Dir = Momentum_MicroBooNE_Directory;
 //    //</editor-fold>
 //
@@ -1797,32 +1796,32 @@ void EventAnalyser() {
     THStack *sP_2p_FD = new THStack("Particle Momentum (2p, FD)", "Particle Momentum Histogram (2p, FD);P [GeV];");
 
     //<editor-fold desc="Momentum histograms before 1e2p cuts">
-//    TH1D *hP_e_1e2p_BC_CD = new TH1D("P_{e} BC (1e2p, CD)", "P_{e} Before Cut (1e2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
-    TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p, FD)", "P_{e} Before Cut (1e2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *hP_e_1e2p_BC_CD = new TH1D("P_{e} BC (1e2p, CD)", "P_{e} Before Cut (1e2p, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p, FD)", "P_{e} Before Cut (1e2p, FD);P_{e} [GeV];", 250, 0, beamE * 1.1);
     string hP_e_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, hP_e_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
 
-    TH1D *hP_p_1e2p_BC_CD = new TH1D("P_{p} BC (1e2p, CD)", "P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
-    TH1D *hP_p_1e2p_BC_FD = new TH1D("P_{p} BC (1e2p, FD)", "P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *hP_p_1e2p_BC_CD = new TH1D("P_{p} BC (1e2p, CD)", "P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_p_1e2p_BC_FD = new TH1D("P_{p} BC (1e2p, FD)", "P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
     string hP_p_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, hP_p_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms after 1e2p cuts">
-//    TH1D *hP_e_1e2p_AC_CD = new TH1D("P_{e} AC (1e2p, CD)", "P_{e} After Cut (1e2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
-    TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p, FD)", "P_{e} After Cut (1e2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *hP_e_1e2p_AC_CD = new TH1D("P_{e} AC (1e2p, CD)", "P_{e} After Cut (1e2p, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p, FD)", "P_{e} After Cut (1e2p, FD);P_{e} [GeV];", 250, 0, beamE * 1.1);
     string hP_e_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, hP_e_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
 
-    TH1D *hP_p_1e2p_AC_CD = new TH1D("P_{p} AC (1e2p, CD)", "P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
-    TH1D *hP_p_1e2p_AC_FD = new TH1D("P_{p} AC (1e2p, FD)", "P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *hP_p_1e2p_AC_CD = new TH1D("P_{p} AC (1e2p, CD)", "P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_p_1e2p_AC_FD = new TH1D("P_{p} AC (1e2p, FD)", "P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
     string hP_p_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, hP_p_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms after 2p cuts">
-//    TH1D *hP_e_2p_CD = new TH1D("P_{e} (2p, CD)", "P_{e} (2p, CD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
-    TH1D *hP_e_2p_FD = new TH1D("P_{e} (2p, FD)", "P_{e} (2p, FD);P_{e} [GeV];", 250, 0, 1.1 * beamE);
+//    TH1D *hP_e_2p_CD = new TH1D("P_{e} (2p, CD)", "P_{e} (2p, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_e_2p_FD = new TH1D("P_{e} (2p, FD)", "P_{e} (2p, FD);P_{e} [GeV];", 250, 0, beamE * 1.1);
     string hP_e_2p_CD_Dir = Momentum_2p_Directory, hP_e_2p_FD_Dir = Momentum_2p_Directory;
 
-    TH1D *hP_p_2p_CD = new TH1D("P_{p} (2p, CD)", "P_{p} (2p, CD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
-    TH1D *hP_p_2p_FD = new TH1D("P_{p} (2p, FD)", "P_{p} (2p, FD);P_{p} [GeV];", 250, 0, 1.1 * beamE);
+    TH1D *hP_p_2p_CD = new TH1D("P_{p} (2p, CD)", "P_{p} (2p, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_p_2p_FD = new TH1D("P_{p} (2p, FD)", "P_{p} (2p, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
     string hP_p_2p_CD_Dir = Momentum_2p_Directory, hP_p_2p_FD_Dir = Momentum_2p_Directory;
     //</editor-fold>
 
@@ -2273,38 +2272,38 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 histograms">
     /* Q2 histograms (no #(e) cut) */
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_All_e_CD = new TH1D("Q^{2} (no #(e) cut, CD)", "Q^{2} (no #(e) cut, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
-    TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
+//    TH1D *hQ2_All_e_CD = new TH1D("Q^{2} (no #(e) cut, CD)", "Q^{2} (no #(e) cut, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+    TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
     string hQ2_All_e_CD_Dir = Q2_All_e_Directory, hQ2_All_e_FD_Dir = Q2_All_e_Directory;
 
     /* Q2 histograms (1e cut) */
     THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e_cut_CD = new TH1D("Q^{2} (1e Cut, CD)", "Q^{2} (1e Cut, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
-    TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
+//    TH1D *hQ2_1e_cut_CD = new TH1D("Q^{2} (1e Cut, CD)", "Q^{2} (1e Cut, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+    TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
     string hQ2_1e_cut_CD_Dir = Q2_1e_cut_Directory, hQ2_1e_cut_FD_Dir = Q2_1e_cut_Directory;
 
     /* Q2 histograms (MicroBooNE) */
 //    THStack *sQ2_MicroBooNE = new THStack("Q^{2} (MicroBooNE ,CD & FD)", "Q^{2} Histogram (MicroBooNE, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_MicroBooNE_CD = new TH1D("Q^{2} (MicroBooNE, CD)", "Q^{2} (MicroBooNE, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
-//    TH1D *hQ2_MicroBooNE_FD = new TH1D("Q^{2} (MicroBooNE, FD)", "Q^{2} (MicroBooNE, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
+//    TH1D *hQ2_MicroBooNE_CD = new TH1D("Q^{2} (MicroBooNE, CD)", "Q^{2} (MicroBooNE, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_MicroBooNE_FD = new TH1D("Q^{2} (MicroBooNE, FD)", "Q^{2} (MicroBooNE, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
 //    string hQ2_MicroBooNE_CD_Dir = Q2_MicroBooNE_Directory, hQ2_MicroBooNE_FD_Dir = Q2_MicroBooNE_Directory;
 
     /* Q2 histograms (1e2X) */
 //    THStack *sQ2_1e2X = new THStack("Q^{2} (1e2X, CD & FD)", "Q^{2} (1e2X, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e2X_CD = new TH1D("Q^{2} (1e2X, CD)", "Q^{2} (1e2X, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
-//    TH1D *hQ2_1e2X_FD = new TH1D("Q^{2} (1e2X, FD)", "Q^{2} (1e2X, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
+//    TH1D *hQ2_1e2X_CD = new TH1D("Q^{2} (1e2X, CD)", "Q^{2} (1e2X, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_1e2X_FD = new TH1D("Q^{2} (1e2X, FD)", "Q^{2} (1e2X, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
 //    string hQ2_1e2X_CD_Dir = Q2_1e2X_Directory, hQ2_1e2X_FD_Dir = Q2_1e2X_Directory;
 
     /* Q2 histograms (1e2p) */
     THStack *sQ2_1e2p = new THStack("Q^{2} (1e2p, CD & FD)", "Q^{2} (1e2p, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e2p_CD = new TH1D("Q^{2} (1e2p, CD)", "Q^{2} (1e2p, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
-    TH1D *hQ2_1e2p_FD = new TH1D("Q^{2} (1e2p, FD)", "Q^{2} (1e2p, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
+//    TH1D *hQ2_1e2p_CD = new TH1D("Q^{2} (1e2p, CD)", "Q^{2} (1e2p, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+    TH1D *hQ2_1e2p_FD = new TH1D("Q^{2} (1e2p, FD)", "Q^{2} (1e2p, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
     string hQ2_1e2p_CD_Dir = Q2_1e2p_Directory, hQ2_1e2p_FD_Dir = Q2_1e2p_Directory;
 
     /* Q2 histograms (2p) */
     THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_2p_CD = new TH1D("Q^{2} (2p, CD)", "Q^{2} (2p, CD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
-    TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 250, 0, 1.1 * beamE);
+//    TH1D *hQ2_2p_CD = new TH1D("Q^{2} (2p, CD)", "Q^{2} (2p, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+    TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
     string hQ2_2p_CD_Dir = Q2_2p_Directory, hQ2_2p_FD_Dir = Q2_2p_Directory;
     //</editor-fold>
 
@@ -2550,7 +2549,7 @@ void EventAnalyser() {
         if (apply_Nphe_cut == true) { clasAna.setNpheCuts(); }                         // making f_NpheCuts = ture (HTCC cuts)
 
         // Cuts on protons and charged pions:
-        if (apply_chi2_cuts_2p == true) { clasAna.setPidCuts(); }                      // making f_pidCuts = ture
+        if (apply_chi2_cuts_1e_cut == true) { clasAna.setPidCuts(); }                      // making f_pidCuts = ture
 
         // Cuts on all particles:
         if (apply_Vz_cuts == true) {
@@ -4802,7 +4801,7 @@ void EventAnalyser() {
 
 //  Chi2 plots (1e cut) ----------------------------------------------------------------------------
 
-        //<editor-fold desc="Electron chi2 (1e cut)">
+        //<editor-fold desc="Chi2 plots (1e cut)">
 //        histPlotter1D(c1, hChi2_Electron_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
 //                      sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_1e_cut_CD,
 //                      Chi2_Electron_1e_Xmax_CD);
@@ -4810,10 +4809,11 @@ void EventAnalyser() {
                       sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_1e_cut_FD,
                       Chi2_Electron_1e_Xmax_FD);
 
-        if (apply_cuts == false) {
-            histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2",
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2_wFit",
                               hChi2_Proton_1e_cut_CD_Dir, "CD", Chi2_Proton_cut_1e_cut_CD, Chi2_Proton_factor_1e_cut_CD, Chi2_Proton_1e_cut_fmean_CD, true, "Protons");
-            histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2",
+            histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2_wFit",
                               hChi2_Proton_1e_cut_FD_Dir, "FD", Chi2_Proton_cut_1e_cut_FD, Chi2_Proton_factor_1e_cut_FD, Chi2_Proton_1e_cut_fmean_FD, true, "Protons");
         } else {
             histPlotter1D(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -4824,10 +4824,11 @@ void EventAnalyser() {
                           Chi2_Proton_1e_peak_FD);
         }
 
-        if (apply_cuts == false) {
-            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2",
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
                               hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cut_1e_cut_CD, Chi2_Kplus_factor_1e_cut_CD, Chi2_Kplus_1e_cut_fmean_CD, true, "K+");
-            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2",
+            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
                               hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cut_1e_cut_FD, Chi2_Kplus_factor_1e_cut_FD, Chi2_Kplus_1e_cut_fmean_FD, true, "K+");
         } else {
             histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -4838,10 +4839,11 @@ void EventAnalyser() {
                           Chi2_Kplus_1e_Xmax_FD);
         }
 
-        if (apply_cuts == false) {
-            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2",
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
                               hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cut_1e_cut_CD, Chi2_Kminus_factor_1e_cut_CD, Chi2_Kminus_1e_cut_fmean_CD, true, "K-");
-            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2",
+            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
                               hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cut_1e_cut_FD, Chi2_Kminus_factor_1e_cut_FD, Chi2_Kminus_1e_cut_fmean_FD, true, "K-");
         } else {
             histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -4852,10 +4854,11 @@ void EventAnalyser() {
                           Chi2_Kminus_1e_Xmax_FD);
         }
 
-        if (apply_cuts == false) {
-            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2",
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
                               hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cut_1e_cut_CD, Chi2_piplus_factor_1e_cut_CD, Chi2_piplus_1e_cut_fmean_CD, true, "pi+");
-            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2",
+            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
                               hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cut_1e_cut_FD, Chi2_piplus_factor_1e_cut_FD, Chi2_piplus_1e_cut_fmean_FD, true, "pi+");
         } else {
             histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -4866,10 +4869,11 @@ void EventAnalyser() {
                           Chi2_piplus_1e_Xmax_FD);
         }
 
-        if (apply_cuts == false) {
-            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2",
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
                               hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cut_1e_cut_CD, Chi2_piminus_factor_1e_cut_CD, Chi2_piminus_1e_cut_fmean_CD, true, "pi-");
-            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2",
+            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
                               hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cut_1e_cut_FD, Chi2_piminus_factor_1e_cut_FD, Chi2_piminus_1e_cut_fmean_FD, true, "pi-");
         } else {
             histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -7324,7 +7328,7 @@ void EventAnalyser() {
     myLogFile << "apply_cuts = " << BoolToString(apply_cuts) << "\n\n";
 
     myLogFile << "apply_Nphe_cut = " << BoolToString(apply_Nphe_cut) << "\n";
-    myLogFile << "apply_chi2_cuts_2p = " << BoolToString(apply_chi2_cuts_2p) << "\n";
+    myLogFile << "apply_chi2_cuts_1e_cut = " << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
     myLogFile << "apply_chi2_cuts_MicroBooNE = " << BoolToString(apply_chi2_cuts_MicroBooNE) << "\n";
     myLogFile << "apply_Vz_cuts = " << BoolToString(apply_Vz_cuts) << "\n";
     myLogFile << "apply_dVz_cuts = " << BoolToString(apply_dVz_cuts) << "\n";
@@ -7332,7 +7336,6 @@ void EventAnalyser() {
     myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
     myLogFile << "apply_DC_fiducial_cut = " << BoolToString(apply_DC_fiducial_cut) << "\n";
     myLogFile << "apply_momentum_cuts_2p = " << BoolToString(apply_momentum_cuts_2p) << "\n";
-    myLogFile << "apply_momentum_cuts_1n1p = " << BoolToString(apply_momentum_cuts_1n1p) << "\n";
     myLogFile << "apply_momentum_cuts_MicroBooNE = " << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
