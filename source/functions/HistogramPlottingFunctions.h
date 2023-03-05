@@ -914,6 +914,221 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 //</editor-fold>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                 histPlotter1Dchi2 function                                                                          //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// histPlotter1Dchi2 function (old) -------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="histPlotter1Dchi2 function (old)">
+/* fitf is used for custom plot fits */
+Double_t fitf(Double_t *v, Double_t *par) {
+    Double_t arg = 0;
+    if (par[2] != 0) arg = (v[0] - par[1]) / par[2];
+
+    Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
+    return fitval;
+}
+
+/* histPlotter1Dchi2 is used for chi2 plots with fit */
+void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
+                       TH1D *Histogram1D,
+                       bool normalize_Histogram,
+                       bool custom_normalization,
+                       double custom_normalization_factor,
+                       string Histogram1DTitle,
+                       string Histogram1DTitleReactions,
+                       TList *Histogram_list,
+                       string Histogram1DSaveName,
+                       string Histogram1DSaveNamePath,
+                       string finalState,
+                       double &plot_cuts,
+                       double factor,
+                       double &plot_Xmax,
+                       bool plot_max = true,
+                       string particle = "") {
+
+//  Normalization factor:
+    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
+    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
+    double diplayTextSize = 0.1225;
+
+    double titleSize = 0.06;
+    double labelSizex = 0.0425;
+    double labelSizey = 0.0425;
+
+    int lineWidth = 2;
+    bool logScalePlot = false;
+    bool linearScalePlot = true;
+
+    int kColor = kBlack;
+    bool centerTitle = true;
+    bool showStats = true;
+    bool title2 = false;
+    bool apply_plot_cuts = true;
+
+    if (normalize_Histogram == true && custom_normalization == false) {
+        Histogram1D_integral = Histogram1D->Integral();
+    } else if (normalize_Histogram == true && custom_normalization == true) {
+        Histogram1D_integral = custom_normalization_factor;
+    }
+
+    if (normalize_Histogram == true) {
+        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        const char *HistogramTitle = title.c_str();
+        Histogram1D->SetTitle(HistogramTitle);
+        Histogram1D->GetYaxis()->SetTitle("Probability (%)");
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Draw();
+        }
+    } else if (normalize_Histogram == false) {
+        string title;
+
+        if (title2 == false) {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        } else {
+            title = Histogram1DTitle + " (" + finalState + ")";
+        }
+
+        const char *HistogramTitle = title.c_str();
+        Histogram1D->SetTitle(HistogramTitle);
+        Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
+
+        if (Histogram1D->Integral() == 0.) {
+            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+            displayText->SetTextSize(diplayTextSize);
+            displayText->SetFillColor(0);
+            displayText->SetTextAlign(12);
+            displayText->AddText("Empty histogram");
+            Histogram1D->Draw();
+            displayText->Draw();
+        } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Draw();
+        }
+    }
+
+    Histogram1D->GetXaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetXaxis()->SetLabelSize(labelSizex);
+    Histogram1D->GetXaxis()->CenterTitle(centerTitle);
+    Histogram1D->GetYaxis()->SetTitleSize(titleSize);
+    Histogram1D->GetYaxis()->SetLabelSize(labelSizey);
+    Histogram1D->GetYaxis()->CenterTitle(centerTitle);
+    Histogram1D->SetLineWidth(lineWidth);
+    Histogram_list->Add(Histogram1D);
+
+    if (showStats == false) {
+        Histogram1D->SetStats(0);
+    }
+
+    if (particle != "") {
+        cout << "\n\nFit results for " << particle << " in " << finalState << " are (" << Histogram1DTitleReactions << "):\n\n";
+    }
+
+    if (apply_plot_cuts == true) {
+        /* A fit to a gaussian with 3 parameters: f(x) = p0*exp(-0.5((x-p1)/p2)^2)). */
+        Histogram1D->Fit("gaus");
+
+        /* Get fitted function to TF1 plot */
+        TF1 *fit = Histogram1D->GetFunction("gaus");
+        fit->SetLineColor(kMagenta);
+
+        /* Set fitted plot parameters from TF1 plot */
+        double Amp = fit->GetParameter(0); // get p0
+        double Mean = fit->GetParameter(1); // get p1
+        double Std = fit->GetParameter(2); // get p2
+
+        /* Set cut parameters from TF1 plot */
+        plot_Xmax = Mean;
+        plot_cuts = Std * factor; // Cut up to 2 Std from mean
+
+        /* Remove TF1 plot from histogram */
+        Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
+
+        /* Draw TF1 plot as curved function */
+        fit->SetLineColor(kMagenta);
+        fit->Draw("same && C");
+
+        gPad->Update();
+
+        double Upper_cut = plot_cuts + plot_Xmax, Lower_cut = -plot_cuts + plot_Xmax, plot_xmax = plot_Xmax;
+        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+        upper_cut->SetLineWidth(lineWidth);
+        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+        lower_cut->SetLineWidth(lineWidth);
+        TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
+        max_location->SetLineWidth(lineWidth + 1);
+
+        double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+        double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
+        auto Cut_legend = new TLegend(x_1_Cut_legend, y_1_Cut_legend, x_2_Cut_legend, y_2_Cut_legend);
+
+        if (Histogram1D->Integral() != 0.) {
+            upper_cut->Draw("same");
+            upper_cut->SetLineColor(kBlue);
+            lower_cut->Draw("same");
+            lower_cut->SetLineColor(kRed);
+            if (plot_max == true) {
+                max_location->Draw("same");
+                max_location->SetLineColor(kGreen);
+            }
+
+            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("UC = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("LC = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
+
+            if (plot_max == true) {
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Mean = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
+            }
+
+            Cut_legend->Draw("same");
+
+            double x_1_FitParam = gStyle->GetStatX(), y_1_FitParam = y_1_Cut_legend - 0.14;
+            double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
+
+            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+            FitParam->SetBorderSize(1);
+            FitParam->SetTextFont(0);
+            FitParam->SetFillColor(0);
+            FitParam->SetTextAlign(11);
+            FitParam->AddText(("Fit amp = " + to_string_with_precision(Amp, 8)).c_str());
+            FitParam->AddText(("Fit std = " + to_string_with_precision(Std, 8)).c_str());
+            FitParam->AddText(("Fit mean = " + to_string_with_precision(Mean, 8)).c_str());
+            FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2)).c_str());
+            FitParam->Draw("same");
+        }
+    }
+
+    if (particle != "") { cout << "\n"; }
+
+    if (logScalePlot == true) {
+        Histogram1DCanvas->SetLogy(1);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas->SaveAs(SaveDir);
+    }
+
+    if (linearScalePlot == true) {
+        Histogram1DCanvas->SetLogy(0);
+        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        const char *SaveDir = Histogram1DSaveNameDir.c_str();
+        Histogram1DCanvas->SaveAs(SaveDir);
+    }
+
+    Histogram1DCanvas->Clear();
+}
+//</editor-fold>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                   stackPlotter1D function                                                                            //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

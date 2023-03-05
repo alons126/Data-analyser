@@ -58,31 +58,88 @@ double Nphe_lower_cut = 10;
 
 /* NOTE: according to Josh's macros, no neutron cuts can be applied */
 
-//<editor-fold desc="Chi2 cuts (2p)">
+//<editor-fold desc="Chi2 cuts (1e cut)">
 
-//<editor-fold desc="Electron chi2 cuts (2p)">
-double Chi2_Electron_cut_CD = 15.; // 100 since electron detection is great
-double Chi2_Electron_Xmax_CD; // for all e plots, no cuts applied
+//<editor-fold desc="Electron chi2 cuts (1e cut)">
+double Chi2_Electron_cut_1e_cut_CD = 10.; // 100 since electron detection is great
+double Chi2_Electron_Xmax_1e_cut_CD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
 double Chi2_Electron_1e_Xmax_CD;
 
-double Chi2_Electron_cut_FD = 15.; // 100 since electron detection is great
-double Chi2_Electron_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_Electron_cut_1e_cut_FD = 10.; // 100 since electron detection is great
+double Chi2_Electron_Xmax_1e_cut_FD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_FD = -0.05; // to fill using Chi2_Electron_1e_Xmax_FD
 double Chi2_Electron_1e_Xmax_FD;
 //</editor-fold>
 
-//<editor-fold desc="Proton chi2 cuts (2p)">
-double Chi2_Proton_cut_CD = 10.; // Josh's proton FD cut
+//<editor-fold desc="Proton chi2 cuts (1e cut)">
+double Chi2_Proton_factor_1e_cut_CD = 2.;
+double Chi2_Proton_cut_1e_cut_CD; // Josh's proton FD cut
 double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
-double Chi2_Proton_1e_peak_CD = 0.35; // to fill using Chi2_Proton_1e_Xmax_CD
-double Chi2_Proton_1e_Xmax_CD;
+double Chi2_Proton_1e_peak_CD = 0.35; // to fill using Chi2_Proton_1e_cut_fmean_CD
+double Chi2_Proton_1e_cut_fmean_CD;
 
-double Chi2_Proton_cut_FD = 10.; // Josh's proton FD cut
-//double Chi2_Proton_cut_FD = 3.; // Josh's proton FD cut
+double Chi2_Proton_factor_1e_cut_FD = 2.;
+double Chi2_Proton_cut_1e_cut_FD; // Josh's proton FD cut
 double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
-double Chi2_Proton_1e_peak_FD = -0.05; // to fill using Chi2_Proton_1e_Xmax_FD
-double Chi2_Proton_1e_Xmax_FD;
+double Chi2_Proton_1e_peak_FD = -0.05; // to fill using Chi2_Proton_1e_cut_fmean_FD
+double Chi2_Proton_1e_cut_fmean_FD;
+//</editor-fold>
+
+//<editor-fold desc="Kplus chi2 cuts (1e cut)">
+double Chi2_Kplus_factor_1e_cut_CD = 2.;
+double Chi2_Kplus_cut_1e_cut_CD;
+double Chi2_Kplus_Xmax_CD; // for all e plots, no cuts applied
+double Chi2_Kplus_1e_peak_CD; // to fill using Chi2_Kplus_1e_cut_fmean_CD
+double Chi2_Kplus_1e_cut_fmean_CD;
+
+double Chi2_Kplus_factor_1e_cut_FD = 2.;
+double Chi2_Kplus_cut_1e_cut_FD;
+double Chi2_Kplus_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_Kplus_1e_peak_FD; // to fill using Chi2_Kplus_1e_cut_fmean_FD
+double Chi2_Kplus_1e_cut_fmean_FD;
+//</editor-fold>
+
+//<editor-fold desc="Kminus chi2 cuts (1e cut)">
+double Chi2_Kminus_factor_1e_cut_CD = 2.;
+double Chi2_Kminus_cut_1e_cut_CD;
+double Chi2_Kminus_Xmax_CD; // for all e plots, no cuts applied
+double Chi2_Kminus_1e_peak_CD; // to fill using Chi2_Kminus_1e_cut_fmean_CD
+double Chi2_Kminus_1e_cut_fmean_CD;
+
+double Chi2_Kminus_factor_1e_cut_FD = 2.;
+double Chi2_Kminus_cut_1e_cut_FD;
+double Chi2_Kminus_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_Kminus_1e_peak_FD; // to fill using Chi2_Kminus_1e_cut_fmean_FD
+double Chi2_Kminus_1e_cut_fmean_FD;
+//</editor-fold>
+
+//<editor-fold desc="piplus chi2 cuts (1e cut)">
+double Chi2_piplus_factor_1e_cut_CD = 2.;
+double Chi2_piplus_cut_1e_cut_CD;
+double Chi2_piplus_Xmax_CD; // for all e plots, no cuts applied
+double Chi2_piplus_1e_peapi_CD; // to fill using Chi2_piplus_1e_cut_fmean_CD
+double Chi2_piplus_1e_cut_fmean_CD;
+
+double Chi2_piplus_factor_1e_cut_FD = 2.;
+double Chi2_piplus_cut_1e_cut_FD;
+double Chi2_piplus_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_piplus_1e_peapi_FD; // to fill using Chi2_piplus_1e_cut_fmean_FD
+double Chi2_piplus_1e_cut_fmean_FD;
+//</editor-fold>
+
+//<editor-fold desc="piminus chi2 cuts (1e cut)">
+double Chi2_piminus_factor_1e_cut_CD = 2.;
+double Chi2_piminus_cut_1e_cut_CD;
+double Chi2_piminus_Xmax_CD; // for all e plots, no cuts applied
+double Chi2_piminus_1e_peapi_CD; // to fill using Chi2_piminus_1e_cut_fmean_CD
+double Chi2_piminus_1e_cut_fmean_CD;
+
+double Chi2_piminus_factor_1e_cut_FD = 2.;
+double Chi2_piminus_cut_1e_cut_FD;
+double Chi2_piminus_Xmax_FD; // for all e plots, no cuts applied
+double Chi2_piminus_1e_peapi_FD; // to fill using Chi2_piminus_1e_cut_fmean_FD
+double Chi2_piminus_1e_cut_fmean_FD;
 //</editor-fold>
 
 //</editor-fold>
@@ -90,41 +147,41 @@ double Chi2_Proton_1e_Xmax_FD;
 //<editor-fold desc="Chi2 cuts (MicroBooNE)">
 
 //<editor-fold desc="Electron chi2 cuts (MicroBooNE)">
-double Chi2_Electron_cut_MicroBooNE_CD = Chi2_Electron_cut_CD; // 100 since electron detection is great
+double Chi2_Electron_cut_MicroBooNE_CD = Chi2_Electron_cut_1e_cut_CD; // 100 since electron detection is great
 double Chi2_Electron_MicroBooNE_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_MicroBooNE_CD = Chi2_Electron_1e_peak_CD; // to fill using Chi2_Electron_1e_Xmax_CD
 
-double Chi2_Electron_cut_MicroBooNE_FD = Chi2_Electron_cut_FD; // 100 since electron detection is great
+double Chi2_Electron_cut_MicroBooNE_FD = Chi2_Electron_cut_1e_cut_FD; // 100 since electron detection is great
 double Chi2_Electron_MicroBooNE_Xmax_FD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_MicroBooNE_FD = 0.135; // to fill using Chi2_Electron_1e_Xmax_FD
 //</editor-fold>
 
 //<editor-fold desc="Proton chi2 cuts (MicroBooNE)">
-double Chi2_Proton_cut_MicroBooNE_CD = Chi2_Proton_cut_CD; // Josh's proton FD cut
+double Chi2_Proton_cut_MicroBooNE_CD = Chi2_Proton_cut_1e_cut_CD; // Josh's proton FD cut
 double Chi2_Proton_MicroBooNE_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Proton_1e_peak_MicroBooNE_CD = -0.03; // to fill using Chi2_Proton_1e_Xmax_MicroBooNE_CD
 
-double Chi2_Proton_cut_MicroBooNE_FD = Chi2_Proton_cut_FD; // Josh's proton FD cut
+double Chi2_Proton_cut_MicroBooNE_FD = Chi2_Proton_cut_1e_cut_FD; // Josh's proton FD cut
 double Chi2_Proton_MicroBooNE_Xmax_FD; // for all e plots, no cuts applied
 double Chi2_Proton_1e_peak_MicroBooNE_FD = -0.423; // to fill using Chi2_Proton_1e_Xmax_MicroBooNE_FD
 //</editor-fold>
 
 //<editor-fold desc="piplus chi2 cuts (MicroBooNE)">
-double Chi2_piplus_cut_MicroBooNE_CD = Chi2_Proton_cut_CD; // Josh's piplus FD cut
+double Chi2_piplus_cut_MicroBooNE_CD = Chi2_Proton_cut_1e_cut_CD; // Josh's piplus FD cut
 double Chi2_piplus_MicroBooNE_Xmax_CD;
 double Chi2_piplus_1e_peak_MicroBooNE_CD = Chi2_Proton_1e_peak_CD; // to fill using Chi2_piplus_1e_Xmax_MicroBooNE_CD
 
-double Chi2_piplus_cut_MicroBooNE_FD = Chi2_Proton_cut_FD; // Josh's piplus FD cut
+double Chi2_piplus_cut_MicroBooNE_FD = Chi2_Proton_cut_1e_cut_FD; // Josh's piplus FD cut
 double Chi2_piplus_MicroBooNE_Xmax_FD; // for all e plots, no cuts applied
 double Chi2_piplus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill using Chi2_piplus_1e_Xmax_MicroBooNE_FD
 //</editor-fold>
 
 //<editor-fold desc="piminus chi2 cuts (MicroBooNE)">
-double Chi2_piminus_cut_MicroBooNE_CD = Chi2_Proton_cut_CD; // Josh's piminus FD cut
+double Chi2_piminus_cut_MicroBooNE_CD = Chi2_Proton_cut_1e_cut_CD; // Josh's piminus FD cut
 double Chi2_piminus_MicroBooNE_Xmax_CD;
 double Chi2_piminus_1e_peak_MicroBooNE_CD = Chi2_Proton_1e_peak_CD; // to fill using Chi2_piminus_1e_Xmax_MicroBooNE_CD
 
-double Chi2_piminus_cut_MicroBooNE_FD = Chi2_Proton_cut_FD; // Josh's piminus FD cut
+double Chi2_piminus_cut_MicroBooNE_FD = Chi2_Proton_cut_1e_cut_FD; // Josh's piminus FD cut
 double Chi2_piminus_MicroBooNE_Xmax_FD;
 double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill using Chi2_piminus_1e_Xmax_MicroBooNE_FD
 //</editor-fold>

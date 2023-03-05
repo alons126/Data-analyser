@@ -134,7 +134,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts settings">
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = true;
+    bool apply_cuts = false;
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
@@ -149,7 +149,7 @@ void EventAnalyser() {
     bool apply_SF_cuts = true;
 
     /* ECAL fiducial (edge) cuts */
-    bool apply_ECAL_fiducial_cut = true;
+    bool apply_ECAL_fiducial_cuts = true;
 
     /* DC fiducial (edge) cuts */
     bool apply_DC_fiducial_cut = true;
@@ -160,7 +160,7 @@ void EventAnalyser() {
     if (apply_cuts == false) {
         cout << "Cuts are disabled.\n\n\n";
 
-        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_ECAL_fiducial_cut = apply_DC_fiducial_cut = false;
+        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
         apply_Nphe_cut = apply_chi2_cuts_2p = apply_chi2_cuts_MicroBooNE = false;
     } else {
         cout << "Cuts are enabled. Cut settings:\n";
@@ -170,7 +170,7 @@ void EventAnalyser() {
         cout << "apply_Vz_cuts:\t\t\t" << BoolToString(apply_Vz_cuts) << "\n";
         cout << "apply_dVz_cuts:\t\t\t" << BoolToString(apply_dVz_cuts) << "\n";
         cout << "apply_SF_cuts:\t\t\t" << BoolToString(apply_SF_cuts) << "\n";
-        cout << "apply_ECAL_fiducial_cut:\t" << BoolToString(apply_ECAL_fiducial_cut) << "\n";
+        cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
         cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
         cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
         cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n";
@@ -192,7 +192,6 @@ void EventAnalyser() {
     //<editor-fold desc="Number of Photo-electrons (Nphe) plots directories">
     bool create_Nphe_Dir = true;
     string Nphe_Parent_Directory = "01_Cuts_plots/01_Nphe_plots";
-//    string Nphe_Parent_Directory = "Nphe_plots";
     TFolder *Nphe_Folder = new TFolder(Nphe_Parent_Directory.c_str(), Nphe_Parent_Directory.c_str());
     string Nphe_Daughter_Folders[] = {"", "01_1e_cut", "02_2p",};
 
@@ -203,23 +202,15 @@ void EventAnalyser() {
 
     plots->Add(Nphe_Folder);
 
-    string Nphe_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/";
+    string Nphe_1e_cut_BC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/"; // before cuts - i.e. plots before Nphe cuts
+    string Nphe_1e_cut_AC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/"; // after cuts - i.e. plots after Nphe cuts
 
-    // 1e2p - i.e. plots before all other cuts
-    // before cuts - i.e. plots before Nphe cuts
-    string Nphe_1e_cut_BC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/";
-
-    // after cuts - i.e. plots after Nphe cuts
-    string Nphe_1e_cut_AC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/";
-
-    // 2p - i.e. plots after Nphe and all other cuts
-    string Nphe_2p_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[2] + "/";
+    string Nphe_2p_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[2] + "/"; // 2p - i.e. plots after Nphe and all other cuts
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
     string Chi2_Parent_Directory = "01_Cuts_plots/02_Chi2_plots";
-//    string Chi2_Parent_Directory = "Chi2_plots";
     TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
     string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
                                       "05_2p"};
@@ -231,16 +222,16 @@ void EventAnalyser() {
 
     plots->Add(Chi2_Folder);
 
-    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/"; // 01_All_e
+    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/";
 
-    string Chi2_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/"; // 02_1e_cut
+    string Chi2_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/";
 
-    string Chi2_MicroBooNE_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/"; // 03_MicroBooNE
-    string Chi2_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/"; // 03_MicroBooNE/BC-AC_cut_tests
+    string Chi2_MicroBooNE_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/";
+    string Chi2_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
 
-    string Chi2_1e2p_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/"; // 04_1e2p_BC-AC_cut_tests
+    string Chi2_1e2p_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[5] + "/";
 
-    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[6] + "/"; // 05_2p
+    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[6] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots directories">
@@ -662,8 +653,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Histogram limits for every case">
     /* Chi2 plots */
-    double Chi2_boundary = 35;
-    if (apply_cuts == true) { Chi2_boundary = 15; }
+    double Chi2_boundary = 15;
+    if (apply_cuts == true) { Chi2_boundary = 7.5; }
 
     /* Vertex plots */
     double Vertex_boundary = 25;
@@ -1173,6 +1164,12 @@ void EventAnalyser() {
 
     cout << "\nDefining histograms...";
 
+// ======================================================================================================================================================================
+// Cut parameters plots
+// ======================================================================================================================================================================
+
+    //<editor-fold desc="Cut parameters plots">
+
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Number of Photo-electrons (Nphe) histograms (FD only)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1259,44 +1256,44 @@ void EventAnalyser() {
     /* Plots of chi2 with no cut on number of electrons - used later to apply cuts with my mechanism (NOT Justin's ana) */
 
     THStack *sChi2_Electron_1e_cut = new THStack("#chi^{2}_{e^{-}} (1e cut, CD & FD)", "#chi^{2}_{e^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{e^{-}};");
-//    TH1D *hChi2_Electron_1e_cut_CD = new TH1D("#chi^{2}_{e^{-}} (1e cut, CD)", "#chi^{2}_{e^{-}} Histogram (1e cut, CD);#chi^{2}_{e^{-}};", 500, 0, beamE);
+//    TH1D *hChi2_Electron_1e_cut_CD = new TH1D("#chi^{2}_{e^{-}} (1e cut, CD)", "#chi^{2}_{e^{-}} Histogram (1e cut, CD);#chi^{2}_{e^{-}};", 150, 0, beamE);
     TH1D *hChi2_Electron_1e_cut_FD = new TH1D("#chi^{2}_{e^{-}} (1e cut, FD)", "#chi^{2}_{e^{-}} Histogram (1e cut, FD);#chi^{2}_{e^{-}};",
-                                              500, -Chi2_boundary, Chi2_boundary);
+                                              150, -Chi2_boundary, Chi2_boundary);
     string hChi2_Electron_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Electron_1e_cut_FD_Dir = Chi2_1e_Directory;
 
     THStack *sChi2_Proton_1e_cut = new THStack("#chi^{2}_{p} (1e cut, CD & FD)", "#chi^{2}_{p} Histogram (1e cut, CD & FD);#chi^{2}_{p};");
     TH1D *hChi2_Proton_1e_cut_CD = new TH1D("#chi^{2}_{p} (1e cut, CD)", "#chi^{2}_{p} Histogram (1e cut, CD);#chi^{2}_{p};",
-                                            500, -Chi2_boundary, Chi2_boundary);
+                                            150, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Proton_1e_cut_FD = new TH1D("#chi^{2}_{p} (1e cut, FD)", "#chi^{2}_{p} Histogram (1e cut, FD);#chi^{2}_{p};",
-                                            500, -Chi2_boundary, Chi2_boundary);
+                                            150, -Chi2_boundary, Chi2_boundary);
     string hChi2_Proton_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Proton_1e_cut_FD_Dir = Chi2_1e_Directory;
 
     THStack *sChi2_Kplus_1e_cut = new THStack("#chi^{2}_{K^{+}} (1e cut, CD & FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{+}};");
     TH1D *hChi2_Kplus_1e_cut_CD = new TH1D("#chi^{2}_{K^{+}} (1e cut, CD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD);#chi^{2}_{K^{+}};",
-                                           500, -Chi2_boundary, Chi2_boundary);
+                                           150, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Kplus_1e_cut_FD = new TH1D("#chi^{2}_{K^{+}} (1e cut, FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, FD);#chi^{2}_{K^{+}};",
-                                           500, -Chi2_boundary, Chi2_boundary);
+                                           150, -Chi2_boundary, Chi2_boundary);
     string hChi2_Kplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kplus_1e_cut_FD_Dir = Chi2_1e_Directory;
 
     THStack *sChi2_Kminus_1e_cut = new THStack("#chi^{2}_{K^{-}} (1e cut, CD & FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{-}};");
     TH1D *hChi2_Kminus_1e_cut_CD = new TH1D("#chi^{2}_{K^{-}} (1e cut, CD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD);#chi^{2}_{K^{-}};",
-                                            500, -Chi2_boundary, Chi2_boundary);
+                                            150, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Kminus_1e_cut_FD = new TH1D("#chi^{2}_{K^{-}} (1e cut, FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, FD);#chi^{2}_{K^{-}};",
-                                            500, -Chi2_boundary, Chi2_boundary);
+                                            150, -Chi2_boundary, Chi2_boundary);
     string hChi2_Kminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kminus_1e_cut_FD_Dir = Chi2_1e_Directory;
 
     THStack *sChi2_piplus_1e_cut = new THStack("#chi^{2}_{#pi^{+}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{+}};");
     TH1D *hChi2_piplus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, CD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD);#chi^{2}_{#pi^{+}};",
-                                            500, -Chi2_boundary, Chi2_boundary);
+                                            150, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_piplus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, FD);#chi^{2}_{#pi^{+}};",
-                                            500, -Chi2_boundary, Chi2_boundary);
+                                            150, -Chi2_boundary, Chi2_boundary);
     string hChi2_piplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piplus_1e_cut_FD_Dir = Chi2_1e_Directory;
 
     THStack *sChi2_piminus_1e_cut = new THStack("#chi^{2}_{#pi^{-}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{-}};");
     TH1D *hChi2_piminus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, CD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD);#chi^{2}_{#pi^{-}};",
-                                             500, -Chi2_boundary, Chi2_boundary);
+                                             150, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_piminus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, FD);#chi^{2}_{#pi^{-}};",
-                                             500, -Chi2_boundary, Chi2_boundary);
+                                             150, -Chi2_boundary, Chi2_boundary);
     string hChi2_piminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piminus_1e_cut_FD_Dir = Chi2_1e_Directory;
     //</editor-fold>
 
@@ -1306,89 +1303,89 @@ void EventAnalyser() {
      * Second - after applying individual chi2 cuts
      * Third - after applying ALL cuts, not just individual chi2 cuts (= c-cut) */
 
-    //<editor-fold desc="Testing Chi2 before MicroBooNE cuts test">
-    THStack *sChi2_Electron_MicroBooNE = new THStack("#chi^{2}_{e^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{e^{-}} (MicroBooNE, CD & FD);#chi^{2}_{e^{-}};");
-//    TH1D *hChi2_Electron_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
-//                                                    500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-//    TH1D *hChi2_Electron_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
-//                                                    500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
-    TH1D *hChi2_Electron_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
-                                                     500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-    TH1D *hChi2_Electron_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
-                                                     500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
-    string hChi2_Electron_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Electron_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-    string hChi2_Electron_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Electron_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-
-    THStack *sChi2_Proton_MicroBooNE = new THStack("#chi^{2}_{p} (MicroBooNE, CD & FD)", "#chi^{2}_{p} (MicroBooNE, CD & FD);#chi^{2}_{p};");
-    TH1D *hChi2_Proton_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
-                                                   500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *hChi2_Proton_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
-                                                   500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
-    TH1D *hChi2_Proton_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
-                                                   500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    TH1D *hChi2_Proton_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
-                                                   500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
-    string hChi2_Proton_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Proton_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-    string hChi2_Proton_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Proton_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-
-    THStack *sChi2_piplus_MicroBooNE = new THStack("#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{+}};");
-    TH1D *hChi2_piplus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, CD)",
-                                                   "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
-                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *hChi2_piplus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, CD)",
-                                                   "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
-                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *hChi2_piplus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, FD)",
-                                                   "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
-                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-    TH1D *hChi2_piplus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, FD)",
-                                                   "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
-                                                   500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-    string hChi2_piplus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piplus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-    string hChi2_piplus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piplus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-
-    THStack *sChi2_piminus_MicroBooNE = new THStack("#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{-}};");
-    TH1D *hChi2_piminus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, CD)",
-                                                    "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
-                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *hChi2_piminus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, CD)",
-                                                    "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
-                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *hChi2_piminus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, FD)",
-                                                    "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
-                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
-    TH1D *hChi2_piminus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, FD)",
-                                                    "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
-                                                    500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
-    string hChi2_piminus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piminus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-    string hChi2_piminus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piminus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
-    //</editor-fold>
-
-    //<editor-fold desc="Chi2 plots after MicroBooNE cuts">
-//    TH1D *hChi2_Electron_MicroBooNE_CD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, CD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{e^{-}};",
-//                                                 500, -1.5 * Chi2_Electron_cut_MicroBooNE_CD, 1.5 * Chi2_Electron_cut_MicroBooNE_CD);
-    TH1D *hChi2_Electron_MicroBooNE_FD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, FD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{e^{-}};",
-                                                  500, -1.5 * Chi2_Electron_cut_MicroBooNE_FD, 1.5 * Chi2_Electron_cut_MicroBooNE_FD);
-    string hChi2_Electron_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_Electron_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
-
-    TH1D *hChi2_Proton_MicroBooNE_CD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, CD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, CD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_MicroBooNE_CD, 1.5 * Chi2_Proton_cut_MicroBooNE_CD);
-    TH1D *hChi2_Proton_MicroBooNE_FD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, FD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, FD);#chi^{2}_{p};",
-                                                500, -1.5 * Chi2_Proton_cut_MicroBooNE_FD, 1.5 * Chi2_Proton_cut_MicroBooNE_FD);
-    string hChi2_Proton_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_Proton_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
-
-    TH1D *hChi2_piplus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, CD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{+}};",
-                                                500, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
-    TH1D *hChi2_piplus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, FD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{+}};",
-                                                500, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
-    string hChi2_piplus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_piplus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
-
-    TH1D *hChi2_piminus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, CD)", "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{-}};",
-                                                 500, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
-    TH1D *hChi2_piminus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, FD)", "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{-}};",
-                                                 500, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
-    string hChi2_piminus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_piminus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
-    //</editor-fold>
+//    //<editor-fold desc="Testing Chi2 before MicroBooNE cuts test">
+//    THStack *sChi2_Electron_MicroBooNE = new THStack("#chi^{2}_{e^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{e^{-}} (MicroBooNE, CD & FD);#chi^{2}_{e^{-}};");
+////    TH1D *hChi2_Electron_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
+////                                                    150, -1.5 * Chi2_Electron_cut_1e_cut_CD, 1.5 * Chi2_Electron_cut_1e_cut_CD);
+////    TH1D *hChi2_Electron_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, CD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{e^{-}};",
+////                                                    150, -1.5 * Chi2_Electron_cut_1e_cut_CD, 1.5 * Chi2_Electron_cut_1e_cut_CD);
+//    TH1D *hChi2_Electron_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
+//                                                     150, -1.5 * Chi2_Electron_cut_1e_cut_FD, 1.5 * Chi2_Electron_cut_1e_cut_FD);
+//    TH1D *hChi2_Electron_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (MicroBooNE, FD)", "#chi^{2}_{e^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{e^{-}};",
+//                                                     150, -1.5 * Chi2_Electron_cut_1e_cut_FD, 1.5 * Chi2_Electron_cut_1e_cut_FD);
+//    string hChi2_Electron_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Electron_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//    string hChi2_Electron_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Electron_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//
+//    THStack *sChi2_Proton_MicroBooNE = new THStack("#chi^{2}_{p} (MicroBooNE, CD & FD)", "#chi^{2}_{p} (MicroBooNE, CD & FD);#chi^{2}_{p};");
+//    TH1D *hChi2_Proton_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
+//                                                   150, -1.5 * Chi2_Proton_cut_1e_cut_CD, 1.5 * Chi2_Proton_cut_1e_cut_CD);
+//    TH1D *hChi2_Proton_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, CD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{p};",
+//                                                   150, -1.5 * Chi2_Proton_cut_1e_cut_CD, 1.5 * Chi2_Proton_cut_1e_cut_CD);
+//    TH1D *hChi2_Proton_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{p} BC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
+//                                                   150, -1.5 * Chi2_Proton_cut_1e_cut_FD, 1.5 * Chi2_Proton_cut_1e_cut_FD);
+//    TH1D *hChi2_Proton_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{p} AC (MicroBooNE, FD)", "#chi^{2}_{p} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{p};",
+//                                                   150, -1.5 * Chi2_Proton_cut_1e_cut_FD, 1.5 * Chi2_Proton_cut_1e_cut_FD);
+//    string hChi2_Proton_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Proton_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//    string hChi2_Proton_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_Proton_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//
+//    THStack *sChi2_piplus_MicroBooNE = new THStack("#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{+}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{+}};");
+//    TH1D *hChi2_piplus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, CD)",
+//                                                   "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+//                                                   150, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
+//    TH1D *hChi2_piplus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, CD)",
+//                                                   "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{+}};",
+//                                                   150, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
+//    TH1D *hChi2_piplus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{+}} BC (MicroBooNE, FD)",
+//                                                   "#chi^{2}_{#pi^{+}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+//                                                   150, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
+//    TH1D *hChi2_piplus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{+}} AC (MicroBooNE, FD)",
+//                                                   "#chi^{2}_{#pi^{+}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{+}};",
+//                                                   150, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
+//    string hChi2_piplus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piplus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//    string hChi2_piplus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piplus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//
+//    THStack *sChi2_piminus_MicroBooNE = new THStack("#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD)", "#chi^{2}_{#pi^{-}} (MicroBooNE, CD & FD);#chi^{2}_{#pi^{-}};");
+//    TH1D *hChi2_piminus_MicroBooNE_BC_CD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, CD)",
+//                                                    "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+//                                                    150, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
+//    TH1D *hChi2_piminus_MicroBooNE_AC_CD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, CD)",
+//                                                    "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, CD);#chi^{2}_{#pi^{-}};",
+//                                                    150, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
+//    TH1D *hChi2_piminus_MicroBooNE_BC_FD = new TH1D("#chi^{2}_{#pi^{-}} BC (MicroBooNE, FD)",
+//                                                    "#chi^{2}_{#pi^{-}} Histogram Before C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+//                                                    150, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+//    TH1D *hChi2_piminus_MicroBooNE_AC_FD = new TH1D("#chi^{2}_{#pi^{-}} AC (MicroBooNE, FD)",
+//                                                    "#chi^{2}_{#pi^{-}} Histogram After C-Cut (MicroBooNE, FD);#chi^{2}_{#pi^{-}};",
+//                                                    150, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+//    string hChi2_piminus_MicroBooNE_BC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piminus_MicroBooNE_BC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//    string hChi2_piminus_MicroBooNE_AC_CD_Dir = Chi2_MicroBooNE_cut_tests_Directory, hChi2_piminus_MicroBooNE_AC_FD_Dir = Chi2_MicroBooNE_cut_tests_Directory;
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2 plots after MicroBooNE cuts">
+////    TH1D *hChi2_Electron_MicroBooNE_CD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, CD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{e^{-}};",
+////                                                 150, -1.5 * Chi2_Electron_cut_MicroBooNE_CD, 1.5 * Chi2_Electron_cut_MicroBooNE_CD);
+//    TH1D *hChi2_Electron_MicroBooNE_FD = new TH1D("#chi^{2}_{e^{-}} (MicroBooNE-CC, FD)", "#chi^{2}_{e^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{e^{-}};",
+//                                                  150, -1.5 * Chi2_Electron_cut_MicroBooNE_FD, 1.5 * Chi2_Electron_cut_MicroBooNE_FD);
+//    string hChi2_Electron_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_Electron_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+//
+//    TH1D *hChi2_Proton_MicroBooNE_CD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, CD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, CD);#chi^{2}_{p};",
+//                                                150, -1.5 * Chi2_Proton_cut_MicroBooNE_CD, 1.5 * Chi2_Proton_cut_MicroBooNE_CD);
+//    TH1D *hChi2_Proton_MicroBooNE_FD = new TH1D("#chi^{2}_{p} (MicroBooNE-CC, FD)", "#chi^{2}_{p} Histogram (MicroBooNE-CC, FD);#chi^{2}_{p};",
+//                                                150, -1.5 * Chi2_Proton_cut_MicroBooNE_FD, 1.5 * Chi2_Proton_cut_MicroBooNE_FD);
+//    string hChi2_Proton_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_Proton_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+//
+//    TH1D *hChi2_piplus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, CD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{+}};",
+//                                                150, -1.5 * Chi2_piplus_cut_MicroBooNE_CD, 1.5 * Chi2_piplus_cut_MicroBooNE_CD);
+//    TH1D *hChi2_piplus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{+}} (MicroBooNE-CC, FD)", "#chi^{2}_{#pi^{+}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{+}};",
+//                                                150, -1.5 * Chi2_piplus_cut_MicroBooNE_FD, 1.5 * Chi2_piplus_cut_MicroBooNE_FD);
+//    string hChi2_piplus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_piplus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+//
+//    TH1D *hChi2_piminus_MicroBooNE_CD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, CD)", "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, CD);#chi^{2}_{#pi^{-}};",
+//                                                 150, -1.5 * Chi2_piminus_cut_MicroBooNE_CD, 1.5 * Chi2_piminus_cut_MicroBooNE_CD);
+//    TH1D *hChi2_piminus_MicroBooNE_FD = new TH1D("#chi^{2}_{#pi^{-}} (MicroBooNE-CC, FD)", "#chi^{2}_{#pi^{-}} Histogram (MicroBooNE-CC, FD);#chi^{2}_{#pi^{-}};",
+//                                                 150, -1.5 * Chi2_piminus_cut_MicroBooNE_FD, 1.5 * Chi2_piminus_cut_MicroBooNE_FD);
+//    string hChi2_piminus_MicroBooNE_CD_Dir = Chi2_MicroBooNE_Directory, hChi2_piminus_MicroBooNE_FD_Dir = Chi2_MicroBooNE_Directory;
+//    //</editor-fold>
 
     //</editor-fold>
 
@@ -1403,37 +1400,37 @@ void EventAnalyser() {
 
     if (apply_cuts == false) {
 //        hChi2_Electron_1e2p_BC_CD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, CD);#chi^{2}_{e^{-}};",
-//                                            500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+//                                            150, -1.5 * Chi2_Electron_cut_1e_cut_CD, 1.5 * Chi2_Electron_cut_1e_cut_CD);
         hChi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e^{-}} BC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram Before Cut (1e2p, FD);#chi^{2}_{e^{-}};",
-                                             500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                             150, -1.5 * Chi2_Electron_cut_1e_cut_FD, 1.5 * Chi2_Electron_cut_1e_cut_FD);
         hChi2_Electron_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
 
         hChi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} BC (1e2p, CD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, CD);#chi^{2}_{p};",
-                                           500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                           150, -1.5 * Chi2_Proton_cut_1e_cut_CD, 1.5 * Chi2_Proton_cut_1e_cut_CD);
         hChi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} BC (1e2p, FD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, FD);#chi^{2}_{p};",
-                                           500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                           150, -1.5 * Chi2_Proton_cut_1e_cut_FD, 1.5 * Chi2_Proton_cut_1e_cut_FD);
         hChi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
 
 //        hChi2_Electron_1e2p_AC_CD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, CD);#chi^{2}_{e^{-}};",
-//                                             500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+//                                             150, -1.5 * Chi2_Electron_cut_1e_cut_CD, 1.5 * Chi2_Electron_cut_1e_cut_CD);
         hChi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e^{-}} AC (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram After Cut (1e2p, FD);#chi^{2}_{e^{-}};",
-                                             500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                             150, -1.5 * Chi2_Electron_cut_1e_cut_FD, 1.5 * Chi2_Electron_cut_1e_cut_FD);
         hChi2_Electron_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Electron_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
 
         hChi2_Proton_1e2p_AC_CD = new TH1D("#chi^{2}_{p} AC (1e2p, CD)", "#chi^{2}_{p} Histogram After Cut (1e2p, CD);#chi^{2}_{p};",
-                                           500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                           150, -1.5 * Chi2_Proton_cut_1e_cut_CD, 1.5 * Chi2_Proton_cut_1e_cut_CD);
         hChi2_Proton_1e2p_AC_FD = new TH1D("#chi^{2}_{p} AC (1e2p, FD)", "#chi^{2}_{p} Histogram After Cut (1e2p, FD);#chi^{2}_{p};",
-                                           500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                           150, -1.5 * Chi2_Proton_cut_1e_cut_FD, 1.5 * Chi2_Proton_cut_1e_cut_FD);
         hChi2_Proton_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Proton_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
     } else {
 //        hChi2_Electron_1e2p_BC_CD = new TH1D("#chi^{2}_{e^{-}} (1e2p, CD)", "#chi^{2}_{e^{-}} Histogram (1e2p, CD);#chi^{2}_{e^{-}};",
-//                                            500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+//                                            150, -1.5 * Chi2_Electron_cut_1e_cut_CD, 1.5 * Chi2_Electron_cut_1e_cut_CD);
         hChi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e^{-}} (1e2p, FD)", "#chi^{2}_{e^{-}} Histogram (1e2p, FD);#chi^{2}_{e^{-}};",
-                                             500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                             150, -1.5 * Chi2_Electron_cut_1e_cut_FD, 1.5 * Chi2_Electron_cut_1e_cut_FD);
         hChi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} (1e2p, CD)", "#chi^{2}_{p} Histogram (1e2p, CD);#chi^{2}_{p};",
-                                           500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                           150, -1.5 * Chi2_Proton_cut_1e_cut_CD, 1.5 * Chi2_Proton_cut_1e_cut_CD);
         hChi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} (1e2p, FD)", "#chi^{2}_{p} Histogram (1e2p, FD);#chi^{2}_{p};",
-                                           500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                           150, -1.5 * Chi2_Proton_cut_1e_cut_FD, 1.5 * Chi2_Proton_cut_1e_cut_FD);
         hChi2_Electron_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
         hChi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
     }
@@ -1441,15 +1438,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Chi2 plots (2p)">
 //    TH1D *hChi2_Electron_2p_CD = new TH1D("#chi^{2}_{e^{-}} (2p, CD)", "#chi^{2}_{e^{-}} Histogram (2p, CD);#chi^{2}_{e^{-}};",
-//                                         500, -1.5 * Chi2_Electron_cut_CD, 1.5 * Chi2_Electron_cut_CD);
+//                                         150, -1.5 * Chi2_Electron_cut_1e_cut_CD, 1.5 * Chi2_Electron_cut_1e_cut_CD);
     TH1D *hChi2_Electron_2p_FD = new TH1D("#chi^{2}_{e^{-}} (2p, FD)", "#chi^{2}_{e^{-}} Histogram (2p, FD);#chi^{2}_{e^{-}};",
-                                          500, -1.5 * Chi2_Electron_cut_FD, 1.5 * Chi2_Electron_cut_FD);
+                                          150, -1.5 * Chi2_Electron_cut_1e_cut_FD, 1.5 * Chi2_Electron_cut_1e_cut_FD);
     string hChi2_Electron_2p_CD_Dir = Chi2_2p_Directory, hChi2_Electron_2p_FD_Dir = Chi2_2p_Directory;
 
     TH1D *hChi2_Proton_2p_CD = new TH1D("#chi^{2}_{p} (2p, CD)", "#chi^{2}_{p} Histogram (2p, CD);#chi^{2}_{p};",
-                                        500, -1.5 * Chi2_Proton_cut_CD, 1.5 * Chi2_Proton_cut_CD);
+                                        150, -1.5 * Chi2_Proton_cut_1e_cut_CD, 1.5 * Chi2_Proton_cut_1e_cut_CD);
     TH1D *hChi2_Proton_2p_FD = new TH1D("#chi^{2}_{p} (2p, FD)", "#chi^{2}_{p} Histogram (2p, FD);#chi^{2}_{p};",
-                                        500, -1.5 * Chi2_Proton_cut_FD, 1.5 * Chi2_Proton_cut_FD);
+                                        150, -1.5 * Chi2_Proton_cut_1e_cut_FD, 1.5 * Chi2_Proton_cut_1e_cut_FD);
     string hChi2_Proton_2p_CD_Dir = Chi2_2p_Directory, hChi2_Proton_2p_FD_Dir = Chi2_2p_Directory;
     //</editor-fold>
 
@@ -1463,192 +1460,172 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots (no #(e) cut)">
     //TODO: figure out if the code shuold plot these or should I delete them:
-//    THStack *Vertex_Electron_Vx_Stack = new THStack("V_{x}^{e^{-}} (no #(e) cut, CD & FD)", "V_{x}^{e^{-}} (no #(e) cut, CD & FD);V_{x}^{e^{-}} [cm];");
-//    THStack *Vertex_Electron_Vy_Stack = new THStack("V_{y}^{e^{-}} (no #(e) cut, CD & FD)", "V_{y}^{e^{-}} (no #(e) cut, CD & FD);V_{y}^{e^{-}} [cm];");
-//    THStack *Vertex_Electron_Vz_Stack = new THStack("V_{z}^{e^{-}} (no #(e) cut, CD & FD)", "V_{z}^{e^{-}} (no #(e) cut, CD & FD);V_{z}^{e^{-}} [cm];");
-//    THStack *Vertex_Proton_Vx_Stack = new THStack("V_{x}^{p} (no #(e) cut, CD & FD)", "V_{x}^{p} (no #(e) cut, CD & FD);V_{x}^{p} [cm];");
-//    THStack *Vertex_Proton_Vy_Stack = new THStack("V_{y}^{p} (no #(e) cut, CD & FD)", "V_{y}^{p} (no #(e) cut, CD & FD);V_{y}^{p} [cm];");
-//    THStack *Vertex_Proton_Vz_Stack = new THStack("V_{z}^{p} (no #(e) cut, CD & FD)", "V_{z}^{p} (no #(e) cut, CD & FD);V_{z}^{p} [cm];");
+//    THStack *sVx_Electron_All_e = new THStack("V_{x}^{e^{-}} (no #(e) cut, CD & FD)", "V_{x}^{e^{-}} (no #(e) cut, CD & FD);V_{x}^{e^{-}} [cm];");
+//    THStack *sVy_Electron_All_e = new THStack("V_{y}^{e^{-}} (no #(e) cut, CD & FD)", "V_{y}^{e^{-}} (no #(e) cut, CD & FD);V_{y}^{e^{-}} [cm];");
+//    THStack *sVz_Electron_All_e = new THStack("V_{z}^{e^{-}} (no #(e) cut, CD & FD)", "V_{z}^{e^{-}} (no #(e) cut, CD & FD);V_{z}^{e^{-}} [cm];");
+//    THStack *sVx_Proton_All_e = new THStack("V_{x}^{p} (no #(e) cut, CD & FD)", "V_{x}^{p} (no #(e) cut, CD & FD);V_{x}^{p} [cm];");
+//    THStack *sVy_Proton_All_e = new THStack("V_{y}^{p} (no #(e) cut, CD & FD)", "V_{y}^{p} (no #(e) cut, CD & FD);V_{y}^{p} [cm];");
+//    THStack *sVz_Proton_All_e = new THStack("V_{z}^{p} (no #(e) cut, CD & FD)", "V_{z}^{p} (no #(e) cut, CD & FD);V_{z}^{p} [cm];");
 
-//    TH1D *Vertex_Electron_Vx_CD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, CD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
+//    TH1D *hVx_Electron_All_e_CD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, CD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
 //                                           100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Electron_Vy_CD = new TH1D("V_{y}^{e^{-}} (no #(e) cut, CD)", "V_{y}^{e^{-}} (no #(e) cut, CD);V_{y}^{e^{-}} [cm];",
+//    TH1D *hVy_Electron_All_e_CD = new TH1D("V_{y}^{e^{-}} (no #(e) cut, CD)", "V_{y}^{e^{-}} (no #(e) cut, CD);V_{y}^{e^{-}} [cm];",
 //                                           100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Electron_Vz_CD = new TH1D("V_{z}^{e^{-}} (no #(e) cut, CD)", "V_{z}^{e^{-}} (no #(e) cut, CD);V_{z}^{e^{-}} [cm];",
+//    TH1D *hVz_Electron_All_e_CD = new TH1D("V_{z}^{e^{-}} (no #(e) cut, CD)", "V_{z}^{e^{-}} (no #(e) cut, CD);V_{z}^{e^{-}} [cm];",
 //                                           100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Electron_Vx_FD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, FD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
+//    TH1D *hVx_Electron_All_e_FD = new TH1D("V_{x}^{e^{-}} (no #(e) cut, FD)", "V_{x}^{e^{-}} (no #(e) cut, CD);V_{x}^{e^{-}} [cm];",
 //                                           100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Electron_Vy_FD = new TH1D("V_{y}^{e^{-}} (no #(e) cut, FD)", "V_{y}^{e^{-}} (no #(e) cut, CD);V_{y}^{e^{-}} [cm];",
+//    TH1D *hVy_Electron_All_e_FD = new TH1D("V_{y}^{e^{-}} (no #(e) cut, FD)", "V_{y}^{e^{-}} (no #(e) cut, CD);V_{y}^{e^{-}} [cm];",
 //                                           100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Electron_Vz_FD = new TH1D("V_{z}^{e^{-}} (no #(e) cut, FD)", "V_{z}^{e^{-}} (no #(e) cut, CD);V_{z}^{e^{-}} [cm];",
+//    TH1D *hVz_Electron_All_e_FD = new TH1D("V_{z}^{e^{-}} (no #(e) cut, FD)", "V_{z}^{e^{-}} (no #(e) cut, CD);V_{z}^{e^{-}} [cm];",
 //                                           100, -Vertex_boundary, Vertex_boundary);
 
-//    TH1D *Vertex_Proton_Vx_CD = new TH1D("V_{x}^{p} (no #(e) cut, CD)", "V_{x}^{p} (no #(e) cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Proton_Vy_CD = new TH1D("V_{y}^{p} (no #(e) cut, CD)", "V_{y}^{p} (no #(e) cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Proton_Vz_CD = new TH1D("V_{z}^{p} (no #(e) cut, CD)", "V_{z}^{p} (no #(e) cut, CD);V_{z}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Proton_Vx_FD = new TH1D("V_{x}^{p} (no #(e) cut, FD)", "V_{x}^{p} (no #(e) cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Proton_Vy_FD = new TH1D("V_{y}^{p} (no #(e) cut, FD)", "V_{y}^{p} (no #(e) cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *Vertex_Proton_Vz_FD = new TH1D("V_{z}^{p} (no #(e) cut, FD)", "V_{z}^{p} (no #(e) cut, CD);V_{z}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVx_Proton_All_e_CD = new TH1D("V_{x}^{p} (no #(e) cut, CD)", "V_{x}^{p} (no #(e) cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVy_Proton_All_e_CD = new TH1D("V_{y}^{p} (no #(e) cut, CD)", "V_{y}^{p} (no #(e) cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVz_Proton_All_e_CD = new TH1D("V_{z}^{p} (no #(e) cut, CD)", "V_{z}^{p} (no #(e) cut, CD);V_{z}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVx_Proton_All_e_FD = new TH1D("V_{x}^{p} (no #(e) cut, FD)", "V_{x}^{p} (no #(e) cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVy_Proton_All_e_FD = new TH1D("V_{y}^{p} (no #(e) cut, FD)", "V_{y}^{p} (no #(e) cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVz_Proton_All_e_FD = new TH1D("V_{z}^{p} (no #(e) cut, FD)", "V_{z}^{p} (no #(e) cut, CD);V_{z}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Vertex plots (1e only)">
-    THStack *Vertex_Electron_1e_Vx_Stack = new THStack("V_{x}^{e^{-}} (1e Only, CD & FD)", "V_{x}^{e^{-}} (1e Only, CD & FD);V_{x}^{e^{-}} [cm];");
-    THStack *Vertex_Electron_1e_Vy_Stack = new THStack("V_{y}^{e^{-}} (1e Only, CD & FD)", "V_{y}^{e^{-}} (1e Only, CD & FD);V_{y}^{e^{-}} [cm];");
-    THStack *Vertex_Electron_1e_Vz_Stack = new THStack("V_{z}^{e^{-}} (1e Only, CD & FD)", "V_{z}^{e^{-}} (1e Only, CD & FD);V_{z}^{e^{-}} [cm];");
-    THStack *Vertex_Proton_1e_Vx_Stack = new THStack("V_{x}^{p} (1e Only, CD & FD)", "V_{x}^{p} (1e Only, CD & FD);V_{x}^{p} [cm];");
-    THStack *Vertex_Proton_1e_Vy_Stack = new THStack("V_{y}^{p} (1e Only, CD & FD)", "V_{y}^{p} (1e Only, CD & FD);V_{y}^{p} [cm];");
-    THStack *Vertex_Proton_1e_Vz_Stack = new THStack("V_{z}^{p} (1e Only, CD & FD)", "V_{z}^{p} (1e Only, CD & FD);V_{z}^{p} [cm];");
-    THStack *Vertex_Kplus_1e_Vx_Stack = new THStack("V_{x}^{K^{+}} (1e Only, CD & FD)", "V_{x}^{K^{+}} (1e Only, CD & FD);V_{x}^{K^{+}} [cm];");
-    THStack *Vertex_Kplus_1e_Vy_Stack = new THStack("V_{y}^{K^{+}} (1e Only, CD & FD)", "V_{y}^{K^{+}} (1e Only, CD & FD);V_{y}^{K^{+}} [cm];");
-    THStack *Vertex_Kplus_1e_Vz_Stack = new THStack("V_{z}^{K^{+}} (1e Only, CD & FD)", "V_{z}^{K^{+}} (1e Only, CD & FD);V_{z}^{K^{+}} [cm];");
-    THStack *Vertex_Kminus_1e_Vx_Stack = new THStack("V_{x}^{K^{-}} (1e Only, CD & FD)", "V_{x}^{K^{-}} (1e Only, CD & FD);V_{x}^{K^{-}} [cm];");
-    THStack *Vertex_Kminus_1e_Vy_Stack = new THStack("V_{y}^{K^{-}} (1e Only, CD & FD)", "V_{y}^{K^{-}} (1e Only, CD & FD);V_{y}^{K^{-}} [cm];");
-    THStack *Vertex_Kminus_1e_Vz_Stack = new THStack("V_{z}^{K^{-}} (1e Only, CD & FD)", "V_{z}^{K^{-}} (1e Only, CD & FD);V_{z}^{K^{-}} [cm];");
-    THStack *Vertex_piplus_1e_Vx_Stack = new THStack("V_{x}^{#pi^{+}} (1e Only, CD & FD)", "V_{x}^{#pi^{+}} (1e Only, CD & FD);V_{x}^{#pi^{+}} [cm];");
-    THStack *Vertex_piplus_1e_Vy_Stack = new THStack("V_{y}^{#pi^{+}} (1e Only, CD & FD)", "V_{y}^{#pi^{+}} (1e Only, CD & FD);V_{y}^{#pi^{+}} [cm];");
-    THStack *Vertex_piplus_1e_Vz_Stack = new THStack("V_{z}^{#pi^{+}} (1e Only, CD & FD)", "V_{z}^{#pi^{+}} (1e Only, CD & FD);V_{z}^{#pi^{+}} [cm];");
-    THStack *Vertex_piminus_1e_Vx_Stack = new THStack("V_{x}^{#pi^{-}} (1e Only, CD & FD)", "V_{x}^{#pi^{-}} (1e Only, CD & FD);V_{x}^{#pi^{-}} [cm];");
-    THStack *Vertex_piminus_1e_Vy_Stack = new THStack("V_{y}^{#pi^{-}} (1e Only, CD & FD)", "V_{y}^{#pi^{-}} (1e Only, CD & FD);V_{y}^{#pi^{-}} [cm];");
-    THStack *Vertex_piminus_1e_Vz_Stack = new THStack("V_{z}^{#pi^{-}} (1e Only, CD & FD)", "V_{z}^{#pi^{-}} (1e Only, CD & FD);V_{z}^{#pi^{-}} [cm];");
+    THStack *sVx_Electron_1e_cut = new THStack("V_{x}^{e^{-}} (1e Only, CD & FD)", "V_{x}^{e^{-}} (1e Only, CD & FD);V_{x}^{e^{-}} [cm];");
+    THStack *sVy_Electron_1e_cut = new THStack("V_{y}^{e^{-}} (1e Only, CD & FD)", "V_{y}^{e^{-}} (1e Only, CD & FD);V_{y}^{e^{-}} [cm];");
+    THStack *sVz_Electron_1e_cut = new THStack("V_{z}^{e^{-}} (1e Only, CD & FD)", "V_{z}^{e^{-}} (1e Only, CD & FD);V_{z}^{e^{-}} [cm];");
+//    TH1D *hVx_Electron_1e_cut_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVy_Electron_1e_cut_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVz_Electron_1e_cut_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Electron_1e_cut_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Electron_1e_cut_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Electron_1e_cut_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    string hVx_Electron_1e_cut_CD_Dir = Vertex_Electron_1e_Vx_Directory, hVx_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vx_Directory;
+    string hVy_Electron_1e_cut_CD_Dir = Vertex_Electron_1e_Vy_Directory, hVy_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vy_Directory;
+    string hVz_Electron_1e_cut_CD_Dir = Vertex_Electron_1e_Vz_Directory, hVz_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vz_Directory;
 
-    TH1D *Vertex_Electron_1e_Vx_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vy_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vz_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vx_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vy_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Electron_1e_Vz_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    THStack *sVx_Proton_1e_cut = new THStack("V_{x}^{p} (1e Only, CD & FD)", "V_{x}^{p} (1e Only, CD & FD);V_{x}^{p} [cm];");
+    THStack *sVy_Proton_1e_cut = new THStack("V_{y}^{p} (1e Only, CD & FD)", "V_{y}^{p} (1e Only, CD & FD);V_{y}^{p} [cm];");
+    THStack *sVz_Proton_1e_cut = new THStack("V_{z}^{p} (1e Only, CD & FD)", "V_{z}^{p} (1e Only, CD & FD);V_{z}^{p} [cm];");
+    TH1D *hVx_Proton_1e_cut_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Proton_1e_cut_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Proton_1e_cut_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Proton_1e_cut_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Proton_1e_cut_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Proton_1e_cut_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    string hVx_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vx_Directory, hVx_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vx_Directory;
+    string hVy_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vy_Directory, hVy_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vy_Directory;
+    string hVz_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vz_Directory, hVz_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vz_Directory;
 
-    TH1D *Vertex_Proton_1e_Vx_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vy_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vz_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vx_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vy_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Proton_1e_Vz_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    THStack *sVx_Kplus_1e_cut = new THStack("V_{x}^{K^{+}} (1e Only, CD & FD)", "V_{x}^{K^{+}} (1e Only, CD & FD);V_{x}^{K^{+}} [cm];");
+    THStack *sVy_Kplus_1e_cut = new THStack("V_{y}^{K^{+}} (1e Only, CD & FD)", "V_{y}^{K^{+}} (1e Only, CD & FD);V_{y}^{K^{+}} [cm];");
+    THStack *sVz_Kplus_1e_cut = new THStack("V_{z}^{K^{+}} (1e Only, CD & FD)", "V_{z}^{K^{+}} (1e Only, CD & FD);V_{z}^{K^{+}} [cm];");
+    TH1D *hVx_Kplus_1e_cut_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Kplus_1e_cut_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Kplus_1e_cut_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Kplus_1e_cut_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Kplus_1e_cut_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Kplus_1e_cut_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    string hVx_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vx_Directory, hVx_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vx_Directory;
+    string hVy_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vy_Directory, hVy_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vy_Directory;
+    string hVz_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vz_Directory, hVz_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vz_Directory;
 
-    TH1D *Vertex_Kplus_1e_Vx_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vy_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vz_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vx_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vy_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kplus_1e_Vz_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    THStack *sVx_Kminus_1e_cut = new THStack("V_{x}^{K^{-}} (1e Only, CD & FD)", "V_{x}^{K^{-}} (1e Only, CD & FD);V_{x}^{K^{-}} [cm];");
+    THStack *sVy_Kminus_1e_cut = new THStack("V_{y}^{K^{-}} (1e Only, CD & FD)", "V_{y}^{K^{-}} (1e Only, CD & FD);V_{y}^{K^{-}} [cm];");
+    THStack *sVz_Kminus_1e_cut = new THStack("V_{z}^{K^{-}} (1e Only, CD & FD)", "V_{z}^{K^{-}} (1e Only, CD & FD);V_{z}^{K^{-}} [cm];");
+    TH1D *hVx_Kminus_1e_cut_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Kminus_1e_cut_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Kminus_1e_cut_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Kminus_1e_cut_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_Kminus_1e_cut_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_Kminus_1e_cut_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    string hVx_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vx_Directory, hVx_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vx_Directory;
+    string hVy_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vy_Directory, hVy_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vy_Directory;
+    string hVz_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vz_Directory, hVz_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vz_Directory;
 
-    TH1D *Vertex_Kminus_1e_Vx_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vy_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vz_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vx_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vy_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_Kminus_1e_Vz_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    THStack *sVx_piplus_1e_cut = new THStack("V_{x}^{#pi^{+}} (1e Only, CD & FD)", "V_{x}^{#pi^{+}} (1e Only, CD & FD);V_{x}^{#pi^{+}} [cm];");
+    THStack *sVy_piplus_1e_cut = new THStack("V_{y}^{#pi^{+}} (1e Only, CD & FD)", "V_{y}^{#pi^{+}} (1e Only, CD & FD);V_{y}^{#pi^{+}} [cm];");
+    THStack *sVz_piplus_1e_cut = new THStack("V_{z}^{#pi^{+}} (1e Only, CD & FD)", "V_{z}^{#pi^{+}} (1e Only, CD & FD);V_{z}^{#pi^{+}} [cm];");
+    TH1D *hVx_piplus_1e_cut_CD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, CD)", "V_{x}^{#pi^{+}} (1e Cut, CD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_piplus_1e_cut_CD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, CD)", "V_{y}^{#pi^{+}} (1e Cut, CD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_piplus_1e_cut_CD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, CD)", "V_{z}^{#pi^{+}} (1e Cut, CD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_piplus_1e_cut_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_piplus_1e_cut_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_piplus_1e_cut_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    string hVx_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vx_Directory, hVx_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vx_Directory;
+    string hVy_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vy_Directory, hVy_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vy_Directory;
+    string hVz_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vz_Directory, hVz_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vz_Directory;
 
-    TH1D *Vertex_piplus_1e_Vx_CD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, CD)", "V_{x}^{#pi^{+}} (1e Cut, CD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vy_CD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, CD)", "V_{y}^{#pi^{+}} (1e Cut, CD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vz_CD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, CD)", "V_{z}^{#pi^{+}} (1e Cut, CD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vx_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vy_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piplus_1e_Vz_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-
-    TH1D *Vertex_piminus_1e_Vx_CD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, CD)", "V_{x}^{#pi^{-}} (1e Cut, CD);V_{x}^{#pi^{-}} [cm];",
-                                             250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vy_CD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, CD)", "V_{y}^{#pi^{-}} (1e Cut, CD);V_{y}^{#pi^{-}} [cm];",
-                                             250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vz_CD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, CD)", "V_{z}^{#pi^{-}} (1e Cut, CD);V_{z}^{#pi^{-}} [cm];",
-                                             250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vx_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];",
-                                             250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vy_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];",
-                                             250, -Vertex_boundary, Vertex_boundary);
-    TH1D *Vertex_piminus_1e_Vz_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];",
-                                             250, -Vertex_boundary, Vertex_boundary);
-    string Vertex_Electron_1e_Vx_CD_Dir = Vertex_Electron_1e_Vx_Directory, Vertex_Electron_1e_Vx_FD_Dir = Vertex_Electron_1e_Vx_Directory;
-    string Vertex_Electron_1e_Vy_CD_Dir = Vertex_Electron_1e_Vy_Directory, Vertex_Electron_1e_Vy_FD_Dir = Vertex_Electron_1e_Vy_Directory;
-    string Vertex_Electron_1e_Vz_CD_Dir = Vertex_Electron_1e_Vz_Directory, Vertex_Electron_1e_Vz_FD_Dir = Vertex_Electron_1e_Vz_Directory;
-    string Vertex_Proton_1e_Vx_CD_Dir = Vertex_Proton_1e_Vx_Directory, Vertex_Proton_1e_Vx_FD_Dir = Vertex_Proton_1e_Vx_Directory;
-    string Vertex_Proton_1e_Vy_CD_Dir = Vertex_Proton_1e_Vy_Directory, Vertex_Proton_1e_Vy_FD_Dir = Vertex_Proton_1e_Vy_Directory;
-    string Vertex_Proton_1e_Vz_CD_Dir = Vertex_Proton_1e_Vz_Directory, Vertex_Proton_1e_Vz_FD_Dir = Vertex_Proton_1e_Vz_Directory;
-    string Vertex_Kplus_1e_Vx_CD_Dir = Vertex_Kplus_1e_Vx_Directory, Vertex_Kplus_1e_Vx_FD_Dir = Vertex_Kplus_1e_Vx_Directory;
-    string Vertex_Kplus_1e_Vy_CD_Dir = Vertex_Kplus_1e_Vy_Directory, Vertex_Kplus_1e_Vy_FD_Dir = Vertex_Kplus_1e_Vy_Directory;
-    string Vertex_Kplus_1e_Vz_CD_Dir = Vertex_Kplus_1e_Vz_Directory, Vertex_Kplus_1e_Vz_FD_Dir = Vertex_Kplus_1e_Vz_Directory;
-    string Vertex_Kminus_1e_Vx_CD_Dir = Vertex_Kminus_1e_Vx_Directory, Vertex_Kminus_1e_Vx_FD_Dir = Vertex_Kminus_1e_Vx_Directory;
-    string Vertex_Kminus_1e_Vy_CD_Dir = Vertex_Kminus_1e_Vy_Directory, Vertex_Kminus_1e_Vy_FD_Dir = Vertex_Kminus_1e_Vy_Directory;
-    string Vertex_Kminus_1e_Vz_CD_Dir = Vertex_Kminus_1e_Vz_Directory, Vertex_Kminus_1e_Vz_FD_Dir = Vertex_Kminus_1e_Vz_Directory;
-    string Vertex_piplus_1e_Vx_CD_Dir = Vertex_piplus_1e_Vx_Directory, Vertex_piplus_1e_Vx_FD_Dir = Vertex_piplus_1e_Vx_Directory;
-    string Vertex_piplus_1e_Vy_CD_Dir = Vertex_piplus_1e_Vy_Directory, Vertex_piplus_1e_Vy_FD_Dir = Vertex_piplus_1e_Vy_Directory;
-    string Vertex_piplus_1e_Vz_CD_Dir = Vertex_piplus_1e_Vz_Directory, Vertex_piplus_1e_Vz_FD_Dir = Vertex_piplus_1e_Vz_Directory;
-    string Vertex_piminus_1e_Vx_CD_Dir = Vertex_piminus_1e_Vx_Directory, Vertex_piminus_1e_Vx_FD_Dir = Vertex_piminus_1e_Vx_Directory;
-    string Vertex_piminus_1e_Vy_CD_Dir = Vertex_piminus_1e_Vy_Directory, Vertex_piminus_1e_Vy_FD_Dir = Vertex_piminus_1e_Vy_Directory;
-    string Vertex_piminus_1e_Vz_CD_Dir = Vertex_piminus_1e_Vz_Directory, Vertex_piminus_1e_Vz_FD_Dir = Vertex_piminus_1e_Vz_Directory;
+    THStack *sVx_piminus_1e_cut = new THStack("V_{x}^{#pi^{-}} (1e Only, CD & FD)", "V_{x}^{#pi^{-}} (1e Only, CD & FD);V_{x}^{#pi^{-}} [cm];");
+    THStack *sVy_piminus_1e_cut = new THStack("V_{y}^{#pi^{-}} (1e Only, CD & FD)", "V_{y}^{#pi^{-}} (1e Only, CD & FD);V_{y}^{#pi^{-}} [cm];");
+    THStack *sVz_piminus_1e_cut = new THStack("V_{z}^{#pi^{-}} (1e Only, CD & FD)", "V_{z}^{#pi^{-}} (1e Only, CD & FD);V_{z}^{#pi^{-}} [cm];");
+    TH1D *hVx_piminus_1e_cut_CD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, CD)", "V_{x}^{#pi^{-}} (1e Cut, CD);V_{x}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_piminus_1e_cut_CD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, CD)", "V_{y}^{#pi^{-}} (1e Cut, CD);V_{y}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_piminus_1e_cut_CD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, CD)", "V_{z}^{#pi^{-}} (1e Cut, CD);V_{z}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_piminus_1e_cut_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVy_piminus_1e_cut_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVz_piminus_1e_cut_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    string hVx_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vx_Directory, hVx_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vx_Directory;
+    string hVy_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vy_Directory, hVy_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vy_Directory;
+    string hVz_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vz_Directory, hVz_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vz_Directory;
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1e2p & 2p)">
-    THStack *dVx_1e2p_before_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD) test;dV_{x} [cm];");
-    THStack *dVy_1e2p_before_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD) test;dV_{y} [cm];");
-    THStack *dVz_1e2p_before_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD) test;dV_{z} [cm];");
+    THStack *sdVx_1e2p_before = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];");
+    THStack *sdVy_1e2p_before = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];");
+    THStack *sdVz_1e2p_before = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];");
+    THStack *sdVx_1e2p_after = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];");
+    THStack *sdVy_1e2p_after = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];");
+    THStack *sdVz_1e2p_after = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];");
+    THStack *sdVx_2p = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD);dV_{x} [cm];");
+    THStack *sdVy_2p = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD);dV_{y} [cm];");
+    THStack *sdVz_2p = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD);dV_{z} [cm];");
 
-    THStack *dVx_1e2p_after_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (1e2p, CD & FD) test;dV_{x} [cm];");
-    THStack *dVy_1e2p_after_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (1e2p, CD & FD) test;dV_{y} [cm];");
-    THStack *dVz_1e2p_after_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (1e2p, CD & FD) test;dV_{z} [cm];");
-
-    THStack *dVx_2p_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD);dV_{x} [cm];");
-    THStack *dVy_2p_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD);dV_{y} [cm];");
-    THStack *dVz_2p_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD);dV_{z} [cm];");
-
-    TH1D *deltaVx_before_dV_cuts_1e2p, *deltaVy_before_dV_cuts_1e2p, *deltaVz_before_dV_cuts_1e2p;
-    TH1D *deltaVx_after_dV_cuts_1e2p, *deltaVy_after_dV_cuts_1e2p, *deltaVz_after_dV_cuts_1e2p;
-    TH1D *deltaVx_2p, *deltaVy_2p, *deltaVz_2p;
+    TH1D *hdVx_1e2p_BC, *hdVy_1e2p_BC, *hdVz_1e2p_BC, *hdVx_1e2p_AC, *hdVy_1e2p_AC, *hdVz_1e2p_AC, *hdVx_2p, *hdVy_2p, *hdVz_2p;
 
     if (apply_cuts == false) {
-        deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];",
-                                               250, -dV_boundary, dV_boundary);
-        deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];",
-                                               250, -dV_boundary, dV_boundary);
-        deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];",
-                                               250, -dV_boundary, dV_boundary);
+        hdVx_1e2p_BC = new TH1D("dV_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVy_1e2p_BC = new TH1D("dV_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVz_1e2p_BC = new TH1D("dV_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
 
-        deltaVx_after_dV_cuts_1e2p = new TH1D("dV_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];",
-                                              250, -dV_boundary, dV_boundary);
-        deltaVy_after_dV_cuts_1e2p = new TH1D("dV_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];",
-                                              250, -dV_boundary, dV_boundary);
-        deltaVz_after_dV_cuts_1e2p = new TH1D("dV_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];",
-                                              250, -dV_boundary, dV_boundary);
+        hdVx_1e2p_AC = new TH1D("dV_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVy_1e2p_AC = new TH1D("dV_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVz_1e2p_AC = new TH1D("dV_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
 
-        deltaVx_2p = new TH1D("dV_{x} AC (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
-        deltaVy_2p = new TH1D("dV_{y} AC (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
-        deltaVz_2p = new TH1D("dV_{z} AC (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVx_2p = new TH1D("dV_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVy_2p = new TH1D("dV_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVz_2p = new TH1D("dV_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
     } else {
-        deltaVx_before_dV_cuts_1e2p = new TH1D("dV_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
-        deltaVy_before_dV_cuts_1e2p = new TH1D("dV_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
-        deltaVz_before_dV_cuts_1e2p = new TH1D("dV_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVx_1e2p_BC = new TH1D("dV_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (1e2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVy_1e2p_BC = new TH1D("dV_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (1e2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVz_1e2p_BC = new TH1D("dV_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (1e2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
 
-        deltaVx_2p = new TH1D("dV_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
-        deltaVy_2p = new TH1D("dV_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
-        deltaVz_2p = new TH1D("dV_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVx_2p = new TH1D("dV_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (2p, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVy_2p = new TH1D("dV_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (2p, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+        hdVz_2p = new TH1D("dV_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (2p, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
     }
     //</editor-fold>
 
     //<editor-fold desc="dV plots (MicroBooNE)">
-    THStack *dVx_MicroBooNE_Stack = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];");
-    THStack *dVy_MicroBooNE_Stack = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];");
-    THStack *dVz_MicroBooNE_Stack = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];");
+    THStack *sdVx_MicroBooNE = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];");
+    THStack *sdVy_MicroBooNE = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];");
+    THStack *sdVz_MicroBooNE = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];");
 
-    TH1D *deltaVx_MicroBooNE_BC = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                           250, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_MicroBooNE_BC = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                           250, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_MicroBooNE_BC = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                           250, -dV_boundary, dV_boundary);
+    TH1D *hdVx_MicroBooNE_BC = new TH1D("dV_{x} BC (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                        250, -dV_boundary, dV_boundary);
+    TH1D *hdVy_MicroBooNE_BC = new TH1D("dV_{y} BC (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                        250, -dV_boundary, dV_boundary);
+    TH1D *hdVz_MicroBooNE_BC = new TH1D("dV_{z} BC (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                        250, -dV_boundary, dV_boundary);
 
-    TH1D *deltaVx_MicroBooNE_AC = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                           250, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_MicroBooNE_AC = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                           250, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_MicroBooNE_AC = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                           250, -dV_boundary, dV_boundary);
+    TH1D *hdVx_MicroBooNE_AC = new TH1D("dV_{x} AC (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts (MicroBooNE, CD & FD);dV_{x} [cm];",
+                                        250, -dV_boundary, dV_boundary);
+    TH1D *hdVy_MicroBooNE_AC = new TH1D("dV_{y} AC (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts (MicroBooNE, CD & FD);dV_{y} [cm];",
+                                        250, -dV_boundary, dV_boundary);
+    TH1D *hdVz_MicroBooNE_AC = new TH1D("dV_{z} AC (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts (MicroBooNE, CD & FD);dV_{z} [cm];",
+                                        250, -dV_boundary, dV_boundary);
 
-    TH1D *deltaVx_MicroBooNE = new TH1D("dV_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];",
-                                        250, -dV_boundary, dV_boundary);
-    TH1D *deltaVy_MicroBooNE = new TH1D("dV_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];",
-                                        250, -dV_boundary, dV_boundary);
-    TH1D *deltaVz_MicroBooNE = new TH1D("dV_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];",
-                                        250, -dV_boundary, dV_boundary);
+    TH1D *hdVx_MicroBooNE = new TH1D("dV_{x} (MicroBooNE, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} (MicroBooNE, CD & FD);dV_{x} [cm];", 250, -dV_boundary, dV_boundary);
+    TH1D *hdVy_MicroBooNE = new TH1D("dV_{y} (MicroBooNE, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} (MicroBooNE, CD & FD);dV_{y} [cm];", 250, -dV_boundary, dV_boundary);
+    TH1D *hdVz_MicroBooNE = new TH1D("dV_{z} (MicroBooNE, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} (MicroBooNE, CD & FD);dV_{z} [cm];", 250, -dV_boundary, dV_boundary);
     //</editor-fold>
 
     //</editor-fold>
@@ -1853,9 +1830,11 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //</editor-fold>
+
+// ======================================================================================================================================================================
 // Beta vs. P histograms
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Beta vs. P histograms">
 
@@ -2116,13 +2095,13 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 // Angle histograms
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Angle histograms">
 
-    // Theta_e --------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_e --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_e histograms">
     THStack *sTheta_e = new THStack("#theta_{e} (CD & FD)", "#theta_{e} of Outgoing Electron (no #(e) cut, CD & FD);#theta_{e} [Deg];");
@@ -2287,9 +2266,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 // Q2 histograms
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Q2 histograms">
     /* Q2 histograms (no #(e) cut) */
@@ -2329,9 +2308,9 @@ void EventAnalyser() {
     string hQ2_2p_CD_Dir = Q2_2p_Directory, hQ2_2p_FD_Dir = Q2_2p_Directory;
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 // Energy (E_e) histograms
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Energy (E_e) histograms">
     /* Energy (E_e) histograms (1e cut, CD & FD) */
@@ -2395,9 +2374,9 @@ void EventAnalyser() {
     string hE_e_VS_Theta_e_DIS_2p_CD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory, hE_e_VS_Theta_e_DIS_2p_FD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory;
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 // Energy Transfer (ET) histograms
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
     /* ET around 15 Deg */
@@ -2435,9 +2414,9 @@ void EventAnalyser() {
     string tET15 = "ET (E_{beam}-E_{e}) Around #theta_{e} = 15#circ";
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 // Ecal reconstruction histograms
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="Ecal reconstruction histograms">
     //TODO: confirm with Adi if Ecal should be separated to CD and FD or not
@@ -2458,9 +2437,9 @@ void EventAnalyser() {
     string hEcal_RES_2p_Dir = Ecal_RES_2p_Directory, hEcal_DIS_2p_Dir = Ecal_DIS_2p_Directory;
     //</editor-fold>
 
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 // MicroBooNE histogram reconstruction
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ======================================================================================================================================================================
 
     //<editor-fold desc="MicroBooNE histogram reconstruction">
 
@@ -2567,7 +2546,7 @@ void EventAnalyser() {
 
         // Cuts on electrons only:
         if (apply_SF_cuts == true) { clasAna.setEcalSFCuts(); }                        // making f_ecalSFCuts = ture
-        if (apply_ECAL_fiducial_cut == true) { clasAna.setEcalEdgeCuts(); }            // making f_ecalEdgeCuts = ture (ECAL fiducial cuts)
+        if (apply_ECAL_fiducial_cuts == true) { clasAna.setEcalEdgeCuts(); }            // making f_ecalEdgeCuts = ture (ECAL fiducial cuts)
         if (apply_Nphe_cut == true) { clasAna.setNpheCuts(); }                         // making f_NpheCuts = ture (HTCC cuts)
 
         // Cuts on protons and charged pions:
@@ -2732,9 +2711,9 @@ void EventAnalyser() {
             if (electrons[i]->getRegion() == CD) {
 //                hChi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
 
-//                Vertex_Electron_Vx_CD->Fill(electrons[i]->par()->getVx());
-//                Vertex_Electron_Vy_CD->Fill(electrons[i]->par()->getVy());
-//                Vertex_Electron_Vz_CD->Fill(electrons[i]->par()->getVz());
+//                hVx_Electron_All_e_CD->Fill(electrons[i]->par()->getVx());
+//                hVy_Electron_All_e_CD->Fill(electrons[i]->par()->getVy());
+//                hVz_Electron_All_e_CD->Fill(electrons[i]->par()->getVz());
 
                 Beta_vs_P_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
                 Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
@@ -2756,9 +2735,9 @@ void EventAnalyser() {
             } else if (electrons[i]->getRegion() == FD) {
                 hChi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
 
-//                Vertex_Electron_Vx_FD->Fill(electrons[i]->par()->getVx());
-//                Vertex_Electron_Vy_FD->Fill(electrons[i]->par()->getVy());
-//                Vertex_Electron_Vz_FD->Fill(electrons[i]->par()->getVz());
+//                hVx_Electron_All_e_FD->Fill(electrons[i]->par()->getVx());
+//                hVy_Electron_All_e_FD->Fill(electrons[i]->par()->getVy());
+//                hVz_Electron_All_e_FD->Fill(electrons[i]->par()->getVz());
 
                 Beta_vs_P_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
                 Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
@@ -2787,9 +2766,9 @@ void EventAnalyser() {
                 hChi2_Proton_CD->Fill(protons[i]->par()->getChi2Pid());
 
                 //TODO: figure out if the code shuold plot these or should I delete them:
-//                Vertex_Proton_Vx_CD->Fill(protons[i]->par()->getVx());
-//                Vertex_Proton_Vy_CD->Fill(protons[i]->par()->getVy());
-//                Vertex_Proton_Vz_CD->Fill(protons[i]->par()->getVz());
+//                hVx_Proton_All_e_CD->Fill(protons[i]->par()->getVx());
+//                hVy_Proton_All_e_CD->Fill(protons[i]->par()->getVy());
+//                hVz_Proton_All_e_CD->Fill(protons[i]->par()->getVz());
 
                 Beta_vs_P_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
@@ -2798,9 +2777,9 @@ void EventAnalyser() {
                 hChi2_Proton_FD->Fill(protons[i]->par()->getChi2Pid());
 
                 //TODO: figure out if the code shuold plot these or should I delete them:
-//                Vertex_Proton_Vx_FD->Fill(protons[i]->par()->getVx());
-//                Vertex_Proton_Vy_FD->Fill(protons[i]->par()->getVy());
-//                Vertex_Proton_Vz_FD->Fill(protons[i]->par()->getVz());
+//                hVx_Proton_All_e_FD->Fill(protons[i]->par()->getVx());
+//                hVy_Proton_All_e_FD->Fill(protons[i]->par()->getVy());
+//                hVz_Proton_All_e_FD->Fill(protons[i]->par()->getVz());
 
                 Beta_vs_P_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_Protons_Only_FD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
@@ -3101,9 +3080,9 @@ void EventAnalyser() {
             if (e->getRegion() == CD) {
 //                hChi2_Electron_1e_cut_CD->Fill(e->par()->getChi2Pid());
 
-                Vertex_Electron_1e_Vx_CD->Fill(e->par()->getVx());
-                Vertex_Electron_1e_Vy_CD->Fill(e->par()->getVy());
-                Vertex_Electron_1e_Vz_CD->Fill(e->par()->getVz());
+//                hVx_Electron_1e_cut_CD->Fill(e->par()->getVx());
+//                hVy_Electron_1e_cut_CD->Fill(e->par()->getVy());
+//                hVz_Electron_1e_cut_CD->Fill(e->par()->getVz());
 
                 Beta_vs_P_1e_cut_CD->Fill(P_e, e->par()->getBeta());
                 Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e, e->par()->getBeta());
@@ -3164,9 +3143,9 @@ void EventAnalyser() {
             } else if (e->getRegion() == FD) {
                 hChi2_Electron_1e_cut_FD->Fill(e->par()->getChi2Pid());
 
-                Vertex_Electron_1e_Vx_FD->Fill(e->par()->getVx());
-                Vertex_Electron_1e_Vy_FD->Fill(e->par()->getVy());
-                Vertex_Electron_1e_Vz_FD->Fill(e->par()->getVz());
+                hVx_Electron_1e_cut_FD->Fill(e->par()->getVx());
+                hVy_Electron_1e_cut_FD->Fill(e->par()->getVy());
+                hVz_Electron_1e_cut_FD->Fill(e->par()->getVz());
 
                 Beta_vs_P_1e_cut_FD->Fill(P_e, e->par()->getBeta());
                 Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e, e->par()->getBeta());
@@ -3233,9 +3212,9 @@ void EventAnalyser() {
             if (p->getRegion() == CD) {
                 hChi2_Proton_1e_cut_CD->Fill(p->par()->getChi2Pid());
 
-                Vertex_Proton_1e_Vx_CD->Fill(p->par()->getVx());
-                Vertex_Proton_1e_Vy_CD->Fill(p->par()->getVy());
-                Vertex_Proton_1e_Vz_CD->Fill(p->par()->getVz());
+                hVx_Proton_1e_cut_CD->Fill(p->par()->getVx());
+                hVy_Proton_1e_cut_CD->Fill(p->par()->getVy());
+                hVz_Proton_1e_cut_CD->Fill(p->par()->getVz());
 
                 Beta_vs_P_1e_cut_CD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
@@ -3243,9 +3222,9 @@ void EventAnalyser() {
             } else if (p->getRegion() == FD) {
                 hChi2_Proton_1e_cut_FD->Fill(p->par()->getChi2Pid());
 
-                Vertex_Proton_1e_Vx_FD->Fill(p->par()->getVx());
-                Vertex_Proton_1e_Vy_FD->Fill(p->par()->getVy());
-                Vertex_Proton_1e_Vz_FD->Fill(p->par()->getVz());
+                hVx_Proton_1e_cut_FD->Fill(p->par()->getVx());
+                hVy_Proton_1e_cut_FD->Fill(p->par()->getVy());
+                hVz_Proton_1e_cut_FD->Fill(p->par()->getVz());
 
                 Beta_vs_P_1e_cut_FD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
@@ -3289,9 +3268,9 @@ void EventAnalyser() {
             if (Kplus[i]->getRegion() == CD) {
                 hChi2_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getChi2Pid());
 
-                Vertex_Kplus_1e_Vx_CD->Fill(Kplus[i]->par()->getVx());
-                Vertex_Kplus_1e_Vy_CD->Fill(Kplus[i]->par()->getVy());
-                Vertex_Kplus_1e_Vz_CD->Fill(Kplus[i]->par()->getVz());
+                hVx_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getVx());
+                hVy_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getVy());
+                hVz_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_1e_Kplus_Only_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
@@ -3300,9 +3279,9 @@ void EventAnalyser() {
             } else if (Kplus[i]->getRegion() == FD) {
                 hChi2_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getChi2Pid());
 
-                Vertex_Kplus_1e_Vx_FD->Fill(Kplus[i]->par()->getVx());
-                Vertex_Kplus_1e_Vy_FD->Fill(Kplus[i]->par()->getVy());
-                Vertex_Kplus_1e_Vz_FD->Fill(Kplus[i]->par()->getVz());
+                hVx_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getVx());
+                hVy_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getVy());
+                hVz_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
                 Beta_vs_P_1e_Kplus_Only_FD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
@@ -3316,9 +3295,9 @@ void EventAnalyser() {
             if (Kminus[i]->getRegion() == CD) {
                 hChi2_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getChi2Pid());
 
-                Vertex_Kminus_1e_Vx_CD->Fill(Kminus[i]->par()->getVx());
-                Vertex_Kminus_1e_Vy_CD->Fill(Kminus[i]->par()->getVy());
-                Vertex_Kminus_1e_Vz_CD->Fill(Kminus[i]->par()->getVz());
+                hVx_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getVx());
+                hVy_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getVy());
+                hVz_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_1e_Kminus_Only_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
@@ -3326,9 +3305,9 @@ void EventAnalyser() {
             } else if (Kminus[i]->getRegion() == FD) {
                 hChi2_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getChi2Pid());
 
-                Vertex_Kminus_1e_Vx_FD->Fill(Kminus[i]->par()->getVx());
-                Vertex_Kminus_1e_Vy_FD->Fill(Kminus[i]->par()->getVy());
-                Vertex_Kminus_1e_Vz_FD->Fill(Kminus[i]->par()->getVz());
+                hVx_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getVx());
+                hVy_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getVy());
+                hVz_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_1e_Kminus_Only_FD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
@@ -3342,9 +3321,9 @@ void EventAnalyser() {
             if (piplus[i]->getRegion() == CD) {
                 hChi2_piplus_1e_cut_CD->Fill(piplus[i]->par()->getChi2Pid());
 
-                Vertex_piplus_1e_Vx_CD->Fill(piplus[i]->par()->getVx());
-                Vertex_piplus_1e_Vy_CD->Fill(piplus[i]->par()->getVy());
-                Vertex_piplus_1e_Vz_CD->Fill(piplus[i]->par()->getVz());
+                hVx_piplus_1e_cut_CD->Fill(piplus[i]->par()->getVx());
+                hVy_piplus_1e_cut_CD->Fill(piplus[i]->par()->getVy());
+                hVz_piplus_1e_cut_CD->Fill(piplus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_1e_piplus_Only_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
@@ -3352,9 +3331,9 @@ void EventAnalyser() {
             } else if (piplus[i]->getRegion() == FD) {
                 hChi2_piplus_1e_cut_FD->Fill(piplus[i]->par()->getChi2Pid());
 
-                Vertex_piplus_1e_Vx_FD->Fill(piplus[i]->par()->getVx());
-                Vertex_piplus_1e_Vy_FD->Fill(piplus[i]->par()->getVy());
-                Vertex_piplus_1e_Vz_FD->Fill(piplus[i]->par()->getVz());
+                hVx_piplus_1e_cut_FD->Fill(piplus[i]->par()->getVx());
+                hVy_piplus_1e_cut_FD->Fill(piplus[i]->par()->getVy());
+                hVz_piplus_1e_cut_FD->Fill(piplus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_1e_piplus_Only_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
@@ -3368,9 +3347,9 @@ void EventAnalyser() {
             if (piminus[i]->getRegion() == CD) {
                 hChi2_piminus_1e_cut_CD->Fill(piminus[i]->par()->getChi2Pid());
 
-                Vertex_piminus_1e_Vx_CD->Fill(piminus[i]->par()->getVx());
-                Vertex_piminus_1e_Vy_CD->Fill(piminus[i]->par()->getVy());
-                Vertex_piminus_1e_Vz_CD->Fill(piminus[i]->par()->getVz());
+                hVx_piminus_1e_cut_CD->Fill(piminus[i]->par()->getVx());
+                hVy_piminus_1e_cut_CD->Fill(piminus[i]->par()->getVy());
+                hVz_piminus_1e_cut_CD->Fill(piminus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_1e_piminus_Only_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
@@ -3378,9 +3357,9 @@ void EventAnalyser() {
             } else if (piminus[i]->getRegion() == FD) {
                 hChi2_piminus_1e_cut_FD->Fill(piminus[i]->par()->getChi2Pid());
 
-                Vertex_piminus_1e_Vx_FD->Fill(piminus[i]->par()->getVx());
-                Vertex_piminus_1e_Vy_FD->Fill(piminus[i]->par()->getVy());
-                Vertex_piminus_1e_Vz_FD->Fill(piminus[i]->par()->getVz());
+                hVx_piminus_1e_cut_FD->Fill(piminus[i]->par()->getVx());
+                hVy_piminus_1e_cut_FD->Fill(piminus[i]->par()->getVy());
+                hVz_piminus_1e_cut_FD->Fill(piminus[i]->par()->getVz());
 
                 Beta_vs_P_1e_cut_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_1e_piminus_Only_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
@@ -3616,13 +3595,13 @@ void EventAnalyser() {
 //            if (electrons[0]->getRegion() == CD) {
 //                hChi2_Electron_MicroBooNE_BC_CD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
 //
-//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD) {
+//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_1e_cut_CD) {
 //                    hChi2_Electron_MicroBooNE_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
 //                }
 //            } else if (electrons[0]->getRegion() == FD) {
 //                hChi2_Electron_MicroBooNE_BC_FD->Fill(electrons[0]->par()->getChi2Pid()); // Before chi2 cuts
 //
-//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD) {
+//                if (fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_1e_cut_FD) {
 //                    hChi2_Electron_MicroBooNE_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
 //                }
 //            }
@@ -3630,13 +3609,13 @@ void EventAnalyser() {
 //            if (protons[0]->getRegion() == CD) {
 //                hChi2_Proton_MicroBooNE_BC_CD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
 //
-//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_CD) {
 //                    hChi2_Proton_MicroBooNE_AC_CD->Fill(protons[0]->par()->getChi2Pid());
 //                }
 //            } else if (protons[0]->getRegion() == FD) {
 //                hChi2_Proton_MicroBooNE_BC_FD->Fill(protons[0]->par()->getChi2Pid()); // Before chi2 cuts
 //
-//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_FD) {
 //                    hChi2_Proton_MicroBooNE_AC_FD->Fill(protons[0]->par()->getChi2Pid());
 //                }
 //            }
@@ -3644,13 +3623,13 @@ void EventAnalyser() {
 //            if (protons[1]->getRegion() == CD) {
 //                hChi2_Proton_MicroBooNE_BC_CD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
 //
-//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD) {
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_CD) {
 //                    hChi2_Proton_MicroBooNE_AC_CD->Fill(protons[1]->par()->getChi2Pid());
 //                }
 //            } else if (protons[1]->getRegion() == FD) {
 //                hChi2_Proton_MicroBooNE_BC_FD->Fill(protons[1]->par()->getChi2Pid()); // Before chi2 cuts
 //
-//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD) {
+//                if (fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_FD) {
 //                    hChi2_Proton_MicroBooNE_AC_FD->Fill(protons[1]->par()->getChi2Pid());
 //                }
 //            }
@@ -3704,12 +3683,12 @@ void EventAnalyser() {
 //                dVz_MicroBooNE = Vz_p_MicroBooNE - Vz_e_MicroBooNE;
 //
 //                // Testing dVx,dVy,dVz before cuts
-//                deltaVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), deltaVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), deltaVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
+//                hdVx_MicroBooNE_BC->Fill(dVx_MicroBooNE), hdVy_MicroBooNE_BC->Fill(dVy_MicroBooNE), hdVz_MicroBooNE_BC->Fill(dVz_MicroBooNE);
 //
 //                // Testing dVx,dVy,dVz after cuts
-//                if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { deltaVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
-//                if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { deltaVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
-//                if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { deltaVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
+//                if (fabs(dVx_peak_MicroBooNE - dVx_MicroBooNE) <= dVx_cut_MicroBooNE) { hdVx_MicroBooNE_AC->Fill(dVx_MicroBooNE); }
+//                if (fabs(dVy_peak_MicroBooNE - dVy_MicroBooNE) <= dVy_cut_MicroBooNE) { hdVy_MicroBooNE_AC->Fill(dVy_MicroBooNE); }
+//                if (fabs(dVz_peak_MicroBooNE - dVz_MicroBooNE) <= dVz_cut_MicroBooNE) { hdVz_MicroBooNE_AC->Fill(dVz_MicroBooNE); }
 //            } // end of loop over protons vector
 //            //</editor-fold>
 //
@@ -3849,23 +3828,23 @@ void EventAnalyser() {
 //
 //            // Electron:
 //            bool e_chi2_MicroBooNE_cut_CD = ((electrons[0]->getRegion() == CD)
-//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD);
+//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_1e_cut_CD);
 //            bool e_chi2_MicroBooNE_cut_FD = ((electrons[0]->getRegion() == FD)
-//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD);
+//                                             && fabs(Chi2_Electron_1e_peak_MicroBooNE_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_1e_cut_FD);
 //            bool e_chi2_MicroBooNE_cut = (e_chi2_MicroBooNE_cut_CD || e_chi2_MicroBooNE_cut_FD);
 //
 //            // Proton 0:
 //            bool p0_chi2_MicroBooNE_cut_CD = ((protons[0]->getRegion() == CD)
-//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_CD);
 //            bool p0_chi2_MicroBooNE_cut_FD = ((protons[0]->getRegion() == FD)
-//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_FD);
 //            bool p0_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut_CD || p0_chi2_MicroBooNE_cut_FD);
 //
 //            // Proton 1:
 //            bool p1_chi2_MicroBooNE_cut_CD = ((protons[1]->getRegion() == CD)
-//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD);
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_CD);
 //            bool p1_chi2_MicroBooNE_cut_FD = ((protons[1]->getRegion() == FD)
-//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD);
+//                                              && fabs(Chi2_Proton_1e_peak_MicroBooNE_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_FD);
 //            bool p1_chi2_MicroBooNE_cut = (p1_chi2_MicroBooNE_cut_CD || p1_chi2_MicroBooNE_cut_FD);
 //
 //            bool p_chi2_MicroBooNE_cut = (p0_chi2_MicroBooNE_cut && p1_chi2_MicroBooNE_cut);
@@ -4040,9 +4019,9 @@ void EventAnalyser() {
 //
 //                //<editor-fold desc="Filling MicroBooNE dVz histograms">
 //                for (auto &p: protons) {
-//                    deltaVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
-//                    deltaVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
-//                    deltaVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
+//                    hdVx_MicroBooNE->Fill(Vx_e_MicroBooNE - p->par()->getVx());
+//                    hdVy_MicroBooNE->Fill(Vy_e_MicroBooNE - p->par()->getVy());
+//                    hdVz_MicroBooNE->Fill(Vz_e_MicroBooNE - p->par()->getVz());
 //                } // end of loop over protons vector
 //                //</editor-fold>
 //
@@ -4071,8 +4050,6 @@ void EventAnalyser() {
 
             //<editor-fold desc="Testing cuts">
 
-            //  Testing momentum cuts (protons only) --------------------------------------------------------------------------------------------------------------------
-
             //<editor-fold desc="Testing momentum cuts (protons only)">
             /* momentum before and after cuts */
             if (electrons[0]->getRegion() == CD) {
@@ -4100,8 +4077,6 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            //  Testing chi2 cuts (protons only) ------------------------------------------------------------------------------------------------------------------------
-
             //<editor-fold desc="Testing chi2 cuts (protons only)">
             if (apply_cuts == false) {
                 /* Chi2 before cut */
@@ -4124,26 +4099,26 @@ void EventAnalyser() {
                 }
 
                 /* Chi2 after cut */
-                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_CD)) {
+                if ((electrons[0]->getRegion() == CD) && (fabs(Chi2_Electron_1e_peak_CD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_1e_cut_CD)) {
                     ++num_of_events_1e2p_w_eChi2_cut_only_CD;
 //                    hChi2_Electron_1e2p_AC_CD->Fill(electrons[0]->par()->getChi2Pid());
-                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_FD)) {
+                } else if ((electrons[0]->getRegion() == FD) && (fabs(Chi2_Electron_1e_peak_FD - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cut_1e_cut_FD)) {
                     ++num_of_events_1e2p_w_eChi2_cut_only_FD;
                     hChi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
                 }
 
-                if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
+                if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_CD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                     hChi2_Proton_1e2p_AC_CD->Fill(protons[0]->par()->getChi2Pid());
-                } else if ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
+                } else if ((protons[0]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_FD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                     hChi2_Proton_1e2p_AC_FD->Fill(protons[0]->par()->getChi2Pid());
                 }
 
-                if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_CD)) {
+                if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_CD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                     hChi2_Proton_1e2p_AC_CD->Fill(protons[1]->par()->getChi2Pid());
-                } else if ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_FD)) {
+                } else if ((protons[1]->getRegion() == FD) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cut_1e_cut_FD)) {
                     ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                     hChi2_Proton_1e2p_AC_FD->Fill(protons[1]->par()->getChi2Pid());
                 }
@@ -4168,8 +4143,6 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            //  Testing dVz cuts ------------------------------------------------------------------------------------------------------------------------
-
             //<editor-fold desc="Testing dV cuts">
             double Vx_e = electrons[0]->par()->getVx(), Vy_e = electrons[0]->par()->getVy(), Vz_e = electrons[0]->par()->getVz();
             double Vz_p0 = protons[0]->par()->getVz(), Vz_p1 = protons[1]->par()->getVz(), dVz0 = Vz_p0 - Vz_e, dVz1 = Vz_p1 - Vz_e;
@@ -4181,14 +4154,14 @@ void EventAnalyser() {
 
                 if (apply_cuts == false) {
                     /* Testing dVx,dVy,dVz before cuts */
-                    deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+                    hdVx_1e2p_BC->Fill(dVx), hdVy_1e2p_BC->Fill(dVy), hdVz_1e2p_BC->Fill(dVz);
 
                     /* Testing dVx,dVy,dVz after cuts */
-                    if (fabs(dVx_peak - dVx) <= dVx_cut) { deltaVx_after_dV_cuts_1e2p->Fill(dVx); }
-                    if (fabs(dVy_peak - dVy) <= dVy_cut) { deltaVy_after_dV_cuts_1e2p->Fill(dVy); }
-                    if (fabs(dVz_peak - dVz) <= dVz_cut) { deltaVz_after_dV_cuts_1e2p->Fill(dVz); }
+                    if (fabs(dVx_peak - dVx) <= dVx_cut) { hdVx_1e2p_AC->Fill(dVx); }
+                    if (fabs(dVy_peak - dVy) <= dVy_cut) { hdVy_1e2p_AC->Fill(dVy); }
+                    if (fabs(dVz_peak - dVz) <= dVz_cut) { hdVz_1e2p_AC->Fill(dVz); }
                 } else {
-                    deltaVx_before_dV_cuts_1e2p->Fill(dVx), deltaVy_before_dV_cuts_1e2p->Fill(dVy), deltaVz_before_dV_cuts_1e2p->Fill(dVz);
+                    hdVx_1e2p_BC->Fill(dVx), hdVy_1e2p_BC->Fill(dVy), hdVz_1e2p_BC->Fill(dVz);
                 }
             } // end of loop over protons vector
             //</editor-fold>
@@ -4199,9 +4172,9 @@ void EventAnalyser() {
 
             //<editor-fold desc="Applying cuts">
 
-            //  Applying momentum cuts ------------------------------------------------------------------------------------------------------------------------
-
             //<editor-fold desc="Applying momentum cuts">
+            /* Applying momentum cuts. Other cuts are applied via clas12ana. */
+
             // Electrons:
             if ((apply_momentum_cuts_2p == true) && ((e_mom_cuts_2p.at(1) != -1) && (P_e > e_mom_cuts_2p.at(1)))) { continue; }
             if ((apply_momentum_cuts_2p == true) && ((e_mom_cuts_2p.at(0) != -1) && (P_e < e_mom_cuts_2p.at(0)))) { continue; }
@@ -4214,31 +4187,6 @@ void EventAnalyser() {
             if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p1.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
             if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p1.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
             //</editor-fold>
-
-            //  Applying chi2 cuts ------------------------------------------------------------------------------------------------------------------------
-
-//            //<editor-fold desc="Applying Chi2 cuts (protons only)">
-//            // TODO: move proton blocks here to for loop to save some space
-//            if (protons[0]->getRegion() == CD) {
-//                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
-//            } else if (protons[0]->getRegion() == FD) {
-//                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[0]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
-//            }
-//
-//            if (protons[1]->getRegion() == CD) {
-//                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_CD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_CD)) { continue; }
-//            } else if (protons[1]->getRegion() == FD) {
-//                if ((apply_chi2_cuts_2p == true) && (fabs(Chi2_Proton_1e_peak_FD - protons[1]->par()->getChi2Pid()) > Chi2_Proton_cut_FD)) { continue; }
-//            }
-//
-//            ++num_of_events_1e2p_w_allChi2_cuts;
-//            //</editor-fold>
-
-            //  Applying dVz cuts ------------------------------------------------------------------------------------------------------------------------
-
-//            //<editor-fold desc="Applying dVz cuts">
-//            if ((apply_dVz_cuts == true) && ((fabs(dVz_peak - dVz0) > dVz_cut) || (fabs(dVz_peak - dVz1) > dVz_cut))) { continue; }
-//            //</editor-fold>
 
             //</editor-fold>
 
@@ -4260,18 +4208,22 @@ void EventAnalyser() {
 
             //<editor-fold desc="Filling cut parameters histograms (2p)">
             /* Filling Chi2 histograms (2p) */
+
+            // Electrton Chi2 (2p):
             if (electrons[0]->getRegion() == CD) {
 //                hChi2_Electron_2p_CD->Fill(electrons[0]->par()->getChi2Pid());
             } else if (electrons[0]->getRegion() == FD) {
                 hChi2_Electron_2p_FD->Fill(electrons[0]->par()->getChi2Pid());
             }
 
+            // Proton0 Chi2 (2p):
             if (protons[0]->getRegion() == CD) {
                 hChi2_Proton_2p_CD->Fill(protons[0]->par()->getChi2Pid());
             } else if (protons[0]->getRegion() == FD) {
                 hChi2_Proton_2p_FD->Fill(protons[0]->par()->getChi2Pid());
             }
 
+            // Proton1 Chi2 (2p):
             if (protons[1]->getRegion() == CD) {
                 hChi2_Proton_2p_CD->Fill(protons[1]->par()->getChi2Pid());
             } else if (protons[1]->getRegion() == FD) {
@@ -4283,7 +4235,7 @@ void EventAnalyser() {
                 Vx_p = p->par()->getVx(), Vy_p = p->par()->getVy(), Vz_p = p->par()->getVz();
                 dVx = Vx_p - Vx_e, dVy = Vy_p - Vy_e, dVz = Vz_p - Vz_e;
 
-                deltaVx_2p->Fill(dVx), deltaVy_2p->Fill(dVy), deltaVz_2p->Fill(dVz);
+                hdVx_2p->Fill(dVx), hdVy_2p->Fill(dVy), hdVz_2p->Fill(dVz);
             } // end of loop over protons vector
 
             /* Filling fiducial plots (2p) */
@@ -4291,25 +4243,27 @@ void EventAnalyser() {
             Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
             /* Filling SF histograms (2p) */
-            hSF_2p_FD->Fill(EoP_e);
-            hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
+            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
 
             /* Filling Nphe plots (2p) */
             hNphe_2p_FD->Fill(Nphe);
 
             /* Filling momentum histograms */
+            // Electrton momentum (2p):
             if (electrons[0]->getRegion() == CD) {
 //                hP_e_2p_CD->Fill(P_e);
             } else if (electrons[0]->getRegion() == FD) {
                 hP_e_2p_FD->Fill(P_e);
             }
 
+            // Proton0 momentum (2p):
             if (protons[0]->getRegion() == CD) {
                 hP_p_2p_CD->Fill(P_p0.Mag());
             } else if (protons[0]->getRegion() == FD) {
                 hP_p_2p_FD->Fill(P_p0.Mag());
             }
 
+            // Proton1 momentum (2p):
             if (protons[1]->getRegion() == CD) {
                 hP_p_2p_CD->Fill(P_p1.Mag());
             } else if (protons[1]->getRegion() == FD) {
@@ -4727,7 +4681,6 @@ void EventAnalyser() {
             histPlotter1D(c1, hNphe_1e_cut_BC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe}) Before Cuts", "1e Cut", plots, 2, false, true,
                           sNphe_1e_cut_FD, "01_Nphe_1e_cut_before_Nphe_cuts", hNphe_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0,
                           false);
-
             histPlotter1D(c1, hNphe_1e_cut_AC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe}) After Cuts", "1e Cut", plots, 2, false, true,
                           sNphe_1e_cut_FD, "02_Nphe_1e_cut_after_Nphe_cuts", hNphe_1e_cut_AC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0,
                           false);
@@ -4762,8 +4715,8 @@ void EventAnalyser() {
 
         //<editor-fold desc="Finding Xmax">
         //todo: calculate Xmax according to BC histograms?
-//        Chi2_Electron_Xmax_CD = hChi2_Electron_CD->GetBinCenter(hChi2_Electron_CD->GetMaximumBin());
-        Chi2_Electron_Xmax_FD = hChi2_Electron_FD->GetBinCenter(hChi2_Electron_FD->GetMaximumBin());
+//        Chi2_Electron_Xmax_1e_cut_CD = hChi2_Electron_CD->GetBinCenter(hChi2_Electron_CD->GetMaximumBin());
+        Chi2_Electron_Xmax_1e_cut_FD = hChi2_Electron_FD->GetBinCenter(hChi2_Electron_FD->GetMaximumBin());
         Chi2_Proton_Xmax_CD = hChi2_Proton_CD->GetBinCenter(hChi2_Proton_CD->GetMaximumBin());
         Chi2_Proton_Xmax_FD = hChi2_Proton_FD->GetBinCenter(hChi2_Proton_FD->GetMaximumBin());
         Chi2_Kplus_Xmax_CD = hChi2_Kplus_CD->GetBinCenter(hChi2_Kplus_CD->GetMaximumBin());
@@ -4776,8 +4729,8 @@ void EventAnalyser() {
         Chi2_piminus_Xmax_FD = hChi2_piminus_FD->GetBinCenter(hChi2_piminus_FD->GetMaximumBin());
 //        Chi2_Electron_1e_Xmax_CD = hChi2_Electron_1e_cut_CD->GetBinCenter(hChi2_Electron_1e_cut_CD->GetMaximumBin());
         Chi2_Electron_1e_Xmax_FD = hChi2_Electron_1e_cut_FD->GetBinCenter(hChi2_Electron_1e_cut_FD->GetMaximumBin());
-        Chi2_Proton_1e_Xmax_CD = hChi2_Proton_1e_cut_CD->GetBinCenter(hChi2_Proton_1e_cut_CD->GetMaximumBin());
-        Chi2_Proton_1e_Xmax_FD = hChi2_Proton_1e_cut_FD->GetBinCenter(hChi2_Proton_1e_cut_FD->GetMaximumBin());
+        Chi2_Proton_1e_cut_fmean_CD = hChi2_Proton_1e_cut_CD->GetBinCenter(hChi2_Proton_1e_cut_CD->GetMaximumBin());
+        Chi2_Proton_1e_cut_fmean_FD = hChi2_Proton_1e_cut_FD->GetBinCenter(hChi2_Proton_1e_cut_FD->GetMaximumBin());
         Chi2_Kplus_1e_Xmax_CD = hChi2_Kplus_1e_cut_CD->GetBinCenter(hChi2_Kplus_1e_cut_CD->GetMaximumBin());
         Chi2_Kplus_1e_Xmax_FD = hChi2_Kplus_1e_cut_FD->GetBinCenter(hChi2_Kplus_1e_cut_FD->GetMaximumBin());
         Chi2_Kminus_1e_Xmax_CD = hChi2_Kminus_1e_cut_CD->GetBinCenter(hChi2_Kminus_1e_cut_CD->GetMaximumBin());
@@ -4787,30 +4740,44 @@ void EventAnalyser() {
         Chi2_piminus_1e_Xmax_CD = hChi2_piminus_1e_cut_CD->GetBinCenter(hChi2_piminus_1e_cut_CD->GetMaximumBin());
         Chi2_piminus_1e_Xmax_FD = hChi2_piminus_1e_cut_FD->GetBinCenter(hChi2_piminus_1e_cut_FD->GetMaximumBin());
 
-//        Chi2_Electron_MicroBooNE_Xmax_CD = hChi2_Electron_MicroBooNE_CD->GetBinCenter(hChi2_Electron_MicroBooNE_CD->GetMaximumBin());
-        Chi2_Electron_MicroBooNE_Xmax_FD = hChi2_Electron_MicroBooNE_FD->GetBinCenter(hChi2_Electron_MicroBooNE_FD->GetMaximumBin());
-        Chi2_Proton_MicroBooNE_Xmax_CD = hChi2_Proton_MicroBooNE_CD->GetBinCenter(hChi2_Proton_MicroBooNE_CD->GetMaximumBin());
-        Chi2_Proton_MicroBooNE_Xmax_FD = hChi2_Proton_MicroBooNE_FD->GetBinCenter(hChi2_Proton_MicroBooNE_FD->GetMaximumBin());
-        Chi2_piplus_MicroBooNE_Xmax_CD = hChi2_piplus_MicroBooNE_CD->GetBinCenter(hChi2_piplus_MicroBooNE_CD->GetMaximumBin());
-        Chi2_piplus_MicroBooNE_Xmax_FD = hChi2_piplus_MicroBooNE_FD->GetBinCenter(hChi2_piplus_MicroBooNE_FD->GetMaximumBin());
-        Chi2_piminus_MicroBooNE_Xmax_CD = hChi2_piminus_MicroBooNE_CD->GetBinCenter(hChi2_piminus_MicroBooNE_CD->GetMaximumBin());
-        Chi2_piminus_MicroBooNE_Xmax_FD = hChi2_piminus_MicroBooNE_FD->GetBinCenter(hChi2_piminus_MicroBooNE_FD->GetMaximumBin());
+////        Chi2_Electron_MicroBooNE_Xmax_CD = hChi2_Electron_MicroBooNE_CD->GetBinCenter(hChi2_Electron_MicroBooNE_CD->GetMaximumBin());
+//        Chi2_Electron_MicroBooNE_Xmax_FD = hChi2_Electron_MicroBooNE_FD->GetBinCenter(hChi2_Electron_MicroBooNE_FD->GetMaximumBin());
+//        Chi2_Proton_MicroBooNE_Xmax_CD = hChi2_Proton_MicroBooNE_CD->GetBinCenter(hChi2_Proton_MicroBooNE_CD->GetMaximumBin());
+//        Chi2_Proton_MicroBooNE_Xmax_FD = hChi2_Proton_MicroBooNE_FD->GetBinCenter(hChi2_Proton_MicroBooNE_FD->GetMaximumBin());
+//        Chi2_piplus_MicroBooNE_Xmax_CD = hChi2_piplus_MicroBooNE_CD->GetBinCenter(hChi2_piplus_MicroBooNE_CD->GetMaximumBin());
+//        Chi2_piplus_MicroBooNE_Xmax_FD = hChi2_piplus_MicroBooNE_FD->GetBinCenter(hChi2_piplus_MicroBooNE_FD->GetMaximumBin());
+//        Chi2_piminus_MicroBooNE_Xmax_CD = hChi2_piminus_MicroBooNE_CD->GetBinCenter(hChi2_piminus_MicroBooNE_CD->GetMaximumBin());
+//        Chi2_piminus_MicroBooNE_Xmax_FD = hChi2_piminus_MicroBooNE_FD->GetBinCenter(hChi2_piminus_MicroBooNE_FD->GetMaximumBin());
         //</editor-fold>
 
 //  Chi2 plots (no #(e) cut) ----------------------------------------------------------------------------
 
         //<editor-fold desc="Chi2 plots (no #(e) cut)">
 //        histPlotter1D(c1, hChi2_Electron_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Electron_All_e, "01_Electron_chi2", hChi2_Electron_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
-//                      Chi2_Electron_Xmax_CD);
+//                      sChi2_Electron_All_e, "01_Electron_chi2", hChi2_Electron_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_1e_cut_CD,
+//                      Chi2_Electron_Xmax_1e_cut_CD);
         histPlotter1D(c1, hChi2_Electron_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Electron_All_e, "01_Electron_chi2", hChi2_Electron_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
-                      Chi2_Electron_Xmax_FD);
+                      sChi2_Electron_All_e, "01_Electron_chi2", hChi2_Electron_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_1e_cut_FD,
+                      Chi2_Electron_Xmax_1e_cut_FD);
+
+
+
+//        TGraphErrors* DataGraph;
+//        TF1* gaussina_for_fit0; // function
+//        gaussina_for_fit0 = new TF1("gaussina_for_fit0", funcstring); // funcstring = the function you fit in TString // [0]*x + [1] // [i] are fitted parameters
+//        gaussina_for_fit0->TF1::SetParLimits(1, edgeRight, edgeLeft); // constrains parameter [1] to range (edgeRight, edgeLeft)
+//        TFitResultPtr fit_func20;  // the fit result pointer
+//        fit_func20= DataGraph->TGraphErrors::Fit(gaussina_for_fit0, "S", "goff", edgeRight, edgeLeft); // fit the DataGraph to the function gaussina_for_fit0
+//        double peak_dat = fit_func2->Parameter(1); // example for data extraction from the fit result pointer
+
+
 
         histPlotter1D(c1, hChi2_Proton_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Proton_All_e, "02_Proton_chi2", hChi2_Proton_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD, Chi2_Proton_Xmax_CD);
+                      sChi2_Proton_All_e, "02_Proton_chi2", hChi2_Proton_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_CD,
+                      Chi2_Proton_Xmax_CD);
         histPlotter1D(c1, hChi2_Proton_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Proton_All_e, "02_Proton_chi2", hChi2_Proton_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD, Chi2_Proton_Xmax_FD);
+                      sChi2_Proton_All_e, "02_Proton_chi2", hChi2_Proton_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_1e_cut_FD,
+                      Chi2_Proton_Xmax_FD);
 
         histPlotter1D(c1, hChi2_Kplus_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sChi2_Kplus_All_e, "03_Kplus_chi2", hChi2_Kplus_CD_Dir, "CD", kBlue, true, true, true, false);
@@ -4837,38 +4804,81 @@ void EventAnalyser() {
 
         //<editor-fold desc="Electron chi2 (1e cut)">
 //        histPlotter1D(c1, hChi2_Electron_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+//                      sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_1e_cut_CD,
 //                      Chi2_Electron_1e_Xmax_CD);
         histPlotter1D(c1, hChi2_Electron_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_FD,
+                      sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Electron_cut_1e_cut_FD,
                       Chi2_Electron_1e_Xmax_FD);
 
-        histPlotter1D(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
-                      Chi2_Proton_1e_Xmax_CD);
-        histPlotter1D(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_FD,
-                      Chi2_Proton_1e_Xmax_FD);
+        if (apply_cuts == false) {
+            histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2",
+                              hChi2_Proton_1e_cut_CD_Dir, "CD", Chi2_Proton_cut_1e_cut_CD, Chi2_Proton_factor_1e_cut_CD, Chi2_Proton_1e_cut_fmean_CD, true, "Protons");
+            histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2",
+                              hChi2_Proton_1e_cut_FD_Dir, "FD", Chi2_Proton_cut_1e_cut_FD, Chi2_Proton_factor_1e_cut_FD, Chi2_Proton_1e_cut_fmean_FD, true, "Protons");
+        } else {
+            histPlotter1D(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_CD,
+                          Chi2_Proton_1e_peak_CD);
+            histPlotter1D(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cut_1e_cut_FD,
+                          Chi2_Proton_1e_peak_FD);
+        }
 
-        histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_Kplus_1e_Xmax_CD);
-        histPlotter1D(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_Kplus_1e_Xmax_FD);
+        if (apply_cuts == false) {
+            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2",
+                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cut_1e_cut_CD, Chi2_Kplus_factor_1e_cut_CD, Chi2_Kplus_1e_cut_fmean_CD, true, "K+");
+            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2",
+                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cut_1e_cut_FD, Chi2_Kplus_factor_1e_cut_FD, Chi2_Kplus_1e_cut_fmean_FD, true, "K+");
+        } else {
+            histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_1e_cut_CD,
+                          Chi2_Kplus_1e_Xmax_CD);
+            histPlotter1D(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cut_1e_cut_FD,
+                          Chi2_Kplus_1e_Xmax_FD);
+        }
 
-        histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_Kminus_1e_Xmax_CD);
-        histPlotter1D(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_Kminus_1e_Xmax_FD);
+        if (apply_cuts == false) {
+            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2",
+                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cut_1e_cut_CD, Chi2_Kminus_factor_1e_cut_CD, Chi2_Kminus_1e_cut_fmean_CD, true, "K-");
+            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2",
+                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cut_1e_cut_FD, Chi2_Kminus_factor_1e_cut_FD, Chi2_Kminus_1e_cut_fmean_FD, true, "K-");
+        } else {
+            histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_1e_cut_CD,
+                          Chi2_Kminus_1e_Xmax_CD);
+            histPlotter1D(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cut_1e_cut_FD,
+                          Chi2_Kminus_1e_Xmax_FD);
+        }
 
-        histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_piplus_1e_Xmax_CD);
-        histPlotter1D(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_piplus_1e_Xmax_FD);
+        if (apply_cuts == false) {
+            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2",
+                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cut_1e_cut_CD, Chi2_piplus_factor_1e_cut_CD, Chi2_piplus_1e_cut_fmean_CD, true, "pi+");
+            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2",
+                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cut_1e_cut_FD, Chi2_piplus_factor_1e_cut_FD, Chi2_piplus_1e_cut_fmean_FD, true, "pi+");
+        } else {
+            histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cut_1e_cut_CD,
+                          Chi2_piplus_1e_Xmax_CD);
+            histPlotter1D(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cut_1e_cut_FD,
+                          Chi2_piplus_1e_Xmax_FD);
+        }
 
-        histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, 6, Chi2_piminus_1e_Xmax_CD);
-        histPlotter1D(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, 6, Chi2_piminus_1e_Xmax_FD);
+        if (apply_cuts == false) {
+            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2",
+                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cut_1e_cut_CD, Chi2_piminus_factor_1e_cut_CD, Chi2_piminus_1e_cut_fmean_CD, true, "pi-");
+            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2",
+                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cut_1e_cut_FD, Chi2_piminus_factor_1e_cut_FD, Chi2_piminus_1e_cut_fmean_FD, true, "pi-");
+        } else {
+            histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piminus_cut_1e_cut_CD,
+                          Chi2_piminus_1e_Xmax_CD);
+            histPlotter1D(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piminus_cut_1e_cut_FD,
+                          Chi2_piminus_1e_Xmax_FD);
+        }
         //</editor-fold>
 
 //        //<editor-fold desc="Chi2 plots (MicroBooNE)">
@@ -4981,61 +4991,61 @@ void EventAnalyser() {
         if (apply_cuts == false) {
 //            histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
 //                          plots, 2, false, true, sChi2_Electron_1e2p, "01_Electron_Chi2_1e2p_BC", hChi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+//                          Chi2_Electron_cut_1e_cut_CD, Chi2_Electron_1e_peak_CD);
             histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram Before Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
                           plots, 2, false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p_BC", hChi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
+                          Chi2_Electron_cut_1e_cut_FD, Chi2_Electron_1e_peak_FD);
 
             histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04,
                           plots, 2, false, true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p_BC", hChi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
+                          Chi2_Proton_cut_1e_cut_CD, Chi2_Proton_1e_peak_CD);
             histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04,
                           plots, 2, false, true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p_BC", hChi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
+                          Chi2_Proton_cut_1e_cut_FD, Chi2_Proton_1e_peak_FD);
 
 //            histPlotter1D(c1, c2, hChi2_Electron_1e2p_AC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram After Cut", "1e2p", "CD", "e", 0.06, 0.04, 0.04,
 //                          plots, 2, false, true, sChi2_Electron_1e2p, "01_Electron_Chi2_1e2p_AC", hChi2_Electron_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+//                          Chi2_Electron_cut_1e_cut_CD, Chi2_Electron_1e_peak_CD);
             histPlotter1D(c1, c2, hChi2_Electron_1e2p_AC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram After Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
                           plots, 2, false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p_AC", hChi2_Electron_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
+                          Chi2_Electron_cut_1e_cut_FD, Chi2_Electron_1e_peak_FD);
 
             histPlotter1D(c1, c2, hChi2_Proton_1e2p_AC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram After Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots,
                           2, false, true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p_AC", hChi2_Proton_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Proton_cut_CD, Chi2_Proton_1e_peak_CD);
+                          Chi2_Proton_cut_1e_cut_CD, Chi2_Proton_1e_peak_CD);
             histPlotter1D(c1, c2, hChi2_Proton_1e2p_AC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram After Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots,
                           2, false, true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p_AC", hChi2_Proton_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Proton_cut_FD, Chi2_Proton_1e_peak_FD);
+                          Chi2_Proton_cut_1e_cut_FD, Chi2_Proton_1e_peak_FD);
         } else {
 //            histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e2p", "CD", "e", 0.06, 0.04, 0.04, plots, 2,
 //                          false, true, sChi2_Electron_1e2p, "01_Electron_Chi2_1e2p", hChi2_Electron_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Electron_cut_CD, Chi2_Electron_1e_peak_CD);
+//                          Chi2_Electron_cut_1e_cut_CD, Chi2_Electron_1e_peak_CD);
             histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
                           false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p", hChi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
-                          Chi2_Electron_cut_FD, Chi2_Electron_1e_peak_FD);
+                          Chi2_Electron_cut_1e_cut_FD, Chi2_Electron_1e_peak_FD);
 
             histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                          true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p", hChi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+                          true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p", hChi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_CD,
                           Chi2_Proton_1e_peak_CD);
             histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-                          true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p", hChi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+                          true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p", hChi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_FD,
                           Chi2_Proton_1e_peak_FD);
         }
         //</editor-fold>
 
         //<editor-fold desc="Testing Chi2 (2p)">
 //        histPlotter1D(c1, hChi2_Electron_2p_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Electron_1e2p, "01_Electron_Chi2_2p_CD", hChi2_Electron_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_CD,
+//                      sChi2_Electron_1e2p, "01_Electron_Chi2_2p_CD", hChi2_Electron_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Electron_cut_1e_cut_CD,
 //                      Chi2_Electron_1e_peak_CD);
         histPlotter1D(c1, hChi2_Electron_2p_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e^{-}} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Electron_1e2p, "01_Electron_Chi2_2p_FD", hChi2_Electron_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_FD,
+                      sChi2_Electron_1e2p, "01_Electron_Chi2_2p_FD", hChi2_Electron_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Electron_cut_1e_cut_FD,
                       Chi2_Electron_1e_peak_FD);
 
         histPlotter1D(c1, hChi2_Proton_2p_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Proton_1e2p, "02_Proton_Chi2_2p_CD", hChi2_Proton_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_CD,
+                      sChi2_Proton_1e2p, "02_Proton_Chi2_2p_CD", hChi2_Proton_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_CD,
                       Chi2_Proton_1e_peak_CD);
         histPlotter1D(c1, hChi2_Proton_2p_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sChi2_Proton_1e2p, "02_Proton_Chi2_2p_FD", hChi2_Proton_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_FD,
+                      sChi2_Proton_1e2p, "02_Proton_Chi2_2p_FD", hChi2_Proton_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_FD,
                       Chi2_Proton_1e_peak_FD);
         //</editor-fold>
 
@@ -5053,233 +5063,233 @@ void EventAnalyser() {
         cout << "\n\nPlotting Vertex plots...\n\n";
 
         //<editor-fold desc="Finding Xmax">
-        double Vertex_Electron_1e_Vx_Xmax_CD = Vertex_Electron_1e_Vx_CD->GetBinCenter(Vertex_Electron_1e_Vx_CD->GetMaximumBin());
-        double Vertex_Electron_1e_Vy_Xmax_CD = Vertex_Electron_1e_Vy_CD->GetBinCenter(Vertex_Electron_1e_Vy_CD->GetMaximumBin());
-        double Vertex_Electron_1e_Vz_Xmax_CD = Vertex_Electron_1e_Vz_CD->GetBinCenter(Vertex_Electron_1e_Vz_CD->GetMaximumBin());
-        double Vertex_Electron_1e_Vx_Xmax_FD = Vertex_Electron_1e_Vx_FD->GetBinCenter(Vertex_Electron_1e_Vx_FD->GetMaximumBin());
-        double Vertex_Electron_1e_Vy_Xmax_FD = Vertex_Electron_1e_Vy_FD->GetBinCenter(Vertex_Electron_1e_Vy_FD->GetMaximumBin());
-        double Vertex_Electron_1e_Vz_Xmax_FD = Vertex_Electron_1e_Vz_FD->GetBinCenter(Vertex_Electron_1e_Vz_FD->GetMaximumBin());
-        double Vertex_Proton_1e_Vx_Xmax_CD = Vertex_Proton_1e_Vx_CD->GetBinCenter(Vertex_Proton_1e_Vx_CD->GetMaximumBin());
-        double Vertex_Proton_1e_Vy_Xmax_CD = Vertex_Proton_1e_Vy_CD->GetBinCenter(Vertex_Proton_1e_Vy_CD->GetMaximumBin());
-        double Vertex_Proton_1e_Vz_Xmax_CD = Vertex_Proton_1e_Vz_CD->GetBinCenter(Vertex_Proton_1e_Vz_CD->GetMaximumBin());
-        double Vertex_Proton_1e_Vx_Xmax_FD = Vertex_Proton_1e_Vx_FD->GetBinCenter(Vertex_Proton_1e_Vx_FD->GetMaximumBin());
-        double Vertex_Proton_1e_Vy_Xmax_FD = Vertex_Proton_1e_Vy_FD->GetBinCenter(Vertex_Proton_1e_Vy_FD->GetMaximumBin());
-        double Vertex_Proton_1e_Vz_Xmax_FD = Vertex_Proton_1e_Vz_FD->GetBinCenter(Vertex_Proton_1e_Vz_FD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vx_Xmax_CD = Vertex_Kplus_1e_Vx_CD->GetBinCenter(Vertex_Kplus_1e_Vx_CD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vy_Xmax_CD = Vertex_Kplus_1e_Vy_CD->GetBinCenter(Vertex_Kplus_1e_Vy_CD->GetMaximumBin());
-//        Vz_cuts.at(2) = Vertex_Kplus_1e_Vz_CD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vz_Xmax_CD = Vertex_Kplus_1e_Vz_FD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vx_Xmax_FD = Vertex_Kplus_1e_Vx_FD->GetBinCenter(Vertex_Kplus_1e_Vx_FD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vy_Xmax_FD = Vertex_Kplus_1e_Vy_FD->GetBinCenter(Vertex_Kplus_1e_Vy_FD->GetMaximumBin());
-        double Vertex_Kplus_1e_Vz_Xmax_FD = Vertex_Kplus_1e_Vz_FD->GetBinCenter(Vertex_Kplus_1e_Vz_FD->GetMaximumBin());
-//        Vz_cuts.at(2) = Vertex_Kplus_1e_Vz_CD->GetBinCenter(Vertex_Kplus_1e_Vz_CD->GetMaximumBin());
-        double Vertex_Kminus_1e_Vx_Xmax_CD = Vertex_Kminus_1e_Vx_CD->GetBinCenter(Vertex_Kminus_1e_Vx_CD->GetMaximumBin());
-        double Vertex_Kminus_1e_Vy_Xmax_CD = Vertex_Kminus_1e_Vy_CD->GetBinCenter(Vertex_Kminus_1e_Vy_CD->GetMaximumBin());
-        double Vertex_Kminus_1e_Vz_Xmax_CD = Vertex_Kminus_1e_Vz_CD->GetBinCenter(Vertex_Kminus_1e_Vz_CD->GetMaximumBin());
-        double Vertex_Kminus_1e_Vx_Xmax_FD = Vertex_Kminus_1e_Vx_FD->GetBinCenter(Vertex_Kminus_1e_Vx_FD->GetMaximumBin());
-        double Vertex_Kminus_1e_Vy_Xmax_FD = Vertex_Kminus_1e_Vy_FD->GetBinCenter(Vertex_Kminus_1e_Vy_FD->GetMaximumBin());
-        double Vertex_Kminus_1e_Vz_Xmax_FD = Vertex_Kminus_1e_Vz_FD->GetBinCenter(Vertex_Kminus_1e_Vz_FD->GetMaximumBin());
-        double Vertex_piplus_1e_Vx_Xmax_CD = Vertex_piplus_1e_Vx_CD->GetBinCenter(Vertex_piplus_1e_Vx_CD->GetMaximumBin());
-        double Vertex_piplus_1e_Vy_Xmax_CD = Vertex_piplus_1e_Vy_CD->GetBinCenter(Vertex_piplus_1e_Vy_CD->GetMaximumBin());
-        double Vertex_piplus_1e_Vz_Xmax_CD = Vertex_piplus_1e_Vz_CD->GetBinCenter(Vertex_piplus_1e_Vz_CD->GetMaximumBin());
-        double Vertex_piplus_1e_Vx_Xmax_FD = Vertex_piplus_1e_Vx_FD->GetBinCenter(Vertex_piplus_1e_Vx_FD->GetMaximumBin());
-        double Vertex_piplus_1e_Vy_Xmax_FD = Vertex_piplus_1e_Vy_FD->GetBinCenter(Vertex_piplus_1e_Vy_FD->GetMaximumBin());
-        double Vertex_piplus_1e_Vz_Xmax_FD = Vertex_piplus_1e_Vz_FD->GetBinCenter(Vertex_piplus_1e_Vz_FD->GetMaximumBin());
-        double Vertex_piminus_1e_Vx_Xmax_CD = Vertex_piminus_1e_Vx_CD->GetBinCenter(Vertex_piminus_1e_Vx_CD->GetMaximumBin());
-        double Vertex_piminus_1e_Vy_Xmax_CD = Vertex_piminus_1e_Vy_CD->GetBinCenter(Vertex_piminus_1e_Vy_CD->GetMaximumBin());
-        double Vertex_piminus_1e_Vz_Xmax_CD = Vertex_piminus_1e_Vz_CD->GetBinCenter(Vertex_piminus_1e_Vz_CD->GetMaximumBin());
-        double Vertex_piminus_1e_Vx_Xmax_FD = Vertex_piminus_1e_Vx_FD->GetBinCenter(Vertex_piminus_1e_Vx_FD->GetMaximumBin());
-        double Vertex_piminus_1e_Vy_Xmax_FD = Vertex_piminus_1e_Vy_FD->GetBinCenter(Vertex_piminus_1e_Vy_FD->GetMaximumBin());
-        double Vertex_piminus_1e_Vz_Xmax_FD = Vertex_piminus_1e_Vz_FD->GetBinCenter(Vertex_piminus_1e_Vz_FD->GetMaximumBin());
-        dVx_Xmax = deltaVx_before_dV_cuts_1e2p->GetBinCenter(deltaVx_before_dV_cuts_1e2p->GetMaximumBin());
-        dVy_Xmax = deltaVy_before_dV_cuts_1e2p->GetBinCenter(deltaVy_before_dV_cuts_1e2p->GetMaximumBin());
-        dVz_Xmax = deltaVz_before_dV_cuts_1e2p->GetBinCenter(deltaVz_before_dV_cuts_1e2p->GetMaximumBin());
+//        double Vertex_Electron_1e_Vx_Xmax_CD = hVx_Electron_1e_cut_CD->GetBinCenter(hVx_Electron_1e_cut_CD->GetMaximumBin());
+//        double Vertex_Electron_1e_Vy_Xmax_CD = hVy_Electron_1e_cut_CD->GetBinCenter(hVy_Electron_1e_cut_CD->GetMaximumBin());
+//        double Vertex_Electron_1e_Vz_Xmax_CD = hVz_Electron_1e_cut_CD->GetBinCenter(hVz_Electron_1e_cut_CD->GetMaximumBin());
+        double Vertex_Electron_1e_Vx_Xmax_FD = hVx_Electron_1e_cut_FD->GetBinCenter(hVx_Electron_1e_cut_FD->GetMaximumBin());
+        double Vertex_Electron_1e_Vy_Xmax_FD = hVy_Electron_1e_cut_FD->GetBinCenter(hVy_Electron_1e_cut_FD->GetMaximumBin());
+        double Vertex_Electron_1e_Vz_Xmax_FD = hVz_Electron_1e_cut_FD->GetBinCenter(hVz_Electron_1e_cut_FD->GetMaximumBin());
+        double Vertex_Proton_1e_Vx_Xmax_CD = hVx_Proton_1e_cut_CD->GetBinCenter(hVx_Proton_1e_cut_CD->GetMaximumBin());
+        double Vertex_Proton_1e_Vy_Xmax_CD = hVy_Proton_1e_cut_CD->GetBinCenter(hVy_Proton_1e_cut_CD->GetMaximumBin());
+        double Vertex_Proton_1e_Vz_Xmax_CD = hVz_Proton_1e_cut_CD->GetBinCenter(hVz_Proton_1e_cut_CD->GetMaximumBin());
+        double Vertex_Proton_1e_Vx_Xmax_FD = hVx_Proton_1e_cut_FD->GetBinCenter(hVx_Proton_1e_cut_FD->GetMaximumBin());
+        double Vertex_Proton_1e_Vy_Xmax_FD = hVy_Proton_1e_cut_FD->GetBinCenter(hVy_Proton_1e_cut_FD->GetMaximumBin());
+        double Vertex_Proton_1e_Vz_Xmax_FD = hVz_Proton_1e_cut_FD->GetBinCenter(hVz_Proton_1e_cut_FD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vx_Xmax_CD = hVx_Kplus_1e_cut_CD->GetBinCenter(hVx_Kplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vy_Xmax_CD = hVy_Kplus_1e_cut_CD->GetBinCenter(hVy_Kplus_1e_cut_CD->GetMaximumBin());
+//        Vz_cuts.at(2) = hVz_Kplus_1e_cut_CD->GetBinCenter(hVz_Kplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vz_Xmax_CD = hVz_Kplus_1e_cut_FD->GetBinCenter(hVz_Kplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vx_Xmax_FD = hVx_Kplus_1e_cut_FD->GetBinCenter(hVx_Kplus_1e_cut_FD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vy_Xmax_FD = hVy_Kplus_1e_cut_FD->GetBinCenter(hVy_Kplus_1e_cut_FD->GetMaximumBin());
+        double Vertex_Kplus_1e_Vz_Xmax_FD = hVz_Kplus_1e_cut_FD->GetBinCenter(hVz_Kplus_1e_cut_FD->GetMaximumBin());
+//        Vz_cuts.at(2) = hVz_Kplus_1e_cut_CD->GetBinCenter(hVz_Kplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vx_Xmax_CD = hVx_Kminus_1e_cut_CD->GetBinCenter(hVx_Kminus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vy_Xmax_CD = hVy_Kminus_1e_cut_CD->GetBinCenter(hVy_Kminus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vz_Xmax_CD = hVz_Kminus_1e_cut_CD->GetBinCenter(hVz_Kminus_1e_cut_CD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vx_Xmax_FD = hVx_Kminus_1e_cut_FD->GetBinCenter(hVx_Kminus_1e_cut_FD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vy_Xmax_FD = hVy_Kminus_1e_cut_FD->GetBinCenter(hVy_Kminus_1e_cut_FD->GetMaximumBin());
+        double Vertex_Kminus_1e_Vz_Xmax_FD = hVz_Kminus_1e_cut_FD->GetBinCenter(hVz_Kminus_1e_cut_FD->GetMaximumBin());
+        double Vertex_piplus_1e_Vx_Xmax_CD = hVx_piplus_1e_cut_CD->GetBinCenter(hVx_piplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_piplus_1e_Vy_Xmax_CD = hVy_piplus_1e_cut_CD->GetBinCenter(hVy_piplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_piplus_1e_Vz_Xmax_CD = hVz_piplus_1e_cut_CD->GetBinCenter(hVz_piplus_1e_cut_CD->GetMaximumBin());
+        double Vertex_piplus_1e_Vx_Xmax_FD = hVx_piplus_1e_cut_FD->GetBinCenter(hVx_piplus_1e_cut_FD->GetMaximumBin());
+        double Vertex_piplus_1e_Vy_Xmax_FD = hVy_piplus_1e_cut_FD->GetBinCenter(hVy_piplus_1e_cut_FD->GetMaximumBin());
+        double Vertex_piplus_1e_Vz_Xmax_FD = hVz_piplus_1e_cut_FD->GetBinCenter(hVz_piplus_1e_cut_FD->GetMaximumBin());
+        double Vertex_piminus_1e_Vx_Xmax_CD = hVx_piminus_1e_cut_CD->GetBinCenter(hVx_piminus_1e_cut_CD->GetMaximumBin());
+        double Vertex_piminus_1e_Vy_Xmax_CD = hVy_piminus_1e_cut_CD->GetBinCenter(hVy_piminus_1e_cut_CD->GetMaximumBin());
+        double Vertex_piminus_1e_Vz_Xmax_CD = hVz_piminus_1e_cut_CD->GetBinCenter(hVz_piminus_1e_cut_CD->GetMaximumBin());
+        double Vertex_piminus_1e_Vx_Xmax_FD = hVx_piminus_1e_cut_FD->GetBinCenter(hVx_piminus_1e_cut_FD->GetMaximumBin());
+        double Vertex_piminus_1e_Vy_Xmax_FD = hVy_piminus_1e_cut_FD->GetBinCenter(hVy_piminus_1e_cut_FD->GetMaximumBin());
+        double Vertex_piminus_1e_Vz_Xmax_FD = hVz_piminus_1e_cut_FD->GetBinCenter(hVz_piminus_1e_cut_FD->GetMaximumBin());
+        dVx_Xmax = hdVx_1e2p_BC->GetBinCenter(hdVx_1e2p_BC->GetMaximumBin());
+        dVy_Xmax = hdVy_1e2p_BC->GetBinCenter(hdVy_1e2p_BC->GetMaximumBin());
+        dVz_Xmax = hdVz_1e2p_BC->GetBinCenter(hdVz_1e2p_BC->GetMaximumBin());
         //</editor-fold>
 
 //  dV plots (1e2p, CD & FD) ----------------------------------------------------------------------------
 
         //<editor-fold desc="Vertesx plots (1e cut, CD & FD)">
-        histPlotter1D(c1, Vertex_Electron_1e_Vx_CD, norm_Vertex_plots, true, 1., "V_{x}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Electron_1e_Vx_Stack, "01_Electron_Vx", Vertex_Electron_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_Electron_1e_Vx_FD, norm_Vertex_plots, true, 1., "V_{x}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Electron_1e_Vx_Stack, "01_Electron_Vx", Vertex_Electron_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_Electron_1e_Vy_CD, norm_Vertex_plots, true, 1., "V_{y}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Electron_1e_Vy_Stack, "02_Electron_Vy", Vertex_Electron_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_Electron_1e_Vy_FD, norm_Vertex_plots, true, 1., "V_{y}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Electron_1e_Vy_Stack, "02_Electron_Vy", Vertex_Electron_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_Electron_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Electron_1e_Vz_Stack, "03_Electron_Vz", Vertex_Electron_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_Electron_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Electron_1e_Vz_Stack, "03_Electron_Vz", Vertex_Electron_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, hVx_Electron_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVx_Electron_1e_cut, "01_Electron_Vx", hVx_Electron_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, hVx_Electron_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Electron_1e_cut, "01_Electron_Vx", hVx_Electron_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+//        histPlotter1D(c1, hVy_Electron_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVy_Electron_1e_cut, "02_Electron_Vy", hVy_Electron_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, hVy_Electron_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Electron_1e_cut, "02_Electron_Vy", hVy_Electron_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+//        histPlotter1D(c1, hVz_Electron_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_Electron_1e_cut, "03_Electron_Vz", hVz_Electron_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, hVz_Electron_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{e^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVz_Electron_1e_cut, "03_Electron_Vz", hVz_Electron_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
 
-        histPlotter1D(c1, Vertex_Proton_1e_Vx_CD, norm_Vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Proton_1e_Vx_Stack, "01_Proton_Vx", Vertex_Proton_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_Proton_1e_Vx_FD, norm_Vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Proton_1e_Vx_Stack, "01_Proton_Vx", Vertex_Proton_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-        histPlotter1D(c1, Vertex_Proton_1e_Vy_CD, norm_Vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Proton_1e_Vy_Stack, "02_Proton_Vy", Vertex_Proton_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-        histPlotter1D(c1, Vertex_Proton_1e_Vy_FD, norm_Vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Proton_1e_Vy_Stack, "02_Proton_Vy", Vertex_Proton_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-//        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-//        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_Proton_1e_Vz_Stack, "03_Proton_Vz", Vertex_Proton_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_Proton_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, Vertex_Proton_1e_Vz_Stack,
-                      "03_Proton_Vz", Vertex_Proton_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Proton_1e_Vz_Xmax_CD);
-        histPlotter1D(c1, Vertex_Proton_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, Vertex_Proton_1e_Vz_Stack,
-                      "03_Proton_Vz", Vertex_Proton_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Proton_1e_Vz_Xmax_FD);
+        histPlotter1D(c1, hVx_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Proton_1e_cut, "01_Proton_Vx", hVx_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, hVx_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Proton_1e_cut, "01_Proton_Vx", hVx_Proton_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, hVy_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Proton_1e_cut, "02_Proton_Vy", hVy_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, hVy_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Proton_1e_cut, "02_Proton_Vy", hVy_Proton_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+//        histPlotter1D(c1, hVz_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_Proton_1e_cut, "03_Proton_Vz", hVz_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, hVz_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_Proton_1e_cut, "03_Proton_Vz", hVz_Proton_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, hVz_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, sVz_Proton_1e_cut,
+                      "03_Proton_Vz", hVz_Proton_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Proton_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, hVz_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, sVz_Proton_1e_cut,
+                      "03_Proton_Vz", hVz_Proton_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Proton_1e_Vz_Xmax_FD);
 
-        histPlotter1D(c1, Vertex_Kplus_1e_Vx_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vx_FD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kplus_1e_Vx_Stack, "01_Kplus_Vx", Vertex_Kplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vy_CD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vy_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kplus_1e_Vy_Stack, "02_Kplus_Vy", Vertex_Kplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, Vertex_Kplus_1e_Vz_Stack,
-                      "03_Kplus_Vz", Vertex_Kplus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kplus_1e_Vz_Xmax_CD);
-        histPlotter1D(c1, Vertex_Kplus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, Vertex_Kplus_1e_Vz_Stack,
-                      "03_Kplus_Vz", Vertex_Kplus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kplus_1e_Vz_Xmax_FD);
+        histPlotter1D(c1, hVx_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Kplus_1e_cut, "01_Kplus_Vx", hVx_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVx_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Kplus_1e_cut, "01_Kplus_Vx", hVx_Kplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Kplus_1e_cut, "02_Kplus_Vy", hVy_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Kplus_1e_cut, "02_Kplus_Vy", hVy_Kplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVz_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, sVz_Kplus_1e_cut,
+                      "03_Kplus_Vz", hVz_Kplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kplus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, hVz_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, sVz_Kplus_1e_cut,
+                      "03_Kplus_Vz", hVz_Kplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kplus_1e_Vz_Xmax_FD);
 
-        histPlotter1D(c1, Vertex_Kminus_1e_Vx_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vx_FD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kminus_1e_Vx_Stack, "01_Kminus_Vx", Vertex_Kminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vy_CD, norm_Vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vy_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_Kminus_1e_Vy_Stack, "02_Kminus_Vy", Vertex_Kminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//        histPlotter1D(c1, Vertex_Kminus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-////                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-//        histPlotter1D(c1, Vertex_Kminus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-////                      Vertex_Kminus_1e_Vz_Stack, "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, Vertex_Kminus_1e_Vz_Stack,
-                      "03_Kminus_Vz", Vertex_Kminus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kminus_1e_Vz_Xmax_CD);
-        histPlotter1D(c1, Vertex_Kminus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, Vertex_Kminus_1e_Vz_Stack,
-                      "03_Kminus_Vz", Vertex_Kminus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kminus_1e_Vz_Xmax_FD);
+        histPlotter1D(c1, hVx_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Kminus_1e_cut, "01_Kminus_Vx", hVx_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVx_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_Kminus_1e_cut, "01_Kminus_Vx", hVx_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Kminus_1e_cut, "02_Kminus_Vy", hVy_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_Kminus_1e_cut, "02_Kminus_Vy", hVy_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+//        histPlotter1D(c1, hVz_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_Kminus_1e_cut, "03_Kminus_Vz", hVz_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+////                      sVz_Kminus_1e_cut, "03_Kminus_Vz", hVz_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, hVz_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_Kminus_1e_cut, "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+////                      sVz_Kminus_1e_cut, "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, hVz_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, sVz_Kminus_1e_cut,
+                      "03_Kminus_Vz", hVz_Kminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kminus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, hVz_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, sVz_Kminus_1e_cut,
+                      "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_Kminus_1e_Vz_Xmax_FD);
 
-        histPlotter1D(c1, Vertex_piplus_1e_Vx_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_piplus_1e_Vx_FD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piplus_1e_Vx_Stack, "01_piplus_Vx", Vertex_piplus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_piplus_1e_Vy_CD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_piplus_1e_Vy_FD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piplus_1e_Vy_Stack, "02_piplus_Vy", Vertex_piplus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//        histPlotter1D(c1, Vertex_piplus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-////                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-//        histPlotter1D(c1, Vertex_piplus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-////                      Vertex_piplus_1e_Vz_Stack, "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_piplus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, Vertex_piplus_1e_Vz_Stack,
-                      "03_piplus_Vz", Vertex_piplus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piplus_1e_Vz_Xmax_CD);
-        histPlotter1D(c1, Vertex_piplus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, Vertex_piplus_1e_Vz_Stack,
-                      "03_piplus_Vz", Vertex_piplus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piplus_1e_Vz_Xmax_FD);
+        histPlotter1D(c1, hVx_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_piplus_1e_cut, "01_piplus_Vx", hVx_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVx_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_piplus_1e_cut, "01_piplus_Vx", hVx_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_piplus_1e_cut, "02_piplus_Vy", hVy_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_piplus_1e_cut, "02_piplus_Vy", hVy_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+//        histPlotter1D(c1, hVz_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_piplus_1e_cut, "03_piplus_Vz", hVz_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+////                      sVz_piplus_1e_cut, "03_piplus_Vz", hVz_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, hVz_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_piplus_1e_cut, "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+////                      sVz_piplus_1e_cut, "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, hVz_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, sVz_piplus_1e_cut,
+                      "03_piplus_Vz", hVz_piplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piplus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, hVz_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, sVz_piplus_1e_cut,
+                      "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piplus_1e_Vz_Xmax_FD);
 
-        histPlotter1D(c1, Vertex_piminus_1e_Vx_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_piminus_1e_Vx_FD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piminus_1e_Vx_Stack, "01_piminus_Vx", Vertex_piminus_1e_Vx_FD_Dir, "FD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_piminus_1e_Vy_CD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_CD_Dir, "CD", kBlue, true, true, true, false);
-        histPlotter1D(c1, Vertex_piminus_1e_Vy_FD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      Vertex_piminus_1e_Vy_Stack, "02_piminus_Vy", Vertex_piminus_1e_Vy_FD_Dir, "FD", kBlue, true, true, true, false);
-//        histPlotter1D(c1, Vertex_piminus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false);
-////                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-//        histPlotter1D(c1, Vertex_piminus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false);
-////                      Vertex_piminus_1e_Vz_Stack, "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, Vertex_piminus_1e_Vz_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, Vertex_piminus_1e_Vz_Stack,
-                      "03_piminus_Vz", Vertex_piminus_1e_Vz_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piminus_1e_Vz_Xmax_CD);
-        histPlotter1D(c1, Vertex_piminus_1e_Vz_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, Vertex_piminus_1e_Vz_Stack,
-                      "03_piminus_Vz", Vertex_piminus_1e_Vz_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piminus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, hVx_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_piminus_1e_cut, "01_piminus_Vx", hVx_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVx_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVx_piminus_1e_cut, "01_piminus_Vx", hVx_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_piminus_1e_cut, "02_piminus_Vy", hVy_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+        histPlotter1D(c1, hVy_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sVy_piminus_1e_cut, "02_piminus_Vy", hVy_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+//        histPlotter1D(c1, hVz_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_piminus_1e_cut, "03_piminus_Vz", hVz_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
+////                      sVz_piminus_1e_cut, "03_piminus_Vz", hVz_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, hVz_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sVz_piminus_1e_cut, "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
+////                      sVz_piminus_1e_cut, "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, hVz_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, sVz_piminus_1e_cut,
+                      "03_piminus_Vz", hVz_piminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piminus_1e_Vz_Xmax_CD);
+        histPlotter1D(c1, hVz_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, sVz_piminus_1e_cut,
+                      "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cuts.at(1), Vz_cuts.at(0), Vertex_piminus_1e_Vz_Xmax_CD);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (1e2p, CD & FD)">
         if (apply_cuts == false) {
-            histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, dVx_1e2p_before_Stack, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+            histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sdVx_1e2p_before, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                           dVx_cut, dVx_peak);
-            histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, dVy_1e2p_before_Stack, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+            histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sdVy_1e2p_before, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                           dVy_cut, dVy_peak);
-            histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, dVz_1e2p_before_Stack, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+            histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sdVz_1e2p_before, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                           dVz_cut, dVz_peak);
 
-            histPlotter1D(c1, deltaVx_after_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, dVx_1e2p_after_Stack, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+            histPlotter1D(c1, hdVx_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sdVx_1e2p_after, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                           dVx_cut, dVx_peak);
-            histPlotter1D(c1, deltaVy_after_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
-                          plots, 2, false, true, dVy_1e2p_after_Stack, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
+            histPlotter1D(c1, hdVy_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sdVy_1e2p_after, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                           dVy_cut, dVy_peak);
-            histPlotter1D(c1, deltaVz_after_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", plots, 2, false, true,
-                          dVz_1e2p_after_Stack, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
+            histPlotter1D(c1, hdVz_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", plots, 2, false, true,
+                          sdVz_1e2p_after, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
                           dVz_peak);
         } else {
-            histPlotter1D(c1, deltaVx_before_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
-                          false, true, dVx_1e2p_before_Stack, "01_dVx", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
-            histPlotter1D(c1, deltaVy_before_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
-                          false, true, dVy_1e2p_before_Stack, "02_dVy", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
-            histPlotter1D(c1, deltaVz_before_dV_cuts_1e2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "1e2p", plots, 2, false, true,
-                          dVy_1e2p_before_Stack, "03_dVz", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
+            histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sdVx_1e2p_before, "01_dVx", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+            histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sdVy_1e2p_before, "02_dVy", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+            histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "1e2p", plots, 2, false, true,
+                          sdVy_1e2p_before, "03_dVz", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0),
                           dVz_peak);
         }
         //</editor-fold>
 
         //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
-        histPlotter1D(c1, deltaVx_2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      dVx_2p_Stack, "01_dVx", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+        histPlotter1D(c1, hdVx_2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sdVx_2p, "01_dVx", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
 
-        histPlotter1D(c1, deltaVy_2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      dVy_2p_Stack, "02_dVy", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+        histPlotter1D(c1, hdVy_2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sdVy_2p, "02_dVy", Vertex_dV_2p_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
 
-//        histPlotter1D(c1, deltaVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      dVz_2p_Stack, "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
-        histPlotter1D(c1, deltaVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", plots, 2, false, true, dVz_2p_Stack, "03_dVz",
+//        histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sdVz_2p, "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+        histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", plots, 2, false, true, sdVz_2p, "03_dVz",
                       Vertex_dV_2p_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.at(1), dVz_cuts.at(0), dVz_peak);
         //</editor-fold>
 
 //        //<editor-fold desc="dV plots before dV cuts (MicroBooNE, CD & FD)">
-//        histPlotter1D(c1, deltaVx_MicroBooNE_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//        histPlotter1D(c1, hdVx_MicroBooNE_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, sdVx_MicroBooNE, "01_dVx_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVx_cut, dVx_peak);
 //
-//        histPlotter1D(c1, deltaVy_MicroBooNE_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//        histPlotter1D(c1, hdVy_MicroBooNE_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, sdVy_MicroBooNE, "02_dVy_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVy_cut, dVy_peak);
 //
-//        histPlotter1D(c1, deltaVz_MicroBooNE_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//        histPlotter1D(c1, hdVz_MicroBooNE_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} Before Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, sdVz_MicroBooNE, "03_dVz_MicroBooNE_BC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVz_cut, dVz_peak);
 //
-//        histPlotter1D(c1, deltaVx_MicroBooNE_AC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//        histPlotter1D(c1, hdVx_MicroBooNE_AC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, sdVx_MicroBooNE, "01_dVx_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVx_cut, dVx_peak);
 //
-//        histPlotter1D(c1, deltaVy_MicroBooNE_AC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//        histPlotter1D(c1, hdVy_MicroBooNE_AC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, sdVy_MicroBooNE, "02_dVy_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVy_cut, dVy_peak);
 //
-//        histPlotter1D(c1, deltaVz_MicroBooNE_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
-//                      plots, 2, false, true, dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
+//        histPlotter1D(c1, hdVz_MicroBooNE_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "MicroBooNE", 0.06, 0.0425, 0.0425,
+//                      plots, 2, false, true, sdVz_MicroBooNE, "03_dVz_MicroBooNE_AC", Vertex_dV_MicroBooNE_cut_tests_Directory, "CD & FD", kBlue, true, true, true,
 //                      false, true, dVz_cut, dVz_peak);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="dV plots after dV cuts (MicroBooNE, CD & FD)">
-//        histPlotter1D(c1, deltaVx_MicroBooNE, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      dVx_MicroBooNE_Stack, "01_dVx_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
+//        histPlotter1D(c1, hdVx_MicroBooNE, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sdVx_MicroBooNE, "01_dVx_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVx_cut, dVx_peak);
 //
-//        histPlotter1D(c1, deltaVy_MicroBooNE, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      dVy_MicroBooNE_Stack, "02_dVy_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
+//        histPlotter1D(c1, hdVy_MicroBooNE, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sdVy_MicroBooNE, "02_dVy_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
 //
-//        histPlotter1D(c1, deltaVz_MicroBooNE, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      dVz_MicroBooNE_Stack, "03_dVz_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
+//        histPlotter1D(c1, hdVz_MicroBooNE, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "MicroBooNE", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                      sdVz_MicroBooNE, "03_dVz_MicroBooNE", Vertex_dV_MicroBooNE_Directory, "MicroBooNE", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
 //        //</editor-fold>
 
     } else {
@@ -7229,22 +7239,22 @@ void EventAnalyser() {
     myLogFile << "// Code version was " << Ver << "\n";
     myLogFile << "// Analysis mode was 'Detector simulation'\n";
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n\n";
-    myLogFile << "Code ran with the following settings:" << "\n\n\n";
+    myLogFile << "Code ran with the following settings:" << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Input\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "LoadedInput: " << LoadedInput << "\n";
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
-    myLogFile << "plotsInput: " << plotsInput << "\n\n\n";
+    myLogFile << "plotsInput: " << plotsInput << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Plot settings\n";
     myLogFile << "===========================================================================\n\n";
-    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n\n";
+    myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Calculation settings\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
@@ -7267,9 +7277,9 @@ void EventAnalyser() {
     myLogFile << "Pv = " << Pv << "\n";
     myLogFile << "Pvx = " << Pvx << "\n";
     myLogFile << "Pvy = " << Pvy << "\n";
-    myLogFile << "Pvz = " << Pvz << "\n\n\n";
+    myLogFile << "Pvz = " << Pvz << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Plot selector\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "Beta_vs_P_plots = " << BoolToString(Beta_vs_P_plots) << "\n";
@@ -7283,9 +7293,9 @@ void EventAnalyser() {
     myLogFile << "ETrans_RES_plots = " << BoolToString(ETrans_RES_plots) << "\n";
     myLogFile << "ETrans_DIS_plots = " << BoolToString(ETrans_DIS_plots) << "\n";
     myLogFile << "E_cal_plots = " << BoolToString(Ecal_plots) << "\n";
-    myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n\n";
+    myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Normalization settings\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "normalize_master = " << BoolToString(normalize_master) << "\n\n";
@@ -7300,15 +7310,15 @@ void EventAnalyser() {
     myLogFile << "norm_Q2_plots = " << BoolToString(norm_Q2_plots) << "\n";
     myLogFile << "norm_E_e_plots = " << BoolToString(norm_E_e_plots) << "\n";
     myLogFile << "norm_ET_plots = " << BoolToString(norm_ET_plots) << "\n";
-    myLogFile << "norm_Ecal_plots = " << BoolToString(norm_Ecal_plots) << "\n\n\n";
+    myLogFile << "norm_Ecal_plots = " << BoolToString(norm_Ecal_plots) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Delete settings\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
-    myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n\n";
+    myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Cut application settings\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "apply_cuts = " << BoolToString(apply_cuts) << "\n\n";
@@ -7319,59 +7329,55 @@ void EventAnalyser() {
     myLogFile << "apply_Vz_cuts = " << BoolToString(apply_Vz_cuts) << "\n";
     myLogFile << "apply_dVz_cuts = " << BoolToString(apply_dVz_cuts) << "\n";
     myLogFile << "apply_SF_cuts = " << BoolToString(apply_SF_cuts) << "\n";
-    myLogFile << "apply_ECAL_fiducial_cut = " << BoolToString(apply_ECAL_fiducial_cut) << "\n";
+    myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
     myLogFile << "apply_DC_fiducial_cut = " << BoolToString(apply_DC_fiducial_cut) << "\n";
     myLogFile << "apply_momentum_cuts_2p = " << BoolToString(apply_momentum_cuts_2p) << "\n";
     myLogFile << "apply_momentum_cuts_1n1p = " << BoolToString(apply_momentum_cuts_1n1p) << "\n";
-    myLogFile << "apply_momentum_cuts_MicroBooNE = " << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n\n";
+    myLogFile << "apply_momentum_cuts_MicroBooNE = " << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Momentum thresholds (2p)\n";
     myLogFile << "===========================================================================\n\n";
     myLogFile << "e_mom_cuts_2p.at(0) = " << e_mom_cuts_2p.at(0) << "\n";
     myLogFile << "e_mom_cuts_2p.at(1) = " << e_mom_cuts_2p.at(1) << "\n";
     myLogFile << "P_L_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
     myLogFile << "P_L_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n";
-    myLogFile << "P_R_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n\n\n";
-    myLogFile << "P_R_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n";
+    myLogFile << "P_R_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
+    myLogFile << "P_R_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Momentum thresholds (MicroBooNE)\n";
     myLogFile << "===========================================================================\n\n";
-
     myLogFile << "e_momentum_lower_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(0) << "\n";
     myLogFile << "e_momentum_upper_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(1) << "\n";
     myLogFile << "p_momentum_lower_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(0) << "\n";
     myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(1) << "\n";
-    myLogFile << "cpion_momentum_lower_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(0) << "\n\n\n";
-    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(1) << "\n\n\n";
+    myLogFile << "cpion_momentum_lower_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(0) << "\n";
+    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(1) << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Sampling Fraction (SF) cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
-
     myLogFile << "apply_SF_cuts = " << BoolToString(apply_SF_cuts) << "\n";
     myLogFile << "SF_1e_upper_cut = " << SF_1e_upper_cut << "\n";
     myLogFile << "SF_1e_lower_cut = " << SF_1e_lower_cut << "\n";
     myLogFile << "SF_1e2p_Xmax (from histogram) = " << SF_1e2p_Xmax << "\n";
-    myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n\n";
+    myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "ECAL fiducial cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
-
-    myLogFile << "apply_ECAL_fiducial_cut = " << BoolToString(apply_ECAL_fiducial_cut) << "\n";
+    myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
     myLogFile << "fiducial_cut_Lv = " << fiducial_cut_Lv << "\n";
-    myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n\n";
+    myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Number of Photo-electrons (Nphe) cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
-
     myLogFile << "apply_Nphe_cut = " << BoolToString(apply_Nphe_cut) << "\n";
-    myLogFile << "Nphe_lower_cut = " << clasAna.getNpheCuts() << "\n\n\n";
+    myLogFile << "Nphe_lower_cut = " << clasAna.getNpheCuts() << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Chi2 cuts\n";
     myLogFile << "===========================================================================\n\n";
 
@@ -7379,25 +7385,25 @@ void EventAnalyser() {
     myLogFile << "\n-- Electrons --------------------------------------------------------------" << "\n\n";
 
 //    myLogFile << "\n-- Electrons in CD (no #e cuts) -------------------------------------------" << "\n";
-//    myLogFile << "Chi2_Electron_cut_CD = " << Chi2_Electron_cut_CD << "\n";
+//    myLogFile << "Chi2_Electron_cut_1e_cut_CD = " << Chi2_Electron_cut_1e_cut_CD << "\n";
 //
 //    if (hChi2_Electron_CD->Integral() == 0.) {
-//        myLogFile << "Chi2_Electron_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+//        myLogFile << "Chi2_Electron_Xmax_1e_cut_CD (from histogram) = NO EVENTS" << "\n";
 //    } else {
-//        myLogFile << "Chi2_Electron_Xmax_CD (from histogram) = " << Chi2_Electron_Xmax_CD << "\n";
+//        myLogFile << "Chi2_Electron_Xmax_1e_cut_CD (from histogram) = " << Chi2_Electron_Xmax_1e_cut_CD << "\n";
 //    }
 
     myLogFile << "\n-- Electrons in FD (no #e cuts) -------------------------------------------" << "\n";
-    myLogFile << "Chi2_Electron_cut_FD = " << Chi2_Electron_cut_FD << "\n";
+    myLogFile << "Chi2_Electron_cut_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
 
     if (hChi2_Electron_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Electron_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Electron_Xmax_1e_cut_FD (from histogram) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Electron_Xmax_FD (from histogram) = " << Chi2_Electron_Xmax_FD << "\n";
+        myLogFile << "Chi2_Electron_Xmax_1e_cut_FD (from histogram) = " << Chi2_Electron_Xmax_1e_cut_FD << "\n";
     }
 
 //    myLogFile << "\n-- Electrons in CD (1e cut) -----------------------------------------------" << "\n";
-//    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_CD << "\n";
+//    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_1e_cut_CD << "\n";
 //
 //    if (hChi2_Electron_1e_cut_CD->Integral() == 0.) {
 //        myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
@@ -7408,7 +7414,7 @@ void EventAnalyser() {
     myLogFile << "Chi2_Electron_1e_peak_CD (used in cuts) = " << Chi2_Electron_1e_peak_CD << "\n";
 
     myLogFile << "\n-- Electrons in FD (1e cut) -----------------------------------------------" << "\n";
-    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_FD << "\n";
+    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
 
     if (hChi2_Electron_1e_cut_FD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
@@ -7427,93 +7433,85 @@ void EventAnalyser() {
 //        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_CD (from histogram) = " << Chi2_Electron_MicroBooNE_Xmax_CD << "\n";
 //    }
 
-    myLogFile << "Chi2_Electron_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Electron_1e_peak_MicroBooNE_CD << "\n";
-
-    myLogFile << "\n-- Electrons in FD (MicroBooNE cut) ---------------------------------------" << "\n";
-
-    myLogFile << "Chi2_Electron_cut_MicroBooNE_FD = " << Chi2_Electron_cut_MicroBooNE_FD << "\n";
-
-    if (hChi2_Electron_MicroBooNE_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_FD (from histogram) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_FD (from histogram) = " << Chi2_Electron_MicroBooNE_Xmax_FD << "\n";
-    }
-
-    myLogFile << "Chi2_Electron_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Electron_1e_peak_MicroBooNE_FD << "\n";
+//    myLogFile << "Chi2_Electron_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Electron_1e_peak_MicroBooNE_CD << "\n";
+//
+//    myLogFile << "\n-- Electrons in FD (MicroBooNE cut) ---------------------------------------" << "\n";
+//
+//    myLogFile << "Chi2_Electron_cut_MicroBooNE_FD = " << Chi2_Electron_cut_MicroBooNE_FD << "\n";
+//
+//    if (hChi2_Electron_MicroBooNE_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_FD (from histogram) = " << Chi2_Electron_MicroBooNE_Xmax_FD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_Electron_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Electron_1e_peak_MicroBooNE_FD << "\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_Proton">
     myLogFile << "\n\n-- Protons ----------------------------------------------------------------" << "\n\n";
 
     myLogFile << "\n-- Protons in CD (no #e cuts) ---------------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_cut_CD = " << Chi2_Proton_cut_CD << "\n";
+    myLogFile << "Chi2_Proton_cut_1e_cut_CD = " << Chi2_Proton_cut_1e_cut_CD << "\n";
 
     if (hChi2_Proton_CD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Proton_Xmax_CD (from histogram fit) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_Xmax_CD (from histogram) = " << Chi2_Proton_Xmax_CD << "\n";
+        myLogFile << "Chi2_Proton_Xmax_CD (from histogram fit) = " << Chi2_Proton_Xmax_CD << "\n";
     }
-
-    myLogFile << "Chi2 Proton mean CD (from histogram) = " << to_string_with_precision(hChi2_Proton_CD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in FD (no #e cuts) ---------------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_cut_FD = " << Chi2_Proton_cut_FD << "\n";
+    myLogFile << "Chi2_Proton_cut_1e_cut_FD = " << Chi2_Proton_cut_1e_cut_FD << "\n";
 
     if (hChi2_Proton_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Proton_Xmax_FD (from histogram fit) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_Xmax_FD (from histogram) = " << Chi2_Proton_Xmax_FD << "\n";
+        myLogFile << "Chi2_Proton_Xmax_FD (from histogram fit) = " << Chi2_Proton_Xmax_FD << "\n";
     }
-
-    myLogFile << "Chi2 Proton mean FD (from histogram) = " << to_string_with_precision(hChi2_Proton_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in CD (1e cut) -------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_CD << "\n";
+    myLogFile << "Chi2_Proton_factor_1e_cut_CD = " << Chi2_Proton_factor_1e_cut_CD << "\n";
+    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_1e_cut_CD << "\n";
 
     if (hChi2_Proton_1e_cut_CD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Proton_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_1e_Xmax_CD (from histogram) = " << Chi2_Proton_1e_Xmax_CD << "\n";
+        myLogFile << "Chi2_Proton_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Proton_1e_cut_fmean_CD << "\n";
     }
-
-    myLogFile << "Chi2_Proton_1e_peak_CD (used in cuts) = " << Chi2_Proton_1e_peak_CD << "\n";
-    myLogFile << "Chi2 Proton 1e mean CD (from histogram) = " << to_string_with_precision(hChi2_Proton_1e_cut_CD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Protons in FD (1e cut) -------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_FD << "\n";
+    myLogFile << "Chi2_Proton_factor_1e_cut_FD = " << Chi2_Proton_factor_1e_cut_FD << "\n";
+    myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_1e_cut_FD << "\n";
 
     if (hChi2_Proton_1e_cut_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+        myLogFile << "Chi2_Proton_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_Proton_1e_Xmax_FD (from histogram) = " << Chi2_Proton_1e_Xmax_FD << "\n";
+        myLogFile << "Chi2_Proton_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Proton_1e_cut_fmean_FD << "\n";
     }
 
-    myLogFile << "Chi2_Proton_1e_peak_FD (used in cuts) = " << Chi2_Proton_1e_peak_FD << "\n";
-    myLogFile << "Chi2 Proton 1e mean FD (from histogram) = " << to_string_with_precision(hChi2_Proton_1e_cut_FD->GetMean(), 20) << "\n";
-
-    myLogFile << "\n-- Protons in CD (MicroBooNE cut) -----------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_cut_MicroBooNE_CD = " << Chi2_Proton_cut_MicroBooNE_CD << "\n";
-
-    if (hChi2_Proton_MicroBooNE_CD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_CD (from histogram) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_CD (from histogram) = " << Chi2_Proton_MicroBooNE_Xmax_CD << "\n";
-    }
-
-    myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_CD << "\n";
-    myLogFile << "Chi2 Proton 1e MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_Proton_MicroBooNE_CD->GetMean(), 20) << "\n";
-
-    myLogFile << "\n-- Protons in FD (MicroBooNE cut) -----------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_cut_MicroBooNE_FD = " << Chi2_Proton_cut_MicroBooNE_FD << "\n";
-
-    if (hChi2_Proton_MicroBooNE_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_FD (from histogram) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_FD (from histogram) = " << Chi2_Proton_MicroBooNE_Xmax_FD << "\n";
-    }
-
-    myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_FD << "\n";
-    myLogFile << "Chi2 Proton 1e MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_Proton_MicroBooNE_FD->GetMean(), 20) << "\n";
+//    myLogFile << "\n-- Protons in CD (MicroBooNE cut) -----------------------------------------" << "\n";
+//    myLogFile << "Chi2_Proton_cut_MicroBooNE_CD = " << Chi2_Proton_cut_MicroBooNE_CD << "\n";
+//
+//    if (hChi2_Proton_MicroBooNE_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_CD (from histogram) = " << Chi2_Proton_MicroBooNE_Xmax_CD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_CD << "\n";
+//    myLogFile << "Chi2 Proton 1e MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_Proton_MicroBooNE_CD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- Protons in FD (MicroBooNE cut) -----------------------------------------" << "\n";
+//    myLogFile << "Chi2_Proton_cut_MicroBooNE_FD = " << Chi2_Proton_cut_MicroBooNE_FD << "\n";
+//
+//    if (hChi2_Proton_MicroBooNE_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_FD (from histogram) = " << Chi2_Proton_MicroBooNE_Xmax_FD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_FD << "\n";
+//    myLogFile << "Chi2 Proton 1e MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_Proton_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_Kplus">
@@ -7528,12 +7526,28 @@ void EventAnalyser() {
     myLogFile << "Chi2 K+ mean FD (from histogram) = " << to_string_with_precision(hChi2_Kplus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Kplus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kplus_1e_Xmax_CD (used in cuts) = " << Chi2_Kplus_1e_Xmax_CD << "\n";
-    myLogFile << "Chi2 K+ mean CD (from histogram) = " << to_string_with_precision(hChi2_Kplus_1e_cut_CD->GetMean(), 20) << "\n";
+    myLogFile << "Chi2_Kplus_factor_1e_cut_CD = " << Chi2_Kplus_factor_1e_cut_CD << "\n";
+    myLogFile << "Chi2_Kplus_1e_cut_CD = " << Chi2_Kplus_cut_1e_cut_CD << "\n";
 
-    myLogFile << "\n-- Kplus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kplus_1e_Xmax_FD (used in cuts) = " << Chi2_Kplus_1e_Xmax_FD << "\n";
-    myLogFile << "Chi2 K+ mean FD (from histogram) = " << to_string_with_precision(hChi2_Kplus_1e_cut_FD->GetMean(), 20) << "\n";
+    if (hChi2_Kplus_1e_cut_CD->Integral() == 0.) {
+        myLogFile << "Chi2_Kplus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Kplus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Kplus_1e_cut_fmean_CD << "\n";
+    }
+
+    myLogFile << "Chi2_Kplus_1e_peak_CD (used in cuts in 2nd run) = " << Chi2_Kplus_1e_peak_CD << "\n";
+
+    myLogFile << "\n-- Kplus in FD (1e cut) -------------------------------------------------" << "\n";
+    myLogFile << "Chi2_Kplus_factor_1e_cut_FD = " << Chi2_Kplus_factor_1e_cut_FD << "\n";
+    myLogFile << "Chi2_Kplus_1e_cut_FD = " << Chi2_Kplus_cut_1e_cut_FD << "\n";
+
+    if (hChi2_Kplus_1e_cut_FD->Integral() == 0.) {
+        myLogFile << "Chi2_Kplus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Kplus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Kplus_1e_cut_fmean_FD << "\n";
+    }
+
+    myLogFile << "Chi2_Kplus_1e_peak_FD (used in cuts in 2nd run) = " << Chi2_Kplus_1e_peak_FD << "\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_Kminus">
@@ -7541,20 +7555,30 @@ void EventAnalyser() {
 
     myLogFile << "\n-- Kminus in CD -----------------------------------------------------------" << "\n";
     myLogFile << "Chi2_Kminus_Xmax_CD (used in cuts) = " << Chi2_Kminus_Xmax_CD << "\n";
-    myLogFile << "Chi2 K- mean CD (from histogram) = " << to_string_with_precision(hChi2_Kminus_CD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Kminus in FD -----------------------------------------------------------" << "\n";
     myLogFile << "Chi2_Kminus_Xmax_FD (used in cuts) = " << Chi2_Kminus_Xmax_FD << "\n";
-    myLogFile << "Chi2 K- mean FD (from histogram) = " << to_string_with_precision(hChi2_Kminus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Kminus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kminus_1e_Xmax_CD (used in cuts) = " << Chi2_Kminus_1e_Xmax_CD << "\n";
-    myLogFile << "Chi2 K- mean CD (from histogram) = " << to_string_with_precision(hChi2_Kminus_1e_cut_CD->GetMean(), 20) << "\n";
+    myLogFile << "Chi2_Kminus_factor_1e_cut_CD = " << Chi2_Kminus_factor_1e_cut_CD << "\n";
+    myLogFile << "Chi2_Kminus_1e_cut_CD = " << Chi2_Kminus_cut_1e_cut_CD << "\n";
+
+    if (hChi2_Kminus_1e_cut_CD->Integral() == 0.) {
+        myLogFile << "Chi2_Kminus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Kminus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Kminus_1e_cut_fmean_CD << "\n";
+    }
 
     myLogFile << "\n-- Kminus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kminus_1e_Xmax_FD (used in cuts) = " << Chi2_Kminus_1e_Xmax_FD << "\n";
-    myLogFile << "Chi2 K- mean FD (from histogram) = " << to_string_with_precision(hChi2_Kminus_1e_cut_FD->GetMean(), 20) << "\n";
-//</editor-fold>
+    myLogFile << "Chi2_Kminus_factor_1e_cut_FD = " << Chi2_Kminus_factor_1e_cut_FD << "\n";
+    myLogFile << "Chi2_Kminus_1e_cut_FD = " << Chi2_Kminus_cut_1e_cut_FD << "\n";
+
+    if (hChi2_Kminus_1e_cut_FD->Integral() == 0.) {
+        myLogFile << "Chi2_Kminus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_Kminus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Kminus_1e_cut_fmean_FD << "\n";
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Chi2_piplus">
     myLogFile << "\n\n-- pi+ --------------------------------------------------------------------" << "\n\n";
@@ -7568,36 +7592,48 @@ void EventAnalyser() {
     myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- piplus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piplus_1e_Xmax_CD (used in cuts) = " << Chi2_piplus_1e_Xmax_CD << "\n";
-    myLogFile << "Chi2 pi+ mean CD (from histogram) = " << to_string_with_precision(hChi2_piplus_1e_cut_CD->GetMean(), 20) << "\n";
+    myLogFile << "Chi2_piplus_factor_1e_cut_CD = " << Chi2_piplus_factor_1e_cut_CD << "\n";
+    myLogFile << "Chi2_piplus_1e_cut_CD = " << Chi2_piplus_cut_1e_cut_CD << "\n";
+
+    if (hChi2_piplus_1e_cut_CD->Integral() == 0.) {
+        myLogFile << "Chi2_piplus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_piplus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_piplus_1e_cut_fmean_CD << "\n";
+    }
 
     myLogFile << "\n-- piplus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piplus_1e_Xmax_FD (used in cuts) = " << Chi2_piplus_1e_Xmax_FD << "\n";
-    myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_1e_cut_FD->GetMean(), 20) << "\n";
+    myLogFile << "Chi2_piplus_factor_1e_cut_FD = " << Chi2_piplus_factor_1e_cut_FD << "\n";
+    myLogFile << "Chi2_piplus_1e_cut_FD = " << Chi2_piplus_cut_1e_cut_FD << "\n";
 
-    myLogFile << "\n-- piplus in CD (MicroBooNE cut) ------------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
-
-    if (hChi2_piplus_MicroBooNE_CD->Integral() == 0.) {
-        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_CD (from histogram) = NO EVENTS" << "\n";
+    if (hChi2_piplus_1e_cut_FD->Integral() == 0.) {
+        myLogFile << "Chi2_piplus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_CD (from histogram) = " << Chi2_piplus_1e_peak_MicroBooNE_CD << "\n";
+        myLogFile << "Chi2_piplus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_piplus_1e_cut_fmean_FD << "\n";
     }
 
-    myLogFile << "Chi2_piplus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_CD << "\n";
-    myLogFile << "Chi2 pi+ MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_piplus_MicroBooNE_CD->GetMean(), 20) << "\n";
-
-    myLogFile << "\n-- piplus in FD (MicroBooNE cut) ------------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
-
-    if (hChi2_piplus_MicroBooNE_FD->Integral() == 0.) {
-        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_FD (from histogram) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piplus_1e_peak_MicroBooNE_FD << "\n";
-    }
-
-    myLogFile << "Chi2_piplus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_FD << "\n";
-    myLogFile << "Chi2 pi+ MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_MicroBooNE_FD->GetMean(), 20) << "\n";
+//    myLogFile << "\n-- piplus in CD (MicroBooNE cut) ------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
+//
+//    if (hChi2_piplus_MicroBooNE_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_CD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_CD (from histogram) = " << Chi2_piplus_1e_peak_MicroBooNE_CD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_piplus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_CD << "\n";
+//    myLogFile << "Chi2 pi+ MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_piplus_MicroBooNE_CD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- piplus in FD (MicroBooNE cut) ------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
+//
+//    if (hChi2_piplus_MicroBooNE_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_FD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piplus_1e_peak_MicroBooNE_FD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_piplus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_FD << "\n";
+//    myLogFile << "Chi2 pi+ MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_piminus">
@@ -7612,39 +7648,51 @@ void EventAnalyser() {
     myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- piminus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_1e_Xmax_CD (used in cuts) = " << Chi2_piminus_1e_Xmax_CD << "\n";
-    myLogFile << "Chi2 pi- mean CD (from histogram) = " << to_string_with_precision(hChi2_piminus_1e_cut_CD->GetMean(), 20) << "\n";
+    myLogFile << "Chi2_piminus_factor_1e_cut_CD = " << Chi2_piminus_factor_1e_cut_CD << "\n";
+    myLogFile << "Chi2_piminus_1e_cut_CD = " << Chi2_piminus_cut_1e_cut_CD << "\n";
+
+    if (hChi2_piminus_1e_cut_CD->Integral() == 0.) {
+        myLogFile << "Chi2_piminus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+    } else {
+        myLogFile << "Chi2_piminus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_piminus_1e_cut_fmean_CD << "\n";
+    }
 
     myLogFile << "\n-- piminus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_1e_Xmax_FD (used in cuts) = " << Chi2_piminus_1e_Xmax_FD << "\n";
-    myLogFile << "Chi2 pi- mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_1e_cut_FD->GetMean(), 20) << "\n";
+    myLogFile << "Chi2_piminus_factor_1e_cut_FD = " << Chi2_piminus_factor_1e_cut_FD << "\n";
+    myLogFile << "Chi2_piminus_1e_cut_FD = " << Chi2_piminus_cut_1e_cut_FD << "\n";
 
-    myLogFile << "\n-- piminus in CD (MicroBooNE cut) -----------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
-
-    if (hChi2_piminus_MicroBooNE_CD->Integral() == 0.) {
-        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_CD (from histogram) = NO EVENTS" << "\n";
+    if (hChi2_piminus_1e_cut_FD->Integral() == 0.) {
+        myLogFile << "Chi2_piminus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
     } else {
-        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_CD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_CD << "\n";
+        myLogFile << "Chi2_piminus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_piminus_1e_cut_fmean_FD << "\n";
     }
 
-    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_CD << "\n";
-    myLogFile << "Chi2 pi- MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_CD->GetMean(), 20) << "\n";
-
-    myLogFile << "\n-- piminus in FD (MicroBooNE cut) -----------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
-
-    if (hChi2_piminus_MicroBooNE_FD->Integral() == 0.) {
-        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_FD << "\n";
-    }
-
-    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_FD << "\n\n\n";
-    myLogFile << "Chi2 pi- MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_FD->GetMean(), 20) << "\n";
+//    myLogFile << "\n-- piminus in CD (MicroBooNE cut) -----------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
+//
+//    if (hChi2_piminus_MicroBooNE_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_CD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_CD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_CD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_CD << "\n";
+//    myLogFile << "Chi2 pi- MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_CD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- piminus in FD (MicroBooNE cut) -----------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
+//
+//    if (hChi2_piminus_MicroBooNE_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_FD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_FD << "\n\n\n";
+//    myLogFile << "Chi2 pi- MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "Vertex cuts\n";
     myLogFile << "===========================================================================\n";
     myLogFile << "Vertex_Electron_cut_CD = " << Vertex_Electron_cut_CD << "\n";
@@ -7655,9 +7703,9 @@ void EventAnalyser() {
     myLogFile << "Vertex_Proton_cut_CD = " << Vertex_Proton_cut_CD << "\n";
     myLogFile << "Vertex_Proton_1e_mean_CD = " << Vertex_Proton_1e_mean_CD << "\n";
     myLogFile << "Vertex_Proton_cut_FD = " << Vertex_Proton_cut_FD << "\n";
-    myLogFile << "Vertex_Proton_1e_mean_FD = " << Vertex_Proton_1e_mean_FD << "\n\n\n";
+    myLogFile << "Vertex_Proton_1e_mean_FD = " << Vertex_Proton_1e_mean_FD << "\n\n";
 
-    myLogFile << "===========================================================================\n";
+    myLogFile << "\n===========================================================================\n";
     myLogFile << "dV cuts\n";
     myLogFile << "===========================================================================\n";
 
