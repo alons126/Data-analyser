@@ -117,6 +117,10 @@ public:
 
     void setEcalSFCuts(bool flag = true) { f_ecalSFCuts = flag; }; //option to have several cuts
 
+    double getEcalSFUpperCut() { return sf_max_cut; }; // My addition
+
+    double getEcalSFLowerCut() { return sf_min_cut; }; // My addition
+
     void setDCEdgeCuts(bool flag = true) { f_DCEdgeCuts = flag; };
 
     double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
@@ -312,6 +316,9 @@ private:
     vector<double> vertex_corr_cuts = {-99, 99}; //electron vertex <-> particle vertex correlation cuts
 
     double htcc_Nphe_cut = 2; // My addition
+
+    double sf_max_cut = .28;
+    double sf_min_cut = .2;
 
     double ecal_edge_cut = 14;
     double dc_edge_cut = 10;
@@ -939,9 +946,10 @@ bool clas12ana::checkEcalCuts(region_part_ptr p) {
         //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
         //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
 
-        // TODO: make as a variable of the class
-        double sf_max_cut = .28;
-        double sf_min_cut = .2;
+// my comment:
+//        // TODO: make as a variable of the class
+//        double sf_max_cut = .28;
+//        double sf_min_cut = .2;
 
         if (sampling_frac < sf_max_cut && sampling_frac > sf_min_cut)
             return true;

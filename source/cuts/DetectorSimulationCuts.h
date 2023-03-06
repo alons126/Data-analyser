@@ -5,6 +5,10 @@
 #ifndef DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
 #define DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "../classes/DSCuts/DSCuts.h"
 
 // ======================================================================================================================================================================
@@ -15,8 +19,8 @@
 // Number of Photo-electrons (Nphe) cuts (electrons only, FD)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DSCuts Nphe_cuts_FD("Nphe", "FD", "Electron", "1e cut", 0, 2, -1);
-double Nphe_lower_cut = Nphe_cuts_FD.GetLowerUSCut();
+DSCuts Nphe_cuts_FD = DSCuts("Nphe", "FD", "Electron", "1e cut", 0, 2, -1);
+double Nphe_lower_cut = Nphe_cuts_FD.GetLowerCut();
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Chi2 cuts
@@ -174,8 +178,8 @@ double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill u
 //<editor-fold desc="Vertex cuts (all particles except electrons)">
 DSCuts Vz_cut("Vertex z componente", "", "", "1e cut", 0, -6, 1);
 //vector<double> Vz_cuts = {-6, 1}; // {min cut, max cut, max location}
-//vector<double> Vz_cuts_CD = {Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut(), 0}; // {min cut, max cut, max location}
-//vector<double> Vz_cuts_FD = {Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut(), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_CD = {Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_FD = {Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0}; // {min cut, max cut, max location}
 //</editor-fold>
 
 //<editor-fold desc="Vertex cuts (2p)">
