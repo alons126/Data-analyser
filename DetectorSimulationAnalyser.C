@@ -39,6 +39,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "clas12reader.h"
 
 #include "settings/codeSetup.h"
+#include "settings/CLAS12SimCuts.h"
 #include "source/classes/hPlots/hPlot1D.h"
 
 using namespace std;
@@ -61,6 +62,16 @@ void EventAnalyser() {
     cout << "===========================================================================\n\n";
 
     string AnalyserVersion = "Beta version";
+
+
+
+//    CLAS12SimCuts clas12simcuts;
+//
+//    clas12simcuts.SetLUSCut(Nphe_cuts_FD, 5);
+//
+//    cout << clas12simcuts.GetLUSCut() << "\n\n\n";
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code settings                                                                               //
@@ -2554,14 +2565,14 @@ void EventAnalyser() {
         // Cuts on all particles:
         if (apply_Vz_cuts == true) {
             clasAna.setVertexCuts();                                                   // making f_vertexCuts = ture
-            clasAna.setVzcuts(Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut());                           // setting Vz cuts for all (charged?) particles
+            clasAna.setVzcuts(Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut());                           // setting Vz cuts for all (charged?) particles
         }
 
         // Cuts on charged particles:
         if (apply_DC_fiducial_cut == true) { clasAna.setDCEdgeCuts(); }                // making f_DCEdgeCuts = ture (DC fiducial cuts?)
         if (apply_dVz_cuts == true) {
             clasAna.setVertexCorrCuts();                                               // making f_corr_vertexCuts = ture
-            clasAna.setVertexCorrCuts(dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut());                 // setting dVz cuts?
+            clasAna.setVertexCorrCuts(dVz_cuts.GetLowerUSCut(), dVz_cuts.GetUpperUSCut());                 // setting dVz cuts?
         }
 
         clasAna.printParams();
@@ -5139,10 +5150,10 @@ void EventAnalyser() {
 //        histPlotter1D(c1, hVz_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
 //                      sVz_Proton_1e_cut, "03_Proton_Vz", hVz_Proton_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         histPlotter1D(c1, hVz_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, sVz_Proton_1e_cut,
-                      "03_Proton_Vz", hVz_Proton_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_Proton_Vz", hVz_Proton_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_Proton_1e_Vz_Xmax_CD);
         histPlotter1D(c1, hVz_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, sVz_Proton_1e_cut,
-                      "03_Proton_Vz", hVz_Proton_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_Proton_Vz", hVz_Proton_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_Proton_1e_Vz_Xmax_FD);
 
         histPlotter1D(c1, hVx_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -5154,10 +5165,10 @@ void EventAnalyser() {
         histPlotter1D(c1, hVy_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sVy_Kplus_1e_cut, "02_Kplus_Vy", hVy_Kplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         histPlotter1D(c1, hVz_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, sVz_Kplus_1e_cut,
-                      "03_Kplus_Vz", hVz_Kplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_Kplus_Vz", hVz_Kplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_Kplus_1e_Vz_Xmax_CD);
         histPlotter1D(c1, hVz_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, sVz_Kplus_1e_cut,
-                      "03_Kplus_Vz", hVz_Kplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_Kplus_Vz", hVz_Kplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_Kplus_1e_Vz_Xmax_FD);
 
         histPlotter1D(c1, hVx_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -5175,10 +5186,10 @@ void EventAnalyser() {
 //                      sVz_Kminus_1e_cut, "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
 ////                      sVz_Kminus_1e_cut, "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         histPlotter1D(c1, hVz_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, sVz_Kminus_1e_cut,
-                      "03_Kminus_Vz", hVz_Kminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_Kminus_Vz", hVz_Kminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_Kminus_1e_Vz_Xmax_CD);
         histPlotter1D(c1, hVz_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, sVz_Kminus_1e_cut,
-                      "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_Kminus_Vz", hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_Kminus_1e_Vz_Xmax_FD);
 
         histPlotter1D(c1, hVx_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -5196,10 +5207,10 @@ void EventAnalyser() {
 //                      sVz_piplus_1e_cut, "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
 ////                      sVz_piplus_1e_cut, "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         histPlotter1D(c1, hVz_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, sVz_piplus_1e_cut,
-                      "03_piplus_Vz", hVz_piplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_piplus_Vz", hVz_piplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_piplus_1e_Vz_Xmax_CD);
         histPlotter1D(c1, hVz_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, sVz_piplus_1e_cut,
-                      "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_piplus_Vz", hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_piplus_1e_Vz_Xmax_FD);
 
         histPlotter1D(c1, hVx_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
@@ -5217,10 +5228,10 @@ void EventAnalyser() {
 //                      sVz_piminus_1e_cut, "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
 ////                      sVz_piminus_1e_cut, "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         histPlotter1D(c1, hVz_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, sVz_piminus_1e_cut,
-                      "03_piminus_Vz", hVz_piminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_piminus_Vz", hVz_piminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_piminus_1e_Vz_Xmax_CD);
         histPlotter1D(c1, hVz_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, sVz_piminus_1e_cut,
-                      "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(),
+                      "03_piminus_Vz", hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperUSCut(), Vz_cut.GetLowerUSCut(),
                       Vertex_piminus_1e_Vz_Xmax_CD);
         //</editor-fold>
 
@@ -5243,8 +5254,8 @@ void EventAnalyser() {
                           plots, 2, false, true, sdVy_1e2p_after, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false, true,
                           dVy_cut, dVy_peak);
             histPlotter1D(c1, hdVz_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z} After Cuts", "1e2p", plots, 2, false, true,
-                          sdVz_1e2p_after, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(),
-                          dVz_cuts.GetLowerCut(),
+                          sdVz_1e2p_after, "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperUSCut(),
+                          dVz_cuts.GetLowerUSCut(),
                           dVz_peak);
         } else {
             histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e^{-}}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
@@ -5252,8 +5263,8 @@ void EventAnalyser() {
             histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e^{-}}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2,
                           false, true, sdVy_1e2p_before, "02_dVy", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVy_cut, dVy_peak);
             histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "1e2p", plots, 2, false, true,
-                          sdVy_1e2p_before, "03_dVz", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(),
-                          dVz_cuts.GetLowerCut(),
+                          sdVy_1e2p_before, "03_dVz", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperUSCut(),
+                          dVz_cuts.GetLowerUSCut(),
                           dVz_peak);
         }
         //</editor-fold>
@@ -5268,7 +5279,7 @@ void EventAnalyser() {
 //        histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
 //                      sdVz_2p, "03_dVz", Vertex_dV_2p_Directory, "2p", kBlue, true, true, true, false, true, dVz_cut, dVz_peak);
         histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e^{-}}_{z}", "2p", plots, 2, false, true, sdVz_2p, "03_dVz",
-                      Vertex_dV_2p_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), dVz_peak);
+                      Vertex_dV_2p_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperUSCut(), dVz_cuts.GetLowerUSCut(), dVz_peak);
         //</editor-fold>
 
 //        //<editor-fold desc="dV plots before dV cuts (MicroBooNE, CD & FD)">

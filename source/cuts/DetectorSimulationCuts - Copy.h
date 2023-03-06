@@ -159,8 +159,8 @@ double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill u
 
 //<editor-fold desc="Vertex cuts (all particles except electrons)">
 vector<double> Vz_cuts = {-6, 1}; // {min cut, max cut, max location}
-//vector<double> Vz_cuts_CD = {Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0}; // {min cut, max cut, max location}
-//vector<double> Vz_cuts_FD = {Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_CD = {Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut(), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_FD = {Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut(), 0}; // {min cut, max cut, max location}
 //</editor-fold>
 
 //<editor-fold desc="Vertex cuts (2p)">

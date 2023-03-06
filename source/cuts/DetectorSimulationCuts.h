@@ -5,7 +5,7 @@
 #ifndef DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
 #define DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
 
-#include "../classes/Cuts/DSCuts.h"
+#include "../classes/DSCuts/DSCuts.h"
 
 // ======================================================================================================================================================================
 // Detector simulation cuts
@@ -16,7 +16,7 @@
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DSCuts Nphe_cuts_FD("Nphe", "FD", "Electron", "1e cut", 0, 2, -1);
-double Nphe_lower_cut = Nphe_cuts_FD.GetLowerCut();
+double Nphe_lower_cut = Nphe_cuts_FD.GetLowerUSCut();
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Chi2 cuts
@@ -26,13 +26,13 @@ double Nphe_lower_cut = Nphe_cuts_FD.GetLowerCut();
 //<editor-fold desc="Chi2 cuts (1e cut)">
 
 //<editor-fold desc="Electron chi2 cuts (1e cut)">
-DSCuts Chi2_Electron_cuts_CD("Chi2", "CD", "Electron", "1e cut");
+DSCuts Chi2_Electron_cuts_CD("Chi2", "CD", "Electron", "1e cut", 0, -1, -1);
 double Chi2_Electron_cut_1e_cut_CD = 10.; // 100 since electron detection is great
 double Chi2_Electron_Xmax_1e_cut_CD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_CD = 0; // to fill using Chi2_Electron_1e_Xmax_CD
 double Chi2_Electron_1e_Xmax_CD;
 
-DSCuts Chi2_Electron_cuts_FD("Chi2", "FD", "Electron", "1e cut");
+DSCuts Chi2_Electron_cuts_FD("Chi2", "FD", "Electron", "1e cut", 0, -1, -1);
 double Chi2_Electron_cut_1e_cut_FD = 10.; // 100 since electron detection is great
 double Chi2_Electron_Xmax_1e_cut_FD; // for all e plots, no cuts applied
 double Chi2_Electron_1e_peak_FD = -0.05; // to fill using Chi2_Electron_1e_Xmax_FD
@@ -40,14 +40,14 @@ double Chi2_Electron_1e_Xmax_FD;
 //</editor-fold>
 
 //<editor-fold desc="Proton chi2 cuts (1e cut)">
-DSCuts Chi2_Proton_cuts_CD("Chi2", "CD", "Proton", "1e cut");
+DSCuts Chi2_Proton_cuts_CD("Chi2", "CD", "Proton", "1e cut", 0, -1, -1);
 double Chi2_Proton_factor_1e_cut_CD = 2.;
 double Chi2_Proton_cut_1e_cut_CD; // Josh's proton FD cut
 double Chi2_Proton_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Proton_1e_peak_CD = 0.35; // to fill using Chi2_Proton_1e_cut_fmean_CD
 double Chi2_Proton_1e_cut_fmean_CD;
 
-DSCuts Chi2_Proton_cuts_FD("Chi2", "FD", "Proton", "1e cut");
+DSCuts Chi2_Proton_cuts_FD("Chi2", "FD", "Proton", "1e cut", 0, -1, -1);
 double Chi2_Proton_factor_1e_cut_FD = 2.;
 double Chi2_Proton_cut_1e_cut_FD; // Josh's proton FD cut
 double Chi2_Proton_Xmax_FD; // for all e plots, no cuts applied
@@ -56,14 +56,14 @@ double Chi2_Proton_1e_cut_fmean_FD;
 //</editor-fold>
 
 //<editor-fold desc="Kplus chi2 cuts (1e cut)">
-DSCuts Chi2_Kplus_cuts_CD("Chi2", "CD", "Kplus", "1e cut");
+DSCuts Chi2_Kplus_cuts_CD("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
 double Chi2_Kplus_factor_1e_cut_CD = 2.;
 double Chi2_Kplus_cut_1e_cut_CD;
 double Chi2_Kplus_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Kplus_1e_peak_CD; // to fill using Chi2_Kplus_1e_cut_fmean_CD
 double Chi2_Kplus_1e_cut_fmean_CD;
 
-DSCuts Chi2_Kplus_cuts_FD("Chi2", "CD", "Kplus", "1e cut");
+DSCuts Chi2_Kplus_cuts_FD("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
 double Chi2_Kplus_factor_1e_cut_FD = 2.;
 double Chi2_Kplus_cut_1e_cut_FD;
 double Chi2_Kplus_Xmax_FD; // for all e plots, no cuts applied
@@ -72,14 +72,14 @@ double Chi2_Kplus_1e_cut_fmean_FD;
 //</editor-fold>
 
 //<editor-fold desc="Kminus chi2 cuts (1e cut)">
-DSCuts Chi2_Kminus_cuts_CD("Chi2", "CD", "Kminus", "1e cut");
+DSCuts Chi2_Kminus_cuts_CD("Chi2", "CD", "Kminus", "1e cut", 0, -1, -1);
 double Chi2_Kminus_factor_1e_cut_CD = 2.;
 double Chi2_Kminus_cut_1e_cut_CD;
 double Chi2_Kminus_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_Kminus_1e_peak_CD; // to fill using Chi2_Kminus_1e_cut_fmean_CD
 double Chi2_Kminus_1e_cut_fmean_CD;
 
-DSCuts Chi2_Kminus_cuts_FD("Chi2", "FD", "Kminus", "1e cut");
+DSCuts Chi2_Kminus_cuts_FD("Chi2", "FD", "Kminus", "1e cut", 0, -1, -1);
 double Chi2_Kminus_factor_1e_cut_FD = 2.;
 double Chi2_Kminus_cut_1e_cut_FD;
 double Chi2_Kminus_Xmax_FD; // for all e plots, no cuts applied
@@ -88,14 +88,14 @@ double Chi2_Kminus_1e_cut_fmean_FD;
 //</editor-fold>
 
 //<editor-fold desc="piplus chi2 cuts (1e cut)">
-DSCuts Chi2_piplus_cuts_CD("Chi2", "CD", "piplus", "1e cut");
+DSCuts Chi2_piplus_cuts_CD("Chi2", "CD", "piplus", "1e cut", 0, -1, -1);
 double Chi2_piplus_factor_1e_cut_CD = 2.;
 double Chi2_piplus_cut_1e_cut_CD;
 double Chi2_piplus_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_piplus_1e_peapi_CD; // to fill using Chi2_piplus_1e_cut_fmean_CD
 double Chi2_piplus_1e_cut_fmean_CD;
 
-DSCuts Chi2_piplus_cuts_FD("Chi2", "FD", "piplus", "1e cut");
+DSCuts Chi2_piplus_cuts_FD("Chi2", "FD", "piplus", "1e cut", 0, -1, -1);
 double Chi2_piplus_factor_1e_cut_FD = 2.;
 double Chi2_piplus_cut_1e_cut_FD;
 double Chi2_piplus_Xmax_FD; // for all e plots, no cuts applied
@@ -104,14 +104,14 @@ double Chi2_piplus_1e_cut_fmean_FD;
 //</editor-fold>
 
 //<editor-fold desc="piminus chi2 cuts (1e cut)">
-DSCuts Chi2_piminus_cuts_CD("Chi2", "CD", "piminus", "1e cut");
+DSCuts Chi2_piminus_cuts_CD("Chi2", "CD", "piminus", "1e cut", 0, -1, -1);
 double Chi2_piminus_factor_1e_cut_CD = 2.;
 double Chi2_piminus_cut_1e_cut_CD;
 double Chi2_piminus_Xmax_CD; // for all e plots, no cuts applied
 double Chi2_piminus_1e_peapi_CD; // to fill using Chi2_piminus_1e_cut_fmean_CD
 double Chi2_piminus_1e_cut_fmean_CD;
 
-DSCuts Chi2_piminus_cuts_FD("Chi2", "FD", "piminus", "1e cut");
+DSCuts Chi2_piminus_cuts_FD("Chi2", "FD", "piminus", "1e cut", 0, -1, -1);
 double Chi2_piminus_factor_1e_cut_FD = 2.;
 double Chi2_piminus_cut_1e_cut_FD;
 double Chi2_piminus_Xmax_FD; // for all e plots, no cuts applied
@@ -172,10 +172,10 @@ double Chi2_piminus_1e_peak_MicroBooNE_FD = Chi2_Proton_1e_peak_FD; // to fill u
 //<editor-fold desc="Vertex cuts">
 
 //<editor-fold desc="Vertex cuts (all particles except electrons)">
-DSCuts Vz_cut("Vertex z componente", "1e cut", 0, -6, 1);
+DSCuts Vz_cut("Vertex z componente", "", "", "1e cut", 0, -6, 1);
 //vector<double> Vz_cuts = {-6, 1}; // {min cut, max cut, max location}
-//vector<double> Vz_cuts_CD = {Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0}; // {min cut, max cut, max location}
-//vector<double> Vz_cuts_FD = {Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_CD = {Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut(), 0}; // {min cut, max cut, max location}
+//vector<double> Vz_cuts_FD = {Vz_cut.GetLowerUSCut(), Vz_cut.GetUpperUSCut(), 0}; // {min cut, max cut, max location}
 //</editor-fold>
 
 //<editor-fold desc="Vertex cuts (2p)">
@@ -244,7 +244,7 @@ double dVy_cut_MicroBooNE = dVy_cut, dVy_peak_MicroBooNE = dVy_peak;
 double dVz_cut_MicroBooNE = dVz_cut, dVz_peak_MicroBooNE = dVz_peak;
 //</editor-fold>
 
-DSCuts dVz_cuts("dVz", "1e cut", 0, -3, 3);
+DSCuts dVz_cuts("dVz", "", "", "1e cut", 0, -3, 3);
 /* //vector<double> dVz_cuts = {-3, 1}; // {min cut, max cut} */
 
 //</editor-fold>
