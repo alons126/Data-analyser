@@ -299,6 +299,8 @@ private:
     //  map<int,vector<double> > test_cuts;
     //  map<int,int> test_cuts;
     map<int, vector<double> > pid_cuts; // map<pid, {min,max cut}>
+    map<int, vector<double> > pid_cuts_CD; // map<pid, {min,max cut}> (my addition)
+    map<int, vector<double> > pid_cuts_FD; // map<pid, {min,max cut}> (my addition)
     vector<double> vertex_x_cuts = {-99, 99};
     vector<double> vertex_y_cuts = {-99, 99};
     vector<double> vertex_z_cuts = {-99, 99};
@@ -1011,14 +1013,35 @@ bool clas12ana::checkVertexCorrelation(region_part_ptr el, region_part_ptr p) {
 bool clas12ana::checkPidCut(region_part_ptr p) {
     //true if inside cut
     //electron pid is handled by ECal sampling fractions cuts not here
-    if (p->par()->getPid() == 11)
+    if (p->par()->getPid() == 11) {
         return true;
+    }
 
-    auto itter = pid_cuts.find(p->par()->getPid());
-    if (itter != pid_cuts.end())
-        return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
-    else
-        return false;
+    if (p->getRegion() == CD) { // My addition
+        auto itter = pid_cuts_CD.find(p->par()->getPid());
+
+        if (itter != pid_cuts_CD.end()) {
+            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
+        } else {
+            return false;
+        }
+    } else if (p->getRegion() == FD) { // My addition
+        auto itter = pid_cuts_FD.find(p->par()->getPid());
+
+        if (itter != pid_cuts_FD.end()) {
+            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
+        } else {
+            return false;
+        }
+    } else { // Justin's original
+        auto itter = pid_cuts.find(p->par()->getPid());
+
+        if (itter != pid_cuts.end()) {
+            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
+        } else {
+            return false;
+        }
+    }
 }
 
 /*
@@ -1131,15 +1154,59 @@ void clas12ana::readInputParam(const char *filename) {
                 vector<double> par;
 
                 while (getline(ss2, pid_v, ':')) {
-                    if (count == 0)
+                    if (count == 0) {
                         pid = stoi(pid_v);
-                    else
+                    } else {
                         par.push_back(atof(pid_v.c_str()));
+                    }
 
                     count++;
                 }
-                if (pid != -99)
+                if (pid != -99) {
                     pid_cuts.insert(pair<int, vector<double> >(pid, par));
+                }
+            } else if (parameter == "pid_cuts_CD") { // My addition
+                //get cut values
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                int pid = -99;
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0) {
+                        pid = stoi(pid_v);
+                    } else {
+                        par.push_back(atof(pid_v.c_str()));
+                    }
+
+                    count++;
+                }
+                if (pid != -99) {
+                    pid_cuts_CD.insert(pair<int, vector<double> >(pid, par));
+                }
+            } else if (parameter == "pid_cuts_FD") { // My addition
+                //get cut values
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                int pid = -99;
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0) {
+                        pid = stoi(pid_v);
+                    } else {
+                        par.push_back(atof(pid_v.c_str()));
+                    }
+
+                    count++;
+                }
+                if (pid != -99) {
+                    pid_cuts_FD.insert(pair<int, vector<double> >(pid, par));
+                }
             } else if (parameter == "vertex_cut") {
                 ss >> parameter2;
                 stringstream ss2(parameter2);
@@ -1203,6 +1270,22 @@ void clas12ana::readInputParam(const char *filename) {
 void clas12ana::printParams() {
     cout << endl;
     cout << "Target Parameters:" << endl;
+
+    cout << "PID cuts (CD):" << endl; // My addition
+    for (auto itr = pid_cuts_CD.begin(); itr != pid_cuts_CD.end(); ++itr) {
+        cout << '\t' << "Particle type: " << itr->first << '\t' << "{mean,sigma}: ";
+        for (auto a: itr->second)
+            cout << '\t' << a;
+        cout << '\n';
+    }
+
+    cout << "PID cuts (FD):" << endl; // My addition
+    for (auto itr = pid_cuts_FD.begin(); itr != pid_cuts_FD.end(); ++itr) {
+        cout << '\t' << "Particle type: " << itr->first << '\t' << "{mean,sigma}: ";
+        for (auto a: itr->second)
+            cout << '\t' << a;
+        cout << '\n';
+    }
 
     cout << "PID cuts:" << endl;
     for (auto itr = pid_cuts.begin(); itr != pid_cuts.end(); ++itr) {

@@ -1103,7 +1103,9 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
             FitParam->AddText(("Fit amp = " + to_string_with_precision(Amp, 8)).c_str());
             FitParam->AddText(("Fit std = " + to_string_with_precision(Std, 8)).c_str());
             FitParam->AddText(("Fit mean = " + to_string_with_precision(Mean, 8)).c_str());
-            FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2)).c_str());
+            ((TText*)FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
+            FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2) + " = " + to_string_with_precision(plot_cuts, 3)).c_str());
+            ((TText*)FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->Draw("same");
         }
     }

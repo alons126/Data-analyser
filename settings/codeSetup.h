@@ -31,6 +31,8 @@ std::string WorkingDirectory = GetCurrentDirectory() + "/";
 //std::string plots_path = WorkingDirectory + "plots" + "/";
 //std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS" + "/";
 //std::string plots_path = WorkingDirectory + "plots_T5tot_NO_CUTS" + "/";
+//std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS_woChi2" + "/";
+//std::string plots_path = WorkingDirectory + "plots_T5tot_NO_CUTS" + "/";
 //std::string plots_path = WorkingDirectory + "plots_momTest_beforeCange" + "/";
 std::string plots_path = WorkingDirectory + "plots" + "/";
 
@@ -60,8 +62,8 @@ std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
