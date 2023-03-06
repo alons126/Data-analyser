@@ -119,7 +119,11 @@ public:
 
     void setDCEdgeCuts(bool flag = true) { f_DCEdgeCuts = flag; };
 
+    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
+
     void setEcalEdgeCuts(bool flag = true) { f_ecalEdgeCuts = flag; };
+
+    double getEcalEdgeCuts() { return ecal_edge_cut; }; // My addition
 
     void setPidCuts(bool flag = true) { f_pidCuts = flag; };
 
