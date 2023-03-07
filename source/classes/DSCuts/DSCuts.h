@@ -11,11 +11,15 @@ public:
     DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1); // Default constructor
 
     /* Set functions */
-    void SetMean(double mean) { Cuts.at(0) = mean; }
+    void InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean = 0, double llim = -1, double ulim = -1);
 
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
 
     void SetMeanFit(double mf) { MeanFromHistogram = mf; }
+
+    void SetStdFactor(double sf) { FitStdFactor = sf; }
+
+    void SetMean(double mean) { Cuts.at(0) = mean; }
 
     void SetLowerCut(double lcut) { Cuts.at(1) = lcut; }
 
@@ -30,11 +34,13 @@ public:
     void SetAppliedCuts(std::string ac) { AppliedCuts = ac; }
 
     /* Get functions */
-    double GetMean() { return Cuts.at(0); }
-
     double GetMeanHist() { return MeanFromHistogram; }
 
     double GetMeanFit() { return MeanFromFit; }
+
+    double GetStdFactor() { return FitStdFactor; }
+
+    double GetMean() { return Cuts.at(0); }
 
     double GetLowerCut() { return Cuts.at(1); }
 
@@ -48,13 +54,15 @@ public:
 
     std::string GetAppliedCuts(std::string ac) { return AppliedCuts; }
 
+    double MeanFromHistogram, MeanFromFit, FitStdFactor;
+    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 private:
     std::string CutVariable, Region, Particle, AppliedCuts;
-    double MeanFromHistogram, MeanFromFit;
-    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
+//    double MeanFromHistogram, MeanFromFit, FitStdFactor;
+//    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 };
 
-DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) {
+DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) { // Default constructor
     CutVariable = cv, Particle = p, AppliedCuts = ac;
     Cuts.at(0) = mean, Cuts.at(1) = llim, Cuts.at(2) = ulim;
 
@@ -62,6 +70,33 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
         Region = "CD & FD";
     } else {
         Region = r;
+    }
+
+    if (r == "CD") {
+        FitStdFactor = 2;
+    } else if (r == "FD") {
+        FitStdFactor = 3;
+    } else {
+        FitStdFactor = 1;
+    }
+}
+
+void DSCuts::InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) {
+    CutVariable = cv, Particle = p, AppliedCuts = ac;
+    Cuts.at(0) = mean, Cuts.at(1) = llim, Cuts.at(2) = ulim;
+
+    if (r == "") {
+        Region = "CD & FD";
+    } else {
+        Region = r;
+    }
+
+    if (r == "CD") {
+        FitStdFactor = 2;
+    } else if (r == "FD") {
+        FitStdFactor = 3;
+    } else {
+        FitStdFactor = 1;
     }
 }
 

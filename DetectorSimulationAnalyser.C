@@ -140,7 +140,8 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = false, apply_chi2_cuts_MicroBooNE = true;
+    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_MicroBooNE = true; //TODO: recheck if needed
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -175,6 +176,43 @@ void EventAnalyser() {
         cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
         cout << "apply_momentum_cuts_MicroBooNE:\t" << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n\n";
     }
+    //</editor-fold>
+
+// Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Cuts declarations">
+    /* Number of Photo-electrons (Nphe) cuts (electrons only, FD) */
+    DSCuts Nphe_cuts_FD;
+
+    /* Chi2 cuts */
+    DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -10, 10);
+    DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", 0, -10, 10);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut");
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut");
+    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut");
+    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut");
+    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut");
+    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut");
+    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut");
+    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut");
+    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut");
+    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut");
+
+    /* Vertex cuts */
+    DSCuts Vz_cut, dVz_cuts;
+
+    /* Sampling Fraction (SF) cuts (electrons only, FD) */
+    DSCuts SF_cuts;
+
+    /* PCAL edge cuts (fiducial cuts ,electrons only, FD) */
+    DSCuts PCAL_edge_cuts;
+
+    /* DC edge cuts (fiducial cuts ,electrons only, FD) */
+    DSCuts DC_edge_cuts;
+
+    /* Momentum cuts */
+    DSCuts e_momentum_cuts_2p, p_momentum_cuts_2p;
+    DSCuts e_momentum_cuts_MicroBooNE, p_momentum_cuts_MicroBooNE, cpion_momentum_cuts_MicroBooNE;
     //</editor-fold>
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -661,34 +699,6 @@ void EventAnalyser() {
     if (apply_cuts == true) { Beta_boundary = 1.1; }
     double P_boundary = beamE * 1.425;
     if (apply_cuts == true) { P_boundary = beamE * 1.1; }
-    //</editor-fold>
-
-// Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Cuts declarations">
-    /* Number of Photo-electrons (Nphe) cuts (electrons only, FD) */
-    DSCuts Nphe_cuts_FD;
-
-    /* Chi2 cuts */
-    DSCuts Chi2_Electron_cuts_CD, Chi2_Electron_cuts_FD, Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD;
-    DSCuts Chi2_Kplus_cuts_CD, Chi2_Kplus_cuts_FD, Chi2_Kminus_cuts_CD, Chi2_Kminus_cuts_FD;
-    DSCuts Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD;
-
-    /* Vertex cuts */
-    DSCuts Vz_cut, dVz_cuts;
-
-    /* Sampling Fraction (SF) cuts (electrons only, FD) */
-    DSCuts SF_cuts;
-
-    /* PCAL edge cuts (fiducial cuts ,electrons only, FD) */
-    DSCuts PCAL_edge_cuts;
-
-    /* DC edge cuts (fiducial cuts ,electrons only, FD) */
-    DSCuts DC_edge_cuts;
-
-    /* Momentum cuts */
-    DSCuts e_momentum_cuts_2p, p_momentum_cuts_2p;
-    DSCuts e_momentum_cuts_MicroBooNE, p_momentum_cuts_MicroBooNE, cpion_momentum_cuts_MicroBooNE;
     //</editor-fold>
 
     //</editor-fold>
@@ -2097,18 +2107,16 @@ void EventAnalyser() {
 
         // Cuts on protons and charged pions:
         if (apply_chi2_cuts_1e_cut == true) { // making f_pidCuts = ture
-            Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -1, -1);
-            Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", 0, -1, -1);
-            Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0, -1, -1);
-            Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0, -1, -1);
-            Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
-            Chi2_Kplus_cuts_FD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
-            Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", 0, -1, -1);
-            Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", 0, -1, -1);
-            Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0, -1, -1);
-            Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0, -1, -1);
-            Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0, -1, -1);
-            Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0, -1, -1);
+//            Chi2_Proton_cuts_CD.InitSetter("Chi2", "CD", "Proton", "1e cut", 0, -1, -1);
+//            Chi2_Proton_cuts_FD.InitSetter("Chi2", "FD", "Proton", "1e cut", 0, -1, -1);
+//            Chi2_Kplus_cuts_CD.InitSetter("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
+//            Chi2_Kplus_cuts_FD.InitSetter("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
+//            Chi2_Kminus_cuts_CD.InitSetter("Chi2", "CD", "Kminus", "1e cut", 0, -1, -1);
+//            Chi2_Kminus_cuts_FD.InitSetter("Chi2", "FD", "Kminus", "1e cut", 0, -1, -1);
+//            Chi2_piplus_cuts_CD.InitSetter("Chi2", "CD", "piplus", "1e cut", 0, -1, -1);
+//            Chi2_piplus_cuts_FD.InitSetter("Chi2", "FD", "piplus", "1e cut", 0, -1, -1);
+//            Chi2_piminus_cuts_CD.InitSetter("Chi2", "CD", "piminus", "1e cut", 0, -1, -1);
+//            Chi2_piminus_cuts_FD.InitSetter("Chi2", "FD", "piminus", "1e cut", 0, -1, -1);
             clasAna.setPidCuts();
         }
 
@@ -4377,9 +4385,11 @@ void EventAnalyser() {
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
             histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2_wFit",
-                              hChi2_Proton_1e_cut_CD_Dir, "CD", Chi2_Proton_cut_1e_cut_CD, Chi2_Proton_factor_1e_cut_CD, Chi2_Proton_1e_cut_fmean_CD, true, "Protons");
+                              hChi2_Proton_1e_cut_CD_Dir, "CD", Chi2_Proton_cuts_CD.Cuts.at(0), Chi2_Proton_cuts_CD.Cuts.at(1), Chi2_Proton_cuts_CD.Cuts.at(2),
+                              Chi2_Proton_cuts_CD.FitStdFactor, true, "Protons");
             histPlotter1Dchi2(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2_wFit",
-                              hChi2_Proton_1e_cut_FD_Dir, "FD", Chi2_Proton_cut_1e_cut_FD, Chi2_Proton_factor_1e_cut_FD, Chi2_Proton_1e_cut_fmean_FD, true, "Protons");
+                              hChi2_Proton_1e_cut_FD_Dir, "FD", Chi2_Proton_cuts_FD.Cuts.at(0), Chi2_Proton_cuts_FD.Cuts.at(1), Chi2_Proton_cuts_FD.Cuts.at(2),
+                              Chi2_Proton_cuts_FD.FitStdFactor, true, "Protons");
         } else {
             histPlotter1D(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cut_1e_cut_CD,
@@ -4391,10 +4401,16 @@ void EventAnalyser() {
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
+//            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
+//                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cut_1e_cut_CD, Chi2_Kplus_factor_1e_cut_CD, Chi2_Kplus_1e_cut_fmean_CD, true, "K+");
+//            histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
+//                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cut_1e_cut_FD, Chi2_Kplus_factor_1e_cut_FD, Chi2_Kplus_1e_cut_fmean_FD, true, "K+");
             histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
-                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cut_1e_cut_CD, Chi2_Kplus_factor_1e_cut_CD, Chi2_Kplus_1e_cut_fmean_CD, true, "K+");
+                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cuts_CD.Cuts.at(0), Chi2_Kplus_cuts_CD.Cuts.at(1), Chi2_Kplus_cuts_CD.Cuts.at(2),
+                              Chi2_Kplus_cuts_CD.FitStdFactor, true, "K+");
             histPlotter1Dchi2(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
-                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cut_1e_cut_FD, Chi2_Kplus_factor_1e_cut_FD, Chi2_Kplus_1e_cut_fmean_FD, true, "K+");
+                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cuts_FD.Cuts.at(0), Chi2_Kplus_cuts_FD.Cuts.at(1), Chi2_Kplus_cuts_FD.Cuts.at(2),
+                              Chi2_Kplus_cuts_FD.FitStdFactor, true, "K+");
         } else {
             histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_1e_cut_CD,
@@ -4406,10 +4422,16 @@ void EventAnalyser() {
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
+//            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
+//                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cut_1e_cut_CD, Chi2_Kminus_factor_1e_cut_CD, Chi2_Kminus_1e_cut_fmean_CD, true, "K-");
+//            histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
+//                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cut_1e_cut_FD, Chi2_Kminus_factor_1e_cut_FD, Chi2_Kminus_1e_cut_fmean_FD, true, "K-");
             histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
-                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cut_1e_cut_CD, Chi2_Kminus_factor_1e_cut_CD, Chi2_Kminus_1e_cut_fmean_CD, true, "K-");
+                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cuts_CD.Cuts.at(0), Chi2_Kminus_cuts_CD.Cuts.at(1), Chi2_Kminus_cuts_CD.Cuts.at(2),
+                              Chi2_Kminus_cuts_CD.FitStdFactor, true, "K-");
             histPlotter1Dchi2(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
-                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cut_1e_cut_FD, Chi2_Kminus_factor_1e_cut_FD, Chi2_Kminus_1e_cut_fmean_FD, true, "K-");
+                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cuts_FD.Cuts.at(0), Chi2_Kminus_cuts_FD.Cuts.at(1), Chi2_Kminus_cuts_FD.Cuts.at(2),
+                              Chi2_Kminus_cuts_FD.FitStdFactor, true, "K-");
         } else {
             histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cut_1e_cut_CD,
@@ -4421,10 +4443,16 @@ void EventAnalyser() {
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
+//            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
+//                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cut_1e_cut_CD, Chi2_piplus_factor_1e_cut_CD, Chi2_piplus_1e_cut_fmean_CD, true, "pi+");
+//            histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
+//                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cut_1e_cut_FD, Chi2_piplus_factor_1e_cut_FD, Chi2_piplus_1e_cut_fmean_FD, true, "pi+");
             histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
-                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cut_1e_cut_CD, Chi2_piplus_factor_1e_cut_CD, Chi2_piplus_1e_cut_fmean_CD, true, "pi+");
+                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cuts_CD.Cuts.at(0), Chi2_piplus_cuts_CD.Cuts.at(1), Chi2_piplus_cuts_CD.Cuts.at(2),
+                              Chi2_piplus_cuts_CD.FitStdFactor, true, "pi+");
             histPlotter1Dchi2(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
-                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cut_1e_cut_FD, Chi2_piplus_factor_1e_cut_FD, Chi2_piplus_1e_cut_fmean_FD, true, "pi+");
+                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cuts_FD.Cuts.at(0), Chi2_piplus_cuts_FD.Cuts.at(1), Chi2_piplus_cuts_FD.Cuts.at(2),
+                              Chi2_piplus_cuts_FD.FitStdFactor, true, "pi+");
         } else {
             histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cut_1e_cut_CD,
@@ -4436,10 +4464,16 @@ void EventAnalyser() {
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
+//            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
+//                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cut_1e_cut_CD, Chi2_piminus_factor_1e_cut_CD, Chi2_piminus_1e_cut_fmean_CD, true, "pi-");
+//            histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
+//                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cut_1e_cut_FD, Chi2_piminus_factor_1e_cut_FD, Chi2_piminus_1e_cut_fmean_FD, true, "pi-");
             histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
-                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cut_1e_cut_CD, Chi2_piminus_factor_1e_cut_CD, Chi2_piminus_1e_cut_fmean_CD, true, "pi-");
+                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cuts_CD.Cuts.at(0), Chi2_piminus_cuts_CD.Cuts.at(1), Chi2_piminus_cuts_CD.Cuts.at(2),
+                              Chi2_piminus_cuts_CD.FitStdFactor, true, "pi-");
             histPlotter1Dchi2(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
-                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cut_1e_cut_FD, Chi2_piminus_factor_1e_cut_FD, Chi2_piminus_1e_cut_fmean_FD, true, "pi-");
+                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cuts_FD.Cuts.at(0), Chi2_piminus_cuts_FD.Cuts.at(1), Chi2_piminus_cuts_FD.Cuts.at(2),
+                              Chi2_piminus_cuts_FD.FitStdFactor, true, "pi-");
         } else {
             histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                           sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piminus_cut_1e_cut_CD,
@@ -6916,46 +6950,12 @@ void EventAnalyser() {
     myLogFile << "apply_momentum_cuts_MicroBooNE = " << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Momentum thresholds (2p)\n";
-    myLogFile << "===========================================================================\n\n";
-    myLogFile << "e_mom_cuts_2p.at(0) = " << e_mom_cuts_2p.at(0) << "\n";
-    myLogFile << "e_mom_cuts_2p.at(1) = " << e_mom_cuts_2p.at(1) << "\n";
-    myLogFile << "P_L_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
-    myLogFile << "P_L_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n";
-    myLogFile << "P_R_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
-    myLogFile << "P_R_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n\n";
-
-    myLogFile << "\n===========================================================================\n";
-    myLogFile << "Momentum thresholds (MicroBooNE)\n";
-    myLogFile << "===========================================================================\n\n";
-    myLogFile << "e_momentum_lower_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(0) << "\n";
-    myLogFile << "e_momentum_upper_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(1) << "\n";
-    myLogFile << "p_momentum_lower_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(0) << "\n";
-    myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(1) << "\n";
-    myLogFile << "cpion_momentum_lower_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(0) << "\n";
-    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(1) << "\n\n";
-
-    myLogFile << "\n===========================================================================\n";
-    myLogFile << "Sampling Fraction (SF) cuts (electrons only, FD)\n";
-    myLogFile << "===========================================================================\n\n";
-    myLogFile << "apply_SF_cuts = " << BoolToString(apply_SF_cuts) << "\n";
-    myLogFile << "SF_1e_upper_cut = " << SF_1e_upper_cut << "\n";
-    myLogFile << "SF_1e_lower_cut = " << SF_1e_lower_cut << "\n";
-    myLogFile << "SF_1e2p_Xmax (from histogram) = " << SF_1e2p_Xmax << "\n";
-    myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n";
-
-    myLogFile << "\n===========================================================================\n";
-    myLogFile << "ECAL fiducial cuts (electrons only, FD)\n";
-    myLogFile << "===========================================================================\n\n";
-    myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
-    myLogFile << "fiducial_cut_Lv = " << fiducial_cut_Lv << "\n";
-    myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n";
-
-    myLogFile << "\n===========================================================================\n";
     myLogFile << "Number of Photo-electrons (Nphe) cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
-    myLogFile << "apply_Nphe_cut = " << BoolToString(apply_Nphe_cut) << "\n";
-    myLogFile << "Nphe_lower_cut = " << clasAna.getNpheCuts() << "\n\n";
+    myLogFile << "Nphe_lower_cut:" << std::setw(50) << Nphe_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Nphe_upper_cut:" << std::setw(50) << Nphe_cuts_FD.GetUpperCut() << "\n\n";
+//    myLogFile << "Nphe_lower_cut:" << std::setw(50);
+//    myLogFile << clasAna.getNpheCuts() << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "Chi2 cuts\n";
@@ -6974,7 +6974,7 @@ void EventAnalyser() {
 //    }
 
     myLogFile << "\n-- Electrons in FD (no #e cuts) -------------------------------------------" << "\n";
-    myLogFile << "Chi2_Electron_cut_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
+    myLogFile << "Chi2_Electron_cut_1e_cut_FD = " << Chi2_Electron_cuts_CD.GetLowerCut() << "\n";
 
     if (hChi2_Electron_FD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_Xmax_1e_cut_FD (from histogram) = NO EVENTS" << "\n";
@@ -6984,6 +6984,8 @@ void EventAnalyser() {
 
 //    myLogFile << "\n-- Electrons in CD (1e cut) -----------------------------------------------" << "\n";
 //    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_1e_cut_CD << "\n";
+//    myLogFile << "Chi2 lower cut (CD):" << std::setw(45) << Chi2_Electron_cuts_CD.GetLowerCut() << "\n";
+//    myLogFile << "Chi2 upper cut (CD):" << std::setw(45) << Chi2_Electron_cuts_CD.GetUpperCut() << "\n\n";
 //
 //    if (hChi2_Electron_1e_cut_CD->Integral() == 0.) {
 //        myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
@@ -6994,7 +6996,9 @@ void EventAnalyser() {
     myLogFile << "Chi2_Electron_1e_peak_CD (used in cuts) = " << Chi2_Electron_1e_peak_CD << "\n";
 
     myLogFile << "\n-- Electrons in FD (1e cut) -----------------------------------------------" << "\n";
-    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
+//    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
+    myLogFile << "Chi2 lower cut (FD):" << std::setw(45) << Chi2_Electron_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut (FD):" << std::setw(45) << Chi2_Electron_cuts_FD.GetUpperCut() << "\n\n";
 
     if (hChi2_Electron_1e_cut_FD->Integral() == 0.) {
         myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
@@ -7050,24 +7054,20 @@ void EventAnalyser() {
     }
 
     myLogFile << "\n-- Protons in CD (1e cut) -------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_factor_1e_cut_CD = " << Chi2_Proton_factor_1e_cut_CD << "\n";
-    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_1e_cut_CD << "\n";
-
-    if (hChi2_Proton_1e_cut_CD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Proton_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Proton_1e_cut_fmean_CD << "\n";
-    }
+//    myLogFile << "Chi2_Proton_factor_1e_cut_CD = " << Chi2_Proton_factor_1e_cut_CD << "\n";
+//    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_1e_cut_CD << "\n";
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_Proton_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_Proton_cuts_CD.GetUpperCut()/Chi2_Proton_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_Proton_cuts_CD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_Proton_cuts_CD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_Proton_cuts_CD.GetUpperCut() << "\n\n";
 
     myLogFile << "\n-- Protons in FD (1e cut) -------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Proton_factor_1e_cut_FD = " << Chi2_Proton_factor_1e_cut_FD << "\n";
-    myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_1e_cut_FD << "\n";
-
-    if (hChi2_Proton_1e_cut_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Proton_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Proton_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Proton_1e_cut_fmean_FD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_Proton_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_Proton_cuts_FD.GetUpperCut()/Chi2_Proton_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_Proton_cuts_FD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_Proton_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_Proton_cuts_FD.GetUpperCut() << "\n\n";
 
 //    myLogFile << "\n-- Protons in CD (MicroBooNE cut) -----------------------------------------" << "\n";
 //    myLogFile << "Chi2_Proton_cut_MicroBooNE_CD = " << Chi2_Proton_cut_MicroBooNE_CD << "\n";
@@ -7106,28 +7106,18 @@ void EventAnalyser() {
     myLogFile << "Chi2 K+ mean FD (from histogram) = " << to_string_with_precision(hChi2_Kplus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- Kplus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kplus_factor_1e_cut_CD = " << Chi2_Kplus_factor_1e_cut_CD << "\n";
-    myLogFile << "Chi2_Kplus_1e_cut_CD = " << Chi2_Kplus_cut_1e_cut_CD << "\n";
-
-    if (hChi2_Kplus_1e_cut_CD->Integral() == 0.) {
-        myLogFile << "Chi2_Kplus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Kplus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Kplus_1e_cut_fmean_CD << "\n";
-    }
-
-    myLogFile << "Chi2_Kplus_1e_peak_CD (used in cuts in 2nd run) = " << Chi2_Kplus_1e_peak_CD << "\n";
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_Kplus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_Kplus_cuts_CD.GetUpperCut()/Chi2_Kplus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_Kplus_cuts_CD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_Kplus_cuts_CD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_Kplus_cuts_CD.GetUpperCut() << "\n\n";
 
     myLogFile << "\n-- Kplus in FD (1e cut) -------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kplus_factor_1e_cut_FD = " << Chi2_Kplus_factor_1e_cut_FD << "\n";
-    myLogFile << "Chi2_Kplus_1e_cut_FD = " << Chi2_Kplus_cut_1e_cut_FD << "\n";
-
-    if (hChi2_Kplus_1e_cut_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Kplus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Kplus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Kplus_1e_cut_fmean_FD << "\n";
-    }
-
-    myLogFile << "Chi2_Kplus_1e_peak_FD (used in cuts in 2nd run) = " << Chi2_Kplus_1e_peak_FD << "\n";
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_Kplus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_Kplus_cuts_FD.GetUpperCut()/Chi2_Kplus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_Kplus_cuts_FD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_Kplus_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_Kplus_cuts_FD.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_Kminus">
@@ -7140,24 +7130,18 @@ void EventAnalyser() {
     myLogFile << "Chi2_Kminus_Xmax_FD (used in cuts) = " << Chi2_Kminus_Xmax_FD << "\n";
 
     myLogFile << "\n-- Kminus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kminus_factor_1e_cut_CD = " << Chi2_Kminus_factor_1e_cut_CD << "\n";
-    myLogFile << "Chi2_Kminus_1e_cut_CD = " << Chi2_Kminus_cut_1e_cut_CD << "\n";
-
-    if (hChi2_Kminus_1e_cut_CD->Integral() == 0.) {
-        myLogFile << "Chi2_Kminus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Kminus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Kminus_1e_cut_fmean_CD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_Kminus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_Kminus_cuts_CD.GetUpperCut()/Chi2_Kminus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_Kminus_cuts_CD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_Kminus_cuts_CD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_Kminus_cuts_CD.GetUpperCut() << "\n\n";
 
     myLogFile << "\n-- Kminus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_Kminus_factor_1e_cut_FD = " << Chi2_Kminus_factor_1e_cut_FD << "\n";
-    myLogFile << "Chi2_Kminus_1e_cut_FD = " << Chi2_Kminus_cut_1e_cut_FD << "\n";
-
-    if (hChi2_Kminus_1e_cut_FD->Integral() == 0.) {
-        myLogFile << "Chi2_Kminus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_Kminus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Kminus_1e_cut_fmean_FD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_Kminus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_Kminus_cuts_FD.GetUpperCut()/Chi2_Kminus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_Kminus_cuts_FD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_Kminus_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_Kminus_cuts_FD.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Chi2_piplus">
@@ -7172,24 +7156,18 @@ void EventAnalyser() {
     myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- piplus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piplus_factor_1e_cut_CD = " << Chi2_piplus_factor_1e_cut_CD << "\n";
-    myLogFile << "Chi2_piplus_1e_cut_CD = " << Chi2_piplus_cut_1e_cut_CD << "\n";
-
-    if (hChi2_piplus_1e_cut_CD->Integral() == 0.) {
-        myLogFile << "Chi2_piplus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_piplus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_piplus_1e_cut_fmean_CD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_piplus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_piplus_cuts_CD.GetUpperCut()/Chi2_piplus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_piplus_cuts_CD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_piplus_cuts_CD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_piplus_cuts_CD.GetUpperCut() << "\n\n";
 
     myLogFile << "\n-- piplus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piplus_factor_1e_cut_FD = " << Chi2_piplus_factor_1e_cut_FD << "\n";
-    myLogFile << "Chi2_piplus_1e_cut_FD = " << Chi2_piplus_cut_1e_cut_FD << "\n";
-
-    if (hChi2_piplus_1e_cut_FD->Integral() == 0.) {
-        myLogFile << "Chi2_piplus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_piplus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_piplus_1e_cut_fmean_FD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_piplus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_piplus_cuts_FD.GetUpperCut()/Chi2_piplus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_piplus_cuts_FD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_piplus_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_piplus_cuts_FD.GetUpperCut() << "\n\n";
 
 //    myLogFile << "\n-- piplus in CD (MicroBooNE cut) ------------------------------------------" << "\n";
 //    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
@@ -7228,24 +7206,18 @@ void EventAnalyser() {
     myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_FD->GetMean(), 20) << "\n";
 
     myLogFile << "\n-- piminus in CD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_factor_1e_cut_CD = " << Chi2_piminus_factor_1e_cut_CD << "\n";
-    myLogFile << "Chi2_piminus_1e_cut_CD = " << Chi2_piminus_cut_1e_cut_CD << "\n";
-
-    if (hChi2_piminus_1e_cut_CD->Integral() == 0.) {
-        myLogFile << "Chi2_piminus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_piminus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_piminus_1e_cut_fmean_CD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_piminus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_piminus_cuts_CD.GetUpperCut()/Chi2_piminus_cuts_CD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_piminus_cuts_CD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_piminus_cuts_CD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_piminus_cuts_CD.GetUpperCut() << "\n\n";
 
     myLogFile << "\n-- piminus in FD (1e cut) --------------------------------------------------" << "\n";
-    myLogFile << "Chi2_piminus_factor_1e_cut_FD = " << Chi2_piminus_factor_1e_cut_FD << "\n";
-    myLogFile << "Chi2_piminus_1e_cut_FD = " << Chi2_piminus_cut_1e_cut_FD << "\n";
-
-    if (hChi2_piminus_1e_cut_FD->Integral() == 0.) {
-        myLogFile << "Chi2_piminus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
-    } else {
-        myLogFile << "Chi2_piminus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_piminus_1e_cut_fmean_FD << "\n";
-    }
+    myLogFile << "Chi2 sdt factor:" << std::setw(58) << Chi2_piminus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit std:" << std::setw(61) << Chi2_piminus_cuts_FD.GetUpperCut()/Chi2_piminus_cuts_FD.GetStdFactor() << "\n";
+    myLogFile << "Chi2 fit mean:" << std::setw(60) << Chi2_piminus_cuts_FD.GetMean() << "\n";
+    myLogFile << "Chi2 lower cut:" << std::setw(59) << Chi2_piminus_cuts_FD.GetLowerCut() << "\n";
+    myLogFile << "Chi2 upper cut:" << std::setw(59) << Chi2_piminus_cuts_FD.GetUpperCut() << "\n\n";
 
 //    myLogFile << "\n-- piminus in CD (MicroBooNE cut) -----------------------------------------" << "\n";
 //    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
@@ -7272,6 +7244,317 @@ void EventAnalyser() {
 //    myLogFile << "Chi2 pi- MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_FD->GetMean(), 20) << "\n";
     //</editor-fold>
 
+//    //<editor-fold desc="Chi2_Electron">
+//    myLogFile << "\n-- Electrons --------------------------------------------------------------" << "\n\n";
+//
+////    myLogFile << "\n-- Electrons in CD (no #e cuts) -------------------------------------------" << "\n";
+////    myLogFile << "Chi2_Electron_cut_1e_cut_CD = " << Chi2_Electron_cut_1e_cut_CD << "\n";
+////
+////    if (hChi2_Electron_CD->Integral() == 0.) {
+////        myLogFile << "Chi2_Electron_Xmax_1e_cut_CD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_Electron_Xmax_1e_cut_CD (from histogram) = " << Chi2_Electron_Xmax_1e_cut_CD << "\n";
+////    }
+//
+//    myLogFile << "\n-- Electrons in FD (no #e cuts) -------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Electron_cut_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_Electron_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Electron_Xmax_1e_cut_FD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Electron_Xmax_1e_cut_FD (from histogram) = " << Chi2_Electron_Xmax_1e_cut_FD << "\n";
+//    }
+//
+////    myLogFile << "\n-- Electrons in CD (1e cut) -----------------------------------------------" << "\n";
+////    myLogFile << "Chi2_Electron_1e_cut_CD = " << Chi2_Electron_cut_1e_cut_CD << "\n";
+////
+////    if (hChi2_Electron_1e_cut_CD->Integral() == 0.) {
+////        myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_Electron_1e_Xmax_CD (from histogram) = " << Chi2_Electron_1e_Xmax_CD << "\n";
+////    }
+//
+//    myLogFile << "Chi2_Electron_1e_peak_CD (used in cuts) = " << Chi2_Electron_1e_peak_CD << "\n";
+//
+//    myLogFile << "\n-- Electrons in FD (1e cut) -----------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Electron_1e_cut_FD = " << Chi2_Electron_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_Electron_1e_cut_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Electron_1e_Xmax_FD (from histogram) = " << Chi2_Electron_1e_Xmax_FD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_Electron_1e_peak_FD (used in cuts) = " << Chi2_Electron_1e_peak_FD << "\n";
+//
+////    myLogFile << "\n-- Electrons in CD (MicroBooNE cut) ---------------------------------------" << "\n";
+////    myLogFile << "Chi2_Electron_cut_MicroBooNE_CD = " << Chi2_Electron_cut_MicroBooNE_CD << "\n";
+////
+////    if (hChi2_Electron_MicroBooNE_CD->Integral() == 0.) {
+////        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_CD (from histogram) = " << Chi2_Electron_MicroBooNE_Xmax_CD << "\n";
+////    }
+//
+////    myLogFile << "Chi2_Electron_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Electron_1e_peak_MicroBooNE_CD << "\n";
+////
+////    myLogFile << "\n-- Electrons in FD (MicroBooNE cut) ---------------------------------------" << "\n";
+////
+////    myLogFile << "Chi2_Electron_cut_MicroBooNE_FD = " << Chi2_Electron_cut_MicroBooNE_FD << "\n";
+////
+////    if (hChi2_Electron_MicroBooNE_FD->Integral() == 0.) {
+////        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_Electron_MicroBooNE_Xmax_FD (from histogram) = " << Chi2_Electron_MicroBooNE_Xmax_FD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_Electron_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Electron_1e_peak_MicroBooNE_FD << "\n";
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2_Proton">
+//    myLogFile << "\n\n-- Protons ----------------------------------------------------------------" << "\n\n";
+//
+//    myLogFile << "\n-- Protons in CD (no #e cuts) ---------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Proton_cut_1e_cut_CD = " << Chi2_Proton_cut_1e_cut_CD << "\n";
+//
+//    if (hChi2_Proton_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_Proton_Xmax_CD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Proton_Xmax_CD (from histogram fit) = " << Chi2_Proton_Xmax_CD << "\n";
+//    }
+//
+//    myLogFile << "\n-- Protons in FD (no #e cuts) ---------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Proton_cut_1e_cut_FD = " << Chi2_Proton_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_Proton_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Proton_Xmax_FD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Proton_Xmax_FD (from histogram fit) = " << Chi2_Proton_Xmax_FD << "\n";
+//    }
+//
+//    myLogFile << "\n-- Protons in CD (1e cut) -------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Proton_factor_1e_cut_CD = " << Chi2_Proton_factor_1e_cut_CD << "\n";
+//    myLogFile << "Chi2_Proton_1e_cut_CD = " << Chi2_Proton_cut_1e_cut_CD << "\n";
+//
+//    if (hChi2_Proton_1e_cut_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_Proton_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Proton_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Proton_1e_cut_fmean_CD << "\n";
+//    }
+//
+//    myLogFile << "\n-- Protons in FD (1e cut) -------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Proton_factor_1e_cut_FD = " << Chi2_Proton_factor_1e_cut_FD << "\n";
+//    myLogFile << "Chi2_Proton_1e_cut_FD = " << Chi2_Proton_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_Proton_1e_cut_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Proton_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Proton_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Proton_1e_cut_fmean_FD << "\n";
+//    }
+//
+////    myLogFile << "\n-- Protons in CD (MicroBooNE cut) -----------------------------------------" << "\n";
+////    myLogFile << "Chi2_Proton_cut_MicroBooNE_CD = " << Chi2_Proton_cut_MicroBooNE_CD << "\n";
+////
+////    if (hChi2_Proton_MicroBooNE_CD->Integral() == 0.) {
+////        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_CD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_CD (from histogram) = " << Chi2_Proton_MicroBooNE_Xmax_CD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_CD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_CD << "\n";
+////    myLogFile << "Chi2 Proton 1e MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_Proton_MicroBooNE_CD->GetMean(), 20) << "\n";
+////
+////    myLogFile << "\n-- Protons in FD (MicroBooNE cut) -----------------------------------------" << "\n";
+////    myLogFile << "Chi2_Proton_cut_MicroBooNE_FD = " << Chi2_Proton_cut_MicroBooNE_FD << "\n";
+////
+////    if (hChi2_Proton_MicroBooNE_FD->Integral() == 0.) {
+////        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_FD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_Proton_MicroBooNE_Xmax_FD (from histogram) = " << Chi2_Proton_MicroBooNE_Xmax_FD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_Proton_1e_peak_MicroBooNE_FD (used in cuts) = " << Chi2_Proton_1e_peak_MicroBooNE_FD << "\n";
+////    myLogFile << "Chi2 Proton 1e MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_Proton_MicroBooNE_FD->GetMean(), 20) << "\n";
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2_Kplus">
+//    myLogFile << "\n\n-- K+ --------------------------------------------------------------------" << "\n\n";
+//
+//    myLogFile << "\n-- Kplus in CD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kplus_Xmax_CD (used in cuts) = " << Chi2_Kplus_Xmax_CD << "\n";
+//    myLogFile << "Chi2 K+ mean CD (from histogram) = " << to_string_with_precision(hChi2_Kplus_CD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- Kplus in FD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kplus_Xmax_FD (used in cuts) = " << Chi2_Kplus_Xmax_FD << "\n";
+//    myLogFile << "Chi2 K+ mean FD (from histogram) = " << to_string_with_precision(hChi2_Kplus_FD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- Kplus in CD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kplus_factor_1e_cut_CD = " << Chi2_Kplus_factor_1e_cut_CD << "\n";
+//    myLogFile << "Chi2_Kplus_1e_cut_CD = " << Chi2_Kplus_cut_1e_cut_CD << "\n";
+//
+//    if (hChi2_Kplus_1e_cut_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_Kplus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Kplus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Kplus_1e_cut_fmean_CD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_Kplus_1e_peak_CD (used in cuts in 2nd run) = " << Chi2_Kplus_1e_peak_CD << "\n";
+//
+//    myLogFile << "\n-- Kplus in FD (1e cut) -------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kplus_factor_1e_cut_FD = " << Chi2_Kplus_factor_1e_cut_FD << "\n";
+//    myLogFile << "Chi2_Kplus_1e_cut_FD = " << Chi2_Kplus_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_Kplus_1e_cut_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Kplus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Kplus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Kplus_1e_cut_fmean_FD << "\n";
+//    }
+//
+//    myLogFile << "Chi2_Kplus_1e_peak_FD (used in cuts in 2nd run) = " << Chi2_Kplus_1e_peak_FD << "\n";
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2_Kminus">
+//    myLogFile << "\n\n-- K- --------------------------------------------------------------------" << "\n\n";
+//
+//    myLogFile << "\n-- Kminus in CD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kminus_Xmax_CD (used in cuts) = " << Chi2_Kminus_Xmax_CD << "\n";
+//
+//    myLogFile << "\n-- Kminus in FD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kminus_Xmax_FD (used in cuts) = " << Chi2_Kminus_Xmax_FD << "\n";
+//
+//    myLogFile << "\n-- Kminus in CD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kminus_factor_1e_cut_CD = " << Chi2_Kminus_factor_1e_cut_CD << "\n";
+//    myLogFile << "Chi2_Kminus_1e_cut_CD = " << Chi2_Kminus_cut_1e_cut_CD << "\n";
+//
+//    if (hChi2_Kminus_1e_cut_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_Kminus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Kminus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_Kminus_1e_cut_fmean_CD << "\n";
+//    }
+//
+//    myLogFile << "\n-- Kminus in FD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_Kminus_factor_1e_cut_FD = " << Chi2_Kminus_factor_1e_cut_FD << "\n";
+//    myLogFile << "Chi2_Kminus_1e_cut_FD = " << Chi2_Kminus_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_Kminus_1e_cut_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_Kminus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_Kminus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_Kminus_1e_cut_fmean_FD << "\n";
+//    }
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2_piplus">
+//    myLogFile << "\n\n-- pi+ --------------------------------------------------------------------" << "\n\n";
+//
+//    myLogFile << "\n-- piplus in CD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piplus_Xmax_CD (used in cuts) = " << Chi2_piplus_Xmax_CD << "\n";
+//    myLogFile << "Chi2 pi+ mean CD (from histogram) = " << to_string_with_precision(hChi2_piplus_CD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- piplus in FD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piplus_Xmax_FD (used in cuts) = " << Chi2_piplus_Xmax_FD << "\n";
+//    myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_FD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- piplus in CD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piplus_factor_1e_cut_CD = " << Chi2_piplus_factor_1e_cut_CD << "\n";
+//    myLogFile << "Chi2_piplus_1e_cut_CD = " << Chi2_piplus_cut_1e_cut_CD << "\n";
+//
+//    if (hChi2_piplus_1e_cut_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_piplus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piplus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_piplus_1e_cut_fmean_CD << "\n";
+//    }
+//
+//    myLogFile << "\n-- piplus in FD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piplus_factor_1e_cut_FD = " << Chi2_piplus_factor_1e_cut_FD << "\n";
+//    myLogFile << "Chi2_piplus_1e_cut_FD = " << Chi2_piplus_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_piplus_1e_cut_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_piplus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piplus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_piplus_1e_cut_fmean_FD << "\n";
+//    }
+//
+////    myLogFile << "\n-- piplus in CD (MicroBooNE cut) ------------------------------------------" << "\n";
+////    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
+////
+////    if (hChi2_piplus_MicroBooNE_CD->Integral() == 0.) {
+////        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_CD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_CD (from histogram) = " << Chi2_piplus_1e_peak_MicroBooNE_CD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_piplus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_CD << "\n";
+////    myLogFile << "Chi2 pi+ MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_piplus_MicroBooNE_CD->GetMean(), 20) << "\n";
+////
+////    myLogFile << "\n-- piplus in FD (MicroBooNE cut) ------------------------------------------" << "\n";
+////    myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
+////
+////    if (hChi2_piplus_MicroBooNE_FD->Integral() == 0.) {
+////        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_FD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_piplus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piplus_1e_peak_MicroBooNE_FD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_piplus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piplus_MicroBooNE_Xmax_FD << "\n";
+////    myLogFile << "Chi2 pi+ MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piplus_MicroBooNE_FD->GetMean(), 20) << "\n";
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Chi2_piminus">
+//    myLogFile << "\n\n-- pi- --------------------------------------------------------------------" << "\n\n";
+//
+//    myLogFile << "\n-- piminus in CD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_Xmax_CD (used in cuts) = " << Chi2_piminus_Xmax_CD << "\n";
+//    myLogFile << "Chi2 pi+ mean CD (from histogram) = " << to_string_with_precision(hChi2_piminus_CD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- piminus in FD -----------------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_Xmax_FD (used in cuts) = " << Chi2_piminus_Xmax_FD << "\n";
+//    myLogFile << "Chi2 pi+ mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_FD->GetMean(), 20) << "\n";
+//
+//    myLogFile << "\n-- piminus in CD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_factor_1e_cut_CD = " << Chi2_piminus_factor_1e_cut_CD << "\n";
+//    myLogFile << "Chi2_piminus_1e_cut_CD = " << Chi2_piminus_cut_1e_cut_CD << "\n";
+//
+//    if (hChi2_piminus_1e_cut_CD->Integral() == 0.) {
+//        myLogFile << "Chi2_piminus_1e_cut_fmean_CD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piminus_1e_cut_fmean_CD (from histogram fit) = " << Chi2_piminus_1e_cut_fmean_CD << "\n";
+//    }
+//
+//    myLogFile << "\n-- piminus in FD (1e cut) --------------------------------------------------" << "\n";
+//    myLogFile << "Chi2_piminus_factor_1e_cut_FD = " << Chi2_piminus_factor_1e_cut_FD << "\n";
+//    myLogFile << "Chi2_piminus_1e_cut_FD = " << Chi2_piminus_cut_1e_cut_FD << "\n";
+//
+//    if (hChi2_piminus_1e_cut_FD->Integral() == 0.) {
+//        myLogFile << "Chi2_piminus_1e_cut_fmean_FD (from histogram fit) = NO EVENTS" << "\n";
+//    } else {
+//        myLogFile << "Chi2_piminus_1e_cut_fmean_FD (from histogram fit) = " << Chi2_piminus_1e_cut_fmean_FD << "\n";
+//    }
+//
+////    myLogFile << "\n-- piminus in CD (MicroBooNE cut) -----------------------------------------" << "\n";
+////    myLogFile << "Chi2_piminus_cut_MicroBooNE_CD = " << Chi2_piminus_cut_MicroBooNE_CD << "\n";
+////
+////    if (hChi2_piminus_MicroBooNE_CD->Integral() == 0.) {
+////        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_CD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_CD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_CD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_CD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_CD << "\n";
+////    myLogFile << "Chi2 pi- MicroBooNE mean CD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_CD->GetMean(), 20) << "\n";
+////
+////    myLogFile << "\n-- piminus in FD (MicroBooNE cut) -----------------------------------------" << "\n";
+////    myLogFile << "Chi2_piminus_cut_MicroBooNE_FD = " << Chi2_piminus_cut_MicroBooNE_FD << "\n";
+////
+////    if (hChi2_piminus_MicroBooNE_FD->Integral() == 0.) {
+////        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = NO EVENTS" << "\n";
+////    } else {
+////        myLogFile << "Chi2_piminus_1e_peak_MicroBooNE_FD (from histogram) = " << Chi2_piminus_1e_peak_MicroBooNE_FD << "\n";
+////    }
+////
+////    myLogFile << "Chi2_piminus_MicroBooNE_Xmax_FD (used in cuts) = " << Chi2_piminus_MicroBooNE_Xmax_FD << "\n\n\n";
+////    myLogFile << "Chi2 pi- MicroBooNE mean FD (from histogram) = " << to_string_with_precision(hChi2_piminus_MicroBooNE_FD->GetMean(), 20) << "\n";
+//    //</editor-fold>
+
     myLogFile << "\n===========================================================================\n";
     myLogFile << "Vertex cuts\n";
     myLogFile << "===========================================================================\n";
@@ -7284,6 +7567,41 @@ void EventAnalyser() {
     myLogFile << "Vertex_Proton_1e_mean_CD = " << Vertex_Proton_1e_mean_CD << "\n";
     myLogFile << "Vertex_Proton_cut_FD = " << Vertex_Proton_cut_FD << "\n";
     myLogFile << "Vertex_Proton_1e_mean_FD = " << Vertex_Proton_1e_mean_FD << "\n\n";
+
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Sampling Fraction (SF) cuts (electrons only, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+    myLogFile << "SF_1e_upper_cut = " << SF_1e_upper_cut << "\n";
+    myLogFile << "SF_1e_lower_cut = " << SF_1e_lower_cut << "\n";
+    myLogFile << "SF_1e2p_Xmax (from histogram) = " << SF_1e2p_Xmax << "\n";
+    myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n";
+
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "ECAL fiducial cuts (electrons only, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+    myLogFile << "fiducial_cut_Lv = " << fiducial_cut_Lv << "\n";
+    myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n";
+
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Momentum thresholds (2p)\n";
+    myLogFile << "===========================================================================\n\n";
+    myLogFile << "e_mom_cuts_2p.at(0) = " << e_mom_cuts_2p.at(0) << "\n";
+    myLogFile << "e_mom_cuts_2p.at(1) = " << e_mom_cuts_2p.at(1) << "\n";
+    myLogFile << "P_L_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
+    myLogFile << "P_L_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n";
+    myLogFile << "P_R_lower_lim_2p* = " << p_mom_cuts_2p.at(0) << "\n";
+    myLogFile << "P_R_upper_lim_2p* = " << p_mom_cuts_2p.at(1) << "\n\n";
+
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Momentum thresholds (MicroBooNE)\n";
+    myLogFile << "===========================================================================\n\n";
+    myLogFile << "e_momentum_lower_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(0) << "\n";
+    myLogFile << "e_momentum_upper_cut_MicroBooNE = " << e_mom_cuts_MicroBooNE.at(1) << "\n";
+    myLogFile << "p_momentum_lower_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(0) << "\n";
+    myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(1) << "\n";
+    myLogFile << "cpion_momentum_lower_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(0) << "\n";
+    myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(1) << "\n\n";
+
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "dV cuts\n";

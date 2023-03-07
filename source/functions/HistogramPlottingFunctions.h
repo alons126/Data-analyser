@@ -941,9 +941,10 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
                        string Histogram1DSaveName,
                        string Histogram1DSaveNamePath,
                        string finalState,
-                       double &plot_cuts,
-                       double factor,
                        double &plot_Xmax,
+                       double &plot_lcut,
+                       double &plot_ucut,
+                       double factor,
                        bool plot_max = true,
                        string particle = "") {
 
@@ -1050,7 +1051,8 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
 
         /* Set cut parameters from TF1 plot */
         plot_Xmax = Mean;
-        plot_cuts = Std * factor; // Cut up to 2 Std from mean
+        plot_ucut = Std * factor; // Cut up to 2 Std from mean
+        plot_lcut = - (Std * factor); // Cut up to 2 Std from mean
 
         /* Remove TF1 plot from histogram */
         Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
@@ -1061,7 +1063,7 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
 
         gPad->Update();
 
-        double Upper_cut = plot_cuts + plot_Xmax, Lower_cut = -plot_cuts + plot_Xmax, plot_xmax = plot_Xmax;
+        double Upper_cut = plot_ucut + plot_Xmax, Lower_cut = plot_lcut + plot_Xmax, plot_xmax = plot_Xmax;
         TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(lineWidth);
         TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
@@ -1103,9 +1105,9 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
             FitParam->AddText(("Fit amp = " + to_string_with_precision(Amp, 8)).c_str());
             FitParam->AddText(("Fit std = " + to_string_with_precision(Std, 8)).c_str());
             FitParam->AddText(("Fit mean = " + to_string_with_precision(Mean, 8)).c_str());
-            ((TText*)FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
-            FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2) + " = " + to_string_with_precision(plot_cuts, 3)).c_str());
-            ((TText*)FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
+            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
+            FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2) + " = " + to_string_with_precision(plot_ucut, 3)).c_str());
+            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
             FitParam->Draw("same");
         }
     }
