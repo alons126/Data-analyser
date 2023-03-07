@@ -760,10 +760,10 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                 //	   bool dc_edge_cut     = DCEdgeCuts(*p);
 
                 /* ME: we set the f_XXX variables as true.
-                 * checkPidCut - checkes if partical is within chi2 cuts
-                 * checkVertex - checkes if Vx,Vy,Vz are within cuts
+                 * checkPidCut - checks if particle is within chi2 cuts
+                 * checkVertex - checks if Vx,Vy,Vz are within cuts
                  * DCEdgeCuts - ???
-                 * checkVertexCorrelation - checkes if dVz,Vy,Vz are within cuts (what are the cuts?) */
+                 * checkVertexCorrelation - checks if dVz,Vy,Vz are within cuts (what are the cuts?) */
                 if (!checkPidCut(*p) && f_pidCuts) //PID cuts
                 {
 //                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
@@ -1025,9 +1025,7 @@ bool clas12ana::checkVertexCorrelation(region_part_ptr el, region_part_ptr p) {
 bool clas12ana::checkPidCut(region_part_ptr p) {
     //true if inside cut
     //electron pid is handled by ECal sampling fractions cuts not here
-    if (p->par()->getPid() == 11) {
-        return true;
-    }
+    if (p->par()->getPid() == 11) { return true; }
 
     if (p->getRegion() == CD) { // My addition
         auto itter = pid_cuts_CD.find(p->par()->getPid());
@@ -1156,7 +1154,7 @@ void clas12ana::readInputParam(const char *filename) {
             double value;
             //get cut identifier
             ss >> parameter;
-            if (parameter == "pid_cuts") {
+            if (parameter == "pid_cuts") { // Justin's original
                 //get cut values
                 ss >> parameter2;
                 stringstream ss2(parameter2);

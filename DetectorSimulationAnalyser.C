@@ -135,7 +135,7 @@ void EventAnalyser() {
 
     /* Chi2 cuts */
     bool apply_chi2_cuts_1e_cut = true;
-    bool apply_chi2_cuts_MicroBooNE = true; //TODO: recheck if needed
+    bool apply_chi2_cuts_MicroBooNE = false; //TODO: recheck if needed
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -152,6 +152,7 @@ void EventAnalyser() {
     /* Momentum cuts */
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_MicroBooNE = true;
 
+    //<editor-fold desc="Cuts output">
     if (apply_cuts == false) {
         cout << "Cuts are disabled.\n\n\n";
 
@@ -172,6 +173,8 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+    //</editor-fold>
+
 // Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts declarations">
@@ -183,16 +186,16 @@ void EventAnalyser() {
      * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
     DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
     DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
-    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -3.78025, 3.78025);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -3.93997, 3.93997);
-    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.327104, -3.45699, 3.45699);
-    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0933062, -4.0555, 4.0555);
-    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.416576, -2.74364, 2.74364);
-    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", -0.441735, -9.92015, 9.92015);
-    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0944273, -3.14944, 3.14944);
-    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0504487, -3.25075, 3.25075);
-    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.023183, -2.99683, 2.99683);
-    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.0961539, -3.47212, 3.47212);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -2.83518, 2.83518);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.62664, 2.62664);
+    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.327104, -2.59275, 2.59275);
+    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0933062, -2.70366, 2.70366);
+    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.416576, -2.05773, 2.05773);
+    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", -0.441735, -6.61344, 6.61344);
+    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0944273, -2.36208, 2.36208);
+    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0504487, -2.16716, 2.16716);
+    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.023183, -2.247615, 2.247615);
+    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.0961539, -2.31474, 2.31474);
 
     /* Vertex cuts */
     DSCuts Vz_cut, dVz_cuts;
@@ -2113,7 +2116,7 @@ void EventAnalyser() {
 
         // Cuts on all particles:
         if (apply_Vz_cuts == true) {
-            Vz_cut = DSCuts("Vertex z componente", "", "", "1e cut", 0, -6, 1);
+            Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
             clasAna.setVertexCuts(); // making f_vertexCuts = ture
             clasAna.setVzcuts(Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut()); // setting Vz cuts for all (charged?) particles
         }
