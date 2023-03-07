@@ -1176,7 +1176,6 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
     //<editor-fold desc="SF histograms (1e cut, FD only)">
-
     THStack *sSF_1e_cut_FD = new THStack("SF (1e Cut, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e Cut, FD);f");
 
     TH1D *hSF_1e_cut_BC_FD, *hSF_1e_cut_AC_FD;
