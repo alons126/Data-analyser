@@ -3,16 +3,16 @@
 ############################################
 
 # pid cuts by detector (pid:mean:sigma)
-pid_cuts_CD 	2212:0.529844:3.76701	 #proton chi2pid cut (CD)
-pid_cuts_FD 	2212:-0.0352616:2.60974	 #proton chi2pid cut (FD)
-pid_cuts_CD 	 321:0.323816:3.4087	 #K+ chi2pid cut (CD)
-pid_cuts_FD 	 321:-0.102416:2.704	 #K+ chi2pid cut (FD)
-pid_cuts_CD 	-321:-0.408544:2.72481	 #K- chi2pid cut (CD)
-pid_cuts_FD 	-321:-0.381618:6.20766	 #K- chi2pid cut (FD)
-pid_cuts_CD 	 211:0.096566:3.14059	 #pi+ chi2pid cut (CD)
-pid_cuts_FD 	 211:0.0548898:2.16518	 #pi+ chi2pid cut (FD)
-pid_cuts_CD 	-211:0.0231258:2.99391	 #pi- chi2pid cut (CD)
-pid_cuts_FD 	-211:0.103287:2.30698	 #pi- chi2pid cut (FD)
+pid_cuts_CD 	2212:0.529231:3.78025	 #proton chi2pid cut (CD)
+pid_cuts_FD 	2212:-0.0203564:3.93997	 #proton chi2pid cut (FD)
+pid_cuts_CD 	 321:0.327104:3.45699	 #K+ chi2pid cut (CD)
+pid_cuts_FD 	 321:-0.0933062:4.0555	 #K+ chi2pid cut (FD)
+pid_cuts_CD 	-321:-0.416576:2.74364	 #K- chi2pid cut (CD)
+pid_cuts_FD 	-321:-0.441735:9.92015	 #K- chi2pid cut (FD)
+pid_cuts_CD 	 211:0.0944273:3.14944	 #pi+ chi2pid cut (CD)
+pid_cuts_FD 	 211:0.0504487:3.25075	 #pi+ chi2pid cut (FD)
+pid_cuts_CD 	-211:0.023183:2.99683	 #pi- chi2pid cut (CD)
+pid_cuts_FD 	-211:0.0961539:3.47212	 #pi- chi2pid cut (FD)
 
 # Vertex cuts (axis:min:max)
 vertex_cut	     z:-6:-1
