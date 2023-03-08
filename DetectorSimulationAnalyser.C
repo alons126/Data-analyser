@@ -201,6 +201,7 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum cuts */
+    //TODO: add momentum cuts here instead of in DetectorSimulationCuts.h
     DSCuts e_momentum_cuts_2p, p_momentum_cuts_2p;
     DSCuts e_momentum_cuts_MicroBooNE, p_momentum_cuts_MicroBooNE, cpion_momentum_cuts_MicroBooNE;
     //</editor-fold>
@@ -2555,8 +2556,8 @@ void EventAnalyser() {
             Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
             /* Fiducial plots after cuts */
-            if (electrons[0]->cal(PCAL)->getLv() >= fiducial_cut_Lv) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-            if (electrons[0]->cal(PCAL)->getLw() >= fiducial_cut_Lw) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+            if (electrons[0]->cal(PCAL)->getLv() >= clasAna.getEcalEdgeCuts()) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
+            if (electrons[0]->cal(PCAL)->getLw() >= clasAna.getEcalEdgeCuts()) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
         } else {
             Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
             Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
@@ -6683,6 +6684,11 @@ void EventAnalyser() {
 //                                                          Saving histogram list and finishing execution                                                              //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//    DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
+//
+//    ofstream pidCutsFile;
+//    pidCutsFile.open("pidCutsFile.par");
+
     //<editor-fold desc="Saving histogram list and finishing execution">
 
 // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
@@ -6985,14 +6991,12 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n\n";
     myLogFile << "SF_1e_upper_cut = " << clasAna.getEcalSFUpperCut() << "\n";
     myLogFile << "SF_1e_lower_cut = " << clasAna.getEcalSFLowerCut() << "\n";
-    myLogFile << "SF_1e2p_Xmax (from histogram) = " << SF_1e2p_Xmax << "\n";
-    myLogFile << "SF_1e2p_peak (used in cuts) = " << SF_1e2p_peak << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "ECAL fiducial cuts (electrons only, FD)\n";
     myLogFile << "===========================================================================\n\n";
-    myLogFile << "fiducial_cut_Lv = " << fiducial_cut_Lv << "\n";
-    myLogFile << "fiducial_cut_Lw = " << fiducial_cut_Lw << "\n\n";
+    myLogFile << "fiducial_cut_Lv = " << clasAna.getEcalEdgeCuts() << "\n";
+    myLogFile << "fiducial_cut_Lw = " << clasAna.getEcalEdgeCuts() << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "Momentum thresholds (2p)\n";
@@ -7136,7 +7140,7 @@ void EventAnalyser() {
     myLogFile << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n\n";
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
-    myLogFile << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_2p << "\n";
+    myLogFile << "#(events) 2p:\t\t" << num_of_events_2p << "\n";
     myLogFile << "#(events) 2p QEL:\t\t\t" << num_of_QEL_2p_events << "\n";
     myLogFile << "#(events) 2p MEC:\t\t\t" << num_of_MEC_2p_events << "\n";
     myLogFile << "#(events) 2p RES:\t\t\t" << num_of_RES_2p_events << "\n";
@@ -7254,7 +7258,7 @@ void EventAnalyser() {
     cout << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n";
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
-    cout << "#(events) 1e2p & Chi2 & dVz cuts (2p):\t" << num_of_events_2p << "\n";
+    cout << "#(events) 2p:\t\t\t\t" << num_of_events_2p << "\n";
     cout << "#(events) 2p QEL:\t\t\t" << num_of_QEL_2p_events << "\n";
     cout << "#(events) 2p MEC:\t\t\t" << num_of_MEC_2p_events << "\n";
     cout << "#(events) 2p RES:\t\t\t" << num_of_RES_2p_events << "\n";
