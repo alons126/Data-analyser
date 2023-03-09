@@ -11,7 +11,7 @@ public:
     DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1); // Default constructor
 
     /* Set functions */
-    void InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean = 0, double llim = -1, double ulim = -1);
+//    void InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean = 0, double llim = -1, double ulim = -1);
 
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
 
@@ -46,13 +46,13 @@ public:
 
     double GetUpperCut() { return Cuts.at(2); }
 
-    std::string GetCutVariable(std::string cv) { return CutVariable; }
+    std::string GetCutVariable() { return CutVariable; }
 
-    std::string GetRegion(std::string r) { return Region; }
+    std::string GetRegion() { return Region; }
 
-    std::string GetPart(std::string p) { return Particle; }
+    std::string GetPart() { return Particle; }
 
-    std::string GetAppliedCuts(std::string ac) { return AppliedCuts; }
+    std::string GetAppliedCuts() { return AppliedCuts; }
 
     double MeanFromHistogram, MeanFromFit, FitStdFactor;
     vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
@@ -77,33 +77,34 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
 //        FitStdFactor = 1.5; // sigma factor for CD cuts
 //        FitStdFactor = 2; // sigma factor for CD cuts
     } else if (r == "FD") {
-        FitStdFactor = 2; // sigma factor for CD cuts
-//        FitStdFactor = 3; // sigma factor for CD cuts
-    } else {
-        FitStdFactor = 1;
-    }
-}
-
-void DSCuts::InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) {
-    CutVariable = cv, Particle = p, AppliedCuts = ac;
-    Cuts.at(0) = mean, Cuts.at(1) = llim, Cuts.at(2) = ulim;
-
-    if (r == "") {
-        Region = "CD & FD";
-    } else {
-        Region = r;
-    }
-
-    if (r == "CD") {
         FitStdFactor = 1; // sigma factor for CD cuts
-//        FitStdFactor = 1.5; // sigma factor for CD cuts
 //        FitStdFactor = 2; // sigma factor for CD cuts
-    } else if (r == "FD") {
-        FitStdFactor = 2; // sigma factor for CD cuts
 //        FitStdFactor = 3; // sigma factor for CD cuts
     } else {
         FitStdFactor = 1;
     }
 }
+
+//void DSCuts::InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) {
+//    CutVariable = cv, Particle = p, AppliedCuts = ac;
+//    Cuts.at(0) = mean, Cuts.at(1) = llim, Cuts.at(2) = ulim;
+//
+//    if (r == "") {
+//        Region = "CD & FD";
+//    } else {
+//        Region = r;
+//    }
+//
+//    if (r == "CD") {
+//        FitStdFactor = 1; // sigma factor for CD cuts
+////        FitStdFactor = 1.5; // sigma factor for CD cuts
+////        FitStdFactor = 2; // sigma factor for CD cuts
+//    } else if (r == "FD") {
+//        FitStdFactor = 2; // sigma factor for CD cuts
+////        FitStdFactor = 3; // sigma factor for CD cuts
+//    } else {
+//        FitStdFactor = 1;
+//    }
+//}
 
 #endif //PROJECT_DSCUTS_H

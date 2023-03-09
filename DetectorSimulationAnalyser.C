@@ -124,7 +124,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
     bool apply_chi2_cuts_MicroBooNE = false; //TODO: recheck if needed
 
     /* Vertex cuts */
@@ -177,7 +177,7 @@ void EventAnalyser() {
     DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
     DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
     DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.62665, 2.62665);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -1.31332, 1.31332);
     DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.327104, -1.7285, 1.7285);
     DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0933062, -2.70367, 2.70367);
     DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.416576, -1.37182, 1.37182);
@@ -189,7 +189,8 @@ void EventAnalyser() {
 //    DSCuts Chi2_hadron_cuts[]
 
     /* Vertex cuts */
-    DSCuts Vz_cut, dVz_cuts;
+    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
+    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
 
     /* Sampling Fraction (SF) cuts (electrons only, FD) */
     DSCuts SF_cuts;
@@ -676,20 +677,22 @@ void EventAnalyser() {
     if (apply_cuts == true) { Chi2_boundary = 10; }
 
     /* Vertex plots */
-    double Vertex_boundary = 25;
-    if (apply_cuts == true) { Vertex_boundary = 7.5; }
+    double Vertex_boundary = 25, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
+
+    if (apply_cuts == true) {
+        double dVertex_boundary = Vz_cut.GetUpperCut() - Vz_cut.GetLowerCut();
+        Vertex_uboundary = Vz_cut.GetUpperCut() + 0.2 * dVertex_boundary, Vertex_lboundary = Vz_cut.GetLowerCut() - 0.1 * dVertex_boundary;
+    }
+
     double dV_boundary = 25;
-    if (apply_cuts == true) { dV_boundary = 7.5; }
+    if (apply_cuts == true) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
 
     /* SF */
-    double SF_uboundary = 0.31;
-    double SF_lboundary = 0.16;
+    double SF_uboundary = 0.31, SF_lboundary = 0.16;
 
     /* Beta vs. P plots */
-    double Beta_boundary = 3;
-    if (apply_cuts == true) { Beta_boundary = 1.1; }
-    double P_boundary = beamE * 1.425;
-    if (apply_cuts == true) { P_boundary = beamE * 1.1; }
+    double Beta_boundary = 3, P_boundary = beamE * 1.425;
+    if (apply_cuts == true) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
     //</editor-fold>
 
     //</editor-fold>
@@ -990,12 +993,12 @@ void EventAnalyser() {
     THStack *sVx_Electron_1e_cut = new THStack("V_{x}^{e^{-}} (1e Only, CD & FD)", "V_{x}^{e^{-}} (1e Only, CD & FD);V_{x}^{e^{-}} [cm];");
     THStack *sVy_Electron_1e_cut = new THStack("V_{y}^{e^{-}} (1e Only, CD & FD)", "V_{y}^{e^{-}} (1e Only, CD & FD);V_{y}^{e^{-}} [cm];");
     THStack *sVz_Electron_1e_cut = new THStack("V_{z}^{e^{-}} (1e Only, CD & FD)", "V_{z}^{e^{-}} (1e Only, CD & FD);V_{z}^{e^{-}} [cm];");
-//    TH1D *hVx_Electron_1e_cut_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Electron_1e_cut_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Electron_1e_cut_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVx_Electron_1e_cut_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Electron_1e_cut_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Electron_1e_cut_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+//    TH1D *hVx_Electron_1e_cut_CD = new TH1D("V_{x}^{e^{-}} (1e Cut, CD)", "V_{x}^{e^{-}} (1e Cut, CD);V_{x}^{e^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+//    TH1D *hVy_Electron_1e_cut_CD = new TH1D("V_{y}^{e^{-}} (1e Cut, CD)", "V_{y}^{e^{-}} (1e Cut, CD);V_{y}^{e^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+//    TH1D *hVz_Electron_1e_cut_CD = new TH1D("V_{z}^{e^{-}} (1e Cut, CD)", "V_{z}^{e^{-}} (1e Cut, CD);V_{z}^{e^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVx_Electron_1e_cut_FD = new TH1D("V_{x}^{e^{-}} (1e Cut, FD)", "V_{x}^{e^{-}} (1e Cut, FD);V_{x}^{e^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Electron_1e_cut_FD = new TH1D("V_{y}^{e^{-}} (1e Cut, FD)", "V_{y}^{e^{-}} (1e Cut, FD);V_{y}^{e^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Electron_1e_cut_FD = new TH1D("V_{z}^{e^{-}} (1e Cut, FD)", "V_{z}^{e^{-}} (1e Cut, FD);V_{z}^{e^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
     string hVx_Electron_1e_cut_CD_Dir = Vertex_Electron_1e_Vx_Directory, hVx_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vx_Directory;
     string hVy_Electron_1e_cut_CD_Dir = Vertex_Electron_1e_Vy_Directory, hVy_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vy_Directory;
     string hVz_Electron_1e_cut_CD_Dir = Vertex_Electron_1e_Vz_Directory, hVz_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vz_Directory;
@@ -1003,12 +1006,12 @@ void EventAnalyser() {
     THStack *sVx_Proton_1e_cut = new THStack("V_{x}^{p} (1e Only, CD & FD)", "V_{x}^{p} (1e Only, CD & FD);V_{x}^{p} [cm];");
     THStack *sVy_Proton_1e_cut = new THStack("V_{y}^{p} (1e Only, CD & FD)", "V_{y}^{p} (1e Only, CD & FD);V_{y}^{p} [cm];");
     THStack *sVz_Proton_1e_cut = new THStack("V_{z}^{p} (1e Only, CD & FD)", "V_{z}^{p} (1e Only, CD & FD);V_{z}^{p} [cm];");
-    TH1D *hVx_Proton_1e_cut_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Proton_1e_cut_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Proton_1e_cut_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVx_Proton_1e_cut_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Proton_1e_cut_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Proton_1e_cut_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Proton_1e_cut_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Proton_1e_cut_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Proton_1e_cut_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVx_Proton_1e_cut_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Proton_1e_cut_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Proton_1e_cut_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
     string hVx_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vx_Directory, hVx_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vx_Directory;
     string hVy_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vy_Directory, hVy_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vy_Directory;
     string hVz_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vz_Directory, hVz_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vz_Directory;
@@ -1016,12 +1019,12 @@ void EventAnalyser() {
     THStack *sVx_Kplus_1e_cut = new THStack("V_{x}^{K^{+}} (1e Only, CD & FD)", "V_{x}^{K^{+}} (1e Only, CD & FD);V_{x}^{K^{+}} [cm];");
     THStack *sVy_Kplus_1e_cut = new THStack("V_{y}^{K^{+}} (1e Only, CD & FD)", "V_{y}^{K^{+}} (1e Only, CD & FD);V_{y}^{K^{+}} [cm];");
     THStack *sVz_Kplus_1e_cut = new THStack("V_{z}^{K^{+}} (1e Only, CD & FD)", "V_{z}^{K^{+}} (1e Only, CD & FD);V_{z}^{K^{+}} [cm];");
-    TH1D *hVx_Kplus_1e_cut_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Kplus_1e_cut_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Kplus_1e_cut_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVx_Kplus_1e_cut_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Kplus_1e_cut_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Kplus_1e_cut_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Kplus_1e_cut_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Kplus_1e_cut_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Kplus_1e_cut_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVx_Kplus_1e_cut_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Kplus_1e_cut_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Kplus_1e_cut_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
     string hVx_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vx_Directory, hVx_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vx_Directory;
     string hVy_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vy_Directory, hVy_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vy_Directory;
     string hVz_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vz_Directory, hVz_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vz_Directory;
@@ -1029,12 +1032,12 @@ void EventAnalyser() {
     THStack *sVx_Kminus_1e_cut = new THStack("V_{x}^{K^{-}} (1e Only, CD & FD)", "V_{x}^{K^{-}} (1e Only, CD & FD);V_{x}^{K^{-}} [cm];");
     THStack *sVy_Kminus_1e_cut = new THStack("V_{y}^{K^{-}} (1e Only, CD & FD)", "V_{y}^{K^{-}} (1e Only, CD & FD);V_{y}^{K^{-}} [cm];");
     THStack *sVz_Kminus_1e_cut = new THStack("V_{z}^{K^{-}} (1e Only, CD & FD)", "V_{z}^{K^{-}} (1e Only, CD & FD);V_{z}^{K^{-}} [cm];");
-    TH1D *hVx_Kminus_1e_cut_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Kminus_1e_cut_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Kminus_1e_cut_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVx_Kminus_1e_cut_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_Kminus_1e_cut_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_Kminus_1e_cut_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_Kminus_1e_cut_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Kminus_1e_cut_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Kminus_1e_cut_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVx_Kminus_1e_cut_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_Kminus_1e_cut_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_Kminus_1e_cut_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
     string hVx_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vx_Directory, hVx_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vx_Directory;
     string hVy_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vy_Directory, hVy_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vy_Directory;
     string hVz_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vz_Directory, hVz_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vz_Directory;
@@ -1042,12 +1045,12 @@ void EventAnalyser() {
     THStack *sVx_piplus_1e_cut = new THStack("V_{x}^{#pi^{+}} (1e Only, CD & FD)", "V_{x}^{#pi^{+}} (1e Only, CD & FD);V_{x}^{#pi^{+}} [cm];");
     THStack *sVy_piplus_1e_cut = new THStack("V_{y}^{#pi^{+}} (1e Only, CD & FD)", "V_{y}^{#pi^{+}} (1e Only, CD & FD);V_{y}^{#pi^{+}} [cm];");
     THStack *sVz_piplus_1e_cut = new THStack("V_{z}^{#pi^{+}} (1e Only, CD & FD)", "V_{z}^{#pi^{+}} (1e Only, CD & FD);V_{z}^{#pi^{+}} [cm];");
-    TH1D *hVx_piplus_1e_cut_CD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, CD)", "V_{x}^{#pi^{+}} (1e Cut, CD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_piplus_1e_cut_CD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, CD)", "V_{y}^{#pi^{+}} (1e Cut, CD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_piplus_1e_cut_CD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, CD)", "V_{z}^{#pi^{+}} (1e Cut, CD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVx_piplus_1e_cut_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_piplus_1e_cut_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_piplus_1e_cut_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_piplus_1e_cut_CD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, CD)", "V_{x}^{#pi^{+}} (1e Cut, CD);V_{x}^{#pi^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_piplus_1e_cut_CD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, CD)", "V_{y}^{#pi^{+}} (1e Cut, CD);V_{y}^{#pi^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_piplus_1e_cut_CD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, CD)", "V_{z}^{#pi^{+}} (1e Cut, CD);V_{z}^{#pi^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVx_piplus_1e_cut_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_piplus_1e_cut_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_piplus_1e_cut_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
     string hVx_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vx_Directory, hVx_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vx_Directory;
     string hVy_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vy_Directory, hVy_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vy_Directory;
     string hVz_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vz_Directory, hVz_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vz_Directory;
@@ -1055,12 +1058,12 @@ void EventAnalyser() {
     THStack *sVx_piminus_1e_cut = new THStack("V_{x}^{#pi^{-}} (1e Only, CD & FD)", "V_{x}^{#pi^{-}} (1e Only, CD & FD);V_{x}^{#pi^{-}} [cm];");
     THStack *sVy_piminus_1e_cut = new THStack("V_{y}^{#pi^{-}} (1e Only, CD & FD)", "V_{y}^{#pi^{-}} (1e Only, CD & FD);V_{y}^{#pi^{-}} [cm];");
     THStack *sVz_piminus_1e_cut = new THStack("V_{z}^{#pi^{-}} (1e Only, CD & FD)", "V_{z}^{#pi^{-}} (1e Only, CD & FD);V_{z}^{#pi^{-}} [cm];");
-    TH1D *hVx_piminus_1e_cut_CD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, CD)", "V_{x}^{#pi^{-}} (1e Cut, CD);V_{x}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_piminus_1e_cut_CD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, CD)", "V_{y}^{#pi^{-}} (1e Cut, CD);V_{y}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_piminus_1e_cut_CD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, CD)", "V_{z}^{#pi^{-}} (1e Cut, CD);V_{z}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVx_piminus_1e_cut_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVy_piminus_1e_cut_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
-    TH1D *hVz_piminus_1e_cut_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];", 250, -Vertex_boundary, Vertex_boundary);
+    TH1D *hVx_piminus_1e_cut_CD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, CD)", "V_{x}^{#pi^{-}} (1e Cut, CD);V_{x}^{#pi^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_piminus_1e_cut_CD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, CD)", "V_{y}^{#pi^{-}} (1e Cut, CD);V_{y}^{#pi^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_piminus_1e_cut_CD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, CD)", "V_{z}^{#pi^{-}} (1e Cut, CD);V_{z}^{#pi^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVx_piminus_1e_cut_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVy_piminus_1e_cut_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
+    TH1D *hVz_piminus_1e_cut_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];", 250, Vertex_lboundary, Vertex_uboundary);
     string hVx_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vx_Directory, hVx_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vx_Directory;
     string hVy_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vy_Directory, hVy_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vy_Directory;
     string hVz_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vz_Directory, hVz_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vz_Directory;
@@ -1205,11 +1208,11 @@ void EventAnalyser() {
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
         Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_Directory;
     } else {
-        Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+        Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
         Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory;
 
-        Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+        Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
         Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory;
     }
@@ -2036,7 +2039,13 @@ void EventAnalyser() {
 
     if (apply_cuts == true) {
         /* Read in target parameter files */
-        clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+//        clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+        if (apply_chi2_cuts_1e_cut == false) {
+            clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+        } else if (apply_chi2_cuts_1e_cut == true) {
+            cout << "Loading fitted pid cuts...\n\n";
+            clasAna.readInputParam((CutsDirectory + "FittedPIDCuts.par").c_str());
+        }
         clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str());
 
         // Cuts on electrons only:
@@ -2071,7 +2080,7 @@ void EventAnalyser() {
 
         // Cuts on all particles:
         if (apply_Vz_cuts == true) {
-            Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
+//            Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
             clasAna.setVertexCuts(); // making f_vertexCuts = ture
             clasAna.setVzcuts(Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut()); // setting Vz cuts for all (charged?) particles
         }
@@ -2083,7 +2092,7 @@ void EventAnalyser() {
         }
 
         if (apply_dVz_cuts == true) {
-            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
+//            dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
             clasAna.setVertexCorrCuts(); // making f_corr_vertexCuts = ture
             clasAna.setVertexCorrCuts(dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut()); // setting dVz cuts?
         }
@@ -2520,6 +2529,15 @@ void EventAnalyser() {
 
             if (protons.size() == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
         }
+
+
+
+
+        //TODO: recheck if beta cut should be applied to ALL particles and add it to clas12ana
+        if (electrons[0]->par()->getBeta() > 1.2) { continue; }
+
+
+
 
         /* Electron 1e cut variables' definitions */
         TVector3 P_e_1e;
@@ -4960,7 +4978,7 @@ void EventAnalyser() {
             Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
             c1->SetLogz(1);
             Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-            c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_BC_PCAL.png").c_str());
+            c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_PCAL.png").c_str());
             gStyle->SetStatX(DefStatX);
             gStyle->SetStatY(DefStatY);
             c1->Clear();
@@ -4977,7 +4995,7 @@ void EventAnalyser() {
             Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
             c1->SetLogz(1);
             Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-            c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_BC_PCAL.png").c_str());
+            c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_PCAL.png").c_str());
             gStyle->SetStatX(DefStatX);
             gStyle->SetStatY(DefStatY);
             c1->Clear();
@@ -4995,8 +5013,6 @@ void EventAnalyser() {
         plots->Add(Vcal_VS_EoP_2p_PCAL);
         Vcal_VS_EoP_2p_PCAL->Draw("colz");
         c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
         Vcal_VS_EoP_2p_PCAL->SetStats(0);
         c1->SaveAs((Vcal_VS_EoP_2p_PCAL_Dir + "01_Vcal_VS_EoP_2p_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
@@ -5014,8 +5030,6 @@ void EventAnalyser() {
         plots->Add(Wcal_VS_EoP_2p_PCAL);
         Wcal_VS_EoP_2p_PCAL->Draw("colz");
         c1->SetLogz(1);
-//        gStyle->SetStatX(0.87);
-//        gStyle->SetStatY(0.4);
         Wcal_VS_EoP_2p_PCAL->SetStats(0);
         c1->SaveAs((Wcal_VS_EoP_2p_PCAL_Dir + "02_Wcal_VS_EoP_2p_PCAL.png").c_str());
         gStyle->SetStatX(DefStatX);
@@ -6684,12 +6698,31 @@ void EventAnalyser() {
 //                                                          Saving histogram list and finishing execution                                                              //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//    DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
-//
-//    ofstream pidCutsFile;
-//    pidCutsFile.open("pidCutsFile.par");
-
     //<editor-fold desc="Saving histogram list and finishing execution">
+
+// Saving proton pid cuts to .par file ----------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Saving proton pid cuts to .par file">
+    if (apply_chi2_cuts_1e_cut == false) {
+        DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
+
+        ofstream FittedPIDCuts;
+        FittedPIDCuts.open((CutsDirectory + "FittedPIDCuts.par").c_str());
+        FittedPIDCuts << "############################################\n";
+        FittedPIDCuts << "# CLAS12 analysis cuts and parameters file #\n";
+        FittedPIDCuts << "############################################\n";
+        FittedPIDCuts << "\n";
+        FittedPIDCuts << "# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor << ";sigma_FD=" << Chi2_Proton_cuts_FD.FitStdFactor
+                      << ":\n";
+
+        for (int i = 0; i < 2; i++) {
+            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << "\n";
+//        FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].GetMeanFit() << ":" << chi2cuts[i].GetUpperCut() << "\n";
+        }
+
+        FittedPIDCuts.close();
+    }
+    //</editor-fold>
 
 // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
 

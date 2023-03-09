@@ -1,0 +1,7 @@
+############################################
+# CLAS12 analysis cuts and parameters file #
+############################################
+
+# pid cuts by detector (pid:mean:sigma) - sigma_CD=1;sigma_FD=1:
+pid_cuts_CD		2212:0.529231:1.89012
+pid_cuts_FD		2212:-0.0203564:1.31332
