@@ -124,7 +124,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
     bool apply_chi2_cuts_MicroBooNE = false; //TODO: recheck if needed
 
     /* Vertex cuts */
