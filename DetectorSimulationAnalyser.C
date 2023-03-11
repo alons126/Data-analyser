@@ -217,19 +217,21 @@ void EventAnalyser() {
     system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
 
     //<editor-fold desc="Cut parameters plots directories">
+//    TFolder *Cuts_plots = new TFolder("01_Cuts_plots", "01_Cuts_plots");
 
     //<editor-fold desc="Number of Photo-electrons (Nphe) plots directories">
     bool create_Nphe_Dir = true;
     string Nphe_Parent_Directory = "01_Cuts_plots/01_Nphe_plots";
-    TFolder *Nphe_Folder = new TFolder(Nphe_Parent_Directory.c_str(), Nphe_Parent_Directory.c_str());
+//    string Nphe_Parent_TFolder_Directory = "01_Nphe_plots";
+//    TFolder *Nphe_Folder = new TFolder(Nphe_Parent_TFolder_Directory.c_str(), Nphe_Parent_TFolder_Directory.c_str());
     string Nphe_Daughter_Folders[] = {"", "01_1e_cut", "02_2p",};
 
     for (string folders_name: Nphe_Daughter_Folders) {
         MakeDirectory(create_Nphe_Dir, Nphe_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Nphe_Folder, Nphe_Parent_Directory, folders_name);
+//        TFolderAdder(Nphe_Folder, Nphe_Parent_Directory, folders_name, true);
     }
 
-    plots->Add(Nphe_Folder);
+//    Cuts_plots->Add(Nphe_Folder);
 
     string Nphe_1e_cut_BC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/"; // before cuts - i.e. plots before Nphe cuts
     string Nphe_1e_cut_AC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/"; // after cuts - i.e. plots after Nphe cuts
@@ -240,16 +242,17 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2 plots directories">
     bool create_chi2_Dir = true;
     string Chi2_Parent_Directory = "01_Cuts_plots/02_Chi2_plots";
-    TFolder *Chi2_Folder = new TFolder(Chi2_Parent_Directory.c_str(), Chi2_Parent_Directory.c_str());
+//    string Chi2_Parent_TFolder_Directory = "02_Chi2_plots";
+//    TFolder *Chi2_Folder = new TFolder(Chi2_Parent_TFolder_Directory.c_str(), Chi2_Parent_TFolder_Directory.c_str());
     string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p_BC-AC_cut_tests",
                                       "05_2p"};
 
     for (string folders_name: Chi2_Daughter_Folders) {
         MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Chi2_Folder, Chi2_Parent_Directory, folders_name);
+//        TFolderAdder(Chi2_Folder, Chi2_Parent_Directory, folders_name, true);
     }
 
-    plots->Add(Chi2_Folder);
+//    Cuts_plots->Add(Chi2_Folder);
 
     string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/";
 
@@ -266,7 +269,8 @@ void EventAnalyser() {
     //<editor-fold desc="Vertex plots directories">
     bool create_Vertex_Dir = true;
     string Vertex_Parent_Directory = "01_Cuts_plots/03_Vertex_plots";
-    TFolder *Vertex_Folder = new TFolder(Vertex_Parent_Directory.c_str(), Vertex_Parent_Directory.c_str());
+//    string Vertex_Parent_TFolder_Directory = "03_Vertex_plots";
+//    TFolder *Vertex_Folder = new TFolder(Vertex_Parent_TFolder_Directory.c_str(), Vertex_Parent_TFolder_Directory.c_str());
     string Vertex_Daughter_Folders[] = {"", "02_dV_plots/02_1e2p", "02_dV_plots/03_2p", "02_dV_plots/01_MicroBooNE",
                                         "02_dV_plots/01_MicroBooNE/BC-AC_cut_tests", "01_Vertex_components_plots/01_1e_cut/01_Electrons",
                                         "01_Vertex_components_plots/01_1e_cut/02_Protons", "01_Vertex_components_plots/01_1e_cut/03_Kplus",
@@ -275,10 +279,10 @@ void EventAnalyser() {
 
     for (string folders_name: Vertex_Daughter_Folders) {
         MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Vertex_Folder, Vertex_Parent_Directory, folders_name);
+//        TFolderAdder(Vertex_Folder, Vertex_Parent_Directory, folders_name, true);
     }
 
-    plots->Add(Vertex_Folder);
+//    Cuts_plots->Add(Vertex_Folder);
 
     string Vertex_1e2p_dV_BC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
     string Vertex_1e2p_dV_AC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
@@ -311,16 +315,17 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) plots directories">
     bool create_SF_Dir = true;
     string SF_Parent_Directory = "01_Cuts_plots/04_SF_plots";
-    TFolder *SF_Folder = new TFolder(SF_Parent_Directory.c_str(), SF_Parent_Directory.c_str());
+//    string SF_Parent_TFolder_Directory = "04_SF_plots";
+//    TFolder *SF_Folder = new TFolder(SF_Parent_TFolder_Directory.c_str(), SF_Parent_TFolder_Directory.c_str());
     string SF_Daughter_Folders[] = {"", "01_1e_cut", "01_1e_cut/SF_plots", "01_1e_cut/SF_VS_P_e_plots", "02_2p", "02_2p/SF_plots",
                                     "02_2p/SF_VS_P_e_plots"};
 
     for (string folders_name: SF_Daughter_Folders) {
         MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name);
+//        TFolderAdder(SF_Folder, SF_Parent_Directory, folders_name, true);
     }
 
-    plots->Add(SF_Folder);
+//    Cuts_plots->Add(SF_Folder);
 
     string SF_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/";
 
@@ -346,15 +351,16 @@ void EventAnalyser() {
     //<editor-fold desc="Edge cuts histograms plots directories">
     bool create_fiducial_Dir = true;
     string fiducial_Parent_Directory = "01_Cuts_plots/05_Edge_cuts_plots";
-    TFolder *fiducial_Folder = new TFolder(fiducial_Parent_Directory.c_str(), fiducial_Parent_Directory.c_str());
+//    string fiducial_Parent_TFolder_Directory = "05_Edge_cuts_plots";
+//    TFolder *fiducial_Folder = new TFolder(fiducial_Parent_TFolder_Directory.c_str(), fiducial_Parent_TFolder_Directory.c_str());
     string fiducial_Daughter_Folders[] = {"", "01_1e_cut", "01_1e_cut/PCAL", "02_2p", "02_2p/PCAL"};
 
     for (string folders_name: fiducial_Daughter_Folders) {
         MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name);
+//        TFolderAdder(fiducial_Folder, fiducial_Parent_Directory, folders_name, true);
     }
 
-    plots->Add(fiducial_Folder);
+//    Cuts_plots->Add(fiducial_Folder);
 
     string fiducial_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/";
 
@@ -370,15 +376,16 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots directories">
     bool create_Momentum_Dir = true;
     string Momentum_Parent_Directory = "01_Cuts_plots/06_Momentum_plots";
-    TFolder *Momentum_Folder = new TFolder(Momentum_Parent_Directory.c_str(), Momentum_Parent_Directory.c_str());
+//    string Momentum_Parent_TFolder_Directory = "06_Momentum_plots";
+//    TFolder *Momentum_Folder = new TFolder(Momentum_Parent_TFolder_Directory.c_str(), Momentum_Parent_TFolder_Directory.c_str());
     string Momentum_Daughter_Folders[] = {"", "01_MicroBooNE", "01_MicroBooNE/BC-AC_cut_tests", "02_1e2p", "03_2p"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
         MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Momentum_Folder, Momentum_Parent_Directory, folders_name);
+//        TFolderAdder(Momentum_Folder, Momentum_Parent_Directory, folders_name, true);
     }
 
-    plots->Add(Momentum_Folder);
+//    Cuts_plots->Add(Momentum_Folder);
 
     string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
     string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
@@ -388,22 +395,24 @@ void EventAnalyser() {
     string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
     //</editor-fold>
 
+//    plots->Add(Cuts_plots);
+
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
     string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
-    TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
+//    TFolder *Beta_vs_P_Folder = new TFolder(Beta_VS_P_Parent_Directory.c_str(), Beta_VS_P_Parent_Directory.c_str());
     string Beta_VS_P_Daughter_Folders[] = {"", "01_All_e", "01_All_e/By_charge", "02_1e_cut", "02_1e_cut/By_charge", "03_MicroBooNE",
                                            "03_MicroBooNE/Before_cuts", "03_MicroBooNE/Before_cuts/By_charge", "03_MicroBooNE/After_cuts",
                                            "03_MicroBooNE/After_cuts/By_charge", "04_2p", "04_2p/By_charge"};
 
     for (string folders_name: Beta_VS_P_Daughter_Folders) {
         MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
+//        TFolderAdder(Beta_vs_P_Folder, Beta_VS_P_Parent_Directory, folders_name);
     }
 
-    plots->Add(Beta_vs_P_Folder);
+//    plots->Add(Beta_vs_P_Folder);
 
     string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
     string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
@@ -422,8 +431,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Angle plots directories">
     bool create_Angle_Dir = true;
-    string Angle_Parent_Directory = "03_Angle_plots";
-    TFolder *Angle_Folder = new TFolder(Angle_Parent_Directory.c_str(), Angle_Parent_Directory.c_str());
+    string Angle_Parent_Directory = "03_Angle_plots_master";
+//    TFolder *Angle_Folder = new TFolder(Angle_Parent_Directory.c_str(), Angle_Parent_Directory.c_str());
     string Angle_Daughter_Folders[] = {"", "01_All_e", "01_All_e/01_Theta_e_All_e_plots", "01_All_e/02_Phi_e_All_e_plots", "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots",
                                        "02_1e_cut", "02_1e_cut/01_Theta_e_1e_cut_plots", "02_1e_cut/02_Phi_e_1e_cut_plots", "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots",
                                        "03_MicroBooNE", "03_MicroBooNE/01_Theta_e_MicroBooNE_plots", "03_MicroBooNE/02_Phi_e_MicroBooNE_plots",
@@ -434,10 +443,10 @@ void EventAnalyser() {
 
     for (string folders_name: Angle_Daughter_Folders) {
         MakeDirectory(create_Angle_Dir, Angle_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Angle_Folder, Angle_Parent_Directory, folders_name);
+//        TFolderAdder(Angle_Folder, Angle_Parent_Directory, folders_name);
     }
 
-    plots->Add(Angle_Folder);
+//    plots->Add(Angle_Folder);
 
     string Theta_e_All_e_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[2] + "/";
     string Phi_e_All_e_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[3] + "/";
@@ -467,15 +476,15 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 plots directories">
     bool create_Q2_Dir = true;
     string Q2_Parent_Directory = "04_Q2_plots";
-    TFolder *Q2_Folder = new TFolder(Q2_Parent_Directory.c_str(), Q2_Parent_Directory.c_str());
+//    TFolder *Q2_Folder = new TFolder(Q2_Parent_Directory.c_str(), Q2_Parent_Directory.c_str());
     string Q2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_MicroBooNE", "04_1e2X", "05_1e2p", "06_2p"};
 
     for (string folders_name: Q2_Daughter_Folders) {
         MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Q2_Folder, Q2_Parent_Directory, folders_name);
+//        TFolderAdder(Q2_Folder, Q2_Parent_Directory, folders_name);
     }
 
-    plots->Add(Q2_Folder);
+//    plots->Add(Q2_Folder);
 
     string Q2_All_e_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[1] + "/";
 
@@ -493,7 +502,7 @@ void EventAnalyser() {
     //<editor-fold desc="E_e plots directories">
     bool create_E_e_Dir = true;
     string E_e_Parent_Directory = "05_E_e_plots";
-    TFolder *E_e_Folder = new TFolder(E_e_Parent_Directory.c_str(), E_e_Parent_Directory.c_str());
+//    TFolder *E_e_Folder = new TFolder(E_e_Parent_Directory.c_str(), E_e_Parent_Directory.c_str());
     string E_e_Daughter_Folders[] = {"", "01_1e_cut", "01_1e_cut/E_e_plots", "01_1e_cut/E_e_VS_Theta_e", "02_MicroBooNE", "02_MicroBooNE/E_e_plots",
                                      "02_MicroBooNE/E_e_VS_Theta_e", "03_2p", "03_2p/E_e_plots", "03_2p/E_e_VS_Theta_e"};
 
@@ -501,10 +510,10 @@ void EventAnalyser() {
 
     for (string folders_name: E_e_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(E_e_Folder, E_e_Parent_Directory, folders_name);
+//        TFolderAdder(E_e_Folder, E_e_Parent_Directory, folders_name);
     }
 
-    plots->Add(E_e_Folder);
+//    plots->Add(E_e_Folder);
 
     string E_e_All_Int_1e_cut_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[2] + "/";
 //    string E_e_QEL_1e_cut_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[2] + "/";
@@ -544,17 +553,17 @@ void EventAnalyser() {
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
     string ETrans_Parent_Directory = "06_ET_plots";
-    TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
+//    TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
     string ETrans_Daughter_Folders[] = {"", "01_2p", "01_2p/01_Around_15_Deg", "01_2p/01_Around_15_Deg/00_All_interactions",
                                         "01_2p/01_Around_15_Deg/01_QEL_only", "01_2p/01_Around_15_Deg/02_MEC_only", "01_2p/01_Around_15_Deg/03_RES_only",
                                         "01_2p/01_Around_15_Deg/04_DIS_only"};
 
     for (string folders_name: ETrans_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(ETrans_Folder, ETrans_Parent_Directory, folders_name);
+//        TFolderAdder(ETrans_Folder, ETrans_Parent_Directory, folders_name);
     }
 
-    plots->Add(ETrans_Folder);
+//    plots->Add(ETrans_Folder);
 
     string ETrans_15_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
     string ETrans_All_Int_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
@@ -567,15 +576,15 @@ void EventAnalyser() {
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
     string Ecal_Parent_Directory = "07_Ecal_rec_plots";
-    TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
+//    TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
     string Ecal_Daughter_Folders[] = {"", "2p", "2p/00_All_interactions", "2p/01_QEL_only", "2p/02_MEC_only", "2p/03_RES_only", "2p/04_DIS_only"};
 
     for (string folders_name: Ecal_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
-        TFolderAdder(Ecal_Folder, Ecal_Parent_Directory, folders_name);
+//        TFolderAdder(Ecal_Folder, Ecal_Parent_Directory, folders_name);
     }
 
-    plots->Add(Ecal_Folder);
+//    plots->Add(Ecal_Folder);
 
     string Ecal_stack_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[1] + "/";
     string Ecal_All_Int_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[2] + "/";
@@ -596,17 +605,24 @@ void EventAnalyser() {
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
+    /* Here are boolean variables used to turn ON/OFF the different plots of the code.
+       Plot_selector_master must remain true, set it OFF only for debugging. */
+
     bool wider_margin = true;
 
+    /* Master plots variable */
+    bool Plot_selector_master = true; // Master plot selector for analysis
+
     /* Cut parameter plots */
+    bool Cut_plots_master = true; // Master cut plots selector
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta vs. P plots */
     bool Beta_vs_P_plots = true;
 
     /* Angle plots */
-    bool Angle_plots = true, Theta_e_plots = true, Phi_e_plots = true;
-    if (Angle_plots == false) { Theta_e_plots = Phi_e_plots = false; }
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
 
     /* Q2 plots */
     bool Q2_plots = true;
@@ -615,15 +631,25 @@ void EventAnalyser() {
     bool E_e_plots = true;
 
     /* ET plots */
-    bool ETrans_plots = true;
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-    if (ETrans_plots == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
 
     /* Ecal plots */
     bool Ecal_plots = true;
 
     /* MicroBooNE plots */
     bool MicroBooNE_plots = false;
+
+    //<editor-fold desc="Turn off plots by master selectors">
+    if (Plot_selector_master == false) {
+        Cut_plots_master = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = MicroBooNE_plots = false;
+    }
+
+    if (Cut_plots_master == false) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
+    if (ETrans_plots_master == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
+    if (Angle_plots_master == false) { Theta_e_plots = Phi_e_plots = false; }
+    //</editor-fold>
+
     //</editor-fold>
 
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -633,11 +659,11 @@ void EventAnalyser() {
 
     bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false;
 
-    bool norm_Angle_plots = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false, norm_Ecal_plots = false;
+    bool norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false, norm_Ecal_plots = false;
 
     if (normalize_master == false) { // Disable all normalizations if normalize_master == false
         norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = false;
-        norm_Angle_plots = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = false;
+        norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = false;
 
         cout << "\nAll normalizations are disabled.\n\n";  // and no change to custom_FSI_status
     }
@@ -4214,6 +4240,10 @@ void EventAnalyser() {
             histPlotter1D(c1, hNphe_1e_cut_BC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC (N_{phe})", "1e Cut", plots, 2, false, true, sNphe_1e_cut_FD,
                           "01_Nphe_1e_cut", hNphe_1e_cut_BC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
         }
+
+
+//        TFolder *TFolder_ptr = (TFolder *) plots->FindObject((Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1]).c_str());
+//        TFolder_ptr->Add(hNphe_1e_cut_BC_FD);
         //</editor-fold>
 
         //<editor-fold desc="Number of Photo-electrons (Nphe) histogram (2p, FD)">
@@ -5632,7 +5662,7 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Angle histograms">
-    if (Angle_plots) {
+    if (Angle_plots_master) {
         cout << "\n\nPlotting Angle histograms...\n\n";
 
 //  Theta_e (CD & FD) --------------------------------------------------------------
@@ -5641,9 +5671,10 @@ void EventAnalyser() {
         double Theta_e_integral = hTheta_e_All_e_FD->Integral();
 //        double Theta_e_integral = hTheta_e_All_e_CD->Integral() + hTheta_e_All_e_FD->Integral();
 
-//        histPlotter1D(c1, hTheta_e_All_e_CD, norm_Angle_plots, true, Theta_e_integral, "#theta_{e} of Outgoing Electron", "All Int., No #(e) Cut", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_All_e_CD, norm_Angle_plots_master, true, Theta_e_integral, "#theta_{e} of Outgoing Electron", "All Int., No #(e) Cut", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e, "Theta_e_All_Int_All_e", hTheta_e_All_e_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
-        histPlotter1D(c1, hTheta_e_All_e_FD, norm_Angle_plots, true, Theta_e_integral, "#theta_{e} of Outgoing Electron", "All Int., No #(e) Cut", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hTheta_e_All_e_FD, norm_Angle_plots_master, true, Theta_e_integral, "#theta_{e} of Outgoing Electron", "All Int., No #(e) Cut", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sTheta_e, "Theta_e_All_Int_All_e", hTheta_e_All_e_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
         //</editor-fold>
 
@@ -5651,9 +5682,10 @@ void EventAnalyser() {
         double Theta_e_1e_integral = hTheta_e_1e_cut_FD->Integral();
 //        double Theta_e_1e_integral = hTheta_e_1e_cut_CD->Integral() + hTheta_e_1e_cut_FD->Integral();
 
-//        histPlotter1D(c1, hTheta_e_1e_cut_CD, norm_Angle_plots, true, Theta_e_1e_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e Cut", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_1e_cut_CD, norm_Angle_plots_master, true, Theta_e_1e_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e Cut", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e, "Theta_e_All_Int_1e_cut", hTheta_e_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
-        histPlotter1D(c1, hTheta_e_1e_cut_FD, norm_Angle_plots, true, Theta_e_1e_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e Cut", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hTheta_e_1e_cut_FD, norm_Angle_plots_master, true, Theta_e_1e_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e Cut", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sTheta_e, "Theta_e_All_Int_1e_cut", hTheta_e_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
         //</editor-fold>
 
@@ -5670,36 +5702,36 @@ void EventAnalyser() {
 //        double Theta_e_1e_1e2X_DIS_integral = hTheta_e_DIS_1e2X_CD->Integral() + hTheta_e_DIS_1e2X_FD->Integral();
 //
 //        <editor-fold desc="Theta_e (1e2X, CD)">
-//        histPlotter1D(c1, hTheta_e_All_Int_1e2X_CD, norm_Angle_plots, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_All_Int_1e2X_CD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "00_Theta_e_1e2X", hTheta_e_All_Int_1e2X_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_QEL_1e2X_CD, norm_Angle_plots, true, Theta_e_1e_1e2X_QEL_integral, "#theta_{e} 1e2X", "QEL Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_QEL_1e2X_CD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_QEL_integral, "#theta_{e} 1e2X", "QEL Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "01_Theta_e_1e2X_QEL_Only", hTheta_e_QEL_1e2X_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_MEC_1e2X_CD, norm_Angle_plots, true, Theta_e_1e_1e2X_MEC_integral, "#theta_{e} 1e2X", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_MEC_1e2X_CD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_MEC_integral, "#theta_{e} 1e2X", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "02_Theta_e_1e2X_MEC_Only", hTheta_e_MEC_1e2X_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_RES_1e2X_CD, norm_Angle_plots, true, Theta_e_1e_1e2X_RES_integral, "#theta_{e} 1e2X", "RES Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_RES_1e2X_CD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_RES_integral, "#theta_{e} 1e2X", "RES Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "03_Theta_e_1e2X_RES_Only", hTheta_e_RES_1e2X_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_DIS_1e2X_CD, norm_Angle_plots, true, Theta_e_1e_1e2X_DIS_integral, "#theta_{e} 1e2X", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_DIS_1e2X_CD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_DIS_integral, "#theta_{e} 1e2X", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "04_Theta_e_1e2X_DIS_Only", hTheta_e_DIS_1e2X_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5, false);
 //        </editor-fold>
 //
 //        <editor-fold desc="Theta_e (1e2X, FD)">
-//        histPlotter1D(c1, hTheta_e_All_Int_1e2X_FD, norm_Angle_plots, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_All_Int_1e2X_FD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_integral, "#theta_{e} 1e2X", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "00_Theta_e_1e_cut_1e2X", hTheta_e_All_Int_1e2X_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_QEL_1e2X_FD, norm_Angle_plots, true, Theta_e_1e_1e2X_QEL_integral, "#theta_{e} 1e2X", "QEL Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_QEL_1e2X_FD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_QEL_integral, "#theta_{e} 1e2X", "QEL Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "01_Theta_e_1e2X_QEL_Only", hTheta_e_QEL_1e2X_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_MEC_1e2X_FD, norm_Angle_plots, true, Theta_e_1e_1e2X_MEC_integral, "#theta_{e} 1e2X", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_MEC_1e2X_FD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_MEC_integral, "#theta_{e} 1e2X", "MEC Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "02_Theta_e_1e2X_MEC_Only", hTheta_e_MEC_1e2X_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_RES_1e2X_FD, norm_Angle_plots, true, Theta_e_1e_1e2X_RES_integral, "#theta_{e} 1e2X", "RES Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_RES_1e2X_FD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_RES_integral, "#theta_{e} 1e2X", "RES Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "03_Theta_e_1e2X_RES_Only", hTheta_e_RES_1e2X_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
 //
-//        histPlotter1D(c1, hTheta_e_DIS_1e2X_FD, norm_Angle_plots, true, Theta_e_1e_1e2X_DIS_integral, "#theta_{e} 1e2X", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2,
+//        histPlotter1D(c1, hTheta_e_DIS_1e2X_FD, norm_Angle_plots_master, true, Theta_e_1e_1e2X_DIS_integral, "#theta_{e} 1e2X", "DIS Only", 0.06, 0.0425, 0.0425, plots, 2,
 //                      false, true, sTheta_e, "04_Theta_e_1e2X_DIS_Only", hTheta_e_DIS_1e2X_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
 //        //</editor-fold>
 
@@ -5728,87 +5760,97 @@ void EventAnalyser() {
 //        double Theta_e_DIS_2p_integral = hTheta_e_DIS_2p_CD->Integral() + hTheta_e_DIS_2p_FD->Integral();
 
         //<editor-fold desc="Theta_e 1e2p (CD)">
-//        histPlotter1D(c1, hTheta_e_All_Int_1e2p_CD, norm_Angle_plots, true, Theta_e_All_Int_1e2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e2p", 0.06,
+//        histPlotter1D(c1, hTheta_e_All_Int_1e2p_CD, norm_Angle_plots_master, true, Theta_e_All_Int_1e2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e2p", 0.06,
 //                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_1e2p_CD, "00_Theta_e_All_Int_1e2p", hTheta_e_All_Int_1e2p_CD_Dir, "CD", kBlue, true, true, true,
 //                      false, true, 47.5, 87.5, false);
-//        histPlotter1D(c1, hTheta_e_QEL_1e2p_CD, norm_Angle_plots, true, Theta_e_QEL_1e2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hTheta_e_QEL_1e2p_CD, norm_Angle_plots_master, true, Theta_e_QEL_1e2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sTheta_e_1e2p_CD, "01_Theta_e_QEL_Only_1e2p", hTheta_e_QEL_1e2p_CD_Dir, "CD", kBlue, true, true, true, false, true,
 //                      47.5, 87.5, false);
-//        histPlotter1D(c1, hTheta_e_MEC_1e2p_CD, norm_Angle_plots, true, Theta_e_MEC_1e2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hTheta_e_MEC_1e2p_CD, norm_Angle_plots_master, true, Theta_e_MEC_1e2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sTheta_e_1e2p_CD, "02_Theta_e_MEC_Only_1e2p", hTheta_e_MEC_1e2p_CD_Dir, "CD", kBlue, true, true, true, false, true,
 //                      47.5, 87.5, false);
-//        histPlotter1D(c1, hTheta_e_RES_1e2p_CD, norm_Angle_plots, true, Theta_e_RES_1e2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hTheta_e_RES_1e2p_CD, norm_Angle_plots_master, true, Theta_e_RES_1e2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sTheta_e_1e2p_CD, "03_Theta_e_RES_Only_1e2p", hTheta_e_RES_1e2p_CD_Dir, "CD", kBlue, true, true, true, false, true,
 //                      47.5, 87.5, false);
-//        histPlotter1D(c1, hTheta_e_DIS_1e2p_CD, norm_Angle_plots, true, Theta_e_DIS_1e2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hTheta_e_DIS_1e2p_CD, norm_Angle_plots_master, true, Theta_e_DIS_1e2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sTheta_e_1e2p_CD, "04_Theta_e_DIS_Only_1e2p", hTheta_e_DIS_1e2p_CD_Dir, "CD", kBlue, true, true, true, false, true,
 //                      47.5, 87.5, false);
 //
-//        stackPlotter1D(c1, sTheta_e_1e2p_CD, norm_Angle_plots, "#theta_{e} of Outgoing Electron", "1e2p", plots, hTheta_e_All_Int_1e2p_CD, hTheta_e_QEL_1e2p_CD,
+//        stackPlotter1D(c1, sTheta_e_1e2p_CD, norm_Angle_plots_master, "#theta_{e} of Outgoing Electron", "1e2p", plots, hTheta_e_All_Int_1e2p_CD, hTheta_e_QEL_1e2p_CD,
 //                       hTheta_e_MEC_1e2p_CD, hTheta_e_RES_1e2p_CD, hTheta_e_DIS_1e2p_CD, "05_Theta_e_Stack_1e2p", hTheta_e_All_Int_1e2p_CD_Dir, "CD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e 1e2p (FD)">
-        histPlotter1D(c1, hTheta_e_All_Int_1e2p_FD, norm_Angle_plots, true, Theta_e_All_Int_1e2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e2p", 0.06,
+        histPlotter1D(c1, hTheta_e_All_Int_1e2p_FD, norm_Angle_plots_master, true, Theta_e_All_Int_1e2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 1e2p",
+                      0.06,
                       0.0425, 0.0425, plots, 2, false, true, sTheta_e_1e2p_FD, "00_Theta_e_All_Int_1e2p", hTheta_e_All_Int_1e2p_FD_Dir, "FD", kBlue, true, true, true,
                       false, true, 17.5, 22.5, false);
-        histPlotter1D(c1, hTheta_e_QEL_1e2p_FD, norm_Angle_plots, true, Theta_e_QEL_1e2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06, 0.0425,
+        histPlotter1D(c1, hTheta_e_QEL_1e2p_FD, norm_Angle_plots_master, true, Theta_e_QEL_1e2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06,
+                      0.0425,
                       0.0425, plots, 2, false, true, sTheta_e_1e2p_FD, "01_Theta_e_QEL_Only_1e2p", hTheta_e_QEL_1e2p_FD_Dir, "FD", kBlue, true, true, true, false, true,
                       17.5, 22.5, false);
-        histPlotter1D(c1, hTheta_e_MEC_1e2p_FD, norm_Angle_plots, true, Theta_e_MEC_1e2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06, 0.0425,
+        histPlotter1D(c1, hTheta_e_MEC_1e2p_FD, norm_Angle_plots_master, true, Theta_e_MEC_1e2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06,
+                      0.0425,
                       0.0425, plots, 2, false, true, sTheta_e_1e2p_FD, "02_Theta_e_MEC_Only_1e2p", hTheta_e_MEC_1e2p_FD_Dir, "FD", kBlue, true, true, true, false, true,
                       17.5, 22.5, false);
-        histPlotter1D(c1, hTheta_e_RES_1e2p_FD, norm_Angle_plots, true, Theta_e_RES_1e2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06, 0.0425,
+        histPlotter1D(c1, hTheta_e_RES_1e2p_FD, norm_Angle_plots_master, true, Theta_e_RES_1e2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06,
+                      0.0425,
                       0.0425, plots, 2, false, true, sTheta_e_1e2p_FD, "03_Theta_e_RES_Only_1e2p", hTheta_e_RES_1e2p_FD_Dir, "FD", kBlue, true, true, true, false, true,
                       17.5, 22.5, false);
-        histPlotter1D(c1, hTheta_e_DIS_1e2p_FD, norm_Angle_plots, true, Theta_e_DIS_1e2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06, 0.0425,
+        histPlotter1D(c1, hTheta_e_DIS_1e2p_FD, norm_Angle_plots_master, true, Theta_e_DIS_1e2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06,
+                      0.0425,
                       0.0425, plots, 2, false, true, sTheta_e_1e2p_FD, "04_Theta_e_DIS_Only_1e2p", hTheta_e_DIS_1e2p_FD_Dir, "FD", kBlue, true, true, true, false, true,
                       17.5, 22.5, false);
 
-        stackPlotter1D(c1, sTheta_e_1e2p_FD, norm_Angle_plots, "#theta_{e} of Outgoing Electron", "1e2p", plots, hTheta_e_All_Int_1e2p_FD, hTheta_e_QEL_1e2p_FD,
+        stackPlotter1D(c1, sTheta_e_1e2p_FD, norm_Angle_plots_master, "#theta_{e} of Outgoing Electron", "1e2p", plots, hTheta_e_All_Int_1e2p_FD, hTheta_e_QEL_1e2p_FD,
                        hTheta_e_MEC_1e2p_FD, hTheta_e_RES_1e2p_FD, hTheta_e_DIS_1e2p_FD, "05_Theta_e_Stack_1e2p", hTheta_e_All_Int_1e2p_FD_Dir, "FD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e 2p (CD)">
-//        histPlotter1D(c1, hTheta_e_All_Int_2p_CD, norm_Angle_plots, true, Theta_e_All_Int_2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_All_Int_2p_CD, norm_Angle_plots_master, true, Theta_e_All_Int_2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e_2p_CD, "00_Theta_e_All_Int_2p", hTheta_e_All_Int_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5,
 //                      false);
-//        histPlotter1D(c1, hTheta_e_QEL_2p_CD, norm_Angle_plots, true, Theta_e_QEL_2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_QEL_2p_CD, norm_Angle_plots_master, true, Theta_e_QEL_2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e_2p_CD, "01_Theta_e_QEL_Only_2p", hTheta_e_QEL_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5,
 //                      false);
-//        histPlotter1D(c1, hTheta_e_MEC_2p_CD, norm_Angle_plots, true, Theta_e_MEC_2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_MEC_2p_CD, norm_Angle_plots_master, true, Theta_e_MEC_2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e_2p_CD, "02_Theta_e_MEC_Only_2p", hTheta_e_MEC_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5,
 //                      false);
-//        histPlotter1D(c1, hTheta_e_RES_2p_CD, norm_Angle_plots, true, Theta_e_RES_2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_RES_2p_CD, norm_Angle_plots_master, true, Theta_e_RES_2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e_2p_CD, "03_Theta_e_RES_Only_2p", hTheta_e_RES_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5,
 //                      false);
-//        histPlotter1D(c1, hTheta_e_DIS_2p_CD, norm_Angle_plots, true, Theta_e_DIS_2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hTheta_e_DIS_2p_CD, norm_Angle_plots_master, true, Theta_e_DIS_2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sTheta_e_2p_CD, "04_Theta_e_DIS_Only_2p", hTheta_e_DIS_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, 47.5, 87.5,
 //                      false);
 //
-//        stackPlotter1D(c1, sTheta_e_2p_CD, norm_Angle_plots, "#theta_{e} of Outgoing Electron", "2p", plots, hTheta_e_All_Int_2p_CD, hTheta_e_QEL_2p_CD,
+//        stackPlotter1D(c1, sTheta_e_2p_CD, norm_Angle_plots_master, "#theta_{e} of Outgoing Electron", "2p", plots, hTheta_e_All_Int_2p_CD, hTheta_e_QEL_2p_CD,
 //                       hTheta_e_MEC_2p_CD, hTheta_e_RES_2p_CD, hTheta_e_DIS_Only_2p_CD, "05_Theta_e_Stack_2p", hTheta_e_All_Int_2p_CD_Dir, "CD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e 2p (FD)">
-        histPlotter1D(c1, hTheta_e_All_Int_2p_FD, norm_Angle_plots, true, Theta_e_All_Int_2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425,
+        histPlotter1D(c1, hTheta_e_All_Int_2p_FD, norm_Angle_plots_master, true, Theta_e_All_Int_2p_integral, "#theta_{e} of Outgoing Electron", "All Int., 2p", 0.06,
+                      0.0425,
                       0.0425,
                       plots, 2, false, true, sTheta_e_2p_FD, "00_Theta_e_All_Int_2p", hTheta_e_All_Int_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5,
                       false);
-        histPlotter1D(c1, hTheta_e_QEL_2p_FD, norm_Angle_plots, true, Theta_e_QEL_2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hTheta_e_QEL_2p_FD, norm_Angle_plots_master, true, Theta_e_QEL_2p_integral, "#theta_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sTheta_e_2p_FD, "01_Theta_e_QEL_Only_2p", hTheta_e_QEL_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5,
                       false);
-        histPlotter1D(c1, hTheta_e_MEC_2p_FD, norm_Angle_plots, true, Theta_e_MEC_2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hTheta_e_MEC_2p_FD, norm_Angle_plots_master, true, Theta_e_MEC_2p_integral, "#theta_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sTheta_e_2p_FD, "02_Theta_e_MEC_Only_2p", hTheta_e_MEC_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5,
                       false);
-        histPlotter1D(c1, hTheta_e_RES_2p_FD, norm_Angle_plots, true, Theta_e_RES_2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hTheta_e_RES_2p_FD, norm_Angle_plots_master, true, Theta_e_RES_2p_integral, "#theta_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sTheta_e_2p_FD, "03_Theta_e_RES_Only_2p", hTheta_e_RES_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5,
                       false);
-        histPlotter1D(c1, hTheta_e_DIS_2p_FD, norm_Angle_plots, true, Theta_e_DIS_2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hTheta_e_DIS_2p_FD, norm_Angle_plots_master, true, Theta_e_DIS_2p_integral, "#theta_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sTheta_e_2p_FD, "04_Theta_e_DIS_Only_2p", hTheta_e_DIS_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, 17.5, 22.5,
                       false);
 
-        stackPlotter1D(c1, sTheta_e_2p_FD, norm_Angle_plots, "#theta_{e} of Outgoing Electron", "2p", plots, hTheta_e_All_Int_2p_FD, hTheta_e_QEL_2p_FD,
+        stackPlotter1D(c1, sTheta_e_2p_FD, norm_Angle_plots_master, "#theta_{e} of Outgoing Electron", "2p", plots, hTheta_e_All_Int_2p_FD, hTheta_e_QEL_2p_FD,
                        hTheta_e_MEC_2p_FD, hTheta_e_RES_2p_FD, hTheta_e_DIS_2p_FD, "05_Theta_e_Stack_2p", hTheta_e_All_Int_2p_FD_Dir, "FD");
         //</editor-fold>
 
@@ -5820,9 +5862,10 @@ void EventAnalyser() {
         double Phi_e_integral = hPhi_e_All_e_FD->Integral();
 //        double Phi_e_integral = hPhi_e_All_e_CD->Integral() + hPhi_e_All_e_FD->Integral();
 
-//        histPlotter1D(c1, hPhi_e_All_e_CD, norm_Angle_plots, true, Phi_e_integral, "#phi_{e} of Outgoing Electron", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+//        histPlotter1D(c1, hPhi_e_All_e_CD, norm_Angle_plots_master, true, Phi_e_integral, "#phi_{e} of Outgoing Electron", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false,
 //                      true, sPhi_e, "Phi_e_All_Int_All_e", hPhi_e_All_e_CD_Dir, "CD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_All_e_FD, norm_Angle_plots, true, Phi_e_integral, "#phi_{e} of Outgoing Electron", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+        histPlotter1D(c1, hPhi_e_All_e_FD, norm_Angle_plots_master, true, Phi_e_integral, "#phi_{e} of Outgoing Electron", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false,
                       true, sPhi_e, "Phi_e_All_Int_All_e", hPhi_e_All_e_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
@@ -5830,9 +5873,10 @@ void EventAnalyser() {
         double Phi_e_1e_integral = hPhi_e_1e_cut_FD->Integral();
 //        double Phi_e_1e_integral = hPhi_e_1e_cut_CD->Integral() + hPhi_e_1e_cut_FD->Integral();
 
-//        histPlotter1D(c1, hPhi_e_1e_cut_CD, norm_Angle_plots, true, Phi_e_1e_integral, "#phi_{e} of Outgoing Electron", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+//        histPlotter1D(c1, hPhi_e_1e_cut_CD, norm_Angle_plots_master, true, Phi_e_1e_integral, "#phi_{e} of Outgoing Electron", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
 //                      true, sPhi_e, "Phi_e_All_Int_1e_cut", hPhi_e_1e_cut_CD_Dir, "CD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_1e_cut_FD, norm_Angle_plots, true, Phi_e_1e_integral, "#phi_{e} of Outgoing Electron", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+        histPlotter1D(c1, hPhi_e_1e_cut_FD, norm_Angle_plots_master, true, Phi_e_1e_integral, "#phi_{e} of Outgoing Electron", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false,
                       true, sPhi_e, "Phi_e_All_Int_1e_cut", hPhi_e_1e_cut_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
@@ -5844,28 +5888,28 @@ void EventAnalyser() {
 //        double Phi_e_1e_1e2X_DIS_integral = hPhi_e_1e2X_DIS_CD->Integral() + hPhi_e_1e2X_DIS_FD->Integral();
 //
 //        //<editor-fold desc="Phi_e (1e2X, CD)">
-//        histPlotter1D(c1, hPhi_e_1e2X_CD, norm_Angle_plots, true, Phi_e_1e_1e2X_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2X", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_1e2X_CD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2X", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "00_phi_e_All_Int_1e2X", hPhi_e_1e2X_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_QEL_CD, norm_Angle_plots, true, Phi_e_1e_1e2X_QEL_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_QEL_CD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_QEL_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_1e2X", hPhi_e_1e2X_QEL_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_MEC_CD, norm_Angle_plots, true, Phi_e_1e_1e2X_MEC_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_MEC_CD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_MEC_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_1e2X", hPhi_e_1e2X_MEC_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_RES_CD, norm_Angle_plots, true, Phi_e_1e_1e2X_RES_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_RES_CD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_RES_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_1e2X", hPhi_e_1e2X_RES_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_DIS_CD, norm_Angle_plots, true, Phi_e_1e_1e2X_DIS_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_DIS_CD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_DIS_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_1e2X", hPhi_e_1e2X_DIS_CD_Dir, "CD", kBlue, true, true, true);
 //        //</editor-fold>
 //
 //        //<editor-fold desc="Phi_e (1e2X, FD)">
-//        histPlotter1D(c1, hPhi_e_1e2X_FD, norm_Angle_plots, true, Phi_e_1e_1e2X_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2X", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_1e2X_FD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2X", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "00_phi_e_All_Int_1e2X", hPhi_e_1e2X_FD_Dir, "FD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_QEL_FD, norm_Angle_plots, true, Phi_e_1e_1e2X_QEL_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_QEL_FD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_QEL_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_1e2X", hPhi_e_1e2X_QEL_FD_Dir, "FD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_MEC_FD, norm_Angle_plots, true, Phi_e_1e_1e2X_MEC_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_MEC_FD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_MEC_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_1e2X", hPhi_e_1e2X_MEC_FD_Dir, "FD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_RES_FD, norm_Angle_plots, true, Phi_e_1e_1e2X_RES_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_RES_FD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_RES_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_1e2X", hPhi_e_1e2X_RES_FD_Dir, "FD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1e2X_DIS_FD, norm_Angle_plots, true, Phi_e_1e_1e2X_DIS_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2X", 0.06, 0.0425, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1e2X_DIS_FD, norm_Angle_plots_master, true, Phi_e_1e_1e2X_DIS_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2X", 0.06, 0.0425, 0.0425,
 //                      plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_1e2X", hPhi_e_1e2X_DIS_FD_Dir, "FD", kBlue, true, true, true);
 //        //</editor-fold>
 //
@@ -5884,28 +5928,33 @@ void EventAnalyser() {
 //        double Phi_e_DIS_1e2p_integral = hPhi_e_1eDIS_2p_CD->Integral() + hPhi_e_DIS_1e2p_FD->Integral();
 
 //        //<editor-fold desc="Phi_e (1e2p, CD)">
-//        histPlotter1D(c1, hPhi_e_All_Int_1e2p_CD, norm_Angle_plots, true, Phi_e_All_Int_1e2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hPhi_e_All_Int_1e2p_CD, norm_Angle_plots_master, true, Phi_e_All_Int_1e2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sPhi_e, "00_Phi_e_All_Int_1e2p", hPhi_e_All_Int_1e2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1eQEL_2p_CD, norm_Angle_plots, true, Phi_e_QEL_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "QEL Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1eQEL_2p_CD, norm_Angle_plots_master, true, Phi_e_QEL_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "QEL Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_1e2p", hPhi_e_1eQEL_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1eMEC_2p_CD, norm_Angle_plots, true, Phi_e_MEC_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "MEC Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1eMEC_2p_CD, norm_Angle_plots_master, true, Phi_e_MEC_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "MEC Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_1e2p", hPhi_e_1eMEC_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1eRES_2p_CD, norm_Angle_plots, true, Phi_e_RES_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "RES Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1eRES_2p_CD, norm_Angle_plots_master, true, Phi_e_RES_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "RES Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_1e2p", hPhi_e_1eRES_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_1eDIS_2p_CD, norm_Angle_plots, true, Phi_e_DIS_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "DIS Only, 1e2p", 0.06, 0.0425,
+//        histPlotter1D(c1, hPhi_e_1eDIS_2p_CD, norm_Angle_plots_master, true, Phi_e_DIS_1e2p_integral, "#phi_{e} of Outgoing Electron 1e2p", "DIS Only, 1e2p", 0.06, 0.0425,
 //                      0.0425, plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_1e2p", hPhi_e_1eDIS_2p_CD_Dir, "CD", kBlue, true, true, true);
 //        //</editor-fold>
 
         //<editor-fold desc="Phi_e (1e2p, FD)">
-        histPlotter1D(c1, hPhi_e_All_Int_1e2p_FD, norm_Angle_plots, true, Phi_e_All_Int_1e2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2p", 0.06, 0.0425,
+        histPlotter1D(c1, hPhi_e_All_Int_1e2p_FD, norm_Angle_plots_master, true, Phi_e_All_Int_1e2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2p", 0.06,
+                      0.0425,
                       0.0425, plots, 2, false, true, sPhi_e, "00_Phi_e_All_Int_1e2p", hPhi_e_All_Int_1e2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_QEL_1e2p_FD, norm_Angle_plots, true, Phi_e_QEL_1e2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hPhi_e_QEL_1e2p_FD, norm_Angle_plots_master, true, Phi_e_QEL_1e2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_1e2p", hPhi_e_QEL_1e2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_MEC_1e2p_FD, norm_Angle_plots, true, Phi_e_MEC_1e2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hPhi_e_MEC_1e2p_FD, norm_Angle_plots_master, true, Phi_e_MEC_1e2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_1e2p", hPhi_e_MEC_1e2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_RES_1e2p_FD, norm_Angle_plots, true, Phi_e_RES_1e2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hPhi_e_RES_1e2p_FD, norm_Angle_plots_master, true, Phi_e_RES_1e2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_1e2p", hPhi_e_RES_1e2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_DIS_1e2p_FD, norm_Angle_plots, true, Phi_e_DIS_1e2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hPhi_e_DIS_1e2p_FD, norm_Angle_plots_master, true, Phi_e_DIS_1e2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_1e2p", hPhi_e_DIS_1e2p_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
@@ -5924,28 +5973,33 @@ void EventAnalyser() {
 //        double Phi_e_DIS_2p_integral = hPhi_e_DIS_2p_CD->Integral() + hPhi_e_DIS_2p_FD->Integral();
 
 //        //<editor-fold desc="Phi_e (2p, CD)">
-//        histPlotter1D(c1, hPhi_e_All_Int_2p_CD, norm_Angle_plots, true, Phi_e_All_Int_2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_All_Int_2p_CD, norm_Angle_plots_master, true, Phi_e_All_Int_2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "00_phi_e_All_Int_2p", hPhi_e_All_Int_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_QEL_2p_CD, norm_Angle_plots, true, Phi_e_QEL_2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_QEL_2p_CD, norm_Angle_plots_master, true, Phi_e_QEL_2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "01_Phi_e_QEL_Only_2p", hPhi_e_QEL_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_MEC_2p_CD, norm_Angle_plots, true, Phi_e_MEC_2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_MEC_2p_CD, norm_Angle_plots_master, true, Phi_e_MEC_2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "02_Phi_e_MEC_Only_2p", hPhi_e_MEC_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_RES_2p_CD, norm_Angle_plots, true, Phi_e_RES_2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_RES_2p_CD, norm_Angle_plots_master, true, Phi_e_RES_2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "03_Phi_e_RES_Only_2p", hPhi_e_RES_2p_CD_Dir, "CD", kBlue, true, true, true);
-//        histPlotter1D(c1, hPhi_e_DIS_2p_CD, norm_Angle_plots, true, Phi_e_DIS_2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots,
+//        histPlotter1D(c1, hPhi_e_DIS_2p_CD, norm_Angle_plots_master, true, Phi_e_DIS_2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots,
 //                      2, false, true, sPhi_e, "04_Phi_e_DIS_Only_2p", hPhi_e_DIS_2p_CD_Dir, "CD", kBlue, true, true, true);
 //        //</editor-fold>
 
         //<editor-fold desc="Phi_e (2p, FD)">
-        histPlotter1D(c1, hPhi_e_All_Int_2p_FD, norm_Angle_plots, true, Phi_e_All_Int_2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425, 0.0425,
+        histPlotter1D(c1, hPhi_e_All_Int_2p_FD, norm_Angle_plots_master, true, Phi_e_All_Int_2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 2p", 0.06, 0.0425,
+                      0.0425,
                       plots, 2, false, true, sPhi_e, "00_phi_e_All_Int_cut_2p", hPhi_e_All_Int_2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_QEL_2p_FD, norm_Angle_plots, true, Phi_e_QEL_2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots,
+        histPlotter1D(c1, hPhi_e_QEL_2p_FD, norm_Angle_plots_master, true, Phi_e_QEL_2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots,
                       2, false, true, sPhi_e, "01_Phi_e_QEL_Only_2p", hPhi_e_QEL_2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_MEC_2p_FD, norm_Angle_plots, true, Phi_e_MEC_2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots,
+        histPlotter1D(c1, hPhi_e_MEC_2p_FD, norm_Angle_plots_master, true, Phi_e_MEC_2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots,
                       2, false, true, sPhi_e, "02_Phi_e_MEC_Only_2p", hPhi_e_MEC_2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_RES_2p_FD, norm_Angle_plots, true, Phi_e_RES_2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425, plots,
+        histPlotter1D(c1, hPhi_e_RES_2p_FD, norm_Angle_plots_master, true, Phi_e_RES_2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots,
                       2, false, true, sPhi_e, "03_Phi_e_RES_Only_2p", hPhi_e_RES_2p_FD_Dir, "FD", kBlue, true, true, true);
-        histPlotter1D(c1, hPhi_e_DIS_2p_FD, norm_Angle_plots, true, Phi_e_DIS_2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots,
+        histPlotter1D(c1, hPhi_e_DIS_2p_FD, norm_Angle_plots_master, true, Phi_e_DIS_2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 2p", 0.06, 0.0425, 0.0425,
+                      plots,
                       2, false, true, sPhi_e, "04_Phi_e_DIS_Only_2p", hPhi_e_DIS_2p_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
@@ -6783,17 +6837,43 @@ void EventAnalyser() {
     myLogFile << "\n===========================================================================\n";
     myLogFile << "Plot selector\n";
     myLogFile << "===========================================================================\n\n";
+    myLogFile << "Plot_selector_master = " << BoolToString(Plot_selector_master) << "\n";
+
+    myLogFile << "\n-- Cut variable plots -----------------------------------------------------" << "\n";
+    myLogFile << "Cut_plots_master = " << BoolToString(Cut_plots_master) << "\n";
+    myLogFile << "Nphe_plots = " << BoolToString(Nphe_plots) << "\n";
+    myLogFile << "Chi2_plots = " << BoolToString(Chi2_plots) << "\n";
+    myLogFile << "Vertex_plots = " << BoolToString(Vertex_plots) << "\n";
+    myLogFile << "SF_plots = " << BoolToString(SF_plots) << "\n";
+    myLogFile << "fiducial_plots = " << BoolToString(fiducial_plots) << "\n";
+    myLogFile << "Momentum_plots = " << BoolToString(Momentum_plots) << "\n";
+
+    myLogFile << "\n-- Beta vs. P plots -------------------------------------------------------" << "\n";
     myLogFile << "Beta_vs_P_plots = " << BoolToString(Beta_vs_P_plots) << "\n";
+
+    myLogFile << "\n-- Angle plots ------------------------------------------------------------" << "\n";
+    myLogFile << "Angle_plots_master = " << BoolToString(Angle_plots_master) << "\n";
     myLogFile << "Theta_e_plots = " << BoolToString(Theta_e_plots) << "\n";
     myLogFile << "Phi_e_plots = " << BoolToString(Phi_e_plots) << "\n";
+
+    myLogFile << "\n-- Q2 plots ---------------------------------------------------------------" << "\n";
     myLogFile << "Q2_plots = " << BoolToString(Q2_plots) << "\n";
+
+    myLogFile << "\n-- E_e plots --------------------------------------------------------------" << "\n";
     myLogFile << "E_e_plots = " << BoolToString(E_e_plots) << "\n";
+
+    myLogFile << "\n-- ET plots ---------------------------------------------------------------" << "\n";
+    myLogFile << "ETrans_plots_master = " << BoolToString(ETrans_plots_master) << "\n";
     myLogFile << "ETrans_all_plots = " << BoolToString(ETrans_all_plots) << "\n";
     myLogFile << "ETrans_QEL_plots = " << BoolToString(ETrans_QEL_plots) << "\n";
     myLogFile << "ETrans_MEC_plots = " << BoolToString(ETrans_MEC_plots) << "\n";
     myLogFile << "ETrans_RES_plots = " << BoolToString(ETrans_RES_plots) << "\n";
     myLogFile << "ETrans_DIS_plots = " << BoolToString(ETrans_DIS_plots) << "\n";
+
+    myLogFile << "\n-- E_cal plots ------------------------------------------------------------" << "\n";
     myLogFile << "E_cal_plots = " << BoolToString(Ecal_plots) << "\n";
+
+    myLogFile << "\n-- MicroBooNE plots -------------------------------------------------------" << "\n";
     myLogFile << "MicroBooNE_plots = " << BoolToString(MicroBooNE_plots) << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
@@ -6807,7 +6887,7 @@ void EventAnalyser() {
     myLogFile << "norm_SF_plots = " << BoolToString(norm_SF_plots) << "\n";
     myLogFile << "norm_Fiducial_plots = " << BoolToString(norm_Fiducial_plots) << "\n\n";
 
-    myLogFile << "norm_Angle_plots = " << BoolToString(norm_Angle_plots) << "\n";
+    myLogFile << "norm_Angle_plots_master = " << BoolToString(norm_Angle_plots_master) << "\n";
     myLogFile << "norm_Q2_plots = " << BoolToString(norm_Q2_plots) << "\n";
     myLogFile << "norm_E_e_plots = " << BoolToString(norm_E_e_plots) << "\n";
     myLogFile << "norm_ET_plots = " << BoolToString(norm_ET_plots) << "\n";

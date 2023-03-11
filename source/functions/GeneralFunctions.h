@@ -61,7 +61,7 @@ string GetCurrentDirectory() {
 /* Usage: in getBeanE */
 
 bool findSubstring(string string1, string string2) {
-    if (string1.find(string2) != std::string::npos) {
+    if (string1.find(string2) != string::npos) {
         return true;
     } else {
         return false;
@@ -98,7 +98,7 @@ double getBeanE(string AnalyseFileSample) {
 /* Usage: convert a number to string with n figures after the decimal point in the plotting functions */
 
 template<typename T>
-std::string to_string_with_precision(const T a_value, const int n = 2) {
+string to_string_with_precision(const T a_value, const int n = 2) {
     std::ostringstream out;
     out.precision(n);
     out << std::fixed << a_value;
@@ -111,7 +111,7 @@ std::string to_string_with_precision(const T a_value, const int n = 2) {
 //<editor-fold desc="TFolderAdder function (regular)">
 /* Usage: recursively create TFolder and sub-folders in TList. */
 
-void TFolderAdder(TFolder *Histogram_List_Folder, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder) {
+void TFolderAdder(TFolder *Histogram_List_Folder, string Plots_Parent_Folder, string Plots_Daughter_Folder) {
     if (Plots_Daughter_Folder != "") {
         if (Plots_Daughter_Folder.find_first_of('/') != 0) {
             int number = Plots_Daughter_Folder.find_first_of('/');
@@ -134,13 +134,86 @@ void TFolderAdder(TFolder *Histogram_List_Folder, std::string Plots_Parent_Folde
 }
 //</editor-fold>
 
+//<editor-fold desc="TFolderAdder function (for cuts)">
+/* Usage: recursively create TFolder and sub-folders in TList. */
+
+void TFolderAdder(TFolder *Histogram_List_Folder, string Plots_Parent_Folder, string Plots_Daughter_Folder, bool cuts_TFolder) {
+    if (Plots_Daughter_Folder != "") {
+        if ((Plots_Parent_Folder.find_first_of('/') <= Plots_Parent_Folder.size()) && cuts_TFolder) {
+            int number0 = Plots_Parent_Folder.find_first_of('/');
+            string Plots_Parent_Folder_Name = Plots_Parent_Folder.substr(number0 + 1, Plots_Parent_Folder.size());
+            TFolderAdder(Histogram_List_Folder, Plots_Parent_Folder_Name, Plots_Daughter_Folder, true);
+        } else {
+            if (Plots_Daughter_Folder.find_first_of('/') != 0) {
+                int number = Plots_Daughter_Folder.find_first_of('/');
+                string Daughter_Folder_Name = Plots_Daughter_Folder.substr(0, number);
+                Histogram_List_Folder->AddFolder(Daughter_Folder_Name.c_str(), Plots_Parent_Folder.c_str());
+
+                if (Plots_Daughter_Folder.size() - Daughter_Folder_Name.size() > 0) {
+                    TFolder *pf = (TFolder *) Histogram_List_Folder->FindObject(Daughter_Folder_Name.c_str());
+
+                    TFolderAdder(pf, Daughter_Folder_Name, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
+                }
+            }
+        }
+    }
+}
+//</editor-fold>
+
+// GetTFolder function ---------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetTFolder function (regular)">
+/* Usage: recursively create TFolder and sub-folders in TList. */
+
+void GetTFolder(TList *HistogramTList, string Plots_Parent_Folder, string Plots_Daughter_Folder) {
+    string TFolder_path = Plots_Parent_Folder + "/" + Plots_Daughter_Folder;
+    TFolder *TFolder_ptr = (TFolder *) HistogramTList->FindObject(TFolder_path.c_str());
+//    TFolder_ptr->AddFolder("Daughter_Folder_Name.c_str()", "Daughter_Folder_Name.c_str()");
+
+//    if (TFolder_path.find_first_of('/') <= TFolder_path.size()) {
+//        int number = TFolder_path.find_last_of('/');
+//        string Folder = TFolder_path.substr(number+1, TFolder_path.size());
+////        int number = TFolder_path.find_first_of('/');
+////        string Folder = TFolder_path.substr(0, number);
+//        TFolder *TFolder_ptr = (TFolder *) HistogramTList->FindObject(Folder.c_str());
+//
+//        TFolder_ptr->AddFolder("Daughter_Folder_Name.c_str()", "Daughter_Folder_Name.c_str()");
+//    }
+
+//    if (TFolder_path.find_first_of('/') <= TFolder_path.size()) {
+//        int number = TFolder_path.find_last_of('/');
+//        string Folder = TFolder_path.substr(number+1, TFolder_path.size());
+////        int number = TFolder_path.find_first_of('/');
+////        string Folder = TFolder_path.substr(0, number);
+//        TFolder *TFolder_ptr = (TFolder *) HistogramTList->FindObject(Folder.c_str());
+//
+//        TFolder_ptr->AddFolder("Daughter_Folder_Name.c_str()", "Daughter_Folder_Name.c_str()");
+//    }
+//    if (Plots_Daughter_Folder != "") {
+//        if (Plots_Daughter_Folder.find_first_of('/') != 0) {
+//            int number = Plots_Daughter_Folder.find_first_of('/');
+//            string Daughter_Folder_Name = Plots_Daughter_Folder.substr(0, number);
+//
+//            Histogram_List_Folder->AddFolder(Daughter_Folder_Name.c_str(), Plots_Parent_Folder.c_str());
+//
+//            if (Plots_Daughter_Folder.size() - Daughter_Folder_Name.size() > 0) {
+//                TFolder *pf = (TFolder *) Histogram_List_Folder->FindObject(Daughter_Folder_Name.c_str());
+//
+//                TFolderAdder(pf, Daughter_Folder_Name, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
+////            TFolderAdder(Histogram_list, Plots_Parent_Folder, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
+//            }
+//        }
+//    }
+}
+//</editor-fold>
+
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="MakeDirectory function">
+//<editor-fold desc="MakeDirectory function (regular)">
 /* Usage: made directory for plots. */
 
-void MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
-                   std::string Parent_Folder = "./plots") {
+void MakeDirectory(bool Create_Directory, string Plots_Parent_Folder, string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
+                   string Parent_Folder = "./plots") {
 
     string MakeDirectory = "mkdir -p " + Parent_Folder;
     string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
