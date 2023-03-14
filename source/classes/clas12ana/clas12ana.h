@@ -715,7 +715,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                  * checkVertexCorrelation - checks if dVz,Vy,Vz are within cuts (what are the cuts?) */
                 if (!checkPidCut(*p) && f_pidCuts) //PID cuts
                 {
-//                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
+                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
                     p = particles.erase(p);
                 } else if (!checkVertex(*p) && f_vertexCuts) //Vertex cut
                 {

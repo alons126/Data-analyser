@@ -124,7 +124,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -139,7 +139,7 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Momentum cuts */
-    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_MicroBooNE = truetrue;
+    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_MicroBooNE = true;
 
     //<editor-fold desc="Cuts output">
     if (apply_cuts == false) {
@@ -174,8 +174,10 @@ void EventAnalyser() {
      * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
     DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
     DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
-    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.61111, 2.61111);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -3.74939, 3.74939);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -3.86714, 3.86714);
+//    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
+//    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.61111, 2.61111);
     DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.327104, -1.7285, 1.7285);
     DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0933062, -2.70367, 2.70367);
     DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.416576, -1.37182, 1.37182);
@@ -610,6 +612,8 @@ void EventAnalyser() {
 
     bool wider_margin = true;
 
+    bool debug_plots = true;
+
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
@@ -677,16 +681,16 @@ void EventAnalyser() {
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
         cout << "\nClearing old plots...";
-        system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
+        system(("find " + plots_path + " -type f -iname '*.png' -delete").c_str()); // Delete existing .png files
         cout << " done.\n\n";
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\nClearing old root files...";
-        system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
+        system(("find " + plots_path + " -type f -iname '*.root' -delete").c_str()); // Delete existing .root files
         cout << " done.\n\n";
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\nClearing old plots & root files...";
-        system("find ./plots -type f -iname '*.png' -delete"); // Delete existing .png files
-        system("find ./plots -type f -iname '*.root' -delete"); // Delete existing .root files
+        system(("find " + plots_path + " -type f -iname '*.png' -delete").c_str()); // Delete existing .png files
+        system(("find " + plots_path + " -type f -iname '*.root' -delete").c_str()); // Delete existing .root files
         cout << " done.\n\n";
     } else {
         cout << "\nNo files were cleared.\n\n";
@@ -2144,9 +2148,7 @@ void EventAnalyser() {
     int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
     int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
 
-//    int num_of_events_with_e_in_CD = 0, num_of_events_with_e_in_FD = 0;
-
-    int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_more_then_1e = 0;
+    int num_of_events_with_at_least_1e = 0; int num_of_events_with_exactly_1e = 0; int num_of_events_more_then_1e = 0;
 
     int num_of_events_with_1e2X = 0, num_of_events_with_1enP = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
@@ -6780,9 +6782,15 @@ void EventAnalyser() {
 // Saving debug plots ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving debug plots">
-    TString debug_filePath = plots_path + "debugOutputFile.root";
-    clasAna.setdebug_fileName(debug_filePath);
-    clasAna.WriteDebugPlots();
+    if (debug_plots == true) {
+        cout << "\n\nSaving debugging plots...\n\n";
+
+        TString debug_filePath = plots_path + "debugOutputFile.root";
+        clasAna.setdebug_fileName(debug_filePath);
+        clasAna.WriteDebugPlots();
+    } else {
+        cout << "\n\nDebugging plots are disabled...\n\n"; //TODO: disable them in clas12ana?
+    }
     //</editor-fold>
 
 // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------

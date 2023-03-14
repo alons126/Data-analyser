@@ -29,10 +29,9 @@ std::string WorkingDirectory = GetCurrentDirectory() + "/";
 //std::string plots_path = "./plots/"; // old plots dir command
 //std::string plots_path = WorkingDirectory + "plots" + "/"; // new plots dir command
 //std::string plots_path = WorkingDirectory + "plots_T5tot_NO_CUTS" + "/";
-//std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS_woChi2" + "/";
+std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS_woChi2" + "/";
 //std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS" + "/";
-//std::string plots_path = WorkingDirectory + "plots2" + "/";
-std::string plots_path = WorkingDirectory + "plots" + "/";
+//std::string plots_path = WorkingDirectory + "plots" + "/";
 
 /* settings directory and directories */
 std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
@@ -48,10 +47,6 @@ std::string plots_log_save_Directory = plots_path + "/" + "Run_log.txt";
 // ======================================================================================================================================================================
 // file_name definitions and selection
 // ======================================================================================================================================================================
-
-// file_name definition -------------------------------------------------------------------------------------------------------------------------------------------------
-
-std::string file_name = "general_file";
 
 // hipo files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -94,6 +89,10 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_598636MeV_Q2_0_5.gst.root";
 ////std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CC_myBranch_10M.root";
 //std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CCMEC_myBranch_10M.root";
+
+// file_name definition -------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::string file_name = "general_file";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                    Other parameters                                                                                 //
