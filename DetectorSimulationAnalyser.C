@@ -124,7 +124,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -2189,7 +2189,31 @@ void EventAnalyser() {
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    int Np, Nkp, Nkm, Npip, Npim, Ne, Nd, Nn, No, Nf;
+
+
+
+//    ofstream EventPrint;
+//    string EventPrint_save_Directory;
+//
+//    if (apply_chi2_cuts_1e_cut == false) {
+//        EventPrint_save_Directory = plots_path + "/" + "Event_Print_without_chi2.txt";
+//    } else if (apply_chi2_cuts_1e_cut == true) {
+//        EventPrint_save_Directory = plots_path + "/" + "Event_Print_ALL_CUTS.txt";
+//    }
+//
+//    EventPrint.open(EventPrint_save_Directory.c_str());
+//
+//    if (apply_chi2_cuts_1e_cut == false) {
+//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n";
+//        EventPrint << "// Log of number of particles in event with all cuts except chi2         //\n";
+//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n\n";
+//    } else if (apply_chi2_cuts_1e_cut == true) {
+//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n";
+//        EventPrint << "// Log of number of particles in event with all cuts including chi2      //\n";
+//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n\n";
+//    }
+
+
 
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
@@ -2210,11 +2234,11 @@ void EventAnalyser() {
         auto otherpart = clasAna.getByPid(311);  // Other particles
 
         /* Number of specific particles in event */
-        Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
-        Nd = deuterons.size(), Nn = neutrals.size(), No = otherpart.size();
+        int Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
+        int Nd = deuterons.size(), Nn = neutrals.size(), No = otherpart.size();
 
         /* Total number of particles in event (= Nf) */
-        Nf = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nn + No;
+        int Nf = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nn + No;
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1.,2.,3.,4. = type = qel, mec, res, dis
@@ -2242,6 +2266,37 @@ void EventAnalyser() {
             dis = true;
         }
         //</editor-fold>
+
+
+
+
+
+
+
+//        int event = c12->runconfig()->getEvent();
+//
+//        if (Ne == 1 && Nf >= 2) {
+//            if (event < 10001) {
+//                EventPrint << "--- EVENT NUMBER " << event << "---\n";
+//                EventPrint << "#particles in event:\t" << Nf << "\n";
+//                EventPrint << "protons.size() = " << protons.size() << "\n";
+//                EventPrint << "Kplus.size() = " << Kplus.size() << "\n";
+//                EventPrint << "Kminus.size() = " << Kminus.size() << "\n";
+//                EventPrint << "piplus.size() = " << piplus.size() << "\n";
+//                EventPrint << "piminus.size() = " << piminus.size() << "\n";
+//                EventPrint << "electrons.size() = " << electrons.size() << "\n";
+//                EventPrint << "deuterons.size() = " << deuterons.size() << "\n";
+//                EventPrint << "neutrals.size() = " << neutrals.size() << "\n";
+//                EventPrint << "otherpart.size() = " << otherpart.size() << "\n\n\n";
+//            }
+//        }
+
+
+
+
+
+
+
 
 //  Fill All particles (All e) plots ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -4206,6 +4261,14 @@ void EventAnalyser() {
 
     } // end of while
     // </editor-fold>
+
+
+
+
+//    EventPrint.close();
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                        Histograms plots                                                                             //
