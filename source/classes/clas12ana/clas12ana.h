@@ -105,15 +105,13 @@ public:
 
     void plotDebug();
 
+    void setdebug_fileName(TString db_fileName) { debug_fileName = db_fileName; }
+
     double getSF(region_part_ptr p);
 
     void pidCuts(std::vector<region_part_ptr> &particles);
 
     void pidCuts(std::vector<std::vector<region_part_ptr>> &particles);
-
-//    void getpidCuts(std::vector<std::vector<region_part_ptr>> &particles) { // My addition
-//
-//    }
 
     void setEcalSFCuts(bool flag = true) { f_ecalSFCuts = flag; }; //option to have several cuts
 
@@ -162,12 +160,6 @@ public:
             return kplus;
         } else if (pid == -321) {
             return kminus;
-//        } else if (pid == 111) { // My addition
-//            return pizero;
-//        } else if (pid == 2112) { // My addition
-//            return neutrons;
-//        } else if (pid == 0) { // My addition
-//            return neutrals;
         } else if (pid == 0 || pid == 2112) {
             return neutrals;
         } else {
@@ -191,12 +183,6 @@ public:
             kplus.push_back(p);
         } else if (pid == -321) {
             kminus.push_back(p);
-//        } else if (pid == 111) { // My addition
-//            pizero.push_back(p);
-//        } else if (pid == 2112) { // My addition
-//            neutrons.push_back(p);
-//        } else if (pid == 0) { // My addition
-//            neutrals.push_back(p);
         } else if (pid == 0 || pid == 2112) {
             neutrals.push_back(p);
         } else {
@@ -253,22 +239,7 @@ public:
     //  void getByChi2Pid(std::vector<region_part_ptr> &p,double mean, double sigma);
     std::vector<region_part_ptr> getByPid(std::vector<region_part_ptr> particles, int pid);
     //  std::vector<region_part_ptr> getByPidChi2(int pid, double chi2);
-
 private:
-//    // My addition:
-//    std::vector<region_part_ptr> electrons;
-//    std::vector<region_part_ptr> protons;
-//    std::vector<region_part_ptr> neutrons;
-//    std::vector<region_part_ptr> piplus;
-//    std::vector<region_part_ptr> piminus;
-//    std::vector<region_part_ptr> pizero;
-//    std::vector<region_part_ptr> kplus;
-//    std::vector<region_part_ptr> kminus;
-//
-//    std::vector<region_part_ptr> deuterons;
-//    std::vector<region_part_ptr> neutrals; // Neutral particles without neutrons
-//    std::vector<region_part_ptr> otherpart;
-
     // Justin's original:
     std::vector<region_part_ptr> electrons;
     std::vector<region_part_ptr> protons;
@@ -360,46 +331,42 @@ private:
     TH2D *sf_debug_b[7] = {nullptr};
     TH2D *sf_debug_a[7] = {nullptr};
 
-    TH2D *pid_cd_debug = new TH2D("pid_cd_debug", "PID Uncut CD", 100, 0, 3, 100, 0, 1.2);
-    TH2D *pid_fd_debug = new TH2D("pid_fd_debug", "PID Uncut FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_cd_debug = new TH2D("pid_cd_debug", "PID Uncut CD", 250, 0, 3, 250, 0, 1.2);
+    TH2D *pid_fd_debug = new TH2D("pid_fd_debug", "PID Uncut FD", 250, 0, 5, 250, 0, 1.2);
 
-    TH2D *sf_v_ecalIN_debug = new TH2D("sf_v_ecalIN_debug", "", 100, 0, 30, 100, 0, .4);
-    TH2D *sf_w_ecalIN_debug = new TH2D("sf_w_ecalIN_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_v_ecalIN_debug = new TH2D("sf_v_ecalIN_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_w_ecalIN_debug = new TH2D("sf_w_ecalIN_debug", "", 250, 0, 30, 250, 0, .4);
 
-    TH2D *sf_v_ecalOUT_debug = new TH2D("sf_v_ecalOUT_debug", "", 100, 0, 30, 100, 0, .4);
-    TH2D *sf_w_ecalOUT_debug = new TH2D("sf_w_ecalOUT_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_v_ecalOUT_debug = new TH2D("sf_v_ecalOUT_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_w_ecalOUT_debug = new TH2D("sf_w_ecalOUT_debug", "", 250, 0, 30, 250, 0, .4);
 
-    TH2D *sf_v_pcal_debug = new TH2D("sf_v_pcal_debug", "", 100, 0, 30, 100, 0, .4);
-    TH2D *sf_w_pcal_debug = new TH2D("sf_w_pcal_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_v_pcal_debug = new TH2D("sf_v_pcal_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_w_pcal_debug = new TH2D("sf_w_pcal_debug", "", 250, 0, 30, 250, 0, .4);
 
-    TH2D *sf_v_ecalIN_a_debug = new TH2D("sf_v_ecalIN_a_debug", "", 100, 0, 30, 100, 0, .4);
-    TH2D *sf_w_ecalIN_a_debug = new TH2D("sf_w_ecalIN_a_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_v_ecalIN_a_debug = new TH2D("sf_v_ecalIN_a_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_w_ecalIN_a_debug = new TH2D("sf_w_ecalIN_a_debug", "", 250, 0, 30, 250, 0, .4);
 
-    TH2D *sf_v_ecalOUT_a_debug = new TH2D("sf_v_ecalOUT_a_debug", "", 100, 0, 30, 100, 0, .4);
-    TH2D *sf_w_ecalOUT_a_debug = new TH2D("sf_w_ecalOUT_a_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_v_ecalOUT_a_debug = new TH2D("sf_v_ecalOUT_a_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_w_ecalOUT_a_debug = new TH2D("sf_w_ecalOUT_a_debug", "", 250, 0, 30, 250, 0, .4);
 
-    TH2D *sf_v_pcal_a_debug = new TH2D("sf_v_pcal_a_debug", "", 100, 0, 30, 100, 0, .4);
-    TH2D *sf_w_pcal_a_debug = new TH2D("sf_w_pcal_a_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_v_pcal_a_debug = new TH2D("sf_v_pcal_a_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_w_pcal_a_debug = new TH2D("sf_w_pcal_a_debug", "", 250, 0, 30, 250, 0, .4);
 
-    TH2D *pid_proton_fd_debug = new TH2D("pid_proton_fd_debug", "PID Cut Proton FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_proton_cd_debug = new TH2D("pid_proton_cd_debug", "PID Cut Proton CD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_piplus_fd_debug = new TH2D("pid_piplus_fd_debug", "PID Cut #pi + FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_piplus_cd_debug = new TH2D("pid_piplus_cd_debug", "PID Cut #pi + CD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_kplus_fd_debug = new TH2D("pid_kplus_fd_debug", "PID Cut K+ FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_kplus_cd_debug = new TH2D("pid_kplus_cd_debug", "PID Cut K+ CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_proton_fd_debug = new TH2D("pid_proton_fd_debug", "PID Cut Proton FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_proton_cd_debug = new TH2D("pid_proton_cd_debug", "PID Cut Proton CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_piplus_fd_debug = new TH2D("pid_piplus_fd_debug", "PID Cut #pi + FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_piplus_cd_debug = new TH2D("pid_piplus_cd_debug", "PID Cut #pi + CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_kplus_fd_debug = new TH2D("pid_kplus_fd_debug", "PID Cut K+ FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_kplus_cd_debug = new TH2D("pid_kplus_cd_debug", "PID Cut K+ CD", 250, 0, 5, 250, 0, 1.2);
 
-    TH2D *pid_piminus_fd_debug = new TH2D("pid_piminus_fd_debug", "PID Cut #pi + FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_piminus_cd_debug = new TH2D("pid_piminus_cd_debug", "PID Cut #pi + CD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_kminus_fd_debug = new TH2D("pid_kminus_fd_debug", "PID Cut K+ FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_kminus_cd_debug = new TH2D("pid_kminus_cd_debug", "PID Cut K+ CD", 100, 0, 5, 100, 0, 1.2);
-//    TH2D *pid_pizero_fd_debug = new TH2D("pid_pizero_fd_debug", "PID Cut pizero FD", 100, 0, 5, 100, 0, 1.2); // My addition
-//    TH2D *pid_pizero_cd_debug = new TH2D("pid_pizero_cd_debug", "PID Cut pizero CD", 100, 0, 5, 100, 0, 1.2); // My addition
-//    TH2D *pid_neutrons_fd_debug = new TH2D("pid_neutrons_fd_debug", "PID Cut neutrons FD", 100, 0, 5, 100, 0, 1.2); // My addition
-//    TH2D *pid_neutrons_cd_debug = new TH2D("pid_neutrons_cd_debug", "PID Cut neutrons CD", 100, 0, 5, 100, 0, 1.2); // My addition
-    TH2D *pid_neutrals_fd_debug = new TH2D("pid_neutrals_fd_debug", "PID Cut neutrals FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_neutrals_cd_debug = new TH2D("pid_neutrals_cd_debug", "PID Cut neutrals CD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_deuteron_fd_debug = new TH2D("pid_deuteron_fd_debug", "PID Cut deuteron FD", 100, 0, 5, 100, 0, 1.2);
-    TH2D *pid_deuteron_cd_debug = new TH2D("pid_deuteron_cd_debug", "PID Cut deutereon CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_piminus_fd_debug = new TH2D("pid_piminus_fd_debug", "PID Cut #pi + FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_piminus_cd_debug = new TH2D("pid_piminus_cd_debug", "PID Cut #pi + CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_kminus_fd_debug = new TH2D("pid_kminus_fd_debug", "PID Cut K+ FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_kminus_cd_debug = new TH2D("pid_kminus_cd_debug", "PID Cut K+ CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_neutrals_fd_debug = new TH2D("pid_neutrals_fd_debug", "PID Cut neutrals FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_neutrals_cd_debug = new TH2D("pid_neutrals_cd_debug", "PID Cut neutrals CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_deuteron_fd_debug = new TH2D("pid_deuteron_fd_debug", "PID Cut deuteron FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_deuteron_cd_debug = new TH2D("pid_deuteron_cd_debug", "PID Cut deutereon CD", 250, 0, 5, 250, 0, 1.2);
 
     TH1D *el_vz_debug = new TH1D("el_vz_debug", "El vertex ", 100, -20, 10);
     TH1D *el_vz_p_debug = new TH1D("el_vz_p_debug", "El-proton vertex ", 100, -10, 10);
@@ -484,12 +451,6 @@ void clas12ana::debugByPid(region_part_ptr p) {
             pid_kplus_fd_debug->Fill(par_mom, par_beta);
         else if (pid == -321)
             pid_kminus_fd_debug->Fill(par_mom, par_beta);
-//        else if (pid == 111) // My addition
-//            pid_pizero_fd_debug->Fill(par_mom, par_beta);
-//        else if (pid == 2112) // My addition
-//            pid_neutrons_fd_debug->Fill(par_mom, par_beta);
-//        else if (pid == 0) // My addition
-//            pid_neutrals_fd_debug->Fill(par_mom, par_beta);
         else if (pid == 0 || pid == 2112) // Justin's original
             pid_neutrals_fd_debug->Fill(par_mom, par_beta);
     } else if (is_cd) {
@@ -505,12 +466,6 @@ void clas12ana::debugByPid(region_part_ptr p) {
             pid_kplus_cd_debug->Fill(par_mom, par_beta);
         else if (pid == -321)
             pid_kminus_cd_debug->Fill(par_mom, par_beta);
-//        else if (pid == 111) // My addition
-//            pid_pizero_cd_debug->Fill(par_mom, par_beta);
-//        else if (pid == 2112) // My addition
-//            pid_neutrons_cd_debug->Fill(par_mom, par_beta);
-//        else if (pid == 0) // My addition
-//            pid_neutrals_cd_debug->Fill(par_mom, par_beta);
         else if (pid == 0 || pid == 2112) // Justin's original
             pid_neutrals_cd_debug->Fill(par_mom, par_beta);
     }
@@ -585,8 +540,6 @@ void clas12ana::WriteDebugPlots() {
     pid_piminus_fd_debug->Write();
     pid_kplus_fd_debug->Write();
     pid_kminus_fd_debug->Write();
-//    pid_pizero_fd_debug->Write(); // My addition
-//    pid_neutrons_fd_debug->Write(); // My addition
     pid_neutrals_fd_debug->Write(); // Justin's original
 
     pid_proton_cd_debug->Write();
@@ -595,8 +548,6 @@ void clas12ana::WriteDebugPlots() {
     pid_piminus_cd_debug->Write();
     pid_kplus_cd_debug->Write();
     pid_kminus_cd_debug->Write();
-//    pid_pizero_cd_debug->Write(); // My addition
-//    pid_neutrons_cd_debug->Write(); // My addition
     pid_neutrals_cd_debug->Write(); // Justin's original
 
     pid_cd_debug->Write();
@@ -613,8 +564,6 @@ void clas12ana::Clear() {
     electrons.clear();
     protons.clear();
     deuterons.clear();
-//    pizero.clear(); // My addition
-//    neutrons.clear(); // My addition
     neutrals.clear(); // Justin's original
     piplus.clear();
     piminus.clear();
@@ -946,11 +895,6 @@ bool clas12ana::checkEcalCuts(region_part_ptr p) {
         //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
         //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
 
-// my comment:
-//        // TODO: make as a variable of the class
-//        double sf_max_cut = .28;
-//        double sf_min_cut = .2;
-
         if (sampling_frac < sf_max_cut && sampling_frac > sf_min_cut)
             return true;
         else
@@ -1028,18 +972,18 @@ bool clas12ana::checkPidCut(region_part_ptr p) {
     if (p->par()->getPid() == 11) { return true; }
 
     if (p->getRegion() == CD) { // My addition
-        auto itter = pid_cuts_CD.find(p->par()->getPid());
+        auto itter_CD = pid_cuts_CD.find(p->par()->getPid());
 
-        if (itter != pid_cuts_CD.end()) {
-            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
+        if (itter_CD != pid_cuts_CD.end()) {
+            return (abs(p->par()->getChi2Pid() - itter_CD->second.at(0)) < itter_CD->second.at(1));
         } else {
             return false;
         }
     } else if (p->getRegion() == FD) { // My addition
-        auto itter = pid_cuts_FD.find(p->par()->getPid());
+        auto itter_FD = pid_cuts_FD.find(p->par()->getPid());
 
-        if (itter != pid_cuts_FD.end()) {
-            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
+        if (itter_FD != pid_cuts_FD.end()) {
+            return (abs(p->par()->getChi2Pid() - itter_FD->second.at(0)) < itter_FD->second.at(1));
         } else {
             return false;
         }

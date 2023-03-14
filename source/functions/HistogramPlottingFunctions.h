@@ -143,11 +143,11 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 //            lower_cut->SetLineColor(kMagenta);
             }
 
-            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut,3)).c_str(), "l");
-            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut,3)).c_str(), "l");
+            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut, 3)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut, 3)).c_str(), "l");
 
             if (plot_max == true) {
-                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax,3)).c_str(), "l");
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
 //            TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(lower_cut, ("Peak location = " + to_string_with_precision(max_location)).c_str(), "l");
             }
 
@@ -936,12 +936,12 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 //</editor-fold>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                 histPlotter1Dchi2 function                                                                          //
+//                                                                 histPlotter1DwFit function                                                                          //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// histPlotter1Dchi2 function (old) -------------------------------------------------------------------------------------------------------------------------------------
+// histPlotter1DwFit function (old) -------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="histPlotter1Dchi2 function (old)">
+//<editor-fold desc="histPlotter1DwFit function (old)">
 /* fitf is used for custom plot fits */
 Double_t fitf(Double_t *v, Double_t *par) {
     Double_t arg = 0;
@@ -951,8 +951,8 @@ Double_t fitf(Double_t *v, Double_t *par) {
     return fitval;
 }
 
-/* histPlotter1Dchi2 is used for chi2 plots with fit */
-void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
+/* histPlotter1DwFit is used for chi2 plots with fit */
+void histPlotter1DwFit(TCanvas *Histogram1DCanvas,
                        TH1D *Histogram1D,
                        bool normalize_Histogram,
                        bool custom_normalization,
@@ -1074,7 +1074,7 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
         /* Set cut parameters from TF1 plot */
         plot_Xmax = Mean;
         plot_ucut = Std * factor; // Cut up to 2 Std from mean
-        plot_lcut = - (Std * factor); // Cut up to 2 Std from mean
+        plot_lcut = -(Std * factor); // Cut up to 2 Std from mean
 
         /* Remove TF1 plot from histogram */
         Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
@@ -1160,7 +1160,7 @@ void histPlotter1Dchi2(TCanvas *Histogram1DCanvas,
 
 // stackPlotter1D function (regular) -----------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="stackPlotter1D">
+//<editor-fold desc="stackPlotter1D (regular)">
 void stackPlotter1D(TCanvas *Histogram1DCanvas,
                     THStack *Histogram1DStack,
                     bool normalize_Histogram,
@@ -1186,9 +1186,12 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
 
     H1D_All_Int->SetLineWidth(4), H1D_All_Int->SetLineColor(kBlack), H1D_All_Int->SetLineStyle(5);
     H1D_QEL->SetLineWidth(2), H1D_QEL->SetLineColor(kBlue);
-    H1D_MEC->SetLineWidth(2), H1D_MEC->SetLineColor(kRed);
+//    H1D_MEC->SetLineWidth(2), H1D_MEC->SetLineColor(kRed);
+    H1D_MEC->SetLineWidth(2), H1D_MEC->SetLineColor(kRed + 1);
     H1D_RES->SetLineWidth(2), H1D_RES->SetLineColor(kGreen);
-    H1D_DIS->SetLineWidth(2), H1D_DIS->SetLineColor(kMagenta);
+    H1D_DIS->SetLineWidth(2), H1D_DIS->SetLineColor(kOrange + 6);
+//    H1D_DIS->SetLineWidth(2), H1D_DIS->SetLineColor(kMagenta);
+//    H1D_DIS->SetLineColor(9);
 //    H1D_DIS->SetLineColor(kCyan);
 
     Histogram1DStack->Draw("nostack");
@@ -1199,9 +1202,15 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
     Histogram1DStack->GetHistogram()->GetYaxis()->CenterTitle(centerTitle);
 
     if (normalize_Histogram == true) {
-        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
-        const char *HistogramTitle = title.c_str();
+        string title;
 
+        if (finalState == "") {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")" + " - Normalized";
+        } else {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        }
+
+        const char *HistogramTitle = title.c_str();
         Histogram1DStack->SetTitle(HistogramTitle);
 //        Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
         Histogram1DStack->GetYaxis()->SetTitle("Probability (%)");
@@ -1217,6 +1226,17 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
             displayText->Draw();
         }
     } else {
+        string title;
+
+        if (finalState == "") {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")";
+        } else {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        }
+
+        const char *HistogramTitle = title.c_str();
+        Histogram1DStack->SetTitle(HistogramTitle);
+
         if (H1D_All_Int->Integral() == 0.) {
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
@@ -1245,10 +1265,108 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
     }
 
     Histogram_list->Add(Histogram1DStack);
-    Histogram1DCanvas->SaveAs((Histogram1DStackSaveNamePath + Histogram1DStackSaveName + "_" + Histogram1DTitleReactions + "_" + finalState + ".png").c_str());
+
+    if (finalState == "") {
+        Histogram1DCanvas->SaveAs((Histogram1DStackSaveNamePath + Histogram1DStackSaveName + "_" + Histogram1DTitleReactions + ".png").c_str());
+    } else {
+        Histogram1DCanvas->SaveAs((Histogram1DStackSaveNamePath + Histogram1DStackSaveName + "_" + Histogram1DTitleReactions + "_" + finalState + ".png").c_str());
+    }
+
     Histogram1DCanvas->Clear();
 }
 //</editor-fold>
+
+////<editor-fold desc="stackPlotter1D (used for E_e plots)">
+//void stackPlotter1D(TCanvas *Histogram1DCanvas,
+//                    THStack *Histogram1DStack,
+//                    bool normalize_Histogram,
+//                    string Histogram1DTitle,
+//                    string Histogram1DTitleReactions,
+//                    TList *Histogram_list,
+//                    TH1D *H1D_All_Int,
+//                    TH1D *H1D_QEL,
+//                    TH1D *H1D_MEC,
+//                    TH1D *H1D_RES,
+//                    TH1D *H1D_DIS,
+//                    string Histogram1DStackSaveName,
+//                    string Histogram1DStackSaveNamePath,
+//                    string finalState) {
+//
+//    //  Normalization factor:
+//    double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
+//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+////    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
+//    double diplayTextSize = 0.1225, TitleSize = 0.06, LabelSize = 0.0425;
+//    bool centerTitle = true;
+//    string xLable = H1D_All_Int->GetXaxis()->GetTitle();
+//
+//    H1D_All_Int->SetLineWidth(4), H1D_All_Int->SetLineColor(kBlack), H1D_All_Int->SetLineStyle(5);
+//    H1D_QEL->SetLineWidth(2), H1D_QEL->SetLineColor(kBlue);
+//    H1D_MEC->SetLineWidth(2), H1D_MEC->SetLineColor(kRed);
+//    H1D_RES->SetLineWidth(2), H1D_RES->SetLineColor(kGreen);
+//    H1D_DIS->SetLineWidth(2), H1D_DIS->SetLineColor(kOrange + 7);
+////    H1D_DIS->SetLineWidth(2), H1D_DIS->SetLineColor(kMagenta);
+////    H1D_DIS->SetLineColor(9);
+////    H1D_DIS->SetLineColor(kCyan);
+//
+//    Histogram1DStack->Draw("nostack");
+//    Histogram1DStack->GetHistogram()->GetXaxis()->SetTitleSize(TitleSize);
+//    Histogram1DStack->GetHistogram()->GetXaxis()->SetLabelSize(LabelSize);
+//    Histogram1DStack->GetHistogram()->GetXaxis()->CenterTitle(centerTitle);
+//    Histogram1DStack->GetHistogram()->GetYaxis()->SetLabelSize(LabelSize);
+//    Histogram1DStack->GetHistogram()->GetYaxis()->CenterTitle(centerTitle);
+//
+//    if (normalize_Histogram == true) {
+//        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+//        const char *HistogramTitle = title.c_str();
+//
+//        Histogram1DStack->SetTitle(HistogramTitle);
+////        Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
+//        Histogram1DStack->GetYaxis()->SetTitle("Probability (%)");
+//        Histogram1DStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
+//
+//        if (H1D_All_Int->Integral() == 0.) {
+//            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+//            displayText->SetTextSize(diplayTextSize);
+//            displayText->SetFillColor(0);
+//            displayText->SetTextAlign(12);
+//            displayText->AddText("Empty histogram");
+//            Histogram1DStack->Draw();
+//            displayText->Draw();
+//        }
+//    } else {
+//        if (H1D_All_Int->Integral() == 0.) {
+//            TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
+//            displayText->SetTextSize(diplayTextSize);
+//            displayText->SetFillColor(0);
+//            displayText->SetTextAlign(12);
+//            displayText->AddText("Empty histogram");
+//            Histogram1DStack->Draw();
+//            displayText->Draw();
+//        } else if (H1D_All_Int->Integral() != 0.) {
+////            Histogram1DStack->GetXaxis()->SetTitle(xLable.c_str());
+//            Histogram1DStack->GetYaxis()->SetTitle("Arbitrary units (#events)");
+//            Histogram1DStack->GetHistogram()->GetYaxis()->SetTitleSize(TitleSize);
+//        }
+//    }
+//
+//    auto Histogram1DStackLegend = new TLegend(0.77, 0.624, 0.875, 0.89);
+////    auto Histogram1DStackLegend = new TLegend(0.775, 0.625, 0.9, 0.9);
+//
+//    if (H1D_All_Int->Integral() != 0.) {
+//        TLegendEntry *H1D_All_Int_Entry = Histogram1DStackLegend->AddEntry(H1D_All_Int, "All int.", "l");
+//        TLegendEntry *H1D_QEL_Entry = Histogram1DStackLegend->AddEntry(H1D_QEL, "QEL", "l");
+//        TLegendEntry *H1D_MEC_Entry = Histogram1DStackLegend->AddEntry(H1D_MEC, "MEC", "l");
+//        TLegendEntry *H1D_RES_Entry = Histogram1DStackLegend->AddEntry(H1D_RES, "RES", "l");
+//        TLegendEntry *H1D_DIS_Entry = Histogram1DStackLegend->AddEntry(H1D_DIS, "DIS", "l");
+//        Histogram1DStackLegend->Draw();
+//    }
+//
+//    Histogram_list->Add(Histogram1DStack);
+//    Histogram1DCanvas->SaveAs((Histogram1DStackSaveNamePath + Histogram1DStackSaveName + "_" + Histogram1DTitleReactions + "_" + finalState + ".png").c_str());
+//    Histogram1DCanvas->Clear();
+//}
+////</editor-fold>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                   histPlotter2D function                                                                            //

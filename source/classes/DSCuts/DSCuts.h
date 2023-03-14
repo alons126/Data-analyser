@@ -73,13 +73,13 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
     }
 
     if (r == "CD") {
-        FitStdFactor = 1; // sigma factor for CD cuts
+//        FitStdFactor = 1; // sigma factor for CD cuts
 //        FitStdFactor = 1.5; // sigma factor for CD cuts
-//        FitStdFactor = 2; // sigma factor for CD cuts
+        FitStdFactor = 2; // sigma factor for CD cuts
     } else if (r == "FD") {
-        FitStdFactor = 1; // sigma factor for CD cuts
+//        FitStdFactor = 1; // sigma factor for CD cuts
 //        FitStdFactor = 2; // sigma factor for CD cuts
-//        FitStdFactor = 3; // sigma factor for CD cuts
+        FitStdFactor = 3; // sigma factor for CD cuts
     } else {
         FitStdFactor = 1;
     }
