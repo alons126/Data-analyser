@@ -124,6 +124,54 @@ void EventAnalyser() {
 
 
 
+// Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Cuts declarations">
+    /* Number of Photo-electrons (Nphe) cuts (electrons only, FD) */
+    DSCuts Nphe_cuts_FD;
+
+    /* Chi2 cuts. NOTES:
+     * Values for mean and cuts are filled from fit variables.
+     * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
+    DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
+    DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.525726, -3.74939, 3.74939);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0.013499, -3.86714, 3.86714);
+//    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -3.74939, 3.74939);
+//    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -3.86714, 3.86714);
+//    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
+//    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.61111, 2.61111);
+    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.329573, -3.22474, 3.22474);
+    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0393059, -3.67649, 3.67649);
+    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.499243, -2.7142, 2.7142);
+    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", -0.39183, -15.4276, 15.4276);
+    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0866916, -3.13858, 3.13858);
+    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0528748, -3.24613, 3.24613);
+    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.0708992, -2.94424, 2.94424);
+    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.107165, -3.34001, 3.34001);
+//    DSCuts Chi2_hadron_cuts[]
+
+    /* Vertex cuts */
+//    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
+//    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
+    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -2.5, 1);
+    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 2);
+
+    /* Sampling Fraction (SF) cuts (electrons only, FD) */
+    DSCuts SF_cuts;
+
+    /* PCAL edge cuts (fiducial cuts ,electrons only, FD) */
+    DSCuts PCAL_edge_cuts;
+
+    /* DC edge cuts (fiducial cuts ,electrons only, FD) */
+    DSCuts DC_edge_cuts;
+
+    /* Momentum cuts */
+    //TODO: add momentum cuts here instead of in DetectorSimulationCuts.h
+    DSCuts e_momentum_cuts_2p, p_momentum_cuts_2p;
+    DSCuts e_momentum_cuts_MicroBooNE, p_momentum_cuts_MicroBooNE, cpion_momentum_cuts_MicroBooNE;
+    //</editor-fold>
+
 //  Input processing ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Input processing">
@@ -178,103 +226,6 @@ void EventAnalyser() {
 
     //    TFolder *folder_test = new TFolder("folder_test_name1/folder_test_name2","folder_test_title");
     //    plots->Add(folder_test);
-    //</editor-fold>
-
-//// Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//    //<editor-fold desc="Cuts settings">
-//    //TODO: add beta = 1.2 cut for electrons
-//    bool apply_cuts = true;
-//
-//    /* HTCC cut */
-//    bool apply_Nphe_cut = true;
-//
-//    /* Chi2 cuts */
-//    bool apply_chi2_cuts_1e_cut = false;
-//
-//    /* Vertex cuts */
-//    bool apply_Vz_cuts = true, apply_dVz_cuts = true;
-//
-//    /* Sampling Fraction (SF) cut */
-//    bool apply_SF_cuts = true;
-//
-//    /* ECAL fiducial (edge) cuts */
-//    bool apply_ECAL_fiducial_cuts = true;
-//
-//    /* DC fiducial (edge) cuts */
-//    bool apply_DC_fiducial_cut = true;
-//
-//    /* Momentum cuts */
-//    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_MicroBooNE = true;
-//
-//    //<editor-fold desc="Cuts output">
-//    if (apply_cuts == false) {
-//        cout << "Cuts are disabled.\n\n\n";
-//
-//        apply_momentum_cuts_2p = apply_momentum_cuts_MicroBooNE = apply_SF_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
-//        apply_Nphe_cut = apply_chi2_cuts_1e_cut = false;
-//    } else {
-//        cout << "Cuts are enabled. Cut settings:\n";
-//        cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
-//        cout << "apply_chi2_cuts_1e_cut:\t\t" << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
-//        cout << "apply_Vz_cuts:\t\t\t" << BoolToString(apply_Vz_cuts) << "\n";
-//        cout << "apply_dVz_cuts:\t\t\t" << BoolToString(apply_dVz_cuts) << "\n";
-//        cout << "apply_SF_cuts:\t\t\t" << BoolToString(apply_SF_cuts) << "\n";
-//        cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
-//        cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
-//        cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
-//        cout << "apply_momentum_cuts_MicroBooNE:\t" << BoolToString(apply_momentum_cuts_MicroBooNE) << "\n\n\n";
-//    }
-//    //</editor-fold>
-//
-//    //</editor-fold>
-
-// Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Cuts declarations">
-    /* Number of Photo-electrons (Nphe) cuts (electrons only, FD) */
-    DSCuts Nphe_cuts_FD;
-
-    /* Chi2 cuts. NOTES:
-     * Values for mean and cuts are filled from fit variables.
-     * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
-    DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
-    DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
-    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.523043, -3.70645, 3.70645);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0.012058, -3.85302, 3.85302);
-//    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -3.74939, 3.74939);
-//    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -3.86714, 3.86714);
-//    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
-//    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.61111, 2.61111);
-    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.327104, -1.7285, 1.7285);
-    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0933062, -2.70367, 2.70367);
-    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.416576, -1.37182, 1.37182);
-    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", -0.441735, -6.61343, 6.61343);
-    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0944273, -1.57472, 1.57472);
-    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0504487, -2.16717, 2.16717);
-    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.023183, -1.49841, 1.49841);
-    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.0961539, -2.31475, 2.31475);
-//    DSCuts Chi2_hadron_cuts[]
-
-    /* Vertex cuts */
-//    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
-//    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
-    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -2.5, 1);
-    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 2);
-
-    /* Sampling Fraction (SF) cuts (electrons only, FD) */
-    DSCuts SF_cuts;
-
-    /* PCAL edge cuts (fiducial cuts ,electrons only, FD) */
-    DSCuts PCAL_edge_cuts;
-
-    /* DC edge cuts (fiducial cuts ,electrons only, FD) */
-    DSCuts DC_edge_cuts;
-
-    /* Momentum cuts */
-    //TODO: add momentum cuts here instead of in DetectorSimulationCuts.h
-    DSCuts e_momentum_cuts_2p, p_momentum_cuts_2p;
-    DSCuts e_momentum_cuts_MicroBooNE, p_momentum_cuts_MicroBooNE, cpion_momentum_cuts_MicroBooNE;
     //</editor-fold>
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -746,6 +697,11 @@ void EventAnalyser() {
     //<editor-fold desc="Delete settings">
     bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
 
+    if (delete_txt_files == true) {
+//        system(("find " + plots_path + " -type f -iname '" + log_file_name + "' -delete").c_str()); // Delete existing .txt files
+        system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
+    }
+
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
         cout << "\nClearing old plots...";
@@ -792,6 +748,41 @@ void EventAnalyser() {
     /* Beta vs. P plots */
     double Beta_boundary = 3, P_boundary = beamE * 1.425;
     if (apply_cuts == true) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
+    //</editor-fold>
+
+// Debugging settings ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Debugging settings">
+    bool PrintEvents = true;
+    int Ne_in_event = 1, Nf_in_event = 2, nEvents2print = 10000;
+
+    ofstream EventPrint;
+    string EventPrint_save_Directory;
+
+    if (PrintEvents == true) {
+        if (apply_chi2_cuts_1e_cut == false) {
+            EventPrint_save_Directory = plots_path + "/" + "Event_Print_without_chi2.txt";
+        } else if (apply_chi2_cuts_1e_cut == true) {
+            EventPrint_save_Directory = plots_path + "/" + "Event_Print_ALL_CUTS.txt";
+        }
+
+        EventPrint.open(EventPrint_save_Directory.c_str());
+
+        if (apply_chi2_cuts_1e_cut == false) {
+            EventPrint << "//////////////////////////////////////////////////////////////////////\n";
+            EventPrint << "// Log of number of particles in event with all cuts except chi2    //\n";
+            EventPrint << "//////////////////////////////////////////////////////////////////////\n\n";
+        } else if (apply_chi2_cuts_1e_cut == true) {
+            EventPrint << "//////////////////////////////////////////////////////////////////////\n";
+            EventPrint << "// Log of number of particles in event with all cuts including chi2 //\n";
+            EventPrint << "//////////////////////////////////////////////////////////////////////\n\n";
+        }
+
+        EventPrint << "EVENT SELECTION:\n";
+        EventPrint << "#electrons in event:\t\t" << Ne_in_event << "\n";
+        EventPrint << "minimal #hadrons in event:\t" << Nf_in_event << "\n";
+        EventPrint << "#event upper bound:\t\t" << nEvents2print << "\n\n\n";
+    }
     //</editor-fold>
 
     //</editor-fold>
@@ -906,33 +897,33 @@ void EventAnalyser() {
                                             150, -Chi2_boundary, Chi2_boundary);
     string hChi2_Proton_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Proton_1e_cut_FD_Dir = Chi2_1e_Directory;
 
-//    THStack *sChi2_Kplus_1e_cut = new THStack("#chi^{2}_{K^{+}} (1e cut, CD & FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{+}};");
-//    TH1D *hChi2_Kplus_1e_cut_CD = new TH1D("#chi^{2}_{K^{+}} (1e cut, CD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD);#chi^{2}_{K^{+}};",
-//                                           150, -Chi2_boundary, Chi2_boundary);
-//    TH1D *hChi2_Kplus_1e_cut_FD = new TH1D("#chi^{2}_{K^{+}} (1e cut, FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, FD);#chi^{2}_{K^{+}};",
-//                                           150, -Chi2_boundary, Chi2_boundary);
-//    string hChi2_Kplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kplus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    THStack *sChi2_Kplus_1e_cut = new THStack("#chi^{2}_{K^{+}} (1e cut, CD & FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{+}};");
+    TH1D *hChi2_Kplus_1e_cut_CD = new TH1D("#chi^{2}_{K^{+}} (1e cut, CD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD);#chi^{2}_{K^{+}};",
+                                           150, -Chi2_boundary, Chi2_boundary);
+    TH1D *hChi2_Kplus_1e_cut_FD = new TH1D("#chi^{2}_{K^{+}} (1e cut, FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, FD);#chi^{2}_{K^{+}};",
+                                           150, -Chi2_boundary, Chi2_boundary);
+    string hChi2_Kplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kplus_1e_cut_FD_Dir = Chi2_1e_Directory;
 
-//    THStack *sChi2_Kminus_1e_cut = new THStack("#chi^{2}_{K^{-}} (1e cut, CD & FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{-}};");
-//    TH1D *hChi2_Kminus_1e_cut_CD = new TH1D("#chi^{2}_{K^{-}} (1e cut, CD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD);#chi^{2}_{K^{-}};",
-//                                            150, -Chi2_boundary, Chi2_boundary);
-//    TH1D *hChi2_Kminus_1e_cut_FD = new TH1D("#chi^{2}_{K^{-}} (1e cut, FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, FD);#chi^{2}_{K^{-}};",
-//                                            150, -Chi2_boundary, Chi2_boundary);
-//    string hChi2_Kminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kminus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    THStack *sChi2_Kminus_1e_cut = new THStack("#chi^{2}_{K^{-}} (1e cut, CD & FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{-}};");
+    TH1D *hChi2_Kminus_1e_cut_CD = new TH1D("#chi^{2}_{K^{-}} (1e cut, CD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD);#chi^{2}_{K^{-}};",
+                                            150, -Chi2_boundary, Chi2_boundary);
+    TH1D *hChi2_Kminus_1e_cut_FD = new TH1D("#chi^{2}_{K^{-}} (1e cut, FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, FD);#chi^{2}_{K^{-}};",
+                                            150, -Chi2_boundary, Chi2_boundary);
+    string hChi2_Kminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kminus_1e_cut_FD_Dir = Chi2_1e_Directory;
 
-//    THStack *sChi2_piplus_1e_cut = new THStack("#chi^{2}_{#pi^{+}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{+}};");
-//    TH1D *hChi2_piplus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, CD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD);#chi^{2}_{#pi^{+}};",
-//                                            150, -Chi2_boundary, Chi2_boundary);
-//    TH1D *hChi2_piplus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, FD);#chi^{2}_{#pi^{+}};",
-//                                            150, -Chi2_boundary, Chi2_boundary);
-//    string hChi2_piplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piplus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    THStack *sChi2_piplus_1e_cut = new THStack("#chi^{2}_{#pi^{+}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{+}};");
+    TH1D *hChi2_piplus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, CD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD);#chi^{2}_{#pi^{+}};",
+                                            150, -Chi2_boundary, Chi2_boundary);
+    TH1D *hChi2_piplus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, FD);#chi^{2}_{#pi^{+}};",
+                                            150, -Chi2_boundary, Chi2_boundary);
+    string hChi2_piplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piplus_1e_cut_FD_Dir = Chi2_1e_Directory;
 
-//    THStack *sChi2_piminus_1e_cut = new THStack("#chi^{2}_{#pi^{-}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{-}};");
-//    TH1D *hChi2_piminus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, CD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD);#chi^{2}_{#pi^{-}};",
-//                                             150, -Chi2_boundary, Chi2_boundary);
-//    TH1D *hChi2_piminus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, FD);#chi^{2}_{#pi^{-}};",
-//                                             150, -Chi2_boundary, Chi2_boundary);
-//    string hChi2_piminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piminus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    THStack *sChi2_piminus_1e_cut = new THStack("#chi^{2}_{#pi^{-}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{-}};");
+    TH1D *hChi2_piminus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, CD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD);#chi^{2}_{#pi^{-}};",
+                                             150, -Chi2_boundary, Chi2_boundary);
+    TH1D *hChi2_piminus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, FD);#chi^{2}_{#pi^{-}};",
+                                             150, -Chi2_boundary, Chi2_boundary);
+    string hChi2_piminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piminus_1e_cut_FD_Dir = Chi2_1e_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots (MicroBooNE)">
@@ -2258,32 +2249,6 @@ void EventAnalyser() {
 //  Looping over each HipoChain file
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-//    ofstream EventPrint;
-//    string EventPrint_save_Directory;
-//
-//    if (apply_chi2_cuts_1e_cut == false) {
-//        EventPrint_save_Directory = plots_path + "/" + "Event_Print_without_chi2.txt";
-//    } else if (apply_chi2_cuts_1e_cut == true) {
-//        EventPrint_save_Directory = plots_path + "/" + "Event_Print_ALL_CUTS.txt";
-//    }
-//
-//    EventPrint.open(EventPrint_save_Directory.c_str());
-//
-//    if (apply_chi2_cuts_1e_cut == false) {
-//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n";
-//        EventPrint << "// Log of number of particles in event with all cuts except chi2         //\n";
-//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n\n";
-//    } else if (apply_chi2_cuts_1e_cut == true) {
-//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n";
-//        EventPrint << "// Log of number of particles in event with all cuts including chi2      //\n";
-//        EventPrint << "///////////////////////////////////////////////////////////////////////////\n\n";
-//    }
-
-
-
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
 
@@ -2336,38 +2301,30 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
+        //<editor-fold desc="Debugging (print events to file)">
+        if (PrintEvents == true) {
+            bool EventPrintSelection = (Ne == Ne_in_event && Nf >= Nf_in_event);
+            int event = c12->runconfig()->getEvent();
 
+            if (EventPrintSelection == true) {
+                if (event < (nEvents2print + 1)) {
+                    EventPrint << "--- EVENT NUMBER " << event << " ---\n";
+                    EventPrint << "#particles in event:\t" << Nf << "\n";
+                    EventPrint << "protons.size() = " << protons.size() << "\n";
+                    EventPrint << "Kplus.size() = " << Kplus.size() << "\n";
+                    EventPrint << "Kminus.size() = " << Kminus.size() << "\n";
+                    EventPrint << "piplus.size() = " << piplus.size() << "\n";
+                    EventPrint << "piminus.size() = " << piminus.size() << "\n";
+                    EventPrint << "electrons.size() = " << electrons.size() << "\n";
+                    EventPrint << "deuterons.size() = " << deuterons.size() << "\n";
+                    EventPrint << "neutrals.size() = " << neutrals.size() << "\n";
+                    EventPrint << "otherpart.size() = " << otherpart.size() << "\n\n\n";
+                }
+            }
+        }
+        //</editor-fold>
 
-
-
-
-
-//        int event = c12->runconfig()->getEvent();
-//
-//        if (Ne == 1 && Nf >= 2) {
-//            if (event < 10001) {
-//                EventPrint << "--- EVENT NUMBER " << event << "---\n";
-//                EventPrint << "#particles in event:\t" << Nf << "\n";
-//                EventPrint << "protons.size() = " << protons.size() << "\n";
-//                EventPrint << "Kplus.size() = " << Kplus.size() << "\n";
-//                EventPrint << "Kminus.size() = " << Kminus.size() << "\n";
-//                EventPrint << "piplus.size() = " << piplus.size() << "\n";
-//                EventPrint << "piminus.size() = " << piminus.size() << "\n";
-//                EventPrint << "electrons.size() = " << electrons.size() << "\n";
-//                EventPrint << "deuterons.size() = " << deuterons.size() << "\n";
-//                EventPrint << "neutrals.size() = " << neutrals.size() << "\n";
-//                EventPrint << "otherpart.size() = " << otherpart.size() << "\n\n\n";
-//            }
-//        }
-
-
-
-
-
-
-
-
-//  Fill All particles (All e) plots ------------------------------------------------------------------------------------------------------------------------------------
+        //  Fill All particles (All e) plots ------------------------------------------------------------------------------------------------------------------------------------
 
         // TODO: remove or change - clas12ana comes with 1e cut already
 
@@ -2961,7 +2918,7 @@ void EventAnalyser() {
         //<editor-fold desc="Kplus Beta vs. P plots (1e cut, CD & FD)">
         for (int i = 0; i < Kplus.size(); i++) {
             if (Kplus[i]->getRegion() == CD) {
-//                hChi2_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getChi2Pid());
+                hChi2_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getChi2Pid());
 
                 hVx_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getVx());
                 hVy_Kplus_1e_cut_CD->Fill(Kplus[i]->par()->getVy());
@@ -2972,7 +2929,7 @@ void EventAnalyser() {
                 Beta_vs_P_positive_particles_1e_cut_CD->Fill(Kplus[i]->getP(), Kplus[i]->par()->getBeta());
 
             } else if (Kplus[i]->getRegion() == FD) {
-//                hChi2_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getChi2Pid());
+                hChi2_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getChi2Pid());
 
                 hVx_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getVx());
                 hVy_Kplus_1e_cut_FD->Fill(Kplus[i]->par()->getVy());
@@ -2988,7 +2945,7 @@ void EventAnalyser() {
         //<editor-fold desc="Kminus Beta vs. P plots (1e cut, CD & FD)">
         for (int i = 0; i < Kminus.size(); i++) {
             if (Kminus[i]->getRegion() == CD) {
-//                hChi2_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getChi2Pid());
+                hChi2_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getChi2Pid());
 
                 hVx_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getVx());
                 hVy_Kminus_1e_cut_CD->Fill(Kminus[i]->par()->getVy());
@@ -2998,7 +2955,7 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Kminus_Only_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_CD->Fill(Kminus[i]->getP(), Kminus[i]->par()->getBeta());
             } else if (Kminus[i]->getRegion() == FD) {
-//                hChi2_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getChi2Pid());
+                hChi2_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getChi2Pid());
 
                 hVx_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getVx());
                 hVy_Kminus_1e_cut_FD->Fill(Kminus[i]->par()->getVy());
@@ -3014,7 +2971,7 @@ void EventAnalyser() {
         //<editor-fold desc="piplus Beta vs. P plots (1e cut, CD & FD)">
         for (int i = 0; i < piplus.size(); i++) {
             if (piplus[i]->getRegion() == CD) {
-//                hChi2_piplus_1e_cut_CD->Fill(piplus[i]->par()->getChi2Pid());
+                hChi2_piplus_1e_cut_CD->Fill(piplus[i]->par()->getChi2Pid());
 
                 hVx_piplus_1e_cut_CD->Fill(piplus[i]->par()->getVx());
                 hVy_piplus_1e_cut_CD->Fill(piplus[i]->par()->getVy());
@@ -3024,7 +2981,7 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piplus_Only_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
             } else if (piplus[i]->getRegion() == FD) {
-//                hChi2_piplus_1e_cut_FD->Fill(piplus[i]->par()->getChi2Pid());
+                hChi2_piplus_1e_cut_FD->Fill(piplus[i]->par()->getChi2Pid());
 
                 hVx_piplus_1e_cut_FD->Fill(piplus[i]->par()->getVx());
                 hVy_piplus_1e_cut_FD->Fill(piplus[i]->par()->getVy());
@@ -3040,7 +2997,7 @@ void EventAnalyser() {
         //<editor-fold desc="piminus Beta vs. P plots (1e cut, CD & FD)">
         for (int i = 0; i < piminus.size(); i++) {
             if (piminus[i]->getRegion() == CD) {
-//                hChi2_piminus_1e_cut_CD->Fill(piminus[i]->par()->getChi2Pid());
+                hChi2_piminus_1e_cut_CD->Fill(piminus[i]->par()->getChi2Pid());
 
                 hVx_piminus_1e_cut_CD->Fill(piminus[i]->par()->getVx());
                 hVy_piminus_1e_cut_CD->Fill(piminus[i]->par()->getVy());
@@ -3050,7 +3007,7 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piminus_Only_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
             } else if (piminus[i]->getRegion() == FD) {
-//                hChi2_piminus_1e_cut_FD->Fill(piminus[i]->par()->getChi2Pid());
+                hChi2_piminus_1e_cut_FD->Fill(piminus[i]->par()->getChi2Pid());
 
                 hVx_piminus_1e_cut_FD->Fill(piminus[i]->par()->getVx());
                 hVy_piminus_1e_cut_FD->Fill(piminus[i]->par()->getVy());
@@ -4331,15 +4288,7 @@ void EventAnalyser() {
     } // end of while
     // </editor-fold>
 
-
-
-
-//    EventPrint.close();
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                        Histograms plots                                                                             //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -4448,14 +4397,14 @@ void EventAnalyser() {
         Chi2_Electron_cuts_FD.MeanFromHistogram = hChi2_Electron_1e_cut_FD->GetBinCenter(hChi2_Electron_1e_cut_FD->GetMaximumBin());
         Chi2_Proton_cuts_CD.MeanFromHistogram = hChi2_Proton_1e_cut_CD->GetBinCenter(hChi2_Proton_1e_cut_CD->GetMaximumBin());
         Chi2_Proton_cuts_FD.MeanFromHistogram = hChi2_Proton_1e_cut_FD->GetBinCenter(hChi2_Proton_1e_cut_FD->GetMaximumBin());
-//        Chi2_Kplus_cuts_CD.MeanFromHistogram = hChi2_Kplus_1e_cut_CD->GetBinCenter(hChi2_Kplus_1e_cut_CD->GetMaximumBin());
-//        Chi2_Kplus_cuts_FD.MeanFromHistogram = hChi2_Kplus_1e_cut_FD->GetBinCenter(hChi2_Kplus_1e_cut_FD->GetMaximumBin());
-//        Chi2_Kminus_cuts_CD.MeanFromHistogram = hChi2_Kminus_1e_cut_CD->GetBinCenter(hChi2_Kminus_1e_cut_CD->GetMaximumBin());
-//        Chi2_Kminus_cuts_FD.MeanFromHistogram = hChi2_Kminus_1e_cut_FD->GetBinCenter(hChi2_Kminus_1e_cut_FD->GetMaximumBin());
-//        Chi2_piplus_cuts_CD.MeanFromHistogram = hChi2_piplus_1e_cut_CD->GetBinCenter(hChi2_piplus_1e_cut_CD->GetMaximumBin());
-//        Chi2_piplus_cuts_FD.MeanFromHistogram = hChi2_piplus_1e_cut_FD->GetBinCenter(hChi2_piplus_1e_cut_FD->GetMaximumBin());
-//        Chi2_piminus_cuts_CD.MeanFromHistogram = hChi2_piminus_1e_cut_CD->GetBinCenter(hChi2_piminus_1e_cut_CD->GetMaximumBin());
-//        Chi2_piminus_cuts_FD.MeanFromHistogram = hChi2_piminus_1e_cut_FD->GetBinCenter(hChi2_piminus_1e_cut_FD->GetMaximumBin());
+        Chi2_Kplus_cuts_CD.MeanFromHistogram = hChi2_Kplus_1e_cut_CD->GetBinCenter(hChi2_Kplus_1e_cut_CD->GetMaximumBin());
+        Chi2_Kplus_cuts_FD.MeanFromHistogram = hChi2_Kplus_1e_cut_FD->GetBinCenter(hChi2_Kplus_1e_cut_FD->GetMaximumBin());
+        Chi2_Kminus_cuts_CD.MeanFromHistogram = hChi2_Kminus_1e_cut_CD->GetBinCenter(hChi2_Kminus_1e_cut_CD->GetMaximumBin());
+        Chi2_Kminus_cuts_FD.MeanFromHistogram = hChi2_Kminus_1e_cut_FD->GetBinCenter(hChi2_Kminus_1e_cut_FD->GetMaximumBin());
+        Chi2_piplus_cuts_CD.MeanFromHistogram = hChi2_piplus_1e_cut_CD->GetBinCenter(hChi2_piplus_1e_cut_CD->GetMaximumBin());
+        Chi2_piplus_cuts_FD.MeanFromHistogram = hChi2_piplus_1e_cut_FD->GetBinCenter(hChi2_piplus_1e_cut_FD->GetMaximumBin());
+        Chi2_piminus_cuts_CD.MeanFromHistogram = hChi2_piminus_1e_cut_CD->GetBinCenter(hChi2_piminus_1e_cut_CD->GetMaximumBin());
+        Chi2_piminus_cuts_FD.MeanFromHistogram = hChi2_piminus_1e_cut_FD->GetBinCenter(hChi2_piminus_1e_cut_FD->GetMaximumBin());
 
 ////        Chi2_Electron_MicroBooNE_Xmax_CD = hChi2_Electron_MicroBooNE_CD->GetBinCenter(hChi2_Electron_MicroBooNE_CD->GetMaximumBin());
 //        Chi2_Electron_MicroBooNE_Xmax_FD = hChi2_Electron_MicroBooNE_FD->GetBinCenter(hChi2_Electron_MicroBooNE_FD->GetMaximumBin());
@@ -4528,73 +4477,73 @@ void EventAnalyser() {
                           Chi2_Proton_cuts_FD.Cuts.at(0));
         }
 
-//        if (apply_chi2_cuts_1e_cut == false) {
-//            /* Do Gaussian fit if not applying chi2 cuts */
-//            histPlotter1DwFit(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
-//                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cuts_CD.Cuts.at(0), Chi2_Kplus_cuts_CD.Cuts.at(1), Chi2_Kplus_cuts_CD.Cuts.at(2),
-//                              Chi2_Kplus_cuts_CD.FitStdFactor, true, "K+");
-//            histPlotter1DwFit(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
-//                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cuts_FD.Cuts.at(0), Chi2_Kplus_cuts_FD.Cuts.at(1), Chi2_Kplus_cuts_FD.Cuts.at(2),
-//                              Chi2_Kplus_cuts_FD.FitStdFactor, true, "K+");
-//        } else {
-//            histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kplus_cuts_CD.Cuts.at(2),
-//                          Chi2_Kplus_cuts_CD.Cuts.at(0));
-//            histPlotter1D(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kplus_cuts_FD.Cuts.at(2),
-//                          Chi2_Kplus_cuts_FD.Cuts.at(0));
-//        }
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1DwFit(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
+                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cuts_CD.Cuts.at(0), Chi2_Kplus_cuts_CD.Cuts.at(1), Chi2_Kplus_cuts_CD.Cuts.at(2),
+                              Chi2_Kplus_cuts_CD.FitStdFactor, true, "K+");
+            histPlotter1DwFit(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
+                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cuts_FD.Cuts.at(0), Chi2_Kplus_cuts_FD.Cuts.at(1), Chi2_Kplus_cuts_FD.Cuts.at(2),
+                              Chi2_Kplus_cuts_FD.FitStdFactor, true, "K+");
+        } else {
+            histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kplus_cuts_CD.Cuts.at(2),
+                          Chi2_Kplus_cuts_CD.Cuts.at(0));
+            histPlotter1D(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kplus_cuts_FD.Cuts.at(2),
+                          Chi2_Kplus_cuts_FD.Cuts.at(0));
+        }
 
-//        if (apply_chi2_cuts_1e_cut == false) {
-//            /* Do Gaussian fit if not applying chi2 cuts */
-//            histPlotter1DwFit(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
-//                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cuts_CD.Cuts.at(0), Chi2_Kminus_cuts_CD.Cuts.at(1), Chi2_Kminus_cuts_CD.Cuts.at(2),
-//                              Chi2_Kminus_cuts_CD.FitStdFactor, true, "K-");
-//            histPlotter1DwFit(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
-//                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cuts_FD.Cuts.at(0), Chi2_Kminus_cuts_FD.Cuts.at(1), Chi2_Kminus_cuts_FD.Cuts.at(2),
-//                              Chi2_Kminus_cuts_FD.FitStdFactor, true, "K-");
-//        } else {
-//            histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cuts_CD.Cuts.at(2),
-//                          Chi2_Kminus_cuts_CD.Cuts.at(0));
-//            histPlotter1D(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cuts_FD.Cuts.at(2),
-//                          Chi2_Kminus_cuts_FD.Cuts.at(0));
-//        }
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1DwFit(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
+                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cuts_CD.Cuts.at(0), Chi2_Kminus_cuts_CD.Cuts.at(1), Chi2_Kminus_cuts_CD.Cuts.at(2),
+                              Chi2_Kminus_cuts_CD.FitStdFactor, true, "K-");
+            histPlotter1DwFit(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
+                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cuts_FD.Cuts.at(0), Chi2_Kminus_cuts_FD.Cuts.at(1), Chi2_Kminus_cuts_FD.Cuts.at(2),
+                              Chi2_Kminus_cuts_FD.FitStdFactor, true, "K-");
+        } else {
+            histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cuts_CD.Cuts.at(2),
+                          Chi2_Kminus_cuts_CD.Cuts.at(0));
+            histPlotter1D(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cuts_FD.Cuts.at(2),
+                          Chi2_Kminus_cuts_FD.Cuts.at(0));
+        }
 
-//        if (apply_chi2_cuts_1e_cut == false) {
-//            /* Do Gaussian fit if not applying chi2 cuts */
-//            histPlotter1DwFit(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
-//                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cuts_CD.Cuts.at(0), Chi2_piplus_cuts_CD.Cuts.at(1), Chi2_piplus_cuts_CD.Cuts.at(2),
-//                              Chi2_piplus_cuts_CD.FitStdFactor, true, "pi+");
-//            histPlotter1DwFit(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
-//                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cuts_FD.Cuts.at(0), Chi2_piplus_cuts_FD.Cuts.at(1), Chi2_piplus_cuts_FD.Cuts.at(2),
-//                              Chi2_piplus_cuts_FD.FitStdFactor, true, "pi+");
-//        } else {
-//            histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cuts_CD.Cuts.at(2),
-//                          Chi2_piplus_cuts_CD.Cuts.at(0));
-//            histPlotter1D(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cuts_FD.Cuts.at(2),
-//                          Chi2_piplus_cuts_FD.Cuts.at(0));
-//        }
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1DwFit(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
+                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cuts_CD.Cuts.at(0), Chi2_piplus_cuts_CD.Cuts.at(1), Chi2_piplus_cuts_CD.Cuts.at(2),
+                              Chi2_piplus_cuts_CD.FitStdFactor, true, "pi+");
+            histPlotter1DwFit(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
+                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cuts_FD.Cuts.at(0), Chi2_piplus_cuts_FD.Cuts.at(1), Chi2_piplus_cuts_FD.Cuts.at(2),
+                              Chi2_piplus_cuts_FD.FitStdFactor, true, "pi+");
+        } else {
+            histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cuts_CD.Cuts.at(2),
+                          Chi2_piplus_cuts_CD.Cuts.at(0));
+            histPlotter1D(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cuts_FD.Cuts.at(2),
+                          Chi2_piplus_cuts_FD.Cuts.at(0));
+        }
 
-//        if (apply_chi2_cuts_1e_cut == false) {
-//            /* Do Gaussian fit if not applying chi2 cuts */
-//            histPlotter1DwFit(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
-//                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cuts_CD.Cuts.at(0), Chi2_piminus_cuts_CD.Cuts.at(1), Chi2_piminus_cuts_CD.Cuts.at(2),
-//                              Chi2_piminus_cuts_CD.FitStdFactor, true, "pi-");
-//            histPlotter1DwFit(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
-//                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cuts_FD.Cuts.at(0), Chi2_piminus_cuts_FD.Cuts.at(1), Chi2_piminus_cuts_FD.Cuts.at(2),
-//                              Chi2_piminus_cuts_FD.FitStdFactor, true, "pi-");
-//        } else {
-//            histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true,
-//                          Chi2_piminus_cuts_CD.Cuts.at(2), Chi2_piminus_cuts_CD.Cuts.at(0));
-//            histPlotter1D(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true,
-//                          Chi2_piminus_cuts_FD.Cuts.at(2), Chi2_piminus_cuts_FD.Cuts.at(0));
-//        }
+        if (apply_chi2_cuts_1e_cut == false) {
+            /* Do Gaussian fit if not applying chi2 cuts */
+            histPlotter1DwFit(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
+                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cuts_CD.Cuts.at(0), Chi2_piminus_cuts_CD.Cuts.at(1), Chi2_piminus_cuts_CD.Cuts.at(2),
+                              Chi2_piminus_cuts_CD.FitStdFactor, true, "pi-");
+            histPlotter1DwFit(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
+                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cuts_FD.Cuts.at(0), Chi2_piminus_cuts_FD.Cuts.at(1), Chi2_piminus_cuts_FD.Cuts.at(2),
+                              Chi2_piminus_cuts_FD.FitStdFactor, true, "pi-");
+        } else {
+            histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true,
+                          Chi2_piminus_cuts_CD.Cuts.at(2), Chi2_piminus_cuts_CD.Cuts.at(0));
+            histPlotter1D(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true,
+                          Chi2_piminus_cuts_FD.Cuts.at(2), Chi2_piminus_cuts_FD.Cuts.at(0));
+        }
         //</editor-fold>
 
 //        //<editor-fold desc="Chi2 plots (MicroBooNE)">
@@ -6932,19 +6881,24 @@ void EventAnalyser() {
 
     //<editor-fold desc="Saving proton pid cuts to .par file">
     if (apply_chi2_cuts_1e_cut == false) {
-        DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
+        DSCuts chi2cuts[10] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_Kplus_cuts_CD, Chi2_Kplus_cuts_FD, Chi2_Kminus_cuts_CD, Chi2_Kminus_cuts_FD,
+                               Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
+//        DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
 
         ofstream FittedPIDCuts;
         FittedPIDCuts.open((CutsDirectory + "FittedPIDCuts.par").c_str());
-        FittedPIDCuts << "############################################\n";
-        FittedPIDCuts << "# CLAS12 analysis cuts and parameters file #\n";
-        FittedPIDCuts << "############################################\n";
+        FittedPIDCuts << "######################################################################\n";
+        FittedPIDCuts << "# CLAS12 analysis cuts and parameters file (after chi2 Gaussian fit) #\n";
+        FittedPIDCuts << "######################################################################\n";
         FittedPIDCuts << "\n";
         FittedPIDCuts << "# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor << ";sigma_FD=" << Chi2_Proton_cuts_FD.FitStdFactor
                       << ":\n";
 
-        for (int i = 0; i < 2; i++) {
-            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << "\n";
+        for (int i = 0; i < 10; i++) {
+//        for (int i = 0; i < 2; i++) {
+            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
+                          << chi2cuts[i].GetUpperCut() << "\n";
+//            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << "\n";
 //        FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].GetMeanFit() << ":" << chi2cuts[i].GetUpperCut() << "\n";
         }
 
@@ -6952,9 +6906,11 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-// Saving debug plots ---------------------------------------------------------------------------------------------------------------------------------------------------
+// Saving debug files ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Saving debug plots">
+    //<editor-fold desc="Saving debug files">
+    if (PrintEvents == true) { EventPrint.close(); }
+
     if (debug_plots == true) {
         cout << "\n\nSaving debugging plots...\n\n";
 
@@ -6969,9 +6925,10 @@ void EventAnalyser() {
 // Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Saving settings to log file">
-    if (delete_txt_files == true) {
-        system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
-    }
+//    if (delete_txt_files == true) {
+//        system(("find " + plots_path + " -type f -iname '" + log_file_name + "' -delete").c_str()); // Delete existing .txt files
+////        system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
+//    }
 
     ofstream myLogFile;
     myLogFile.open(plots_log_save_Directory.c_str());
@@ -6991,6 +6948,8 @@ void EventAnalyser() {
     myLogFile << "filePath: " << filePath << "\n";
     myLogFile << "fileInput: " << fileInput << "\n";
     myLogFile << "plotsInput: " << plotsInput << "\n\n";
+    myLogFile << "WorkingDirectory: " << WorkingDirectory << "\n";
+    myLogFile << "plots_path: " << plots_path << "\n\n";
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "Plot settings\n";
@@ -7275,7 +7234,7 @@ void EventAnalyser() {
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "Vertex cuts\n";
-    myLogFile << "===========================================================================\n";
+    myLogFile << "===========================================================================\n\n";
     myLogFile << "Vertex_Electron_cut_CD = " << Vertex_Electron_cut_CD << "\n";
     myLogFile << "Vertex_Electron_1e_mean_CD = " << Vertex_Electron_1e_mean_CD << "\n";
     myLogFile << "Vertex_Electron_cut_FD = " << Vertex_Electron_cut_FD << "\n";
@@ -7317,7 +7276,6 @@ void EventAnalyser() {
     myLogFile << "p_momentum_upper_cut_MicroBooNE = " << p_mom_cuts_MicroBooNE.at(1) << "\n";
     myLogFile << "cpion_momentum_lower_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(0) << "\n";
     myLogFile << "cpion_momentum_upper_cut_MicroBooNE = " << cpion_mom_cuts_MicroBooNE.at(1) << "\n\n";
-
 
     myLogFile << "\n===========================================================================\n";
     myLogFile << "dV cuts\n";
@@ -7388,11 +7346,11 @@ void EventAnalyser() {
 
     myLogFile << "-- Events with electrons counts -------------------------------------------\n";
     myLogFile << "#(events) w/ at least 1e:\t\t\t" << num_of_events_with_at_least_1e << "\n";
-    myLogFile << "#(events) w/ more then 1e:\t\t\t" << num_of_events_more_then_1e << "\n\n";
-    myLogFile << "#(events) w/ exactly 1e:\t\t\t\t" << num_of_events_with_exactly_1e << "\n";
+    myLogFile << "#(events) w/ more then 1e:\t\t\t" << num_of_events_more_then_1e << "\n";
+    myLogFile << "#(events) w/ exactly 1e:\t\t\t" << num_of_events_with_exactly_1e << "\n\n";
 
     myLogFile << "-- 1e2X event counts ------------------------------------------------------\n";
-    myLogFile << "#(events) w/ 1e2X:\t\t\t\t\t" << num_of_events_with_1e2X << "\n\n";
+    myLogFile << "#(events) w/ 1e2X:\t\t\t\t" << num_of_events_with_1e2X << "\n\n";
 
     myLogFile << "#(events) w/ 1e2X QEL in CD:\t\t\t" << num_of_QEL_1e2X_CD_events << "\n";
     myLogFile << "#(events) w/ 1e2X MEC in CD:\t\t\t" << num_of_MEC_1e2X_CD_events << "\n";
@@ -7412,10 +7370,10 @@ void EventAnalyser() {
     myLogFile << "#(events) w/ 1e & any #p:\t\t\t" << num_of_events_with_1enP << "\n\n";
 
     myLogFile << "-- 1e1p event counts ------------------------------------------------------\n";
-    myLogFile << "#(events) w/ 1e1p:\t\t\t\t\t" << num_of_events_with_1e1p << "\n\n";
+    myLogFile << "#(events) w/ 1e1p:\t\t\t\t" << num_of_events_with_1e1p << "\n\n";
 
     myLogFile << "-- 1e2p event counts ------------------------------------------------------\n";
-    myLogFile << "#(events) w/ 1e2p:\t\t\t\t\t" << num_of_events_with_1e2p << "\n\n";
+    myLogFile << "#(events) w/ 1e2p:\t\t\t\t" << num_of_events_with_1e2p << "\n\n";
 
     myLogFile << "#(events) w/ 1e2p QEL in CD:\t\t\t" << num_of_QEL_1e2p_CD_events << "\n";
     myLogFile << "#(events) w/ 1e2p MEC in CD:\t\t\t" << num_of_MEC_1e2p_CD_events << "\n";
@@ -7440,11 +7398,11 @@ void EventAnalyser() {
     myLogFile << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n\n";
 
     cout << "-- 2p event counts --------------------------------------------------------\n";
-    myLogFile << "#(events) 2p:\t\t" << num_of_events_2p << "\n";
-    myLogFile << "#(events) 2p QEL:\t\t\t" << num_of_QEL_2p_events << "\n";
-    myLogFile << "#(events) 2p MEC:\t\t\t" << num_of_MEC_2p_events << "\n";
-    myLogFile << "#(events) 2p RES:\t\t\t" << num_of_RES_2p_events << "\n";
-    myLogFile << "#(events) 2p DIS:\t\t\t" << num_of_DIS_2p_events << "\n";
+    myLogFile << "#(events) 2p:\t\t\t\t\t" << num_of_events_2p << "\n";
+    myLogFile << "#(events) 2p QEL:\t\t\t\t\t" << num_of_QEL_2p_events << "\n";
+    myLogFile << "#(events) 2p MEC:\t\t\t\t\t" << num_of_MEC_2p_events << "\n";
+    myLogFile << "#(events) 2p RES:\t\t\t\t\t" << num_of_RES_2p_events << "\n";
+    myLogFile << "#(events) 2p DIS:\t\t\t\t\t" << num_of_DIS_2p_events << "\n";
     myLogFile << "QEL + MEC + RES + DIS (2p):\t\t\t" << num_of_QEL_2p_events + num_of_MEC_2p_events + num_of_RES_2p_events + num_of_DIS_2p_events << "\n\n\n";
 
     myLogFile << "-- MicroBooNE event counts ------------------------------------------------\n";

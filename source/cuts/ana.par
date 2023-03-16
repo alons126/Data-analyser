@@ -2,8 +2,16 @@
 # CLAS12 analysis cuts and parameters file #
 ############################################
 
-pid_cuts_CD 	2212:0:1	 #proton chi2pid cut (CD)
-pid_cuts_FD 	2212:0:2	 #proton chi2pid cut (FD)
+pid_cuts_CD 	2212:0:2	 #proton chi2pid cut (CD)
+pid_cuts_FD 	2212:0:3	 #proton chi2pid cut (FD)
+pid_cuts_CD 	 321:0:2	 #K+ chi2pid cut (CD)
+pid_cuts_FD 	 321:0:3	 #K+ chi2pid cut (FD)
+pid_cuts_CD 	-321:0:2	 #K- chi2pid cut (CD)
+pid_cuts_FD 	-321:0:3	 #K- chi2pid cut (FD)
+pid_cuts_CD 	 211:0:2	 #pi+ chi2pid cut (CD)
+pid_cuts_FD 	 211:0:3	 #pi+ chi2pid cut (FD)
+pid_cuts_CD 	-211:0:2	 #pi- chi2pid cut (CD)
+pid_cuts_FD 	-211:0:3	 #pi- chi2pid cut (FD)
 
 # pid cuts by detector (pid:mean:sigma) - sigma_CD=1;sigma_FD=2:
 #pid _cuts_CD 	2212:0.529231:1.89012	 #proton chi2pid cut (CD)

@@ -52,12 +52,15 @@ public:
 
     std::string GetPart() { return Particle; }
 
+    int GetPartPDG() { return particlePDG; }
+
     std::string GetAppliedCuts() { return AppliedCuts; }
 
     double MeanFromHistogram, MeanFromFit, FitStdFactor;
     vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 private:
     std::string CutVariable, Region, Particle, AppliedCuts;
+    int particlePDG;
 //    double MeanFromHistogram, MeanFromFit, FitStdFactor;
 //    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 };
@@ -82,6 +85,20 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
         FitStdFactor = 3; // sigma factor for CD cuts
     } else {
         FitStdFactor = 1;
+    }
+
+    if (p == "electron" || p == "Electron") {
+        particlePDG = 11;
+    } else if (p == "proton" || p == "Proton") {
+        particlePDG = 2212;
+    } else if (p == "kplus" || p == "Kplus") {
+        particlePDG = 321;
+    } else if (p == "kminus" || p == "Kminus") {
+        particlePDG = -321;
+    } else if (p == "piplus" || p == "Piplus") {
+        particlePDG = 211;
+    } else if (p == "piminus" || p == "Piminus") {
+        particlePDG = -211;
     }
 }
 
