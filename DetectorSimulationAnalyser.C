@@ -109,6 +109,7 @@ void EventAnalyser() {
 
 
 
+
     if (apply_cuts == false) {
         plots_path = WorkingDirectory + "plots_T5tot_NO_CUTS" + "/";
         plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
@@ -124,6 +125,7 @@ void EventAnalyser() {
 
 
 
+
 // Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts declarations">
@@ -135,8 +137,8 @@ void EventAnalyser() {
      * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
     DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
     DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
-    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.525726, -3.74939, 3.74939);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0.013499, -3.86714, 3.86714);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.527243, -5.65305, 5.65305);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0.00665029, -3.88398, 3.88398);
 //    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -3.74939, 3.74939);
 //    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -3.86714, 3.86714);
 //    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
@@ -145,10 +147,11 @@ void EventAnalyser() {
     DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0393059, -3.67649, 3.67649);
     DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.499243, -2.7142, 2.7142);
     DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", -0.39183, -15.4276, 15.4276);
-    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0866916, -3.13858, 3.13858);
-    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0528748, -3.24613, 3.24613);
-    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.0708992, -2.94424, 2.94424);
-    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.107165, -3.34001, 3.34001);
+
+    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0893723, -4.70075, 4.70075);
+    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0513592, -3.24309, 3.24309);
+    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.0261186, -4.47516, 4.47516);
+    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.0938055, -3.4548, 3.4548);
 //    DSCuts Chi2_hadron_cuts[]
 
     /* Vertex cuts */
@@ -452,15 +455,16 @@ void EventAnalyser() {
 
     //<editor-fold desc="Angle plots directories">
     bool create_Angle_Dir = true;
-    string Angle_Parent_Directory = "03_Angle_plots_master";
+    string Angle_Parent_Directory = "03_Angle_plots";
 //    TFolder *Angle_Folder = new TFolder(Angle_Parent_Directory.c_str(), Angle_Parent_Directory.c_str());
     string Angle_Daughter_Folders[] = {"", "01_All_e", "01_All_e/01_Theta_e_All_e_plots", "01_All_e/02_Phi_e_All_e_plots", "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots",
                                        "02_1e_cut", "02_1e_cut/01_Theta_e_1e_cut_plots", "02_1e_cut/02_Phi_e_1e_cut_plots", "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots",
                                        "03_MicroBooNE", "03_MicroBooNE/01_Theta_e_MicroBooNE_plots", "03_MicroBooNE/02_Phi_e_MicroBooNE_plots",
-                                       "03_MicroBooNE/03_Theta_e_VS_Phi_e_MicroBooNE_plots",
-                                       "04_1e2X", "04_1e2X/01_Theta_e_1e2X_plots", "04_1e2X/02_Phi_e_1e2X_plots", "04_1e2X/03_Theta_e_VS_Phi_e_1e2X_plots",
-                                       "05_1e2p", "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots",
-                                       "06_2p", "06_2p/01_Theta_e_2p_plots", "06_2p/02_Phi_e_2p_plots", "06_2p/03_Theta_e_VS_Phi_e_2p_plots"};
+                                       "03_MicroBooNE/03_Theta_e_VS_Phi_e_MicroBooNE_plots", "04_1e2X", "04_1e2X/01_Theta_e_1e2X_plots", "04_1e2X/02_Phi_e_1e2X_plots",
+                                       "04_1e2X/03_Theta_e_VS_Phi_e_1e2X_plots", "05_1e2p", "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots",
+                                       "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots", "06_2p", "06_2p/01_Theta_e_2p_plots", "06_2p/02_Phi_e_2p_plots",
+                                       "06_2p/03_Theta_e_VS_Phi_e_2p_plots", "07_1e2pXy", "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots",
+                                       "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots", "07_1e2pXy/04_Phi_Proton_1e2pXy_plots"};
 
     for (string folders_name: Angle_Daughter_Folders) {
         MakeDirectory(create_Angle_Dir, Angle_Parent_Directory, folders_name, false, Plots_Folder);
@@ -477,6 +481,10 @@ void EventAnalyser() {
     string Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[7] + "/";
     string Theta_e_VS_Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[8] + "/";
 
+////    string Theta_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[6] + "/";
+//    string Phi_Phi_Proton_1e2pXy_Directory_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[7] + "/";
+////    string Theta_e_VS_Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[8] + "/";
+//
     string Theta_e_MicroBooNE_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[10] + "/";
     string Phi_e_MicroBooNE_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[11] + "/";
     string Theta_e_VS_Phi_e_MicroBooNE_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[12] + "/";
@@ -492,6 +500,11 @@ void EventAnalyser() {
     string Theta_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[22] + "/";
     string Phi_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[23] + "/";
     string Theta_e_VS_Phi_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[24] + "/";
+
+//    string Theta_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[6] + "/";
+    string Phi_Proton_1e2pXy_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[29] + "/";
+//    string Theta_e_VS_Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[8] + "/";
+    //TODO: reorganize properly
     //</editor-fold>
 
     //<editor-fold desc="Q2 plots directories">
@@ -794,6 +807,8 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram definitions">
 
     cout << "\nDefining histograms...";
+
+    //TODO: add weights to all histograms
 
 // ======================================================================================================================================================================
 // Cut parameters plots
@@ -1828,7 +1843,7 @@ void EventAnalyser() {
     string hPhi_e_DIS_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_DIS_2p_FD_Dir = Phi_e_2p_Directory;
     //</editor-fold>
 
-// Theta_e vs. Phi_e -----------------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_e vs. Phi_e ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_e vs. Phi_e">
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
@@ -1852,6 +1867,18 @@ void EventAnalyser() {
                                              250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
     string hTheta_e_VS_Phi_e_2p_CD_Dir = Theta_e_VS_Phi_e_2p_Directory, hTheta_e_VS_Phi_e_2p_FD_Dir = Theta_e_VS_Phi_e_2p_Directory;
     //</editor-fold>
+
+// Phi of leading (p1) and recoil (p2) protons --------------------------------------------------------------------------------------------------------------------------
+
+    //TODO: reorganize proprly
+    THStack *sPhi_Phi_Proton_1e2pXy = new THStack("#phi_{p} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
+
+    TH1D *hPhi_p1_1e2pXy_CD = new TH1D("#phi_{p_{1}} (1e2pXy, CD)", ";#phi_{p_{1}} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_p1_1e2pXy_FD = new TH1D("#phi_{p_{1}} (1e2pXy, FD)", ";#phi_{p_{1}} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_p2_1e2pXy_CD = new TH1D("#phi_{p_{2}} (1e2pXy, CD)", ";#phi_{p_{2}} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_p2_1e2pXy_FD = new TH1D("#phi_{p_{2}} (1e2pXy, FD)", ";#phi_{p_{2}} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    string hPhi_p1_1e2pXy_CD_Dir = Phi_Proton_1e2pXy_Directory, hPhi_p1_1e2pXy_FD_Dir = Phi_Proton_1e2pXy_Directory;
+    string hPhi_p2_1e2pXy_CD_Dir = Phi_Proton_1e2pXy_Directory, hPhi_p2_1e2pXy_FD_Dir = Phi_Proton_1e2pXy_Directory;
 
     //</editor-fold>
 
@@ -3131,6 +3158,41 @@ void EventAnalyser() {
         //</editor-fold>
 
         //</editor-fold>
+
+//  1e2pXy --------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        if (Np == 2) {
+            //TODO: reorganize properly
+            TVector3 P_p_1, P_p_2; // P_L = leading proton (p1); P_R = recoil proton (p2)
+            P_p_1.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+            P_p_2.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+
+            if (P_p_1.Mag() >= P_p_2.Mag()) {
+                if (protons[0]->getRegion() == CD) {
+                    hPhi_p1_1e2pXy_CD->Fill(protons[0]->getPhi());
+                } else if (protons[0]->getRegion() == FD) {
+                    hPhi_p1_1e2pXy_FD->Fill(protons[0]->getPhi());
+                }
+
+                if (protons[1]->getRegion() == CD) {
+                    hPhi_p2_1e2pXy_CD->Fill(protons[1]->getPhi());
+                } else if (protons[1]->getRegion() == FD) {
+                    hPhi_p2_1e2pXy_FD->Fill(protons[1]->getPhi());
+                }
+            } else {
+                if (protons[1]->getRegion() == CD) {
+                    hPhi_p1_1e2pXy_CD->Fill(protons[1]->getPhi());
+                } else if (protons[1]->getRegion() == FD) {
+                    hPhi_p1_1e2pXy_FD->Fill(protons[1]->getPhi());
+                }
+
+                if (protons[0]->getRegion() == CD) {
+                    hPhi_p2_1e2pXy_CD->Fill(protons[0]->getPhi());
+                } else if (protons[0]->getRegion() == FD) {
+                    hPhi_p2_1e2pXy_FD->Fill(protons[0]->getPhi());
+                }
+            }
+        }
 
 //  MicroBooNE cuts -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -5993,6 +6055,20 @@ void EventAnalyser() {
                       true, sPhi_e, "Phi_e_All_Int_1e_cut", hPhi_e_1e_cut_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
+        //<editor-fold desc="Phi of protons (1e2pXy)">
+        double Phi_p1_1e2pXy_CD_integral = hPhi_p1_1e2pXy_CD->Integral(), Phi_p1_1e2pXy_FD_integral = hPhi_p1_1e2pXy_FD->Integral();
+        double Phi_p2_1e2pXy_CD_integral = hPhi_p2_1e2pXy_CD->Integral(), Phi_p2_1e2pXy_FD_integral = hPhi_p2_1e2pXy_FD->Integral();
+
+        histPlotter1D(c1, hPhi_p1_1e2pXy_CD, norm_Angle_plots_master, true, Phi_p1_1e2pXy_CD_integral, "#phi_{p_{1}} of Leading Proton", "1e2pXy", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sPhi_Phi_Proton_1e2pXy, "01_Phi_p1_All_Int_1e2pXy", hPhi_p1_1e2pXy_CD_Dir, "CD", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_p1_1e2pXy_FD, norm_Angle_plots_master, true, Phi_p1_1e2pXy_FD_integral, "#phi_{p_{1}} of Leading Proton", "1e2pXy", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sPhi_Phi_Proton_1e2pXy, "02_Phi_p1_All_Int_1e2pXy", hPhi_p1_1e2pXy_FD_Dir, "FD", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_p2_1e2pXy_CD, norm_Angle_plots_master, true, Phi_p2_1e2pXy_CD_integral, "#phi_{p_{2}} of Recoil Proton", "1e2pXy", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sPhi_Phi_Proton_1e2pXy, "01_Phi_p2_All_Int_1e2pXy", hPhi_p2_1e2pXy_CD_Dir, "CD", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_p2_1e2pXy_FD, norm_Angle_plots_master, true, Phi_p2_1e2pXy_FD_integral, "#phi_{p_{2}} of Recoil Proton", "1e2pXy", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sPhi_Phi_Proton_1e2pXy, "02_Phi_p2_All_Int_1e2pXy", hPhi_p2_1e2pXy_FD_Dir, "FD", kBlue, true, true, true);
+        //</editor-fold>
+
 //        //<editor-fold desc="Phi_e (1e2X)">
 //        double Phi_e_1e_1e2X_integral = hPhi_e_1e2X_CD->Integral() + hPhi_e_1e2X_FD->Integral();
 //        double Phi_e_1e_1e2X_QEL_integral = hPhi_e_1e2X_QEL_CD->Integral() + hPhi_e_1e2X_QEL_FD->Integral();
@@ -6881,8 +6957,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Saving proton pid cuts to .par file">
     if (apply_chi2_cuts_1e_cut == false) {
-        DSCuts chi2cuts[10] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_Kplus_cuts_CD, Chi2_Kplus_cuts_FD, Chi2_Kminus_cuts_CD, Chi2_Kminus_cuts_FD,
-                               Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
+        DSCuts chi2cuts[] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
+//        DSCuts chi2cuts[10] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_Kplus_cuts_CD, Chi2_Kplus_cuts_FD, Chi2_Kminus_cuts_CD, Chi2_Kminus_cuts_FD,
+//                               Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
 //        DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
 
         ofstream FittedPIDCuts;
@@ -6894,7 +6971,8 @@ void EventAnalyser() {
         FittedPIDCuts << "# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor << ";sigma_FD=" << Chi2_Proton_cuts_FD.FitStdFactor
                       << ":\n";
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 6; i++) {
+//        for (int i = 0; i < 10; i++) {
 //        for (int i = 0; i < 2; i++) {
             FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
                           << chi2cuts[i].GetUpperCut() << "\n";
