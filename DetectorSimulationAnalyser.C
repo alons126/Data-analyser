@@ -68,7 +68,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -137,21 +137,23 @@ void EventAnalyser() {
      * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
     DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
     DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", -0.05, -6, 6);
-    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.527243, -5.65305, 5.65305);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0.00665029, -3.88398, 3.88398);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.0839467, -7.04585, 7.04585);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0.685842, -4.00315, 4.00315);
 //    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -3.74939, 3.74939);
 //    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -3.86714, 3.86714);
 //    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0.529231, -1.89012, 1.89012);
 //    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", -0.0203564, -2.61111, 2.61111);
-    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.329573, -3.22474, 3.22474);
-    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", -0.0393059, -3.67649, 3.67649);
+
+    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0.075425, -3.22474, 3.22474);
+    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", 0.0544009, -3.67649, 3.67649);
     DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", -0.499243, -2.7142, 2.7142);
     DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", -0.39183, -15.4276, 15.4276);
 
-    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0.0893723, -4.70075, 4.70075);
-    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0.0513592, -3.24309, 3.24309);
-    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0.0261186, -4.47516, 4.47516);
-    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0.0938055, -3.4548, 3.4548);
+    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", -0.565247, -5.84155, 5.84155);
+    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", -0.152543, -3.15349, 3.15349);
+
+    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", -0.373333, -4.70016, 4.70016);
+    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", -0.0627976, -2.90736, 2.90736);
 //    DSCuts Chi2_hadron_cuts[]
 
     /* Vertex cuts */

@@ -2,6 +2,7 @@
 
 # INPUT=""
 
+git reset --hard
 git pull
 clas12root -b -q ./main.c
 
