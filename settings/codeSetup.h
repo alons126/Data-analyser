@@ -74,7 +74,8 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
 std::string AnalyseFileSample = "015832"; // run 015832
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
+std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
 
 //std::string AnalyseFileSample = "015843"; // run 015843
 //std::string AnalyseFileSample = "015852"; // run 015852
