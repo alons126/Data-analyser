@@ -2235,21 +2235,11 @@ void EventAnalyser() {
     int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
     int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
 
-    int num_of_events_with_at_least_1e = 0;
-    int num_of_events_with_at_least_1e_protons = 0;
-    int num_of_events_with_exactly_1e = 0;
-    int num_of_events_with_exactly_1e_protons = 0;
-    int num_of_events_more_then_1e = 0;
-    int num_of_events_more_then_1e_protons = 0;
+    int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_more_then_1e = 0;
 
-    int num_of_events_with_1e2X = 0;
-    int num_of_protons_in_1e2X_events = 0;
-    int num_of_events_with_1enP = 0;
-    int num_of_protons_in_1enP_events = 0;
-    int num_of_events_with_1e1p = 0;
-    int num_of_protons_in_1e1p_events = 0;
-    int num_of_events_with_1e2p = 0;
-    int num_of_protons_in_1e2p_events = 0;
+    int num_of_events_1e1p_all = 0, num_of_events_1e2p_all = 0, num_of_events_1e2p_all_wo_FDph = 0;
+
+    int num_of_events_with_1e2X = 0, num_of_events_with_1enP = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
     //TODO: change to 1e2X #(events) with e in det by reaction
     int num_of_QEL_1e2X_CD_events = 0, num_of_MEC_1e2X_CD_events = 0, num_of_RES_1e2X_CD_events = 0, num_of_DIS_1e2X_CD_events = 0;
@@ -2300,6 +2290,83 @@ void EventAnalyser() {
 
         /* Total number of particles in event (= Nf) */
         int Nf = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nn + No;
+
+        //<editor-fold desc="Nph_CD counter">
+        int Nph_CD = 0, Nph_FD = 0;
+
+        for (int i = 0; i < No; i++) {
+            if ((otherpart[i]->getRegion() == CD) && (otherpart[i]->par()->getPid() == 22)) {
+                ++Nph_CD;
+            } else if ((otherpart[i]->getRegion() == FD) && (otherpart[i]->par()->getPid() == 22)) {
+                ++Nph_FD;
+            }
+        } // end of loop over otherpart vector
+
+        /* No_Prime does not include:
+         * Neutrals (change to neutrons only?)
+         * Photons in the CD */
+        int No_Prime = No - Nph_CD; // ignore photons in CD
+        int Nf_Prime = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + No_Prime;
+        //</editor-fold>
+
+//        //<editor-fold desc="n0 counter">
+//        int n0;
+//
+//        for (int i = 0; i < Nn; i++) {
+//            /* Definition of electron variables for all particles analysis.
+//             * To be filled by region (CD or FD) */
+//            Theta_e_tmp = electrons[i]->getTheta() * 180.0 / pi; // Theta_e_tmp in deg
+//            Phi_e_tmp = electrons[i]->getPhi() * 180.0 / pi;     // Phi_e_tmp in deg
+//            P_e_tmp = electrons[i]->par()->getP();               // temp electron momentum
+//            //TODO: fix the SetLorentzVector function
+////            SetLorentzVector(e_out, electrons[i], m_e);   // definition of outgoing electron 4-momentum
+//            e_out.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + P_e_tmp * P_e_tmp));
+//            Q = beam - e_out;                                    // definition of 4-momentum transfer
+//            Q2 = fabs(Q.Mag2());
+//
+//            if (electrons[i]->getRegion() == CD) {
+////                hChi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
+//
+//                Beta_vs_P_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                Beta_vs_P_negative_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//
+////                hTheta_e_All_e_CD->Fill(Theta_e_tmp);
+////                hPhi_e_All_e_CD->Fill(Phi_e_tmp);
+////                hTheta_e_VS_Phi_e_All_e_CD->Fill(Phi_e_tmp, Theta_e_tmp);
+//
+////                hQ2_All_e_CD->Fill(Q2);
+//
+////                if (Ne == 1) { hQ2_1e_cut_CD->Fill(Q2); }
+//
+////                if (Ne == 1 && Nf == 3) {
+////                    hQ2_1e2X_CD->Fill(Q2);
+////
+////                    if (Np == 2) { hQ2_1e2p_CD->Fill(Q2); }
+////                }
+//            } else if (electrons[i]->getRegion() == FD) {
+//                hChi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
+//
+//                Beta_vs_P_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//                Beta_vs_P_negative_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
+//
+//                hTheta_e_All_e_FD->Fill(Theta_e_tmp);
+//                hPhi_e_All_e_FD->Fill(Phi_e_tmp);
+//                hTheta_e_VS_Phi_e_All_e_FD->Fill(Phi_e_tmp, Theta_e_tmp);
+//
+//                hQ2_All_e_FD->Fill(Q2);
+//
+//                if (Ne == 1) { hQ2_1e_cut_FD->Fill(Q2); }
+//
+//                if (Ne == 1 && Nf == 3) {
+////                    hQ2_1e2X_FD->Fill(Q2);
+//
+//                    if (Np == 2) { hQ2_1e2p_FD->Fill(Q2); }
+//                }
+//            }
+//        } // end of loop over electrons vector
+//        //</editor-fold>
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1.,2.,3.,4. = type = qel, mec, res, dis
@@ -2394,7 +2461,7 @@ void EventAnalyser() {
 //                if (Ne == 1 && Nf == 3) {
 //                    hQ2_1e2X_CD->Fill(Q2);
 //
-//                    if (protons.size() == 2) { hQ2_1e2p_CD->Fill(Q2); }
+//                    if (Np == 2) { hQ2_1e2p_CD->Fill(Q2); }
 //                }
             } else if (electrons[i]->getRegion() == FD) {
                 hChi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
@@ -2411,17 +2478,18 @@ void EventAnalyser() {
 
                 if (Ne == 1) { hQ2_1e_cut_FD->Fill(Q2); }
 
-                if (Ne == 1 && Nf == 3) {
+                if (Ne == 1 && Nf_Prime == 3) {
+//                if (Ne == 1 && Nf == 3) {
 //                    hQ2_1e2X_FD->Fill(Q2);
 
-                    if (protons.size() == 2) { hQ2_1e2p_FD->Fill(Q2); }
+                    if (Np == 2) { hQ2_1e2p_FD->Fill(Q2); }
                 }
             }
         } // end of loop over electrons vector
         //</editor-fold>
 
         //<editor-fold desc="Proton plots (no #(electron) cut, CD & FD)">
-        for (int i = 0; i < protons.size(); i++) {
+        for (int i = 0; i < Np; i++) {
             if (protons[i]->getRegion() == CD) {
                 hChi2_Proton_CD->Fill(protons[i]->par()->getChi2Pid());
 
@@ -2646,16 +2714,8 @@ void EventAnalyser() {
         if (Ne >= 1) {
             ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
 
-            for (int i = 0; i < protons.size(); i++) {
-                ++num_of_events_with_at_least_1e_protons;
-            } // end of loop over protons vector
-
             if (Ne > 1) {
                 ++num_of_events_more_then_1e; // logging #(events) w/ more then 1e
-
-                for (int i = 0; i < protons.size(); i++) {
-                    ++num_of_events_more_then_1e_protons;
-                } // end of loop over protons vector
             }
         }
         //</editor-fold>
@@ -2669,30 +2729,20 @@ void EventAnalyser() {
         if (Ne != 1) { continue; } // the rough 1e cut
         ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
 
-        for (int i = 0; i < protons.size(); i++) {
-            ++num_of_events_with_exactly_1e_protons;
-        } // end of loop over protons vector
-
         if (Nf - Ne == Np) {
             ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p 1enP
 
-            for (int i = 0; i < protons.size(); i++) {
-                ++num_of_protons_in_1enP_events;
-            } // end of loop over protons vector
-
-            if (protons.size() == 1) {
-                ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */
-
-                for (int i = 0; i < protons.size(); i++) {
-                    ++num_of_protons_in_1e1p_events;
-                } // end of loop over protons vector
-            }
+            if (Np == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
         }
 
-//
-//        //TODO: recheck if beta cut should be applied to ALL particles and add it to clas12ana
-//        if (electrons[0]->par()->getBeta() > 1.2) { continue; }
-//
+        if (Np == 1) { ++num_of_events_1e1p_all; }
+        if (Np == 2) { ++num_of_events_1e2p_all; }
+        if (Np == 2 && Nph_FD == 0) { ++num_of_events_1e2p_all_wo_FDph; }
+
+
+        //TODO: recheck if beta cut should be applied to ALL particles and add it to clas12ana
+        if (electrons[0]->par()->getBeta() > 1.2) { continue; }
+
 
         /* Electron 1e cut variables' definitions */
         TVector3 P_e_1e;
@@ -3201,7 +3251,7 @@ void EventAnalyser() {
 //        int ne = electrons.size(), np = protons.size(), npi0 = pizero.size(), nn = neutrons.size(), npip = piplus.size(), npim = piminus.size();
 //        bool MicroBooNE_particle_selection = ((ne == 1) && (np == 2) && (npi0 == 0) && (Nf == ne + np + nn + npi0 + npip + npim));
 //
-////            if ((calculate_MicroBooNE == true) && ((protons.size() == 2) && (pizero.size() == 0) && (pizero.size() == 0))) {
+////            if ((calculate_MicroBooNE == true) && ((Np == 2) && (pizero.size() == 0) && (pizero.size() == 0))) {
 //        if ((calculate_MicroBooNE == true) && MicroBooNE_particle_selection) {
 //            ++num_of_MicroBooNE_events_BC;
 //
@@ -3746,25 +3796,16 @@ void EventAnalyser() {
 //  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1e2X cut">
-        if (Nf == 3) {
-            ++num_of_events_with_1e2X;
-
-            for (int i = 0; i < protons.size(); i++) {
-                ++num_of_protons_in_1e2X_events;
-            } // end of loop over protons vector
-        } // logging #(events) w/ 1e2X (only 3 scattered/detected particles)
+        if (Nf == 3) { ++num_of_events_with_1e2X; } // logging #(events) w/ 1e2X (only 3 scattered/detected particles)
         //</editor-fold>
 
 //  1e2p & 2p cuts ------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1e2p & 2p cuts">
-        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
+        //TODO: make sure that pdg=0 particles are included/excluded.
+        if ((calculate_2p == true) && ((Nf_Prime == 3) && (Np == 2))) { // for 2p calculations (with any number of neutrals)
+//        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
-
-            for (int i = 0; i < protons.size(); i++) {
-                ++num_of_protons_in_1e2p_events;
-            } // end of loop over protons vector
-
 
             /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
             TVector3 P_p0, P_p1;
@@ -4029,7 +4070,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Beta vs. P from protons (2p, CD & FD)">
-            for (int i = 0; i < protons.size(); i++) {
+            for (int i = 0; i < Np; i++) {
                 if (protons[i]->getRegion() == CD) {
                     Beta_vs_P_2p_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                     Beta_vs_P_2p_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
@@ -4350,7 +4391,7 @@ void EventAnalyser() {
     } // end of while
     // </editor-fold>
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                        Histograms plots                                                                             //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -7542,15 +7583,11 @@ void EventAnalyser() {
 
     cout << "-- Events with electrons counts -------------------------------------------\n";
     cout << "#(events) w/ at least 1e:\t\t" << num_of_events_with_at_least_1e << "\n";
-    cout << "num_of_events_with_at_least_1e_protons:\t\t" << num_of_events_with_at_least_1e_protons << "\n";
     cout << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n";
-    cout << "num_of_events_more_then_1e_protons:\t\t" << num_of_events_more_then_1e_protons << "\n";
-    cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n";
-    cout << "num_of_events_with_exactly_1e_protons:\t\t" << num_of_events_with_exactly_1e_protons << "\n\n";
+    cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n\n";
 
     cout << "-- 1e2X event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e2X:\t\t\t" << num_of_events_with_1e2X << "\n\n";
-    cout << "num_of_protons_in_1e2X_events:\t\t\t" << num_of_protons_in_1e2X_events << "\n\n";
 
     cout << "#(events) w/ 1e2X QEL in CD:\t\t" << num_of_QEL_1e2X_CD_events << "\n";
     cout << "#(events) w/ 1e2X MEC in CD:\t\t" << num_of_MEC_1e2X_CD_events << "\n";
@@ -7568,15 +7605,12 @@ void EventAnalyser() {
 
     cout << "-- 1enp event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e & any #p:\t\t" << num_of_events_with_1enP << "\n\n";
-    cout << "num_of_protons_in_1enP_events:\t\t" << num_of_protons_in_1enP_events << "\n\n";
 
     cout << "-- 1e1p event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e1p:\t\t\t" << num_of_events_with_1e1p << "\n\n";
-    cout << "num_of_protons_in_1e1p_events:\t\t\t" << num_of_protons_in_1e1p_events << "\n\n";
 
     cout << "-- 1e2p event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e2p:\t\t\t" << num_of_events_with_1e2p << "\n\n";
-    cout << "num_of_protons_in_1e2p_events:\t\t\t" << num_of_protons_in_1e2p_events << "\n\n";
 
     cout << "#(events) w/ 1e2p QEL in CD:\t\t" << num_of_QEL_1e2p_CD_events << "\n";
     cout << "#(events) w/ 1e2p MEC in CD:\t\t" << num_of_MEC_1e2p_CD_events << "\n";
@@ -7620,6 +7654,12 @@ void EventAnalyser() {
 //    cout << "#(events) MicroBooNE AC with pi0:\t" << num_of_MicroBooNE_events_AC_wpi0 << "\n";
 //    cout << "#(events) MicroBooNE AC with pi+:\t" << num_of_MicroBooNE_events_AC_wpip << "\n";
 //    cout << "#(events) MicroBooNE AC with pi-:\t" << num_of_MicroBooNE_events_AC_wpim << "\n\n";
+
+    cout << "-- Proton counts ----------------------------------------------------------\n";
+    cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
+    cout << "num_of_events_1e2p_all:\t\t\t" << num_of_events_1e2p_all << "\n";
+    cout << "num_of_events_1e2p_all_wo_FDph:\t\t" << num_of_events_1e2p_all_wo_FDph << "\n";
+    cout << "num_of_events_2p:\t\t\t" << num_of_events_2p << "\n\n";
 
     cout << "---------------------------------------------------------------------------\n";
     cout << "\t\t\tExecution variables\n";
