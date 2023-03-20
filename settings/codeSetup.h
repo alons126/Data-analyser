@@ -79,7 +79,7 @@ std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo";
 //std::string AnalyseFileSample = "015843"; // run 015843
 //std::string AnalyseFileSample = "015852"; // run 015852
 //std::string AnalyseFileSample = "015854"; // run 015854
-std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ////
