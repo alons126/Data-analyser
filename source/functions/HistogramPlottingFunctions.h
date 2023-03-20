@@ -62,7 +62,14 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
     }
 
     if (normalize_Histogram == true) {
-        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        string title;
+
+        if (finalState == "") {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")" + " - Normalized";
+        } else {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        }
+
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
         Histogram1D->GetYaxis()->SetTitle("Probability (%)");
@@ -82,9 +89,17 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         string title;
 
         if (title2 == false) {
-            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+            if (finalState == "") {
+                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")";
+            } else {
+                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+            }
         } else {
-            title = Histogram1DTitle + " (" + finalState + ")";
+            if (finalState == "") {
+                title = Histogram1DTitle;
+            } else {
+                title = Histogram1DTitle + " (" + finalState + ")";
+            }
         }
 //        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle = title.c_str();
