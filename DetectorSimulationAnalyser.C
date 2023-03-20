@@ -185,8 +185,8 @@ void EventAnalyser() {
     string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
 
     /* Configure beam energy (beamE) */
-//    double beamE = 5.98636; // electron energy declaration
-    double beamE = getBeanE(AnalyseFile); // electron energy declaration
+    double beamE = 5.98636; // electron energy declaration
+//    double beamE = getBeanE(AnalyseFile); // electron energy declaration
 
     /* Configure target */
     TargetParameters ScattringTarget;
