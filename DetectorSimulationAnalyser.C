@@ -2319,7 +2319,7 @@ void EventAnalyser() {
     int num_of_events = 0, num_of_events_without_any_e = 0, num_of_events_with_any_e = 0;
     int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
 
-    int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_more_then_1e = 0;
+    int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_with_exactly_1e_from_file = 0, num_of_events_more_then_1e = 0;
 
     int num_of_events_1e1p_all = 0, num_of_events_1e2p_all = 0, num_of_events_1e2p_all_wo_FDph = 0;
 
@@ -2352,6 +2352,12 @@ void EventAnalyser() {
 
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events)
+
+        auto electrons_det = c12->getByID(11);
+
+        if (electrons_det.size() == 1) {
+            ++num_of_events_with_exactly_1e_from_file;
+        }
 
         clasAna.Run(c12);
 
@@ -7766,6 +7772,7 @@ void EventAnalyser() {
     cout << "#(events) w/ at least 1e:\t\t" << num_of_events_with_at_least_1e << "\n";
     cout << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n";
     cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n\n";
+    cout << "#(events) w/ exactly 1e (from file):\t" << num_of_events_with_exactly_1e_from_file << "\n\n";
 
     cout << "-- 1e2X event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e2X:\t\t\t" << num_of_events_with_1e2X << "\n\n";
