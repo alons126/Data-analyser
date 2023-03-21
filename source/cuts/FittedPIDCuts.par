@@ -3,17 +3,9 @@
 ######################################################################
 
 # pid cuts by detector (pid:mean:sigma) - sigma_CD=3;sigma_FD=3:
-pid_cuts_CD		2212:0.0839467:7.04585
-pid_cuts_FD		2212:0.685842:4.00315
-pid_cuts_CD		211:-0.565247:5.84155
-pid_cuts_FD		211:-0.152543:3.15349
-pid_cuts_CD		-211:-0.537081:4.70016
-pid_cuts_FD		-211:-0.0627976:2.90736
-
-# pid cuts by detector (pid:mean:sigma) - sigma_CD=3;sigma_FD=3:
-#pid _cuts_CD		2212:0.523043:5.55968
-#pid _cuts_FD		2212:0.012058:3.85302
-#pid _cuts_CD		211:0.075425:4.63542
-#pid _cuts_FD		211:0.0544009:3.23064
-#pid _cuts_CD		-211:0.0329791:4.47954
-#pid _cuts_FD		-211:0.0955296:3.43602
+pid_cuts_CD		2212:0.501913:5.71562
+pid_cuts_FD		2212:-0.0458425:4.3778
+pid_cuts_CD		211:0.0833033:4.79055
+pid_cuts_FD		211:-0.00480623:3.40455
+pid_cuts_CD		-211:0.0873539:4.33115
+pid_cuts_FD		-211:0.123437:3.72916
