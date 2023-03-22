@@ -68,7 +68,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -770,11 +770,13 @@ void EventAnalyser() {
 
     //<editor-fold desc="Histogram limits">
     /* Chi2 plots */
-    double Chi2_boundary = 15;
+    double Chi2_boundary = 30;
+//    double Chi2_boundary = 15;
     if (apply_cuts == true) { Chi2_boundary = 8; }
 
     /* Vertex plots */
-    double Vertex_boundary = 25, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
+    double Vertex_boundary = 50, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
+//    double Vertex_boundary = 25, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
 
     if (apply_cuts == true) {
         double dVertex_boundary = Vz_cut.GetUpperCut() - Vz_cut.GetLowerCut();
@@ -782,7 +784,8 @@ void EventAnalyser() {
         Vertex_boundary = Vertex_boundary / 5;
     }
 
-    double dV_boundary = 25;
+    double dV_boundary = 50;
+//    double dV_boundary = 25;
     if (apply_cuts == true) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
 
     /* SF */
