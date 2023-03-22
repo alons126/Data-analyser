@@ -62,7 +62,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts settings">
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = false;
+    bool apply_cuts = true;
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
@@ -156,8 +156,10 @@ void EventAnalyser() {
     /* Vertex cuts */
 //    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
 //    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
-    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -2.5, 1);
-    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 2);
+//    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -2.5, 1); // for t5
+    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 1); // for 48Ca - run 015832 - first 100
+//    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 2); // for t5
+    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4); // for 48Ca - run 015832 - first 100
 
     /* Sampling Fraction (SF) cuts (electrons only, FD) */
     DSCuts SF_cuts;
