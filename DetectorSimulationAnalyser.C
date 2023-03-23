@@ -157,7 +157,8 @@ void EventAnalyser() {
 //    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
 //    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
 //    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -2.5, 1); // for t5
-    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 1); // for 48Ca - run 015832 - first 100
+    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5); // for 48Ca - run 015832 - first 100
+//    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 1); // for 48Ca - run 015832 - first 100
 //    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 2); // for t5
     DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4); // for 48Ca - run 015832 - first 100
 
