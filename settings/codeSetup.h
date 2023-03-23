@@ -99,7 +99,7 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 std::string AnalyseFilePath = "/lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5";
 std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+std::string AnalyseFile = AnalyseFileDir + " recon_c12_598636MeV_Q2_0_5_*_torus-1.0.hipo";
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ////
