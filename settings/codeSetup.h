@@ -64,12 +64,12 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////std::string AnalyseFile = AnalyseFileDir + "recon_c12_598636MeV_Q2_0_5_1*.hipo"; // only files #1 and #10
 
-//// ifarm files (Ca48 run files):
-std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
-std::string AnalyseFileSample = "015832"; // run 015832
-std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
-std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
+////// ifarm files (Ca48 run files):
+//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
+//std::string AnalyseFileSample = "015832"; // run 015832
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
 
 //std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
 //std::string AnalyseFileSample = "015843"; // run 015843
@@ -94,6 +94,12 @@ std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //f
 //std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+
+//// ifarm files (Justin's MC files):
+std::string AnalyseFilePath = "/lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5";
+std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ////
