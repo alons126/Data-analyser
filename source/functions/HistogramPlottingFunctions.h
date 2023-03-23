@@ -184,14 +184,28 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
     if (logScalePlot == true) {
         Histogram1DCanvas->SetLogy(1);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        string Histogram1DSaveNameDir;
+
+        if (finalState == "") {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale.png";
+        } else {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        }
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
     if (linearScalePlot == true) {
         Histogram1DCanvas->SetLogy(0);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        string Histogram1DSaveNameDir;
+
+        if (finalState == "") {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale.png";
+        } else {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        }
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
@@ -250,7 +264,14 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
     }
 
     if (normalize_Histogram == true) {
-        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        string title;
+
+        if (finalState == "") {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")" + " - Normalized";
+        } else {
+            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        }
+
         const char *HistogramTitle = title.c_str();
         Histogram1D->SetTitle(HistogramTitle);
         Histogram1D->GetYaxis()->SetTitle("Probability (%)");
@@ -270,9 +291,17 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
         string title;
 
         if (title2 == false) {
-            title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+            if (finalState == "") {
+                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")";
+            } else {
+                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+            }
         } else {
-            title = Histogram1DTitle + " (" + finalState + ")";
+            if (finalState == "") {
+                title = Histogram1DTitle;
+            } else {
+                title = Histogram1DTitle + " (" + finalState + ")";
+            }
         }
 //        string title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
         const char *HistogramTitle = title.c_str();
@@ -359,14 +388,28 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
 
     if (logScalePlot == true) {
         Histogram1DCanvas->SetLogy(1);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        string Histogram1DSaveNameDir;
+
+        if (finalState == "") {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale.png";
+        } else {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_log_scale_" + finalState + ".png";
+        }
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
 
     if (linearScalePlot == true) {
         Histogram1DCanvas->SetLogy(0);
-        string Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        string Histogram1DSaveNameDir;
+
+        if (finalState == "") {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale.png";
+        } else {
+            Histogram1DSaveNameDir = Histogram1DSaveNamePath + Histogram1DSaveName + "_linear_scale_" + finalState + ".png";
+        }
+
         const char *SaveDir = Histogram1DSaveNameDir.c_str();
         Histogram1DCanvas->SaveAs(SaveDir);
     }
