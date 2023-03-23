@@ -62,13 +62,13 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts settings">
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = true;
+    bool apply_cuts = true; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -105,20 +105,26 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //</editor-fold>
+    //<editor-fold desc="Custom cuts naming">
+    bool custom_cuts_naming = true;
 
-    if (apply_cuts == false) {
-        plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
-        plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
-    } else {
-        if (apply_chi2_cuts_1e_cut == false) {
-            plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
-        } else if (apply_chi2_cuts_1e_cut == true) {
-            plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
+    if (custom_cuts_naming == true) {
+        if (apply_cuts == false) {
+            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
+        } else {
+            if (apply_chi2_cuts_1e_cut == false) {
+                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
+            } else if (apply_chi2_cuts_1e_cut == true) {
+                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
+            }
         }
     }
+    //</editor-fold>
+
+    //</editor-fold>
 
 // Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -154,11 +160,9 @@ void EventAnalyser() {
 //    DSCuts Chi2_hadron_cuts[]
 
     /* Vertex cuts */
-//    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -6, 1);
-//    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -3, 3);
 //    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -2.5, 1); // for t5
-    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5); // for 48Ca - run 015832 - first 100
 //    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -10, 1); // for 48Ca - run 015832 - first 100
+    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5); // for 48Ca - run 015832 - first 100
 //    DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -2, 2); // for t5
     DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4); // for 48Ca - run 015832 - first 100
 
@@ -2246,7 +2250,6 @@ void EventAnalyser() {
 
     if (apply_cuts == true) {
         /* Read in target parameter files */
-//        clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
         if (apply_chi2_cuts_1e_cut == false) {
             clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
         } else if (apply_chi2_cuts_1e_cut == true) {
@@ -2360,10 +2363,7 @@ void EventAnalyser() {
         ++num_of_events; // logging Total #(events)
 
         auto electrons_det = c12->getByID(11);
-
-        if (electrons_det.size() == 1) {
-            ++num_of_events_with_exactly_1e_from_file;
-        }
+        if (electrons_det.size() == 1) { ++num_of_events_with_exactly_1e_from_file; }
 
         clasAna.Run(c12);
 
@@ -2399,70 +2399,12 @@ void EventAnalyser() {
         } // end of loop over otherpart vector
 
         /* No_Prime does not include:
-         * Neutrals (change to neutrons only?)
+         * Neutrals
          * Photons in the CD */
-        int No_Prime = No - Nph_CD; // ignore photons in CD
+        int No_Prime = No; // don't ignore photons in CD
+//        int No_Prime = No - Nph_CD; // ignore photons in CD
         int Nf_Prime = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + No_Prime;
         //</editor-fold>
-
-//        //<editor-fold desc="n0 counter">
-//        int n0;
-//
-//        for (int i = 0; i < Nn; i++) {
-//            /* Definition of electron variables for all particles analysis.
-//             * To be filled by region (CD or FD) */
-//            Theta_e_tmp = electrons[i]->getTheta() * 180.0 / pi; // Theta_e_tmp in deg
-//            Phi_e_tmp = electrons[i]->getPhi() * 180.0 / pi;     // Phi_e_tmp in deg
-//            P_e_tmp = electrons[i]->par()->getP();               // temp electron momentum
-//            //TODO: fix the SetLorentzVector function
-////            SetLorentzVector(e_out, electrons[i], m_e);   // definition of outgoing electron 4-momentum
-//            e_out.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + P_e_tmp * P_e_tmp));
-//            Q = beam - e_out;                                    // definition of 4-momentum transfer
-//            Q2 = fabs(Q.Mag2());
-//
-//            if (electrons[i]->getRegion() == CD) {
-////                hChi2_Electron_CD->Fill(electrons[i]->par()->getChi2Pid());
-//
-//                Beta_vs_P_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                Beta_vs_P_Electrons_Only_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                Beta_vs_P_negative_particles_All_e_CD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//
-////                hTheta_e_All_e_CD->Fill(Theta_e_tmp);
-////                hPhi_e_All_e_CD->Fill(Phi_e_tmp);
-////                hTheta_e_VS_Phi_e_All_e_CD->Fill(Phi_e_tmp, Theta_e_tmp);
-//
-////                hQ2_All_e_CD->Fill(Q2);
-//
-////                if (Ne == 1) { hQ2_1e_cut_CD->Fill(Q2); }
-//
-////                if (Ne == 1 && Nf == 3) {
-////                    hQ2_1e2X_CD->Fill(Q2);
-////
-////                    if (Np == 2) { hQ2_1e2p_CD->Fill(Q2); }
-////                }
-//            } else if (electrons[i]->getRegion() == FD) {
-//                hChi2_Electron_FD->Fill(electrons[i]->par()->getChi2Pid());
-//
-//                Beta_vs_P_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                Beta_vs_P_Electrons_Only_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//                Beta_vs_P_negative_particles_All_e_FD->Fill(electrons[i]->getP(), electrons[i]->par()->getBeta());
-//
-//                hTheta_e_All_e_FD->Fill(Theta_e_tmp);
-//                hPhi_e_All_e_FD->Fill(Phi_e_tmp);
-//                hTheta_e_VS_Phi_e_All_e_FD->Fill(Phi_e_tmp, Theta_e_tmp);
-//
-//                hQ2_All_e_FD->Fill(Q2);
-//
-//                if (Ne == 1) { hQ2_1e_cut_FD->Fill(Q2); }
-//
-//                if (Ne == 1 && Nf == 3) {
-////                    hQ2_1e2X_FD->Fill(Q2);
-//
-//                    if (Np == 2) { hQ2_1e2p_FD->Fill(Q2); }
-//                }
-//            }
-//        } // end of loop over electrons vector
-//        //</editor-fold>
 
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1.,2.,3.,4. = type = qel, mec, res, dis
@@ -7195,6 +7137,7 @@ void EventAnalyser() {
 //        DSCuts chi2cuts[10] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_Kplus_cuts_CD, Chi2_Kplus_cuts_FD, Chi2_Kminus_cuts_CD, Chi2_Kminus_cuts_FD,
 //                               Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
 //        DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
+        int chi2cuts_length = 6;
 
         ofstream FittedPIDCuts;
         FittedPIDCuts.open((CutsDirectory + "FittedPIDCuts.par").c_str());
@@ -7205,7 +7148,7 @@ void EventAnalyser() {
         FittedPIDCuts << "# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor << ";sigma_FD=" << Chi2_Proton_cuts_FD.FitStdFactor
                       << ":\n";
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < chi2cuts_length; i++) {
 //        for (int i = 0; i < 10; i++) {
 //        for (int i = 0; i < 2; i++) {
             FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
@@ -7729,6 +7672,40 @@ void EventAnalyser() {
     myLogFile << "#(events) MicroBooNE AC with pi0:\t\t" << num_of_MicroBooNE_events_AC_wpi0 << "\n";
     myLogFile << "#(events) MicroBooNE AC with pi+:\t\t" << num_of_MicroBooNE_events_AC_wpip << "\n";
     myLogFile << "#(events) MicroBooNE AC with pi-:\t\t" << num_of_MicroBooNE_events_AC_wpim << "\n\n\n";
+
+    myLogFile << "-- Proton counts ----------------------------------------------------------\n";
+    myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
+    myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
+    myLogFile << "num_of_events_1e2p_all_wo_FDph:\t\t" << num_of_events_1e2p_all_wo_FDph << "\n";
+    myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n\n\n";
+
+    if (apply_chi2_cuts_1e_cut == false) {
+        myLogFile << "===========================================================================\n";
+        myLogFile << "content of FittedPIDCuts.par file\n";
+        myLogFile << "===========================================================================\n\n";
+
+        DSCuts chi2cuts[] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
+//        DSCuts chi2cuts[10] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_Kplus_cuts_CD, Chi2_Kplus_cuts_FD, Chi2_Kminus_cuts_CD, Chi2_Kminus_cuts_FD,
+//                               Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
+//        DSCuts chi2cuts[2] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD};
+        int chi2cuts_length = 6;
+
+        myLogFile << "######################################################################\n";
+        myLogFile << "# CLAS12 analysis cuts and parameters file (after chi2 Gaussian fit) #\n";
+        myLogFile << "######################################################################\n";
+        myLogFile << "\n";
+        myLogFile << "# pid cuts by detector (pid:mean:sigma) - sigma_CD=" << Chi2_Proton_cuts_CD.FitStdFactor << ";sigma_FD=" << Chi2_Proton_cuts_FD.FitStdFactor
+                      << ":\n";
+
+        for (int i = 0; i < chi2cuts_length; i++) {
+//        for (int i = 0; i < 10; i++) {
+//        for (int i = 0; i < 2; i++) {
+            myLogFile << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
+                          << chi2cuts[i].GetUpperCut() << "\n";
+//            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << "\n";
+//        FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << "2212" << ":" << chi2cuts[i].GetMeanFit() << ":" << chi2cuts[i].GetUpperCut() << "\n";
+        }
+    }
 
     myLogFile.close();
     //</editor-fold>
