@@ -68,7 +68,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -108,35 +108,35 @@ void EventAnalyser() {
     //<editor-fold desc="Custom cuts naming">
     bool custom_cuts_naming = true;
 
-    if (custom_cuts_naming == true) {
-        if (apply_cuts == false) {
-            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
-        } else {
-            if (apply_chi2_cuts_1e_cut == false) {
-                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
-            } else if (apply_chi2_cuts_1e_cut == true) {
-                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
-            }
-        }
-    }
-
 //    if (custom_cuts_naming == true) {
 //        if (apply_cuts == false) {
-//            plots_path = WorkingDirectory + "plots_NO_CUTS_LH2" + "/";
-//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS_LH2.txt";
+//            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
+//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
 //        } else {
 //            if (apply_chi2_cuts_1e_cut == false) {
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2_LH2" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2_LH2.txt";
+//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
+//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
 //            } else if (apply_chi2_cuts_1e_cut == true) {
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS_LH2" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_LH2.txt";
+//                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
+//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
 //            }
 //        }
 //    }
+
+    if (custom_cuts_naming == true) {
+        if (apply_cuts == false) {
+            plots_path = WorkingDirectory + "plots_NO_CUTS_LH2" + "/";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS_LH2.txt";
+        } else {
+            if (apply_chi2_cuts_1e_cut == false) {
+                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2_LH2" + "/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2_LH2.txt";
+            } else if (apply_chi2_cuts_1e_cut == true) {
+                plots_path = WorkingDirectory + "plots_ALL_CUTS_LH2" + "/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_LH2.txt";
+            }
+        }
+    }
     //</editor-fold>
 
     //</editor-fold>
