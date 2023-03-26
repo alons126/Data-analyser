@@ -101,11 +101,13 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 
-//// ifarm files (T5 MC file on ifarm):
+//// ifarm files:
+/* Ca48 5.98636GeV MC file on ifarm */
 std::string AnalyseFilePath = "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV";
-std::string AnalyseFileSample = "reconhipo"; // My MC files
+std::string AnalyseFileSample = "reconhipo";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+std::string AnalyseFile = AnalyseFileDir + "recon_Ca48_G18_10a_02_11b_Q205_598636MeV_1*_torus-1.0.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 ////
