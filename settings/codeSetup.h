@@ -111,8 +111,8 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 
 //// ifarm files:
 /* LH2 data file on ifarm */
-std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2";
-std::string AnalyseFileSample = "8.6.0";
+std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2/8.6.0";
+std::string AnalyseFileSample = "015032";
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 
