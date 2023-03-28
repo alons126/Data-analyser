@@ -51,73 +51,85 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 
 // hipo files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-////// Local files:
-//std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
-//////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
-////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
-//
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
-////std::string AnalyseFile = AnalyseFileDir + "recon_c12_598636MeV_Q2_0_5_1*.hipo"; // only files #1 and #10
+//// Local files:
+std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
+////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
-////// ifarm files (Ca48 run files):
-//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
-//std::string AnalyseFileSample = "015832"; // run 015832
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
-//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "recon_c12_598636MeV_Q2_0_5_1*.hipo"; // only files #1 and #10
 
-//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
-//std::string AnalyseFileSample = "015843"; // run 015843
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015843.evio.0000*.hipo"; //first 10
-//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015843.evio.000*.hipo"; //first 100
-
-//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
-//std::string AnalyseFileSample = "015852"; // run 015852
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015852.evio.0000*.hipo"; //first 10
-//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015852.evio.000*.hipo"; //first 100
-
-//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
-//std::string AnalyseFileSample = "015854"; // run 015854
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015854.evio.0000*.hipo"; //first 10
-//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015854.evio.000*.hipo"; //first 100
-
-////// ifarm files (Justin's MC files):
+////<editor-fold desc="C12 5.98636GeV (ifarm MC files - Justin's MC files)">
+///* C12 5.98636GeV (Justin's MC files) */
 //std::string AnalyseFilePath = "volatile/clas12/users/esteejus/Simulation_sigmaCM";
 //std::string AnalyseFileSample = "reconhipo"; // Justin's MC files
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //std::string AnalyseFile = AnalyseFileDir + "recon_qe_gcf_c_5.98gev_sigmacm_200_1*.hipo";
+////</editor-fold>
 
-////// ifarm files (T5 MC file on ifarm):
+////<editor-fold desc="C12 5.98636GeV (ifarm MC files - T5 MC files)">
+///* C12 5.98636GeV (T5 MC files) */
 //std::string AnalyseFilePath = "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5";
 //std::string AnalyseFileSample = "reconhipo"; // My MC files
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////</editor-fold>
 
-////// ifarm files:
+////<editor-fold desc="Ca48 5.98636GeV (ifarm MC files - Ca48 MC files)">
 ///* Ca48 5.98636GeV MC file on ifarm */
 //std::string AnalyseFilePath = "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV";
 //std::string AnalyseFileSample = "reconhipo";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 ////std::string AnalyseFile = AnalyseFileDir + "recon_Ca48_G18_10a_02_11b_Q205_598636MeV_1*_torus-1.0.hipo";
 //std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////</editor-fold>
 
-//// ifarm files:
-/* LH2 data file on ifarm */
-std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2/8.6.0";
-std::string AnalyseFileSample = "015032";
-std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////<editor-fold desc="Ca48 5.98636GeV (ifarm DATA files)">
+///* Ca48 5.98636GeV (DATA) - run 015832 */
+//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
+//std::string AnalyseFileSample = "015832"; // run 015832
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
+
+///* Ca48 5.98636GeV (DATA) - run 015843 */
+//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
+//std::string AnalyseFileSample = "015843"; // run 015843
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015843.evio.0000*.hipo"; //first 10
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015843.evio.000*.hipo"; //first 100
+
+///* Ca48 5.98636GeV (DATA) - run 015852 */
+//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
+//std::string AnalyseFileSample = "015852"; // run 015852
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015852.evio.0000*.hipo"; //first 10
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015852.evio.000*.hipo"; //first 100
+
+///* Ca48 5.98636GeV (DATA) - run 015854 */
+//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
+//std::string AnalyseFileSample = "015854"; // run 015854
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015854.evio.0000*.hipo"; //first 10
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015854.evio.000*.hipo"; //first 100
+////</editor-fold>
+
+////<editor-fold desc="LH2 ---GeV (ifarm DATA files - LH2 DATA files)">
+///* LH2 ---GeV DATA file on ifarm */
+//std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2/8.6.0";
+//std::string AnalyseFileSample = "015032";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////</editor-fold>
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
-////
+
+////<editor-fold desc="root files">
 ////std::string AnalyseFile = "./e_on_1000060120_598636MeV.gst.root";
 ////
 ////std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
@@ -137,6 +149,7 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //////std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_598636MeV_Q2_0_5.gst.root";
 //////std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CC_myBranch_10M.root";
 ////std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CCMEC_myBranch_10M.root";
+////</editor-fold>
 
 // file_name definition -------------------------------------------------------------------------------------------------------------------------------------------------
 

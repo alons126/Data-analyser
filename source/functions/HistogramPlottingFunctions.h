@@ -925,9 +925,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) {
-        Histogram1D->SetStats(0);
-    }
+    if (showStats == false) { Histogram1D->SetStats(0); }
 
     if (apply_plot_cuts == true) {
         gPad->Update();
@@ -989,7 +987,6 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
     gROOT->ForceStyle();
 
     Histogram1DCanvas1->cd();
-
 }
 //</editor-fold>
 
@@ -1444,7 +1441,8 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
                    TList *Histogram_list,
                    bool zlogScalePlot,
                    string Histogram1DSaveNameDir,
-                   string Histogram1DSaveName) {
+                   string Histogram1DSaveName,
+                   bool showStats = true) {
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
     double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
@@ -1472,9 +1470,9 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
         Histogram2D->Draw("colz");
     }
 
-    if (zlogScalePlot == true) {
-        Histogram1DCanvas->SetLogz(1);
-    }
+    if (zlogScalePlot == true) { Histogram1DCanvas->SetLogz(1); }
+
+    if (showStats == false) { Histogram2D->SetStats(0); }
 
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.875);
@@ -1544,9 +1542,7 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
         Beta_function9->Draw("same");
     }
 
-    if (zlogScalePlot == true) {
-        Histogram1DCanvas->SetLogz(1);
-    }
+    if (zlogScalePlot == true) { Histogram1DCanvas->SetLogz(1); }
 
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.4);
@@ -1554,7 +1550,6 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
     gStyle->SetStatX(DefStatX);
     gStyle->SetStatY(DefStatY);
     Histogram1DCanvas->Clear();
-
 }
 //</editor-fold>
 
@@ -1613,9 +1608,7 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
         Beta_vs_P_legend->Draw("same");
     }
 
-    if (zlogScalePlot == true) {
-        Histogram1DCanvas->SetLogz(1);
-    }
+    if (zlogScalePlot == true) { Histogram1DCanvas->SetLogz(1); }
 
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.4);
@@ -1623,7 +1616,6 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
     gStyle->SetStatX(DefStatX);
     gStyle->SetStatY(DefStatY);
     Histogram1DCanvas->Clear();
-
 }
 //</editor-fold>
 
@@ -1692,9 +1684,7 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
         Beta_vs_P_legend->Draw("same");
     }
 
-    if (zlogScalePlot == true) {
-        Histogram1DCanvas->SetLogz(1);
-    }
+    if (zlogScalePlot == true) { Histogram1DCanvas->SetLogz(1); }
 
     gStyle->SetStatX(0.87);
     gStyle->SetStatY(0.4);
@@ -1702,7 +1692,6 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
     gStyle->SetStatX(DefStatX);
     gStyle->SetStatY(DefStatY);
     Histogram1DCanvas->Clear();
-
 }
 //</editor-fold>
 

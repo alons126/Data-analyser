@@ -68,7 +68,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -108,35 +108,35 @@ void EventAnalyser() {
     //<editor-fold desc="Custom cuts naming">
     bool custom_cuts_naming = true;
 
-//    if (custom_cuts_naming == true) {
-//        if (apply_cuts == false) {
-//            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
-//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
-//        } else {
-//            if (apply_chi2_cuts_1e_cut == false) {
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
-//            } else if (apply_chi2_cuts_1e_cut == true) {
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
-//            }
-//        }
-//    }
-
     if (custom_cuts_naming == true) {
         if (apply_cuts == false) {
-            plots_path = WorkingDirectory + "plots_NO_CUTS_LH2" + "/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS_LH2.txt";
+            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
         } else {
             if (apply_chi2_cuts_1e_cut == false) {
-                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2_LH2" + "/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2_LH2.txt";
+                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut == true) {
-                plots_path = WorkingDirectory + "plots_ALL_CUTS_LH2" + "/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_LH2.txt";
+                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
             }
         }
     }
+
+//    if (custom_cuts_naming == true) {
+//        if (apply_cuts == false) {
+//            plots_path = WorkingDirectory + "plots_NO_CUTS_LH2" + "/";
+//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS_LH2.txt";
+//        } else {
+//            if (apply_chi2_cuts_1e_cut == false) {
+//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2_LH2" + "/";
+//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2_LH2.txt";
+//            } else if (apply_chi2_cuts_1e_cut == true) {
+//                plots_path = WorkingDirectory + "plots_ALL_CUTS_LH2" + "/";
+//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_LH2.txt";
+//            }
+//        }
+//    }
     //</editor-fold>
 
     //</editor-fold>
@@ -435,7 +435,7 @@ void EventAnalyser() {
     string Momentum_Parent_Directory = "01_Cuts_plots/06_Momentum_plots";
 //    string Momentum_Parent_TFolder_Directory = "06_Momentum_plots";
 //    TFolder *Momentum_Folder = new TFolder(Momentum_Parent_TFolder_Directory.c_str(), Momentum_Parent_TFolder_Directory.c_str());
-    string Momentum_Daughter_Folders[] = {"", "01_MicroBooNE", "01_MicroBooNE/BC-AC_cut_tests", "02_1e2p", "03_2p"};
+    string Momentum_Daughter_Folders[] = {"", "01_1e_cut", "03_MicroBooNE", "03_MicroBooNE/BC-AC_cut_tests", "04_1e2p", "05_2p"};
 
     for (string folders_name: Momentum_Daughter_Folders) {
         MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
@@ -444,12 +444,11 @@ void EventAnalyser() {
 
 //    Cuts_plots->Add(Momentum_Folder);
 
-    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
-    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
-
-    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
-
-    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
+    string Momentum_1e_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
+    string Momentum_MicroBooNE_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[2] + "/";
+    string Momentum_MicroBooNE_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
+    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
+    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[5] + "/";
     //</editor-fold>
 
 //    plots->Add(Cuts_plots);
@@ -502,7 +501,7 @@ void EventAnalyser() {
                                        "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots",
 
                                        "06_2p", "06_2p/01_Theta_e_2p_plots", "06_2p/02_Phi_e_2p_plots", "06_2p/03_Theta_e_VS_Phi_e_2p_plots",
-                                       "06_2p/04_Opening_angle_2p_plots",
+                                       "06_2p/04_Opening_angles_2p_plots",
 
                                        "07_1e2pXy", "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots", "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots",
                                        "07_1e2pXy/04_Phi_Proton_1e2pXy_plots"};
@@ -631,9 +630,11 @@ void EventAnalyser() {
     bool create_ETrans_Dir = true;
     string ETrans_Parent_Directory = "06_ET_plots";
 //    TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
-    string ETrans_Daughter_Folders[] = {"", "01_2p", "01_2p/01_Around_15_Deg", "01_2p/01_Around_15_Deg/00_All_interactions",
-                                        "01_2p/01_Around_15_Deg/01_QEL_only", "01_2p/01_Around_15_Deg/02_MEC_only", "01_2p/01_Around_15_Deg/03_RES_only",
-                                        "01_2p/01_Around_15_Deg/04_DIS_only"};
+    string ETrans_Daughter_Folders[] = {"", "01_2p", "01_2p/02_Around_15_Deg", "01_2p/02_Around_15_Deg/00_All_interactions",
+                                        "01_2p/02_Around_15_Deg/01_QEL_only", "01_2p/02_Around_15_Deg/02_MEC_only", "01_2p/02_Around_15_Deg/03_RES_only",
+                                        "01_2p/02_Around_15_Deg/04_DIS_only", "01_2p/01_Every_theta_e", "01_2p/01_Every_theta_e/00_All_interactions",
+                                        "01_2p/01_Every_theta_e/01_QEL_only", "01_2p/01_Every_theta_e/02_MEC_only", "01_2p/01_Every_theta_e/03_RES_only",
+                                        "01_2p/01_Every_theta_e/04_DIS_only"};
 
     for (string folders_name: ETrans_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
@@ -648,13 +649,22 @@ void EventAnalyser() {
     string ETrans_MEC_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
     string ETrans_RES_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
     string ETrans_DIS_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
+
+    string ETrans_All_Ang_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[8] + "/";
+    string ETrans_All_Int_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[9] + "/";
+    string ETrans_QEL_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[10] + "/";
+    string ETrans_MEC_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[11] + "/";
+    string ETrans_RES_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[12] + "/";
+    string ETrans_DIS_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[13] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
     string Ecal_Parent_Directory = "07_Ecal_rec_plots";
 //    TFolder *Ecal_Folder = new TFolder(Ecal_Parent_Directory.c_str(), Ecal_Parent_Directory.c_str());
-    string Ecal_Daughter_Folders[] = {"", "2p", "2p/00_All_interactions", "2p/01_QEL_only", "2p/02_MEC_only", "2p/03_RES_only", "2p/04_DIS_only"};
+    string Ecal_Daughter_Folders[] = {"", "01_2p", "01_2p/01_Ecal_rec_by_reaction_2p/00_All_interactions", "01_2p/01_Ecal_rec_by_reaction_2p/01_QEL_only",
+                                      "01_2p/01_Ecal_rec_by_reaction_2p/02_MEC_only", "01_2p/01_Ecal_rec_by_reaction_2p/03_RES_only",
+                                      "01_2p/01_Ecal_rec_by_reaction_2p/04_DIS_only", "01_2p/02_Ecal_rec_vs_transverse_variables"};
 
     for (string folders_name: Ecal_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
@@ -669,6 +679,7 @@ void EventAnalyser() {
     string Ecal_MEC_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[4] + "/";
     string Ecal_RES_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[5] + "/";
     string Ecal_DIS_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[6] + "/";
+    string Ecal_rec_vs_transverse_variables_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[7] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Transverse variables plots directories">
@@ -1403,7 +1414,27 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum histograms">
     /* Here are the definitions for the momentum plots. These are used to check that momentum cuts were applied in MicroBooNE, 1e2p and 2p plots. */
 
-//    //<editor-fold desc="Momentum MicroBooNE plots">
+    //<editor-fold desc="Momentum histograms (1e cut)">
+    THStack *sP_CD = new THStack("Particle Momentum histograms (1e cut, CD)", "Particle Momentum histograms (1e cut, CD);P [GeV];");
+    THStack *sP_FD = new THStack("Particle Momentum histograms (1e cut, FD)", "Particle Momentum histograms (1e cut, FD);P [GeV];");
+//    TH1D *hP_e_1e_cut_CD = new TH1D("P_{e} (1e cut, CD)", "P_{e} (1e cut, CD);P_{e} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_e_1e_cut_FD = new TH1D("P_{e} (1e cut, FD)", "P_{e} (1e cut, FD);P_{e} [GeV];", 150, 0, beamE * 1.1);
+    string hP_e_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_e_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+
+    TH1D *hP_p_1e_cut_CD = new TH1D("P_{p} (1e cut, CD)", "P_{p} (1e cut, CD);P_{p} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_p_1e_cut_FD = new TH1D("P_{p} (1e cut, FD)", "P_{p} (1e cut, FD);P_{p} [GeV];", 150, 0, beamE * 1.1);
+    string hP_p_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_p_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+
+    TH1D *hP_piplus_1e_cut_CD = new TH1D("P_{#pi^{+}} (1e cut, CD)", "P_{#pi^{+}} (1e cut, CD);P_{#pi^{+}} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_piplus_1e_cut_FD = new TH1D("P_{#pi^{+}} (1e cut, FD)", "P_{#pi^{+}} (1e cut, FD);P_{#pi^{+}} [GeV];", 150, 0, beamE * 1.1);
+    string hP_piplus_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_piplus_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+
+    TH1D *hP_piminus_1e_cut_CD = new TH1D("P_{#pi^{-}} (1e cut, CD)", "P_{#pi^{-}} (1e cut, CD);P_{#pi^{-}} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_piminus_1e_cut_FD = new TH1D("P_{#pi^{-}} (1e cut, FD)", "P_{#pi^{-}} (1e cut, FD);P_{#pi^{-}} [GeV];", 150, 0, beamE * 1.1);
+    string hP_piminus_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_piminus_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+    //</editor-fold>
+
+//    //<editor-fold desc="Momentum histograms (MicroBooNE)">
 //    THStack *P_Stack_MicroBooNE_BC_CD = new THStack("Particle Momentum BC (MicroBooNE, CD)", "Particle Momentum Histogram BC (MicroBooNE, CD);P [GeV];");
 //    THStack *P_Stack_MicroBooNE_AC_CD = new THStack("Particle Momentum AC (MicroBooNE, CD)", "Particle Momentum Histogram AC (MicroBooNE, CD);P [GeV];");
 //    THStack *P_Stack_MicroBooNE_BC_FD = new THStack("Particle Momentum BC (MicroBooNE, FD)", "Particle Momentum Histogram BC (MicroBooNE, FD);P [GeV];");
@@ -1457,7 +1488,7 @@ void EventAnalyser() {
 //
 //    //</editor-fold>
 
-    //<editor-fold desc="Momentum 1e2p & 2p plots">
+    //<editor-fold desc="Momentum histograms (1e2p & 2p)">
     THStack *sP_1e2p_BC_CD = new THStack("Particle Momentum BC (1e2p, CD)", "Particle Momentum Histogram BC (1e2p, CD);P [GeV];");
     THStack *sP_1e2p_AC_CD = new THStack("Particle Momentum AC (1e2p, CD)", "Particle Momentum Histogram AC (1e2p, CD);P [GeV];");
     THStack *sP_1e2p_BC_FD = new THStack("Particle Momentum BC (1e2p, FD)", "Particle Momentum Histogram BC (1e2p, FD);P [GeV];");
@@ -1468,35 +1499,37 @@ void EventAnalyser() {
     THStack *sP_2p_FD = new THStack("Particle Momentum (2p, FD)", "Particle Momentum Histogram (2p, FD);P [GeV];");
 
     //<editor-fold desc="Momentum histograms before 1e2p cuts">
-//    TH1D *hP_e_1e2p_BC_CD = new TH1D("P_{e} BC (1e2p, CD)", "P_{e} Before Cut (1e2p, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
-    TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p)", "P_{e} Before Cut (1e2p);P_{e} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *hP_e_1e2p_BC_CD = new TH1D("P_{e} BC (1e2p, CD)", "P_{e} Before Cut (1e2p, CD);P_{e} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p)", "P_{e} Before Cut (1e2p);P_{e} [GeV];", 150, 0, beamE * 1.1);
     string hP_e_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, hP_e_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
 
-    TH1D *hP_p_1e2p_BC_CD = new TH1D("P_{p} BC (1e2p, CD)", "P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
-    TH1D *hP_p_1e2p_BC_FD = new TH1D("P_{p} BC (1e2p, FD)", "P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_p_1e2p_BC_CD = new TH1D("Proton momentum P_{p} BC (1e2p, CD)", "Proton momentum P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_p_1e2p_BC_FD = new TH1D("Proton momentum P_{p} BC (1e2p, FD)", "Proton momentum P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 150, 0, beamE * 1.1);
     string hP_p_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, hP_p_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms after 1e2p cuts">
-//    TH1D *hP_e_1e2p_AC_CD = new TH1D("P_{e} AC (1e2p, CD)", "P_{e} After Cut (1e2p, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
-    TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p)", "P_{e} After Cut (1e2p);P_{e} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *hP_e_1e2p_AC_CD = new TH1D("P_{e} AC (1e2p, CD)", "P_{e} After Cut (1e2p, CD);P_{e} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p)", "P_{e} After Cut (1e2p);P_{e} [GeV];", 150, 0, beamE * 1.1);
     string hP_e_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, hP_e_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
 
-    TH1D *hP_p_1e2p_AC_CD = new TH1D("P_{p} AC (1e2p, CD)", "P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
-    TH1D *hP_p_1e2p_AC_FD = new TH1D("P_{p} AC (1e2p, FD)", "P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_p_1e2p_AC_CD = new TH1D("Proton momentum P_{p} AC (1e2p, CD)", "Proton momentum P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_p_1e2p_AC_FD = new TH1D("Proton momentum P_{p} AC (1e2p, FD)", "Proton momentum P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 150, 0, beamE * 1.1);
     string hP_p_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, hP_p_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms after 2p cuts">
-//    TH1D *hP_e_2p_CD = new TH1D("P_{e} (2p, CD)", "P_{e} (2p, CD);P_{e} [GeV];", 250, 0, beamE * 1.1);
-    TH1D *hP_e_2p_FD = new TH1D("P_{e} (2p)", "P_{e} (2p);P_{e} [GeV];", 250, 0, beamE * 1.1);
+//    TH1D *hP_e_2p_CD = new TH1D("Electron momentum P_{e} (2p, CD)", "Electron momentum P_{e} (2p, CD);P_{e} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_e_2p_FD = new TH1D("Electron momentum P_{e} (2p)", "Electron momentum P_{e} (2p);P_{e} [GeV];", 150, 0, beamE * 1.1);
     string hP_e_2p_CD_Dir = Momentum_2p_Directory, hP_e_2p_FD_Dir = Momentum_2p_Directory;
 
-    TH1D *hP_p_2p_CD = new TH1D("P_{p} (2p, CD)", "P_{p} (2p, CD);P_{p} [GeV];", 250, 0, beamE * 1.1);
-    TH1D *hP_p_2p_FD = new TH1D("P_{p} (2p, FD)", "P_{p} (2p, FD);P_{p} [GeV];", 250, 0, beamE * 1.1);
+    TH1D *hP_p_2p_CD = new TH1D("Proton momentum P_{p} (2p, CD)", "Proton momentum P_{p} (2p, CD);P_{p} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_p_2p_FD = new TH1D("Proton momentum P_{p} (2p, FD)", "Proton momentum P_{p} (2p, FD);P_{p} [GeV];", 150, 0, beamE * 1.1);
     string hP_p_2p_CD_Dir = Momentum_2p_Directory, hP_p_2p_FD_Dir = Momentum_2p_Directory;
-    //</editor-fold>
 
+    TH1D *hP_p_1_2p = new TH1D("Leading proton P_{p_{1}} (2p)", "Leading proton momentum P_{p_{1}} (2p);P_{p_{1}} [GeV];", 150, 0, beamE * 1.1);
+    TH1D *hP_p_2_2p = new TH1D("Recoil proton P_{p_{2}} (2p)", "Recoil proton momentum P_{p_{2}} (2p);P_{p_{2}} [GeV];", 150, 0, beamE * 1.1);
+    string hP_p_1_2p_Dir = Momentum_2p_Directory, hP_p_2_2p_Dir = Momentum_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -1849,26 +1882,26 @@ void EventAnalyser() {
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
     /* Phi_e histograms (no #(e) cut) */
-//    TH1D *hPhi_e_All_e_CD = new TH1D("#phi_{e} (no #(e) cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_All_e_CD = new TH1D("#phi_{e} (no #(e) cut, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string hPhi_e_All_e_CD_Dir = Phi_e_All_e_Directory, hPhi_e_All_e_FD_Dir = Phi_e_All_e_Directory;
 
     /* Phi_e histograms (1e cut) */
-//    TH1D *hPhi_e_1e_cut_CD = new TH1D("#phi_{e} (1e Cut, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e_cut_CD = new TH1D("#phi_{e} (1e Cut, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string hPhi_e_1e_cut_CD_Dir = Phi_e_1e_cut_Directory, hPhi_e_1e_cut_FD_Dir = Phi_e_1e_cut_Directory;
 
     /* Phi_e histograms (1e2X) */
-//    TH1D *hPhi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All Int., CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All Int., FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All Int., CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All Int., FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
 //    string hPhi_e_1e2X_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_FD_Dir = Phi_e_1e2X_Directory;
 //    string hPhi_e_1e2X_QEL_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_QEL_FD_Dir = Phi_e_1e2X_Directory;
 //    string hPhi_e_1e2X_MEC_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_MEC_FD_Dir = Phi_e_1e2X_Directory;
@@ -1876,16 +1909,16 @@ void EventAnalyser() {
 //    string hPhi_e_1e2X_DIS_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_DIS_FD_Dir = Phi_e_1e2X_Directory;
 
     /* Phi_e histograms (1e2p) */
-//    TH1D *hPhi_e_All_Int_1e2p_CD = new TH1D("#phi_{e} 1e2p (All Int., CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eQEL_2p_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eMEC_2p_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eRES_2p_CD = new TH1D("#phi_{e} for 1e2p (RES Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eDIS_2p_CD = new TH1D("#phi_{e} for 1e2p (DIS Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_QEL_1e2p_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_All_Int_1e2p_CD = new TH1D("#phi_{e} 1e2p (All Int., CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1eQEL_2p_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1eMEC_2p_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1eRES_2p_CD = new TH1D("#phi_{e} for 1e2p (RES Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1eDIS_2p_CD = new TH1D("#phi_{e} for 1e2p (DIS Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_QEL_1e2p_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string hPhi_e_All_Int_1e2p_FD_Dir = Phi_e_1e2p_Directory, hPhi_e_All_Int_1e2p_CD_Dir = Phi_e_1e2p_Directory;
     string hPhi_e_1eQEL_2p_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_QEL_1e2p_FD_Dir = Phi_e_1e2p_Directory;
     string hPhi_e_1eMEC_2p_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_MEC_1e2p_FD_Dir = Phi_e_1e2p_Directory;
@@ -1893,16 +1926,16 @@ void EventAnalyser() {
     string hPhi_e_1eDIS_2p_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_DIS_1e2p_FD_Dir = Phi_e_1e2p_Directory;
 
     /* Phi_e histograms (2p) */
-//    TH1D *hPhi_e_All_Int_2p_CD = new TH1D("#phi_{e} 2p (All Int., CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_QEL_2p_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_MEC_2p_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_RES_2p_CD = new TH1D("#phi_{e} for 2p (RES Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_DIS_2p_CD = new TH1D("#phi_{e} for 2p (DIS Only, CD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_All_Int_2p_CD = new TH1D("#phi_{e} 2p (All Int., CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_QEL_2p_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_MEC_2p_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_RES_2p_CD = new TH1D("#phi_{e} for 2p (RES Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_DIS_2p_CD = new TH1D("#phi_{e} for 2p (DIS Only, CD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 150, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
     string hPhi_e_All_Int_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_All_Int_2p_FD_Dir = Phi_e_2p_Directory;
     string hPhi_e_QEL_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_QEL_2p_FD_Dir = Phi_e_2p_Directory;
     string hPhi_e_MEC_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_MEC_2p_FD_Dir = Phi_e_2p_Directory;
@@ -1935,18 +1968,38 @@ void EventAnalyser() {
     string hTheta_e_VS_Phi_e_2p_CD_Dir = Theta_e_VS_Phi_e_2p_Directory, hTheta_e_VS_Phi_e_2p_FD_Dir = Theta_e_VS_Phi_e_2p_Directory;
     //</editor-fold>
 
-// Theta_p_e_p_h (CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_p_e_p_tot (CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p_e_p_h (CD & FD)">
-    THStack *sTheta_p_e_p_h_2p = new THStack("#theta_{p_{e},P_{1}+P_{2}} (All Int., 2p)",
-                                             "#theta_{p_{e},P_{1}+P_{2}} - Opening Angle Between P_{e} and P_{1}+P_{2} (All Int., 2p);#theta_{p_{e},P_{1}+P_{2}} [Deg];");
-    TH1D *hTheta_p_e_p_h_2p = new TH1D("#theta_{p_{e},P_{1}+P_{2}} (All Int., 2p)",
-                                       "#theta_{p_{e},P_{1}+P_{2}} - Opening Angle Between P_{e} and P_{1}+P_{2} (All Int., 2p);#theta_{p_{e},P_{1}+P_{2}} [Deg];",
-                                       150, -10, 190);
-    string hTheta_p_e_p_h_2p_Dir = Opening_angle_Directory;
+    //<editor-fold desc="Theta_p_e_p_tot (CD & FD)">
+    THStack *sTheta_p_e_p_tot_2p = new THStack("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., 2p)",
+                                               "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{p_{1}}+#vec{P}_{p_{2}} (All Int., 2p);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
+    TH1D *hTheta_p_e_p_tot_2p = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., 2p)",
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{p_{1}}+#vec{P}_{p_{2}} (All Int., 2p);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
+                                         150, -10, 190);
+    string hTheta_p_e_p_tot_2p_Dir = Opening_angle_Directory;
     //</editor-fold>
 
-// Theta_p1_p2 (CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_q_p_tot (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_tot (CD & FD)">
+    THStack *sTheta_q_p_tot_2p = new THStack("#theta_{#vec{q},#vec{P}_{tot}} (All Int., 2p)",
+                                             "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{p_{1}}+#vec{P}_{p_{2}} (All Int., 2p);#theta_{#vec{q},#vec{P}_{tot}} [Deg];");
+    TH1D *hTheta_q_p_tot_2p = new TH1D("#theta_{#vec{q},#vec{P}_{tot}} (All Int., 2p)",
+                                       "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{p_{1}}+#vec{P}_{p_{2}} (All Int., 2p);"
+                                       "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 150, -10, 190);
+    string hTheta_q_p_tot_2p_Dir = Opening_angle_Directory;
+    //</editor-fold>
+
+// Theta_q_p_1 vs |P_1|/|q| (2p, CD & FD) -------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_tot (CD & FD)">
+    TH2D *hTheta_q_p_L_vs_p_L_q_2p = new TH2D("#theta_{#vec{q},#vec{P}_{1}} vs. r_{1} (All Int., 2p)",
+                                              "#theta_{#vec{q},#vec{P}_{1}} vs. r_{1}=|#vec{P_{1}}|/|#vec{q}| (All Int., 2p);r_{1};#theta_{#vec{q},#vec{P}_{1}}",
+                                              150, 0, 1.05, 150, -10, 190);
+    string hTheta_q_p_L_vs_p_L_q_2p_Dir = Opening_angle_Directory;
+    //</editor-fold>
+
+// Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 (CD & FD)">
     THStack *sTheta_p1_p2_2p = new THStack("#theta_{p_{1},p_{2}} (All Int., 2p)",
@@ -1956,7 +2009,7 @@ void EventAnalyser() {
     string hTheta_p1_p2_2p_Dir = Opening_angle_Directory;
     //</editor-fold>
 
-// Theta_p1_p2 vs. W (CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_p1_p2 vs. W (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 vs. W (CD & FD)">
     TH2D *hTheta_p1_p2_vs_W_2p = new TH2D("#theta_{p_{1},p_{2}} vs. W (All Int., 2p)",
@@ -1988,38 +2041,38 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 histograms">
     /* Q2 histograms (no #(e) cut) */
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_All_e_CD = new TH1D("Q^{2} (no #(e) cut, CD)", "Q^{2} (no #(e) cut, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
-    TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_All_e_CD = new TH1D("Q^{2} (no #(e) cut, CD)", "Q^{2} (no #(e) cut, CD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
+    TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
     string hQ2_All_e_CD_Dir = Q2_All_e_Directory, hQ2_All_e_FD_Dir = Q2_All_e_Directory;
 
     /* Q2 histograms (1e cut) */
     THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e_cut_CD = new TH1D("Q^{2} (1e Cut, CD)", "Q^{2} (1e Cut, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
-    TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_1e_cut_CD = new TH1D("Q^{2} (1e Cut, CD)", "Q^{2} (1e Cut, CD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
+    TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
     string hQ2_1e_cut_CD_Dir = Q2_1e_cut_Directory, hQ2_1e_cut_FD_Dir = Q2_1e_cut_Directory;
 
     /* Q2 histograms (MicroBooNE) */
 //    THStack *sQ2_MicroBooNE = new THStack("Q^{2} (MicroBooNE ,CD & FD)", "Q^{2} Histogram (MicroBooNE, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_MicroBooNE_CD = new TH1D("Q^{2} (MicroBooNE, CD)", "Q^{2} (MicroBooNE, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
-//    TH1D *hQ2_MicroBooNE_FD = new TH1D("Q^{2} (MicroBooNE, FD)", "Q^{2} (MicroBooNE, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_MicroBooNE_CD = new TH1D("Q^{2} (MicroBooNE, CD)", "Q^{2} (MicroBooNE, CD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
+//    TH1D *hQ2_MicroBooNE_FD = new TH1D("Q^{2} (MicroBooNE, FD)", "Q^{2} (MicroBooNE, FD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
 //    string hQ2_MicroBooNE_CD_Dir = Q2_MicroBooNE_Directory, hQ2_MicroBooNE_FD_Dir = Q2_MicroBooNE_Directory;
 
     /* Q2 histograms (1e2X) */
 //    THStack *sQ2_1e2X = new THStack("Q^{2} (1e2X, CD & FD)", "Q^{2} (1e2X, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e2X_CD = new TH1D("Q^{2} (1e2X, CD)", "Q^{2} (1e2X, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
-//    TH1D *hQ2_1e2X_FD = new TH1D("Q^{2} (1e2X, FD)", "Q^{2} (1e2X, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_1e2X_CD = new TH1D("Q^{2} (1e2X, CD)", "Q^{2} (1e2X, CD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
+//    TH1D *hQ2_1e2X_FD = new TH1D("Q^{2} (1e2X, FD)", "Q^{2} (1e2X, FD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
 //    string hQ2_1e2X_CD_Dir = Q2_1e2X_Directory, hQ2_1e2X_FD_Dir = Q2_1e2X_Directory;
 
     /* Q2 histograms (1e2p) */
     THStack *sQ2_1e2p = new THStack("Q^{2} (1e2p, CD & FD)", "Q^{2} (1e2p, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e2p_CD = new TH1D("Q^{2} (1e2p, CD)", "Q^{2} (1e2p, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
-    TH1D *hQ2_1e2p_FD = new TH1D("Q^{2} (1e2p, FD)", "Q^{2} (1e2p, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_1e2p_CD = new TH1D("Q^{2} (1e2p, CD)", "Q^{2} (1e2p, CD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
+    TH1D *hQ2_1e2p_FD = new TH1D("Q^{2} (1e2p, FD)", "Q^{2} (1e2p, FD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
     string hQ2_1e2p_CD_Dir = Q2_1e2p_Directory, hQ2_1e2p_FD_Dir = Q2_1e2p_Directory;
 
     /* Q2 histograms (2p) */
     THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_2p_CD = new TH1D("Q^{2} (2p, CD)", "Q^{2} (2p, CD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
-    TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 250, 0, beamE * 1.1);
+//    TH1D *hQ2_2p_CD = new TH1D("Q^{2} (2p, CD)", "Q^{2} (2p, CD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
+    TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 150, 0, beamE * 1.1);
     string hQ2_2p_CD_Dir = Q2_2p_Directory, hQ2_2p_FD_Dir = Q2_2p_Directory;
     //</editor-fold>
 
@@ -2094,6 +2147,42 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
+
+    //<editor-fold desc="ET for every theta_e">
+//    THStack *sET_All_Ang_All_Int_2p_CD = new THStack("ET for all #theta_{e} (2p, CD)",
+//                                               "ET #omega for all #theta_{e} (2p, CD);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET_All_Ang_All_Int_2p_FD = new THStack("ET for all #theta_{e} (2p)", "ET #omega for all #theta_{e} (2p);#omega = E_{beam}-E_{e} [GeV]");
+    string sET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Ang_stack_Directory, sET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Ang_stack_Directory;
+
+//    TH1D *hET_All_Ang_All_Int_2p_CD = new TH1D("ET for all #theta_{e} (All Int., 2p, CD)",
+//                                               "ET #omega for all #theta_{e} (All Int., 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_QEL_2p_CD = new TH1D("ET for all #theta_{e} (QEL Only, 2p, CD)",
+//                                           "ET #omega for all #theta_{e} (QEL Only, 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_MEC_2p_CD = new TH1D("ET for all #theta_{e} (MEC Only, 2p, CD)",
+//                                           "ET #omega for all #theta_{e} (MEC Only, 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_RES_2p_CD = new TH1D("ET for all #theta_{e} (RES Only, 2p, CD)",
+//                                           "ET #omega for all #theta_{e} (RES Only, 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_DIS_2p_CD = new TH1D("ET for all #theta_{e} (DIS Only, 2p, CD)",
+//                                           "ET #omega for all #theta_{e} (DIS Only, 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_All_Int_2p_FD = new TH1D("ET for all #theta_{e} (All Int., 2p)",
+                                               "ET #omega for all #theta_{e} (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_QEL_2p_FD = new TH1D("ET for all #theta_{e} (QEL Only, 2p, FD)",
+                                           "ET #omega for all #theta_{e} (QEL Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_MEC_2p_FD = new TH1D("ET for all #theta_{e} (MEC Only, 2p, FD)",
+                                           "ET #omega for all #theta_{e} (MEC Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_RES_2p_FD = new TH1D("ET for all #theta_{e} (RES Only, 2p, FD)",
+                                           "ET #omega for all #theta_{e} (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_DIS_2p_FD = new TH1D("ET for all #theta_{e} (DIS Only, 2p, FD)",
+                                           "ET #omega for all #theta_{e} (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Int_All_Ang_Directory, hET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Int_All_Ang_Directory;
+    string hET_All_Ang_QEL_2p_CD_Dir = ETrans_QEL_All_Ang_Directory, hET_All_Ang_QEL_2p_FD_Dir = ETrans_QEL_All_Ang_Directory;
+    string hET_All_Ang_MEC_2p_CD_Dir = ETrans_MEC_All_Ang_Directory, hET_All_Ang_MEC_2p_FD_Dir = ETrans_MEC_All_Ang_Directory;
+    string hET_All_Ang_RES_2p_CD_Dir = ETrans_RES_All_Ang_Directory, hET_All_Ang_RES_2p_FD_Dir = ETrans_RES_All_Ang_Directory;
+    string hET_All_Ang_DIS_2p_CD_Dir = ETrans_DIS_All_Ang_Directory, hET_All_Ang_DIS_2p_FD_Dir = ETrans_DIS_All_Ang_Directory;
+    string tET_All_Ang = "ET #omega for every #theta_{e}";
+    //</editor-fold>
+
+    //<editor-fold desc="ET around 15 Deg">
     /* ET around 15 Deg */
 //    THStack *sET15_All_Int_2p_CD = new THStack("ET around #theta_{e} = 15#circ (2p, CD)",
 //                                               "ET #omega Around #theta_{e} = 15#circ (2p, CD);#omega = E_{beam}-E_{e} [GeV]");
@@ -2128,11 +2217,15 @@ void EventAnalyser() {
     string tET15 = "ET #omega Around #theta_{e} = 15#circ";
     //</editor-fold>
 
+    //</editor-fold>
+
 // ======================================================================================================================================================================
 // Ecal reconstruction histograms
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Ecal reconstruction histograms">
+
+    //<editor-fold desc="Ecal histograms">
     THStack *sEcal_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]");
     string sEcal_2p_Dir = Ecal_stack_2p_Directory;
 
@@ -2148,6 +2241,18 @@ void EventAnalyser() {
                                   100, 0, beamE * 1.35);
     string hEcal_All_Int_2p_Dir = Ecal_All_Int_2p_Directory, hEcal_QEL_2p_Dir = Ecal_QEL_2p_Directory, hEcal_MEC_2p_Dir = Ecal_MEC_2p_Directory;
     string hEcal_RES_2p_Dir = Ecal_RES_2p_Directory, hEcal_DIS_2p_Dir = Ecal_DIS_2p_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal vs. dAlpha_T">
+    TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#phi_{T,L} (All Int., 2p)",
+                                            "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
+                                            250, -10, 190, 250, 0, beamE * 1.1);
+    TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#phi_{T,tot} (All Int., 2p)",
+                                              "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                              250, -10, 190, 250, 0, beamE * 1.1);
+    string hEcal_vs_dAlpha_T_L_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory, hEcal_vs_dAlpha_T_tot_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory;
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -2247,9 +2352,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Transverse variables histograms">
     THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV]");
-    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV]", 100, 0, 2.5);
     TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)",
-                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV]", 100, 0, beamE * 1.1);
+                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV]", 100, 0, 2.5);
     string hdP_T_L_2p_Dir = dP_T_2p_Directory, hdP_T_tot_2p_Dir = dP_T_2p_Directory;
 
     THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
@@ -2791,6 +2896,7 @@ void EventAnalyser() {
         if (Ne != 1) { continue; } // the rough 1e cut
         ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
 
+        //<editor-fold desc="1e cut event counts">
         if (Nf - Ne == Np) {
             ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p 1enP
 
@@ -2800,6 +2906,7 @@ void EventAnalyser() {
         if (Np == 1) { ++num_of_events_1e1p_all; }
         if (Np == 2) { ++num_of_events_1e2p_all; }
         if (Np == 2 && Nph_FD == 0) { ++num_of_events_1e2p_all_wo_FDph; }
+        //</editor-fold>
 
 
         //TODO: recheck if beta cut should be applied to ALL particles and add it to clas12ana
@@ -2879,6 +2986,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Electrons_Only_CD->Fill(P_e, e->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_CD->Fill(P_e, e->par()->getBeta());
 
+//                hP_e_1e_cut_CD->Fill(P_e);
+
 //                hTheta_e_1e_cut_CD->Fill(Theta_e);
 //                hPhi_e_1e_cut_CD->Fill(Phi_e);
 //                hTheta_e_VS_Phi_e_1e_cut_CD->Fill(Phi_e, Theta_e);
@@ -2941,6 +3050,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_FD->Fill(P_e, e->par()->getBeta());
                 Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e, e->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_FD->Fill(P_e, e->par()->getBeta());
+
+                hP_e_1e_cut_FD->Fill(P_e);
 
                 hTheta_e_1e_cut_FD->Fill(Theta_e);
                 hPhi_e_1e_cut_FD->Fill(Phi_e);
@@ -3010,6 +3121,9 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_CD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_CD->Fill(p->getP(), p->par()->getBeta());
+
+                hP_p_1e_cut_CD->Fill(p->getP());
+
             } else if (p->getRegion() == FD) {
                 hChi2_Proton_1e_cut_FD->Fill(p->par()->getChi2Pid());
 
@@ -3020,6 +3134,9 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_FD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_FD->Fill(p->getP(), p->par()->getBeta());
+
+                hP_p_1e_cut_FD->Fill(p->getP());
+
             }
         } // end of loop over protons vector
         //</editor-fold>
@@ -3119,6 +3236,9 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_1e_piplus_Only_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+
+                hP_piplus_1e_cut_CD->Fill(piplus[i]->getP());
+
             } else if (piplus[i]->getRegion() == FD) {
                 hChi2_piplus_1e_cut_FD->Fill(piplus[i]->par()->getChi2Pid());
 
@@ -3129,6 +3249,9 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_1e_piplus_Only_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
+
+                hP_piplus_1e_cut_FD->Fill(piplus[i]->getP());
+
             }
         } // end of loop over piplus vector
         //</editor-fold>
@@ -3145,6 +3268,9 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_1e_piminus_Only_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+
+                hP_piminus_1e_cut_CD->Fill(piminus[i]->getP());
+
             } else if (piminus[i]->getRegion() == FD) {
                 hChi2_piminus_1e_cut_FD->Fill(piminus[i]->par()->getChi2Pid());
 
@@ -3155,6 +3281,9 @@ void EventAnalyser() {
                 Beta_vs_P_1e_cut_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_1e_piminus_Only_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
+
+                hP_piminus_1e_cut_FD->Fill(piminus[i]->getP());
+
             }
         } // end of loop over piminus vector
         //</editor-fold>
@@ -3276,11 +3405,11 @@ void EventAnalyser() {
         //<editor-fold desc="1e2pXy">
         if (Np == 2) { // 2p and everything else is allowed
             //TODO: reorganize properly
-            TVector3 P_p_1, P_p_2; // P_L = leading proton (p1); P_R = recoil proton (p2)
-            P_p_1.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
-            P_p_2.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+            TVector3 P_p_first_1e2pXy, P_p_second_1e2pXy; // P_L = leading proton (p1); P_R = recoil proton (p2)
+            P_p_first_1e2pXy.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
+            P_p_second_1e2pXy.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
 
-            if (P_p_1.Mag() >= P_p_2.Mag()) {
+            if (P_p_first_1e2pXy.Mag() >= P_p_second_1e2pXy.Mag()) { //if p_first is leading
                 if (protons[0]->getRegion() == CD) {
                     hPhi_p1_1e2pXy_CD->Fill(protons[0]->getPhi());
                 } else if (protons[0]->getRegion() == FD) {
@@ -3292,7 +3421,7 @@ void EventAnalyser() {
                 } else if (protons[1]->getRegion() == FD) {
                     hPhi_p2_1e2pXy_FD->Fill(protons[1]->getPhi());
                 }
-            } else {
+            } else { //else if p_second is leading
                 if (protons[1]->getRegion() == CD) {
                     hPhi_p1_1e2pXy_CD->Fill(protons[1]->getPhi());
                 } else if (protons[1]->getRegion() == FD) {
@@ -3871,12 +4000,18 @@ void EventAnalyser() {
 //        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
-            /* NOTE: p0 corresponds to protons[0] & p1 corresponds to protons[1] */
-            TVector3 P_p0, P_p1;
-            double P_p0_x = protons[0]->par()->getPx(), P_p0_y = protons[0]->par()->getPy(), P_p0_z = protons[0]->par()->getPz();
-            double P_p1_x = protons[1]->par()->getPx(), P_p1_y = protons[1]->par()->getPy(), P_p1_z = protons[1]->par()->getPz();
-            P_p0.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());
-            P_p1.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
+            /* NOTE: p_first corresponds to protons[0] & p_second corresponds to protons[1] */
+            TVector3 P_e_2p_3v, q_3v, P_p_first_2p_3v, P_p_second_2p_3v, P_tot_2p_3v, P_1_2p_3v, P_2_2p_3v, P_T_e_2p_3v, P_T_L_2p_3v, P_T_tot_2p_3v, dP_T_L_2p_3v, dP_T_tot_2p_3v;
+
+            P_e_2p_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi()); // electron 3 momentum
+            q_3v = TVector3(Pvx - P_e_2p_3v.Px(), Pvy - P_e_2p_3v.Py(), Pvz - P_e_2p_3v.Pz()); // 3 momentum transfer
+            P_T_e_2p_3v = TVector3(P_e_2p_3v.Px(), P_e_2p_3v.Py(), 0); // electron transverse momentum
+            P_p_first_2p_3v.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi()); // first proton in protons vector
+            P_p_second_2p_3v.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi()); // second proton in protons vector
+
+            double E_e_2p = sqrt(m_e * m_e + P_e_2p_3v.Mag2()), omega_2p = beamE - E_e_2p, W_2p = sqrt((omega_2p + m_p) * (omega_2p + m_p) - q_3v.Mag2());
+            double E_1_2p, E_2_2p, Theta_p1_p2_2p, Theta_p_e_p_tot_2p, Theta_q_p_L_2p, Theta_q_p_tot_2p;
+            double dAlpha_T_L, dAlpha_T_tot, dPhi_T_L, dPhi_T_tot, Ecal_2p;
 
             //  Testing cuts ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -3893,18 +4028,18 @@ void EventAnalyser() {
             }
 
             if (protons[0]->getRegion() == CD) {
-                hP_p_1e2p_BC_CD->Fill(P_p0.Mag()); // momentum before cuts
+                hP_p_1e2p_BC_CD->Fill(P_p_first_2p_3v.Mag()); // momentum before cuts
                 LogEventCuts(hP_p_1e2p_AC_CD, protons[0], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             } else if (protons[0]->getRegion() == FD) {
-                hP_p_1e2p_BC_FD->Fill(P_p0.Mag()); // momentum before cuts
+                hP_p_1e2p_BC_FD->Fill(P_p_first_2p_3v.Mag()); // momentum before cuts
                 LogEventCuts(hP_p_1e2p_AC_FD, protons[0], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             }
 
             if (protons[1]->getRegion() == CD) {
-                hP_p_1e2p_BC_CD->Fill(P_p1.Mag()); // momentum before cuts
+                hP_p_1e2p_BC_CD->Fill(P_p_second_2p_3v.Mag()); // momentum before cuts
                 LogEventCuts(hP_p_1e2p_AC_CD, protons[1], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             } else if (protons[1]->getRegion() == FD) {
-                hP_p_1e2p_BC_FD->Fill(P_p1.Mag()); // momentum before cuts
+                hP_p_1e2p_BC_FD->Fill(P_p_second_2p_3v.Mag()); // momentum before cuts
                 LogEventCuts(hP_p_1e2p_AC_FD, protons[1], p_mom_cuts_2p.at(0), p_mom_cuts_2p.at(1)); // momentum after cuts
             }
             //</editor-fold>
@@ -4016,12 +4151,12 @@ void EventAnalyser() {
             if ((apply_momentum_cuts_2p == true) && ((e_mom_cuts_2p.at(0) != -1) && (P_e < e_mom_cuts_2p.at(0)))) { continue; }
 
             // Proton 0:
-            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p0.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p0.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p_first_2p_3v.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p_first_2p_3v.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
 
             // Proton 1:
-            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p1.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
-            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p1.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(1) != -1) && (P_p_second_2p_3v.Mag() > p_mom_cuts_2p.at(1)))) { continue; }
+            if ((apply_momentum_cuts_2p == true) && ((p_mom_cuts_2p.at(0) != -1) && (P_p_second_2p_3v.Mag() < p_mom_cuts_2p.at(0)))) { continue; }
             //</editor-fold>
 
             //</editor-fold>
@@ -4094,16 +4229,16 @@ void EventAnalyser() {
 
             // Proton0 momentum (2p):
             if (protons[0]->getRegion() == CD) {
-                hP_p_2p_CD->Fill(P_p0.Mag());
+                hP_p_2p_CD->Fill(P_p_first_2p_3v.Mag());
             } else if (protons[0]->getRegion() == FD) {
-                hP_p_2p_FD->Fill(P_p0.Mag());
+                hP_p_2p_FD->Fill(P_p_first_2p_3v.Mag());
             }
 
             // Proton1 momentum (2p):
             if (protons[1]->getRegion() == CD) {
-                hP_p_2p_CD->Fill(P_p1.Mag());
+                hP_p_2p_CD->Fill(P_p_second_2p_3v.Mag());
             } else if (protons[1]->getRegion() == FD) {
-                hP_p_2p_FD->Fill(P_p1.Mag());
+                hP_p_2p_FD->Fill(P_p_second_2p_3v.Mag());
             }
             //</editor-fold>
 
@@ -4343,6 +4478,7 @@ void EventAnalyser() {
 //                    hE_e_All_Int_2p_CD->Fill(E_e);
 //                    hE_e_VS_Theta_e_All_Int_2p_CD->Fill(Theta_e, E_e);
 //
+//                    hET_All_Ang_All_Int_2p_FD->Fill(beamE - E_e);
 //                    if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_All_Int_2p_CD->Fill(beamE - E_e); }
 //
 //                    if (qel) {
@@ -4351,6 +4487,7 @@ void EventAnalyser() {
 //                        hE_e_QEL_2p_CD->Fill(E_e);
 //                        hE_e_VS_Theta_e_QEL_2p_CD->Fill(Theta_e, E_e);
 //
+//                        hET_All_Ang_QEL_2p_FD->Fill(beamE - E_e);
 //                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_QEL_2p_CD->Fill(beamE - E_e); }
 //                    } else if (mec) {
 //                        hTheta_e_MEC_2p_CD->Fill(Theta_e);
@@ -4358,6 +4495,7 @@ void EventAnalyser() {
 //                        hE_e_MEC_2p_CD->Fill(E_e);
 //                        hE_e_VS_Theta_e_MEC_2p_CD->Fill(Theta_e, E_e);
 //
+//                        hET_All_Ang_MEC_2p_FD->Fill(beamE - E_e);
 //                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_MEC_2p_CD->Fill(beamE - E_e); }
 //                    } else if (res) {
 //                        hTheta_e_RES_2p_CD->Fill(Theta_e);
@@ -4365,6 +4503,7 @@ void EventAnalyser() {
 //                        hE_e_RES_2p_CD->Fill(E_e);
 //                        hE_e_VS_Theta_e_RES_2p_CD->Fill(Theta_e, E_e);
 //
+//                        hET_All_Ang_RES_2p_FD->Fill(beamE - E_e);
 //                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_RES_2p_CD->Fill(beamE - E_e); }
 //                    } else if (dis) {
 //                        hTheta_e_DIS_2p_CD->Fill(Theta_e);
@@ -4372,6 +4511,7 @@ void EventAnalyser() {
 //                        hE_e_DIS_2p_CD->Fill(E_e);
 //                        hE_e_VS_Theta_e_DIS_2p_CD->Fill(Theta_e, E_e);
 //
+//                        hET_All_Ang_DIS_2p_FD->Fill(beamE - E_e);
 //                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_DIS_2p_CD->Fill(beamE - E_e); }
 //                    }
                 } else if (e->getRegion() == FD) {
@@ -4382,6 +4522,7 @@ void EventAnalyser() {
                     hE_e_All_Int_2p_FD->Fill(E_e);
                     hE_e_VS_Theta_e_All_Int_2p_FD->Fill(Theta_e, E_e);
 
+                    hET_All_Ang_All_Int_2p_FD->Fill(beamE - E_e);
                     if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_All_Int_2p_FD->Fill(beamE - E_e); }
 
                     if (qel) {
@@ -4390,6 +4531,7 @@ void EventAnalyser() {
                         hE_e_QEL_2p_FD->Fill(E_e);
                         hE_e_VS_Theta_e_QEL_2p_FD->Fill(Theta_e, E_e);
 
+                        hET_All_Ang_QEL_2p_FD->Fill(beamE - E_e);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_QEL_2p_FD->Fill(beamE - E_e); }
                     } else if (mec) {
                         hTheta_e_MEC_2p_FD->Fill(Theta_e);
@@ -4397,6 +4539,7 @@ void EventAnalyser() {
                         hE_e_MEC_2p_FD->Fill(E_e);
                         hE_e_VS_Theta_e_MEC_2p_FD->Fill(Theta_e, E_e);
 
+                        hET_All_Ang_MEC_2p_FD->Fill(beamE - E_e);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_MEC_2p_FD->Fill(beamE - E_e); }
                     } else if (res) {
                         hTheta_e_RES_2p_FD->Fill(Theta_e);
@@ -4404,6 +4547,7 @@ void EventAnalyser() {
                         hE_e_RES_2p_FD->Fill(E_e);
                         hE_e_VS_Theta_e_RES_2p_FD->Fill(Theta_e, E_e);
 
+                        hET_All_Ang_RES_2p_FD->Fill(beamE - E_e);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_RES_2p_FD->Fill(beamE - E_e); }
                     } else if (dis) {
                         hTheta_e_DIS_2p_FD->Fill(Theta_e);
@@ -4411,6 +4555,7 @@ void EventAnalyser() {
                         hE_e_DIS_2p_FD->Fill(E_e);
                         hE_e_VS_Theta_e_DIS_2p_FD->Fill(Theta_e, E_e);
 
+                        hET_All_Ang_DIS_2p_FD->Fill(beamE - E_e);
                         if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_DIS_2p_FD->Fill(beamE - E_e); }
                     }
                 }
@@ -4424,67 +4569,66 @@ void EventAnalyser() {
             }
 
             /* Filling Ecal histograms (2p) */
-            //TODO: move these into TVector3 variables
-            double P_1, P_1_x, P_1_y, P_1_z, E_1, P_2, P_2_x, P_2_y, P_2_z, E_2, Theta_p1_p2_2p, omega, W;
-            double P_h, P_h_x, P_h_y, P_h_z, P_e_x, P_e_y, P_e_z, Theta_p_e_p_h_2p;
-            double Ecal_2p;
-            double P_T_e, P_T_L, P_T_tot, dP_T_L, dP_T_L_x, dP_T_L_y, dAlpha_T_L, dPhi_T_L, dP_T_tot, dP_T_tot_x, dP_T_tot_y, dAlpha_T_tot, dPhi_T_tot;
-
             // Determining leading and recoil protons:
-            if (P_p0.Mag() >= P_p1.Mag()) { // If p0 is leading proton
-                P_1 = P_p0.Mag(), P_1_x = P_p0_x, P_1_y = P_p0_y, P_1_z = P_p0_z;
-                P_2 = P_p1.Mag(), P_2_x = P_p1_x, P_2_y = P_p1_y, P_2_z = P_p1_z;
-            } else { // Else, p1 is leading proton
-                P_1 = P_p1.Mag(), P_1_x = P_p1_x, P_1_y = P_p1_y, P_1_z = P_p1_z;
-                P_2 = P_p0.Mag(), P_2_x = P_p0_x, P_2_y = P_p0_y, P_2_z = P_p0_z;
+            if (P_p_first_2p_3v.Mag() >= P_p_second_2p_3v.Mag()) { // If p_first is leading proton
+                P_1_2p_3v = TVector3(P_p_first_2p_3v.Px(), P_p_first_2p_3v.Py(), P_p_first_2p_3v.Pz());
+                P_2_2p_3v = TVector3(P_p_second_2p_3v.Px(), P_p_second_2p_3v.Py(), P_p_second_2p_3v.Pz());
+            } else { // else if p_second is leading proton
+                P_2_2p_3v = TVector3(P_p_first_2p_3v.Px(), P_p_first_2p_3v.Py(), P_p_first_2p_3v.Pz());
+                P_1_2p_3v = TVector3(P_p_second_2p_3v.Px(), P_p_second_2p_3v.Py(), P_p_second_2p_3v.Pz());
             }
 
-            P_e_x = electrons[0]->par()->getPx();
-            P_e_y = electrons[0]->par()->getPy();
-            P_e_z = electrons[0]->par()->getPz();
-            P_h_x = P_1_x + P_2_x;
-            P_h_y = P_1_y + P_2_y;
-            P_h_z = P_1_z + P_2_z;
-            P_h = rCalc(P_h_x, P_h_y, P_h_z);
-            Theta_p_e_p_h_2p = acos((P_e_x * P_h_x + P_e_y * P_h_y + P_e_z * P_h_z) / (P_e * P_h)) * 180.0 / pi; // Theta_p_e_p_h_2p in deg
-            hTheta_p_e_p_h_2p->Fill(Theta_p_e_p_h_2p);
+            hP_p_1_2p->Fill(P_1_2p_3v.Mag());
+            hP_p_2_2p->Fill(P_2_2p_3v.Mag());
 
-            TVector3 q(Pvx - P_e_x, Pvy - P_e_y, Pvz - P_e_z); // 3 momentum transfer
-            omega = beamE - E_e; // energy momentum transfer
-            W = sqrt((omega + m_p) * (omega + m_p) - q.Mag2());
-            Theta_p1_p2_2p = acos((P_1_x * P_2_x + P_1_y * P_2_y + P_1_z * P_2_z) / (P_1 * P_2)) * 180.0 / pi; // Theta_p1_p2_2p in deg
+            P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
+                                   P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz());
+            P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(), 0);
+            P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(), 0);
+            dP_T_L_2p_3v = TVector3(P_e_2p_3v.Px() + P_1_2p_3v.Px(), P_e_2p_3v.Py() + P_1_2p_3v.Py(), 0);
+            dP_T_tot_2p_3v = TVector3(P_e_2p_3v.Px() + P_1_2p_3v.Px() + P_2_2p_3v.Px(), P_e_2p_3v.Py() + P_1_2p_3v.Py() + P_2_2p_3v.Py(), 0);
+
+            Theta_p_e_p_tot_2p = acos((P_e_2p_3v.Px() * P_tot_2p_3v.Px() + P_e_2p_3v.Py() * P_tot_2p_3v.Py() + P_e_2p_3v.Pz() * P_tot_2p_3v.Pz())
+                                      / (P_e_2p_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_tot_2p in deg
+            hTheta_p_e_p_tot_2p->Fill(Theta_p_e_p_tot_2p);
+
+            Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
+                                  / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi; // Theta_p1_p2_2p in deg
             hTheta_p1_p2_2p->Fill(Theta_p1_p2_2p);
-            hTheta_p1_p2_vs_W_2p->Fill(W, Theta_p1_p2_2p);
+            hTheta_p1_p2_vs_W_2p->Fill(W_2p, Theta_p1_p2_2p);
 
-            E_1 = sqrt(m_p * m_p + P_1 * P_1);
-            E_2 = sqrt(m_p * m_p + P_2 * P_2);
-            Ecal_2p = E_e + (E_1 - m_p) + (E_2 - m_p);
+            Theta_q_p_tot_2p = acos((q_3v.Px() * P_tot_2p_3v.Px() + q_3v.Py() * P_tot_2p_3v.Py() + q_3v.Pz() * P_tot_2p_3v.Pz())
+                                    / (q_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_2p in deg
+            hTheta_q_p_tot_2p->Fill(Theta_q_p_tot_2p);
+
+            Theta_q_p_L_2p = acos((q_3v.Px() * P_T_L_2p_3v.Px() + q_3v.Py() * P_T_L_2p_3v.Py() + q_3v.Pz() * P_T_L_2p_3v.Pz())
+                                  / (q_3v.Mag() * P_T_L_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_L_2p in deg
+            hTheta_q_p_L_vs_p_L_q_2p->Fill(P_1_2p_3v.Mag() / q_3v.Mag(), Theta_q_p_L_2p);
+
+            E_1_2p = sqrt(m_p * m_p + P_1_2p_3v.Mag2());
+            E_2_2p = sqrt(m_p * m_p + P_2_2p_3v.Mag2());
+            Ecal_2p = E_e_2p + (E_1_2p - m_p) + (E_2_2p - m_p);
             hEcal_All_Int_2p->Fill(Ecal_2p); // Fill Ecal for all interactions
 
-            P_T_e = rCalc(P_e_x, P_e_y, 0);
-            P_T_L = rCalc(P_1_x, P_1_y, 0);
-            P_T_tot = rCalc(P_1_x + P_2_x, P_1_y + P_2_y, 0);
+            hdP_T_L_2p->Fill(dP_T_L_2p_3v.Mag());
+            hdP_T_tot_2p->Fill(dP_T_tot_2p_3v.Mag());
 
-            dP_T_L_x = P_e_x + P_1_x;
-            dP_T_L_y = P_e_y + P_1_y;
-            dP_T_L = rCalc(dP_T_L_x, dP_T_L_y, 0);
-
-            dP_T_tot_x = P_e_x + P_1_x + P_2_x;
-            dP_T_tot_y = P_e_y + P_1_y + P_2_y;
-            dP_T_tot = rCalc(dP_T_tot_x, dP_T_tot_y, 0);
-
-            hdP_T_L_2p->Fill(dP_T_L);
-            hdP_T_tot_2p->Fill(dP_T_tot);
-
-            dAlpha_T_L = acos(-(P_e_x * dP_T_L_x + P_e_y * dP_T_L_y + P_e_z * 0) / (P_T_e * dP_T_L)) * 180.0 / pi; // dP_T_L_z = 0
-            dAlpha_T_tot = acos(-(P_e_x * dP_T_tot_x + P_e_y * dP_T_tot_y + P_e_z * 0) / (P_T_e * dP_T_tot)) * 180.0 / pi; // dP_T_tot_z = 0
+            dAlpha_T_L = acos(-(P_e_2p_3v.Px() * dP_T_L_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_L_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_L_2p_3v.Pz())
+                              / (P_T_e_2p_3v.Mag() * dP_T_L_2p_3v.Mag())) * 180.0 / pi; // dP_T_L_2p_3v.Pz() = 0
+            dAlpha_T_tot = acos(-(P_e_2p_3v.Px() * dP_T_tot_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_tot_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_tot_2p_3v.Pz())
+                                / (P_T_e_2p_3v.Mag() * dP_T_tot_2p_3v.Mag())) * 180.0 / pi; // dP_T_tot_2p_3v.Pz() = 0
             hdAlpha_T_L_2p->Fill(dAlpha_T_L);
             hdAlpha_T_tot_2p->Fill(dAlpha_T_tot);
 
-            dPhi_T_L = acos(-(P_e_x * P_1_x + P_e_y * P_1_y + P_e_z * 0) / (P_T_e * P_T_L)) * 180.0 / pi; // P_T_L_z = 0
-            dPhi_T_tot = acos(-(P_e_x * (P_1_x + P_2_x) + P_e_y * (P_1_y + P_2_y) + P_e_z * 0) / (P_T_e * P_T_tot)) * 180.0 / pi; // P_T_tot_z = 0
+            dPhi_T_L = acos(-(P_T_e_2p_3v.Px() * P_T_L_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_L_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_L_2p_3v.Pz())
+                            / (P_T_e_2p_3v.Mag() * P_T_L_2p_3v.Mag())) * 180.0 / pi; // P_T_L_2p_3v.Pz() = 0
+            dPhi_T_tot = acos(-(P_T_e_2p_3v.Px() * P_T_tot_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_tot_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_tot_2p_3v.Pz())
+                              / (P_T_e_2p_3v.Mag() * P_T_tot_2p_3v.Mag())) * 180.0 / pi; // P_T_tot_2p_3v.Pz() = 0
             hdPhi_T_L_2p->Fill(dPhi_T_L);
             hdPhi_T_tot_2p->Fill(dPhi_T_tot);
+
+            hEcal_vs_dAlpha_T_L_2p->Fill(dAlpha_T_L, Ecal_2p);
+            hEcal_vs_dAlpha_T_tot_2p->Fill(dAlpha_T_tot, Ecal_2p);
 
             if (qel) {
                 hEcal_QEL_2p->Fill(Ecal_2p); // Fill Ecal for QEL only
@@ -5406,42 +5550,29 @@ void EventAnalyser() {
     if (Momentum_plots) {
         cout << "\n\nPlotting Momentum histograms...\n\n";
 
-//  Momentum histograms (1e2p, CD & FD)  --------------------------------------------------------------
+//  Momentum histograms (1e cut, CD & FD)  --------------------------------------------------------------
 
-        //<editor-fold desc="Momentum histograms before & after cuts (1e2p, CD & FD)">
-//        histPlotter1D(c1, hP_e_1e2p_BC_CD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "01_P_e_1e2p_BC_CD", hP_e_1e2p_BC_CD_Dir,
-//                      "CD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
-//        histPlotter1D(c1, hP_e_1e2p_AC_CD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "01_P_e_1e2p_AC_CD", hP_e_1e2p_AC_CD_Dir,
-//                      "CD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        //<editor-fold desc="Momentum histograms (1e cut, CD & FD)">
+//        histPlotter1D(c1, hP_e_1e_cut_CD, false, true, 1., "P_{e}", "1e cut", plots, 2, false, true, sP_CD, "01_P_e_1e_cut_CD", hP_e_1e_cut_CD_Dir, "CD", kBlue, true,
+//                      true, false, true, -1, -1, 0, false);
+        histPlotter1D(c1, hP_e_1e_cut_FD, false, true, 1., "P_{e}", "1e cut", plots, 2, false, true, sP_FD, "01_P_e_1e_cut_FD", hP_e_1e_cut_FD_Dir, "FD", kBlue, true,
+                      true, false, true, -1, -1, 0, false);
 
-        histPlotter1D(c1, hP_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "02_P_e_1e2p_BC_FD", hP_e_1e2p_BC_FD_Dir,
-                      "", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
-        histPlotter1D(c1, hP_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "02_P_e_1e2p_AC_FD", hP_e_1e2p_AC_FD_Dir,
-                      "", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_1e_cut_CD, false, true, 1., "P_{p}", "1e cut", plots, 2, false, true, sP_CD, "02_P_p_1e_cut_CD", hP_p_1e_cut_CD_Dir, "CD", kBlue, true,
+                      true, false, true, -1, -1, 0, false);
+        histPlotter1D(c1, hP_p_1e_cut_FD, false, true, 1., "P_{p}", "1e cut", plots, 2, false, true, sP_FD, "02_P_p_1e_cut_FD", hP_p_1e_cut_FD_Dir, "FD", kBlue, true,
+                      true, false, true, -1, -1, 0, false);
 
-        histPlotter1D(c1, hP_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "03_P_p_1e2p_BC_CD", hP_p_1e2p_BC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
-        histPlotter1D(c1, hP_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "03_P_p_1e2p_AC_CD", hP_p_1e2p_AC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_piplus_1e_cut_CD, false, true, 1., "P_{#pi^{+}}", "1e cut", plots, 2, false, true, sP_CD, "03_P_piplus_1e_cut_CD", hP_piplus_1e_cut_CD_Dir,
+                      "CD", kBlue, true, true, false, true, -1, -1, 0, false);
+        histPlotter1D(c1, hP_piplus_1e_cut_FD, false, true, 1., "P_{#pi^{+}}", "1e cut", plots, 2, false, true, sP_FD, "03_P_piplus_1e_cut_FD", hP_piplus_1e_cut_FD_Dir,
+                      "FD", kBlue, true, true, false, true, -1, -1, 0, false);
 
-        histPlotter1D(c1, hP_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "04_P_p_1e2p_BC_FD", hP_p_1e2p_BC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
-        histPlotter1D(c1, hP_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", hP_p_1e2p_AC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_piminus_1e_cut_CD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_CD, "04_P_piminus_1e_cut_CD",
+                      hP_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, false, true, -1, -1, 0, false);
+        histPlotter1D(c1, hP_piminus_1e_cut_FD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_FD, "04_P_piminus_1e_cut_FD",
+                      hP_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, false, true, -1, -1, 0, false);
         //</editor-fold>
-
-        //<editor-fold desc="Momentum histograms before & after cuts (2p, CD & FD)">
-//        histPlotter1D(c1, hP_e_2p_CD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, sP_2p_CD, "01_P_e_2p_CD", hP_e_2p_CD_Dir, "CD", kBlue, true, true, false,
-//                      true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
-        histPlotter1D(c1, hP_e_2p_FD, false, true, 1., "P_{e}", "2p", plots, 2, false, true, sP_2p_FD, "01_P_e_2p_FD", hP_e_2p_FD_Dir, "", kBlue, true, true, false,
-                      true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
-
-        histPlotter1D(c1, hP_p_2p_CD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, sP_2p_CD, "02_P_p_2p_CD", hP_p_2p_CD_Dir, "CD", kBlue, true, true, false,
-                      true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
-        histPlotter1D(c1, hP_p_2p_FD, false, true, 1., "P_{p}", "2p", plots, 2, false, true, sP_2p_FD, "02_P_p_2p_FD", hP_p_2p_FD_Dir, "FD", kBlue, true, true, false,
-                      true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
-        //</editor-fold>
-
 ////  Momentum histograms (MicroBooNE, CD & FD)  --------------------------------------------------------------
 //
 ////        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
@@ -5543,6 +5674,47 @@ void EventAnalyser() {
 //        //</editor-fold>
 //
 //        //</editor-fold>
+
+//  Momentum histograms (1e2p, CD & FD)  --------------------------------------------------------------
+
+        //<editor-fold desc="Momentum histograms before & after cuts (1e2p, CD & FD)">
+//        histPlotter1D(c1, hP_e_1e2p_BC_CD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "01_P_e_1e2p_BC_CD", hP_e_1e2p_BC_CD_Dir,
+//                      "CD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+//        histPlotter1D(c1, hP_e_1e2p_AC_CD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "01_P_e_1e2p_AC_CD", hP_e_1e2p_AC_CD_Dir,
+//                      "CD", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+
+        histPlotter1D(c1, hP_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "02_P_e_1e2p_BC_FD", hP_e_1e2p_BC_FD_Dir,
+                      "", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "02_P_e_1e2p_AC_FD", hP_e_1e2p_AC_FD_Dir,
+                      "", kBlue, true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+
+        histPlotter1D(c1, hP_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "03_P_p_1e2p_BC_CD", hP_p_1e2p_BC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "03_P_p_1e2p_AC_CD", hP_p_1e2p_AC_CD_Dir,
+                      "CD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+
+        histPlotter1D(c1, hP_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "04_P_p_1e2p_BC_FD", hP_p_1e2p_BC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", hP_p_1e2p_AC_FD_Dir,
+                      "FD", kBlue, true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Momentum histograms before & after cuts (2p, CD & FD)">
+//        histPlotter1D(c1, hP_e_2p_CD, false, true, 1., "Electron momentum P_{e}", "2p", plots, 2, false, true, sP_2p_CD, "01_P_e_2p_CD", hP_e_2p_CD_Dir, "CD", kBlue,
+//                      true, true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_e_2p_FD, false, true, 1., "Electron momentum P_{e}", "2p", plots, 2, false, true, sP_2p_FD, "01_P_e_2p_FD", hP_e_2p_FD_Dir, "", kBlue, true,
+                      true, false, true, e_mom_cuts_2p.at(1), e_mom_cuts_2p.at(0), 0, false);
+
+        histPlotter1D(c1, hP_p_2p_CD, false, true, 1., "Proton momentum P_{p}", "2p", plots, 2, false, true, sP_2p_CD, "02_P_p_2p_CD", hP_p_2p_CD_Dir, "CD", kBlue, true,
+                      true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_2p_FD, false, true, 1., "Proton momentum P_{p}", "2p", plots, 2, false, true, sP_2p_FD, "02_P_p_2p_FD", hP_p_2p_FD_Dir, "FD", kBlue, true,
+                      true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+
+        histPlotter1D(c1, hP_p_1_2p, false, true, 1., "Leading proton momentum P_{p_{1}}", "2p", plots, 2, false, true, sP_2p_CD, "03_P_p_1_2p", hP_p_1_2p_Dir, "", kBlue,
+                      true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        histPlotter1D(c1, hP_p_2_2p, false, true, 1., "Recoil proton momentum P_{p_{2}}", "2p", plots, 2, false, true, sP_2p_FD, "03_P_p_2_2p", hP_p_2_2p_Dir, "", kBlue,
+                      true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        //</editor-fold>
 
     } else {
         cout << "\n\nMomentum (P_e) plots are disabled by user.\n\n";
@@ -6359,14 +6531,31 @@ void EventAnalyser() {
                       "Theta_e_VS_Phi_e_All_Int_2p_FD");
         //</editor-fold>
 
-// Theta_p_e_p_h (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_p_e_p_tot (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Theta_p_e_p_h (2p, CD & FD)">
-        double Theta_p_e_p_h_2p_integral = hTheta_p_e_p_h_2p->Integral();
+        //<editor-fold desc="Theta_p_e_p_tot (2p, CD & FD)">
+        double Theta_p_e_p_tot_2p_integral = hTheta_p_e_p_tot_2p->Integral();
 
-        histPlotter1D(c1, hTheta_p_e_p_h_2p, norm_Angle_plots_master, true, Theta_p_e_p_h_2p_integral,
-                      "#theta_{p_{e},P_{1}+P_{2}} - Opening Angle Between P_{e} and P_{1}+P_{2}", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sTheta_p1_p2_2p, "01_Theta_p_e_p_h_All_Int_2p", hTheta_p_e_p_h_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hTheta_p_e_p_tot_2p, norm_Angle_plots_master, true, Theta_p_e_p_tot_2p_integral,
+                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{p_{1}}+#vec{P}_{p_{2}}", "All Int., 2p", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_p1_p2_2p, "01_Theta_p_e_p_tot_All_Int_2p", hTheta_p_e_p_tot_2p_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// Theta_q_p_tot (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_q_p_tot (2p, CD & FD)">
+        double Theta_q_p_tot_2p_integral = hTheta_q_p_tot_2p->Integral();
+
+        histPlotter1D(c1, hTheta_q_p_tot_2p, norm_Angle_plots_master, true, Theta_q_p_tot_2p_integral,
+                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{p_{1}}+#vec{P}_{p_{2}}", "All Int., 2p", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "02_Theta_q_p_tot_All_Int_2p", hTheta_q_p_tot_2p_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// Theta_q_p_1 vs |P_1|/|q| (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="hTheta_p1_p2_vs_W_2p (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_q_p_L_vs_p_L_q_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_q_p_L_vs_p_L_q_2p_Dir, "03_Theta_q_p_L_vs_p_L_q_2p");
         //</editor-fold>
 
 // Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
@@ -6375,13 +6564,13 @@ void EventAnalyser() {
         double Theta_p1_p2_integral = hTheta_p1_p2_2p->Integral();
 
         histPlotter1D(c1, hTheta_p1_p2_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "All Int., 2p",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "02_Theta_p1_p2_All_Int_2p", hTheta_p1_p2_2p_Dir, "", kBlue, true, true, true, false);
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "04_Theta_p1_p2_All_Int_2p", hTheta_p1_p2_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
 // hTheta_p1_p2_vs_W_2p (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="hTheta_p1_p2_vs_W_2p (2p, CD & FD)">
-        histPlotter2D(c1, hTheta_p1_p2_vs_W_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_2p_Dir, "03_Theta_p1_p2_vs_W_2p");
+        histPlotter2D(c1, hTheta_p1_p2_vs_W_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_2p_Dir, "05_Theta_p1_p2_vs_W_2p");
         //</editor-fold>
 
     } else {
@@ -6743,6 +6932,14 @@ void EventAnalyser() {
         cout << "\n\nPlotting Energy Transfer (ET) histograms...\n\n";
 
         if (ETrans_All_Int_plots) {
+            double ETrans_All_Ang_All_Int_integral_2p = hET_All_Ang_All_Int_2p_FD->Integral();
+//            double ETrans_All_Ang_All_Int_integral_2p = hET_All_Ang_All_Int_2p_CD->Integral() + hET_All_Ang_All_Int_2p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_All_Int_2p_CD, norm_ET_plots, true, ETrans_All_Ang_All_Int_integral_2p, tET_All_Ang, "All Int., 2p", 0.06, 0.0425, 0.0425,
+//                          plots, 2, false, true, sET_All_Ang_All_Int_2p_CD, "ET_All_Ang_All_Int_2p", hET_All_Ang_All_Int_2p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_All_Int_2p_FD, norm_ET_plots, true, ETrans_All_Ang_All_Int_integral_2p, tET_All_Ang, "All Int., 2p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sET_All_Ang_All_Int_2p_FD, "ET_All_Ang_All_Int_2p", hET_All_Ang_All_Int_2p_FD_Dir, "FD", kBlack, true, true, true);
+
             double ETrans15_All_Int_integral_2p = hET15_All_Int_2p_FD->Integral();
 //            double ETrans15_All_Int_integral_2p = hET15_All_Int_2p_CD->Integral() + hET15_All_Int_2p_FD->Integral();
 
@@ -6753,6 +6950,14 @@ void EventAnalyser() {
         }
 
         if (ETrans_QEL_plots) {
+            double ETrans_All_Ang_QEL_integral_2p = hET_All_Ang_QEL_2p_FD->Integral();
+//            double ETrans_All_Ang_QEL_integral_2p = hET_All_Ang_QEL_2p_CD->Integral() + hET_All_Ang_QEL_2p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_QEL_2p_CD, norm_ET_plots, true, ETrans_All_Ang_QEL_integral_2p, tET_All_Ang, "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_2p_CD, "ET_All_Ang_QEL_2p", hET_All_Ang_QEL_2p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_QEL_2p_FD, norm_ET_plots, true, ETrans_All_Ang_QEL_integral_2p, tET_All_Ang, "QEL Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_2p_FD, "ET_All_Ang_QEL_2p", hET_All_Ang_QEL_2p_FD_Dir, "FD", kBlack, true, true, true);
+
             double ETrans15_QEL_integral_2p = hET15_QEL_2p_FD->Integral();
 //            double ETrans15_QEL_integral_2p = hET15_QEL_2p_CD->Integral() + hET15_QEL_2p_FD->Integral();
 
@@ -6763,6 +6968,14 @@ void EventAnalyser() {
         }
 
         if (ETrans_MEC_plots) {
+            double ETrans_All_Ang_MEC_integral_2p = hET_All_Ang_MEC_2p_FD->Integral();
+//            double ETrans_All_Ang_MEC_integral_2p = hET_All_Ang_MEC_2p_CD->Integral() + hET_All_Ang_MEC_2p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_MEC_2p_CD, norm_ET_plots, true, ETrans_All_Ang_MEC_integral_2p, tET_All_Ang, "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_2p_CD, "ET_All_Ang_MEC_2p", hET_All_Ang_MEC_2p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_MEC_2p_FD, norm_ET_plots, true, ETrans_All_Ang_MEC_integral_2p, tET_All_Ang, "MEC Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_2p_FD, "ET_All_Ang_MEC_2p", hET_All_Ang_MEC_2p_FD_Dir, "FD", kBlack, true, true, true);
+
             double ETrans15_MEC_integral_2p = hET15_MEC_2p_FD->Integral();
 //            double ETrans15_MEC_integral_2p = hET15_MEC_2p_CD->Integral() + hET15_MEC_2p_FD->Integral();
 
@@ -6773,6 +6986,14 @@ void EventAnalyser() {
         }
 
         if (ETrans_RES_plots) {
+            double ETrans_All_Ang_RES_integral_2p = hET_All_Ang_RES_2p_FD->Integral();
+//            double ETrans_All_Ang_RES_integral_2p = hET_All_Ang_RES_2p_CD->Integral() + hET_All_Ang_RES_2p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_RES_2p_CD, norm_ET_plots, true, ETrans_All_Ang_RES_integral_2p, tET_All_Ang, "RES Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_2p_CD, "ET_All_Ang_RES_2p", hET_All_Ang_RES_2p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_RES_2p_FD, norm_ET_plots, true, ETrans_All_Ang_RES_integral_2p, tET_All_Ang, "RES Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_2p_FD, "ET_All_Ang_RES_2p", hET_All_Ang_RES_2p_FD_Dir, "FD", kBlack, true, true, true);
+
             double ETrans15_RES_integral_2p = hET15_RES_2p_FD->Integral();
 //            double ETrans15_RES_integral_2p = hET15_RES_2p_CD->Integral() + hET15_RES_2p_FD->Integral();
 
@@ -6783,6 +7004,14 @@ void EventAnalyser() {
         }
 
         if (ETrans_DIS_plots) {
+            double ETrans_All_Ang_DIS_integral_2p = hET_All_Ang_DIS_2p_FD->Integral();
+//            double ETrans_All_Ang_DIS_integral_2p = hET_All_Ang_DIS_2p_CD->Integral() + hET_All_Ang_DIS_2p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_DIS_2p_CD, norm_ET_plots, true, ETrans_All_Ang_DIS_integral_2p, tET_All_Ang, "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_2p_CD, "ET_All_Ang_DIS_2p", hET_All_Ang_DIS_2p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_DIS_2p_FD, norm_ET_plots, true, ETrans_All_Ang_DIS_integral_2p, tET_All_Ang, "DIS Only, 2p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_2p_FD, "ET_All_Ang_DIS_2p", hET_All_Ang_DIS_2p_FD_Dir, "FD", kBlack, true, true, true);
+
             double ETrans15_DIS_integral_2p = hET15_DIS_2p_FD->Integral();
 //            double ETrans15_DIS_integral_2p = hET15_DIS_2p_CD->Integral() + hET15_DIS_2p_FD->Integral();
 
@@ -6795,6 +7024,11 @@ void EventAnalyser() {
 //  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
 
         if (ETrans_All_Int_plots && ETrans_QEL_plots && ETrans_MEC_plots && ETrans_RES_plots && ETrans_DIS_plots) {
+//            stackPlotter1D(c1, sET_All_Ang_All_Int_2p_CD, norm_ET_plots, tET_All_Ang, "2p", plots, hET_All_Ang_All_Int_2p_CD, hET_All_Ang_QEL_2p_CD, hET_All_Ang_MEC_2p_CD,
+//                           hET_All_Ang_RES_2p_CD, hET_All_Ang_DIS_2p_CD, "01_ET_All_Ang_stack", sET_All_Ang_All_Int_2p_CD_Dir, "CD");
+            stackPlotter1D(c1, sET_All_Ang_All_Int_2p_FD, norm_ET_plots, tET_All_Ang, "2p", plots, hET_All_Ang_All_Int_2p_FD, hET_All_Ang_QEL_2p_FD, hET_All_Ang_MEC_2p_FD,
+                           hET_All_Ang_RES_2p_FD, hET_All_Ang_DIS_2p_FD, "02_ET_All_Ang_stack", sET_All_Ang_All_Int_2p_FD_Dir, "");
+
 //            stackPlotter1D(c1, sET15_All_Int_2p_CD, norm_ET_plots, tET15, "2p", plots, hET15_All_Int_2p_CD, hET15_QEL_2p_CD, hET15_MEC_2p_CD,
 //                           hET15_RES_2p_CD, hET15_DIS_2p_CD, "01_ET15_stack", sET15_All_Int_2p_CD_Dir, "CD");
             stackPlotter1D(c1, sET15_All_Int_2p_FD, norm_ET_plots, tET15, "2p", plots, hET15_All_Int_2p_FD, hET15_QEL_2p_FD, hET15_MEC_2p_FD,
@@ -6815,7 +7049,8 @@ void EventAnalyser() {
 
         cout << "\n\nPlotting Ecal reconstruction histograms...\n\n";
 
-//        histPlotter1D(c1, hEcal_All_Int_2p, norm_Ecal_plots, true, 1., "E_{cal} Reconstruction", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, true, false, sEcal_2p,
+        //<editor-fold desc="Ecal histograms">
+        //        histPlotter1D(c1, hEcal_All_Int_2p, norm_Ecal_plots, true, 1., "E_{cal} Reconstruction", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, true, false, sEcal_2p,
 //                      "Ecal_rec_All_Int", hEcal_All_Int_2p_Dir, "2p", kBlue, true, true, true);
 //        histPlotter1D(c1, hEcal_QEL_2p, norm_Ecal_plots, true, 1., "E_{cal} Reconstruction", "QEL Only", 0.06, 0.0425, 0.0425, plots, 2, true, false, sEcal_2p,
 //                      "Ecal_rec_QEL_only", hEcal_QEL_2p_Dir, "2p", kBlue, true, true, true);
@@ -6839,6 +7074,13 @@ void EventAnalyser() {
         stackPlotter1D(c1, sEcal_2p, norm_Ecal_plots, "E_{cal} Reconstruction", "2p", plots, hEcal_All_Int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p,
                        hEcal_DIS_2p,
                        "01_Ecal_rec_stack", sEcal_2p_Dir, "");
+        //</editor-fold>
+
+        //<editor-fold desc="Ecal vs. dAlpha_T">
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_L_2p_Dir, "02_Ecal_vs_dAlpha_T_L", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_tot_2p_Dir, "03_Ecal_vs_dAlpha_T_tot", false);
+        //</editor-fold>
+
     } else {
         cout << "\n\nEcal plots are disabled by user.\n\n";
     }
