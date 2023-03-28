@@ -7071,7 +7071,7 @@ void gst::Loop() {
 //        gStyle->SetStatX(0.88);
 //        gStyle->SetStatY(0.4);
         theta_lp_VS_phi_lp->SetStats(0);
-        c1->SaveAs("" + WorkingDirectory + "plots/Theta_l_VS_Phi_l_inclusive.png");
+        c1->SaveAs((WorkingDirectory + "plots/Theta_l_VS_Phi_l_inclusive.png").c_str());
 //        gStyle->SetStatX(DefStatX);
 //        gStyle->SetStatY(DefStatY);
         c1->Clear();
