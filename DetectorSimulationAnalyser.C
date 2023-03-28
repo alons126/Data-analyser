@@ -630,11 +630,15 @@ void EventAnalyser() {
     bool create_ETrans_Dir = true;
     string ETrans_Parent_Directory = "06_ET_plots";
 //    TFolder *ETrans_Folder = new TFolder(ETrans_Parent_Directory.c_str(), ETrans_Parent_Directory.c_str());
-    string ETrans_Daughter_Folders[] = {"", "01_2p", "01_2p/02_Around_15_Deg", "01_2p/02_Around_15_Deg/00_All_interactions",
-                                        "01_2p/02_Around_15_Deg/01_QEL_only", "01_2p/02_Around_15_Deg/02_MEC_only", "01_2p/02_Around_15_Deg/03_RES_only",
-                                        "01_2p/02_Around_15_Deg/04_DIS_only", "01_2p/01_Every_theta_e", "01_2p/01_Every_theta_e/00_All_interactions",
-                                        "01_2p/01_Every_theta_e/01_QEL_only", "01_2p/01_Every_theta_e/02_MEC_only", "01_2p/01_Every_theta_e/03_RES_only",
-                                        "01_2p/01_Every_theta_e/04_DIS_only"};
+    string ETrans_Daughter_Folders[] = {"", "02_2p", "02_2p/02_Around_15_Deg_2p", "02_2p/02_Around_15_Deg_2p/00_All_interactions",
+                                        "02_2p/02_Around_15_Deg_2p/01_QEL_only", "02_2p/02_Around_15_Deg_2p/02_MEC_only", "02_2p/02_Around_15_Deg_2p/03_RES_only",
+                                        "02_2p/02_Around_15_Deg_2p/04_DIS_only", "02_2p/01_Every_theta_e_2p", "02_2p/01_Every_theta_e_2p/00_All_interactions",
+                                        "02_2p/01_Every_theta_e_2p/01_QEL_only", "02_2p/01_Every_theta_e_2p/02_MEC_only", "02_2p/01_Every_theta_e_2p/03_RES_only",
+                                        "02_2p/01_Every_theta_e_2p/04_DIS_only", "01_1p", "01_1p/02_Around_15_Deg_1p", "01_1p/02_Around_15_Deg_1p/00_All_interactions",
+                                        "01_1p/02_Around_15_Deg_1p/01_QEL_only", "01_1p/02_Around_15_Deg_1p/02_MEC_only", "01_1p/02_Around_15_Deg_1p/03_RES_only",
+                                        "01_1p/02_Around_15_Deg_1p/04_DIS_only", "01_1p/01_Every_theta_e_1p", "01_1p/01_Every_theta_e_1p/00_All_interactions",
+                                        "01_1p/01_Every_theta_e_1p/01_QEL_only", "01_1p/01_Every_theta_e_1p/02_MEC_only", "01_1p/01_Every_theta_e_1p/03_RES_only",
+                                        "01_1p/01_Every_theta_e_1p/04_DIS_only"};
 
     for (string folders_name: ETrans_Daughter_Folders) {
         MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
@@ -643,19 +647,31 @@ void EventAnalyser() {
 
 //    plots->Add(ETrans_Folder);
 
-    string ETrans_15_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
-    string ETrans_All_Int_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
-    string ETrans_QEL_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[4] + "/";
-    string ETrans_MEC_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
-    string ETrans_RES_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
-    string ETrans_DIS_15_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
+    string ETrans_15_stack_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
+    string ETrans_All_Int_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
+    string ETrans_QEL_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[4] + "/";
+    string ETrans_MEC_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
+    string ETrans_RES_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
+    string ETrans_DIS_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
+    string ETrans_All_Ang_stack_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[8] + "/";
+    string ETrans_All_Int_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[9] + "/";
+    string ETrans_QEL_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[10] + "/";
+    string ETrans_MEC_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[11] + "/";
+    string ETrans_RES_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[12] + "/";
+    string ETrans_DIS_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[13] + "/";
 
-    string ETrans_All_Ang_stack_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[8] + "/";
-    string ETrans_All_Int_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[9] + "/";
-    string ETrans_QEL_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[10] + "/";
-    string ETrans_MEC_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[11] + "/";
-    string ETrans_RES_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[12] + "/";
-    string ETrans_DIS_All_Ang_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[13] + "/";
+    string ETrans_15_stack_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[15] + "/";
+    string ETrans_All_Int_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[16] + "/";
+    string ETrans_QEL_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[17] + "/";
+    string ETrans_MEC_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[18] + "/";
+    string ETrans_RES_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[19] + "/";
+    string ETrans_DIS_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[20] + "/";
+    string ETrans_All_Ang_stack_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[21] + "/";
+    string ETrans_All_Int_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[22] + "/";
+    string ETrans_QEL_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[23] + "/";
+    string ETrans_MEC_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[24] + "/";
+    string ETrans_RES_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[25] + "/";
+    string ETrans_DIS_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[26] + "/";
     //</editor-fold>
 
     //<editor-fold desc="Ecal plots directories">
@@ -705,7 +721,7 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
-    bool calculate_2p = true, calculate_MicroBooNE = true;
+    bool calculate_1p = true, calculate_2p = true, calculate_MicroBooNE = true;
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2148,11 +2164,80 @@ void EventAnalyser() {
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
 
-    //<editor-fold desc="ET for every theta_e">
+    string tET_All_Ang = "ET #omega for every #theta_{e}", tET15 = "ET #omega Around #theta_{e} = 15#circ";
+
+    //<editor-fold desc="ET for every theta_e (1p)">
+//    THStack *sET_All_Ang_All_Int_1p_CD = new THStack("ET for all #theta_{e} (1p, CD)",
+//                                               "ET #omega for all #theta_{e} (1p, CD);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET_All_Ang_All_Int_1p_FD = new THStack("ET for all #theta_{e} (1p)", "ET #omega for all #theta_{e} (1p);#omega = E_{beam}-E_{e} [GeV]");
+    string sET_All_Ang_All_Int_1p_CD_Dir = ETrans_All_Ang_stack_1p_Directory, sET_All_Ang_All_Int_1p_FD_Dir = ETrans_All_Ang_stack_1p_Directory;
+
+//    TH1D *hET_All_Ang_All_Int_1p_CD = new TH1D("ET for all #theta_{e} (All Int., 1p, CD)",
+//                                               "ET #omega for all #theta_{e} (All Int., 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_QEL_1p_CD = new TH1D("ET for all #theta_{e} (QEL Only, 1p, CD)",
+//                                           "ET #omega for all #theta_{e} (QEL Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_MEC_1p_CD = new TH1D("ET for all #theta_{e} (MEC Only, 1p, CD)",
+//                                           "ET #omega for all #theta_{e} (MEC Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_RES_1p_CD = new TH1D("ET for all #theta_{e} (RES Only, 1p, CD)",
+//                                           "ET #omega for all #theta_{e} (RES Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET_All_Ang_DIS_1p_CD = new TH1D("ET for all #theta_{e} (DIS Only, 1p, CD)",
+//                                           "ET #omega for all #theta_{e} (DIS Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_All_Int_1p_FD = new TH1D("ET for all #theta_{e} (All Int., 1p)",
+                                               "ET #omega for all #theta_{e} (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_QEL_1p_FD = new TH1D("ET for all #theta_{e} (QEL Only, 1p, FD)",
+                                           "ET #omega for all #theta_{e} (QEL Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_MEC_1p_FD = new TH1D("ET for all #theta_{e} (MEC Only, 1p, FD)",
+                                           "ET #omega for all #theta_{e} (MEC Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_RES_1p_FD = new TH1D("ET for all #theta_{e} (RES Only, 1p, FD)",
+                                           "ET #omega for all #theta_{e} (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET_All_Ang_DIS_1p_FD = new TH1D("ET for all #theta_{e} (DIS Only, 1p, FD)",
+                                           "ET #omega for all #theta_{e} (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hET_All_Ang_All_Int_1p_CD_Dir = ETrans_All_Int_All_Ang_1p_Directory, hET_All_Ang_All_Int_1p_FD_Dir = ETrans_All_Int_All_Ang_1p_Directory;
+    string hET_All_Ang_QEL_1p_CD_Dir = ETrans_QEL_All_Ang_1p_Directory, hET_All_Ang_QEL_1p_FD_Dir = ETrans_QEL_All_Ang_1p_Directory;
+    string hET_All_Ang_MEC_1p_CD_Dir = ETrans_MEC_All_Ang_1p_Directory, hET_All_Ang_MEC_1p_FD_Dir = ETrans_MEC_All_Ang_1p_Directory;
+    string hET_All_Ang_RES_1p_CD_Dir = ETrans_RES_All_Ang_1p_Directory, hET_All_Ang_RES_1p_FD_Dir = ETrans_RES_All_Ang_1p_Directory;
+    string hET_All_Ang_DIS_1p_CD_Dir = ETrans_DIS_All_Ang_1p_Directory, hET_All_Ang_DIS_1p_FD_Dir = ETrans_DIS_All_Ang_1p_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="ET around 15 Deg (1p)">
+    /* ET around 15 Deg */
+//    THStack *sET15_All_Int_1p_CD = new THStack("ET around #theta_{e} = 15#circ (1p, CD)",
+//                                               "ET #omega Around #theta_{e} = 15#circ (1p, CD);#omega = E_{beam}-E_{e} [GeV]");
+    THStack *sET15_All_Int_1p_FD = new THStack("ET around #theta_{e} = 15#circ (1p)", "ET #omega Around #theta_{e} = 15#circ (1p);#omega = E_{beam}-E_{e} [GeV]");
+    string sET15_All_Int_1p_CD_Dir = ETrans_15_stack_1p_Directory, sET15_All_Int_1p_FD_Dir = ETrans_15_stack_1p_Directory;
+
+//    TH1D *hET15_All_Int_1p_CD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 1p, CD)",
+//                                         "ET #omega Around #theta_{e} = 15#circ (All Int., 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_QEL_1p_CD = new TH1D("ET around #theta_{e} = 15#circ (QEL Only, 1p, CD)",
+//                                     "ET #omega Around #theta_{e} = 15#circ (QEL Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_MEC_1p_CD = new TH1D("ET around #theta_{e} = 15#circ (MEC Only, 1p, CD)",
+//                                     "ET #omega Around #theta_{e} = 15#circ (MEC Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_RES_1p_CD = new TH1D("ET around #theta_{e} = 15#circ (RES Only, 1p, CD)",
+//                                     "ET #omega Around #theta_{e} = 15#circ (RES Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+//    TH1D *hET15_DIS_1p_CD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 1p, CD)",
+//                                     "ET #omega Around #theta_{e} = 15#circ (DIS Only, 1p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_All_Int_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 1p)",
+                                         "ET #omega Around #theta_{e} = 15#circ (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_QEL_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (QEL Only, 1p, FD)",
+                                     "ET #omega Around #theta_{e} = 15#circ (QEL Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_MEC_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (MEC Only, 1p, FD)",
+                                     "ET #omega Around #theta_{e} = 15#circ (MEC Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_RES_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (RES Only, 1p, FD)",
+                                     "ET #omega Around #theta_{e} = 15#circ (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hET15_DIS_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 1p, FD)",
+                                     "ET #omega Around #theta_{e} = 15#circ (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hET15_All_Int_1p_CD_Dir = ETrans_All_Int_15_1p_Directory, hET15_All_Int_1p_FD_Dir = ETrans_All_Int_15_1p_Directory;
+    string hET15_QEL_1p_CD_Dir = ETrans_QEL_15_1p_Directory, hET15_QEL_1p_FD_Dir = ETrans_QEL_15_1p_Directory;
+    string hET15_MEC_1p_CD_Dir = ETrans_MEC_15_1p_Directory, hET15_MEC_1p_FD_Dir = ETrans_MEC_15_1p_Directory;
+    string hET15_RES_1p_CD_Dir = ETrans_RES_15_1p_Directory, hET15_RES_1p_FD_Dir = ETrans_RES_15_1p_Directory;
+    string hET15_DIS_1p_CD_Dir = ETrans_DIS_15_1p_Directory, hET15_DIS_1p_FD_Dir = ETrans_DIS_15_1p_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="ET for every theta_e (2p)">
 //    THStack *sET_All_Ang_All_Int_2p_CD = new THStack("ET for all #theta_{e} (2p, CD)",
 //                                               "ET #omega for all #theta_{e} (2p, CD);#omega = E_{beam}-E_{e} [GeV]");
     THStack *sET_All_Ang_All_Int_2p_FD = new THStack("ET for all #theta_{e} (2p)", "ET #omega for all #theta_{e} (2p);#omega = E_{beam}-E_{e} [GeV]");
-    string sET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Ang_stack_Directory, sET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Ang_stack_Directory;
+    string sET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Ang_stack_2p_Directory, sET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Ang_stack_2p_Directory;
 
 //    TH1D *hET_All_Ang_All_Int_2p_CD = new TH1D("ET for all #theta_{e} (All Int., 2p, CD)",
 //                                               "ET #omega for all #theta_{e} (All Int., 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -2174,20 +2259,19 @@ void EventAnalyser() {
                                            "ET #omega for all #theta_{e} (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hET_All_Ang_DIS_2p_FD = new TH1D("ET for all #theta_{e} (DIS Only, 2p, FD)",
                                            "ET #omega for all #theta_{e} (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Int_All_Ang_Directory, hET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Int_All_Ang_Directory;
-    string hET_All_Ang_QEL_2p_CD_Dir = ETrans_QEL_All_Ang_Directory, hET_All_Ang_QEL_2p_FD_Dir = ETrans_QEL_All_Ang_Directory;
-    string hET_All_Ang_MEC_2p_CD_Dir = ETrans_MEC_All_Ang_Directory, hET_All_Ang_MEC_2p_FD_Dir = ETrans_MEC_All_Ang_Directory;
-    string hET_All_Ang_RES_2p_CD_Dir = ETrans_RES_All_Ang_Directory, hET_All_Ang_RES_2p_FD_Dir = ETrans_RES_All_Ang_Directory;
-    string hET_All_Ang_DIS_2p_CD_Dir = ETrans_DIS_All_Ang_Directory, hET_All_Ang_DIS_2p_FD_Dir = ETrans_DIS_All_Ang_Directory;
-    string tET_All_Ang = "ET #omega for every #theta_{e}";
+    string hET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Int_All_Ang_2p_Directory, hET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Int_All_Ang_2p_Directory;
+    string hET_All_Ang_QEL_2p_CD_Dir = ETrans_QEL_All_Ang_2p_Directory, hET_All_Ang_QEL_2p_FD_Dir = ETrans_QEL_All_Ang_2p_Directory;
+    string hET_All_Ang_MEC_2p_CD_Dir = ETrans_MEC_All_Ang_2p_Directory, hET_All_Ang_MEC_2p_FD_Dir = ETrans_MEC_All_Ang_2p_Directory;
+    string hET_All_Ang_RES_2p_CD_Dir = ETrans_RES_All_Ang_2p_Directory, hET_All_Ang_RES_2p_FD_Dir = ETrans_RES_All_Ang_2p_Directory;
+    string hET_All_Ang_DIS_2p_CD_Dir = ETrans_DIS_All_Ang_2p_Directory, hET_All_Ang_DIS_2p_FD_Dir = ETrans_DIS_All_Ang_2p_Directory;
     //</editor-fold>
 
-    //<editor-fold desc="ET around 15 Deg">
+    //<editor-fold desc="ET around 15 Deg (2p)">
     /* ET around 15 Deg */
 //    THStack *sET15_All_Int_2p_CD = new THStack("ET around #theta_{e} = 15#circ (2p, CD)",
 //                                               "ET #omega Around #theta_{e} = 15#circ (2p, CD);#omega = E_{beam}-E_{e} [GeV]");
     THStack *sET15_All_Int_2p_FD = new THStack("ET around #theta_{e} = 15#circ (2p)", "ET #omega Around #theta_{e} = 15#circ (2p);#omega = E_{beam}-E_{e} [GeV]");
-    string sET15_All_Int_2p_CD_Dir = ETrans_15_stack_Directory, sET15_All_Int_2p_FD_Dir = ETrans_15_stack_Directory;
+    string sET15_All_Int_2p_CD_Dir = ETrans_15_stack_2p_Directory, sET15_All_Int_2p_FD_Dir = ETrans_15_stack_2p_Directory;
 
 //    TH1D *hET15_All_Int_2p_CD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 2p, CD)",
 //                                         "ET #omega Around #theta_{e} = 15#circ (All Int., 2p, CD);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -2209,12 +2293,11 @@ void EventAnalyser() {
                                      "ET #omega Around #theta_{e} = 15#circ (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hET15_DIS_2p_FD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 2p, FD)",
                                      "ET #omega Around #theta_{e} = 15#circ (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hET15_All_Int_2p_CD_Dir = ETrans_All_Int_15_Directory, hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_Directory;
-    string hET15_QEL_2p_CD_Dir = ETrans_QEL_15_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_Directory;
-    string hET15_MEC_2p_CD_Dir = ETrans_MEC_15_Directory, hET15_MEC_2p_FD_Dir = ETrans_MEC_15_Directory;
-    string hET15_RES_2p_CD_Dir = ETrans_RES_15_Directory, hET15_RES_2p_FD_Dir = ETrans_RES_15_Directory;
-    string hET15_DIS_2p_CD_Dir = ETrans_DIS_15_Directory, hET15_DIS_2p_FD_Dir = ETrans_DIS_15_Directory;
-    string tET15 = "ET #omega Around #theta_{e} = 15#circ";
+    string hET15_All_Int_2p_CD_Dir = ETrans_All_Int_15_2p_Directory, hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_2p_Directory;
+    string hET15_QEL_2p_CD_Dir = ETrans_QEL_15_2p_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_2p_Directory;
+    string hET15_MEC_2p_CD_Dir = ETrans_MEC_15_2p_Directory, hET15_MEC_2p_FD_Dir = ETrans_MEC_15_2p_Directory;
+    string hET15_RES_2p_CD_Dir = ETrans_RES_15_2p_Directory, hET15_RES_2p_FD_Dir = ETrans_RES_15_2p_Directory;
+    string hET15_DIS_2p_CD_Dir = ETrans_DIS_15_2p_Directory, hET15_DIS_2p_FD_Dir = ETrans_DIS_15_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -3398,6 +3481,51 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+        //</editor-fold>
+
+//  1p ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="1e1p">
+        if ((calculate_1p == true) && ((Nf_Prime == 2) && (Np == 1))) { // for 2p calculations (with any number of neutrals)
+//        if ((calculate_2p == true) && ((Nf == 2) && (Np == 1))) { // for 2p calculations
+            for (auto &e: electrons) {
+                if (e->getRegion() == CD) {
+//                    hET_All_Ang_All_Int_1p_FD->Fill(beamE - E_e);
+//                    if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_All_Int_1p_CD->Fill(beamE - E_e); }
+//
+//                    if (qel) {
+//                        hET_All_Ang_QEL_1p_FD->Fill(beamE - E_e);
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_QEL_1p_CD->Fill(beamE - E_e); }
+//                    } else if (mec) {
+//                        hET_All_Ang_MEC_1p_FD->Fill(beamE - E_e);
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_MEC_1p_CD->Fill(beamE - E_e); }
+//                    } else if (res) {
+//                        hET_All_Ang_RES_1p_FD->Fill(beamE - E_e);
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_RES_1p_CD->Fill(beamE - E_e); }
+//                    } else if (dis) {
+//                        hET_All_Ang_DIS_1p_FD->Fill(beamE - E_e);
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_DIS_1p_CD->Fill(beamE - E_e); }
+//                    }
+                } else if (e->getRegion() == FD) {
+                    hET_All_Ang_All_Int_1p_FD->Fill(beamE - E_e);
+                    if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_All_Int_1p_FD->Fill(beamE - E_e); }
+
+                    if (qel) {
+                        hET_All_Ang_QEL_1p_FD->Fill(beamE - E_e);
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_QEL_1p_FD->Fill(beamE - E_e); }
+                    } else if (mec) {
+                        hET_All_Ang_MEC_1p_FD->Fill(beamE - E_e);
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_MEC_1p_FD->Fill(beamE - E_e); }
+                    } else if (res) {
+                        hET_All_Ang_RES_1p_FD->Fill(beamE - E_e);
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_RES_1p_FD->Fill(beamE - E_e); }
+                    } else if (dis) {
+                        hET_All_Ang_DIS_1p_FD->Fill(beamE - E_e);
+                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) { hET15_DIS_1p_FD->Fill(beamE - E_e); }
+                    }
+                }
+            } // end of loop over electrons vector
+        } // end of 1p cuts if
         //</editor-fold>
 
 //  1e2pXy --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -6932,6 +7060,22 @@ void EventAnalyser() {
         cout << "\n\nPlotting Energy Transfer (ET) histograms...\n\n";
 
         if (ETrans_All_Int_plots) {
+            double ETrans_All_Ang_All_Int_integral_1p = hET_All_Ang_All_Int_1p_FD->Integral();
+//            double ETrans_All_Ang_All_Int_integral_1p = hET_All_Ang_All_Int_1p_CD->Integral() + hET_All_Ang_All_Int_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_All_Int_1p_CD, norm_ET_plots, true, ETrans_All_Ang_All_Int_integral_1p, tET_All_Ang, "All Int., 1p", 0.06, 0.0425, 0.0425,
+//                          plots, 2, false, true, sET_All_Ang_All_Int_1p_CD, "ET_All_Ang_All_Int_1p", hET_All_Ang_All_Int_1p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_All_Int_1p_FD, norm_ET_plots, true, ETrans_All_Ang_All_Int_integral_1p, tET_All_Ang, "All Int., 1p", 0.06, 0.0425, 0.0425,
+                          plots, 2, false, true, sET_All_Ang_All_Int_1p_FD, "ET_All_Ang_All_Int_1p", hET_All_Ang_All_Int_1p_FD_Dir, "FD", kBlack, true, true, true);
+
+            double ETrans15_All_Int_integral_1p = hET15_All_Int_1p_FD->Integral();
+//            double ETrans15_All_Int_integral_1p = hET15_All_Int_1p_CD->Integral() + hET15_All_Int_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET15_All_Int_1p_CD, norm_ET_plots, true, ETrans15_All_Int_integral_1p, tET15, "All Int., 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_1p_CD, "ETrans_15_All_Int_1p", hET15_All_Int_1p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET15_All_Int_1p_FD, norm_ET_plots, true, ETrans15_All_Int_integral_1p, tET15, "All Int., 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sET15_All_Int_1p_FD, "ETrans_15_All_Int_1p", hET15_All_Int_1p_FD_Dir, "", kBlack, true, true, true);
+
             double ETrans_All_Ang_All_Int_integral_2p = hET_All_Ang_All_Int_2p_FD->Integral();
 //            double ETrans_All_Ang_All_Int_integral_2p = hET_All_Ang_All_Int_2p_CD->Integral() + hET_All_Ang_All_Int_2p_FD->Integral();
 
@@ -6950,6 +7094,22 @@ void EventAnalyser() {
         }
 
         if (ETrans_QEL_plots) {
+            double ETrans_All_Ang_QEL_integral_1p = hET_All_Ang_QEL_1p_FD->Integral();
+//            double ETrans_All_Ang_QEL_integral_1p = hET_All_Ang_QEL_1p_CD->Integral() + hET_All_Ang_QEL_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_QEL_1p_CD, norm_ET_plots, true, ETrans_All_Ang_QEL_integral_1p, tET_All_Ang, "QEL Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_1p_CD, "ET_All_Ang_QEL_1p", hET_All_Ang_QEL_1p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_QEL_1p_FD, norm_ET_plots, true, ETrans_All_Ang_QEL_integral_1p, tET_All_Ang, "QEL Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_1p_FD, "ET_All_Ang_QEL_1p", hET_All_Ang_QEL_1p_FD_Dir, "FD", kBlack, true, true, true);
+
+            double ETrans15_QEL_integral_1p = hET15_QEL_1p_FD->Integral();
+//            double ETrans15_QEL_integral_1p = hET15_QEL_1p_CD->Integral() + hET15_QEL_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET15_QEL_1p_CD, norm_ET_plots, true, ETrans15_QEL_integral_1p, tET15, "QEL Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_1p_CD, "ETrans_15_QEL_Only_1p", hET15_QEL_1p_CD_Dir, "CD", kBlue, true, true, true);
+            histPlotter1D(c1, hET15_QEL_1p_FD, norm_ET_plots, true, ETrans15_QEL_integral_1p, tET15, "QEL Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sET15_All_Int_1p_FD, "ETrans_15_QEL_Only_1p", hET15_QEL_1p_FD_Dir, "", kBlue, true, true, true);
+
             double ETrans_All_Ang_QEL_integral_2p = hET_All_Ang_QEL_2p_FD->Integral();
 //            double ETrans_All_Ang_QEL_integral_2p = hET_All_Ang_QEL_2p_CD->Integral() + hET_All_Ang_QEL_2p_FD->Integral();
 
@@ -6968,6 +7128,22 @@ void EventAnalyser() {
         }
 
         if (ETrans_MEC_plots) {
+            double ETrans_All_Ang_MEC_integral_1p = hET_All_Ang_MEC_1p_FD->Integral();
+//            double ETrans_All_Ang_MEC_integral_1p = hET_All_Ang_MEC_1p_CD->Integral() + hET_All_Ang_MEC_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_MEC_1p_CD, norm_ET_plots, true, ETrans_All_Ang_MEC_integral_1p, tET_All_Ang, "MEC Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_1p_CD, "ET_All_Ang_MEC_1p", hET_All_Ang_MEC_1p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_MEC_1p_FD, norm_ET_plots, true, ETrans_All_Ang_MEC_integral_1p, tET_All_Ang, "MEC Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_1p_FD, "ET_All_Ang_MEC_1p", hET_All_Ang_MEC_1p_FD_Dir, "FD", kBlack, true, true, true);
+
+            double ETrans15_MEC_integral_1p = hET15_MEC_1p_FD->Integral();
+//            double ETrans15_MEC_integral_1p = hET15_MEC_1p_CD->Integral() + hET15_MEC_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET15_MEC_1p_CD, norm_ET_plots, true, ETrans15_MEC_integral_1p, tET15, "MEC Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_1p_CD, "ETrans_15_MEC_Only_1p", hET15_MEC_1p_CD_Dir, "CD", kRed, true, true, true);
+            histPlotter1D(c1, hET15_MEC_1p_FD, norm_ET_plots, true, ETrans15_MEC_integral_1p, tET15, "MEC Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sET15_All_Int_1p_FD, "ETrans_15_MEC_Only_1p", hET15_MEC_1p_FD_Dir, "", kRed, true, true, true);
+
             double ETrans_All_Ang_MEC_integral_2p = hET_All_Ang_MEC_2p_FD->Integral();
 //            double ETrans_All_Ang_MEC_integral_2p = hET_All_Ang_MEC_2p_CD->Integral() + hET_All_Ang_MEC_2p_FD->Integral();
 
@@ -6986,6 +7162,22 @@ void EventAnalyser() {
         }
 
         if (ETrans_RES_plots) {
+            double ETrans_All_Ang_RES_integral_1p = hET_All_Ang_RES_1p_FD->Integral();
+//            double ETrans_All_Ang_RES_integral_1p = hET_All_Ang_RES_1p_CD->Integral() + hET_All_Ang_RES_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_RES_1p_CD, norm_ET_plots, true, ETrans_All_Ang_RES_integral_1p, tET_All_Ang, "RES Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_1p_CD, "ET_All_Ang_RES_1p", hET_All_Ang_RES_1p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_RES_1p_FD, norm_ET_plots, true, ETrans_All_Ang_RES_integral_1p, tET_All_Ang, "RES Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_1p_FD, "ET_All_Ang_RES_1p", hET_All_Ang_RES_1p_FD_Dir, "FD", kBlack, true, true, true);
+
+            double ETrans15_RES_integral_1p = hET15_RES_1p_FD->Integral();
+//            double ETrans15_RES_integral_1p = hET15_RES_1p_CD->Integral() + hET15_RES_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET15_RES_1p_CD, norm_ET_plots, true, ETrans15_RES_integral_1p, tET15, "RES Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_1p_CD, "ETrans_15_RES_1p", hET15_RES_1p_CD_Dir, "CD", kGreen, true, true, true);
+            histPlotter1D(c1, hET15_RES_1p_FD, norm_ET_plots, true, ETrans15_RES_integral_1p, tET15, "RES Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sET15_All_Int_1p_FD, "ETrans_15_RES_1p", hET15_RES_1p_FD_Dir, "", kGreen, true, true, true);
+
             double ETrans_All_Ang_RES_integral_2p = hET_All_Ang_RES_2p_FD->Integral();
 //            double ETrans_All_Ang_RES_integral_2p = hET_All_Ang_RES_2p_CD->Integral() + hET_All_Ang_RES_2p_FD->Integral();
 
@@ -7004,6 +7196,22 @@ void EventAnalyser() {
         }
 
         if (ETrans_DIS_plots) {
+            double ETrans_All_Ang_DIS_integral_1p = hET_All_Ang_DIS_1p_FD->Integral();
+//            double ETrans_All_Ang_DIS_integral_1p = hET_All_Ang_DIS_1p_CD->Integral() + hET_All_Ang_DIS_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET_All_Ang_DIS_1p_CD, norm_ET_plots, true, ETrans_All_Ang_DIS_integral_1p, tET_All_Ang, "DIS Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+//                          false, true, sET_All_Ang_All_Int_1p_CD, "ET_All_Ang_DIS_1p", hET_All_Ang_DIS_1p_CD_Dir, "CD", kBlack, true, true, true);
+            histPlotter1D(c1, hET_All_Ang_DIS_1p_FD, norm_ET_plots, true, ETrans_All_Ang_DIS_integral_1p, tET_All_Ang, "DIS Only, 1p", 0.06, 0.0425, 0.0425, plots, 2,
+                          false, true, sET_All_Ang_All_Int_1p_FD, "ET_All_Ang_DIS_1p", hET_All_Ang_DIS_1p_FD_Dir, "FD", kBlack, true, true, true);
+
+            double ETrans15_DIS_integral_1p = hET15_DIS_1p_FD->Integral();
+//            double ETrans15_DIS_integral_1p = hET15_DIS_1p_CD->Integral() + hET15_DIS_1p_FD->Integral();
+
+//            histPlotter1D(c1, hET15_DIS_1p_CD, norm_ET_plots, true, ETrans15_DIS_integral_1p, tET15, "DIS Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+//                          sET15_All_Int_1p_CD, "ETrans_15_DIS_1p", hET15_DIS_1p_CD_Dir, "CD", kMagenta, true, true, true);
+            histPlotter1D(c1, hET15_DIS_1p_FD, norm_ET_plots, true, ETrans15_DIS_integral_1p, tET15, "DIS Only, 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                          sET15_All_Int_1p_FD, "ETrans_15_DIS_1p", hET15_DIS_1p_FD_Dir, "", kMagenta, true, true, true);
+
             double ETrans_All_Ang_DIS_integral_2p = hET_All_Ang_DIS_2p_FD->Integral();
 //            double ETrans_All_Ang_DIS_integral_2p = hET_All_Ang_DIS_2p_CD->Integral() + hET_All_Ang_DIS_2p_FD->Integral();
 
@@ -7024,9 +7232,21 @@ void EventAnalyser() {
 //  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
 
         if (ETrans_All_Int_plots && ETrans_QEL_plots && ETrans_MEC_plots && ETrans_RES_plots && ETrans_DIS_plots) {
+//            stackPlotter1D(c1, sET_All_Ang_All_Int_1p_CD, norm_ET_plots, tET_All_Ang, "1p", plots, hET_All_Ang_All_Int_1p_CD, hET_All_Ang_QEL_1p_CD, hET_All_Ang_MEC_1p_CD,
+//                           hET_All_Ang_RES_1p_CD, hET_All_Ang_DIS_1p_CD, "01_ET_All_Ang_stack", sET_All_Ang_All_Int_1p_CD_Dir, "CD");
+            stackPlotter1D(c1, sET_All_Ang_All_Int_1p_FD, norm_ET_plots, tET_All_Ang, "1p", plots, hET_All_Ang_All_Int_1p_FD, hET_All_Ang_QEL_1p_FD,
+                           hET_All_Ang_MEC_1p_FD,
+                           hET_All_Ang_RES_1p_FD, hET_All_Ang_DIS_1p_FD, "02_ET_All_Ang_stack", sET_All_Ang_All_Int_1p_FD_Dir, "");
+
+//            stackPlotter1D(c1, sET15_All_Int_1p_CD, norm_ET_plots, tET15, "1p", plots, hET15_All_Int_1p_CD, hET15_QEL_1p_CD, hET15_MEC_1p_CD,
+//                           hET15_RES_1p_CD, hET15_DIS_1p_CD, "01_ET15_stack", sET15_All_Int_1p_CD_Dir, "CD");
+            stackPlotter1D(c1, sET15_All_Int_1p_FD, norm_ET_plots, tET15, "1p", plots, hET15_All_Int_1p_FD, hET15_QEL_1p_FD, hET15_MEC_1p_FD,
+                           hET15_RES_1p_FD, hET15_DIS_1p_FD, "02_ET15_stack", sET15_All_Int_1p_FD_Dir, "");
+
 //            stackPlotter1D(c1, sET_All_Ang_All_Int_2p_CD, norm_ET_plots, tET_All_Ang, "2p", plots, hET_All_Ang_All_Int_2p_CD, hET_All_Ang_QEL_2p_CD, hET_All_Ang_MEC_2p_CD,
 //                           hET_All_Ang_RES_2p_CD, hET_All_Ang_DIS_2p_CD, "01_ET_All_Ang_stack", sET_All_Ang_All_Int_2p_CD_Dir, "CD");
-            stackPlotter1D(c1, sET_All_Ang_All_Int_2p_FD, norm_ET_plots, tET_All_Ang, "2p", plots, hET_All_Ang_All_Int_2p_FD, hET_All_Ang_QEL_2p_FD, hET_All_Ang_MEC_2p_FD,
+            stackPlotter1D(c1, sET_All_Ang_All_Int_2p_FD, norm_ET_plots, tET_All_Ang, "2p", plots, hET_All_Ang_All_Int_2p_FD, hET_All_Ang_QEL_2p_FD,
+                           hET_All_Ang_MEC_2p_FD,
                            hET_All_Ang_RES_2p_FD, hET_All_Ang_DIS_2p_FD, "02_ET_All_Ang_stack", sET_All_Ang_All_Int_2p_FD_Dir, "");
 
 //            stackPlotter1D(c1, sET15_All_Int_2p_CD, norm_ET_plots, tET15, "2p", plots, hET15_All_Int_2p_CD, hET15_QEL_2p_CD, hET15_MEC_2p_CD,
