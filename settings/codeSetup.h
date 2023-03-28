@@ -142,8 +142,10 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //std::string AnalyseFileDir = "/home/alon/project/Downloads/";
 //std::string AnalyseFile = AnalyseFileDir + "Ca48_G18_10a_02_11b_Q205_598636MeV.root";
 
-std::string AnalyseFileDir = "lustre19/expphy/volatile/clas12/asportes/truthLevelROOTFiles/C12_G18_10a_02_11b_207052MeV";
-std::string AnalyseFile = AnalyseFileDir + "Ca48_G18_10a_02_11b_Q205_598636MeV.root";
+std::string AnalyseFilePath = "lustre19/expphy/volatile/clas12/asportes/truthLevelROOTFiles/C12_G18_10a_02_11b_207052MeV";
+std::string AnalyseFileSample = "C12_G18_10a_02_11b_207052MeV";
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+std::string AnalyseFile = AnalyseFileDir + "C12_G18_10a_02_11b_207052MeV.root";
 
 //std::string AnalyseFilePath = "mnt/d/e4nu/root_data_files/Detector_sim_truth_level_files";
 //std::string AnalyseFileSample = "598636MeV_Q2_0_5";
