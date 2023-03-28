@@ -34,41 +34,41 @@ void gst::Loop() {
     //<editor-fold desc="FSI settings">
     cout << "Creating plots directories...\n\n";
 
-    system("rm -r " + WorkingDirectory + "plots"); // clear old stuff in Parent_Folder
-    system("mkdir -p " + WorkingDirectory + "plots");
+    system(("rm -r " + WorkingDirectory + "plots").c_str()); // clear old stuff in Parent_Folder
+    system(("mkdir -p " + WorkingDirectory + "plots").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/E_cal_restorations");
-    system("mkdir -p " + WorkingDirectory + "plots/E_cal_restorations/Other");
+    system(("mkdir -p " + WorkingDirectory + "plots/E_cal_restorations").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/E_cal_restorations/Other").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_histograms");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_histograms/El_histograms");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_histograms/El_VS_theta_l");
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_histograms").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_histograms/El_histograms").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_histograms/El_VS_theta_l").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_VS_q3");
-    system("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Inclusive_plots");
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_DIS_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_MEC_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_QEL_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_histograms_RES_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_VS_q3").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Inclusive_plots").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/all_interactions");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/DIS_only");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/MEC_only");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/QEL_only");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/RES_only");
-    system("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/momentum_distributions");
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/all_interactions").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/DIS_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/MEC_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/QEL_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab/RES_only").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/momentum_distributions").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/momentum_histograms");
-    system("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/1n1p");
-    system("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/2p");
+    system(("mkdir -p " + WorkingDirectory + "plots/momentum_histograms").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/1n1p").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/2p").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/phi_histograms");
+    system(("mkdir -p " + WorkingDirectory + "plots/phi_histograms").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/theta_histograms");
+    system(("mkdir -p " + WorkingDirectory + "plots/theta_histograms").c_str());
     //</editor-fold>
 
 //  FSI settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -437,20 +437,20 @@ void gst::Loop() {
         cout << "Clearing old plots...\n";
         cout << "\n";
 
-        system("find " + WorkingDirectory + "plots -type f -iname '*.png' -delete"); // Delete existing .png files
+        system(("find " + WorkingDirectory + "plots -type f -iname '*.png' -delete").c_str()); // Delete existing .png files
     } else if (delete_png_files == false && delete_root_files == true) {
         cout << "\n";
         cout << "Clearing old root files...\n";
         cout << "\n";
 
-        system("find " + WorkingDirectory + "plots -type f -iname '*.root' -delete"); // Delete existing .root files
+        system(("find " + WorkingDirectory + "plots -type f -iname '*.root' -delete").c_str()); // Delete existing .root files
     } else if (delete_png_files == true && delete_root_files == true) {
         cout << "\n";
         cout << "Clearing old plots & root files...\n";
         cout << "\n";
 
-        system("find " + WorkingDirectory + "plots -type f -iname '*.png' -delete"); // Delete existing .png files
-        system("find " + WorkingDirectory + "plots -type f -iname '*.root' -delete"); // Delete existing .root files
+        system(("find " + WorkingDirectory + "plots -type f -iname '*.png' -delete").c_str()); // Delete existing .png files
+        system(("find " + WorkingDirectory + "plots -type f -iname '*.root' -delete").c_str()); // Delete existing .root files
     } else {
         cout << "\n";
         cout << "No files were cleared.\n";
@@ -4550,13 +4550,13 @@ void gst::Loop() {
 
     //<editor-fold desc="Creating directories">
 
-    system("mkdir -p " + WorkingDirectory + "plots");
-    system("mkdir -p " + WorkingDirectory + "plots/theta_histograms");
-    system("mkdir -p " + WorkingDirectory + "plots/phi_histograms");
+    system(("mkdir -p " + WorkingDirectory + "plots").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/theta_histograms").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/phi_histograms").c_str());
 
-    system("mkdir -p " + WorkingDirectory + "plots/momentum_histograms");
-    system("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/2p");
-    system("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/1n1p");
+    system(("mkdir -p " + WorkingDirectory + "plots/momentum_histograms").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/2p").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/momentum_histograms/1n1p").c_str());
 
     //</editor-fold>
 
@@ -4564,7 +4564,7 @@ void gst::Loop() {
 
     //<editor-fold desc="Saving settings to log file">
     if (delete_txt_files == true) {
-        system("find " + WorkingDirectory + "plots -type f -iname '*.txt' -delete"); // Delete existing .txt files
+        system(("find " + WorkingDirectory + "plots -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
     }
 
     ofstream myLogFile;
