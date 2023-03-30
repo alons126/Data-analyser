@@ -1548,6 +1548,12 @@ void EventAnalyser() {
     string hP_p_1_2p_Dir = Momentum_2p_Directory, hP_p_2_2p_Dir = Momentum_2p_Directory;
     //</editor-fold>
 
+    //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
+    TH2D *hP_p_1_vs_P_p_2_2p = new TH2D("P_{p_{1}} vs. P_{p_{2}} (2p)", "P_{p_{1}} vs. P_{p_{2}} (2p);P_{p_{1}} [GeV];P_{p_{2}} [GeV]",
+                                        250, 0, beamE * 1.1, 250, 0, beamE * 1.1);
+    string hP_p_1_vs_P_p_2_2p_Dir = Momentum_2p_Directory;
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
@@ -2327,13 +2333,23 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T">
-    TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#phi_{T,L} (All Int., 2p)",
+    TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p)",
                                             "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
                                             250, -10, 190, 250, 0, beamE * 1.1);
-    TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#phi_{T,tot} (All Int., 2p)",
+    TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p)",
                                               "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
                                               250, -10, 190, 250, 0, beamE * 1.1);
     string hEcal_vs_dAlpha_T_L_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory, hEcal_vs_dAlpha_T_tot_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory;
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal vs. dP_T">
+    TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #delta#P_{T,L} (All Int., 2p)",
+                                        "E_{cal} vs. #delta#P_{T,L} (All Int., 2p);#delta#P_{T,L} [Deg];E_{cal} [GeV];",
+                                        250, -10, 190, 250, 0, beamE * 1.1);
+    TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #delta#P_{T,tot} (All Int., 2p)",
+                                          "E_{cal} vs. #delta#P_{T,tot} (All Int., 2p);#delta#P_{T,tot} [Deg];E_{cal} [GeV];",
+                                          250, -10, 190, 250, 0, beamE * 1.1);
+    string hEcal_vs_dP_T_L_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory, hEcal_vs_dP_T_tot_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -4708,6 +4724,7 @@ void EventAnalyser() {
 
             hP_p_1_2p->Fill(P_1_2p_3v.Mag());
             hP_p_2_2p->Fill(P_2_2p_3v.Mag());
+            hP_p_1_vs_P_p_2_2p->Fill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag());
 
             P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
                                    P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz());
@@ -4757,6 +4774,8 @@ void EventAnalyser() {
 
             hEcal_vs_dAlpha_T_L_2p->Fill(dAlpha_T_L, Ecal_2p);
             hEcal_vs_dAlpha_T_tot_2p->Fill(dAlpha_T_tot, Ecal_2p);
+            hEcal_vs_dP_T_L_2p->Fill(dP_T_L_2p_3v.Mag(), Ecal_2p);
+            hEcal_vs_dP_T_tot_2p->Fill(dP_T_tot_2p_3v.Mag(), Ecal_2p);
 
             if (qel) {
                 hEcal_QEL_2p->Fill(Ecal_2p); // Fill Ecal for QEL only
@@ -5701,6 +5720,7 @@ void EventAnalyser() {
         histPlotter1D(c1, hP_piminus_1e_cut_FD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_FD, "04_P_piminus_1e_cut_FD",
                       hP_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, false, true, -1, -1, 0, false);
         //</editor-fold>
+
 ////  Momentum histograms (MicroBooNE, CD & FD)  --------------------------------------------------------------
 //
 ////        double Momentum_integral = P_e_histogram_CD->Integral() + P_e_histogram_FD->Integral();
@@ -5842,6 +5862,10 @@ void EventAnalyser() {
                       true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
         histPlotter1D(c1, hP_p_2_2p, false, true, 1., "Recoil proton momentum P_{p_{2}}", "2p", plots, 2, false, true, sP_2p_FD, "03_P_p_2_2p", hP_p_2_2p_Dir, "", kBlue,
                       true, true, false, true, p_mom_cuts_2p.at(1), p_mom_cuts_2p.at(0), 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
+        histPlotter2D(c1, hP_p_1_vs_P_p_2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hP_p_1_vs_P_p_2_2p_Dir, "04_P_p_1_vs_P_p_2", true);
         //</editor-fold>
 
     } else {
@@ -7299,6 +7323,11 @@ void EventAnalyser() {
         //<editor-fold desc="Ecal vs. dAlpha_T">
         histPlotter2D(c1, hEcal_vs_dAlpha_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_L_2p_Dir, "02_Ecal_vs_dAlpha_T_L", false);
         histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_tot_2p_Dir, "03_Ecal_vs_dAlpha_T_tot", false);
+        //</editor-fold>
+
+        //<editor-fold desc="Ecal vs. dP_T">
+        histPlotter2D(c1, hEcal_vs_dP_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_L_2p_Dir, "02_Ecal_vs_dP_T_L", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_tot_2p_Dir, "03_Ecal_vs_dP_T_tot", false);
         //</editor-fold>
 
     } else {
