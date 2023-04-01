@@ -195,11 +195,12 @@ void gst::Loop() {
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot settings">
-    bool lowest_nentries = true;
+    bool lowest_nentries = false;
     int custom_nentries;
 
     if (lowest_nentries == true) {
-        custom_nentries = 1000000; // 10M entries
+        custom_nentries = 10000; // 100 entries
+//        custom_nentries = 1000000; // 1M entries
 //        custom_nentries = 10000000; // 10M entries
     }
 
@@ -4470,13 +4471,13 @@ void gst::Loop() {
         //<editor-fold desc="E_cal restoration histograms">
 
         //<editor-fold desc="E_cal range">
-        E_cal_QEL_upper_lim_range = BeamEnergy * 1.1;
+        E_cal_QEL_upper_lim_range = BeamEnergy * 1.35;
         E_cal_QEL_lower_lim_range = 0;
-        E_cal_MEC_upper_lim_range = BeamEnergy * 1.1;
+        E_cal_MEC_upper_lim_range = BeamEnergy * 1.35;
         E_cal_MEC_lower_lim_range = 0;
-        E_cal_RES_upper_lim_range = BeamEnergy * 1.1;
+        E_cal_RES_upper_lim_range = BeamEnergy * 1.35;
         E_cal_RES_lower_lim_range = 0;
-        E_cal_DIS_upper_lim_range = BeamEnergy * 1.1;
+        E_cal_DIS_upper_lim_range = BeamEnergy * 1.35;
         E_cal_DIS_lower_lim_range = 0;
 //        E_cal_QEL_upper_lim_range = 2.35;
 //        E_cal_QEL_lower_lim_range = 2.11;
@@ -4834,9 +4835,13 @@ void gst::Loop() {
 // Energy Transfer histograms (all interactions) ------------------------------------------------------
 
     //<editor-fold desc="Energy Transfer histograms (all interactions)">
+    //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
+//    THStack *Energy_Transfer_all_int_15_Stack_2p = new
+//    THStack("ET around 15 degrees Stack (all interactions, 2p)",
+//            "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p);E_{#nu}-E_{l} [GeV]");
     THStack *Energy_Transfer_all_int_15_Stack_2p = new
-    THStack("ET around 15 degrees Stack (all interactions, 2p)",
-            "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p);E_{#nu}-E_{l} [GeV]");
+    THStack("ET #omega around #theta_{l'}=15#circ (all interactions, 2p)",
+            "ET #omega around #theta_{l'}=15#circ (all int., 2p);#omega=E_{l}-E_{l'} [GeV]");
     THStack *Energy_Transfer_all_int_15_Stack_1n1p = new
     THStack("ET around 15 deg Stack (all interactions, 1n1p)",
             "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p);E_{#nu}-E_{l} [GeV]");
@@ -5254,15 +5259,15 @@ void gst::Loop() {
 //    THStack("Truth-level E_{cal} (2p)", "Truth-level E_{cal} (2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV]");
     TH1D *hEcal_all_int_2p = new
     TH1D("Truth-level E_{cal} (all int., 2p)", "Truth-level E_{cal} (all interactions, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV]",
-         150, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
+         100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     TH1D *hEcal_QEL_2p = new
-    TH1D("Truth-level E_{cal} (QEL only, 2p)", "Truth-level E_{cal} (QEL only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 150, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (QEL only, 2p)", "Truth-level E_{cal} (QEL only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
     TH1D *hEcal_MEC_2p = new
-    TH1D("Truth-level E_{cal} (MEC only, 2p)", "Truth-level E_{cal} (MEC only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 150, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (MEC only, 2p)", "Truth-level E_{cal} (MEC only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
     TH1D *hEcal_RES_2p = new
-    TH1D("Truth-level E_{cal} (RES only, 2p)", "Truth-level E_{cal} (RES only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 150, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (RES only, 2p)", "Truth-level E_{cal} (RES only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
     TH1D *hEcal_DIS_2p = new
-    TH1D("Truth-level E_{cal} (DIS only, 2p)", "Truth-level E_{cal} (DIS only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 150, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (DIS only, 2p)", "Truth-level E_{cal} (DIS only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
     //</editor-fold>
 
 // E_cal VS other variables (all interactions, 2p):
@@ -8568,37 +8573,44 @@ void gst::Loop() {
 //  Energy transfer around 15 deg stack (2p only) ------------------------------------------------------
 
         //<editor-fold desc="Energy transfer around 15 deg stack (2p only)">
-        Energy_Transfer_all_int_15_Stack_2p->Draw("nostack");
-        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_2p->Draw("nostack");
+//        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_Trans15_plots) {
+//            Energy_Transfer_all_int_15_Stack_2p->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p) - Normalized");
+//            Energy_Transfer_all_int_15_Stack_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Probability (%)");
+//            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Arbitrary units");
+//            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//
+//        auto E_Trans_15_legend_2p = new
+//        TLegend(0.625, 0.625, 0.9, 0.9);
+////        auto E_Trans_15_legend_2p = new TLegend(0.65, 0.65, 0.9, 0.9);
+//
+//        TLegendEntry *E_Trans_15_all_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_all_2p, "All interactions", "l");
+//        TLegendEntry *E_Trans_15_QEL_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_QEL_2p, "QEL", "l");
+//        TLegendEntry *E_Trans_15_MEC_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_MEC_2p, "MEC", "l");
+//        TLegendEntry *E_Trans_15_RES_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_RES_2p, "RES", "l");
+//        TLegendEntry *E_Trans_15_DIS_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_DIS_2p, "DIS", "l");
+//        E_Trans_15_legend_2p->Draw();
+//
+//        plots->Add(Energy_Transfer_all_int_15_Stack_2p);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_2p.png");
+//        c1->Clear();
 
-        if (normalized_E_Trans15_plots) {
-            Energy_Transfer_all_int_15_Stack_2p->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p) - Normalized");
-            Energy_Transfer_all_int_15_Stack_2p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Probability (%)");
-            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            Energy_Transfer_all_int_15_Stack_2p->GetYaxis()->SetTitle("Arbitrary units");
-            Energy_Transfer_all_int_15_Stack_2p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
+        //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
+        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "ET #omega around #theta_{l'}=15#circ", "2pXnX#pi^{0}", plots,
+//        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "Energy Transfer #omega for every #theta_{l'}", "2p", plots,
+                       E_Trans15_all_2p, E_Trans15_QEL_2p, E_Trans15_MEC_2p, E_Trans15_RES_2p, E_Trans15_DIS_2p,
+                       "Energy_transfer_histogram_15_Stack_linear_scale_2p", "plots/Energy_transfer_histograms/", "");
 
-
-        auto E_Trans_15_legend_2p = new
-        TLegend(0.625, 0.625, 0.9, 0.9);
-//        auto E_Trans_15_legend_2p = new TLegend(0.65, 0.65, 0.9, 0.9);
-
-        TLegendEntry *E_Trans_15_all_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_all_2p, "All interactions", "l");
-        TLegendEntry *E_Trans_15_QEL_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_QEL_2p, "QEL", "l");
-        TLegendEntry *E_Trans_15_MEC_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_MEC_2p, "MEC", "l");
-        TLegendEntry *E_Trans_15_RES_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_RES_2p, "RES", "l");
-        TLegendEntry *E_Trans_15_DIS_entry_2p_stack = E_Trans_15_legend_2p->AddEntry(E_Trans15_DIS_2p, "DIS", "l");
-        E_Trans_15_legend_2p->Draw();
-
-        plots->Add(Energy_Transfer_all_int_15_Stack_2p);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_2p.png");
-        c1->Clear();
         //</editor-fold>
 
 //  Energy transfer around 15 deg stack (1n1p only) ----------------------------------------------------
@@ -8858,7 +8870,7 @@ void gst::Loop() {
         histPlotter1D(c1, hEcal_DIS_2p, normalized_E_cal_plots, false, 1., "Truth-level E_{cal}", "DIS only", 0.06, 0.0425, 0.0425, plots, 2, false, true, sEcal_2p,
                       "05_E_cal_DIS_only", "plots/E_cal_restorations/All_Int_Stack_IPS/", "2p", kBlack, true, true, true);
 
-        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2pXnXpi0", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
+        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2pXnX#pi^{0}", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
 //        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2p", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
                        "00_E_cal_stack", "plots/E_cal_restorations/All_Int_Stack_IPS/", "");
 

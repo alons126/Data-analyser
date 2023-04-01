@@ -1307,7 +1307,8 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
         }
     }
 
-    auto Histogram1DStackLegend = new TLegend(0.77, 0.624, 0.875, 0.89);
+    auto Histogram1DStackLegend = new TLegend(0.76, 0.624, 0.865, 0.89); // TLA
+//    auto Histogram1DStackLegend = new TLegend(0.77, 0.624, 0.875, 0.89); // DSA
 //    auto Histogram1DStackLegend = new TLegend(0.775, 0.625, 0.9, 0.9);
 
     if (H1D_All_Int->Integral() != 0.) {
