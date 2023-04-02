@@ -69,6 +69,46 @@ bool findSubstring(string string1, string string2) {
 }
 //</editor-fold>
 
+// getSampleName function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="getSampleName function">
+/* Usage: get SampleName from AnalyseFileSample. It will be used in creating a custom cuts file */
+
+string getSampleName(string AnalyseFilePath, string AnalyseFileSample) {
+    string SampleName;
+
+    if (AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") {
+        if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10") {
+            SampleName = "C12_simulation_Q2_0_5_598636MeV_T5_first_10";
+        } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100") {
+            SampleName = "C12_simulation_Q2_0_5_598636MeV_T5_first_100";
+        } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5") {
+            SampleName = "C12_simulation_Q2_0_5_598636MeV_T5";
+        }
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") {
+        if (AnalyseFileSample == "reconhipo") { SampleName = "C12_simulation_Q2_0_5_598636MeV_T5"; }
+    } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") {
+        if (AnalyseFileSample == "reconhipo") { SampleName = "C_simulation_Justin_598636MeV"; }
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") {
+        if (AnalyseFileSample == "reconhipo") { SampleName = "Ca48_simulation_G18_10a_02_11b_Q205_598636MeV"; }
+    } else if (AnalyseFilePath == "volatile/clas12/rg-m/48Ca/dst/recon") {
+        if (AnalyseFileSample == "015832") {
+            SampleName = "Ca48_data_598636MeV_run_015832";
+        } else if (AnalyseFileSample == "015843") {
+            SampleName = "Ca48_data_598636MeV_run_015843";
+        } else if (AnalyseFileSample == "015852") {
+            SampleName = "Ca48_data_598636MeV_run_015843";
+        } else if (AnalyseFileSample == "015854") {
+            SampleName = "Ca48_data_598636MeV_run_015854";
+        }
+    } else if (AnalyseFilePath == "cache/hallb/scratch/rg-m/LH2/8.6.0") {
+        if (AnalyseFileSample == "015032") { SampleName = "LH2_data_------MeV_run_015032"; }
+    }
+
+    return SampleName;
+}
+//</editor-fold>
+
 // getBeanE function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="getBeanE function">

@@ -195,7 +195,7 @@ void gst::Loop() {
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot settings">
-    bool lowest_nentries = false;
+    bool lowest_nentries = true;
     int custom_nentries;
 
     if (lowest_nentries == true) {
@@ -8606,7 +8606,7 @@ void gst::Loop() {
 //        c1->Clear();
 
         //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
-        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "ET #omega around #theta_{l'}=15#circ", "2pXnX#pi^{0}", plots,
+        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "Energy transfer #omega around #theta_{l'}=15#circ", "2pXnX#pi^{0}", plots,
 //        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "Energy Transfer #omega for every #theta_{l'}", "2p", plots,
                        E_Trans15_all_2p, E_Trans15_QEL_2p, E_Trans15_MEC_2p, E_Trans15_RES_2p, E_Trans15_DIS_2p,
                        "Energy_transfer_histogram_15_Stack_linear_scale_2p", "plots/Energy_transfer_histograms/", "");
