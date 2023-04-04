@@ -11,13 +11,13 @@ public:
     DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1); // Default constructor
 
     /* Set functions */
-//    void InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean = 0, double llim = -1, double ulim = -1);
-
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
 
     void SetMeanFit(double mf) { MeanFromHistogram = mf; }
 
     void SetStdFactor(double sf) { FitStdFactor = sf; }
+
+    void SetCutPram(double mean, double lcut, double ucut) { Cuts.at(0) = mean, Cuts.at(1) = lcut, Cuts.at(2) = ucut;  }
 
     void SetMean(double mean) { Cuts.at(0) = mean; }
 

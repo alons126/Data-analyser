@@ -200,6 +200,36 @@ public:
 
     bool checkPidCut(region_part_ptr p);
 
+    double GetPidCutSigma(int Pid, string region) {
+        if (region == "CD") {
+            auto itter_CD = pid_cuts_CD.find(Pid);
+
+            return itter_CD->second.at(1);
+        } else if (region == "FD") {
+            auto itter_FD = pid_cuts_FD.find(Pid);
+
+            return itter_FD->second.at(1);
+        } else {
+            //todo: figure out what to do in this case
+            return -9999;
+        }
+    }
+
+    double GetPidCutMean(int Pid, string region) {
+        if (region == "CD") {
+            auto itter_CD = pid_cuts_CD.find(Pid);
+
+            return itter_CD->second.at(0);
+        } else if (region == "FD") {
+            auto itter_FD = pid_cuts_FD.find(Pid);
+
+            return itter_FD->second.at(0);
+        } else {
+            //todo: figure out what to do in this case
+            return -9999;
+        }
+    }
+
     bool checkVertex(region_part_ptr p);
 
     bool checkVertexCorrelation(region_part_ptr el, region_part_ptr p);
@@ -758,23 +788,18 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 
         if (!checkEcalCuts(*el) && f_ecalSFCuts) //ECAL SF cuts
         {
-//            cout << "ECAL SF cuts (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else if (!EcalEdgeCuts(*el) && f_ecalEdgeCuts) //ECAL edge cuts
         {
-//            cout << "ECAL edge cuts (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else if (!HTCCNpheCuts(*el) && f_NpheCuts) //HTCC Nphe cuts (my addition)
         {
-//            cout << "HTCC Nphe cuts (electrons)\n"; // My addition
             el = electrons_det.erase(el);
         } else if (!checkVertex(*el) && f_vertexCuts) //Vertex cut
         {
-//            cout << "Vertex cut (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else if (!DCEdgeCuts(*el) && f_DCEdgeCuts) //DC edge cut
         {
-//            cout << "DC edge cut (electrons)\n"; // My debugging
             el = electrons_det.erase(el);
         } else {
             //DEBUG plots
@@ -1477,7 +1502,8 @@ bool clas12ana::checkPidCut(region_part_ptr p) {
         } else {
             return false;
         }
-    } else { // Justin's original
+    }
+    else { // Justin's original
         auto itter = pid_cuts.find(p->par()->getPid());
 
         if (itter != pid_cuts.end()) {
