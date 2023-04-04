@@ -58,6 +58,56 @@ void EventAnalyser() {
 
     //<editor-fold desc="Code settings">
 
+//  Input processing ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Input processing">
+    /* Determine file path and name */
+    string LoadedInput = AnalyseFile; // AnalyseFile is taken from codeSetup.h
+    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
+    string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
+    string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
+
+    /* Configure sample name */
+    string SampleName = getSampleName(AnalyseFilePath, AnalyseFileSample); // electron energy declaration
+
+    /* Configure beam energy (beamE) */
+//    double beamE = 5.98636; // electron energy declaration
+    double beamE = getBeanE(SampleName); // electron energy declaration
+
+    /* Configure target */
+    TargetParameters ScattringTarget;
+
+    if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
+        (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
+        (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
+        ScattringTarget.SetTargetElement("C12");
+        ScattringTarget.SetTargetElementPDG(1000060120);
+    } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
+        ScattringTarget.SetTargetElement("Ca48");
+        ScattringTarget.SetTargetElementPDG(1000200480);
+    } else {
+        ScattringTarget.SetTargetElement("UNKOWN");
+        ScattringTarget.SetTargetElementPDG(0);
+    }
+
+    string Target = ScattringTarget.GetTargetElement();
+    int TargetPDG = ScattringTarget.GetTargetElementPDG();
+
+    /* Execution variables */
+    cout << "-- Execution variables ----------------------------------------------------\n";
+    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
+    cout << "plots_path:\t\t" << plots_path << "\n\n";
+
+    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
+    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
+    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
+    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
+
+    cout << "SampleName:\t\t" << SampleName << "\n";
+    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
+    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
+    //</editor-fold>
+
 // Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts settings">
@@ -68,7 +118,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -110,33 +160,24 @@ void EventAnalyser() {
 
     if (custom_cuts_naming == true) {
         if (apply_cuts == false) {
-            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
+            plots_path = WorkingDirectory + "plots_" + SampleName + "__NO_CUTS/";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__NO_CUTS.txt";
+//            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
+//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
         } else {
             if (apply_chi2_cuts_1e_cut == false) {
-                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
+                plots_path = WorkingDirectory + "plots_" + SampleName + "__ALL_CUTS_woChi2/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__ALL_CUTS_woChi2.txt";
+//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
+//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut == true) {
-                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
+                plots_path = WorkingDirectory + "plots_" + SampleName + "__ALL_CUTS/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__ALL_CUTS.txt";
+//                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
+//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
             }
         }
     }
-
-//    if (custom_cuts_naming == true) {
-//        if (apply_cuts == false) {
-//            plots_path = WorkingDirectory + "plots_NO_CUTS_LH2" + "/";
-//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS_LH2.txt";
-//        } else {
-//            if (apply_chi2_cuts_1e_cut == false) {
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2_LH2" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2_LH2.txt";
-//            } else if (apply_chi2_cuts_1e_cut == true) {
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS_LH2" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_LH2.txt";
-//            }
-//        }
-//    }
     //</editor-fold>
 
     //</editor-fold>
@@ -206,64 +247,6 @@ void EventAnalyser() {
     //TODO: add momentum cuts here instead of in DetectorSimulationCuts.h
     DSCuts e_momentum_cuts_2p, p_momentum_cuts_2p;
     DSCuts e_momentum_cuts_MicroBooNE, p_momentum_cuts_MicroBooNE, cpion_momentum_cuts_MicroBooNE;
-    //</editor-fold>
-
-//  Input processing ----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //<editor-fold desc="Input processing">
-    /* Determine file path and name */
-    string LoadedInput = AnalyseFile; // AnalyseFile is taken from codeSetup.h
-    string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
-    string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
-    string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
-
-    /* Configure sample name */
-    string SampleName = getSampleName(AnalyseFilePath, AnalyseFileSample); // electron energy declaration
-
-    /* Configure beam energy (beamE) */
-    double beamE = 5.98636; // electron energy declaration
-//    double beamE = getBeanE(AnalyseFile); // electron energy declaration
-
-    /* Configure target */
-    TargetParameters ScattringTarget;
-
-//    if ((AnalyseFileSample.find("c12") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
-//        (AnalyseFileSample.find("C12") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
-//        (AnalyseFileSample.find("12c") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
-//        (AnalyseFileSample.find("12C") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
-//        (AnalyseFileSample.find("_c_") <= AnalyseFileSample[AnalyseFileSample.size() - 1]) ||
-//        (AnalyseFileSample.find("_C_") <= AnalyseFileSample[AnalyseFileSample.size() - 1])) {
-//        ScattringTarget.SetTargetElement("C12");
-//        ScattringTarget.SetTargetElementPDG(1000060120);
-    if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
-        (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
-        (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
-        ScattringTarget.SetTargetElement("C12");
-        ScattringTarget.SetTargetElementPDG(1000060120);
-    } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
-        ScattringTarget.SetTargetElement("Ca48");
-        ScattringTarget.SetTargetElementPDG(1000200480);
-    } else {
-        ScattringTarget.SetTargetElement("UNKOWN");
-        ScattringTarget.SetTargetElementPDG(0);
-    }
-
-    string Target = ScattringTarget.GetTargetElement();
-    int TargetPDG = ScattringTarget.GetTargetElementPDG();
-
-    /* Execution variables */
-    cout << "-- Execution variables ----------------------------------------------------\n";
-    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
-    cout << "plots_path:\t\t" << plots_path << "\n\n";
-
-    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
-    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
-    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
-    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
-
-    cout << "SampleName:\t\t" << SampleName << "\n";
-    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
-    cout << "Beam Energy:\t\t" << beamE << "\n\n\n\n";
     //</editor-fold>
 
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -517,7 +500,7 @@ void EventAnalyser() {
                                        "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots",
 
                                        "06_2p", "06_2p/01_Theta_e_2p_plots", "06_2p/02_Phi_e_2p_plots", "06_2p/03_Theta_e_VS_Phi_e_2p_plots",
-                                       "06_2p/04_Opening_angles_2p_plots",
+                                       "06_2p/04_Opening_angles_2p_plots", "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction",
 
                                        "07_1e2pXy", "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots", "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots",
                                        "07_1e2pXy/04_Phi_Proton_1e2pXy_plots"};
@@ -557,9 +540,10 @@ void EventAnalyser() {
     string Phi_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[23] + "/";
     string Theta_e_VS_Phi_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[24] + "/";
     string Opening_angle_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[25] + "/";
+    string Theta_p1_p2_by_interaction_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[26] + "/";
 
 //    string Theta_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[6] + "/";
-    string Phi_Proton_1e2pXy_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[30] + "/";
+    string Phi_Proton_1e2pXy_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[31] + "/";
 //    string Theta_e_VS_Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[8] + "/";
     //TODO: reorganize properly
 
@@ -733,6 +717,7 @@ void EventAnalyser() {
 
 //    plots->Add(TVariables_Folder);
 
+    string dP_T_vs_dAlpha_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[1] + "/";
     string dP_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[2] + "/";
     string dAlpha_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[3] + "/";
     string dPhi_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[4] + "/";
@@ -877,6 +862,9 @@ void EventAnalyser() {
     /* Beta vs. P plots */
     double Beta_boundary = 3, P_boundary = beamE * 1.425;
     if (apply_cuts == true) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
+
+    /* Transverse variables */
+    double dP_T_boundary = 2.5;
     //</editor-fold>
 
 // Debugging settings ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1588,6 +1576,7 @@ void EventAnalyser() {
     //</editor-fold>
 
     //</editor-fold>
+    //</editor-fold>
 
 // ======================================================================================================================================================================
 // Beta vs. P histograms
@@ -2072,10 +2061,20 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p1_p2 (CD & FD)">
     THStack *sTheta_p1_p2_2p = new THStack("#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                           "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];");
-    TH1D *hTheta_p1_p2_2p = new TH1D("#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                     "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];", 150, -10, 190);
-    string hTheta_p1_p2_2p_Dir = Opening_angle_Directory;
+                                           "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (2p);#theta_{p_{1},p_{2}} [Deg];");
+    TH1D *hTheta_p1_p2_All_Int_2p = new TH1D("#theta_{p_{1},p_{2}} (All Int., 2p)",
+                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];", 150, -10, 190);
+    TH1D *hTheta_p1_p2_QEL_2p = new TH1D("#theta_{p_{1},p_{2}} (QEL only, 2p)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, 2p);#theta_{p_{1},p_{2}} [Deg];", 150, -10, 190);
+    TH1D *hTheta_p1_p2_MEC_2p = new TH1D("#theta_{p_{1},p_{2}} (MEC only, 2p)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, 2p);#theta_{p_{1},p_{2}} [Deg];", 150, -10, 190);
+    TH1D *hTheta_p1_p2_RES_2p = new TH1D("#theta_{p_{1},p_{2}} (RES only, 2p)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, 2p);#theta_{p_{1},p_{2}} [Deg];", 150, -10, 190);
+    TH1D *hTheta_p1_p2_DIS_2p = new TH1D("#theta_{p_{1},p_{2}} (DIS only, 2p)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, 2p);#theta_{p_{1},p_{2}} [Deg];", 150, -10, 190);
+    string sTheta_p1_p2_2p_Dir = Opening_angle_Directory, hTheta_p1_p2_All_Int_2p_Dir = Theta_p1_p2_by_interaction_Directory;
+    string hTheta_p1_p2_QEL_2p_Dir = Theta_p1_p2_by_interaction_Directory, hTheta_p1_p2_MEC_2p_Dir = Theta_p1_p2_by_interaction_Directory;
+    string hTheta_p1_p2_RES_2p_Dir = Theta_p1_p2_by_interaction_Directory, hTheta_p1_p2_DIS_2p_Dir = Theta_p1_p2_by_interaction_Directory;
     //</editor-fold>
 
 // Theta_p1_p2 vs. W (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
@@ -2085,6 +2084,15 @@ void EventAnalyser() {
                                           "#theta_{p_{1},p_{2}} vs. W (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{p_{1},p_{2}} [Deg];",
                                           250, 0, beamE * 1.1, 250, -10, 190);
     string hTheta_p1_p2_vs_W_2p_Dir = Opening_angle_Directory;
+    //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p)",
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+                                                                 250, -10, 190, 250, -10, 190);
+    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir = Opening_angle_Directory;
     //</editor-fold>
 
 // Phi of leading (p1) and recoil (p2) protons --------------------------------------------------------------------------------------------------------------------------
@@ -2424,9 +2432,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. dP_T">
     TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#delta#P_{T,L} [Deg];E_{cal} [GeV];", 250, 0, 2.5, 250, 0, beamE * 1.35);
+                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#delta#P_{T,L} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
-                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [Deg];E_{cal} [GeV];", 250, 0, 2.5, 250, 0, beamE * 1.35);
+                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory, hEcal_vs_dP_T_tot_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory;
     //</editor-fold>
 
@@ -2529,9 +2537,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Transverse variables histograms">
     THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV]");
-    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV]", 150, 0, 2.5);
+    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV]", 150, 0,
+                                dP_T_boundary);
     TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)",
-                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV]", 150, 0, 2.5);
+                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV]", 150, 0, dP_T_boundary);
     string hdP_T_L_2p_Dir = dP_T_2p_Directory, hdP_T_tot_2p_Dir = dP_T_2p_Directory;
 
     THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
@@ -2543,6 +2552,14 @@ void EventAnalyser() {
     TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]", 150, -10, 200);
     TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]", 150, -10, 200);
     string hdPhi_T_L_2p_Dir = dPhi_T_2p_Directory, hdPhi_T_tot_2p_Dir = dPhi_T_2p_Directory;
+
+    TH2D *hdP_T_L_vs_dAlpha_T_L_2p = new TH2D("#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p)",
+                                              "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV];",
+                                              250, -10, 190, 250, 0, dP_T_boundary);
+    TH2D *hdP_T_tot_vs_dAlpha_T_tot_2p = new TH2D("#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p)",
+                                                  "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];#deltaP_{T,tot} [GeV];",
+                                                  250, -10, 190, 250, 0, dP_T_boundary);
+    string hdP_T_L_vs_dAlpha_T_L_2p_Dir = dP_T_vs_dAlpha_T_2p_Directory, hdP_T_tot_vs_dAlpha_T_tot_2p_Dir = dP_T_vs_dAlpha_T_2p_Directory;
     //</editor-fold>
 
     //</editor-fold>
@@ -4832,8 +4849,24 @@ void EventAnalyser() {
 
             Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
                                   / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi; // Theta_p1_p2_2p in deg
-            hTheta_p1_p2_2p->Fill(Theta_p1_p2_2p);
+            hTheta_p1_p2_All_Int_2p->Fill(Theta_p1_p2_2p);
+
+            if (qel) {
+                hTheta_p1_p2_QEL_2p->Fill(Theta_p1_p2_2p);
+            } else if (mec) {
+                hTheta_p1_p2_MEC_2p->Fill(Theta_p1_p2_2p);
+            } else if (res) {
+                hTheta_p1_p2_RES_2p->Fill(Theta_p1_p2_2p);
+            } else if (dis) {
+                hTheta_p1_p2_DIS_2p->Fill(Theta_p1_p2_2p);
+            }
+
             hTheta_p1_p2_vs_W_2p->Fill(W_2p, Theta_p1_p2_2p);
+
+            if (Theta_p1_p2_2p < 10) {
+                double Theta_p1 = P_1_2p_3v.Theta() * 180.0 / pi, Theta_p2 = P_2_2p_3v.Theta() * 180.0 / pi; // Theta_p1, Theta_p2 in deg
+                hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p->Fill(Theta_p2, Theta_p1);
+            }
 
             Theta_q_p_tot_2p = acos((q_3v.Px() * P_tot_2p_3v.Px() + q_3v.Py() * P_tot_2p_3v.Py() + q_3v.Pz() * P_tot_2p_3v.Pz())
                                     / (q_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_2p in deg
@@ -4880,6 +4913,9 @@ void EventAnalyser() {
                                 / (P_T_e_2p_3v.Mag() * dP_T_tot_2p_3v.Mag())) * 180.0 / pi; // dP_T_tot_2p_3v.Pz() = 0; dAlpha_T_tot in deg
             hdAlpha_T_L_2p->Fill(dAlpha_T_L);
             hdAlpha_T_tot_2p->Fill(dAlpha_T_tot);
+
+            hdP_T_L_vs_dAlpha_T_L_2p->Fill(dAlpha_T_L, dP_T_L_2p_3v.Mag());
+            hdP_T_tot_vs_dAlpha_T_tot_2p->Fill(dAlpha_T_tot, dP_T_tot_2p_3v.Mag());
 
             dPhi_T_L = acos(-(P_T_e_2p_3v.Px() * P_T_L_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_L_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_L_2p_3v.Pz())
                             / (P_T_e_2p_3v.Mag() * P_T_L_2p_3v.Mag())) * 180.0 / pi; // P_T_L_2p_3v.Pz() = 0; dPhi_T_L in deg
@@ -6715,20 +6751,15 @@ void EventAnalyser() {
 
         //<editor-fold desc="Phi_e (1e2p, FD)">
         histPlotter1D(c1, hPhi_e_All_Int_1e2p_FD, norm_Angle_plots_master, true, Phi_e_All_Int_1e2p_integral, "#phi_{e} of Outgoing Electron", "All Int., 1e2p", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sPhi_e, "00_Phi_e_All_Int_1e2p", hPhi_e_All_Int_1e2p_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "00_Phi_e_All_Int_1e2p", hPhi_e_All_Int_1e2p_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_QEL_1e2p_FD, norm_Angle_plots_master, true, Phi_e_QEL_1e2p_integral, "#phi_{e} of Outgoing Electron", "QEL Only, 1e2p", 0.06, 0.0425,
-                      0.0425,
-                      plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_1e2p", hPhi_e_QEL_1e2p_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_1e2p", hPhi_e_QEL_1e2p_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_MEC_1e2p_FD, norm_Angle_plots_master, true, Phi_e_MEC_1e2p_integral, "#phi_{e} of Outgoing Electron", "MEC Only, 1e2p", 0.06, 0.0425,
-                      0.0425,
-                      plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_1e2p", hPhi_e_MEC_1e2p_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_1e2p", hPhi_e_MEC_1e2p_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_RES_1e2p_FD, norm_Angle_plots_master, true, Phi_e_RES_1e2p_integral, "#phi_{e} of Outgoing Electron", "RES Only, 1e2p", 0.06, 0.0425,
-                      0.0425,
-                      plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_1e2p", hPhi_e_RES_1e2p_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_1e2p", hPhi_e_RES_1e2p_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_DIS_1e2p_FD, norm_Angle_plots_master, true, Phi_e_DIS_1e2p_integral, "#phi_{e} of Outgoing Electron", "DIS Only, 1e2p", 0.06, 0.0425,
-                      0.0425,
-                      plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_1e2p", hPhi_e_DIS_1e2p_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_1e2p", hPhi_e_DIS_1e2p_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
         //</editor-fold>
@@ -6799,18 +6830,17 @@ void EventAnalyser() {
                       "Theta_e_VS_Phi_e_All_Int_2p_FD");
         //</editor-fold>
 
-// Theta_p_e_p_tot (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_p_e_p_tot (2p, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p_e_p_tot (2p, CD & FD)">
         double Theta_p_e_p_tot_2p_integral = hTheta_p_e_p_tot_2p->Integral();
 
         histPlotter1D(c1, hTheta_p_e_p_tot_2p, norm_Angle_plots_master, true, Theta_p_e_p_tot_2p_integral,
-                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., 2p", 0.06,
-                      0.0425, 0.0425, plots, 2, false, true,
-                      sTheta_p1_p2_2p, "01_Theta_p_e_p_tot_All_Int_2p", hTheta_p_e_p_tot_2p_Dir, "", kBlue, true, true, true, false);
+                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., 2p", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_p_e_p_tot_2p, "01_Theta_p_e_p_tot_All_Int_2p", hTheta_p_e_p_tot_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
-// Theta_q_p (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_q_p (2p, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_q_p_tot (2p, CD & FD)">
         double Theta_q_p_tot_2p_integral = hTheta_q_p_tot_2p->Integral();
@@ -6831,7 +6861,7 @@ void EventAnalyser() {
                       false, true, sTheta_q_p_2p, "03_Theta_q_p_2_All_Int_2p", hTheta_q_p_R_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
-// Theta_q_p_L vs |P_L|/|q| (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
+// Theta_q_p_L vs |P_L|/|q| (2p, CD & FD) -------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="hTheta_p1_p2_vs_W_2p (2p, CD & FD)">
         histPlotter2D(c1, hTheta_q_p_L_vs_p_L_q_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_q_p_L_vs_p_L_q_2p_Dir, "04_Theta_q_p_L_vs_p_L_q_2p");
@@ -6840,16 +6870,39 @@ void EventAnalyser() {
 // Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_p2 (2p, CD & FD)">
-        double Theta_p1_p2_integral = hTheta_p1_p2_2p->Integral();
+        double Theta_p1_p2_integral = hTheta_p1_p2_All_Int_2p->Integral();
 
-        histPlotter1D(c1, hTheta_p1_p2_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "All Int., 2p",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "05_Theta_p1_p2_All_Int_2p", hTheta_p1_p2_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_All_Int_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "00_Theta_p1_p2_All_Int_2p", hTheta_p1_p2_All_Int_2p_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_QEL_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "QEL only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "01_Theta_p1_p2_QEL_only_2p", hTheta_p1_p2_QEL_2p_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_MEC_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "MEC only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "02_Theta_p1_p2_MEC_only_2p", hTheta_p1_p2_MEC_2p_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_RES_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "RES only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "03_Theta_p1_p2_RES_only_2p", hTheta_p1_p2_RES_2p_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_DIS_2p, norm_Angle_plots_master, true, Theta_p1_p2_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "DIS only, 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_2p, "04_Theta_p1_p2_DIS_only_2p", hTheta_p1_p2_DIS_2p_Dir, "", kBlue,
+                      true, true, true, false);
+
+        stackPlotter1D(c1, sTheta_p1_p2_2p, norm_E_e_plots, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "2p", plots, hTheta_p1_p2_All_Int_2p,
+                       hTheta_p1_p2_QEL_2p, hTheta_p1_p2_MEC_2p, hTheta_p1_p2_RES_2p, hTheta_p1_p2_DIS_2p, "05_Theta_p1_p2_Stack", sTheta_p1_p2_2p_Dir, "");
         //</editor-fold>
 
 // hTheta_p1_p2_vs_W_2p (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="hTheta_p1_p2_vs_W_2p (2p, CD & FD)">
         histPlotter2D(c1, hTheta_p1_p2_vs_W_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_2p_Dir, "06_Theta_p1_p2_vs_W_2p");
+        //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir,
+                      "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p");
         //</editor-fold>
 
     } else {
@@ -7776,26 +7829,28 @@ void EventAnalyser() {
     if (TVariables_plots) {
         cout << "\n\nTransverse variables histograms...\n\n";
 
-        //<editor-fold desc="dP_T plots">
+        /* dP_T plots */
         histPlotter1D(c1, hdP_T_L_2p, norm_TVariables_plots, true, 1., "#deltaP_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdP_T_2p, "dP_T_L", hdP_T_L_2p_Dir, "2p", kBlue, true, true, true);
         histPlotter1D(c1, hdP_T_tot_2p, norm_TVariables_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdP_T_2p, "dP_T_tot", hdP_T_tot_2p_Dir, "2p", kBlue, true, true, true);
-        //</editor-fold>
 
-        //<editor-fold desc="dAlpha_T plots">
+        /* dAlpha_T plots */
         histPlotter1D(c1, hdAlpha_T_L_2p, norm_TVariables_plots, true, 1., "#delta#alpha_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, sdAlpha_T_2p, "dAlpha_T_L", hdAlpha_T_L_2p_Dir, "2p", kBlue, true, true, true);
         histPlotter1D(c1, hdAlpha_T_tot_2p, norm_TVariables_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, sdAlpha_T_2p, "dAlpha_T_tot", hdAlpha_T_tot_2p_Dir, "2p", kBlue, true, true, true);
-        //</editor-fold>
 
-        //<editor-fold desc="dPhi_T plots">
+        /* dPhi_T plots */
         histPlotter1D(c1, hdPhi_T_L_2p, norm_TVariables_plots, true, 1., "#delta#phi_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdPhi_T_2p, "dPhi_T_L", hdPhi_T_L_2p_Dir, "2p", kBlue, true, true, true);
         histPlotter1D(c1, hdPhi_T_tot_2p, norm_TVariables_plots, true, 1., "#delta#phi_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sdPhi_T_2p, "dPhi_T_tot", hdPhi_T_tot_2p_Dir, "2p", kBlue, true, true, true);
-        //</editor-fold>
+
+        histPlotter2D(c1, hdP_T_L_vs_dAlpha_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_L_vs_dAlpha_T_L_2p_Dir, "01_dP_T_L_vs_dAlpha_T_L_2p", false);
+        histPlotter2D(c1, hdP_T_tot_vs_dAlpha_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_tot_vs_dAlpha_T_tot_2p_Dir,
+                      "02_dP_T_tot_vs_dAlpha_T_tot_2p", false);
+
     } else {
         cout << "\n\nTransverse variables plots are disabled by user.\n\n";
     }
@@ -7911,7 +7966,7 @@ void EventAnalyser() {
     myLogFile << "m_Kplus = " << m_Kplus << "\n";
     myLogFile << "m_Kminus = " << m_Kminus << "\n\n";
 
-    myLogFile << "beamE = " << beamE << "\n";
+    myLogFile << "beamE = " << beamE << " [GeV]\n";
     myLogFile << "Pv = " << Pv << "\n";
     myLogFile << "Pvx = " << Pvx << "\n";
     myLogFile << "Pvy = " << Pvy << "\n";
@@ -8529,7 +8584,7 @@ void EventAnalyser() {
     cout << "Settings mode:\t\t'" << file_name << "'\n\n";
 
     cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
-    cout << "Beam Energy:\t\t" << beamE << "\n\n";
+    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n";
 
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n\n";
     //</editor-fold>

@@ -77,32 +77,57 @@ bool findSubstring(string string1, string string2) {
 string getSampleName(string AnalyseFilePath, string AnalyseFileSample) {
     string SampleName;
 
-    if (AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") {
+    if (AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") { // C12, simulation, 6GeV, Q205, T5, local
         if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10") {
-            SampleName = "C12_simulation_Q2_0_5_598636MeV_T5_first_10";
+            SampleName = "C12_simulation_6GeV_T5_first_10";
+//            SampleName = "C12_simulation_Q205_598636MeV_T5_first_10";
         } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100") {
-            SampleName = "C12_simulation_Q2_0_5_598636MeV_T5_first_100";
+            SampleName = "C12_simulation_6GeV_T5_first_100";
+//            SampleName = "C12_simulation_Q205_598636MeV_T5_first_100";
         } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5") {
-            SampleName = "C12_simulation_Q2_0_5_598636MeV_T5";
+            SampleName = "C12_simulation_6GeV_T5";
+//            SampleName = "C12_simulation_Q205_598636MeV_T5";
         }
-    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") {
-        if (AnalyseFileSample == "reconhipo") { SampleName = "C12_simulation_Q2_0_5_598636MeV_T5"; }
-    } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") {
-        if (AnalyseFileSample == "reconhipo") { SampleName = "C_simulation_Justin_598636MeV"; }
-    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") {
-        if (AnalyseFileSample == "reconhipo") { SampleName = "Ca48_simulation_G18_10a_02_11b_Q205_598636MeV"; }
-    } else if (AnalyseFilePath == "volatile/clas12/rg-m/48Ca/dst/recon") {
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") { // C12, simulation, 6GeV, Q205, T5, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            SampleName = "C12_simulation_6GeV_T5";
+//            SampleName = "C12_simulation_Q205_598636MeV_T5";
+        }
+    } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") { // C, simulation, 6GeV, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            SampleName = "C_simulation_Justin_6GeV";
+//            SampleName = "C_simulation_Justin_598636MeV";
+        }
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") { // Ca48, simulation, 6GeV, Q205, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            SampleName = "Ca48_simulation_G18_10a_02_11b_6GeV";
+//            SampleName = "Ca48_simulation_G18_10a_02_11b_Q205_598636MeV";
+        }
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/H1_G18_10a_02_11b_Q205_598636MeV") { // H1, simulation, 6GeV, Q205, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            SampleName = "H1_simulation_G18_10a_02_11b_6GeV";
+        }
+    } else if (AnalyseFilePath == "volatile/clas12/rg-m/48Ca/dst/recon") { // Ca48, data, 6GeV, ifarm
         if (AnalyseFileSample == "015832") {
-            SampleName = "Ca48_data_598636MeV_run_015832";
+            SampleName = "Ca48_data_6GeV_run_015832";
+//            SampleName = "Ca48_data_598636MeV_run_015832";
         } else if (AnalyseFileSample == "015843") {
-            SampleName = "Ca48_data_598636MeV_run_015843";
+            SampleName = "Ca48_data_6GeV_run_015843";
+//            SampleName = "Ca48_data_598636MeV_run_015843";
         } else if (AnalyseFileSample == "015852") {
-            SampleName = "Ca48_data_598636MeV_run_015843";
+            SampleName = "Ca48_data_6GeV_run_015843";
+//            SampleName = "Ca48_data_598636MeV_run_015843";
         } else if (AnalyseFileSample == "015854") {
-            SampleName = "Ca48_data_598636MeV_run_015854";
+            SampleName = "Ca48_data_6GeV_run_015854";
+//            SampleName = "Ca48_data_598636MeV_run_015854";
         }
-    } else if (AnalyseFilePath == "cache/hallb/scratch/rg-m/LH2/8.6.0") {
-        if (AnalyseFileSample == "015032") { SampleName = "LH2_data_------MeV_run_015032"; }
+    } else if (AnalyseFilePath == "cache/hallb/scratch/rg-m/LH2/8.6.0") { // LH2, data, 6GeV, ifarm
+        if (AnalyseFileSample == "015032") {
+            SampleName = "LH2_data_6GeV_run_015032";
+//            SampleName = "LH2_data_598636MeV_run_015032";
+        }
+    } else {
+        SampleName = "unknown_target_598636MeV"; // to set beamE = 5.98636 by default
     }
 
     return SampleName;
@@ -112,19 +137,19 @@ string getSampleName(string AnalyseFilePath, string AnalyseFileSample) {
 // getBeanE function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="getBeanE function">
-/* Usage: get beamE from AnalyseFileSample */
+/* Usage: get beamE from SampleName */
 
-double getBeanE(string AnalyseFileSample) {
+double getBeanE(string SampleName) {
     double beamE;
 
-    if ((findSubstring(AnalyseFileSample, "598636MeV") == true) || (findSubstring(AnalyseFileSample, "598636mev") == true)
-        || (findSubstring(AnalyseFileSample, "598636") == true)) {
+    if ((findSubstring(SampleName, "598636MeV") == true) || (findSubstring(SampleName, "598636mev") == true)
+        || (findSubstring(SampleName, "598636") == true) || (findSubstring(SampleName, "6GeV") == true)) {
         beamE = 5.98636;
-    } else if ((findSubstring(AnalyseFileSample, "402962MeV") == true) || (findSubstring(AnalyseFileSample, "402962mev") == true)
-               || (findSubstring(AnalyseFileSample, "402962") == true)) {
+    } else if ((findSubstring(SampleName, "402962MeV") == true) || (findSubstring(SampleName, "402962mev") == true)
+               || (findSubstring(SampleName, "402962") == true) || (findSubstring(SampleName, "4GeV") == true)) {
         beamE = 4.02962;
-    } else if ((findSubstring(AnalyseFileSample, "207052MeV") == true) || (findSubstring(AnalyseFileSample, "207052mev") == true)
-               || (findSubstring(AnalyseFileSample, "207052") == true)) {
+    } else if ((findSubstring(SampleName, "207052MeV") == true) || (findSubstring(SampleName, "207052mev") == true)
+               || (findSubstring(SampleName, "207052") == true) || (findSubstring(SampleName, "2GeV") == true)) {
         beamE = 2.07052;
     }
 

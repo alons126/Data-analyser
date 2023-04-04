@@ -56,8 +56,8 @@ std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1_first_10"; // my test with Justin's code; no pion data saved (e,p,n only)
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_1";          // my test with Justin's code; no pion data saved (e,p,n only)
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
@@ -119,8 +119,8 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFile = AnalyseFileDir + "rec_clas_015854.evio.000*.hipo"; //first 100
 ////</editor-fold>
 
-////<editor-fold desc="LH2 ---GeV (ifarm DATA files - LH2 DATA files)">
-///* LH2 ---GeV DATA file on ifarm */
+////<editor-fold desc="LH2 5.98636GeV (ifarm DATA files - LH2 DATA files)">
+///* LH2 5.98636GeV DATA file on ifarm */
 //std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2/8.6.0";
 //std::string AnalyseFileSample = "015032";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
