@@ -90,12 +90,12 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 ////</editor-fold>
 
 ////<editor-fold desc="Ca48 5.98636GeV (ifarm DATA files)">
-/* Ca48 5.98636GeV (DATA) - run 015832 */
-std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
-std::string AnalyseFileSample = "015832"; // run 015832
-std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
-std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
+///* Ca48 5.98636GeV (DATA) - run 015832 */
+//std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
+//std::string AnalyseFileSample = "015832"; // run 015832
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.0000*.hipo"; //first 10
+//std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //first 100
 
 ///* Ca48 5.98636GeV (DATA) - run 015843 */
 //std::string AnalyseFilePath = "volatile/clas12/rg-m/48Ca/dst/recon";
@@ -120,11 +120,11 @@ std::string AnalyseFile = AnalyseFileDir + "rec_clas_015832.evio.000*.hipo"; //f
 ////</editor-fold>
 
 ////<editor-fold desc="LH2 5.98636GeV (ifarm DATA files - LH2 DATA files)">
-///* LH2 5.98636GeV DATA file on ifarm */
-//std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2/8.6.0";
-//std::string AnalyseFileSample = "015032";
-//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+/* LH2 5.98636GeV DATA file on ifarm */
+std::string AnalyseFilePath = "cache/hallb/scratch/rg-m/LH2/8.6.0";
+std::string AnalyseFileSample = "015032";
+std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////</editor-fold>
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
