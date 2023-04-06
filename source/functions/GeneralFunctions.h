@@ -73,94 +73,6 @@ bool findSubstring(string string1, string string2) {
 }
 //</editor-fold>
 
-// getSampleName function -----------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="getSampleName function">
-/* Usage: get SampleName from AnalyseFileSample. It will be used in creating a custom cuts file */
-
-string getSampleName(string AnalyseFilePath, string AnalyseFileSample) {
-    string SampleName;
-
-    if (AnalyseFilePath == "mnt/d/e4nu/hipo_data_files") { // C12, simulation, 6GeV, Q205, T5, local
-        if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10") {
-            SampleName = "C12_simulation_6GeV_T5_first_10";
-//            SampleName = "C12_simulation_Q205_598636MeV_T5_first_10";
-        } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100") {
-            SampleName = "C12_simulation_6GeV_T5_first_100";
-//            SampleName = "C12_simulation_Q205_598636MeV_T5_first_100";
-        } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5") {
-            SampleName = "C12_simulation_6GeV_T5";
-//            SampleName = "C12_simulation_Q205_598636MeV_T5";
-        }
-    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") { // C12, simulation, 6GeV, Q205, T5, ifarm
-        if (AnalyseFileSample == "reconhipo") {
-            SampleName = "C12_simulation_6GeV_T5";
-//            SampleName = "C12_simulation_Q205_598636MeV_T5";
-        }
-    } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") { // C, simulation, 6GeV, ifarm
-        if (AnalyseFileSample == "reconhipo") {
-            SampleName = "C_simulation_Justin_6GeV";
-//            SampleName = "C_simulation_Justin_598636MeV";
-        }
-    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") { // Ca48, simulation, 6GeV, Q205, ifarm
-        if (AnalyseFileSample == "reconhipo") {
-            SampleName = "Ca48_simulation_G18_10a_02_11b_6GeV";
-//            SampleName = "Ca48_simulation_G18_10a_02_11b_Q205_598636MeV";
-        }
-    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/H1_G18_10a_02_11b_Q205_598636MeV") { // H1, simulation, 6GeV, Q205, ifarm
-        if (AnalyseFileSample == "reconhipo") {
-            SampleName = "H1_simulation_G18_10a_02_11b_6GeV";
-        }
-    } else if (AnalyseFilePath == "volatile/clas12/rg-m/48Ca/dst/recon") { // Ca48, data, 6GeV, ifarm
-        if (AnalyseFileSample == "015832") {
-            SampleName = "Ca48_data_6GeV_run_015832";
-//            SampleName = "Ca48_data_598636MeV_run_015832";
-        } else if (AnalyseFileSample == "015843") {
-            SampleName = "Ca48_data_6GeV_run_015843";
-//            SampleName = "Ca48_data_598636MeV_run_015843";
-        } else if (AnalyseFileSample == "015852") {
-            SampleName = "Ca48_data_6GeV_run_015843";
-//            SampleName = "Ca48_data_598636MeV_run_015843";
-        } else if (AnalyseFileSample == "015854") {
-            SampleName = "Ca48_data_6GeV_run_015854";
-//            SampleName = "Ca48_data_598636MeV_run_015854";
-        }
-    } else if (AnalyseFilePath == "cache/hallb/scratch/rg-m/LH2/8.6.0") { // LH2, data, 6GeV, ifarm
-        if (AnalyseFileSample == "015032") {
-            SampleName = "LH2_data_6GeV_run_015032";
-//            SampleName = "LH2_data_598636MeV_run_015032";
-        }
-    } else {
-        SampleName = "unknown_target_598636MeV"; // to set beamE = 5.98636 by default
-    }
-
-    return SampleName;
-}
-//</editor-fold>
-
-// getBeanE function ----------------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="getBeanE function">
-/* Usage: get beamE from SampleName */
-
-double getBeanE(string SampleName) {
-    double beamE;
-
-    if ((findSubstring(SampleName, "598636MeV") == true) || (findSubstring(SampleName, "598636mev") == true)
-        || (findSubstring(SampleName, "598636") == true) || (findSubstring(SampleName, "6GeV") == true)) {
-        beamE = 5.98636;
-    } else if ((findSubstring(SampleName, "402962MeV") == true) || (findSubstring(SampleName, "402962mev") == true)
-               || (findSubstring(SampleName, "402962") == true) || (findSubstring(SampleName, "4GeV") == true)) {
-        beamE = 4.02962;
-    } else if ((findSubstring(SampleName, "207052MeV") == true) || (findSubstring(SampleName, "207052mev") == true)
-               || (findSubstring(SampleName, "207052") == true) || (findSubstring(SampleName, "2GeV") == true)) {
-        beamE = 2.07052;
-    }
-
-    return beamE;
-}
-//</editor-fold>
-
 // to_string_with_precision function ------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="to_string_with_precision function">
@@ -175,107 +87,6 @@ string to_string_with_precision(const T a_value, const int n = 2) {
 }
 //</editor-fold>
 
-// TFolderAdder function ------------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="TFolderAdder function (regular)">
-/* Usage: recursively create TFolder and sub-folders in TList. */
-
-void TFolderAdder(TFolder *Histogram_List_Folder, string Plots_Parent_Folder, string Plots_Daughter_Folder) {
-    if (Plots_Daughter_Folder != "") {
-        if (Plots_Daughter_Folder.find_first_of('/') != 0) {
-            int number = Plots_Daughter_Folder.find_first_of('/');
-            string Daughter_Folder_Name = Plots_Daughter_Folder.substr(0, number);
-
-            Histogram_List_Folder->AddFolder(Daughter_Folder_Name.c_str(), Plots_Parent_Folder.c_str());
-
-            if (Plots_Daughter_Folder.size() - Daughter_Folder_Name.size() > 0) {
-                TFolder *pf = (TFolder *) Histogram_List_Folder->FindObject(Daughter_Folder_Name.c_str());
-
-                TFolderAdder(pf, Daughter_Folder_Name, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
-//            TFolderAdder(Histogram_list, Plots_Parent_Folder, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
-            }
-        }
-    }
-
-//    TFolder *pf = (TFolder *) Histogram_list->FindObject(Plots_Parent_Folder.c_str());
-
-//    Histogram_list->Add(List_Parent_Folder);
-}
-//</editor-fold>
-
-//<editor-fold desc="TFolderAdder function (for cuts)">
-/* Usage: recursively create TFolder and sub-folders in TList. */
-
-void TFolderAdder(TFolder *Histogram_List_Folder, string Plots_Parent_Folder, string Plots_Daughter_Folder, bool cuts_TFolder) {
-    if (Plots_Daughter_Folder != "") {
-        if ((Plots_Parent_Folder.find_first_of('/') <= Plots_Parent_Folder.size()) && cuts_TFolder) {
-            int number0 = Plots_Parent_Folder.find_first_of('/');
-            string Plots_Parent_Folder_Name = Plots_Parent_Folder.substr(number0 + 1, Plots_Parent_Folder.size());
-            TFolderAdder(Histogram_List_Folder, Plots_Parent_Folder_Name, Plots_Daughter_Folder, true);
-        } else {
-            if (Plots_Daughter_Folder.find_first_of('/') != 0) {
-                int number = Plots_Daughter_Folder.find_first_of('/');
-                string Daughter_Folder_Name = Plots_Daughter_Folder.substr(0, number);
-                Histogram_List_Folder->AddFolder(Daughter_Folder_Name.c_str(), Plots_Parent_Folder.c_str());
-
-                if (Plots_Daughter_Folder.size() - Daughter_Folder_Name.size() > 0) {
-                    TFolder *pf = (TFolder *) Histogram_List_Folder->FindObject(Daughter_Folder_Name.c_str());
-
-                    TFolderAdder(pf, Daughter_Folder_Name, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
-                }
-            }
-        }
-    }
-}
-//</editor-fold>
-
-// GetTFolder function ---------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="GetTFolder function (regular)">
-/* Usage: recursively create TFolder and sub-folders in TList. */
-
-void GetTFolder(TList *HistogramTList, string Plots_Parent_Folder, string Plots_Daughter_Folder) {
-    string TFolder_path = Plots_Parent_Folder + "/" + Plots_Daughter_Folder;
-    TFolder *TFolder_ptr = (TFolder *) HistogramTList->FindObject(TFolder_path.c_str());
-//    TFolder_ptr->AddFolder("Daughter_Folder_Name.c_str()", "Daughter_Folder_Name.c_str()");
-
-//    if (TFolder_path.find_first_of('/') <= TFolder_path.size()) {
-//        int number = TFolder_path.find_last_of('/');
-//        string Folder = TFolder_path.substr(number+1, TFolder_path.size());
-////        int number = TFolder_path.find_first_of('/');
-////        string Folder = TFolder_path.substr(0, number);
-//        TFolder *TFolder_ptr = (TFolder *) HistogramTList->FindObject(Folder.c_str());
-//
-//        TFolder_ptr->AddFolder("Daughter_Folder_Name.c_str()", "Daughter_Folder_Name.c_str()");
-//    }
-
-//    if (TFolder_path.find_first_of('/') <= TFolder_path.size()) {
-//        int number = TFolder_path.find_last_of('/');
-//        string Folder = TFolder_path.substr(number+1, TFolder_path.size());
-////        int number = TFolder_path.find_first_of('/');
-////        string Folder = TFolder_path.substr(0, number);
-//        TFolder *TFolder_ptr = (TFolder *) HistogramTList->FindObject(Folder.c_str());
-//
-//        TFolder_ptr->AddFolder("Daughter_Folder_Name.c_str()", "Daughter_Folder_Name.c_str()");
-//    }
-//    if (Plots_Daughter_Folder != "") {
-//        if (Plots_Daughter_Folder.find_first_of('/') != 0) {
-//            int number = Plots_Daughter_Folder.find_first_of('/');
-//            string Daughter_Folder_Name = Plots_Daughter_Folder.substr(0, number);
-//
-//            Histogram_List_Folder->AddFolder(Daughter_Folder_Name.c_str(), Plots_Parent_Folder.c_str());
-//
-//            if (Plots_Daughter_Folder.size() - Daughter_Folder_Name.size() > 0) {
-//                TFolder *pf = (TFolder *) Histogram_List_Folder->FindObject(Daughter_Folder_Name.c_str());
-//
-//                TFolderAdder(pf, Daughter_Folder_Name, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
-////            TFolderAdder(Histogram_list, Plots_Parent_Folder, Plots_Daughter_Folder.substr(number + 1, Plots_Daughter_Folder.size() - 1));
-//            }
-//        }
-//    }
-}
-//</editor-fold>
-
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="MakeDirectory function (regular)">
@@ -286,7 +97,6 @@ void MakeDirectory(bool Create_Directory, string Plots_Parent_Folder, string Plo
 
     string MakeDirectory = "mkdir -p " + Parent_Folder;
     string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
-//    cout << "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*" << "\n\n";
 
     if (Clear_Parent_Folder_content == true && Create_Directory == true) {
         system(RemoveDirectoryContent.c_str());
@@ -294,18 +104,6 @@ void MakeDirectory(bool Create_Directory, string Plots_Parent_Folder, string Plo
     } else if (Clear_Parent_Folder_content == false && Create_Directory == true) {
         system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
     }
-
-    /*
-//    if (Clear_Parent_Folder_content == true) {
-//        system(RemoveDirectoryContent.c_str());
-//    }
-//
-//    if (Create_Directory == true) {
-//        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
-////        cout << MakeDir + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder << "\n\n";
-//    }
-     */
-
 }
 //</editor-fold>
 
@@ -383,38 +181,6 @@ void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, double Lo
 /* Usage: convert bool variables to string. Used to log settings to file. */
 
 inline const char *const BoolToString(bool b) { return b ? "true" : "false"; }
-//</editor-fold>
-
-// testPrint functions --------------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="testPrint functions">
-/* Usage: general functions used to print variables. */
-
-void testPrint() { cout << "\n"; }
-
-void testPrint(string varString = "") {
-    if (varString == "") {
-        cout << "\n";
-    } else {
-        cout << varString << "\n";
-    }
-}
-
-void testPrint(int var, string varString = "") {
-    if (varString == "") {
-        cout << "\n";
-    } else {
-        cout << varString << " = " << var << "\n";
-    }
-}
-
-void testPrint(double var, string varString = "") {
-    if (varString == "") {
-        cout << "\n";
-    } else {
-        cout << varString << " = " << var << "\n";
-    }
-}
 //</editor-fold>
 
 // fit functions --------------------------------------------------------------------------------------------------------------------------------------------------
