@@ -6,10 +6,12 @@
 #define PROJECT_HPLOT2D_H
 
 #include <iostream>
+/*
 #include <vector>
 #include <TF1.h>
 #include <math.h>
 #include <map>
+*/
 
 using namespace std;
 

@@ -2,15 +2,17 @@
 // Created by alons on 27/01/2023.
 //
 
-#ifndef DETECTORSIMULATIONANALYSER_C_HISTOGRAMPLOTTINGFUNCTIONS_H
-#define DETECTORSIMULATIONANALYSER_C_HISTOGRAMPLOTTINGFUNCTIONS_H
+#ifndef HISTOGRAMPLOTTINGFUNCTIONS_H
+#define HISTOGRAMPLOTTINGFUNCTIONS_H
 
+/*
 #include <string>
 #include <cmath>
 #include <tuple>
 #include <iostream>
 #include <sys/stat.h>
 #include <sstream>
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                   histPlotter1D function                                                                            //
@@ -1604,4 +1606,4 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
 }
 //</editor-fold>
 
-#endif //DETECTORSIMULATIONANALYSER_C_HISTOGRAMPLOTTINGFUNCTIONS_H
+#endif //HISTOGRAMPLOTTINGFUNCTIONS_H

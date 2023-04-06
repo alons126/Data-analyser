@@ -2,12 +2,14 @@
 // Created by alons on 27/01/2023.
 //
 
-#ifndef DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
-#define DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
+#ifndef DETECTORSIMULATIONCUTS_H
+#define DETECTORSIMULATIONCUTS_H
 
+/*
 #include <iostream>
 #include <string>
 #include <vector>
+*/
 
 #include "../classes/DSCuts/DSCuts.h"
 
@@ -292,4 +294,4 @@ vector<double> p_mom_cuts_MicroBooNE = {0.3, -1}; // {lower cut, upper cut}; // 
 vector<double> cpion_mom_cuts_MicroBooNE = {0.5, 3}; // {lower cut, upper cut};
 //vector<double> cpion_mom_cuts_MicroBooNE = {-1, 0.065}; // {lower cut, upper cut}; // MicroBooNE cuts
 
-#endif //DETECTORSIMULATIONANALYSER_C_DETECTORSIMULATIONCUTS_H
+#endif //DETECTORSIMULATIONCUTS_H

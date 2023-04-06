@@ -2,8 +2,8 @@
 // Created by alons on 06/03/2023.
 //
 
-#ifndef PROJECT_DSCUTS_H
-#define PROJECT_DSCUTS_H
+#ifndef DSCUTS_H
+#define DSCUTS_H
 
 class DSCuts {
 public:
@@ -126,4 +126,4 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
 //    }
 //}
 
-#endif //PROJECT_DSCUTS_H
+#endif //DSCUTS_H

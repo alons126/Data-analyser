@@ -2,11 +2,12 @@
 // Created by alons on 27/01/2023.
 //
 
-#ifndef DETECTORSIMULATIONANALYSER_C_GENERALFUNCTIONS_H
-#define DETECTORSIMULATIONANALYSER_C_GENERALFUNCTIONS_H
+#ifndef GENERALFUNCTIONS_H
+#define GENERALFUNCTIONS_H
 
 //TODO: recheck which of these #include-s are needed and which aren't
 
+/*
 #include <stdio.h>
 #include <unistd.h>
 
@@ -16,7 +17,9 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <sstream>
+*/
 
+/*
 #include <cstdlib>
 #include <chrono>
 #include <TFile.h>
@@ -32,6 +35,7 @@
 #include <iomanip>
 
 #include "clas12reader.h"
+*/
 
 using namespace clas12;
 using namespace std;
@@ -439,4 +443,4 @@ void testPrint(double var, string varString = "") {
 //}
 ////</editor-fold>
 
-#endif //DETECTORSIMULATIONANALYSER_C_GENERALFUNCTIONS_H
+#endif //GENERALFUNCTIONS_H

@@ -5,6 +5,7 @@
 #ifndef PROJECT_HPLOT1D_H
 #define PROJECT_HPLOT1D_H
 
+/*
 #include <iostream>
 #include <vector>
 #include <TF1.h>
@@ -29,6 +30,7 @@
 #include <TDatabasePDG.h>
 #include <TApplication.h>
 #include <TROOT.h>
+*/
 
 class hPlot1D {
 protected:

@@ -2,8 +2,8 @@
 // Created by alons on 31/01/2023.
 //
 
-#ifndef DETECTORSIMULATIONANALYSER_C_CONSTANTS_H
-#define DETECTORSIMULATIONANALYSER_C_CONSTANTS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //  Mathematical constants
@@ -49,4 +49,4 @@ int tauPDG = 15;
 int nutauPDG = 16;
 int phPDG = 22;
 
-#endif //DETECTORSIMULATIONANALYSER_C_CONSTANTS_H
+#endif //CONSTANTS_H
