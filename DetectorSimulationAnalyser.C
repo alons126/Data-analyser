@@ -39,7 +39,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "clas12reader.h"
 
 #include "settings/codeSetup.h"
-#include "source/classes/hPlots/hPlot1D.h"
+#include "source/classes/hPlots/hPlot1D.cpp"
 
 using namespace std;
 using namespace clas12;
@@ -4983,6 +4983,17 @@ void EventAnalyser() {
 
     c1->cd();
     //</editor-fold>
+
+
+
+    hPlot1D testHist = hPlot1D("hst", "ht", "xat", 0, 1.25);
+//    testHist.hFill(1);
+    testHist.hSave(c1);
+
+
+
+
+
 
 // ======================================================================================================================================================================
 // Cut parameters plots
