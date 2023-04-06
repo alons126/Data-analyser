@@ -36,7 +36,7 @@ protected:
     TH1D *Histogram1D;
 
     /* Histogram titles & lables */
-    map<std::string, std::string> Histogram1DTitles; // contains HistogramStatTitle, HistogramTitle, XaxisTitle, YaxisTitle, Histogram1DTitleReactions, FinalState and DetectorRegion
+    map<std::string, std::string> Histogram1DTitles{{"FinalState",""},{"DetectorRegion",""}}; // contains HistogramStatTitle, HistogramTitle, XaxisTitle, YaxisTitle, Histogram1DTitleReactions, FinalState and DetectorRegion
     std::string Histogram1DTitleReactions;
     std::string FinalState;
     std::string DetectorRegion;
@@ -75,7 +75,7 @@ protected:
     bool LogScalePlot = false, LinearScalePlot = true;
 
     /* Histogram save name and path */
-    std::string Histogram1DSaveName = "test_hist";
+    std::string Histogram1DSaveName = "Histogram1D";
     std::string Histogram1DSaveNamePath = "./";
 
 
@@ -86,15 +86,13 @@ protected:
 
 public:
 // Constructor declaration:
+    hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
+
+    hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
+
     hPlot1D(std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
 
-    hPlot1D(std::string hst, std::string ht, std::string xat, int hnoxb, double lxl, double uxl);
-
-    hPlot1D(std::string hst, std::string ht, std::string xat, std::string h1dsn, std::string h1dsnp);
-
-    hPlot1D(std::string hst, std::string ht, std::string xat, int hnoxb, double lxl, double uxl, std::string h1dsn, std::string h1dsnp);
-
-// Histogram methods:
+    // Histogram methods:
     void hFill(double data) { Histogram1D->Fill(data); }
 
     // histPlotter1D function (old):
@@ -234,7 +232,9 @@ public:
 
     void SetHistogram1DSaveNamePath(std::string h1dsNamePath) { Histogram1DSaveNamePath = h1dsNamePath; }
 
-    void SetFinalState(std::string fState) { FinalState = fState; }
+    void SetFinalState(std::string fState) { Histogram1DTitles["FinalState"] = fState; }
+
+    void SetDetectorRegion(std::string dRegion) { Histogram1DTitles["DetectorRegion"] = dRegion; }
 
     void SetkColor(int kCol = 1) { LineColor = kCol; }
 
@@ -295,7 +295,9 @@ public:
 
     std::string GetHistogram1DSaveNamePath() { return Histogram1DSaveNamePath; }
 
-    std::string GetFinalState() { return FinalState; }
+    std::string GetFinalState() { return Histogram1DTitles["FinalState"]; }
+
+    std::string GetDetectorRegion() { return Histogram1DTitles["DetectorRegion"]; }
 
     int GetkColor() { return LineColor; }
 

@@ -5,7 +5,35 @@
 #include "hPlot1D.h"
 #include "../../functions/GeneralFunctions.h"
 
-/* Constructor definitions */
+// Constructor definition ---------------------------------------------------------------------------------------------------------------
+
+hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim,
+                 int hnob = 100) {
+    Histogram1DTitles["Histogram1DTitleReactions"] = h1DtReactions, Histogram1DTitles["FinalState"] = fState, Histogram1DTitles["DetectorRegion"] = dRegion;
+    Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
+    HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
+    HistogramNumberOfXBins = 100;
+
+    Histogram1D = new TH1D((Histogram1DTitles["HistogramStatTitle"] +
+                            " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " +
+                            Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")").c_str(),
+                           (Histogram1DTitles["HistogramTitle"] + " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " +
+                            Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")" + ";" + Histogram1DTitles["XaxisTitle"] + ";").c_str(),
+                           HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
+}
+
+hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100) {
+    Histogram1DTitles["FinalState"] = fState, Histogram1DTitles["DetectorRegion"] = dRegion;
+    Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
+    HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
+    HistogramNumberOfXBins = 100;
+
+    Histogram1D = new TH1D((Histogram1DTitles["HistogramStatTitle"] +
+                            " (" + Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")").c_str(),
+                           (Histogram1DTitles["HistogramTitle"] + " (" + Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")" + ";" +
+                            Histogram1DTitles["XaxisTitle"] + ";").c_str(), HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
+}
+
 hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob) {
     Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -15,45 +43,7 @@ hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, double LowerX
                            HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
 }
 
-hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, int hnoxb, double lxl, double uxl) {
-    Histogram1DTitles["HistogramStatTitle"] = hst;
-    Histogram1DTitles["HistogramTitle"] = ht;
-    Histogram1DTitles["XaxisTitle"] = xat;
-    HistogramNumberOfXBins = hnoxb;
-    HistogramXAxisLimits.at(0) = lxl;
-    HistogramXAxisLimits.at(1) = uxl;
-
-    std::string TandX = Histogram1DTitles["HistogramTitle"] + ";" + Histogram1DTitles["XaxisTitle"] + ";";
-    Histogram1D = new TH1D(Histogram1DTitles["HistogramStatTitle"].c_str(), TandX.c_str(), HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
-}
-
-hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, std::string h1dsn, std::string h1dsnp) {
-    Histogram1DTitles["HistogramStatTitle"] = hst;
-    Histogram1DTitles["HistogramTitle"] = ht;
-    Histogram1DTitles["XaxisTitle"] = xat;
-    Histogram1DSaveName = h1dsn;
-    Histogram1DSaveNamePath = h1dsnp;
-
-    std::string TandX = Histogram1DTitles["HistogramTitle"] + ";" + Histogram1DTitles["XaxisTitle"] + ";";
-    Histogram1D = new TH1D(Histogram1DTitles["HistogramStatTitle"].c_str(), TandX.c_str(), HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
-}
-
-hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, int hnoxb, double lxl, double uxl, std::string h1dsn, std::string h1dsnp) {
-    Histogram1DTitles["HistogramStatTitle"] = hst;
-    Histogram1DTitles["HistogramTitle"] = ht;
-    Histogram1DTitles["XaxisTitle"] = xat;
-    HistogramNumberOfXBins = hnoxb;
-    HistogramXAxisLimits.at(0) = lxl;
-    HistogramXAxisLimits.at(1) = uxl;
-    Histogram1DSaveName = h1dsn;
-    Histogram1DSaveNamePath = h1dsnp;
-
-    std::string TandX = Histogram1DTitles["HistogramTitle"] + ";" + Histogram1DTitles["XaxisTitle"] + ";";
-    Histogram1D = new TH1D(Histogram1DTitles["HistogramStatTitle"].c_str(), TandX.c_str(), HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
-}
-
-
-/* histPlotter1D definitions */
+// histPlotter1D function (old) ---------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter1D function (old)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
@@ -717,10 +707,10 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas1, TCanvas *Histogram1DCan
     if (normalize_Histogram == true) {
         std::string title = Histogram1DTitle1 + " (" + Histogram1DTitle2 + ", " + Histogram1DTitle3 + ")" + " - Normalized";
         std::string HistogramTitle0 = "#splitline{" + title + "}{" + "(|#chi^{2}_{" + Particle1 + "," + Histogram1DTitle3 + "} - (#chi^{2}_{" + Particle1 + "," +
-                                     Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts1) + ", " + "|#chi^{2}_{" + Particle2 + "," +
-                                     Histogram1DTitle3 + "} -(#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 + "})_{max}| #leq " +
-                                     to_string_with_precision(plot_cuts2) +
-                                     ")}";
+                                      Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts1) + ", " + "|#chi^{2}_{" + Particle2 + "," +
+                                      Histogram1DTitle3 + "} -(#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 + "})_{max}| #leq " +
+                                      to_string_with_precision(plot_cuts2) +
+                                      ")}";
         Histogram1D->SetTitle(HistogramTitle0.c_str());
         Histogram1D->GetYaxis()->SetTitle("Probability (%)");
         gStyle->SetTitleFontSize(0.04);
@@ -750,8 +740,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas1, TCanvas *Histogram1DCan
         }
 
         HistogramTitle0 = "#splitline{" + title + "}{" + "(|#chi^{2}_{" + Particle1 + "," + Histogram1DTitle3 + "} - (#chi^{2}_{" + Particle1 + "," +
-                         Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts1) + ", " + "|#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 +
-                         "} - (#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts2) + ")}";
+                          Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts1) + ", " + "|#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 +
+                          "} - (#chi^{2}_{" + Particle2 + "," + Histogram1DTitle3 + "})_{max}| #leq " + to_string_with_precision(plot_cuts2) + ")}";
         Histogram1D->SetTitle(HistogramTitle0.c_str());
         Histogram1D->GetYaxis()->SetTitle("Arbitrary units (#events)");
         gStyle->SetTitleFontSize(0.04);

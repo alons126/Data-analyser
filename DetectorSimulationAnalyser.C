@@ -65,33 +65,14 @@ void EventAnalyser() {
     string LoadedInput = AnalyseFile; // AnalyseFile is taken from codeSetup.h
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
     string fileInput = LoadedInput.substr(LoadedInput.find_last_of('/') + 1);
-    string plotsInput = fileInput.substr(0, fileInput.find_last_of(".root") - 4);
+    string plotsInput = fileInput.substr(0, fileInput.find_last_of(".hipo") - 4);
 
-    /* Configure sample name */
-    string SampleName = getSampleName(AnalyseFilePath, AnalyseFileSample); // electron energy declaration
-
-    /* Configure beam energy (beamE) */
-//    double beamE = 5.98636; // electron energy declaration
-    double beamE = getBeanE(SampleName); // electron energy declaration
-
-    /* Configure target */
-    TargetParameters ScattringTarget;
-
-    if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
-        (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
-        (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
-        ScattringTarget.SetTargetElement("C12");
-        ScattringTarget.SetTargetElementPDG(1000060120);
-    } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
-        ScattringTarget.SetTargetElement("Ca48");
-        ScattringTarget.SetTargetElementPDG(1000200480);
-    } else {
-        ScattringTarget.SetTargetElement("UNKOWN");
-        ScattringTarget.SetTargetElementPDG(0);
-    }
-
-    string Target = ScattringTarget.GetTargetElement();
-    int TargetPDG = ScattringTarget.GetTargetElementPDG();
+    /* Configure and get run parameters */
+    ExperimentParameters Experiment(AnalyseFilePath, AnalyseFileSample);
+    string SampleName = Experiment.ConfigureSampleName(AnalyseFilePath, AnalyseFileSample); // Configure SampleName from input
+    double beamE = Experiment.GetBeanEnergy(); // Configure beam energy from SampleName
+    string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
+    int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
 
     /* Execution variables */
     cout << "-- Execution variables ----------------------------------------------------\n";
@@ -1924,26 +1905,26 @@ void EventAnalyser() {
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
     /* Phi_e histograms (no #(e) cut) */
-//    TH1D *hPhi_e_All_e_CD = new TH1D("#phi_{e} (no #(e) cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_All_e_CD = new TH1D("#phi_{e} (no #(e) cut, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     string hPhi_e_All_e_CD_Dir = Phi_e_All_e_Directory, hPhi_e_All_e_FD_Dir = Phi_e_All_e_Directory;
 
     /* Phi_e histograms (1e cut) */
-//    TH1D *hPhi_e_1e_cut_CD = new TH1D("#phi_{e} (1e Cut, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e_cut_CD = new TH1D("#phi_{e} (1e Cut, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     string hPhi_e_1e_cut_CD_Dir = Phi_e_1e_cut_Directory, hPhi_e_1e_cut_FD_Dir = Phi_e_1e_cut_Directory;
 
     /* Phi_e histograms (1e2X) */
-//    TH1D *hPhi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All Int., CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All Int., FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All Int., CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
 //    string hPhi_e_1e2X_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_FD_Dir = Phi_e_1e2X_Directory;
 //    string hPhi_e_1e2X_QEL_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_QEL_FD_Dir = Phi_e_1e2X_Directory;
 //    string hPhi_e_1e2X_MEC_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_MEC_FD_Dir = Phi_e_1e2X_Directory;
@@ -1951,16 +1932,16 @@ void EventAnalyser() {
 //    string hPhi_e_1e2X_DIS_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_DIS_FD_Dir = Phi_e_1e2X_Directory;
 
     /* Phi_e histograms (1e2p) */
-//    TH1D *hPhi_e_All_Int_1e2p_CD = new TH1D("#phi_{e} 1e2p (All Int., CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eQEL_2p_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eMEC_2p_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eRES_2p_CD = new TH1D("#phi_{e} for 1e2p (RES Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_1eDIS_2p_CD = new TH1D("#phi_{e} for 1e2p (DIS Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_QEL_1e2p_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_All_Int_1e2p_CD = new TH1D("#phi_{e} 1e2p (All Int., CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1eQEL_2p_CD = new TH1D("#phi_{e} for 1e2p (QEL Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1eMEC_2p_CD = new TH1D("#phi_{e} for 1e2p (MEC Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1eRES_2p_CD = new TH1D("#phi_{e} for 1e2p (RES Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_1eDIS_2p_CD = new TH1D("#phi_{e} for 1e2p (DIS Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_QEL_1e2p_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     string hPhi_e_All_Int_1e2p_FD_Dir = Phi_e_1e2p_Directory, hPhi_e_All_Int_1e2p_CD_Dir = Phi_e_1e2p_Directory;
     string hPhi_e_1eQEL_2p_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_QEL_1e2p_FD_Dir = Phi_e_1e2p_Directory;
     string hPhi_e_1eMEC_2p_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_MEC_1e2p_FD_Dir = Phi_e_1e2p_Directory;
@@ -1968,16 +1949,16 @@ void EventAnalyser() {
     string hPhi_e_1eDIS_2p_CD_Dir = Phi_e_1e2p_Directory, hPhi_e_DIS_1e2p_FD_Dir = Phi_e_1e2p_Directory;
 
     /* Phi_e histograms (2p) */
-//    TH1D *hPhi_e_All_Int_2p_CD = new TH1D("#phi_{e} 2p (All Int., CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_QEL_2p_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_MEC_2p_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_RES_2p_CD = new TH1D("#phi_{e} for 2p (RES Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-//    TH1D *hPhi_e_DIS_2p_CD = new TH1D("#phi_{e} for 2p (DIS Only, CD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+//    TH1D *hPhi_e_All_Int_2p_CD = new TH1D("#phi_{e} 2p (All Int., CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_QEL_2p_CD = new TH1D("#phi_{e} for 2p (QEL Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_MEC_2p_CD = new TH1D("#phi_{e} for 2p (MEC Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_RES_2p_CD = new TH1D("#phi_{e} for 2p (RES Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+//    TH1D *hPhi_e_DIS_2p_CD = new TH1D("#phi_{e} for 2p (DIS Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     string hPhi_e_All_Int_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_All_Int_2p_FD_Dir = Phi_e_2p_Directory;
     string hPhi_e_QEL_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_QEL_2p_FD_Dir = Phi_e_2p_Directory;
     string hPhi_e_MEC_2p_CD_Dir = Phi_e_2p_Directory, hPhi_e_MEC_2p_FD_Dir = Phi_e_2p_Directory;
@@ -1990,23 +1971,23 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_e vs. Phi_e">
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
 //    TH2D *hTheta_e_VS_Phi_e_All_e_CD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, CD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
-//                                                250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
+//                                                250, -200, 200, 250, 35, 140);
     TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
+                                                250, -200, 200, 250, 0, 50);
     string hTheta_e_VS_Phi_e_All_e_CD_Dir = Theta_e_VS_Phi_e_All_e_Directory, hTheta_e_VS_Phi_e_All_e_FD_Dir = Theta_e_VS_Phi_e_All_e_Directory;
 
     /* Theta_e vs. Phi_e histograms (1e cut) */
 //    TH2D *hTheta_e_VS_Phi_e_1e_cut_CD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, CD)", "#theta_{e} vs. #phi_{e}  (1e Cut, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
-//                                                 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
+//                                                 250, -200, 200, 250, 35, 140);
     TH2D *hTheta_e_VS_Phi_e_1e_cut_FD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, FD)", "#theta_{e} vs. #phi_{e} (1e Cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                 250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
+                                                 250, -200, 200, 250, 0, 50);
     string hTheta_e_VS_Phi_e_1e_cut_CD_Dir = Theta_e_VS_Phi_e_1e_cut_Directory, hTheta_e_VS_Phi_e_1e_cut_FD_Dir = Theta_e_VS_Phi_e_1e_cut_Directory;
 
     /* Theta_e vs. Phi_e histograms (2p) */
 //    TH2D *hTheta_e_VS_Phi_e_2p_CD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 2p, CD)", "#theta_{e} vs. #phi_{e} (All Int., 2p, CD);#phi_{e} [Deg];#theta_{e} [Deg]",
-//                                             250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 35, 140);
+//                                             250, -200, 200, 250, 35, 140);
     TH2D *hTheta_e_VS_Phi_e_2p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 2p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 2p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                             250, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p, 250, 0, 50);
+                                             250, -200, 200, 250, 0, 50);
     string hTheta_e_VS_Phi_e_2p_CD_Dir = Theta_e_VS_Phi_e_2p_Directory, hTheta_e_VS_Phi_e_2p_FD_Dir = Theta_e_VS_Phi_e_2p_Directory;
     //</editor-fold>
 
@@ -2101,10 +2082,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Phi of leading (p1) and recoil (p2) protons">
     THStack *sPhi_Proton_1e2pXy = new THStack("#phi_{p} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
-    TH1D *hPhi_p1_1e2pXy_CD = new TH1D("#phi_{p_{1}} (1e2pXy, CD)", ";#phi_{p_{1}} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_p1_1e2pXy_FD = new TH1D("#phi_{p_{1}} (1e2pXy, FD)", ";#phi_{p_{1}} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_p2_1e2pXy_CD = new TH1D("#phi_{p_{2}} (1e2pXy, CD)", ";#phi_{p_{2}} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
-    TH1D *hPhi_p2_1e2pXy_FD = new TH1D("#phi_{p_{2}} (1e2pXy, FD)", ";#phi_{p_{2}} [Deg];", 100, phi_lp_lower_lim_2p, phi_lp_upper_lim_2p);
+    TH1D *hPhi_p1_1e2pXy_CD = new TH1D("#phi_{p_{1}} (1e2pXy, CD)", ";#phi_{p_{1}} [Deg];", 100, -200, 200);
+    TH1D *hPhi_p1_1e2pXy_FD = new TH1D("#phi_{p_{1}} (1e2pXy, FD)", ";#phi_{p_{1}} [Deg];", 100, -200, 200);
+    TH1D *hPhi_p2_1e2pXy_CD = new TH1D("#phi_{p_{2}} (1e2pXy, CD)", ";#phi_{p_{2}} [Deg];", 100, -200, 200);
+    TH1D *hPhi_p2_1e2pXy_FD = new TH1D("#phi_{p_{2}} (1e2pXy, FD)", ";#phi_{p_{2}} [Deg];", 100, -200, 200);
     string hPhi_p1_1e2pXy_CD_Dir = Phi_Proton_1e2pXy_Directory, hPhi_p1_1e2pXy_FD_Dir = Phi_Proton_1e2pXy_Directory;
     string hPhi_p2_1e2pXy_CD_Dir = Phi_Proton_1e2pXy_Directory, hPhi_p2_1e2pXy_FD_Dir = Phi_Proton_1e2pXy_Directory;
     //</editor-fold>
@@ -4983,17 +4964,6 @@ void EventAnalyser() {
 
     c1->cd();
     //</editor-fold>
-
-
-
-    hPlot1D testHist = hPlot1D("hst", "ht", "xat", 0, 1.25);
-//    testHist.hFill(1);
-    testHist.hSave(c1);
-
-
-
-
-
 
 // ======================================================================================================================================================================
 // Cut parameters plots
