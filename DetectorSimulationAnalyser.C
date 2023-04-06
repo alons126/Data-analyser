@@ -112,13 +112,13 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts settings">
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
