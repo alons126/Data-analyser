@@ -102,7 +102,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -148,15 +148,15 @@ void EventAnalyser() {
 
     if (custom_cuts_naming == true) {
         if (apply_cuts == false) {
-            plots_path = WorkingDirectory + "plots_" + SampleName + "__NO_CUTS/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__NO_CUTS.txt";
+            plots_path = WorkingDirectory + "plots_" + SampleName + "_-_NO_CUTS/";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_NO_CUTS.txt";
         } else {
             if (apply_chi2_cuts_1e_cut == false) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "__ALL_CUTS_woChi2/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__ALL_CUTS_woChi2.txt";
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut == true) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "__ALL_CUTS/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__ALL_CUTS.txt";
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
         }
     }
@@ -227,313 +227,14 @@ void EventAnalyser() {
 
     //<editor-fold desc="Creating directories">
     /* Code for creating directories.
+     * Directory creation has been moved to the Directories class.
      * Added for the case that plots out folder does not exist and for orgenazation.
      * All cut plots are separate from the analysis plots, and withing the 01_Cuts_plots folder. */
 
     cout << "Creating plot directories...\n\n";
 
-    string Plots_Folder = plots_path; // Plots_Folder = Parent_Folder
-    system(("mkdir -p " + Plots_Folder).c_str()); // clear old stuff in Parent_Folder
-    system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
-
-    //<editor-fold desc="Cut parameters plots directories">
-
-    //<editor-fold desc="Number of Photo-electrons (Nphe) plots directories">
-    bool create_Nphe_Dir = true;
-    string Nphe_Parent_Directory = "01_Cuts_plots/01_Nphe_plots";
-    string Nphe_Daughter_Folders[] = {"", "01_1e_cut", "02_1p", "03_2p"};
-
-    for (string folders_name: Nphe_Daughter_Folders) {
-        MakeDirectory(create_Nphe_Dir, Nphe_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Nphe_1e_cut_BC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/"; // before cuts - i.e. plots before Nphe cuts
-    string Nphe_1e_cut_AC_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[1] + "/"; // after cuts - i.e. plots after Nphe cuts
-    string Nphe_1p_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[2] + "/"; // 1p - i.e. plots after Nphe and all other cuts
-    string Nphe_2p_Directory = Plots_Folder + "/" + Nphe_Parent_Directory + "/" + Nphe_Daughter_Folders[3] + "/"; // 2p - i.e. plots after Nphe and all other cuts
-    //</editor-fold>
-
-    //<editor-fold desc="Chi2 plots directories">
-    bool create_chi2_Dir = true;
-    string Chi2_Parent_Directory = "01_Cuts_plots/02_Chi2_plots";
-    string Chi2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_1e2p_BC-AC_cut_tests", "04_2p"};
-
-    for (string folders_name: Chi2_Daughter_Folders) {
-        MakeDirectory(create_chi2_Dir, Chi2_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Chi2_All_e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[1] + "/";
-    string Chi2_1e_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[2] + "/";
-    string Chi2_1e2p_cut_tests_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[3] + "/";
-    string Chi2_2p_Directory = Plots_Folder + "/" + Chi2_Parent_Directory + "/" + Chi2_Daughter_Folders[4] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Vertex plots directories">
-    bool create_Vertex_Dir = true;
-    string Vertex_Parent_Directory = "01_Cuts_plots/03_Vertex_plots";
-    string Vertex_Daughter_Folders[] = {"", "02_dV_plots/02_1e2p", "02_dV_plots/03_2p", "01_Vertex_components_plots/01_1e_cut/01_Electrons",
-                                        "01_Vertex_components_plots/01_1e_cut/02_Protons", "01_Vertex_components_plots/01_1e_cut/03_Kplus",
-                                        "01_Vertex_components_plots/01_1e_cut/04_Kminus", "01_Vertex_components_plots/01_1e_cut/05_Piplus",
-                                        "01_Vertex_components_plots/01_1e_cut/06_Piminus"};
-
-    for (string folders_name: Vertex_Daughter_Folders) {
-        MakeDirectory(create_Vertex_Dir, Vertex_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Vertex_1e2p_dV_BC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
-    string Vertex_1e2p_dV_AC_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[1] + "/";
-    string Vertex_dV_2p_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[2] + "/";
-    string Vertex_Electron_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
-    string Vertex_Electron_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
-    string Vertex_Electron_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[3] + "/";
-    string Vertex_Proton_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
-    string Vertex_Proton_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
-    string Vertex_Proton_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[4] + "/";
-    string Vertex_Kplus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
-    string Vertex_Kplus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
-    string Vertex_Kplus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[5] + "/";
-    string Vertex_Kminus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
-    string Vertex_Kminus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
-    string Vertex_Kminus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[6] + "/";
-    string Vertex_piplus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
-    string Vertex_piplus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
-    string Vertex_piplus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[7] + "/";
-    string Vertex_piminus_1e_Vx_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[8] + "/";
-    string Vertex_piminus_1e_Vy_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[8] + "/";
-    string Vertex_piminus_1e_Vz_Directory = Plots_Folder + "/" + Vertex_Parent_Directory + "/" + Vertex_Daughter_Folders[8] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Sampling Fraction (SF) plots directories">
-    bool create_SF_Dir = true;
-    string SF_Parent_Directory = "01_Cuts_plots/04_SF_plots";
-    string SF_Daughter_Folders[] = {"", "01_1e_cut", "01_1e_cut/SF_plots", "01_1e_cut/SF_VS_P_e_plots", "02_2p", "02_2p/SF_plots",
-                                    "02_2p/SF_VS_P_e_plots"};
-
-    for (string folders_name: SF_Daughter_Folders) {
-        MakeDirectory(create_SF_Dir, SF_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string SF_plots_1e_cut_BC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
-    string SF_VS_P_e_plots_1e_cut_BC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
-    string SF_plots_1e_cut_AC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[2] + "/";
-    string SF_VS_P_e_plots_1e_cut_AC_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[3] + "/";
-    string SF_plots_2p_cuts_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[5] + "/";
-    string SF_VS_P_e_plots_2p_cuts_Directory = Plots_Folder + "/" + SF_Parent_Directory + "/" + SF_Daughter_Folders[6] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Edge cuts histograms plots directories">
-    bool create_fiducial_Dir = true;
-    string fiducial_Parent_Directory = "01_Cuts_plots/05_Edge_cuts_plots";
-    string fiducial_Daughter_Folders[] = {"", "01_1e_cut", "01_1e_cut/PCAL", "02_2p", "02_2p/PCAL"};
-
-    for (string folders_name: fiducial_Daughter_Folders) {
-        MakeDirectory(create_fiducial_Dir, fiducial_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string fiducial_plots_1e_BC_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_1e_AC_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[2] + "/";
-    string fiducial_plots_2p_cuts_histograms_PCAL_Directory = Plots_Folder + "/" + fiducial_Parent_Directory + "/" + fiducial_Daughter_Folders[4] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Momentum plots directories">
-    bool create_Momentum_Dir = true;
-    string Momentum_Parent_Directory = "01_Cuts_plots/06_Momentum_plots";
-    string Momentum_Daughter_Folders[] = {"", "01_1e_cut", "02_1p", "03_1e2p", "04_2p"};
-
-    for (string folders_name: Momentum_Daughter_Folders) {
-        MakeDirectory(create_Momentum_Dir, Momentum_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Momentum_1e_cut_tests_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[1] + "/";
-    string Momentum_1e2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[3] + "/";
-    string Momentum_2p_Directory = Plots_Folder + "/" + Momentum_Parent_Directory + "/" + Momentum_Daughter_Folders[4] + "/";
-    //</editor-fold>
-
-    //</editor-fold>
-
-    //<editor-fold desc="Beta vs. p plots directories">
-    bool create_Beta_vs_P_Dir = true;
-    string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
-    string Beta_VS_P_Daughter_Folders[] = {"", "01_All_e", "01_All_e/By_charge", "02_1e_cut", "02_1e_cut/By_charge",
-                                           "04_1p", "04_1p/By_charge", "05_2p", "05_2p/By_charge"};
-
-    for (string folders_name: Beta_VS_P_Daughter_Folders) {
-        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Beta_VS_P_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[1] + "/";
-    string Beta_VS_P_by_charge_All_e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[2] + "/";
-    string Beta_VS_P_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[3] + "/";
-    string Beta_VS_P_by_charge_Only_1e_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[4] + "/";
-    string Beta_VS_P_1p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[5] + "/";
-    string Beta_VS_P_by_charge_1p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[6] + "/";
-    string Beta_VS_P_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[7] + "/";
-    string Beta_VS_P_by_charge_2p_Directory = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" + Beta_VS_P_Daughter_Folders[8] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Angle plots directories">
-    bool create_Angle_Dir = true;
-    string Angle_Parent_Directory = "03_Angle_plots";
-    string Angle_Daughter_Folders[] = {"",
-                                       "01_All_e", "01_All_e/01_Theta_e_All_e_plots", "01_All_e/02_Phi_e_All_e_plots", "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots",
-
-                                       "02_1e_cut", "02_1e_cut/01_Theta_e_1e_cut_plots", "02_1e_cut/02_Phi_e_1e_cut_plots", "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots",
-
-                                       "03_1e2X",
-                                       "03_1e2X/01_Theta_e_1e2X_plots", "03_1e2X/02_Phi_e_1e2X_plots", "03_1e2X/03_Theta_e_VS_Phi_e_1e2X_plots",
-
-                                       "05_1e2p", "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots",
-
-                                       "06_2p", "06_2p/01_Theta_e_2p_plots", "06_2p/02_Phi_e_2p_plots", "06_2p/03_Theta_e_VS_Phi_e_2p_plots",
-                                       "06_2p/04_Opening_angles_2p_plots", "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction",
-
-                                       "07_1e2pXy", "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots",
-                                       "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots", "07_1e2pXy/04_Phi_Proton_1e2pXy_plots"};
-
-    for (string folders_name: Angle_Daughter_Folders) {
-        MakeDirectory(create_Angle_Dir, Angle_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Theta_e_All_e_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[2] + "/";
-    string Phi_e_All_e_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[3] + "/";
-    string Theta_e_VS_Phi_e_All_e_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[4] + "/";
-
-    string Theta_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[6] + "/";
-    string Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[7] + "/";
-    string Theta_e_VS_Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[8] + "/";
-
-    string Theta_e_1e2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[14] + "/";
-    string Phi_e_1e2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[15] + "/";
-
-    string Theta_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[18] + "/";
-    string Phi_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[19] + "/";
-    string Theta_e_VS_Phi_e_2p_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[20] + "/";
-    string Opening_angle_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[21] + "/";
-    string Theta_p1_p2_by_interaction_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[22] + "/";
-
-//    string Theta_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[6] + "/";
-    string Phi_Proton_1e2pXy_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[27] + "/";
-//    string Theta_e_VS_Phi_e_1e_cut_Directory = Plots_Folder + "/" + Angle_Parent_Directory + "/" + Angle_Daughter_Folders[8] + "/";
-    //TODO: reorganize properly
-
-    //</editor-fold>
-
-    //<editor-fold desc="Q2 plots directories">
-    bool create_Q2_Dir = true;
-    string Q2_Parent_Directory = "04_Q2_plots";
-    string Q2_Daughter_Folders[] = {"", "01_All_e", "02_1e_cut", "03_1e2X", "04_1e2p", "05_2p"};
-
-    for (string folders_name: Q2_Daughter_Folders) {
-        MakeDirectory(create_Q2_Dir, Q2_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Q2_All_e_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[1] + "/";
-    string Q2_1e_cut_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[2] + "/";
-    string Q2_1e2X_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[3] + "/";
-    string Q2_1e2p_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[4] + "/";
-    string Q2_2p_Directory = Plots_Folder + "/" + Q2_Parent_Directory + "/" + Q2_Daughter_Folders[5] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="E_e plots directories">
-    bool create_E_e_Dir = true;
-    string E_e_Parent_Directory = "05_E_e_plots";
-    string E_e_Daughter_Folders[] = {"", "01_1e_cut", "01_1e_cut/E_e_plots", "01_1e_cut/E_e_VS_Theta_e", "02_2p", "02_2p/E_e_plots",
-                                     "02_2p/E_e_VS_Theta_e", "02_2p/E_e_plots/Around_15_deg"};
-
-    for (string folders_name: E_e_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string E_e_All_Int_1e_cut_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[2] + "/";
-    string E_e_VS_Theta_e_All_Int_1e_cut_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[3] + "/";
-    string E_e_All_Int_2p_stack_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[4] + "/";
-    string E_e_All_Int_2p_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[5] + "/";
-    string E_e_VS_Theta_e_All_Int_2p_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[6] + "/";
-    string E_e_15_All_Int_2p_Directory = Plots_Folder + "/" + E_e_Parent_Directory + "/" + E_e_Daughter_Folders[7] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="ETrans plots directories">
-    bool create_ETrans_Dir = true;
-    string ETrans_Parent_Directory = "06_ET_plots";
-    string ETrans_Daughter_Folders[] = {"", "02_2p", "02_2p/02_Around_15_Deg_2p", "02_2p/02_Around_15_Deg_2p/00_All_interactions",
-                                        "02_2p/02_Around_15_Deg_2p/01_QEL_only", "02_2p/02_Around_15_Deg_2p/02_MEC_only", "02_2p/02_Around_15_Deg_2p/03_RES_only",
-                                        "02_2p/02_Around_15_Deg_2p/04_DIS_only", "02_2p/01_Every_theta_e_2p", "02_2p/01_Every_theta_e_2p/00_All_interactions",
-                                        "02_2p/01_Every_theta_e_2p/01_QEL_only", "02_2p/01_Every_theta_e_2p/02_MEC_only",
-                                        "02_2p/01_Every_theta_e_2p/03_RES_only", "02_2p/01_Every_theta_e_2p/04_DIS_only", "01_1p", "01_1p/02_Around_15_Deg_1p",
-                                        "01_1p/02_Around_15_Deg_1p/00_All_interactions", "01_1p/02_Around_15_Deg_1p/01_QEL_only",
-                                        "01_1p/02_Around_15_Deg_1p/02_MEC_only", "01_1p/02_Around_15_Deg_1p/03_RES_only",
-                                        "01_1p/02_Around_15_Deg_1p/04_DIS_only", "01_1p/01_Every_theta_e_1p",
-                                        "01_1p/01_Every_theta_e_1p/00_All_interactions", "01_1p/01_Every_theta_e_1p/01_QEL_only",
-                                        "01_1p/01_Every_theta_e_1p/02_MEC_only", "01_1p/01_Every_theta_e_1p/03_RES_only",
-                                        "01_1p/01_Every_theta_e_1p/04_DIS_only"};
-
-    for (string folders_name: ETrans_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string ETrans_15_stack_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[2] + "/";
-    string ETrans_All_Int_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[3] + "/";
-    string ETrans_QEL_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[4] + "/";
-    string ETrans_MEC_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[5] + "/";
-    string ETrans_RES_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[6] + "/";
-    string ETrans_DIS_15_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[7] + "/";
-    string ETrans_All_Ang_stack_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[8] + "/";
-    string ETrans_All_Int_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[9] + "/";
-    string ETrans_QEL_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[10] + "/";
-    string ETrans_MEC_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[11] + "/";
-    string ETrans_RES_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[12] + "/";
-    string ETrans_DIS_All_Ang_2p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[13] + "/";
-    string ETrans_15_stack_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[15] + "/";
-    string ETrans_All_Int_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[16] + "/";
-    string ETrans_QEL_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[17] + "/";
-    string ETrans_MEC_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[18] + "/";
-    string ETrans_RES_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[19] + "/";
-    string ETrans_DIS_15_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[20] + "/";
-    string ETrans_All_Ang_stack_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[21] + "/";
-    string ETrans_All_Int_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[22] + "/";
-    string ETrans_QEL_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[23] + "/";
-    string ETrans_MEC_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[24] + "/";
-    string ETrans_RES_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[25] + "/";
-    string ETrans_DIS_All_Ang_1p_Directory = Plots_Folder + "/" + ETrans_Parent_Directory + "/" + ETrans_Daughter_Folders[26] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Ecal plots directories">
-    bool create_Ecal_Dir = true;
-    string Ecal_Parent_Directory = "07_Ecal_rec_plots";
-    string Ecal_Daughter_Folders[] = {"", "01_2p", "01_2p/01_Ecal_rec_by_reaction_2p/00_All_interactions", "01_2p/01_Ecal_rec_by_reaction_2p/01_QEL_only",
-                                      "01_2p/01_Ecal_rec_by_reaction_2p/02_MEC_only", "01_2p/01_Ecal_rec_by_reaction_2p/03_RES_only",
-                                      "01_2p/01_Ecal_rec_by_reaction_2p/04_DIS_only", "01_2p/02_Ecal_rec_vs_transverse_variables",
-                                      "01_2p/03_Chi2_for_Ecal_above_Ebeam"};
-
-    for (string folders_name: Ecal_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string Ecal_stack_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[1] + "/";
-    string Ecal_All_Int_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[2] + "/";
-    string Ecal_QEL_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[3] + "/";
-    string Ecal_MEC_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[4] + "/";
-    string Ecal_RES_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[5] + "/";
-    string Ecal_DIS_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[6] + "/";
-    string Ecal_rec_vs_transverse_variables_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[7] + "/";
-    string Chi2_Ecal_test_2p_Directory = Plots_Folder + "/" + Ecal_Parent_Directory + "/" + Ecal_Daughter_Folders[8] + "/";
-    //</editor-fold>
-
-    //<editor-fold desc="Transverse variables plots directories">
-    bool create_TVariables_Dir = true;
-    string TVariables_Parent_Directory = "08_Transverse_variable_plots";
-    string TVariables_Daughter_Folders[] = {"", "2p", "2p/01_dP_T", "2p/02_dAlpha_T", "2p/03_dPhi_T"};
-
-    for (string folders_name: TVariables_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, TVariables_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    string dP_T_vs_dAlpha_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[1] + "/";
-    string dP_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[2] + "/";
-    string dAlpha_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[3] + "/";
-    string dPhi_T_2p_Directory = Plots_Folder + "/" + TVariables_Parent_Directory + "/" + TVariables_Daughter_Folders[4] + "/";
-    //</editor-fold>
-
+    string Plots_Folder = plots_path;
+    Directories directories = Directories(Plots_Folder);
     //</editor-fold>
 
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -749,17 +450,19 @@ void EventAnalyser() {
     if (apply_cuts == false) {
         hNphe_1e_cut_BC_FD = new TH1D("N_{phe} in HTCC BC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} - Before Cuts (1e Cut);N_{phe}", 100, 0, 40);
         hNphe_1e_cut_AC_FD = new TH1D("N_{phe} in HTCC AC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} - After Cuts (1e Cut);N_{phe}", 100, 0, 40);
-        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
+        hNphe_1e_cut_BC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"], hNphe_1e_cut_AC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
+//        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
     } else {
         hNphe_1e_cut_BC_FD = new TH1D("N_{phe} in HTCC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} (1e Cut);N_{phe}", 100, 0, 40);
-        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
+        hNphe_1e_cut_BC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"], hNphe_1e_cut_AC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
+//        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
     }
     //</editor-fold>
 
     //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (2p, FD only)">
     THStack *sNphe_2p_FD = new THStack("N_{phe} in HTCC (2p)", "#Photo-electrons in HTCC - N_{phe} Histogram (2p);N_{phe}");
     TH1D *hNphe_2p_FD = new TH1D("N_{phe} in HTCC (2p)", "#Photo-electrons in HTCC - N_{phe} (2p);N_{phe}", 100, 0, 40);
-    string hNphe_2p_FD_Dir = Nphe_2p_Directory;
+    string hNphe_2p_FD_Dir = directories.Nphe_Directory_map["Nphe_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -776,14 +479,15 @@ void EventAnalyser() {
     THStack *sChi2_Electron_All_e = new THStack("#chi^{2}_{e} (no #(e) cut, CD & FD)", "#chi^{2}_{e} Histogram (no #(e) cut, CD & FD);#chi^{2}_{e};");
     TH1D *hChi2_Electron_FD = new TH1D("#chi^{2}_{e} (no #(e) cut)", "#chi^{2}_{e} Histogram (no #(e) cut);#chi^{2}_{e};",
                                        100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Electron_FD_Dir = Chi2_All_e_Directory;
+    string hChi2_Electron_FD_Dir = directories.Chi2_Directory_map["Chi2_All_e_Directory"];
 
     THStack *sChi2_Proton_All_e = new THStack("#chi^{2}_{p} (no #(e) cut, CD & FD)", "#chi^{2}_{p} Histogram (no #(e) cut, CD & FD);#chi^{2}_{p};");
     TH1D *hChi2_Proton_CD = new TH1D("#chi^{2}_{p} (no #(e) cut, CD)", "#chi^{2}_{p} Histogram (no #(e) cut, CD);#chi^{2}_{p};",
                                      100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Proton_FD = new TH1D("#chi^{2}_{p} (no #(e) cut, FD)", "#chi^{2}_{p} Histogram (no #(e) cut, FD);#chi^{2}_{p};",
                                      100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Proton_CD_Dir = Chi2_All_e_Directory, hChi2_Proton_FD_Dir = Chi2_All_e_Directory;
+    string hChi2_Proton_CD_Dir = directories.Chi2_Directory_map["Chi2_All_e_Directory"];
+    string hChi2_Proton_FD_Dir = directories.Chi2_Directory_map["Chi2_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots (1e cut)">
@@ -791,40 +495,45 @@ void EventAnalyser() {
 
     THStack *sChi2_Electron_1e_cut = new THStack("#chi^{2}_{e} (1e cut, CD & FD)", "#chi^{2}_{e} Histogram (1e cut, CD & FD);#chi^{2}_{e};");
     TH1D *hChi2_Electron_1e_cut_FD = new TH1D("#chi^{2}_{e} (1e cut)", "#chi^{2}_{e} Histogram (1e cut);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Electron_1e_cut_FD_Dir = Chi2_1e_Directory;
+    string hChi2_Electron_1e_cut_FD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
 
     THStack *sChi2_Proton_1e_cut = new THStack("#chi^{2}_{p} (1e cut, CD & FD)", "#chi^{2}_{p} Histogram (1e cut, CD & FD);#chi^{2}_{p};");
     TH1D *hChi2_Proton_1e_cut_CD = new TH1D("#chi^{2}_{p} (1e cut, CD)", "#chi^{2}_{p} Histogram (1e cut, CD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Proton_1e_cut_FD = new TH1D("#chi^{2}_{p} (1e cut, FD)", "#chi^{2}_{p} Histogram (1e cut, FD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Proton_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Proton_1e_cut_FD_Dir = Chi2_1e_Directory;
+    string hChi2_Proton_1e_cut_CD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
+    string hChi2_Proton_1e_cut_FD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
 
     THStack *sChi2_Kplus_1e_cut = new THStack("#chi^{2}_{K^{+}} (1e cut, CD & FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{+}};");
     TH1D *hChi2_Kplus_1e_cut_CD = new TH1D("#chi^{2}_{K^{+}} (1e cut, CD)", "#chi^{2}_{K^{+}} Histogram (1e cut, CD);#chi^{2}_{K^{+}};",
                                            100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Kplus_1e_cut_FD = new TH1D("#chi^{2}_{K^{+}} (1e cut, FD)", "#chi^{2}_{K^{+}} Histogram (1e cut, FD);#chi^{2}_{K^{+}};",
                                            100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Kplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kplus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    string hChi2_Kplus_1e_cut_CD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
+    string hChi2_Kplus_1e_cut_FD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
 
     THStack *sChi2_Kminus_1e_cut = new THStack("#chi^{2}_{K^{-}} (1e cut, CD & FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{K^{-}};");
     TH1D *hChi2_Kminus_1e_cut_CD = new TH1D("#chi^{2}_{K^{-}} (1e cut, CD)", "#chi^{2}_{K^{-}} Histogram (1e cut, CD);#chi^{2}_{K^{-}};",
                                             100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Kminus_1e_cut_FD = new TH1D("#chi^{2}_{K^{-}} (1e cut, FD)", "#chi^{2}_{K^{-}} Histogram (1e cut, FD);#chi^{2}_{K^{-}};",
                                             100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Kminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_Kminus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    string hChi2_Kminus_1e_cut_CD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
+    string hChi2_Kminus_1e_cut_FD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
 
     THStack *sChi2_piplus_1e_cut = new THStack("#chi^{2}_{#pi^{+}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{+}};");
     TH1D *hChi2_piplus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, CD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, CD);#chi^{2}_{#pi^{+}};",
                                             100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_piplus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{+}} (1e cut, FD)", "#chi^{2}_{#pi^{+}} Histogram (1e cut, FD);#chi^{2}_{#pi^{+}};",
                                             100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_piplus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piplus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    string hChi2_piplus_1e_cut_CD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
+    string hChi2_piplus_1e_cut_FD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
 
     THStack *sChi2_piminus_1e_cut = new THStack("#chi^{2}_{#pi^{-}} (1e cut, CD & FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD & FD);#chi^{2}_{#pi^{-}};");
     TH1D *hChi2_piminus_1e_cut_CD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, CD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, CD);#chi^{2}_{#pi^{-}};",
                                              100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_piminus_1e_cut_FD = new TH1D("#chi^{2}_{#pi^{-}} (1e cut, FD)", "#chi^{2}_{#pi^{-}} Histogram (1e cut, FD);#chi^{2}_{#pi^{-}};",
                                              100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_piminus_1e_cut_CD_Dir = Chi2_1e_Directory, hChi2_piminus_1e_cut_FD_Dir = Chi2_1e_Directory;
+    string hChi2_piminus_1e_cut_CD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
+    string hChi2_piminus_1e_cut_FD_Dir = directories.Chi2_Directory_map["Chi2_1e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots (1e2p)">
@@ -839,47 +548,36 @@ void EventAnalyser() {
     if (apply_cuts == false) {
         hChi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e} BC (1e2p)", "#chi^{2}_{e} Histogram Before Cut (1e2p);#chi^{2}_{e};",
                                              100, -Chi2_boundary, Chi2_boundary);
-        hChi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+        hChi2_Electron_1e2p_BC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
 
         hChi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} BC (1e2p, CD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, CD);#chi^{2}_{p};",
                                            100, -Chi2_boundary, Chi2_boundary);
         hChi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} BC (1e2p, FD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, FD);#chi^{2}_{p};",
                                            100, -Chi2_boundary, Chi2_boundary);
-        hChi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+        hChi2_Proton_1e2p_BC_CD_Dir = hChi2_Proton_1e2p_BC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
 
-        hChi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e} AC (1e2p)", "#chi^{2}_{e} Histogram After Cut (1e2p);#chi^{2}_{e};",
-                                             100, -Chi2_boundary, Chi2_boundary);
-        hChi2_Electron_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+        hChi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e} AC (1e2p)", "#chi^{2}_{e} Histogram After Cut (1e2p);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
+        hChi2_Electron_1e2p_AC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
 
         hChi2_Proton_1e2p_AC_CD = new TH1D("#chi^{2}_{p} AC (1e2p, CD)", "#chi^{2}_{p} Histogram After Cut (1e2p, CD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
         hChi2_Proton_1e2p_AC_FD = new TH1D("#chi^{2}_{p} AC (1e2p, FD)", "#chi^{2}_{p} Histogram After Cut (1e2p, FD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
-        hChi2_Proton_1e2p_AC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Proton_1e2p_AC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+        hChi2_Proton_1e2p_AC_CD_Dir = hChi2_Proton_1e2p_AC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
     } else {
-        hChi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e} (1e2p)", "#chi^{2}_{e} Histogram (1e2p);#chi^{2}_{e};",
-                                             100, -Chi2_boundary, Chi2_boundary);
+        hChi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e} (1e2p)", "#chi^{2}_{e} Histogram (1e2p);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
         hChi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} (1e2p, CD)", "#chi^{2}_{p} Histogram (1e2p, CD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
         hChi2_Proton_1e2p_BC_FD = new TH1D("#chi^{2}_{p} (1e2p, FD)", "#chi^{2}_{p} Histogram (1e2p, FD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
-        hChi2_Electron_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
-        hChi2_Proton_1e2p_BC_CD_Dir = Chi2_1e2p_cut_tests_Directory, hChi2_Proton_1e2p_BC_FD_Dir = Chi2_1e2p_cut_tests_Directory;
+        hChi2_Electron_1e2p_BC_FD_Dir = hChi2_Proton_1e2p_BC_CD_Dir = hChi2_Proton_1e2p_BC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
     }
     //</editor-fold>
 
     //<editor-fold desc="Chi2 plots (2p)">
     TH1D *hChi2_Electron_2p_FD = new TH1D("#chi^{2}_{e} (2p)", "#chi^{2}_{e} Histogram (2p);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Electron_2p_FD_Dir = Chi2_2p_Directory;
+    string hChi2_Electron_2p_FD_Dir = directories.Chi2_Directory_map["Chi2_2p_Directory"];
 
     TH1D *hChi2_Proton_2p_CD = new TH1D("#chi^{2}_{p} (2p, CD)", "#chi^{2}_{p} Histogram (2p, CD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
     TH1D *hChi2_Proton_2p_FD = new TH1D("#chi^{2}_{p} (2p, FD)", "#chi^{2}_{p} Histogram (2p, FD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Proton_2p_CD_Dir = Chi2_2p_Directory, hChi2_Proton_2p_FD_Dir = Chi2_2p_Directory;
-
-    //<editor-fold desc="Chi2 plots for Ecal>Ebeam (2p)">
-    TH1D *hChi2_Electron_Ecal_test_2p = new TH1D("#chi^{2}_{e} for E_{cal}>E_{beam} (2p)", ("#chi^{2}_{e} for E_{cal}>E_{beam}=" + to_string(beamE) +
-                                                                                            " [GeV] (2p);#chi^{2}_{e};").c_str(), 100, -Chi2_boundary, Chi2_boundary);
-    TH1D *hChi2_Proton_Ecal_test_2p = new TH1D("#chi^{2}_{p} for E_{cal}>E_{beam} (2p)", ("#chi^{2}_{p} for E_{cal}>E_{beam}=" + to_string(beamE) +
-                                                                                          " [GeV] (2p);#chi^{2}_{p};").c_str(), 100, -Chi2_boundary, Chi2_boundary);
-    string hChi2_Electron_Ecal_test_2p_Dir = Chi2_Ecal_test_2p_Directory, hChi2_Proton_Ecal_test_2p_Dir = Chi2_Ecal_test_2p_Directory;
-    //</editor-fold>
-
+    string hChi2_Proton_2p_CD_Dir = directories.Chi2_Directory_map["Chi2_2p_Directory"];
+    string hChi2_Proton_2p_FD_Dir = directories.Chi2_Directory_map["Chi2_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -897,8 +595,9 @@ void EventAnalyser() {
     TH1D *hVx_Electron_1e_cut_FD = new TH1D("V_{x}^{e} (1e Cut)", "V_{x}^{e} (1e Cut);V_{x}^{e} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVy_Electron_1e_cut_FD = new TH1D("V_{y}^{e} (1e Cut)", "V_{y}^{e} (1e Cut);V_{y}^{e} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVz_Electron_1e_cut_FD = new TH1D("V_{z}^{e} (1e Cut)", "V_{z}^{e} (1e Cut);V_{z}^{e} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-    string hVx_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vx_Directory, hVy_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vy_Directory;
-    string hVz_Electron_1e_cut_FD_Dir = Vertex_Electron_1e_Vz_Directory;
+    string hVx_Electron_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Electron_1e_Vx_Directory"];
+    string hVy_Electron_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Electron_1e_Vy_Directory"];
+    string hVz_Electron_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Electron_1e_Vz_Directory"];
 
     THStack *sVx_Proton_1e_cut = new THStack("V_{x}^{p} (1e Only, CD & FD)", "V_{x}^{p} (1e Only, CD & FD);V_{x}^{p} [cm];");
     THStack *sVy_Proton_1e_cut = new THStack("V_{y}^{p} (1e Only, CD & FD)", "V_{y}^{p} (1e Only, CD & FD);V_{y}^{p} [cm];");
@@ -909,9 +608,12 @@ void EventAnalyser() {
     TH1D *hVx_Proton_1e_cut_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVy_Proton_1e_cut_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVz_Proton_1e_cut_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-    string hVx_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vx_Directory, hVx_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vx_Directory;
-    string hVy_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vy_Directory, hVy_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vy_Directory;
-    string hVz_Proton_1e_cut_CD_Dir = Vertex_Proton_1e_Vz_Directory, hVz_Proton_1e_cut_FD_Dir = Vertex_Proton_1e_Vz_Directory;
+    string hVx_Proton_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vx_Directory"];
+    string hVx_Proton_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vx_Directory"];
+    string hVy_Proton_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vy_Directory"];
+    string hVy_Proton_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vy_Directory"];
+    string hVz_Proton_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vz_Directory"];
+    string hVz_Proton_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vz_Directory"];
 
     THStack *sVx_Kplus_1e_cut = new THStack("V_{x}^{K^{+}} (1e Only, CD & FD)", "V_{x}^{K^{+}} (1e Only, CD & FD);V_{x}^{K^{+}} [cm];");
     THStack *sVy_Kplus_1e_cut = new THStack("V_{y}^{K^{+}} (1e Only, CD & FD)", "V_{y}^{K^{+}} (1e Only, CD & FD);V_{y}^{K^{+}} [cm];");
@@ -922,9 +624,12 @@ void EventAnalyser() {
     TH1D *hVx_Kplus_1e_cut_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVy_Kplus_1e_cut_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVz_Kplus_1e_cut_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-    string hVx_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vx_Directory, hVx_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vx_Directory;
-    string hVy_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vy_Directory, hVy_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vy_Directory;
-    string hVz_Kplus_1e_cut_CD_Dir = Vertex_Kplus_1e_Vz_Directory, hVz_Kplus_1e_cut_FD_Dir = Vertex_Kplus_1e_Vz_Directory;
+    string hVx_Kplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vx_Directory"];
+    string hVx_Kplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vx_Directory"];
+    string hVy_Kplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vy_Directory"];
+    string hVy_Kplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vy_Directory"];
+    string hVz_Kplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vz_Directory"];
+    string hVz_Kplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vz_Directory"];
 
     THStack *sVx_Kminus_1e_cut = new THStack("V_{x}^{K^{-}} (1e Only, CD & FD)", "V_{x}^{K^{-}} (1e Only, CD & FD);V_{x}^{K^{-}} [cm];");
     THStack *sVy_Kminus_1e_cut = new THStack("V_{y}^{K^{-}} (1e Only, CD & FD)", "V_{y}^{K^{-}} (1e Only, CD & FD);V_{y}^{K^{-}} [cm];");
@@ -935,9 +640,12 @@ void EventAnalyser() {
     TH1D *hVx_Kminus_1e_cut_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVy_Kminus_1e_cut_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVz_Kminus_1e_cut_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-    string hVx_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vx_Directory, hVx_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vx_Directory;
-    string hVy_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vy_Directory, hVy_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vy_Directory;
-    string hVz_Kminus_1e_cut_CD_Dir = Vertex_Kminus_1e_Vz_Directory, hVz_Kminus_1e_cut_FD_Dir = Vertex_Kminus_1e_Vz_Directory;
+    string hVx_Kminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vx_Directory"];
+    string hVx_Kminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vx_Directory"];
+    string hVy_Kminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vy_Directory"];
+    string hVy_Kminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vy_Directory"];
+    string hVz_Kminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vz_Directory"];
+    string hVz_Kminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vz_Directory"];
 
     THStack *sVx_piplus_1e_cut = new THStack("V_{x}^{#pi^{+}} (1e Only, CD & FD)", "V_{x}^{#pi^{+}} (1e Only, CD & FD);V_{x}^{#pi^{+}} [cm];");
     THStack *sVy_piplus_1e_cut = new THStack("V_{y}^{#pi^{+}} (1e Only, CD & FD)", "V_{y}^{#pi^{+}} (1e Only, CD & FD);V_{y}^{#pi^{+}} [cm];");
@@ -948,9 +656,12 @@ void EventAnalyser() {
     TH1D *hVx_piplus_1e_cut_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVy_piplus_1e_cut_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVz_piplus_1e_cut_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-    string hVx_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vx_Directory, hVx_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vx_Directory;
-    string hVy_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vy_Directory, hVy_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vy_Directory;
-    string hVz_piplus_1e_cut_CD_Dir = Vertex_piplus_1e_Vz_Directory, hVz_piplus_1e_cut_FD_Dir = Vertex_piplus_1e_Vz_Directory;
+    string hVx_piplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vx_Directory"];
+    string hVx_piplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vx_Directory"];
+    string hVy_piplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vy_Directory"];
+    string hVy_piplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vy_Directory"];
+    string hVz_piplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vz_Directory"];
+    string hVz_piplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vz_Directory"];
 
     THStack *sVx_piminus_1e_cut = new THStack("V_{x}^{#pi^{-}} (1e Only, CD & FD)", "V_{x}^{#pi^{-}} (1e Only, CD & FD);V_{x}^{#pi^{-}} [cm];");
     THStack *sVy_piminus_1e_cut = new THStack("V_{y}^{#pi^{-}} (1e Only, CD & FD)", "V_{y}^{#pi^{-}} (1e Only, CD & FD);V_{y}^{#pi^{-}} [cm];");
@@ -961,9 +672,12 @@ void EventAnalyser() {
     TH1D *hVx_piminus_1e_cut_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVy_piminus_1e_cut_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
     TH1D *hVz_piminus_1e_cut_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-    string hVx_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vx_Directory, hVx_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vx_Directory;
-    string hVy_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vy_Directory, hVy_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vy_Directory;
-    string hVz_piminus_1e_cut_CD_Dir = Vertex_piminus_1e_Vz_Directory, hVz_piminus_1e_cut_FD_Dir = Vertex_piminus_1e_Vz_Directory;
+    string hVx_piminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vx_Directory"];
+    string hVx_piminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vx_Directory"];
+    string hVy_piminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vy_Directory"];
+    string hVy_piminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vy_Directory"];
+    string hVz_piminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vz_Directory"];
+    string hVz_piminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vz_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1e2p & 2p)">
@@ -977,28 +691,40 @@ void EventAnalyser() {
     THStack *sdVy_2p = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD);dV_{y} [cm];");
     THStack *sdVz_2p = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD);dV_{z} [cm];");
 
-    TH1D *hdVx_1e2p_BC, *hdVy_1e2p_BC, *hdVz_1e2p_BC, *hdVx_1e2p_AC, *hdVy_1e2p_AC, *hdVz_1e2p_AC, *hdVx_2p, *hdVy_2p, *hdVz_2p;
+    TH1D *hdVx_1e2p_BC, *hdVy_1e2p_BC, *hdVz_1e2p_BC;
+    string hdVx_1e2p_BC_Dir, hdVy_1e2p_BC_Dir, hdVz_1e2p_BC_Dir;
+
+    TH1D *hdVx_1e2p_AC, *hdVy_1e2p_AC, *hdVz_1e2p_AC;
+    string hdVx_1e2p_AC_Dir, hdVy_1e2p_AC_Dir, hdVz_1e2p_AC_Dir;
+
+    TH1D *hdVx_2p, *hdVy_2p, *hdVz_2p;
+    string hdVx_2p_Dir, hdVy_2p_Dir, hdVz_2p_Dir;
 
     if (apply_cuts == false) {
         hdVx_1e2p_BC = new TH1D("dV_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
         hdVy_1e2p_BC = new TH1D("dV_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
         hdVz_1e2p_BC = new TH1D("dV_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
+        hdVx_1e2p_BC_Dir = hdVy_1e2p_BC_Dir = hdVz_1e2p_BC_Dir = directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"];
 
         hdVx_1e2p_AC = new TH1D("dV_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
         hdVy_1e2p_AC = new TH1D("dV_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
         hdVz_1e2p_AC = new TH1D("dV_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
+        hdVx_1e2p_AC_Dir = hdVy_1e2p_AC_Dir = hdVz_1e2p_AC_Dir = directories.Vertex_Directory_map["Vertex_1e2p_dV_AC_Directory"];
 
         hdVx_2p = new TH1D("dV_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} (2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
         hdVy_2p = new TH1D("dV_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} (2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
         hdVz_2p = new TH1D("dV_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} (2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
+        hdVx_2p_Dir = hdVy_2p_Dir = hdVz_2p_Dir = directories.Vertex_Directory_map["Vertex_dV_2p_Directory"];
     } else {
         hdVx_1e2p_BC = new TH1D("dV_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} (1e2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
         hdVy_1e2p_BC = new TH1D("dV_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} (1e2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
         hdVz_1e2p_BC = new TH1D("dV_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} (1e2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
+        hdVx_1e2p_BC_Dir = hdVy_1e2p_BC_Dir = hdVz_1e2p_BC_Dir = directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"];
 
         hdVx_2p = new TH1D("dV_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} (2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
         hdVy_2p = new TH1D("dV_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} (2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
         hdVz_2p = new TH1D("dV_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} (2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
+        hdVx_2p_Dir = hdVy_2p_Dir = hdVz_2p_Dir = directories.Vertex_Directory_map["Vertex_dV_2p_Directory"];
     }
     //</editor-fold>
 
@@ -1020,10 +746,11 @@ void EventAnalyser() {
                                     100, SF_lboundary, SF_uboundary);
         hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                     100, SF_lboundary, SF_uboundary);
-        hSF_1e_cut_BC_FD_Dir = SF_plots_1e_cut_BC_Directory, hSF_1e_cut_AC_FD_Dir = SF_plots_1e_cut_AC_Directory;
+        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
+        hSF_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"];
     } else {
         hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-        hSF_1e_cut_BC_FD_Dir = SF_plots_1e_cut_BC_Directory;
+        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
     }
     //</editor-fold>
 
@@ -1038,11 +765,12 @@ void EventAnalyser() {
         hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
                                            "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                            250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-        hSF_VS_P_e_1e_cut_BC_FD_Dir = SF_VS_P_e_plots_1e_cut_BC_Directory, hSF_VS_P_e_1e_cut_AC_FD_Dir = SF_VS_P_e_plots_1e_cut_AC_Directory;
+        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
+        hSF_VS_P_e_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"];
     } else {
         hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                            250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-        hSF_VS_P_e_1e_cut_BC_FD_Dir = SF_VS_P_e_plots_1e_cut_BC_Directory;
+        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
     }
     //</editor-fold>
 
@@ -1051,7 +779,8 @@ void EventAnalyser() {
     TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
     TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                       250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-    string hSF_2p_FD_Dir = SF_plots_2p_cuts_Directory, hSF_VS_P_e_2p_FD_Dir = SF_VS_P_e_plots_2p_cuts_Directory;
+    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
+    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1071,7 +800,8 @@ void EventAnalyser() {
         Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
                                           "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory, Vcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_Directory;
+        Vcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+        Vcal_VS_EoP_1e_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
 
         Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
                                           "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
@@ -1079,22 +809,24 @@ void EventAnalyser() {
         Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
                                           "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory, Wcal_VS_EoP_1e_AC_PCAL_Dir = fiducial_plots_1e_AC_PCAL_Directory;
+        Wcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+        Wcal_VS_EoP_1e_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
     } else {
         Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Vcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory;
+        Vcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
 
         Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                           250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Wcal_VS_EoP_1e_BC_PCAL_Dir = fiducial_plots_1e_BC_PCAL_Directory;
+        Wcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
     }
 
     TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
     TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-    string Vcal_VS_EoP_2p_PCAL_Dir = fiducial_plots_2p_cuts_histograms_PCAL_Directory, Wcal_VS_EoP_2p_PCAL_Dir = fiducial_plots_2p_cuts_histograms_PCAL_Directory;
+    string Vcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+    string Wcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1108,19 +840,22 @@ void EventAnalyser() {
     THStack *sP_CD = new THStack("Particle Momentum histograms (1e cut, CD)", "Particle Momentum histograms (1e cut, CD);P [GeV];");
     THStack *sP_FD = new THStack("Particle Momentum histograms (1e cut, FD)", "Particle Momentum histograms (1e cut, FD);P [GeV];");
     TH1D *hP_e_1e_cut_FD = new TH1D("P_{e} (1e cut, FD)", "P_{e} (1e cut, FD);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+    string hP_e_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
 
     TH1D *hP_p_1e_cut_CD = new TH1D("P_{p} (1e cut, CD)", "P_{p} (1e cut, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_p_1e_cut_FD = new TH1D("P_{p} (1e cut, FD)", "P_{p} (1e cut, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_p_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+    string hP_p_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    string hP_p_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
 
     TH1D *hP_piplus_1e_cut_CD = new TH1D("P_{#pi^{+}} (1e cut, CD)", "P_{#pi^{+}} (1e cut, CD);P_{#pi^{+}} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_piplus_1e_cut_FD = new TH1D("P_{#pi^{+}} (1e cut, FD)", "P_{#pi^{+}} (1e cut, FD);P_{#pi^{+}} [GeV];", 100, 0, beamE * 1.1);
-    string hP_piplus_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_piplus_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+    string hP_piplus_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    string hP_piplus_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
 
     TH1D *hP_piminus_1e_cut_CD = new TH1D("P_{#pi^{-}} (1e cut, CD)", "P_{#pi^{-}} (1e cut, CD);P_{#pi^{-}} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_piminus_1e_cut_FD = new TH1D("P_{#pi^{-}} (1e cut, FD)", "P_{#pi^{-}} (1e cut, FD);P_{#pi^{-}} [GeV];", 100, 0, beamE * 1.1);
-    string hP_piminus_1e_cut_CD_Dir = Momentum_1e_cut_tests_Directory, hP_piminus_1e_cut_FD_Dir = Momentum_1e_cut_tests_Directory;
+    string hP_piminus_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    string hP_piminus_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms (1e2p & 2p)">
@@ -1135,39 +870,42 @@ void EventAnalyser() {
 
     //<editor-fold desc="Momentum histograms before 1e2p cuts">
     TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p)", "P_{e} Before Cut (1e2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
+    string hP_e_1e2p_BC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
 
     TH1D *hP_p_1e2p_BC_CD = new TH1D("Proton momentum P_{p} BC (1e2p, CD)", "Proton momentum P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_p_1e2p_BC_FD = new TH1D("Proton momentum P_{p} BC (1e2p, FD)", "Proton momentum P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1e2p_BC_CD_Dir = Momentum_1e2p_Directory, hP_p_1e2p_BC_FD_Dir = Momentum_1e2p_Directory;
+    string hP_p_1e2p_BC_CD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    string hP_p_1e2p_BC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms after 1e2p cuts">
     TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p)", "P_{e} After Cut (1e2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
+    string hP_e_1e2p_AC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
 
     TH1D *hP_p_1e2p_AC_CD = new TH1D("Proton momentum P_{p} AC (1e2p, CD)", "Proton momentum P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_p_1e2p_AC_FD = new TH1D("Proton momentum P_{p} AC (1e2p, FD)", "Proton momentum P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1e2p_AC_CD_Dir = Momentum_1e2p_Directory, hP_p_1e2p_AC_FD_Dir = Momentum_1e2p_Directory;
+    string hP_p_1e2p_AC_CD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    string hP_p_1e2p_AC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Momentum histograms after 2p cuts">
     TH1D *hP_e_2p_FD = new TH1D("Electron momentum P_{e} (2p)", "Electron momentum P_{e} (2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_2p_FD_Dir = Momentum_2p_Directory;
+    string hP_e_2p_FD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
 
     TH1D *hP_p_2p_CD = new TH1D("Proton momentum P_{p} (2p, CD)", "Proton momentum P_{p} (2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_p_2p_FD = new TH1D("Proton momentum P_{p} (2p, FD)", "Proton momentum P_{p} (2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_2p_CD_Dir = Momentum_2p_Directory, hP_p_2p_FD_Dir = Momentum_2p_Directory;
+    string hP_p_2p_CD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    string hP_p_2p_FD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
 
     TH1D *hP_p_1_2p = new TH1D("Leading proton P_{1} (2p)", "Leading proton momentum P_{1} (2p);P_{1} [GeV];", 100, 0, beamE * 1.1);
     TH1D *hP_p_2_2p = new TH1D("Recoil proton P_{2} (2p)", "Recoil proton momentum P_{2} (2p);P_{2} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1_2p_Dir = Momentum_2p_Directory, hP_p_2_2p_Dir = Momentum_2p_Directory;
+    string hP_p_1_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    string hP_p_2_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
-    TH2D *hP_p_1_vs_P_p_2_2p = new TH2D("P_{1} vs. P_{2} (2p)", "P_{1} vs. P_{2} (2p);P_{1} [GeV];P_{2} [GeV]",
-                                        250, 0, beamE * 1.1, 250, 0, beamE * 1.1);
-    string hP_p_1_vs_P_p_2_2p_Dir = Momentum_2p_Directory;
+    TH2D *hP_p_1_vs_P_p_2_2p = new TH2D("P_{1} vs. P_{2} (2p)", "P_{1} vs. P_{2} (2p);P_{1} [GeV];P_{2} [GeV]", 250, 0, beamE * 1.1, 250, 0, beamE * 1.1);
+    string hP_p_1_vs_P_p_2_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1187,23 +925,26 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (no cuts, CD & FD)">
     TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_FD = new TH2D("#beta vs. P (All Particles, FD)", "#beta vs. P (All Particles, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
-    string Beta_vs_P_CD_Dir = Beta_VS_P_All_e_Directory, Beta_vs_P_FD_Dir = Beta_VS_P_All_e_Directory;
+    string Beta_vs_P_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
+    string Beta_vs_P_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
 
     TH2D *Beta_vs_P_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, FD)", "#beta vs. P (Electrons Only, FD);P [GeV];#beta",
                                                  250, 0, beamE * 1.425, 250, 0.5, 3);
-    string Beta_vs_P_Electrons_Only_FD_Dir = Beta_VS_P_All_e_Directory;
+    string Beta_vs_P_Electrons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
 
     TH2D *Beta_vs_P_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, CD)", "#beta vs. P (Protons Only, CD);P [GeV];#beta",
                                                250, 0, beamE * 1.1, 250, 0, 1.1);
     TH2D *Beta_vs_P_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, FD)", "#beta vs. P (Protons Only, FD);P [GeV];#beta",
                                                250, 0, beamE * 1.1, 250, 0, 1.1);
-    string Beta_vs_P_Protons_Only_CD_Dir = Beta_VS_P_All_e_Directory, Beta_vs_P_Protons_Only_FD_Dir = Beta_VS_P_All_e_Directory;
+    string Beta_vs_P_Protons_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
+    string Beta_vs_P_Protons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
 
 //    TH2D *Beta_vs_P_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, CD)", "#beta vs. P (Neutrons Only, CD);P [GeV];#beta",
 //                                                250, 0, beamE * 1.425, 250, 0, 3);
 //    TH2D *Beta_vs_P_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, FD)", "#beta vs. P (Neutrons Only, FD);P [GeV];#beta",
 //                                                250, 0, beamE * 1.425, 250, 0, 3);
-//    string Beta_vs_P_Neutrons_Only_CD_Dir = Beta_VS_P_All_e_Directory, Beta_vs_P_Neutrons_Only_FD_Dir = Beta_VS_P_All_e_Directory;
+//    string Beta_vs_P_Neutrons_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
+//    string Beta_vs_P_Neutrons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge">
@@ -1219,6 +960,12 @@ void EventAnalyser() {
                                                            250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_negative_particles_All_e_FD = new TH2D("#beta vs. P & q = -1 (All p., FD)", "#beta vs. P for all particles with q = -1 (All p., FD);P [GeV];#beta",
                                                            250, 0, beamE * 1.425, 250, 0, 3);
+    string Beta_vs_P_positive_particles_All_e_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"];
+    string Beta_vs_P_positive_particles_All_e_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"];
+    string Beta_vs_P_neutral_particles_All_e_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"];
+    string Beta_vs_P_neutral_particles_All_e_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"];
+    string Beta_vs_P_negative_particles_All_e_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"];
+    string Beta_vs_P_negative_particles_All_e_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1230,44 +977,61 @@ void EventAnalyser() {
                                          250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_1e_cut_FD = new TH2D("#beta vs. P (All Particles, 1e only, FD)", "#beta vs. P (All Particles, 1e Cut, FD);P [GeV];#beta",
                                          250, 0, beamE * 1.1, 250, 0, 1.7);
+    string Beta_vs_P_1e_cut_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_cut_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, 1e only, FD)", "#beta vs. P (Electrons Only, 1e Cut, FD);P [GeV];#beta",
                                                     250, 0, beamE * 1.425, 250, 0.5, 1.7);
+    string Beta_vs_P_1e_Electrons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 1e only, CD)", "#beta vs. P (Protons Only, 1e Cut, CD);P [GeV];#beta",
                                                   250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 1e only, FD)", "#beta vs. P (Protons Only, 1e Cut, FD);P [GeV];#beta",
                                                   250, 0, P_boundary, 250, 0, Beta_boundary);
+    string Beta_vs_P_1e_Protons_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_Protons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_Neutrons_Only_CD = new TH2D("#beta vs. P (Neutrons Only, 1e only, CD)", "#beta vs. P (Neutrons Only, 1e Cut, CD);P [GeV];#beta",
                                                    250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Neutrons_Only_FD = new TH2D("#beta vs. P (Neutrons Only, 1e only, FD)", "#beta vs. P (Neutrons Only, 1e Cut, FD);P [GeV];#beta",
                                                    250, 0, P_boundary, 250, 0, Beta_boundary);
+    string Beta_vs_P_1e_Neutrons_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_Neutrons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_piplus_Only_CD = new TH2D("#beta vs. P (#pi^{+} Only, 1e only, CD)", "#beta vs. P (#pi^{+} Only, 1e Cut, CD);P [GeV];#beta",
                                                  250, 0, P_boundary, 250, 0, 1.7);
     TH2D *Beta_vs_P_1e_piplus_Only_FD = new TH2D("#beta vs. P (#pi^{+} Only, 1e only, FD)", "#beta vs. P (#pi^{+} Only, 1e Cut, FD);P [GeV];#beta",
                                                  250, 0, P_boundary, 250, 0, 1.7);
+    string Beta_vs_P_1e_piplus_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_piplus_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_pizero_Only_CD = new TH2D("#beta vs. P (#pi^{0} Only, 1e only, CD)", "#beta vs. P (#pi^{0} Only, 1e Cut, CD);P [GeV];#beta",
                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_pizero_Only_FD = new TH2D("#beta vs. P (#pi^{0} Only, 1e only, FD)", "#beta vs. P (#pi^{0} Only, 1e Cut, FD);P [GeV];#beta",
                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
+    string Beta_vs_P_1e_pizero_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_pizero_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_piminus_Only_CD = new TH2D("#beta vs. P (#pi^{-} Only, 1e only, CD)", "#beta vs. P (#pi^{-} Only, 1e Cut, CD);P [GeV];#beta",
                                                   250, 0, P_boundary, 250, 0, 1.7);
     TH2D *Beta_vs_P_1e_piminus_Only_FD = new TH2D("#beta vs. P (#pi^{-} Only, 1e only, FD)", "#beta vs. P (#pi^{-} Only, 1e Cut, FD);P [GeV];#beta",
                                                   250, 0, P_boundary, 250, 0, 1.7);
+    string Beta_vs_P_1e_piminus_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_piminus_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_Kplus_Only_CD = new TH2D("#beta vs. P (K^{+} Only, 1e only, CD)", "#beta vs. P (K^{+} Only, 1e Cut, CD);P [GeV];#beta",
                                                 250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Kplus_Only_FD = new TH2D("#beta vs. P (K^{+} Only, 1e only, FD)", "#beta vs. P (K^{+} Only, 1e Cut, FD);P [GeV];#beta",
                                                 250, 0, P_boundary, 250, 0, Beta_boundary);
+    string Beta_vs_P_1e_Kplus_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_Kplus_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
 
     TH2D *Beta_vs_P_1e_Kminus_Only_CD = new TH2D("#beta vs. P (K^{-} Only, 1e only, CD)", "#beta vs. P (K^{-} Only, 1e Cut, CD);P [GeV];#beta",
                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_1e_Kminus_Only_FD = new TH2D("#beta vs. P (K^{-} Only, 1e only, FD)", "#beta vs. P (K^{-} Only, 1e Cut, FD);P [GeV];#beta",
                                                  250, 0, P_boundary, 250, 0, Beta_boundary);
+    string Beta_vs_P_1e_Kminus_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
+    string Beta_vs_P_1e_Kminus_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1e cut)">
@@ -1283,6 +1047,12 @@ void EventAnalyser() {
                                                             250, 0, beamE * 1.1, 250, 0, 1.7);
     TH2D *Beta_vs_P_negative_particles_1e_cut_FD = new TH2D("#beta vs. P & q = -1 (1e cut, FD)", "#beta vs. P for all particles with q = -1 (1e cut, FD);P [GeV];#beta",
                                                             250, 0, beamE * 1.1, 250, 0, 1.7);
+    string Beta_vs_P_positive_particles_1e_cut_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"];
+    string Beta_vs_P_positive_particles_1e_cut_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"];
+    string Beta_vs_P_neutral_particles_1e_cut_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"];
+    string Beta_vs_P_neutral_particles_1e_cut_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"];
+    string Beta_vs_P_negative_particles_1e_cut_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"];
+    string Beta_vs_P_negative_particles_1e_cut_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1294,17 +1064,19 @@ void EventAnalyser() {
                                      250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_2p_FD = new TH2D("#beta vs. P (All Particles, 2p, FD)", "#beta vs. P (All Particles, 2p, FD);P [GeV];#beta",
                                      250, 0, beamE * 1.1, 250, 0, 1.5);
-    string Beta_vs_P_2p_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_FD_Dir = Beta_VS_P_2p_Directory;
+    string Beta_vs_P_2p_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"];
+    string Beta_vs_P_2p_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"];
 
     TH2D *Beta_vs_P_2p_Electrons_Only_FD = new TH2D("#beta vs. P (Electrons Only, 2p, FD)", "#beta vs. P (Electrons Only, 2p, FD);P [GeV];#beta",
                                                     250, 0, beamE * 1.425, 250, 0.5, 3);
-    string Beta_vs_P_2p_Electrons_Only_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_Electrons_Only_FD_Dir = Beta_VS_P_2p_Directory;
+    string Beta_vs_P_2p_Electrons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"];
 
     TH2D *Beta_vs_P_2p_Protons_Only_CD = new TH2D("#beta vs. P (Protons Only, 2p, CD)", "#beta vs. P (Protons Only, 2p, CD);P [GeV];#beta",
                                                   250, 0, P_boundary, 250, 0, Beta_boundary);
     TH2D *Beta_vs_P_2p_Protons_Only_FD = new TH2D("#beta vs. P (Protons Only, 2p, FD)", "#beta vs. P (Protons Only, 2p, FD);P [GeV];#beta",
                                                   250, 0, P_boundary, 250, 0, Beta_boundary);
-    string Beta_vs_P_2p_Protons_Only_CD_Dir = Beta_VS_P_2p_Directory, Beta_vs_P_2p_Protons_Only_FD_Dir = Beta_VS_P_2p_Directory;
+    string Beta_vs_P_2p_Protons_Only_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"];
+    string Beta_vs_P_2p_Protons_Only_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (2p)">
@@ -1320,9 +1092,12 @@ void EventAnalyser() {
                                                         250, 0, beamE * 1.1, 250, 0, 1.5);
     TH2D *Beta_vs_P_negative_particles_2p_FD = new TH2D("#beta vs. P & q = -1 (2p, FD)", "#beta vs. P for all particles with q = -1 (2p, FD);P [GeV];#beta",
                                                         250, 0, beamE * 1.1, 250, 0, 1.5);
-    string Beta_vs_P_positive_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_positive_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
-    string Beta_vs_P_neutral_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_neutral_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
-    string Beta_vs_P_negative_particles_2p_CD_Dir = Beta_VS_P_by_charge_2p_Directory, Beta_vs_P_negative_particles_2p_FD_Dir = Beta_VS_P_by_charge_2p_Directory;
+    string Beta_vs_P_positive_particles_2p_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"];
+    string Beta_vs_P_positive_particles_2p_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"];
+    string Beta_vs_P_neutral_particles_2p_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"];
+    string Beta_vs_P_neutral_particles_2p_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"];
+    string Beta_vs_P_negative_particles_2p_CD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"];
+    string Beta_vs_P_negative_particles_2p_FD_Dir = directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1344,28 +1119,23 @@ void EventAnalyser() {
 
     /* Theta_e histograms (no #(e) cut) */
     TH1D *hTheta_e_All_e_FD = new TH1D("#theta_{e} (no #(e) cut, FD)", "#theta_{e} of Outgoing Electron (no #(e) cut, FD);#theta_{e} [Deg];", 100, 0, 50);
-    string hTheta_e_All_e_FD_Dir = Theta_e_All_e_Directory;
+    string hTheta_e_All_e_FD_Dir = directories.Angle_Directory_map["Theta_e_All_e_Directory"];
 
     /* Theta_e histograms (1e cut) */
     TH1D *hTheta_e_1e_cut_FD = new TH1D("#theta_{e} (1e Cut, FD)", "#theta_{e} of Outgoing Electron (1e Cut, FD);#theta_{e} [Deg];", 100, 0, 50);
-    string hTheta_e_1e_cut_FD_Dir = Theta_e_1e_cut_Directory;
+    string hTheta_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Theta_e_1e_cut_Directory"];
 
-    /* Theta_e histograms (1e2X) */
-//    TH1D *hTheta_e_All_Int_1e2X_CD = new TH1D("#theta_{e} (All Int., 1e2X, CD)", "#theta_{e} of Outgoing Electron (All Int., 1e2X, CD);#theta_{e} [Deg];", 100, 35, 140);
-//    TH1D *hTheta_e_QEL_1e2X_CD = new TH1D("#theta_{e} (QEL Only, 1e2X, CD)", "#theta_{e} of Outgoing Electron (QEL Only, 1e2X, CD);#theta_{e} [Deg];", 100, 35, 140);
-//    TH1D *hTheta_e_MEC_1e2X_CD = new TH1D("#theta_{e} (MEC Only, 1e2X, CD)", "#theta_{e} of Outgoing Electron (MEC Only, 1e2X, CD);#theta_{e} [Deg];", 100, 35, 140);
-//    TH1D *hTheta_e_RES_1e2X_CD = new TH1D("#theta_{e} (RES Only, 1e2X, CD)", "#theta_{e} of Outgoing Electron (RES Only, 1e2X, CD);#theta_{e} [Deg];", 100, 35, 140);
-//    TH1D *hTheta_e_DIS_1e2X_CD = new TH1D("#theta_{e} (DIS Only, 1e2X, CD)", "#theta_{e} of Outgoing Electron (DIS Only, 1e2X, CD);#theta_{e} [Deg];", 100, 35, 140);
-//    TH1D *hTheta_e_All_Int_1e2X_FD = new TH1D("#theta_{e} (All Int., 1e2X, FD)", "#theta_{e} of Outgoing Electron (All Int., 1e2X, FD);#theta_{e} [Deg];", 100, 0, 50);
-//    TH1D *hTheta_e_QEL_1e2X_FD = new TH1D("#theta_{e} (QEL Only, 1e2X, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 1e2X, FD);#theta_{e} [Deg];", 100, 0, 50);
-//    TH1D *hTheta_e_MEC_1e2X_FD = new TH1D("#theta_{e} (MEC Only, 1e2X, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1e2X, FD);#theta_{e} [Deg];", 100, 0, 50);
-//    TH1D *hTheta_e_RES_1e2X_FD = new TH1D("#theta_{e} (RES Only, 1e2X, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1e2X, FD);#theta_{e} [Deg];", 100, 0, 50);
-//    TH1D *hTheta_e_DIS_1e2X_FD = new TH1D("#theta_{e} (DIS Only, 1e2X, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1e2X, FD);#theta_{e} [Deg];", 100, 0, 50);
-//    string hTheta_e_All_Int_1e2X_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_All_Int_1e2X_FD_Dir = Theta_e_1e2X_Directory;
-//    string hTheta_e_QEL_1e2X_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_QEL_1e2X_FD_Dir = Theta_e_1e2X_Directory;
-//    string hTheta_e_MEC_1e2X_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_MEC_1e2X_FD_Dir = Theta_e_1e2X_Directory;
-//    string hTheta_e_RES_1e2X_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_RES_1e2X_FD_Dir = Theta_e_1e2X_Directory;
-//    string hTheta_e_DIS_1e2X_CD_Dir = Theta_e_1e2X_Directory, hTheta_e_DIS_1e2X_FD_Dir = Theta_e_1e2X_Directory;
+    /* Theta_e histograms (1p) */
+    TH1D *hTheta_e_All_Int_1p_FD = new TH1D("#theta_{e} (All Int., 1p, FD)", "#theta_{e} of Outgoing Electron (All Int., 1p, FD);#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *hTheta_e_QEL_1p_FD = new TH1D("#theta_{e} (QEL Only, 1p, FD)", "#theta_{e} of Outgoing Electron (QEL Only, 1p, FD);#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *hTheta_e_MEC_1p_FD = new TH1D("#theta_{e} (MEC Only, 1p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1p, FD);#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *hTheta_e_RES_1p_FD = new TH1D("#theta_{e} (RES Only, 1p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1p, FD);#theta_{e} [Deg];", 100, 0, 50);
+    TH1D *hTheta_e_DIS_1p_FD = new TH1D("#theta_{e} (DIS Only, 1p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1p, FD);#theta_{e} [Deg];", 100, 0, 50);
+    string hTheta_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
+    string hTheta_e_QEL_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
+    string hTheta_e_MEC_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
+    string hTheta_e_RES_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
+    string hTheta_e_DIS_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_1p_Directory"];
 
     /* Theta_e histograms (1e2p) */
     TH1D *hTheta_e_All_Int_1e2p_FD = new TH1D("#theta_{e} (All Int., 1e2p, FD)", "#theta_{e} of Outgoing Electron (All Int., 1e2p, FD);#theta_{e} [Deg];", 100, 0, 50);
@@ -1373,8 +1143,11 @@ void EventAnalyser() {
     TH1D *hTheta_e_MEC_1e2p_FD = new TH1D("#theta_{e} (MEC Only, 1e2p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 1e2p, FD);#theta_{e} [Deg];", 100, 0, 50);
     TH1D *hTheta_e_RES_1e2p_FD = new TH1D("#theta_{e} (RES Only, 1e2p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 1e2p, FD);#theta_{e} [Deg];", 100, 0, 50);
     TH1D *hTheta_e_DIS_1e2p_FD = new TH1D("#theta_{e} (DIS Only, 1e2p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 1e2p, FD);#theta_{e} [Deg];", 100, 0, 50);
-    string hTheta_e_All_Int_1e2p_FD_Dir = Theta_e_1e2p_Directory, hTheta_e_QEL_1e2p_FD_Dir = Theta_e_1e2p_Directory, hTheta_e_MEC_1e2p_FD_Dir = Theta_e_1e2p_Directory;
-    string hTheta_e_RES_1e2p_FD_Dir = Theta_e_1e2p_Directory, hTheta_e_DIS_1e2p_FD_Dir = Theta_e_1e2p_Directory;
+    string hTheta_e_All_Int_1e2p_FD_Dir = directories.Angle_Directory_map["Theta_e_1e2p_Directory"];
+    string hTheta_e_QEL_1e2p_FD_Dir = directories.Angle_Directory_map["Theta_e_1e2p_Directory"];
+    string hTheta_e_MEC_1e2p_FD_Dir = directories.Angle_Directory_map["Theta_e_1e2p_Directory"];
+    string hTheta_e_RES_1e2p_FD_Dir = directories.Angle_Directory_map["Theta_e_1e2p_Directory"];
+    string hTheta_e_DIS_1e2p_FD_Dir = directories.Angle_Directory_map["Theta_e_1e2p_Directory"];
 
     /* Theta_e histograms (2p) */
     TH1D *hTheta_e_All_Int_2p_FD = new TH1D("#theta_{e} (All Int., 2p, FD)", "#theta_{e} of Outgoing Electron (All Int., 2p, FD);#theta_{e} [Deg];", 100, 0, 50);
@@ -1382,8 +1155,11 @@ void EventAnalyser() {
     TH1D *hTheta_e_MEC_2p_FD = new TH1D("#theta_{e} (MEC Only, 2p, FD)", "#theta_{e} of Outgoing Electron (MEC Only, 2p, FD);#theta_{e} [Deg];", 100, 0, 50);
     TH1D *hTheta_e_RES_2p_FD = new TH1D("#theta_{e} (RES Only, 2p, FD)", "#theta_{e} of Outgoing Electron (RES Only, 2p, FD);#theta_{e} [Deg];", 100, 0, 50);
     TH1D *hTheta_e_DIS_2p_FD = new TH1D("#theta_{e} (DIS Only, 2p, FD)", "#theta_{e} of Outgoing Electron (DIS Only, 2p, FD);#theta_{e} [Deg];", 100, 0, 50);
-    string hTheta_e_All_Int_2p_FD_Dir = Theta_e_2p_Directory, hTheta_e_QEL_2p_FD_Dir = Theta_e_2p_Directory, hTheta_e_MEC_2p_FD_Dir = Theta_e_2p_Directory;
-    string hTheta_e_RES_2p_FD_Dir = Theta_e_2p_Directory, hTheta_e_DIS_2p_FD_Dir = Theta_e_2p_Directory;
+    string hTheta_e_All_Int_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
+    string hTheta_e_QEL_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
+    string hTheta_e_MEC_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
+    string hTheta_e_RES_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
+    string hTheta_e_DIS_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_2p_Directory"];
     //</editor-fold>
 
 // Phi_e ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1393,28 +1169,23 @@ void EventAnalyser() {
 
     /* Phi_e histograms (no #(e) cut) */
     TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    string hPhi_e_All_e_FD_Dir = Phi_e_All_e_Directory;
+    string hPhi_e_All_e_FD_Dir = directories.Angle_Directory_map["Phi_e_All_e_Directory"];
 
     /* Phi_e histograms (1e cut) */
     TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    string hPhi_e_1e_cut_FD_Dir = Phi_e_1e_cut_Directory;
+    string hPhi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Phi_e_1e_cut_Directory"];
 
-    /* Phi_e histograms (1e2X) */
-//    TH1D *hPhi_e_1e2X_CD = new TH1D("#phi_{e} 1e2X (All Int., CD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_QEL_CD = new TH1D("#phi_{e} for 1e2X (QEL Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_MEC_CD = new TH1D("#phi_{e} for 1e2X (MEC Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_RES_CD = new TH1D("#phi_{e} for 1e2X (RES Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_DIS_CD = new TH1D("#phi_{e} for 1e2X (DIS Only, CD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_FD = new TH1D("#phi_{e} 1e2X (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_QEL_FD = new TH1D("#phi_{e} for 1e2X (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_MEC_FD = new TH1D("#phi_{e} for 1e2X (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_RES_FD = new TH1D("#phi_{e} for 1e2X (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    TH1D *hPhi_e_1e2X_DIS_FD = new TH1D("#phi_{e} for 1e2X (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-//    string hPhi_e_1e2X_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_FD_Dir = Phi_e_1e2X_Directory;
-//    string hPhi_e_1e2X_QEL_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_QEL_FD_Dir = Phi_e_1e2X_Directory;
-//    string hPhi_e_1e2X_MEC_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_MEC_FD_Dir = Phi_e_1e2X_Directory;
-//    string hPhi_e_1e2X_RES_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_RES_FD_Dir = Phi_e_1e2X_Directory;
-//    string hPhi_e_1e2X_DIS_CD_Dir = Phi_e_1e2X_Directory, hPhi_e_1e2X_DIS_FD_Dir = Phi_e_1e2X_Directory;
+    /* Phi_e histograms (1p) */
+    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_1p_QEL_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_1p_MEC_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_1p_RES_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_1p_DIS_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    string hPhi_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
+    string hPhi_e_1p_QEL_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
+    string hPhi_e_1p_MEC_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
+    string hPhi_e_1p_RES_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
+    string hPhi_e_1p_DIS_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
 
     /* Phi_e histograms (1e2p) */
     TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
@@ -1422,8 +1193,11 @@ void EventAnalyser() {
     TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    string hPhi_e_All_Int_1e2p_FD_Dir = Phi_e_1e2p_Directory, hPhi_e_QEL_1e2p_FD_Dir = Phi_e_1e2p_Directory, hPhi_e_MEC_1e2p_FD_Dir = Phi_e_1e2p_Directory;
-    string hPhi_e_RES_1e2p_FD_Dir = Phi_e_1e2p_Directory, hPhi_e_DIS_1e2p_FD_Dir = Phi_e_1e2p_Directory;
+    string hPhi_e_All_Int_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
+    string hPhi_e_QEL_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
+    string hPhi_e_MEC_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
+    string hPhi_e_RES_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
+    string hPhi_e_DIS_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
 
     /* Phi_e histograms (2p) */
     TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
@@ -1431,8 +1205,11 @@ void EventAnalyser() {
     TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
     TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    string hPhi_e_All_Int_2p_FD_Dir = Phi_e_2p_Directory, hPhi_e_QEL_2p_FD_Dir = Phi_e_2p_Directory, hPhi_e_MEC_2p_FD_Dir = Phi_e_2p_Directory;
-    string hPhi_e_RES_2p_FD_Dir = Phi_e_2p_Directory, hPhi_e_DIS_2p_FD_Dir = Phi_e_2p_Directory;
+    string hPhi_e_All_Int_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
+    string hPhi_e_QEL_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
+    string hPhi_e_MEC_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
+    string hPhi_e_RES_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
+    string hPhi_e_DIS_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     //</editor-fold>
 
 // Theta_e vs. Phi_e ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1441,17 +1218,22 @@ void EventAnalyser() {
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
     TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                 250, -200, 200, 250, 0, 50);
-    string hTheta_e_VS_Phi_e_All_e_FD_Dir = Theta_e_VS_Phi_e_All_e_Directory;
+    string hTheta_e_VS_Phi_e_All_e_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_All_e_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1e cut) */
     TH2D *hTheta_e_VS_Phi_e_1e_cut_FD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, FD)", "#theta_{e} vs. #phi_{e} (1e Cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                  250, -200, 200, 250, 0, 50);
-    string hTheta_e_VS_Phi_e_1e_cut_FD_Dir = Theta_e_VS_Phi_e_1e_cut_Directory;
+    string hTheta_e_VS_Phi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1e_cut_Directory"];
+
+    /* Theta_e vs. Phi_e histograms (1p) */
+    TH2D *hTheta_e_VS_Phi_e_1p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 1p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 1p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
+                                             250, -200, 200, 250, 0, 50);
+    string hTheta_e_VS_Phi_e_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1p_Directory"];
 
     /* Theta_e vs. Phi_e histograms (2p) */
     TH2D *hTheta_e_VS_Phi_e_2p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 2p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 2p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                              250, -200, 200, 250, 0, 50);
-    string hTheta_e_VS_Phi_e_2p_FD_Dir = Theta_e_VS_Phi_e_2p_Directory;
+    string hTheta_e_VS_Phi_e_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_2p_Directory"];
     //</editor-fold>
 
 // Theta_p_e_p_tot (CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
@@ -1460,9 +1242,9 @@ void EventAnalyser() {
     THStack *sTheta_p_e_p_tot_2p = new THStack("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., 2p)",
                                                "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., 2p);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_p_e_p_tot_2p = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., 2p)",
-                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., 2p);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
-                                         100, -10, 190);
-    string hTheta_p_e_p_tot_2p_Dir = Opening_angle_Directory;
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., 2p);"
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+    string hTheta_p_e_p_tot_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
     //</editor-fold>
 
 // Theta_q_p (2p, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1474,8 +1256,8 @@ void EventAnalyser() {
                                              "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., 2p);#theta_{#vec{q},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_q_p_tot_2p = new TH1D("#theta_{#vec{q},#vec{P}_{tot}} (All Int., 2p)",
                                        "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., 2p);"
-                                       "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 100, -10, 190);
-    string hTheta_q_p_tot_2p_Dir = Opening_angle_Directory;
+                                       "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+    string hTheta_q_p_tot_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (2p, CD & FD)">
@@ -1483,11 +1265,12 @@ void EventAnalyser() {
                                          "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., 2p);#theta_{#vec{q},#vec{P}} [Deg];");
     TH1D *hTheta_q_p_L_2p = new TH1D("#theta_{#vec{q},#vec{P}_{1}} (All Int., 2p)",
                                      "#theta_{#vec{q},#vec{P}_{1}} - Opening Angle Between #vec{q} and leading proton #vec{P}_{1} (All Int., 2p);#theta_{#vec{q},#vec{P}_{1}}",
-                                     100, -10, 190);
+                                     100, 0, 180);
     TH1D *hTheta_q_p_R_2p = new TH1D("#theta_{#vec{q},#vec{P}_{2}} (All Int., 2p)",
                                      "#theta_{#vec{q},#vec{P}_{2}} - Opening Angle Between #vec{q} and recoil proton #vec{P}_{2} (All Int., 2p);#theta_{#vec{q},#vec{P}_{2}}",
-                                     100, -10, 190);
-    string hTheta_q_p_L_2p_Dir = Opening_angle_Directory, hTheta_q_p_R_2p_Dir = Opening_angle_Directory;
+                                     100, 0, 180);
+    string hTheta_q_p_L_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
+    string hTheta_q_p_R_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1497,8 +1280,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_tot (CD & FD)">
     TH2D *hTheta_q_p_L_vs_p_L_q_2p = new TH2D("#theta_{#vec{q},#vec{P}_{1}} vs. r_{1} (All Int., 2p)",
                                               "#theta_{#vec{q},#vec{P}_{1}} vs. r_{1}=|#vec{P_{1}}|/|#vec{q}| (All Int., 2p);r_{1};#theta_{#vec{q},#vec{P}_{1}}",
-                                              250, 0, 1.05, 250, -10, 190);
-    string hTheta_q_p_L_vs_p_L_q_2p_Dir = Opening_angle_Directory;
+                                              250, 0, 1.05, 250, 0, 180);
+    string hTheta_q_p_L_vs_p_L_q_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
     //</editor-fold>
 
 // Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
@@ -1507,18 +1290,21 @@ void EventAnalyser() {
     THStack *sTheta_p1_p2_2p = new THStack("#theta_{p_{1},p_{2}} (All Int., 2p)",
                                            "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (2p);#theta_{p_{1},p_{2}} [Deg];");
     TH1D *hTheta_p1_p2_All_Int_2p = new TH1D("#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];", 100, -10, 190);
+                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., 2p);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     TH1D *hTheta_p1_p2_QEL_2p = new TH1D("#theta_{p_{1},p_{2}} (QEL only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, -10, 190);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     TH1D *hTheta_p1_p2_MEC_2p = new TH1D("#theta_{p_{1},p_{2}} (MEC only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, -10, 190);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     TH1D *hTheta_p1_p2_RES_2p = new TH1D("#theta_{p_{1},p_{2}} (RES only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, -10, 190);
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     TH1D *hTheta_p1_p2_DIS_2p = new TH1D("#theta_{p_{1},p_{2}} (DIS only, 2p)",
-                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, -10, 190);
-    string sTheta_p1_p2_2p_Dir = Opening_angle_Directory, hTheta_p1_p2_All_Int_2p_Dir = Theta_p1_p2_by_interaction_Directory;
-    string hTheta_p1_p2_QEL_2p_Dir = Theta_p1_p2_by_interaction_Directory, hTheta_p1_p2_MEC_2p_Dir = Theta_p1_p2_by_interaction_Directory;
-    string hTheta_p1_p2_RES_2p_Dir = Theta_p1_p2_by_interaction_Directory, hTheta_p1_p2_DIS_2p_Dir = Theta_p1_p2_by_interaction_Directory;
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    string sTheta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
+    string hTheta_p1_p2_All_Int_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_QEL_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_MEC_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_RES_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_DIS_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
     //</editor-fold>
 
 // Theta_p1_p2 vs. W (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
@@ -1526,8 +1312,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p1_p2 vs. W (CD & FD)">
     TH2D *hTheta_p1_p2_vs_W_2p = new TH2D("#theta_{p_{1},p_{2}} vs. W (All Int., 2p)",
                                           "#theta_{p_{1},p_{2}} vs. W (All Int., 2p);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{p_{1},p_{2}} [Deg];",
-                                          250, 0, beamE * 1.1, 250, -10, 190);
-    string hTheta_p1_p2_vs_W_2p_Dir = Opening_angle_Directory;
+                                          250, 0, beamE * 1.1, 250, 0, 180);
+    string hTheta_p1_p2_vs_W_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
     //</editor-fold>
 
 // Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -1535,8 +1321,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p)",
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                 250, -10, 190, 250, -10, 190);
-    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir = Opening_angle_Directory;
+                                                                 250, 0, 180, 250, 0, 180);
+    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory"];
     //</editor-fold>
 
 // Phi of leading (p1) and recoil (p2) protons --------------------------------------------------------------------------------------------------------------------------
@@ -1547,7 +1333,8 @@ void EventAnalyser() {
     THStack *sPhi_Proton_1e2pXy = new THStack("#phi_{p} stack (1e2pXy, CD)", "#phi_{p} of outgoing protons (1e2pXy, CD);#phi_{p} [Deg];");
     TH1D *hPhi_p1_1e2pXy_CD = new TH1D("#phi_{p_{1}} (1e2pXy, CD)", ";#phi_{p_{1}} [Deg];", 100, -200, 200);
     TH1D *hPhi_p2_1e2pXy_CD = new TH1D("#phi_{p_{2}} (1e2pXy, CD)", ";#phi_{p_{2}} [Deg];", 100, -200, 200);
-    string hPhi_p1_1e2pXy_CD_Dir = Phi_Proton_1e2pXy_Directory, hPhi_p2_1e2pXy_CD_Dir = Phi_Proton_1e2pXy_Directory;
+    string hPhi_p1_1e2pXy_CD_Dir = directories.Angle_Directory_map["Phi_Proton_1e2pXy_Directory"];
+    string hPhi_p2_1e2pXy_CD_Dir = directories.Angle_Directory_map["Phi_Proton_1e2pXy_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1560,29 +1347,28 @@ void EventAnalyser() {
     /* Q2 histograms (no #(e) cut) */
     THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-    string hQ2_All_e_FD_Dir = Q2_All_e_Directory;
+    string hQ2_All_e_FD_Dir = directories.Q2_Directory_map["Q2_All_e_Directory"];
 
     /* Q2 histograms (1e cut) */
     THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-    string hQ2_1e_cut_FD_Dir = Q2_1e_cut_Directory;
+    string hQ2_1e_cut_FD_Dir = directories.Q2_Directory_map["Q2_1e_cut_Directory"];
 
 
-    /* Q2 histograms (1e2X) */
-//    THStack *sQ2_1e2X = new THStack("Q^{2} (1e2X, CD & FD)", "Q^{2} (1e2X, CD & FD);Q^{2} [GeV^{2}];");
-//    TH1D *hQ2_1e2X_CD = new TH1D("Q^{2} (1e2X, CD)", "Q^{2} (1e2X, CD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-//    TH1D *hQ2_1e2X_FD = new TH1D("Q^{2} (1e2X, FD)", "Q^{2} (1e2X, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-//    string hQ2_1e2X_CD_Dir = Q2_1e2X_Directory, hQ2_1e2X_FD_Dir = Q2_1e2X_Directory;
+    /* Q2 histograms (1p) */
+    THStack *sQ2_1p = new THStack("Q^{2} (1p, CD & FD)", "Q^{2} (1p, CD & FD);Q^{2} [GeV^{2}];");
+    TH1D *hQ2_1p_FD = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    string hQ2_1p_FD_Dir = directories.Q2_Directory_map["Q2_1p_Directory"];
 
     /* Q2 histograms (1e2p) */
     THStack *sQ2_1e2p = new THStack("Q^{2} (1e2p, CD & FD)", "Q^{2} (1e2p, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_1e2p_FD = new TH1D("Q^{2} (1e2p, FD)", "Q^{2} (1e2p, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-    string hQ2_1e2p_FD_Dir = Q2_1e2p_Directory;
+    string hQ2_1e2p_FD_Dir = directories.Q2_Directory_map["Q2_1e2p_Directory"];
 
     /* Q2 histograms (2p) */
     THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}];");
     TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
-    string hQ2_2p_FD_Dir = Q2_2p_Directory;
+    string hQ2_2p_FD_Dir = directories.Q2_Directory_map["Q2_2p_Directory"];
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -1593,23 +1379,27 @@ void EventAnalyser() {
     /* Energy (E_e) histograms (1e cut, CD & FD) */
     THStack *sE_e_1e_cut = new THStack("E_{e} (CD & FD)", "E_{e} Histogram (1e Cut, CD & FD);E_{e} [GeV]");
     TH1D *hE_e_1e_cut_FD = new TH1D("E_{e} (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_1e_cut_FD_Dir = E_e_All_Int_1e_cut_Directory;
+    string hE_e_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
 
     TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)",
                                                        "E_{e} vs. #theta_{e} (All Int., 1e Cut);#theta_{e} [Deg];E_{e} [GeV]", 250, 0, 50, 250, 0, beamE * 1.1);
-    string hE_e_VS_Theta_e_All_Int_1e_cut_FD_Dir = E_e_VS_Theta_e_All_Int_1e_cut_Directory;
+    string hE_e_VS_Theta_e_All_Int_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
 
     /* Energy (E_e) histograms (2p, CD & FD) */
     THStack *sE_e_2p_FD = new THStack("E_{e} (2p)", "E_{e} Histogram (2p);E_{e} [GeV]");
-    string sE_e_2p_CD_Dir = E_e_All_Int_2p_stack_Directory, sE_e_2p_FD_Dir = E_e_All_Int_2p_stack_Directory;
+    string sE_e_2p_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
+    string sE_e_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
 
     TH1D *hE_e_All_Int_2p_FD = new TH1D("E_{e} (All Int., 2p)", "E_{e} Histogram (All Int., 2p);E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hE_e_QEL_2p_FD = new TH1D("E_{e} (QEL Only, 2p)", "E_{e} Histogram (QEL Only, 2p);E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hE_e_MEC_2p_FD = new TH1D("E_{e} (MEC Only, 2p)", "E_{e} Histogram (MEC Only, 2p);E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hE_e_RES_2p_FD = new TH1D("E_{e} (RES Only, 2p)", "E_{e} Histogram (RES Only, 2p);E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hE_e_DIS_2p_FD = new TH1D("E_{e} (DIS Only, 2p)", "E_{e} Histogram (DIS Only, 2p);E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_All_Int_2p_FD_Dir = E_e_All_Int_2p_Directory, hE_e_QEL_2p_FD_Dir = E_e_All_Int_2p_Directory, hE_e_MEC_2p_FD_Dir = E_e_All_Int_2p_Directory;
-    string hE_e_RES_2p_FD_Dir = E_e_All_Int_2p_Directory, hE_e_DIS_2p_FD_Dir = E_e_All_Int_2p_Directory;
+    string hE_e_All_Int_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
+    string hE_e_QEL_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
+    string hE_e_MEC_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
+    string hE_e_RES_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
+    string hE_e_DIS_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
 
     /* E_e vs. Theta_e (2p, CD & FD) */
     TH2D *hE_e_VS_Theta_e_All_Int_2p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int.)", "E_{e} vs. #theta_{e} (All Int., 2p);#theta_{e} [Deg];E_{e} [GeV]",
@@ -1622,13 +1412,16 @@ void EventAnalyser() {
                                                250, 0, 50, 250, 0, beamE * 1.1);
     TH2D *hE_e_VS_Theta_e_DIS_2p_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 2p)", "E_{e} vs. #theta_{e} (DIS Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                250, 0, 50, 250, 0, beamE * 1.1);
-    string hE_e_VS_Theta_e_All_Int_2p_FD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory, hE_e_VS_Theta_e_QEL_2p_FD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory;
-    string hE_e_VS_Theta_e_MEC_2p_FD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory, hE_e_VS_Theta_e_RES_2p_FD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory;
-    string hE_e_VS_Theta_e_DIS_2p_FD_Dir = E_e_VS_Theta_e_All_Int_2p_Directory;
+    string hE_e_VS_Theta_e_All_Int_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
+    string hE_e_VS_Theta_e_QEL_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
+    string hE_e_VS_Theta_e_MEC_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
+    string hE_e_VS_Theta_e_RES_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
+    string hE_e_VS_Theta_e_DIS_2p_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_2p_Directory"];
 
     /* Energy (E_e) histograms around theta_e = 15 (2p, CD & FD) */
     THStack *sE_e_15_2p_FD = new THStack("E_{e} (2p)", "E_{e} Histogram (2p);E_{e} [GeV]");
-    string sE_e_15_2p_CD_Dir = E_e_All_Int_2p_stack_Directory, sE_e_15_2p_FD_Dir = E_e_All_Int_2p_stack_Directory;
+    string sE_e_15_2p_CD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
+    string sE_e_15_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_stack_Directory"];
 
     TH1D *hE_e_15_All_Int_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (All Int., 2p)", "E_{e} around #theta_{e} = 15#circ (All Int., 2p);E_{e} [GeV]",
                                            100, 0, beamE * 1.1);
@@ -1640,8 +1433,11 @@ void EventAnalyser() {
                                        100, 0, beamE * 1.1);
     TH1D *hE_e_15_DIS_2p_FD = new TH1D("E_{e} around #theta_{e} = 15#circ (DIS Only, 2p)", "E_{e} around #theta_{e} = 15#circ (DIS Only, 2p);E_{e} [GeV]",
                                        100, 0, beamE * 1.1);
-    string hE_e_15_All_Int_2p_FD_Dir = E_e_15_All_Int_2p_Directory, hE_e_15_QEL_2p_FD_Dir = E_e_15_All_Int_2p_Directory, hE_e_15_MEC_2p_FD_Dir = E_e_15_All_Int_2p_Directory;
-    string hE_e_15_RES_2p_FD_Dir = E_e_15_All_Int_2p_Directory, hE_e_15_DIS_2p_FD_Dir = E_e_15_All_Int_2p_Directory;
+    string hE_e_15_All_Int_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
+    string hE_e_15_QEL_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
+    string hE_e_15_MEC_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
+    string hE_e_15_RES_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
+    string hE_e_15_DIS_2p_FD_Dir = directories.E_e_Directory_map["E_e_15_All_Int_2p_Directory"];
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -1654,7 +1450,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="ET for every theta_e (1p)">
     THStack *sET_All_Ang_All_Int_1p_FD = new THStack("#omega for all #theta_{e} (1p)", "Energy Transfer #omega for all #theta_{e} (1p);#omega = E_{beam}-E_{e} [GeV]");
-    string sET_All_Ang_All_Int_1p_CD_Dir = ETrans_All_Ang_stack_1p_Directory, sET_All_Ang_All_Int_1p_FD_Dir = ETrans_All_Ang_stack_1p_Directory;
+    string sET_All_Ang_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_1p_Directory"];
 
     TH1D *hET_All_Ang_All_Int_1p_FD = new TH1D("#omega for all #theta_{e} (All Int., 1p)",
                                                "Energy Transfer #omega for all #theta_{e} (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -1666,16 +1462,18 @@ void EventAnalyser() {
                                            "Energy Transfer #omega for all #theta_{e} (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hET_All_Ang_DIS_1p_FD = new TH1D("#omega for all #theta_{e} (DIS Only, 1p, FD)",
                                            "Energy Transfer #omega for all #theta_{e} (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hET_All_Ang_All_Int_1p_FD_Dir = ETrans_All_Int_All_Ang_1p_Directory, hET_All_Ang_QEL_1p_FD_Dir = ETrans_QEL_All_Ang_1p_Directory;
-    string hET_All_Ang_MEC_1p_FD_Dir = ETrans_MEC_All_Ang_1p_Directory, hET_All_Ang_RES_1p_FD_Dir = ETrans_RES_All_Ang_1p_Directory;
-    string hET_All_Ang_DIS_1p_FD_Dir = ETrans_DIS_All_Ang_1p_Directory;
+    string hET_All_Ang_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_1p_Directory"];
+    string hET_All_Ang_QEL_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_1p_Directory"];
+    string hET_All_Ang_MEC_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_1p_Directory"];
+    string hET_All_Ang_RES_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_RES_All_Ang_1p_Directory"];
+    string hET_All_Ang_DIS_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_DIS_All_Ang_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="ET around 15 Deg (1p)">
     /* ET around 15 Deg */
     THStack *sET15_All_Int_1p_FD = new THStack("ET around #theta_{e} = 15#circ (1p)",
                                                "Energy Transfer #omega Around #theta_{e} = 15#circ (1p);#omega = E_{beam}-E_{e} [GeV]");
-    string sET15_All_Int_1p_CD_Dir = ETrans_15_stack_1p_Directory, sET15_All_Int_1p_FD_Dir = ETrans_15_stack_1p_Directory;
+    string sET15_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_1p_Directory"];
 
     TH1D *hET15_All_Int_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (All Int., 1p)",
                                          "Energy Transfer #omega Around #theta_{e} = 15#circ (All Int., 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -1687,13 +1485,16 @@ void EventAnalyser() {
                                      "Energy Transfer #omega Around #theta_{e} = 15#circ (RES Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hET15_DIS_1p_FD = new TH1D("ET around #theta_{e} = 15#circ (DIS Only, 1p, FD)",
                                      "Energy Transfer #omega Around #theta_{e} = 15#circ (DIS Only, 1p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hET15_All_Int_1p_FD_Dir = ETrans_All_Int_15_1p_Directory, hET15_QEL_1p_FD_Dir = ETrans_QEL_15_1p_Directory, hET15_MEC_1p_FD_Dir = ETrans_MEC_15_1p_Directory;
-    string hET15_RES_1p_FD_Dir = ETrans_RES_15_1p_Directory, hET15_DIS_1p_FD_Dir = ETrans_DIS_15_1p_Directory;
+    string hET15_All_Int_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_1p_Directory"];
+    string hET15_QEL_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_1p_Directory"];
+    string hET15_MEC_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_1p_Directory"];
+    string hET15_RES_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_RES_15_1p_Directory"];
+    string hET15_DIS_1p_FD_Dir = directories.ETrans_Directory_map["ETrans_DIS_15_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="#omega for every theta_e (2p)">
     THStack *sET_All_Ang_All_Int_2p_FD = new THStack("#omega for all #theta_{e} (2p)", "Energy Transfer #omega for all #theta_{e} (2p);#omega = E_{beam}-E_{e} [GeV]");
-    string sET_All_Ang_All_Int_2p_CD_Dir = ETrans_All_Ang_stack_2p_Directory, sET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Ang_stack_2p_Directory;
+    string sET_All_Ang_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Ang_stack_2p_Directory"];
 
     TH1D *hET_All_Ang_All_Int_2p_FD = new TH1D("#omega for all #theta_{e} (All Int., 2p)",
                                                "Energy Transfer #omega for all #theta_{e} (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -1705,16 +1506,18 @@ void EventAnalyser() {
                                            "Energy Transfer #omega for all #theta_{e} (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hET_All_Ang_DIS_2p_FD = new TH1D("#omega for all #theta_{e} (DIS Only, 2p, FD)",
                                            "Energy Transfer #omega for all #theta_{e} (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hET_All_Ang_All_Int_2p_FD_Dir = ETrans_All_Int_All_Ang_2p_Directory, hET_All_Ang_QEL_2p_FD_Dir = ETrans_QEL_All_Ang_2p_Directory;
-    string hET_All_Ang_MEC_2p_FD_Dir = ETrans_MEC_All_Ang_2p_Directory, hET_All_Ang_RES_2p_FD_Dir = ETrans_RES_All_Ang_2p_Directory;
-    string hET_All_Ang_DIS_2p_FD_Dir = ETrans_DIS_All_Ang_2p_Directory;
+    string hET_All_Ang_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_All_Ang_2p_Directory"];
+    string hET_All_Ang_QEL_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_All_Ang_2p_Directory"];
+    string hET_All_Ang_MEC_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_All_Ang_2p_Directory"];
+    string hET_All_Ang_RES_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_RES_All_Ang_2p_Directory"];
+    string hET_All_Ang_DIS_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_DIS_All_Ang_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="ET around 15 Deg (2p)">
     /* ET around 15 Deg */
     THStack *sET15_All_Int_2p_FD = new THStack("#omega around #theta_{e} = 15#circ (2p)",
                                                "Energy Transfer #omega Around #theta_{e} = 15#circ (2p);#omega = E_{beam}-E_{e} [GeV]");
-    string sET15_All_Int_2p_CD_Dir = ETrans_15_stack_2p_Directory, sET15_All_Int_2p_FD_Dir = ETrans_15_stack_2p_Directory;
+    string sET15_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_15_stack_2p_Directory"];
 
     TH1D *hET15_All_Int_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (All Int., 2p)",
                                          "Energy Transfer #omega Around #theta_{e} = 15#circ (All Int., 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -1726,8 +1529,11 @@ void EventAnalyser() {
                                      "Energy Transfer #omega Around #theta_{e} = 15#circ (RES Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
     TH1D *hET15_DIS_2p_FD = new TH1D("#omega around #theta_{e} = 15#circ (DIS Only, 2p, FD)",
                                      "Energy Transfer #omega Around #theta_{e} = 15#circ (DIS Only, 2p);#omega = E_{beam}-E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hET15_All_Int_2p_FD_Dir = ETrans_All_Int_15_2p_Directory, hET15_QEL_2p_FD_Dir = ETrans_QEL_15_2p_Directory;
-    string hET15_MEC_2p_FD_Dir = ETrans_MEC_15_2p_Directory, hET15_RES_2p_FD_Dir = ETrans_RES_15_2p_Directory, hET15_DIS_2p_FD_Dir = ETrans_DIS_15_2p_Directory;
+    string hET15_All_Int_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_All_Int_15_2p_Directory"];
+    string hET15_QEL_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_QEL_15_2p_Directory"];
+    string hET15_MEC_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_MEC_15_2p_Directory"];
+    string hET15_RES_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_RES_15_2p_Directory"];
+    string hET15_DIS_2p_FD_Dir = directories.ETrans_Directory_map["ETrans_DIS_15_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1739,8 +1545,10 @@ void EventAnalyser() {
     //<editor-fold desc="Ecal reconstruction histograms">
 
     //<editor-fold desc="Ecal histograms">
+
+    //<editor-fold desc="Ecal histograms (2p)">
     THStack *sEcal_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]");
-    string sEcal_2p_Dir = Ecal_stack_2p_Directory;
+    string sEcal_2p_Dir = directories.Ecal_Directory_map["Ecal_stack_2p_Directory"];
 
     TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} rec. (All Int., 2p)", "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                       100, 0, beamE * 1.35);
@@ -1752,26 +1560,43 @@ void EventAnalyser() {
                                   100, 0, beamE * 1.35);
     TH1D *hEcal_DIS_2p = new TH1D("E_{cal} rec. (DIS only, 2p)", "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   100, 0, beamE * 1.35);
-    string hEcal_All_Int_2p_Dir = Ecal_All_Int_2p_Directory, hEcal_QEL_2p_Dir = Ecal_QEL_2p_Directory, hEcal_MEC_2p_Dir = Ecal_MEC_2p_Directory;
-    string hEcal_RES_2p_Dir = Ecal_RES_2p_Directory, hEcal_DIS_2p_Dir = Ecal_DIS_2p_Directory;
+    string hEcal_All_Int_2p_Dir = directories.Ecal_Directory_map["Ecal_All_Int_2p_Directory"];
+    string hEcal_QEL_2p_Dir = directories.Ecal_Directory_map["Ecal_QEL_2p_Directory"];
+    string hEcal_MEC_2p_Dir = directories.Ecal_Directory_map["Ecal_MEC_2p_Directory"];
+    string hEcal_RES_2p_Dir = directories.Ecal_Directory_map["Ecal_RES_2p_Directory"];
+    string hEcal_DIS_2p_Dir = directories.Ecal_Directory_map["Ecal_DIS_2p_Directory"];
+
+    //<editor-fold desc="Chi2 plots for Ecal>Ebeam (2p)">
+    TH1D *hChi2_Electron_Ecal_test_2p = new TH1D("#chi^{2}_{e} for E_{cal}>E_{beam} (2p)", ("#chi^{2}_{e} for E_{cal}>E_{beam}=" + to_string(beamE) +
+                                                                                            " [GeV] (2p);#chi^{2}_{e};").c_str(), 100, -Chi2_boundary, Chi2_boundary);
+    TH1D *hChi2_Proton_Ecal_test_2p = new TH1D("#chi^{2}_{p} for E_{cal}>E_{beam} (2p)", ("#chi^{2}_{p} for E_{cal}>E_{beam}=" + to_string(beamE) +
+                                                                                          " [GeV] (2p);#chi^{2}_{p};").c_str(), 100, -Chi2_boundary, Chi2_boundary);
+    string hChi2_Electron_Ecal_test_2p_Dir = directories.Ecal_Directory_map["Chi2_Ecal_test_2p_Directory"];
+    string hChi2_Proton_Ecal_test_2p_Dir = directories.Ecal_Directory_map["Chi2_Ecal_test_2p_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T">
     TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p)",
                                             "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                            250, -10, 190, 250, 0, beamE * 1.35);
+                                            250, 0, 180, 250, 0, beamE * 1.35);
     TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p)",
                                               "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
-                                              250, -10, 190, 250, 0, beamE * 1.35);
-    string hEcal_vs_dAlpha_T_L_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory, hEcal_vs_dAlpha_T_tot_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory;
-    //</editor-fold>
+                                              250, 0, 180, 250, 0, beamE * 1.35);
+    string hEcal_vs_dAlpha_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
+    string hEcal_vs_dAlpha_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
+    //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T">
     TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
                                         "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#delta#P_{T,L} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
                                           "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
-    string hEcal_vs_dP_T_L_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory, hEcal_vs_dP_T_tot_2p_Dir = Ecal_rec_vs_transverse_variables_2p_Directory;
+    string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
+    string hEcal_vs_dP_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -1786,25 +1611,29 @@ void EventAnalyser() {
                                 dP_T_boundary);
     TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)",
                                   "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV]", 100, 0, dP_T_boundary);
-    string hdP_T_L_2p_Dir = dP_T_2p_Directory, hdP_T_tot_2p_Dir = dP_T_2p_Directory;
+    string hdP_T_L_2p_Dir = directories.TVariables_Directory_map["dP_T_2p_Directory"];
+    string hdP_T_tot_2p_Dir = directories.TVariables_Directory_map["dP_T_2p_Directory"];
 
     THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
     TH1D *hdAlpha_T_L_2p = new TH1D("#delta#alpha_{T,L} (2p)", "#delta#alpha_{T,L} by Leading Proton (2p);#delta#alpha_{T,L} [Deg]", 100, -10, 200);
     TH1D *hdAlpha_T_tot_2p = new TH1D("#delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,tot} by Momentum Sum (2p);#delta#alpha_{T,tot} [Deg]", 100, -10, 200);
-    string hdAlpha_T_L_2p_Dir = dAlpha_T_2p_Directory, hdAlpha_T_tot_2p_Dir = dAlpha_T_2p_Directory;
+    string hdAlpha_T_L_2p_Dir = directories.TVariables_Directory_map["dAlpha_T_2p_Directory"];
+    string hdAlpha_T_tot_2p_Dir = directories.TVariables_Directory_map["dAlpha_T_2p_Directory"];
 
     THStack *sdPhi_T_2p = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (2p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (2p);#delta#phi_{T} [Deg]");
     TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]", 100, -10, 200);
     TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]", 100, -10, 200);
-    string hdPhi_T_L_2p_Dir = dPhi_T_2p_Directory, hdPhi_T_tot_2p_Dir = dPhi_T_2p_Directory;
+    string hdPhi_T_L_2p_Dir = directories.TVariables_Directory_map["dPhi_T_2p_Directory"];
+    string hdPhi_T_tot_2p_Dir = directories.TVariables_Directory_map["dPhi_T_2p_Directory"];
 
     TH2D *hdP_T_L_vs_dAlpha_T_L_2p = new TH2D("#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p)",
                                               "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV];",
-                                              250, -10, 190, 250, 0, dP_T_boundary);
+                                              250, 0, 180, 250, 0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_dAlpha_T_tot_2p = new TH2D("#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p)",
                                                   "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];#deltaP_{T,tot} [GeV];",
-                                                  250, -10, 190, 250, 0, dP_T_boundary);
-    string hdP_T_L_vs_dAlpha_T_L_2p_Dir = dP_T_vs_dAlpha_T_2p_Directory, hdP_T_tot_vs_dAlpha_T_tot_2p_Dir = dP_T_vs_dAlpha_T_2p_Directory;
+                                                  250, 0, 180, 250, 0, dP_T_boundary);
+    string hdP_T_L_vs_dAlpha_T_L_2p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"];
+    string hdP_T_tot_vs_dAlpha_T_tot_2p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -2797,11 +2626,11 @@ void EventAnalyser() {
             P_p_second_1e2pXy.SetMagThetaPhi(protons[1]->getP(), protons[1]->getTheta(), protons[1]->getPhi());
 
             if (P_p_first_1e2pXy.Mag() >= P_p_second_1e2pXy.Mag()) { //if p_first is leading
-                if (protons[0]->getRegion() == CD) { hPhi_p1_1e2pXy_CD->Fill(protons[0]->getPhi()); }
-                if (protons[1]->getRegion() == CD) { hPhi_p2_1e2pXy_CD->Fill(protons[1]->getPhi()); }
+                if (protons[0]->getRegion() == CD) { hPhi_p1_1e2pXy_CD->Fill(protons[0]->getPhi() * 180.0 / pi); }
+                if (protons[1]->getRegion() == CD) { hPhi_p2_1e2pXy_CD->Fill(protons[1]->getPhi() * 180.0 / pi); }
             } else { //else if p_second is leading
-                if (protons[1]->getRegion() == CD) { hPhi_p1_1e2pXy_CD->Fill(protons[1]->getPhi()); }
-                if (protons[0]->getRegion() == CD) { hPhi_p2_1e2pXy_CD->Fill(protons[0]->getPhi()); }
+                if (protons[1]->getRegion() == CD) { hPhi_p1_1e2pXy_CD->Fill(protons[1]->getPhi() * 180.0 / pi); }
+                if (protons[0]->getRegion() == CD) { hPhi_p2_1e2pXy_CD->Fill(protons[0]->getPhi() * 180.0 / pi); }
             }
         }
         //</editor-fold>
@@ -3494,14 +3323,17 @@ void EventAnalyser() {
     //<editor-fold desc="Canvas definitions">
 
     //<editor-fold desc="Canvas c1">
-    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
+    TCanvas *c1 = new TCanvas("canvas", "canvas", 2000, 1500);
+//    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
 //    c1->cd();
     c1->SetGrid();
     c1->SetBottomMargin(0.14);
 
     if (wider_margin) {
-        c1->SetLeftMargin(0.14);
+        c1->SetLeftMargin(0.16);
         c1->SetRightMargin(0.12);
+//        c1->SetLeftMargin(0.14);
+//        c1->SetRightMargin(0.12);
     }
 
     float DefStatX = gStyle->GetStatX();
@@ -3854,36 +3686,36 @@ void EventAnalyser() {
         //<editor-fold desc="dV plots (1e2p, CD & FD)">
         if (apply_cuts == false) {
             histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false,
-                          true, sdVx_1e2p_before, "01_dVx_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false);
+                          true, sdVx_1e2p_before, "01_dVx_BC", hdVx_1e2p_BC_Dir, "CD & FD", kBlue, true, true, true, false);
             histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false,
-                          true, sdVy_1e2p_before, "02_dVy_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false);
+                          true, sdVy_1e2p_before, "02_dVy_BC", hdVy_1e2p_BC_Dir, "CD & FD", kBlue, true, true, true, false);
             histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false,
-                          true, sdVz_1e2p_before, "03_dVz_BC", Vertex_1e2p_dV_BC_Directory, "CD & FD", kBlue, true, true, true, false, true, dVz_cuts.GetUpperCut(), 0,
+                          true, sdVz_1e2p_before, "03_dVz_BC", hdVz_1e2p_BC_Dir, "CD & FD", kBlue, true, true, true, false, true, dVz_cuts.GetUpperCut(), 0,
                           false);
 
             histPlotter1D(c1, hdVx_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sdVx_1e2p_after, "01_dVx_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false);
+                          sdVx_1e2p_after, "01_dVx_AC", hdVx_1e2p_AC_Dir, "CD & FD", kBlue, true, true, true, false);
             histPlotter1D(c1, hdVy_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sdVy_1e2p_after, "02_dVy_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, true, true, true, false);
+                          sdVy_1e2p_after, "02_dVy_AC", hdVy_1e2p_AC_Dir, "CD & FD", kBlue, true, true, true, false);
             histPlotter1D(c1, hdVz_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z} After Cuts", "1e2p", plots, 2, false, true, sdVz_1e2p_after,
-                          "03_dVz_AC", Vertex_1e2p_dV_AC_Directory, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
+                          "03_dVz_AC", hdVz_1e2p_AC_Dir, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
         } else {
             histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sdVx_1e2p_before, "01_dVx", Vertex_1e2p_dV_BC_Directory, "", kBlue, true, true, true, false);
+                          sdVx_1e2p_before, "01_dVx", hdVx_1e2p_BC_Dir, "", kBlue, true, true, true, false);
             histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                          sdVy_1e2p_before, "02_dVy", Vertex_1e2p_dV_BC_Directory, "", kBlue, true, true, true, false);
+                          sdVy_1e2p_before, "02_dVy", hdVy_1e2p_BC_Dir, "", kBlue, true, true, true, false);
             histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z}", "1e2p", plots, 2, false, true, sdVy_1e2p_before, "03_dVz",
-                          Vertex_1e2p_dV_BC_Directory, "", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
+                          hdVz_1e2p_BC_Dir, "", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
         }
         //</editor-fold>
 
         //<editor-fold desc="dV plots after dV cuts (2p, CD & FD)">
         histPlotter1D(c1, hdVx_2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sdVx_2p, "01_dVx",
-                      Vertex_dV_2p_Directory, "", kBlue, true, true, true, false);
+                      hdVx_2p_Dir, "", kBlue, true, true, true, false);
         histPlotter1D(c1, hdVy_2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sdVy_2p, "02_dVy",
-                      Vertex_dV_2p_Directory, "", kBlue, true, true, true, false);
-        histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z}", "2p", plots, 2, false, true, sdVz_2p, "03_dVz", Vertex_dV_2p_Directory,
-                      "", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
+                      hdVy_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z}", "2p", plots, 2, false, true, sdVz_2p, "03_dVz", hdVz_2p_Dir, "", kBlue,
+                      false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
         //</editor-fold>
 
     } else {
@@ -4290,33 +4122,27 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs. P plots (all particles, by charge)">
 
         //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "01_Beta_vs_P_q_p1_All_e_CD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        histPlotter2D(c1, Beta_vs_P_positive_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_positive_particles_All_e_CD_Dir,
+                      "01_Beta_vs_P_q_p1_All_e_CD.png", beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
 
-        histPlotter2D(c1, Beta_vs_P_positive_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "01_Beta_vs_P_q_p1_All_e_FD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        histPlotter2D(c1, Beta_vs_P_positive_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_positive_particles_All_e_FD_Dir,
+                      "01_Beta_vs_P_q_p1_All_e_FD.png", beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "02_Beta_vs_P_q_0_All_e_CD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_neutral_particles_All_e_CD_Dir,
+                      "02_Beta_vs_P_q_0_All_e_CD.png", beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
 
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "02_Beta_vs_P_q_0_All_e_FD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_neutral_particles_All_e_FD_Dir,
+                      "02_Beta_vs_P_q_0_All_e_FD.png", beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "03_Beta_vs_P_q_m1_All_e_CD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_negative_particles_All_e_CD_Dir,
+                      "03_Beta_vs_P_q_m1_All_e_CD.png", beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
 
-        histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_All_e_Directory, "03_Beta_vs_P_q_m1_All_e_FD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        histPlotter2D(c1, Beta_vs_P_negative_particles_All_e_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_negative_particles_All_e_FD_Dir,
+                      "03_Beta_vs_P_q_m1_All_e_FD.png", beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
         //</editor-fold>
 
         //</editor-fold>
@@ -4326,119 +4152,98 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs. P plots (1e cut)">
 
         //<editor-fold desc="Beta vs. P for all particles (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_Only_1e_Directory, "01_Beta_vs_P_1e_cut_All_Particles_CD.png",
+        histPlotter2D(c1, Beta_vs_P_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_cut_CD_Dir, "01_Beta_vs_P_1e_cut_All_Particles_CD.png",
                       beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
 
-        histPlotter2D(c1, Beta_vs_P_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_VS_P_Only_1e_Directory, "01_Beta_vs_P_1e_cut_All_Particles_FD.png",
+        histPlotter2D(c1, Beta_vs_P_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_cut_FD_Dir, "01_Beta_vs_P_1e_cut_All_Particles_FD.png",
                       beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus, beta_Kminus);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for Electrons Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "02_Beta_vs_P_1e_cut_Electrons_Only_FD.png",
-                      beta_electron, "Electrons", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Electrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Electrons_Only_FD_Dir,
+                      "02_Beta_vs_P_1e_cut_Electrons_Only_FD.png", beta_electron, "Electrons", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for Protons Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "03_Beta_vs_P_1e_cut_Protons_Only_CD.png",
-                      beta_proton, "Protons", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Protons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Protons_Only_CD_Dir,
+                      "03_Beta_vs_P_1e_cut_Protons_Only_CD.png", beta_proton, "Protons", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "03_Beta_vs_P_1e_cut_Protons_Only_FD.png",
-                      beta_proton, "Protons", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Protons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Protons_Only_FD_Dir,
+                      "03_Beta_vs_P_1e_cut_Protons_Only_FD.png", beta_proton, "Protons", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for Neutrons Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "04_Beta_vs_P_1e_cut_Neutrons_Only_CD.png",
-                      beta_neutron, "Neutrons", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Neutrons_Only_CD_Dir,
+                      "04_Beta_vs_P_1e_cut_Neutrons_Only_CD.png", beta_neutron, "Neutrons", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "04_Beta_vs_P_1e_cut_Neutrons_Only_FD.png",
-                      beta_neutron, "Neutrons", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Neutrons_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Neutrons_Only_FD_Dir,
+                      "04_Beta_vs_P_1e_cut_Neutrons_Only_FD.png", beta_neutron, "Neutrons", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for Kplus Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Kplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "05_Beta_vs_P_1e_cut_Kplus_Only_CD.png",
-                      beta_Kplus, "K^{+}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Kplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Kplus_Only_CD_Dir,
+                      "05_Beta_vs_P_1e_cut_Kplus_Only_CD.png", beta_Kplus, "K^{+}", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_Kplus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "05_Beta_vs_P_1e_cut_Kplus_Only_FD.png",
-                      beta_Kplus, "K^{+}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Kplus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Kplus_Only_FD_Dir,
+                      "05_Beta_vs_P_1e_cut_Kplus_Only_FD.png", beta_Kplus, "K^{+}", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for Kminus Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_Kminus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "06_Beta_vs_P_1e_cut_Kminus_Only_CD.png",
-                      beta_Kminus, "K^{-}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Kminus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Kminus_Only_CD_Dir,
+                      "06_Beta_vs_P_1e_cut_Kminus_Only_CD.png", beta_Kminus, "K^{-}", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_Kminus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "06_Beta_vs_P_1e_cut_Kminus_Only_FD.png",
-                      beta_Kminus, "K^{-}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_Kminus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_Kminus_Only_FD_Dir,
+                      "06_Beta_vs_P_1e_cut_Kminus_Only_FD.png", beta_Kminus, "K^{-}", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for piplus Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "08_Beta_vs_P_1e_cut_piplus_Only_CD.png",
-                      beta_piplus, "#pi^{+}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_piplus_Only_CD_Dir,
+                      "08_Beta_vs_P_1e_cut_piplus_Only_CD.png", beta_piplus, "#pi^{+}", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "08_Beta_vs_P_1e_cut_piplus_Only_FD.png",
-                      beta_piplus, "#pi^{+}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_piplus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_piplus_Only_FD_Dir,
+                      "08_Beta_vs_P_1e_cut_piplus_Only_FD.png", beta_piplus, "#pi^{+}", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for piminus Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_piminus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "09_Beta_vs_P_1e_cut_piminus_Only_CD.png",
-                      beta_piminus, "#pi^{-}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_piminus_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_piminus_Only_CD_Dir,
+                      "09_Beta_vs_P_1e_cut_piminus_Only_CD.png", beta_piminus, "#pi^{-}", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_piminus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "09_Beta_vs_P_1e_cut_piminus_Only_FD.png",
-                      beta_piminus, "#pi^{-}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_piminus_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_piminus_Only_FD_Dir,
+                      "09_Beta_vs_P_1e_cut_piminus_Only_FD.png", beta_piminus, "#pi^{-}", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for pizero Only (1e cut, CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "10_Beta_vs_P_1e_cut_pizero_Only_CD.png",
-                      beta_pizero, "#pi^{0}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_pizero_Only_CD_Dir,
+                      "10_Beta_vs_P_1e_cut_pizero_Only_CD.png", beta_pizero, "#pi^{0}", true);
 
-        histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_Only_1e_Directory, "10_Beta_vs_P_1e_cut_pizero_Only_FD.png",
-                      beta_pizero, "#pi^{0}", true);
+        histPlotter2D(c1, Beta_vs_P_1e_pizero_Only_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_1e_pizero_Only_FD_Dir,
+                      "10_Beta_vs_P_1e_cut_pizero_Only_FD.png", beta_pizero, "#pi^{0}", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P plots (by charge, 1e cut, CD & FD)">
 
         //<editor-fold desc="Beta vs. P for q = +1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_positive_particles_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "01_Beta_vs_P_q_p1_1e_cut_CD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        histPlotter2D(c1, Beta_vs_P_positive_particles_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_positive_particles_1e_cut_CD_Dir,
+                      "01_Beta_vs_P_q_p1_1e_cut_CD.png", beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
 
-        histPlotter2D(c1, Beta_vs_P_positive_particles_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "01_Beta_vs_P_q_p1_1e_cut_FD.png",
-                      beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        histPlotter2D(c1, Beta_vs_P_positive_particles_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_positive_particles_1e_cut_FD_Dir,
+                      "01_Beta_vs_P_q_p1_1e_cut_FD.png", beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for q = 0 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "02_Beta_vs_P_q_0_1e_cut_CD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_neutral_particles_1e_cut_CD_Dir,
+                      "02_Beta_vs_P_q_0_1e_cut_CD.png", beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
 
-        histPlotter2D(c1, Beta_vs_P_neutral_particles_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "02_Beta_vs_P_q_0_1e_cut_FD.png",
-                      beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        histPlotter2D(c1, Beta_vs_P_neutral_particles_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_neutral_particles_1e_cut_FD_Dir,
+                      "02_Beta_vs_P_q_0_1e_cut_FD.png", beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P for q = -1 (CD & FD)">
-        histPlotter2D(c1, Beta_vs_P_negative_particles_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "03_Beta_vs_P_q_m1_1e_cut_CD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        histPlotter2D(c1, Beta_vs_P_negative_particles_1e_cut_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_negative_particles_1e_cut_CD_Dir,
+                      "03_Beta_vs_P_q_m1_1e_cut_CD.png", beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
 
-        histPlotter2D(c1, Beta_vs_P_negative_particles_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425,
-                      plots, true, Beta_VS_P_by_charge_Only_1e_Directory, "03_Beta_vs_P_q_m1_1e_cut_FD.png",
-                      beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        histPlotter2D(c1, Beta_vs_P_negative_particles_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, Beta_vs_P_negative_particles_1e_cut_FD_Dir,
+                      "03_Beta_vs_P_q_m1_1e_cut_FD.png", beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
         //</editor-fold>
 
         //</editor-fold>

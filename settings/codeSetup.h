@@ -4,6 +4,7 @@
 
 #include "../source/constants.h"
 #include "../source/classes/clas12ana/clas12ana.h"
+#include "../source/classes/Directories/Directories.cpp"
 #include "../source/classes/DSCuts/DSCuts.h"
 #include "../source/classes/ExperimentParameters/ExperimentParameters.cpp"
 #include "../source/classes/hPlots/hPlot1D.cpp"

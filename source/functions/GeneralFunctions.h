@@ -87,41 +87,6 @@ string to_string_with_precision(const T a_value, const int n = 2) {
 }
 //</editor-fold>
 
-// MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="MakeDirectory function (regular)">
-/* Usage: made directory for plots. */
-
-void MakeDirectory(bool Create_Directory, string Plots_Parent_Folder, string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
-                   string Parent_Folder = "./plots") {
-
-    string MakeDirectory = "mkdir -p " + Parent_Folder;
-    string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
-
-    if (Clear_Parent_Folder_content == true && Create_Directory == true) {
-        system(RemoveDirectoryContent.c_str());
-        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
-    } else if (Clear_Parent_Folder_content == false && Create_Directory == true) {
-        system((MakeDirectory + "/" + Plots_Parent_Folder + "/" + Plots_Daughter_Folder).c_str());
-    }
-}
-//</editor-fold>
-
-// SetLorentzVector function --------------------------------------------------------------------------------------------------------------------------------------------
-
-//<editor-fold desc="SetLorentzVector function">
-/* Usage:  */
-
-void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp) {
-    p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), p4.M());
-}
-
-void SetLorentzVector(TLorentzVector &p4, clas12::region_part_ptr rp, double mass) {
-    double P = rp->par()->getP();
-    p4.SetXYZM(rp->par()->getPx(), rp->par()->getPy(), rp->par()->getPz(), sqrt(mass * mass + P * P));
-}
-//</editor-fold>
-
 // rCalc function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="rCalc function">
