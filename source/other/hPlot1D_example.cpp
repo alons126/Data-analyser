@@ -45,6 +45,6 @@ void hPlot1D_example() {
 
     hPlot1D testHist = hPlot1D("hst", "ht", "xat", 0, 1.25);
     testHist.hFill(1);
-    testHist.hDraw();
-    testHist.hSave(c1);
+    testHist.SimpleDraw();
+    testHist.SimpleSave(c1);
 }

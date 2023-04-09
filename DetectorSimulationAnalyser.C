@@ -1169,6 +1169,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P (all particles)">
 
+    hPlot2D hBeta_vs_P_Protons_Only_CD = hPlot2D("Protons Only", "CD", "#beta vs. P test", "#beta vs. P", "P [GeV]", "#beta", 0, beamE * 1.1, 0, 1.1);
+    hBeta_vs_P_Protons_Only_CD.SetHistogram2DSaveNamePath(plots_path);
+
+
     //<editor-fold desc="Beta vs. P (no cuts, CD & FD)">
     TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
     TH2D *Beta_vs_P_FD = new TH2D("#beta vs. P (All Particles, FD)", "#beta vs. P (All Particles, FD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
@@ -2068,6 +2072,8 @@ void EventAnalyser() {
         for (int i = 0; i < Np; i++) {
             if (protons[i]->getRegion() == CD) {
                 hChi2_Proton_CD->Fill(protons[i]->par()->getChi2Pid());
+
+                hBeta_vs_P_Protons_Only_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta());
 
                 Beta_vs_P_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
@@ -4216,6 +4222,8 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 // Beta vs. P histograms
 // ======================================================================================================================================================================
+
+    hBeta_vs_P_Protons_Only_CD.hDrawAndSave(c1, plots, "");
 
     //<editor-fold desc="Beta vs. P histograms">
     if (Beta_vs_P_plots) {

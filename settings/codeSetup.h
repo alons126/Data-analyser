@@ -7,6 +7,7 @@
 #include "../source/classes/DSCuts/DSCuts.h"
 #include "../source/classes/ExperimentParameters/ExperimentParameters.cpp"
 #include "../source/classes/hPlots/hPlot1D.cpp"
+#include "../source/classes/hPlots/hPlot2D.cpp"
 #include "../source/functions/GeneralFunctions.h"
 #include "../source/functions/HistogramPlottingFunctions.h"
 
