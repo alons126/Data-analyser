@@ -60,6 +60,8 @@ void EventAnalyser() {
 //  Input processing ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Input processing">
+    /* Initial input processing of loaded files (given by AnalyseFile) */
+
     /* Determine file path and name */
     string LoadedInput = AnalyseFile; // AnalyseFile is taken from codeSetup.h
     string filePath = LoadedInput.substr(0, LoadedInput.find_last_of('/') + 1);
@@ -73,7 +75,7 @@ void EventAnalyser() {
     string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
     int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
 
-    /* Execution variables */
+    /* Print out execution variables (for self observation) */
     cout << "-- Execution variables ----------------------------------------------------\n";
     cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
     cout << "plots_path:\t\t" << plots_path << "\n\n";
@@ -91,13 +93,15 @@ void EventAnalyser() {
 // Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts settings">
+    /* Settings that allow to disable/enable every cut individually */
+
     //TODO: add beta = 1.2 cut for electrons
     bool apply_cuts = true; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
-    /* Chi2 cuts */
+    /* Chi2 cuts (= PID cuts) */
     bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
@@ -116,6 +120,8 @@ void EventAnalyser() {
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
 
     //<editor-fold desc="Cuts output">
+    /* Print out the cuts within the run (for self-observation) */
+
     if (apply_cuts == false) {
         cout << "Cuts are disabled.\n\n\n";
 
@@ -136,25 +142,21 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Custom cuts naming">
+    /* Save plots to custom-named folders, to allow multi-sample runs at once. */
+
     bool custom_cuts_naming = true;
 
     if (custom_cuts_naming == true) {
         if (apply_cuts == false) {
             plots_path = WorkingDirectory + "plots_" + SampleName + "__NO_CUTS/";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__NO_CUTS.txt";
-//            plots_path = WorkingDirectory + "plots_NO_CUTS" + "/";
-//            plots_log_save_Directory = plots_path + "/" + "Run_log_NO_CUTS.txt";
         } else {
             if (apply_chi2_cuts_1e_cut == false) {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "__ALL_CUTS_woChi2/";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__ALL_CUTS_woChi2.txt";
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS_woChi2" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut == true) {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "__ALL_CUTS/";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "__ALL_CUTS.txt";
-//                plots_path = WorkingDirectory + "plots_ALL_CUTS" + "/";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_ALL_CUTS.txt";
             }
         }
     }
@@ -165,29 +167,33 @@ void EventAnalyser() {
 // Cuts declarations -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Cuts declarations">
+    /* Log cut values to be used later when applying them. */
+
     /* Number of Photo-electrons (Nphe) cuts (electrons only, FD) */
     DSCuts Nphe_cuts_FD;
 
     /* Chi2 cuts. NOTES:
-     * Values for mean and cuts are filled from fit variables.
-     * Upper cut lim (Cuts.at(2)) is the same as sigma that is used ni clas12ana */
+     * Values for mean and sigma are filled from fit variables (overating these values later).
+     * Upper cut lim (Cuts.at(2)) is the same as the sigma that is used in clas12ana to apply PID cuts */
     DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
     DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", 0, -6, 6);
 
     DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0, -1, -1);
     DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0, -1, -1);
 
-    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", 0, -1, -1);
-
     DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0, -1, -1);
     DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0, -1, -1);
 
     DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0, -1, -1);
     DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0, -1, -1);
-//    DSCuts Chi2_hadron_cuts[]
+
+    //<editor-fold desc="Kaon PID cuts">
+    /* Kaon pid cuts. Not really applied in our analysis. */
+    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
+    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", 0, -1, -1);
+    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", 0, -1, -1);
+    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", 0, -1, -1);
+    //</editor-fold>
 
     /* Vertex cuts */
     DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
@@ -210,18 +216,20 @@ void EventAnalyser() {
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="TList definition">
-    TList *plots = new TList();
+    /* Definition of plots TList used to save all plots to .root file. */
 
+    TList *plots = new TList();
     string listName = plots_path + AnalyseFileSample + plots_file_type;
     const char *TListName = listName.c_str();
-
-    //    TFolder *folder_test = new TFolder("folder_test_name1/folder_test_name2","folder_test_title");
-    //    plots->Add(folder_test);
     //</editor-fold>
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Creating directories">
+    /* Code for creating directories.
+     * Added for the case that plots out folder does not exist and for orgenazation.
+     * All cut plots are separate from the analysis plots, and withing the 01_Cuts_plots folder. */
+
     cout << "Creating plot directories...\n\n";
 
     string Plots_Folder = plots_path; // Plots_Folder = Parent_Folder
@@ -531,6 +539,8 @@ void EventAnalyser() {
 // Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Calculation settings">
+    /* settings to enable/disable specific FS plot calculations. */
+
     bool calculate_1p = true, calculate_2p = true, calculate_1n1p = true;
     //</editor-fold>
 
@@ -542,12 +552,12 @@ void EventAnalyser() {
 
     bool wider_margin = true;
 
-    bool debug_plots = true;
+    bool debug_plots = true; // Print out clas12ana debugging plots
 
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
-    /* Cut parameter plots */
+    /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
@@ -589,6 +599,9 @@ void EventAnalyser() {
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Normalization settings">
+    /* Here are boolean variables used to turn ON/OFF the different plot normalizations of the code.
+     * Enable of presentations only, since event count is important otherwise. */
+
     bool normalize_master = false;
 
     bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false;
@@ -606,12 +619,12 @@ void EventAnalyser() {
 // Delete settings ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Delete settings">
+    /* Clear files from previous runs (to prevent mix fo plots from different codes). */
+
     bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
 
-    if (delete_txt_files == true) {
-//        system(("find " + plots_path + " -type f -iname '" + log_file_name + "' -delete").c_str()); // Delete existing .txt files
-        system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
-    }
+    /* Delete existing .txt files */
+    if (delete_txt_files == true) { system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); }
 
     //<editor-fold desc="Deleting files by cases">
     if (delete_png_files == true && delete_root_files == false) {
@@ -636,15 +649,15 @@ void EventAnalyser() {
 
 // Histogram limits -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Histogram limits">
+    //<editor-fold desc="Histogram boundaries">
+    /* Histogram boundary variables. Used to unify histograms to the same boundaries. */
+
     /* Chi2 plots */
     double Chi2_boundary = 30;
-//    double Chi2_boundary = 15;
     if (apply_cuts == true) { Chi2_boundary = 9; }
 
     /* Vertex plots */
     double Vertex_boundary = 50, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
-//    double Vertex_boundary = 25, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
 
     if (apply_cuts == true) {
         double dVertex_boundary = Vz_cut.GetUpperCut() - Vz_cut.GetLowerCut();
@@ -653,7 +666,6 @@ void EventAnalyser() {
     }
 
     double dV_boundary = 50;
-//    double dV_boundary = 25;
     if (apply_cuts == true) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
 
     /* SF */
@@ -670,6 +682,8 @@ void EventAnalyser() {
 // Debugging settings ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Debugging settings">
+    /* Saving a printout of the number of particles in nEvents2print events. Used for clas12ana debugging. */
+
     bool PrintEvents = false;
     int Ne_in_event = 1, Nf_in_event = 2, nEvents2print = 10000;
 
@@ -709,6 +723,7 @@ void EventAnalyser() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Histogram definitions">
+    /* Histogram definitions and settings. */
 
     cout << "\nDefining histograms...";
 
@@ -1168,10 +1183,6 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P histograms">
 
     //<editor-fold desc="Beta vs. P (all particles)">
-
-    hPlot2D hBeta_vs_P_Protons_Only_CD = hPlot2D("Protons Only", "CD", "#beta vs. P test", "#beta vs. P", "P [GeV]", "#beta", 0, beamE * 1.1, 0, 1.1);
-    hBeta_vs_P_Protons_Only_CD.SetHistogram2DSaveNamePath(plots_path);
-
 
     //<editor-fold desc="Beta vs. P (no cuts, CD & FD)">
     TH2D *Beta_vs_P_CD = new TH2D("#beta vs. P (All Particles, CD)", "#beta vs. P (All Particles, CD);P [GeV];#beta", 250, 0, beamE * 1.425, 250, 0, 3);
@@ -2072,8 +2083,6 @@ void EventAnalyser() {
         for (int i = 0; i < Np; i++) {
             if (protons[i]->getRegion() == CD) {
                 hChi2_Proton_CD->Fill(protons[i]->par()->getChi2Pid());
-
-                hBeta_vs_P_Protons_Only_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta());
 
                 Beta_vs_P_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
                 Beta_vs_P_Protons_Only_CD->Fill(protons[i]->getP(), protons[i]->par()->getBeta());
@@ -4223,8 +4232,6 @@ void EventAnalyser() {
 // Beta vs. P histograms
 // ======================================================================================================================================================================
 
-    hBeta_vs_P_Protons_Only_CD.hDrawAndSave(c1, plots, "");
-
     //<editor-fold desc="Beta vs. P histograms">
     if (Beta_vs_P_plots) {
         cout << "\n\nPlotting Beta vs. P histograms...\n\n";
@@ -5236,7 +5243,7 @@ void EventAnalyser() {
     if (debug_plots == true) {
         cout << "\n\nSaving debugging plots...\n\n";
 
-        TString debug_filePath = plots_path + "debugOutputFile.root";
+        TString debug_filePath = plots_path + "DebugOutputFile.root";
         clasAna.setdebug_fileName(debug_filePath);
         clasAna.WriteDebugPlots();
     } else {
