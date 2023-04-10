@@ -32,6 +32,8 @@
 #include <TROOT.h>
 */
 
+#include "../../functions/GeneralFunctions.h"
+
 class hPlot1D {
 protected:
     /* 1D histogram declaration */
@@ -169,6 +171,9 @@ public:
                        bool plot_max = true);
 
 // Histogram methods:
+//    template<typename T>
+//    string to_string_with_precision(const T a_value, const int n = 2);
+
     Double_t fitf(Double_t *v, Double_t *par);
 
     void hFill(double data) { Histogram1D->Fill(data); }

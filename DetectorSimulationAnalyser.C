@@ -610,9 +610,9 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2 plots (1p)">
     hPlot1D hChi2_Electron_1p_FD = hPlot1D("1p", "", "#chi^{2}_{e}", "#chi^{2}_{e} histogram", "#chi^{2}_{e}", directories.Chi2_Directory_map["Chi2_1p_Directory"],
                                            "01_Electron_Chi2_1p", -Chi2_boundary, Chi2_boundary);
-    hPlot1D hChi2_Proton_1p_CD = hPlot1D("1e cut", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_1p_Directory"],
+    hPlot1D hChi2_Proton_1p_CD = hPlot1D("1p", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_1p_Directory"],
                                          "02_Proton_Chi2_1p", -Chi2_boundary, Chi2_boundary);
-    hPlot1D hChi2_Proton_1p_FD = hPlot1D("1e cut", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_1p_Directory"],
+    hPlot1D hChi2_Proton_1p_FD = hPlot1D("1p", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_1p_Directory"],
                                          "02_Proton_Chi2_1p", -Chi2_boundary, Chi2_boundary);
     //</editor-fold>
 
@@ -628,10 +628,10 @@ void EventAnalyser() {
 //                                             100, -Chi2_boundary, Chi2_boundary);
 //        hChi2_Electron_1e2p_BC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
 
-        hChi2_Proton_1e2p_BC_CD = hPlot1D("1e cut", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - before cuts", "#chi^{2}_{p}",
+        hChi2_Proton_1e2p_BC_CD = hPlot1D("1e2p", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - before cuts", "#chi^{2}_{p}",
                                           directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "03_Proton_Chi2_1e2p_BC",
                                           -Chi2_boundary, Chi2_boundary);
-        hChi2_Proton_1e2p_BC_FD = hPlot1D("1e cut", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - before cuts", "#chi^{2}_{p}",
+        hChi2_Proton_1e2p_BC_FD = hPlot1D("1e2p", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - before cuts", "#chi^{2}_{p}",
                                           directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "03_Proton_Chi2_1e2p_BC",
                                           -Chi2_boundary, Chi2_boundary);
 //        hChi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} BC (1e2p, CD)", "#chi^{2}_{p} Histogram Before Cut (1e2p, CD);#chi^{2}_{p};",
@@ -646,10 +646,10 @@ void EventAnalyser() {
 //        hChi2_Electron_1e2p_AC_FD = new TH1D("#chi^{2}_{e} AC (1e2p)", "#chi^{2}_{e} Histogram After Cut (1e2p);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
 //        hChi2_Electron_1e2p_AC_FD_Dir = directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"];
 
-        hChi2_Proton_1e2p_AC_CD = hPlot1D("1e cut", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - after cuts", "#chi^{2}_{p}",
+        hChi2_Proton_1e2p_AC_CD = hPlot1D("1e2p", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - after cuts", "#chi^{2}_{p}",
                                           directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "03_Proton_Chi2_1e2p_AC",
                                           -Chi2_boundary, Chi2_boundary);
-        hChi2_Proton_1e2p_AC_FD = hPlot1D("1e cut", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - after cuts", "#chi^{2}_{p}",
+        hChi2_Proton_1e2p_AC_FD = hPlot1D("1e2p", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram - after cuts", "#chi^{2}_{p}",
                                           directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "03_Proton_Chi2_1e2p_AC",
                                           -Chi2_boundary, Chi2_boundary);
 //        hChi2_Proton_1e2p_AC_CD = new TH1D("#chi^{2}_{p} AC (1e2p, CD)", "#chi^{2}_{p} Histogram After Cut (1e2p, CD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
@@ -658,9 +658,9 @@ void EventAnalyser() {
     } else {
         hChi2_Electron_1e2p_BC_FD = hPlot1D("1e2p", "", "#chi^{2}_{e}", "#chi^{2}_{e} histogram", "#chi^{2}_{e}",
                                             directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "02_Electron_Chi2_2p", -Chi2_boundary, Chi2_boundary);
-        hChi2_Proton_1e2p_BC_CD = hPlot1D("1e cut", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}",
+        hChi2_Proton_1e2p_BC_CD = hPlot1D("1e2p", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}",
                                           directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "03_Proton_Chi2_2p", -Chi2_boundary, Chi2_boundary);
-        hChi2_Proton_1e2p_BC_FD = hPlot1D("1e cut", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}",
+        hChi2_Proton_1e2p_BC_FD = hPlot1D("1e2p", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}",
                                           directories.Chi2_Directory_map["Chi2_1e2p_cut_tests_Directory"], "03_Proton_Chi2_2p", -Chi2_boundary, Chi2_boundary);
 //        hChi2_Electron_1e2p_BC_FD = new TH1D("#chi^{2}_{e} (1e2p)", "#chi^{2}_{e} Histogram (1e2p);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
 //        hChi2_Proton_1e2p_BC_CD = new TH1D("#chi^{2}_{p} (1e2p, CD)", "#chi^{2}_{p} Histogram (1e2p, CD);#chi^{2}_{p};", 100, -Chi2_boundary, Chi2_boundary);
@@ -702,9 +702,9 @@ void EventAnalyser() {
     //<editor-fold desc="Chi2 plots (2p)">
     hPlot1D hChi2_Electron_2p_FD = hPlot1D("2p", "", "#chi^{2}_{e}", "#chi^{2}_{e} histogram", "#chi^{2}_{e}", directories.Chi2_Directory_map["Chi2_2p_Directory"],
                                            "01_Electron_Chi2_2p", -Chi2_boundary, Chi2_boundary);
-    hPlot1D hChi2_Proton_2p_CD = hPlot1D("1e cut", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_2p_Directory"],
+    hPlot1D hChi2_Proton_2p_CD = hPlot1D("2p", "CD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_2p_Directory"],
                                          "02_Proton_Chi2_2p", -Chi2_boundary, Chi2_boundary);
-    hPlot1D hChi2_Proton_2p_FD = hPlot1D("1e cut", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_2p_Directory"],
+    hPlot1D hChi2_Proton_2p_FD = hPlot1D("2p", "FD", "#chi^{2}_{p}", "#chi^{2}_{p} histogram", "#chi^{2}_{p}", directories.Chi2_Directory_map["Chi2_2p_Directory"],
                                          "02_Proton_Chi2_2p", -Chi2_boundary, Chi2_boundary);
 //    TH1D *hChi2_Electron_2p_FD = new TH1D("#chi^{2}_{e} (2p)", "#chi^{2}_{e} Histogram (2p);#chi^{2}_{e};", 100, -Chi2_boundary, Chi2_boundary);
 //    string hChi2_Electron_2p_FD_Dir = directories.Chi2_Directory_map["Chi2_2p_Directory"];
@@ -3850,7 +3850,7 @@ void EventAnalyser() {
 //                          2, false, true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p_AC", hChi2_Proton_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
 //                          Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(0));
         } else {
-            hChi2_Electron_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, true);
+            hChi2_Electron_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
 //            histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
 //                          false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p", hChi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false);
 

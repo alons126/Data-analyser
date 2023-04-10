@@ -1093,9 +1093,11 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
         double Upper_cut = plot_upper_cut;
         double Lower_cut = plot_lower_cut;
         double plot_xmax = plot_Xmax;
-        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+        TLine *upper_cut = new TLine((Upper_cut + plot_xmax), 0., (Upper_cut + plot_xmax), gPad->GetFrame()->GetY2());
+//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(LineWidth);
-        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+        TLine *lower_cut = new TLine((Lower_cut + plot_xmax), 0., (Lower_cut + plot_xmax), gPad->GetFrame()->GetY2());
+//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
         lower_cut->SetLineWidth(LineWidth);
         TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
         max_location->SetLineWidth(LineWidth + 1);
@@ -1113,11 +1115,13 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
                 max_location->SetLineColor(kGreen);
             }
 
-            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
-            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
+            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut + plot_xmax, 3)).c_str(), "l");
+//            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut + plot_xmax, 3)).c_str(), "l");
+//            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
             if (plot_max == true) {
-                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
             Cut_legend->Draw("same");
@@ -1266,9 +1270,11 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
         double Upper_cut = plot_upper_cut;
         double Lower_cut = plot_lower_cut;
         double plot_xmax = plot_Xmax;
-        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
+        TLine *upper_cut = new TLine((Upper_cut + plot_xmax), 0., (Upper_cut + plot_xmax), gPad->GetFrame()->GetY2());
+//        TLine *upper_cut = new TLine(Upper_cut, 0., Upper_cut, gPad->GetFrame()->GetY2());
         upper_cut->SetLineWidth(LineWidth);
-        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
+        TLine *lower_cut = new TLine((Lower_cut + plot_xmax), 0., (Lower_cut + plot_xmax), gPad->GetFrame()->GetY2());
+//        TLine *lower_cut = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
         lower_cut->SetLineWidth(LineWidth);
         TLine *max_location = new TLine(plot_Xmax, 0., plot_Xmax, gPad->GetFrame()->GetY2());
         max_location->SetLineWidth(LineWidth + 1);
@@ -1286,11 +1292,13 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
                 max_location->SetLineColor(kGreen);
             }
 
-            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
-            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
+            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut + plot_xmax, 3)).c_str(), "l");
+//            TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, ("Upper cut = " + to_string_with_precision(Upper_cut)).c_str(), "l");
+            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut + plot_xmax, 3)).c_str(), "l");
+//            TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, ("Lower cut = " + to_string_with_precision(Lower_cut)).c_str(), "l");
 
             if (plot_max == true) {
-                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax)).c_str(), "l");
+                TLegendEntry *Cut_max_location_lim = Cut_legend->AddEntry(max_location, ("Peak location = " + to_string_with_precision(plot_xmax, 3)).c_str(), "l");
             }
 
             Cut_legend->Draw("same");
@@ -1328,6 +1336,8 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
     Histogram1DCanvas->Clear();
 }
 //</editor-fold>
+
+// histPlotter1DwFit function (unified) -------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter1DwFit function">
 void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
@@ -1547,15 +1557,6 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 void hPlot1D::hDrawAndSave(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
                            double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0, bool plotMax = false) {
     histPlotter1D(SampleName, h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, hList, plot_lower_cut, plot_upper_cut, plot_Xmax, plotMax);
-
-//    histPlotter1D(h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
-//                  Histogram1DTitles["Histogram1DTitleReactions"], hList, LineWidth, LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath,
-//                  Histogram1DTitles["FinalState"], ShowStats, Title2, ApplyPlotCuts, sigma, mean, plotMax);
-//
-//    histPlotter1D(h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
-//                  Histogram1DTitles["Histogram1DTitleReactions"], Histogram1DTitleSizes.at(0), Histogram1DTitleSizes.at(1), Histogram1DTitleSizes.at(2), hList, LineWidth,
-//                  LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath, Histogram1DTitles["FinalState"], CenterTitle, ShowStats, Title2,
-//                  ApplyPlotCuts, sigma, mean, plotMax);
 }
 
 void hPlot1D::hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor) {
@@ -1564,12 +1565,6 @@ void hPlot1D::hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram,
                   LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath, Histogram1DTitles["FinalState"], CenterTitle, ShowStats, Title2,
                   ApplyPlotCuts, PlotCuts, PlotXmax, PlotHistogramMax);
 }
-//void hPlot1D::hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor, std::string FinalState) {
-//    histPlotter1D(h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
-//                  Histogram1DTitles["Histogram1DTitleReactions"], Histogram1DTitleSizes.at(0), Histogram1DTitleSizes.at(1), Histogram1DTitleSizes.at(2), hList,
-//                  LineWidth, LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath, FinalState, CenterTitle, ShowStats, Title2, ApplyPlotCuts,
-//                  PlotCuts, PlotXmax, PlotHistogramMax);
-//}
 //</editor-fold>
 
 // hDrawAndSaveWFit function ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1577,31 +1572,19 @@ void hPlot1D::hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram,
 //<editor-fold desc="hDrawAndSaveWFit function">
 void hPlot1D::hDrawAndSaveWFit(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
                                double factor, double &plot_lower_cut, double &plot_upper_cut, double &plot_Xmax, bool plotMax = false) {
-//                               double factor, double &plot_lower_cut = -9999., double &plot_upper_cut = 9999., double &plot_Xmax = 0, bool plotMax = false) {
-//    double *PlotLowerCut = plot_lower_cut;
-//    double *PlotUpperCut = plot_upper_cut;
-//    double *PlotXmax = plot_Xmax;
-
     histPlotter1DwFit(SampleName, h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
                       Histogram1DTitles["Histogram1DTitleReactions"], hList, Histogram1DSaveName, Histogram1DSaveNamePath, Histogram1DTitles["FinalState"], plot_Xmax,
                       plot_lower_cut, plot_upper_cut, factor, plotMax);
-
-//    plot_lower_cut = PlotLowerCut;
-//    plot_upper_cut = PlotUpperCut;
-//    plot_Xmax = PlotXmax;
-//    histPlotter1D(SampleName, h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, hList, plot_lower_cut, plot_upper_cut, plot_Xmax, plotMax);
-
-//    histPlotter1D(h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
-//                  Histogram1DTitles["Histogram1DTitleReactions"], hList, LineWidth, LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath,
-//                  Histogram1DTitles["FinalState"], ShowStats, Title2, ApplyPlotCuts, sigma, mean, plotMax);
-//
-//    histPlotter1D(h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
-//                  Histogram1DTitles["Histogram1DTitleReactions"], Histogram1DTitleSizes.at(0), Histogram1DTitleSizes.at(1), Histogram1DTitleSizes.at(2), hList, LineWidth,
-//                  LogScalePlot, LinearScalePlot, Histogram1DSaveName, Histogram1DSaveNamePath, Histogram1DTitles["FinalState"], CenterTitle, ShowStats, Title2,
-//                  ApplyPlotCuts, sigma, mean, plotMax);
 }
-
 //</editor-fold>
+
+////<editor-fold desc="to_string_with_precision function">
+//string hPlot1D::to_string_with_precision(const T a_value, const int n = 2) {
+//    std::ostringstream out;
+//    out.precision(n);
+//    out << std::fixed << a_value;
+//    return out.str();
+//}//</editor-fold>
 
 //<editor-fold desc="fitf function">
 Double_t hPlot1D::fitf(Double_t *v, Double_t *par) {
