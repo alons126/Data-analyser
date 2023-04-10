@@ -209,8 +209,18 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum cuts */
+    // Momentum cuts (1p)
+    DSCuts e_momentum_cuts_1p = DSCuts("Momentum", "", "Electron", "1p", 0, -1, -1);
+    DSCuts p_momentum_cuts_1p = DSCuts("Momentum", "", "Proton", "1p", 0, 0.3, -1);
+
+    // Momentum cuts (2p)
     DSCuts e_momentum_cuts_2p = DSCuts("Momentum", "", "Electron", "2p", 0, -1, -1);
     DSCuts p_momentum_cuts_2p = DSCuts("Momentum", "", "Proton", "2p", 0, 0.3, -1);
+
+    // Momentum cuts (1n1p)
+    DSCuts e_momentum_cuts_1n1p = DSCuts("Momentum", "", "Electron", "1n1p", 0, -1, -1);
+    DSCuts p_momentum_cuts_1n1p = DSCuts("Momentum", "", "Proton", "1n1p", 0, 0.3, -1);
+    DSCuts n_momentum_cuts_1n1p = DSCuts("Momentum", "", "Neutron", "1n1p", 0, 0.3, -1);
     //</editor-fold>
 
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -227,8 +237,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Creating directories">
     /* Code for creating directories.
-     * Directory creation has been moved to the Directories class.
-     * Added for the case that plots out folder does not exist and for orgenazation.
+     * Directory creation is done in the Directories class.
+     * Added for the case that plots out folder does not exist and for organization.
      * All cut plots are separate from the analysis plots, and withing the 01_Cuts_plots folder. */
 
     cout << "Creating plot directories...\n\n";
@@ -250,10 +260,6 @@ void EventAnalyser() {
     //<editor-fold desc="Plot selector">
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
-
-    bool wider_margin = true;
-
-    bool debug_plots = true; // Print out clas12ana debugging plots
 
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
@@ -284,6 +290,10 @@ void EventAnalyser() {
 
     /* Transverse variables plots */
     bool TVariables_plots = true;
+
+    /* Other settings variables */
+    bool wider_margin = true;
+    bool debug_plots = true; // Print out clas12ana debugging plots
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (Plot_selector_master == false) {
@@ -443,20 +453,59 @@ void EventAnalyser() {
     //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (FD only)">
 
     //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (1e cut, FD only)">
+
     THStack *sNphe_1e_cut_FD = new THStack("N_{phe} (1e Cut)", "#Photo-electrons in HTCC - N_{phe} (1e Cut);N_{phe}");
-    TH1D *hNphe_1e_cut_BC_FD, *hNphe_1e_cut_AC_FD;
-    string hNphe_1e_cut_BC_FD_Dir, hNphe_1e_cut_AC_FD_Dir;
+//    TH1D *hNphe_1e_cut_BC_FD, *hNphe_1e_cut_AC_FD;
+//    string hNphe_1e_cut_BC_FD_Dir, hNphe_1e_cut_AC_FD_Dir;
+
+    hPlot1D hNphe_1e_cut_BC_FD, hNphe_1e_cut_AC_FD;
+//    Histogram1D hNphe_1e_cut_BC_FD, hNphe_1e_cut_AC_FD;
 
     if (apply_cuts == false) {
-        hNphe_1e_cut_BC_FD = new TH1D("N_{phe} in HTCC BC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} - Before Cuts (1e Cut);N_{phe}", 100, 0, 40);
-        hNphe_1e_cut_AC_FD = new TH1D("N_{phe} in HTCC AC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} - After Cuts (1e Cut);N_{phe}", 100, 0, 40);
-        hNphe_1e_cut_BC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"], hNphe_1e_cut_AC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
-//        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
+//        hNphe_1e_cut_BC_FD.FinalState = "1e Cut";
+//        hNphe_1e_cut_BC_FD.Histogram1d = new TH1D(("N_{phe} in HTCC BC (" + hNphe_1e_cut_BC_FD.FinalState + ")").c_str(), ";N_{phe}", hNphe_1e_cut_BC_FD.NumOfXBins, 0,
+//                                                  40);
+//        hNphe_1e_cut_BC_FD.HistogramTitle = "#Photo-electrons in HTCC N_{phe} - before cuts";
+//        hNphe_1e_cut_BC_FD.SaveDirectory = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"];
+//        hNphe_1e_cut_BC_FD.SaveName = "01_Nphe_1e_cut_BC";
+//
+//        hNphe_1e_cut_AC_FD.FinalState = "1e Cut";
+//        hNphe_1e_cut_AC_FD.Histogram1d = new TH1D(("N_{phe} in HTCC AC (" + hNphe_1e_cut_BC_FD.FinalState + ")").c_str(), ";N_{phe}", hNphe_1e_cut_AC_FD.NumOfXBins, 0,
+//                                                  40);
+//        hNphe_1e_cut_AC_FD.HistogramTitle = "#Photo-electrons in HTCC N_{phe} - after cuts";
+//        hNphe_1e_cut_AC_FD.SaveDirectory = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
+//        hNphe_1e_cut_AC_FD.SaveName = "02_Nphe_1e_cut_AC";
     } else {
-        hNphe_1e_cut_BC_FD = new TH1D("N_{phe} in HTCC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} (1e Cut);N_{phe}", 100, 0, 40);
-        hNphe_1e_cut_BC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"], hNphe_1e_cut_AC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
-//        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
+        hNphe_1e_cut_BC_FD = hPlot1D("1e cut", "", "N_{phe} in HTCC", "#Photo-electrons in HTCC - N_{phe}", "N_{phe}",
+                                     directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"], "01_Nphe_1e_cut", 0, 40);
+//        hNphe_1e_cut_BC_FD.FinalState = "1e Cut";
+//        hNphe_1e_cut_BC_FD.Histogram1d = new TH1D(("N_{phe} in HTCC (" + hNphe_1e_cut_BC_FD.FinalState + ")").c_str(), ";YYYYN_{phe}", hNphe_1e_cut_BC_FD.NumOfXBins, 0, 40);
+//        hNphe_1e_cut_BC_FD.HistogramTitle = "#Photo-electrons in HTCC N_{phe}";
+//        hNphe_1e_cut_BC_FD.SaveDirectory = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"];
+//        hNphe_1e_cut_BC_FD.SaveName = "01_Nphe_1e_cutYYYY";
+////        hNphe_1e_cut_BC_FD.FinalState = "1e Cut";
+////        hNphe_1e_cut_BC_FD.Histogram1d = new TH1D(("N_{phe} in HTCC BC (" + hNphe_1e_cut_BC_FD.FinalState + ")").c_str(), ";YYYYN_{phe}", hNphe_1e_cut_BC_FD.NumOfXBins, 0, 40);
+////        hNphe_1e_cut_BC_FD.HistogramTitle = "#Photo-electrons in HTCC N_{phe}";
+////        hNphe_1e_cut_BC_FD.SaveDirectory = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"];
+////        hNphe_1e_cut_BC_FD.SaveName = "01_Nphe_1e_cutYYYY";
     }
+
+//    THStack *sNphe_1e_cut_FD = new THStack("N_{phe} (1e Cut)", "#Photo-electrons in HTCC - N_{phe} (1e Cut);N_{phe}");
+//    TH1D *hNphe_1e_cut_BC_FD, *hNphe_1e_cut_AC_FD;
+//    string hNphe_1e_cut_BC_FD_Dir, hNphe_1e_cut_AC_FD_Dir;
+//
+//    if (apply_cuts == false) {
+//        hNphe_1e_cut_BC_FD = new TH1D("N_{phe} in HTCC BC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} - Before Cuts (1e Cut);N_{phe}", 100, 0, 40);
+//        hNphe_1e_cut_AC_FD = new TH1D("N_{phe} in HTCC AC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} - After Cuts (1e Cut);N_{phe}", 100, 0, 40);
+//        hNphe_1e_cut_BC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"];
+//        hNphe_1e_cut_AC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
+////        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
+//    } else {
+//        hNphe_1e_cut_BC_FD = new TH1D("N_{phe} in HTCC (1e Cut)", "#Photo-electrons in HTCC - N_{phe} (1e Cut);N_{phe}", 100, 0, 40);
+//        hNphe_1e_cut_BC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_BC_Directory"];
+//        hNphe_1e_cut_AC_FD_Dir = directories.Nphe_Directory_map["Nphe_1e_cut_AC_Directory"];
+////        hNphe_1e_cut_BC_FD_Dir = Nphe_1e_cut_BC_Directory, hNphe_1e_cut_AC_FD_Dir = Nphe_1e_cut_AC_Directory;
+//    }
     //</editor-fold>
 
     //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (2p, FD only)">
@@ -2211,12 +2260,19 @@ void EventAnalyser() {
 
         if (apply_cuts == false) {
             /* Nphe plots before cuts */
-            hNphe_1e_cut_BC_FD->Fill(Nphe);
+            hNphe_1e_cut_BC_FD.hFill(Nphe);
+//            hNphe_1e_cut_BC_FD.Histogram1d->Fill(Nphe);
+//            hNphe_1e_cut_BC_FD->Fill(Nphe);
 
             /* Nphe plots after cuts */
-            if (Nphe >= clasAna.getNpheCuts()) { hNphe_1e_cut_AC_FD->Fill(Nphe); }
+            if (Nphe >= clasAna.getNpheCuts()) {
+//                hNphe_1e_cut_AC_FD.Histogram1d->Fill(Nphe);
+////                hNphe_1e_cut_AC_FD->Fill(Nphe);
+            }
         } else {
-            hNphe_1e_cut_BC_FD->Fill(Nphe);
+            hNphe_1e_cut_BC_FD.hFill(Nphe);
+//            hNphe_1e_cut_BC_FD.Histogram1d->Fill(Nphe);
+//            hNphe_1e_cut_BC_FD->Fill(Nphe);
         }
         //</editor-fold>
 
@@ -3370,13 +3426,21 @@ void EventAnalyser() {
 
         //<editor-fold desc="Number of Photo-electrons (Nphe) histogram (1e cut, FD)">
         if (apply_cuts == false) {
-            histPlotter1D(c1, hNphe_1e_cut_BC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC - N_{phe} Before Cuts", "1e Cut", plots, 2, false, true,
-                          sNphe_1e_cut_FD, "01_Nphe_1e_cut_BC", hNphe_1e_cut_BC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
-            histPlotter1D(c1, hNphe_1e_cut_AC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC - N_{phe} After Cuts", "1e Cut", plots, 2, false, true,
-                          sNphe_1e_cut_FD, "02_Nphe_1e_cut_AC", hNphe_1e_cut_AC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
+//            histPlotter1D(c1, hNphe_1e_cut_BC_FD.Histogram1d, norm_Nphe_plots, true, 1., hNphe_1e_cut_BC_FD.HistogramTitle, hNphe_1e_cut_BC_FD.FinalState, plots, 2,
+//                          false, true, hNphe_1e_cut_BC_FD.SaveName, hNphe_1e_cut_BC_FD.SaveDirectory, "", true, false, true, clasAna.getNpheCuts(), 0, false);
+//            histPlotter1D(c1, hNphe_1e_cut_AC_FD.Histogram1d, norm_Nphe_plots, true, 1., hNphe_1e_cut_AC_FD.HistogramTitle, hNphe_1e_cut_AC_FD.FinalState, plots, 2,
+//                          false, true, hNphe_1e_cut_AC_FD.SaveName, hNphe_1e_cut_AC_FD.SaveDirectory, "", true, false, true, clasAna.getNpheCuts(), 0, false);
+////            histPlotter1D(c1, hNphe_1e_cut_BC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC - N_{phe} Before Cuts", "1e Cut", plots, 2, false, true,
+////                          sNphe_1e_cut_FD, "01_Nphe_1e_cut_BC", hNphe_1e_cut_BC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
+////            histPlotter1D(c1, hNphe_1e_cut_AC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC - N_{phe} After Cuts", "1e Cut", plots, 2, false, true,
+////                          sNphe_1e_cut_FD, "02_Nphe_1e_cut_AC", hNphe_1e_cut_AC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
         } else {
-            histPlotter1D(c1, hNphe_1e_cut_BC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC - N_{phe}", "1e Cut", plots, 2, false, true, sNphe_1e_cut_FD,
-                          "01_Nphe_1e_cut", hNphe_1e_cut_BC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
+            hNphe_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Nphe_plots, true, 1., clasAna.getNpheCuts(), 9999, 0, false);
+//            hNphe_1e_cut_BC_FD.hDrawAndSave(c1, plots, norm_Nphe_plots, true, 1., clasAna.getNpheCuts(), 0, false);
+//            histPlotter1D(c1, hNphe_1e_cut_BC_FD.Histogram1d, norm_Nphe_plots, true, 1., hNphe_1e_cut_BC_FD.HistogramTitle, hNphe_1e_cut_BC_FD.FinalState, plots, 2,
+//                          false, true, hNphe_1e_cut_BC_FD.SaveName, hNphe_1e_cut_BC_FD.SaveDirectory, "", true, false, true, clasAna.getNpheCuts(), 0, false);
+//            histPlotter1D(c1, hNphe_1e_cut_BC_FD, norm_Nphe_plots, true, 1., "#Photo-electrons in HTCC - N_{phe}", "1e Cut", plots, 2, false, true, sNphe_1e_cut_FD,
+//                          "01_Nphe_1e_cut", hNphe_1e_cut_BC_FD_Dir, "", kBlue, true, true, false, true, clasAna.getNpheCuts(), 0, false);
         }
 
         //<editor-fold desc="Number of Photo-electrons (Nphe) histogram (2p, FD)">

@@ -11,6 +11,7 @@
 #include "../source/classes/hPlots/hPlot2D.cpp"
 #include "../source/functions/GeneralFunctions.h"
 #include "../source/functions/HistogramPlottingFunctions.h"
+#include "../source/Structures/Histogram1D.cpp"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code version                                                                                //
