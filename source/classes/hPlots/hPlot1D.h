@@ -152,6 +152,11 @@ public:
                        string Histogram1DSaveName, const string &Histogram1DSaveNamePath, bool centerTitle = true, bool showStats = true, bool title2 = false,
                        bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0, bool plot_max = true);
 
+    // histPlotter1DwFit function:
+    void histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+                           double custom_normalization_factor, string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list,
+                           string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, double &plot_Xmax, double &plot_lcut,
+                           double &plot_ucut, double factor, bool plot_max = true, string particle = "");
 
     // histPlotter1D function (unified):
     void histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
@@ -164,6 +169,8 @@ public:
                        bool plot_max = true);
 
 // Histogram methods:
+    Double_t fitf(Double_t *v, Double_t *par);
+
     void hFill(double data) { Histogram1D->Fill(data); }
 
     void hFill(double data, double weight) { Histogram1D->Fill(data, weight); }
@@ -176,6 +183,9 @@ public:
                       double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0, bool plotMax = false);
 
     void hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor);
+
+    void hDrawAndSaveWFit(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
+                          double factor, double &plot_lower_cut, double &plot_upper_cut, double &plot_Xmax, bool plotMax = false);
 
 //    void hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool nHistogram, bool cNormalization, double cNormalizationFactor, std::string FinalState);
 
