@@ -3,11 +3,15 @@
 #define ANALYSER_CODESETUP_H
 
 #include "../source/constants.h"
-#include "../source/classes/GeneralClasses.h"
 #include "../source/classes/clas12ana/clas12ana.h"
-#include "../source/cuts/DetectorSimulationCuts.h"
+#include "../source/classes/Directories/Directories.cpp"
+#include "../source/classes/DSCuts/DSCuts.h"
+#include "../source/classes/ExperimentParameters/ExperimentParameters.cpp"
+#include "../source/classes/hPlots/hPlot1D.cpp"
+#include "../source/classes/hPlots/hPlot2D.cpp"
 #include "../source/functions/GeneralFunctions.h"
 #include "../source/functions/HistogramPlottingFunctions.h"
+#include "../source/Structures/Histogram1D.cpp"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code version                                                                                //

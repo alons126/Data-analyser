@@ -2,13 +2,14 @@
 // Created by alons on 06/03/2023.
 //
 
-#ifndef PROJECT_DSCUTS_H
-#define PROJECT_DSCUTS_H
+#ifndef DSCUTS_H
+#define DSCUTS_H
 
 class DSCuts {
 public:
     /* Constructors */
-    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1); // Default constructor
+    // Default constructor:
+    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1);
 
     /* Set functions */
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
@@ -61,8 +62,6 @@ public:
 private:
     std::string CutVariable, Region, Particle, AppliedCuts;
     int particlePDG;
-//    double MeanFromHistogram, MeanFromFit, FitStdFactor;
-//    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 };
 
 DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) { // Default constructor
@@ -76,16 +75,10 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
     }
 
     if (r == "CD") {
-//        FitStdFactor = 1; // sigma factor for CD cuts
-//        FitStdFactor = 1.5; // sigma factor for CD cuts
-//        FitStdFactor = 2; // sigma factor for CD cuts
         FitStdFactor = 3; // sigma factor for CD cuts
     } else if (r == "FD") {
-//        FitStdFactor = 1; // sigma factor for CD cuts
-//        FitStdFactor = 2; // sigma factor for CD cuts
-        FitStdFactor = 3; // sigma factor for CD cuts
+        FitStdFactor = 3; // sigma factor for FD cuts
     } else {
-//        FitStdFactor = 1;
         FitStdFactor = 3;
     }
 
@@ -104,26 +97,4 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
     }
 }
 
-//void DSCuts::InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) {
-//    CutVariable = cv, Particle = p, AppliedCuts = ac;
-//    Cuts.at(0) = mean, Cuts.at(1) = llim, Cuts.at(2) = ulim;
-//
-//    if (r == "") {
-//        Region = "CD & FD";
-//    } else {
-//        Region = r;
-//    }
-//
-//    if (r == "CD") {
-//        FitStdFactor = 1; // sigma factor for CD cuts
-////        FitStdFactor = 1.5; // sigma factor for CD cuts
-////        FitStdFactor = 2; // sigma factor for CD cuts
-//    } else if (r == "FD") {
-//        FitStdFactor = 2; // sigma factor for CD cuts
-////        FitStdFactor = 3; // sigma factor for CD cuts
-//    } else {
-//        FitStdFactor = 1;
-//    }
-//}
-
-#endif //PROJECT_DSCUTS_H
+#endif //DSCUTS_H
