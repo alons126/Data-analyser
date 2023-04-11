@@ -741,23 +741,11 @@ void EventAnalyser() {
     //<editor-fold desc="SF plots (2p, FD only)">
     hPlot1D hSF_2p_FD = hPlot1D("2p", "FD", "SF", "Sampling Fraction f", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                 directories.SF_Directory_map["SF_plots_2p_cuts_Directory"], "01_SF_2p", SF_lboundary, SF_uboundary);
-//    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
-//    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-//    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
-//    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="SF plots (1p, FD only)">
     hPlot1D hSF_1p_FD = hPlot1D("1p", "FD", "SF", "Sampling Fraction f", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                 directories.SF_Directory_map["SF_plots_1p_cuts_Directory"], "01_SF_1p", SF_lboundary, SF_uboundary);
-//    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
-//    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-//    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
-//    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (1e cut, FD only)">
@@ -787,58 +775,131 @@ void EventAnalyser() {
     hPlot2D hSF_VS_P_e_2p_FD = hPlot2D("2p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
                                       "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"],
                                       "01_SF_VS_P_e_2p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
-//    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
-//    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-//    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
-//    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
     //</editor-fold>
 
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// ECAL edge histograms (electrons only, FD only)
+// ECAL edge histograms (FD only)
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="ECAL edge histograms (electrons only, FD only)">
-    TH2D *Vcal_VS_EoP_1e_BC_PCAL, *Vcal_VS_EoP_1e_AC_PCAL, *Wcal_VS_EoP_1e_BC_PCAL, *Wcal_VS_EoP_1e_AC_PCAL;
-    string Vcal_VS_EoP_1e_BC_PCAL_Dir, Vcal_VS_EoP_1e_AC_PCAL_Dir, Wcal_VS_EoP_1e_BC_PCAL_Dir, Wcal_VS_EoP_1e_AC_PCAL_Dir;
+    //<editor-fold desc="ECAL edge histograms (FD only)">
+
+    //<editor-fold desc="ECAL coordinates vs. SF plots (1e cut, FD only)">
+    hPlot2D hVcal_VS_EoP_1e_cut_BC_PCAL, hVcal_VS_EoP_1e_cut_AC_PCAL, hWcal_VS_EoP_1e_cut_BC_PCAL, hWcal_VS_EoP_1e_cut_AC_PCAL;
 
     if (apply_cuts == false) {
-        Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
-                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Vcal_VS_EoP_1e_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
-                                          "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Vcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-        Vcal_VS_EoP_1e_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
+        hVcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF BC", "ECAL V coordinate vs. SF - before cuts", "ECAL V coordinate [cm]",
+                                           "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                           "01_Vcal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
+//                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+        hVcal_VS_EoP_1e_cut_AC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF AC", "ECAL V coordinate vs. SF - after cuts", "ECAL V coordinate [cm]",
+                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"],
+                                         "01_Vcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
+//                                          "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//        hVcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
 
-        Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
-                                          "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Wcal_VS_EoP_1e_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
-                                          "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Wcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-        Wcal_VS_EoP_1e_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
+        hWcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF BC", "ECAL W coordinate vs. SF - before cuts", "ECAL W coordinate [cm]",
+                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                         "02_Wcal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
+//                                          "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+        hWcal_VS_EoP_1e_cut_AC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF AC", "ECAL W coordinate vs. SF - after cuts", "ECAL W coordinate [cm]",
+                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"],
+                                         "02_Wcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
+//                                          "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//        hWcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
     } else {
-        Vcal_VS_EoP_1e_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Vcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-
-        Wcal_VS_EoP_1e_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-        Wcal_VS_EoP_1e_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+        hVcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
+                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                         "01_Vcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
+//                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+        hWcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
+                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                         "02_Wcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//
+//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
     }
 
-    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
-    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
-    string Vcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
-    string Wcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+//    TH2D *hVcal_VS_EoP_1e_cut_BC_PCAL, *hVcal_VS_EoP_1e_cut_AC_PCAL, *hWcal_VS_EoP_1e_cut_BC_PCAL, *hWcal_VS_EoP_1e_cut_AC_PCAL;
+//    string hVcal_VS_EoP_1e_cut_BC_PCAL_Dir, hVcal_VS_EoP_1e_cut_AC_PCAL_Dir, hWcal_VS_EoP_1e_cut_BC_PCAL_Dir, hWcal_VS_EoP_1e_cut_AC_PCAL_Dir;
+//
+//    if (apply_cuts == false) {
+//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
+//                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
+//                                          "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//        hVcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
+//
+//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
+//                                          "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
+//                                          "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//        hWcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
+//    } else {
+//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//
+//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+//    }
+//
+//    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//    string Vcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+//    string Wcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="ECAL coordinates vs. SF plots vs. SF plots (1p, FD only)">
+    hPlot2D Vcal_VS_EoP_1p_PCAL = hPlot2D("1p", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
+                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1p_cuts_histograms_PCAL_Directory"],
+                                          "01_Vcal_VS_EoP_PCAL_1p", 0, 50, SF_lboundary, SF_uboundary);
+    hPlot2D Wcal_VS_EoP_1p_PCAL = hPlot2D("1p", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
+                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1p_cuts_histograms_PCAL_Directory"],
+                                          "02_Wcal_VS_EoP_PCAL_1p", 0, 50, SF_lboundary, SF_uboundary);
+    //</editor-fold>
+
+    //<editor-fold desc="ECAL coordinates vs. SF plots vs. SF plots (2p, FD only)">
+    hPlot2D Vcal_VS_EoP_2p_PCAL = hPlot2D("2p", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
+                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"],
+                                          "01_Vcal_VS_EoP_PCAL_2p", 0, 50, SF_lboundary, SF_uboundary);
+    hPlot2D Wcal_VS_EoP_2p_PCAL = hPlot2D("2p", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
+                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"],
+                                          "02_Wcal_VS_EoP_PCAL_2p", 0, 50, SF_lboundary, SF_uboundary);
+//    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
+//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
+//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
+//    string Vcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+//    string Wcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+    //</editor-fold>
+
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2220,15 +2281,19 @@ void EventAnalyser() {
         /* Testing fiducial cuts */
         if (apply_cuts == false) {
             /* Fiducial plots before cuts */
-            Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+            hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
             /* Fiducial plots after cuts */
-            if (electrons[0]->cal(PCAL)->getLv() >= clasAna.getEcalEdgeCuts()) { Vcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e); }
-            if (electrons[0]->cal(PCAL)->getLw() >= clasAna.getEcalEdgeCuts()) { Wcal_VS_EoP_1e_AC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e); }
+            if (electrons[0]->cal(PCAL)->getLv() >= clasAna.getEcalEdgeCuts()) { hVcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight); }
+            if (electrons[0]->cal(PCAL)->getLw() >= clasAna.getEcalEdgeCuts()) { hWcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight); }
         } else {
-            Vcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            Wcal_VS_EoP_1e_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+            hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
         }
 
         /* Testing Nphe cuts */
@@ -2682,9 +2747,12 @@ void EventAnalyser() {
                 hdVx_1p.hFill(dVx, Weight), hdVy_1p.hFill(dVy, Weight), hdVz_1p.hFill(dVz, Weight);
             } // end of loop over protons vector
 
-            /* Filling SF histograms (2p) */
+            /* Filling SF histograms (1p) */
             hSF_1p_FD.hFill(EoP_e,Weight), hSF_VS_P_e_1p_FD.hFill(P_e, EoP_e,Weight);
-//            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
+
+            /* Filling fiducial plots (1p) */
+            Vcal_VS_EoP_1p_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
+            Wcal_VS_EoP_1p_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
 
             for (auto &e: electrons) {
                 if (e->getRegion() == FD) {
@@ -2979,8 +3047,10 @@ void EventAnalyser() {
 //            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
 
             /* Filling fiducial plots (2p) */
-            Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+            Vcal_VS_EoP_2p_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
+//            Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            Wcal_VS_EoP_2p_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
+//            Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
             /* Filling Nphe plots (2p) */
             hNphe_2p_FD.hFill(Nphe, Weight);
@@ -4068,146 +4138,165 @@ void EventAnalyser() {
 
 //  fiducial histograms --------------------------------------------------------------
 
+        //<editor-fold desc="ECAL coordinates vs. SF plots (1e cut, FD only)">
         if (apply_cuts == false) {
 
             //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
-            Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
-            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
-            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
-            Vcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(Vcal_VS_EoP_1e_BC_PCAL);
-            Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
-            c1->SetLogz(1);
-            Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-            c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_BC_PCAL.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hVcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hVcal_VS_EoP_1e_cut_BC_PCAL);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
+//            c1->SetLogz(1);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
+//            c1->SaveAs((hVcal_VS_EoP_1e_cut_BC_PCAL_Dir + "01_hVcal_VS_EoP_1e_cut_BC_PCAL.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
             //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
-            Wcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
-            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
-            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
-            Wcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(Wcal_VS_EoP_1e_BC_PCAL);
-            Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
-            c1->SetLogz(1);
-            Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-            c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_BC_PCAL.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hWcal_VS_EoP_1e_cut_BC_PCAL);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
+//            c1->SetLogz(1);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
+//            c1->SaveAs((hWcal_VS_EoP_1e_cut_BC_PCAL_Dir + "02_hWcal_VS_EoP_1e_cut_BC_PCAL.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
             //<editor-fold desc="Vcal vs. EoP 1e2p AC PCAL">
-            Vcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
-            Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-            Vcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
-            Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-            Vcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
-            Vcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(Vcal_VS_EoP_1e_AC_PCAL);
-            Vcal_VS_EoP_1e_AC_PCAL->Draw("colz");
-            c1->SetLogz(1);
-            Vcal_VS_EoP_1e_AC_PCAL->SetStats(0);
-            c1->SaveAs((Vcal_VS_EoP_1e_AC_PCAL_Dir + "01_Vcal_VS_EoP_1e_AC_PCAL.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hVcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->SetTitleSize(0.06, "xyz");
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->CenterTitle(true);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->CenterTitle(true);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hVcal_VS_EoP_1e_cut_AC_PCAL);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->Draw("colz");
+//            c1->SetLogz(1);
+//            hVcal_VS_EoP_1e_cut_AC_PCAL->SetStats(0);
+//            c1->SaveAs((hVcal_VS_EoP_1e_cut_AC_PCAL_Dir + "01_hVcal_VS_EoP_1e_cut_AC_PCAL.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
             //<editor-fold desc="Wcal vs. EoP 1e2p AC PCAL">
-            Wcal_VS_EoP_1e_AC_PCAL->SetTitleSize(0.06, "xyz");
-            Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-            Wcal_VS_EoP_1e_AC_PCAL->GetXaxis()->CenterTitle(true);
-            Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-            Wcal_VS_EoP_1e_AC_PCAL->GetYaxis()->CenterTitle(true);
-            Wcal_VS_EoP_1e_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(Wcal_VS_EoP_1e_AC_PCAL);
-            Wcal_VS_EoP_1e_AC_PCAL->Draw("colz");
-            c1->SetLogz(1);
-            Wcal_VS_EoP_1e_AC_PCAL->SetStats(0);
-            c1->SaveAs((Wcal_VS_EoP_1e_AC_PCAL_Dir + "02_Wcal_VS_EoP_1e_AC_PCAL.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hWcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->SetTitleSize(0.06, "xyz");
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->CenterTitle(true);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->CenterTitle(true);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hWcal_VS_EoP_1e_cut_AC_PCAL);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->Draw("colz");
+//            c1->SetLogz(1);
+//            hWcal_VS_EoP_1e_cut_AC_PCAL->SetStats(0);
+//            c1->SaveAs((hWcal_VS_EoP_1e_cut_AC_PCAL_Dir + "02_hWcal_VS_EoP_1e_cut_AC_PCAL.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
         } else {
 
             //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
-            Vcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
-            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-            Vcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
-            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-            Vcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
-            Vcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(Vcal_VS_EoP_1e_BC_PCAL);
-            Vcal_VS_EoP_1e_BC_PCAL->Draw("colz");
-            c1->SetLogz(1);
-            Vcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-            c1->SaveAs((Vcal_VS_EoP_1e_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_PCAL.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hVcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hVcal_VS_EoP_1e_cut_BC_PCAL);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
+//            c1->SetLogz(1);
+//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
+//            c1->SaveAs((hVcal_VS_EoP_1e_cut_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_PCAL.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
             //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
-            Wcal_VS_EoP_1e_BC_PCAL->SetTitleSize(0.06, "xyz");
-            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-            Wcal_VS_EoP_1e_BC_PCAL->GetXaxis()->CenterTitle(true);
-            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-            Wcal_VS_EoP_1e_BC_PCAL->GetYaxis()->CenterTitle(true);
-            Wcal_VS_EoP_1e_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(Wcal_VS_EoP_1e_BC_PCAL);
-            Wcal_VS_EoP_1e_BC_PCAL->Draw("colz");
-            c1->SetLogz(1);
-            Wcal_VS_EoP_1e_BC_PCAL->SetStats(0);
-            c1->SaveAs((Wcal_VS_EoP_1e_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_PCAL.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hWcal_VS_EoP_1e_cut_BC_PCAL);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
+//            c1->SetLogz(1);
+//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
+//            c1->SaveAs((hWcal_VS_EoP_1e_cut_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_PCAL.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
         }
+        //</editor-fold>
+
+        //<editor-fold desc="ECAL coordinates vs. SF plots (1p, FD only)">
+        Vcal_VS_EoP_1p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+        Wcal_VS_EoP_1p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+        //</editor-fold>
+
+        //<editor-fold desc="ECAL coordinates vs. SF plots (2p, FD only)">
 
         //<editor-fold desc="Vcal vs. EoP 2p PCAL">
-        Vcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
-        Vcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
-        Vcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Vcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
-        Vcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Vcal_VS_EoP_2p_PCAL);
-        Vcal_VS_EoP_2p_PCAL->Draw("colz");
-        c1->SetLogz(1);
-        Vcal_VS_EoP_2p_PCAL->SetStats(0);
-        c1->SaveAs((Vcal_VS_EoP_2p_PCAL_Dir + "01_Vcal_VS_EoP_2p_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        Vcal_VS_EoP_2p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//        Vcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
+//        Vcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//        Vcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
+//        Vcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Vcal_VS_EoP_2p_PCAL);
+//        Vcal_VS_EoP_2p_PCAL->Draw("colz");
+//        c1->SetLogz(1);
+//        Vcal_VS_EoP_2p_PCAL->SetStats(0);
+//        c1->SaveAs((Vcal_VS_EoP_2p_PCAL_Dir + "01_Vcal_VS_EoP_2p_PCAL.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
         //</editor-fold>
 
         //<editor-fold desc="Wcal vs. EoP 2p PCAL">
-        Wcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
-        Wcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
-        Wcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
-        Wcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
-        Wcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(Wcal_VS_EoP_2p_PCAL);
-        Wcal_VS_EoP_2p_PCAL->Draw("colz");
-        c1->SetLogz(1);
-        Wcal_VS_EoP_2p_PCAL->SetStats(0);
-        c1->SaveAs((Wcal_VS_EoP_2p_PCAL_Dir + "02_Wcal_VS_EoP_2p_PCAL.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        Wcal_VS_EoP_2p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+//        Wcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
+//        Wcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
+//        Wcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
+//        Wcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
+//        plots->Add(Wcal_VS_EoP_2p_PCAL);
+//        Wcal_VS_EoP_2p_PCAL->Draw("colz");
+//        c1->SetLogz(1);
+//        Wcal_VS_EoP_2p_PCAL->SetStats(0);
+//        c1->SaveAs((Wcal_VS_EoP_2p_PCAL_Dir + "02_Wcal_VS_EoP_2p_PCAL.png").c_str());
+//        gStyle->SetStatX(DefStatX);
+//        gStyle->SetStatY(DefStatY);
+//        c1->Clear();
+        //</editor-fold>
+
         //</editor-fold>
 
     } else {
