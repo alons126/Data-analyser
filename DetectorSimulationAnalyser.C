@@ -600,15 +600,6 @@ void EventAnalyser() {
                                              directories.Vertex_Directory_map["Vertex_Electron_1e_Vy_Directory"], "02_Electron_Vy", -Vertex_boundary, Vertex_boundary);
     hPlot1D hVz_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{z}^{e}", "V_{z}^{e} histogram", "V_{z}^{e} [cm]",
                                              directories.Vertex_Directory_map["Vertex_Electron_1e_Vz_Directory"], "03_Electron_Vz", -Vertex_boundary, Vertex_boundary);
-//    THStack *sVx_Electron_1e_cut = new THStack("V_{x}^{e} (1e Only, CD & FD)", "V_{x}^{e} (1e Only, CD & FD);V_{x}^{e} [cm];");
-//    THStack *sVy_Electron_1e_cut = new THStack("V_{y}^{e} (1e Only, CD & FD)", "V_{y}^{e} (1e Only, CD & FD);V_{y}^{e} [cm];");
-//    THStack *sVz_Electron_1e_cut = new THStack("V_{z}^{e} (1e Only, CD & FD)", "V_{z}^{e} (1e Only, CD & FD);V_{z}^{e} [cm];");
-//    TH1D *hVx_Electron_1e_cut_FD = new TH1D("V_{x}^{e} (1e Cut)", "V_{x}^{e} (1e Cut);V_{x}^{e} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Electron_1e_cut_FD = new TH1D("V_{y}^{e} (1e Cut)", "V_{y}^{e} (1e Cut);V_{y}^{e} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Electron_1e_cut_FD = new TH1D("V_{z}^{e} (1e Cut)", "V_{z}^{e} (1e Cut);V_{z}^{e} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    string hVx_Electron_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Electron_1e_Vx_Directory"];
-//    string hVy_Electron_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Electron_1e_Vy_Directory"];
-//    string hVz_Electron_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Electron_1e_Vz_Directory"];
 
     hPlot1D hVx_Proton_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{p}", "V_{x}^{p} histogram", "V_{x}^{p} [cm]",
                                            directories.Vertex_Directory_map["Vertex_Proton_1e_Vx_Directory"], "01_Proton_Vx", -Vertex_boundary, Vertex_boundary);
@@ -622,21 +613,6 @@ void EventAnalyser() {
                                            directories.Vertex_Directory_map["Vertex_Proton_1e_Vz_Directory"], "03_Proton_Vz", -Vertex_boundary, Vertex_boundary);
     hPlot1D hVz_Proton_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{p}", "V_{z}^{p} histogram", "V_{z}^{p} [cm]",
                                            directories.Vertex_Directory_map["Vertex_Proton_1e_Vz_Directory"], "03_Proton_Vz", -Vertex_boundary, Vertex_boundary);
-//    THStack *sVx_Proton_1e_cut = new THStack("V_{x}^{p} (1e Only, CD & FD)", "V_{x}^{p} (1e Only, CD & FD);V_{x}^{p} [cm];");
-//    THStack *sVy_Proton_1e_cut = new THStack("V_{y}^{p} (1e Only, CD & FD)", "V_{y}^{p} (1e Only, CD & FD);V_{y}^{p} [cm];");
-//    THStack *sVz_Proton_1e_cut = new THStack("V_{z}^{p} (1e Only, CD & FD)", "V_{z}^{p} (1e Only, CD & FD);V_{z}^{p} [cm];");
-//    TH1D *hVx_Proton_1e_cut_CD = new TH1D("V_{x}^{p} (1e Cut, CD)", "V_{x}^{p} (1e Cut, CD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Proton_1e_cut_CD = new TH1D("V_{y}^{p} (1e Cut, CD)", "V_{y}^{p} (1e Cut, CD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Proton_1e_cut_CD = new TH1D("V_{z}^{p} (1e Cut, CD)", "V_{z}^{p} (1e Cut, CD);V_{z}^{p} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    TH1D *hVx_Proton_1e_cut_FD = new TH1D("V_{x}^{p} (1e Cut, FD)", "V_{x}^{p} (1e Cut, FD);V_{x}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Proton_1e_cut_FD = new TH1D("V_{y}^{p} (1e Cut, FD)", "V_{y}^{p} (1e Cut, FD);V_{y}^{p} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Proton_1e_cut_FD = new TH1D("V_{z}^{p} (1e Cut, FD)", "V_{z}^{p} (1e Cut, FD);V_{z}^{p} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    string hVx_Proton_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vx_Directory"];
-//    string hVx_Proton_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vx_Directory"];
-//    string hVy_Proton_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vy_Directory"];
-//    string hVy_Proton_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vy_Directory"];
-//    string hVz_Proton_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vz_Directory"];
-//    string hVz_Proton_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Proton_1e_Vz_Directory"];
 
     hPlot1D hVx_Kplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{K^{+}}", "V_{x}^{K^{+}} histogram", "V_{x}^{K^{+}} [cm]",
                                           directories.Vertex_Directory_map["Vertex_Kplus_1e_Vx_Directory"], "01_Kplus_Vx", -Vertex_boundary, Vertex_boundary);
@@ -650,21 +626,6 @@ void EventAnalyser() {
                                           directories.Vertex_Directory_map["Vertex_Kplus_1e_Vz_Directory"], "03_Kplus_Vz", -Vertex_boundary, Vertex_boundary);
     hPlot1D hVz_Kplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{K^{+}}", "V_{z}^{K^{+}} histogram", "V_{z}^{K^{+}} [cm]",
                                           directories.Vertex_Directory_map["Vertex_Kplus_1e_Vz_Directory"], "03_Kplus_Vz", -Vertex_boundary, Vertex_boundary);
-//    THStack *sVx_Kplus_1e_cut = new THStack("V_{x}^{K^{+}} (1e Only, CD & FD)", "V_{x}^{K^{+}} (1e Only, CD & FD);V_{x}^{K^{+}} [cm];");
-//    THStack *sVy_Kplus_1e_cut = new THStack("V_{y}^{K^{+}} (1e Only, CD & FD)", "V_{y}^{K^{+}} (1e Only, CD & FD);V_{y}^{K^{+}} [cm];");
-//    THStack *sVz_Kplus_1e_cut = new THStack("V_{z}^{K^{+}} (1e Only, CD & FD)", "V_{z}^{K^{+}} (1e Only, CD & FD);V_{z}^{K^{+}} [cm];");
-//    TH1D *hVx_Kplus_1e_cut_CD = new TH1D("V_{x}^{K^{+}} (1e Cut, CD)", "V_{x}^{K^{+}} (1e Cut, CD);V_{x}^{K^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Kplus_1e_cut_CD = new TH1D("V_{y}^{K^{+}} (1e Cut, CD)", "V_{y}^{K^{+}} (1e Cut, CD);V_{y}^{K^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Kplus_1e_cut_CD = new TH1D("V_{z}^{K^{+}} (1e Cut, CD)", "V_{z}^{K^{+}} (1e Cut, CD);V_{z}^{K^{+}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    TH1D *hVx_Kplus_1e_cut_FD = new TH1D("V_{x}^{K^{+}} (1e Cut, FD)", "V_{x}^{K^{+}} (1e Cut, FD);V_{x}^{K^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Kplus_1e_cut_FD = new TH1D("V_{y}^{K^{+}} (1e Cut, FD)", "V_{y}^{K^{+}} (1e Cut, FD);V_{y}^{K^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Kplus_1e_cut_FD = new TH1D("V_{z}^{K^{+}} (1e Cut, FD)", "V_{z}^{K^{+}} (1e Cut, FD);V_{z}^{K^{+}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    string hVx_Kplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vx_Directory"];
-//    string hVx_Kplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vx_Directory"];
-//    string hVy_Kplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vy_Directory"];
-//    string hVy_Kplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vy_Directory"];
-//    string hVz_Kplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vz_Directory"];
-//    string hVz_Kplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kplus_1e_Vz_Directory"];
 
     hPlot1D hVx_Kminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{K^{-}}", "V_{x}^{K^{-}} histogram", "V_{x}^{K^{-}} [cm]",
                                            directories.Vertex_Directory_map["Vertex_Kminus_1e_Vx_Directory"], "01_Kminus_Vx", -Vertex_boundary, Vertex_boundary);
@@ -678,21 +639,6 @@ void EventAnalyser() {
                                            directories.Vertex_Directory_map["Vertex_Kminus_1e_Vz_Directory"], "03_Kminus_Vz", -Vertex_boundary, Vertex_boundary);
     hPlot1D hVz_Kminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{K^{-}}", "V_{z}^{K^{-}} histogram", "V_{z}^{K^{-}} [cm]",
                                            directories.Vertex_Directory_map["Vertex_Kminus_1e_Vz_Directory"], "03_Kminus_Vz", -Vertex_boundary, Vertex_boundary);
-//    THStack *sVx_Kminus_1e_cut = new THStack("V_{x}^{K^{-}} (1e Only, CD & FD)", "V_{x}^{K^{-}} (1e Only, CD & FD);V_{x}^{K^{-}} [cm];");
-//    THStack *sVy_Kminus_1e_cut = new THStack("V_{y}^{K^{-}} (1e Only, CD & FD)", "V_{y}^{K^{-}} (1e Only, CD & FD);V_{y}^{K^{-}} [cm];");
-//    THStack *sVz_Kminus_1e_cut = new THStack("V_{z}^{K^{-}} (1e Only, CD & FD)", "V_{z}^{K^{-}} (1e Only, CD & FD);V_{z}^{K^{-}} [cm];");
-//    TH1D *hVx_Kminus_1e_cut_CD = new TH1D("V_{x}^{K^{-}} (1e Cut, CD)", "V_{x}^{K^{-}} (1e Cut, CD);V_{x}^{K^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Kminus_1e_cut_CD = new TH1D("V_{y}^{K^{-}} (1e Cut, CD)", "V_{y}^{K^{-}} (1e Cut, CD);V_{y}^{K^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Kminus_1e_cut_CD = new TH1D("V_{z}^{K^{-}} (1e Cut, CD)", "V_{z}^{K^{-}} (1e Cut, CD);V_{z}^{K^{-}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    TH1D *hVx_Kminus_1e_cut_FD = new TH1D("V_{x}^{K^{-}} (1e Cut, FD)", "V_{x}^{K^{-}} (1e Cut, FD);V_{x}^{K^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_Kminus_1e_cut_FD = new TH1D("V_{y}^{K^{-}} (1e Cut, FD)", "V_{y}^{K^{-}} (1e Cut, FD);V_{y}^{K^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_Kminus_1e_cut_FD = new TH1D("V_{z}^{K^{-}} (1e Cut, FD)", "V_{z}^{K^{-}} (1e Cut, FD);V_{z}^{K^{-}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    string hVx_Kminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vx_Directory"];
-//    string hVx_Kminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vx_Directory"];
-//    string hVy_Kminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vy_Directory"];
-//    string hVy_Kminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vy_Directory"];
-//    string hVz_Kminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vz_Directory"];
-//    string hVz_Kminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_Kminus_1e_Vz_Directory"];
 
     hPlot1D hVx_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{#pi^{+}}", "V_{x}^{#pi^{+}} histogram", "V_{x}^{#pi^{+}} [cm]",
                                            directories.Vertex_Directory_map["Vertex_piplus_1e_Vx_Directory"], "01_piplus_Vx", -Vertex_boundary, Vertex_boundary);
@@ -706,21 +652,6 @@ void EventAnalyser() {
                                            directories.Vertex_Directory_map["Vertex_piplus_1e_Vz_Directory"], "03_piplus_Vz", -Vertex_boundary, Vertex_boundary);
     hPlot1D hVz_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{#pi^{+}}", "V_{z}^{#pi^{+}} histogram", "V_{z}^{#pi^{+}} [cm]",
                                            directories.Vertex_Directory_map["Vertex_piplus_1e_Vz_Directory"], "03_piplus_Vz", -Vertex_boundary, Vertex_boundary);
-//    THStack *sVx_piplus_1e_cut = new THStack("V_{x}^{#pi^{+}} (1e Only, CD & FD)", "V_{x}^{#pi^{+}} (1e Only, CD & FD);V_{x}^{#pi^{+}} [cm];");
-//    THStack *sVy_piplus_1e_cut = new THStack("V_{y}^{#pi^{+}} (1e Only, CD & FD)", "V_{y}^{#pi^{+}} (1e Only, CD & FD);V_{y}^{#pi^{+}} [cm];");
-//    THStack *sVz_piplus_1e_cut = new THStack("V_{z}^{#pi^{+}} (1e Only, CD & FD)", "V_{z}^{#pi^{+}} (1e Only, CD & FD);V_{z}^{#pi^{+}} [cm];");
-//    TH1D *hVx_piplus_1e_cut_CD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, CD)", "V_{x}^{#pi^{+}} (1e Cut, CD);V_{x}^{#pi^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_piplus_1e_cut_CD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, CD)", "V_{y}^{#pi^{+}} (1e Cut, CD);V_{y}^{#pi^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_piplus_1e_cut_CD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, CD)", "V_{z}^{#pi^{+}} (1e Cut, CD);V_{z}^{#pi^{+}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    TH1D *hVx_piplus_1e_cut_FD = new TH1D("V_{x}^{#pi^{+}} (1e Cut, FD)", "V_{x}^{#pi^{+}} (1e Cut, FD);V_{x}^{#pi^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_piplus_1e_cut_FD = new TH1D("V_{y}^{#pi^{+}} (1e Cut, FD)", "V_{y}^{#pi^{+}} (1e Cut, FD);V_{y}^{#pi^{+}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_piplus_1e_cut_FD = new TH1D("V_{z}^{#pi^{+}} (1e Cut, FD)", "V_{z}^{#pi^{+}} (1e Cut, FD);V_{z}^{#pi^{+}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    string hVx_piplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vx_Directory"];
-//    string hVx_piplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vx_Directory"];
-//    string hVy_piplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vy_Directory"];
-//    string hVy_piplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vy_Directory"];
-//    string hVz_piplus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vz_Directory"];
-//    string hVz_piplus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piplus_1e_Vz_Directory"];
 
     hPlot1D hVx_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{#pi^{-}}", "V_{x}^{#pi^{-}} histogram", "V_{x}^{#pi^{-}} [cm]",
                                             directories.Vertex_Directory_map["Vertex_piminus_1e_Vx_Directory"], "01_piminus_Vx", -Vertex_boundary, Vertex_boundary);
@@ -734,21 +665,6 @@ void EventAnalyser() {
                                             directories.Vertex_Directory_map["Vertex_piminus_1e_Vz_Directory"], "03_piminus_Vz", -Vertex_boundary, Vertex_boundary);
     hPlot1D hVz_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "V_{z}^{#pi^{-}}", "V_{z}^{#pi^{-}} histogram", "V_{z}^{#pi^{-}} [cm]",
                                             directories.Vertex_Directory_map["Vertex_piminus_1e_Vz_Directory"], "03_piminus_Vz", -Vertex_boundary, Vertex_boundary);
-//    THStack *sVx_piminus_1e_cut = new THStack("V_{x}^{#pi^{-}} (1e Only, CD & FD)", "V_{x}^{#pi^{-}} (1e Only, CD & FD);V_{x}^{#pi^{-}} [cm];");
-//    THStack *sVy_piminus_1e_cut = new THStack("V_{y}^{#pi^{-}} (1e Only, CD & FD)", "V_{y}^{#pi^{-}} (1e Only, CD & FD);V_{y}^{#pi^{-}} [cm];");
-//    THStack *sVz_piminus_1e_cut = new THStack("V_{z}^{#pi^{-}} (1e Only, CD & FD)", "V_{z}^{#pi^{-}} (1e Only, CD & FD);V_{z}^{#pi^{-}} [cm];");
-//    TH1D *hVx_piminus_1e_cut_CD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, CD)", "V_{x}^{#pi^{-}} (1e Cut, CD);V_{x}^{#pi^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_piminus_1e_cut_CD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, CD)", "V_{y}^{#pi^{-}} (1e Cut, CD);V_{y}^{#pi^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_piminus_1e_cut_CD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, CD)", "V_{z}^{#pi^{-}} (1e Cut, CD);V_{z}^{#pi^{-}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    TH1D *hVx_piminus_1e_cut_FD = new TH1D("V_{x}^{#pi^{-}} (1e Cut, FD)", "V_{x}^{#pi^{-}} (1e Cut, FD);V_{x}^{#pi^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVy_piminus_1e_cut_FD = new TH1D("V_{y}^{#pi^{-}} (1e Cut, FD)", "V_{y}^{#pi^{-}} (1e Cut, FD);V_{y}^{#pi^{-}} [cm];", 100, -Vertex_boundary, Vertex_boundary);
-//    TH1D *hVz_piminus_1e_cut_FD = new TH1D("V_{z}^{#pi^{-}} (1e Cut, FD)", "V_{z}^{#pi^{-}} (1e Cut, FD);V_{z}^{#pi^{-}} [cm];", 100, Vertex_lboundary, Vertex_uboundary);
-//    string hVx_piminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vx_Directory"];
-//    string hVx_piminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vx_Directory"];
-//    string hVy_piminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vy_Directory"];
-//    string hVy_piminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vy_Directory"];
-//    string hVz_piminus_1e_cut_CD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vz_Directory"];
-//    string hVz_piminus_1e_cut_FD_Dir = directories.Vertex_Directory_map["Vertex_piminus_1e_Vz_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="dV plots (1p)">
@@ -764,22 +680,6 @@ void EventAnalyser() {
     hPlot1D hdVx_1e2p_BC, hdVy_1e2p_BC, hdVz_1e2p_BC;
     hPlot1D hdVx_1e2p_AC, hdVy_1e2p_AC, hdVz_1e2p_AC;
 
-//    THStack *sdVx_1e2p_before = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];");
-//    THStack *sdVy_1e2p_before = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];");
-//    THStack *sdVz_1e2p_before = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];");
-//    THStack *sdVx_1e2p_after = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];");
-//    THStack *sdVy_1e2p_after = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];");
-//    THStack *sdVz_1e2p_after = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];");
-//    THStack *sdVx_2p = new THStack("dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD)", "dV_{x}=V^{p}_{x}-dV^{e}_{x} (2p, CD & FD);dV_{x} [cm];");
-//    THStack *sdVy_2p = new THStack("dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD)", "dV_{y}=V^{p}_{y}-dV^{e}_{y} (2p, CD & FD);dV_{y} [cm];");
-//    THStack *sdVz_2p = new THStack("dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD)", "dV_{z}=V^{p}_{z}-dV^{e}_{z} (2p, CD & FD);dV_{z} [cm];");
-
-//    TH1D *hdVx_1e2p_BC, *hdVy_1e2p_BC, *hdVz_1e2p_BC;
-//    string hdVx_1e2p_BC_Dir, hdVy_1e2p_BC_Dir, hdVz_1e2p_BC_Dir;
-//
-//    TH1D *hdVx_1e2p_AC, *hdVy_1e2p_AC, *hdVz_1e2p_AC;
-//    string hdVx_1e2p_AC_Dir, hdVy_1e2p_AC_Dir, hdVz_1e2p_AC_Dir;
-
     if (apply_cuts == false) {
         hdVx_1e2p_BC = hPlot1D("1e2p", "", "Vertex corr. dV_{x} BC", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x} - before cuts", "dV_{x} [cm]",
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"], "01_dVx_BC", -Vertex_boundary, Vertex_boundary);
@@ -787,10 +687,6 @@ void EventAnalyser() {
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"], "02_dVy_BC", -Vertex_boundary, Vertex_boundary);
         hdVz_1e2p_BC = hPlot1D("1e2p", "", "Vertex corr. dV_{z} BC", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z} - before cuts", "dV_{z} [cm]",
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"], "03_dVz_BC", -Vertex_boundary, Vertex_boundary);
-//        hdVx_1e2p_BC = new TH1D("dV_{x} BC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} Before Cuts (1e2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVy_1e2p_BC = new TH1D("dV_{y} BC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} Before Cuts (1e2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVz_1e2p_BC = new TH1D("dV_{z} BC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} Before Cuts (1e2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVx_1e2p_BC_Dir = hdVy_1e2p_BC_Dir = hdVz_1e2p_BC_Dir = directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"];
 
         hdVx_1e2p_AC = hPlot1D("1e2p", "", "Vertex corr. dV_{x} AC", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x} - after cuts", "dV_{x} [cm]",
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_AC_Directory"], "01_dVx_AC", -Vertex_boundary, Vertex_boundary);
@@ -798,10 +694,6 @@ void EventAnalyser() {
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_AC_Directory"], "02_dVy_AC", -Vertex_boundary, Vertex_boundary);
         hdVz_1e2p_AC = hPlot1D("1e2p", "", "Vertex corr. dV_{z} AC", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z} - after cuts", "dV_{z} [cm]",
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_AC_Directory"], "03_dVz_AC", -Vertex_boundary, Vertex_boundary);
-//        hdVx_1e2p_AC = new TH1D("dV_{x} AC (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} After Cuts (1e2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVy_1e2p_AC = new TH1D("dV_{y} AC (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} After Cuts (1e2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVz_1e2p_AC = new TH1D("dV_{z} AC (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} After Cuts (1e2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVx_1e2p_AC_Dir = hdVy_1e2p_AC_Dir = hdVz_1e2p_AC_Dir = directories.Vertex_Directory_map["Vertex_1e2p_dV_AC_Directory"];
     } else {
         hdVx_1e2p_BC = hPlot1D("1e2p", "", "Vertex corr. dV_{x}", "Vertex correlation dV_{x}=V^{p}_{x}-V^{e}_{x}", "dV_{x} [cm]",
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"],
@@ -812,10 +704,6 @@ void EventAnalyser() {
         hdVz_1e2p_BC = hPlot1D("1e2p", "", "Vertex corr. dV_{z}", "Vertex correlation dV_{z}=V^{p}_{z}-V^{e}_{z}", "dV_{z} [cm]",
                                directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"],
                                "03_dVz", -Vertex_boundary, Vertex_boundary);
-//        hdVx_1e2p_BC = new TH1D("dV_{x} (1e2p, CD & FD)", "dV_{x}=V^{p}_{x}-V^{e}_{x} (1e2p, CD & FD);dV_{x} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVy_1e2p_BC = new TH1D("dV_{y} (1e2p, CD & FD)", "dV_{y}=V^{p}_{y}-V^{e}_{y} (1e2p, CD & FD);dV_{y} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVz_1e2p_BC = new TH1D("dV_{z} (1e2p, CD & FD)", "dV_{z}=V^{p}_{z}-V^{e}_{z} (1e2p, CD & FD);dV_{z} [cm];", 100, -dV_boundary, dV_boundary);
-//        hdVx_1e2p_BC_Dir = hdVy_1e2p_BC_Dir = hdVz_1e2p_BC_Dir = directories.Vertex_Directory_map["Vertex_1e2p_dV_BC_Directory"];
     }
     //</editor-fold>
 
@@ -836,7 +724,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
-    //<editor-fold desc="SF histograms (1e cut, FD only)">
+    //<editor-fold desc="SF plots (1e cut, FD only)">
     hPlot1D hSF_1e_cut_BC_FD, hSF_1e_cut_AC_FD;
 
     if (apply_cuts == false) {
@@ -844,87 +732,67 @@ void EventAnalyser() {
                                    directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"], "01_SF_1e_cut_before_SF_cuts", SF_lboundary, SF_uboundary);
         hSF_1e_cut_AC_FD = hPlot1D("1e cut", "FD", "SF AC", "Sampling fraction f - after cuts", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                    directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"], "02_SF_1e_cut_after_SF_cuts", SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_BC_FD = new TH1D("SF BC (1e Cut, FD)", "Sampling Fraction f Before Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                    100, SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                    100, SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
-//        hSF_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"];
     } else {
         hSF_1e_cut_BC_FD = hPlot1D("1e cut", "FD", "SF", "Sampling fraction f", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
                                    directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"], "01_SF_1e_cut", SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
     }
-//    THStack *sSF_1e_cut_FD = new THStack("SF (1e Cut, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e Cut, FD);f");
-//    TH1D *hSF_1e_cut_BC_FD, *hSF_1e_cut_AC_FD;
-//    string hSF_1e_cut_BC_FD_Dir, hSF_1e_cut_AC_FD_Dir;
-//
-//    if (apply_cuts == false) {
-//        hSF_1e_cut_BC_FD = new TH1D("SF BC (1e Cut, FD)", "Sampling Fraction f Before Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                    100, SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                    100, SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
-//        hSF_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"];
-//    } else {
-//        hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
-//    }
     //</editor-fold>
 
-    //<editor-fold desc="SF vs. P histograms (1e cut, FD only)">
+    //<editor-fold desc="SF plots (2p, FD only)">
+    hPlot1D hSF_2p_FD = hPlot1D("2p", "FD", "SF", "Sampling Fraction f", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                directories.SF_Directory_map["SF_plots_2p_cuts_Directory"], "01_SF_2p", SF_lboundary, SF_uboundary);
+//    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
+//    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
+//    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
+//    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="SF plots (1p, FD only)">
+    hPlot1D hSF_1p_FD = hPlot1D("1p", "FD", "SF", "Sampling Fraction f", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                directories.SF_Directory_map["SF_plots_1p_cuts_Directory"], "01_SF_1p", SF_lboundary, SF_uboundary);
+//    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
+//    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
+//    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
+//    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="SF vs. P plots (1e cut, FD only)">
     hPlot2D hSF_VS_P_e_1e_cut_BC_FD, hSF_VS_P_e_1e_cut_AC_FD;
 
     if (apply_cuts == false) {
         hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} BC", "Sampling fraction f vs. P_{e} - before cuts", "P_{e} [GeV]",
                                           "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"],
                                           "01_SF_VS_P_e_1e_cut_BC_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} BC (1e Cut, FD)",
-//                                           "Sampling Fraction f vs. P_{e} Before Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
         hSF_VS_P_e_1e_cut_AC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} AC", "Sampling fraction f vs. P_{e} - after cuts", "P_{e} [GeV]",
                                           "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"],
                                           "01_SF_VS_P_e_1e_cut_AC_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
-//                                           "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
-//        hSF_VS_P_e_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"];
     } else {
         hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
                                           "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"],
                                           "01_SF_VS_P_e_1e_cut_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
     }
-//    TH2D *hSF_VS_P_e_1e_cut_BC_FD, *hSF_VS_P_e_1e_cut_AC_FD;
-//    string hSF_VS_P_e_1e_cut_BC_FD_Dir, hSF_VS_P_e_1e_cut_AC_FD_Dir;
-//
-//    if (apply_cuts == false) {
-//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} BC (1e Cut, FD)",
-//                                           "Sampling Fraction f vs. P_{e} Before Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
-//                                           "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
-//        hSF_VS_P_e_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"];
-//    } else {
-//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
-//    }
     //</editor-fold>
 
-    //<editor-fold desc="SF histograms (2p, FD only)">
-    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
-    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
-    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
+    //<editor-fold desc="SF vs. P plots (1p, FD only)">
+    hPlot2D hSF_VS_P_e_1p_FD = hPlot2D("1p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+                                      "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1p_cuts_Directory"],
+                                      "01_SF_VS_P_e_1p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+    //</editor-fold>
+
+    //<editor-fold desc="SF vs. P plots (2p, FD only)">
+    hPlot2D hSF_VS_P_e_2p_FD = hPlot2D("2p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+                                      "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"],
+                                      "01_SF_VS_P_e_2p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+//    THStack *sSF_2p_FD = new THStack("SF (2p, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P}) Histogram (2p, FD);f");
+//    TH1D *hSF_2p_FD = new TH1D("SF (2p, FD)", "Sampling Fraction f (2p, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
+//    TH2D *hSF_VS_P_e_2p_FD = new TH2D("SF vs. P_{e} (2p, FD)", "Sampling Fraction f vs. P_{e} (2p, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                      250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//    string hSF_2p_FD_Dir = directories.SF_Directory_map["SF_plots_2p_cuts_Directory"];
+//    string hSF_VS_P_e_2p_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -2814,6 +2682,10 @@ void EventAnalyser() {
                 hdVx_1p.hFill(dVx, Weight), hdVy_1p.hFill(dVy, Weight), hdVz_1p.hFill(dVz, Weight);
             } // end of loop over protons vector
 
+            /* Filling SF histograms (2p) */
+            hSF_1p_FD.hFill(EoP_e,Weight), hSF_VS_P_e_1p_FD.hFill(P_e, EoP_e,Weight);
+//            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
+
             for (auto &e: electrons) {
                 if (e->getRegion() == FD) {
                     hET_All_Ang_All_Int_1p_FD->Fill(beamE - E_e);
@@ -3102,12 +2974,13 @@ void EventAnalyser() {
 //                hdVx_2p->Fill(dVx), hdVy_2p->Fill(dVy), hdVz_2p->Fill(dVz);
             } // end of loop over protons vector
 
+            /* Filling SF histograms (2p) */
+            hSF_2p_FD.hFill(EoP_e,Weight), hSF_VS_P_e_2p_FD.hFill(P_e, EoP_e,Weight);
+//            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
+
             /* Filling fiducial plots (2p) */
             Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
             Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
-
-            /* Filling SF histograms (2p) */
-            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
 
             /* Filling Nphe plots (2p) */
             hNphe_2p_FD.hFill(Nphe, Weight);
@@ -4144,137 +4017,40 @@ void EventAnalyser() {
 
 //  SF plots ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="SF and SF vs. P histograms (1e cut, FD)">
+        //<editor-fold desc="SF plots (1e cut, FD)">
         if (apply_cuts == false) {
             hSF_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
-//            histPlotter1D(c1, hSF_1e_cut_BC_FD, norm_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
-//                          "01_SF_1e_cut_before_SF_cuts", hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(),
-//                          clasAna.getEcalSFLowerCut(), 0, false);
-
             hSF_1e_cut_AC_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
-//            histPlotter1D(c1, hSF_1e_cut_AC_FD, norm_SF_plots, true, 1., "Sampling Fraction f After cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
-//                          "02_SF_1e_cut_after_SF_cuts", hSF_1e_cut_AC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(),
-//                          clasAna.getEcalSFLowerCut(), 0, false);
-
-            //<editor-fold desc="SF vs. P before cuts (1e cut, FD)">
-            hSF_VS_P_e_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, false);
-
-//            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
-//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
-//            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
-//            c1->SetLogz(1);
-//            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
-//            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_BC_FD.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
-//            //<editor-fold desc="SF vs. P before cuts (1e cut, FD)">
-//            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
-//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
-//            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
-//            c1->SetLogz(1);
-//            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
-//            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_BC_FD.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-//            //</editor-fold>
-
-            //<editor-fold desc="SF vs. P after cuts (1e cut, FD)">
-            hSF_VS_P_e_1e_cut_AC_FD.hDrawAndSave(SampleName, c1, plots, false);
-
-//            hSF_VS_P_e_1e_cut_AC_FD->SetTitleSize(0.06, "xyz");
-//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hSF_VS_P_e_1e_cut_AC_FD);
-//            hSF_VS_P_e_1e_cut_AC_FD->Draw("colz");
-//            c1->SetLogz(1);
-//            hSF_VS_P_e_1e_cut_AC_FD->SetStats(0);
-//            c1->SaveAs((hSF_VS_P_e_1e_cut_AC_FD_Dir + "02_SF_VS_P_e_1e_cut_AC_FD.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
-            //            //<editor-fold desc="SF vs. P after cuts (1e cut, FD)">
-//            hSF_VS_P_e_1e_cut_AC_FD->SetTitleSize(0.06, "xyz");
-//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_AC_FD->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hSF_VS_P_e_1e_cut_AC_FD);
-//            hSF_VS_P_e_1e_cut_AC_FD->Draw("colz");
-//            c1->SetLogz(1);
-//            hSF_VS_P_e_1e_cut_AC_FD->SetStats(0);
-//            c1->SaveAs((hSF_VS_P_e_1e_cut_AC_FD_Dir + "02_SF_VS_P_e_1e_cut_AC_FD.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-//            //</editor-fold>
-
         } else {
             hSF_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
-//            histPlotter1D(c1, hSF_1e_cut_BC_FD, norm_SF_plots, true, 1., "Sampling Fraction f", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD, "01_SF_1e_cut",
-//                          hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(), clasAna.getEcalSFLowerCut(), 0, false);
-
-            //<editor-fold desc="SF vs. P 1e2p (FD)">
-            hSF_VS_P_e_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, false);
-
-//            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
-//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
-//            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
-//            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
-//            c1->SetLogz(1);
-//            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
-//            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_FD.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
         }
         //</editor-fold>
 
-        //<editor-fold desc="SF histogram (2p, FD)">
-        histPlotter1D(c1, hSF_2p_FD, norm_SF_plots, true, 1., "Sampling Fraction f", "2p", plots, 2, false, true, sSF_2p_FD, "01_SF_2p", hSF_2p_FD_Dir, "FD", kBlue, true,
-                      true, false, true, clasAna.getEcalSFUpperCut(), clasAna.getEcalSFLowerCut(), 0, false);
+        //<editor-fold desc="SF plots (1p, FD)">
+        hSF_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
         //</editor-fold>
 
-        //<editor-fold desc="SF vs. P (2p, FD)">
-        hSF_VS_P_e_2p_FD->SetTitleSize(0.06, "xyz");
-        hSF_VS_P_e_2p_FD->GetXaxis()->SetLabelSize(0.0425);
-        hSF_VS_P_e_2p_FD->GetXaxis()->CenterTitle(true);
-        hSF_VS_P_e_2p_FD->GetYaxis()->SetLabelSize(0.0425);
-        hSF_VS_P_e_2p_FD->GetYaxis()->CenterTitle(true);
-        hSF_VS_P_e_2p_FD->GetZaxis()->SetLabelSize(0.0425);
-        plots->Add(hSF_VS_P_e_2p_FD);
-        hSF_VS_P_e_2p_FD->Draw("colz");
-        c1->SetLogz(1);
-        hSF_VS_P_e_2p_FD->SetStats(0);
-        c1->SaveAs((hSF_VS_P_e_2p_FD_Dir + "01_SF_VS_P_e_2p_FD.png").c_str());
-        gStyle->SetStatX(DefStatX);
-        gStyle->SetStatY(DefStatY);
-        c1->Clear();
+        //<editor-fold desc="SF plots (2p, FD)">
+        hSF_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
+        //</editor-fold>
+
+//  SF vs. P plots ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="SF vs. P plots (1e cut, FD)">
+        if (apply_cuts == false) {
+            hSF_VS_P_e_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, false);
+            hSF_VS_P_e_1e_cut_AC_FD.hDrawAndSave(SampleName, c1, plots, false);
+        } else {
+            hSF_VS_P_e_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, false);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="SF vs. P plots (1p, FD)">
+        hSF_VS_P_e_1p_FD.hDrawAndSave(SampleName, c1, plots, false);
+        //</editor-fold>
+
+        //<editor-fold desc="SF vs. P plots (2p, FD)">
+        hSF_VS_P_e_2p_FD.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
     } else {
