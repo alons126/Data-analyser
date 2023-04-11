@@ -49,12 +49,21 @@ hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::
     Histogram2DSaveNamePath = sPath;
     Histogram2DSaveName = sName;
 
-    Histogram2D = new TH2D(
-            (Histogram2DTitles["HistogramStatTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")").c_str(),
-            (Histogram2DTitles["HistogramTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")" + ";" +
-             Histogram2DTitles["XaxisTitle"] + ";" + Histogram2DTitles["YaxisTitle"]).c_str(),
-            HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1),
-            HistogramNumberOfYBins, HistogramYAxisLimits.at(0), HistogramYAxisLimits.at(1));
+    if (Histogram2DTitles["DetectorRegion"] == "") {
+        Histogram2D = new TH2D(
+                (Histogram2DTitles["HistogramStatTitle"] + " (" + Histogram2DTitles["FinalState"] + ")").c_str(),
+                (Histogram2DTitles["HistogramTitle"] + " (" + Histogram2DTitles["FinalState"] + ")" + ";" + Histogram2DTitles["XaxisTitle"] + ";" +
+                 Histogram2DTitles["YaxisTitle"]).c_str(),
+                HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1),
+                HistogramNumberOfYBins, HistogramYAxisLimits.at(0), HistogramYAxisLimits.at(1));
+    } else {
+        Histogram2D = new TH2D(
+                (Histogram2DTitles["HistogramStatTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")").c_str(),
+                (Histogram2DTitles["HistogramTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")" + ";" +
+                 Histogram2DTitles["XaxisTitle"] + ";" + Histogram2DTitles["YaxisTitle"]).c_str(),
+                HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1),
+                HistogramNumberOfYBins, HistogramYAxisLimits.at(0), HistogramYAxisLimits.at(1));
+    }
 }
 
 hPlot2D::hPlot2D(std::string hst, std::string ht, std::string xat, std::string yat,

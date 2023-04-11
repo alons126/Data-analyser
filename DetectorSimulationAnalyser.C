@@ -175,24 +175,24 @@ void EventAnalyser() {
     /* Chi2 cuts. NOTES:
      * Values for mean and sigma are filled from fit variables (overating these values later).
      * Upper cut lim (Cuts.at(2)) is the same as the sigma that is used in clas12ana to apply PID cuts */
-    DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -6, 6);
-    DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", 0, -6, 6);
+    DSCuts Chi2_Electron_cuts_CD = DSCuts("Chi2", "CD", "Electron", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_Electron_cuts_FD = DSCuts("Chi2", "FD", "Electron", "1e cut", 0, -9999, 9999);
 
-    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0, -1, -1);
+    DSCuts Chi2_Proton_cuts_CD = DSCuts("Chi2", "CD", "Proton", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_Proton_cuts_FD = DSCuts("Chi2", "FD", "Proton", "1e cut", 0, -9999, 9999);
 
-    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0, -1, -1);
+    DSCuts Chi2_piplus_cuts_CD = DSCuts("Chi2", "CD", "piplus", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_piplus_cuts_FD = DSCuts("Chi2", "FD", "piplus", "1e cut", 0, -9999, 9999);
 
-    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0, -1, -1);
+    DSCuts Chi2_piminus_cuts_CD = DSCuts("Chi2", "CD", "piminus", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_piminus_cuts_FD = DSCuts("Chi2", "FD", "piminus", "1e cut", 0, -9999, 9999);
 
     //<editor-fold desc="Kaon PID cuts">
     /* Kaon pid cuts. Not really applied in our analysis. */
-    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", 0, -1, -1);
-    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", 0, -1, -1);
+    DSCuts Chi2_Kplus_cuts_CD = DSCuts("Chi2", "CD", "Kplus", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_Kplus_cuts_FD = DSCuts("Chi2", "FD", "Kplus", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_Kminus_cuts_CD = DSCuts("Chi2", "CD", "Kminus", "1e cut", 0, -9999, 9999);
+    DSCuts Chi2_Kminus_cuts_FD = DSCuts("Chi2", "FD", "Kminus", "1e cut", 0, -9999, 9999);
     //</editor-fold>
 
     /* Vertex cuts */
@@ -210,17 +210,17 @@ void EventAnalyser() {
 
     /* Momentum cuts */
     // Momentum cuts (1p)
-    DSCuts e_momentum_cuts_1p = DSCuts("Momentum", "", "Electron", "1p", 0, -1, -1);
-    DSCuts p_momentum_cuts_1p = DSCuts("Momentum", "", "Proton", "1p", 0, 0.3, -1);
+    DSCuts e_momentum_cuts_1p = DSCuts("Momentum", "", "Electron", "1p", 0, -9999, 9999);
+    DSCuts p_momentum_cuts_1p = DSCuts("Momentum", "", "Proton", "1p", 0, 0.3, 9999);
 
     // Momentum cuts (2p)
-    DSCuts e_momentum_cuts_2p = DSCuts("Momentum", "", "Electron", "2p", 0, -1, -1);
-    DSCuts p_momentum_cuts_2p = DSCuts("Momentum", "", "Proton", "2p", 0, 0.3, -1);
+    DSCuts e_momentum_cuts_2p = DSCuts("Momentum", "", "Electron", "2p", 0, -9999, 9999);
+    DSCuts p_momentum_cuts_2p = DSCuts("Momentum", "", "Proton", "2p", 0, 0.3, 9999);
 
     // Momentum cuts (1n1p)
-    DSCuts e_momentum_cuts_1n1p = DSCuts("Momentum", "", "Electron", "1n1p", 0, -1, -1);
-    DSCuts p_momentum_cuts_1n1p = DSCuts("Momentum", "", "Proton", "1n1p", 0, 0.3, -1);
-    DSCuts n_momentum_cuts_1n1p = DSCuts("Momentum", "", "Neutron", "1n1p", 0, 0.3, -1);
+    DSCuts e_momentum_cuts_1n1p = DSCuts("Momentum", "", "Electron", "1n1p", 0, -9999, 9999);
+    DSCuts p_momentum_cuts_1n1p = DSCuts("Momentum", "", "Proton", "1n1p", 0, 0.3, 9999);
+    DSCuts n_momentum_cuts_1n1p = DSCuts("Momentum", "", "Neutron", "1n1p", 0, 0.3, 9999);
     //</editor-fold>
 
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -315,7 +315,7 @@ void EventAnalyser() {
 
     bool normalize_master = false;
 
-    bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false;
+    bool norm_Nphe_plots = false, norm_Chi2_plots = false, norm_Vertex_plots = false, norm_SF_plots = false, norm_Fiducial_plots = false, norm_Momentum_plots = false;
 
     bool norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false, norm_Ecal_plots = false, norm_TVariables_plots = false;
 
@@ -767,14 +767,14 @@ void EventAnalyser() {
 
     //<editor-fold desc="SF vs. P plots (1p, FD only)">
     hPlot2D hSF_VS_P_e_1p_FD = hPlot2D("1p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
-                                      "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1p_cuts_Directory"],
-                                      "01_SF_VS_P_e_1p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+                                       "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1p_cuts_Directory"],
+                                       "01_SF_VS_P_e_1p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (2p, FD only)">
     hPlot2D hSF_VS_P_e_2p_FD = hPlot2D("2p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
-                                      "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"],
-                                      "01_SF_VS_P_e_2p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+                                       "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"],
+                                       "01_SF_VS_P_e_2p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //</editor-fold>
@@ -790,114 +790,44 @@ void EventAnalyser() {
 
     if (apply_cuts == false) {
         hVcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF BC", "ECAL V coordinate vs. SF - before cuts", "ECAL V coordinate [cm]",
-                                           "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
-                                           "01_Vcal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
-//                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+                                              "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                              "01_Vcal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary, SF_uboundary);
         hVcal_VS_EoP_1e_cut_AC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF AC", "ECAL V coordinate vs. SF - after cuts", "ECAL V coordinate [cm]",
-                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"],
-                                         "01_Vcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
-//                                          "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//        hVcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
+                                              "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"],
+                                              "01_Vcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary, SF_uboundary);
 
         hWcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF BC", "ECAL W coordinate vs. SF - before cuts", "ECAL W coordinate [cm]",
-                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
-                                         "02_Wcal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
-//                                          "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+                                              "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                              "02_Wcal_VS_EoP_PCAL_1e_cut_BC", 0, 50, SF_lboundary, SF_uboundary);
         hWcal_VS_EoP_1e_cut_AC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF AC", "ECAL W coordinate vs. SF - after cuts", "ECAL W coordinate [cm]",
-                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"],
-                                         "02_Wcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
-//                                          "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//        hWcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
+                                              "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"],
+                                              "02_Wcal_VS_EoP_PCAL_1e_cut_AC", 0, 50, SF_lboundary, SF_uboundary);
     } else {
         hVcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
-                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
-                                         "01_Vcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
-//                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
+                                              "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                              "01_Vcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary);
         hWcal_VS_EoP_1e_cut_BC_PCAL = hPlot2D("1e cut", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
-                                         "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
-                                         "02_Wcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//
-//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
+                                              "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"],
+                                              "02_Wcal_VS_EoP_PCAL_1e_cut", 0, 50, SF_lboundary, SF_uboundary);
     }
-
-//    TH2D *hVcal_VS_EoP_1e_cut_BC_PCAL, *hVcal_VS_EoP_1e_cut_AC_PCAL, *hWcal_VS_EoP_1e_cut_BC_PCAL, *hWcal_VS_EoP_1e_cut_AC_PCAL;
-//    string hVcal_VS_EoP_1e_cut_BC_PCAL_Dir, hVcal_VS_EoP_1e_cut_AC_PCAL_Dir, hWcal_VS_EoP_1e_cut_BC_PCAL_Dir, hWcal_VS_EoP_1e_cut_AC_PCAL_Dir;
-//
-//    if (apply_cuts == false) {
-//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF BC (1e Cut, PCAL)",
-//                                          "ECAL V coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Vcal vs. SF AC (1e Cut, PCAL)",
-//                                          "ECAL V coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//        hVcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
-//
-//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF BC (1e Cut, PCAL)",
-//                                          "ECAL W coordinate vs. SF Before Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_AC_PCAL = new TH2D("Wcal vs. SF AC (1e Cut, PCAL)",
-//                                          "ECAL W coordinate vs. SF After Cuts (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//        hWcal_VS_EoP_1e_cut_AC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_AC_PCAL_Directory"];
-//    } else {
-//        hVcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Vcal vs. SF (1e Cut, PCAL)", "ECAL V coordinate vs. SF (1e Cut, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hVcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//
-//        hWcal_VS_EoP_1e_cut_BC_PCAL = new TH2D("Wcal vs. SF (1e Cut, PCAL)", "ECAL W coordinate vs. SF (1e Cut, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                          250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//        hWcal_VS_EoP_1e_cut_BC_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_1e_BC_PCAL_Directory"];
-//    }
-//
-//    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//    string Vcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
-//    string Wcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="ECAL coordinates vs. SF plots vs. SF plots (1p, FD only)">
-    hPlot2D Vcal_VS_EoP_1p_PCAL = hPlot2D("1p", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
-                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1p_cuts_histograms_PCAL_Directory"],
-                                          "01_Vcal_VS_EoP_PCAL_1p", 0, 50, SF_lboundary, SF_uboundary);
-    hPlot2D Wcal_VS_EoP_1p_PCAL = hPlot2D("1p", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
-                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1p_cuts_histograms_PCAL_Directory"],
-                                          "02_Wcal_VS_EoP_PCAL_1p", 0, 50, SF_lboundary, SF_uboundary);
+    hPlot2D hVcal_VS_EoP_1p_PCAL = hPlot2D("1p", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
+                                           "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1p_cuts_histograms_PCAL_Directory"],
+                                           "01_Vcal_VS_EoP_PCAL_1p", 0, 50, SF_lboundary, SF_uboundary);
+    hPlot2D hWcal_VS_EoP_1p_PCAL = hPlot2D("1p", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
+                                           "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_1p_cuts_histograms_PCAL_Directory"],
+                                           "02_Wcal_VS_EoP_PCAL_1p", 0, 50, SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="ECAL coordinates vs. SF plots vs. SF plots (2p, FD only)">
-    hPlot2D Vcal_VS_EoP_2p_PCAL = hPlot2D("2p", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
-                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"],
-                                          "01_Vcal_VS_EoP_PCAL_2p", 0, 50, SF_lboundary, SF_uboundary);
-    hPlot2D Wcal_VS_EoP_2p_PCAL = hPlot2D("2p", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
-                                          "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"],
-                                          "02_Wcal_VS_EoP_PCAL_2p", 0, 50, SF_lboundary, SF_uboundary);
-//    TH2D *Vcal_VS_EoP_2p_PCAL = new TH2D("Vcal vs. SF (2p, PCAL)", "ECAL V coordinate vs. SF (2p, PCAL);ECAL V coordinate [cm];Sampling Fraction (SF)",
-//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//    TH2D *Wcal_VS_EoP_2p_PCAL = new TH2D("Wcal vs. SF (2p, PCAL)", "ECAL W coordinate vs. SF (2p, PCAL);ECAL W coordinate [cm];Sampling Fraction (SF)",
-//                                         250, 0, 50, 250, SF_lboundary, SF_uboundary);
-//    string Vcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
-//    string Wcal_VS_EoP_2p_PCAL_Dir = directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"];
+    hPlot2D hVcal_VS_EoP_2p_PCAL = hPlot2D("2p", "PCAL", "Vcal vs. SF", "ECAL V coordinate vs. SF", "ECAL V coordinate [cm]",
+                                           "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"],
+                                           "01_Vcal_VS_EoP_PCAL_2p", 0, 50, SF_lboundary, SF_uboundary);
+    hPlot2D hWcal_VS_EoP_2p_PCAL = hPlot2D("2p", "PCAL", "Wcal vs. SF", "ECAL W coordinate vs. SF", "ECAL W coordinate [cm]",
+                                           "Sampling Fraction (SF)", directories.Fiducial_Directory_map["fiducial_plots_2p_cuts_histograms_PCAL_Directory"],
+                                           "02_Wcal_VS_EoP_PCAL_2p", 0, 50, SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //</editor-fold>
@@ -909,76 +839,114 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum histograms">
     /* Here are the definitions for the momentum plots. These are used to check that momentum cuts were applied in 1e_cut and 2p plots. */
 
-    //<editor-fold desc="Momentum histograms (1e cut)">
-    THStack *sP_CD = new THStack("Particle Momentum histograms (1e cut, CD)", "Particle Momentum histograms (1e cut, CD);P [GeV];");
-    THStack *sP_FD = new THStack("Particle Momentum histograms (1e cut, FD)", "Particle Momentum histograms (1e cut, FD);P [GeV];");
-    TH1D *hP_e_1e_cut_FD = new TH1D("P_{e} (1e cut, FD)", "P_{e} (1e cut, FD);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    //<editor-fold desc="Momentum plots (1e cut)">
+    hPlot1D hP_e_1e_cut_FD = hPlot1D("1e cut", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]",
+                                     directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "01_P_e_1e_cut_FD", 0, beamE * 1.1);
+//    THStack *sP_CD = new THStack("Particle Momentum histograms (1e cut, CD)", "Particle Momentum histograms (1e cut, CD);P [GeV];");
+//    THStack *sP_FD = new THStack("Particle Momentum histograms (1e cut, FD)", "Particle Momentum histograms (1e cut, FD);P [GeV];");
+//    TH1D *hP_e_1e_cut_FD = new TH1D("P_{e} (1e cut, FD)", "P_{e} (1e cut, FD);P_{e} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_e_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
 
-    TH1D *hP_p_1e_cut_CD = new TH1D("P_{p} (1e cut, CD)", "P_{p} (1e cut, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_p_1e_cut_FD = new TH1D("P_{p} (1e cut, FD)", "P_{p} (1e cut, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
-    string hP_p_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    hPlot1D hP_p_1e_cut_CD = hPlot1D("1e cut", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+                                     directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "02_P_p_1e_cut_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_1e_cut_FD = hPlot1D("1e cut", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+                                     directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "02_P_p_1e_cut_FD", 0, beamE * 1.1);
+//    TH1D *hP_p_1e_cut_CD = new TH1D("P_{p} (1e cut, CD)", "P_{p} (1e cut, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_p_1e_cut_FD = new TH1D("P_{p} (1e cut, FD)", "P_{p} (1e cut, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_p_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+//    string hP_p_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
 
-    TH1D *hP_piplus_1e_cut_CD = new TH1D("P_{#pi^{+}} (1e cut, CD)", "P_{#pi^{+}} (1e cut, CD);P_{#pi^{+}} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_piplus_1e_cut_FD = new TH1D("P_{#pi^{+}} (1e cut, FD)", "P_{#pi^{+}} (1e cut, FD);P_{#pi^{+}} [GeV];", 100, 0, beamE * 1.1);
-    string hP_piplus_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
-    string hP_piplus_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    hPlot1D hP_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}}", "P_{#pi^{+}} [GeV]",
+                                          directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "03_P_piplus_1e_cut_CD", 0, beamE * 1.1);
+    hPlot1D hP_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}}", "P_{#pi^{+}} [GeV]",
+                                          directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "03_P_piplus_1e_cut_FD", 0, beamE * 1.1);
+//    TH1D *hP_piplus_1e_cut_CD = new TH1D("P_{#pi^{+}} (1e cut, CD)", "P_{#pi^{+}} (1e cut, CD);P_{#pi^{+}} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_piplus_1e_cut_FD = new TH1D("P_{#pi^{+}} (1e cut, FD)", "P_{#pi^{+}} (1e cut, FD);P_{#pi^{+}} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_piplus_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+//    string hP_piplus_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
 
-    TH1D *hP_piminus_1e_cut_CD = new TH1D("P_{#pi^{-}} (1e cut, CD)", "P_{#pi^{-}} (1e cut, CD);P_{#pi^{-}} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_piminus_1e_cut_FD = new TH1D("P_{#pi^{-}} (1e cut, FD)", "P_{#pi^{-}} (1e cut, FD);P_{#pi^{-}} [GeV];", 100, 0, beamE * 1.1);
-    string hP_piminus_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
-    string hP_piminus_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+    hPlot1D hP_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}}", "P_{#pi^{-}} [GeV]",
+                                           directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "04_P_piminus_1e_cut_CD", 0, beamE * 1.1);
+    hPlot1D hP_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}}", "P_{#pi^{-}} [GeV]",
+                                           directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "04_P_piminus_1e_cut_FD", 0, beamE * 1.1);
+//    TH1D *hP_piminus_1e_cut_CD = new TH1D("P_{#pi^{-}} (1e cut, CD)", "P_{#pi^{-}} (1e cut, CD);P_{#pi^{-}} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_piminus_1e_cut_FD = new TH1D("P_{#pi^{-}} (1e cut, FD)", "P_{#pi^{-}} (1e cut, FD);P_{#pi^{-}} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_piminus_1e_cut_CD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
+//    string hP_piminus_1e_cut_FD_Dir = directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Momentum histograms (1e2p & 2p)">
-    THStack *sP_1e2p_BC_CD = new THStack("Particle Momentum BC (1e2p, CD)", "Particle Momentum Histogram BC (1e2p, CD);P [GeV];");
-    THStack *sP_1e2p_AC_CD = new THStack("Particle Momentum AC (1e2p, CD)", "Particle Momentum Histogram AC (1e2p, CD);P [GeV];");
-    THStack *sP_1e2p_BC_FD = new THStack("Particle Momentum BC (1e2p, FD)", "Particle Momentum Histogram BC (1e2p, FD);P [GeV];");
-    THStack *sP_1e2p_AC_FD = new THStack("Particle Momentum AC (1e2p, FD)", "Particle Momentum Histogram AC (1e2p, FD);P [GeV];");
-    THStack *sP_1e2p_BC = new THStack("Particle Momentum BC (1e2p, CD & FD)", "Particle Momentum Histogram BC (1e2p, CD & FD);P [GeV];");
-    THStack *sP_1e2p_AC = new THStack("Particle Momentum AC (1e2p, CD & FD)", "Particle Momentum Histogram AC (1e2p, CD & FD);P [GeV];");
-    THStack *sP_2p_CD = new THStack("Particle Momentum (2p, CD)", "Particle Momentum Histogram (2p, CD);P [GeV];");
-    THStack *sP_2p_FD = new THStack("Particle Momentum (2p, FD)", "Particle Momentum Histogram (2p, FD);P [GeV];");
+    //<editor-fold desc="Momentum plots (1p)">
+    hPlot1D hP_e_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]", directories.Momentum_Directory_map["Momentum_1p_Directory"],
+                                 "01_P_e_1p_FD", 0, beamE * 1.1);
 
-    //<editor-fold desc="Momentum histograms before 1e2p cuts">
-    TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p)", "P_{e} Before Cut (1e2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_1e2p_BC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
-
-    TH1D *hP_p_1e2p_BC_CD = new TH1D("Proton momentum P_{p} BC (1e2p, CD)", "Proton momentum P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_p_1e2p_BC_FD = new TH1D("Proton momentum P_{p} BC (1e2p, FD)", "Proton momentum P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1e2p_BC_CD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
-    string hP_p_1e2p_BC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    hPlot1D hP_p_1p_CD = hPlot1D("1p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+                                 directories.Momentum_Directory_map["Momentum_1p_Directory"], "02_P_p_1p_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+                                 directories.Momentum_Directory_map["Momentum_1p_Directory"], "02_P_p_1p_FD", 0, beamE * 1.1);
     //</editor-fold>
 
-    //<editor-fold desc="Momentum histograms after 1e2p cuts">
-    TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p)", "P_{e} After Cut (1e2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_1e2p_AC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    //<editor-fold desc="Momentum plots (1e2p)">
+    hPlot1D hP_e_1e2p_BC_FD = hPlot1D("1e2p", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV]",
+                                      directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "01_P_e_1e2p_BC_FD", 0, beamE * 1.1);
+//    TH1D *hP_e_1e2p_BC_FD = new TH1D("P_{e} BC (1e2p)", "P_{e} Before Cut (1e2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_e_1e2p_BC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    hPlot1D hP_e_1e2p_AC_FD = hPlot1D("1e2p", "", "Electron momentum AC", "Electron momentum P_{e} - after cuts", "P_{e} [GeV]",
+                                      directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "01_P_e_1e2p_AC_FD", 0, beamE * 1.1);
+//    TH1D *hP_e_1e2p_AC_FD = new TH1D("P_{e} AC (1e2p)", "P_{e} After Cut (1e2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_e_1e2p_AC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
 
-    TH1D *hP_p_1e2p_AC_CD = new TH1D("Proton momentum P_{p} AC (1e2p, CD)", "Proton momentum P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_p_1e2p_AC_FD = new TH1D("Proton momentum P_{p} AC (1e2p, FD)", "Proton momentum P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1e2p_AC_CD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
-    string hP_p_1e2p_AC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    hPlot1D hP_p_1e2p_BC_CD = hPlot1D("1e2p", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV]",
+                                      directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "02_P_p_1e2p_BC_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_1e2p_BC_FD = hPlot1D("1e2p", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV]",
+                                      directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "03_P_p_1e2p_BC_FD", 0, beamE * 1.1);
+//    TH1D *hP_p_1e2p_BC_CD = new TH1D("Proton momentum P_{p} BC (1e2p, CD)", "Proton momentum P_{p} Before Cut (1e2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_p_1e2p_BC_FD = new TH1D("Proton momentum P_{p} BC (1e2p, FD)", "Proton momentum P_{p} Before Cut (1e2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_p_1e2p_BC_CD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+//    string hP_p_1e2p_BC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+    hPlot1D hP_p_1e2p_AC_CD = hPlot1D("1e2p", "CD", "Proton momentum AC", "Proton momentum P_{p} - after cuts", "P_{p} [GeV]",
+                                      directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "02_P_p_1e2p_AC_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_1e2p_AC_FD = hPlot1D("1e2p", "FD", "Proton momentum AC", "Proton momentum P_{p} - after cuts", "P_{p} [GeV]",
+                                      directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "03_P_p_1e2p_AC_FD", 0, beamE * 1.1);
+//    TH1D *hP_p_1e2p_AC_CD = new TH1D("Proton momentum P_{p} AC (1e2p, CD)", "Proton momentum P_{p} After Cut (1e2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_p_1e2p_AC_FD = new TH1D("Proton momentum P_{p} AC (1e2p, FD)", "Proton momentum P_{p} After Cut (1e2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_p_1e2p_AC_CD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
+//    string hP_p_1e2p_AC_FD_Dir = directories.Momentum_Directory_map["Momentum_1e2p_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Momentum histograms after 2p cuts">
-    TH1D *hP_e_2p_FD = new TH1D("Electron momentum P_{e} (2p)", "Electron momentum P_{e} (2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
-    string hP_e_2p_FD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    //<editor-fold desc="Momentum plots (2p)">
 
-    TH1D *hP_p_2p_CD = new TH1D("Proton momentum P_{p} (2p, CD)", "Proton momentum P_{p} (2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_p_2p_FD = new TH1D("Proton momentum P_{p} (2p, FD)", "Proton momentum P_{p} (2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_2p_CD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
-    string hP_p_2p_FD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    //<editor-fold desc="Momentum plots (2p)">
+    hPlot1D hP_e_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]", directories.Momentum_Directory_map["Momentum_2p_Directory"],
+                                 "01_P_e_2p_FD", 0, beamE * 1.1);
+//    TH1D *hP_e_2p_FD = new TH1D("Electron momentum P_{e} (2p)", "Electron momentum P_{e} (2p);P_{e} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_e_2p_FD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
 
-    TH1D *hP_p_1_2p = new TH1D("Leading proton P_{1} (2p)", "Leading proton momentum P_{1} (2p);P_{1} [GeV];", 100, 0, beamE * 1.1);
-    TH1D *hP_p_2_2p = new TH1D("Recoil proton P_{2} (2p)", "Recoil proton momentum P_{2} (2p);P_{2} [GeV];", 100, 0, beamE * 1.1);
-    string hP_p_1_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
-    string hP_p_2_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    hPlot1D hP_p_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_2p_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_2p_FD", 0, beamE * 1.1);
+//    TH1D *hP_p_2p_CD = new TH1D("Proton momentum P_{p} (2p, CD)", "Proton momentum P_{p} (2p, CD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_p_2p_FD = new TH1D("Proton momentum P_{p} (2p, FD)", "Proton momentum P_{p} (2p, FD);P_{p} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_p_2p_CD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+//    string hP_p_2p_FD_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="Leading (P_1) and recoil (P_2) momentum plots (2p)">
+    hPlot1D hP_p_1_2p = hPlot1D("2p", "", "Leading proton P_{1}", "Leading proton momentum P_{1}", "P_{1} [GeV]",
+                                directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_1_2p", 0, beamE * 1.1);
+    hPlot1D hP_p_2_2p = hPlot1D("2p", "", "Recoil proton P_{2}", "Recoil proton momentum P_{2}", "P_{2} [GeV]",
+                                directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_2_2p", 0, beamE * 1.1);
+//    TH1D *hP_p_1_2p = new TH1D("Leading proton P_{1} (2p)", "Leading proton momentum P_{1} (2p);P_{1} [GeV];", 100, 0, beamE * 1.1);
+//    TH1D *hP_p_2_2p = new TH1D("Recoil proton P_{2} (2p)", "Recoil proton momentum P_{2} (2p);P_{2} [GeV];", 100, 0, beamE * 1.1);
+//    string hP_p_1_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+//    string hP_p_2_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
-    TH2D *hP_p_1_vs_P_p_2_2p = new TH2D("P_{1} vs. P_{2} (2p)", "P_{1} vs. P_{2} (2p);P_{1} [GeV];P_{2} [GeV]", 250, 0, beamE * 1.1, 250, 0, beamE * 1.1);
-    string hP_p_1_vs_P_p_2_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
+    hPlot2D hP_p_1_vs_P_p_2_2p = hPlot2D("2p", "", "P_{1} vs. P_{2}", "P_{1} vs. P_{2}", "P_{1} [GeV]", "P_{2} [GeV]",
+                                         directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_p_1_vs_P_p_2", 0, beamE * 1.1, 0, beamE * 1.1);
+//    TH2D *hP_p_1_vs_P_p_2_2p = new TH2D("P_{1} vs. P_{2} (2p)", "P_{1} vs. P_{2} (2p);P_{1} [GeV];P_{2} [GeV]", 250, 0, beamE * 1.1, 250, 0, beamE * 1.1);
+//    string hP_p_1_vs_P_p_2_2p_Dir = directories.Momentum_Directory_map["Momentum_2p_Directory"];
     //</editor-fold>
 
     //</editor-fold>
@@ -2281,18 +2249,18 @@ void EventAnalyser() {
         /* Testing fiducial cuts */
         if (apply_cuts == false) {
             /* Fiducial plots before cuts */
-            hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
+            hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e, Weight);
 //            hVcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e, Weight);
 //            hWcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
             /* Fiducial plots after cuts */
-            if (electrons[0]->cal(PCAL)->getLv() >= clasAna.getEcalEdgeCuts()) { hVcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight); }
-            if (electrons[0]->cal(PCAL)->getLw() >= clasAna.getEcalEdgeCuts()) { hWcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight); }
+            if (electrons[0]->cal(PCAL)->getLv() >= clasAna.getEcalEdgeCuts()) { hVcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e, Weight); }
+            if (electrons[0]->cal(PCAL)->getLw() >= clasAna.getEcalEdgeCuts()) { hWcal_VS_EoP_1e_cut_AC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e, Weight); }
         } else {
-            hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
+            hVcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e, Weight);
 //            hVcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
+            hWcal_VS_EoP_1e_cut_BC_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e, Weight);
 //            hWcal_VS_EoP_1e_cut_BC_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
         }
 
@@ -2331,7 +2299,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Electrons_Only_FD->Fill(P_e, e->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_FD->Fill(P_e, e->par()->getBeta());
 
-                hP_e_1e_cut_FD->Fill(P_e);
+                hP_e_1e_cut_FD.hFill(P_e, Weight);
+//                hP_e_1e_cut_FD->Fill(P_e);
 
                 hTheta_e_1e_cut_FD->Fill(Theta_e);
                 hPhi_e_1e_cut_FD->Fill(Phi_e);
@@ -2408,7 +2377,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Protons_Only_CD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_CD->Fill(p->getP(), p->par()->getBeta());
 
-                hP_p_1e_cut_CD->Fill(p->getP());
+                hP_p_1e_cut_CD.hFill(p->getP(), Weight);
+//                hP_p_1e_cut_CD->Fill(p->getP());
 
             } else if (p->getRegion() == FD) {
                 hChi2_Proton_1e_cut_FD.hFill(p->par()->getChi2Pid(), Weight);
@@ -2425,7 +2395,7 @@ void EventAnalyser() {
                 Beta_vs_P_1e_Protons_Only_FD->Fill(p->getP(), p->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_FD->Fill(p->getP(), p->par()->getBeta());
 
-                hP_p_1e_cut_FD->Fill(p->getP());
+                hP_p_1e_cut_FD.hFill(p->getP(), Weight);
 
             }
         } // end of loop over protons vector
@@ -2546,7 +2516,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piplus_Only_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_CD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
 
-                hP_piplus_1e_cut_CD->Fill(piplus[i]->getP());
+                hP_piplus_1e_cut_CD.hFill(piplus[i]->getP(), Weight);
+//                hP_piplus_1e_cut_CD->Fill(piplus[i]->getP());
 
             } else if (piplus[i]->getRegion() == FD) {
                 hChi2_piplus_1e_cut_FD.hFill(piplus[i]->par()->getChi2Pid(), Weight);
@@ -2563,7 +2534,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piplus_Only_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
                 Beta_vs_P_positive_particles_1e_cut_FD->Fill(piplus[i]->getP(), piplus[i]->par()->getBeta());
 
-                hP_piplus_1e_cut_FD->Fill(piplus[i]->getP());
+                hP_piplus_1e_cut_FD.hFill(piplus[i]->getP(), Weight);
+//                hP_piplus_1e_cut_FD->Fill(piplus[i]->getP());
 
             }
         } // end of loop over piplus vector
@@ -2586,7 +2558,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piminus_Only_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_CD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
 
-                hP_piminus_1e_cut_CD->Fill(piminus[i]->getP());
+                hP_piminus_1e_cut_CD.hFill(piminus[i]->getP(), Weight);
+//                hP_piminus_1e_cut_CD->Fill(piminus[i]->getP());
 
             } else if (piminus[i]->getRegion() == FD) {
                 hChi2_piminus_1e_cut_FD.hFill(piminus[i]->par()->getChi2Pid(), Weight);
@@ -2603,7 +2576,8 @@ void EventAnalyser() {
                 Beta_vs_P_1e_piminus_Only_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
                 Beta_vs_P_negative_particles_1e_cut_FD->Fill(piminus[i]->getP(), piminus[i]->par()->getBeta());
 
-                hP_piminus_1e_cut_FD->Fill(piminus[i]->getP());
+                hP_piminus_1e_cut_FD.hFill(piminus[i]->getP(), Weight);
+//                hP_piminus_1e_cut_FD->Fill(piminus[i]->getP());
 
             }
         } // end of loop over piminus vector
@@ -2748,11 +2722,22 @@ void EventAnalyser() {
             } // end of loop over protons vector
 
             /* Filling SF histograms (1p) */
-            hSF_1p_FD.hFill(EoP_e,Weight), hSF_VS_P_e_1p_FD.hFill(P_e, EoP_e,Weight);
+            hSF_1p_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1p_FD.hFill(P_e, EoP_e, Weight);
 
             /* Filling fiducial plots (1p) */
-            Vcal_VS_EoP_1p_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
-            Wcal_VS_EoP_1p_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
+            hVcal_VS_EoP_1p_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e, Weight);
+            hWcal_VS_EoP_1p_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e, Weight);
+
+            /* Filling momentum histograms (1p) */
+            // Electrton momentum (1p):
+            if (electrons[0]->getRegion() == FD) { hP_e_1p_FD.hFill(P_e, Weight); }
+
+            // Proton0 momentum (1p):
+            if (protons[0]->getRegion() == CD) {
+                hP_p_1p_CD.hFill(protons[0]->getP(), Weight);
+            } else if (protons[0]->getRegion() == FD) {
+                hP_p_1p_FD.hFill(protons[0]->getP(), Weight);
+            }
 
             for (auto &e: electrons) {
                 if (e->getRegion() == FD) {
@@ -2830,24 +2815,34 @@ void EventAnalyser() {
             //<editor-fold desc="Testing momentum cuts (protons only)">
             /* momentum before and after cuts */
             if (electrons[0]->getRegion() == FD) {
-                hP_e_1e2p_BC_FD->Fill(P_e); // momentum before cuts
-                LogEventCuts(hP_e_1e2p_AC_FD, electrons[0], e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
+                hP_e_1e2p_BC_FD.hFill(P_e, Weight); // momentum before cuts
+//                hP_e_1e2p_BC_FD->Fill(P_e); // momentum before cuts
+                hP_e_1e2p_AC_FD.hLogEventCuts(electrons[0], e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut(), 0, Weight);
+//                LogEventCuts(hP_e_1e2p_AC_FD, electrons[0], e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
             }
 
             if (protons[0]->getRegion() == CD) {
-                hP_p_1e2p_BC_CD->Fill(P_p_first_2p_3v.Mag()); // momentum before cuts
-                LogEventCuts(hP_p_1e2p_AC_CD, protons[0], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
+                hP_p_1e2p_BC_CD.hFill(P_p_first_2p_3v.Mag(), Weight); // momentum before cuts
+//                hP_p_1e2p_BC_CD->Fill(P_p_first_2p_3v.Mag()); // momentum before cuts
+                hP_p_1e2p_AC_CD.hLogEventCuts(protons[0], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, Weight);
+//                LogEventCuts(hP_p_1e2p_AC_CD, protons[0], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
             } else if (protons[0]->getRegion() == FD) {
-                hP_p_1e2p_BC_FD->Fill(P_p_first_2p_3v.Mag()); // momentum before cuts
-                LogEventCuts(hP_p_1e2p_AC_FD, protons[0], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
+                hP_p_1e2p_BC_FD.hFill(P_p_first_2p_3v.Mag(), Weight); // momentum before cuts
+//                hP_p_1e2p_BC_FD->Fill(P_p_first_2p_3v.Mag()); // momentum before cuts
+                hP_p_1e2p_AC_FD.hLogEventCuts(protons[0], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, Weight);
+//                LogEventCuts(hP_p_1e2p_AC_FD, protons[0], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
             }
 
             if (protons[1]->getRegion() == CD) {
-                hP_p_1e2p_BC_CD->Fill(P_p_second_2p_3v.Mag()); // momentum before cuts
-                LogEventCuts(hP_p_1e2p_AC_CD, protons[1], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
+                hP_p_1e2p_BC_CD.hFill(P_p_second_2p_3v.Mag(), Weight); // momentum before cuts
+//                hP_p_1e2p_BC_CD->Fill(P_p_second_2p_3v.Mag()); // momentum before cuts
+                hP_p_1e2p_AC_CD.hLogEventCuts(protons[1], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, Weight);
+//                LogEventCuts(hP_p_1e2p_AC_CD, protons[1], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
             } else if (protons[1]->getRegion() == FD) {
-                hP_p_1e2p_BC_FD->Fill(P_p_second_2p_3v.Mag()); // momentum before cuts
-                LogEventCuts(hP_p_1e2p_AC_FD, protons[1], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
+                hP_p_1e2p_BC_FD.hFill(P_p_second_2p_3v.Mag(), Weight); // momentum before cuts
+//                hP_p_1e2p_BC_FD->Fill(P_p_second_2p_3v.Mag()); // momentum before cuts
+                hP_p_1e2p_AC_FD.hLogEventCuts(protons[1], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, Weight);
+//                LogEventCuts(hP_p_1e2p_AC_FD, protons[1], p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut()); // momentum after cuts
             }
             //</editor-fold>
 
@@ -3043,14 +3038,14 @@ void EventAnalyser() {
             } // end of loop over protons vector
 
             /* Filling SF histograms (2p) */
-            hSF_2p_FD.hFill(EoP_e,Weight), hSF_VS_P_e_2p_FD.hFill(P_e, EoP_e,Weight);
+            hSF_2p_FD.hFill(EoP_e, Weight), hSF_VS_P_e_2p_FD.hFill(P_e, EoP_e, Weight);
 //            hSF_2p_FD->Fill(EoP_e), hSF_VS_P_e_2p_FD->Fill(P_e, EoP_e);
 
             /* Filling fiducial plots (2p) */
-            Vcal_VS_EoP_2p_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e,Weight);
-//            Vcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
-            Wcal_VS_EoP_2p_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e,Weight);
-//            Wcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
+            hVcal_VS_EoP_2p_PCAL.hFill(electrons[0]->cal(PCAL)->getLv(), EoP_e, Weight);
+//            hVcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLv(), EoP_e);
+            hWcal_VS_EoP_2p_PCAL.hFill(electrons[0]->cal(PCAL)->getLw(), EoP_e, Weight);
+//            hWcal_VS_EoP_2p_PCAL->Fill(electrons[0]->cal(PCAL)->getLw(), EoP_e);
 
             /* Filling Nphe plots (2p) */
             hNphe_2p_FD.hFill(Nphe, Weight);
@@ -3058,20 +3053,27 @@ void EventAnalyser() {
 
             /* Filling momentum histograms */
             // Electrton momentum (2p):
-            if (electrons[0]->getRegion() == FD) { hP_e_2p_FD->Fill(P_e); }
+            if (electrons[0]->getRegion() == FD) {
+                hP_e_2p_FD.hFill(P_e, Weight);
+//                hP_e_2p_FD->Fill(P_e);
+            }
 
             // Proton0 momentum (2p):
             if (protons[0]->getRegion() == CD) {
-                hP_p_2p_CD->Fill(P_p_first_2p_3v.Mag());
+                hP_p_2p_CD.hFill(P_p_first_2p_3v.Mag(), Weight);
+//                hP_p_2p_CD->Fill(P_p_first_2p_3v.Mag());
             } else if (protons[0]->getRegion() == FD) {
-                hP_p_2p_FD->Fill(P_p_first_2p_3v.Mag());
+                hP_p_2p_FD.hFill(P_p_first_2p_3v.Mag(), Weight);
+//                hP_p_2p_FD->Fill(P_p_first_2p_3v.Mag());
             }
 
             // Proton1 momentum (2p):
             if (protons[1]->getRegion() == CD) {
-                hP_p_2p_CD->Fill(P_p_second_2p_3v.Mag());
+                hP_p_2p_CD.hFill(P_p_second_2p_3v.Mag(), Weight);
+//                hP_p_2p_CD->Fill(P_p_second_2p_3v.Mag());
             } else if (protons[1]->getRegion() == FD) {
-                hP_p_2p_FD->Fill(P_p_second_2p_3v.Mag());
+                hP_p_2p_FD.hFill(P_p_second_2p_3v.Mag(), Weight);
+//                hP_p_2p_FD->Fill(P_p_second_2p_3v.Mag());
             }
             //</editor-fold>
 
@@ -3411,9 +3413,12 @@ void EventAnalyser() {
                 P_1_2p_3v = TVector3(P_p_second_2p_3v.Px(), P_p_second_2p_3v.Py(), P_p_second_2p_3v.Pz());
             }
 
-            hP_p_1_2p->Fill(P_1_2p_3v.Mag()); // Leading proton (2p)
-            hP_p_2_2p->Fill(P_2_2p_3v.Mag()); // Recoil proton (2p)
-            hP_p_1_vs_P_p_2_2p->Fill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag());
+            hP_p_1_2p.hFill(P_1_2p_3v.Mag(), Weight); // Leading proton (2p)
+//            hP_p_1_2p->Fill(P_1_2p_3v.Mag()); // Leading proton (2p)
+            hP_p_2_2p.hFill(P_2_2p_3v.Mag(), Weight); // Recoil proton (2p)
+//            hP_p_2_2p->Fill(P_2_2p_3v.Mag()); // Recoil proton (2p)
+            hP_p_1_vs_P_p_2_2p.hFill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag(), Weight);
+//            hP_p_1_vs_P_p_2_2p->Fill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag());
 
             P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
                                    P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz()); // P_tot = P_1 + P_2
@@ -3624,177 +3629,78 @@ void EventAnalyser() {
 
         //<editor-fold desc="Chi2 plots (no #(e) cut)">
         hChi2_Electron_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hChi2_Electron_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Electron_All_e, "01_Electron_chi2", hChi2_Electron_FD_Dir, "FD", kRed, true, true, true, false);
-
         hChi2_Proton_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
                                      Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//        histPlotter1D(c1, hChi2_Proton_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Proton_All_e, "02_Proton_chi2", hChi2_Proton_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cuts_CD.Cuts.at(2),
-//                      Chi2_Proton_cuts_CD.Cuts.at(0));
         hChi2_Proton_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(2),
                                      Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//        histPlotter1D(c1, hChi2_Proton_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Proton_All_e, "02_Proton_chi2", hChi2_Proton_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cuts_FD.Cuts.at(2),
-//                      Chi2_Proton_cuts_FD.Cuts.at(0));
-
-//        hChi2_Kplus_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_Kplus_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_Kplus_All_e, "03_Kplus_chi2", hChi2_Kplus_CD_Dir, "CD", kBlue, true, true, true, false);
-//        hChi2_Kplus_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_Kplus_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_Kplus_All_e, "03_Kplus_chi2", hChi2_Kplus_FD_Dir, "FD", kRed, true, true, true, false);
-//
-//        hChi2_Kminus_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_Kminus_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_Kminus_All_e, "04_Kminus_chi2", hChi2_Kminus_CD_Dir, "CD", kBlue, true, true, true, false);
-//        hChi2_Kminus_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_Kminus_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_Kminus_All_e, "04_Kminus_chi2", hChi2_Kminus_FD_Dir, "FD", kRed, true, true, true, false);
-//
-//        hChi2_piplus_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_piplus_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_piplus_All_e, "03_piplus_chi2", hChi2_piplus_CD_Dir, "CD", kBlue, true, true, true, false);
-//        hChi2_piplus_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_piplus_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_piplus_All_e, "03_piplus_chi2", hChi2_piplus_FD_Dir, "FD", kRed, true, true, true, false);
-//
-//        hChi2_piminus_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_piminus_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_piminus_All_e, "04_piminus_chi2", hChi2_piminus_CD_Dir, "CD", kBlue, true, true, true, false);
-//        hChi2_piminus_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-////        histPlotter1D(c1, hChi2_piminus_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "no #(e) cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                      sChi2_piminus_All_e, "04_piminus_chi2", hChi2_piminus_FD_Dir, "FD", kRed, true, true, true, false);
         //</editor-fold>
 
         //<editor-fold desc="Chi2 plots (1e cut)">
         hChi2_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hChi2_Electron_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Electron_1e_cut, "01_Electron_chi2", hChi2_Electron_1e_cut_FD_Dir, "FD", kRed, true, true, true, false);
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
             hChi2_Proton_1e_cut_CD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_Proton_cuts_CD.FitStdFactor, Chi2_Proton_cuts_CD.Cuts.at(1),
                                                     Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2_wFit",
-//                              hChi2_Proton_1e_cut_CD_Dir, "CD", Chi2_Proton_cuts_CD.Cuts.at(0), Chi2_Proton_cuts_CD.Cuts.at(1), Chi2_Proton_cuts_CD.Cuts.at(2),
-//                              Chi2_Proton_cuts_CD.FitStdFactor, true, "Protons");
             hChi2_Proton_1e_cut_FD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_Proton_cuts_FD.FitStdFactor, Chi2_Proton_cuts_FD.Cuts.at(1),
                                                     Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram With Fit", "1e Cut", plots, "02_Proton_chi2_wFit",
-//                              hChi2_Proton_1e_cut_FD_Dir, "FD", Chi2_Proton_cuts_FD.Cuts.at(0), Chi2_Proton_cuts_FD.Cuts.at(1), Chi2_Proton_cuts_FD.Cuts.at(2),
-//                              Chi2_Proton_cuts_FD.FitStdFactor, true, "Protons");
         } else {
             hChi2_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
                                                 Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_Proton_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cuts_CD.Cuts.at(2),
-//                          Chi2_Proton_cuts_CD.Cuts.at(0));
             hChi2_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(2),
                                                 Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_Proton_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Proton_1e_cut, "02_Proton_chi2", hChi2_Proton_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Proton_cuts_FD.Cuts.at(2),
-//                          Chi2_Proton_cuts_FD.Cuts.at(0));
         }
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
             hChi2_Kplus_1e_cut_CD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_Kplus_cuts_CD.FitStdFactor, Chi2_Kplus_cuts_CD.Cuts.at(1),
                                                    Chi2_Kplus_cuts_CD.Cuts.at(2), Chi2_Kplus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
-//                              hChi2_Kplus_1e_cut_CD_Dir, "CD", Chi2_Kplus_cuts_CD.Cuts.at(0), Chi2_Kplus_cuts_CD.Cuts.at(1), Chi2_Kplus_cuts_CD.Cuts.at(2),
-//                              Chi2_Kplus_cuts_CD.FitStdFactor, true, "K+");
             hChi2_Kplus_1e_cut_FD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_Kplus_cuts_FD.FitStdFactor, Chi2_Kplus_cuts_FD.Cuts.at(1),
                                                    Chi2_Kplus_cuts_FD.Cuts.at(2), Chi2_Kplus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram With Fit", "1e Cut", plots, "03_Kplus_chi2_wFit",
-//                              hChi2_Kplus_1e_cut_FD_Dir, "FD", Chi2_Kplus_cuts_FD.Cuts.at(0), Chi2_Kplus_cuts_FD.Cuts.at(1), Chi2_Kplus_cuts_FD.Cuts.at(2),
-//                              Chi2_Kplus_cuts_FD.FitStdFactor, true, "K+");
         } else {
             hChi2_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Kplus_cuts_CD.Cuts.at(2), Chi2_Kplus_cuts_CD.Cuts.at(2),
                                                Chi2_Kplus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_Kplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kplus_cuts_CD.Cuts.at(2),
-//                          Chi2_Kplus_cuts_CD.Cuts.at(0));
             hChi2_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Kplus_cuts_FD.Cuts.at(2), Chi2_Kplus_cuts_FD.Cuts.at(2),
                                                Chi2_Kplus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_Kplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kplus_1e_cut, "03_Kplus_chi2", hChi2_Kplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kplus_cuts_FD.Cuts.at(2),
-//                          Chi2_Kplus_cuts_FD.Cuts.at(0));
         }
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
             hChi2_Kminus_1e_cut_CD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_Kminus_cuts_CD.FitStdFactor, Chi2_Kminus_cuts_CD.Cuts.at(1),
                                                     Chi2_Kminus_cuts_CD.Cuts.at(2), Chi2_Kminus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
-//                              hChi2_Kminus_1e_cut_CD_Dir, "CD", Chi2_Kminus_cuts_CD.Cuts.at(0), Chi2_Kminus_cuts_CD.Cuts.at(1), Chi2_Kminus_cuts_CD.Cuts.at(2),
-//                              Chi2_Kminus_cuts_CD.FitStdFactor, true, "K-");
             hChi2_Kminus_1e_cut_FD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_Kminus_cuts_FD.FitStdFactor, Chi2_Kminus_cuts_FD.Cuts.at(1),
                                                     Chi2_Kminus_cuts_FD.Cuts.at(2), Chi2_Kminus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram With Fit", "1e Cut", plots, "04_Kminus_chi2_wFit",
-//                              hChi2_Kminus_1e_cut_FD_Dir, "FD", Chi2_Kminus_cuts_FD.Cuts.at(0), Chi2_Kminus_cuts_FD.Cuts.at(1), Chi2_Kminus_cuts_FD.Cuts.at(2),
-//                              Chi2_Kminus_cuts_FD.FitStdFactor, true, "K-");
         } else {
             hChi2_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Kminus_cuts_CD.Cuts.at(2), Chi2_Kminus_cuts_CD.Cuts.at(2),
                                                 Chi2_Kminus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_Kminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Kminus_cuts_CD.Cuts.at(2),
-//                          Chi2_Kminus_cuts_CD.Cuts.at(0));
             hChi2_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Kminus_cuts_FD.Cuts.at(2), Chi2_Kminus_cuts_FD.Cuts.at(2),
                                                 Chi2_Kminus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_Kminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{K^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_Kminus_1e_cut, "04_Kminus_chi2", hChi2_Kminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_Kminus_cuts_FD.Cuts.at(2),
-//                          Chi2_Kminus_cuts_FD.Cuts.at(0));
         }
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
             hChi2_piplus_1e_cut_CD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_piplus_cuts_CD.FitStdFactor, Chi2_piplus_cuts_CD.Cuts.at(1),
                                                     Chi2_piplus_cuts_CD.Cuts.at(2), Chi2_piplus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
-//                              hChi2_piplus_1e_cut_CD_Dir, "CD", Chi2_piplus_cuts_CD.Cuts.at(0), Chi2_piplus_cuts_CD.Cuts.at(1), Chi2_piplus_cuts_CD.Cuts.at(2),
-//                              Chi2_piplus_cuts_CD.FitStdFactor, true, "pi+");
             hChi2_piplus_1e_cut_FD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_piplus_cuts_FD.FitStdFactor, Chi2_piplus_cuts_FD.Cuts.at(1),
                                                     Chi2_piplus_cuts_FD.Cuts.at(2), Chi2_piplus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram With Fit", "1e Cut", plots, "05_piplus_chi2_wFit",
-//                              hChi2_piplus_1e_cut_FD_Dir, "FD", Chi2_piplus_cuts_FD.Cuts.at(0), Chi2_piplus_cuts_FD.Cuts.at(1), Chi2_piplus_cuts_FD.Cuts.at(2),
-//                              Chi2_piplus_cuts_FD.FitStdFactor, true, "pi+");
         } else {
             hChi2_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_piplus_cuts_CD.Cuts.at(2), Chi2_piplus_cuts_CD.Cuts.at(2),
                                                 Chi2_piplus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_piplus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_piplus_cuts_CD.Cuts.at(2),
-//                          Chi2_piplus_cuts_CD.Cuts.at(0));
             hChi2_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_piplus_cuts_FD.Cuts.at(2), Chi2_piplus_cuts_FD.Cuts.at(2),
                                                 Chi2_piplus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_piplus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{+}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piplus_1e_cut, "05_piplus_chi2", hChi2_piplus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true, Chi2_piplus_cuts_FD.Cuts.at(2),
-//                          Chi2_piplus_cuts_FD.Cuts.at(0));
         }
 
         if (apply_chi2_cuts_1e_cut == false) {
             /* Do Gaussian fit if not applying chi2 cuts */
             hChi2_piminus_1e_cut_CD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_piminus_cuts_CD.FitStdFactor, Chi2_piminus_cuts_CD.Cuts.at(1),
                                                      Chi2_piminus_cuts_CD.Cuts.at(2), Chi2_piminus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
-//                              hChi2_piminus_1e_cut_CD_Dir, "CD", Chi2_piminus_cuts_CD.Cuts.at(0), Chi2_piminus_cuts_CD.Cuts.at(1), Chi2_piminus_cuts_CD.Cuts.at(2),
-//                              Chi2_piminus_cuts_CD.FitStdFactor, true, "pi-");
             hChi2_piminus_1e_cut_FD.hDrawAndSaveWFit(SampleName, c1, plots, norm_Chi2_plots, true, 1., Chi2_piminus_cuts_FD.FitStdFactor, Chi2_piminus_cuts_FD.Cuts.at(1),
                                                      Chi2_piminus_cuts_FD.Cuts.at(2), Chi2_piminus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1DwFit(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram With Fit", "1e Cut", plots, "06_piminus_chi2_wFit",
-//                              hChi2_piminus_1e_cut_FD_Dir, "FD", Chi2_piminus_cuts_FD.Cuts.at(0), Chi2_piminus_cuts_FD.Cuts.at(1), Chi2_piminus_cuts_FD.Cuts.at(2),
-//                              Chi2_piminus_cuts_FD.FitStdFactor, true, "pi-");
         } else {
             hChi2_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_piminus_cuts_CD.Cuts.at(2), Chi2_piminus_cuts_CD.Cuts.at(2),
                                                  Chi2_piminus_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_piminus_1e_cut_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false, true,
-//                          Chi2_piminus_cuts_CD.Cuts.at(2), Chi2_piminus_cuts_CD.Cuts.at(0));
             hChi2_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_piminus_cuts_FD.Cuts.at(2), Chi2_piminus_cuts_FD.Cuts.at(2),
                                                  Chi2_piminus_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, hChi2_piminus_1e_cut_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{#pi^{-}} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sChi2_piminus_1e_cut, "06_piminus_chi2", hChi2_piminus_1e_cut_FD_Dir, "FD", kRed, true, true, true, false, true,
-//                          Chi2_piminus_cuts_FD.Cuts.at(2), Chi2_piminus_cuts_FD.Cuts.at(0));
         }
         //</editor-fold>
 
@@ -3809,69 +3715,33 @@ void EventAnalyser() {
         //<editor-fold desc="Chi2 plots (1e2p)">
         if (apply_cuts == false) {
             hChi2_Electron_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-//            histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram Before Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
-//                          plots, 2, false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p_BC", hChi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false);
-
             hChi2_Proton_1e2p_BC_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
                                                  Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2,
-//                          false, true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p_BC", hChi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(0));
             hChi2_Proton_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(2),
                                                  Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram Before Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2,
-//                          false, true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p_BC", hChi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(0));
 
             hChi2_Electron_1e2p_AC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Electron_cuts_FD.Cuts.at(2), Chi2_Electron_cuts_FD.Cuts.at(2),
                                                    Chi2_Electron_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Electron_1e2p_AC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram After Cut", "1e2p", "FD", "e", 0.06, 0.04, 0.04,
-//                          plots, 2, false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p_AC", hChi2_Electron_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Electron_cuts_FD.Cuts.at(2), Chi2_Electron_cuts_FD.Cuts.at(0));
-
             hChi2_Proton_1e2p_AC_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
                                                  Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Proton_1e2p_AC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram After Cut", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots,
-//                          2, false, true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p_AC", hChi2_Proton_1e2p_AC_CD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(0));
             hChi2_Proton_1e2p_AC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(2),
                                                  Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Proton_1e2p_AC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram After Cut", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots,
-//                          2, false, true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p_AC", hChi2_Proton_1e2p_AC_FD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(0));
         } else {
             hChi2_Electron_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-//            histPlotter1D(c1, c2, hChi2_Electron_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram", "1e2p", "FD", "e", 0.06, 0.04, 0.04, plots, 2,
-//                          false, true, sChi2_Electron_1e2p, "02_Electron_Chi2_1e2p", hChi2_Electron_1e2p_BC_FD_Dir, kBlue, true, true, true, false);
-
             hChi2_Proton_1e2p_BC_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
                                                  Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "CD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-//                          true, sChi2_Proton_1e2p, "03_Proton_Chi2_1e2p", hChi2_Proton_1e2p_BC_CD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(0));
             hChi2_Proton_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(2),
                                                  Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//            histPlotter1D(c1, c2, hChi2_Proton_1e2p_BC_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "1e2p", "FD", "p", 0.06, 0.04, 0.04, plots, 2, false,
-//                          true, sChi2_Proton_1e2p, "04_Proton_Chi2_1e2p", hChi2_Proton_1e2p_BC_FD_Dir, kBlue, true, true, true, false, true,
-//                          Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(0));
         }
         //</editor-fold>
 
         //<editor-fold desc="Chi2 plots (2p)">
         hChi2_Electron_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hChi2_Electron_2p_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{e} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sChi2_Electron_1e2p, "01_Electron_Chi2_2p", hChi2_Electron_2p_FD_Dir, "", kBlue, true, true, true, false);
 
         hChi2_Proton_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
                                         Chi2_Proton_cuts_CD.Cuts.at(0), true);
-//        histPlotter1D(c1, hChi2_Proton_2p_CD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sChi2_Proton_1e2p,
-//                      "02_Proton_Chi2_2p", hChi2_Proton_2p_CD_Dir, "CD", kBlue, true, true, true, false, true, Chi2_Proton_cuts_CD.Cuts.at(2),
-//                      Chi2_Proton_cuts_CD.Cuts.at(0));
         hChi2_Proton_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Chi2_plots, true, 1., -Chi2_Proton_cuts_FD.Cuts.at(2), Chi2_Proton_cuts_FD.Cuts.at(2),
                                         Chi2_Proton_cuts_FD.Cuts.at(0), true);
-//        histPlotter1D(c1, hChi2_Proton_2p_FD, norm_Chi2_plots, true, 1., "#chi^{2}_{p} Histogram", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sChi2_Proton_1e2p,
-//                      "02_Proton_Chi2_2p", hChi2_Proton_2p_FD_Dir, "FD", kBlue, true, true, true, false, true, Chi2_Proton_cuts_FD.Cuts.at(2),
-//                      Chi2_Proton_cuts_FD.Cuts.at(0));
         //</editor-fold>
 
     } else {
@@ -3891,109 +3761,43 @@ void EventAnalyser() {
 
         //<editor-fold desc="Vertex plots (1e cut, CD & FD)">
         hVx_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Electron_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{e}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sVx_Electron_1e_cut, "01_Electron_Vx", hVx_Electron_1e_cut_FD_Dir, "", kBlue, true, true, true, false);
         hVy_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Electron_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{e}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sVy_Electron_1e_cut, "02_Electron_Vy", hVy_Electron_1e_cut_FD_Dir, "", kBlue, true, true, true, false);
         hVz_Electron_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Electron_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{e}", "1e Cut", plots, 2, false, true, sVz_Electron_1e_cut, "03_Electron_Vz",
-//                      hVz_Electron_1e_cut_FD_Dir, "", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
 
         hVx_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_Proton_1e_cut,
-//                      "01_Proton_Vx", hVx_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVx_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_Proton_1e_cut,
-//                      "01_Proton_Vx", hVx_Proton_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVy_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_Proton_1e_cut,
-//                      "02_Proton_Vy", hVy_Proton_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVy_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{p}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_Proton_1e_cut,
-//                      "02_Proton_Vy", hVy_Proton_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVz_Proton_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Proton_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, sVz_Proton_1e_cut, "03_Proton_Vz",
-//                      hVz_Proton_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
         hVz_Proton_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Proton_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{p}", "1e Cut", plots, 2, false, true, sVz_Proton_1e_cut, "03_Proton_Vz",
-//                      hVz_Proton_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
 
         hVx_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_Kplus_1e_cut,
-//                      "01_Kplus_Vx", hVx_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVx_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_Kplus_1e_cut,
-//                      "01_Kplus_Vx", hVx_Kplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVy_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_Kplus_1e_cut,
-//                      "02_Kplus_Vy", hVy_Kplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVy_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_Kplus_1e_cut,
-//                      "02_Kplus_Vy", hVy_Kplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVz_Kplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Kplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, sVz_Kplus_1e_cut, "03_Kplus_Vz",
-//                      hVz_Kplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
         hVz_Kplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Kplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{+}}", "1e Cut", plots, 2, false, true, sVz_Kplus_1e_cut, "03_Kplus_Vz",
-//                      hVz_Kplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
 
         hVx_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_Kminus_1e_cut,
-//                      "01_Kminus_Vx", hVx_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVx_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_Kminus_1e_cut,
-//                      "01_Kminus_Vx", hVx_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVy_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_Kminus_1e_cut,
-//                      "02_Kminus_Vy", hVy_Kminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVy_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{K^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_Kminus_1e_cut,
-//                      "02_Kminus_Vy", hVy_Kminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVz_Kminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Kminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, sVz_Kminus_1e_cut, "03_Kminus_Vz",
-//                      hVz_Kminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
         hVz_Kminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_Kminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{K^{-}}", "1e Cut", plots, 2, false, true, sVz_Kminus_1e_cut, "03_Kminus_Vz",
-//                      hVz_Kminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
 
         hVx_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_piplus_1e_cut,
-//                      "01_piplus_Vx", hVx_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVx_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVx_piplus_1e_cut,
-//                      "01_piplus_Vx", hVx_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVy_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_piplus_1e_cut,
-//                      "02_piplus_Vy", hVy_piplus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVy_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{+}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sVy_piplus_1e_cut,
-//                      "02_piplus_Vy", hVy_piplus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVz_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_piplus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, sVz_piplus_1e_cut, "03_piplus_Vz",
-//                      hVz_piplus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
         hVz_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_piplus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{+}}", "1e Cut", plots, 2, false, true, sVz_piplus_1e_cut, "03_piplus_Vz",
-//                      hVz_piplus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
 
         hVx_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sVx_piminus_1e_cut, "01_piminus_Vx", hVx_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVx_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVx_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{x}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sVx_piminus_1e_cut, "01_piminus_Vx", hVx_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVy_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sVy_piminus_1e_cut, "02_piminus_Vy", hVy_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, true, false);
         hVy_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hVy_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{y}^{#pi^{-}}", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                      sVy_piminus_1e_cut, "02_piminus_Vy", hVy_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, true, false);
         hVz_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_piminus_1e_cut_CD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, sVz_piminus_1e_cut, "03_piminus_Vz",
-//                      hVz_piminus_1e_cut_CD_Dir, "CD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
         hVz_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hVz_piminus_1e_cut_FD, norm_Vertex_plots, true, 1., "V_{z}^{#pi^{-}}", "1e Cut", plots, 2, false, true, sVz_piminus_1e_cut, "03_piminus_Vz",
-//                      hVz_piminus_1e_cut_FD_Dir, "FD", kBlue, false, true, false, true, Vz_cut.GetUpperCut(), Vz_cut.GetLowerCut(), 0, false);
         //</editor-fold>
 
 //  dV plots ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4006,70 +3810,20 @@ void EventAnalyser() {
 
         //<editor-fold desc="dV plots (1e2p, CD & FD)">
         hdVx_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//            histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sdVx_1e2p_before, "01_dVx", hdVx_1e2p_BC_Dir, "", kBlue, true, true, true, false);
         hdVy_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//            histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sdVy_1e2p_before, "02_dVy", hdVy_1e2p_BC_Dir, "", kBlue, true, true, true, false);
         hdVz_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -Vz_cut.GetUpperCut(), Vz_cut.GetUpperCut(), 0, false);
-//            histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z}", "1e2p", plots, 2, false, true, sdVy_1e2p_before, "03_dVz",
-//                          hdVz_1e2p_BC_Dir, "", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
 
         if (apply_cuts == false) {
             hdVx_1e2p_AC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//            histPlotter1D(c1, hdVx_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sdVx_1e2p_after, "01_dVx_AC", hdVx_1e2p_AC_Dir, "CD & FD", kBlue, true, true, true, false);
             hdVy_1e2p_AC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//            histPlotter1D(c1, hdVy_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-//                          sdVy_1e2p_after, "02_dVy_AC", hdVy_1e2p_AC_Dir, "CD & FD", kBlue, true, true, true, false);
             hdVz_1e2p_AC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -Vz_cut.GetUpperCut(), Vz_cut.GetUpperCut(), 0, false);
-//            histPlotter1D(c1, hdVz_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z} After Cuts", "1e2p", plots, 2, false, true, sdVz_1e2p_after,
-//                          "03_dVz_AC", hdVz_1e2p_AC_Dir, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
         }
-//        if (apply_cuts == false) {
-//            hdVx_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-////            histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false,
-////                          true, sdVx_1e2p_before, "01_dVx_BC", hdVx_1e2p_BC_Dir, "CD & FD", kBlue, true, true, true, false);
-//            hdVy_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-////            histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false,
-////                          true, sdVy_1e2p_before, "02_dVy_BC", hdVy_1e2p_BC_Dir, "CD & FD", kBlue, true, true, true, false);
-//            hdVz_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -Vz_cut.GetUpperCut(), Vz_cut.GetUpperCut(), 0, false);
-////            histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z} Before Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false,
-////                          true, sdVz_1e2p_before, "03_dVz_BC", hdVz_1e2p_BC_Dir, "CD & FD", kBlue, true, true, true, false, true, dVz_cuts.GetUpperCut(), 0,
-////                          false);
-//
-//            hdVx_1e2p_AC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-////            histPlotter1D(c1, hdVx_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x} After Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                          sdVx_1e2p_after, "01_dVx_AC", hdVx_1e2p_AC_Dir, "CD & FD", kBlue, true, true, true, false);
-//            hdVy_1e2p_AC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-////            histPlotter1D(c1, hdVy_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y} After Cuts", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                          sdVy_1e2p_after, "02_dVy_AC", hdVy_1e2p_AC_Dir, "CD & FD", kBlue, true, true, true, false);
-//            hdVz_1e2p_AC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -Vz_cut.GetUpperCut(), Vz_cut.GetUpperCut(), 0, false);
-////            histPlotter1D(c1, hdVz_1e2p_AC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z} After Cuts", "1e2p", plots, 2, false, true, sdVz_1e2p_after,
-////                          "03_dVz_AC", hdVz_1e2p_AC_Dir, "CD & FD", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
-//        } else {
-//            hdVx_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-////            histPlotter1D(c1, hdVx_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                          sdVx_1e2p_before, "01_dVx", hdVx_1e2p_BC_Dir, "", kBlue, true, true, true, false);
-//            hdVy_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-////            histPlotter1D(c1, hdVy_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y}", "1e2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-////                          sdVy_1e2p_before, "02_dVy", hdVy_1e2p_BC_Dir, "", kBlue, true, true, true, false);
-//            hdVz_1e2p_BC.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -Vz_cut.GetUpperCut(), Vz_cut.GetUpperCut(), 0, false);
-////            histPlotter1D(c1, hdVz_1e2p_BC, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z}", "1e2p", plots, 2, false, true, sdVy_1e2p_before, "03_dVz",
-////                          hdVz_1e2p_BC_Dir, "", kBlue, false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
-//        }
         //</editor-fold>
 
         //<editor-fold desc="dV plots (2p, CD & FD)">
         hdVx_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hdVx_2p, norm_Vertex_plots, true, 1., "dV_{x}=V^{p}_{x}-V^{e}_{x}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sdVx_2p, "01_dVx",
-//                      hdVx_2p_Dir, "", kBlue, true, true, true, false);
         hdVy_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-//        histPlotter1D(c1, hdVy_2p, norm_Vertex_plots, true, 1., "dV_{y}=V^{p}_{y}-V^{e}_{y}", "2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sdVy_2p, "02_dVy",
-//                      hdVy_2p_Dir, "", kBlue, true, true, true, false);
         hdVz_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -Vz_cut.GetUpperCut(), Vz_cut.GetUpperCut(), 0, false);
-//        histPlotter1D(c1, hdVz_2p, norm_Vertex_plots, true, 1., "dV_{z}=V^{p}_{z}-V^{e}_{z}", "2p", plots, 2, false, true, sdVz_2p, "03_dVz", hdVz_2p_Dir, "", kBlue,
-//                      false, true, false, true, dVz_cuts.GetUpperCut(), dVz_cuts.GetLowerCut(), 0, false);
         //</editor-fold>
 
     } else {
@@ -4136,167 +3890,28 @@ void EventAnalyser() {
     if (fiducial_plots) {
         cout << "\n\nPlotting fiducial histograms...\n\n";
 
-//  fiducial histograms --------------------------------------------------------------
+//  ECAL coordinates vs. SF plots ---------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="ECAL coordinates vs. SF plots (1e cut, FD only)">
         if (apply_cuts == false) {
-
-            //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
             hVcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hVcal_VS_EoP_1e_cut_BC_PCAL);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
-//            c1->SetLogz(1);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
-//            c1->SaveAs((hVcal_VS_EoP_1e_cut_BC_PCAL_Dir + "01_hVcal_VS_EoP_1e_cut_BC_PCAL.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
             hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hWcal_VS_EoP_1e_cut_BC_PCAL);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
-//            c1->SetLogz(1);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
-//            c1->SaveAs((hWcal_VS_EoP_1e_cut_BC_PCAL_Dir + "02_hWcal_VS_EoP_1e_cut_BC_PCAL.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Vcal vs. EoP 1e2p AC PCAL">
             hVcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->SetTitleSize(0.06, "xyz");
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->CenterTitle(true);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->CenterTitle(true);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hVcal_VS_EoP_1e_cut_AC_PCAL);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->Draw("colz");
-//            c1->SetLogz(1);
-//            hVcal_VS_EoP_1e_cut_AC_PCAL->SetStats(0);
-//            c1->SaveAs((hVcal_VS_EoP_1e_cut_AC_PCAL_Dir + "01_hVcal_VS_EoP_1e_cut_AC_PCAL.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Wcal vs. EoP 1e2p AC PCAL">
             hWcal_VS_EoP_1e_cut_AC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->SetTitleSize(0.06, "xyz");
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetXaxis()->CenterTitle(true);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetYaxis()->CenterTitle(true);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hWcal_VS_EoP_1e_cut_AC_PCAL);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->Draw("colz");
-//            c1->SetLogz(1);
-//            hWcal_VS_EoP_1e_cut_AC_PCAL->SetStats(0);
-//            c1->SaveAs((hWcal_VS_EoP_1e_cut_AC_PCAL_Dir + "02_hWcal_VS_EoP_1e_cut_AC_PCAL.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
         } else {
-
-            //<editor-fold desc="Vcal vs. EoP 1e2p BC PCAL">
             hVcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hVcal_VS_EoP_1e_cut_BC_PCAL);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
-//            c1->SetLogz(1);
-//            hVcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
-//            c1->SaveAs((hVcal_VS_EoP_1e_cut_BC_PCAL_Dir + "01_Vcal_VS_EoP_1e_PCAL.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
-            //<editor-fold desc="Wcal vs. EoP 1e2p BC PCAL">
             hWcal_VS_EoP_1e_cut_BC_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetTitleSize(0.06, "xyz");
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetXaxis()->CenterTitle(true);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetYaxis()->CenterTitle(true);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//            plots->Add(hWcal_VS_EoP_1e_cut_BC_PCAL);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->Draw("colz");
-//            c1->SetLogz(1);
-//            hWcal_VS_EoP_1e_cut_BC_PCAL->SetStats(0);
-//            c1->SaveAs((hWcal_VS_EoP_1e_cut_BC_PCAL_Dir + "02_Wcal_VS_EoP_1e_PCAL.png").c_str());
-//            gStyle->SetStatX(DefStatX);
-//            gStyle->SetStatY(DefStatY);
-//            c1->Clear();
-            //</editor-fold>
-
         }
         //</editor-fold>
 
         //<editor-fold desc="ECAL coordinates vs. SF plots (1p, FD only)">
-        Vcal_VS_EoP_1p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-        Wcal_VS_EoP_1p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+        hVcal_VS_EoP_1p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+        hWcal_VS_EoP_1p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
         //<editor-fold desc="ECAL coordinates vs. SF plots (2p, FD only)">
-
-        //<editor-fold desc="Vcal vs. EoP 2p PCAL">
-        Vcal_VS_EoP_2p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//        Vcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
-//        Vcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//        Vcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
-//        Vcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Vcal_VS_EoP_2p_PCAL);
-//        Vcal_VS_EoP_2p_PCAL->Draw("colz");
-//        c1->SetLogz(1);
-//        Vcal_VS_EoP_2p_PCAL->SetStats(0);
-//        c1->SaveAs((Vcal_VS_EoP_2p_PCAL_Dir + "01_Vcal_VS_EoP_2p_PCAL.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-        //</editor-fold>
-
-        //<editor-fold desc="Wcal vs. EoP 2p PCAL">
-        Wcal_VS_EoP_2p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
-//        Wcal_VS_EoP_2p_PCAL->SetTitleSize(0.06, "xyz");
-//        Wcal_VS_EoP_2p_PCAL->GetXaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_2p_PCAL->GetXaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_2p_PCAL->GetYaxis()->SetLabelSize(0.0425);
-//        Wcal_VS_EoP_2p_PCAL->GetYaxis()->CenterTitle(true);
-//        Wcal_VS_EoP_2p_PCAL->GetZaxis()->SetLabelSize(0.0425);
-//        plots->Add(Wcal_VS_EoP_2p_PCAL);
-//        Wcal_VS_EoP_2p_PCAL->Draw("colz");
-//        c1->SetLogz(1);
-//        Wcal_VS_EoP_2p_PCAL->SetStats(0);
-//        c1->SaveAs((Wcal_VS_EoP_2p_PCAL_Dir + "02_Wcal_VS_EoP_2p_PCAL.png").c_str());
-//        gStyle->SetStatX(DefStatX);
-//        gStyle->SetStatY(DefStatY);
-//        c1->Clear();
-        //</editor-fold>
-
+        hVcal_VS_EoP_2p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
+        hWcal_VS_EoP_2p_PCAL.hDrawAndSave(SampleName, c1, plots, false);
         //</editor-fold>
 
     } else {
@@ -4312,64 +3927,97 @@ void EventAnalyser() {
     if (Momentum_plots) {
         cout << "\n\nPlotting Momentum histograms...\n\n";
 
-//  Momentum histograms (1e cut, CD & FD)  --------------------------------------------------------------
+//  Momentum plots ------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Momentum histograms (1e cut, CD & FD)">
-        histPlotter1D(c1, hP_e_1e_cut_FD, false, true, 1., "P_{e}", "1e cut", plots, 2, false, true, sP_FD, "01_P_e_1e_cut_FD", hP_e_1e_cut_FD_Dir, "FD", kBlue, true,
-                      true, false, true, -1, -1, 0, false);
+        hP_e_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        hP_e_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_e_1e_cut_FD, false, true, 1., "P_{e}", "1e cut", plots, 2, false, true, sP_FD, "01_P_e_1e_cut_FD", hP_e_1e_cut_FD_Dir, "FD", kBlue, true,
+//                      true, false, true, -1, -1, 0, false);
 
-        histPlotter1D(c1, hP_p_1e_cut_CD, false, true, 1., "P_{p}", "1e cut", plots, 2, false, true, sP_CD, "02_P_p_1e_cut_CD", hP_p_1e_cut_CD_Dir, "CD", kBlue, true,
-                      true, false, true, -1, -1, 0, false);
-        histPlotter1D(c1, hP_p_1e_cut_FD, false, true, 1., "P_{p}", "1e cut", plots, 2, false, true, sP_FD, "02_P_p_1e_cut_FD", hP_p_1e_cut_FD_Dir, "FD", kBlue, true,
-                      true, false, true, -1, -1, 0, false);
+        hP_p_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        histPlotter1D(c1, hP_p_1e_cut_CD, false, true, 1., "P_{p}", "1e cut", plots, 2, false, true, sP_CD, "02_P_p_1e_cut_CD", hP_p_1e_cut_CD_Dir, "CD", kBlue, true,
+//                      true, false, true, -1, -1, 0, false);
+        hP_p_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        histPlotter1D(c1, hP_p_1e_cut_FD, false, true, 1., "P_{p}", "1e cut", plots, 2, false, true, sP_FD, "02_P_p_1e_cut_FD", hP_p_1e_cut_FD_Dir, "FD", kBlue, true,
+//                      true, false, true, -1, -1, 0, false);
 
-        histPlotter1D(c1, hP_piplus_1e_cut_CD, false, true, 1., "P_{#pi^{+}}", "1e cut", plots, 2, false, true, sP_CD, "03_P_piplus_1e_cut_CD", hP_piplus_1e_cut_CD_Dir,
-                      "CD", kBlue, true, true, false, true, -1, -1, 0, false);
-        histPlotter1D(c1, hP_piplus_1e_cut_FD, false, true, 1., "P_{#pi^{+}}", "1e cut", plots, 2, false, true, sP_FD, "03_P_piplus_1e_cut_FD", hP_piplus_1e_cut_FD_Dir,
-                      "FD", kBlue, true, true, false, true, -1, -1, 0, false);
+        hP_piplus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        histPlotter1D(c1, hP_piplus_1e_cut_CD, false, true, 1., "P_{#pi^{+}}", "1e cut", plots, 2, false, true, sP_CD, "03_P_piplus_1e_cut_CD", hP_piplus_1e_cut_CD_Dir,
+//                      "CD", kBlue, true, true, false, true, -1, -1, 0, false);
+        hP_piplus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        histPlotter1D(c1, hP_piplus_1e_cut_FD, false, true, 1., "P_{#pi^{+}}", "1e cut", plots, 2, false, true, sP_FD, "03_P_piplus_1e_cut_FD", hP_piplus_1e_cut_FD_Dir,
+//                      "FD", kBlue, true, true, false, true, -1, -1, 0, false);
 
-        histPlotter1D(c1, hP_piminus_1e_cut_CD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_CD, "04_P_piminus_1e_cut_CD",
-                      hP_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, false, true, -1, -1, 0, false);
-        histPlotter1D(c1, hP_piminus_1e_cut_FD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_FD, "04_P_piminus_1e_cut_FD",
-                      hP_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, false, true, -1, -1, 0, false);
+        hP_piminus_1e_cut_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        histPlotter1D(c1, hP_piminus_1e_cut_CD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_CD, "04_P_piminus_1e_cut_CD",
+//                      hP_piminus_1e_cut_CD_Dir, "CD", kBlue, true, true, false, true, -1, -1, 0, false);
+        hP_piminus_1e_cut_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
+//        histPlotter1D(c1, hP_piminus_1e_cut_FD, false, true, 1., "P_{#pi^{-}}", "1e cut", plots, 2, false, true, sP_FD, "04_P_piminus_1e_cut_FD",
+//                      hP_piminus_1e_cut_FD_Dir, "FD", kBlue, true, true, false, true, -1, -1, 0, false);
+        //</editor-fold>
+
+//  Momentum histograms (1p, CD & FD)  --------------------------------------------------------------
+
+        //<editor-fold desc="Momentum histograms before & after cuts (1p, CD & FD)">
+        hP_e_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts_1p.GetLowerCut(), e_momentum_cuts_1p.GetUpperCut(), 0, false);
+        hP_p_1p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_1p.GetLowerCut(), p_momentum_cuts_1p.GetUpperCut(), 0, false);
+        hP_p_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_1p.GetLowerCut(), p_momentum_cuts_1p.GetUpperCut(), 0, false);
+        //</editor-fold>
+
+        //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
+        hP_p_1_vs_P_p_2_2p.hDrawAndSave(SampleName, c1, plots, false);
+//        histPlotter2D(c1, hP_p_1_vs_P_p_2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hP_p_1_vs_P_p_2_2p_Dir, "04_P_p_1_vs_P_p_2", true);
         //</editor-fold>
 
 //  Momentum histograms (1e2p, CD & FD)  --------------------------------------------------------------
 
         //<editor-fold desc="Momentum histograms before & after cuts (1e2p, CD & FD)">
-        histPlotter1D(c1, hP_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "02_P_e_1e2p_BC_FD", hP_e_1e2p_BC_FD_Dir,
-                      "", kBlue, true, true, false, true, e_momentum_cuts_2p.GetUpperCut(), e_momentum_cuts_2p.GetLowerCut(), 0, false);
-        histPlotter1D(c1, hP_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "02_P_e_1e2p_AC_FD", hP_e_1e2p_AC_FD_Dir,
-                      "", kBlue, true, true, false, true, e_momentum_cuts_2p.GetUpperCut(), e_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_e_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_e_1e2p_BC_FD, false, true, 1., "P_{e} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "02_P_e_1e2p_BC_FD", hP_e_1e2p_BC_FD_Dir,
+//                      "", kBlue, true, true, false, true, e_momentum_cuts_2p.GetUpperCut(), e_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_e_1e2p_AC_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_e_1e2p_AC_FD, false, true, 1., "P_{e} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "02_P_e_1e2p_AC_FD", hP_e_1e2p_AC_FD_Dir,
+//                      "", kBlue, true, true, false, true, e_momentum_cuts_2p.GetUpperCut(), e_momentum_cuts_2p.GetLowerCut(), 0, false);
 
-        histPlotter1D(c1, hP_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "03_P_p_1e2p_BC_CD", hP_p_1e2p_BC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
-        histPlotter1D(c1, hP_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "03_P_p_1e2p_AC_CD", hP_p_1e2p_AC_CD_Dir,
-                      "CD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_1e2p_BC_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_1e2p_BC_CD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_CD, "03_P_p_1e2p_BC_CD", hP_p_1e2p_BC_CD_Dir,
+//                      "CD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_1e2p_AC_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_1e2p_AC_CD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_CD, "03_P_p_1e2p_AC_CD", hP_p_1e2p_AC_CD_Dir,
+//                      "CD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
 
-        histPlotter1D(c1, hP_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "04_P_p_1e2p_BC_FD", hP_p_1e2p_BC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
-        histPlotter1D(c1, hP_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", hP_p_1e2p_AC_FD_Dir,
-                      "FD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_1e2p_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_1e2p_BC_FD, false, true, 1., "P_{p} Before Cut", "1e2p", plots, 2, false, true, sP_1e2p_BC_FD, "04_P_p_1e2p_BC_FD", hP_p_1e2p_BC_FD_Dir,
+//                      "FD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_1e2p_AC_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_1e2p_AC_FD, false, true, 1., "P_{p} After Cut", "1e2p", plots, 2, false, true, sP_1e2p_AC_FD, "04_P_p_1e2p_AC_FD", hP_p_1e2p_AC_FD_Dir,
+//                      "FD", kBlue, true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Momentum histograms before & after cuts (2p, CD & FD)">
-        histPlotter1D(c1, hP_e_2p_FD, false, true, 1., "Electron momentum P_{e}", "2p", plots, 2, false, true, sP_2p_FD, "01_P_e_2p_FD", hP_e_2p_FD_Dir, "", kBlue, true,
-                      true, false, true, e_momentum_cuts_2p.GetUpperCut(), e_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_e_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts_2p.GetLowerCut(), e_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_e_2p_FD, false, true, 1., "Electron momentum P_{e}", "2p", plots, 2, false, true, sP_2p_FD, "01_P_e_2p_FD", hP_e_2p_FD_Dir, "", kBlue, true,
+//                      true, false, true, e_momentum_cuts_2p.GetUpperCut(), e_momentum_cuts_2p.GetLowerCut(), 0, false);
 
-        histPlotter1D(c1, hP_p_2p_CD, false, true, 1., "Proton momentum P_{p}", "2p", plots, 2, false, true, sP_2p_CD, "02_P_p_2p_CD", hP_p_2p_CD_Dir, "CD", kBlue, true,
-                      true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
-        histPlotter1D(c1, hP_p_2p_FD, false, true, 1., "Proton momentum P_{p}", "2p", plots, 2, false, true, sP_2p_FD, "02_P_p_2p_FD", hP_p_2p_FD_Dir, "FD", kBlue, true,
-                      true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_2p_CD, false, true, 1., "Proton momentum P_{p}", "2p", plots, 2, false, true, sP_2p_CD, "02_P_p_2p_CD", hP_p_2p_CD_Dir, "CD", kBlue, true,
+//                      true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_2p_FD, false, true, 1., "Proton momentum P_{p}", "2p", plots, 2, false, true, sP_2p_FD, "02_P_p_2p_FD", hP_p_2p_FD_Dir, "FD", kBlue, true,
+//                      true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
 
-        histPlotter1D(c1, hP_p_1_2p, false, true, 1., "Leading proton momentum P_{1}", "2p", plots, 2, false, true, sP_2p_CD, "03_P_p_1_2p", hP_p_1_2p_Dir, "", kBlue,
-                      true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
-        histPlotter1D(c1, hP_p_2_2p, false, true, 1., "Recoil proton momentum P_{2}", "2p", plots, 2, false, true, sP_2p_FD, "03_P_p_2_2p", hP_p_2_2p_Dir, "", kBlue,
-                      true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_1_2p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_1_2p, false, true, 1., "Leading proton momentum P_{1}", "2p", plots, 2, false, true, sP_2p_CD, "03_P_p_1_2p", hP_p_1_2p_Dir, "", kBlue,
+//                      true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
+        hP_p_2_2p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts_2p.GetLowerCut(), p_momentum_cuts_2p.GetUpperCut(), 0, false);
+//        histPlotter1D(c1, hP_p_2_2p, false, true, 1., "Recoil proton momentum P_{2}", "2p", plots, 2, false, true, sP_2p_FD, "03_P_p_2_2p", hP_p_2_2p_Dir, "", kBlue,
+//                      true, true, false, true, p_momentum_cuts_2p.GetUpperCut(), p_momentum_cuts_2p.GetLowerCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
-        histPlotter2D(c1, hP_p_1_vs_P_p_2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hP_p_1_vs_P_p_2_2p_Dir, "04_P_p_1_vs_P_p_2", true);
+        hP_p_1_vs_P_p_2_2p.hDrawAndSave(SampleName, c1, plots, false);
+//        histPlotter2D(c1, hP_p_1_vs_P_p_2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hP_p_1_vs_P_p_2_2p_Dir, "04_P_p_1_vs_P_p_2", true);
         //</editor-fold>
 
     } else {
@@ -5487,6 +5135,7 @@ void EventAnalyser() {
     myLogFile << "norm_Chi2_plots = " << BoolToString(norm_Chi2_plots) << "\n";
     myLogFile << "norm_Vertex_plots = " << BoolToString(norm_Vertex_plots) << "\n";
     myLogFile << "norm_SF_plots = " << BoolToString(norm_SF_plots) << "\n";
+    myLogFile << "norm_Momentum_plots = " << BoolToString(norm_Momentum_plots) << "\n";
     myLogFile << "norm_Fiducial_plots = " << BoolToString(norm_Fiducial_plots) << "\n\n";
 
     myLogFile << "norm_Angle_plots_master = " << BoolToString(norm_Angle_plots_master) << "\n";

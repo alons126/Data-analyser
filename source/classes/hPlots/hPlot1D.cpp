@@ -1578,13 +1578,7 @@ void hPlot1D::hDrawAndSaveWFit(std::string &SampleName, TCanvas *h1DCanvas, TLis
 }
 //</editor-fold>
 
-////<editor-fold desc="to_string_with_precision function">
-//string hPlot1D::to_string_with_precision(const T a_value, const int n = 2) {
-//    std::ostringstream out;
-//    out.precision(n);
-//    out << std::fixed << a_value;
-//    return out.str();
-//}//</editor-fold>
+// fitf function ------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="fitf function">
 Double_t hPlot1D::fitf(Double_t *v, Double_t *par) {
@@ -1593,5 +1587,24 @@ Double_t hPlot1D::fitf(Double_t *v, Double_t *par) {
 
     Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
     return fitval;
+}
+//</editor-fold>
+
+// fitf function ------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="fitf function">
+void hPlot1D::hLogEventCuts(clas12::region_part_ptr Particle, double Lower_cut, double Upper_cut, double CutCenter = 0, double Weight = 1) {
+    TVector3 P;
+    P.SetMagThetaPhi(Particle->getP(), Particle->getTheta(), Particle->getPhi());
+
+    if ((fabs(Upper_cut) == 9999) && (fabs(Lower_cut) == 9999)) {
+        Histogram1D->Fill(P.Mag(), Weight);
+    } else if ((fabs(Upper_cut) != 9999) && (fabs(Lower_cut) == 9999)) {
+        if (P.Mag() <= Upper_cut) { Histogram1D->Fill(P.Mag(), Weight); }
+    } else if ((fabs(Upper_cut) == 9999) && (fabs(Lower_cut) != 9999)) {
+        if (P.Mag() >= Lower_cut) { Histogram1D->Fill(P.Mag(), Weight); }
+    } else if ((fabs(Upper_cut) != 9999) && (fabs(Lower_cut) != 9999)) {
+        if ((P.Mag() >= Lower_cut) && (P.Mag() <= Upper_cut)) { Histogram1D->Fill(P.Mag(), Weight); }
+    }
 }
 //</editor-fold>

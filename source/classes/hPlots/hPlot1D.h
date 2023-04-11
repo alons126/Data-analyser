@@ -32,7 +32,7 @@
 #include <TROOT.h>
 */
 
-#include "../../functions/GeneralFunctions.h"
+//#include "../../functions/GeneralFunctions.h"
 
 class hPlot1D {
 protected:
@@ -84,7 +84,7 @@ protected:
 
 public:
     // Constructor declaration:
-    hPlot1D() {}
+    hPlot1D() {} // Default constructor
 
     hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat,
             double LowerXlim, double UpperXlim, int hnob = 100);
@@ -154,12 +154,6 @@ public:
                        string Histogram1DSaveName, const string &Histogram1DSaveNamePath, bool centerTitle = true, bool showStats = true, bool title2 = false,
                        bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0, bool plot_max = true);
 
-    // histPlotter1DwFit function:
-    void histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
-                           double custom_normalization_factor, string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list,
-                           string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, double &plot_Xmax, double &plot_lcut,
-                           double &plot_ucut, double factor, bool plot_max = true, string particle = "");
-
     // histPlotter1D function (unified):
     void histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                        double custom_normalization_factor, TList *Histogram_list, THStack *Histogram1DStack, double plot_lower_cut = -9999, double plot_upper_cut = 9999,
@@ -170,12 +164,19 @@ public:
                        double custom_normalization_factor, TList *Histogram_list, double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0,
                        bool plot_max = true);
 
-// Histogram methods:
-//    template<typename T>
-//    string to_string_with_precision(const T a_value, const int n = 2);
+    // histPlotter1DwFit function:
+    void histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+                           double custom_normalization_factor, string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list,
+                           string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, double &plot_Xmax, double &plot_lcut,
+                           double &plot_ucut, double factor, bool plot_max = true, string particle = "");
 
+    // fitf function:
     Double_t fitf(Double_t *v, Double_t *par);
 
+    // LogEventCuts function:
+    void hLogEventCuts(clas12::region_part_ptr Particle, double Lower_cut, double Upper_cut, double CutCenter = 0, double Weight = 1);
+
+// Histogram methods:
     void hFill(double data) { Histogram1D->Fill(data); }
 
     void hFill(double data, double weight) { Histogram1D->Fill(data, weight); }

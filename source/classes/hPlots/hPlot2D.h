@@ -55,7 +55,7 @@ protected:
     std::string Histogram2DSaveNamePath = "./"; // default Histogram2DSaveNamePath
 public:
     // Constructor declaration ------------------------------------------------------------------------------------------------------------------------------------------
-    hPlot2D() {}
+    hPlot2D() {} // Default constructor
 
     hPlot2D(std::string h2DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, double LowerXlim,
             double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
