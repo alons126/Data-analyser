@@ -39,6 +39,24 @@ hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::
             HistogramNumberOfYBins, HistogramYAxisLimits.at(0), HistogramYAxisLimits.at(1));
 }
 
+hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, std::string sPath, std::string sName,
+                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
+    Histogram2DTitles["FinalState"] = fState, Histogram2DTitles["DetectorRegion"] = dRegion;
+    Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
+    HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
+    HistogramYAxisLimits.push_back(LowerYlim), HistogramYAxisLimits.push_back(UpperYlim);
+    HistogramNumberOfXBins = hnoXb, HistogramNumberOfYBins = hnoYb;
+    Histogram2DSaveNamePath = sPath;
+    Histogram2DSaveName = sName;
+
+    Histogram2D = new TH2D(
+            (Histogram2DTitles["HistogramStatTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")").c_str(),
+            (Histogram2DTitles["HistogramTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")" + ";" +
+             Histogram2DTitles["XaxisTitle"] + ";" + Histogram2DTitles["YaxisTitle"]).c_str(),
+            HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1),
+            HistogramNumberOfYBins, HistogramYAxisLimits.at(0), HistogramYAxisLimits.at(1));
+}
+
 hPlot2D::hPlot2D(std::string hst, std::string ht, std::string xat, std::string yat,
                  double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
     Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
@@ -56,19 +74,28 @@ hPlot2D::hPlot2D(std::string hst, std::string ht, std::string xat, std::string y
 // histPlotter2D function-----------------------------------------------------------------------------------------------------------------------------------------
 
 // histPlotter2D function (regular)
-void hPlot2D::histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
-                            TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, bool showStats = true) {
+void
+hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
+                       std::string Histogram2DSaveName, bool showStats = true) {
+
+    std::string sNameFlag;
+
+    if (findSubstring(SampleName, "simulation")) {
+        sNameFlag = "s";
+    } else if (findSubstring(SampleName, "data")) {
+        sNameFlag = "d";
+    }
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
     double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1225;
 
-    Histogram2D->SetTitleSize(titleSize, "xyz");
-    Histogram2D->GetXaxis()->SetLabelSize(labelSizex);
-    Histogram2D->GetXaxis()->CenterTitle(centerTitle);
-    Histogram2D->GetYaxis()->SetLabelSize(labelSizey);
-    Histogram2D->GetYaxis()->CenterTitle(centerTitle);
-    Histogram2D->GetZaxis()->SetLabelSize(labelSizez);
+    Histogram2D->SetTitleSize(Histogram2DTitleSizes.at(0), "xyz");
+    Histogram2D->GetXaxis()->SetLabelSize(Histogram2DTitleSizes.at(1));
+    Histogram2D->GetXaxis()->CenterTitle(CenterTitle);
+    Histogram2D->GetYaxis()->SetLabelSize(Histogram2DTitleSizes.at(2));
+    Histogram2D->GetYaxis()->CenterTitle(CenterTitle);
+    Histogram2D->GetZaxis()->SetLabelSize(Histogram2DTitleSizes.at(3));
     Histogram_list->Add(Histogram2D);
 
     if (Histogram2D->Integral() == 0.) {
@@ -84,21 +111,38 @@ void hPlot2D::histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, doubl
         Histogram2D->Draw("colz");
     }
 
-    if (zlogScalePlot == true) { Histogram2DCanvas->SetLogz(1); }
+    gStyle->SetStatX(0.87);
+    gStyle->SetStatY(0.875);
 
     if (showStats == false) { Histogram2D->SetStats(0); }
 
-    gStyle->SetStatX(0.87);
-    gStyle->SetStatY(0.875);
-    Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + Histogram2DSaveName + ".png").c_str());
+    if (ZLogScalePlot == true) {
+        Histogram2DCanvas->SetLogz(1);
+        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
+    }
+
+    if (ZLinearScalePlot == true) {
+        Histogram2DCanvas->SetLogz(0);
+        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
+    }
+
     gStyle->SetStatX(DefStatX);
     gStyle->SetStatY(DefStatY);
     Histogram2DCanvas->Clear();
+//    if (ZLogScalePlot == true) { Histogram2DCanvas->SetLogz(1); }
+//
+//    if (showStats == false) { Histogram2D->SetStats(0); }
+//
+//    gStyle->SetStatX(0.87);
+//    gStyle->SetStatY(0.875);
+//    Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + ".png").c_str());
+//    gStyle->SetStatX(DefStatX);
+//    gStyle->SetStatY(DefStatY);
+//    Histogram2DCanvas->Clear();
 }
 
-void hPlot2D::hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState) {
-    histPlotter2D(h2DCanvas, Histogram2D, Histogram2DTitleSizes.at(0), CenterTitle, Histogram2DTitleSizes.at(1), Histogram2DTitleSizes.at(2), Histogram2DTitleSizes.at(3),
-                  hList, ZLogScalePlot, Histogram2DSaveNamePath, Histogram2DSaveName, ShowStats);
+void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *hList, bool showStats) {
+    histPlotter2D(SampleName, h2DCanvas, Histogram2D, hList, Histogram2DSaveNamePath, Histogram2DSaveName, showStats);
 }
 
 // histPlotter2D function (Beta vs. P plots, all particles):
@@ -215,7 +259,6 @@ void hPlot2D::hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalSt
                   hList, ZLogScalePlot, Histogram2DSaveNamePath, Histogram2DSaveName, Beta_function1, particle1, plot_legend);
 }
 
-
 // histPlotter2D function (Beta vs. P plots, by charge):
 void hPlot2D::histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
                             TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, TF1 *Beta_function1,
@@ -273,6 +316,8 @@ void hPlot2D::histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, doubl
     gStyle->SetStatY(DefStatY);
     Histogram2DCanvas->Clear();
 }
+
+// hDrawAndSave function-----------------------------------------------------------------------------------------------------------------------------------------
 
 void hPlot2D::hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2,
                            std::string particle2, TF1 *Beta_function3, std::string particle3, bool plot_legend) {

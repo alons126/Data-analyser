@@ -48,17 +48,23 @@ protected:
 
     /* Histogram scale settings */
     bool ZLogScalePlot = true;
+    bool ZLinearScalePlot = true;
 
     /* Histogram save name and path */
     std::string Histogram2DSaveName = "Histogram2D"; // default Histogram2DSaveName
     std::string Histogram2DSaveNamePath = "./"; // default Histogram2DSaveNamePath
 public:
     // Constructor declaration ------------------------------------------------------------------------------------------------------------------------------------------
+    hPlot2D() {}
+
     hPlot2D(std::string h2DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, double LowerXlim,
             double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
 
     hPlot2D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, double LowerXlim, double UpperXlim,
             double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
+
+    hPlot2D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, std::string sPath, std::string sName,
+            double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
 
     hPlot2D(std::string hst, std::string ht, std::string xat, std::string yat, double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250,
             int hnoYb = 250);
@@ -66,10 +72,10 @@ public:
     // histPlotter2D function -------------------------------------------------------------------------------------------------------------------------------------------
 
     // histPlotter2D function (regular)
-    void histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
-                       TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, bool showStats = true);
+    void histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
+                       std::string Histogram2DSaveName, bool showStats = true);
 
-    void hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState);
+    void hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *hList, bool showStats = false);
 
     // histPlotter2D function (Beta vs. P plots, all particles):
     void histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,

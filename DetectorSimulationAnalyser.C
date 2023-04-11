@@ -837,41 +837,85 @@ void EventAnalyser() {
     //<editor-fold desc="Sampling Fraction (SF) histograms (FD only)">
 
     //<editor-fold desc="SF histograms (1e cut, FD only)">
-    THStack *sSF_1e_cut_FD = new THStack("SF (1e Cut, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e Cut, FD);f");
-    TH1D *hSF_1e_cut_BC_FD, *hSF_1e_cut_AC_FD;
-    string hSF_1e_cut_BC_FD_Dir, hSF_1e_cut_AC_FD_Dir;
+    hPlot1D hSF_1e_cut_BC_FD, hSF_1e_cut_AC_FD;
 
     if (apply_cuts == false) {
-        hSF_1e_cut_BC_FD = new TH1D("SF BC (1e Cut, FD)", "Sampling Fraction f Before Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                    100, SF_lboundary, SF_uboundary);
-        hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                    100, SF_lboundary, SF_uboundary);
-        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
-        hSF_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"];
+        hSF_1e_cut_BC_FD = hPlot1D("1e cut", "FD", "SF BC", "Sampling fraction f - before cuts", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                   directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"], "01_SF_1e_cut_before_SF_cuts", SF_lboundary, SF_uboundary);
+        hSF_1e_cut_AC_FD = hPlot1D("1e cut", "FD", "SF AC", "Sampling fraction f - after cuts", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                   directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"], "02_SF_1e_cut_after_SF_cuts", SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_BC_FD = new TH1D("SF BC (1e Cut, FD)", "Sampling Fraction f Before Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                    100, SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                    100, SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
+//        hSF_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"];
     } else {
-        hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
-        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
+        hSF_1e_cut_BC_FD = hPlot1D("1e cut", "FD", "SF", "Sampling fraction f", "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+                                   directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"], "01_SF_1e_cut", SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
     }
+//    THStack *sSF_1e_cut_FD = new THStack("SF (1e Cut, FD)", "Sampling Fraction (f = #frac{E_{PCAL}+E_{IN}+E_{OUT}}{P_{e}}) Histogram (1e Cut, FD);f");
+//    TH1D *hSF_1e_cut_BC_FD, *hSF_1e_cut_AC_FD;
+//    string hSF_1e_cut_BC_FD_Dir, hSF_1e_cut_AC_FD_Dir;
+//
+//    if (apply_cuts == false) {
+//        hSF_1e_cut_BC_FD = new TH1D("SF BC (1e Cut, FD)", "Sampling Fraction f Before Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                    100, SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_AC_FD = new TH1D("SF AC (1e Cut, FD)", "Sampling Fraction f After Cuts (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                    100, SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
+//        hSF_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_AC_Directory"];
+//    } else {
+//        hSF_1e_cut_BC_FD = new TH1D("SF (1e Cut, FD)", "Sampling Fraction f (1e Cut, FD);f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", 100, SF_lboundary, SF_uboundary);
+//        hSF_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_plots_1e_cut_BC_Directory"];
+//    }
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P histograms (1e cut, FD only)">
-    TH2D *hSF_VS_P_e_1e_cut_BC_FD, *hSF_VS_P_e_1e_cut_AC_FD;
-    string hSF_VS_P_e_1e_cut_BC_FD_Dir, hSF_VS_P_e_1e_cut_AC_FD_Dir;
+    hPlot2D hSF_VS_P_e_1e_cut_BC_FD, hSF_VS_P_e_1e_cut_AC_FD;
 
     if (apply_cuts == false) {
-        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} BC (1e Cut, FD)",
-                                           "Sampling Fraction f vs. P_{e} Before Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-        hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
-                                           "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
-        hSF_VS_P_e_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"];
+        hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} BC", "Sampling fraction f vs. P_{e} - before cuts", "P_{e} [GeV]",
+                                          "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"],
+                                          "01_SF_VS_P_e_1e_cut_BC_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} BC (1e Cut, FD)",
+//                                           "Sampling Fraction f vs. P_{e} Before Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+        hSF_VS_P_e_1e_cut_AC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} AC", "Sampling fraction f vs. P_{e} - after cuts", "P_{e} [GeV]",
+                                          "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"],
+                                          "01_SF_VS_P_e_1e_cut_AC_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
+//                                           "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
+//        hSF_VS_P_e_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"];
     } else {
-        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
-        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
+        hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+                                          "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"],
+                                          "01_SF_VS_P_e_1e_cut_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
     }
+//    TH2D *hSF_VS_P_e_1e_cut_BC_FD, *hSF_VS_P_e_1e_cut_AC_FD;
+//    string hSF_VS_P_e_1e_cut_BC_FD_Dir, hSF_VS_P_e_1e_cut_AC_FD_Dir;
+//
+//    if (apply_cuts == false) {
+//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} BC (1e Cut, FD)",
+//                                           "Sampling Fraction f vs. P_{e} Before Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_AC_FD = new TH2D("SF vs. P_{e} AC (1e Cut, FD)",
+//                                           "Sampling Fraction f vs. P_{e} After Cuts (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
+//        hSF_VS_P_e_1e_cut_AC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"];
+//    } else {
+//        hSF_VS_P_e_1e_cut_BC_FD = new TH2D("SF vs. P_{e} (1e Cut, FD)", "Sampling Fraction f vs. P_{e} (1e Cut, FD);P_{e} [GeV];f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
+//                                           250, 0, beamE * 1.1, 250, SF_lboundary, SF_uboundary);
+//        hSF_VS_P_e_1e_cut_BC_FD_Dir = directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"];
+//    }
     //</editor-fold>
 
     //<editor-fold desc="SF histograms (2p, FD only)">
@@ -2294,13 +2338,16 @@ void EventAnalyser() {
 
         if (apply_cuts == false) {
             /* SF plots before cuts */
-            hSF_1e_cut_BC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_BC_FD->Fill(P_e, EoP_e);
+            hSF_1e_cut_BC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_BC_FD.hFill(P_e, EoP_e, Weight);
+//            hSF_1e_cut_BC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_BC_FD->Fill(P_e, EoP_e);
 
             /* SF plots after cuts */
             if ((EoP_e >= clasAna.getEcalSFLowerCut()) && (EoP_e <= clasAna.getEcalSFUpperCut())) {
-                hSF_1e_cut_AC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_AC_FD->Fill(P_e, EoP_e);
+                hSF_1e_cut_AC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_AC_FD.hFill(P_e, EoP_e, Weight);
+//                hSF_1e_cut_AC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_AC_FD->Fill(P_e, EoP_e);
             }
-        } else { hSF_1e_cut_BC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_BC_FD->Fill(P_e, EoP_e); }
+        } else { hSF_1e_cut_BC_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1e_cut_BC_FD.hFill(P_e, EoP_e, Weight); }
+//        } else { hSF_1e_cut_BC_FD->Fill(EoP_e), hSF_VS_P_e_1e_cut_BC_FD->Fill(P_e, EoP_e); }
 
         /* Testing fiducial cuts */
         if (apply_cuts == false) {
@@ -4095,71 +4142,114 @@ void EventAnalyser() {
     if (SF_plots) {
         cout << "\n\nPlotting Sampling Fraction histograms...\n\n";
 
-//  SF histograms --------------------------------------------------------------
+//  SF plots ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="SF and SF vs. P histograms (1e cut, FD)">
         if (apply_cuts == false) {
-            histPlotter1D(c1, hSF_1e_cut_BC_FD, norm_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
-                          "01_SF_1e_cut_before_SF_cuts", hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(),
-                          clasAna.getEcalSFLowerCut(), 0, false);
+            hSF_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
+//            histPlotter1D(c1, hSF_1e_cut_BC_FD, norm_SF_plots, true, 1., "Sampling Fraction f Before Cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
+//                          "01_SF_1e_cut_before_SF_cuts", hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(),
+//                          clasAna.getEcalSFLowerCut(), 0, false);
 
-            histPlotter1D(c1, hSF_1e_cut_AC_FD, norm_SF_plots, true, 1., "Sampling Fraction f After cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
-                          "02_SF_1e_cut_after_SF_cuts", hSF_1e_cut_AC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(),
-                          clasAna.getEcalSFLowerCut(), 0, false);
+            hSF_1e_cut_AC_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
+//            histPlotter1D(c1, hSF_1e_cut_AC_FD, norm_SF_plots, true, 1., "Sampling Fraction f After cuts", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD,
+//                          "02_SF_1e_cut_after_SF_cuts", hSF_1e_cut_AC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(),
+//                          clasAna.getEcalSFLowerCut(), 0, false);
 
             //<editor-fold desc="SF vs. P before cuts (1e cut, FD)">
-            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
-            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
-            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
-            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
-            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
-            c1->SetLogz(1);
-            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
-            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_BC_FD.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hSF_VS_P_e_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, false);
+
+//            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
+//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
+//            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
+//            c1->SetLogz(1);
+//            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
+//            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_BC_FD.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
+
+//            //<editor-fold desc="SF vs. P before cuts (1e cut, FD)">
+//            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
+//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
+//            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
+//            c1->SetLogz(1);
+//            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
+//            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_BC_FD.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
+//            //</editor-fold>
 
             //<editor-fold desc="SF vs. P after cuts (1e cut, FD)">
-            hSF_VS_P_e_1e_cut_AC_FD->SetTitleSize(0.06, "xyz");
-            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->SetLabelSize(0.0425);
-            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->CenterTitle(true);
-            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->SetLabelSize(0.0425);
-            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->CenterTitle(true);
-            hSF_VS_P_e_1e_cut_AC_FD->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(hSF_VS_P_e_1e_cut_AC_FD);
-            hSF_VS_P_e_1e_cut_AC_FD->Draw("colz");
-            c1->SetLogz(1);
-            hSF_VS_P_e_1e_cut_AC_FD->SetStats(0);
-            c1->SaveAs((hSF_VS_P_e_1e_cut_AC_FD_Dir + "02_SF_VS_P_e_1e_cut_AC_FD.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hSF_VS_P_e_1e_cut_AC_FD.hDrawAndSave(SampleName, c1, plots, false);
+
+//            hSF_VS_P_e_1e_cut_AC_FD->SetTitleSize(0.06, "xyz");
+//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hSF_VS_P_e_1e_cut_AC_FD);
+//            hSF_VS_P_e_1e_cut_AC_FD->Draw("colz");
+//            c1->SetLogz(1);
+//            hSF_VS_P_e_1e_cut_AC_FD->SetStats(0);
+//            c1->SaveAs((hSF_VS_P_e_1e_cut_AC_FD_Dir + "02_SF_VS_P_e_1e_cut_AC_FD.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
+            //            //<editor-fold desc="SF vs. P after cuts (1e cut, FD)">
+//            hSF_VS_P_e_1e_cut_AC_FD->SetTitleSize(0.06, "xyz");
+//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetXaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetYaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_AC_FD->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hSF_VS_P_e_1e_cut_AC_FD);
+//            hSF_VS_P_e_1e_cut_AC_FD->Draw("colz");
+//            c1->SetLogz(1);
+//            hSF_VS_P_e_1e_cut_AC_FD->SetStats(0);
+//            c1->SaveAs((hSF_VS_P_e_1e_cut_AC_FD_Dir + "02_SF_VS_P_e_1e_cut_AC_FD.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
+//            //</editor-fold>
+
         } else {
-            histPlotter1D(c1, hSF_1e_cut_BC_FD, norm_SF_plots, true, 1., "Sampling Fraction f", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD, "01_SF_1e_cut",
-                          hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(), clasAna.getEcalSFLowerCut(), 0, false);
+            hSF_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, norm_SF_plots, true, 1., clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut(), 0, false);
+//            histPlotter1D(c1, hSF_1e_cut_BC_FD, norm_SF_plots, true, 1., "Sampling Fraction f", "1e Cut", plots, 2, false, true, sSF_1e_cut_FD, "01_SF_1e_cut",
+//                          hSF_1e_cut_BC_FD_Dir, "FD", kBlue, true, true, false, true, clasAna.getEcalSFUpperCut(), clasAna.getEcalSFLowerCut(), 0, false);
 
             //<editor-fold desc="SF vs. P 1e2p (FD)">
-            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
-            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
-            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
-            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
-            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
-            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
-            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
-            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
-            c1->SetLogz(1);
-            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
-            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_FD.png").c_str());
-            gStyle->SetStatX(DefStatX);
-            gStyle->SetStatY(DefStatY);
-            c1->Clear();
+            hSF_VS_P_e_1e_cut_BC_FD.hDrawAndSave(SampleName, c1, plots, false);
+
+//            hSF_VS_P_e_1e_cut_BC_FD->SetTitleSize(0.06, "xyz");
+//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetXaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->SetLabelSize(0.0425);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetYaxis()->CenterTitle(true);
+//            hSF_VS_P_e_1e_cut_BC_FD->GetZaxis()->SetLabelSize(0.0425);
+//            plots->Add(hSF_VS_P_e_1e_cut_BC_FD);
+//            hSF_VS_P_e_1e_cut_BC_FD->Draw("colz");
+//            c1->SetLogz(1);
+//            hSF_VS_P_e_1e_cut_BC_FD->SetStats(0);
+//            c1->SaveAs((hSF_VS_P_e_1e_cut_BC_FD_Dir + "01_SF_VS_P_e_1e_cut_FD.png").c_str());
+//            gStyle->SetStatX(DefStatX);
+//            gStyle->SetStatY(DefStatY);
+//            c1->Clear();
             //</editor-fold>
 
         }
