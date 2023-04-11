@@ -455,7 +455,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (FD only)">
 
-    //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (1e cut, FD only)">
+    //<editor-fold desc="Nphe plots (1e cut, FD only)">
     hPlot1D hNphe_1e_cut_BC_FD, hNphe_1e_cut_AC_FD;
 
     if (apply_cuts == false) {
@@ -486,7 +486,7 @@ void EventAnalyser() {
 //    }
     //</editor-fold>
 
-    //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (1p, FD only)">
+    //<editor-fold desc="Nphe plots (1p, FD only)">
     hPlot1D hNphe_1p_BC_FD, hNphe_1p_AC_FD;
 
     if (apply_cuts == false) {
@@ -500,7 +500,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Number of Photo-electrons (Nphe) histograms (2p, FD only)">
+    //<editor-fold desc="Nphe plots (2p, FD only)">
     hPlot1D hNphe_2p_FD = hPlot1D("2p", "", "N_{phe} in HTCC", "#Photo-electrons in HTCC - N_{phe}", "N_{phe}",
                                   directories.Nphe_Directory_map["Nphe_2p_Directory"], "01_Nphe_2p", 0, Nphe_boundary);
 //    THStack *sNphe_2p_FD = new THStack("N_{phe} in HTCC (2p)", "#Photo-electrons in HTCC - N_{phe} Histogram (2p);N_{phe}");
