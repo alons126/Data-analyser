@@ -3,6 +3,12 @@
 //
 
 struct Histogram1D {
-    int myNum;
-    string myString;
+    std::string Proccess = "";
+    std::string FinalState;
+    std::string DetectorRegion = "";
+    TH1D *Histogram1d;
+    int NumOfXBins = 100;
+    std::string HistogramTitle;
+    std::string SaveDirectory;
+    std::string SaveName;
 };

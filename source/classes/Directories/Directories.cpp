@@ -191,9 +191,9 @@ Directories::Directories(std::string plots_path) {
     Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
                                                                      Find(Beta_VS_P_Daughter_Folders, "01_All_e/By_charge") + "/";
 
-    Beta_VS_P_Directory_map["Beta_VS_P_Only_1e_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
+    Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
                                                              Find(Beta_VS_P_Daughter_Folders, "02_1e_cut") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_Only_1e_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
+    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
                                                                        Find(Beta_VS_P_Daughter_Folders, "02_1e_cut/By_charge") + "/";
 
     Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +

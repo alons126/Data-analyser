@@ -9,7 +9,8 @@ class DSCuts {
 public:
     /* Constructors */
     // Default constructor:
-    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1);
+    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -9999, double ulim = 9999);
+//    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1);
 
     /* Set functions */
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
@@ -58,7 +59,8 @@ public:
     std::string GetAppliedCuts() { return AppliedCuts; }
 
     double MeanFromHistogram, MeanFromFit, FitStdFactor;
-    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
+    vector<double> Cuts = {0, -9999, 9999}; // {mean, lower cut, upper cut}
+//    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 private:
     std::string CutVariable, Region, Particle, AppliedCuts;
     int particlePDG;
