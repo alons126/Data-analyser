@@ -4056,8 +4056,6 @@ void EventAnalyser() {
                                                     true);
         //</editor-fold>
 
-        //</editor-fold>
-
     } else {
         cout << "\n\nBeta vs. P plots are disabled by user.\n\n";
     } // end of Beta vs. P plot if
