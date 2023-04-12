@@ -336,7 +336,7 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
 
     if (showStats == false || Histogram2D->Integral() == 0.) { Histogram2D->SetStats(0); }
 
-    if (ZLogScalePlot == true && Histogram2D->Integral() != 0.) {
+    if (ZLogScalePlot == true) {
         Histogram2DCanvas->SetLogz(1);
         Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
     }
