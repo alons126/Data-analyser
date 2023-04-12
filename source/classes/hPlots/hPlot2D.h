@@ -60,6 +60,9 @@ public:
     hPlot2D(std::string h2DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, double LowerXlim,
             double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
 
+    hPlot2D(std::string h2DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat,
+            std::string sPath, std::string sName, double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
+
     hPlot2D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, double LowerXlim, double UpperXlim,
             double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250);
 
@@ -71,35 +74,45 @@ public:
 
     // histPlotter2D function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    // histPlotter2D function (regular)
+    //<editor-fold desc="histPlotter2D function (regular)">
+    /* histPlotter2D function (regular) */
     void histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                        std::string Histogram2DSaveName, bool showStats = true);
 
+    /* Corresponding hDrawAndSave function (regular) */
     void hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *hList, bool showStats = false);
+    //</editor-fold>
 
-    // histPlotter2D function (Beta vs. P plots, all particles):
-    void histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
-                       TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, TF1 *Beta_function1,
-                       TF1 *Beta_function2, TF1 *Beta_function3, TF1 *Beta_function4, TF1 *Beta_function5, TF1 *Beta_function6, TF1 *Beta_function7, TF1 *Beta_function8,
-                       TF1 *Beta_function9);
+    //<editor-fold desc="histPlotter2D function (Beta vs. P plots, all particles)">
+    /* histPlotter2D function (Beta vs. P plots, all particles) */
+    void histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
+                       std::string Histogram2DSaveName, TF1 *Beta_function1, TF1 *Beta_function2, TF1 *Beta_function3, TF1 *Beta_function4, TF1 *Beta_function5,
+                       TF1 *Beta_function6, TF1 *Beta_function7, TF1 *Beta_function8, TF1 *Beta_function9, bool showStats = true);
 
-    void hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState, TF1 *Beta_function1, TF1 *Beta_function2, TF1 *Beta_function3,
-                      TF1 *Beta_function4, TF1 *Beta_function5, TF1 *Beta_function6, TF1 *Beta_function7, TF1 *Beta_function8, TF1 *Beta_function);
+    /* Corresponding hDrawAndSave function (Beta vs. P plots, all particles) */
+    void hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *hList, TF1 *Beta_function1, TF1 *Beta_function2, TF1 *Beta_function3,
+                      TF1 *Beta_function4, TF1 *Beta_function5, TF1 *Beta_function6, TF1 *Beta_function7, TF1 *Beta_function8, TF1 *Beta_function, bool showStats = true);
+    //</editor-fold>
 
-    // histPlotter2D function (Beta vs. P plots, single particle):
-    void histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
-                       TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, TF1 *Beta_function1,
-                       std::string particle1, bool plot_legend);
+    //<editor-fold desc="histPlotter2D function (Beta vs. P plots, single particle)">
+    /* histPlotter2D function (Beta vs. P plots, single particle) */
+    void histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
+                       std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, bool showStats = true, bool plot_legend = true);
 
-    void hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState, TF1 *Beta_function1, std::string particle1, bool plot_legend);
+    /* Corresponding hDrawAndSave function (Beta vs. P plots, single particle) */
+    void hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *hList, TF1 *Beta_function1, std::string particle1, bool showStats, bool plot_legend = true);
+    //</editor-fold>
 
-    // histPlotter2D function (Beta vs. P plots, by charge):
-    void histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
-                       TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, TF1 *Beta_function1,
-                       std::string particle1, TF1 *Beta_function2, std::string particle2, TF1 *Beta_function3, std::string particle3, bool plot_legend);
+    //<editor-fold desc="histPlotter2D function (Beta vs. P plots, 3 particles (by charge))">
+    /* histPlotter2D function (Beta vs. P plots, 3 particles (by charge)) */
+    void histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
+                       std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2, std::string particle2, TF1 *Beta_function3,
+                       std::string particle3, bool showStats = true, bool plot_legend = true);
 
-    void hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2, std::string particle2,
-                      TF1 *Beta_function3, std::string particle3, bool plot_legend);
+    /* Corresponding hDrawAndSave function (Beta vs. P plots, 3 particles (by charge)) */
+    void hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *hList, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2,
+                      std::string particle2, TF1 *Beta_function3, std::string particle3, bool showStats = true, bool plot_legend = true);
+    //</editor-fold>
 
 // Histogram methods:
     void hFill(double Xdata, double Ydata) { Histogram2D->Fill(Xdata, Ydata); }
@@ -122,8 +135,7 @@ public:
     void SetYaxisTitle(std::string yTitle) { Histogram2DTitles["YaxisTitle"] = yTitle; }
 
     void SetHistogramHeadTitles(std::string hTitle, std::string sTitle) {
-        Histogram2DTitles["HistogramTitle"] = hTitle;
-        Histogram2DTitles["HistogramStatTitle"] = sTitle;
+        Histogram2DTitles["HistogramTitle"] = hTitle, Histogram2DTitles["HistogramStatTitle"] = sTitle;
     }
 
     void SetHistogramTitles(std::string hTitle, std::string sTitle, std::string xTitle, std::string yTitle) {
@@ -139,10 +151,7 @@ public:
         Histogram2DTitles["XaxisTitle"] = xTitle;
     }
 
-    void SetAxisTitles(std::string xTitle, std::string yTitle) {
-        Histogram2DTitles["XaxisTitle"] = xTitle;
-        Histogram2DTitles["YaxisTitle"] = yTitle;
-    }
+    void SetAxisTitles(std::string xTitle, std::string yTitle) { Histogram2DTitles["XaxisTitle"] = xTitle, Histogram2DTitles["YaxisTitle"] = yTitle; }
 
     void SetHistogramNumberOfXBins(int NumberOfXBins) { HistogramNumberOfXBins = NumberOfXBins; }
 
@@ -154,15 +163,9 @@ public:
 
     void SetLowerYlim(double lYlim) { HistogramYAxisLimits.at(0) = lYlim; }
 
-    void SetXAxisLimits(double uXlim, double lXlim) {
-        HistogramXAxisLimits.at(1) = uXlim;
-        HistogramXAxisLimits.at(0) = lXlim;
-    }
+    void SetXAxisLimits(double uXlim, double lXlim) { HistogramXAxisLimits.at(1) = uXlim, HistogramXAxisLimits.at(0) = lXlim; }
 
-    void SetYAxisLimits(double uYlim, double lYlim) {
-        HistogramYAxisLimits.at(1) = uYlim;
-        HistogramYAxisLimits.at(0) = lYlim;
-    }
+    void SetYAxisLimits(double uYlim, double lYlim) { HistogramYAxisLimits.at(1) = uYlim, HistogramYAxisLimits.at(0) = lYlim; }
 
     void SetAxisLimits(double uXlim, double lXlim, double uYlim, double lYlim) {
         HistogramXAxisLimits.at(1) = uXlim, HistogramXAxisLimits.at(0) = lXlim;
@@ -187,7 +190,7 @@ public:
 
     void SetZLogScalePlot(bool ZlsPlot) { ZLogScalePlot = ZlsPlot; }
 
-//    void SetLinearScalePlot(bool lsPlot) { LinearScalePlot = lsPlot; }
+    void SetZLinearScalePlot(bool lsPlot) { ZLinearScalePlot = lsPlot; }
 
     void SetHistogram2DSaveName(std::string h2DsName) { Histogram2DSaveName = h2DsName; }
 
@@ -256,7 +259,7 @@ public:
 
     bool GetZLogScalePlot() { return ZLogScalePlot; }
 
-//    bool GetLinearScalePlot() { return LinearScalePlot; }
+    bool GetZLinearScalePlot() { return ZLinearScalePlot; }
 
     std::string GetHistogram2DSaveName() { return Histogram2DSaveName; }
 

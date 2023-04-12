@@ -60,14 +60,14 @@ private:
 
     //<editor-fold desc="Beta vs. p plots directories">
     bool create_Beta_vs_P_Dir = true;
-    std::string Beta_VS_P_Parent_Directory = "Beta_VS_P_plots";
+    std::string Beta_VS_P_Parent_Directory = "02_Beta_VS_P_plots";
     vector<std::string> Beta_VS_P_Daughter_Folders = {"", "01_All_e", "01_All_e/By_charge", "02_1e_cut", "02_1e_cut/By_charge", "04_1p", "04_1p/By_charge", "05_2p",
                                                       "05_2p/By_charge"};
 
     std::string Beta_VS_P_All_e_Directory;
     std::string Beta_VS_P_by_charge_All_e_Directory;
-    std::string Beta_VS_P_Only_1e_Directory;
-    std::string Beta_VS_P_by_charge_Only_1e_Directory;
+    std::string Beta_VS_P_1e_cut_Directory;
+    std::string Beta_VS_P_by_charge_1e_cut_Directory;
     std::string Beta_VS_P_1p_Directory;
     std::string Beta_VS_P_by_charge_1p_Directory;
     std::string Beta_VS_P_2p_Directory;
