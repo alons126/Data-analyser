@@ -33,20 +33,12 @@ const double c = 29.9792458;
 //  Particle PDG
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-int nPDG = 2112;
-int pPDG = 2212;
-int KplusPDG = 321;
-int KminusPDG = -321;
-int KzeroPDG = 311;
-int piplusPDG = 211;
-int piminusPDG = -211;
-int pizeroPDG = 111;
-int ePDG = 11;
-int nuePDG = 12;
-int muPDG = 13;
-int numuPDG = 14;
-int tauPDG = 15;
-int nutauPDG = 16;
+int nPDG = 2112, pPDG = 2212;
+int KplusPDG = 321, KminusPDG = -321, KzeroPDG = 311;
+int piplusPDG = 211, piminusPDG = -211, pizeroPDG = 111;
+int ePDG = 11, nuePDG = 12;
+int muPDG = 13, numuPDG = 14;
+int tauPDG = 15, nutauPDG = 16;
 int phPDG = 22;
 
 #endif //CONSTANTS_H

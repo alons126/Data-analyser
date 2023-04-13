@@ -5,7 +5,6 @@
 #ifndef HPLOT1D_H
 #define HPLOT1D_H
 
-/*
 #include <iostream>
 #include <vector>
 #include <TF1.h>
@@ -30,9 +29,6 @@
 #include <TDatabasePDG.h>
 #include <TApplication.h>
 #include <TROOT.h>
-*/
-
-//#include "../../functions/GeneralFunctions.h"
 
 class hPlot1D {
 protected:

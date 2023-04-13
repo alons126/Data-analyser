@@ -67,6 +67,7 @@ public:
     //   void pidCuts(std::vector<std::vector<region_part_ptr>> &particles);
 
     void setEcalPCuts(bool flag = true) { f_ecalPCuts = flag; }; //option to have several cuts
+
     void setEcalSFCuts(bool flag = true) { f_ecalSFCuts = flag; }; //option to have several cuts
 
     double getEcalSFUpperCut() { return sf_max_cut; }; // My addition
@@ -75,9 +76,11 @@ public:
 
     void setDCEdgeCuts(bool flag = true) { f_DCEdgeCuts = flag; };
 
+    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
+
     void setEcalEdgeCuts(bool flag = true) { f_ecalEdgeCuts = flag; };
 
-    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
+    double getEcalEdgeCuts() { return ecal_edge_cut; }; // My addition
 
     void setPidCuts(bool flag = true) { f_pidCuts = flag; };
 
@@ -90,6 +93,8 @@ public:
     double getNpheCuts() { return htcc_Nphe_cut; }; // My addition
 
     TVector3 getCOM(TLorentzVector l, TLorentzVector r, TLorentzVector q);
+
+    std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
 
     std::vector<region_part_ptr> getByPid(int pid) {
         if (pid == 11)
@@ -154,11 +159,11 @@ public:
 
     double GetPidCutSigma(int Pid, string region) { // My addition?
         if (region == "CD") {
-            auto itter_CD = pid_cuts_CD.find(Pid);
+            auto itter_CD = pid_cuts_cd.find(Pid);
 
             return itter_CD->second.at(1);
         } else if (region == "FD") {
-            auto itter_FD = pid_cuts_FD.find(Pid);
+            auto itter_FD = pid_cuts_fd.find(Pid);
 
             return itter_FD->second.at(1);
         } else {
@@ -169,11 +174,11 @@ public:
 
     double GetPidCutMean(int Pid, string region) { // My addition?
         if (region == "CD") {
-            auto itter_CD = pid_cuts_CD.find(Pid);
+            auto itter_CD = pid_cuts_cd.find(Pid);
 
             return itter_CD->second.at(0);
         } else if (region == "FD") {
-            auto itter_FD = pid_cuts_FD.find(Pid);
+            auto itter_FD = pid_cuts_fd.find(Pid);
 
             return itter_FD->second.at(0);
         } else {
@@ -610,7 +615,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             if ((*p)->par()->getCharge() == 0 || (*p)->par()->getPid() == 11) {
                 setByPid(*p);
                 ++p; //itterate
-                allparticles.push_back(p); // neutrals and electrons to allparticles (My addition)
+                allparticles.push_back(*p); // neutrals and electrons to allparticles (My addition)
                 continue;
                 // ME: the continue (line above) will skip the rest of the cuts. Apparently, it was added here to allow the log of event_mult (recheck!)
             } else {
@@ -648,7 +653,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                 p = particles.erase(p);
             } else { //itterate
                 setByPid(*p);
-                allparticles.push_back(p); // add all surviving particles in event to allparticles (My addition)
+                allparticles.push_back(*p); // add all surviving particles in event to allparticles (My addition)
 
                 if (debug_plots) {
                     if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11)
@@ -840,7 +845,6 @@ bool clas12ana::checkEcalSFCuts(region_part_ptr p) { // ME: used to be checkEcal
         return false;
 }
 
-
 bool clas12ana::checkEcalPCuts(region_part_ptr p) {
     //true if inside cut
 
@@ -864,7 +868,6 @@ bool clas12ana::checkEcalPCuts(region_part_ptr p) {
     } else
         return false;
 }
-
 
 double clas12ana::getSF(region_part_ptr p) {
     if (p->par()->getPid() == 11)

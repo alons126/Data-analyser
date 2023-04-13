@@ -26,8 +26,8 @@ std::string Directories::Find(vector<std::string> Vector, std::string String) {
 
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
 
-void Directories::MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content = false,
-                                std::string Parent_Folder = "./plots") {
+void Directories::MakeDirectory(bool Create_Directory, std::string Plots_Parent_Folder, std::string Plots_Daughter_Folder, bool Clear_Parent_Folder_content,
+                                std::string Parent_Folder) {
     std::string MakeDirectory = "mkdir -p " + Parent_Folder;
     std::string RemoveDirectoryContent = "rm -r " + Parent_Folder + "/" + Plots_Parent_Folder + "/*";
 

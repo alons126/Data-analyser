@@ -110,8 +110,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -142,8 +142,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -270,8 +270,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -301,8 +301,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -419,8 +419,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -444,8 +444,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -578,8 +578,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -609,8 +609,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -726,8 +726,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -751,8 +751,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //            TPaveText *displayText = new TPaveText(x_1,y_1,x_2,y_2);
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -877,8 +877,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -908,8 +908,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1004,10 +1004,9 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -1039,8 +1038,8 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1068,8 +1067,8 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1181,10 +1180,9 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
-    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -1216,8 +1214,8 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1245,8 +1243,8 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1354,8 +1352,9 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
     }
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -1387,8 +1386,8 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1417,8 +1416,8 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
@@ -1440,29 +1439,36 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
     if (particle != "") { cout << "\n\nFit results for " << particle << " in " << finalState << " are (" << Histogram1DTitleReactions << "):\n\n"; }
 
     if (ApplyPlotCuts == true) {
-        /* A fit to a gaussian with 3 parameters: f(x) = p0*exp(-0.5((x-p1)/p2)^2)). */
-        Histogram1D->Fit("gaus");
+        double Amp, Mean, Std;
 
-        /* Get fitted function to TF1 plot */
-        TF1 *fit = Histogram1D->GetFunction("gaus");
-        fit->SetLineColor(kMagenta);
+        if (Histogram1D->Integral() != 0.) { // don't fit if histogram is empty (leads to an error!)
+            /* A fit to a gaussian with 3 parameters: f(x) = p0*exp(-0.5((x-p1)/p2)^2)). */
+            cout << "\n\n";
+            Histogram1D->Fit("gaus");
+            cout << "\n\n";
 
-        /* Set fitted plot parameters from TF1 plot */
-        double Amp = fit->GetParameter(0); // get p0
-        double Mean = fit->GetParameter(1); // get p1
-        double Std = fit->GetParameter(2); // get p2
+            /* Get fitted function to TF1 plot */
+            TF1 *fit = Histogram1D->GetFunction("gaus");
+            fit->SetLineColor(kMagenta);
 
-        /* Set cut parameters from TF1 plot */
-        plot_Xmax = Mean;
-        plot_ucut = Std * factor; // Cut up to 2 Std from mean
-        plot_lcut = -(Std * factor); // Cut up to 2 Std from mean
+            /* Set fitted plot parameters from TF1 plot */
+            Amp = fit->GetParameter(0); // get p0
+            Mean = fit->GetParameter(1); // get p1
+            Std = fit->GetParameter(2); // get p2
 
-        /* Remove TF1 plot from histogram */
-        Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
+            /* Set cut parameters from TF1 plot */
+            //todo: set these as 9999 if histogram is empty?
+            plot_Xmax = Mean;
+            plot_ucut = Std * factor; // Cut up to 2 Std from mean
+            plot_lcut = -(Std * factor); // Cut up to 2 Std from mean
 
-        /* Draw TF1 plot as curved function */
-        fit->SetLineColor(kMagenta);
-        fit->Draw("same && C");
+            /* Remove TF1 plot from histogram */
+            Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
+
+            /* Draw TF1 plot as curved function */
+            fit->SetLineColor(kMagenta);
+            fit->Draw("same && C");
+        }
 
         gPad->Update();
 
@@ -1506,7 +1512,9 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             FitParam->SetBorderSize(1);
             FitParam->SetTextFont(0);
             FitParam->SetFillColor(0);
-            FitParam->SetTextAlign(11);
+//            FitParam->SetTextAlign(11);
+//            FitParam->SetTextAlign(22);
+            FitParam->SetTextAlign(12);
             FitParam->AddText(("Fit amp = " + to_string_with_precision(Amp, 8)).c_str());
             FitParam->AddText(("Fit std = " + to_string_with_precision(Std, 8)).c_str());
             FitParam->AddText(("Fit mean = " + to_string_with_precision(Mean, 8)).c_str());

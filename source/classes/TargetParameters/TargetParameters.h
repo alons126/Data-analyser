@@ -4,12 +4,12 @@
 
 class TargetParameters {
 protected:
-    string TargetElement;
+    std::string TargetElement;
     int TargetElementPDG, ProbePDG;
     double BindingEnergyToNucleus;
 
 public:
-    void SetTargetElement(string TargetElementName) { TargetElement = TargetElementName; }
+    void SetTargetElement(std::string TargetElementName) { TargetElement = TargetElementName; }
 
     void SetTargetElementPDG(int TargetElementPDGNumber) { TargetElementPDG = TargetElementPDGNumber; }
 
@@ -17,7 +17,7 @@ public:
 
     void SetBindingEnergyToNucleus(double BindingEnergy) { BindingEnergyToNucleus = BindingEnergy; }
 
-    string GetTargetElement() { return TargetElement; }
+    std::string GetTargetElement() { return TargetElement; }
 
     int GetTargetElementPDG() { return TargetElementPDG; }
 

@@ -7,6 +7,10 @@
 
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <map>
+
+using namespace std;
 
 class Directories {
 private:
@@ -139,7 +143,7 @@ private:
 
 // Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool FindSubstring(string string1, string string2);
+    bool FindSubstring(std::string string1, std::string string2);
 
     std::string Find(vector<std::string> vector, std::string string);
 

@@ -12,6 +12,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 
  */
 
+/*
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
@@ -32,13 +33,18 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TDatabasePDG.h>
 #include <TApplication.h>
 #include <TROOT.h>
-
-#include <TBenchmark.h>
+*/
 
 #include "HipoChain.h"
 #include "clas12reader.h"
 
 #include "settings/codeSetup.h"
+#include "source/classes/clas12ana/clas12ana.h"
+//#include "source/classes/clas12ana/clas12ana_ver_1_myedit.h"
+#include "source/classes/DSCuts/DSCuts.h"
+#include "source/classes/hPlots/hPlot1D.cpp"
+#include "source/classes/hPlots/hPlot2D.cpp"
+#include "source/functions/NeutronECAL_Cut_Veto.h"
 
 using namespace std;
 using namespace clas12;
@@ -1690,11 +1696,11 @@ void EventAnalyser() {
 
     clas12ana clasAna;
 
-    if (apply_cuts == true) {
+    if (apply_cuts) {
         /* Read in target parameter files */
-        if (apply_chi2_cuts_1e_cut == false) {
+        if (!apply_chi2_cuts_1e_cut) {
             clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
-        } else if (apply_chi2_cuts_1e_cut == true) {
+        } else if (apply_chi2_cuts_1e_cut) {
             cout << "Loading fitted pid cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
@@ -1705,43 +1711,54 @@ void EventAnalyser() {
             Chi2_piplus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(211, "FD"), -clasAna.GetPidCutSigma(211, "FD"), clasAna.GetPidCutSigma(211, "FD"));
             Chi2_piminus_cuts_CD.SetCutPram(clasAna.GetPidCutMean(-211, "CD"), -clasAna.GetPidCutSigma(-211, "CD"), clasAna.GetPidCutSigma(-211, "CD"));
             Chi2_piminus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(-211, "FD"), -clasAna.GetPidCutSigma(-211, "FD"), clasAna.GetPidCutSigma(-211, "FD"));
+
+            clasAna.setPidCuts(); // making f_pidCuts = ture
         }
 
-        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str());
+//        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
 
         // Cuts on electrons only:
-        if (apply_SF_cuts == true) { // making f_ecalSFCuts = ture
+        if (apply_SF_cuts) { // making f_ecalSFCuts = ture
+
+
+
+
+            //todo: ask justin what are these cuts:
+            //todo: ask justin for these cuts for LH2 and C12 (and other elements)
+//        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
+//        clasAna.readEcalSFPar((CutsDirectory + "ecal.par").c_str());
+            clasAna.readEcalSFPar((CutsDirectory + "paramsSF_40Ca_x2.dat").c_str());
+            clasAna.readEcalPPar((CutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
+
+
             SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.248125, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
             clasAna.setEcalSFCuts();
+            clasAna.setEcalPCuts();
         }
 
-        if (apply_ECAL_fiducial_cuts == true) { // making f_ecalEdgeCuts = ture (ECAL fiducial cuts)
+        if (apply_ECAL_fiducial_cuts) { // making f_ecalEdgeCuts = ture (ECAL fiducial cuts)
             PCAL_edge_cuts = DSCuts("PCAL edge", "FD", "Electron", "1e cut", 0, clasAna.getEcalEdgeCuts());
             clasAna.setEcalEdgeCuts();
         }
-        if (apply_Nphe_cut == true) { // making f_NpheCuts = ture (HTCC cuts)
+
+        if (apply_Nphe_cut) { // making f_NpheCuts = ture (HTCC cuts)
             Nphe_cuts_FD = DSCuts("Nphe", "FD", "Electron", "1e cut", 0, clasAna.getNpheCuts());
             clasAna.setNpheCuts();
         }
 
-        // Cuts on protons and charged pions:
-        if (apply_chi2_cuts_1e_cut == true) { // making f_pidCuts = ture
-            clasAna.setPidCuts();
-        }
-
         // Cuts on all particles:
-        if (apply_Vz_cuts == true) {
+        if (apply_Vz_cuts) {
             clasAna.setVertexCuts(); // making f_vertexCuts = ture
             clasAna.setVzcuts(Vz_cut.GetLowerCut(), Vz_cut.GetUpperCut()); // setting Vz cuts for all (charged?) particles
         }
 
         // Cuts on charged particles:
-        if (apply_DC_fiducial_cut == true) { // making f_DCEdgeCuts = ture (DC fiducial cuts?)
+        if (apply_DC_fiducial_cut) { // making f_DCEdgeCuts = ture (DC fiducial cuts?)
             DC_edge_cuts = DSCuts("DC edge", "FD", "Electron", "1e cut", 0, clasAna.getDCEdgeCuts());
             clasAna.setDCEdgeCuts();
         }
 
-        if (apply_dVz_cuts == true) {
+        if (apply_dVz_cuts) {
             clasAna.setVertexCorrCuts(); // making f_corr_vertexCuts = ture
             clasAna.setVertexCorrCuts(dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut()); // setting dVz cuts?
         }
@@ -1795,6 +1812,9 @@ void EventAnalyser() {
     int num_of_events_1e2p_w_allChi2_cuts_CD = 0, num_of_events_1e2p_w_allChi2_cuts_FD = 0;
     int num_of_events_1e2p_w_allChi2_cuts = 0;
 
+    int num_of_events_1p = 0; // = number of 1p events
+    int num_of_QEL_1p_events = 0, num_of_MEC_1p_events = 0, num_of_RES_1p_events = 0, num_of_DIS_1p_events = 0;
+
     /* 1e2p = 2p 1e + electron cuts only; 2p = 1e2p with all other cuts */
     int num_of_events_2p = 0; // = number of 2p events
     int num_of_QEL_2p_events = 0, num_of_MEC_2p_events = 0, num_of_RES_2p_events = 0, num_of_DIS_2p_events = 0;
@@ -1814,6 +1834,7 @@ void EventAnalyser() {
 
         /* All of these particles are with clas12ana cuts
            Only cuts missing are Nphe and momentum cuts - to be applied later */
+        auto neutrons = clasAna.getByPid(2112);  // Neutrons
         auto protons = clasAna.getByPid(2212);   // Protons
         auto Kplus = clasAna.getByPid(321);      // K+
         auto Kminus = clasAna.getByPid(-321);    // K-
@@ -1824,6 +1845,14 @@ void EventAnalyser() {
         auto deuterons = clasAna.getByPid(45);   // Deuterons
         auto neutrals = clasAna.getByPid(0);     // Neutrons
         auto otherpart = clasAna.getByPid(311);  // Other particles
+
+
+
+
+        auto allparticles = clasAna.getParticles();
+
+
+
 
         /* Number of specific particles in event */
         int Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
@@ -2705,9 +2734,12 @@ void EventAnalyser() {
 
 //  1p ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="1e1p">
+        //<editor-fold desc="1p">
         if ((calculate_1p == true) && ((Nf_Prime == 2) && (Np == 1))) { // for 1p calculations (with any number of neutrals)
-            /* Filling Nphe plots (2p) */
+            //todo: add mom cuts for 1p
+            ++num_of_events_1p;
+
+            /* Filling Nphe plots (1p) */
             hNphe_1p_FD.hFill(Nphe, Weight);
 
             /* Filling Chi2 histograms (1p) */
@@ -4806,10 +4838,10 @@ void EventAnalyser() {
                       << ":\n";
 
         for (int i = 0; i < chi2cuts_length; i++) {
-//            FittedPIDCuts << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << ":"
-//                          << chi2cuts[i].GetRegion() << "\n";
-            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
-                          << chi2cuts[i].GetUpperCut() << "\n";
+            FittedPIDCuts << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << ":"
+                          << chi2cuts[i].GetRegion() << "\n";
+//            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
+//                          << chi2cuts[i].GetUpperCut() << "\n";
         }
 
         FittedPIDCuts.close();
@@ -5245,6 +5277,7 @@ void EventAnalyser() {
 
     myLogFile << "-- Proton counts ----------------------------------------------------------\n";
     myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
+    myLogFile << "num_of_events_1p:\t\t\t\t\t" << num_of_events_1p << "\n\n\n";
     myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
     myLogFile << "num_of_events_1e2p_all_wo_FDph:\t\t" << num_of_events_1e2p_all_wo_FDph << "\n";
     myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n\n\n";
@@ -5267,10 +5300,10 @@ void EventAnalyser() {
                   << ":\n";
 
         for (int i = 0; i < chi2cuts_length; i++) {
-//            myLogFile << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << ":"
-//                      << chi2cuts[i].GetRegion() << "\n";
-            myLogFile << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
-                      << chi2cuts[i].GetUpperCut() << "\n";
+            myLogFile << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << ":"
+                      << chi2cuts[i].GetRegion() << "\n";
+//            myLogFile << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
+//                      << chi2cuts[i].GetUpperCut() << "\n";
         }
     }
     //</editor-fold>
@@ -5375,6 +5408,7 @@ void EventAnalyser() {
 
     cout << "-- Proton counts ----------------------------------------------------------\n";
     cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
+    cout << "num_of_events_1p:\t\t\t" << num_of_events_1p << "\n";
     cout << "num_of_events_1e2p_all:\t\t\t" << num_of_events_1e2p_all << "\n";
     cout << "num_of_events_1e2p_all_wo_FDph:\t\t" << num_of_events_1e2p_all_wo_FDph << "\n";
     cout << "num_of_events_2p:\t\t\t" << num_of_events_2p << "\n\n";
@@ -5399,6 +5433,8 @@ void EventAnalyser() {
     cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n";
 
     cout << "Operation finished (AnalyserVersion = " << AnalyserVersion << ")." << "\n\n";
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>

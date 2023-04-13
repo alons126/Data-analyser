@@ -37,6 +37,8 @@
 #include "clas12reader.h"
 */
 
+#include "clas12reader.h"
+
 using namespace clas12;
 using namespace std;
 

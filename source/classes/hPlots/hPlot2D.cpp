@@ -143,7 +143,6 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
         TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
         displayText->SetTextSize(diplayTextSize);
         displayText->SetFillColor(0);
-        displayText->SetTextAlign(12);
         displayText->AddText("Empty histogram");
         displayText->SetTextAlign(22);
         Histogram2D->Draw();
@@ -227,7 +226,6 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
         TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
         displayText->SetTextSize(diplayTextSize);
         displayText->SetFillColor(0);
-        displayText->SetTextAlign(12);
         displayText->AddText("Empty histogram");
         displayText->SetTextAlign(22);
         Histogram2D->Draw();
@@ -310,7 +308,6 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
         TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
         displayText->SetTextSize(diplayTextSize);
         displayText->SetFillColor(0);
-        displayText->SetTextAlign(12);
         displayText->AddText("Empty histogram");
         displayText->SetTextAlign(22);
         Histogram2D->Draw();
@@ -451,71 +448,5 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 }
 //</editor-fold>
 
-/*
-void hPlot2D::histPlotter2D(TCanvas *Histogram2DCanvas, TH2D *Histogram2D, double titleSize, bool centerTitle, double labelSizex, double labelSizey, double labelSizez,
-                            TList *Histogram_list, bool zlogScalePlot, std::string Histogram2DSaveNameDir, std::string Histogram2DSaveName, TF1 *Beta_function1,
-                            std::string particle1, TF1 *Beta_function2, std::string particle2, TF1 *Beta_function3, std::string particle3, bool plot_legend) {
-
-    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
-    double x_1 = 0.165, y_1 = 0.3, x_2 = 0.865, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
-
-    Histogram2D->SetTitleSize(titleSize, "xyz");
-    Histogram2D->GetXaxis()->SetLabelSize(labelSizex);
-    Histogram2D->GetXaxis()->CenterTitle(centerTitle);
-    Histogram2D->GetYaxis()->SetLabelSize(labelSizey);
-    Histogram2D->GetYaxis()->CenterTitle(centerTitle);
-    Histogram2D->GetZaxis()->SetLabelSize(labelSizez);
-    Histogram_list->Add(Histogram2D);
-
-    if (Histogram2D->Integral() == 0.) {
-        Histogram2D->SetStats(0);
-        TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
-        displayText->SetTextSize(diplayTextSize);
-        displayText->SetFillColor(0);
-        displayText->SetTextAlign(12);
-        displayText->AddText("Empty histogram");
-        displayText->SetTextAlign(22);
-        Histogram2D->Draw();
-        displayText->Draw();
-    } else if (Histogram2D->Integral() != 0.) {
-        Histogram2D->Draw("colz");
-
-        Beta_function1->SetLineColor(kBlue);
-        Beta_function1->Draw("same");
-        Beta_function2->SetLineColor(kGreen);
-        Beta_function2->Draw("same");
-        Beta_function3->SetLineColor(kRed);
-        Beta_function3->Draw("same");
-    }
-
-    auto Beta_vs_P_legend = new TLegend(0.87, 0.725 - 0.2, 0.87 - 0.2, 0.725 - 0.3);
-
-    if ((plot_legend == true) && (Histogram2D->Integral() != 0.)) {
-
-        TLegendEntry *Beta_function1_entry = Beta_vs_P_legend->AddEntry(Beta_function1, particle1.c_str(), "l");
-        TLegendEntry *Beta_function2_entry = Beta_vs_P_legend->AddEntry(Beta_function2, particle2.c_str(), "l");
-        TLegendEntry *Beta_function3_entry = Beta_vs_P_legend->AddEntry(Beta_function3, particle3.c_str(), "l");
-
-        Beta_vs_P_legend->Draw("same");
-    }
-
-    if (zlogScalePlot == true) { Histogram2DCanvas->SetLogz(1); }
-
-    gStyle->SetStatX(0.87);
-    gStyle->SetStatY(0.4);
-    Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + Histogram2DSaveName).c_str());
-    gStyle->SetStatX(DefStatX);
-    gStyle->SetStatY(DefStatY);
-    Histogram2DCanvas->Clear();
-}
-
-void hPlot2D::hDrawAndSave(TCanvas *h2DCanvas, TList *hList, std::string FinalState, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2,
-                           std::string particle2, TF1 *Beta_function3, std::string particle3, bool plot_legend) {
-    histPlotter2D(h2DCanvas, Histogram2D, Histogram2DTitleSizes.at(0), CenterTitle, Histogram2DTitleSizes.at(1), Histogram2DTitleSizes.at(2), Histogram2DTitleSizes.at(3),
-                  hList, ZLogScalePlot, Histogram2DSaveNamePath, Histogram2DSaveName, Beta_function1, particle1, Beta_function2, particle2, Beta_function3, particle3,
-                  plot_legend);
-}
-*/
 //</editor-fold>
 
