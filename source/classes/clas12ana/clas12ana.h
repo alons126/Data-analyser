@@ -273,10 +273,9 @@ private:
 
     double htcc_Nphe_cut = 2; // My addition
 
-/* ME: in the old version, SF cuts where:
+    // ME: in the old version, SF cuts where:
     double sf_max_cut = .28;
     double sf_min_cut = .2;
-*/
 
     double ecal_edge_cut = 14;
     double dc_edge_cut = 10; // My addition (from Larry)

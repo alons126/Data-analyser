@@ -12,6 +12,13 @@
 using namespace std;
 using namespace clas12;
 
+
+/* About this file:
+ * This is the first version of clas12ana that had beed used in my analyser.
+ * It is kept here for self-observation and comparison with other versions of clas12ana.
+ * */
+
+
 struct cutpar {
     string id;
     vector<double> par = {}; //pi- parameters
