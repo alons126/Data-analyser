@@ -80,20 +80,6 @@ void EventAnalyser() {
     double beamE = Experiment.GetBeanEnergy(); // Configure beam energy from SampleName
     string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
     int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
-
-    /* Print out execution variables (for self observation) */
-    cout << "-- Execution variables ----------------------------------------------------\n";
-    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
-    cout << "plots_path:\t\t" << plots_path << "\n\n";
-
-    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
-    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
-    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
-    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
-
-    cout << "SampleName:\t\t" << SampleName << "\n";
-    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
-    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
 
 // Cuts settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -114,7 +100,8 @@ void EventAnalyser() {
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
 
     /* Sampling Fraction (SF) cut */
-    bool apply_SF_cuts = true;
+    bool apply_ECAL_SF_cuts = true;
+    bool apply_ECAL_P_cuts = false;
 
     /* ECAL fiducial (edge) cuts */
     bool apply_ECAL_fiducial_cuts = true;
@@ -123,29 +110,35 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Momentum cuts */
-    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
+    bool apply_momentum_cuts_1p = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
 
     //<editor-fold desc="Cuts output">
     /* Print out the cuts within the run (for self-observation) */
 
     if (apply_cuts == false) {
-        cout << "Cuts are disabled.\n\n\n";
+        cout << "Cuts are disabled:\n";
 
-        apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = apply_SF_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
-        apply_Nphe_cut = apply_chi2_cuts_1e_cut = false;
+        apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
+        apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
+        apply_momentum_cuts_1p = apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = false;
     } else {
-        cout << "Cuts are enabled. Cut settings:\n";
-        cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
-        cout << "apply_chi2_cuts_1e_cut:\t\t" << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
-        cout << "apply_Vz_cuts:\t\t\t" << BoolToString(apply_Vz_cuts) << "\n";
-        cout << "apply_dVz_cuts:\t\t\t" << BoolToString(apply_dVz_cuts) << "\n";
-        cout << "apply_SF_cuts:\t\t\t" << BoolToString(apply_SF_cuts) << "\n";
-        cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
-        cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
-        cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
-        cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n\n\n";
+        cout << "Cuts are enabled:\n";
     }
+
+    cout << "apply_Nphe_cut:\t\t\t" << BoolToString(apply_Nphe_cut) << "\n";
+    cout << "apply_chi2_cuts_1e_cut:\t\t" << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
+    cout << "apply_Vz_cuts:\t\t\t" << BoolToString(apply_Vz_cuts) << "\n";
+    cout << "apply_dVz_cuts:\t\t\t" << BoolToString(apply_dVz_cuts) << "\n";
+    cout << "apply_ECAL_SF_cuts:\t\t" << BoolToString(apply_ECAL_SF_cuts) << "\n";
+    cout << "apply_ECAL_P_cuts:\t\t" << BoolToString(apply_ECAL_P_cuts) << "\n";
+    cout << "apply_ECAL_fiducial_cuts:\t" << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
+    cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
+    cout << "apply_momentum_cuts_1p:\t\t" << BoolToString(apply_momentum_cuts_1p) << "\n";
+    cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
+    cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n\n\n";
     //</editor-fold>
+
+    //<editor-fold desc="Custom cuts naming & print out execution variables">
 
     //<editor-fold desc="Custom cuts naming">
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
@@ -166,6 +159,21 @@ void EventAnalyser() {
             }
         }
     }
+    //</editor-fold>
+
+    /* Print out execution variables (for self observation) */
+    cout << "-- Execution variables ----------------------------------------------------\n";
+    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
+    cout << "plots_path:\t\t" << plots_path << "\n\n";
+
+    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
+    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
+    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
+    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
+
+    cout << "SampleName:\t\t" << SampleName << "\n";
+    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
+    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -207,6 +215,7 @@ void EventAnalyser() {
 
     /* Sampling Fraction (SF) cuts (electrons only, FD) */
     DSCuts SF_cuts;
+//    DSCuts P_cuts;
 
     /* PCAL edge cuts (fiducial cuts ,electrons only, FD) */
     DSCuts PCAL_edge_cuts;
@@ -1718,7 +1727,7 @@ void EventAnalyser() {
 //        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
 
         // Cuts on electrons only:
-        if (apply_SF_cuts) { // making f_ecalSFCuts = ture
+        if (apply_ECAL_SF_cuts) { // making f_ecalSFCuts = ture
 
 
 
@@ -1728,11 +1737,29 @@ void EventAnalyser() {
 //        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
 //        clasAna.readEcalSFPar((CutsDirectory + "ecal.par").c_str());
             clasAna.readEcalSFPar((CutsDirectory + "paramsSF_40Ca_x2.dat").c_str());
+
+
+
+            //TODO: RECHECK WHAT ARE THE CUTS HERE:
+            SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.248125, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
+
+
+            clasAna.setEcalSFCuts();
+        }
+
+        if (apply_ECAL_P_cuts) { // making f_ecalSFCuts = ture
+
+
+
+
+            //todo: ask justin what are these cuts:
+            //todo: ask justin for these cuts for LH2 and C12 (and other elements)
+//        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
+//        clasAna.readEcalSFPar((CutsDirectory + "ecal.par").c_str());
             clasAna.readEcalPPar((CutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
 
 
-            SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.248125, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
-            clasAna.setEcalSFCuts();
+//            SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.248125, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
             clasAna.setEcalPCuts();
         }
 
@@ -1832,8 +1859,10 @@ void EventAnalyser() {
 
         clasAna.Run(c12);
 
-        /* All of these particles are with clas12ana cuts
-           Only cuts missing are Nphe and momentum cuts - to be applied later */
+        /* allparticles vector from clas12ana (my addition). Used mostly for 1n1p.  */
+        auto allparticles = clasAna.getParticles();
+
+        /* All of these particles are with clas12ana cuts. Only cuts missing are momentum and beta(?) cuts - to be applied later */
         auto neutrons = clasAna.getByPid(2112);  // Neutrons
         auto protons = clasAna.getByPid(2212);   // Protons
         auto Kplus = clasAna.getByPid(321);      // K+
@@ -1846,20 +1875,20 @@ void EventAnalyser() {
         auto neutrals = clasAna.getByPid(0);     // Neutrons
         auto otherpart = clasAna.getByPid(311);  // Other particles
 
-
-
-
-        auto allparticles = clasAna.getParticles();
-
-
-
-
         /* Number of specific particles in event */
-        int Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
-        int Nd = deuterons.size(), Nn = neutrals.size(), No = otherpart.size();
+        int Nn = neutrons.size(), Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
+        int Nd = deuterons.size(), Nneut = neutrals.size(), No = otherpart.size();
 
         /* Total number of particles in event (= Nf) */
-        int Nf = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nn + No;
+        int Nf = Nn + Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nneut + No;
+
+//
+//
+//
+        if (allparticles.size() != Nf) { cout << "\n\nallparticles.size() is dofferent than Nf! exiting...\n\n", exit(EXIT_FAILURE); }
+//
+//
+//
 
         //<editor-fold desc="Nph_CD, Nph_FD, No_Prime and Nf_Prime declarations and definitions">
         int Nph_CD = 0, Nph_FD = 0;
@@ -1872,12 +1901,16 @@ void EventAnalyser() {
             }
         } // end of loop over otherpart vector
 
-        /* No_Prime does not include:
-         * Neutrals
-         * Photons in the CD */
+        /* No_Prime does not include (ignored particles):
+           Neutrals
+           Neutrons
+           Photons in the CD (?) */
         int No_Prime = No; // don't ignore photons in CD
 //        int No_Prime = No - Nph_CD; // ignore photons in CD
-        int Nf_Prime = Np + Nkp + Nkm + Npip + Npim + Ne + Nd + No_Prime;
+
+        int N_charged_p = Np + Nkp + Nkm + Npip + Npim + Ne + Nd; // Particles that are not ignored
+
+        int Nf_Prime = N_charged_p + No_Prime;
         //</editor-fold>
 
         bool qel = false, mec = false, res = false, dis = false;
@@ -2914,7 +2947,7 @@ void EventAnalyser() {
         } // end of 1p cuts if
         //</editor-fold>
 
-//  1e2pXy --------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  1e2pXy (or (e,e'pp)X) -----------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1e2pXy">
         if (Np == 2) { // 2p and everything else is allowed
@@ -5016,9 +5049,10 @@ void EventAnalyser() {
     myLogFile << "apply_chi2_cuts_1e_cut = " << BoolToString(apply_chi2_cuts_1e_cut) << "\n";
     myLogFile << "apply_Vz_cuts = " << BoolToString(apply_Vz_cuts) << "\n";
     myLogFile << "apply_dVz_cuts = " << BoolToString(apply_dVz_cuts) << "\n";
-    myLogFile << "apply_SF_cuts = " << BoolToString(apply_SF_cuts) << "\n";
+    myLogFile << "apply_ECAL_SF_cuts = " << BoolToString(apply_ECAL_SF_cuts) << "\n";
     myLogFile << "apply_ECAL_fiducial_cuts = " << BoolToString(apply_ECAL_fiducial_cuts) << "\n";
     myLogFile << "apply_DC_fiducial_cut = " << BoolToString(apply_DC_fiducial_cut) << "\n";
+    myLogFile << "apply_momentum_cuts_1p = " << BoolToString(apply_momentum_cuts_1p) << "\n";
     myLogFile << "apply_momentum_cuts_2p = " << BoolToString(apply_momentum_cuts_2p) << "\n";
     myLogFile << "apply_momentum_cuts_1n1p = " << BoolToString(apply_momentum_cuts_1n1p) << "\n\n";
     //</editor-fold>

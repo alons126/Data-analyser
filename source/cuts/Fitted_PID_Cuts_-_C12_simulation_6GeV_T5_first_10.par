@@ -5,9 +5,9 @@
 # Cuts are fitted for - C12_simulation_6GeV_T5_first_10
 
 # pid cuts by detector (pid:mean:sigma) - sigma_CD=3;sigma_FD=3:
-pid_cuts		2212:0.518179:5.64921:CD
-pid_cuts		2212:-0.0617033:4.03877:FD
-pid_cuts		211:0.136342:4.63301:CD
-pid_cuts		211:0.0298721:3.2527:FD
-pid_cuts		-211:0.0502739:4.2693:CD
-pid_cuts		-211:0.18005:3.41808:FD
+pid_cuts		2212:0.51722:5.61296:CD
+pid_cuts		2212:-0.0621473:4.04646:FD
+pid_cuts		211:0.147604:4.65232:CD
+pid_cuts		211:0.0234755:3.27697:FD
+pid_cuts		-211:0.0554405:4.20117:CD
+pid_cuts		-211:0.177892:3.42527:FD

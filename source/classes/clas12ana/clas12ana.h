@@ -70,17 +70,9 @@ public:
 
     void setEcalSFCuts(bool flag = true) { f_ecalSFCuts = flag; }; //option to have several cuts
 
-    double getEcalSFUpperCut() { return sf_max_cut; }; // My addition
-
-    double getEcalSFLowerCut() { return sf_min_cut; }; // My addition
-
     void setDCEdgeCuts(bool flag = true) { f_DCEdgeCuts = flag; };
 
-    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
-
     void setEcalEdgeCuts(bool flag = true) { f_ecalEdgeCuts = flag; };
-
-    double getEcalEdgeCuts() { return ecal_edge_cut; }; // My addition
 
     void setPidCuts(bool flag = true) { f_pidCuts = flag; };
 
@@ -88,13 +80,7 @@ public:
 
     void setVertexCorrCuts(bool flag = true) { f_corr_vertexCuts = flag; };
 
-    void setNpheCuts(bool flag = true) { f_NpheCuts = flag; }; // My addition
-
-    double getNpheCuts() { return htcc_Nphe_cut; }; // My addition
-
     TVector3 getCOM(TLorentzVector l, TLorentzVector r, TLorentzVector q);
-
-    std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
 
     std::vector<region_part_ptr> getByPid(int pid) {
         if (pid == 11)
@@ -149,43 +135,11 @@ public:
 
     bool EcalEdgeCuts(region_part_ptr p);
 
-    bool HTCCNpheCuts(region_part_ptr p); // My addition
-
     bool checkEcalPCuts(region_part_ptr p);
 
     bool checkEcalSFCuts(region_part_ptr p);
 
     bool checkPidCut(region_part_ptr p);
-
-    double GetPidCutSigma(int Pid, string region) { // My addition?
-        if (region == "CD") {
-            auto itter_CD = pid_cuts_cd.find(Pid);
-
-            return itter_CD->second.at(1);
-        } else if (region == "FD") {
-            auto itter_FD = pid_cuts_fd.find(Pid);
-
-            return itter_FD->second.at(1);
-        } else {
-            //todo: figure out what to do in this case
-            return -9999;
-        }
-    }
-
-    double GetPidCutMean(int Pid, string region) { // My addition?
-        if (region == "CD") {
-            auto itter_CD = pid_cuts_cd.find(Pid);
-
-            return itter_CD->second.at(0);
-        } else if (region == "FD") {
-            auto itter_FD = pid_cuts_fd.find(Pid);
-
-            return itter_FD->second.at(0);
-        } else {
-            //todo: figure out what to do in this case
-            return -9999;
-        }
-    }
 
     bool checkVertex(region_part_ptr p);
 
@@ -225,8 +179,57 @@ public:
     std::vector<region_part_ptr> getByPid(std::vector<region_part_ptr> particles, int pid);
     //  std::vector<region_part_ptr> getByPidChi2(int pid, double chi2);
 
+    //<editor-fold desc="My addition (methods)">
+    double getEcalSFUpperCut() { return SF_max_cut; }; // My addition
+
+    double getEcalSFLowerCut() { return SF_min_cut; }; // My addition
+
+    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
+
+    double getEcalEdgeCuts() { return ecal_edge_cut; }; // My addition
+
+    void setNpheCuts(bool flag = true) { f_NpheCuts = flag; }; // My addition
+
+    double getNpheCuts() { return htcc_Nphe_cut; }; // My addition
+
+    std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
+
+    void addToAllParticles(region_part_ptr p) { allparticles.push_back(p); } // My addition
+
+    bool HTCCNpheCuts(region_part_ptr p); // My addition
+
+    double GetPidCutSigma(int Pid, string region) { // My addition?
+        if (region == "CD") {
+            auto itter_CD = pid_cuts_cd.find(Pid);
+
+            return itter_CD->second.at(1);
+        } else if (region == "FD") {
+            auto itter_FD = pid_cuts_fd.find(Pid);
+
+            return itter_FD->second.at(1);
+        } else {
+            //todo: figure out what to do in this case
+            return -9999;
+        }
+    }
+
+    double GetPidCutMean(int Pid, string region) { // My addition?
+        if (region == "CD") {
+            auto itter_CD = pid_cuts_cd.find(Pid);
+
+            return itter_CD->second.at(0);
+        } else if (region == "FD") {
+            auto itter_FD = pid_cuts_fd.find(Pid);
+
+            return itter_FD->second.at(0);
+        } else {
+            //todo: figure out what to do in this case
+            return -9999;
+        }
+    }
+    //</editor-fold>
+
 private:
-    std::vector<region_part_ptr> allparticles; // My addition
     std::vector<region_part_ptr> electrons;
     std::vector<region_part_ptr> protons;
     std::vector<region_part_ptr> deuterons;
@@ -263,7 +266,6 @@ private:
     bool f_pidCuts = false;
     bool f_vertexCuts = false;
     bool f_corr_vertexCuts = false;
-    bool f_NpheCuts = false; // My addition
 
     //  map<int,vector<double> > test_cuts;
     //  map<int,int> test_cuts;
@@ -276,14 +278,7 @@ private:
     map<string, vector<double> > vertex_cuts; //map< x,y,z, {min,max}>
     vector<double> vertex_corr_cuts = {-99, 99}; //electron vertex <-> particle vertex correlation cuts
 
-    double htcc_Nphe_cut = 2; // My addition
-
-    // ME: in the old version, SF cuts where:
-    double sf_max_cut = .28;
-    double sf_min_cut = .2;
-
     double ecal_edge_cut = 14;
-    double dc_edge_cut = 10; // My addition (from Larry)
 //    double dc_edge_cut = 5; // Justin's original
 
     //SRC Cuts
@@ -365,6 +360,29 @@ private:
     TH1D *el_vz_debug = new TH1D("el_vz_debug", "El vertex ", 100, -20, 10);
     TH1D *el_vz_p_debug = new TH1D("el_vz_p_debug", "El-proton vertex ", 100, -10, 10);
 
+    TH2D *dc_hit_map_a[4]; //3 regions
+    TH2D *dc_hit_map_b[4]; //3 regions
+
+    TH2D *dc_hit_map_a_proton[4]; //3 regions
+    TH2D *dc_hit_map_b_proton[4]; //3 regions
+
+    TH2D *dc_hit_map_a_pion[4]; //3 regions
+    TH2D *dc_hit_map_b_pion[4]; //3 regions
+
+    //<editor-fold desc="My addition (attributes)">
+    std::vector<region_part_ptr> allparticles; // My addition
+
+    bool f_NpheCuts = false; // My addition
+
+    double htcc_Nphe_cut = 2; // My addition
+
+    // ME: in the old version, SF cuts where:
+    //todo: CHECK WITH JUSTIN WHAT TO DO WITH THEM!
+    double SF_max_cut = .28;
+    double SF_min_cut = .2;
+
+    double dc_edge_cut = 10; // My addition (from Larry)
+
     //<editor-fold desc="my debugging - multiplicity plots before cuts (= BC) - no #e cuts">
     /* my debugging - multiplicity plots before cuts (= BC) - no #e cuts */
 //    TH2D *multi_p_vs_cpi_fd_BC_debug = new TH2D("multi_p_vs_cpi_fd_BC_debug",
@@ -437,14 +455,8 @@ private:
     TH1D *multi_cpi_1e_cut_AC_debug = new TH1D("multi_cpi_1e_cut_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, CD & FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
     //</editor-fold>
 
-    TH2D *dc_hit_map_a[4]; //3 regions
-    TH2D *dc_hit_map_b[4]; //3 regions
+    //</editor-fold>
 
-    TH2D *dc_hit_map_a_proton[4]; //3 regions
-    TH2D *dc_hit_map_b_proton[4]; //3 regions
-
-    TH2D *dc_hit_map_a_pion[4]; //3 regions
-    TH2D *dc_hit_map_b_pion[4]; //3 regions
 };
 
 
@@ -614,8 +626,8 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             //neutrals and electrons don't follow cuts below, skip them
             if ((*p)->par()->getCharge() == 0 || (*p)->par()->getPid() == 11) {
                 setByPid(*p);
+                addToAllParticles(*p); // add neutrals and electrons to allparticles (My addition)
                 ++p; //itterate
-                allparticles.push_back(*p); // neutrals and electrons to allparticles (My addition)
                 continue;
                 // ME: the continue (line above) will skip the rest of the cuts. Apparently, it was added here to allow the log of event_mult (recheck!)
             } else {
@@ -637,7 +649,6 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                     pid_fd_debug->Fill(par_mom, par_beta);
             }
 
-
             //	   bool pid_cut    = checkPidCut(*p);
             //	   bool vertex_cut = checkVertex(*p);
             //	   bool vertex_corr_cut = checkVertexCorrelation(electrons_det[0],*p); //correlation between good electron and particles vertex
@@ -653,7 +664,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                 p = particles.erase(p);
             } else { //itterate
                 setByPid(*p);
-                allparticles.push_back(*p); // add all surviving particles in event to allparticles (My addition)
+                addToAllParticles(*p); // add all particles surviving the cuts in event to allparticles (My addition)
 
                 if (debug_plots) {
                     if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11)
@@ -821,28 +832,43 @@ bool clas12ana::HTCCNpheCuts(region_part_ptr p) { // My addition
 bool clas12ana::checkEcalSFCuts(region_part_ptr p) { // ME: used to be checkEcalCuts
     //true if inside cut
 
+//    //<editor-fold desc="Justin's original">
+//    if (p->par()->getPid() == 11) {
+//        double sampling_frac = getSF(p);
+//        double energy = p->cal(PCAL)->getEnergy();
+//        //      double energy =  p->cal(ECIN)->getEnergy() +  p->cal(ECOUT)->getEnergy();
+//
+//        int sector = p->getSector();
+//
+//        //Turn on for functional form
+//        double sf_max_cut = ecal_sf_fcn[1][sector]->Eval(energy);
+//        double sf_min_cut = ecal_sf_fcn[0][sector]->Eval(energy);
+//        //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
+//        //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
+//
+//        //      double sf_max_cut = .28;
+//        //      double sf_min_cut = .2;
+//
+//        if (sampling_frac < sf_max_cut && sampling_frac > sf_min_cut)
+//            return true;
+//        else
+//            return false;
+//    } else
+//        return false;
+//    //</editor-fold>
+
+    //<editor-fold desc="My addition">
     if (p->par()->getPid() == 11) {
         double sampling_frac = getSF(p);
-        double energy = p->cal(PCAL)->getEnergy();
-        //      double energy =  p->cal(ECIN)->getEnergy() +  p->cal(ECOUT)->getEnergy();
 
-        int sector = p->getSector();
-
-        //Turn on for functional form
-        double sf_max_cut = ecal_sf_fcn[1][sector]->Eval(energy);
-        double sf_min_cut = ecal_sf_fcn[0][sector]->Eval(energy);
-        //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
-        //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
-
-        //      double sf_max_cut = .28;
-        //      double sf_min_cut = .2;
-
-        if (sampling_frac < sf_max_cut && sampling_frac > sf_min_cut)
+        if (sampling_frac < SF_max_cut && sampling_frac > SF_min_cut)
             return true;
         else
             return false;
     } else
         return false;
+    //</editor-fold>
+
 }
 
 bool clas12ana::checkEcalPCuts(region_part_ptr p) {
