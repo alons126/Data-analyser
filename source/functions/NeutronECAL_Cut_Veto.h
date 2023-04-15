@@ -15,6 +15,8 @@
 
 #include "../constants.h"
 
+/* NOTE: this code is valid for a single neutral only. */
+
 /* In the input, we have:
  * const std::unique_ptr<clas12::clas12reader> &c12 - the event
  * Ebeam
@@ -66,7 +68,7 @@ bool NeutronECAL_Cut_Veto(const std::unique_ptr<clas12::clas12reader> &c12, doub
     //Now let's put a charge particle veto
     bool Veto = false;
     for (int j = 0; j < allParticles.size(); j++) {
-        if (allParticles[j]->par()->getCharge() == 0) { continue; }
+        if (allParticles[j]->par()->getCharge() == 0) { continue; } /* looking on charged particles only */
         TVector3 v_chit; /* v_chit = location of charged particle hit */
 
         if ((detlayer == clas12::ECIN) && (allParticles[j]->cal(clas12::ECIN)->getZ() != 0)) {

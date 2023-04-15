@@ -79,6 +79,8 @@ protected:
     bool findSubstring(std::string string1, std::string string2);
 
 public:
+    //TODO: add function to integrate histogram
+
     // Constructor declaration:
     hPlot1D() {} // Default constructor
 

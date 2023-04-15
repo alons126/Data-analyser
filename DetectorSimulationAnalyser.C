@@ -112,6 +112,45 @@ void EventAnalyser() {
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
 
+    //<editor-fold desc="Custom cuts naming & print out execution variables">
+
+    //<editor-fold desc="Custom cuts naming">
+    /* Save plots to custom-named folders, to allow multi-sample runs at once. */
+
+    bool custom_cuts_naming = true;
+
+    if (custom_cuts_naming == true) {
+        if (apply_cuts == false) {
+            plots_path = WorkingDirectory + "plots_" + SampleName + "_-_NO_CUTS/";
+            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_NO_CUTS.txt";
+        } else {
+            if (apply_chi2_cuts_1e_cut == false) {
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
+            } else if (apply_chi2_cuts_1e_cut == true) {
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS/";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
+            }
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Print out execution variables">
+    /* Print out execution variables (for self observation) */
+    cout << "-- Execution variables ----------------------------------------------------\n";
+    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
+    cout << "plots_path:\t\t" << plots_path << "\n\n";
+
+    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
+    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
+    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
+    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
+
+    cout << "SampleName:\t\t" << SampleName << "\n";
+    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
+    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
+    //</editor-fold>
+
     //<editor-fold desc="Cuts output">
     /* Print out the cuts within the run (for self-observation) */
 
@@ -138,42 +177,6 @@ void EventAnalyser() {
     cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="Custom cuts naming & print out execution variables">
-
-    //<editor-fold desc="Custom cuts naming">
-    /* Save plots to custom-named folders, to allow multi-sample runs at once. */
-
-    bool custom_cuts_naming = true;
-
-    if (custom_cuts_naming == true) {
-        if (apply_cuts == false) {
-            plots_path = WorkingDirectory + "plots_" + SampleName + "_-_NO_CUTS/";
-            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_NO_CUTS.txt";
-        } else {
-            if (apply_chi2_cuts_1e_cut == false) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
-            } else if (apply_chi2_cuts_1e_cut == true) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS/";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
-            }
-        }
-    }
-    //</editor-fold>
-
-    /* Print out execution variables (for self observation) */
-    cout << "-- Execution variables ----------------------------------------------------\n";
-    cout << "WorkingDirectory:\t" << WorkingDirectory << "\n";
-    cout << "plots_path:\t\t" << plots_path << "\n\n";
-
-    cout << "AnalyseFilePath:\t" << "/" << AnalyseFilePath << "/" << "\n";
-    cout << "AnalyseFileSample:\t" << "/" << AnalyseFileSample << "/" << "\n";
-    cout << "AnalyseFile:\t\t" << AnalyseFile << "\n";
-    cout << "Settings mode:\t\t'" << file_name << "'\n\n";
-
-    cout << "SampleName:\t\t" << SampleName << "\n";
-    cout << "Target:\t\t\t" << Target << " (PDG: " << TargetPDG << ")\n";
-    cout << "Beam Energy:\t\t" << beamE << " [GeV]\n\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -306,20 +309,19 @@ void EventAnalyser() {
     /* Transverse variables plots */
     bool TVariables_plots = true;
 
-    /* Other settings variables */
-    bool wider_margin = true;
-    bool debug_plots = true; // Print out clas12ana debugging plots
-
     //<editor-fold desc="Turn off plots by master selectors">
     if (Plot_selector_master == false) {
-        Cut_plots_master = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
+        Cut_plots_master = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = TVariables_plots = false;
     }
 
     if (Cut_plots_master == false) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
-    if (ETrans_plots_master == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
     if (Angle_plots_master == false) { Theta_e_plots = Phi_e_plots = false; }
+    if (ETrans_plots_master == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
     //</editor-fold>
 
+    /* Other settings variables */
+    bool wider_margin = true;
+    bool debug_plots = true; // Print out clas12ana debugging plots
     //</editor-fold>
 
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -335,7 +337,7 @@ void EventAnalyser() {
     bool norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false, norm_Ecal_plots = false, norm_TVariables_plots = false;
 
     if (normalize_master == false) { // Disable all normalizations if normalize_master == false
-        norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = false;
+        norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
         norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TVariables_plots = false;
 
         cout << "\nAll normalizations are disabled.\n\n";  // and no change to custom_FSI_status
@@ -1828,7 +1830,7 @@ void EventAnalyser() {
 
     int num_of_events_with_1e2X = 0, num_of_events_with_1enP = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
-    //TODO: change to 1e2X #(events) with e in det by reaction
+    //TODO: remove all 1e2X plots and outputs. Replace with 1p
     int num_of_QEL_1e2X_CD_events = 0, num_of_MEC_1e2X_CD_events = 0, num_of_RES_1e2X_CD_events = 0, num_of_DIS_1e2X_CD_events = 0;
     int num_of_QEL_1e2X_FD_events = 0, num_of_MEC_1e2X_FD_events = 0, num_of_RES_1e2X_FD_events = 0, num_of_DIS_1e2X_FD_events = 0;
     int num_of_QEL_1e2p_CD_events = 0, num_of_MEC_1e2p_CD_events = 0, num_of_RES_1e2p_CD_events = 0, num_of_DIS_1e2p_CD_events = 0;
@@ -1984,8 +1986,6 @@ void EventAnalyser() {
             Theta_e_tmp = electrons[i]->getTheta() * 180.0 / pi; // Theta_e_tmp in deg
             Phi_e_tmp = electrons[i]->getPhi() * 180.0 / pi;     // Phi_e_tmp in deg
             P_e_tmp = electrons[i]->par()->getP();               // temp electron momentum
-            //TODO: fix the SetLorentzVector function
-//            SetLorentzVector(e_out, electrons[i], m_e);   // definition of outgoing electron 4-momentum
             e_out.SetPxPyPzE(electrons[i]->par()->getPx(), electrons[i]->par()->getPy(), electrons[i]->par()->getPz(), sqrt(m_e * m_e + P_e_tmp * P_e_tmp));
             Q = beam - e_out;                                    // definition of 4-momentum transfer
             Q2 = fabs(Q.Mag2());
@@ -4896,7 +4896,7 @@ void EventAnalyser() {
         clasAna.setdebug_fileName(debug_filePath);
         clasAna.WriteDebugPlots();
     } else {
-        cout << "\n\nDebugging plots are disabled...\n\n"; //TODO: disable them in clas12ana?
+        cout << "\n\nDebugging plots are disabled...\n\n";
     }
     //</editor-fold>
 

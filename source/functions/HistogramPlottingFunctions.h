@@ -2158,7 +2158,6 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
 // histPlotter2D function (regular) -------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter2D function (regular)">
-//TODO: add this to histogram class
 void histPlotter2D(TCanvas *Histogram1DCanvas,
                    TH2D *Histogram2D,
                    double titleSize,
