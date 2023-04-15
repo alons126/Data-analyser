@@ -50,7 +50,6 @@ using namespace std;
 using namespace clas12;
 
 void EventAnalyser() {
-
     cout << "\n\n===========================================================================\n";
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
@@ -213,8 +212,15 @@ void EventAnalyser() {
     //</editor-fold>
 
     /* Vertex cuts */
-    DSCuts Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
+    DSCuts Vz_cut;
     DSCuts dVz_cuts = DSCuts("dVz", "", "", "1e cut", 0, -8, 4);
+
+    if (SampleName == "LH2_data_6GeV_run_015032") {
+        Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -15, 5);
+    } else {
+        //TODO: these are good for Ca48 simulation and data. Check cuts for other targets!
+        Vz_cut = DSCuts("Vertex z component", "", "", "1e cut", 0, -5, 5);
+    }
 
     /* Sampling Fraction (SF) cuts (electrons only, FD) */
     DSCuts SF_cuts;
@@ -1652,7 +1658,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. dP_T">
     TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#delta#P_{T,L} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
                                           "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
