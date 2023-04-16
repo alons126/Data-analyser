@@ -374,9 +374,9 @@ Directories::Directories(std::string plots_path) {
     Ecal_Directory_map["Ecal_MEC_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                   Find(Ecal_Daughter_Folders, "01_1p/01_Ecal_rec_by_reaction_1p/02_MEC_only") + "/";
     Ecal_Directory_map["Ecal_RES_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                  Find(Ecal_Daughter_Folders, "01_1p/01_Ecal_rec_by_reaction_1p/02_RES_only") + "/";
+                                                  Find(Ecal_Daughter_Folders, "01_1p/01_Ecal_rec_by_reaction_1p/03_RES_only") + "/";
     Ecal_Directory_map["Ecal_DIS_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                  Find(Ecal_Daughter_Folders, "01_1p/01_Ecal_rec_by_reaction_1p/02_DIS_only") + "/";
+                                                  Find(Ecal_Daughter_Folders, "01_1p/01_Ecal_rec_by_reaction_1p/04_DIS_only") + "/";
     Ecal_Directory_map["Ecal_rec_vs_transverse_variables_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                                           Find(Ecal_Daughter_Folders, "01_1p/02_Ecal_rec_vs_transverse_variables_1p") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_1p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +

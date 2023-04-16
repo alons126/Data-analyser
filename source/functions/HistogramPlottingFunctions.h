@@ -2052,7 +2052,8 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
 
     //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
 //    double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
     double diplayTextSize = 0.1225, TitleSize = 0.06, LabelSize = 0.0425;
     bool centerTitle = true;
@@ -2094,8 +2095,8 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1DStack->Draw();
             displayText->Draw();
         }
@@ -2115,8 +2116,8 @@ void stackPlotter1D(TCanvas *Histogram1DCanvas,
             TPaveText *displayText = new TPaveText(x_1, y_1, x_2, y_2, "NDC");
             displayText->SetTextSize(diplayTextSize);
             displayText->SetFillColor(0);
-            displayText->SetTextAlign(12);
             displayText->AddText("Empty histogram");
+            displayText->SetTextAlign(22);
             Histogram1DStack->Draw();
             displayText->Draw();
         } else if (H1D_All_Int->Integral() != 0.) {

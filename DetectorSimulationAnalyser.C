@@ -293,7 +293,16 @@ void EventAnalyser() {
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta vs. P plots */
-    bool Beta_vs_P_plots = true;
+    bool Beta_vs_P_plots = false;
+    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
     bool Angle_plots_master = true; // Master angle plots selector
@@ -413,7 +422,7 @@ void EventAnalyser() {
     if (apply_cuts == true) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
 
     /* Transverse variables */
-    double dP_T_boundary = 2.5;
+    double dP_T_boundary = 3.;
     //</editor-fold>
 
 // Debugging settings ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1468,7 +1477,7 @@ void EventAnalyser() {
     string hE_e_DIS_1p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1p_Directory"];
 
     /* E_e vs. Theta_e (1p, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_1p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int.)", "E_{e} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_1p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1p)", "E_{e} vs. #theta_{e} (All Int., 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                    250, 0, 50, 250, 0, beamE * 1.1);
     TH2D *hE_e_VS_Theta_e_QEL_1p_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1p)", "E_{e} vs. #theta_{e} (QEL Only, 1p);#theta_{e} [Deg];E_{e} [GeV]",
                                                250, 0, 50, 250, 0, beamE * 1.1);
@@ -1524,7 +1533,7 @@ void EventAnalyser() {
     string hE_e_DIS_2p_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_2p_Directory"];
 
     /* E_e vs. Theta_e (2p, CD & FD) */
-    TH2D *hE_e_VS_Theta_e_All_Int_2p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int.)", "E_{e} vs. #theta_{e} (All Int., 2p);#theta_{e} [Deg];E_{e} [GeV]",
+    TH2D *hE_e_VS_Theta_e_All_Int_2p_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 2p)", "E_{e} vs. #theta_{e} (All Int., 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                    250, 0, 50, 250, 0, beamE * 1.1);
     TH2D *hE_e_VS_Theta_e_QEL_2p_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 2p)", "E_{e} vs. #theta_{e} (QEL Only, 2p);#theta_{e} [Deg];E_{e} [GeV]",
                                                250, 0, 50, 250, 0, beamE * 1.1);
@@ -1669,18 +1678,18 @@ void EventAnalyser() {
     //<editor-fold desc="Ecal reconstruction histograms">
 
     //<editor-fold desc="Ecal plots (1p)">
-    THStack *sEcal_1p = new THStack("E_{cal} Reconstruction (1p)", "E_{cal} Reconstruction (1p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]");
+    THStack *sEcal_1p = new THStack("E_{cal} Reconstruction (1p)", "E_{cal} Reconstruction (1p);E_{cal} = E_{e} + T_{p} [GeV]");
     string sEcal_1p_Dir = directories.Ecal_Directory_map["Ecal_stack_1p_Directory"];
 
-    TH1D *hEcal_All_Int_1p = new TH1D("E_{cal} rec. (All Int., 1p)", "E_{cal} Reconstruction (All Int., 1p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_All_Int_1p = new TH1D("E_{cal} rec. (All Int., 1p)", "E_{cal} Reconstruction (All Int., 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_1p = new TH1D("E_{cal} rec. (QEL only, 1p)", "E_{cal} Reconstruction (QEL only, 1p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_QEL_1p = new TH1D("E_{cal} rec. (QEL only, 1p)", "E_{cal} Reconstruction (QEL only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_1p = new TH1D("E_{cal} rec. (MEC only, 1p)", "E_{cal} Reconstruction (MEC only, 1p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_MEC_1p = new TH1D("E_{cal} rec. (MEC only, 1p)", "E_{cal} Reconstruction (MEC only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_1p = new TH1D("E_{cal} rec. (RES only, 1p)", "E_{cal} Reconstruction (RES only, 1p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_RES_1p = new TH1D("E_{cal} rec. (RES only, 1p)", "E_{cal} Reconstruction (RES only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_1p = new TH1D("E_{cal} rec. (DIS only, 1p)", "E_{cal} Reconstruction (DIS only, 1p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_DIS_1p = new TH1D("E_{cal} rec. (DIS only, 1p)", "E_{cal} Reconstruction (DIS only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
     string hEcal_All_Int_1p_Dir = directories.Ecal_Directory_map["Ecal_All_Int_1p_Directory"];
     string hEcal_QEL_1p_Dir = directories.Ecal_Directory_map["Ecal_QEL_1p_Directory"];
@@ -1703,15 +1712,15 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dAlpha_T (1p)">
-    TH2D *hEcal_vs_dAlpha_T_1p = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., 1p)",
-                                            "E_{cal} vs. #delta#alpha_{T,L} (All Int., 1p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                            250, 0, 180, 250, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_1p = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1p)",
+                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
+                                          250, 0, 180, 250, 0, beamE * 1.35);
     string hEcal_vs_dAlpha_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_1p_Directory"];
     //</editor-fold>`
 
     //<editor-fold desc="Ecal vs. dP_T (1p)">
-    TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 1p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 1p);#deltaP_{T,L} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1p)",
+                                      "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     string hEcal_vs_dP_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_1p_Directory"];
     //</editor-fold>
 
@@ -1762,9 +1771,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. dP_T (2p)">
     TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
-                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [Deg];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
     string hEcal_vs_dP_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_2p_Directory"];
     //</editor-fold>
@@ -1778,22 +1787,21 @@ void EventAnalyser() {
     //<editor-fold desc="Transverse variables histograms">
 
     //<editor-fold desc="TV plots (1p)">
-    THStack *sdP_T_1p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV]");
-    TH1D *hdP_T_1p = new TH1D("#deltaP_{T,L} (1p)", "#deltaP_{T,L} by Leading Proton (1p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV]", 100, 0,
-                                dP_T_boundary);
+    THStack *sdP_T_1p = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV]");
+    TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV]", 100, 0, dP_T_boundary);
     string hdP_T_1p_Dir = directories.TVariables_Directory_map["dP_T_1p_Directory"];
 
-    THStack *sdAlpha_T_1p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (1p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1p);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_1p = new TH1D("#delta#alpha_{T,L} (1p)", "#delta#alpha_{T,L} by Leading Proton (1p);#delta#alpha_{T,L} [Deg]", 100, -10, 200);
+    THStack *sdAlpha_T_1p = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1p);#delta#alpha_{T} [Deg]");
+    TH1D *hdAlpha_T_1p = new TH1D("#delta#alpha_{T} (1p)", "#delta#alpha_{T} histogram (1p);#delta#alpha_{T} [Deg]", 100, 0, 180);
     string hdAlpha_T_1p_Dir = directories.TVariables_Directory_map["dAlpha_T_1p_Directory"];
 
-    THStack *sdPhi_T_1p = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (1p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1p);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_1p = new TH1D("#delta#phi_{T,L} (1p)", "#delta#phi_{T,L} by Leading Proton (1p);#delta#phi_{T,L} [Deg]", 100, -10, 200);
+    THStack *sdPhi_T_1p = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1p);#delta#phi_{T} [Deg]");
+    TH1D *hdPhi_T_1p = new TH1D("#delta#phi_{T} (1p)", "#delta#phi_{T} histogram (1p);#delta#phi_{T} [Deg]", 100, 0, 180);
     string hdPhi_T_1p_Dir = directories.TVariables_Directory_map["dPhi_T_1p_Directory"];
 
-    TH2D *hdP_T_vs_dAlpha_T_1p = new TH2D("#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 1p)",
-                                              "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 1p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV];",
-                                              250, 0, 180, 250, 0, dP_T_boundary);
+    TH2D *hdP_T_vs_dAlpha_T_1p = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p)",
+                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV];",
+                                          250, 0, 180, 250, 0, dP_T_boundary);
     string hdP_T_vs_dAlpha_T_1p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"];
     //</editor-fold>
 
@@ -1807,14 +1815,14 @@ void EventAnalyser() {
     string hdP_T_tot_2p_Dir = directories.TVariables_Directory_map["dP_T_2p_Directory"];
 
     THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_L_2p = new TH1D("#delta#alpha_{T,L} (2p)", "#delta#alpha_{T,L} by Leading Proton (2p);#delta#alpha_{T,L} [Deg]", 100, -10, 200);
-    TH1D *hdAlpha_T_tot_2p = new TH1D("#delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,tot} by Momentum Sum (2p);#delta#alpha_{T,tot} [Deg]", 100, -10, 200);
+    TH1D *hdAlpha_T_L_2p = new TH1D("#delta#alpha_{T,L} (2p)", "#delta#alpha_{T,L} by Leading Proton (2p);#delta#alpha_{T,L} [Deg]", 100, 0, 180);
+    TH1D *hdAlpha_T_tot_2p = new TH1D("#delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,tot} by Momentum Sum (2p);#delta#alpha_{T,tot} [Deg]", 100, 0, 180);
     string hdAlpha_T_L_2p_Dir = directories.TVariables_Directory_map["dAlpha_T_2p_Directory"];
     string hdAlpha_T_tot_2p_Dir = directories.TVariables_Directory_map["dAlpha_T_2p_Directory"];
 
     THStack *sdPhi_T_2p = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (2p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (2p);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]", 100, -10, 200);
-    TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]", 100, -10, 200);
+    TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]", 100, 0, 180);
+    TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]", 100, 0, 180);
     string hdPhi_T_L_2p_Dir = directories.TVariables_Directory_map["dPhi_T_2p_Directory"];
     string hdPhi_T_tot_2p_Dir = directories.TVariables_Directory_map["dPhi_T_2p_Directory"];
 
@@ -1961,26 +1969,10 @@ void EventAnalyser() {
     int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_with_exactly_1e_from_file = 0, num_of_events_more_then_1e = 0;
 
     int num_of_events_1e1p_all = 0, num_of_events_1e2p_all = 0, num_of_events_1e2p_all_wo_FDph = 0;
-
-    int num_of_events_with_1e2X = 0, num_of_events_with_1enP = 0, num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
-
-    //TODO: remove all 1e2X plots and outputs. Replace with 1p
-    int num_of_QEL_1e2X_CD_events = 0, num_of_MEC_1e2X_CD_events = 0, num_of_RES_1e2X_CD_events = 0, num_of_DIS_1e2X_CD_events = 0;
-    int num_of_QEL_1e2X_FD_events = 0, num_of_MEC_1e2X_FD_events = 0, num_of_RES_1e2X_FD_events = 0, num_of_DIS_1e2X_FD_events = 0;
-    int num_of_QEL_1e2p_CD_events = 0, num_of_MEC_1e2p_CD_events = 0, num_of_RES_1e2p_CD_events = 0, num_of_DIS_1e2p_CD_events = 0;
-    int num_of_QEL_1e2p_FD_events = 0, num_of_MEC_1e2p_FD_events = 0, num_of_RES_1e2p_FD_events = 0, num_of_DIS_1e2p_FD_events = 0;
-
-    int num_of_events_1e2p_w_eChi2_cut_only_CD = 0, num_of_events_1e2p_w_eChi2_cut_only_FD = 0;
-    int num_of_events_1e2p_w_pChi2_cut_only_CD = 0, num_of_events_1e2p_w_pChi2_cut_only_FD = 0;
-    int num_of_events_1e2p_w_allChi2_cuts_CD = 0, num_of_events_1e2p_w_allChi2_cuts_FD = 0;
-    int num_of_events_1e2p_w_allChi2_cuts = 0;
+    int num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
     int num_of_events_1p = 0; // = number of 1p events
-    int num_of_QEL_1p_events = 0, num_of_MEC_1p_events = 0, num_of_RES_1p_events = 0, num_of_DIS_1p_events = 0;
-
-    /* 1e2p = 2p 1e + electron cuts only; 2p = 1e2p with all other cuts */
     int num_of_events_2p = 0; // = number of 2p events
-    int num_of_QEL_2p_events = 0, num_of_MEC_2p_events = 0, num_of_RES_2p_events = 0, num_of_DIS_2p_events = 0;
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2396,12 +2388,7 @@ void EventAnalyser() {
         ++num_of_events_with_exactly_1e; // logging #(events) w/ exactly 1e
 
         //<editor-fold desc="1e cut event counts">
-        if (Nf - Ne == Np) {
-            ++num_of_events_with_1enP; // logging #(events) w/ 1e & any #p 1enP
-
-            if (Np == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
-        }
-
+        if (Nf_Prime == 2 && Np == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
         if (Np == 1) { ++num_of_events_1e1p_all; }
         if (Np == 2) { ++num_of_events_1e2p_all; }
         if (Np == 2 && Nph_FD == 0) { ++num_of_events_1e2p_all_wo_FDph; }
@@ -2534,19 +2521,15 @@ void EventAnalyser() {
                         hPhi_e_All_Int_1e2p_FD->Fill(Phi_e);
 
                         if (qel) {
-                            ++num_of_QEL_1e2p_FD_events;
                             hTheta_e_QEL_1e2p_FD->Fill(Theta_e);
                             hPhi_e_QEL_1e2p_FD->Fill(Phi_e);
                         } else if (mec) {
-                            ++num_of_MEC_1e2p_FD_events;
                             hTheta_e_MEC_1e2p_FD->Fill(Theta_e);
                             hPhi_e_MEC_1e2p_FD->Fill(Phi_e);
                         } else if (res) {
-                            ++num_of_RES_1e2p_FD_events;
                             hTheta_e_RES_1e2p_FD->Fill(Theta_e);
                             hPhi_e_RES_1e2p_FD->Fill(Phi_e);
                         } else if (dis) {
-                            ++num_of_DIS_1e2p_FD_events;
                             hTheta_e_DIS_1e2p_FD->Fill(Theta_e);
                             hPhi_e_DIS_1e2p_FD->Fill(Phi_e);
                         }
@@ -3185,18 +3168,19 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            dP_T_1p_3v = P_T_e_1p_3v + P_T_p_1p_3v;
+//            dP_T_1p_3v = P_T_e_1p_3v + P_T_p_1p_3v;
+            dP_T_1p_3v = TVector3(P_T_e_1p_3v.Px() + P_T_p_1p_3v.Px(), P_T_e_1p_3v.Py() + P_T_p_1p_3v.Py(), 0);
 
             hdP_T_1p->Fill(dP_T_1p_3v.Mag());
 
             dAlpha_T_1p = acos(-(P_e_1p_3v.Px() * dP_T_1p_3v.Px() + P_e_1p_3v.Py() * dP_T_1p_3v.Py() + P_e_1p_3v.Pz() * dP_T_1p_3v.Pz())
-                              / (P_T_e_1p_3v.Mag() * dP_T_1p_3v.Mag())) * 180.0 / pi; // dP_T_1p_3v.Pz() = 0; dAlpha_T_1p in deg
+                               / (P_T_e_1p_3v.Mag() * dP_T_1p_3v.Mag())) * 180.0 / pi; // dP_T_1p_3v.Pz() = 0; dAlpha_T_1p in deg
             hdAlpha_T_1p->Fill(dAlpha_T_1p);
 
             hdP_T_vs_dAlpha_T_1p->Fill(dAlpha_T_1p, dP_T_1p_3v.Mag());
 
             dPhi_T_1p = acos(-(P_T_e_1p_3v.Px() * P_T_p_1p_3v.Px() + P_T_e_1p_3v.Py() * P_T_p_1p_3v.Py() + P_T_e_1p_3v.Pz() * P_T_p_1p_3v.Pz())
-                            / (P_T_e_1p_3v.Mag() * P_T_p_1p_3v.Mag())) * 180.0 / pi; // P_T_p_1p_3v.Pz() = 0; dPhi_T_1p in deg
+                             / (P_T_e_1p_3v.Mag() * P_T_p_1p_3v.Mag())) * 180.0 / pi; // P_T_p_1p_3v.Pz() = 0; dPhi_T_1p in deg
             hdPhi_T_1p->Fill(dPhi_T_1p);
 
             hEcal_vs_dAlpha_T_1p->Fill(dAlpha_T_1p, Ecal_1p);
@@ -3221,12 +3205,6 @@ void EventAnalyser() {
                 if (protons[0]->getRegion() == CD) { hPhi_p2_1e2pXy_CD->Fill(protons[0]->getPhi() * 180.0 / pi); }
             }
         }
-        //</editor-fold>
-
-//  1e2X cut ------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        //<editor-fold desc="1e2X cut">
-        if (Nf == 3) { ++num_of_events_with_1e2X; } // logging #(events) w/ 1e2X (only 3 scattered/detected particles)
         //</editor-fold>
 
 //  1e2p & 2p cuts ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3315,29 +3293,24 @@ void EventAnalyser() {
                 /* Chi2 after cut */
                 if ((electrons[0]->getRegion() == FD) &&
                     (fabs(Chi2_Electron_cuts_FD.Cuts.at(0) - electrons[0]->par()->getChi2Pid()) <= Chi2_Electron_cuts_FD.Cuts.at(2))) {
-                    ++num_of_events_1e2p_w_eChi2_cut_only_FD;
                     hChi2_Electron_1e2p_AC_FD.hFill(electrons[0]->par()->getChi2Pid(), Weight);
 //                    hChi2_Electron_1e2p_AC_FD->Fill(electrons[0]->par()->getChi2Pid());
                 }
 
                 if ((protons[0]->getRegion() == CD) && (fabs(Chi2_Proton_cuts_CD.Cuts.at(0) - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cuts_CD.Cuts.at(2))) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                     hChi2_Proton_1e2p_AC_CD.hFill(protons[0]->par()->getChi2Pid(), Weight);
 //                    hChi2_Proton_1e2p_AC_CD->Fill(protons[0]->par()->getChi2Pid());
                 } else if ((protons[0]->getRegion() == FD) &&
                            (fabs(Chi2_Proton_cuts_FD.Cuts.at(0) - protons[0]->par()->getChi2Pid()) <= Chi2_Proton_cuts_FD.Cuts.at(2))) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                     hChi2_Proton_1e2p_AC_FD.hFill(protons[0]->par()->getChi2Pid(), Weight);
 //                    hChi2_Proton_1e2p_AC_FD->Fill(protons[0]->par()->getChi2Pid());
                 }
 
                 if ((protons[1]->getRegion() == CD) && (fabs(Chi2_Proton_cuts_CD.Cuts.at(0) - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cuts_CD.Cuts.at(2))) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_CD;
                     hChi2_Proton_1e2p_AC_CD.hFill(protons[1]->par()->getChi2Pid(), Weight);
 //                    hChi2_Proton_1e2p_AC_CD->Fill(protons[1]->par()->getChi2Pid());
                 } else if ((protons[1]->getRegion() == FD) &&
                            (fabs(Chi2_Proton_cuts_FD.Cuts.at(0) - protons[1]->par()->getChi2Pid()) <= Chi2_Proton_cuts_FD.Cuts.at(2))) {
-                    ++num_of_events_1e2p_w_pChi2_cut_only_FD;
                     hChi2_Proton_1e2p_AC_FD.hFill(protons[1]->par()->getChi2Pid(), Weight);
 //                    hChi2_Proton_1e2p_AC_FD->Fill(protons[1]->par()->getChi2Pid());
                 }
@@ -3428,20 +3401,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Counting 2p events by reaction">
             ++num_of_events_2p;
-
-            if (qel) {
-                ++num_of_QEL_2p_events;
-            } else if (mec) {
-                ++num_of_MEC_2p_events;
-            } else if (res) {
-                ++num_of_RES_2p_events;
-            } else if (dis) {
-                ++num_of_DIS_2p_events;
-            }
-            //</editor-fold>
 
             //<editor-fold desc="Filling cut parameters histograms (2p)">
             /* Filling Chi2 histograms (2p) */
@@ -3789,9 +3749,9 @@ void EventAnalyser() {
             hdP_T_tot_2p->Fill(dP_T_tot_2p_3v.Mag());
 
             dAlpha_T_L_2p = acos(-(P_e_2p_3v.Px() * dP_T_L_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_L_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_L_2p_3v.Pz())
-                              / (P_T_e_2p_3v.Mag() * dP_T_L_2p_3v.Mag())) * 180.0 / pi; // dP_T_L_2p_3v.Pz() = 0; dAlpha_T_L_2p in deg
+                                 / (P_T_e_2p_3v.Mag() * dP_T_L_2p_3v.Mag())) * 180.0 / pi; // dP_T_L_2p_3v.Pz() = 0; dAlpha_T_L_2p in deg
             dAlpha_T_tot_2p = acos(-(P_e_2p_3v.Px() * dP_T_tot_2p_3v.Px() + P_e_2p_3v.Py() * dP_T_tot_2p_3v.Py() + P_e_2p_3v.Pz() * dP_T_tot_2p_3v.Pz())
-                                / (P_T_e_2p_3v.Mag() * dP_T_tot_2p_3v.Mag())) * 180.0 / pi; // dP_T_tot_2p_3v.Pz() = 0; dAlpha_T_tot_2p in deg
+                                   / (P_T_e_2p_3v.Mag() * dP_T_tot_2p_3v.Mag())) * 180.0 / pi; // dP_T_tot_2p_3v.Pz() = 0; dAlpha_T_tot_2p in deg
             hdAlpha_T_L_2p->Fill(dAlpha_T_L_2p);
             hdAlpha_T_tot_2p->Fill(dAlpha_T_tot_2p);
 
@@ -3799,9 +3759,9 @@ void EventAnalyser() {
             hdP_T_tot_vs_dAlpha_T_tot_2p->Fill(dAlpha_T_tot_2p, dP_T_tot_2p_3v.Mag());
 
             dPhi_T_L_2p = acos(-(P_T_e_2p_3v.Px() * P_T_L_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_L_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_L_2p_3v.Pz())
-                            / (P_T_e_2p_3v.Mag() * P_T_L_2p_3v.Mag())) * 180.0 / pi; // P_T_L_2p_3v.Pz() = 0; dPhi_T_L_2p in deg
+                               / (P_T_e_2p_3v.Mag() * P_T_L_2p_3v.Mag())) * 180.0 / pi; // P_T_L_2p_3v.Pz() = 0; dPhi_T_L_2p in deg
             dPhi_T_tot_2p = acos(-(P_T_e_2p_3v.Px() * P_T_tot_2p_3v.Px() + P_T_e_2p_3v.Py() * P_T_tot_2p_3v.Py() + P_T_e_2p_3v.Pz() * P_T_tot_2p_3v.Pz())
-                              / (P_T_e_2p_3v.Mag() * P_T_tot_2p_3v.Mag())) * 180.0 / pi; // P_T_tot_2p_3v.Pz() = 0; dPhi_T_tot_2p in deg
+                                 / (P_T_e_2p_3v.Mag() * P_T_tot_2p_3v.Mag())) * 180.0 / pi; // P_T_tot_2p_3v.Pz() = 0; dPhi_T_tot_2p in deg
             hdPhi_T_L_2p->Fill(dPhi_T_L_2p);
             hdPhi_T_tot_2p->Fill(dPhi_T_tot_2p);
 
@@ -5081,23 +5041,23 @@ void EventAnalyser() {
 //  Ecal vs. dAlpha_T plots (CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Ecal vs. dAlpha_T plots (1p)">
-        histPlotter2D(c1, hEcal_vs_dAlpha_T_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_1p_Dir, "02_Ecal_vs_dAlpha_T_L", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_1p_Dir, "02_Ecal_vs_dAlpha_T_1p", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. dAlpha_T plots (2p)">
-        histPlotter2D(c1, hEcal_vs_dAlpha_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_L_2p_Dir, "02_Ecal_vs_dAlpha_T_L", false);
-        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_tot_2p_Dir, "03_Ecal_vs_dAlpha_T_tot", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_L_2p_Dir, "02_Ecal_vs_dAlpha_T_L_2p", false);
+        histPlotter2D(c1, hEcal_vs_dAlpha_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dAlpha_T_tot_2p_Dir, "03_Ecal_vs_dAlpha_T_tot_2p", false);
         //</editor-fold>
 
 //  Ecal vs. dP_T plots (CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Ecal vs. dP_T plots (1p)">
-        histPlotter2D(c1, hEcal_vs_dP_T_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_1p_Dir, "02_Ecal_vs_dP_T_L", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_1p_Dir, "02_Ecal_vs_dP_T_1p", false);
         //</editor-fold>
 
         //<editor-fold desc="Ecal vs. dP_T plots (2p)">
-        histPlotter2D(c1, hEcal_vs_dP_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_L_2p_Dir, "02_Ecal_vs_dP_T_L", false);
-        histPlotter2D(c1, hEcal_vs_dP_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_tot_2p_Dir, "03_Ecal_vs_dP_T_tot", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_L_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_L_2p_Dir, "02_Ecal_vs_dP_T_L_2p", false);
+        histPlotter2D(c1, hEcal_vs_dP_T_tot_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_dP_T_tot_2p_Dir, "03_Ecal_vs_dP_T_tot_2p", false);
         //</editor-fold>
 
     } else {
@@ -5116,49 +5076,49 @@ void EventAnalyser() {
 //  dP_T plots (CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dP_T plots (1p)">
-        histPlotter1D(c1, hdP_T_1p, norm_TVariables_plots, true, 1., "#deltaP_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_1p, "dP_T_L", hdP_T_1p_Dir, "1p", kBlue, true, true, true);
+        histPlotter1D(c1, hdP_T_1p, norm_TVariables_plots, true, 1., "#deltaP_{T} histogram", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sdP_T_1p, "dP_T_1p", hdP_T_1p_Dir, "1p", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="dP_T plots (2p)">
         histPlotter1D(c1, hdP_T_L_2p, norm_TVariables_plots, true, 1., "#deltaP_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_2p, "dP_T_L", hdP_T_L_2p_Dir, "2p", kBlue, true, true, true);
+                      sdP_T_2p, "dP_T_L_2p", hdP_T_L_2p_Dir, "2p", kBlue, true, true, true);
         histPlotter1D(c1, hdP_T_tot_2p, norm_TVariables_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_2p, "dP_T_tot", hdP_T_tot_2p_Dir, "2p", kBlue, true, true, true);
+                      sdP_T_2p, "dP_T_tot_2p", hdP_T_tot_2p_Dir, "2p", kBlue, true, true, true);
         //</editor-fold>
 
 //  dAlpha_T plots (CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dAlpha_T plots (1p)">
-        histPlotter1D(c1, hdAlpha_T_1p, norm_TVariables_plots, true, 1., "#delta#alpha_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true, sdAlpha_T_1p, "dAlpha_T_L", hdAlpha_T_1p_Dir, "1p", kBlue, true, true, true);
+        histPlotter1D(c1, hdAlpha_T_1p, norm_TVariables_plots, true, 1., "#delta#alpha_{T} histogram", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sdAlpha_T_1p, "dAlpha_T_1p", hdAlpha_T_1p_Dir, "1p", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="dAlpha_T plots (2p)">
         histPlotter1D(c1, hdAlpha_T_L_2p, norm_TVariables_plots, true, 1., "#delta#alpha_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true, sdAlpha_T_2p, "dAlpha_T_L", hdAlpha_T_L_2p_Dir, "2p", kBlue, true, true, true);
+                      true, sdAlpha_T_2p, "dAlpha_T_L_2p", hdAlpha_T_L_2p_Dir, "2p", kBlue, true, true, true);
         histPlotter1D(c1, hdAlpha_T_tot_2p, norm_TVariables_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true, sdAlpha_T_2p, "dAlpha_T_tot", hdAlpha_T_tot_2p_Dir, "2p", kBlue, true, true, true);
+                      true, sdAlpha_T_2p, "dAlpha_T_tot_2p", hdAlpha_T_tot_2p_Dir, "2p", kBlue, true, true, true);
         //</editor-fold>
 
 //  dPhi_T plots (CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dPhi_T plots (1p)">
-        histPlotter1D(c1, hdPhi_T_1p, norm_TVariables_plots, true, 1., "#delta#phi_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdPhi_T_1p, "dPhi_T_L", hdPhi_T_1p_Dir, "1p", kBlue, true, true, true);
+        histPlotter1D(c1, hdPhi_T_1p, norm_TVariables_plots, true, 1., "#delta#phi_{T} histogram", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sdPhi_T_1p, "dPhi_T_1p", hdPhi_T_1p_Dir, "1p", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="dPhi_T plots (2p)">
         histPlotter1D(c1, hdPhi_T_L_2p, norm_TVariables_plots, true, 1., "#delta#phi_{T,L} by Leading Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdPhi_T_2p, "dPhi_T_L", hdPhi_T_L_2p_Dir, "2p", kBlue, true, true, true);
+                      sdPhi_T_2p, "dPhi_T_L_2p", hdPhi_T_L_2p_Dir, "2p", kBlue, true, true, true);
         histPlotter1D(c1, hdPhi_T_tot_2p, norm_TVariables_plots, true, 1., "#delta#phi_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdPhi_T_2p, "dPhi_T_tot", hdPhi_T_tot_2p_Dir, "2p", kBlue, true, true, true);
+                      sdPhi_T_2p, "dPhi_T_tot_2p", hdPhi_T_tot_2p_Dir, "2p", kBlue, true, true, true);
         //</editor-fold>
 
 //  dP_T vs. dAlpha_T plots (CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dP_T vs. dAlpha_T plots (1p)">
-        histPlotter2D(c1, hdP_T_vs_dAlpha_T_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_vs_dAlpha_T_1p_Dir, "01_dP_T_L_vs_dAlpha_T_L_1p", false);
+        histPlotter2D(c1, hdP_T_vs_dAlpha_T_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_vs_dAlpha_T_1p_Dir, "01_dP_T_vs_dAlpha_T_1p", false);
         //</editor-fold>
 
         //<editor-fold desc="dP_T vs. dAlpha_T plots (2p)">
@@ -5585,61 +5545,14 @@ void EventAnalyser() {
     myLogFile << "#(events) w/ more then 1e:\t\t\t" << num_of_events_more_then_1e << "\n";
     myLogFile << "#(events) w/ exactly 1e:\t\t\t" << num_of_events_with_exactly_1e << "\n\n";
 
-    myLogFile << "-- 1e2X event counts ------------------------------------------------------\n";
-    myLogFile << "#(events) w/ 1e2X:\t\t\t\t" << num_of_events_with_1e2X << "\n\n";
-
-    myLogFile << "#(events) w/ 1e2X QEL in CD:\t\t\t" << num_of_QEL_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X MEC in CD:\t\t\t" << num_of_MEC_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X RES in CD:\t\t\t" << num_of_RES_1e2X_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X DIS in CD:\t\t\t" << num_of_DIS_1e2X_CD_events << "\n";
-    myLogFile << "QEL + MEC + RES + DIS (CD):\t\t\t" << num_of_QEL_1e2X_CD_events + num_of_MEC_1e2X_CD_events + num_of_RES_1e2X_CD_events + num_of_DIS_1e2X_CD_events
-              << "\n\n";
-
-    myLogFile << "#(events) w/ 1e2X QEL in FD:\t\t\t" << num_of_QEL_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X MEC in FD:\t\t\t" << num_of_MEC_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X RES in FD:\t\t\t" << num_of_RES_1e2X_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2X DIS in FD:\t\t\t" << num_of_DIS_1e2X_FD_events << "\n";
-    myLogFile << "QEL + MEC + RES + DIS (FD):\t\t\t" << num_of_QEL_1e2X_FD_events + num_of_MEC_1e2X_FD_events + num_of_RES_1e2X_FD_events + num_of_DIS_1e2X_FD_events
-              << "\n\n";
-
-    myLogFile << "-- 1enp event counts ------------------------------------------------------\n";
-    myLogFile << "#(events) w/ 1e & any #p:\t\t\t" << num_of_events_with_1enP << "\n\n";
-
     myLogFile << "-- 1e1p event counts ------------------------------------------------------\n";
     myLogFile << "#(events) w/ 1e1p:\t\t\t\t" << num_of_events_with_1e1p << "\n\n";
 
     myLogFile << "-- 1e2p event counts ------------------------------------------------------\n";
     myLogFile << "#(events) w/ 1e2p:\t\t\t\t" << num_of_events_with_1e2p << "\n\n";
 
-    myLogFile << "#(events) w/ 1e2p QEL in CD:\t\t\t" << num_of_QEL_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p MEC in CD:\t\t\t" << num_of_MEC_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p RES in CD:\t\t\t" << num_of_RES_1e2p_CD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p DIS in CD:\t\t\t" << num_of_DIS_1e2p_CD_events << "\n";
-    myLogFile << "QEL + MEC + RES + DIS (CD):\t\t\t" << num_of_QEL_1e2p_CD_events + num_of_MEC_1e2p_CD_events + num_of_RES_1e2p_CD_events + num_of_DIS_1e2p_CD_events
-              << "\n";
-    myLogFile << "#(events) 1e2p & e Chi2 cuts CD:\t\t" << num_of_events_1e2p_w_eChi2_cut_only_CD << "\n";
-    myLogFile << "#(events) 1e2p & p Chi2 cuts CD:\t\t" << num_of_events_1e2p_w_pChi2_cut_only_CD << "\n";
-    myLogFile << "#(events) 1e2p & all Chi2 cuts CD*:\t" << num_of_events_1e2p_w_allChi2_cuts_CD << "\n\n";
-
-    myLogFile << "#(events) w/ 1e2p QEL in FD:\t\t\t" << num_of_QEL_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p MEC in FD:\t\t\t" << num_of_MEC_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p RES in FD:\t\t\t" << num_of_RES_1e2p_FD_events << "\n";
-    myLogFile << "#(events) w/ 1e2p DIS in FD:\t\t\t" << num_of_DIS_1e2p_FD_events << "\n";
-    myLogFile << "QEL + MEC + RES + DIS (FD):\t\t\t" << num_of_QEL_1e2p_FD_events + num_of_MEC_1e2p_FD_events + num_of_RES_1e2p_FD_events + num_of_DIS_1e2p_FD_events
-              << "\n";
-    myLogFile << "#(events) 1e2p & e Chi2 cuts FD:\t\t" << num_of_events_1e2p_w_eChi2_cut_only_FD << "\n";
-    myLogFile << "#(events) 1e2p & p Chi2 cuts FD:\t\t" << num_of_events_1e2p_w_pChi2_cut_only_FD << "\n";
-    myLogFile << "#(events) 1e2p & all Chi2 cuts FD*:\t" << num_of_events_1e2p_w_allChi2_cuts_FD << "\n\n";
-
-    myLogFile << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n\n";
-
-    cout << "-- 2p event counts --------------------------------------------------------\n";
+    myLogFile << "-- 2p event counts --------------------------------------------------------\n";
     myLogFile << "#(events) 2p:\t\t\t\t\t" << num_of_events_2p << "\n";
-    myLogFile << "#(events) 2p QEL:\t\t\t\t\t" << num_of_QEL_2p_events << "\n";
-    myLogFile << "#(events) 2p MEC:\t\t\t\t\t" << num_of_MEC_2p_events << "\n";
-    myLogFile << "#(events) 2p RES:\t\t\t\t\t" << num_of_RES_2p_events << "\n";
-    myLogFile << "#(events) 2p DIS:\t\t\t\t\t" << num_of_DIS_2p_events << "\n";
-    myLogFile << "QEL + MEC + RES + DIS (2p):\t\t\t" << num_of_QEL_2p_events + num_of_MEC_2p_events + num_of_RES_2p_events + num_of_DIS_2p_events << "\n\n\n";
 
     myLogFile << "-- Proton counts ----------------------------------------------------------\n";
     myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
@@ -5717,60 +5630,14 @@ void EventAnalyser() {
     cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n\n";
     cout << "#(events) w/ exactly 1e (from file):\t" << num_of_events_with_exactly_1e_from_file << "\n\n";
 
-    cout << "-- 1e2X event counts ------------------------------------------------------\n";
-    cout << "#(events) w/ 1e2X:\t\t\t" << num_of_events_with_1e2X << "\n\n";
-
-    cout << "#(events) w/ 1e2X QEL in CD:\t\t" << num_of_QEL_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X MEC in CD:\t\t" << num_of_MEC_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X RES in CD:\t\t" << num_of_RES_1e2X_CD_events << "\n";
-    cout << "#(events) w/ 1e2X DIS in CD:\t\t" << num_of_DIS_1e2X_CD_events << "\n";
-    cout << "QEL + MEC + RES + DIS (CD):\t\t" << num_of_QEL_1e2X_CD_events + num_of_MEC_1e2X_CD_events + num_of_RES_1e2X_CD_events + num_of_DIS_1e2X_CD_events
-         << "\n\n";
-
-    cout << "#(events) w/ 1e2X QEL in FD:\t\t" << num_of_QEL_1e2X_FD_events << "\n";
-    cout << "#(events) w/ 1e2X MEC in FD:\t\t" << num_of_MEC_1e2X_FD_events << "\n";
-    cout << "#(events) w/ 1e2X RES in FD:\t\t" << num_of_RES_1e2X_FD_events << "\n";
-    cout << "#(events) w/ 1e2X DIS in FD:\t\t" << num_of_DIS_1e2X_FD_events << "\n";
-    cout << "QEL + MEC + RES + DIS (FD):\t\t" << num_of_QEL_1e2X_FD_events + num_of_MEC_1e2X_FD_events + num_of_RES_1e2X_FD_events + num_of_DIS_1e2X_FD_events
-         << "\n\n";
-
-    cout << "-- 1enp event counts ------------------------------------------------------\n";
-    cout << "#(events) w/ 1e & any #p:\t\t" << num_of_events_with_1enP << "\n\n";
-
     cout << "-- 1e1p event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e1p:\t\t\t" << num_of_events_with_1e1p << "\n\n";
 
     cout << "-- 1e2p event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e2p:\t\t\t" << num_of_events_with_1e2p << "\n\n";
 
-    cout << "#(events) w/ 1e2p QEL in CD:\t\t" << num_of_QEL_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p MEC in CD:\t\t" << num_of_MEC_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p RES in CD:\t\t" << num_of_RES_1e2p_CD_events << "\n";
-    cout << "#(events) w/ 1e2p DIS in CD:\t\t" << num_of_DIS_1e2p_CD_events << "\n";
-    cout << "QEL + MEC + RES + DIS (CD):\t\t" << num_of_QEL_1e2p_CD_events + num_of_MEC_1e2p_CD_events + num_of_RES_1e2p_CD_events + num_of_DIS_1e2p_CD_events
-         << "\n";
-    cout << "#(events) 1e2p & e Chi2 cuts CD:\t" << num_of_events_1e2p_w_eChi2_cut_only_CD << "\n";
-    cout << "#(events) 1e2p & p Chi2 cuts CD:\t" << num_of_events_1e2p_w_pChi2_cut_only_CD << "\n";
-    cout << "#(events) 1e2p & all Chi2 cuts CD*:\t" << num_of_events_1e2p_w_allChi2_cuts_CD << "\n\n";
-
-    cout << "#(events) w/ 1e2p QEL in FD:\t\t" << num_of_QEL_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p MEC in FD:\t\t" << num_of_MEC_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p RES in FD:\t\t" << num_of_RES_1e2p_FD_events << "\n";
-    cout << "#(events) w/ 1e2p DIS in FD:\t\t" << num_of_DIS_1e2p_FD_events << "\n";
-    cout << "QEL + MEC + RES + DIS (FD):\t\t" << num_of_QEL_1e2p_FD_events + num_of_MEC_1e2p_FD_events + num_of_RES_1e2p_FD_events + num_of_DIS_1e2p_FD_events << "\n";
-    cout << "#(events) 1e2p & e Chi2 cuts FD:\t" << num_of_events_1e2p_w_eChi2_cut_only_FD << "\n";
-    cout << "#(events) 1e2p & p Chi2 cuts FD:\t" << num_of_events_1e2p_w_pChi2_cut_only_FD << "\n";
-    cout << "#(events) 1e2p & all Chi2 cuts FD*:\t" << num_of_events_1e2p_w_allChi2_cuts_FD << "\n\n";
-
-    cout << "#(events) 1e2p & all Chi2 cuts:\t\t" << num_of_events_1e2p_w_allChi2_cuts << "\n\n";
-
     cout << "-- 2p event counts --------------------------------------------------------\n";
     cout << "#(events) 2p:\t\t\t\t" << num_of_events_2p << "\n";
-    cout << "#(events) 2p QEL:\t\t\t" << num_of_QEL_2p_events << "\n";
-    cout << "#(events) 2p MEC:\t\t\t" << num_of_MEC_2p_events << "\n";
-    cout << "#(events) 2p RES:\t\t\t" << num_of_RES_2p_events << "\n";
-    cout << "#(events) 2p DIS:\t\t\t" << num_of_DIS_2p_events << "\n";
-    cout << "QEL + MEC + RES + DIS (2p):\t\t" << num_of_QEL_2p_events + num_of_MEC_2p_events + num_of_RES_2p_events + num_of_DIS_2p_events << "\n\n";
 
     cout << "-- Proton counts ----------------------------------------------------------\n";
     cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
