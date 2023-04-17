@@ -291,7 +291,7 @@ Directories::Directories(std::string plots_path) {
 
     //<editor-fold desc="ETrans plots directories">
     for (std::string folders_name: ETrans_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
+        MakeDirectory(create_ETrans_Dir, ETrans_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
     ETrans_Directory_map["ETrans_15_stack_2p_Directory"] = Plots_Folder + "/" + ETrans_Parent_Directory + "/" +
@@ -346,7 +346,7 @@ Directories::Directories(std::string plots_path) {
 
     //<editor-fold desc="Ecal plots directories">
     for (std::string folders_name: Ecal_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
+        MakeDirectory(create_Ecal_Dir, Ecal_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
     Ecal_Directory_map["Ecal_stack_2p_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
@@ -385,7 +385,7 @@ Directories::Directories(std::string plots_path) {
 
     //<editor-fold desc="Transverse variables plots directories">
     for (std::string folders_name: TVariables_Daughter_Folders) {
-        MakeDirectory(create_E_e_Dir, TVariables_Parent_Directory, folders_name, false, Plots_Folder);
+        MakeDirectory(create_TVariables_Dir, TVariables_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
     TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TVariables_Parent_Directory + "/" +
@@ -404,6 +404,17 @@ Directories::Directories(std::string plots_path) {
                                                         Find(TVariables_Daughter_Folders, "01_1p/02_dAlpha_T_1p") + "/";
     TVariables_Directory_map["dPhi_T_1p_Directory"] = Plots_Folder + "/" + TVariables_Parent_Directory + "/" +
                                                       Find(TVariables_Daughter_Folders, "01_1p/03_dPhi_T_1p") + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="ToF plots directories">
+    for (std::string folders_name: ToF_Daughter_Folders) {
+        MakeDirectory(create_ToF_Dir, ToF_Parent_Directory, folders_name, false, Plots_Folder);
+    }
+
+    ToF_Directory_map["Neutron_vs_cParticles_hits_1e_cut"] = Plots_Folder + "/" + ToF_Parent_Directory + "/" +
+                                                                Find(ToF_Daughter_Folders, "01_1e_cut/01_Neutron_vs_cParticles_hits_FTOF_1e_cut") + "/";
+    ToF_Directory_map["Neutron_vs_cParticles_hits_1n1p"] = Plots_Folder + "/" + ToF_Parent_Directory + "/" +
+                                                           Find(ToF_Daughter_Folders, "02_1n1p/01_Neutron_vs_cParticles_hits_FTOF_1n1p") + "/";
     //</editor-fold>
 
 }

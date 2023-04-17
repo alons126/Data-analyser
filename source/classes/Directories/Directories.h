@@ -141,6 +141,13 @@ private:
                                                        "01_1p/02_dAlpha_T_1p", "01_1p/03_dPhi_T_1p"};
     //</editor-fold>
 
+    //<editor-fold desc="ToF plots directories">
+    bool create_ToF_Dir = true;
+    std::string ToF_Parent_Directory = "09_ToF_plots";
+    vector<std::string> ToF_Daughter_Folders = {"", "01_1e_cut", "01_1e_cut/01_Neutron_vs_cParticles_hits_FTOF_1e_cut", "02_1n1p",
+                                                "02_1n1p/01_Neutron_vs_cParticles_hits_FTOF_1n1p"};
+    //</editor-fold>
+
 // Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool FindSubstring(std::string string1, std::string string2);
@@ -163,6 +170,7 @@ public:
     map<std::string, std::string> ETrans_Directory_map;
     map<std::string, std::string> Ecal_Directory_map;
     map<std::string, std::string> TVariables_Directory_map;
+    map<std::string, std::string> ToF_Directory_map;
 
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
 
