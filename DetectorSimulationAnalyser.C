@@ -305,17 +305,17 @@ void EventAnalyser() {
     cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
-    bool Angle_plots_master = false; // Master angle plots selector
+    bool Angle_plots_master = true; // Master angle plots selector
     bool Theta_e_plots = true, Phi_e_plots = true;
-    cout << "\n\n\n\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
+//    cout << "\n\n\n\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
     bool Q2_plots = true;
@@ -1440,6 +1440,20 @@ void EventAnalyser() {
     string hPhi_p2_1e2pXy_CD_Dir = directories.Angle_Directory_map["Phi_Proton_1e2pXy_Directory"];
     //</editor-fold>
 
+
+// Theta_R1_R2_VS_ToF1_ToF2 --------------------------------------------------------------------------------------------------------------------------
+
+    //TODO: reorganize properly
+
+    //<editor-fold desc="Theta_R1_R2_VS_ToF1_ToF2">
+    hPlot2D hTheta_R1_R2_VS_ToF1_ToF2_2p = hPlot2D("2p", "CD", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
+                                                   "ToF_{1}-ToF_{2} [???]", directories.Angle_Directory_map["Theta_R1_R2_plots_2p"], "01_Theta_R1_R2_VS_ToF1_ToF2_2p",
+                                                   0, 180, -3, 3);
+    hPlot2D hTheta_R1_R2_VS_Pos1_Pos2_2p = hPlot2D("2p", "CD", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
+                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [???]", directories.Angle_Directory_map["Theta_R1_R2_plots_2p"],
+                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_2p", 0, 180, 0, 100);
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -2165,7 +2179,7 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-        //  Fill All particles (All e) plots ----------------------------------------------------------------------------------------------------------------------------
+//  Fill All particles (All e) plots ----------------------------------------------------------------------------------------------------------------------------
 
         // TODO: remove or change - clas12ana comes with 1e cut already
 
@@ -3258,37 +3272,6 @@ void EventAnalyser() {
                     hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1n1p.hFill(n_hit_Phi_1n1p - p_hit_Phi_1n1p, n_hit_Theta_1n1p - p_hit_Theta_1n1p, Weight);
                 }
             }
-
-/*
-            bool PC_1n1p = (neutrons[0]->cal(clas12::PCAL)->getDetector() == 7);
-            bool IC_1n1p = (neutrons[0]->cal(clas12::ECIN)->getDetector() == 7);
-            bool OC_1n1p = (neutrons[0]->cal(clas12::ECOUT)->getDetector() == 7);
-            auto detlayer_1n1p = PC_1n1p ? clas12::PCAL : IC_1n1p ? clas12::ECIN : clas12::ECOUT;
-
-            if (detlayer_1n1p != PC_1n1p) {
-                TVector3 v_nhit_1n1p(neutrons[0]->cal(detlayer_1n1p)->getX(), neutrons[0]->cal(detlayer_1n1p)->getY(), neutrons[0]->cal(detlayer_1n1p)->getZ());
-                TVector3 v_chit_1n1p, v_dist_1n1p;
-
-//            if ((detlayer_1n1p == clas12::ECIN) && (protons[0]->cal(clas12::ECIN)->getZ() != 0)) {
-                if ((detlayer_1n1p == clas12::ECIN)) {
-                    v_chit_1n1p.SetXYZ(protons[0]->cal(clas12::ECIN)->getX(), protons[0]->cal(clas12::ECIN)->getY(), protons[0]->cal(clas12::ECIN)->getZ());
-                    v_dist_1n1p = v_nhit_1n1p - v_chit_1n1p;
-//            } else if ((detlayer_1n1p == clas12::ECOUT) && (protons[0]->cal(clas12::ECOUT)->getZ() != 0)) {
-                } else if ((detlayer_1n1p == clas12::ECOUT)) {
-                    v_chit_1n1p.SetXYZ(protons[0]->cal(clas12::ECOUT)->getX(), protons[0]->cal(clas12::ECOUT)->getY(), protons[0]->cal(clas12::ECOUT)->getZ());
-                    v_dist_1n1p = v_nhit_1n1p - v_chit_1n1p;
-                } else {
-                    int trajlayer_1n1p = (detlayer_1n1p == clas12::ECIN) ? 4 : 7;
-                    v_chit_1n1p.SetXYZ(protons[0]->traj(clas12::ECAL, trajlayer_1n1p)->getX(), protons[0]->traj(clas12::ECAL, trajlayer_1n1p)->getY(),
-                                       protons[0]->traj(clas12::ECAL, trajlayer_1n1p)->getZ());
-                    v_dist_1n1p = v_nhit_1n1p - v_chit_1n1p;
-                }
-
-                double Theta_diff_1n1p = v_dist_1n1p.Theta() * 180 / pi, Phi_diff_1n1p = v_dist_1n1p.Phi() * 180 / pi;
-                hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1n1p.hFill(Phi_diff_1n1p, Theta_diff_1n1p, Weight);
-            }
-*/
-
         } // end of 1n1p cuts if
         //</editor-fold>
 
@@ -3315,7 +3298,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="1e2p & 2p cuts">
         //TODO: make sure that pdg=0 particles are included/excluded.
-        if ((calculate_2p == true) && ((Nf_Prime == 3) && (Np == 2))) { // for 2p calculations (with any number of neutrals)
+        if (calculate_2p && ((Nf_Prime == 3) && (Np == 2))) { // for 2p calculations (with any number of neutrals)
 //        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
@@ -3784,11 +3767,8 @@ void EventAnalyser() {
             }
 
             hP_p_1_2p.hFill(P_1_2p_3v.Mag(), Weight); // Leading proton (2p)
-//            hP_p_1_2p->Fill(P_1_2p_3v.Mag()); // Leading proton (2p)
             hP_p_2_2p.hFill(P_2_2p_3v.Mag(), Weight); // Recoil proton (2p)
-//            hP_p_2_2p->Fill(P_2_2p_3v.Mag()); // Recoil proton (2p)
             hP_p_1_vs_P_p_2_2p.hFill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag(), Weight);
-//            hP_p_1_vs_P_p_2_2p->Fill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag());
 
             P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
                                    P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz()); // P_tot = P_1 + P_2
@@ -3885,6 +3865,33 @@ void EventAnalyser() {
             hEcal_vs_dAlpha_T_tot_2p->Fill(dAlpha_T_tot_2p, Ecal_2p);
             hEcal_vs_dP_T_L_2p->Fill(dP_T_L_2p_3v.Mag(), Ecal_2p);
             hEcal_vs_dP_T_tot_2p->Fill(dP_T_tot_2p_3v.Mag(), Ecal_2p);
+
+
+            if ((protons[0]->getRegion() == CD) && (protons[1]->getRegion() == CD)) {
+//                cout << "\n\n2p: protons.size() is different than 2 exiting...\n\n", exit(EXIT_FAILURE);
+
+                TVector3 v_chit_R1, v_chit_R2, pos_diff;
+                v_chit_R1.SetXYZ(protons[0]->sci(clas12::CTOF)->getX(), protons[0]->sci(clas12::CTOF)->getY(), protons[0]->sci(clas12::CTOF)->getZ());
+                v_chit_R2.SetXYZ(protons[1]->sci(clas12::CTOF)->getX(), protons[1]->sci(clas12::CTOF)->getY(), protons[1]->sci(clas12::CTOF)->getZ());
+//                v_chit_R1.SetXYZ(protons[0]->traj(clas12::CTOF, 4)->getX(), protons[0]->traj(clas12::CTOF, 4)->getY(), protons[0]->traj(clas12::CTOF, 4)->getZ());
+//                v_chit_R2.SetXYZ(protons[1]->traj(clas12::CTOF, 4)->getX(), protons[1]->traj(clas12::CTOF, 4)->getY(), protons[1]->traj(clas12::CTOF, 4)->getZ());
+                pos_diff.SetXYZ(v_chit_R1.Px() - v_chit_R2.Px(), v_chit_R1.Py() - v_chit_R2.Py(), v_chit_R1.Pz() - v_chit_R2.Pz());
+                double Theta_R1_R2 = acos((v_chit_R1.Px() * v_chit_R2.Px() + v_chit_R1.Py() * v_chit_R2.Py() + v_chit_R1.Pz() * v_chit_R2.Pz())
+                                          / (v_chit_R1.Mag() * v_chit_R2.Mag())) * 180.0 / pi; // Theta_R1_R2 in deg
+                double time_diff = protons[0]->getTime() - protons[1]->getTime();
+
+//                cout << "\n\nprotons[0]->traj(clas12::CTOF, 4)->getCx() = " << protons[0]->traj(clas12::CTOF, 4)->getCx() << "\n";
+//                cout << "protons[0]->traj(clas12::CTOF, 4)->getCy() = " << protons[0]->traj(clas12::CTOF, 4)->getCy() << "\n";
+//                cout << "protons[0]->traj(clas12::CTOF, 4)->getCz() = " << protons[0]->traj(clas12::CTOF, 4)->getCz() << "\n";
+//                cout << "Theta_R1_R2 = " << Theta_R1_R2 << "\n";
+//                cout << "time_diff = " << time_diff << "\n";
+
+                hTheta_R1_R2_VS_ToF1_ToF2_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
+//                hTheta_R1_R2_VS_ToF1_ToF2_2p.hFill(Theta_R1_R2, time_diff, Weight);
+                hTheta_R1_R2_VS_Pos1_Pos2_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
+            }
+
+
         } // end of 1e2p & 2p cuts if
         //</editor-fold>
 
@@ -4763,6 +4770,13 @@ void EventAnalyser() {
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD)">
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir,
                       "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p");
+        //</editor-fold>
+
+// Theta_R1_R2_VS_ToF1_ToF2 (2p, CD only) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_R1_R2_VS_ToF1_ToF2 (2p, CD only)">
+        hTheta_R1_R2_VS_ToF1_ToF2_2p.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_R1_R2_VS_Pos1_Pos2_2p.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
     } else {

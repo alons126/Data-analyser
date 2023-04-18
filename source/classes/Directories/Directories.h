@@ -87,8 +87,8 @@ private:
                                                   "03_1p/02_Phi_e_1p_plots", "03_1p/03_Theta_e_VS_Phi_e_1p_plots", "05_1e2p", "05_1e2p/01_Theta_e_1e2p_plots",
                                                   "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots", "06_2p", "06_2p/01_Theta_e_2p_plots",
                                                   "06_2p/02_Phi_e_2p_plots", "06_2p/03_Theta_e_VS_Phi_e_2p_plots", "06_2p/04_Opening_angles_2p_plots",
-                                                  "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction", "07_1e2pXy", "07_1e2pXy/01_Theta_e_1e2pXy_plots",
-                                                  "07_1e2pXy/02_Phi_e_1e2pXy_plots", "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots",
+                                                  "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction", "06_2p/05_Theta_R1_R2_plots", "07_1e2pXy",
+                                                  "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots", "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots",
                                                   "07_1e2pXy/04_Phi_Proton_1e2pXy_plots"};
     //</editor-fold>
 
