@@ -305,11 +305,29 @@ void EventAnalyser() {
     cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
+    bool Angle_plots_master = false; // Master angle plots selector
     bool Theta_e_plots = true, Phi_e_plots = true;
+    cout << "\n\n\n\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
     bool Q2_plots = true;
+    cout << "\n\n\n\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
     bool E_e_plots = true;
@@ -317,6 +335,15 @@ void EventAnalyser() {
     /* ET plots */
     bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
 
     /* Ecal plots */
     bool Ecal_plots = true;
@@ -1849,28 +1876,28 @@ void EventAnalyser() {
 
     //<editor-fold desc="ToF plots (1e cut)">
     hPlot2D hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
-                                                                      "'Neutron Hits' vs. Electron Hits - Before Veto", "#Delta#phi_{n,e} = #phi_{n} - #phi_{e}",
-                                                                      "#Delta#theta_{n,e} = #theta_{n} - #theta_{e}",
+                                                                      "'Neutron Hits' vs. Electron Hits - Before Veto", "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL}",
+                                                                      "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL}",
                                                                       directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1e_cut"],
-                                                                      "01_Neutron_hits_vs_electron_hits", -180, 180, -50, 50);
+                                                                      "01_Neutron_hits_vs_electron_hits_1e_cut", -180, 180, -50, 50);
     hPlot2D hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1e_cut = hPlot2D("1e cut", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p}",
-                                                                    "'Neutron Hits' vs. Proton Hits - Before Veto", "#Delta#phi_{n,p} = #phi_{n} - #phi_{p}",
-                                                                    "#Delta#theta_{n,p} = #theta_{n} - #theta_{p}",
-                                                                    directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1e_cut"], "02_Neutron_hits_vs_proton_hits",
+                                                                    "'Neutron Hits' vs. Proton Hits - Before Veto", "#Delta#phi_{n,p} = #phi_{n}^{ECIN/ECOUT} - #phi_{p}^{PCAL}",
+                                                                    "#Delta#theta_{n,p} = #theta_{n}^{ECIN/ECOUT} - #theta_{p}^{PCAL}",
+                                                                    directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1e_cut"], "02_Neutron_hits_vs_proton_hits_1e_cut",
                                                                     -180, 180, -50, 50);
     //</editor-fold>
 
-    //<editor-fold desc="ToF plots (1e cut)">
+    //<editor-fold desc="ToF plots (1n1p)">
     hPlot2D hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1n1p = hPlot2D("1n1p", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
-                                                                    "'Neutron Hits' vs. Electron Hits - Before Veto", "#Delta#phi_{n,e} = #phi_{n} - #phi_{e}",
-                                                                    "#Delta#theta_{n,e} = #theta_{n} - #theta_{e}",
-                                                                    directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1n1p"],
-                                                                    "01_Neutron_hits_vs_electron_hits", -180, 180, -50, 50);
+                                                                      "'Neutron Hits' vs. Electron Hits - Before Veto", "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL}",
+                                                                      "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL}",
+                                                                      directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1n1p"],
+                                                                      "01_Neutron_hits_vs_electron_hits_1n1p", -180, 180, -50, 50);
     hPlot2D hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1n1p = hPlot2D("1n1p", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p}",
-                                                                  "'Neutron Hits' vs. Proton Hits - Before Veto", "#Delta#phi_{n,p} = #phi_{n} - #phi_{p}",
-                                                                  "#Delta#theta_{n,p} = #theta_{n} - #theta_{p}",
-                                                                  directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1n1p"], "02_Neutron_hits_vs_proton_hits",
-                                                                  -180, 180, -50, 50);
+                                                                    "'Neutron Hits' vs. Proton Hits - Before Veto", "#Delta#phi_{n,p} = #phi_{n}^{ECIN/ECOUT} - #phi_{p}^{PCAL}",
+                                                                    "#Delta#theta_{n,p} = #theta_{n}^{ECIN/ECOUT} - #theta_{p}^{PCAL}",
+                                                                    directories.ToF_Directory_map["Neutron_vs_cParticles_hits_1n1p"], "02_Neutron_hits_vs_proton_hits_1n1p",
+                                                                    -180, 180, -50, 50);
     //</editor-fold>
 
     //</editor-fold>
@@ -2009,7 +2036,7 @@ void EventAnalyser() {
     int num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
     int num_of_events_1p = 0; // = number of 1p events
-    int num_of_events_1n1p_wFakeNeut = 0; // = number of 1p events
+    int num_of_events_1e1n1p_wFakeNeut = 0; // = number of 1p events
     int num_of_events_2p = 0; // = number of 2p events
     //</editor-fold>
 
@@ -2048,13 +2075,8 @@ void EventAnalyser() {
         /* Total number of particles in event (= Nf) */
         int Nf = Nn + Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nneut + No;
 
-//
-//
-//
-        if (allparticles.size() != Nf) { cout << "\n\nallparticles.size() is dofferent than Nf! exiting...\n\n", exit(EXIT_FAILURE); }
-//
-//
-//
+        /* Safety check that allparticles.size(), Nf are the same */
+        if (allparticles.size() != Nf) { cout << "\n\nallparticles.size() is different than Nf! exiting...\n\n", exit(EXIT_FAILURE); }
 
         //<editor-fold desc="Nph_CD, Nph_FD, No_Prime and Nf_Prime declarations and definitions">
         int Nph_CD = 0, Nph_FD = 0;
@@ -2900,9 +2922,62 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Fill ToF plots for electron (1e cut, FD)">
-        bool e_hit_PCAL = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
+        //TODO: rename and move from ToF to angles folder
 
-        if (e_hit_PCAL) {
+        bool e_hit_PCAL_1e_cut = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
+
+        //TODO: ask Justin if electrons and/or protons can be detected in the FD WITHOUT hitting the PCAL
+        if (e_hit_PCAL_1e_cut) { // if there's an electron hit in the PCAL
+            // electron PCAL hit vector and angles:
+            TVector3 e_hit_1e_cut_3v(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), electrons[0]->cal(clas12::PCAL)->getZ());
+            double e_hit_Theta_1e_cut = e_hit_1e_cut_3v.Theta() * 180 / pi, e_hit_Phi_1e_cut = e_hit_1e_cut_3v.Phi() * 180 / pi;
+
+            for (auto &n: neutrons) { // loop on every detected neutron
+                // check neutron hits in the PCAL, ECIN and ECOUT:
+                bool n_hit_PCAL_1e_cut = (n->cal(clas12::PCAL)->getDetector() == 7);
+                bool n_hit_ECIN_1e_cut = (n->cal(clas12::ECIN)->getDetector() == 7);
+                bool n_hit_ECOUT_1e_cut = (n->cal(clas12::ECOUT)->getDetector() == 7);
+
+                if ((n_hit_PCAL_1e_cut == false) && ((n_hit_ECIN_1e_cut == true) || (n_hit_ECOUT_1e_cut == true))) { // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT
+                    auto n_detlayer_1e_cut = n_hit_ECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+
+                    // neutron ECIN/ECAL hit vector and angles:
+                    TVector3 n_hit_1e_cut_3v(n->cal(n_detlayer_1e_cut)->getX(), n->cal(n_detlayer_1e_cut)->getY(), n->cal(n_detlayer_1e_cut)->getZ());
+                    double n_hit_Theta_1e_cut = n_hit_1e_cut_3v.Theta() * 180 / pi, n_hit_Phi_1e_cut = n_hit_1e_cut_3v.Phi() * 180 / pi;
+
+                    // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
+                    hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1e_cut.hFill(n_hit_Phi_1e_cut - e_hit_Phi_1e_cut, n_hit_Theta_1e_cut - e_hit_Theta_1e_cut, Weight);
+                }
+            } // end of ToF loop over neutrons vector
+        }
+//        //<editor-fold desc="BEST ONE - REVERSE ORDER!!!">
+//        bool e_hit_PCAL_1e_cut = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
+//
+//        //TODO: ask Justin if electrons and/or protons can be detected in the FD WITHOUT hitting the PCAL
+//        if (e_hit_PCAL_1e_cut) {
+//            TVector3 e_hit_3v(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), electrons[0]->cal(clas12::PCAL)->getZ());
+//            double e_hit_Theta = e_hit_3v.Theta() * 180 / pi, e_hit_Phi = e_hit_3v.Phi() * 180 / pi;
+//
+//            for (auto &n: neutrons) {
+//                bool n_hit_PCAL = (n->cal(clas12::PCAL)->getDetector() == 7);
+//                bool n_hit_ECIN = (n->cal(clas12::ECIN)->getDetector() == 7);
+//                bool n_hit_ECOUT = (n->cal(clas12::ECOUT)->getDetector() == 7);
+//
+//                if ((n_hit_PCAL == false) && ((n_hit_ECIN == true) || (n_hit_ECOUT == true))) {
+//                    auto n_detlayer = n_hit_PCAL ? clas12::PCAL : n_hit_ECIN ? clas12::ECIN : clas12::ECOUT;
+//
+//                    TVector3 n_hit_3v(n->cal(n_detlayer)->getX(), n->cal(n_detlayer)->getY(), n->cal(n_detlayer)->getZ());
+//                    double n_hit_Theta = n_hit_3v.Theta() * 180 / pi, n_hit_Phi = n_hit_3v.Phi() * 180 / pi;
+//                    hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1e_cut.hFill(n_hit_Phi - e_hit_Phi, n_hit_Theta - e_hit_Theta, Weight);
+//                }
+//            }
+//        } // end of ToF loop over electrons vector
+//        //</editor-fold>
+/*
+        bool e_hit_PCAL_1e_cut = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
+
+        //TODO: ask Justin if electrons and/or protons can be detected in the FD WITHOUT hitting the PCAL
+        if (e_hit_PCAL_1e_cut) {
             TVector3 e_hit_3v(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), electrons[0]->cal(clas12::PCAL)->getZ());
             double e_hit_Theta = e_hit_3v.Theta() * 180 / pi, e_hit_Phi = e_hit_3v.Phi() * 180 / pi;
 
@@ -2919,99 +2994,72 @@ void EventAnalyser() {
                 }
             }
         } // end of ToF loop over electrons vector
-/*
-        for (auto &e: electrons) {
-            bool e_hit_PCAL = (e->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
-
-            if (e_hit_PCAL) {
-                TVector3 e_hit_3v(e->cal(clas12::PCAL)->getX(), e->cal(clas12::PCAL)->getY(), e->cal(clas12::PCAL)->getZ());
-                double e_hit_Theta = e_hit_3v.Theta() * 180 / pi, e_hit_Phi = e_hit_3v.Phi() * 180 / pi;
-
-                for (auto &n: neutrons) {
-                    bool n_hit_PCAL = (n->cal(clas12::PCAL)->getDetector() == 7);
-                    bool n_hit_ECIN = (n->cal(clas12::ECIN)->getDetector() == 7);
-                    bool n_hit_ECOUT = (n->cal(clas12::ECOUT)->getDetector() == 7);
-                    auto n_detlayer = n_hit_PCAL ? clas12::PCAL : n_hit_ECIN ? clas12::ECIN : clas12::ECOUT;
-
-                    if (!n_hit_PCAL) {
-                        TVector3 n_hit_3v(n->cal(n_detlayer)->getX(), n->cal(n_detlayer)->getY(), n->cal(n_detlayer)->getZ());
-                        double n_hit_Theta = n_hit_3v.Theta() * 180 / pi, n_hit_Phi = n_hit_3v.Phi() * 180 / pi;
-                        hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1e_cut.hFill(n_hit_Phi - e_hit_Phi, n_hit_Theta - e_hit_Theta, Weight);
-                    }
-//                    TVector3 n_hit_3v(n->cal(n_detlayer)->getX(), n->cal(n_detlayer)->getY(), n->cal(n_detlayer)->getZ());
-//                    double n_hit_Theta = n_hit_3v.Theta() * 180 / pi;
-//                    double n_hit_Phi = n_hit_3v.Phi() * 180 / pi;
-//                    hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1e_cut.hFill(n_hit_Phi - e_hit_Phi, n_hit_Theta - e_hit_Theta, Weight);
-                }
-            } // end of ToF loop over neutrons vector
-        } // end of ToF loop over electrons vector
 */
-/*        bool FTOF1A = (electrons[0]->sci(clas12::FTOF1A)->getDetector() == 12);
-        bool FTOF1B = (electrons[0]->sci(clas12::FTOF1B)->getDetector() == 12);
-        bool FTOF2 = (electrons[0]->sci(clas12::FTOF2)->getDetector() == 12);
-        auto detlayer_electron = FTOF1A ? clas12::FTOF1A : FTOF1B ? clas12::FTOF1B : clas12::FTOF2;
-
-        TVector3 electron_hit_3v(electrons[0]->cal(detlayer_electron)->getX(), electrons[0]->cal(detlayer_electron)->getY(),
-                                 electrons[0]->cal(detlayer_electron)->getZ());
-        double Theta_electron = electron_hit_3v.Theta() * 180 / pi;
-        double Phi_electron = electron_hit_3v.Phi() * 180 / pi;
-
-        for (auto &n: neutrons) {
-            bool IC = (n->cal(clas12::ECIN)->getDetector() == 7);
-            bool OC = (n->cal(clas12::ECOUT)->getDetector() == 7);
-            auto detlayer_neutron = IC ? clas12::ECIN : clas12::ECOUT;
-
-            TVector3 neutron_hit_3v(n->cal(detlayer_neutron)->getX(), n->cal(detlayer_neutron)->getY(), n->cal(detlayer_neutron)->getZ());
-            double Theta_neutron = neutron_hit_3v.Theta() * 180 / pi;
-            double Phi_neutron = neutron_hit_3v.Phi() * 180 / pi;
-
-            hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1e_cut.hFill(Phi_neutron - Phi_electron, Theta_neutron - Theta_electron, Weight);
-        } // end of ToF loop over neutrons vector*/
         //</editor-fold>
 
         //<editor-fold desc="Fill ToF plots for protons (1e cut, FD)">
-        for (auto &p: protons) {
-            bool PC_proton = (p->cal(clas12::PCAL)->getDetector() == 7);
+        for (auto &n: neutrons) { // loop on every detected neutron
+            // check neutron (n) hits in the PCAL, ECIN and ECOUT:
+            bool n_hit_PCAL_1e_cut = (n->cal(clas12::PCAL)->getDetector() == 7);
+            bool n_hit_ECIN_1e_cut = (n->cal(clas12::ECIN)->getDetector() == 7);
+            bool n_hit_ECOUT_1e_cut = (n->cal(clas12::ECOUT)->getDetector() == 7);
 
-            if (PC_proton) {
-                TVector3 proton_hit_3v(p->cal(clas12::PCAL)->getX(), p->cal(clas12::PCAL)->getY(), p->cal(clas12::PCAL)->getZ());
-                double Theta_proton = proton_hit_3v.Theta() * 180 / pi, Phi_proton = proton_hit_3v.Phi() * 180 / pi;
+            // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT:
+            if ((n_hit_PCAL_1e_cut == false) && ((n_hit_ECIN_1e_cut == true) || (n_hit_ECOUT_1e_cut == true))) {
+                auto n_detlayer_1e_cut = n_hit_ECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
-                for (auto &n: neutrons) {
-                    bool PC = (n->cal(clas12::PCAL)->getDetector() == 7);
-                    bool IC = (n->cal(clas12::ECIN)->getDetector() == 7);
-                    bool OC = (n->cal(clas12::ECOUT)->getDetector() == 7);
-                    auto detlayer_neutron = PC ? clas12::PCAL : IC ? clas12::ECIN : clas12::ECOUT;
+                // neutron (n)'s ECIN/ECAL hit vector and angles:
+                TVector3 n_hit_1e_cut_3v(n->cal(n_detlayer_1e_cut)->getX(), n->cal(n_detlayer_1e_cut)->getY(), n->cal(n_detlayer_1e_cut)->getZ());
+                double n_hit_Theta_1e_cut = n_hit_1e_cut_3v.Theta() * 180 / pi, n_hit_Phi_1e_cut = n_hit_1e_cut_3v.Phi() * 180 / pi;
 
-                    if ((detlayer_neutron == IC) || (detlayer_neutron == OC)) {
-                        TVector3 neutron_hit_3v(n->cal(detlayer_neutron)->getX(), n->cal(detlayer_neutron)->getY(), n->cal(detlayer_neutron)->getZ());
-                        double Theta_neutron = neutron_hit_3v.Theta() * 180 / pi, Phi_neutron = neutron_hit_3v.Phi() * 180 / pi;
-                        hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1e_cut.hFill(Phi_neutron - Phi_proton, Theta_neutron - Theta_proton, Weight);
+                for (auto &p: protons) { // loop over protons vector
+                    bool p_hit_PCAL_1e_cut = (p->cal(clas12::PCAL)->getDetector() == 7); // check if proton hit the PCAL
+                    //TODO: rename and move from ToF to angles folder
+
+                    //TODO: ask Justin if electrons and/or protons can be detected in the FD WITHOUT hitting the PCAL
+                    if (p_hit_PCAL_1e_cut) { // if there's a proton hit in the PCAL
+                        // proton PCAL hit vector and angles:
+                        TVector3 p_hit_1e_cut_3v(p->cal(clas12::PCAL)->getX(), p->cal(clas12::PCAL)->getY(), p->cal(clas12::PCAL)->getZ());
+                        double p_hit_Theta_1e_cut = p_hit_1e_cut_3v.Theta() * 180 / pi, p_hit_Phi_1e_cut = p_hit_1e_cut_3v.Phi() * 180 / pi;
+
+                        // subtracting the angles between the neutron (n) hit and proton hit to see if we have fake neutrons:
+                        hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1e_cut.hFill(n_hit_Phi_1e_cut - p_hit_Phi_1e_cut, n_hit_Theta_1e_cut - p_hit_Theta_1e_cut, Weight);
                     }
-                }
+                } // end of ToF loop over protons vector
+            }
+        } // end of ToF loop over neutrons vector
 /*
-            bool FTOF1A = (p->sci(clas12::FTOF1A)->getDetector() == 12);
-            bool FTOF1B = (p->sci(clas12::FTOF1B)->getDetector() == 12);
-            bool FTOF2 = (p->sci(clas12::FTOF2)->getDetector() == 12);
-            auto detlayer_proton = FTOF1A ? clas12::FTOF1A : FTOF1B ? clas12::FTOF1B : clas12::FTOF2;
+        for (auto &p: protons) {
+            bool p_hit_PCAL_1e_cut = (p->cal(clas12::PCAL)->getDetector() == 7); // check if proton hit the PCAL
+            //TODO: rename and move from ToF to angles folder
 
-            TVector3 proton_hit_3v(p->cal(detlayer_proton)->getX(), p->cal(detlayer_proton)->getY(), p->cal(detlayer_proton)->getZ());
-            double Theta_proton = proton_hit_3v.Theta() * 180 / pi;
-            double Phi_proton = proton_hit_3v.Phi() * 180 / pi;
+            //TODO: ask Justin if electrons and/or protons can be detected in the FD WITHOUT hitting the PCAL
+            if (p_hit_PCAL_1e_cut) { // if there is and proton hit in the PCAL
+                // proton PCAL hit vector and angles:
+                TVector3 p_hit_1e_cut_3v(p->cal(clas12::PCAL)->getX(), p->cal(clas12::PCAL)->getY(), p->cal(clas12::PCAL)->getZ());
+                double p_hit_Theta_1e_cut = p_hit_1e_cut_3v.Theta() * 180 / pi, p_hit_Phi_1e_cut = p_hit_1e_cut_3v.Phi() * 180 / pi;
 
-            for (auto &n: neutrons) {
-                bool IC = (n->cal(clas12::ECIN)->getDetector() == 7);
-                bool OC = (n->cal(clas12::ECOUT)->getDetector() == 7);
-                auto detlayer_neutron = IC ? clas12::ECIN : clas12::ECOUT;
+                for (auto &n: neutrons) { // loop on every detected neutron
+                    // check neutron hits in the PCAL, ECIN and ECOUT:
+                    bool n_hit_PCAL_1e_cut = (n->cal(clas12::PCAL)->getDetector() == 7);
+                    bool n_hit_ECIN_1e_cut = (n->cal(clas12::ECIN)->getDetector() == 7);
+                    bool n_hit_ECOUT_1e_cut = (n->cal(clas12::ECOUT)->getDetector() == 7);
 
-                TVector3 neutron_hit_3v(n->cal(detlayer_neutron)->getX(), n->cal(detlayer_neutron)->getY(), n->cal(detlayer_neutron)->getZ());
-                double Theta_neutron = neutron_hit_3v.Theta() * 180 / pi;
-                double Phi_neutron = neutron_hit_3v.Phi() * 180 / pi;
+                    // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT // if neutron (n) did not hit PCAL & hit either ECIN or ECOUT:
+                    if ((n_hit_PCAL_1e_cut == false) && ((n_hit_ECIN_1e_cut == true) || (n_hit_ECOUT_1e_cut == true))) {
+                        auto n_detlayer_1e_cut = n_hit_ECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
-                hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1e_cut.hFill(Phi_neutron - Phi_proton, Theta_neutron - Theta_proton, Weight);
-*/
-            } // end of ToF loop over neutrons vector
+                        // neutron ECIN/ECAL hit vector and angles:
+                        TVector3 n_hit_1e_cut_3v(n->cal(n_detlayer_1e_cut)->getX(), n->cal(n_detlayer_1e_cut)->getY(), n->cal(n_detlayer_1e_cut)->getZ());
+                        double n_hit_Theta_1e_cut = n_hit_1e_cut_3v.Theta() * 180 / pi, n_hit_Phi_1e_cut = n_hit_1e_cut_3v.Phi() * 180 / pi;
+
+                        // subtracting the angles between the neutron hit and proton hit to see if we have fake neutrons:
+                        hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1e_cut.hFill(n_hit_Phi_1e_cut - p_hit_Phi_1e_cut, n_hit_Theta_1e_cut - p_hit_Theta_1e_cut, Weight);
+                    }
+                } // end of ToF loop over neutrons vector
+            }
         } // end of ToF loop over protons vector
+*/
         //</editor-fold>
 
         //</editor-fold>
@@ -3022,8 +3070,21 @@ void EventAnalyser() {
 
         //<editor-fold desc="1p">
         if ((calculate_1p == true) && ((Nf_Prime == 2) && (Np == 1))) { // for 1p calculations (with any number of neutrals)
-            //todo: add mom cuts for 1p
             ++num_of_events_1p;
+
+            //<editor-fold desc="Safety check (1p)">
+            /* Safety check that we are looking at 1p */
+            if (protons.size() != 1) { cout << "\n\n1p: protons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kplus.size() != 0) { cout << "\n\n1p: Kplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kminus.size() != 0) { cout << "\n\n1p: Kminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piplus.size() != 0) { cout << "\n\n1p: piplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piminus.size() != 0) { cout << "\n\n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piminus.size() != 0) { cout << "\n\n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (electrons.size() != 1) { cout << "\n\n1p: electrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (deuterons.size() != 0) { cout << "\n\n1p: deuterons.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            //</editor-fold>
+
+            //todo: add mom cuts for 1p
 
             TVector3 P_e_1p_3v, P_p_1p_3v, q_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v;
 
@@ -3332,10 +3393,59 @@ void EventAnalyser() {
 //  1n1p ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1n1p">
-        if ((calculate_1n1p == true) && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of neutrals)
-            //todo: add mom cuts for 1n1p
-            ++num_of_events_1n1p_wFakeNeut;
+        if ((calculate_1n1p == true) && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of other neutrals)
+            ++num_of_events_1e1n1p_wFakeNeut;
 
+            //<editor-fold desc="Safty check (1n1p)">
+            /* Safety check that we are looking at 1n1p */
+            if (neutrons.size() != 1) { cout << "\n\n1n1p: neutrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (protons.size() != 1) { cout << "\n\n1n1p: protons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kplus.size() != 0) { cout << "\n\n1n1p: Kplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kminus.size() != 0) { cout << "\n\n1n1p: Kminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piplus.size() != 0) { cout << "\n\n1n1p: piplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piminus.size() != 0) { cout << "\n\n1n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piminus.size() != 0) { cout << "\n\n1n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (electrons.size() != 1) { cout << "\n\n1n1p: electrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (deuterons.size() != 0) { cout << "\n\n1n1p: deuterons.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            //</editor-fold>
+
+            //todo: add mom cuts for 1n1p
+
+            //TODO: rename and move from ToF to angles folder
+            bool e_hit_PCAL_1n1p = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
+            bool p_hit_PCAL_1n1p = (protons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if proton hit the PCAL
+
+            bool n_hit_PCAL_1n1p = (neutrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if neutron hit the PCAL
+            bool n_hit_ECIN_1n1p = (neutrons[0]->cal(clas12::ECIN)->getDetector() == 7); // check if neutron hit the ECIN
+            bool n_hit_ECOUT_1n1p = (neutrons[0]->cal(clas12::ECOUT)->getDetector() == 7); // check if neutron hit the ECOUT
+
+            if (!n_hit_PCAL_1n1p && (n_hit_ECIN_1n1p || n_hit_ECOUT_1n1p)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
+                auto n_detlayer_1n1p = n_hit_ECIN_1n1p ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+
+                // neutron ECIN/ECAL hit vector and angles:
+                TVector3 n_hit_1n1p_3v(neutrons[0]->cal(n_detlayer_1n1p)->getX(), neutrons[0]->cal(n_detlayer_1n1p)->getY(), neutrons[0]->cal(n_detlayer_1n1p)->getZ());
+                double n_hit_Theta_1n1p = n_hit_1n1p_3v.Theta() * 180 / pi, n_hit_Phi_1n1p = n_hit_1n1p_3v.Phi() * 180 / pi;
+
+                if (e_hit_PCAL_1n1p) { // if there's an electron hit in the PCAL
+                    // electron PCAL hit vector and angles:
+                    TVector3 e_hit_1n1p_3v(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), electrons[0]->cal(clas12::PCAL)->getZ());
+                    double e_hit_Theta_1n1p = e_hit_1n1p_3v.Theta() * 180 / pi, e_hit_Phi_1n1p = e_hit_1n1p_3v.Phi() * 180 / pi;
+
+                    // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
+                    hdTheta_n_pos_VS_dPhi_n_pos_Electrons_BV_1n1p.hFill(n_hit_Phi_1n1p - e_hit_Phi_1n1p, n_hit_Theta_1n1p - e_hit_Theta_1n1p, Weight);
+                }
+
+                if (p_hit_PCAL_1n1p) { // if there's an proton hit in the PCAL
+                    // proton PCAL hit vector and angles:
+                    TVector3 p_hit_1n1p_3v(protons[0]->cal(clas12::PCAL)->getX(), protons[0]->cal(clas12::PCAL)->getY(), protons[0]->cal(clas12::PCAL)->getZ());
+                    double p_hit_Theta_1n1p = p_hit_1n1p_3v.Theta() * 180 / pi, p_hit_Phi_1n1p = p_hit_1n1p_3v.Phi() * 180 / pi;
+
+                    // subtracting the angles between the neutron hit and proton hit to see if we have fake neutrons:
+                    hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1n1p.hFill(n_hit_Phi_1n1p - p_hit_Phi_1n1p, n_hit_Theta_1n1p - p_hit_Theta_1n1p, Weight);
+                }
+            }
+
+/*
             bool PC_1n1p = (neutrons[0]->cal(clas12::PCAL)->getDetector() == 7);
             bool IC_1n1p = (neutrons[0]->cal(clas12::ECIN)->getDetector() == 7);
             bool OC_1n1p = (neutrons[0]->cal(clas12::ECOUT)->getDetector() == 7);
@@ -3363,7 +3473,9 @@ void EventAnalyser() {
                 double Theta_diff_1n1p = v_dist_1n1p.Theta() * 180 / pi, Phi_diff_1n1p = v_dist_1n1p.Phi() * 180 / pi;
                 hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1n1p.hFill(Phi_diff_1n1p, Theta_diff_1n1p, Weight);
             }
-        } // end of 1p cuts if
+*/
+
+        } // end of 1n1p cuts if
         //</editor-fold>
 
 //  1e2pXy (or (e,e'pp)X) -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -3392,6 +3504,18 @@ void EventAnalyser() {
         if ((calculate_2p == true) && ((Nf_Prime == 3) && (Np == 2))) { // for 2p calculations (with any number of neutrals)
 //        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
+
+            //<editor-fold desc="Safty check (2p)">
+            /* Safety check that we are looking at 1n1p */
+            if (protons.size() != 2) { cout << "\n\n2p: protons.size() is different than 2 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kplus.size() != 0) { cout << "\n\n2p: Kplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (Kminus.size() != 0) { cout << "\n\n2p: Kminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piplus.size() != 0) { cout << "\n\n2p: piplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piminus.size() != 0) { cout << "\n\n2p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (piminus.size() != 0) { cout << "\n\n2p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (electrons.size() != 1) { cout << "\n\n2p: electrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+            if (deuterons.size() != 0) { cout << "\n\n2p: deuterons.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+            //</editor-fold>
 
             /* NOTE: p_first corresponds to protons[0] & p_second corresponds to protons[1] */
             TVector3 P_e_2p_3v, q_2p_3v, P_p_first_2p_3v, P_p_second_2p_3v, P_tot_2p_3v, P_1_2p_3v, P_2_2p_3v, P_T_e_2p_3v, P_T_L_2p_3v, P_T_tot_2p_3v, dP_T_L_2p_3v, dP_T_tot_2p_3v;
@@ -5760,7 +5884,7 @@ void EventAnalyser() {
     myLogFile << "-- Proton counts ----------------------------------------------------------\n";
     myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
     myLogFile << "num_of_events_1p:\t\t\t\t\t" << num_of_events_1p << "\n\n\n";
-    myLogFile << "num_of_events_1n1p_wFakeNeut:\t\t\t\t" << num_of_events_1n1p_wFakeNeut << "\n\n\n";
+    myLogFile << "num_of_events_1e1n1p_wFakeNeut:\t\t\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n\n\n";
     myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
     myLogFile << "num_of_events_1e2p_all_wo_FDph:\t\t" << num_of_events_1e2p_all_wo_FDph << "\n";
     myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n\n\n";
@@ -5846,7 +5970,7 @@ void EventAnalyser() {
     cout << "-- Proton counts ----------------------------------------------------------\n";
     cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
     cout << "num_of_events_1p:\t\t\t" << num_of_events_1p << "\n";
-    cout << "num_of_events_1n1p_wFakeNeut:\t\t" << num_of_events_1n1p_wFakeNeut << "\n";
+    cout << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n";
     cout << "num_of_events_1e2p_all:\t\t\t" << num_of_events_1e2p_all << "\n";
     cout << "num_of_events_1e2p_all_wo_FDph:\t\t" << num_of_events_1e2p_all_wo_FDph << "\n";
     cout << "num_of_events_2p:\t\t\t" << num_of_events_2p << "\n\n";
