@@ -246,8 +246,8 @@ Directories::Directories(std::string plots_path) {
                                                                   Find(Angle_Daughter_Folders, "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction") + "/";
     Angle_Directory_map["Phi_Proton_1e2pXy_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                          Find(Angle_Daughter_Folders, "07_1e2pXy/04_Phi_Proton_1e2pXy_plots") + "/";
-    Angle_Directory_map["Theta_R1_R2_plots_2p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                         Find(Angle_Daughter_Folders, "06_2p/05_Theta_R1_R2_plots") + "/";
+    Angle_Directory_map["Ghost_tracks_handling_2p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                         Find(Angle_Daughter_Folders, "06_2p/05_Ghost_tracks_handling_2p_plots") + "/";
     //TODO: reorganize properly
 
     //</editor-fold>

@@ -347,6 +347,15 @@ void EventAnalyser() {
 
     /* Ecal plots */
     bool Ecal_plots = true;
+//    cout << "\n\n\n\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
     bool TVariables_plots = true;
@@ -1441,18 +1450,27 @@ void EventAnalyser() {
     //</editor-fold>
 
 
-// Theta_R1_R2_VS_ToF1_ToF2 --------------------------------------------------------------------------------------------------------------------------
+// Ghost tracks handling (2p, CD only) ----------------------------------------------------------------------------------------------------------------------------------
 
-    //TODO: reorganize properly
-
-    //<editor-fold desc="Theta_R1_R2_VS_ToF1_ToF2">
-    hPlot2D hTheta_R1_R2_VS_ToF1_ToF2_2p = hPlot2D("2p", "CD", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
-                                                   "ToF_{1}-ToF_{2} [???]", directories.Angle_Directory_map["Theta_R1_R2_plots_2p"], "01_Theta_R1_R2_VS_ToF1_ToF2_2p",
-                                                   0, 180, -3, 3);
-    hPlot2D hTheta_R1_R2_VS_Pos1_Pos2_2p = hPlot2D("2p", "CD", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
-                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [???]", directories.Angle_Directory_map["Theta_R1_R2_plots_2p"],
-                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_2p", 0, 180, 0, 100);
+    //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
+    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2}",
+                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                      directories.Angle_Directory_map["Ghost_tracks_handling_2p"],
+                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_BC_2p", 0, 180, -3, 3, 150, 150);
+    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2}",
+                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]",
+                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_2p"],
+                                                      "02_Theta_p1_p2_VS_Pos1-Pos2_BC_2p", 0, 180, 0, 100, 150, 150);
     //</editor-fold>
+
+//    //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
+//                                                   "ToF_{1}-ToF_{2} [ns]", directories.Angle_Directory_map["Ghost_tracks_handling_2p"], "01_Theta_R1_R2_VS_ToF1_ToF2_2p",
+//                                                   0, 180, -3, 3);
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
+//                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_2p"],
+//                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_2p", 0, 180, 0, 100);
+//    //</editor-fold>
 
     //</editor-fold>
 
@@ -3499,6 +3517,31 @@ void EventAnalyser() {
 
             //</editor-fold>
 
+            //  ghost tracks handeling (2p) -----------------------------------------------------------------------------------------------------------------------------
+//            TVector3 p1_hit_pos, p2_hit_pos, pos_diff; // hit position in the CTOF, and position difference
+
+//            if ((protons[0]->getRegion() == CD) && (protons[1]->getRegion() == CD)) { // if both 2p protons are in the CD
+//                TVector3 p1_hit_pos, p2_hit_pos, pos_diff; // hit position in the CTOF, and position difference
+//                p1_hit_pos.SetXYZ(protons[0]->sci(clas12::CTOF)->getX(), protons[0]->sci(clas12::CTOF)->getY(), protons[0]->sci(clas12::CTOF)->getZ());
+//                p2_hit_pos.SetXYZ(protons[1]->sci(clas12::CTOF)->getX(), protons[1]->sci(clas12::CTOF)->getY(), protons[1]->sci(clas12::CTOF)->getZ());
+////                p1_hit_pos.SetXYZ(protons[0]->traj(clas12::CTOF, 4)->getX(), protons[0]->traj(clas12::CTOF, 4)->getY(), protons[0]->traj(clas12::CTOF, 4)->getZ());
+////                p2_hit_pos.SetXYZ(protons[1]->traj(clas12::CTOF, 4)->getX(), protons[1]->traj(clas12::CTOF, 4)->getY(), protons[1]->traj(clas12::CTOF, 4)->getZ());
+//                pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
+//
+//                // opening angle between trajectories:
+//                // TODO: recheck this
+//                double Theta_R1_R2 = acos((p1_hit_pos.Px() * p2_hit_pos.Px() + p1_hit_pos.Py() * p2_hit_pos.Py() + p1_hit_pos.Pz() * p2_hit_pos.Pz())
+//                                          / (p1_hit_pos.Mag() * p2_hit_pos.Mag())) * 180.0 / pi; // Theta_R1_R2 in deg
+//                // ToF difference measured in the CTOF (automatically logged from CTOF when a proton is in the CD):
+//                double time_diff = protons[0]->getTime() - protons[1]->getTime();
+//
+//                hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
+////                hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_R1_R2, time_diff, Weight);
+//                hTheta_p1_p2_VS_Pos1_Pos2_BC_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
+//            }
+
+//            bool true_2p_event = (pos_diff.Mag() != 0);
+
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
             ++num_of_events_2p;
 
@@ -3756,7 +3799,6 @@ void EventAnalyser() {
             /* Filling Q2 histograms (2p) */
             if (electrons[0]->getRegion() == FD) { hQ2_2p_FD->Fill(Q2); }
 
-            /* Filling Ecal histograms (2p) */
             // Determining leading and recoil protons:
             if (P_p_first_2p_3v.Mag() >= P_p_second_2p_3v.Mag()) { // If p_first is leading proton
                 P_1_2p_3v = TVector3(P_p_first_2p_3v.Px(), P_p_first_2p_3v.Py(), P_p_first_2p_3v.Pz());
@@ -3771,9 +3813,9 @@ void EventAnalyser() {
             hP_p_1_vs_P_p_2_2p.hFill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag(), Weight);
 
             P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
-                                   P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz()); // P_tot = P_1 + P_2
-            P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(), 0); // transverse part of P_1
-            P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(), 0); // transverse part of P_tot
+                                   P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz());                                                             // P_tot = P_1 + P_2
+            P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(), 0);                                                                        // transverse part of P_1
+            P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(), 0);          // transverse part of P_tot
             dP_T_L_2p_3v = TVector3(P_e_2p_3v.Px() + P_T_L_2p_3v.Px(), P_e_2p_3v.Py() + P_T_L_2p_3v.Py(), 0);
             dP_T_tot_2p_3v = TVector3(P_e_2p_3v.Px() + P_1_2p_3v.Px() + P_2_2p_3v.Px(), P_e_2p_3v.Py() + P_1_2p_3v.Py() + P_2_2p_3v.Py(), 0);
 
@@ -3866,31 +3908,25 @@ void EventAnalyser() {
             hEcal_vs_dP_T_L_2p->Fill(dP_T_L_2p_3v.Mag(), Ecal_2p);
             hEcal_vs_dP_T_tot_2p->Fill(dP_T_tot_2p_3v.Mag(), Ecal_2p);
 
+            if ((protons[0]->getRegion() == CD) && (protons[1]->getRegion() == CD)) { // if both 2p protons are in the CD
+                TVector3 p1_hit_pos, p2_hit_pos, pos_diff; // hit position in the CTOF, and position difference
+                p1_hit_pos.SetXYZ(protons[0]->sci(clas12::CTOF)->getX(), protons[0]->sci(clas12::CTOF)->getY(), protons[0]->sci(clas12::CTOF)->getZ());
+                p2_hit_pos.SetXYZ(protons[1]->sci(clas12::CTOF)->getX(), protons[1]->sci(clas12::CTOF)->getY(), protons[1]->sci(clas12::CTOF)->getZ());
+//                p1_hit_pos.SetXYZ(protons[0]->traj(clas12::CTOF, 4)->getX(), protons[0]->traj(clas12::CTOF, 4)->getY(), protons[0]->traj(clas12::CTOF, 4)->getZ());
+//                p2_hit_pos.SetXYZ(protons[1]->traj(clas12::CTOF, 4)->getX(), protons[1]->traj(clas12::CTOF, 4)->getY(), protons[1]->traj(clas12::CTOF, 4)->getZ());
+                pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
 
-            if ((protons[0]->getRegion() == CD) && (protons[1]->getRegion() == CD)) {
-//                cout << "\n\n2p: protons.size() is different than 2 exiting...\n\n", exit(EXIT_FAILURE);
-
-                TVector3 v_chit_R1, v_chit_R2, pos_diff;
-                v_chit_R1.SetXYZ(protons[0]->sci(clas12::CTOF)->getX(), protons[0]->sci(clas12::CTOF)->getY(), protons[0]->sci(clas12::CTOF)->getZ());
-                v_chit_R2.SetXYZ(protons[1]->sci(clas12::CTOF)->getX(), protons[1]->sci(clas12::CTOF)->getY(), protons[1]->sci(clas12::CTOF)->getZ());
-//                v_chit_R1.SetXYZ(protons[0]->traj(clas12::CTOF, 4)->getX(), protons[0]->traj(clas12::CTOF, 4)->getY(), protons[0]->traj(clas12::CTOF, 4)->getZ());
-//                v_chit_R2.SetXYZ(protons[1]->traj(clas12::CTOF, 4)->getX(), protons[1]->traj(clas12::CTOF, 4)->getY(), protons[1]->traj(clas12::CTOF, 4)->getZ());
-                pos_diff.SetXYZ(v_chit_R1.Px() - v_chit_R2.Px(), v_chit_R1.Py() - v_chit_R2.Py(), v_chit_R1.Pz() - v_chit_R2.Pz());
-                double Theta_R1_R2 = acos((v_chit_R1.Px() * v_chit_R2.Px() + v_chit_R1.Py() * v_chit_R2.Py() + v_chit_R1.Pz() * v_chit_R2.Pz())
-                                          / (v_chit_R1.Mag() * v_chit_R2.Mag())) * 180.0 / pi; // Theta_R1_R2 in deg
+                // opening angle between trajectories:
+                // TODO: recheck this
+                double Theta_R1_R2 = acos((p1_hit_pos.Px() * p2_hit_pos.Px() + p1_hit_pos.Py() * p2_hit_pos.Py() + p1_hit_pos.Pz() * p2_hit_pos.Pz())
+                                          / (p1_hit_pos.Mag() * p2_hit_pos.Mag())) * 180.0 / pi; // Theta_R1_R2 in deg
+                // ToF difference measured in the CTOF (automatically logged from CTOF when a proton is in the CD):
                 double time_diff = protons[0]->getTime() - protons[1]->getTime();
 
-//                cout << "\n\nprotons[0]->traj(clas12::CTOF, 4)->getCx() = " << protons[0]->traj(clas12::CTOF, 4)->getCx() << "\n";
-//                cout << "protons[0]->traj(clas12::CTOF, 4)->getCy() = " << protons[0]->traj(clas12::CTOF, 4)->getCy() << "\n";
-//                cout << "protons[0]->traj(clas12::CTOF, 4)->getCz() = " << protons[0]->traj(clas12::CTOF, 4)->getCz() << "\n";
-//                cout << "Theta_R1_R2 = " << Theta_R1_R2 << "\n";
-//                cout << "time_diff = " << time_diff << "\n";
-
-                hTheta_R1_R2_VS_ToF1_ToF2_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
-//                hTheta_R1_R2_VS_ToF1_ToF2_2p.hFill(Theta_R1_R2, time_diff, Weight);
-                hTheta_R1_R2_VS_Pos1_Pos2_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
+                hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
+//                hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_R1_R2, time_diff, Weight);
+                hTheta_p1_p2_VS_Pos1_Pos2_BC_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
             }
-
 
         } // end of 1e2p & 2p cuts if
         //</editor-fold>
@@ -4772,11 +4808,11 @@ void EventAnalyser() {
                       "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p");
         //</editor-fold>
 
-// Theta_R1_R2_VS_ToF1_ToF2 (2p, CD only) --------------------------------------------------------------------------------------------------------------
+//  Ghost tracks handling (2p, CD only) ---------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Theta_R1_R2_VS_ToF1_ToF2 (2p, CD only)">
-        hTheta_R1_R2_VS_ToF1_ToF2_2p.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_R1_R2_VS_Pos1_Pos2_2p.hDrawAndSave(SampleName, c1, plots, true);
+        //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
+        hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_p1_p2_VS_Pos1_Pos2_BC_2p.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
     } else {
