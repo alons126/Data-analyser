@@ -118,15 +118,15 @@ void EventAnalyser() {
 
     bool custom_cuts_naming = true;
 
-    if (custom_cuts_naming == true) {
-        if (apply_cuts == false) {
+    if (custom_cuts_naming) {
+        if (!apply_cuts) {
             plots_path = WorkingDirectory + "plots_" + SampleName + "_-_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_NO_CUTS.txt";
         } else {
-            if (apply_chi2_cuts_1e_cut == false) {
+            if (!apply_chi2_cuts_1e_cut) {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
-            } else if (apply_chi2_cuts_1e_cut == true) {
+            } else if (apply_chi2_cuts_1e_cut) {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
@@ -153,7 +153,7 @@ void EventAnalyser() {
     //<editor-fold desc="Cuts output">
     /* Print out the cuts within the run (for self-observation) */
 
-    if (apply_cuts == false) {
+    if (!apply_cuts) {
         cout << "Cuts are disabled:\n";
 
         apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
@@ -369,13 +369,13 @@ void EventAnalyser() {
     bool ToF_plots = true;
 
     //<editor-fold desc="Turn off plots by master selectors">
-    if (Plot_selector_master == false) {
+    if (!Plot_selector_master) {
         Cut_plots_master = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = TVariables_plots = false;
     }
 
-    if (Cut_plots_master == false) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
-    if (Angle_plots_master == false) { Theta_e_plots = Phi_e_plots = false; }
-    if (ETrans_plots_master == false) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
+    if (!Cut_plots_master) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
+    if (!Angle_plots_master) { Theta_e_plots = Phi_e_plots = false; }
+    if (!ETrans_plots_master) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
     //</editor-fold>
 
     /* Other settings variables */
@@ -395,7 +395,7 @@ void EventAnalyser() {
 
     bool norm_Angle_plots_master = false, norm_Q2_plots = false, norm_E_e_plots = false, norm_ET_plots = false, norm_Ecal_plots = false, norm_TVariables_plots = false;
 
-    if (normalize_master == false) { // Disable all normalizations if normalize_master == false
+    if (!normalize_master) { // Disable all normalizations if normalize_master == false
         norm_Nphe_plots = norm_Chi2_plots = norm_Vertex_plots = norm_SF_plots = norm_Fiducial_plots = norm_Momentum_plots = false;
         norm_Angle_plots_master = norm_Q2_plots = norm_E_e_plots = norm_ET_plots = norm_Ecal_plots = norm_TVariables_plots = false;
 
@@ -411,18 +411,18 @@ void EventAnalyser() {
     bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
 
     /* Delete existing .txt files */
-    if (delete_txt_files == true) { system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); }
+    if (delete_txt_files) { system(("find " + plots_path + " -type f -iname '*.txt' -delete").c_str()); }
 
     //<editor-fold desc="Deleting files by cases">
-    if (delete_png_files == true && delete_root_files == false) {
+    if (delete_png_files && !delete_root_files) {
         cout << "\nClearing old plots...";
         system(("find " + plots_path + " -type f -iname '*.png' -delete").c_str()); // Delete existing .png files
         cout << " done.\n\n";
-    } else if (delete_png_files == false && delete_root_files == true) {
+    } else if (!delete_png_files && delete_root_files) {
         cout << "\nClearing old root files...";
         system(("find " + plots_path + " -type f -iname '*.root' -delete").c_str()); // Delete existing .root files
         cout << " done.\n\n";
-    } else if (delete_png_files == true && delete_root_files == true) {
+    } else if (delete_png_files && delete_root_files) {
         cout << "\nClearing old plots & root files...";
         system(("find " + plots_path + " -type f -iname '*.png' -delete").c_str()); // Delete existing .png files
         system(("find " + plots_path + " -type f -iname '*.root' -delete").c_str()); // Delete existing .root files
@@ -444,26 +444,26 @@ void EventAnalyser() {
 
     /* Chi2 plots */
     double Chi2_boundary = 30;
-    if (apply_cuts == true) { Chi2_boundary = 9; }
+    if (apply_cuts) { Chi2_boundary = 9; }
 
     /* Vertex plots */
     double Vertex_boundary = 50, Vertex_uboundary = Vertex_boundary, Vertex_lboundary = -Vertex_boundary;
 
-    if (apply_cuts == true) {
+    if (apply_cuts) {
         double dVertex_boundary = Vz_cut.GetUpperCut() - Vz_cut.GetLowerCut();
         Vertex_uboundary = Vz_cut.GetUpperCut() + 0.2 * dVertex_boundary, Vertex_lboundary = Vz_cut.GetLowerCut() - 0.1 * dVertex_boundary;
         Vertex_boundary = Vertex_boundary / 5;
     }
 
     double dV_boundary = 50;
-    if (apply_cuts == true) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
+    if (apply_cuts) { /* dV_boundary = 7.5; */ dV_boundary = dVz_cuts.GetUpperCut() * 1.4; }
 
     /* SF */
     double SF_uboundary = 0.31, SF_lboundary = 0.16;
 
     /* Beta vs. P plots */
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
-    if (apply_cuts == true) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
+    if (apply_cuts) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
 
     /* Transverse variables */
     double dP_T_boundary = 3.;
@@ -480,20 +480,20 @@ void EventAnalyser() {
     ofstream EventPrint;
     string EventPrint_save_Directory;
 
-    if (PrintEvents == true) {
-        if (apply_chi2_cuts_1e_cut == false) {
+    if (PrintEvents) {
+        if (!apply_chi2_cuts_1e_cut) {
             EventPrint_save_Directory = plots_path + "/" + "Event_Print_without_chi2.txt";
-        } else if (apply_chi2_cuts_1e_cut == true) {
+        } else if (apply_chi2_cuts_1e_cut) {
             EventPrint_save_Directory = plots_path + "/" + "Event_Print_ALL_CUTS.txt";
         }
 
         EventPrint.open(EventPrint_save_Directory.c_str());
 
-        if (apply_chi2_cuts_1e_cut == false) {
+        if (!apply_chi2_cuts_1e_cut) {
             EventPrint << "//////////////////////////////////////////////////////////////////////\n";
             EventPrint << "// Log of number of particles in event with all cuts except chi2    //\n";
             EventPrint << "//////////////////////////////////////////////////////////////////////\n\n";
-        } else if (apply_chi2_cuts_1e_cut == true) {
+        } else if (apply_chi2_cuts_1e_cut) {
             EventPrint << "//////////////////////////////////////////////////////////////////////\n";
             EventPrint << "// Log of number of particles in event with all cuts including chi2 //\n";
             EventPrint << "//////////////////////////////////////////////////////////////////////\n\n";
