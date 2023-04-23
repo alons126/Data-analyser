@@ -110,6 +110,7 @@ private:
                                                   "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots",
 
                                                   "03_1p", "03_1p/01_Theta_e_1p_plots", "03_1p/02_Phi_e_1p_plots", "03_1p/03_Theta_e_VS_Phi_e_1p_plots",
+                                                  "03_1p/04_Opening_angles_1p_plots",
 
                                                   "05_1e2p", "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots",
 
@@ -120,7 +121,8 @@ private:
                                                   "07_1e2pXy", "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots",
                                                   "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots", "07_1e2pXy/04_Phi_Proton_1e2pXy_plots",
 
-                                                  "08_1n", "08_1n/01_Theta_e_1n_plots", "08_1n/02_Phi_e_1n_plots", "08_1n/03_Theta_e_VS_Phi_e_1n_plots"};
+                                                  "08_1n", "08_1n/01_Theta_e_1n_plots", "08_1n/02_Phi_e_1n_plots", "08_1n/03_Theta_e_VS_Phi_e_1n_plots",
+                                                  "08_1n/04_Opening_angles_1n_plots"};
     //</editor-fold>
 
     //<editor-fold desc="Q2 plots directories">
