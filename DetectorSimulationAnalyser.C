@@ -3987,7 +3987,6 @@ void EventAnalyser() {
             // opening angle between the protons' momenta:
             double Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
                                          / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi; // Theta_p1_p2_2p in deg
-//            double time_diff = protons[lead_p_ind]->getTime() - protons[recoil_p_ind]->getTime();
 ////            double time_diff = protons[0]->getTime() - protons[1]->getTime();
 
             //  Testing cuts --------------------------------------------------------------------------------------------------------------------------------------------
@@ -4140,23 +4139,13 @@ void EventAnalyser() {
             bool true_2p_event = true;
 
             if ((protons[0]->getRegion() == CD) && (protons[1]->getRegion() == CD)) { // if both 2p protons are in the CD
-//                TVector3 p1_hit_pos, p2_hit_pos, pos_diff; // hit position in the CTOF, and position difference
                 p1_hit_pos.SetXYZ(protons[0]->sci(clas12::CTOF)->getX(), protons[0]->sci(clas12::CTOF)->getY(), protons[0]->sci(clas12::CTOF)->getZ());
                 p2_hit_pos.SetXYZ(protons[1]->sci(clas12::CTOF)->getX(), protons[1]->sci(clas12::CTOF)->getY(), protons[1]->sci(clas12::CTOF)->getZ());
-//                p1_hit_pos.SetXYZ(protons[0]->traj(clas12::CTOF, 4)->getX(), protons[0]->traj(clas12::CTOF, 4)->getY(), protons[0]->traj(clas12::CTOF, 4)->getZ());
-//                p2_hit_pos.SetXYZ(protons[1]->traj(clas12::CTOF, 4)->getX(), protons[1]->traj(clas12::CTOF, 4)->getY(), protons[1]->traj(clas12::CTOF, 4)->getZ());
                 pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
 
-                // opening angle between trajectories:
-                // TODO: recheck this
-                double Theta_R1_R2 = acos((p1_hit_pos.Px() * p2_hit_pos.Px() + p1_hit_pos.Py() * p2_hit_pos.Py() + p1_hit_pos.Pz() * p2_hit_pos.Pz())
-                                          / (p1_hit_pos.Mag() * p2_hit_pos.Mag())) * 180.0 / pi; // Theta_R1_R2 in deg
-//                // ToF difference measured in the CTOF (automatically logged from CTOF when a proton is in the CD):
-//                double time_diff = protons[0]->getTime() - protons[1]->getTime();
                 time_diff = protons[lead_p_ind]->getTime() - protons[recoil_p_ind]->getTime();
 
                 hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
-//                hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_R1_R2, time_diff, Weight);
                 hTheta_p1_p2_VS_Pos1_Pos2_BC_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
 
                 true_2p_event = (pos_diff.Mag() != 0);
@@ -4164,23 +4153,37 @@ void EventAnalyser() {
 
             bool single_detection = !(((protons[0]->par()->getStatus() == 2100) && (protons[1]->par()->getStatus() == 4100)) ||
                                       ((protons[1]->par()->getStatus() == 2100) && (protons[0]->par()->getStatus() == 4100)));
-//            bool single_detection = !((protons[0]->par()->getStatus() == 2100) && (protons[1]->par()->getStatus() == 4100) ||
-//                                      (protons[1]->par()->getStatus() == 2100) && (protons[0]->par()->getStatus() == 4100));
             //</editor-fold>
 
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
-            if (true_2p_event && single_detection) {
-//            if (true_2p_event) {
+
+            //<editor-fold desc="Fillings 2p histograms">
+//            if (true_2p_event && single_detection) { // with id. CTOF pos. cut. + status cut
+            if (true_2p_event) { // with id. CTOF pos. cut.
 //            if (true) {
                 ++num_of_events_2p;
 
 /*
                 if (Theta_p1_p2_2p < 10) {
                     if (fabs((P_1_2p_3v.Theta() * 180.0 / pi) - 2.5) < 37.5 && fabs((P_2_2p_3v.Theta() * 180.0 / pi) - 2.5) < 37.5) {
-                        cout << "\n\nprotons[0]->par()->getStatus() = " << protons[0]->par()->getStatus() << "\n";
-                        cout << "protons[1]->par()->getStatus() = " << protons[1]->par()->getStatus() << "\n";
-                        cout << "protons[0]->getRegion() = " << protons[0]->getRegion() << "\n";
-                        cout << "protons[1]->getRegion() = " << protons[1]->getRegion() << "\n\n\n";
+//                        cout << "\n\nprotons[0]->par()->getStatus() = " << protons[0]->par()->getStatus() << "\n";
+//                        cout << "protons[1]->par()->getStatus() = " << protons[1]->par()->getStatus() << "\n";
+//                        cout << "protons[0]->getRegion() = " << protons[0]->getRegion() << "\n";
+//                        cout << "protons[1]->getRegion() = " << protons[1]->getRegion() << "\n\n\n";
+
+                        ++duplicate;
+
+                        if (protons[0]->par()->getStatus() == protons[1]->par()->getStatus()) {
+                            ++same_status;
+                        }
+
+                        if (protons[0]->getRegion() == protons[1]->getRegion()) {
+                            ++same_region;
+                        }
+
+                        if ((protons[0]->getRegion() == protons[1]->getRegion()) && (protons[0]->par()->getStatus() == protons[1]->par()->getStatus())) {
+                            ++same_region;
+                        }
                     }
 //                    cout << "\n\nprotons[0]->par()->getStatus() = " << protons[0]->par()->getStatus() << "\n";
 //                    cout << "protons[1]->par()->getStatus() = " << protons[1]->par()->getStatus() << "\n";
@@ -4577,6 +4580,7 @@ void EventAnalyser() {
                     hTheta_p1_p2_VS_Pos1_Pos2_AC_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
                 }
             } // end of if true 2p event
+            //</editor-fold>
 
         } // end of 1e2p & 2p cuts if
         //</editor-fold>
