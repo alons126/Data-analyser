@@ -3987,7 +3987,6 @@ void EventAnalyser() {
             // opening angle between the protons' momenta:
             double Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
                                          / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi; // Theta_p1_p2_2p in deg
-////            double time_diff = protons[0]->getTime() - protons[1]->getTime();
 
             //  Testing cuts --------------------------------------------------------------------------------------------------------------------------------------------
 
