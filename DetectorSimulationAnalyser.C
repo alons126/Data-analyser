@@ -1519,6 +1519,15 @@ void EventAnalyser() {
     string hTheta_q_p_p_vs_p_p_q_1p_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1p"];
     //</editor-fold>
 
+// Theta_q_p_p vs. |p_N|/|q| (1p, FD only) -------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_p vs. |p_N|/|q| (1p, FD only)">
+    TH2D *hTheta_q_p_p_vs_p_N_q_1p = new TH2D("#theta_{#vec{q},#vec{P}_{p}} vs. r (All Int., 1p, FD)",
+                                              "#theta_{#vec{q},#vec{P}_{p}} vs. r=|#vec{P_{N}}|/|#vec{q}| (All Int., 1p, FD);r;#theta_{#vec{q},#vec{P}_{p}}",
+                                              250, 0, 1.05, 250, 0, 180);
+    string hTheta_q_p_p_vs_p_N_q_1p_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1p"];
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="1n plots">
@@ -1554,6 +1563,13 @@ void EventAnalyser() {
     string hTheta_q_p_n_vs_p_n_q_1n_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1n"];
     //</editor-fold>
 
+// Theta_q_p_n vs. |p_N|/|q| (1n, FD only) -------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_n vs. |p_N|/|q| (1n, FD only)">
+    TH2D *hTheta_q_p_n_vs_p_N_q_1n = new TH2D("#theta_{#vec{q},#vec{P}_{n}} vs. r (All Int., 1n, FD)",
+                                              "#theta_{#vec{q},#vec{P}_{n}} vs. r=|#vec{P_{N}}|/|#vec{q}| (All Int., 1n, FD);r;#theta_{#vec{q},#vec{P}_{n}}",
+                                              250, 0, 1.05, 250, 0, 180);
+    string hTheta_q_p_n_vs_p_N_q_1n_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1n"];
     //</editor-fold>
 
     //<editor-fold desc="1e2pXy plots">
@@ -2463,6 +2479,7 @@ void EventAnalyser() {
     double Pv = beamE, Pvx = 0., Pvy = 0., Pvz = Pv; // Assuming momentum of incoming lepton is in the z direction
 
     TLorentzVector beam(0, 0, beamE, beamE);
+    TVector3 Pv_3v(0, 0, beamE);
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3357,7 +3374,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             if (protons[0]->getRegion() == FD) {
-                TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v;
+                TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
                 P_e_1p_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());  // electron 3 momentum
                 q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());              // 3 momentum transfer
                 P_p_1p_3v.SetMagThetaPhi(protons[0]->getP(), protons[0]->getTheta(), protons[0]->getPhi());        // proton 3 momentum
@@ -3655,6 +3672,11 @@ void EventAnalyser() {
                     hTheta_q_p_p_1p->Fill(Theta_q_p_p_1p, Weight);
 
                     hTheta_q_p_p_vs_p_p_q_1p->Fill(P_p_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight);
+
+                    P_N_1p_3v = TVector3(P_e_1p_3v.Px() + P_p_1p_3v.Px() - Pvx, P_e_1p_3v.Py() + P_p_1p_3v.Py() - Pvy, P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pvz);
+//                    P_N_1p_3v = TVector3(P_e_1p_3v.Px() + P_p_1p_3v.Px() - Pv_3v.Px(), P_e_1p_3v.Py() + P_p_1p_3v.Py() - Pv_3v.Py(),
+//                                         P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pv_3v.Pz());
+                    hTheta_q_p_p_vs_p_N_q_1p->Fill(P_N_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight);
                     //</editor-fold>
 
                 } // end of momentum cut if
@@ -3681,7 +3703,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             if (neutrons[0]->getRegion() == FD) { // looking at events with 1n in the FD only
-                TVector3 P_e_1n_3v,q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v;
+                TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
                 P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());  // electron 3 momentum
                 q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());              // 3 momentum transfer
                 P_n_1n_3v.SetMagThetaPhi(neutrons[0]->getP(), neutrons[0]->getTheta(), neutrons[0]->getPhi());     // neutron 3 momentum
@@ -3963,6 +3985,11 @@ void EventAnalyser() {
                     hTheta_q_p_n_1n->Fill(Theta_q_p_n_1n, Weight);
 
                     hTheta_q_p_n_vs_p_n_q_1n->Fill(P_n_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight);
+
+                    P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pvx, P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pvy, P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pvz);
+//                    P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pv_3v.Px(), P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pv_3v.Py(),
+//                                         P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pv_3v.Pz());
+                    hTheta_q_p_n_vs_p_N_q_1n->Fill(P_N_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight);
                     //</editor-fold>
 
                 } // end of momentum cut if
@@ -5634,6 +5661,12 @@ void EventAnalyser() {
         histPlotter2D(c1, hTheta_q_p_p_vs_p_p_q_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_p_vs_p_p_q_1p_Dir, "03_Theta_q_p_p_vs_p_p_q_1p");
         //</editor-fold>
 
+//  Theta_q_p_p vs. |p_N|/|q| (1p, FD only) -------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_q_p_p vs. |P_p|/|q| (1p, FD only)">
+        histPlotter2D(c1, hTheta_q_p_p_vs_p_N_q_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_p_vs_p_N_q_1p_Dir, "04_Theta_q_p_N_vs_p_p_q_1p");
+        //</editor-fold>
+
         //</editor-fold>
 
         //<editor-fold desc="1n plots">
@@ -5662,6 +5695,12 @@ void EventAnalyser() {
 
         //<editor-fold desc="Theta_q_p_n vs. |p_n|/|q| (1n, FD only)">
         histPlotter2D(c1, hTheta_q_p_n_vs_p_n_q_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_n_vs_p_n_q_1n_Dir, "03_Theta_q_p_n_vs_p_n_q_1n");
+        //</editor-fold>
+
+//  Theta_q_p_n vs. |p_N|/|q| (1n, FD only) -------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_q_p_n vs. |p_N|/|q| (1n, FD only)">
+        histPlotter2D(c1, hTheta_q_p_n_vs_p_N_q_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_n_vs_p_N_q_1n_Dir, "04_Theta_q_p_n_vs_p_N_q_1n");
         //</editor-fold>
 
         //</editor-fold>

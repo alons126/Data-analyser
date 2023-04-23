@@ -1046,7 +1046,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas, //The canvas
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) {        Histogram1D->SetStats(0);    }
+    if (showStats == false) { Histogram1D->SetStats(0); }
 
     if (apply_plot_cuts == true) {
         gPad->Update();
@@ -1389,7 +1389,7 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
     Histogram1D->SetLineWidth(lineWidth);
     Histogram_list->Add(Histogram1D);
 
-    if (showStats == false) {        Histogram1D->SetStats(0);    }
+    if (showStats == false) { Histogram1D->SetStats(0); }
 
     if (apply_plot_cuts == true) {
         gPad->Update();
@@ -2198,7 +2198,11 @@ void histPlotter2D(TCanvas *Histogram1DCanvas,
         Histogram2D->Draw("colz");
     }
 
-    if (zlogScalePlot == true) { Histogram1DCanvas->SetLogz(1); }
+    if (zlogScalePlot == true) {
+        Histogram1DCanvas->SetLogz(1);
+    } else if (zlogScalePlot == false) {
+        Histogram1DCanvas->SetLogz(0);
+    }
 
     if (showStats == false) { Histogram2D->SetStats(0); }
 
