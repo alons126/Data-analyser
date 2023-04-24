@@ -45,6 +45,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
+#include "source/functions/GetGoodParticles.h"
 
 using namespace std;
 using namespace clas12;
@@ -253,6 +254,18 @@ void EventAnalyser() {
     // Momentum cuts (2p):
     DSCuts e_momentum_cuts_2p = DSCuts("Momentum", "", "Electron", "2p", 0, -9999, 9999);
     DSCuts p_momentum_cuts_2p = DSCuts("Momentum", "", "Proton", "2p", 0, 0.3, 9999);
+
+
+
+    // General momentum cuts:
+    DSCuts n_momentum_cuts_general = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
+    DSCuts p_momentum_cuts_general = DSCuts("Momentum", "", "Proton", "", 0, 0.3, 9999);
+    DSCuts piplus_momentum_cuts_general = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts piminus_momentum_cuts_general = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts e_momentum_cuts_general = DSCuts("Momentum", "", "Electron", "", 0, -9999, 9999);
+
+
+
     //</editor-fold>
 
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2560,6 +2573,14 @@ void EventAnalyser() {
         auto neutrals = clasAna.getByPid(0);     // Neutrons
         auto otherpart = clasAna.getByPid(311);  // Other particles
 
+        //<editor-fold desc="Configure particles within general momentum cuts">
+        vector<int> good_neutrons = GetGoodParticles(neutrons,n_momentum_cuts_general);
+        vector<int> good_protons = GetGoodParticles(protons,p_momentum_cuts_general);
+        vector<int> good_piplus = GetGoodParticles(piplus,piplus_momentum_cuts_general);
+        vector<int> good_piminus = GetGoodParticles(piminus,piminus_momentum_cuts_general);
+        vector<int> good_electron = GetGoodParticles(electrons,e_momentum_cuts_general);
+        //</editor-fold>
+
         /* Number of specific particles in event */
         int Nn = neutrons.size(), Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
         int Nd = deuterons.size(), Nneut = neutrals.size(), No = otherpart.size();
@@ -4341,6 +4362,11 @@ void EventAnalyser() {
                 ++num_of_events_2p;
 
 /*
+                if (good_protons.size() != Np) { cout << "\n\n2p: good_protons.size() != Np. Exiting...\n\n", exit(EXIT_FAILURE); }
+
+
+
+
                 if (Theta_p1_p2_2p < 10) {
                     if (fabs((P_1_2p_3v.Theta() * 180.0 / pi) - 2.5) < 37.5 && fabs((P_2_2p_3v.Theta() * 180.0 / pi) - 2.5) < 37.5) {
 //                        cout << "\n\nprotons[0]->par()->getStatus() = " << protons[0]->par()->getStatus() << "\n";
