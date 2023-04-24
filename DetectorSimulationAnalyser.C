@@ -1397,19 +1397,19 @@ void EventAnalyser() {
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
     /* Phi_e histograms (no #(e) cut) */
-    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_All_e_FD_Dir = directories.Angle_Directory_map["Phi_e_All_e_Directory"];
 
     /* Phi_e histograms (1e cut) */
-    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Phi_e_1e_cut_Directory"];
 
     /* Phi_e histograms (1p) */
-    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_QEL_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_MEC_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
@@ -1417,11 +1417,11 @@ void EventAnalyser() {
     string hPhi_e_DIS_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
 
     /* Phi_e histograms (1n) */
-    TH1D *hPhi_e_All_Int_1n_FD = new TH1D("#phi_{e} 1n (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_QEL_1n_FD = new TH1D("#phi_{e} for 1n (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_MEC_1n_FD = new TH1D("#phi_{e} for 1n (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_RES_1n_FD = new TH1D("#phi_{e} for 1n (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_DIS_1n_FD = new TH1D("#phi_{e} for 1n (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_Int_1n_FD = new TH1D("#phi_{e} 1n (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_QEL_1n_FD = new TH1D("#phi_{e} for 1n (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_MEC_1n_FD = new TH1D("#phi_{e} for 1n (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_RES_1n_FD = new TH1D("#phi_{e} for 1n (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_DIS_1n_FD = new TH1D("#phi_{e} for 1n (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_All_Int_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_QEL_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_MEC_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
@@ -1429,11 +1429,11 @@ void EventAnalyser() {
     string hPhi_e_DIS_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
 
     /* Phi_e histograms (1e2p) */
-    TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_QEL_1e2p_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_Int_1e2p_FD = new TH1D("#phi_{e} 1e2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_QEL_1e2p_FD = new TH1D("#phi_{e} for 1e2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_MEC_1e2p_FD = new TH1D("#phi_{e} for 1e2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_RES_1e2p_FD = new TH1D("#phi_{e} for 1e2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_DIS_1e2p_FD = new TH1D("#phi_{e} for 1e2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_All_Int_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
     string hPhi_e_QEL_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
     string hPhi_e_MEC_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
@@ -1441,11 +1441,11 @@ void EventAnalyser() {
     string hPhi_e_DIS_1e2p_FD_Dir = directories.Angle_Directory_map["Phi_e_1e2p_Directory"];
 
     /* Phi_e histograms (2p) */
-    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
-    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -200, 200);
+    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_All_Int_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_QEL_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_MEC_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
@@ -1487,6 +1487,22 @@ void EventAnalyser() {
     //<editor-fold desc="Other angle plots">
 
     //<editor-fold desc="1p plots">
+
+// Theta_p (1p, FD only) ----------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p (1p, FD only)">
+    THStack *sTheta_p_1p = new THStack("#theta_{p} (All Int., 1p, FD)", "#theta_{p} Of Outgoing Proton (All Int., 1p, FD);#theta_{p} [Deg];");
+    TH1D *hTheta_p_All_Int_1p = new TH1D("#theta_{p} (All Int., 1p, FD)", "#theta_{p} Of Outgoing Proton (All Int., 1p, FD);#theta_{p} [Deg];", 100, 0, 50);
+    string hTheta_p_All_Int_1p_Dir = directories.Angle_Directory_map["Theta_p_Directory_1p"];
+    //</editor-fold>
+
+// Phi_p (1p, FD only) ----------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Phi_p (1p, FD only)">
+    THStack *sPhi_p_1p = new THStack("#phi_{p} (All Int., 1p, FD)", "#phi_{p} Of Outgoing Proton (All Int., 1p, FD);#phi_{p} [Deg];");
+    TH1D *hPhi_p_All_Int_1p = new TH1D("#phi_{p} (All Int., 1p, FD)", "#phi_{p} Of Outgoing Proton (All Int., 1p, FD);#phi_{p} [Deg];", 100, -180, 180);
+    string hPhi_p_All_Int_1p_Dir = directories.Angle_Directory_map["Phi_p_Directory_1p"];
+    //</editor-fold>
 
 // Theta_p_e_p_p (1p, FD only) ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1531,6 +1547,22 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="1n plots">
+
+// Theta_n (1n, FD only) ----------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_n (1n, FD only)">
+    THStack *sTheta_n_1n = new THStack("#theta_{n} (All Int., 1n, FD)", "#theta_{n} Of Outgoing Neutron (All Int., 1n, FD);#theta_{n} [Deg];");
+    TH1D *hTheta_n_All_Int_1n = new TH1D("#theta_{n} (All Int., 1n, FD)", "#theta_{n} Of Outgoing Neutron (All Int., 1n, FD);#theta_{n} [Deg];", 100, 0, 50);
+    string hTheta_n_All_Int_1n_Dir = directories.Angle_Directory_map["Theta_n_Directory_1n"];
+    //</editor-fold>
+
+// Phi_n (1n, FD only) ----------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Phi_n (1n, FD only)">
+    THStack *sPhi_n_1n = new THStack("#phi_{n} (All Int., 1n, FD)", "#phi_{n} Of Outgoing Neutron (All Int., 1n, FD);#phi_{n} [Deg];");
+    TH1D *hPhi_n_All_Int_1n = new TH1D("#phi_{n} (All Int., 1n, FD)", "#phi_{n} Of Outgoing Neutron (All Int., 1n, FD);#phi_{n} [Deg];", 100, -180, 180);
+    string hPhi_n_All_Int_1n_Dir = directories.Angle_Directory_map["Phi_n_Directory_1n"];
+    //</editor-fold>
 
 // Theta_p_e_p_n (1n, FD only) ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1580,8 +1612,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Phi of leading (p1) and recoil (p2) protons">
     THStack *sPhi_Proton_1e2pXy = new THStack("#phi_{p} stack (1e2pXy, CD)", "#phi_{p} of outgoing protons (1e2pXy, CD);#phi_{p} [Deg];");
-    TH1D *hPhi_p1_1e2pXy_CD = new TH1D("#phi_{p_{1}} (1e2pXy, CD)", ";#phi_{p_{1}} [Deg];", 100, -200, 200);
-    TH1D *hPhi_p2_1e2pXy_CD = new TH1D("#phi_{p_{2}} (1e2pXy, CD)", ";#phi_{p_{2}} [Deg];", 100, -200, 200);
+    TH1D *hPhi_p1_1e2pXy_CD = new TH1D("#phi_{p_{1}} (1e2pXy, CD)", ";#phi_{p_{1}} [Deg];", 100, -180, 180);
+    TH1D *hPhi_p2_1e2pXy_CD = new TH1D("#phi_{p_{2}} (1e2pXy, CD)", ";#phi_{p_{2}} [Deg];", 100, -180, 180);
     string hPhi_p1_1e2pXy_CD_Dir = directories.Angle_Directory_map["Phi_Proton_1e2pXy_Directory"];
     string hPhi_p2_1e2pXy_CD_Dir = directories.Angle_Directory_map["Phi_Proton_1e2pXy_Directory"];
     //</editor-fold>
@@ -1711,6 +1743,8 @@ void EventAnalyser() {
 //                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_2p"],
 //                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_2p", 0, 180, 0, 100);
 //    //</editor-fold>
+
+    //</editor-fold>
 
     //</editor-fold>
 
@@ -3663,6 +3697,10 @@ void EventAnalyser() {
                     hEcal_vs_dAlpha_T_1p->Fill(dAlpha_T_1p, Ecal_1p, Weight);
                     hEcal_vs_dP_T_1p->Fill(dP_T_1p_3v.Mag(), Ecal_1p, Weight);
 
+
+                    hTheta_p_All_Int_1p->Fill(protons[0]->getTheta() * 180.0 / pi, Weight);
+                    hPhi_p_All_Int_1p->Fill(protons[0]->getPhi() * 180.0 / pi, Weight);
+
                     Theta_p_e_p_p_1p = acos((P_e_1p_3v.Px() * P_p_1p_3v.Px() + P_e_1p_3v.Py() * P_p_1p_3v.Py() + P_e_1p_3v.Pz() * P_p_1p_3v.Pz())
                                             / (P_e_1p_3v.Mag() * P_p_1p_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_p_1p in deg
                     hTheta_p_e_p_p_1p->Fill(Theta_p_e_p_p_1p, Weight);
@@ -3975,6 +4013,10 @@ void EventAnalyser() {
 
                     hEcal_vs_dAlpha_T_1n->Fill(dAlpha_T_1n, Ecal_1n, Weight);
                     hEcal_vs_dP_T_1n->Fill(dP_T_1n_3v.Mag(), Ecal_1n, Weight);
+
+
+                    hTheta_n_All_Int_1n->Fill(neutrons[0]->getTheta() * 180.0 / pi, Weight);
+                    hPhi_n_All_Int_1n->Fill(neutrons[0]->getPhi() * 180.0 / pi, Weight);
 
                     Theta_p_e_p_n_1n = acos((P_e_1n_3v.Px() * P_n_1n_3v.Px() + P_e_1n_3v.Py() * P_n_1n_3v.Py() + P_e_1n_3v.Pz() * P_n_1n_3v.Pz())
                                             / (P_e_1n_3v.Mag() * P_n_1n_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_n_1n in deg
@@ -5635,6 +5677,24 @@ void EventAnalyser() {
 
         //<editor-fold desc="1p plots">
 
+//  Theta_p (1p, CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p (1p, CD & FD)">
+        double Theta_p_1p_integral = hTheta_p_All_Int_1p->Integral();
+
+        histPlotter1D(c1, hTheta_p_All_Int_1p, norm_Angle_plots_master, true, Theta_p_1p_integral, "#theta_{p} Of Outgoing Proton", "All Int., 1p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sTheta_p_1p, "01_Theta_p_All_Int_1p", hTheta_p_All_Int_1p_Dir, "FD", kBlue, true, true, true, false);
+        //</editor-fold>
+
+//  Phi_p (1p, CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Phi_p (1p, CD & FD)">
+        double Phi_p_1p_integral = hPhi_p_All_Int_1p->Integral();
+
+        histPlotter1D(c1, hPhi_p_All_Int_1p, norm_Angle_plots_master, true, Phi_p_1p_integral, "#phi_{p} Of Outgoing Proton", "All Int., 1p", 0.06, 0.0425, 0.0425, plots,
+                      2, false, true, sPhi_p_1p, "01_Phi_p_All_Int_1p", hPhi_p_All_Int_1p_Dir, "FD", kBlue, true, true, true, false);
+        //</editor-fold>
+
 //  Theta_p_e_p_tot (1p, CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p_e_p_tot (1p, CD & FD)">
@@ -5670,6 +5730,25 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="1n plots">
+
+//  Theta_n (1n, CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_n (1n, CD & FD)">
+        double Theta_n_1n_integral = hTheta_n_All_Int_1n->Integral();
+
+        histPlotter1D(c1, hTheta_n_All_Int_1n, norm_Angle_plots_master, true, Theta_n_1n_integral, "#theta_{n} Of Outgoing Neutron", "All Int., 1n", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sTheta_n_1n, "01_Theta_n_All_Int_1n", hTheta_n_All_Int_1n_Dir, "FD", kBlue, true, true, true, false);
+        //</editor-fold>
+
+//  Phi_n (1n, CD & FD) -------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Phi_n (1n, CD & FD)">
+        double Phi_n_1n_integral = hPhi_n_All_Int_1n->Integral();
+
+        histPlotter1D(c1, hPhi_n_All_Int_1n, norm_Angle_plots_master, true, Phi_n_1n_integral, "#phi_{n} Of Outgoing Neutron", "All Int., 1n", 0.06, 0.0425, 0.0425,
+                      plots,
+                      2, false, true, sPhi_n_1n, "01_Phi_n_All_Int_1n", hPhi_n_All_Int_1n_Dir, "FD", kBlue, true, true, true, false);
+        //</editor-fold>
 
 //  Theta_p_e_p_tot (1n, CD & FD) ---------------------------------------------------------------------------------------------------------------------------------------
 

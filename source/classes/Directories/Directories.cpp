@@ -247,6 +247,10 @@ Directories::Directories(std::string plots_path) {
                                                            Find(Angle_Daughter_Folders, "03_1p/03_Theta_e_VS_Phi_e_1p_plots") + "/";
     Angle_Directory_map["Opening_angle_Directory_1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                         Find(Angle_Daughter_Folders, "03_1p/04_Opening_angles_1p_plots") + "/";
+    Angle_Directory_map["Theta_p_Directory_1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                        Find(Angle_Daughter_Folders, "03_1p/05_Theta_p_1p") + "/";
+    Angle_Directory_map["Phi_p_Directory_1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                        Find(Angle_Daughter_Folders, "03_1p/06_Phi_p_1p") + "/";
 
     Angle_Directory_map["Theta_e_1n_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                   Find(Angle_Daughter_Folders, "08_1n/01_Theta_e_1n_plots") + "/";
@@ -256,6 +260,10 @@ Directories::Directories(std::string plots_path) {
                                                            Find(Angle_Daughter_Folders, "08_1n/03_Theta_e_VS_Phi_e_1n_plots") + "/";
     Angle_Directory_map["Opening_angle_Directory_1n"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                         Find(Angle_Daughter_Folders, "08_1n/04_Opening_angles_1n_plots") + "/";
+    Angle_Directory_map["Theta_n_Directory_1n"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                  Find(Angle_Daughter_Folders, "08_1n/05_Theta_n_1n") + "/";
+    Angle_Directory_map["Phi_n_Directory_1n"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                  Find(Angle_Daughter_Folders, "08_1n/06_Phi_n_1n") + "/";
 
     Angle_Directory_map["Theta_e_1e2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                     Find(Angle_Daughter_Folders, "05_1e2p/01_Theta_e_1e2p_plots") + "/";
