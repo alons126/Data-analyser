@@ -1784,7 +1784,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p)",
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                 250, 0, 120, 250, 0, 120);
+                                                                 250, 10, 80, 250, 10, 80);
+//                                                                 250, 0, 120, 250, 0, 120);
 //                                                                 250, 0, 180, 250, 0, 180);
     string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir = directories.Angle_Directory_map["Opening_angle_Directory_2p"];
     //</editor-fold>
@@ -4293,11 +4294,11 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            // Angles of leading and recoil protons:
-            double Theta_p1 = P_1_2p_3v.Theta() * 180.0 / pi, Theta_p2 = P_2_2p_3v.Theta() * 180.0 / pi; // Theta_p1, Theta_p2 in deg
-            double Phi_p1 = P_1_2p_3v.Phi() * 180.0 / pi, Phi_p2 = P_2_2p_3v.Phi() * 180.0 / pi; // Phi_p1, Phi_p2 in deg
+            /* Angles of leading and recoil protons */
+            double Theta_p1 = P_1_2p_3v.Theta() * 180.0 / pi, Theta_p2 = P_2_2p_3v.Theta() * 180.0 / pi;                                    // Theta_p1, Theta_p2 in deg
+            double Phi_p1 = P_1_2p_3v.Phi() * 180.0 / pi, Phi_p2 = P_2_2p_3v.Phi() * 180.0 / pi;                                                // Phi_p1, Phi_p2 in deg
             double Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
-                                         / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi; // Theta_p1_p2_2p in deg
+                                         / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi;                                                   // Theta_p1_p2_2p in deg
 
             //  Testing cuts --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -4423,18 +4424,9 @@ void EventAnalyser() {
             bool Lead_proton_Theta_p_cut = (fabs(Theta_p1 - 40.) < 10.);
             bool Recoil_proton_Theta_p_cut = (fabs(Theta_p2 - 40.) < 10.);
             bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 10.);
-//            bool first_proton_Theta_p_cut = (fabs(protons[good_protons.at(0)]->getTheta() - 40.) < 10.);
-//            bool second_proton_Theta_p_cut = (fabs(protons[good_protons.at(1)]->getTheta() - 40.) < 10.);
-//            bool protons_with_close_phi = (fabs(protons[good_protons.at(0)]->getPhi() - protons[good_protons.at(1)]->getPhi()) < 10.);
 
-//            bool ang_cut = !(first_proton_Theta_p_cut && second_proton_Theta_p_cut && protons_with_close_phi);
-            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut && Lead_and_Recoil_with_close_phi);
-//            bool ang_cut = !(((fabs(protons[good_protons.at(0)]->getTheta() - 40.) < 10.) && // first proton is with theta_p close to 40 deg
-//                              (fabs(protons[good_protons.at(1)]->getTheta() - 40.) < 10.))   // second proton is with theta_p close to 40 deg
-//                             && (fabs(protons[good_protons.at(0)]->getPhi() - protons[good_protons.at(1)]->getPhi()) < 10.));
-//            bool ang_cut = !(((fabs(protons[good_protons.at(0)]->getTheta() - 40) < 3.5) && // first proton is with theta_p close to 40 deg
-//                              (fabs(protons[good_protons.at(1)]->getTheta() - 40) < 3.5))   // second proton is with theta_p close to 40 deg
-//                             && (fabs(protons[good_protons.at(0)]->getPhi() - protons[good_protons.at(1)]->getPhi()) < 3.5));
+            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut);
+//            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut && Lead_and_Recoil_with_close_phi);
             //</editor-fold>
 
             //<editor-fold desc="Identical CTOF position cut">
@@ -4444,6 +4436,23 @@ void EventAnalyser() {
 
             bool true_2p_event = true;
 
+            if (single_edge_detection) {
+                if ((protons[good_protons.at(0)]->getRegion() == CD) && (protons[good_protons.at(1)]->getRegion() == CD)) { // if both 2p protons are in the CD
+                    p1_hit_pos.SetXYZ(protons[good_protons.at(0)]->sci(clas12::CTOF)->getX(), protons[good_protons.at(0)]->sci(clas12::CTOF)->getY(),
+                                      protons[good_protons.at(0)]->sci(clas12::CTOF)->getZ());
+                    p2_hit_pos.SetXYZ(protons[good_protons.at(1)]->sci(clas12::CTOF)->getX(), protons[good_protons.at(1)]->sci(clas12::CTOF)->getY(),
+                                      protons[good_protons.at(1)]->sci(clas12::CTOF)->getZ());
+                    pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
+
+                    time_diff = protons[lead_p_ind]->getTime() - protons[recoil_p_ind]->getTime();
+
+                    hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
+                    hTheta_p1_p2_VS_Pos1_Pos2_BC_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
+
+                    true_2p_event = (pos_diff.Mag() != 0);
+                }
+            }
+            /*
             if ((protons[good_protons.at(0)]->getRegion() == CD) && (protons[good_protons.at(1)]->getRegion() == CD)) { // if both 2p protons are in the CD
                 p1_hit_pos.SetXYZ(protons[good_protons.at(0)]->sci(clas12::CTOF)->getX(), protons[good_protons.at(0)]->sci(clas12::CTOF)->getY(),
                                   protons[good_protons.at(0)]->sci(clas12::CTOF)->getZ());
@@ -4458,6 +4467,7 @@ void EventAnalyser() {
 
                 true_2p_event = (pos_diff.Mag() != 0);
             }
+*/
             //</editor-fold>
 
             //</editor-fold>
@@ -4465,46 +4475,9 @@ void EventAnalyser() {
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Fillings 2p histograms">
-//            if (true_2p_event && single_detection) { // with id. CTOF pos. cut. + status cut
             if (true_2p_event && single_edge_detection) { // with id. CTOF pos. cut.
-//            if (true_2p_event && ang_cut) { // with id. CTOF pos. cut.
 //            if (true_2p_event) { // with id. CTOF pos. cut.
-//            if (true) {
                 ++num_of_events_2p;
-
-/*
-                if (good_protons.size() != Np) { cout << "\n\n2p: good_protons.size() != Np. Exiting...\n\n", exit(EXIT_FAILURE); }
-
-
-
-
-                if (Theta_p1_p2_2p < 10) {
-                    if (fabs((P_1_2p_3v.Theta() * 180.0 / pi) - 2.5) < 37.5 && fabs((P_2_2p_3v.Theta() * 180.0 / pi) - 2.5) < 37.5) {
-//                        cout << "\n\nprotons[good_protons.at(0)]->par()->getStatus() = " << protons[good_protons.at(0)]->par()->getStatus() << "\n";
-//                        cout << "protons[good_protons.at(1)]->par()->getStatus() = " << protons[good_protons.at(1)]->par()->getStatus() << "\n";
-//                        cout << "protons[good_protons.at(0)]->getRegion() = " << protons[good_protons.at(0)]->getRegion() << "\n";
-//                        cout << "protons[good_protons.at(1)]->getRegion() = " << protons[good_protons.at(1)]->getRegion() << "\n\n\n";
-
-                        ++duplicate;
-
-                        if (protons[good_protons.at(0)]->par()->getStatus() == protons[good_protons.at(1)]->par()->getStatus()) {
-                            ++same_status;
-                        }
-
-                        if (protons[good_protons.at(0)]->getRegion() == protons[good_protons.at(1)]->getRegion()) {
-                            ++same_region;
-                        }
-
-                        if ((protons[good_protons.at(0)]->getRegion() == protons[good_protons.at(1)]->getRegion()) && (protons[good_protons.at(0)]->par()->getStatus() == protons[good_protons.at(1)]->par()->getStatus())) {
-                            ++same_region;
-                        }
-                    }
-//                    cout << "\n\nprotons[good_protons.at(0)]->par()->getStatus() = " << protons[good_protons.at(0)]->par()->getStatus() << "\n";
-//                    cout << "protons[good_protons.at(1)]->par()->getStatus() = " << protons[good_protons.at(1)]->par()->getStatus() << "\n";
-//                    cout << "protons[good_protons.at(0)]->getRegion() = " << protons[good_protons.at(0)]->getRegion() << "\n";
-//                    cout << "protons[good_protons.at(1)]->getRegion() = " << protons[good_protons.at(1)]->getRegion() << "\n\n\n";
-                }
-*/
 
                 //<editor-fold desc="Filling cut parameters histograms (2p)">
                 /* Filling Chi2 histograms (2p) */
@@ -4796,13 +4769,10 @@ void EventAnalyser() {
                 hP_p_2_2p.hFill(P_2_2p_3v.Mag(), Weight); // Recoil proton (2p)
                 hP_p_1_vs_P_p_2_2p.hFill(P_1_2p_3v.Mag(), P_2_2p_3v.Mag(), Weight);
 
-                // P_tot = P_1 + P_2:
                 P_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(),
-                                       P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz());
-                // transverse part of P_1:
-                P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(), 0);
-                // transverse part of P_tot:
-                P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(), 0);
+                                       P_p_first_2p_3v.Pz() + P_p_second_2p_3v.Pz());                                                    // P_tot = P_1 + P_2
+                P_T_L_2p_3v = TVector3(P_1_2p_3v.Px(), P_1_2p_3v.Py(), 0);                                                               // transverse part of P_1
+                P_T_tot_2p_3v = TVector3(P_p_first_2p_3v.Px() + P_p_second_2p_3v.Px(), P_p_first_2p_3v.Py() + P_p_second_2p_3v.Py(), 0); // transverse part of P_tot
                 dP_T_L_2p_3v = TVector3(P_e_2p_3v.Px() + P_T_L_2p_3v.Px(), P_e_2p_3v.Py() + P_T_L_2p_3v.Py(), 0);
                 dP_T_tot_2p_3v = TVector3(P_e_2p_3v.Px() + P_1_2p_3v.Px() + P_2_2p_3v.Px(), P_e_2p_3v.Py() + P_1_2p_3v.Py() + P_2_2p_3v.Py(), 0);
 
@@ -4824,10 +4794,7 @@ void EventAnalyser() {
 
                 hTheta_p1_p2_vs_W_2p->Fill(W_2p, Theta_p1_p2_2p, Weight);
 
-                if (Theta_p1_p2_2p < 10) {
-//                    double Theta_p1 = P_1_2p_3v.Theta() * 180.0 / pi, Theta_p2 = P_2_2p_3v.Theta() * 180.0 / pi; // Theta_p1, Theta_p2 in deg
-                    hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p->Fill(Theta_p2, Theta_p1, Weight);
-                }
+                if (Theta_p1_p2_2p < 10) { hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p->Fill(Theta_p2, Theta_p1, Weight); }
 
                 Theta_q_p_tot_2p = acos((q_2p_3v.Px() * P_tot_2p_3v.Px() + q_2p_3v.Py() * P_tot_2p_3v.Py() + q_2p_3v.Pz() * P_tot_2p_3v.Pz())
                                         / (q_2p_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_2p in deg
@@ -5564,9 +5531,8 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Canvas definitions">
-
-    //<editor-fold desc="Canvas c1">
-    TCanvas *c1 = new TCanvas("canvas", "canvas", 2000, 1500);
+    TCanvas *c1 = new TCanvas("canvas", "canvas", 1000, 750); // normal res
+//    TCanvas *c1 = new TCanvas("canvas", "canvas", 2000, 1500); // high res
 //    TCanvas *c1 = new TCanvas("canvas", "canvas", 1650, 1150);
 //    c1->cd();
     c1->SetGrid();
@@ -5579,20 +5545,7 @@ void EventAnalyser() {
 //        c1->SetRightMargin(0.12);
     }
 
-    float DefStatX = gStyle->GetStatX();
-    float DefStatY = gStyle->GetStatY();
-    //</editor-fold>
-
-    //<editor-fold desc="Canvas c2">
-    TCanvas *c2 = new TCanvas("canvas2", "canvas2", 1650, 1150);
-    c2->SetGrid();
-    c2->SetBottomMargin(0.14);
-    c2->SetTopMargin(0.15);
-
-    if (wider_margin) {
-        c2->SetLeftMargin(0.14);
-    }
-    //</editor-fold>
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
 
     c1->cd();
     //</editor-fold>
