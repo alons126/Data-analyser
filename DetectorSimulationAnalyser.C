@@ -128,9 +128,7 @@ void EventAnalyser() {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-//                plots_path = WorkingDirectory + "C12_T5_ALL_CUTS_-_ACandSTATUS";
-//                plots_path = WorkingDirectory + "C12_T5_ALL_CUTS_-_AC";
-//                plots_path = WorkingDirectory + "C12_T5_ALL_CUTS_-_BC";
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_comb9";
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
@@ -243,6 +241,17 @@ void EventAnalyser() {
     DSCuts pip_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts pim_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts e_momentum_cuts = DSCuts("Momentum", "", "Electron", "", 0, -9999, 9999);
+
+    /* Nucleon theta cut (1p & 1n, FD) */
+    DSCuts Theta_nuc_cut = DSCuts("Theta_nuc", "FD", "", "1p & 1n", 0, -9999, 32);
+
+    /* Ghost tracks handling (2p, CD & FD) */
+    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
+    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
+    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
+//    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "", 40., -9999, 5.);
+//    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "", 40., -9999, 5.);
+//    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "", 0, -9999, 15.);
     //</editor-fold>
 
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -868,33 +877,33 @@ void EventAnalyser() {
     hPlot2D hSF_VS_P_e_1e_cut_BC_FD, hSF_VS_P_e_1e_cut_AC_FD;
 
     if (!apply_cuts) {
-        hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} BC", "Sampling fraction f vs. P_{e} - before cuts", "P_{e} [GeV]",
+        hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} BC", "Sampling fraction f vs. P_{e} - before cuts", "P_{e} [GeV/c]",
                                           "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"],
                                           "01_SF_VS_P_e_1e_cut_BC_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
-        hSF_VS_P_e_1e_cut_AC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} AC", "Sampling fraction f vs. P_{e} - after cuts", "P_{e} [GeV]",
+        hSF_VS_P_e_1e_cut_AC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e} AC", "Sampling fraction f vs. P_{e} - after cuts", "P_{e} [GeV/c]",
                                           "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_AC_Directory"],
                                           "01_SF_VS_P_e_1e_cut_AC_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     } else {
-        hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+        hSF_VS_P_e_1e_cut_BC_FD = hPlot2D("1e cut", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV/c]",
                                           "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1e_cut_BC_Directory"],
                                           "01_SF_VS_P_e_1e_cut_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     }
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (1p, FD)">
-    hPlot2D hSF_VS_P_e_1p_FD = hPlot2D("1p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+    hPlot2D hSF_VS_P_e_1p_FD = hPlot2D("1p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV/c]",
                                        "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1p_cuts_Directory"],
                                        "01_SF_VS_P_e_1p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (1n, FD)">
-    hPlot2D hSF_VS_P_e_1n_FD = hPlot2D("1n", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+    hPlot2D hSF_VS_P_e_1n_FD = hPlot2D("1n", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV/c]",
                                        "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_1n_cuts_Directory"],
                                        "01_SF_VS_P_e_1n_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (2p, FD)">
-    hPlot2D hSF_VS_P_e_2p_FD = hPlot2D("2p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV]",
+    hPlot2D hSF_VS_P_e_2p_FD = hPlot2D("2p", "FD", "SF vs. P_{e}", "Sampling fraction f vs. P_{e}", "P_{e} [GeV/c]",
                                        "f = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}", directories.SF_Directory_map["SF_VS_P_e_plots_2p_cuts_Directory"],
                                        "01_SF_VS_P_e_2p_FD", 0, beamE * 1.1, SF_lboundary, SF_uboundary);
     //</editor-fold>
@@ -971,141 +980,141 @@ void EventAnalyser() {
     /* Here are the definitions for the momentum plots. These are used to check that momentum cuts were applied in 1e_cut and 2p plots. */
 
     //<editor-fold desc="Momentum plots (1e cut)">
-    hPlot1D hP_e_1e_cut_FD = hPlot1D("1e cut", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]",
+    hPlot1D hP_e_1e_cut_FD = hPlot1D("1e cut", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                      directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "01_P_e_1e_cut_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_1e_cut_CD = hPlot1D("1e cut", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+    hPlot1D hP_p_1e_cut_CD = hPlot1D("1e cut", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                      directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "02_P_p_1e_cut_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_1e_cut_FD = hPlot1D("1e cut", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+    hPlot1D hP_p_1e_cut_FD = hPlot1D("1e cut", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                      directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "02_P_p_1e_cut_FD", 0, beamE * 1.1);
-    hPlot1D hP_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}}", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_piplus_1e_cut_CD = hPlot1D("1e cut", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}}", "P_{#pi^{+}} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "03_P_piplus_1e_cut_CD", 0, beamE * 1.1);
-    hPlot1D hP_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}}", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_piplus_1e_cut_FD = hPlot1D("1e cut", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}}", "P_{#pi^{+}} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "03_P_piplus_1e_cut_FD", 0, beamE * 1.1);
-    hPlot1D hP_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}}", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_piminus_1e_cut_CD = hPlot1D("1e cut", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}}", "P_{#pi^{-}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "04_P_piminus_1e_cut_CD", 0, beamE * 1.1);
-    hPlot1D hP_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}}", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_piminus_1e_cut_FD = hPlot1D("1e cut", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}}", "P_{#pi^{-}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1e_cut_tests_Directory"], "04_P_piminus_1e_cut_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots (1p)">
-    hPlot1D hP_e_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]", directories.Momentum_Directory_map["Momentum_1p_Directory"],
+    hPlot1D hP_e_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]", directories.Momentum_Directory_map["Momentum_1p_Directory"],
                                  "01_P_e_1p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV]",
+    hPlot1D hP_e_BC_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "01_P_e_BC_1p_FD", 0, beamE * 1.1);
 
 
-    hPlot1D hP_p_BC_1p_CD = hPlot1D("1p", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV]",
+    hPlot1D hP_p_BC_1p_CD = hPlot1D("1p", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "02_P_p_BC_1p_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_BC_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV]",
+    hPlot1D hP_p_BC_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "03_P_p_BC_1p_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+    hPlot1D hP_p_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1p_Directory"], "03_P_p_1p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_pip_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "04_P_piplus_BC_1p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_pip_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "04_P_piplus_BC_1p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_pim_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "05_P_piminus_BC_1p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_pim_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "05_P_piminus_BC_1p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_1p_CD = hPlot1D("1p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV]",
+    hPlot1D hP_n_BC_1p_CD = hPlot1D("1p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "06_P_n_BC_1p_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_1p_FD = hPlot1D("1p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV]",
+    hPlot1D hP_n_BC_1p_FD = hPlot1D("1p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "06_P_n_BC_1p_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots (1n)">
-    hPlot1D hP_e_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]",
+    hPlot1D hP_e_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "01_P_e_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV]",
+    hPlot1D hP_e_BC_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "01_P_e_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n}", "P_{n} [GeV]",
+    hPlot1D hP_n_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n}", "P_{n} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_n_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV]",
+    hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_p_BC_1n_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV]",
+    hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "03_P_p_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_pip_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "04_P_piplus_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_pip_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "04_P_piplus_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_pim_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "05_P_piminus_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_pim_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "05_P_piminus_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_1n_CD = hPlot1D("1n", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV]",
+    hPlot1D hP_n_BC_1n_CD = hPlot1D("1n", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "06_P_n_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV]",
+    hPlot1D hP_n_BC_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "06_P_n_BC_1n_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots (1e2p)">
-    hPlot1D hP_e_1e2p_BC_FD = hPlot1D("1e2p", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV]",
+    hPlot1D hP_e_1e2p_BC_FD = hPlot1D("1e2p", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "01_P_e_1e2p_BC_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_1e2p_AC_FD = hPlot1D("1e2p", "", "Electron momentum AC", "Electron momentum P_{e} - after cuts", "P_{e} [GeV]",
+    hPlot1D hP_e_1e2p_AC_FD = hPlot1D("1e2p", "", "Electron momentum AC", "Electron momentum P_{e} - after cuts", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "01_P_e_1e2p_AC_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_1e2p_BC_CD = hPlot1D("1e2p", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV]",
+    hPlot1D hP_p_1e2p_BC_CD = hPlot1D("1e2p", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "02_P_p_1e2p_BC_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_1e2p_BC_FD = hPlot1D("1e2p", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV]",
+    hPlot1D hP_p_1e2p_BC_FD = hPlot1D("1e2p", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "03_P_p_1e2p_BC_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_1e2p_AC_CD = hPlot1D("1e2p", "CD", "Proton momentum AC", "Proton momentum P_{p} - after cuts", "P_{p} [GeV]",
+    hPlot1D hP_p_1e2p_AC_CD = hPlot1D("1e2p", "CD", "Proton momentum AC", "Proton momentum P_{p} - after cuts", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "02_P_p_1e2p_AC_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_1e2p_AC_FD = hPlot1D("1e2p", "FD", "Proton momentum AC", "Proton momentum P_{p} - after cuts", "P_{p} [GeV]",
+    hPlot1D hP_p_1e2p_AC_FD = hPlot1D("1e2p", "FD", "Proton momentum AC", "Proton momentum P_{p} - after cuts", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1e2p_Directory"], "03_P_p_1e2p_AC_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots (2p)">
 
     //<editor-fold desc="Momentum plots (2p)">
-    hPlot1D hP_e_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV]",
+    hPlot1D hP_e_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV]",
+    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+    hPlot1D hP_p_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV]",
+    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_BC_2p_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV]",
+    hPlot1D hP_p_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV]",
+    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV]",
+    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV]",
+    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV]",
+    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV]",
+    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Leading (P_1) and recoil (P_2) momentum plots (2p)">
-    hPlot1D hP_p_1_2p = hPlot1D("2p", "", "Leading proton P_{1}", "Leading proton momentum P_{1}", "P_{1} [GeV]",
+    hPlot1D hP_p_1_2p = hPlot1D("2p", "", "Leading proton P_{1}", "Leading proton momentum P_{1}", "P_{1} [GeV/c]",
                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "07_P_p_1_2p", 0, beamE * 1.1);
-    hPlot1D hP_p_2_2p = hPlot1D("2p", "", "Recoil proton P_{2}", "Recoil proton momentum P_{2}", "P_{2} [GeV]",
+    hPlot1D hP_p_2_2p = hPlot1D("2p", "", "Recoil proton P_{2}", "Recoil proton momentum P_{2}", "P_{2} [GeV/c]",
                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "07_P_p_2_2p", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="P1 vs P2 (2p, CD & FD)">
-    hPlot2D hP_p_1_vs_P_p_2_2p = hPlot2D("2p", "", "P_{1} vs. P_{2}", "P_{1} vs. P_{2}", "P_{1} [GeV]", "P_{2} [GeV]",
+    hPlot2D hP_p_1_vs_P_p_2_2p = hPlot2D("2p", "", "P_{1} vs. P_{2}", "P_{1} vs. P_{2}", "P_{1} [GeV/c]", "P_{2} [GeV/c]",
                                          directories.Momentum_Directory_map["Momentum_2p_Directory"], "08_P_p_1_vs_P_p_2",
                                          0, beamE * 1.1, 0, beamE * 1.1);
     //</editor-fold>
@@ -1125,48 +1134,48 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (no #(e) cut)">
 
     //<editor-fold desc="Beta vs. P (no #(e) cut)">
-    hPlot2D hBeta_vs_P_CD = hPlot2D("all particles", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_CD = hPlot2D("all particles", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "01_Beta_vs_P_All_Particles_CD", 0, beamE * 1.425, 0, 3);
-    hPlot2D hBeta_vs_P_FD = hPlot2D("all particles", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_FD = hPlot2D("all particles", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "01_Beta_vs_P_All_Particles_FD", 0, beamE * 1.425, 0, 3);
 
-    hPlot2D hBeta_vs_P_Electrons_Only_FD = hPlot2D("electrons only", "no #(e) cut", "", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_Electrons_Only_FD = hPlot2D("electrons only", "no #(e) cut", "", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "02_Beta_vs_P_Electrons_Only_FD", 0, beamE * 1.425,
                                                    0.5, 3);
 
-    hPlot2D hBeta_vs_P_Protons_Only_CD = hPlot2D("protons only", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_Protons_Only_CD = hPlot2D("protons only", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                  directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "03_Beta_vs_P_Protons_Only_CD",
                                                  0, beamE * 1.1, 0, 1.1);
-    hPlot2D hBeta_vs_P_Protons_Only_FD = hPlot2D("protons only", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_Protons_Only_FD = hPlot2D("protons only", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                  directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "03_Beta_vs_P_Protons_Only_FD",
                                                  0, beamE * 1.1, 0, 1.1);
 
-    hPlot2D hBeta_vs_P_Neutrons_Only_CD = hPlot2D("neutrons only", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_Neutrons_Only_CD = hPlot2D("neutrons only", "no #(e) cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                   directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "04_Beta_vs_P_Neutrons_Only_CD",
                                                   0, beamE * 1.1, 0, 3);
-    hPlot2D hBeta_vs_P_Neutrons_Only_FD = hPlot2D("neutrons only", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_Neutrons_Only_FD = hPlot2D("neutrons only", "no #(e) cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                   directories.Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"], "04_Beta_vs_P_Neutrons_Only_FD",
                                                   0, beamE * 1.1, 0, 3);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (no #(e) cut)">
     hPlot2D hBeta_vs_P_positive_part_All_e_CD = hPlot2D("", "no #(e) cut", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                        "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
+                                                        "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
                                                         "01_Beta_vs_P_q_p1_All_e_CD", 0, beamE * 1.425, 0, 3);
     hPlot2D hBeta_vs_P_positive_part_All_e_FD = hPlot2D("", "no #(e) cut", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                        "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
+                                                        "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
                                                         "01_Beta_vs_P_q_p1_All_e_FD", 0, beamE * 1.425, 0, 3);
     hPlot2D hBeta_vs_P_neutral_part_All_e_CD = hPlot2D("", "no #(e) cut", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                       "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
+                                                       "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
                                                        "02_Beta_vs_P_q_0_All_e_CD", 0, beamE * 1.425, 0, 3);
     hPlot2D hBeta_vs_P_neutral_part_All_e_FD = hPlot2D("", "no #(e) cut", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                       "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
+                                                       "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
                                                        "02_Beta_vs_P_q_0_All_e_FD", 0, beamE * 1.425, 0, 3);
     hPlot2D hBeta_vs_P_negative_part_All_e_CD = hPlot2D("", "no #(e) cut", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                        "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
+                                                        "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
                                                         "03_Beta_vs_P_q_m1_All_e_CD", 0, beamE * 1.425, 0, 3);
     hPlot2D hBeta_vs_P_negative_part_All_e_FD = hPlot2D("", "no #(e) cut", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                        "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
+                                                        "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"],
                                                         "03_Beta_vs_P_q_m1_All_e_FD", 0, beamE * 1.425, 0, 3);
     //</editor-fold>
 
@@ -1175,85 +1184,85 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (1e cut)">
 
     //<editor-fold desc="Beta vs. P for all particles (1e cut)">
-    hPlot2D hBeta_vs_P_1e_cut_CD = hPlot2D("all particles", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_CD = hPlot2D("all particles", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                            directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "01_Beta_vs_P_1e_cut_All_Particles_CD",
                                            0, beamE * 1.1, 0, 1.7);
-    hPlot2D hBeta_vs_P_1e_cut_FD = hPlot2D("all particles", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_FD = hPlot2D("all particles", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                            directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "01_Beta_vs_P_1e_cut_All_Particles_FD",
                                            0, beamE * 1.1, 0, 1.7);
 
-    hPlot2D hBeta_vs_P_1e_cut_Electrons_Only_FD = hPlot2D("electrons only", "1e cut", "", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Electrons_Only_FD = hPlot2D("electrons only", "1e cut", "", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                           directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "02_Beta_vs_P_1e_cut_Electrons_Only_FD",
                                                           0, beamE * 1.425, 0.5, 1.7);
 
-    hPlot2D hBeta_vs_P_1e_cut_Protons_Only_CD = hPlot2D("protons only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Protons_Only_CD = hPlot2D("protons only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                         directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "03_Beta_vs_P_1e_cut_Protons_Only_CD",
                                                         0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1e_cut_Protons_Only_FD = hPlot2D("protons only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Protons_Only_FD = hPlot2D("protons only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                         directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "03_Beta_vs_P_1e_cut_Protons_Only_FD",
                                                         0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_CD = hPlot2D("neutrons only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_CD = hPlot2D("neutrons only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                          directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "04_Beta_vs_P_1e_cut_Neutrons_Only_CD",
                                                          0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_FD = hPlot2D("neutrons only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Neutrons_Only_FD = hPlot2D("neutrons only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                          directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "04_Beta_vs_P_1e_cut_Neutrons_Only_FD",
                                                          0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1e_cut_Kplus_Only_CD = hPlot2D("K^{+} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Kplus_Only_CD = hPlot2D("K^{+} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "05_Beta_vs_P_1e_cut_Kplus_Only_CD",
                                                       0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1e_cut_Kplus_Only_FD = hPlot2D("K^{+} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Kplus_Only_FD = hPlot2D("K^{+} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "05_Beta_vs_P_1e_cut_Kplus_Only_FD",
                                                       0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1e_cut_Kminus_Only_CD = hPlot2D("K^{-} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Kminus_Only_CD = hPlot2D("K^{-} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "06_Beta_vs_P_1e_cut_Kminus_Only_CD",
                                                        0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1e_cut_Kminus_Only_FD = hPlot2D("K^{-} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_Kminus_Only_FD = hPlot2D("K^{-} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "06_Beta_vs_P_1e_cut_Kminus_Only_FD",
                                                        0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1e_cut_piplus_Only_CD = hPlot2D("#pi^{+} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_piplus_Only_CD = hPlot2D("#pi^{+} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "07_Beta_vs_P_1e_cut_piplus_Only_CD",
                                                        0, P_boundary, 0, 1.7);
-    hPlot2D hBeta_vs_P_1e_cut_piplus_Only_FD = hPlot2D("#pi^{+} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_piplus_Only_FD = hPlot2D("#pi^{+} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "07_Beta_vs_P_1e_cut_piplus_Only_FD",
                                                        0, P_boundary, 0, 1.7);
 
-    hPlot2D hBeta_vs_P_1e_cut_piminus_Only_CD = hPlot2D("#pi^{-} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_piminus_Only_CD = hPlot2D("#pi^{-} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                         directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "08_Beta_vs_P_1e_cut_piminus_Only_CD",
                                                         0, P_boundary, 0, 1.7);
-    hPlot2D hBeta_vs_P_1e_cut_piminus_Only_FD = hPlot2D("#pi^{-} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_piminus_Only_FD = hPlot2D("#pi^{-} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                         directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "08_Beta_vs_P_1e_cut_piminus_Only_FD",
                                                         0, P_boundary, 0, 1.7);
 
-    hPlot2D hBeta_vs_P_1e_cut_pizero_Only_CD = hPlot2D("#pi^{0} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_pizero_Only_CD = hPlot2D("#pi^{0} only", "1e cut", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "09_Beta_vs_P_1e_cut_pizero_Only_CD",
                                                        0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1e_cut_pizero_Only_FD = hPlot2D("#pi^{0} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1e_cut_pizero_Only_FD = hPlot2D("#pi^{0} only", "1e cut", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"], "09_Beta_vs_P_1e_cut_pizero_Only_FD",
                                                        0, P_boundary, 0, Beta_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1e cut)">
     hPlot2D hBeta_vs_P_positive_part_1e_cut_CD = hPlot2D("all particles", "1e cut", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                         "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
+                                                         "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
                                                          "01_Beta_vs_P_q_p1_1e_cut_CD", 0, beamE * 1.1, 0, 1.7);
     hPlot2D hBeta_vs_P_positive_part_1e_cut_FD = hPlot2D("all particles", "1e cut", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                         "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
+                                                         "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
                                                          "01_Beta_vs_P_q_p1_1e_cut_FD", 0, beamE * 1.1, 0, 1.7);
     hPlot2D hBeta_vs_P_neutral_part_1e_cut_CD = hPlot2D("all particles", "1e cut", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                        "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
+                                                        "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
                                                         "02_Beta_vs_P_q_0_1e_cut_CD", 0, beamE * 1.1, 0, 1.7);
     hPlot2D hBeta_vs_P_neutral_part_1e_cut_FD = hPlot2D("all particles", "1e cut", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                        "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
+                                                        "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
                                                         "02_Beta_vs_P_q_0_1e_cut_FD", 0, beamE * 1.1, 0, 1.7);
     hPlot2D hBeta_vs_P_negative_part_1e_cut_CD = hPlot2D("all particles", "1e cut", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                         "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
+                                                         "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
                                                          "03_Beta_vs_P_q_m1_1e_cut_CD", 0, beamE * 1.1, 0, 1.7);
     hPlot2D hBeta_vs_P_negative_part_1e_cut_FD = hPlot2D("all particles", "1e cut", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                         "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
+                                                         "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"],
                                                          "03_Beta_vs_P_q_m1_1e_cut_FD", 0, beamE * 1.1, 0, 1.7);
     //</editor-fold>
 
@@ -1262,43 +1271,43 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (1p)">
 
     //<editor-fold desc="Beta vs. P for all particles (1p)">
-    hPlot2D hBeta_vs_P_1p_CD = hPlot2D("all particles", "1p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1p_CD = hPlot2D("all particles", "1p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "01_Beta_vs_P_1p_All_Particles_CD",
                                        0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_1p_FD = hPlot2D("all particles", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1p_FD = hPlot2D("all particles", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "01_Beta_vs_P_1p_All_Particles_FD",
                                        0, beamE * 1.1, 0, 1.5);
 
-    hPlot2D hBeta_vs_P_1p_Electrons_Only_FD = hPlot2D("electrons only", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1p_Electrons_Only_FD = hPlot2D("electrons only", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "02_Beta_vs_P_1p_Electrons_Only_FD", 0,
                                                       0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1p_Protons_Only_CD = hPlot2D("protons only", "1p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1p_Protons_Only_CD = hPlot2D("protons only", "1p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "03_Beta_vs_P_1p_Protons_Only_CD",
                                                     0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1p_Protons_Only_FD = hPlot2D("protons only", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1p_Protons_Only_FD = hPlot2D("protons only", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "03_Beta_vs_P_1p_Protons_Only_FD",
                                                     0, P_boundary, 0, Beta_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1p)">
     hPlot2D hBeta_vs_P_positive_part_1p_CD = hPlot2D("all particles", "1p", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
                                                      "01_Beta_vs_P_q_p1_1p_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_positive_part_1p_FD = hPlot2D("all particles", "1p", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
                                                      "01_Beta_vs_P_q_p1_1p_FD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_neutral_part_1p_CD = hPlot2D("all particles", "1p", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
+                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
                                                     "02_Beta_vs_P_q_0_1p_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_neutral_part_1p_FD = hPlot2D("all particles", "1p", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
+                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
                                                     "02_Beta_vs_P_q_0_1p_FD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_negative_part_1p_CD = hPlot2D("all particles", "1p", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
                                                      "03_Beta_vs_P_q_m1_1p_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_negative_part_1p_FD = hPlot2D("all particles", "1p", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"],
                                                      "03_Beta_vs_P_q_m1_1p_FD", 0, beamE * 1.1, 0, 1.5);
     //</editor-fold>
 
@@ -1307,43 +1316,43 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (1n)">
 
     //<editor-fold desc="Beta vs. P for all particles (1n)">
-    hPlot2D hBeta_vs_P_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "01_Beta_vs_P_1n_All_Particles_CD",
                                        0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "01_Beta_vs_P_1n_All_Particles_FD",
                                        0, beamE * 1.1, 0, 1.5);
 
-    hPlot2D hBeta_vs_P_1n_Electrons_Only_FD = hPlot2D("electrons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1n_Electrons_Only_FD = hPlot2D("electrons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_1n_Electrons_Only_FD", 0,
                                                       0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1n_Protons_Only_CD = hPlot2D("protons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1n_Protons_Only_CD = hPlot2D("protons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_1n_Protons_Only_CD",
                                                     0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1n_Protons_Only_FD = hPlot2D("protons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_1n_Protons_Only_FD = hPlot2D("protons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_1n_Protons_Only_FD",
                                                     0, P_boundary, 0, Beta_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1n)">
     hPlot2D hBeta_vs_P_positive_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
                                                      "01_Beta_vs_P_q_p1_1n_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_positive_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
                                                      "01_Beta_vs_P_q_p1_1n_FD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_neutral_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
                                                     "02_Beta_vs_P_q_0_1n_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_neutral_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
                                                     "02_Beta_vs_P_q_0_1n_FD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_negative_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
                                                      "03_Beta_vs_P_q_m1_1n_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_negative_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
                                                      "03_Beta_vs_P_q_m1_1n_FD", 0, beamE * 1.1, 0, 1.5);
     //</editor-fold>
 
@@ -1352,43 +1361,43 @@ void EventAnalyser() {
     //<editor-fold desc="Beta vs. P (2p)">
 
     //<editor-fold desc="Beta vs. P for all particles (2p)">
-    hPlot2D hBeta_vs_P_2p_CD = hPlot2D("all particles", "2p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_2p_CD = hPlot2D("all particles", "2p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"], "01_Beta_vs_P_2p_All_Particles_CD",
                                        0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_2p_FD = hPlot2D("all particles", "2p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_2p_FD = hPlot2D("all particles", "2p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                        directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"], "01_Beta_vs_P_2p_All_Particles_FD",
                                        0, beamE * 1.1, 0, 1.5);
 
-    hPlot2D hBeta_vs_P_2p_Electrons_Only_FD = hPlot2D("electrons only", "2p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_2p_Electrons_Only_FD = hPlot2D("electrons only", "2p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"], "02_Beta_vs_P_2p_Electrons_Only_FD",
                                                       0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_2p_Protons_Only_CD = hPlot2D("protons only", "2p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_2p_Protons_Only_CD = hPlot2D("protons only", "2p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"], "03_Beta_vs_P_2p_Protons_Only_CD",
                                                     0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_2p_Protons_Only_FD = hPlot2D("protons only", "2p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV]", "#beta",
+    hPlot2D hBeta_vs_P_2p_Protons_Only_FD = hPlot2D("protons only", "2p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"], "03_Beta_vs_P_2p_Protons_Only_FD",
                                                     0, P_boundary, 0, Beta_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (2p)">
     hPlot2D hBeta_vs_P_positive_part_2p_CD = hPlot2D("all particles", "2p", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
                                                      "01_Beta_vs_P_q_p1_2p_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_positive_part_2p_FD = hPlot2D("all particles", "2p", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
                                                      "01_Beta_vs_P_q_p1_2p_FD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_neutral_part_2p_CD = hPlot2D("all particles", "2p", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
+                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
                                                     "02_Beta_vs_P_q_0_2p_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_neutral_part_2p_FD = hPlot2D("all particles", "2p", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
+                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
                                                     "02_Beta_vs_P_q_0_2p_FD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_negative_part_2p_CD = hPlot2D("all particles", "2p", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
                                                      "03_Beta_vs_P_q_m1_2p_CD", 0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_negative_part_2p_FD = hPlot2D("all particles", "2p", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
+                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"],
                                                      "03_Beta_vs_P_q_m1_2p_FD", 0, beamE * 1.1, 0, 1.5);
     //</editor-fold>
 
@@ -1681,6 +1690,8 @@ void EventAnalyser() {
     string hTheta_q_p_n_vs_p_N_q_1n_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1n"];
     //</editor-fold>
 
+    //</editor-fold>
+
     //<editor-fold desc="1e2pXy plots">
 
 // Phi of leading (p1) and recoil (p2) protons --------------------------------------------------------------------------------------------------------------------------
@@ -1829,11 +1840,11 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-    //</editor-fold>
-
 // ======================================================================================================================================================================
 // Q2 histograms
 // ======================================================================================================================================================================
+
+    //TODO: confirm units with Adi
 
     //<editor-fold desc="Q2 histograms">
 
@@ -2337,13 +2348,13 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. dP_T (1p)">
     TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1p)",
-                                      "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+                                      "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV/c];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     string hEcal_vs_dP_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dP_T (1n)">
     TH2D *hEcal_vs_dP_T_1n = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1n)",
-                                      "E_{cal} vs. #deltaP_{T} (All Int., 1n);#deltaP_{T} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+                                      "E_{cal} vs. #deltaP_{T} (All Int., 1n);#deltaP_{T} [GeV/c];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
     string hEcal_vs_dP_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_transverse_variables_1n_Directory"];
     //</editor-fold>
 
@@ -2365,8 +2376,8 @@ void EventAnalyser() {
     //<editor-fold desc="Transverse variables histograms">
 
     //<editor-fold desc="TV plots (1p)">
-    THStack *sdP_T_1p = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV]");
-    TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV]", 100, 0, dP_T_boundary);
+    THStack *sdP_T_1p = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV/c]");
+    TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV/c]", 100, 0, dP_T_boundary);
     string hdP_T_1p_Dir = directories.TVariables_Directory_map["dP_T_1p_Directory"];
 
     THStack *sdAlpha_T_1p = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1p);#delta#alpha_{T} [Deg]");
@@ -2378,14 +2389,14 @@ void EventAnalyser() {
     string hdPhi_T_1p_Dir = directories.TVariables_Directory_map["dPhi_T_1p_Directory"];
 
     TH2D *hdP_T_vs_dAlpha_T_1p = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p)",
-                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV];",
+                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV/c];",
                                           250, 0, 180, 250, 0, dP_T_boundary);
     string hdP_T_vs_dAlpha_T_1p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="TV plots (1n)">
-    THStack *sdP_T_1n = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1n)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1n);#deltaP_{T} [GeV]");
-    TH1D *hdP_T_1n = new TH1D("#deltaP_{T} (1n)", "#deltaP_{T} histogram (1n);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV]", 100, 0, dP_T_boundary);
+    THStack *sdP_T_1n = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1n)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1n);#deltaP_{T} [GeV/c]");
+    TH1D *hdP_T_1n = new TH1D("#deltaP_{T} (1n)", "#deltaP_{T} histogram (1n);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,n}| [GeV/c]", 100, 0, dP_T_boundary);
     string hdP_T_1n_Dir = directories.TVariables_Directory_map["dP_T_1n_Directory"];
 
     THStack *sdAlpha_T_1n = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1n)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1n);#delta#alpha_{T} [Deg]");
@@ -2397,17 +2408,18 @@ void EventAnalyser() {
     string hdPhi_T_1n_Dir = directories.TVariables_Directory_map["dPhi_T_1n_Directory"];
 
     TH2D *hdP_T_vs_dAlpha_T_1n = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n)",
-                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV];",
+                                          "#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];#deltaP_{T} [GeV/c];",
                                           250, 0, 180, 250, 0, dP_T_boundary);
     string hdP_T_vs_dAlpha_T_1n_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="TV plots (2p)">
-    THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV]");
-    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV]", 100, 0,
+    THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV/c]");
+    TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV/c]", 100, 0,
                                 dP_T_boundary);
     TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)",
-                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV]", 100, 0, dP_T_boundary);
+                                  "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV/c]", 100, 0,
+                                  dP_T_boundary);
     string hdP_T_L_2p_Dir = directories.TVariables_Directory_map["dP_T_2p_Directory"];
     string hdP_T_tot_2p_Dir = directories.TVariables_Directory_map["dP_T_2p_Directory"];
 
@@ -2424,10 +2436,10 @@ void EventAnalyser() {
     string hdPhi_T_tot_2p_Dir = directories.TVariables_Directory_map["dPhi_T_2p_Directory"];
 
     TH2D *hdP_T_L_vs_dAlpha_T_L_2p = new TH2D("#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p)",
-                                              "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV];",
+                                              "#deltaP_{T,L} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];#deltaP_{T,L} [GeV/c];",
                                               250, 0, 180, 250, 0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_dAlpha_T_tot_2p = new TH2D("#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p)",
-                                                  "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];#deltaP_{T,tot} [GeV];",
+                                                  "#deltaP_{T,tot} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];#deltaP_{T,tot} [GeV/c];",
                                                   250, 0, 180, 250, 0, dP_T_boundary);
     string hdP_T_L_vs_dAlpha_T_L_2p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"];
     string hdP_T_tot_vs_dAlpha_T_tot_2p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"];
@@ -3498,18 +3510,18 @@ void EventAnalyser() {
             if (deuterons.size() != 0) { cout << "\n\n1p: deuterons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             //</editor-fold>
 
-            if (protons[good_protons.at(0)]->getRegion() == FD) {
-                ++num_of_events_1p_inFD; // 1p event count after momentum cuts
+            // looking at events with 1p in the FD only:
+            if ((protons[good_protons.at(0)]->getRegion() == FD) && ((protons[good_protons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+                ++num_of_events_1p_inFD; // 1p event count after momentum and theta_p cuts
 
                 TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
                 P_e_1p_3v.SetMagThetaPhi(electrons[good_electron.at(0)]->getP(), electrons[good_electron.at(0)]->getTheta(),
-                                         electrons[good_electron.at(0)]->getPhi());  // electron 3 momentum
-                q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());              // 3 momentum transfer
-                P_p_1p_3v.SetMagThetaPhi(protons[good_protons.at(0)]->getP(),
-                                         protons[good_protons.at(0)]->getTheta(),
-                                         protons[good_protons.at(0)]->getPhi());                                   // proton 3 momentum
-                P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                         // electron transverse momentum
-                P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                         // proton transverse momentum
+                                         electrons[good_electron.at(0)]->getPhi());                                             // electron 3 momentum
+                q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                              // 3 momentum transfer
+                P_p_1p_3v.SetMagThetaPhi(protons[good_protons.at(0)]->getP(), protons[good_protons.at(0)]->getTheta(),
+                                         protons[good_protons.at(0)]->getPhi());                                                   // proton 3 momentum
+                P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                                         // electron transverse momentum
+                P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                                         // proton transverse momentum
 
                 double E_e_1p = sqrt(m_e * m_e + P_e_1p_3v.Mag2()), E_p_1p = sqrt(m_p * m_p + P_p_1p_3v.Mag2()), Ecal_1p, dAlpha_T_1p, dPhi_T_1p;
                 double Theta_p_e_p_p_1p, Theta_q_p_p_1p;
@@ -3849,17 +3861,17 @@ void EventAnalyser() {
             if (deuterons.size() != 0) { cout << "\n\n1n: deuterons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             //</editor-fold>
 
-            if (neutrons[good_neutrons.at(0)]->getRegion() == FD) { // looking at events with 1n in the FD only
-                ++num_of_events_1n_inFD; // 1n event count after momentum cuts
+            // looking at events with 1n in the FD only:
+            if (neutrons[good_neutrons.at(0)]->getRegion() == FD && ((neutrons[good_neutrons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+                ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
 
                 TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
-                P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());  // electron 3 momentum
-                q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());              // 3 momentum transfer
-                P_n_1n_3v.SetMagThetaPhi(neutrons[good_neutrons.at(0)]->getP(),
-                                         neutrons[good_neutrons.at(0)]->getTheta(),
-                                         neutrons[good_neutrons.at(0)]->getPhi());                                 // neutron 3 momentum
-                P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                         // electron transverse momentum
-                P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                         // neutron transverse momentum
+                P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());          // electron 3 momentum
+                q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                      // 3 momentum transfer
+                P_n_1n_3v.SetMagThetaPhi(neutrons[good_neutrons.at(0)]->getP(), neutrons[good_neutrons.at(0)]->getTheta(),
+                                         neutrons[good_neutrons.at(0)]->getPhi());                                         // neutron 3 momentum
+                P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                 // electron transverse momentum
+                P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                 // neutron transverse momentum
 
                 double E_e_1n = sqrt(m_e * m_e + P_e_1n_3v.Mag2()), E_n_1n = sqrt(m_n * m_n + P_n_1n_3v.Mag2()), Ecal_1n, dAlpha_T_1n, dPhi_T_1n;
                 double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
@@ -4420,13 +4432,28 @@ void EventAnalyser() {
 
             //<editor-fold desc="Ghost tracks handling (2p)">
 
-            //<editor-fold desc="Single edge detection (on CD-FD border)">
-            bool Lead_proton_Theta_p_cut = (fabs(Theta_p1 - 40.) < 10.);
-            bool Recoil_proton_Theta_p_cut = (fabs(Theta_p2 - 40.) < 10.);
-            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 10.);
+            //<editor-fold desc="Single edge detection cut (on CD-FD border)">
+//            cout << "\np1_Theta_p_cuts_2p.GetMean() = " << p1_Theta_p_cuts_2p.GetMean() << "\n";
+//            cout << "p2_Theta_p_cuts_2p.GetMean() = " << p2_Theta_p_cuts_2p.GetMean() << "\n";
 
-//            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut);
-            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut && Lead_and_Recoil_with_close_phi);
+            bool p1_Theta_p_cut = (fabs(Theta_p1 - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut()); // Lead proton theta_p cut
+            bool p2_Theta_p_cut = (fabs(Theta_p2 - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut()); // Recoil proton theta_p cut
+            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
+//            bool p1_Theta_p_cut = (fabs(Theta_p1 - 40.) < 5.); // Lead proton theta_p cut
+//            bool p2_Theta_p_cut = (fabs(Theta_p2 - 40.) < 5.); // Recoil proton theta_p cut
+//            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 15.);
+
+            //best one (too wide?)
+//            bool p1_Theta_p_cut = (fabs(Theta_p1 - 40.) < 7.5); // Lead proton theta_p cut
+//            bool p2_Theta_p_cut = (fabs(Theta_p2 - 40.) < 7.5); // Recoil proton theta_p cut
+//            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 20.);
+
+//            bool p1_Theta_p_cut = (fabs(Theta_p1 - 40.) < 10.);
+//            bool p2_Theta_p_cut = (fabs(Theta_p2 - 40.) < 10.);
+//            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 10.);
+
+//            bool single_edge_detection = !(p1_Theta_p_cut && p2_Theta_p_cut);
+            bool single_edge_detection = !(p1_Theta_p_cut && p2_Theta_p_cut && Lead_and_Recoil_with_close_phi);
             //</editor-fold>
 
             //<editor-fold desc="Identical CTOF position cut">
@@ -4452,22 +4479,6 @@ void EventAnalyser() {
                     true_2p_event = (pos_diff.Mag() != 0);
                 }
             }
-            /*
-            if ((protons[good_protons.at(0)]->getRegion() == CD) && (protons[good_protons.at(1)]->getRegion() == CD)) { // if both 2p protons are in the CD
-                p1_hit_pos.SetXYZ(protons[good_protons.at(0)]->sci(clas12::CTOF)->getX(), protons[good_protons.at(0)]->sci(clas12::CTOF)->getY(),
-                                  protons[good_protons.at(0)]->sci(clas12::CTOF)->getZ());
-                p2_hit_pos.SetXYZ(protons[good_protons.at(1)]->sci(clas12::CTOF)->getX(), protons[good_protons.at(1)]->sci(clas12::CTOF)->getY(),
-                                  protons[good_protons.at(1)]->sci(clas12::CTOF)->getZ());
-                pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
-
-                time_diff = protons[lead_p_ind]->getTime() - protons[recoil_p_ind]->getTime();
-
-                hTheta_p1_p2_VS_ToF1_ToF2_BC_2p.hFill(Theta_p1_p2_2p, time_diff, Weight);
-                hTheta_p1_p2_VS_Pos1_Pos2_BC_2p.hFill(Theta_p1_p2_2p, pos_diff.Mag(), Weight);
-
-                true_2p_event = (pos_diff.Mag() != 0);
-            }
-*/
             //</editor-fold>
 
             //</editor-fold>
@@ -4475,8 +4486,7 @@ void EventAnalyser() {
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Fillings 2p histograms">
-            if (true_2p_event && single_edge_detection) { // with id. CTOF pos. cut.
-//            if (true_2p_event) { // with id. CTOF pos. cut.
+            if (true_2p_event && single_edge_detection) { // with identical CTOF position cut & single edge detection cut
                 ++num_of_events_2p;
 
                 //<editor-fold desc="Filling cut parameters histograms (2p)">
@@ -7717,6 +7727,18 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "dVz_cuts = " << dVz_cuts.GetUpperCut() << "\n";
+    //</editor-fold>
+
+    //<editor-fold desc="Ghost tracks handling (2p, CD & FD)">
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Ghost tracks handling (2p, CD & FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "p1_Theta_p_cuts_2p = " << p1_Theta_p_cuts_2p.GetUpperCut() << "\n";
+    myLogFile << "p1_Theta_p_cuts_2p mean = " << p1_Theta_p_cuts_2p.GetMean() << "\n";
+    myLogFile << "p2_Theta_p_cuts_2p = " << p2_Theta_p_cuts_2p.GetUpperCut() << "\n";
+    myLogFile << "p2_Theta_p_cuts_2p mean = " << p2_Theta_p_cuts_2p.GetMean() << "\n";
+    myLogFile << "phi_p1_p2_diff_cuts_2p = " << phi_p1_p2_diff_cuts_2p.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //</editor-fold>
