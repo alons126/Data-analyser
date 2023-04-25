@@ -4425,8 +4425,8 @@ void EventAnalyser() {
             bool Recoil_proton_Theta_p_cut = (fabs(Theta_p2 - 40.) < 10.);
             bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 10.);
 
-            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut);
-//            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut && Lead_and_Recoil_with_close_phi);
+//            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut);
+            bool single_edge_detection = !(Lead_proton_Theta_p_cut && Recoil_proton_Theta_p_cut && Lead_and_Recoil_with_close_phi);
             //</editor-fold>
 
             //<editor-fold desc="Identical CTOF position cut">
