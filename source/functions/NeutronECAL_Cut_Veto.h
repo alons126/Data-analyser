@@ -93,7 +93,7 @@ bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_p
         }
     }
 
-    if (Veto) { return false; } /* if any of the vetos are true, return false */
+    if (Veto) { return false; } /* if any of the vetoes are true, return false */
 
     return true; /* we survived up to this point, we do have a neutral particle */
 }

@@ -15,7 +15,6 @@
 #include "region_particle.h"
 
 #include "../classes/DSCuts/DSCuts.h"
-#include "NeutronECAL_Cut_Veto.h"
 
 using namespace std;
 
@@ -28,6 +27,7 @@ vector<int> GetNeutrons(vector<region_part_ptr> &allParticles, DSCuts &Momentum_
     for (int i = 0; i < allParticles.size(); i++) {
         int ParticalPDG = allParticles[i]->par()->getPid();
 
+//        if ((allParticles[i]->getRegion() == FD) && (ParticalPDG == 2112)) { // if neutron/photon is in the FD
         if ((allParticles[i]->getRegion() == FD) && ((ParticalPDG == 2112) || (ParticalPDG == 22))) { // if neutron/photon is in the FD
             bool inPCAL = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
             bool inECIN = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit

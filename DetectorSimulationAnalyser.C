@@ -47,6 +47,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/NeutronECAL_Cut_Veto.h"
 #include "source/functions/GetGoodParticles.h"
 #include "source/functions/GetNeutrons.h"
+#include "source/functions/GetPhotons.h"
 
 using namespace std;
 using namespace clas12;
@@ -2709,6 +2710,7 @@ void EventAnalyser() {
         //<editor-fold desc="Configure good particles and basic event selection">
         /* Configure particles within general momentum cuts: */
         vector<int> good_neutrons_test = GetNeutrons(allParticles, n_momentum_cuts);
+        vector<int> good_photons_test = GetPhotons(allParticles);
 //        vector<int> good_neutrons = GetGoodParticles(neutrons, n_momentum_cuts);
         vector<int> good_protons = GetGoodParticles(protons, p_momentum_cuts);
         vector<int> good_piplus = GetGoodParticles(piplus, pip_momentum_cuts);
@@ -3949,7 +3951,72 @@ void EventAnalyser() {
 
                 // Fake neutrons handeling (neutron veto) ---------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Fake neutrons handeling (neutron veto)">
+//                //<editor-fold desc="Fake neutrons handeling (neutron veto)">
+//                if (!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
+//                    auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+//
+//                    // neutron ECIN/ECAL hit vector and angles:
+//                    TVector3 n_hit_1n_3v(allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getX(),
+//                                         allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getY(),
+//                                         allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getZ());
+//                    double n_hit_Theta_1n = n_hit_1n_3v.Theta() * 180 / pi, n_hit_Phi_1n = n_hit_1n_3v.Phi() * 180 / pi;
+//
+//                    if (e_hit_PCAL_1n) { // if there's an electron hit in the PCAL
+//                        // electron PCAL hit vector and angles:
+//                        TVector3 e_hit_1n_3v(electrons[good_electron.at(0)]->cal(clas12::PCAL)->getX(), electrons[good_electron.at(0)]->cal(clas12::PCAL)->getY(),
+//                                             electrons[good_electron.at(0)]->cal(clas12::PCAL)->getZ());
+//                        double e_hit_Theta_1n = e_hit_1n_3v.Theta() * 180 / pi, e_hit_Phi_1n = e_hit_1n_3v.Phi() * 180 / pi;
+//
+//                        // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
+//                        hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n.hFill(n_hit_Phi_1n - e_hit_Phi_1n, n_hit_Theta_1n - e_hit_Theta_1n, Weight);
+//                    }
+//                } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
+//
+//                bool NeutronPassVeto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, good_neutrons_test.at(0), Neutron_veto_cut.GetLowerCut());
+//
+//                if (NeutronPassVeto) {
+//                    if (!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
+//                        auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+//
+//                        // neutron ECIN/ECAL hit vector and angles:
+//                        TVector3 n_hit_1n_3v(allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getX(),
+//                                             allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getY(),
+//                                             allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getZ());
+//                        double n_hit_Theta_1n = n_hit_1n_3v.Theta() * 180 / pi, n_hit_Phi_1n = n_hit_1n_3v.Phi() * 180 / pi;
+//
+//                        if (e_hit_PCAL_1n) { // if there's an electron hit in the PCAL
+//                            // electron PCAL hit vector and angles:
+//                            TVector3 e_hit_1n_3v(electrons[good_electron.at(0)]->cal(clas12::PCAL)->getX(), electrons[good_electron.at(0)]->cal(clas12::PCAL)->getY(),
+//                                                 electrons[good_electron.at(0)]->cal(clas12::PCAL)->getZ());
+//                            double e_hit_Theta_1n = e_hit_1n_3v.Theta() * 180 / pi, e_hit_Phi_1n = e_hit_1n_3v.Phi() * 180 / pi;
+//
+//                            // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
+//                            hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(n_hit_Phi_1n - e_hit_Phi_1n, n_hit_Theta_1n - e_hit_Theta_1n, Weight);
+//                        }
+//                    } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
+//                } else {
+//                    if (!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
+//                        auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+//
+//                        // neutron ECIN/ECAL hit vector and angles:
+//                        TVector3 n_hit_1n_3v(allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getX(),
+//                                             allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getY(),
+//                                             allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getZ());
+//                        double n_hit_Theta_1n = n_hit_1n_3v.Theta() * 180 / pi, n_hit_Phi_1n = n_hit_1n_3v.Phi() * 180 / pi;
+//                        if (e_hit_PCAL_1n) { // if there's an electron hit in the PCAL
+//                            // electron PCAL hit vector and angles:
+//                            TVector3 e_hit_1n_3v(electrons[good_electron.at(0)]->cal(clas12::PCAL)->getX(), electrons[good_electron.at(0)]->cal(clas12::PCAL)->getY(),
+//                                                 electrons[good_electron.at(0)]->cal(clas12::PCAL)->getZ());
+//                            double e_hit_Theta_1n = e_hit_1n_3v.Theta() * 180 / pi, e_hit_Phi_1n = e_hit_1n_3v.Phi() * 180 / pi;
+//
+//                            // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
+//                            hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n.hFill(n_hit_Phi_1n - e_hit_Phi_1n, n_hit_Theta_1n - e_hit_Theta_1n, Weight);
+//                        }
+//                    }
+//                } // end of else to if neutron did not hit PCAL & hit either ECIN or ECOUT
+//                //</editor-fold>
+
+                //<editor-fold desc="Fake neutrons handeling (neutron veto) - OLD">
                 if (!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
                     auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
@@ -3968,18 +4035,7 @@ void EventAnalyser() {
                         // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
                         hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n.hFill(n_hit_Phi_1n - e_hit_Phi_1n, n_hit_Theta_1n - e_hit_Theta_1n, Weight);
                     }
-
-/*
-                    if (p_hit_PCAL_1n) { // if there's an proton hit in the PCAL
-                        // proton PCAL hit vector and angles:
-                        TVector3 p_hit_1n_3v(protons[0]->cal(clas12::PCAL)->getX(), protons[0]->cal(clas12::PCAL)->getY(), protons[0]->cal(clas12::PCAL)->getZ());
-                        double p_hit_Theta_1n = p_hit_1n_3v.Theta() * 180 / pi, p_hit_Phi_1n = p_hit_1n_3v.Phi() * 180 / pi;
-
-                        // subtracting the angles between the neutron hit and proton hit to see if we have fake neutrons:
-                        hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1n.hFill(n_hit_Phi_1n - p_hit_Phi_1n, n_hit_Theta_1n - p_hit_Theta_1n, Weight);
-                    }
-*/
-                }
+                } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
 
                 bool NeutronPassVeto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, good_neutrons_test.at(0), Neutron_veto_cut.GetLowerCut());
 
@@ -4002,7 +4058,7 @@ void EventAnalyser() {
                             // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
                             hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(n_hit_Phi_1n - e_hit_Phi_1n, n_hit_Theta_1n - e_hit_Theta_1n, Weight);
                         }
-                    }
+                    } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
                 } else {
                     if (!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
                         auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
@@ -4023,7 +4079,7 @@ void EventAnalyser() {
                             hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n.hFill(n_hit_Phi_1n - e_hit_Phi_1n, n_hit_Theta_1n - e_hit_Theta_1n, Weight);
                         }
                     }
-                }
+                } // end of else to if neutron did not hit PCAL & hit either ECIN or ECOUT
                 //</editor-fold>
 
                 // Fillings 1n histograms -------------------------------------------------------------------------------------------------------------------------------
