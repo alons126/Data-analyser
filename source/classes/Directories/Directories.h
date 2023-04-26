@@ -107,10 +107,10 @@ private:
                                                   "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots",
 
                                                   "02_1e_cut", "02_1e_cut/01_Theta_e_1e_cut_plots", "02_1e_cut/02_Phi_e_1e_cut_plots",
-                                                  "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots",
+                                                  "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots", "02_1e_cut/04_Neutron_Veto_1e_cut_plots",
 
                                                   "03_1p", "03_1p/01_Theta_e_1p_plots", "03_1p/02_Phi_e_1p_plots", "03_1p/03_Theta_e_VS_Phi_e_1p_plots",
-                                                  "03_1p/04_Opening_angles_1p_plots", "03_1p/05_Theta_p_1p", "03_1p/06_Phi_p_1p",
+                                                  "03_1p/04_Opening_angles_1p_plots", "03_1p/05_Theta_p_1p", "03_1p/06_Phi_p_1p", "03_1p/07_Theta_p_VS_Phi_p_1p_plots",
 
                                                   "05_1e2p", "05_1e2p/01_Theta_e_1e2p_plots", "05_1e2p/02_Phi_e_1e2p_plots", "05_1e2p/03_Theta_e_VS_Phi_e_1e2p_plots",
 
@@ -122,7 +122,13 @@ private:
                                                   "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots", "07_1e2pXy/04_Phi_Proton_1e2pXy_plots",
 
                                                   "08_1n", "08_1n/01_Theta_e_1n_plots", "08_1n/02_Phi_e_1n_plots", "08_1n/03_Theta_e_VS_Phi_e_1n_plots",
-                                                  "08_1n/04_Opening_angles_1n_plots", "08_1n/05_Theta_n_1n", "08_1n/06_Phi_n_1n"};
+                                                  "08_1n/04_Opening_angles_1n_plots", "08_1n/05_Theta_n_1n", "08_1n/06_Phi_n_1n", "08_1n/07_Theta_n_VS_Phi_n_1n_plots",
+                                                  "08_1n/07_Theta_n_VS_Phi_n_1n_plots", "08_1n/08_Neutron_Veto_1n_plots",
+
+                                                  "09_1n1p", "09_1n1p/01_Theta_e_1n1p_plots", "09_1n1p/02_Phi_e_1n1p_plots", "09_1n1p/03_Theta_e_VS_Phi_e_1n1p_plots",
+                                                  "09_1n1p/04_Opening_angles_1n1p_plots", "09_1n1p/05_Theta_n_1n1p", "09_1n1p/06_Phi_n_1n1p",
+                                                  "09_1n1p/07_Theta_n_VS_Phi_n_1n1p_plots", "09_1n1p/07_Theta_n_VS_Phi_n_1n1p_plots",
+                                                  "09_1n1p/08_Neutron_Veto_1n1p_plots"};
     //</editor-fold>
 
     //<editor-fold desc="Q2 plots directories">

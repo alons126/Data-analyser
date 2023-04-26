@@ -15,21 +15,24 @@
 
 #include "../constants.h"
 
+/* This my original veto code as copied from Andrew. */
+
+
 /* NOTE: this code is valid for a single neutral only. */
 
 /* In the input, we have:
  * const std::unique_ptr<clas12::clas12reader> &c12 - the event
  * Ebeam
  * index - of the particle in question (the neutral) */
-bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_part_ptr> &electrons, double Ebeam, int index, double veto_cut) {
+bool NeutronECAL_Cut_Veto(const std::unique_ptr<clas12::clas12reader> &c12, double Ebeam, int index) {
     TVector3 p_b(0, 0, Ebeam); /* beam energy */
 
-//    auto electrons = c12->getByID(11);
+    auto electrons = c12->getByID(11);
     TVector3 p_e; /* our electron */
     p_e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
     TVector3 p_q = p_b - p_e; /* 3-momentum transfer */
 
-//    auto allParticles = c12->getDetParticles();
+    auto allParticles = c12->getDetParticles();
 
     if (allParticles[index]->par()->getCharge() != 0) { return false; } /* determine if the particle is neutral or not */
 
@@ -56,9 +59,11 @@ bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_p
 
     if (beta < 0) { return false; }
     if (beta > 1.1) { return false; }
-//    // physics cuts, to be ignored according to Larry.
-//    if (theta_nq > 25) { return false; }
-//    if (theta_q > 40) { return false; }
+/*
+    // physics cuts, to be ignored according to Larry.
+    if (theta_nq > 25) { return false; }
+    if (theta_q > 40) { return false; }
+*/
     if (theta_n < 1) { return false; } /* to avoid events with theta_n = 0 (the "1" is in deg) */
     if (!(IC || OC)) { return false; } /* hit only one of these layers */
     if (PC) { return false; } /* to veto out the gammas (photons) */
@@ -74,13 +79,13 @@ bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_p
             v_chit.SetXYZ(allParticles[j]->cal(clas12::ECIN)->getX(), allParticles[j]->cal(clas12::ECIN)->getY(), allParticles[j]->cal(clas12::ECIN)->getZ());
             TVector3 v_dist = v_nhit - v_chit;
 
-            if (v_dist.Mag() < veto_cut) { Veto = true; }
+            if (v_dist.Mag() < 100) { Veto = true; }
         } else if ((detlayer == clas12::ECOUT) && (allParticles[j]->cal(clas12::ECOUT)->getZ() != 0)) {
             /* if both particles hit the outer calorimeter, use the outer calorimeter to determine v_chit */
             v_chit.SetXYZ(allParticles[j]->cal(clas12::ECOUT)->getX(), allParticles[j]->cal(clas12::ECOUT)->getY(), allParticles[j]->cal(clas12::ECOUT)->getZ());
             TVector3 v_dist = v_nhit - v_chit;
 
-            if (v_dist.Mag() < veto_cut) { Veto = true; }
+            if (v_dist.Mag() < 100) { Veto = true; }
         } else {
             /* the neutral has to hit either the ECIN or ECOUT.
                If the charged particle hit the other calorimeter, then look at where the charged particle was expected to be according to the trajectory. */
@@ -89,7 +94,7 @@ bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_p
                           allParticles[j]->traj(clas12::ECAL, trajlayer)->getZ());
             TVector3 v_dist = v_nhit - v_chit;
 
-            if (v_dist.Mag() < veto_cut) { Veto = true; }
+            if (v_dist.Mag() < 100) { Veto = true; }
         }
     }
 
