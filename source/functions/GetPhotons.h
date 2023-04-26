@@ -26,14 +26,11 @@ vector<int> GetPhotons(vector<region_part_ptr> &allParticles) {
     for (int i = 0; i < allParticles.size(); i++) {
         int ParticalPDG = allParticles[i]->par()->getPid();
 
-        if ((allParticles[i]->getRegion() == FD) && ((ParticalPDG == 2112) || (ParticalPDG == 22))) { // if neutron/photon is in the FD
+        if ((allParticles[i]->getRegion() == FD) && (ParticalPDG == 22)) { // if neutron/photon is in the FD
             bool inPCAL = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-            bool inECIN = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
-            bool inECOUT = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
-            if (inPCAL) { // if particle hit the PCAL - it is a photon
-                Photons_indices_in_allParticles.push_back(i);
-            } // end of if neutron/photon hit the EC but not in PCAL
+            // if particle hit the PCAL - it is a photon:
+            if (inPCAL) { Photons_indices_in_allParticles.push_back(i); }
         } // end of if neutron/photon is in the FD
     } // end of loop over allparticle vector
 

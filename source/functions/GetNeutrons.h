@@ -47,5 +47,4 @@ vector<int> GetNeutrons(vector<region_part_ptr> &allParticles, DSCuts &Momentum_
     return Neutrons_indices_in_allParticles;
 }
 
-
 #endif //GETNEUTRONS_H
