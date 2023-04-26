@@ -19,6 +19,21 @@
 using namespace std;
 
 vector<int> GetGoodParticles(vector<region_part_ptr> &Particle, // particle
+                             DSCuts &Momentum_cuts // corresponding momentum cuts
+) {
+    vector<int> GoodParticles;
+
+    for (int i = 0; i < Particle.size(); i++) {
+        double Momentum = Particle[i]->getP();
+
+        if ((Momentum >= Momentum_cuts.GetLowerCut()) && (Momentum <= Momentum_cuts.GetUpperCut())) { GoodParticles.push_back(i); }
+    }
+
+    return GoodParticles;
+}
+
+/*
+vector<int> GetGoodParticles(vector<region_part_ptr> &Particle, // particle
 //vector<int> GetGoodParticles(region_part_ptr &Particle, // particle
                              DSCuts &Momentum_cuts // corresponding momentum cuts
 ) {
@@ -32,6 +47,6 @@ vector<int> GetGoodParticles(vector<region_part_ptr> &Particle, // particle
 
     return within_momentum_cuts;
 }
-
+*/
 
 #endif //GETGOODPARTICLES_H

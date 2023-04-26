@@ -46,6 +46,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/hPlots/hPlot2D.cpp"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
 #include "source/functions/GetGoodParticles.h"
+#include "source/functions/GetNeutrons.h"
 
 using namespace std;
 using namespace clas12;
@@ -999,62 +1000,60 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots (1p)">
     hPlot1D hP_e_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]", directories.Momentum_Directory_map["Momentum_1p_Directory"],
                                  "01_P_e_1p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV/c]",
+    hPlot1D hP_e_BC_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "01_P_e_BC_1p_FD", 0, beamE * 1.1);
 
 
-    hPlot1D hP_p_BC_1p_CD = hPlot1D("1p", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1p_CD = hPlot1D("1p", "CD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "02_P_p_BC_1p_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_BC_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "03_P_p_BC_1p_FD", 0, beamE * 1.1);
     hPlot1D hP_p_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1p_Directory"], "03_P_p_1p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "04_P_piplus_BC_1p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "04_P_piplus_BC_1p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_1p_CD = hPlot1D("1p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "05_P_piminus_BC_1p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_1p_FD = hPlot1D("1p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "05_P_piminus_BC_1p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_1p_CD = hPlot1D("1p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_1p_CD = hPlot1D("1p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "06_P_n_BC_1p_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_1p_FD = hPlot1D("1p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_1p_FD = hPlot1D("1p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "06_P_n_BC_1p_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots (1n)">
     hPlot1D hP_e_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "01_P_e_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV/c]",
+    hPlot1D hP_e_BC_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "01_P_e_BC_1n_FD", 0, beamE * 1.1);
 
     hPlot1D hP_n_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n}", "P_{n} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_n_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_p_BC_1n_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "03_P_p_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "04_P_piplus_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "04_P_piplus_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "05_P_piminus_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "05_P_piminus_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_1n_CD = hPlot1D("1n", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_1n_Directory"], "06_P_n_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_1n_Directory"], "06_P_n_BC_1n_FD", 0, beamE * 1.1);
+    hPlot1D hP_n_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum", "Neutrons and 'photons' momentum - before cuts", "P_{n} [GeV/c]",
+                                    directories.Momentum_Directory_map["Momentum_1n_Directory"], "06_Pn_and_Pph_BC_1n_FD", 0, beamE * 1.1);
     //</editor-fold>
 
     //<editor-fold desc="Momentum plots (1e2p)">
@@ -1077,32 +1076,32 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots (2p)">
     hPlot1D hP_e_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e} - before cut", "P_{e} [GeV/c]",
+    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_BC_2p_FD", 0, beamE * 1.1);
 
     hPlot1D hP_p_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_BC_2p_CD", 0, beamE * 1.1);
 
     hPlot1D hP_p_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p} - before cut", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cut", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cut", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cut", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_FD", 0, beamE * 1.1);
     //</editor-fold>
 
@@ -2655,25 +2654,27 @@ void EventAnalyser() {
         int Nn = neutrons.size(), Np = protons.size(), Nkp = Kplus.size(), Nkm = Kminus.size(), Npip = piplus.size(), Npim = piminus.size(), Ne = electrons.size();
         int Nd = deuterons.size(), Nneut = neutrals.size(), No = otherpart.size();
 
+        /* Total number of particles in event (= Nf) */
+        int Nf = Nn + Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nneut + No;
+
         //<editor-fold desc="Configure good particles and basic event selection">
         /* Configure particles within general momentum cuts: */
-        vector<int> good_neutrons = GetGoodParticles(neutrons, n_momentum_cuts);
+        vector<int> good_neutrons_test = GetNeutrons(allparticles, n_momentum_cuts);
+//        vector<int> good_neutrons = GetGoodParticles(neutrons, n_momentum_cuts);
         vector<int> good_protons = GetGoodParticles(protons, p_momentum_cuts);
         vector<int> good_piplus = GetGoodParticles(piplus, pip_momentum_cuts);
         vector<int> good_piminus = GetGoodParticles(piminus, pim_momentum_cuts);
         vector<int> good_electron = GetGoodParticles(electrons, e_momentum_cuts);
 
         /* set up basic event selection: */
-        bool single_electron = (Ne == 1);
+        bool single_electron = (good_electron.size() == 1);
+//        bool single_electron = (Ne == 1);
         bool no_carged_Kaons = ((Nkp == 0) && (Nkm == 0));
         bool no_carged_pions = ((good_piplus.size() == 0) && (good_piminus.size() == 0));
         bool no_deuterons = (Nd == 0);
 
         bool basic_event_selection = (single_electron && no_carged_Kaons && no_carged_pions && no_deuterons);
         //</editor-fold>
-
-        /* Total number of particles in event (= Nf) */
-        int Nf = Nn + Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nneut + No;
 
         /* Safety check that allparticles.size(), Nf are the same */
         if (allparticles.size() != Nf) { cout << "\n\nallparticles.size() is different than Nf! exiting...\n\n", exit(EXIT_FAILURE); }
@@ -2713,7 +2714,7 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-        //<editor-fold desc="Identify event process ID">
+        //<editor-fold desc="Process ID">
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1.,2.,3.,4. = type = qel, mec, res, dis
 
@@ -3511,17 +3512,18 @@ void EventAnalyser() {
             //</editor-fold>
 
             // looking at events with 1p in the FD only:
-            if ((protons[good_protons.at(0)]->getRegion() == FD) && ((protons[good_protons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+            if ((protons[good_protons.at(0)]->getRegion() == FD) &&
+                ((protons[good_protons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1p_inFD; // 1p event count after momentum and theta_p cuts
 
                 TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
                 P_e_1p_3v.SetMagThetaPhi(electrons[good_electron.at(0)]->getP(), electrons[good_electron.at(0)]->getTheta(),
-                                         electrons[good_electron.at(0)]->getPhi());                                             // electron 3 momentum
-                q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                              // 3 momentum transfer
+                                         electrons[good_electron.at(0)]->getPhi());                                                             // electron 3 momentum
+                q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                                              // 3 momentum transfer
                 P_p_1p_3v.SetMagThetaPhi(protons[good_protons.at(0)]->getP(), protons[good_protons.at(0)]->getTheta(),
-                                         protons[good_protons.at(0)]->getPhi());                                                   // proton 3 momentum
-                P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                                         // electron transverse momentum
-                P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                                         // proton transverse momentum
+                                         protons[good_protons.at(0)]->getPhi());                                                                     // proton 3 momentum
+                P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                                                // electron transverse momentum
+                P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                                                  // proton transverse momentum
 
                 double E_e_1p = sqrt(m_e * m_e + P_e_1p_3v.Mag2()), E_p_1p = sqrt(m_p * m_p + P_p_1p_3v.Mag2()), Ecal_1p, dAlpha_T_1p, dPhi_T_1p;
                 double Theta_p_e_p_p_1p, Theta_q_p_p_1p;
@@ -3713,6 +3715,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
+                //<editor-fold desc="Filling electron plots (1p)">
                 if (electrons[good_electron.at(0)]->getRegion() == FD) {
                     hTheta_e_All_Int_1p_FD->Fill(Theta_e, Weight);
                     hPhi_e_All_Int_1p_FD->Fill(Phi_e, Weight);
@@ -3781,6 +3784,7 @@ void EventAnalyser() {
                     /* Filling Q2 histograms (1p) */
                     hQ2_1p_FD->Fill(Q2, Weight);
                 }
+                //</editor-fold>
 
                 //<editor-fold desc="Filling Ecal plots (1p)">
                 Ecal_1p = E_e_1p + (E_p_1p - m_p);
@@ -3844,14 +3848,14 @@ void EventAnalyser() {
 //  1n (FD only) --------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1n (FD only)">
-        /* 1n event selection: 1n = good_neutrons.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
-        bool event_selection_1n = (basic_event_selection && (good_protons.size() == 0) && (good_neutrons.size() == 1));
+        /* 1n event selection: 1n = good_neutrons_test.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
+        bool event_selection_1n = (basic_event_selection && (good_protons.size() == 0) && (good_neutrons_test.size() == 1));
 
         if (calculate_1n && event_selection_1n) { // for 1n calculations (with any number of neutrals)
 
             //<editor-fold desc="Safety check (1n)">
             /* Safety check that we are looking at 1n */
-            if (good_neutrons.size() != 1) { cout << "\n\n1n: good_neutrons.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (good_neutrons_test.size() != 1) { cout << "\n\n1n: good_neutrons_test.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (good_protons.size() != 0) { cout << "\n\n1n: good_protons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (Kplus.size() != 0) { cout << "\n\n1n: Kplus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (Kminus.size() != 0) { cout << "\n\n1n: Kminus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
@@ -3862,21 +3866,35 @@ void EventAnalyser() {
             //</editor-fold>
 
             // looking at events with 1n in the FD only:
-            if (neutrons[good_neutrons.at(0)]->getRegion() == FD && ((neutrons[good_neutrons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+            if (allparticles[good_neutrons_test.at(0)]->getRegion() == FD &&
+                ((allparticles[good_neutrons_test.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
 
+                //<editor-fold desc="Safety check (1n)">
+                /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
+                int NeutronPDG = allparticles[good_neutrons_test.at(0)]->par()->getPid();
+                bool inPCAL = (allparticles[good_neutrons_test.at(0)]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                bool inECIN = (allparticles[good_neutrons_test.at(0)]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                bool inECOUT = (allparticles[good_neutrons_test.at(0)]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+                if (allparticles[good_neutrons_test.at(0)]->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) { cout << "\n\n1n: neutral PDG is not 2112 or 22. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (inPCAL) { cout << "\n\n1n: neutron hit in PCAL. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!(inECIN || inECOUT)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT. Exiting...\n\n", exit(EXIT_FAILURE); }
+                //</editor-fold>
+
                 TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
-                P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());          // electron 3 momentum
-                q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                      // 3 momentum transfer
-                P_n_1n_3v.SetMagThetaPhi(neutrons[good_neutrons.at(0)]->getP(), neutrons[good_neutrons.at(0)]->getTheta(),
-                                         neutrons[good_neutrons.at(0)]->getPhi());                                         // neutron 3 momentum
-                P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                 // electron transverse momentum
-                P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                 // neutron transverse momentum
+                P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());                                  // electron 3 momentum
+                q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                              // 3 momentum transfer
+                P_n_1n_3v.SetMagThetaPhi(allparticles[good_neutrons_test.at(0)]->getP(), allparticles[good_neutrons_test.at(0)]->getTheta(),
+                                         allparticles[good_neutrons_test.at(0)]->getPhi());                                                         // neutron 3 momentum
+                P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                // electron transverse momentum
+                P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                 // neutron transverse momentum
 
                 double E_e_1n = sqrt(m_e * m_e + P_e_1n_3v.Mag2()), E_n_1n = sqrt(m_n * m_n + P_n_1n_3v.Mag2()), Ecal_1n, dAlpha_T_1n, dPhi_T_1n;
                 double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
 
-                //  Fillings 1n histograms ------------------------------------------------------------------------------------------------------------------------------
+                // Fillings 1n histograms -------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Fillings 1n histograms">
 
@@ -3889,6 +3907,7 @@ void EventAnalyser() {
                 if (electrons[good_electron.at(0)]->getRegion() == FD) { hChi2_Electron_1n_FD.hFill(electrons[good_electron.at(0)]->par()->getChi2Pid(), Weight); }
 
                 /* Filling dVx, dVy, dVz (1n) */
+                //TODO: recheck with Adi rather or not to remove these plots
                 for (auto &p: neutrons) {
                     double Vx_n_1n = p->par()->getVx(), Vy_n_1n = p->par()->getVy(), Vz_n_1n = p->par()->getVz();
                     double dVx = Vx_n_1n - Vx_e, dVy = Vy_n_1n - Vy_e, dVz = Vz_n_1n - Vz_e;
@@ -3912,8 +3931,21 @@ void EventAnalyser() {
                 }
 
                 // Neutron momentum (1n):
-                hP_n_1n_FD.hFill(neutrons[good_neutrons.at(0)]->getP(), Weight);
+                hP_n_1n_FD.hFill(allparticles[good_neutrons_test.at(0)]->getP(), Weight);
 
+                //<editor-fold desc="Momentum plots before cuts (BC)">
+                for (int i = 0; i < allparticles.size(); i++) {
+                    int ParticlePDGtmp = allparticles[i]->par()->getPid();
+                    bool inPCALtmp = (allparticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                    bool inECINtmp = (allparticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                    bool inECOUTtmp = (allparticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+                    // neutron and photon mom before cuts:
+                    if ((allparticles[i]->getRegion() == FD) && (ParticlePDGtmp == 2112 || ParticlePDGtmp == 22) && (!inPCALtmp && (inECINtmp || inECOUTtmp))) {
+                        hP_n_BC_1n_FD.hFill(allparticles[i]->getP(), Weight);
+                    }
+                }
+/*
                 for (int i = 0; i < Nn; i++) {
                     if (neutrons[i]->getRegion() == CD) {
                         hP_n_BC_1n_CD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
@@ -3921,6 +3953,7 @@ void EventAnalyser() {
                         hP_n_BC_1n_FD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
                     }
                 }
+*/
 
                 for (int i = 0; i < Np; i++) {
                     if (protons[i]->getRegion() == CD) {
@@ -3947,6 +3980,8 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
+                //</editor-fold>
+
                 //<editor-fold desc="Filling Beta vs. P plots (1n)">
 
                 //<editor-fold desc="Beta vs. P from electrons (1n, CD & FD)">
@@ -3956,6 +3991,9 @@ void EventAnalyser() {
                     hBeta_vs_P_negative_part_1n_FD.hFill(electrons[good_electron.at(0)]->getP(), electrons[good_electron.at(0)]->par()->getBeta(), Weight);
                 }
                 //</editor-fold>
+
+                //<editor-fold desc="Beta vs. P from other particles (1n, CD & FD)">
+                /* This is for self-consistency. Contributions from other particles should be zero */
 
                 //<editor-fold desc="Beta vs. P from protons (1n, CD & FD)">
                 for (int i = 0; i < Np; i++) {
@@ -3970,9 +4008,6 @@ void EventAnalyser() {
                     }
                 } // end of loop over protons vector
                 //</editor-fold>
-
-                //<editor-fold desc="Beta vs. P from other particles (1n, CD & FD)">
-                /* This is for self-consistency. Contributions from other particles should be zero */
 
 //        //<editor-fold desc="Beta vs. P from neutrons (1n, CD & FD)">
 //        for (int i = 0; i < neutrons.size(); i++) {
@@ -4052,6 +4087,7 @@ void EventAnalyser() {
 
                 //</editor-fold>
 
+                //<editor-fold desc="Filling electron plots (1n)">
                 if (electrons[good_electron.at(0)]->getRegion() == FD) {
                     hTheta_e_All_Int_1n_FD->Fill(Theta_e, Weight);
                     hPhi_e_All_Int_1n_FD->Fill(Phi_e, Weight);
@@ -4120,6 +4156,7 @@ void EventAnalyser() {
                     /* Filling Q2 histograms (1n) */
                     hQ2_1n_FD->Fill(Q2, Weight);
                 }
+                //</editor-fold>
 
                 //<editor-fold desc="Filling Ecal plots (1n)">
                 Ecal_1n = E_e_1n + (E_n_1n - m_n);
@@ -4154,8 +4191,8 @@ void EventAnalyser() {
                 hEcal_vs_dP_T_1n->Fill(dP_T_1n_3v.Mag(), Ecal_1n, Weight);
 
 
-                hTheta_n_All_Int_1n->Fill(neutrons[good_neutrons.at(0)]->getTheta() * 180.0 / pi, Weight);
-                hPhi_n_All_Int_1n->Fill(neutrons[good_neutrons.at(0)]->getPhi() * 180.0 / pi, Weight);
+                hTheta_n_All_Int_1n->Fill(allparticles[good_neutrons_test.at(0)]->getTheta() * 180.0 / pi, Weight);
+                hPhi_n_All_Int_1n->Fill(allparticles[good_neutrons_test.at(0)]->getPhi() * 180.0 / pi, Weight);
 
                 Theta_p_e_p_n_1n = acos((P_e_1n_3v.Px() * P_n_1n_3v.Px() + P_e_1n_3v.Py() * P_n_1n_3v.Py() + P_e_1n_3v.Pz() * P_n_1n_3v.Pz())
                                         / (P_e_1n_3v.Mag() * P_n_1n_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_n_1n in deg
@@ -4176,6 +4213,342 @@ void EventAnalyser() {
             } // end of proton in FD if
         } // end of 1n cuts if
         //</editor-fold>
+
+//        //<editor-fold desc="1n (FD only) - OLD">
+//        /* 1n event selection: 1n = good_neutrons.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
+//        bool event_selection_1n = (basic_event_selection && (good_protons.size() == 0) && (good_neutrons.size() == 1));
+//
+//        if (calculate_1n && event_selection_1n) { // for 1n calculations (with any number of neutrals)
+//
+//            //<editor-fold desc="Safety check (1n)">
+//            /* Safety check that we are looking at 1n */
+//            if (good_neutrons.size() != 1) { cout << "\n\n1n: good_neutrons.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (good_protons.size() != 0) { cout << "\n\n1n: good_protons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (Kplus.size() != 0) { cout << "\n\n1n: Kplus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (Kminus.size() != 0) { cout << "\n\n1n: Kminus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (good_piplus.size() != 0) { cout << "\n\n1n: good_piplus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (good_piminus.size() != 0) { cout << "\n\n1n: good_piminus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (good_electron.size() != 1) { cout << "\n\n1n: good_electron.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (deuterons.size() != 0) { cout << "\n\n1n: deuterons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+//            //</editor-fold>
+//
+//            // looking at events with 1n in the FD only:
+//            if (neutrons[good_neutrons.at(0)]->getRegion() == FD && ((neutrons[good_neutrons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+//                ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
+//
+//                TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
+//                P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());          // electron 3 momentum
+//                q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                      // 3 momentum transfer
+//                P_n_1n_3v.SetMagThetaPhi(neutrons[good_neutrons.at(0)]->getP(), neutrons[good_neutrons.at(0)]->getTheta(),
+//                                         neutrons[good_neutrons.at(0)]->getPhi());                                         // neutron 3 momentum
+//                P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                 // electron transverse momentum
+//                P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                 // neutron transverse momentum
+//
+//                double E_e_1n = sqrt(m_e * m_e + P_e_1n_3v.Mag2()), E_n_1n = sqrt(m_n * m_n + P_n_1n_3v.Mag2()), Ecal_1n, dAlpha_T_1n, dPhi_T_1n;
+//                double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
+//
+//                //  Fillings 1n histograms ------------------------------------------------------------------------------------------------------------------------------
+//
+//                //<editor-fold desc="Fillings 1n histograms">
+//
+//                //<editor-fold desc="Filling cut variable plots (1n)">
+//                /* Filling Nphe plots (1n) */
+//                hNphe_1n_FD.hFill(Nphe, Weight);
+//
+//                /* Filling Chi2 histograms (1n) */
+//                // Electrton Chi2 (1n):
+//                if (electrons[good_electron.at(0)]->getRegion() == FD) { hChi2_Electron_1n_FD.hFill(electrons[good_electron.at(0)]->par()->getChi2Pid(), Weight); }
+//
+//                /* Filling dVx, dVy, dVz (1n) */
+//                for (auto &p: neutrons) {
+//                    double Vx_n_1n = p->par()->getVx(), Vy_n_1n = p->par()->getVy(), Vz_n_1n = p->par()->getVz();
+//                    double dVx = Vx_n_1n - Vx_e, dVy = Vy_n_1n - Vy_e, dVz = Vz_n_1n - Vz_e;
+//
+//                    hdVx_1n.hFill(dVx, Weight), hdVy_1n.hFill(dVy, Weight), hdVz_1n.hFill(dVz, Weight);
+//                } // end of loop over neutrons vector
+//
+//                /* Filling SF histograms (1n) */
+//                hSF_1n_FD.hFill(EoP_e, Weight), hSF_VS_P_e_1n_FD.hFill(P_e, EoP_e, Weight);
+//
+//                /* Filling fiducial plots (1n) */
+//                hVcal_VS_EoP_1n_PCAL.hFill(electrons[good_electron.at(0)]->cal(PCAL)->getLv(), EoP_e, Weight);
+//                hWcal_VS_EoP_1n_PCAL.hFill(electrons[good_electron.at(0)]->cal(PCAL)->getLw(), EoP_e, Weight);
+//
+//                /* Filling momentum histograms (1n) */
+//                // Electrton momentum (1n):
+//                if (electrons[good_electron.at(0)]->getRegion() == FD) { hP_e_1n_FD.hFill(P_e, Weight); }
+//
+//                for (int i = 0; i < Ne; i++) {
+//                    if (electrons[i]->getRegion() == FD) { hP_e_BC_1n_FD.hFill(P_e, Weight); } // before mom cuts
+//                }
+//
+//                // Neutron momentum (1n):
+//                hP_n_1n_FD.hFill(neutrons[good_neutrons.at(0)]->getP(), Weight);
+//
+//                for (int i = 0; i < Nn; i++) {
+//                    if (neutrons[i]->getRegion() == CD) {
+//                        hP_n_BC_1n_CD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
+//                    } else if (neutrons[i]->getRegion() == FD) {
+//                        hP_n_BC_1n_FD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
+//                    }
+//                }
+//
+//                for (int i = 0; i < Np; i++) {
+//                    if (protons[i]->getRegion() == CD) {
+//                        hP_p_BC_1n_CD.hFill(protons[i]->getP(), Weight); // before mom cuts
+//                    } else if (protons[i]->getRegion() == FD) {
+//                        hP_p_BC_1n_FD.hFill(protons[i]->getP(), Weight); // before mom cuts
+//                    }
+//                }
+//
+//                for (int i = 0; i < Npip; i++) {
+//                    if (piplus[i]->getRegion() == CD) {
+//                        hP_pip_BC_1n_CD.hFill(piplus[i]->getP(), Weight); // before mom cuts
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        hP_pip_BC_1n_FD.hFill(piplus[i]->getP(), Weight); // before mom cuts
+//                    }
+//                }
+//
+//                for (int i = 0; i < Npim; i++) {
+//                    if (piminus[i]->getRegion() == CD) {
+//                        hP_pim_BC_1n_CD.hFill(piminus[i]->getP(), Weight); // before mom cuts
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        hP_pim_BC_1n_FD.hFill(piminus[i]->getP(), Weight); // before mom cuts
+//                    }
+//                }
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling Beta vs. P plots (1n)">
+//
+//                //<editor-fold desc="Beta vs. P from electrons (1n, CD & FD)">
+//                if (electrons[good_electron.at(0)]->getRegion() == FD) {
+//                    hBeta_vs_P_1n_FD.hFill(electrons[good_electron.at(0)]->getP(), electrons[good_electron.at(0)]->par()->getBeta(), Weight);
+//                    hBeta_vs_P_1n_Electrons_Only_FD.hFill(electrons[good_electron.at(0)]->getP(), electrons[good_electron.at(0)]->par()->getBeta(), Weight);
+//                    hBeta_vs_P_negative_part_1n_FD.hFill(electrons[good_electron.at(0)]->getP(), electrons[good_electron.at(0)]->par()->getBeta(), Weight);
+//                }
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Beta vs. P from protons (1n, CD & FD)">
+//                for (int i = 0; i < Np; i++) {
+//                    if (protons[i]->getRegion() == CD) {
+//                        hBeta_vs_P_1n_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_1n_Protons_Only_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_positive_part_1n_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+//                    } else if (protons[i]->getRegion() == FD) {
+//                        hBeta_vs_P_1n_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_1n_Protons_Only_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_positive_part_1n_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+//                    }
+//                } // end of loop over protons vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Beta vs. P from other particles (1n, CD & FD)">
+//                /* This is for self-consistency. Contributions from other particles should be zero */
+//
+////        //<editor-fold desc="Beta vs. P from neutrons (1n, CD & FD)">
+////        for (int i = 0; i < neutrons.size(); i++) {
+////            if (neutrons[i]->getRegion() == CD) {
+////                hBeta_vs_P_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////
+////                if (neutrons[i]->par()->getCharge() == 1) {
+////                    hBeta_vs_P_positive_part_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////                } else if (neutrons[i]->par()->getCharge() == 0) {
+////                    hBeta_vs_P_neutral_part_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////                } else if (neutrons[i]->par()->getCharge() == -1) {
+////                    hBeta_vs_P_negative_part_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////                }
+////            } else if (neutrons[i]->getRegion() == FD) {
+////                hBeta_vs_P_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////
+////                if (neutrons[i]->par()->getCharge() == 1) {
+////                    hBeta_vs_P_positive_part_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////                } else if (neutrons[i]->par()->getCharge() == 0) {
+////                    hBeta_vs_P_neutral_part_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////                } else if (neutrons[i]->par()->getCharge() == -1) {
+////                    hBeta_vs_P_negative_part_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+////                }
+////            }
+////        } // end of loop over neutrons vector
+////        //</editor-fold>
+//
+//                //<editor-fold desc="Beta vs. P from Kplus (1n, CD & FD)">
+//                for (int i = 0; i < Kplus.size(); i++) {
+//                    if (Kplus[i]->getRegion() == CD) {
+//                        hBeta_vs_P_1n_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_positive_part_1n_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+//                    } else if (Kplus[i]->getRegion() == FD) {
+//                        hBeta_vs_P_1n_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_positive_part_1n_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+//                    }
+//                } // end of loop over Kplus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Beta vs. P from Kminus (1n, CD & FD)">
+//                for (int i = 0; i < Kminus.size(); i++) {
+//                    if (Kminus[i]->getRegion() == CD) {
+//                        hBeta_vs_P_1n_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_negative_part_1n_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+//                    } else if (Kminus[i]->getRegion() == FD) {
+//                        hBeta_vs_P_1n_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_negative_part_1n_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+//                    }
+//                } // end of loop over Kminus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Beta vs. P from piplus (1n, CD & FD)">
+//                for (int i = 0; i < piplus.size(); i++) {
+//                    if (piplus[i]->getRegion() == CD) {
+//                        hBeta_vs_P_1n_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_positive_part_1n_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+//                    } else if (piplus[i]->getRegion() == FD) {
+//                        hBeta_vs_P_1n_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_positive_part_1n_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+//                    }
+//                } // end of loop over piplus vector
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Beta vs. P from piminus (1n, CD & FD)">
+//                for (int i = 0; i < piminus.size(); i++) {
+//                    if (piminus[i]->getRegion() == CD) {
+//                        hBeta_vs_P_1n_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_negative_part_1n_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+//                    } else if (piminus[i]->getRegion() == FD) {
+//                        hBeta_vs_P_1n_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+//                        hBeta_vs_P_negative_part_1n_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+//                    }
+//                } // end of loop over piminus vector
+//                //</editor-fold>
+//
+//                //</editor-fold>
+//
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling electron plots (1n)">
+//                if (electrons[good_electron.at(0)]->getRegion() == FD) {
+//                    hTheta_e_All_Int_1n_FD->Fill(Theta_e, Weight);
+//                    hPhi_e_All_Int_1n_FD->Fill(Phi_e, Weight);
+//                    hTheta_e_VS_Phi_e_1n_FD->Fill(Phi_e, Theta_e, Weight);
+//
+//                    hE_e_All_Int_1n_FD->Fill(E_e, Weight);
+//                    hE_e_VS_Theta_e_All_Int_1n_FD->Fill(Theta_e, E_e, Weight);
+//
+//                    hET_All_Ang_All_Int_1n_FD->Fill(beamE - E_e, Weight);
+//
+//                    if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
+//                        hET15_All_Int_1n_FD->Fill(beamE - E_e, Weight);
+//                        hE_e_15_All_Int_1n_FD->Fill(E_e, Weight);
+//                    }
+//
+//                    if (qel) {
+//                        hTheta_e_QEL_1n_FD->Fill(Theta_e, Weight);
+//                        hPhi_e_QEL_1n_FD->Fill(Phi_e, Weight);
+//                        hE_e_QEL_1n_FD->Fill(E_e, Weight);
+//                        hE_e_VS_Theta_e_QEL_1n_FD->Fill(Theta_e, E_e, Weight);
+//
+//                        hET_All_Ang_QEL_1n_FD->Fill(beamE - E_e, Weight);
+//
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
+//                            hET15_QEL_1n_FD->Fill(beamE - E_e, Weight);
+//                            hE_e_15_QEL_1n_FD->Fill(E_e, Weight);
+//                        }
+//                    } else if (mec) {
+//                        hTheta_e_MEC_1n_FD->Fill(Theta_e, Weight);
+//                        hPhi_e_MEC_1n_FD->Fill(Phi_e, Weight);
+//                        hE_e_MEC_1n_FD->Fill(E_e, Weight);
+//                        hE_e_VS_Theta_e_MEC_1n_FD->Fill(Theta_e, E_e, Weight);
+//
+//                        hET_All_Ang_MEC_1n_FD->Fill(beamE - E_e, Weight);
+//
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
+//                            hET15_MEC_1n_FD->Fill(beamE - E_e, Weight);
+//                            hE_e_15_MEC_1n_FD->Fill(E_e, Weight);
+//                        }
+//                    } else if (res) {
+//                        hTheta_e_RES_1n_FD->Fill(Theta_e, Weight);
+//                        hPhi_e_RES_1n_FD->Fill(Phi_e, Weight);
+//                        hE_e_RES_1n_FD->Fill(E_e, Weight);
+//                        hE_e_VS_Theta_e_RES_1n_FD->Fill(Theta_e, E_e, Weight);
+//
+//                        hET_All_Ang_RES_1n_FD->Fill(beamE - E_e, Weight);
+//
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
+//                            hET15_RES_1n_FD->Fill(beamE - E_e, Weight);
+//                            hE_e_15_RES_1n_FD->Fill(E_e, Weight);
+//                        }
+//                    } else if (dis) {
+//                        hTheta_e_DIS_1n_FD->Fill(Theta_e, Weight);
+//                        hPhi_e_DIS_1n_FD->Fill(Phi_e, Weight);
+//                        hE_e_DIS_1n_FD->Fill(E_e, Weight);
+//                        hE_e_VS_Theta_e_DIS_1n_FD->Fill(Theta_e, E_e, Weight);
+//
+//                        hET_All_Ang_DIS_1n_FD->Fill(beamE - E_e, Weight);
+//
+//                        if ((Theta_e >= 14.0) && (Theta_e <= 16.0)) {
+//                            hET15_DIS_1n_FD->Fill(beamE - E_e, Weight);
+//                            hE_e_15_DIS_1n_FD->Fill(E_e, Weight);
+//                        }
+//                    }
+//
+//                    /* Filling Q2 histograms (1n) */
+//                    hQ2_1n_FD->Fill(Q2, Weight);
+//                }
+//                //</editor-fold>
+//
+//                //<editor-fold desc="Filling Ecal plots (1n)">
+//                Ecal_1n = E_e_1n + (E_n_1n - m_n);
+//
+//                if (Ecal_1n > beamE) { hChi2_Electron_Ecal_test_1n->Fill(electrons[good_electron.at(0)]->par()->getChi2Pid(), Weight); }
+//
+//                hEcal_All_Int_1n->Fill(Ecal_1n, Weight); // Fill Ecal for all interactions
+//
+//                if (qel) {
+//                    hEcal_QEL_1n->Fill(Ecal_1n, Weight); // Fill Ecal for QEL only
+//                } else if (mec) {
+//                    hEcal_MEC_1n->Fill(Ecal_1n, Weight); // Fill Ecal for MEC only
+//                } else if (res) {
+//                    hEcal_RES_1n->Fill(Ecal_1n, Weight); // Fill Ecal for RES only
+//                } else if (dis) {
+//                    hEcal_DIS_1n->Fill(Ecal_1n, Weight); // Fill Ecal for DIS only
+//                }
+//                //</editor-fold>
+//
+//                dP_T_1n_3v = TVector3(P_T_e_1n_3v.Px() + P_T_n_1n_3v.Px(), P_T_e_1n_3v.Py() + P_T_n_1n_3v.Py(), 0);
+//                dAlpha_T_1n = acos(-(P_e_1n_3v.Px() * dP_T_1n_3v.Px() + P_e_1n_3v.Py() * dP_T_1n_3v.Py() + P_e_1n_3v.Pz() * dP_T_1n_3v.Pz())
+//                                   / (P_T_e_1n_3v.Mag() * dP_T_1n_3v.Mag())) * 180.0 / pi; // dP_T_1n_3v.Pz() = 0; dAlpha_T_1n in deg
+//                hdP_T_1n->Fill(dP_T_1n_3v.Mag(), Weight);
+//                hdAlpha_T_1n->Fill(dAlpha_T_1n, Weight);
+//                hdP_T_vs_dAlpha_T_1n->Fill(dAlpha_T_1n, dP_T_1n_3v.Mag(), Weight);
+//
+//                dPhi_T_1n = acos(-(P_T_e_1n_3v.Px() * P_T_n_1n_3v.Px() + P_T_e_1n_3v.Py() * P_T_n_1n_3v.Py() + P_T_e_1n_3v.Pz() * P_T_n_1n_3v.Pz())
+//                                 / (P_T_e_1n_3v.Mag() * P_T_n_1n_3v.Mag())) * 180.0 / pi; // P_T_n_1n_3v.Pz() = 0; dPhi_T_1n in deg
+//                hdPhi_T_1n->Fill(dPhi_T_1n, Weight);
+//
+//                hEcal_vs_dAlpha_T_1n->Fill(dAlpha_T_1n, Ecal_1n, Weight);
+//                hEcal_vs_dP_T_1n->Fill(dP_T_1n_3v.Mag(), Ecal_1n, Weight);
+//
+//
+//                hTheta_n_All_Int_1n->Fill(neutrons[good_neutrons.at(0)]->getTheta() * 180.0 / pi, Weight);
+//                hPhi_n_All_Int_1n->Fill(neutrons[good_neutrons.at(0)]->getPhi() * 180.0 / pi, Weight);
+//
+//                Theta_p_e_p_n_1n = acos((P_e_1n_3v.Px() * P_n_1n_3v.Px() + P_e_1n_3v.Py() * P_n_1n_3v.Py() + P_e_1n_3v.Pz() * P_n_1n_3v.Pz())
+//                                        / (P_e_1n_3v.Mag() * P_n_1n_3v.Mag())) * 180.0 / pi; // Theta_p_e_p_n_1n in deg
+//                hTheta_p_e_p_n_1n->Fill(Theta_p_e_p_n_1n, Weight);
+//
+//                Theta_q_p_n_1n = acos((q_1n_3v.Px() * P_n_1n_3v.Px() + q_1n_3v.Py() * P_n_1n_3v.Py() + q_1n_3v.Pz() * P_n_1n_3v.Pz())
+//                                      / (q_1n_3v.Mag() * P_n_1n_3v.Mag())) * 180.0 / pi; // Theta_q_p_n_1n in deg
+//                hTheta_q_p_n_1n->Fill(Theta_q_p_n_1n, Weight);
+//
+//                hTheta_q_p_n_vs_p_n_q_1n->Fill(P_n_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight);
+//
+//                P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pvx, P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pvy, P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pvz);
+////                    P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pv_3v.Px(), P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pv_3v.Py(),
+////                                         P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pv_3v.Pz());
+//                hTheta_q_p_n_vs_p_N_q_1n->Fill(P_N_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight);
+//                //</editor-fold>
+//
+//            } // end of proton in FD if
+//        } // end of 1n cuts if
+//        //</editor-fold>
 
 //  1n1p ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -6011,7 +6384,7 @@ void EventAnalyser() {
         hP_pip_BC_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_momentum_cuts.GetLowerCut(), pip_momentum_cuts.GetUpperCut(), 0, false);
         hP_pim_BC_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0, false);
         hP_pim_BC_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0, false);
-        hP_n_BC_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_n_BC_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
         hP_n_BC_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
 //</editor-fold>
 

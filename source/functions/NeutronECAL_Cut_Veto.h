@@ -72,13 +72,13 @@ bool NeutronECAL_Cut_Veto(const std::unique_ptr<clas12::clas12reader> &c12, doub
         TVector3 v_chit; /* v_chit = location of charged particle hit */
 
         if ((detlayer == clas12::ECIN) && (allParticles[j]->cal(clas12::ECIN)->getZ() != 0)) {
-            /* if both partcles hit the inner calorimeter, use the inner calorimeter to determine v_chit */
+            /* if both particles hit the inner calorimeter, use the inner calorimeter to determine v_chit */
             v_chit.SetXYZ(allParticles[j]->cal(clas12::ECIN)->getX(), allParticles[j]->cal(clas12::ECIN)->getY(), allParticles[j]->cal(clas12::ECIN)->getZ());
             TVector3 v_dist = v_nhit - v_chit;
 
             if (v_dist.Mag() < 100) { Veto = true; }
         } else if ((detlayer == clas12::ECOUT) && (allParticles[j]->cal(clas12::ECOUT)->getZ() != 0)) {
-            /* if both partcles hit the outer calorimeter, use the outer calorimeter to determine v_chit */
+            /* if both particles hit the outer calorimeter, use the outer calorimeter to determine v_chit */
             v_chit.SetXYZ(allParticles[j]->cal(clas12::ECOUT)->getX(), allParticles[j]->cal(clas12::ECOUT)->getY(), allParticles[j]->cal(clas12::ECOUT)->getZ());
             TVector3 v_dist = v_nhit - v_chit;
 
