@@ -2718,7 +2718,6 @@ void EventAnalyser() {
 
         //<editor-fold desc="Configure good particles and basic event selection">
         /* Configure particles within general momentum cuts: */
-//        vector<int> good_neutrons_test = GetFDNeutrons(allParticles, electrons[good_electron.at(0)], beamE, n_momentum_cuts, Neutron_veto_cut);
         vector<int> good_neutrons_test = GetNeutrons(allParticles, n_momentum_cuts);
         vector<int> good_FD_photons_test = GetPhotons(allParticles);
 //        vector<int> good_neutrons = GetGoodParticles(neutrons, n_momentum_cuts);
@@ -3914,6 +3913,12 @@ void EventAnalyser() {
 
         if (calculate_1n && event_selection_1n) { // for 1n calculations (with any number of neutrals)
 
+//            int numNeut = 0;
+//            int numPh = 0;
+//            for (int i = 0; i < allParticles.size(); i++) {
+//
+//            }
+
             //<editor-fold desc="Safety check (1n)">
             /* Safety check that we are looking at 1n */
             if (good_neutrons_test.size() != 1) { cout << "\n\n1n: good_neutrons_test.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
@@ -3931,7 +3936,8 @@ void EventAnalyser() {
                 ((allParticles[good_neutrons_test.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1n_inFD_wAllPhotons; // 1n event count after momentum and theta_n cuts
 
-                if (good_FD_photons_test.size() == 0) { // no photons in the FD cut
+                if (true) { // no photons in the FD cut
+//                if (good_FD_photons_test.size() == 0) { // no photons in the FD cut
                     ++num_of_events_1n_inFD_woFDphotons; // 1n event count after momentum cuts, theta_n cuts and no photons in the FD cut.
 
                     bool e_hit_PCAL_1n = (electrons[good_electron.at(0)]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
