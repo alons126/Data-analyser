@@ -131,7 +131,9 @@ void EventAnalyser() {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_comb9";
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_shifted_dPhi_noVetoCuts";
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_shifted_dPhi";
+//
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
@@ -1005,14 +1007,14 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots (1p)">
     hPlot1D hP_e_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]", directories.Momentum_Directory_map["Momentum_1p_Directory"],
                                  "01_P_e_1p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_1p_FD = hPlot1D("1p", "", "Electron momentum", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
+    hPlot1D hP_e_BC_1p_FD = hPlot1D("1p", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "01_P_e_BC_1p_FD", 0, beamE * 1.1);
 
 
     hPlot1D hP_p_BC_1p_CD = hPlot1D("1p", "CD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "02_P_p_BC_1p_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_BC_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1p_FD = hPlot1D("1p", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1p_Directory"], "03_P_p_BC_1p_FD", 0, beamE * 1.1);
     hPlot1D hP_p_1p_FD = hPlot1D("1p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1p_Directory"], "03_P_p_1p_FD", 0, beamE * 1.1);
@@ -1036,41 +1038,41 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots (1n)">
     hPlot1D hP_e_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "01_P_e_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_1n_FD = hPlot1D("1n", "", "Electron momentum", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
+    hPlot1D hP_e_BC_1n_FD = hPlot1D("1n", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "01_P_e_BC_1n_FD", 0, beamE * 1.1);
 
     hPlot1D hP_n_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n}", "P_{n} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_n_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_p_BC_1n_CD", 0, beamE * 1.1);
 
-    hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "03_P_p_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "04_P_piplus_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "04_P_piplus_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "05_P_piminus_BC_1n_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "05_P_piminus_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum", "Neutrons and 'photons' momentum - before cuts", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum BC", "Neutrons and 'photons' momentum - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "06_Pn_and_Pph_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_Neutrons_only_BC_1n_FD = hPlot1D("1n", "FD", "Verified n momentum", "Verified neutron momentum (from neutrons vector) - before cuts", "P_{n} [GeV/c]",
+    hPlot1D hP_n_Neutrons_only_BC_1n_FD = hPlot1D("1n", "FD", "Verified n momentum BC", "Verified neutron momentum (from neutrons vector) - before cuts", "P_{n} [GeV/c]",
                                                   directories.Momentum_Directory_map["Momentum_1n_Directory"], "07_P_n_Neutrons_only_BC_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_ph_Photons_only_BC_1n_FD = hPlot1D("1n", "FD", "'#gamma' momentum", "Neutron ('Photons') momentum (from otherpart vector) - before cuts",
+    hPlot1D hP_ph_Photons_only_BC_1n_FD = hPlot1D("1n", "FD", "'#gamma' momentum BC", "Neutron ('Photons') momentum (from otherpart vector) - before cuts",
                                                   "P_{#gamma} [GeV/c]",
                                                   directories.Momentum_Directory_map["Momentum_1n_Directory"], "07_P_ph_photons_only_BC_1n_FD", 0, beamE * 1.1);
-    hPlot1D hP_neut_Otherpart_only_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum (Otherpart vector)",
+    hPlot1D hP_neut_Otherpart_only_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum (Otherpart vector) BC",
                                                       "Neutron (ver. neutrons + 'photons') momentum (from otherpart vector) - before cuts",
                                                       "P_{n} [GeV/c]",
                                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "08_P_neut_Otherpart_only_BC_1n_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_neut_Neutrals_only_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum (allParticles vector)",
+    hPlot1D hP_neut_Neutrals_only_BC_1n_FD = hPlot1D("1n", "FD", "n & '#gamma' momentum (allParticles vector) BC",
                                                      "Neutron (ver. neutrons + 'photons') momentum (from allParticles vector) - before cuts", "P_{n} [GeV/c]",
                                                      directories.Momentum_Directory_map["Momentum_1n_Directory"], "08_P_neut_Neutrals_only_BC_1n_FD", 0, beamE * 1.1);
     //</editor-fold>
@@ -1095,32 +1097,32 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum plots (2p)">
     hPlot1D hP_e_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
+    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_BC_2p_FD", 0, beamE * 1.1);
 
     hPlot1D hP_p_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_BC_2p_CD", 0, beamE * 1.1);
 
     hPlot1D hP_p_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
+    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
+    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
+    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_FD", 0, beamE * 1.1);
 
-    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
+    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_FD", 0, beamE * 1.1);
     //</editor-fold>
 
@@ -1652,7 +1654,7 @@ void EventAnalyser() {
 // Theta_q_p_p vs. |P_p|/|q| (1p, FD only) -------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p_p vs. |P_p|/|q| (1p, FD only)">
-    TH2D *hTheta_q_p_p_vs_p_p_q_1p = new TH2D("#theta_{#vec{q},#vec{P}_{p}} vs. r (All Int., 1p, FD)",
+    TH2D *hTheta_q_p_p_vs_p_p_q_1p = new TH2D("#theta_{#vec{q},#vec{P}_{p}} vs. r=|P_{p}|/|q| (All Int., 1p, FD)",
                                               "#theta_{#vec{q},#vec{P}_{p}} vs. r=|#vec{P_{p}}|/|#vec{q}| (All Int., 1p, FD);r;#theta_{#vec{q},#vec{P}_{p}}",
                                               250, 0, 1.05, 250, 0, 180);
     string hTheta_q_p_p_vs_p_p_q_1p_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1p"];
@@ -1661,7 +1663,7 @@ void EventAnalyser() {
 // Theta_q_p_p vs. |p_N|/|q| (1p, FD only) -------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p_p vs. |p_N|/|q| (1p, FD only)">
-    TH2D *hTheta_q_p_p_vs_p_N_q_1p = new TH2D("#theta_{#vec{q},#vec{P}_{p}} vs. r (All Int., 1p, FD)",
+    TH2D *hTheta_q_p_p_vs_p_N_q_1p = new TH2D("#theta_{#vec{q},#vec{P}_{p}} vs. r=|P_{N}|/|q| (All Int., 1p, FD)",
                                               "#theta_{#vec{q},#vec{P}_{p}} vs. r=|#vec{P_{N}}|/|#vec{q}| (All Int., 1p, FD);r;#theta_{#vec{q},#vec{P}_{p}}",
                                               250, 0, 1.05, 250, 0, 180);
     string hTheta_q_p_p_vs_p_N_q_1p_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1p"];
@@ -1712,7 +1714,7 @@ void EventAnalyser() {
 // Theta_q_p_n vs. |p_n|/|q| (1n, FD only) ------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p_n vs. |p_n|/|q| (1n, FD only)">
-    TH2D *hTheta_q_p_n_vs_p_n_q_1n = new TH2D("#theta_{#vec{q},#vec{P}_{n}} vs. r (All Int., 1n, FD)",
+    TH2D *hTheta_q_p_n_vs_p_n_q_1n = new TH2D("#theta_{#vec{q},#vec{P}_{n}} vs. r=|P_{n}|/|q| (All Int., 1n, FD)",
                                               "#theta_{#vec{q},#vec{P}_{n}} vs. r=|#vec{P}_{n}|/|#vec{q}| (All Int., 1n, FD);r;#theta_{#vec{q},#vec{P}_{n}}",
                                               250, 0, 1.05, 250, 0, 180);
     string hTheta_q_p_n_vs_p_n_q_1n_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1n"];
@@ -1721,7 +1723,7 @@ void EventAnalyser() {
 // Theta_q_p_n vs. |p_N|/|q| (1n, FD only) ------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p_n vs. |p_N|/|q| (1n, FD only)">
-    TH2D *hTheta_q_p_n_vs_p_N_q_1n = new TH2D("#theta_{#vec{q},#vec{P}_{n}} vs. r (All Int., 1n, FD)",
+    TH2D *hTheta_q_p_n_vs_p_N_q_1n = new TH2D("#theta_{#vec{q},#vec{P}_{n}} vs. r=|P_{N}|/|q| (All Int., 1n, FD)",
                                               "#theta_{#vec{q},#vec{P}_{n}} vs. r=|#vec{P_{N}}|/|#vec{q}| (All Int., 1n, FD);r;#theta_{#vec{q},#vec{P}_{n}}",
                                               250, 0, 1.05, 250, 0, 180);
     string hTheta_q_p_n_vs_p_N_q_1n_Dir = directories.Angle_Directory_map["Opening_angle_Directory_1n"];
@@ -1730,28 +1732,28 @@ void EventAnalyser() {
 // Neutron veto plots (1n) ----------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron veto plots (1n)">
-    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
+    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} BV",
                                                               "'Neutron Hits' vs. Electron Hits - Before Veto",
                                                               "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                               "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                               directories.Angle_Directory_map["Neutron_Veto_Directory_1n"],
 //                                                              "01_Neutron_hits_vs_electron_hits_BV_1n", -180 * 3, 180 * 3, -50, 50);
-                                                              "01_Neutron_hits_vs_electron_hits_BV_1n", -360, 360, -50, 50);
-//                                                              "01_Neutron_hits_vs_electron_hits_BV_1n", -180, 180, -50, 50);
-    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
+//                                                              "01_Neutron_hits_vs_electron_hits_BV_1n", -360, 360, -50, 50);
+                                                              "01_Neutron_hits_vs_electron_hits_BV_1n", -180, 180, -50, 50);
+    hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e} AV",
                                                               "'Neutron Hits' vs. Electron Hits - After Veto",
                                                               "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                               "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                               directories.Angle_Directory_map["Neutron_Veto_Directory_1n"],
-                                                              "01_Neutron_hits_vs_electron_hits_AV_1n", -360, 360, -50, 50);
-//                                                              "01_Neutron_hits_vs_electron_hits_AV_1n", -180, 180, -50, 50);
+//                                                              "01_Neutron_hits_vs_electron_hits_AV_1n", -360, 360, -50, 50);
+                                                              "01_Neutron_hits_vs_electron_hits_AV_1n", -180, 180, -50, 50);
     hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
                                                                            "'Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                            "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                            "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                            directories.Angle_Directory_map["Neutron_Veto_Directory_1n"],
-                                                                           "01_Neutron_hits_vs_electron_hits_Vetoed_1n", -360, 360, -50, 50);
-//                                                                           "01_Neutron_hits_vs_electron_hits_Vetoed_1n", -180, 180, -50, 50);
+//                                                                           "01_Neutron_hits_vs_electron_hits_Vetoed_1n", -360, 360, -50, 50);
+                                                                           "01_Neutron_hits_vs_electron_hits_Vetoed_1n", -180, 180, -50, 50);
 //    hPlot2D hdTheta_n_pos_VS_dPhi_n_pos_Protons_BV_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,p} vs. #Delta#phi_{n,p}",
 //                                                                "'Neutron Hits' vs. Proton Hits - Before Veto",
 //                                                                "#Delta#phi_{n,p} = #phi_{n}^{ECIN/ECOUT} - #phi_{p}^{PCAL} [Deg]",
@@ -4018,6 +4020,12 @@ void EventAnalyser() {
 
                     dPhi_hit_1n = n_hit_Phi_1n - e_hit_Phi_1n, dTheta_hit_1n = n_hit_Theta_1n - e_hit_Theta_1n;
 
+                    if (dPhi_hit_1n > 180) {
+                        dPhi_hit_1n = n_hit_Phi_1n - e_hit_Phi_1n - 360;
+                    } else if (dPhi_hit_1n < -180) {
+                        dPhi_hit_1n = n_hit_Phi_1n - e_hit_Phi_1n + 360;
+                    }
+
                     // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
                     hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);
                 } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
@@ -4132,6 +4140,20 @@ void EventAnalyser() {
 //                //</editor-fold>
 
                 // Fillings 1n histograms -------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+//                bool NeutronPassVeto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, good_neutrons_test.at(0), Neutron_veto_cut.GetLowerCut());
+
+
+
+
+
+
+
 
                 //<editor-fold desc="Fillings 1n histograms">
 
