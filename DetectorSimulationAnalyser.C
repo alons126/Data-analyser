@@ -44,11 +44,12 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
-#include "source/functions/NeutronECAL_Cut_Veto.h"
 #include "source/functions/GetFDNeutrons.h"
+#include "source/functions/GetFDPhotons.h"
 #include "source/functions/GetGoodParticles.h"
-#include "source/functions/GetNeutrons.h"
-#include "source/functions/GetPhotons.h"
+#include "source/functions/NeutronECAL_Cut_Veto.h"
+//#include "source/functions/GetNeutrons.h"
+//#include "source/functions/GetPhotons.h"
 
 using namespace std;
 using namespace clas12;
@@ -240,8 +241,9 @@ void EventAnalyser() {
     /* DC edge cuts (fiducial cuts ,electrons only, FD) */
     DSCuts DC_edge_cuts;
 
-    /* Momentum cuts */
+    /* Momentum cuts (thresholds) */
     DSCuts n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
+    DSCuts ph_momentum_cuts = DSCuts("Momentum", "", "Photons", "", 0, 0.3, 9999);
     DSCuts p_momentum_cuts = DSCuts("Momentum", "", "Proton", "", 0, 0.3, 9999);
     DSCuts pip_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts pim_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
@@ -2718,8 +2720,10 @@ void EventAnalyser() {
 
         //<editor-fold desc="Configure good particles and basic event selection">
         /* Configure particles within general momentum cuts: */
-        vector<int> good_neutrons_test = GetNeutrons(allParticles, n_momentum_cuts);
-        vector<int> good_FD_photons_test = GetPhotons(allParticles);
+        vector<int> good_FD_neutrons = GetFDNeutrons(allParticles, n_momentum_cuts);
+//        vector<int> good_FD_neutrons = GetNeutrons(allParticles, n_momentum_cuts); // with GetFDNeutrons old 2
+        vector<int> good_FD_photons = GetFDPhotons(allParticles, ph_momentum_cuts);
+//        vector<int> good_FD_photons = GetPhotons(allParticles);
 //        vector<int> good_neutrons = GetGoodParticles(neutrons, n_momentum_cuts);
         vector<int> good_protons = GetGoodParticles(protons, p_momentum_cuts);
         vector<int> good_piplus = GetGoodParticles(piplus, pip_momentum_cuts);
@@ -2730,7 +2734,7 @@ void EventAnalyser() {
         bool single_electron = (good_electron.size() == 1);
 //        bool single_electron = (Ne == 1);
         bool no_carged_Kaons = ((Nkp == 0) && (Nkm == 0));
-        bool no_carged_pions = ((good_piplus.size() == 0) && (good_piminus.size() == 0));
+        bool no_carged_pions = ((good_piplus.size() == 0) && (good_piminus.size() == 0)); // no cPion above momentum threshold
         bool no_deuterons = (Nd == 0);
 
         bool basic_event_selection = (single_electron && no_carged_Kaons && no_carged_pions && no_deuterons);
@@ -3908,20 +3912,14 @@ void EventAnalyser() {
 //  1n (FD only) --------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1n (FD only)">
-        /* 1n event selection: 1n = good_neutrons_test.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
-        bool event_selection_1n = (basic_event_selection && (good_protons.size() == 0) && (good_neutrons_test.size() == 1));
+        /* 1n event selection: 1n = good_FD_neutrons.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
+        bool event_selection_1n = (basic_event_selection && (good_protons.size() == 0) && (good_FD_neutrons.size() == 1));
 
         if (calculate_1n && event_selection_1n) { // for 1n calculations (with any number of neutrals)
 
-//            int numNeut = 0;
-//            int numPh = 0;
-//            for (int i = 0; i < allParticles.size(); i++) {
-//
-//            }
-
             //<editor-fold desc="Safety check (1n)">
             /* Safety check that we are looking at 1n */
-            if (good_neutrons_test.size() != 1) { cout << "\n\n1n: good_neutrons_test.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
+            if (good_FD_neutrons.size() != 1) { cout << "\n\n1n: good_FD_neutrons.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (good_protons.size() != 0) { cout << "\n\n1n: good_protons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (Kplus.size() != 0) { cout << "\n\n1n: Kplus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (Kminus.size() != 0) { cout << "\n\n1n: Kminus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
@@ -3929,28 +3927,32 @@ void EventAnalyser() {
             if (good_piminus.size() != 0) { cout << "\n\n1n: good_piminus.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (good_electron.size() != 1) { cout << "\n\n1n: good_electron.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (deuterons.size() != 0) { cout << "\n\n1n: deuterons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+            for (int i = 0; i < good_FD_photons.size(); i++) {
+                bool PhotonInPCAL_1n = (allParticles[good_FD_photons.at(i)]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                if (!PhotonInPCAL_1n) { cout << "\n\n1n: a photon have been found with out PCAL hit. Exiting...\n\n", exit(EXIT_FAILURE); }
+            }
             //</editor-fold>
 
             // looking at events with 1n in the FD only, and below theta_n cut:
-            if (allParticles[good_neutrons_test.at(0)]->getRegion() == FD &&
-                ((allParticles[good_neutrons_test.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+            if (allParticles[good_FD_neutrons.at(0)]->getRegion() == FD &&
+                ((allParticles[good_FD_neutrons.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1n_inFD_wAllPhotons; // 1n event count after momentum and theta_n cuts
 
                 if (true) { // no photons in the FD cut
-//                if (good_FD_photons_test.size() == 0) { // no photons in the FD cut
+//                if (good_FD_photons.size() == 0) { // no photons in the FD cut
                     ++num_of_events_1n_inFD_woFDphotons; // 1n event count after momentum cuts, theta_n cuts and no photons in the FD cut.
 
                     bool e_hit_PCAL_1n = (electrons[good_electron.at(0)]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
 
-                    bool NeutronInPCAL_1n = (allParticles[good_neutrons_test.at(0)]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                    bool NeutronInECIN_1n = (allParticles[good_neutrons_test.at(0)]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
-                    bool NeutronInECOUT_1n = (allParticles[good_neutrons_test.at(0)]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+                    bool NeutronInPCAL_1n = (allParticles[good_FD_neutrons.at(0)]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                    bool NeutronInECIN_1n = (allParticles[good_FD_neutrons.at(0)]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                    bool NeutronInECOUT_1n = (allParticles[good_FD_neutrons.at(0)]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
                     //<editor-fold desc="Safety check (1n)">
                     /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
-                    int NeutronPDG = allParticles[good_neutrons_test.at(0)]->par()->getPid();
+                    int NeutronPDG = allParticles[good_FD_neutrons.at(0)]->par()->getPid();
 
-                    if (allParticles[good_neutrons_test.at(0)]->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
+                    if (allParticles[good_FD_neutrons.at(0)]->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
                     if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) { cout << "\n\n1n: neutral PDG is not 2112 or 22. Exiting...\n\n", exit(EXIT_FAILURE); }
                     if (NeutronInPCAL_1n) { cout << "\n\n1n: neutron hit in PCAL. Exiting...\n\n", exit(EXIT_FAILURE); }
                     if (!(NeutronInECIN_1n || NeutronInECOUT_1n)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT. Exiting...\n\n", exit(EXIT_FAILURE); }
@@ -3959,8 +3961,8 @@ void EventAnalyser() {
                     TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
                     P_e_1n_3v.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());                              // electron 3 momentum
                     q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                          // 3 momentum transfer
-                    P_n_1n_3v.SetMagThetaPhi(allParticles[good_neutrons_test.at(0)]->getP(), allParticles[good_neutrons_test.at(0)]->getTheta(),
-                                             allParticles[good_neutrons_test.at(0)]->getPhi());                                                     // neutron 3 momentum
+                    P_n_1n_3v.SetMagThetaPhi(allParticles[good_FD_neutrons.at(0)]->getP(), allParticles[good_FD_neutrons.at(0)]->getTheta(),
+                                             allParticles[good_FD_neutrons.at(0)]->getPhi());                                                     // neutron 3 momentum
                     P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                            // electron transverse momentum
                     P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                             // neutron transverse momentum
 
@@ -3978,9 +3980,9 @@ void EventAnalyser() {
                         auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
                         // neutron ECIN/ECAL hit vector and angles:
-                        n_hit_1n_3v.SetXYZ(allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getX(),
-                                           allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getY(),
-                                           allParticles[good_neutrons_test.at(0)]->cal(n_detlayer_1n)->getZ());
+                        n_hit_1n_3v.SetXYZ(allParticles[good_FD_neutrons.at(0)]->cal(n_detlayer_1n)->getX(),
+                                           allParticles[good_FD_neutrons.at(0)]->cal(n_detlayer_1n)->getY(),
+                                           allParticles[good_FD_neutrons.at(0)]->cal(n_detlayer_1n)->getZ());
                         n_hit_Theta_1n = n_hit_1n_3v.Theta() * 180 / pi, n_hit_Phi_1n = n_hit_1n_3v.Phi() * 180 / pi;
 
                         if ((n_detlayer_1n == clas12::ECIN) && (electrons[good_electron.at(0)]->cal(clas12::ECIN)->getZ() != 0)) {
@@ -4011,7 +4013,7 @@ void EventAnalyser() {
                         hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);
                     } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
 
-                    bool NeutronPassVeto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, good_neutrons_test.at(0), Neutron_veto_cut.GetLowerCut());
+                    bool NeutronPassVeto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, good_FD_neutrons.at(0), Neutron_veto_cut.GetLowerCut());
 
                     /* Log vetoed neutron values (for self-consistency) */
                     if (!NeutronPassVeto) { hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight); }
@@ -4054,7 +4056,7 @@ void EventAnalyser() {
                         if (electrons[good_electron.at(0)]->getRegion() == FD) { hP_e_1n_FD.hFill(P_e, Weight); }
 
                         // Neutron momentum (1n):
-                        hP_n_1n_FD.hFill(allParticles[good_neutrons_test.at(0)]->getP(), Weight);
+                        hP_n_1n_FD.hFill(allParticles[good_FD_neutrons.at(0)]->getP(), Weight);
 
                         //<editor-fold desc="Momentum plots before cuts (BC)">
                         for (int i = 0; i < Ne; i++) { if (electrons[i]->getRegion() == FD) { hP_e_BC_1n_FD.hFill(P_e, Weight); }}
@@ -4350,8 +4352,8 @@ void EventAnalyser() {
                         hEcal_vs_dP_T_1n->Fill(dP_T_1n_3v.Mag(), Ecal_1n, Weight);
 
 
-                        hTheta_n_All_Int_1n->Fill(allParticles[good_neutrons_test.at(0)]->getTheta() * 180.0 / pi, Weight);
-                        hPhi_n_All_Int_1n->Fill(allParticles[good_neutrons_test.at(0)]->getPhi() * 180.0 / pi, Weight);
+                        hTheta_n_All_Int_1n->Fill(allParticles[good_FD_neutrons.at(0)]->getTheta() * 180.0 / pi, Weight);
+                        hPhi_n_All_Int_1n->Fill(allParticles[good_FD_neutrons.at(0)]->getPhi() * 180.0 / pi, Weight);
 
                         Theta_p_e_p_n_1n = acos((P_e_1n_3v.Px() * P_n_1n_3v.Px() + P_e_1n_3v.Py() * P_n_1n_3v.Py() + P_e_1n_3v.Pz() * P_n_1n_3v.Pz())
                                                 / (P_e_1n_3v.Mag() * P_n_1n_3v.Mag())) * 180.0 / pi;                                           // Theta_p_e_p_n_1n in deg
@@ -4367,7 +4369,6 @@ void EventAnalyser() {
 //                    P_N_1n_3v = TVector3(P_e_1n_3v.Px() + P_n_1n_3v.Px() - Pv_3v.Px(), P_e_1n_3v.Py() + P_n_1n_3v.Py() - Pv_3v.Py(),
 //                                         P_e_1n_3v.Pz() + P_n_1n_3v.Pz() - Pv_3v.Pz());
                         hTheta_q_p_n_vs_p_N_q_1n->Fill(P_N_1n_3v.Mag() / q_1n_3v.Mag(), Theta_q_p_n_1n, Weight);
-
 
 
                         hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);

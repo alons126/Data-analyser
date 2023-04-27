@@ -24,12 +24,9 @@
 bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_part_ptr> &electrons, double Ebeam, int index, double veto_cut) {
     TVector3 p_b(0, 0, Ebeam); /* beam energy */
 
-//    auto electrons = c12->getByID(11);
     TVector3 p_e; /* our electron */
     p_e.SetMagThetaPhi(electrons[0]->getP(), electrons[0]->getTheta(), electrons[0]->getPhi());
     TVector3 p_q = p_b - p_e; /* 3-momentum transfer */
-
-//    auto allParticles = c12->getDetParticles();
 
     if (allParticles[index]->par()->getCharge() != 0) { return false; } /* determine if the particle is neutral or not */
 
