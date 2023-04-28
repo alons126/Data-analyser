@@ -40,7 +40,6 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 
 #include "settings/codeSetup.h"
 #include "source/classes/clas12ana/clas12ana.h"
-//#include "source/classes/clas12ana/clas12ana_ver_1_myedit.h"
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
@@ -49,8 +48,6 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/GetFDPhotons.h"
 #include "source/functions/GetGoodParticles.h"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
-//#include "source/functions/GetNeutrons.h"
-//#include "source/functions/GetPhotons.h"
 
 using namespace std;
 using namespace clas12;
@@ -324,6 +321,7 @@ void EventAnalyser() {
     cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
+//    bool Angle_plots_master = true; // Master angle plots selector
     bool Angle_plots_master = false; // Master angle plots selector
     bool Theta_e_plots = true, Phi_e_plots = true;
     cout << "\n\n\n\nbool Angle_plots_master = false;";
@@ -337,6 +335,7 @@ void EventAnalyser() {
     cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
+//    bool Q2_plots = true;
     bool Q2_plots = false;
     cout << "\n\n\n\nbool Q2_plots = false;";
     cout << "\nbool Q2_plots = false;";
@@ -349,6 +348,7 @@ void EventAnalyser() {
     cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
+//    bool E_e_plots = true;
     bool E_e_plots = false;
     cout << "\n\n\n\nbool E_e_plots = false;";
     cout << "\nbool E_e_plots = false;";
@@ -361,6 +361,7 @@ void EventAnalyser() {
     cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
+//    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_plots_master = false; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
     cout << "\n\n\n\nbool ETrans_plots_master = false;";
@@ -374,6 +375,7 @@ void EventAnalyser() {
     cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
 
     /* Ecal plots */
+//    bool Ecal_plots = true;
     bool Ecal_plots = false;
     cout << "\n\n\n\nbool Ecal_plots = false;";
     cout << "\nbool Ecal_plots = false;";
@@ -386,6 +388,7 @@ void EventAnalyser() {
     cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
+//    bool TVariables_plots = true;
     bool TVariables_plots = false;
     cout << "\n\n\n\nbool TVariables_plots = false;";
     cout << "\nbool TVariables_plots = false;";
@@ -3964,11 +3967,6 @@ void EventAnalyser() {
                     q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                          // 3 momentum transfer
                     P_n_1n_3v.SetMagThetaPhi(GetFDNeutronP(allParticles[good_FD_neutrons.at(0)]), allParticles[good_FD_neutrons.at(0)]->getTheta(),
                                              allParticles[good_FD_neutrons.at(0)]->getPhi());                                                       // neutron 3 momentum
-
-//                    for (int i = 0; i < good_FD_neutrons.size(); i++) {
-//                        double mom = GetFDNeutronP(allParticles[good_FD_neutrons.at(i)]
-//                    }
-
                     P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                            // electron transverse momentum
                     P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                             // neutron transverse momentum
 
