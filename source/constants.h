@@ -25,6 +25,7 @@ double m_piplus = 0.13957;
 double m_piminus = 0.13957;
 double m_pizero = 0.134977;
 double m_e = 0.000510999;
+double m_d = 1.8756;
 
 // Speed of light in vacuum (in cm/ns):
 const double c = 29.9792458;
