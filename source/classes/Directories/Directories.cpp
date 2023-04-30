@@ -239,7 +239,7 @@ Directories::Directories(std::string plots_path) {
     Angle_Directory_map["Theta_e_VS_Phi_e_1e_cut_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                                Find(Angle_Daughter_Folders, "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots") + "/";
     Angle_Directory_map["Neutron_Veto_Directory_1e_cut"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                       Find(Angle_Daughter_Folders, "02_1e_cut/04_Neutron_Veto_1e_cut_plots") + "/";
+                                                           Find(Angle_Daughter_Folders, "02_1e_cut/04_Neutron_Veto_1e_cut_plots") + "/";
 
     Angle_Directory_map["Theta_e_1p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                   Find(Angle_Daughter_Folders, "03_1p/01_Theta_e_1p_plots") + "/";
@@ -250,9 +250,9 @@ Directories::Directories(std::string plots_path) {
     Angle_Directory_map["Opening_angle_Directory_1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                         Find(Angle_Daughter_Folders, "03_1p/04_Opening_angles_1p_plots") + "/";
     Angle_Directory_map["Theta_p_Directory_1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                        Find(Angle_Daughter_Folders, "03_1p/05_Theta_p_1p") + "/";
+                                                  Find(Angle_Daughter_Folders, "03_1p/05_Theta_p_1p") + "/";
     Angle_Directory_map["Phi_p_Directory_1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                        Find(Angle_Daughter_Folders, "03_1p/06_Phi_p_1p") + "/";
+                                                Find(Angle_Daughter_Folders, "03_1p/06_Phi_p_1p") + "/";
     Angle_Directory_map["Theta_p_VS_Phi_p_1p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                            Find(Angle_Daughter_Folders, "03_1p/07_Theta_p_VS_Phi_p_1p_plots") + "/";
 
@@ -267,28 +267,28 @@ Directories::Directories(std::string plots_path) {
     Angle_Directory_map["Theta_n_Directory_1n"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                   Find(Angle_Daughter_Folders, "08_1n/05_Theta_n_1n") + "/";
     Angle_Directory_map["Phi_n_Directory_1n"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "08_1n/06_Phi_n_1n") + "/";
+                                                Find(Angle_Daughter_Folders, "08_1n/06_Phi_n_1n") + "/";
     Angle_Directory_map["Theta_n_VS_Phi_n_1n_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "08_1n/07_Theta_n_VS_Phi_n_1n_plots") + "/";
+                                                           Find(Angle_Daughter_Folders, "08_1n/07_Theta_n_VS_Phi_n_1n_plots") + "/";
     Angle_Directory_map["Neutron_Veto_Directory_1n"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "08_1n/08_Neutron_Veto_1n_plots") + "/";
+                                                       Find(Angle_Daughter_Folders, "08_1n/08_Neutron_Veto_1n_plots") + "/";
 
     Angle_Directory_map["Theta_e_1n1p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "09_1n1p/01_Theta_e_1n1p_plots") + "/";
+                                                    Find(Angle_Daughter_Folders, "09_1n1p/01_Theta_e_1n1p_plots") + "/";
     Angle_Directory_map["Phi_e_1n1p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                Find(Angle_Daughter_Folders, "09_1n1p/02_Phi_e_1n1p_plots") + "/";
+                                                  Find(Angle_Daughter_Folders, "09_1n1p/02_Phi_e_1n1p_plots") + "/";
     Angle_Directory_map["Theta_e_VS_Phi_e_1n1p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                           Find(Angle_Daughter_Folders, "09_1n1p/03_Theta_e_VS_Phi_e_1n1p_plots") + "/";
+                                                             Find(Angle_Daughter_Folders, "09_1n1p/03_Theta_e_VS_Phi_e_1n1p_plots") + "/";
     Angle_Directory_map["Opening_angle_Directory_1n1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                        Find(Angle_Daughter_Folders, "09_1n1p/04_Opening_angles_1n1p_plots") + "/";
+                                                          Find(Angle_Daughter_Folders, "09_1n1p/04_Opening_angles_1n1p_plots") + "/";
     Angle_Directory_map["Theta_n_Directory_1n1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "09_1n1p/05_Theta_n_1n1p") + "/";
+                                                    Find(Angle_Daughter_Folders, "09_1n1p/05_Theta_n_1n1p") + "/";
     Angle_Directory_map["Phi_n_Directory_1n1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                   Find(Angle_Daughter_Folders, "09_1n1p/06_Phi_n_1n1p") + "/";
     Angle_Directory_map["Theta_n_VS_Phi_n_1n1p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "09_1n1p/07_Theta_n_VS_Phi_n_1n1p_plots") + "/";
+                                                             Find(Angle_Daughter_Folders, "09_1n1p/07_Theta_n_VS_Phi_n_1n1p_plots") + "/";
     Angle_Directory_map["Neutron_Veto_Directory_1n1p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                  Find(Angle_Daughter_Folders, "09_1n1p/08_Neutron_Veto_1n1p_plots") + "/";
+                                                         Find(Angle_Daughter_Folders, "09_1n1p/08_Neutron_Veto_1n1p_plots") + "/";
 
     Angle_Directory_map["Theta_e_1e2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                     Find(Angle_Daughter_Folders, "05_1e2p/01_Theta_e_1e2p_plots") + "/";
@@ -301,7 +301,7 @@ Directories::Directories(std::string plots_path) {
     Angle_Directory_map["Theta_e_VS_Phi_e_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                            Find(Angle_Daughter_Folders, "06_2p/03_Theta_e_VS_Phi_e_2p_plots") + "/";
     Angle_Directory_map["Opening_angle_Directory_2p"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                     Find(Angle_Daughter_Folders, "06_2p/04_Opening_angles_2p_plots") + "/";
+                                                        Find(Angle_Daughter_Folders, "06_2p/04_Opening_angles_2p_plots") + "/";
 
     Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                                   Find(Angle_Daughter_Folders, "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction") + "/";
@@ -538,6 +538,51 @@ Directories::Directories(std::string plots_path) {
                                                              Find(ToF_Daughter_Folders, "01_1e_cut/01_Neutron_vs_cParticles_hits_FTOF_1e_cut") + "/";
     ToF_Directory_map["Neutron_vs_cParticles_hits_1n1p"] = Plots_Folder + "/" + ToF_Parent_Directory + "/" +
                                                            Find(ToF_Daughter_Folders, "02_1n1p/01_Neutron_vs_cParticles_hits_FTOF_1n1p") + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Efficiency plots directories">
+    for (std::string folders_name: Efficiency_Daughter_Folders) {
+        MakeDirectory(create_Efficiency_Dir, Efficiency_Parent_Directory, folders_name, false, Plots_Folder);
+    }
+
+    Efficiency_Directory_map["Momentum_efficiency_Directory_1e_cut"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                       Find(Efficiency_Daughter_Folders, "01_1e_cut/Momentum_efficiency_plots_1e_cut") + "/";
+    Efficiency_Directory_map["Momentum_efficiency_Directory_1p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                   Find(Efficiency_Daughter_Folders, "02_1p/Momentum_efficiency_plots_1p") + "/";
+    Efficiency_Directory_map["Momentum_efficiency_Directory_1n"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                   Find(Efficiency_Daughter_Folders, "03_1n/Momentum_efficiency_plots_1n") + "/";
+    Efficiency_Directory_map["Momentum_efficiency_Directory_1n1p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                     Find(Efficiency_Daughter_Folders, "04_1n1p/Momentum_efficiency_plots_1n1p") + "/";
+    Efficiency_Directory_map["Momentum_efficiency_Directory_1e2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                     Find(Efficiency_Daughter_Folders, "05_1e2p/Momentum_efficiency_plots_1e2p") + "/";
+    Efficiency_Directory_map["Momentum_efficiency_Directory_2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                   Find(Efficiency_Daughter_Folders, "06_2p/Momentum_efficiency_plots_2p") + "/";
+
+    Efficiency_Directory_map["Theta_nuc_efficiency_Directory_1e_cut"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                        Find(Efficiency_Daughter_Folders, "01_1e_cut/Theta_nuc_efficiency_plots_1e_cut") + "/";
+    Efficiency_Directory_map["Theta_nuc_efficiency_Directory_1p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                    Find(Efficiency_Daughter_Folders, "02_1p/Theta_nuc_efficiency_plots_1p") + "/";
+    Efficiency_Directory_map["Theta_nuc_efficiency_Directory_1n"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                    Find(Efficiency_Daughter_Folders, "03_1n/Theta_nuc_efficiency_plots_1n") + "/";
+    Efficiency_Directory_map["Theta_nuc_efficiency_Directory_1n1p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                      Find(Efficiency_Daughter_Folders, "04_1n1p/Theta_nuc_efficiency_plots_1n1p") + "/";
+    Efficiency_Directory_map["Theta_nuc_efficiency_Directory_1e2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                      Find(Efficiency_Daughter_Folders, "05_1e2p/Theta_nuc_efficiency_plots_1e2p") + "/";
+    Efficiency_Directory_map["Theta_nuc_efficiency_Directory_2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                    Find(Efficiency_Daughter_Folders, "06_2p/Theta_nuc_efficiency_plots_2p") + "/";
+
+    Efficiency_Directory_map["Phi_nuc_efficiency_Directory_1e_cut"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                      Find(Efficiency_Daughter_Folders, "01_1e_cut/Phi_nuc_efficiency_plots_1e_cut") + "/";
+    Efficiency_Directory_map["Phi_nuc_efficiency_Directory_1p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                  Find(Efficiency_Daughter_Folders, "02_1p/Phi_nuc_efficiency_plots_1p") + "/";
+    Efficiency_Directory_map["Phi_nuc_efficiency_Directory_1n"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                  Find(Efficiency_Daughter_Folders, "03_1n/Phi_nuc_efficiency_plots_1n") + "/";
+    Efficiency_Directory_map["Phi_nuc_efficiency_Directory_1n1p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                    Find(Efficiency_Daughter_Folders, "04_1n1p/Phi_nuc_efficiency_plots_1n1p") + "/";
+    Efficiency_Directory_map["Phi_nuc_efficiency_Directory_1e2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                    Find(Efficiency_Daughter_Folders, "05_1e2p/Phi_nuc_efficiency_plots_1e2p") + "/";
+    Efficiency_Directory_map["Phi_nuc_efficiency_Directory_2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                  Find(Efficiency_Daughter_Folders, "06_2p/Phi_nuc_efficiency_plots_2p") + "/";
     //</editor-fold>
 
 }
