@@ -307,6 +307,8 @@ public:
 //  Get methods:
     TH1D GetHistogram1D() { return *Histogram1D; }
 
+    TH1D *GetHistogram() { return Histogram1D; }
+
     std::string GetHistogramTitle() { return Histogram1DTitles["HistogramTitle"]; }
 
     std::string GetHistogramStatTitle() { return Histogram1DTitles["HistogramStatTitle"]; }

@@ -503,7 +503,8 @@ void EventAnalyser() {
     double SF_uboundary = 0.31, SF_lboundary = 0.16;
 
     /* Momentum boundries */
-    double Momentum_uboundary = beamE * 1.1, Momentum_lboundary = 0.;
+//    double Momentum_uboundary = beamE * 1.1, Momentum_lboundary = 0.;
+    double Momentum_uboundary = 20., Momentum_lboundary = 0.;
 
     /* Beta vs. P plots */
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
@@ -7790,31 +7791,38 @@ void EventAnalyser() {
         hP_p_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
 
 
-        TH1D hP_n_1n_rec = hP_e_1n_FD.GetHistogram1D();
-//        TH1D *hP_n_1n_rec = hP_e_1n_FD.GetHistogram1D().Clone((hP_e_1n_FD.GetHistogramTitle() + " CLONED").c_str());
-        TH1D hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram1D();
-//        TH1D *hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram1D().Clone((hP_n_truth_1n_FD.GetHistogramTitle() + " CLONED").c_str());
-
-        hP_n_1n_rec.Draw();
-        hP_n_1n_rec.SaveAs("hP_n_1n_rec.png");
+        TH1D *hP_n_1n_rec = hP_n_1n_FD.GetHistogram();
+        hP_n_1n_rec->Draw();
+        c1->SaveAs("hP_n_1n_rec.png");
         c1->Clear();
 
-//        hP_n_1n_rec->SaveAs(("./" + hP_e_1n_FD.GetHistogramTitle() + " CLONED" + ".png").c_str());
-        hP_n_1n_truth.Draw();
-        hP_n_1n_truth.SaveAs("hP_n_1n_truth.png");
+        TH1D *hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram();
+        hP_n_1n_truth->Draw();
+        c1->SaveAs("hP_n_1n_truth.png");
         c1->Clear();
-//        hP_n_1n_truth->SaveAs(("./" + hP_n_truth_1n_FD.GetHistogramTitle() + " CLONED" + ".png").c_str());
 
+        hP_n_1n_rec->Divide(hP_n_1n_truth);
+        hP_n_1n_rec->Draw();
+        c1->SaveAs("hP_n_1n_rec_Divided.png");
+        c1->Clear();
 
-////        hP_p_BC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
-////        hP_pip_BC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_momentum_cuts.GetLowerCut(), pip_momentum_cuts.GetUpperCut(), 0,
-//                                           false);
-//        hP_pip_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_momentum_cuts.GetLowerCut(), pip_momentum_cuts.GetUpperCut(), 0,
-//                                           false);
-////        hP_pim_BC_truth_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0,
-//                                           false);
-//        hP_pim_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0,
-//                                           false);
+        //<editor-fold desc="test 1">
+//        TH1D hP_n_1n_rec = hP_n_1n_FD.GetHistogram1D();
+//        hP_n_1n_rec.Draw();
+//        c1->SaveAs("hP_n_1n_rec.png");
+//        c1->Clear();
+//
+//        TH1D hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram1D();
+//        hP_n_1n_truth.Draw();
+//        c1->SaveAs("hP_n_1n_truth.png");
+//        c1->Clear();
+//
+//        hP_n_1n_rec.Divide(*hP_n_1n_truth);
+//        hP_n_1n_rec.Draw();
+//        c1->SaveAs("hP_n_1n_rec_Divided.png");
+//        c1->Clear();
+        //</editor-fold>
+
         //</editor-fold>
 
 //        //<editor-fold desc="Efficiency plots (1e2p, CD & FD)">
