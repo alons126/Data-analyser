@@ -315,15 +315,15 @@ void EventAnalyser() {
     /* Beta vs. P plots */
     bool Beta_vs_P_plots = true;
 //    bool Beta_vs_P_plots = false;
-    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
+//    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
 //    bool Angle_plots_master = true; // Master angle plots selector
@@ -1380,7 +1380,7 @@ void EventAnalyser() {
                                                      0, P_boundary, 0, Beta_boundary);
     hPlot2D hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD = hPlot2D("id. neutrons only", "1n", "FD", "#beta vs. P ZOOMOUT", "#beta vs. P", "P [GeV/c]", "#beta",
                                                              directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_id_Neutrons_Only_ZOOMOUT_FD_1n",
-                                                             0, 20., 0, Beta_boundary);
+                                                             0, P_boundary, 0, 2);
 
     hPlot2D hBeta_vs_P_1n_Photons_Only_CD = hPlot2D("id. photons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_id_Photons_Only_CD_1n",
@@ -7935,8 +7935,8 @@ void EventAnalyser() {
         hP_p_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
         hP_p_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
 
-
-        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots, "", "");
+        DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1n_FD, hP_e_1n_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots);
 
 //        //<editor-fold desc="test 2 - WORKS!">
 //        TH1D *hP_n_1n_rec = hP_n_1n_FD.GetHistogram();

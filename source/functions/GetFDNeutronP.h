@@ -19,9 +19,9 @@
 double GetFDNeutronP(region_part_ptr &Neutron) {
     double Momentum;
 
-////    //<editor-fold desc="Get momentum for both neutrons and photons from file">
+//    //<editor-fold desc="Get momentum for both neutrons and photons from file">
 //    Momentum = Neutron->par()->getP();
-////    //</editor-fold>
+//    //</editor-fold>
 
 //    //<editor-fold desc="Calculate for both neutrons and photons">
 //    bool PCALhit = (Neutron->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
