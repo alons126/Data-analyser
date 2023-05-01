@@ -19,6 +19,10 @@
 double GetFDNeutronP(region_part_ptr &Neutron) {
     double Momentum;
 
+////    //<editor-fold desc="Get momentum for both neutrons and photons from file">
+//    Momentum = Neutron->par()->getP();
+////    //</editor-fold>
+
 //    //<editor-fold desc="Calculate for both neutrons and photons">
 //    bool PCALhit = (Neutron->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
 //    bool ECINhit = (Neutron->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
@@ -41,7 +45,7 @@ double GetFDNeutronP(region_part_ptr &Neutron) {
 ////    cout << "\n\n\nTEST TEST TEST TEST TEST TEST\n\n\n";
 //    //</editor-fold>
 
-    //<editor-fold desc="Get for ver. neutrons & calc for 'photons'">
+    //<editor-fold desc="Get for ver. neutrons & calculate for 'photons'">
     int ParticlePDG = Neutron->par()->getPid();
 
     if (ParticlePDG == 2112) {

@@ -127,8 +127,10 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
     }
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
-    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
+//    double diplayTextSize = 0.1225;
 
     Histogram2D->SetTitleSize(Histogram2DTitleSizes.at(0), "xyz");
     Histogram2D->GetXaxis()->SetLabelSize(Histogram2DTitleSizes.at(1));
@@ -282,7 +284,6 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 //<editor-fold desc="histPlotter2D function (Beta vs. P plots, single particle)">
 void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                             std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, bool showStats = true, bool plot_legend = true) {
-
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {
@@ -364,7 +365,6 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                             std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2, std::string particle2, TF1 *Beta_function3,
                             std::string particle3, bool showStats, bool plot_legend) {
-
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {

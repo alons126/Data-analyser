@@ -17,8 +17,10 @@ bool hPlot1D::findSubstring(std::string string1, std::string string2) {
 
 hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim,
                  int hnob = 100) {
+    HistogramStatsTitle = hst;
+    Histogram1DTitles["HistogramStatTitle"] = hst;
     Histogram1DTitles["Histogram1DTitleReactions"] = h1DtReactions, Histogram1DTitles["FinalState"] = fState, Histogram1DTitles["DetectorRegion"] = dRegion;
-    Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
+    Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramNumberOfXBins = 100;
 
@@ -31,8 +33,10 @@ hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dReg
 }
 
 hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100) {
+    HistogramStatsTitle = hst;
+    Histogram1DTitles["HistogramStatTitle"] = hst;
     Histogram1DTitles["FinalState"] = fState, Histogram1DTitles["DetectorRegion"] = dRegion;
-    Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
+    Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramNumberOfXBins = 100;
 
@@ -43,8 +47,10 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
 
 hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string sPath, std::string sName, double LowerXlim,
                  double UpperXlim, int hnob = 100) {
+    HistogramStatsTitle = hst;
+    Histogram1DTitles["HistogramStatTitle"] = hst;
     Histogram1DTitles["FinalState"] = fState, Histogram1DTitles["DetectorRegion"] = dRegion;
-    Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
+    Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramNumberOfXBins = 100;
     Histogram1DSaveNamePath = sPath;
@@ -64,7 +70,9 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
 }
 
 hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob) {
-    Histogram1DTitles["HistogramStatTitle"] = hst, Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
+    HistogramStatsTitle = hst;
+    Histogram1DTitles["HistogramStatTitle"] = hst;
+    Histogram1DTitles["HistogramTitle"] = ht, Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramNumberOfXBins = 100;
 

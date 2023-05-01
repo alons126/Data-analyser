@@ -43,6 +43,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
+#include "source/functions/DrawAndSaveEfficiencyPlots.h"
 #include "source/functions/GetFDNeutrons.h"
 #include "source/functions/GetFDNeutronP.h"
 #include "source/functions/GetFDPhotons.h"
@@ -132,6 +133,8 @@ void EventAnalyser() {
             } else if (apply_chi2_cuts_1e_cut) {
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_shifted_dPhi_noVetoCuts";
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_shifted_dPhi";
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_mom_from_file";
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_reg";
 //
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
@@ -310,17 +313,17 @@ void EventAnalyser() {
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta vs. P plots */
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
-//    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
+    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;";
+    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
 //    bool Angle_plots_master = true; // Master angle plots selector
@@ -503,12 +506,12 @@ void EventAnalyser() {
     double SF_uboundary = 0.31, SF_lboundary = 0.16;
 
     /* Momentum boundries */
-//    double Momentum_uboundary = beamE * 1.1, Momentum_lboundary = 0.;
-    double Momentum_uboundary = 20., Momentum_lboundary = 0.;
+    double Momentum_lboundary = 0., Momentum_uboundary = beamE * 1.1;
+//    double Momentum_uboundary = 20., Momentum_lboundary = 0.;
 
     /* Beta vs. P plots */
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
-    if (apply_cuts) { Beta_boundary = 1.1, P_boundary = beamE * 1.1; }
+    if (apply_cuts) { Beta_boundary = 1.25, P_boundary = beamE * 1.1; }
 
     /* Transverse variables */
     double dP_T_boundary = 3.;
@@ -1060,6 +1063,9 @@ void EventAnalyser() {
     hPlot1D hP_n_1n_FD = hPlot1D("1n", "FD", "Neutron momentum", "Neutron momentum P_{n}", "P_{n} [GeV/c]",
                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_n_1n_FD", Momentum_lboundary, Momentum_uboundary);
 
+    hPlot1D hP_n_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum ZOOMOUT", "Neutron momentum P_{n}", "P_{n} [GeV/c]",
+                                         directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_n_1n_ZOOMOUT_FD", Momentum_lboundary, 20.);
+
     hPlot1D hP_p_BC_1n_CD = hPlot1D("1n", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_1n_Directory"], "02_P_p_BC_1n_CD", Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_p_BC_1n_FD = hPlot1D("1n", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
@@ -1318,7 +1324,7 @@ void EventAnalyser() {
                                        0, beamE * 1.1, 0, 1.5);
 
     hPlot2D hBeta_vs_P_1p_Electrons_Only_FD = hPlot2D("electrons only", "1p", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                      directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "02_Beta_vs_P_1p_Electrons_Only_FD", 0,
+                                                      directories.Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"], "02_Beta_vs_P_1p_Electrons_Only_FD",
                                                       0, P_boundary, 0, Beta_boundary);
 
     hPlot2D hBeta_vs_P_1p_Protons_Only_CD = hPlot2D("protons only", "1p", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
@@ -1356,43 +1362,88 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta vs. P for all particles (1n)">
     hPlot2D hBeta_vs_P_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "01_Beta_vs_P_1n_All_Particles_CD",
+                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "00_Beta_vs_P_All_Particles_CD_1n",
                                        0, beamE * 1.1, 0, 1.5);
     hPlot2D hBeta_vs_P_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "01_Beta_vs_P_1n_All_Particles_FD",
+                                       directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "00_Beta_vs_P_All_Particles_FD_1n",
                                        0, beamE * 1.1, 0, 1.5);
 
     hPlot2D hBeta_vs_P_1n_Electrons_Only_FD = hPlot2D("electrons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                      directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_1n_Electrons_Only_FD", 0,
+                                                      directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "01_Beta_vs_P_Electrons_Only_FD_1n",
                                                       0, P_boundary, 0, Beta_boundary);
 
-    hPlot2D hBeta_vs_P_1n_Protons_Only_CD = hPlot2D("protons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_1n_Protons_Only_CD",
+    hPlot2D hBeta_vs_P_1n_Neutrons_Only_CD = hPlot2D("id. neutrons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_id_Neutrons_Only_CD_1n",
+                                                     0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Neutrons_Only_FD = hPlot2D("id. neutrons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                     directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_id_Neutrons_Only_FD_1n",
+                                                     0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD = hPlot2D("id. neutrons only", "1n", "FD", "#beta vs. P ZOOMOUT", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                             directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_id_Neutrons_Only_ZOOMOUT_FD_1n",
+                                                             0, 20., 0, Beta_boundary);
+
+    hPlot2D hBeta_vs_P_1n_Photons_Only_CD = hPlot2D("id. photons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_id_Photons_Only_CD_1n",
                                                     0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1n_Protons_Only_FD = hPlot2D("protons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
-                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_1n_Protons_Only_FD",
+    hPlot2D hBeta_vs_P_1n_Photons_Only_FD = hPlot2D("id. photons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_id_Photons_Only_FD_1n",
                                                     0, P_boundary, 0, Beta_boundary);
+
+    hPlot2D hBeta_vs_P_1n_Protons_Only_CD = hPlot2D("id. protons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "04_Beta_vs_P_id_Protons_Only_CD_1n",
+                                                    0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Protons_Only_FD = hPlot2D("id. protons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "04_Beta_vs_P_id_Protons_Only_FD_1n",
+                                                    0, P_boundary, 0, Beta_boundary);
+
+    hPlot2D hBeta_vs_P_1n_Piplus_Only_CD = hPlot2D("id. #pi^{+} only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                   directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "05_Beta_vs_P_id_piplus_Only_CD_1n",
+                                                   0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Piplus_Only_FD = hPlot2D("id. #pi^{+} only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                   directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "05_Beta_vs_P_id_piplus_Only_FD_1n",
+                                                   0, P_boundary, 0, Beta_boundary);
+
+    hPlot2D hBeta_vs_P_1n_Piminus_Only_CD = hPlot2D("id. #pi^{-} only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "06_Beta_vs_P_id_piminus_Only_CD_1n",
+                                                    0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Piminus_Only_FD = hPlot2D("id. #pi^{-} only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                    directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "06_Beta_vs_P_id_piminus_Only_FD_1n",
+                                                    0, P_boundary, 0, Beta_boundary);
+
+    hPlot2D hBeta_vs_P_1n_Kplus_Only_CD = hPlot2D("id. K^{+} only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                  directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "05_Beta_vs_P_id_Kplus_Only_CD_1n",
+                                                  0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Kplus_Only_FD = hPlot2D("id. K^{+} only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                  directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "05_Beta_vs_P_id_Kplus_Only_FD_1n",
+                                                  0, P_boundary, 0, Beta_boundary);
+
+    hPlot2D hBeta_vs_P_1n_Kminus_Only_CD = hPlot2D("id. K^{-} only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                   directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "06_Beta_vs_P_id_Kminus_Only_CD_1n",
+                                                   0, P_boundary, 0, Beta_boundary);
+    hPlot2D hBeta_vs_P_1n_Kminus_Only_FD = hPlot2D("id. K^{-} only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
+                                                   directories.Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"], "06_Beta_vs_P_id_Kminus_Only_FD_1n",
+                                                   0, P_boundary, 0, Beta_boundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P by charge (1n)">
-    hPlot2D hBeta_vs_P_positive_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
-                                                     "01_Beta_vs_P_q_p1_1n_CD", 0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_positive_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
-                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
-                                                     "01_Beta_vs_P_q_p1_1n_FD", 0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_neutral_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
-                                                    "02_Beta_vs_P_q_0_1n_CD", 0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_neutral_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
-                                                    "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
-                                                    "02_Beta_vs_P_q_0_1n_FD", 0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_negative_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
-                                                     "03_Beta_vs_P_q_m1_1n_CD", 0, beamE * 1.1, 0, 1.5);
-    hPlot2D hBeta_vs_P_negative_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
-                                                     "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
-                                                     "03_Beta_vs_P_q_m1_1n_FD", 0, beamE * 1.1, 0, 1.5);
+    hPlot2D hBeta_vs_P_pos_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
+                                                "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                "01_Beta_vs_P_q_p1_1n_CD", 0, beamE * 1.1, 0, 1.5);
+    hPlot2D hBeta_vs_P_pos_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = +1", "#beta vs. P for all particles with q = +1",
+                                                "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                "01_Beta_vs_P_q_p1_1n_FD", 0, beamE * 1.1, 0, 1.5);
+    hPlot2D hBeta_vs_P_neut_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
+                                                 "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                 "02_Beta_vs_P_q_0_1n_CD", 0, beamE * 1.1, 0, 1.5);
+    hPlot2D hBeta_vs_P_neut_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = 0", "#beta vs. P for all particles with q = 0",
+                                                 "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                 "02_Beta_vs_P_q_0_1n_FD", 0, beamE * 1.1, 0, 1.5);
+    hPlot2D hBeta_vs_P_neg_part_1n_CD = hPlot2D("all particles", "1n", "CD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
+                                                "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                "03_Beta_vs_P_q_m1_1n_CD", 0, beamE * 1.1, 0, 1.5);
+    hPlot2D hBeta_vs_P_neg_part_1n_FD = hPlot2D("all particles", "1n", "FD", "#beta vs. P & q = -1", "#beta vs. P for all particles with q = -1",
+                                                "P [GeV/c]", "#beta", directories.Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"],
+                                                "03_Beta_vs_P_q_m1_1n_FD", 0, beamE * 1.1, 0, 1.5);
     //</editor-fold>
 
     //</editor-fold>
@@ -2787,12 +2838,12 @@ void EventAnalyser() {
 
         //<editor-fold desc="Configure good particles & basic event selection">
         /* Configure particles within general momentum cuts (i.e. "identified particles") */
+        vector<int> Electron_ind = GetGoodParticles(electrons, e_momentum_cuts);
         vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_momentum_cuts);
         vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_momentum_cuts);
         vector<int> Protons_ind = GetGoodParticles(protons, p_momentum_cuts);
         vector<int> Piplus_ind = GetGoodParticles(piplus, pip_momentum_cuts);
         vector<int> Piminus_ind = GetGoodParticles(piminus, pim_momentum_cuts);
-        vector<int> Electron_ind = GetGoodParticles(electrons, e_momentum_cuts);
 
         /* set up basic event selection: */
         bool single_electron = (Electron_ind.size() == 1);                              // no electron above momentum threshold
@@ -4179,6 +4230,7 @@ void EventAnalyser() {
 
                         // Neutron momentum (1n):
                         hP_n_1n_FD.hFill(P_n_1n_3v.Mag(), Weight);
+                        hP_n_1n_ZOOMOUT_FD.hFill(P_n_1n_3v.Mag(), Weight);
 //                        hP_n_1n_FD.hFill(allParticles[NeutronsFD_ind.at(0)]->getP(), Weight);
 
                         //<editor-fold desc="Momentum plots before cuts (BC)">
@@ -4337,103 +4389,137 @@ void EventAnalyser() {
 
                         //<editor-fold desc="Filling Beta vs. P plots (1n)">
 
-                        //<editor-fold desc="Beta vs. P from electrons (1n, CD & FD)">
-                        if (electrons[Electron_ind.at(0)]->getRegion() == FD) {
-                            hBeta_vs_P_1n_FD.hFill(electrons[Electron_ind.at(0)]->getP(), electrons[Electron_ind.at(0)]->par()->getBeta(), Weight);
-                            hBeta_vs_P_1n_Electrons_Only_FD.hFill(electrons[Electron_ind.at(0)]->getP(), electrons[Electron_ind.at(0)]->par()->getBeta(), Weight);
-                            hBeta_vs_P_negative_part_1n_FD.hFill(electrons[Electron_ind.at(0)]->getP(), electrons[Electron_ind.at(0)]->par()->getBeta(), Weight);
-                        }
+                        //<editor-fold desc="Beta vs. P from identified particles">
+
+                        //<editor-fold desc="Beta vs. P from identified electrons (1n, CD & FD)">
+                        /* loop over Electron_ind, so that, is Electron_ind.size() != 1, you'll see what thw other electrons have */
+                        for (int &i: Electron_ind) {
+                            double P_e_temp = electrons[i]->getP();
+
+                            if (electrons[i]->getRegion() == FD) {
+                                hBeta_vs_P_1n_FD.hFill(P_e_temp, electrons[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Electrons_Only_FD.hFill(P_e_temp, electrons[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neg_part_1n_FD.hFill(P_e_temp, electrons[i]->par()->getBeta(), Weight);
+                            }
+                        } // end of loop over identified electrons vector
+                        //</editor-fold>
+
+                        //<editor-fold desc="Beta vs. P from identified neutrons (1n, CD & FD)">
+                        for (int &i: NeutronsFD_ind) {
+                            double P_n_temp = GetFDNeutronP(allParticles[i]);
+
+                            if (allParticles[i]->getRegion() == CD) {
+                                hBeta_vs_P_1n_CD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Neutrons_Only_CD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neut_part_1n_CD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                            } else if (allParticles[i]->getRegion() == FD) {
+                                hBeta_vs_P_1n_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Neutrons_Only_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neut_part_1n_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                            }
+                        } // end of loop over identified neutrons vector
+                        //</editor-fold>
+
+                        //<editor-fold desc="Beta vs. P from identified photons (1n, CD & FD)">
+                        for (int &i: PhotonsFD_ind) {
+                            double P_ph_temp = allParticles[i]->getP();
+
+                            if (allParticles[i]->getRegion() == CD) {
+                                hBeta_vs_P_1n_CD.hFill(P_ph_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Photons_Only_CD.hFill(P_ph_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neut_part_1n_CD.hFill(P_ph_temp, allParticles[i]->par()->getBeta(), Weight);
+                            } else if (allParticles[i]->getRegion() == FD) {
+                                hBeta_vs_P_1n_FD.hFill(P_ph_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Photons_Only_FD.hFill(P_ph_temp, allParticles[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neut_part_1n_FD.hFill(P_ph_temp, allParticles[i]->par()->getBeta(), Weight);
+                            }
+                        } // end of loop over identified photons vector
+                        //</editor-fold>
+
+                        //<editor-fold desc="Beta vs. P from identified protons (1n, CD & FD)">
+                        for (int &i: Protons_ind) {
+                            double P_p_temp = protons[i]->getP();
+
+                            if (protons[i]->getRegion() == CD) {
+                                hBeta_vs_P_1n_CD.hFill(P_p_temp, protons[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Protons_Only_CD.hFill(P_p_temp, protons[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_pos_part_1n_CD.hFill(P_p_temp, protons[i]->par()->getBeta(), Weight);
+                            } else if (protons[i]->getRegion() == FD) {
+                                hBeta_vs_P_1n_FD.hFill(P_p_temp, protons[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Protons_Only_FD.hFill(P_p_temp, protons[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_pos_part_1n_FD.hFill(P_p_temp, protons[i]->par()->getBeta(), Weight);
+                            }
+                        } // end of loop over identified protons vector
+                        //</editor-fold>
+
+                        //<editor-fold desc="Beta vs. P from identified piplus (1n, CD & FD)">
+                        for (int &i: Piplus_ind) {
+                            double P_pip_temp = piplus[i]->getP();
+
+                            if (piplus[i]->getRegion() == CD) {
+                                hBeta_vs_P_1n_CD.hFill(P_pip_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Piplus_Only_CD.hFill(P_pip_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_pos_part_1n_CD.hFill(P_pip_temp, piplus[i]->par()->getBeta(), Weight);
+                            } else if (piplus[i]->getRegion() == FD) {
+                                hBeta_vs_P_1n_FD.hFill(P_pip_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Piplus_Only_FD.hFill(P_pip_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_pos_part_1n_FD.hFill(P_pip_temp, piplus[i]->par()->getBeta(), Weight);
+                            }
+                        } // end of loop over identified piplus vector
+                        //</editor-fold>
+
+                        //<editor-fold desc="Beta vs. P from identified piminus (1n, CD & FD)">
+                        for (int &i: Piminus_ind) {
+                            double P_pim_temp = piminus[i]->getP();
+
+                            if (piminus[i]->getRegion() == CD) {
+                                hBeta_vs_P_1n_CD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Piminus_Only_CD.hFill(P_pim_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neg_part_1n_CD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
+                            } else if (piminus[i]->getRegion() == FD) {
+                                hBeta_vs_P_1n_FD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Piminus_Only_FD.hFill(P_pim_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neg_part_1n_FD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
+                            }
+                        } // end of loop over identified piminus vector
+                        //</editor-fold>
+
                         //</editor-fold>
 
                         //<editor-fold desc="Beta vs. P from other particles (1n, CD & FD)">
                         /* This is for self-consistency. Contributions from other particles should be zero */
 
-                        //<editor-fold desc="Beta vs. P from protons (1n, CD & FD)">
-                        for (int i = 0; i < Protons_ind.size(); i++) {
-                            if (protons[Protons_ind.at(i)]->getRegion() == CD) {
-                                hBeta_vs_P_1n_CD.hFill(protons[Protons_ind.at(i)]->getP(), protons[Protons_ind.at(i)]->par()->getBeta(), Weight);
-                                hBeta_vs_P_1n_Protons_Only_CD.hFill(protons[Protons_ind.at(i)]->getP(), protons[Protons_ind.at(i)]->par()->getBeta(), Weight);
-                                hBeta_vs_P_positive_part_1n_CD.hFill(protons[Protons_ind.at(i)]->getP(), protons[Protons_ind.at(i)]->par()->getBeta(), Weight);
-                            } else if (protons[Protons_ind.at(i)]->getRegion() == FD) {
-                                hBeta_vs_P_1n_FD.hFill(protons[Protons_ind.at(i)]->getP(), protons[Protons_ind.at(i)]->par()->getBeta(), Weight);
-                                hBeta_vs_P_1n_Protons_Only_FD.hFill(protons[Protons_ind.at(i)]->getP(), protons[Protons_ind.at(i)]->par()->getBeta(), Weight);
-                                hBeta_vs_P_positive_part_1n_FD.hFill(protons[Protons_ind.at(i)]->getP(), protons[Protons_ind.at(i)]->par()->getBeta(), Weight);
-                            }
-                        } // end of loop over protons vector
-                        //</editor-fold>
-
-//        //<editor-fold desc="Beta vs. P from neutrons (1n, CD & FD)">
-//        for (int i = 0; i < neutrons.size(); i++) {
-//            if (neutrons[i]->getRegion() == CD) {
-//                hBeta_vs_P_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//
-//                if (neutrons[i]->par()->getCharge() == 1) {
-//                    hBeta_vs_P_positive_part_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//                } else if (neutrons[i]->par()->getCharge() == 0) {
-//                    hBeta_vs_P_neutral_part_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//                } else if (neutrons[i]->par()->getCharge() == -1) {
-//                    hBeta_vs_P_negative_part_1n_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//                }
-//            } else if (neutrons[i]->getRegion() == FD) {
-//                hBeta_vs_P_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//
-//                if (neutrons[i]->par()->getCharge() == 1) {
-//                    hBeta_vs_P_positive_part_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//                } else if (neutrons[i]->par()->getCharge() == 0) {
-//                    hBeta_vs_P_neutral_part_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//                } else if (neutrons[i]->par()->getCharge() == -1) {
-//                    hBeta_vs_P_negative_part_1n_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
-//                }
-//            }
-//        } // end of loop over neutrons vector
-//        //</editor-fold>
-
                         //<editor-fold desc="Beta vs. P from Kplus (1n, CD & FD)">
                         for (int i = 0; i < Kplus.size(); i++) {
+                            double P_Kp_temp = Kplus[i]->getP();
+
                             if (Kplus[i]->getRegion() == CD) {
-                                hBeta_vs_P_1n_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_positive_part_1n_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_CD.hFill(P_Kp_temp, Kplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Kplus_Only_CD.hFill(P_Kp_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_pos_part_1n_CD.hFill(P_Kp_temp, Kplus[i]->par()->getBeta(), Weight);
                             } else if (Kplus[i]->getRegion() == FD) {
-                                hBeta_vs_P_1n_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_positive_part_1n_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_FD.hFill(P_Kp_temp, Kplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Kplus_Only_FD.hFill(P_Kp_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_pos_part_1n_FD.hFill(P_Kp_temp, Kplus[i]->par()->getBeta(), Weight);
                             }
                         } // end of loop over Kplus vector
                         //</editor-fold>
 
                         //<editor-fold desc="Beta vs. P from Kminus (1n, CD & FD)">
                         for (int i = 0; i < Kminus.size(); i++) {
+                            double P_Km_temp = Kminus[i]->getP();
+
                             if (Kminus[i]->getRegion() == CD) {
-                                hBeta_vs_P_1n_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_negative_part_1n_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_CD.hFill(P_Km_temp, Kminus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Kminus_Only_CD.hFill(P_Km_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neg_part_1n_CD.hFill(P_Km_temp, Kminus[i]->par()->getBeta(), Weight);
                             } else if (Kminus[i]->getRegion() == FD) {
-                                hBeta_vs_P_1n_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_negative_part_1n_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_FD.hFill(P_Km_temp, Kminus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_1n_Kminus_Only_FD.hFill(P_Km_temp, piplus[i]->par()->getBeta(), Weight);
+                                hBeta_vs_P_neg_part_1n_FD.hFill(P_Km_temp, Kminus[i]->par()->getBeta(), Weight);
                             }
                         } // end of loop over Kminus vector
-                        //</editor-fold>
-
-                        //<editor-fold desc="Beta vs. P from piplus (1n, CD & FD)">
-                        for (int i = 0; i < Piplus_ind.size(); i++) {
-                            if (piplus[i]->getRegion() == CD) {
-                                hBeta_vs_P_1n_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_positive_part_1n_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                            } else if (piplus[i]->getRegion() == FD) {
-                                hBeta_vs_P_1n_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_positive_part_1n_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                            }
-                        } // end of loop over piplus vector
-                        //</editor-fold>
-
-                        //<editor-fold desc="Beta vs. P from piminus (1n, CD & FD)">
-                        for (int i = 0; i < piminus.size(); i++) {
-                            if (piminus[i]->getRegion() == CD) {
-                                hBeta_vs_P_1n_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_negative_part_1n_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                            } else if (piminus[i]->getRegion() == FD) {
-                                hBeta_vs_P_1n_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                                hBeta_vs_P_negative_part_1n_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                            }
-                        } // end of loop over piminus vector
                         //</editor-fold>
 
                         //</editor-fold>
@@ -6398,6 +6484,7 @@ void EventAnalyser() {
         //<editor-fold desc="Momentum plots (1n, CD & FD)">
         hP_e_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
         hP_n_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
+        hP_n_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
 
         hP_e_BC_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
         hP_p_BC_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
@@ -6556,21 +6643,44 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P plots (1n)">
-        hBeta_vs_P_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
-                                      beta_Kminus, true);
-        hBeta_vs_P_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
-                                      beta_Kminus, true);
-        hBeta_vs_P_1n_Electrons_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_electron, "Electrons", true);
+        hBeta_vs_P_1n_CD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+//                                      beta_Kminus, true);
+        hBeta_vs_P_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_electron, beta_proton, beta_neutron, beta_pizero, beta_piplus, beta_piminus, beta_Kzero, beta_Kplus,
+//                                      beta_Kminus, true);
+
+        hBeta_vs_P_1n_Electrons_Only_FD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_Electrons_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_electron, "Electrons", true);
+
+        hBeta_vs_P_1n_Neutrons_Only_CD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_Neutrons_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", true);
+        hBeta_vs_P_1n_Neutrons_Only_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_Neutrons_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", true);
+
+        hBeta_vs_P_1n_Photons_Only_CD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_Photons_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", true);
+        hBeta_vs_P_1n_Photons_Only_FD.hDrawAndSave(SampleName, c1, plots, false);
+//        hBeta_vs_P_1n_Photons_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", true);
+
         hBeta_vs_P_1n_Protons_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_proton, "Protons", true);
         hBeta_vs_P_1n_Protons_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_proton, "Protons", true);
-        hBeta_vs_P_positive_part_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-        hBeta_vs_P_positive_part_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
-        hBeta_vs_P_neutral_part_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-        hBeta_vs_P_neutral_part_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
-        hBeta_vs_P_negative_part_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons",
-                                                    true);
-        hBeta_vs_P_negative_part_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons",
-                                                    true);
+        hBeta_vs_P_1n_Piplus_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_piplus, "#pi^{+}", true);
+        hBeta_vs_P_1n_Piplus_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_piplus, "#pi^{+}", true);
+        hBeta_vs_P_1n_Piminus_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_piminus, "#pi^{-}", true);
+        hBeta_vs_P_1n_Piminus_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_piminus, "#pi^{-}", true);
+        hBeta_vs_P_1n_Kplus_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_Kplus, "K^{+}", true);
+        hBeta_vs_P_1n_Kplus_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_Kplus, "K^{+}", true);
+        hBeta_vs_P_1n_Kminus_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_Kminus, "K^{-}", true);
+        hBeta_vs_P_1n_Kminus_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_Kminus, "K^{-}", true);
+
+        hBeta_vs_P_pos_part_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        hBeta_vs_P_pos_part_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_proton, "Protons", beta_Kplus, "Positive kaons", beta_piplus, "Positive pions", true);
+        hBeta_vs_P_neut_part_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        hBeta_vs_P_neut_part_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", beta_Kzero, "Neutral kaons", beta_pizero, "Neutral pions", true);
+        hBeta_vs_P_neg_part_1n_CD.hDrawAndSave(SampleName, c1, plots, beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
+        hBeta_vs_P_neg_part_1n_FD.hDrawAndSave(SampleName, c1, plots, beta_Kminus, "Negative kaons", beta_piminus, "Negative pions", beta_electron, "Electrons", true);
         //</editor-fold>
 
         //<editor-fold desc="Beta vs. P plots (2p)">
@@ -7791,20 +7901,24 @@ void EventAnalyser() {
         hP_p_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
 
 
-        TH1D *hP_n_1n_rec = hP_n_1n_FD.GetHistogram();
-        hP_n_1n_rec->Draw();
-        c1->SaveAs("hP_n_1n_rec.png");
-        c1->Clear();
+        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots, "");
 
-        TH1D *hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram();
-        hP_n_1n_truth->Draw();
-        c1->SaveAs("hP_n_1n_truth.png");
-        c1->Clear();
-
-        hP_n_1n_rec->Divide(hP_n_1n_truth);
-        hP_n_1n_rec->Draw();
-        c1->SaveAs("hP_n_1n_rec_Divided.png");
-        c1->Clear();
+//        //<editor-fold desc="test 2 - WORKS!">
+//        TH1D *hP_n_1n_rec = hP_n_1n_FD.GetHistogram();
+//        hP_n_1n_rec->Draw();
+//        c1->SaveAs("hP_n_1n_rec.png");
+//        c1->Clear();
+//
+//        TH1D *hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram();
+//        hP_n_1n_truth->Draw();
+//        c1->SaveAs("hP_n_1n_truth.png");
+//        c1->Clear();
+//
+//        hP_n_1n_rec->Divide(hP_n_1n_truth);
+//        hP_n_1n_rec->Draw();
+//        c1->SaveAs("hP_n_1n_rec_Divided.png");
+//        c1->Clear();
+//        //</editor-fold>
 
         //<editor-fold desc="test 1">
 //        TH1D hP_n_1n_rec = hP_n_1n_FD.GetHistogram1D();

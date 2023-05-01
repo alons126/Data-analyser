@@ -40,6 +40,7 @@ protected:
     map <std::string, std::string> Histogram1DTitles{{"FinalState",                ""},
                                                      {"DetectorRegion",            ""},
                                                      {"Histogram1DTitleReactions", ""}};
+    std::string HistogramStatsTitle;
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */
@@ -307,11 +308,12 @@ public:
 //  Get methods:
     TH1D GetHistogram1D() { return *Histogram1D; }
 
-    TH1D *GetHistogram() { return Histogram1D; }
+    TH1D *GetHistogram() const { return Histogram1D; }
 
     std::string GetHistogramTitle() { return Histogram1DTitles["HistogramTitle"]; }
 
-    std::string GetHistogramStatTitle() { return Histogram1DTitles["HistogramStatTitle"]; }
+    std::string GetHistogramStatTitle() const { return HistogramStatsTitle; }
+//    std::string GetHistogramStatTitle() const { return Histogram1DTitles["HistogramStatTitle"]; }
 
     std::string GetXaxisTitle() { return Histogram1DTitles["XaxisTitle"]; }
 
