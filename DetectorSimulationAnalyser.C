@@ -2934,24 +2934,36 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-        //<editor-fold desc="Counting #(events) that have 'photons' with Beta_ph > 1">
-        bool Beta_Larger_Than_1 = false;
-
-        for (int i = 0; i < allParticles.size(); i++) {
-            int pdg = allParticles[i]->par()->getPid();
-            double ph_Beta = allParticles[i]->par()->getBeta();
-
-            bool inPCAL = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-            bool inECIN = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
-            bool inECOUT = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-
-            if ((pdg == 22) && (ph_Beta > 1) && (!inPCAL && (inECIN || inECOUT))) {
-                Beta_Larger_Than_1 = true;
-            }
-        } // end of loop over allParticles vector
-
-        if (Beta_Larger_Than_1) { ++num_of_events_1n_inFD_wAllPh_wBetaLT1; }
-        //</editor-fold>
+//        //<editor-fold desc="Counting #(1n events) that have 'photons' with Beta_ph > 1">
+//        bool Beta_Larger_Than_1 = false;
+//
+//        for (int i = 0; i < allParticles.size(); i++) {
+//            int pdgt = allParticles[i]->par()->getPid();
+//            double ph_Beta = allParticles[i]->par()->getBeta();
+//
+//            bool inPCAL = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+//            bool inECIN = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+//            bool inECOUT = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+//
+//
+//            bool es_1n = (basic_event_selection && (Protons_ind.size() == 0) && (NeutronsFD_ind.size() == 1));
+//////            bool es_1n = (basic_event_selection && (Protons_ind.size() == 0) && (NeutronsFD_ind.size() == 1));
+////
+////            if ((Ne == 1) && (electrons[0]->par()->getBeta() > 1.2) && es_1n &&
+////                ((pdgt == 22) && (ph_Beta > 1) && (!inPCAL && (inECIN || inECOUT)))) {
+////                Beta_Larger_Than_1 = true;
+////            }
+//
+//
+//            if ((allParticles[i]->getRegion() == FD) && (pdgt == 22) && (!inPCAL && (inECIN || inECOUT))) { // neutrons missid.ed as photons
+//                if ((Ne == 1) && (electrons[0]->par()->getBeta() > 1.2) && es_1n) { // 1n event selection
+//                    if (ph_Beta > 1) { Beta_Larger_Than_1 = true; }
+//                }
+//            }
+//        } // end of loop over allParticles vector
+//
+//        if (Beta_Larger_Than_1) { ++num_of_events_1n_inFD_wAllPh_wBetaLT1; }
+//        //</editor-fold>
 
 //  Fill All particles (All e) plots ----------------------------------------------------------------------------------------------------------------------------
 
@@ -4080,6 +4092,29 @@ void EventAnalyser() {
                 if (!PhotonInPCAL_1n) { cout << "\n\n1n: a photon have been found with out PCAL hit. Exiting...\n\n", exit(EXIT_FAILURE); }
             }
             //</editor-fold>
+
+
+
+            //<editor-fold desc="Counting #(1n events) that have 'photons' with Beta_ph > 1">
+            bool Beta_Larger_Than_1 = false;
+
+            for (int &i: NeutronsFD_ind) {
+                int pdgt = allParticles[i]->par()->getPid();
+                double ph_Beta = allParticles[i]->par()->getBeta();
+
+                bool inPCAL = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                bool inECIN = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                bool inECOUT = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+                if ((allParticles[i]->getRegion() == FD) && (pdgt == 22) && (!inPCAL && (inECIN || inECOUT))) { // neutrons missid.ed as photons
+                    if (ph_Beta > 1) { Beta_Larger_Than_1 = true; }
+                }
+            } // end of loop over allParticles vector
+
+            if (Beta_Larger_Than_1) { ++num_of_events_1n_inFD_wAllPh_wBetaLT1; }
+            //</editor-fold>
+
+
 
             // looking at 1n events in the FD only & below theta_n cut:
             if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD &&
@@ -7901,7 +7936,7 @@ void EventAnalyser() {
         hP_p_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
 
 
-        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots, "");
+        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots, "", "");
 
 //        //<editor-fold desc="test 2 - WORKS!">
 //        TH1D *hP_n_1n_rec = hP_n_1n_FD.GetHistogram();

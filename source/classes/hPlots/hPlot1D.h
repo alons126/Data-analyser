@@ -41,6 +41,7 @@ protected:
                                                      {"DetectorRegion",            ""},
                                                      {"Histogram1DTitleReactions", ""}};
     std::string HistogramStatsTitle;
+    std::string HistogramTitle;
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */
@@ -310,7 +311,8 @@ public:
 
     TH1D *GetHistogram() const { return Histogram1D; }
 
-    std::string GetHistogramTitle() { return Histogram1DTitles["HistogramTitle"]; }
+    std::string GetHistogramTitle() const { return HistogramTitle; }
+//    std::string GetHistogramTitle() { return Histogram1DTitles["HistogramTitle"]; }
 
     std::string GetHistogramStatTitle() const { return HistogramStatsTitle; }
 //    std::string GetHistogramStatTitle() const { return Histogram1DTitles["HistogramStatTitle"]; }
