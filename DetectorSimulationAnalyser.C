@@ -7928,6 +7928,8 @@ void EventAnalyser() {
 //        //</editor-fold>
 
         //<editor-fold desc="Efficiency plots (1n, CD & FD)">
+
+        //<editor-fold desc="Momentum efficiency plots">
         hP_e_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
         hP_e_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
         hP_n_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
@@ -7937,40 +7939,31 @@ void EventAnalyser() {
 
         DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1n_FD, hP_e_1n_FD, plots);
         DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots);
+        //</editor-fold>
 
-//        //<editor-fold desc="test 2 - WORKS!">
-//        TH1D *hP_n_1n_rec = hP_n_1n_FD.GetHistogram();
-//        hP_n_1n_rec->Draw();
-//        c1->SaveAs("hP_n_1n_rec.png");
-//        c1->Clear();
+//        //<editor-fold desc="Theta efficiency plots">
+//        hP_e_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_e_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_n_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_n_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_p_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_p_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
 //
-//        TH1D *hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram();
-//        hP_n_1n_truth->Draw();
-//        c1->SaveAs("hP_n_1n_truth.png");
-//        c1->Clear();
-//
-//        hP_n_1n_rec->Divide(hP_n_1n_truth);
-//        hP_n_1n_rec->Draw();
-//        c1->SaveAs("hP_n_1n_rec_Divided.png");
-//        c1->Clear();
+//        DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1n_FD, hP_e_1n_FD, plots);
+//        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots);
 //        //</editor-fold>
 
-        //<editor-fold desc="test 1">
-//        TH1D hP_n_1n_rec = hP_n_1n_FD.GetHistogram1D();
-//        hP_n_1n_rec.Draw();
-//        c1->SaveAs("hP_n_1n_rec.png");
-//        c1->Clear();
+//        //<editor-fold desc="Phi efficiency plots">
+//        hP_e_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_e_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_momentum_cuts.GetLowerCut(), e_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_n_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_n_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_momentum_cuts.GetLowerCut(), n_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_p_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
+//        hP_p_BC_truth_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_momentum_cuts.GetLowerCut(), p_momentum_cuts.GetUpperCut(), 0, false);
 //
-//        TH1D hP_n_1n_truth = hP_n_truth_1n_FD.GetHistogram1D();
-//        hP_n_1n_truth.Draw();
-//        c1->SaveAs("hP_n_1n_truth.png");
-//        c1->Clear();
-//
-//        hP_n_1n_rec.Divide(*hP_n_1n_truth);
-//        hP_n_1n_rec.Draw();
-//        c1->SaveAs("hP_n_1n_rec_Divided.png");
-//        c1->Clear();
-        //</editor-fold>
+//        DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1n_FD, hP_e_1n_FD, plots);
+//        DrawAndSaveEfficiencyPlots(SampleName, hP_n_truth_1n_FD, hP_n_1n_FD, plots);
+//        //</editor-fold>
 
         //</editor-fold>
 
