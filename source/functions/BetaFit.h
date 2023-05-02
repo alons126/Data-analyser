@@ -1,57 +1,87 @@
-//_____________________macro fitexample.C___________________________
-#include <string>
-#include <cmath>
-#include <tuple>
-#include <iostream>
-#include <sys/stat.h>
-#include <sstream>
+//
+// Created by alons on 02/05/2023.
+//
 
-template<
-typename T
->
+#ifndef BETAFIT_H
+#define BETAFIT_H
 
-std::string to_string_with_precision(const T a_value, const int n = 2) {
-    std::ostringstream out;
-    out.precision(n);
-    out << std::fixed << a_value;
-    return out.str();
-}
+#include <TFile.h>
+#include <TTree.h>
+#include <TLorentzVector.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TLatex.h>
+#include <TChain.h>
+#include <TCanvas.h>
+#include <TStyle.h>
+#include <TDatabasePDG.h>
+#include <TApplication.h>
+#include <TROOT.h>
+
+#include "GeneralFunctions.h"
+#include "../classes/DSCuts/DSCuts.h"
+#include "../classes/hPlots/hPlot1D.h"
+
+using namespace std;
 
 Double_t FitFunction(Double_t *v, Double_t *par) {
     Double_t arg = 0;
-    if (par[2] != 0) arg = (v[0] - par[1]) / par[2];
+//    if (par[1] != 0) { arg = (v[0] - 1) / par[1]; } // 2 parameters
+    if (par[2] != 0) { arg = (v[0] - par[1]) / par[2]; } // 3 parameters
 
     Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
     return fitval;
 }
 
-void fitexample() {
-    TFile *f = new
-    TFile("./plots/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+void BetaFit(string SampleName, DSCuts &Beta_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
 
-    TH1D *hpx = (TH1D *) f->Get("#chi^{2}_{p} (1e cut, FD)");
+    //<editor-fold desc="Canvas definitions">
+    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
+//    TCanvas *Canvas = new TCanvas("canvas", "canvas", 2000, 1500); // high res
+//    TCanvas *Canvas = new TCanvas("canvas", "canvas", 1650, 1150);
+//    Canvas->cd();
+    Canvas->SetGrid();
+    Canvas->SetBottomMargin(0.14);
 
-//    //create a function with 3 parameters in the range [-3,3]
-//    TF1 * func = new
-//    TF1("fit", FitFunction, -3, 3, 3);
-//    func->SetLineColor(kBlue);
-//    func->SetParameters(1000, hpx->GetMean(), hpx->GetRMS());
-//    func->SetParNames("Constant", "Mean_value", "Sigma");
-////    func->SetParNames("p0", "p1", "p2");
-//    hpx->Fit("fit");
-//    hpx->Fit("gaus", "W");
-//    hpx->Fit("gaus", "WW");
-//    hpx->Fit("gaus", "I");
-//    hpx->Fit("gaus", "F");
-//    hpx->Fit("gaus", "U");
-//    hpx->Fit("gaus", "E");
-//    hpx->Fit("gaus", "M");
-//    hpx->Fit("gaus", "S");
-    hpx->Fit("gaus");
-//    c1->clear();
-    hpx->Draw();
+    Canvas->SetLeftMargin(0.16);
+    Canvas->SetRightMargin(0.12);
 
-//    Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
+
+    Canvas->cd();
+    //</editor-fold>
+
+    //<editor-fold desc="Setting sNameFlag">
+    string sNameFlag;
+
+    if (findSubstring(SampleName, "simulation")) {
+        sNameFlag = "s";
+    } else if (findSubstring(SampleName, "data")) {
+        sNameFlag = "d";
+    }
+    //</editor-fold>
+
+    TH1D *hBeta = BetaPlot.GetHistogram();
+    TH1D *hBeta_Clone = (TH1D *) hBeta->Clone((BetaPlot.GetHistogramStatTitle() + " - fitted").c_str());
+
+    TF1 *func = new TF1("fit", FitFunction, 0, 2, 3); // create a function with 3 parameters in the range [-3,3]
+    func->SetLineColor(kRed);
+    func->SetParameters(25, 1, 0.001);
+//    func->SetParameters(300, 1, 0.001);
+    func->SetParNames("Constant", "Mean_value", "Sigma");
+//    func->SetParLimits(0, 21, 50);
+////    func->SetParLimits(0, 215, 500);
+    func->SetParLimits(1, 0.999, 1.05);
+//    func->SetParLimits(2, 0.00001, 0.05);
+    hBeta->Fit("fit");
+    hBeta->SetLineColor(kBlack);
+    hBeta->Draw();
+
+    TF1 *fit = hBeta->GetFunction("fit");
+
+    Beta_cuts.SetUpperCut(fit->GetParameter(2));
+
+    /*//    Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
 
     TF1 *fit = hpx->GetFunction("gaus");
     double Amp = fit->GetParameter(0); // get p0
@@ -132,21 +162,9 @@ void fitexample() {
     FitParam->AddText(("Fit std = " + to_string_with_precision(Std, 3)).c_str());
     FitParam->AddText(("Fit mean = " + to_string_with_precision(Mean, 3)).c_str());
     FitParam->AddText(("Cuts = std * " + to_string_with_precision(factor, 2)).c_str());
-    FitParam->Draw("same");
+    FitParam->Draw("same");*/
+
 }
 
-//void fitexample() {
-//    TFile * f = new
-//    TFile("./plots/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-//
-//    TH1F *hpx = (TH1F *) f->Get("#chi^{2}_{p} (1e cut, FD)");
-//
-//    //create a function with 3 parameters in the range [-3,3]
-//    TF1 * func = new
-//    TF1("fit", FitFunction, -3, 3, 3);
-//    func->SetParameters(500, hpx->GetMean(), hpx->GetRMS());
-//    func->SetParNames("Constant", "Mean_value", "Sigma");
-////    func->SetParNames("p0", "p1", "p2");
-//    hpx->Fit("fit");
-//
-//}
+
+#endif //BETAFIT_H

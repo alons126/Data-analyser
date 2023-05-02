@@ -245,10 +245,6 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     //<editor-fold desc="Setting particle">
     string EfficiencyRecTitle = RPlot->GetTitle(), EfficiencyParticle, EfficiencyParticleShort;
 
-
-    cout << "\n\nEfficiencyRecTitle:\t" << EfficiencyRecTitle << "\n\n";
-
-
     if (findSubstring(EfficiencyRecTitle, "Electron") || findSubstring(EfficiencyRecTitle, "electron")) {
         EfficiencyParticle = "Electron";
         EfficiencyParticleShort = "e";

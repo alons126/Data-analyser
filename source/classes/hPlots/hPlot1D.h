@@ -170,8 +170,8 @@ public:
                            string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, double &plot_Xmax, double &plot_lcut,
                            double &plot_ucut, double factor, bool plot_max = true, string particle = "");
 
-    // fitf function:
-    Double_t fitf(Double_t *v, Double_t *par);
+    // FitFunction function:
+    Double_t FitFunction(Double_t *v, Double_t *par);
 
     // LogEventCuts function:
     void hLogEventCuts(clas12::region_part_ptr Particle, double Lower_cut, double Upper_cut, double CutCenter = 0, double Weight = 1);

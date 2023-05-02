@@ -43,6 +43,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
+#include "source/functions/BetaFit.h"
 #include "source/functions/DrawAndSaveEfficiencyPlots.h"
 #include "source/functions/GetFDNeutrons.h"
 #include "source/functions/GetFDNeutronP.h"
@@ -137,10 +138,13 @@ void EventAnalyser() {
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_reg";
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS1"; // mom_from_file
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2"; // mom_from_file zoomed
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS22"; // mom_from_file zoomed 250
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS222"; // mom_from_file zoomed 200
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2222"; // mom_from_file zoomed 150
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS3"; // reg
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS4"; // reg zoomed
 //
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
         }
@@ -521,15 +525,15 @@ void EventAnalyser() {
 
     /* Beta plots */
 //    double dBeta_sigma_boundary = 0.2; // 1 - mom_from_file
-//    double dBeta_sigma_boundary = 0.1; // 2 - mom_from_file zoomed
+    double dBeta_sigma_boundary = 0.1; // 2 - mom_from_file zoomed
 //    double dBeta_sigma_boundary = 0.2; // 3 - reg
-    double dBeta_sigma_boundary = 0.1; // 4 - reg zoomed
+//    double dBeta_sigma_boundary = 0.1; // 4 - reg zoomed
     double Beta_dist_uboundary = Beta_cut.GetMean() + dBeta_sigma_boundary, Beta_dist_lboundary = Beta_cut.GetMean() - dBeta_sigma_boundary;
 
 //    double dBeta_sigma_ZOOMOUT_boundary = 0.5; // 1 - mom_from_file
-//    double dBeta_sigma_ZOOMOUT_boundary = 0.2; // 2 - mom_from_file zoomed
+    double dBeta_sigma_ZOOMOUT_boundary = 0.2; // 2 - mom_from_file zoomed
 //    double dBeta_sigma_ZOOMOUT_boundary = 0.5; // 3 - reg
-    double dBeta_sigma_ZOOMOUT_boundary = 0.2; // 4 - reg zoomed
+//    double dBeta_sigma_ZOOMOUT_boundary = 0.2; // 4 - reg zoomed
     double Beta_dist_ZOOMOUT_uboundary = Beta_cut.GetMean() + dBeta_sigma_ZOOMOUT_boundary;
     double Beta_dist_ZOOMOUT_lboundary = Beta_cut.GetMean() - dBeta_sigma_ZOOMOUT_boundary;
 
@@ -1208,12 +1212,18 @@ void EventAnalyser() {
     //<editor-fold desc="Beta plots (1n)">
     hPlot1D hBeta_n_from_ph_1n_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
                                             directories.Beta_Directory_map["Beta_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
-                                            Beta_dist_lboundary, Beta_dist_uboundary);
+//                                            0.975, Beta_dist_uboundary); // 2
+//                                            0.975, Beta_dist_uboundary, 250); // 22
+//                                            0.975, Beta_dist_uboundary, 200); // 222
+                                            0.975, Beta_dist_uboundary, 150); // 2222
+//                                            Beta_dist_lboundary, Beta_dist_uboundary);
 
     hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
                                                     directories.Beta_Directory_map["Beta_1n_Directory"], "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
-                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
-
+//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary); // 2
+//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 250); // 22
+//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 200); // 222
+                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 150); // 2222
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P plots">
@@ -6911,11 +6921,12 @@ void EventAnalyser() {
 //  Beta plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Beta vs. P plots (1n)">
-//        hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
         hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-//        hChi2_Proton_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., -Chi2_Proton_cuts_CD.Cuts.at(2), Chi2_Proton_cuts_CD.Cuts.at(2),
-//                                        Chi2_Proton_cuts_CD.Cuts.at(0), false);
+        BetaFit(SampleName, Beta_cut, hBeta_n_from_ph_1n_FD, plots);
+
+        cout << "Beta_cut.GetUpperCut():\t" << Beta_cut.GetUpperCut() << "\n\n\n\n";
+
         //</editor-fold>
 
     } else {
@@ -8771,6 +8782,22 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "dVz_cuts = " << dVz_cuts.GetUpperCut() << "\n";
+    //</editor-fold>
+
+    //<editor-fold desc="Beta cut (1n, FD)">
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Beta cut (1n & 1n1p, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "Beta_cut.GetUpperCut() = " << Beta_cut.GetUpperCut() << "\n\n";
+    //</editor-fold>
+
+    //<editor-fold desc="Nucleon theta cut (1p & 1n, FD)">
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "Nucleon theta cut (1p & 1n, FD)\n";
+    myLogFile << "===========================================================================\n\n";
+
+    myLogFile << "Theta_nuc_cut.GetUpperCut() = " << Theta_nuc_cut.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Neutron veto cut (1n & 1n1p, FD)">

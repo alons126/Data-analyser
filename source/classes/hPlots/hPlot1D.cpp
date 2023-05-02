@@ -1601,10 +1601,10 @@ void hPlot1D::hDrawAndSaveWFit(std::string &SampleName, TCanvas *h1DCanvas, TLis
 }
 //</editor-fold>
 
-// fitf function ------------------------------------------------------------------------------------------------------------------------------------------------
+// FitFunction function ------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="fitf function">
-Double_t hPlot1D::fitf(Double_t *v, Double_t *par) {
+//<editor-fold desc="FitFunction function">
+Double_t hPlot1D::FitFunction(Double_t *v, Double_t *par) {
     Double_t arg = 0;
     if (par[2] != 0) arg = (v[0] - par[1]) / par[2];
 
@@ -1613,9 +1613,9 @@ Double_t hPlot1D::fitf(Double_t *v, Double_t *par) {
 }
 //</editor-fold>
 
-// fitf function ------------------------------------------------------------------------------------------------------------------------------------------------
+// hLogEventCuts function ------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="fitf function">
+//<editor-fold desc="hLogEventCuts function">
 void hPlot1D::hLogEventCuts(clas12::region_part_ptr Particle, double Lower_cut, double Upper_cut, double CutCenter = 0, double Weight = 1) {
     TVector3 P;
     P.SetMagThetaPhi(Particle->getP(), Particle->getTheta(), Particle->getPhi());

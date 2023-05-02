@@ -1816,17 +1816,17 @@ void histPlotter1D(TCanvas *Histogram1DCanvas1, // canvas c1 of other histograms
 
 // histPlotter1DwFit function (old) -------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="fitf function">
-/* fitf is used for custom plot fits */
-
-Double_t fitf(Double_t *v, Double_t *par) {
-    Double_t arg = 0;
-    if (par[2] != 0) arg = (v[0] - par[1]) / par[2];
-
-    Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
-    return fitval;
-}
-//</editor-fold>
+////<editor-fold desc="FitFunction function">
+///* FitFunction is used for custom plot fits */
+//
+//Double_t FitFunction(Double_t *v, Double_t *par) {
+//    Double_t arg = 0;
+//    if (par[2] != 0) arg = (v[0] - par[1]) / par[2];
+//
+//    Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
+//    return fitval;
+//}
+////</editor-fold>
 
 //<editor-fold desc="histPlotter1DwFit function (old)">
 /* histPlotter1DwFit is used for chi2 plots with fit */
