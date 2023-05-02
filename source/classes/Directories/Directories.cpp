@@ -194,31 +194,44 @@ Directories::Directories(std::string plots_path) {
 
     //</editor-fold>
 
-    //<editor-fold desc="Beta vs. p plots directories">
-    for (std::string folders_name: Beta_VS_P_Daughter_Folders) {
-        MakeDirectory(create_Beta_vs_P_Dir, Beta_VS_P_Parent_Directory, folders_name, false, Plots_Folder);
+    //<editor-fold desc="Beta plots directories">
+    for (std::string folders_name: Beta_Daughter_Folders) {
+        MakeDirectory(create_Beta_Dir, Beta_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    Beta_VS_P_Directory_map["Beta_VS_P_All_e_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                           Find(Beta_VS_P_Daughter_Folders, "01_All_e") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_All_e_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                                     Find(Beta_VS_P_Daughter_Folders, "01_All_e/By_charge") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_1e_cut_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                            Find(Beta_VS_P_Daughter_Folders, "02_1e_cut") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                                      Find(Beta_VS_P_Daughter_Folders, "02_1e_cut/By_charge") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_1p_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                        Find(Beta_VS_P_Daughter_Folders, "04_1p") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1p_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                                  Find(Beta_VS_P_Daughter_Folders, "04_1p/By_charge") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_1n_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                        Find(Beta_VS_P_Daughter_Folders, "06_1n") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_1n_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                                  Find(Beta_VS_P_Daughter_Folders, "06_1n/By_charge") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_2p_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                        Find(Beta_VS_P_Daughter_Folders, "05_2p") + "/";
-    Beta_VS_P_Directory_map["Beta_VS_P_by_charge_2p_Directory"] = Plots_Folder + "/" + Beta_VS_P_Parent_Directory + "/" +
-                                                                  Find(Beta_VS_P_Daughter_Folders, "05_2p/By_charge") + "/";
+    Beta_Directory_map["Beta_VS_P_All_e_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                      Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/01_All_e") + "/";
+    Beta_Directory_map["Beta_VS_P_by_charge_All_e_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                                Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/01_All_e/By_charge") + "/";
+
+    Beta_Directory_map["Beta_VS_P_1e_cut_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                       Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/02_1e_cut") + "/";
+    Beta_Directory_map["Beta_VS_P_by_charge_1e_cut_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                                 Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/02_1e_cut/By_charge") + "/";
+
+    Beta_Directory_map["Beta_VS_P_1p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                   Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/04_1p") + "/";
+    Beta_Directory_map["Beta_VS_P_by_charge_1p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                             Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/04_1p/By_charge") + "/";
+
+    Beta_Directory_map["Beta_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n") + "/";
+    Beta_Directory_map["Beta_VS_P_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                   Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/05_1n") + "/";
+    Beta_Directory_map["Beta_VS_P_by_charge_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                             Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/05_1n/By_charge") + "/";
+
+    Beta_Directory_map["Beta_1n1p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                Find(Beta_Daughter_Folders, "01_Beta_plots/06_1n1p") + "/";
+    Beta_Directory_map["Beta_VS_P_1n1p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                     Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/06_1n1p") + "/";
+    Beta_Directory_map["Beta_VS_P_by_charge_1n1p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                               Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/06_1n1p/By_charge") + "/";
+
+    Beta_Directory_map["Beta_VS_P_2p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                   Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/07_2p") + "/";
+    Beta_Directory_map["Beta_VS_P_by_charge_2p_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                             Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/07_2p/By_charge") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Angle plots directories">

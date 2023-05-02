@@ -36,9 +36,8 @@ private:
     bool create_Vertex_Dir = true;
     std::string Vertex_Parent_Directory = "01_Cuts_plots/03_Vertex_plots";
     vector<std::string> Vertex_Daughter_Folders = {"",
-                                                   "02_dV_plots/01_1p",
-                                                   "02_dV_plots/02_1e2p",
-                                                   "02_dV_plots/03_2p",
+                                                   "02_dV_plots/01_1p", "02_dV_plots/02_1e2p", "02_dV_plots/03_2p",
+
                                                    "01_Vertex_components_plots/01_1e_cut/01_Electrons", "01_Vertex_components_plots/01_1e_cut/02_Protons",
                                                    "01_Vertex_components_plots/01_1e_cut/03_Kplus", "01_Vertex_components_plots/01_1e_cut/04_Kminus",
                                                    "01_Vertex_components_plots/01_1e_cut/05_Piplus", "01_Vertex_components_plots/01_1e_cut/06_Piminus",
@@ -52,8 +51,7 @@ private:
                                                "01_1e_cut", "01_1e_cut/SF_plots", "01_1e_cut/SF_VS_P_e_plots",
                                                "02_1p", "02_1p/SF_plots", "02_1p/SF_VS_P_e_plots",
                                                "03_2p", "03_2p/SF_plots", "03_2p/SF_VS_P_e_plots",
-                                               "04_1n", "04_1n/SF_plots", "04_1n/SF_VS_P_e_plots",
-    };
+                                               "04_1n", "04_1n/SF_plots", "04_1n/SF_VS_P_e_plots"};
     //</editor-fold>
 
     //<editor-fold desc="Edge cuts histograms plots directories">
@@ -79,24 +77,18 @@ private:
 
     //</editor-fold>
 
-    //<editor-fold desc="Beta vs. p plots directories">
-    bool create_Beta_vs_P_Dir = true;
-    std::string Beta_VS_P_Parent_Directory = "02_Beta_VS_P_plots";
-    vector<std::string> Beta_VS_P_Daughter_Folders = {"",
-                                                      "01_All_e", "01_All_e/By_charge",
-                                                      "02_1e_cut", "02_1e_cut/By_charge",
-                                                      "04_1p", "04_1p/By_charge",
-                                                      "05_2p", "05_2p/By_charge",
-                                                      "06_1n", "06_1n/By_charge"};
+    //<editor-fold desc="Beta directories">
+    bool create_Beta_Dir = true;
+    std::string Beta_Parent_Directory = "02_Beta_plots";
+//    std::string Beta_Parent_Directory = "02_Beta_VS_P_plots";
+    vector<std::string> Beta_Daughter_Folders = {"",
+                                                 "01_Beta_plots", "01_Beta_plots/05_1n", "01_Beta_plots/06_1n1p",
 
-    std::string Beta_VS_P_All_e_Directory;
-    std::string Beta_VS_P_by_charge_All_e_Directory;
-    std::string Beta_VS_P_1e_cut_Directory;
-    std::string Beta_VS_P_by_charge_1e_cut_Directory;
-    std::string Beta_VS_P_1p_Directory;
-    std::string Beta_VS_P_by_charge_1p_Directory;
-    std::string Beta_VS_P_2p_Directory;
-    std::string Beta_VS_P_by_charge_2p_Directory;
+                                                 "02_Beta_VS_P_plots", "02_Beta_VS_P_plots/01_All_e", "02_Beta_VS_P_plots/01_All_e/By_charge",
+                                                 "02_Beta_VS_P_plots/02_1e_cut", "02_Beta_VS_P_plots/02_1e_cut/By_charge", "02_Beta_VS_P_plots/04_1p",
+                                                 "02_Beta_VS_P_plots/04_1p/By_charge", "02_Beta_VS_P_plots/05_1n", "02_Beta_VS_P_plots/05_1n/By_charge",
+                                                 "02_Beta_VS_P_plots/06_1n1p", "02_Beta_VS_P_plots/06_1n1p/By_charge", "02_Beta_VS_P_plots/07_2p",
+                                                 "02_Beta_VS_P_plots/07_2p/By_charge"};
     //</editor-fold>
 
     //<editor-fold desc="Angle plots directories">
@@ -256,7 +248,7 @@ public:
     map<std::string, std::string> Fiducial_Directory_map;
     map<std::string, std::string> Momentum_Directory_map;
 
-    map<std::string, std::string> Beta_VS_P_Directory_map;
+    map<std::string, std::string> Beta_Directory_map;
     map<std::string, std::string> Angle_Directory_map;
     map<std::string, std::string> Q2_Directory_map;
     map<std::string, std::string> E_e_Directory_map;
