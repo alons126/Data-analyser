@@ -6923,10 +6923,12 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs. P plots (1n)">
         hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        BetaFit(SampleName, Beta_cut, hBeta_n_from_ph_1n_FD, plots);
+        BetaFit(SampleName, Beta_cut,  n_momentum_cuts, hBeta_n_from_ph_1n_FD, plots);
 
-        cout << "Beta_cut.GetUpperCut():\t" << Beta_cut.GetUpperCut() << "\n\n\n\n";
+        cout << "\n\n\nBeta_cut.GetUpperCut():\t" << Beta_cut.GetUpperCut() << "\n";
+        cout << "n_momentum_cuts.GetUpperCut():\t" << n_momentum_cuts.GetUpperCut() << "\n\n\n\n";
 
+        cout << "\n\nBeta plots: BetaFit(...) finished. Exiting...\n\n", exit(EXIT_FAILURE);
         //</editor-fold>
 
     } else {

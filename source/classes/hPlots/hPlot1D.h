@@ -42,6 +42,7 @@ protected:
                                                      {"Histogram1DTitleReactions", ""}};
     std::string HistogramStatsTitle;
     std::string HistogramTitle;
+    std::string FinalState;
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */
@@ -352,7 +353,8 @@ public:
     std::string GetHistogram1DSaveNamePath() const { return Histogram1DSaveNamePath; }
 //    std::string GetHistogram1DSaveNamePath() { return Histogram1DSaveNamePath; }
 
-    std::string GetFinalState() { return Histogram1DTitles["FinalState"]; }
+    std::string GetFinalState() const { return FinalState; }
+//    std::string GetFinalState() { return Histogram1DTitles["FinalState"]; }
 
     std::string GetDetectorRegion() { return Histogram1DTitles["DetectorRegion"]; }
 
