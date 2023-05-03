@@ -33,7 +33,7 @@ Double_t FitFunction(Double_t *v, Double_t *par) {
     return fitval;
 }
 
-void BetaFit(string SampleName, DSCuts &Beta_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
+void BetaFit(const string &SampleName, DSCuts &Beta_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -66,20 +66,35 @@ void BetaFit(string SampleName, DSCuts &Beta_cuts, const hPlot1D &BetaPlot, TLis
 
     TF1 *func = new TF1("fit", FitFunction, 0, 2, 3); // create a function with 3 parameters in the range [-3,3]
     func->SetLineColor(kRed);
-    func->SetParameters(25, 1, 0.001);
+
+    double max = hBeta_Clone->GetMaximum();
+//    double max = hpx->GetBinCenter(hpx->GetMaximumBin());
+    double mean = hBeta_Clone->GetMean();
+
+    func->SetParameters(max, mean, 0.001);
+//    func->SetParameters(25, 1, 0.001);
 //    func->SetParameters(300, 1, 0.001);
     func->SetParNames("Constant", "Mean_value", "Sigma");
 //    func->SetParLimits(0, 21, 50);
 ////    func->SetParLimits(0, 215, 500);
-    func->SetParLimits(1, 0.999, 1.05);
+    func->SetParLimits(0, 0.7 * max, 1.2 * max); // amp limits
+//    func->SetParLimits(1, 0.999, 1.05);
 //    func->SetParLimits(2, 0.00001, 0.05);
-    hBeta->Fit("fit");
-    hBeta->SetLineColor(kBlack);
-    hBeta->Draw();
+    hBeta_Clone->Fit("fit");
+    hBeta_Clone->SetLineColor(kBlack);
+    hBeta_Clone->Draw();
 
-    TF1 *fit = hBeta->GetFunction("fit");
+    TF1 *fit = hBeta_Clone->GetFunction("fit");
 
     Beta_cuts.SetUpperCut(fit->GetParameter(2));
+
+    Histogram_list->Add(hBeta_Clone);
+
+    string hBeta_CloneSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + sNameFlag + BetaPlot.GetHistogram1DSaveName() + +"_fitted.png";
+    const char *SaveDir = hBeta_CloneSaveNameDir.c_str();
+    Canvas->SaveAs(SaveDir);
+
+    Canvas->Clear();
 
     /*//    Histogram1D->GetListOfFunctions()->Remove(Histogram1D->GetFunction("gaus"));
 

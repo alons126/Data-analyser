@@ -347,7 +347,7 @@ public:
 
     bool GetLinearScalePlot() { return LinearScalePlot; }
 
-    std::string GetHistogram1DSaveName() { return Histogram1DSaveName; }
+    std::string GetHistogram1DSaveName() const { return Histogram1DSaveName; }
 
     std::string GetHistogram1DSaveNamePath() const { return Histogram1DSaveNamePath; }
 //    std::string GetHistogram1DSaveNamePath() { return Histogram1DSaveNamePath; }
