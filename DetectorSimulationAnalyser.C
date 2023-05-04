@@ -535,7 +535,8 @@ void EventAnalyser() {
 //    double dBeta_sigma_ZOOMOUT_boundary = 0.5; // 3 - reg
 //    double dBeta_sigma_ZOOMOUT_boundary = 0.2; // 4 - reg zoomed
     double Beta_dist_ZOOMOUT_uboundary = Beta_cut.GetMean() + dBeta_sigma_ZOOMOUT_boundary;
-    double Beta_dist_ZOOMOUT_lboundary = Beta_cut.GetMean() - dBeta_sigma_ZOOMOUT_boundary;
+    double Beta_dist_ZOOMOUT_lboundary = 0.9;
+//    double Beta_dist_ZOOMOUT_lboundary = Beta_cut.GetMean() - dBeta_sigma_ZOOMOUT_boundary;
 
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
     if (apply_cuts) { Beta_boundary = 1.25, P_boundary = beamE * 1.1; }
@@ -1218,7 +1219,7 @@ void EventAnalyser() {
                                             0.975, Beta_dist_uboundary, 150); // 2222
 //                                            Beta_dist_lboundary, Beta_dist_uboundary);
 
-    hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
+    hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
                                                     directories.Beta_Directory_map["Beta_1n_Directory"], "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
 //                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary); // 2
 //                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 250); // 22
@@ -1430,9 +1431,15 @@ void EventAnalyser() {
     hPlot2D hBeta_vs_P_1n_Neutrons_Only_FD = hPlot2D("id. neutrons only", "1n", "FD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                      directories.Beta_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_id_Neutrons_Only_FD_1n",
                                                      0, P_boundary, 0, Beta_boundary);
-    hPlot2D hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD = hPlot2D("id. neutrons only", "1n", "FD", "#beta vs. P ZOOMOUT", "#beta vs. P", "P [GeV/c]", "#beta",
+    hPlot2D hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD = hPlot2D("id. neutrons only", "1n", "FD", "#beta vs. P - ZOOMOUT", "#beta vs. P", "P [GeV/c]", "#beta",
                                                              directories.Beta_Directory_map["Beta_VS_P_1n_Directory"], "02_Beta_vs_P_id_Neutrons_Only_ZOOMOUT_FD_1n",
                                                              0, P_boundary, 0, 2);
+
+    hPlot2D hBeta_vs_P_1n_Neutrons_Only_from_photons_FD = hPlot2D("id. neutrons", "1n", "FD", "#beta vs. P",
+                                                                  " Cond. to id. neutron's #beta vs. P from 'photons'", "P [GeV/c]", "#beta",
+                                                                  directories.Beta_Directory_map["Beta_VS_P_1n_Directory"],
+                                                                  "02a_Beta_vs_P_id_Neutrons_Only_from_potons_FD_1n",
+                                                                  0, P_boundary, 0.9, 1.15);
 
     hPlot2D hBeta_vs_P_1n_Photons_Only_CD = hPlot2D("id. photons only", "1n", "CD", "#beta vs. P", "#beta vs. P", "P [GeV/c]", "#beta",
                                                     directories.Beta_Directory_map["Beta_VS_P_1n_Directory"], "03_Beta_vs_P_id_Photons_Only_CD_1n",
@@ -4670,6 +4677,8 @@ void EventAnalyser() {
                         //<editor-fold desc="Fill Beta plots (1n, FD only)">
                         for (int &i: NeutronsFD_ind) {
                             int PDGtmp = allParticles[i]->par()->getPid();
+                            double P_n_temp = GetFDNeutronP(allParticles[i]);
+
 
                             bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
                             bool inECINtmp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
@@ -4681,6 +4690,8 @@ void EventAnalyser() {
 
                                 hBeta_n_from_ph_1n_FD.hFill(allParticles[i]->par()->getBeta());
                                 hBeta_n_from_ph_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+
+                                hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
                             }
                         }
                         //</editor-fold>
@@ -6923,12 +6934,12 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs. P plots (1n)">
         hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        BetaFit(SampleName, Beta_cut,  n_momentum_cuts, hBeta_n_from_ph_1n_FD, plots);
+        BetaFit(SampleName, Beta_cut, n_momentum_cuts, hBeta_n_from_ph_1n_FD, plots);
 
         cout << "\n\n\nBeta_cut.GetUpperCut():\t" << Beta_cut.GetUpperCut() << "\n";
         cout << "n_momentum_cuts.GetUpperCut():\t" << n_momentum_cuts.GetUpperCut() << "\n\n\n\n";
 
-        cout << "\n\nBeta plots: BetaFit(...) finished. Exiting...\n\n", exit(EXIT_FAILURE);
+//        cout << "\n\nBeta plots: BetaFit(...) finished. Exiting...\n\n", exit(EXIT_FAILURE);
         //</editor-fold>
 
     } else {
@@ -7041,6 +7052,8 @@ void EventAnalyser() {
         hBeta_vs_P_1n_Neutrons_Only_FD.hDrawAndSave(SampleName, c1, plots, false);
         hBeta_vs_P_1n_Neutrons_Only_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, false);
 //        hBeta_vs_P_1n_Neutrons_Only_FD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", true);
+
+        hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hDrawAndSave(SampleName, c1, plots, false);
 
         hBeta_vs_P_1n_Photons_Only_CD.hDrawAndSave(SampleName, c1, plots, false);
 //        hBeta_vs_P_1n_Photons_Only_CD.hDrawAndSave(SampleName, c1, plots, beta_neutron, "Neutrons", true);
