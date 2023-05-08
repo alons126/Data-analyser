@@ -115,11 +115,20 @@ void BetaFitAndSave() {
     string SampleName = "C12_simulation_6GeV_T5";
 */
 
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_10";
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_100";
+/*
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_10";
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_100";
 //    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5";
+*/
+
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS_woChi2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_10";
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS_woChi2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_100";
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS_woChi2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSampleName:\t" << SampleName << "\n\n";
@@ -216,29 +225,29 @@ void BetaFitAndSave() {
 
     cout << "Beta histogram {max, mean}:\t{" << BetaMax << ", " << BetaMean << "}\n\n\n\n";
 
-//    // Adding limits to "Constant"
-//    double BetaConstantUlim = 1.2 * BetaMax;
-//    double BetaConstantLlim = 0.90 * BetaMax;
-////    double BetaConstantLlim = 0.67 * BetaMax;
-//    func->SetParLimits(0, BetaConstantLlim, BetaConstantUlim);
-//    cout << "Beta Constant {Llim, Ulim}:\t{" << BetaConstantLlim << ", " << BetaConstantUlim << "}\n\n";
+    // Adding limits to "Constant"
+    double BetaConstantUlim = 1.2 * BetaMax;
+    double BetaConstantLlim = 0.90 * BetaMax;
+//    double BetaConstantLlim = 0.67 * BetaMax;
+    func->SetParLimits(0, BetaConstantLlim, BetaConstantUlim);
+    cout << "Beta Constant {Llim, Ulim}:\t{" << BetaConstantLlim << ", " << BetaConstantUlim << "}\n\n";
 
 
-//    // Adding limits to "Mean_value"
-////    double BetaMean_valueUlim = 1.0075;
-//    double BetaMean_valueUlim = 1.02;
-////    double BetaMean_valueLlim = 1.0075;
-//    double BetaMean_valueLlim = 1.005;
-//    func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
-//    cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
+    // Adding limits to "Mean_value"
+//    double BetaMean_valueUlim = 1.0075;
+    double BetaMean_valueUlim = 1.02;
+//    double BetaMean_valueLlim = 1.0075;
+    double BetaMean_valueLlim = 1.005;
+    func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
+    cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
 
 
-    // Adding limits to "Sigma"
-//    double BetaSigmaUlim = 0.015;
-    double BetaSigmaUlim = 0.01;
-    double BetaSigmaLlim = 0.00001;
-    func->SetParLimits(2, BetaSigmaLlim, BetaSigmaUlim);
-    cout << "Beta Sigma {Llim, Ulim}:\t{" << BetaSigmaLlim << ", " << BetaSigmaUlim << "}\n\n";
+//    // Adding limits to "Sigma"
+////    double BetaSigmaUlim = 0.015;
+//    double BetaSigmaUlim = 0.01;
+//    double BetaSigmaLlim = 0.00001;
+//    func->SetParLimits(2, BetaSigmaLlim, BetaSigmaUlim);
+//    cout << "Beta Sigma {Llim, Ulim}:\t{" << BetaSigmaLlim << ", " << BetaSigmaUlim << "}\n\n";
 
 
 
@@ -402,14 +411,14 @@ void BetaFitAndSave() {
     lower_cut->SetLineColor(kRed);
     lower_cut->Draw("same");
 
-    auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.1, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-    TLegendEntry *Cut_legend_deltaPRel_deltaP = Cut_legend->AddEntry(deltaPRel_deltaP, ("#deltaP_{" + BetaParticleShort + "} /P").c_str(), "l");
+    auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
+    TLegendEntry *Cut_legend_deltaPRel_deltaP = Cut_legend->AddEntry(deltaPRel_deltaP, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}").c_str(),
+                                                                     "l");
     TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, "20% cut", "l");
     TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, "10% cut", "l");
     Cut_legend->Draw("same");
 
-    string Rel_deltaPSaveNameDir = "./" + sNameFlag + "02b_P_" + BetaParticleShort + "_rel_uncertainty" + BetaFinalState +
-                                   ".png";
+    string Rel_deltaPSaveNameDir = "./" + sNameFlag + "02b_P_" + BetaParticleShort + "_rel_uncertainty" + BetaFinalState + ".png";
 
     const Int_t n = 2;
     auto gr = new TGraph(n);
@@ -446,10 +455,9 @@ void BetaFitAndSave() {
 
     //<editor-fold desc="Plot w as function of beta">
     string WStatsTitle = "W(#beta) (" + BetaFinalState + ")";
-    string WTitle = "W(#beta) (" + BetaFinalState + ")";
+    string WTitle = "The W(#beta) function (" + BetaFinalState + ")";
     string W_Maxfunc = "x*x*x - x + " + to_string(FitStd / deltaPRel_UncertaintyU);
     string W_Minfunc = "x*x*x - x + " + to_string(FitStd / deltaPRel_UncertaintyL);
-//    string Wfunc = to_string(FitStd) + "/ ( (1 - x*x) * x )";
 
     auto *W_Max = new TF1(WStatsTitle.c_str(), W_Maxfunc.c_str(), 0.9, 1);
     W_Max->SetLineWidth(2);
@@ -464,7 +472,6 @@ void BetaFitAndSave() {
     W_Max->GetYaxis()->SetLabelSize(0.0425);
     W_Max->GetYaxis()->CenterTitle(true);
     W_Max->GetYaxis()->SetTitle(("W(#beta) = #beta^{3} - #beta + #delta#beta(#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}})^{-1}").c_str());
-//    W_Max->GetYaxis()->SetTitle("W(#beta) = #beta^{3} - #beta + #delta#beta#frac{P}{#deltaP}");
     W_Max->SetLineColor(kBlack);
     W_Max->SetLineWidth(2);
     W_Max->Draw();
@@ -477,16 +484,23 @@ void BetaFitAndSave() {
     W_Min->Draw("same");
 
     TLine *Beta_Max_cut = new TLine(Beta_Max, W_yULim, Beta_Max, W_yLLim);
-//    TLine *Beta_Max_cut = new TLine(Beta_Max, gPad->GetFrame()->GetY1() - 0.126, Beta_Max, gPad->GetFrame()->GetY2() + 0.5);
     Beta_Max_cut->SetLineWidth(2);
     Beta_Max_cut->SetLineColor(kBlue);
     Beta_Max_cut->Draw("same");
 
     TLine *Beta_Min_cut = new TLine(Beta_Min, W_yULim, Beta_Min, W_yLLim);
-//    TLine *Beta_Min_cut = new TLine(Beta_Min, gPad->GetFrame()->GetY1() - 0.126, Beta_Min, gPad->GetFrame()->GetY2() - 0.126);
     Beta_Min_cut->SetLineWidth(2);
     Beta_Min_cut->SetLineColor(kRed);
     Beta_Min_cut->Draw("same");
+
+    TLine *XAxis = new TLine(W_xLLim, 0., W_xULim, 0.);
+    XAxis->SetLineColor(kBlack);
+    XAxis->Draw("same");
+
+    auto W_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.1, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
+    TLegendEntry *W_legend_upper_lim = W_legend->AddEntry(Beta_Max_cut, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} = 0.2").c_str(), "l");
+    TLegendEntry *W_legend_lower_lim = W_legend->AddEntry(Beta_Min_cut, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} = 0.1").c_str(), "l");
+    W_legend->Draw("same");
 
     string WSaveNameDir = "./" + sNameFlag + "03_W_function.png";
     const char *WSaveDir = WSaveNameDir.c_str();

@@ -44,7 +44,7 @@ void Directories::MakeDirectory(bool Create_Directory, std::string Plots_Parent_
 Directories::Directories(std::string plots_path) {
     std::string Plots_Folder = plots_path; // Plots_Folder = Parent_Folder
     system(("mkdir -p " + Plots_Folder).c_str()); // clear old stuff in Parent_Folder
-    system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
+//    system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
 
     //<editor-fold desc="Cut parameters plots directories">
 

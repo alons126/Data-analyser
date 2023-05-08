@@ -86,6 +86,8 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
 
     if (p == "electron" || p == "Electron") {
         particlePDG = 11;
+    } else if (p == "neutron" || p == "Neutron") {
+        particlePDG = 2112;
     } else if (p == "proton" || p == "Proton") {
         particlePDG = 2212;
     } else if (p == "kplus" || p == "Kplus") {

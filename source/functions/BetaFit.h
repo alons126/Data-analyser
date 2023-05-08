@@ -101,12 +101,10 @@ Double_t FitFunction(Double_t *v, Double_t *par) {
     return fitval;
 }
 
-void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
+void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
 
     double W_yLLim = -0.1, W_yULim = 0.1, W_xLLim = 0.9, W_xULim = 1.;
-
-    double deltaPRel_UncertaintyU = 0.2;
-    double deltaPRel_UncertaintyL = 0.1;
+    double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -170,7 +168,6 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
     TH1D *hBeta = BetaPlot.GetHistogram();
     TH1D *hBeta_Clone = (TH1D *) hBeta->Clone((BetaPlot.GetHistogramStatTitle() + " - fitted").c_str());
     Int_t Color = hBeta_Clone->GetLineColor();
-    //    hBeta_Clone->SetLineColor(kBlack);
 
     TF1 *func = new TF1("fit", FitFunction, 0, 2, 3); // create a function with 3 parameters in the range [-3,3]
     func->SetLineColor(kRed);
@@ -180,13 +177,38 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
 
     func->SetParameters(BetaMax, BetaMean, 0.001); // start fit with histogram's max and mean
     func->SetParNames("Constant", "Mean_value", "Sigma");
-    func->SetParLimits(0, 0.67 * BetaMax, 1.2 * BetaMax); // Amplitude ("Constant") limits
-//    func->SetParLimits(0, 0.7 * BetaMax, 1.2 * BetaMax); // Amplitude ("Constant") limits
+
+    cout << "Beta histogram {max, mean}:\t{" << BetaMax << ", " << BetaMean << "}\n\n\n\n";
+
+    // Adding limits to "Constant"
+    double BetaConstantUlim = 1.2 * BetaMax;
+    double BetaConstantLlim = 0.90 * BetaMax;
+//    double BetaConstantLlim = 0.67 * BetaMax;
+    func->SetParLimits(0, BetaConstantLlim, BetaConstantUlim);
+    cout << "Beta Constant {Llim, Ulim}:\t{" << BetaConstantLlim << ", " << BetaConstantUlim << "}\n\n";
+
+
+    // Adding limits to "Mean_value"
+//    double BetaMean_valueUlim = 1.0075;
+    double BetaMean_valueUlim = 1.02;
+//    double BetaMean_valueLlim = 1.0075;
+    double BetaMean_valueLlim = 1.005;
+    func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
+    cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
+
+
+//    // Adding limits to "Sigma"
+////    double BetaSigmaUlim = 0.015;
+//    double BetaSigmaUlim = 0.01;
+//    double BetaSigmaLlim = 0.00001;
+//    func->SetParLimits(2, BetaSigmaLlim, BetaSigmaUlim);
+//    cout << "Beta Sigma {Llim, Ulim}:\t{" << BetaSigmaLlim << ", " << BetaSigmaUlim << "}\n\n";
+
+
 
     cout << "\n";
     hBeta_Clone->Fit("fit");
     hBeta_Clone->Draw();
-    Histogram_list->Add(hBeta_Clone);
     cout << "\n";
 
     TF1 *fit = hBeta_Clone->GetFunction("fit");
@@ -194,7 +216,7 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
     double FitMean = fit->GetParameter(1); // get p1
     double FitStd = fit->GetParameter(2); // get p2
 
-    Beta_cuts.SetUpperCut(fit->GetParameter(2));
+    Beta_cut.SetUpperCut(fit->GetParameter(2));
     //</editor-fold>
 
     //<editor-fold desc="Drawing fit parameters and saving">
@@ -308,7 +330,8 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
 
     //<editor-fold desc="Plot deltaP/P as function of beta">
     string Rel_deltaPStatsTitle = "#deltaP_{" + BetaParticleShort + "} (" + BetaPlot.GetFinalState() + ")";
-    string Rel_deltaPTitle = BetaParticle + " relative uncertainty #deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}" + " (" + BetaPlot.GetFinalState() + ")";
+    string Rel_deltaPTitle =
+            BetaParticle + " relative uncertainty #deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}" + " (" + BetaPlot.GetFinalState() + ")";
     string Rel_deltaPfunc = to_string(FitStd) + "/ ( (1 - x*x) * x )";
 
     auto *Rel_deltaP = new TF1(Rel_deltaPStatsTitle.c_str(), Rel_deltaPfunc.c_str(), 0.9, 1);
@@ -346,8 +369,9 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
     lower_cut->SetLineColor(kRed);
     lower_cut->Draw("same");
 
-    auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.1, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-    TLegendEntry *Cut_legend_deltaPRel_deltaP = Cut_legend->AddEntry(deltaPRel_deltaP, ("#deltaP_{" + BetaParticleShort + "} /P").c_str(), "l");
+    auto Cut_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.125, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
+    TLegendEntry *Cut_legend_deltaPRel_deltaP = Cut_legend->AddEntry(deltaPRel_deltaP, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}").c_str(),
+                                                                     "l");
     TLegendEntry *Cut_legend_upper_lim = Cut_legend->AddEntry(upper_cut, "20% cut", "l");
     TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, "10% cut", "l");
     Cut_legend->Draw("same");
@@ -390,10 +414,9 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
 
     //<editor-fold desc="Plot w as function of beta">
     string WStatsTitle = "W(#beta) (" + BetaPlot.GetFinalState() + ")";
-    string WTitle = "W(#beta) (" + BetaPlot.GetFinalState() + ")";
+    string WTitle = "The W(#beta) function (" + BetaPlot.GetFinalState() + ")";
     string W_Maxfunc = "x*x*x - x + " + to_string(FitStd / deltaPRel_UncertaintyU);
     string W_Minfunc = "x*x*x - x + " + to_string(FitStd / deltaPRel_UncertaintyL);
-//    string Wfunc = to_string(FitStd) + "/ ( (1 - x*x) * x )";
 
     auto *W_Max = new TF1(WStatsTitle.c_str(), W_Maxfunc.c_str(), 0.9, 1);
     W_Max->SetLineWidth(2);
@@ -408,7 +431,6 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
     W_Max->GetYaxis()->SetLabelSize(0.0425);
     W_Max->GetYaxis()->CenterTitle(true);
     W_Max->GetYaxis()->SetTitle(("W(#beta) = #beta^{3} - #beta + #delta#beta(#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}})^{-1}").c_str());
-//    W_Max->GetYaxis()->SetTitle("W(#beta) = #beta^{3} - #beta + #delta#beta#frac{P}{#deltaP}");
     W_Max->SetLineColor(kBlack);
     W_Max->SetLineWidth(2);
     W_Max->Draw();
@@ -423,16 +445,23 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts,
     Histogram_list->Add(W_Min);
 
     TLine *Beta_Max_cut = new TLine(Beta_Max, W_yULim, Beta_Max, W_yLLim);
-//    TLine *Beta_Max_cut = new TLine(Beta_Max, gPad->GetFrame()->GetY1() - 0.126, Beta_Max, gPad->GetFrame()->GetY2() + 0.5);
     Beta_Max_cut->SetLineWidth(2);
     Beta_Max_cut->SetLineColor(kBlue);
     Beta_Max_cut->Draw("same");
 
     TLine *Beta_Min_cut = new TLine(Beta_Min, W_yULim, Beta_Min, W_yLLim);
-//    TLine *Beta_Min_cut = new TLine(Beta_Min, gPad->GetFrame()->GetY1() - 0.126, Beta_Min, gPad->GetFrame()->GetY2() - 0.126);
     Beta_Min_cut->SetLineWidth(2);
     Beta_Min_cut->SetLineColor(kRed);
     Beta_Min_cut->Draw("same");
+
+    TLine *XAxis = new TLine(W_xLLim, 0., W_xULim, 0.);
+    XAxis->SetLineColor(kBlack);
+    XAxis->Draw("same");
+
+    auto W_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.1, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
+    TLegendEntry *W_legend_upper_lim = W_legend->AddEntry(Beta_Max_cut, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} = 0.2").c_str(), "l");
+    TLegendEntry *W_legend_lower_lim = W_legend->AddEntry(Beta_Min_cut, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} = 0.1").c_str(), "l");
+    W_legend->Draw("same");
 
     string WSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + sNameFlag + "03_W_function.png";
     const char *WSaveDir = WSaveNameDir.c_str();

@@ -132,16 +132,6 @@ void EventAnalyser() {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_shifted_dPhi_noVetoCuts";
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_shifted_dPhi";
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_mom_from_file";
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_reg";
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS1"; // mom_from_file
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2"; // mom_from_file zoomed
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS22"; // mom_from_file zoomed 250
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS222"; // mom_from_file zoomed 200
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2222"; // mom_from_file zoomed 150
-//
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
@@ -249,13 +239,17 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum cuts (thresholds) */
-    DSCuts n_momentum_cuts;
 
-    if (!apply_chi2_cuts_1e_cut) {
-        n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
-    } else if (apply_chi2_cuts_1e_cut) {
-        n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 4.03902);
-    }
+    //<editor-fold desc="n_momentum_cuts">
+    DSCuts n_momentum_cuts;
+    DSCuts n_momentum_cuts_ABF; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
+
+//    if (!apply_chi2_cuts_1e_cut) {
+//        n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
+//    } else if (apply_chi2_cuts_1e_cut) {
+//        n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 4.03902);
+//    }
+    //</editor-fold>
 
     DSCuts ph_momentum_cuts = DSCuts("Momentum", "", "Photons", "", 0, 0.3, 9999);
     DSCuts p_momentum_cuts = DSCuts("Momentum", "", "Proton", "", 0, 0.3, 9999);
@@ -1216,19 +1210,10 @@ void EventAnalyser() {
     //<editor-fold desc="Beta plots (1n)">
     hPlot1D hBeta_n_from_ph_1n_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
                                             directories.Beta_Directory_map["Beta_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
-//                                            0.975, Beta_dist_uboundary); // 2
-//                                            0.975, Beta_dist_uboundary, 250); // 22
-//                                            0.975, Beta_dist_uboundary, 200); // 222
-//                                            0.975, Beta_dist_uboundary, 150); // 2222
-                                            0.975, Beta_dist_uboundary);
-//                                            Beta_dist_lboundary, Beta_dist_uboundary);
+                                            0.98, Beta_dist_uboundary);
 
     hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
                                                     directories.Beta_Directory_map["Beta_1n_Directory"], "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
-//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary); // 2
-//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 250); // 22
-//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 200); // 222
-//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 150); // 2222
                                                     Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
     //</editor-fold>
 
@@ -2967,11 +2952,15 @@ void EventAnalyser() {
         /* Read in target parameter files */
         if (!apply_chi2_cuts_1e_cut) {
             clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+
+            /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
+            n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
+            n_momentum_cuts_ABF = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
         } else if (apply_chi2_cuts_1e_cut) {
             cout << "Loading fitted pid cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
-            /* Overwriting cuts according to SampleName */
+            /* Overwriting PID cuts according to SampleName */
             Chi2_Proton_cuts_CD.SetCutPram(clasAna.GetPidCutMean(2212, "CD"), -clasAna.GetPidCutSigma(2212, "CD"), clasAna.GetPidCutSigma(2212, "CD"));
             Chi2_Proton_cuts_FD.SetCutPram(clasAna.GetPidCutMean(2212, "FD"), -clasAna.GetPidCutSigma(2212, "FD"), clasAna.GetPidCutSigma(2212, "FD"));
             Chi2_piplus_cuts_CD.SetCutPram(clasAna.GetPidCutMean(211, "CD"), -clasAna.GetPidCutSigma(211, "CD"), clasAna.GetPidCutSigma(211, "CD"));
@@ -2980,6 +2969,9 @@ void EventAnalyser() {
             Chi2_piminus_cuts_FD.SetCutPram(clasAna.GetPidCutMean(-211, "FD"), -clasAna.GetPidCutSigma(-211, "FD"), clasAna.GetPidCutSigma(-211, "FD"));
 
             clasAna.setPidCuts(); // making f_pidCuts = ture
+
+            /* Setting neutron momentum cut after beta fit */
+            n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, clasAna.getNeutronMomentumCut());
         }
 
 //        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
@@ -6939,12 +6931,12 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs. P plots (1n)">
         hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-//        BetaFit(SampleName, Beta_cut, n_momentum_cuts, hBeta_n_from_ph_1n_FD, plots);
 
-        cout << "\n\n\nBeta_cut.GetUpperCut():\t" << Beta_cut.GetUpperCut() << "\n";
-        cout << "n_momentum_cuts.GetUpperCut():\t" << n_momentum_cuts.GetUpperCut() << "\n\n\n\n";
+        cout << "\n\nBefore fit:\n";
+        cout << "Beta_cut = " << Beta_cut.GetUpperCut() << "\n";
+        cout << "Beta_cut = " << Beta_cut.GetLowerCut() << "\n";
 
-//        cout << "\n\nBeta plots: BetaFit(...) finished. Exiting...\n\n", exit(EXIT_FAILURE);
+        if (!apply_chi2_cuts_1e_cut) { BetaFit(SampleName, Beta_cut, n_momentum_cuts_ABF, hBeta_n_from_ph_1n_FD, plots); }
         //</editor-fold>
 
     } else {
@@ -8446,9 +8438,13 @@ void EventAnalyser() {
         for (int i = 0; i < chi2cuts_length; i++) {
             FittedPIDCuts << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << ":"
                           << chi2cuts[i].GetRegion() << "\n";
-//            FittedPIDCuts << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
-//                          << chi2cuts[i].GetUpperCut() << "\n";
         }
+
+        FittedPIDCuts << "\n# Momentum cuts (pid:mean:sigma):\n";
+        FittedPIDCuts << "Momentum_cuts" << "\t\t" << n_momentum_cuts_ABF.GetPartPDG() << ":" << n_momentum_cuts_ABF.Cuts.at(0) << ":" << n_momentum_cuts_ABF.GetUpperCut() << ":"
+                      << n_momentum_cuts_ABF.GetRegion() << "\n";
+//        FittedPIDCuts << "Momentum_cuts" << "\t\t" << n_momentum_cuts.GetPartPDG() << ":" << n_momentum_cuts.Cuts.at(0) << ":" << n_momentum_cuts.GetUpperCut() << ":"
+//                      << n_momentum_cuts.GetRegion() << "\n";
 
         FittedPIDCuts.close();
 
@@ -8787,9 +8783,14 @@ void EventAnalyser() {
 
     //<editor-fold desc="Momentum thresholds (2p)">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Momentum thresholds (2p)\n";
-    myLogFile << "===========================================================================\n\n";
+    myLogFile << "Momentum thresholds\n";
+    myLogFile << "===========================================================================\n";
 
+    myLogFile << "\n-- Momentum thresholds (1n) -----------------------------------------------" << "\n";
+    myLogFile << "P_n_lower_cut_1n (n_momentum_cuts) = " << n_momentum_cuts.GetLowerCut() << "\n";
+    myLogFile << "P_n_upper_cut_1n (n_momentum_cuts) = " << n_momentum_cuts.GetUpperCut() << "\n";
+
+    myLogFile << "\n-- Momentum thresholds (2p) -----------------------------------------------" << "\n";
     myLogFile << "P_e_lower_cut_2p (e_momentum_cuts) = " << e_momentum_cuts.GetLowerCut() << "\n";
     myLogFile << "P_e_upper_cut_2p (e_momentum_cuts) = " << e_momentum_cuts.GetUpperCut() << "\n";
     myLogFile << "P_p_lower_cut_2p (p_momentum_cuts) = " << p_momentum_cuts.GetLowerCut() << "\n";
@@ -8806,10 +8807,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta cut (1n, FD)">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Beta cut (1n & 1n1p, FD)\n";
+    myLogFile << "Beta cut (1n, FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "Beta_cut.GetUpperCut() = " << Beta_cut.GetUpperCut() << "\n\n";
+    myLogFile << "Beta_cut.GetUpperCut() (1 fit std) = " << Beta_cut.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Nucleon theta cut (1p & 1n, FD)">
@@ -8879,7 +8880,7 @@ void EventAnalyser() {
     myLogFile << "num_of_events_1n_inFD_wAllPh_wBetaLT1:\t\t" << num_of_events_1n_inFD_wAllPh_wBetaLT1 << "\n";
     myLogFile << "num_of_events_1n_inFD_woFDphotons:\t\t" << num_of_events_1n_inFD_woFDphotons << "\n";
     myLogFile << "num_of_events_1n_inFD_woFDphotons_AV:\t" << num_of_events_1n_inFD_woFDphotons_AV << "\n";
-    myLogFile << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n";
+//    myLogFile << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n";
     myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
     myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
     myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n\n\n";
