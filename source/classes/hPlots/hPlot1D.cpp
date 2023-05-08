@@ -27,7 +27,7 @@ hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dReg
     Histogram1DTitles["DetectorRegion"] = dRegion;
     Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
-    HistogramNumberOfXBins = 100;
+    HistogramNumberOfXBins = hnob;
 
     Histogram1D = new TH1D(
             (Histogram1DTitles["HistogramStatTitle"] + " (" + Histogram1DTitles["Histogram1DTitleReactions"] + ", " + Histogram1DTitles["FinalState"] + ", " +
@@ -46,7 +46,7 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
     FinalState = fState;
     Histogram1DTitles["DetectorRegion"] = dRegion, Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
-    HistogramNumberOfXBins = 100;
+    HistogramNumberOfXBins = hnob;
 
     Histogram1D = new TH1D((Histogram1DTitles["HistogramStatTitle"] + " (" + Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")").c_str(),
                            (Histogram1DTitles["HistogramTitle"] + " (" + Histogram1DTitles["FinalState"] + ", " + Histogram1DTitles["DetectorRegion"] + ")" + ";" +
@@ -64,7 +64,7 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
     Histogram1DTitles["DetectorRegion"] = dRegion;
     Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
-    HistogramNumberOfXBins = 100;
+    HistogramNumberOfXBins = hnob;
     Histogram1DSaveNamePath = sPath;
     Histogram1DSaveName = sName;
 
@@ -88,7 +88,7 @@ hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, double LowerX
     Histogram1DTitles["HistogramTitle"] = ht;
     Histogram1DTitles["XaxisTitle"] = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
-    HistogramNumberOfXBins = 100;
+    HistogramNumberOfXBins = hnob;
 
     Histogram1D = new TH1D((Histogram1DTitles["HistogramStatTitle"]).c_str(), (Histogram1DTitles["HistogramTitle"] + ";" + Histogram1DTitles["XaxisTitle"] + ";").c_str(),
                            HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
@@ -1015,7 +1015,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                             double custom_normalization_factor, TList *Histogram_list, THStack *Histogram1DStack, double plot_lower_cut = -9999,
                             double plot_upper_cut = 9999, double plot_Xmax = 0, bool plot_max = true) {
-
+    Histogram1DCanvas->cd();
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {
@@ -1191,7 +1191,7 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
 void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                             double custom_normalization_factor, TList *Histogram_list, double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0,
                             bool plot_max = true) {
-
+    Histogram1DCanvas->cd();
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {

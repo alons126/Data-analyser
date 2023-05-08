@@ -13,4 +13,4 @@ pid_cuts		-211:0.0554405:4.20117:CD
 pid_cuts		-211:0.177892:3.42527:FD
 
 # Momentum cuts (pid:mean:sigma):
-Momentum_cuts		2112:0:6.53312e-310:CD & FD
+Momentum_cuts		2112:0:19.2805:CD & FD
