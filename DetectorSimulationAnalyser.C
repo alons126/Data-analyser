@@ -140,11 +140,9 @@ void EventAnalyser() {
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2"; // mom_from_file zoomed
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS22"; // mom_from_file zoomed 250
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS222"; // mom_from_file zoomed 200
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2222"; // mom_from_file zoomed 150
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS3"; // reg
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS4"; // reg zoomed
+//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS2222"; // mom_from_file zoomed 150
 //
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
             }
         }
@@ -251,10 +249,15 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum cuts (thresholds) */
-    DSCuts n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
-//    DSCuts n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, -9999, 9999);
+    DSCuts n_momentum_cuts;
+
+    if (!apply_chi2_cuts_1e_cut) {
+        n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
+    } else if (apply_chi2_cuts_1e_cut) {
+        n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 4.03902);
+    }
+
     DSCuts ph_momentum_cuts = DSCuts("Momentum", "", "Photons", "", 0, 0.3, 9999);
-//    DSCuts ph_momentum_cuts = DSCuts("Momentum", "", "Photons", "", 0, -9999, 9999);
     DSCuts p_momentum_cuts = DSCuts("Momentum", "", "Proton", "", 0, 0.3, 9999);
     DSCuts pip_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts pim_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, 0.2, 9999);
@@ -1216,7 +1219,8 @@ void EventAnalyser() {
 //                                            0.975, Beta_dist_uboundary); // 2
 //                                            0.975, Beta_dist_uboundary, 250); // 22
 //                                            0.975, Beta_dist_uboundary, 200); // 222
-                                            0.975, Beta_dist_uboundary, 150); // 2222
+//                                            0.975, Beta_dist_uboundary, 150); // 2222
+                                            0.975, Beta_dist_uboundary);
 //                                            Beta_dist_lboundary, Beta_dist_uboundary);
 
     hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
@@ -1224,7 +1228,8 @@ void EventAnalyser() {
 //                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary); // 2
 //                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 250); // 22
 //                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 200); // 222
-                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 150); // 2222
+//                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 150); // 2222
+                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P plots">
@@ -3124,7 +3129,7 @@ void EventAnalyser() {
         //<editor-fold desc="Configure good particles & basic event selection">
         /* Configure particles within general momentum cuts (i.e. "identified particles") */
         vector<int> Electron_ind = GetGoodParticles(electrons, e_momentum_cuts);
-        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_momentum_cuts);
+        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_momentum_cuts, apply_chi2_cuts_1e_cut);
         vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_momentum_cuts);
         vector<int> Protons_ind = GetGoodParticles(protons, p_momentum_cuts);
         vector<int> Piplus_ind = GetGoodParticles(piplus, pip_momentum_cuts);
@@ -4492,7 +4497,7 @@ void EventAnalyser() {
                     P_e_1n_3v.SetMagThetaPhi(electrons[Electron_ind.at(0)]->getP(), electrons[Electron_ind.at(0)]->getTheta(),
                                              electrons[Electron_ind.at(0)]->getPhi());                                                         // electron 3 momentum
                     q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                         // 3 momentum transfer
-                    P_n_1n_3v.SetMagThetaPhi(GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)]), allParticles[NeutronsFD_ind.at(0)]->getTheta(),
+                    P_n_1n_3v.SetMagThetaPhi(GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_chi2_cuts_1e_cut), allParticles[NeutronsFD_ind.at(0)]->getTheta(),
                                              allParticles[NeutronsFD_ind.at(0)]->getPhi());                                                       // neutron 3 momentum
                     P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                    // electron t. momentum
                     P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                    // neutron t. momentum
@@ -4628,7 +4633,7 @@ void EventAnalyser() {
 
                             // 'photon' mom before cuts:
                             if ((allParticles[i]->getRegion() == FD) && (ParticlePDGtmp == 22) && (!inPCALtmp && (inECINtmp || inECOUTtmp))) {
-                                hP_n_From_Photons_BC_1n_FD.hFill(GetFDNeutronP(allParticles[i]), Weight);
+                                hP_n_From_Photons_BC_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_chi2_cuts_1e_cut), Weight);
                             }
                         }
 
@@ -4641,7 +4646,7 @@ void EventAnalyser() {
                             bool inECOUTtmp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
                             if ((allParticles[i]->getRegion() == FD) && (ParticlePDGtmp == 22) && (!inPCALtmp && (inECINtmp || inECOUTtmp))) {
-                                hP_n_From_Photons_AC_1n_FD.hFill(GetFDNeutronP(allParticles[i]), Weight);
+                                hP_n_From_Photons_AC_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_chi2_cuts_1e_cut), Weight);
                             }
                         }
 
@@ -4677,7 +4682,7 @@ void EventAnalyser() {
                         //<editor-fold desc="Fill Beta plots (1n, FD only)">
                         for (int &i: NeutronsFD_ind) {
                             int PDGtmp = allParticles[i]->par()->getPid();
-                            double P_n_temp = GetFDNeutronP(allParticles[i]);
+                            double P_n_temp = GetFDNeutronP(allParticles[i], apply_chi2_cuts_1e_cut);
 
 
                             bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
@@ -4713,7 +4718,7 @@ void EventAnalyser() {
 
                         //<editor-fold desc="Beta vs. P from identified neutrons (1n, CD & FD)">
                         for (int &i: NeutronsFD_ind) {
-                            double P_n_temp = GetFDNeutronP(allParticles[i]);
+                            double P_n_temp = GetFDNeutronP(allParticles[i], apply_chi2_cuts_1e_cut);
 
                             if (allParticles[i]->getRegion() == CD) {
                                 hBeta_vs_P_1n_CD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
@@ -6934,7 +6939,7 @@ void EventAnalyser() {
         //<editor-fold desc="Beta vs. P plots (1n)">
         hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        BetaFit(SampleName, Beta_cut, n_momentum_cuts, hBeta_n_from_ph_1n_FD, plots);
+//        BetaFit(SampleName, Beta_cut, n_momentum_cuts, hBeta_n_from_ph_1n_FD, plots);
 
         cout << "\n\n\nBeta_cut.GetUpperCut():\t" << Beta_cut.GetUpperCut() << "\n";
         cout << "n_momentum_cuts.GetUpperCut():\t" << n_momentum_cuts.GetUpperCut() << "\n\n\n\n";

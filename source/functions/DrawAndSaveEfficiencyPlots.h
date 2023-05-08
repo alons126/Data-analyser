@@ -393,12 +393,12 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     RPlot_Clone->GetYaxis()->CenterTitle(true);
     RPlot_Clone->SetLineWidth(2);
 
-//    if (weighted_plots) {
-//        RPlot_Clone->Draw();
-//        RPlot_Clone->Sumw2();
-//    } else {
-//        RPlot_Clone->Draw();
-//    }
+    if (weighted_plots) {
+        RPlot_Clone->Draw();
+        RPlot_Clone->Sumw2();
+    } else {
+        RPlot_Clone->Draw();
+    }
 
     RPlot_Clone->Draw();
 
@@ -411,12 +411,12 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     TLPlot_Clone->SetLineStyle(1);
     TLPlot_Clone->SetLineColor(kBlue);
 
-//    if (weighted_plots) {
-//        TLPlot_Clone->Draw();
-//        TLPlot_Clone->Sumw2();
-//    } else {
-//        TLPlot_Clone->Draw();
-//    }
+    if (weighted_plots) {
+        TLPlot_Clone->Draw();
+        TLPlot_Clone->Sumw2();
+    } else {
+        TLPlot_Clone->Draw();
+    }
 
     TLPlot_Clone->Draw();
 

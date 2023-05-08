@@ -106,12 +106,21 @@ void BetaFitAndSave() {
 //void BetaFitAndSave(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
     cout << "\n\n";
 
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_10";
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_100";
+/*
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_10";
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_100";
     TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
+*/
+
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_10";
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_100";
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSampleName:\t" << SampleName << "\n\n";
 
@@ -486,19 +495,3 @@ void BetaFitAndSave() {
     //</editor-fold>
 
 }
-
-/*
-int main() {
-    */
-/* Beta cut (1n, FD) *//*
-
-    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-
-    */
-/* Momentum cuts (thresholds) *//*
-
-    DSCuts n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, 0.3, 9999);
-}
-*/
-
-
