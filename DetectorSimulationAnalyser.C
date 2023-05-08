@@ -54,6 +54,12 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 using namespace std;
 using namespace clas12;
 
+
+
+// TODO: add sumw2 to all histograms after their definition
+
+
+
 void EventAnalyser() {
     cout << "\n\n===========================================================================\n";
     cout << "\t\t\tDetector simulation analyser\n";
@@ -4032,8 +4038,9 @@ void EventAnalyser() {
             //</editor-fold>
 
             // looking at events with 1p in the FD only:
-            if ((protons[Protons_ind.at(0)]->getRegion() == FD) &&
-                ((protons[Protons_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+            if (protons[Protons_ind.at(0)]->getRegion() == FD) {
+//            if ((protons[Protons_ind.at(0)]->getRegion() == FD) &&
+//                ((protons[Protons_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1p_inFD; // 1p event count after momentum and theta_p cuts
 
                 TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
@@ -4372,9 +4379,9 @@ void EventAnalyser() {
                     double particlePhi_1p = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
                     bool inFD_1p = ((particleTheta_1p >= ThetaFD.GetLowerCut()) && (particleTheta_1p <= ThetaFD.GetUpperCut()));
-                    bool within_Theta_nuc_cut_1p = (particleTheta_1p <= Theta_nuc_cut.GetUpperCut());
+//                    bool within_Theta_nuc_cut_1p = (particleTheta_1p <= Theta_nuc_cut.GetUpperCut());
 
-                    if (inFD_1p && within_Theta_nuc_cut_1p) { // Fill only for particles in the FD
+                    if (inFD_1p) { // Fill only for particles in the FD
                         switch (particlePDGtmp) {
                             case 11:
                                 if ((particleMomentum_1p >= e_momentum_cuts.GetLowerCut()) && (particleMomentum_1p <= e_momentum_cuts.GetUpperCut())) {
@@ -4510,8 +4517,9 @@ void EventAnalyser() {
             //</editor-fold>
 
             // looking at 1n events in the FD only & below theta_n cut:
-            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD &&
-                ((allParticles[NeutronsFD_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
+            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) {
+//            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD &&
+//                ((allParticles[NeutronsFD_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1n_inFD_wAllPhotons; // 1n event count after momentum and theta_n cuts
 
                 bool noFDphotons = true;
@@ -4536,12 +4544,12 @@ void EventAnalyser() {
 
                     TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
                     P_e_1n_3v.SetMagThetaPhi(electrons[Electron_ind.at(0)]->getP(), electrons[Electron_ind.at(0)]->getTheta(),
-                                             electrons[Electron_ind.at(0)]->getPhi());                                                         // electron 3 momentum
-                    q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                         // 3 momentum transfer
+                                             electrons[Electron_ind.at(0)]->getPhi());                                                          // electron 3 momentum
+                    q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                          // 3 momentum transfer
                     P_n_1n_3v.SetMagThetaPhi(GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_chi2_cuts_1e_cut), allParticles[NeutronsFD_ind.at(0)]->getTheta(),
-                                             allParticles[NeutronsFD_ind.at(0)]->getPhi());                                                       // neutron 3 momentum
+                                             allParticles[NeutronsFD_ind.at(0)]->getPhi());                                                         // neutron 3 momentum
                     P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                    // electron t. momentum
-                    P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                    // neutron t. momentum
+                    P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                     // neutron t. momentum
 
                     double E_e_1n = sqrt(m_e * m_e + P_e_1n_3v.Mag2()), E_n_1n = sqrt(m_n * m_n + P_n_1n_3v.Mag2()), Ecal_1n, dAlpha_T_1n, dPhi_T_1n;
                     double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
@@ -5016,9 +5024,9 @@ void EventAnalyser() {
                             double particlePhi_1n = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
                             bool inFD_1n = ((particleTheta_1n >= ThetaFD.GetLowerCut()) && (particleTheta_1n <= ThetaFD.GetUpperCut()));
-                            bool within_Theta_nuc_cut_1n = (particleTheta_1n <= Theta_nuc_cut.GetUpperCut());
+//                            bool within_Theta_nuc_cut_1n = (particleTheta_1n <= Theta_nuc_cut.GetUpperCut());
 
-                            if (inFD_1n && within_Theta_nuc_cut_1n) { // Fill only for particles in the FD
+                            if (inFD_1n) { // Fill only for particles in the FD
                                 switch (particlePDGtmp) {
                                     case 11:
                                         if ((particleMomentum_1n >= e_momentum_cuts.GetLowerCut()) && (particleMomentum_1n <= e_momentum_cuts.GetUpperCut())) {
