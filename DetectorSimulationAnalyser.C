@@ -1804,7 +1804,7 @@ void EventAnalyser() {
     //<editor-fold desc="no #(e) cut">
 
     //<editor-fold desc="Theta_n vs. Phi_n for neutrals hitting the PCAL (no #(e) cut, FD only)">
-    hPlot2D hTheta_neut_VS_Phi_neut_All_e_FD = hPlot2D("no #(e) cut", "FD", "#theta_{neut} vs. #phi_{neut}", "#theta_{neut} vs. #phi_{neut}",
+    hPlot2D hTheta_neut_VS_Phi_neut_All_e_FD = hPlot2D("no #(e) cut", "FD", "#theta_{neut} vs. #phi_{neut} w/ PCAL hit", "#theta_{neut} vs. #phi_{neut} for neutrals with PCAL hit",
                                                        "#phi_{neut} [Deg]", "#theta_{neut} [Deg]", directories.Angle_Directory_map["Theta_n_VS_Phi_n_1n_Directory"],
                                                        "01_Theta_neut_VS_Phi_neut_All_Int_1n_FD", -180, 180, 0, 50);
     //</editor-fold>
@@ -4130,7 +4130,7 @@ void EventAnalyser() {
             if (allParticles[i]->par()->getCharge() == 0) {
                 bool inPCAL_1n_temp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
 
-                if (inPCAL_1n_temp) { hTheta_neut_VS_Phi_neut_All_e_FD.hFill(allParticles[i]->par()->getBeta(), Weight); }
+                if (inPCAL_1n_temp) { hTheta_neut_VS_Phi_neut_All_e_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight); }
             }
         }
 
@@ -5252,7 +5252,7 @@ void EventAnalyser() {
 
 
                                 if (fabs(allParticles[i]->par()->getBeta() - Beta_cut_for_map.GetMean()) <= Beta_cut_for_map.GetUpperCut()) {
-                                    hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->par()->getBeta(), Weight);
+                                    hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
                                 }
                             }
                         }
