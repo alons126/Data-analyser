@@ -44,7 +44,7 @@ void Directories::MakeDirectory(bool Create_Directory, std::string Plots_Parent_
 Directories::Directories(std::string plots_path) {
     std::string Plots_Folder = plots_path; // Plots_Folder = Parent_Folder
     system(("mkdir -p " + Plots_Folder).c_str()); // clear old stuff in Parent_Folder
-//    system(("rm -r " + Plots_Folder + "*").c_str()); // clear old stuff in Parent_Folder
+    system(("rm -r " + Plots_Folder + "/*").c_str()); // clear old stuff in Parent_Folder
 
     //<editor-fold desc="Cut parameters plots directories">
 
@@ -216,6 +216,16 @@ Directories::Directories(std::string plots_path) {
 
     Beta_Directory_map["Beta_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                               Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n") + "/";
+    Beta_Directory_map["Neutron_beta_from_ph_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/01_Neutron_beta_from_ph_plots_1n") + "/";
+    Beta_Directory_map["All_neutrals_beta_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_neutrals_beta_plots_1n") + "/";
+    Beta_Directory_map["All_neutrals_beta_noPCAL_hit_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_All_neutrals_beta_noPCAL_hit_plots_1n") + "/";
+    Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/04_All_neutrals_beta_noPCAL_wECIN_hit_plots_1n") + "/";
+    Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/05_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_plots_1n") + "/";
     Beta_Directory_map["Beta_VS_P_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                    Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/05_1n") + "/";
     Beta_Directory_map["Beta_VS_P_by_charge_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
@@ -245,6 +255,8 @@ Directories::Directories(std::string plots_path) {
                                                    Find(Angle_Daughter_Folders, "01_All_e/02_Phi_e_All_e_plots") + "/";
     Angle_Directory_map["Theta_e_VS_Phi_e_All_e_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                               Find(Angle_Daughter_Folders, "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots") + "/";
+    Angle_Directory_map["Theta_neut_VS_Phi_neut_All_e_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                              Find(Angle_Daughter_Folders, "01_All_e/03_Theta_neut_VS_Phi_neut_All_e_plots") + "/";
     Angle_Directory_map["Theta_e_1e_cut_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                       Find(Angle_Daughter_Folders, "02_1e_cut/01_Theta_e_1e_cut_plots") + "/";
     Angle_Directory_map["Phi_e_1e_cut_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +

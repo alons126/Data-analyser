@@ -81,7 +81,7 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
     } else if (r == "FD") {
         FitStdFactor = 3; // sigma factor for FD cuts
     } else {
-        FitStdFactor = 3;
+        FitStdFactor = 1;
     }
 
     if (p == "electron" || p == "Electron") {

@@ -16,10 +16,10 @@
 
 #include "../constants.h"
 
-double GetFDNeutronP(region_part_ptr &Neutron, bool apply_chi2_cuts_1e_cut) {
+double GetFDNeutronP(region_part_ptr &Neutron, bool apply_neutron_Beta_Fit) {
     double Momentum;
 
-    if (apply_chi2_cuts_1e_cut) {
+    if (apply_neutron_Beta_Fit) {
 
         //<editor-fold desc="Get for ver. neutrons & calculate for 'photons'">
         int ParticlePDG = Neutron->par()->getPid();
@@ -70,7 +70,7 @@ double GetFDNeutronP(region_part_ptr &Neutron, bool apply_chi2_cuts_1e_cut) {
         }
         //</editor-fold>
 
-    } else if (!apply_chi2_cuts_1e_cut) {
+    } else if (!apply_neutron_Beta_Fit) {
 
         //<editor-fold desc="Get momentum for both neutrons and photons from file">
         Momentum = Neutron->par()->getP();

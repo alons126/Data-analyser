@@ -80,9 +80,16 @@ private:
     //<editor-fold desc="Beta directories">
     bool create_Beta_Dir = true;
     std::string Beta_Parent_Directory = "02_Beta_plots";
-//    std::string Beta_Parent_Directory = "02_Beta_VS_P_plots";
     vector<std::string> Beta_Daughter_Folders = {"",
-                                                 "01_Beta_plots", "01_Beta_plots/05_1n", "01_Beta_plots/06_1n1p",
+                                                 "01_Beta_plots",
+                                                 "01_Beta_plots/05_1n",
+                                                 "01_Beta_plots/05_1n/01_Neutron_beta_from_ph_plots_1n",
+                                                 "01_Beta_plots/05_1n/02_All_neutrals_beta_plots_1n",
+                                                 "01_Beta_plots/05_1n/03_All_neutrals_beta_noPCAL_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/04_All_neutrals_beta_noPCAL_wECIN_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/05_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_plots_1n",
+
+                                                 "01_Beta_plots/06_1n1p",
 
                                                  "02_Beta_VS_P_plots", "02_Beta_VS_P_plots/01_All_e", "02_Beta_VS_P_plots/01_All_e/By_charge",
                                                  "02_Beta_VS_P_plots/02_1e_cut", "02_Beta_VS_P_plots/02_1e_cut/By_charge", "02_Beta_VS_P_plots/04_1p",
@@ -96,7 +103,7 @@ private:
     std::string Angle_Parent_Directory = "03_Angle_plots";
     vector<std::string> Angle_Daughter_Folders = {"",
                                                   "01_All_e", "01_All_e/01_Theta_e_All_e_plots", "01_All_e/02_Phi_e_All_e_plots",
-                                                  "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots",
+                                                  "01_All_e/03_Theta_e_VS_Phi_e_All_e_plots", "01_All_e/03_Theta_neut_VS_Phi_neut_All_e_plots",
 
                                                   "02_1e_cut", "02_1e_cut/01_Theta_e_1e_cut_plots", "02_1e_cut/02_Phi_e_1e_cut_plots",
                                                   "02_1e_cut/03_Theta_e_VS_Phi_e_1e_cut_plots", "02_1e_cut/04_Neutron_Veto_1e_cut_plots",

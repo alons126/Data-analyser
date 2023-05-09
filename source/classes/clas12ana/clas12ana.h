@@ -377,7 +377,7 @@ private:
     bool f_NpheCuts = false; // My addition
 
     double htcc_Nphe_cut = 2; // My addition
-    double Neutron_Momentum_cut = 0; // My addition
+    double Neutron_Momentum_cut = 9999; // My addition
 
     // ME: in the old version, SF cuts where:
     //todo: CHECK WITH JUSTIN WHAT TO DO WITH THEM!

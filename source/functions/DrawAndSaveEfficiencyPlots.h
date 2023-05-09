@@ -290,7 +290,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     Canvas->SaveAs((Efficiency_plot_SaveName).c_str());
     Canvas->Clear();
     //</editor-fold>
-    
+
 }
 
 void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {

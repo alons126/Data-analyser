@@ -1,7 +1,4 @@
-//
-// Created by alons on 04/05/2023.
-//
-
+/* root BetaFitAndSave.cpp -q -b */
 
 #include <iostream>
 #include <fstream>
@@ -124,11 +121,11 @@ void BetaFitAndSave() {
 //    string SampleName = "C12_simulation_6GeV_T5";
 */
 
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS_woChi2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS_woChi2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS_woChi2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSampleName:\t" << SampleName << "\n\n";
@@ -225,14 +222,23 @@ void BetaFitAndSave() {
 
     cout << "Beta histogram {max, mean}:\t{" << BetaMax << ", " << BetaMean << "}\n\n\n\n";
 
+////    // Adding limits to "Constant"
+////    double BetaConstantUlim = 1.2 * BetaMax;
+////    double BetaConstantLlim = 0.95 * BetaMax;
+////    func->SetParLimits(0, BetaConstantLlim, BetaConstantUlim);
+////    cout << "Beta Constant {Llim, Ulim}:\t{" << BetaConstantLlim << ", " << BetaConstantUlim << "}\n\n";
 //    // Adding limits to "Constant"
 //    double BetaConstantUlim = 1.2 * BetaMax;
-//    double BetaConstantLlim = 0.95 * BetaMax;
+//    double BetaConstantLlim = BetaMax;
+////    double BetaConstantLlim = 0.90 * BetaMax;
+////    double BetaConstantLlim = 0.67 * BetaMax;
 //    func->SetParLimits(0, BetaConstantLlim, BetaConstantUlim);
 //    cout << "Beta Constant {Llim, Ulim}:\t{" << BetaConstantLlim << ", " << BetaConstantUlim << "}\n\n";
+
     // Adding limits to "Constant"
-    double BetaConstantUlim = 1.2 * BetaMax;
-    double BetaConstantLlim = 0.90 * BetaMax;
+    double BetaConstantUlim = 1.5 * BetaMax;
+    double BetaConstantLlim = BetaMax;
+//    double BetaConstantLlim = 0.90 * BetaMax;
 //    double BetaConstantLlim = 0.67 * BetaMax;
     func->SetParLimits(0, BetaConstantLlim, BetaConstantUlim);
     cout << "Beta Constant {Llim, Ulim}:\t{" << BetaConstantLlim << ", " << BetaConstantUlim << "}\n\n";
@@ -244,9 +250,7 @@ void BetaFitAndSave() {
 //    func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
 //    cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
     // Adding limits to "Mean_value"
-//    double BetaMean_valueUlim = 1.0075;
     double BetaMean_valueUlim = 1.02;
-//    double BetaMean_valueLlim = 1.0075;
     double BetaMean_valueLlim = 1.005;
     func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
     cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
