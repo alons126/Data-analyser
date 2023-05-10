@@ -70,11 +70,11 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     RPlot_Clone_test_rebined->Rebin(2);
 
     TH1D *Histogram1D_Truth = TLPlot.GetHistogram();
-    string TLPlot_Clone_StatsTitle = "Rec. " + TLPlot.GetHistogramStatTitle() + " - cloned";
+    string TLPlot_Clone_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned";
     TH1D *TLPlot_Clone = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_StatsTitle).c_str());
-    string TLPlot_Clone_test_StatsTitle = "Rec. " + TLPlot.GetHistogramStatTitle() + " - cloned test";
+    string TLPlot_Clone_test_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test";
     TH1D *TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
-    string TLPlot_Clone_test_rebined_StatsTitle = "Rec. " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
+    string TLPlot_Clone_test_rebined_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
     TLPlot_Clone_test_rebined->Rebin(2);
     //</editor-fold>

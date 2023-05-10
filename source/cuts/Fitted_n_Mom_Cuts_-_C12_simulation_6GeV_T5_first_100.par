@@ -1,0 +1,17 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #
+######################################################################
+
+# Cuts are fitted for - C12_simulation_6GeV_T5_first_100
+
+# Beta std by detector (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts			2112:0:9999:CD & FD
+Momentum_cuts_ECAL			2112:0:4.01954:FD-ECAL
+Momentum_cuts_All_neutrals			2112:0:15.6533:FD-ECAL
+Momentum_cuts_All_neutrals_noPDG0			2112:0:15.6937:FD-ECAL
+Momentum_cuts_noPCAL			2112:0:15.6937:FD-noPCAL
+Momentum_cuts_noPCAL_noPDG0			2112:0:15.6937:FD-noPCAL
+Momentum_cuts_ECIN			2112:0:1.99495:FD-ECIN
+Momentum_cuts_ECIN_noPDG0			2112:0:1.99495:FD-ECIN
+Momentum_cuts_ECOUT			2112:0:1.99495:FD-ECOUT
+Momentum_cuts_ECOUT_noPDG0			2112:0:1.99495:FD-ECOUT

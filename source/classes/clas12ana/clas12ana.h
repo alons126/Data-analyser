@@ -1100,7 +1100,8 @@ void clas12ana::readInputParam(const char *filename) {
                     vertex_cuts.insert(pair<string, vector<double> >(pid, par));
             }
 
-            else if (parameter == "Momentum_cuts") {
+            else if (parameter == "Momentum_cuts_ECAL") { // My addition
+//            else if (parameter == "Momentum_cuts") { // My addition
                 //TODO: organize this properly with a map for each pdg.
                 ss >> parameter2;
                 stringstream ss2(parameter2);

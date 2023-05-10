@@ -84,10 +84,14 @@ private:
                                                  "01_Beta_plots",
                                                  "01_Beta_plots/05_1n",
                                                  "01_Beta_plots/05_1n/01_Neutron_beta_from_ph_plots_1n",
-                                                 "01_Beta_plots/05_1n/02_All_neutrals_beta_plots_1n",
-                                                 "01_Beta_plots/05_1n/03_All_neutrals_beta_noPCAL_hit_plots_1n",
-                                                 "01_Beta_plots/05_1n/04_All_neutrals_beta_noPCAL_wECIN_hit_plots_1n",
-                                                 "01_Beta_plots/05_1n/05_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/02a_All_neutrals_beta_plots_1n",
+                                                 "01_Beta_plots/05_1n/02b_All_neutrals_beta_plots_noPDG0_1n",
+                                                 "01_Beta_plots/05_1n/03a_All_neutrals_beta_noPCAL_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/03b_All_neutrals_beta_noPCAL_hit_plots_noPDG0_1n",
+                                                 "01_Beta_plots/05_1n/04a_All_neutrals_beta_noPCAL_wECIN_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/04b_All_neutrals_beta_noPCAL_wECIN_hit_noPDG0_plots_1n",
+                                                 "01_Beta_plots/05_1n/05a_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/05b_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_plots_1n",
 
                                                  "01_Beta_plots/06_1n1p",
 
