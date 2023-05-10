@@ -34,8 +34,12 @@ void PlotsBeta4x4() {
 
 //    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
+
 //    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_100";
+
     TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 
@@ -85,6 +89,7 @@ void PlotsBeta4x4() {
     Canvas4x4->cd(1)->SetBottomMargin(0.14);
     Canvas4x4->cd(1)->SetLeftMargin(0.17);
     Canvas4x4->cd(1)->SetRightMargin(0.12);
+//    Beta1Plot->Rebin(2);
     Beta1Plot->Draw();
 
     Canvas4x4->cd(2);
@@ -92,6 +97,7 @@ void PlotsBeta4x4() {
     Canvas4x4->cd(2)->SetBottomMargin(0.14);
     Canvas4x4->cd(2)->SetLeftMargin(0.17);
     Canvas4x4->cd(2)->SetRightMargin(0.12);
+//    Beta2Plot->Rebin(2);
     Beta2Plot->Draw();
 
     Canvas4x4->cd(3);
@@ -99,6 +105,7 @@ void PlotsBeta4x4() {
     Canvas4x4->cd(3)->SetBottomMargin(0.14);
     Canvas4x4->cd(3)->SetLeftMargin(0.17);
     Canvas4x4->cd(3)->SetRightMargin(0.12);
+//    Beta3Plot->Rebin(2);
     Beta3Plot->Draw();
 
     Canvas4x4->cd(4);
@@ -106,6 +113,7 @@ void PlotsBeta4x4() {
     Canvas4x4->cd(4)->SetBottomMargin(0.14);
     Canvas4x4->cd(4)->SetLeftMargin(0.17);
     Canvas4x4->cd(4)->SetRightMargin(0.12);
+//    Beta4Plot->Rebin(2);
     Beta4Plot->Draw();
 
     Canvas4x4->SaveAs(saveName.c_str());

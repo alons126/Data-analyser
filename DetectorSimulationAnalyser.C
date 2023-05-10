@@ -131,7 +131,7 @@ void EventAnalyser() {
 
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
-    bool apply_neutron_Beta_Fit = true;
+    bool apply_neutron_Beta_Fit = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -299,7 +299,8 @@ void EventAnalyser() {
     DSCuts ThetaFD = DSCuts("Theta FD", "FD", "", "1n & 1p", 1, 5., 40.);
 
     /* Beta cut (1n, FD) */
-    DSCuts Beta_cut_for_map = DSCuts("Beta_nuc", "FD", "", "1n", 1, -0.967983, 0.967983);
+    DSCuts Beta_cut_for_map = DSCuts("Beta_nuc", "FD", "", "1n", 1, -0.973608, 0.973608); // std = 1.01426e-02
+    Beta_cut_for_map.FitStd = 1.01426 * 0.01;
 
     DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
     DSCuts Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
@@ -360,7 +361,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Calculation settings">
     /* settings to enable/disable specific FS plot calculations. */
-    bool calculate_truth_level = false, calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
+    bool calculate_truth_level = true, calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1269,88 +1270,88 @@ void EventAnalyser() {
     //<editor-fold desc="Beta plots (1n)">
     hPlot1D hBeta_n_from_ph_1n_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
                                             directories.Beta_Directory_map["Neutron_beta_from_ph_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
-                                            0.98, Beta_dist_uboundary);
+                                            0.98, Beta_dist_uboundary, 50);
     hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
                                                     directories.Beta_Directory_map["Neutron_beta_from_ph_1n_Directory"], "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
-                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
+                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
 
     hPlot1D hBeta_all_neutrals_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta", "All FD neutrals #beta", "#beta",
                                                directories.Beta_Directory_map["All_neutrals_beta_1n_Directory"], "01_Beta_Neutrals_1n",
-                                               Beta_dist_lboundary, Beta_dist_uboundary);
+                                               Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals - ZOOMOUT", "All FD neutrals - ZOOMOUT", "#beta",
                                                        directories.Beta_Directory_map["All_neutrals_beta_1n_Directory"], "01_Beta_Neutrals_1n_ZOOMOUT",
-                                                       Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
+                                                       Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPDG0_1n_FD = hPlot1D("1n", "FD", "h1", "FD neutrals (no PDG=0) #beta", "#beta",
 //    hPlot1D hBeta_all_neutrals_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta", "FD neutrals (no PDG=0) #beta", "#beta",
                                                       directories.Beta_Directory_map["All_neutrals_beta_noPDG0_1n_Directory"], "01_Beta_Neutrals_1n",
-                                                      Beta_dist_lboundary, Beta_dist_uboundary);
+                                                      Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) - ZOOMOUT", "FD neutrals (no PDG=0) - ZOOMOUT", "#beta",
                                                               directories.Beta_Directory_map["All_neutrals_beta_noPDG0_1n_Directory"], "01_Beta_Neutrals_1n_ZOOMOUT",
-                                                              Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
+                                                              Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
 
     hPlot1D hBeta_all_neutrals_noPCAL_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL hit", "All FD neutrals #beta w/o PCAL hit", "#beta",
                                                       directories.Beta_Directory_map["All_neutrals_beta_noPCAL_hit_1n_Directory"], "01_Beta_Neutrals_noPCAL_hit_1n",
-                                                      Beta_dist_lboundary, Beta_dist_uboundary);
+                                                      Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL hit - ZOOMOUT", "All FD neutrals w/o PCAL hit - ZOOMOUT",
                                                               "#beta", directories.Beta_Directory_map["All_neutrals_beta_noPCAL_hit_1n_Directory"],
                                                               "01_Beta_Neutrals_noPCAL_hit_1n_ZOOMOUT",
-                                                              Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
+                                                              Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_noPDG0_1n_FD = hPlot1D("1n", "FD", "h2", "FD neutrals (no PDG=0) #beta w/o PCAL hit",
 //    hPlot1D hBeta_all_neutrals_noPCAL_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL hit", "FD neutrals (no PDG=0) #beta w/o PCAL hit",
                                                              "#beta",
                                                              directories.Beta_Directory_map["All_neutrals_beta_noPCAL_hit_noPDG0_1n_Directory"],
                                                              "01_Beta_Neutrals_noPCAL_hit_1n",
-                                                             Beta_dist_lboundary, Beta_dist_uboundary);
+                                                             Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL hit - ZOOMOUT",
                                                                      "FD neutrals (no PDG=0) w/o PCAL hit - ZOOMOUT",
                                                                      "#beta", directories.Beta_Directory_map["All_neutrals_beta_noPCAL_hit_noPDG0_1n_Directory"],
                                                                      "01_Beta_Neutrals_noPCAL_hit_1n_ZOOMOUT",
-                                                                     Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary);
+                                                                     Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
 
     hPlot1D hBeta_all_neutrals_noPCAL_wECIN_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL & w/ ECIN", "All FD neutrals #beta w/o PCAL hit & ECIN hit",
                                                             "#beta", directories.Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_1n_Directory"],
                                                             "01_Beta_Neutrals_noPCAL_wECIN_hit_1n",
-                                                            Beta_dist_lboundary, Beta_dist_uboundary);
+                                                            Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_wECIN_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL & w/ ECIN - ZOOMOUT",
                                                                     "All FD neutrals #beta w/o PCAL hit & ECIN hit - ZOOMOUT", "#beta",
                                                                     directories.Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_1n_Directory"],
                                                                     "01_Beta_Neutrals_noPCAL_wECIN_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                    Beta_dist_ZOOMOUT_uboundary);
+                                                                    Beta_dist_ZOOMOUT_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD = hPlot1D("1n", "FD", "h3",
 //    hPlot1D hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL & w/ ECIN",
                                                                    "FD neutrals (no PDG=0) #beta w/o PCAL hit & ECIN hit",
                                                                    "#beta", directories.Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_noPDG0_1n_Directory"],
                                                                    "01_Beta_Neutrals_noPCAL_wECIN_hit_1n",
-                                                                   Beta_dist_lboundary, Beta_dist_uboundary);
+                                                                   Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL & w/ ECIN - ZOOMOUT",
                                                                            "FD neutrals (no PDG=0) #beta w/o PCAL hit & ECIN hit - ZOOMOUT", "#beta",
                                                                            directories.Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_noPDG0_1n_Directory"],
                                                                            "01_Beta_Neutrals_noPCAL_wECIN_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                           Beta_dist_ZOOMOUT_uboundary);
+                                                                           Beta_dist_ZOOMOUT_uboundary, 50);
 
     hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL/ECIN & w/ ECOUT",
                                                                     "All FD neutrals #beta w/o PCAL/ECIN hit &  w/ ECOUT hit",
                                                                     "#beta", directories.Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_1n_Directory"],
                                                                     "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n",
-                                                                    Beta_dist_lboundary, Beta_dist_uboundary);
+                                                                    Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL/ECIN & w/ ECOUT - ZOOMOUT",
                                                                             "All FD neutrals #beta w/o PCAL/ECIN hit &  w/ ECOUT hit - ZOOMOUT", "#beta",
                                                                             directories.Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_1n_Directory"],
                                                                             "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                            Beta_dist_ZOOMOUT_uboundary);
+                                                                            Beta_dist_ZOOMOUT_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD = hPlot1D("1n", "FD", "h4",
 //    hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN & w/ ECOUT",
                                                                            "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN hit &  w/ ECOUT hit",
                                                                            "#beta",
                                                                            directories.Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_1n_Directory"],
                                                                            "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n",
-                                                                           Beta_dist_lboundary, Beta_dist_uboundary);
+                                                                           Beta_dist_lboundary, Beta_dist_uboundary, 50);
     hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN & w/ ECOUT - ZOOMOUT",
                                                                                    "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN hit &  w/ ECOUT hit - ZOOMOUT", "#beta",
                                                                                    directories.Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_1n_Directory"],
                                                                                    "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                                   Beta_dist_ZOOMOUT_uboundary);
-//</editor-fold>
+                                                                                   Beta_dist_ZOOMOUT_uboundary, 50);
+    //</editor-fold>
 
     //<editor-fold desc="Beta vs. P plots">
 
@@ -2883,13 +2884,13 @@ void EventAnalyser() {
                                              Momentum_uboundary);
 
     hPlot1D hP_ph_truth_1e_cut = hPlot1D("1e cut", "", "#gamma momentum", "#gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                          directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1e_cut"], "06_P_ph_truth_1e_cut",
-                                          Momentum_lboundary,
-                                          Momentum_uboundary);
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1e_cut"], "06_P_ph_truth_1e_cut",
+                                         Momentum_lboundary,
+                                         Momentum_uboundary);
     hPlot1D hP_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "#gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} - before cuts", "P^{truth}_{#gamma} [GeV/c]",
-                                             directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1e_cut"], "06_P_ph_BC_truth_1e_cut",
-                                             Momentum_lboundary,
-                                             Momentum_uboundary);
+                                            directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1e_cut"], "06_P_ph_BC_truth_1e_cut",
+                                            Momentum_lboundary,
+                                            Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1e cut)">
@@ -2940,15 +2941,15 @@ void EventAnalyser() {
                                                  Theta_uboundary_FD);
 
     hPlot1D hTheta_ph_truth_1e_cut = hPlot1D("1e cut", "", "#theta^{truth}_{#gamma}", "#theta^{truth}_{#gamma} of Outgoing #gamma",
-                                              "#theta^{truth}_{#gamma} [Deg]",
-                                              directories.Efficiency_Directory_map["Theta_efficiency_Directory_1e_cut"], "06_Theta_Photons_truth_1e_cut",
-                                              Theta_lboundary_FD,
-                                              Theta_uboundary_FD);
+                                             "#theta^{truth}_{#gamma} [Deg]",
+                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1e_cut"], "06_Theta_Photons_truth_1e_cut",
+                                             Theta_lboundary_FD,
+                                             Theta_uboundary_FD);
     hPlot1D hTheta_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "#theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma - before cuts",
-                                                 "#theta^{truth}_{#gamma} [Deg]",
-                                                 directories.Efficiency_Directory_map["Theta_efficiency_Directory_1e_cut"], "06_Theta_Photons_BC_truth_1e_cut",
-                                                 Theta_lboundary_FD,
-                                                 Theta_uboundary_FD);
+                                                "#theta^{truth}_{#gamma} [Deg]",
+                                                directories.Efficiency_Directory_map["Theta_efficiency_Directory_1e_cut"], "06_Theta_Photons_BC_truth_1e_cut",
+                                                Theta_lboundary_FD,
+                                                Theta_uboundary_FD);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1e cut)">
@@ -2997,15 +2998,15 @@ void EventAnalyser() {
                                                Phi_uboundary_FD);
 
     hPlot1D hPhi_ph_truth_1e_cut = hPlot1D("1e cut", "", "#phi^{truth}_{#gamma}", "#phi^{truth}_{#gamma} of Outgoing #gamma",
-                                            "#phi^{truth}_{#gamma} [Deg]",
-                                            directories.Efficiency_Directory_map["Phi_efficiency_Directory_1e_cut"], "06_Phi_Photons_truth_1e_cut",
-                                            Phi_lboundary_FD,
-                                            Phi_uboundary_FD);
+                                           "#phi^{truth}_{#gamma} [Deg]",
+                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1e_cut"], "06_Phi_Photons_truth_1e_cut",
+                                           Phi_lboundary_FD,
+                                           Phi_uboundary_FD);
     hPlot1D hPhi_ph_BC_truth_1e_cut = hPlot1D("1e cut", "", "#phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma - before cuts",
-                                               "#phi^{truth}_{#gamma} [Deg]",
-                                               directories.Efficiency_Directory_map["Phi_efficiency_Directory_1e_cut"], "06_Phi_Photons_BC_truth_1e_cut",
-                                               Phi_lboundary_FD,
-                                               Phi_uboundary_FD);
+                                              "#phi^{truth}_{#gamma} [Deg]",
+                                              directories.Efficiency_Directory_map["Phi_efficiency_Directory_1e_cut"], "06_Phi_Photons_BC_truth_1e_cut",
+                                              Phi_lboundary_FD,
+                                              Phi_uboundary_FD);
     //</editor-fold>
 
     //</editor-fold>
@@ -3059,13 +3060,13 @@ void EventAnalyser() {
                                          Momentum_uboundary);
 
     hPlot1D hP_ph_truth_1p = hPlot1D("1p", "", "#gamma momentum", "#gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_truth_1p",
-                                         Momentum_lboundary,
-                                         Momentum_uboundary);
+                                     directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_truth_1p",
+                                     Momentum_lboundary,
+                                     Momentum_uboundary);
     hPlot1D hP_ph_BC_truth_1p = hPlot1D("1p", "", "#gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} - before cuts", "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_BC_truth_1p",
-                                            Momentum_lboundary,
-                                            Momentum_uboundary);
+                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_BC_truth_1p",
+                                        Momentum_lboundary,
+                                        Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1p)">
@@ -3120,15 +3121,15 @@ void EventAnalyser() {
                                              Theta_uboundary_FD);
 
     hPlot1D hTheta_ph_truth_1p = hPlot1D("1p", "", "#theta^{truth}_{#gamma}", "#theta^{truth}_{#gamma} of Outgoing #gamma",
-                                             "#theta^{truth}_{#gamma} [Deg]",
-                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_truth_1p",
-                                             Theta_lboundary_FD,
-                                             Theta_uboundary_FD);
+                                         "#theta^{truth}_{#gamma} [Deg]",
+                                         directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_truth_1p",
+                                         Theta_lboundary_FD,
+                                         Theta_uboundary_FD);
     hPlot1D hTheta_ph_BC_truth_1p = hPlot1D("1p", "", "#theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma - before cuts",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_BC_truth_1p",
-                                                Theta_lboundary_FD,
-                                                Theta_uboundary_FD);
+                                            "#theta^{truth}_{#gamma} [Deg]",
+                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_BC_truth_1p",
+                                            Theta_lboundary_FD,
+                                            Theta_uboundary_FD);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1p)">
@@ -3183,15 +3184,15 @@ void EventAnalyser() {
                                            Phi_uboundary_FD);
 
     hPlot1D hPhi_ph_truth_1p = hPlot1D("1p", "", "#phi^{truth}_{#gamma}", "#phi^{truth}_{#gamma} of Outgoing #gamma",
-                                           "#phi^{truth}_{#gamma} [Deg]",
-                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_truth_1p",
-                                           Phi_lboundary_FD,
-                                           Phi_uboundary_FD);
+                                       "#phi^{truth}_{#gamma} [Deg]",
+                                       directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_truth_1p",
+                                       Phi_lboundary_FD,
+                                       Phi_uboundary_FD);
     hPlot1D hPhi_ph_BC_truth_1p = hPlot1D("1p", "", "#phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma - before cuts",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_BC_truth_1p",
-                                              Phi_lboundary_FD,
-                                              Phi_uboundary_FD);
+                                          "#phi^{truth}_{#gamma} [Deg]",
+                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_BC_truth_1p",
+                                          Phi_lboundary_FD,
+                                          Phi_uboundary_FD);
     //</editor-fold>
 
     //</editor-fold>
@@ -3245,13 +3246,13 @@ void EventAnalyser() {
                                          Momentum_uboundary);
 
     hPlot1D hP_ph_truth_1n = hPlot1D("1n", "", "#gamma momentum", "#gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_ph_truth_1n",
-                                         Momentum_lboundary,
-                                         Momentum_uboundary);
+                                     directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_ph_truth_1n",
+                                     Momentum_lboundary,
+                                     Momentum_uboundary);
     hPlot1D hP_ph_BC_truth_1n = hPlot1D("1n", "", "#gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} - before cuts", "P^{truth}_{#gamma} [GeV/c]",
-                                            directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_ph_BC_truth_1n",
-                                            Momentum_lboundary,
-                                            Momentum_uboundary);
+                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_ph_BC_truth_1n",
+                                        Momentum_lboundary,
+                                        Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1n)">
@@ -3306,15 +3307,15 @@ void EventAnalyser() {
                                              Theta_uboundary_FD);
 
     hPlot1D hTheta_ph_truth_1n = hPlot1D("1n", "", "#theta^{truth}_{#gamma}", "#theta^{truth}_{#gamma} of Outgoing #gamma",
-                                             "#theta^{truth}_{#gamma} [Deg]",
-                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "06_Theta_Photons_truth_1n",
-                                             Theta_lboundary_FD,
-                                             Theta_uboundary_FD);
+                                         "#theta^{truth}_{#gamma} [Deg]",
+                                         directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "06_Theta_Photons_truth_1n",
+                                         Theta_lboundary_FD,
+                                         Theta_uboundary_FD);
     hPlot1D hTheta_ph_BC_truth_1n = hPlot1D("1n", "", "#theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma - before cuts",
-                                                "#theta^{truth}_{#gamma} [Deg]",
-                                                directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "06_Theta_Photons_BC_truth_1n",
-                                                Theta_lboundary_FD,
-                                                Theta_uboundary_FD);
+                                            "#theta^{truth}_{#gamma} [Deg]",
+                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "06_Theta_Photons_BC_truth_1n",
+                                            Theta_lboundary_FD,
+                                            Theta_uboundary_FD);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1n)">
@@ -3369,15 +3370,15 @@ void EventAnalyser() {
                                            Phi_uboundary_FD);
 
     hPlot1D hPhi_ph_truth_1n = hPlot1D("1n", "", "#phi^{truth}_{#gamma}", "#phi^{truth}_{#gamma} of Outgoing #gamma",
-                                           "#phi^{truth}_{#gamma} [Deg]",
-                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "06_Phi_Photons_truth_1n",
-                                           Phi_lboundary_FD,
-                                           Phi_uboundary_FD);
+                                       "#phi^{truth}_{#gamma} [Deg]",
+                                       directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "06_Phi_Photons_truth_1n",
+                                       Phi_lboundary_FD,
+                                       Phi_uboundary_FD);
     hPlot1D hPhi_ph_BC_truth_1n = hPlot1D("1n", "", "#phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma - before cuts",
-                                              "#phi^{truth}_{#gamma} [Deg]",
-                                              directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "06_Phi_Photons_BC_truth_1n",
-                                              Phi_lboundary_FD,
-                                              Phi_uboundary_FD);
+                                          "#phi^{truth}_{#gamma} [Deg]",
+                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "06_Phi_Photons_BC_truth_1n",
+                                          Phi_lboundary_FD,
+                                          Phi_uboundary_FD);
     //</editor-fold>
 
     //</editor-fold>
@@ -4327,7 +4328,7 @@ void EventAnalyser() {
 
 
         for (int i = 0; i < allParticles.size(); i++) {
-            if (allParticles[i]->getRegion() == FD && allParticles[i]->par()->getCharge() == 0) {
+            if ((allParticles[i]->getRegion() == FD) && (allParticles[i]->par()->getCharge() == 0)) {
                 bool inPCAL_1n_temp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
 
                 if (inPCAL_1n_temp) { hTheta_neut_VS_Phi_neut_All_e_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight); }
@@ -5429,8 +5430,7 @@ void EventAnalyser() {
                             hBeta_n_from_ph_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
 
-
-                            if (fabs(allParticles[i]->par()->getBeta() - Beta_cut_for_map.GetMean()) <= Beta_cut_for_map.GetUpperCut()) {
+                            if (fabs(allParticles[i]->par()->getBeta() - Beta_cut_for_map.GetMean()) <= Beta_cut_for_map.FitStd) {
                                 hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
                             }
                         }
@@ -8396,9 +8396,9 @@ void EventAnalyser() {
         hP_pim_BC_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0,
                                             false);
         hP_ph_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0,
-                                         false);
+                                        false);
         hP_ph_BC_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_momentum_cuts.GetLowerCut(), pim_momentum_cuts.GetUpperCut(), 0,
-                                            false);
+                                           false);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (1e cut)">

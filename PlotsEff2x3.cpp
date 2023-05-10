@@ -26,7 +26,9 @@ void PlotsEff2x3() {
 
 //    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_100";
+    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
     string SampleName = "C12_simulation_6GeV_T5_first_100";
 
     string saveName;
@@ -57,16 +59,18 @@ void PlotsEff2x3() {
     Canvas2x6->Divide(2, 3);
 
     TH1D *RecPlot_1p = (TH1D *) f->Get("h1 (1p, FD)");
-    TH1D *TruthPlot_1p = (TH1D *) f->Get("Rec. Neutron momentum");
+    TH1D *TruthPlot_1p = (TH1D *) f->Get("Truth Neutron momentum (1p, FD)");
     TH1D *EffPlot_1p = (TH1D *) f->Get("h3 (1p, FD)");
     TH1D *RecPlot_1n = (TH1D *) f->Get("h4 (1n, FD)");
-    TH1D *TruthPlot_1n = (TH1D *) f->Get("Neutron momentum (1n, FD)");
+    TH1D *TruthPlot_1n = (TH1D *) f->Get("Rec. Neutron momentum (1n, FD)");
     TH1D *EffPlot_1n = (TH1D *) f->Get("h4 (1n, FD)");
 
     if (!RecPlot_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!RecPlot_1n) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!TruthPlot_1n) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!EffPlot_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
     Canvas2x6->cd(1);
     Canvas2x6->cd(1)->SetGrid();

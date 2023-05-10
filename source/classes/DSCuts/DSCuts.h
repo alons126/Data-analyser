@@ -58,7 +58,7 @@ public:
 
     std::string GetAppliedCuts() { return AppliedCuts; }
 
-    double MeanFromHistogram, MeanFromFit, FitStdFactor;
+    double MeanFromHistogram, MeanFromFit, FitStdFactor, FitStd;
     vector<double> Cuts = {0, -9999, 9999}; // {mean, lower cut, upper cut}
 //    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 private:
