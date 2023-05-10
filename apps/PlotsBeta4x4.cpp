@@ -32,15 +32,15 @@ using namespace std;
 void PlotsBeta4x4() {
 //void PlotsBeta4x4(hPlot1D Beta1, hPlot1D Beta2, hPlot1D Beta3, hPlot1D Beta4) {
 
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
 
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
 
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 
     string saveName;

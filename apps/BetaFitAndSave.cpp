@@ -121,11 +121,11 @@ void BetaFitAndSave() {
 //    string SampleName = "C12_simulation_6GeV_T5";
 */
 
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSampleName:\t" << SampleName << "\n\n";
