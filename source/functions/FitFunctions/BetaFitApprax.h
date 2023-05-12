@@ -40,11 +40,8 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
 
     system(("mkdir -p " + BetaPlot.GetHistogram1DSaveNamePath() + "Approximatied_beta/").c_str());
 
-//    cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
-//    exit(EXIT_FAILURE);
-
     //<editor-fold desc="Canvas definitions">
-    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
+    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000 * 2, 750 * 2); // normal res
 //    TCanvas *Canvas = new TCanvas("canvas", "canvas", 2000, 1500); // high res
 //    TCanvas *Canvas = new TCanvas("canvas", "canvas", 1650, 1150);
 //    Canvas->cd();
@@ -58,6 +55,9 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
 
     Canvas->cd();
+
+//    cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
+//    exit(EXIT_FAILURE);
     //</editor-fold>
 
     //<editor-fold desc="Setting sNameFlag">
@@ -242,17 +242,21 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         cout << "\nSolutions for deltaP/P = 20%:\n";
 
         Beta_Max_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyU);
-        Beta_Min_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyL);
+        P_Beta_Max_Apprax = m_n * Beta_Max_Apprax / sqrt(1 - Beta_Max_Apprax * Beta_Max_Apprax);
 
         cout << "Beta_Max_Apprax = " << Beta_Max_Apprax << " is chosen\n";
         cout << "P(Beta_Max_Apprax) = " << P_Beta_Max_Apprax << "\n\n";
 
         cout << "Solutions for deltaP/P = 10%:\n";
 
+        Beta_Min_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyL);
         P_Beta_Min_Apprax = m_n * Beta_Min_Apprax / sqrt(1 - Beta_Min_Apprax * Beta_Min_Apprax);
 
         cout << "Beta_Min_Apprax = " << Beta_Min_Apprax << " is chosen\n";
         cout << "P(Beta_Min_Apprax) = " << P_Beta_Min_Apprax << "\n\n";
+
+////        cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
+//        exit(EXIT_FAILURE);
 
         Momentum_cuts.SetUpperCut(P_Beta_Max_Apprax);
         //</editor-fold>

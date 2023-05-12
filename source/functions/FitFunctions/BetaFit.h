@@ -40,7 +40,7 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
     double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
 
     //<editor-fold desc="Canvas definitions">
-    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
+    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000*2, 750*2); // normal res
 //    TCanvas *Canvas = new TCanvas("canvas", "canvas", 2000, 1500); // high res
 //    TCanvas *Canvas = new TCanvas("canvas", "canvas", 1650, 1150);
 //    Canvas->cd();

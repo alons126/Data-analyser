@@ -8712,12 +8712,9 @@ void EventAnalyser() {
 
     //<editor-fold desc="Saving proton pid cuts to .par file">
     if (!apply_neutron_Beta_Fit) { // log neutron beta cut from fit
-        DSCuts Beta_Fit_Cuts[] = {n_momentum_cuts, n_momentum_cuts_ABF_FD_n_from_ph,n_momentum_cuts_ABF_FD_n_from_ph_apprax,
-                                  n_momentum_cuts_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0,
-                                  n_momentum_cuts_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL_noPDG0,
-                                  n_momentum_cuts_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0,
-                                  n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0};
-        int Beta_Fit_Cuts_length = 11;
+        /* Log cuts from 'photons' fit first */
+        DSCuts Beta_Fit_Cuts[] = {n_momentum_cuts, n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
+        int Beta_Fit_Cuts_length = 3;
 
         ofstream Fitted_n_Mom_Cuts;
         std::string Fitted_n_Mom_CutsFilePath = CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par";
@@ -8733,21 +8730,20 @@ void EventAnalyser() {
         for (int i = 0; i < Beta_Fit_Cuts_length; i++) {
             Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
                               << Beta_Fit_Cuts[i].GetUpperCut() << ":" << Beta_Fit_Cuts[i].GetRegion() << "\n";
-/*
-            if (Beta_Fit_Cuts[i].GetCutVariable() == "Momentum_cuts") {
-                Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
-                                  << Beta_Fit_Cuts[i].GetUpperCut() << ":" << Beta_Fit_Cuts[i].GetRegion() << "\n";
-            } else if (Beta_Fit_Cuts[i].GetCutVariable() == "Momentum_cuts_All_neutrals") {
-                Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
-                                  << Beta_Fit_Cuts[i].GetUpperCut() << ":" << Beta_Fit_Cuts[i].GetRegion() << "\n";
-            } else if (Beta_Fit_Cuts[i].GetCutVariable() == "Momentum_cuts_noPCAL") {
-                Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
-                                  << Beta_Fit_Cuts[i].GetUpperCut() << ":" << Beta_Fit_Cuts[i].GetRegion() << "\n";
-            } else {
-                Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
-                                  << Beta_Fit_Cuts[i].GetUpperCut() << ":" << Beta_Fit_Cuts[i].GetRegion() << "\n";
-            }
-*/
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+
+        /* Log cuts from other tests */
+        DSCuts Beta_Fit_Cuts_test[] = {n_momentum_cuts_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0,
+                                       n_momentum_cuts_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL_noPDG0,
+                                       n_momentum_cuts_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0,
+                                       n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0};
+        int Beta_Fit_Cuts_test_length = 8;
+
+        for (int i = 0; i < Beta_Fit_Cuts_test_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_Fit_Cuts_test[i].GetCutVariable() << "\t\t\t" << Beta_Fit_Cuts_test[i].GetPartPDG() << ":" << Beta_Fit_Cuts_test[i].Cuts.at(0) <<
+                              ":" << Beta_Fit_Cuts_test[i].GetUpperCut() << ":" << Beta_Fit_Cuts_test[i].GetRegion() << "\n";
         }
 
         Fitted_n_Mom_Cuts.close();
