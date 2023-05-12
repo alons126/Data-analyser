@@ -38,6 +38,11 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
     double W_yLLim = -0.1, W_yULim = 0.1, W_xLLim = 0.9, W_xULim = 1.;
     double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
 
+    system(("mkdir -p " + BetaPlot.GetHistogram1DSaveNamePath() + "Approximatied_beta/").c_str());
+
+//    cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
+//    exit(EXIT_FAILURE);
+
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
 //    TCanvas *Canvas = new TCanvas("canvas", "canvas", 2000, 1500); // high res
@@ -180,7 +185,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
         FitParam->Draw("same");
 
-        string hBeta_CloneSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + sNameFlag + BetaPlot.GetHistogram1DSaveName() + "_fitted.png";
+        string hBeta_CloneSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + "Approximatied_beta/" + sNameFlag + BetaPlot.GetHistogram1DSaveName() + "_fitted.png";
         const char *hBeta_CloneSaveDir = hBeta_CloneSaveNameDir.c_str();
         Canvas->SaveAs(hBeta_CloneSaveDir);
 
@@ -222,7 +227,9 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
 //    deltaPParam->AddText(("#delta#beta = " + to_string_with_precision(FitStd, 8)).c_str());
         deltaPParam->Draw("same");
 
-        string deltaPSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + sNameFlag + "02a_P_" + BetaParticleShort + "_uncertainty" + BetaPlot.GetFinalState() + ".png";
+        string deltaPSaveNameDir =
+                BetaPlot.GetHistogram1DSaveNamePath() + "Approximatied_beta/" + sNameFlag + "02a_P_" + BetaParticleShort + "_uncertainty_" + BetaPlot.GetFinalState() +
+                ".png";
         const char *deltaPSaveDir = deltaPSaveNameDir.c_str();
         Canvas->SaveAs(deltaPSaveDir);
 
@@ -234,8 +241,8 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
 
         cout << "\nSolutions for deltaP/P = 20%:\n";
 
-        Beta_Max_Apprax = sqrt(1-FitStd/deltaPRel_UncertaintyU);
-        Beta_Min_Apprax = sqrt(1-FitStd/deltaPRel_UncertaintyL);
+        Beta_Max_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyU);
+        Beta_Min_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyL);
 
         cout << "Beta_Max_Apprax = " << Beta_Max_Apprax << " is chosen\n";
         cout << "P(Beta_Max_Apprax) = " << P_Beta_Max_Apprax << "\n\n";
@@ -253,7 +260,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         //<editor-fold desc="Plot deltaP/P as function of beta">
         string Rel_deltaPStatsTitle = "#deltaP_{" + BetaParticleShort + "} (" + BetaPlot.GetFinalState() + ")";
         string Rel_deltaPTitle =
-                BetaParticle + " apprax. relative uncertainty #deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}" + " (" + BetaPlot.GetFinalState() + ")";
+                BetaParticle + " relative uncertainty #deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}" + " (apprax. ," + BetaPlot.GetFinalState() + ")";
         string Rel_deltaPfunc = to_string(FitStd) + "/ ( (1 - x*x) * x )";
 
         auto *Rel_deltaP = new TF1(Rel_deltaPStatsTitle.c_str(), Rel_deltaPfunc.c_str(), 0.9, 1);
@@ -298,8 +305,8 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, "10% cut", "l");
         Cut_legend->Draw("same");
 
-        string Rel_deltaPSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + sNameFlag + "02b_P_" + BetaParticleShort + "apprax_rel_uncertainty" + BetaPlot.GetFinalState() +
-                                       ".png";
+        string Rel_deltaPSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + "Approximatied_beta/" + sNameFlag + "02b_P_" + BetaParticleShort
+                                       + "apprax_rel_uncertainty_" + BetaPlot.GetFinalState() + ".png";
 
         const Int_t n = 2;
         auto gr = new TGraph(n);
@@ -317,7 +324,6 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         //</editor-fold>
 
     }
-
 }
 
 

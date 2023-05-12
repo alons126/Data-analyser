@@ -17,13 +17,11 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-//#include "source/functions/GeneralFunctions.h"
-#include "source/functions/to_string_with_precision.h"
-#include "source/functions/findSubstring.h"
-#include "source/classes/DSCuts/DSCuts.h"
-//#include "source/classes/hPlots/hPlot1D.h"
-#include "source/constants.h"
-#include "source/functions/Math_func/poly34.cpp"
+#include "../source/classes/DSCuts/DSCuts.h"
+#include "../source/functions/Math_func/poly34.cpp"
+#include "../source/functions/findSubstring.h"
+#include "../source/functions/to_string_with_precision.h"
+#include "../source/constants.h"
 
 using namespace std;
 
@@ -123,8 +121,11 @@ void BetaFitAndSave() {
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
+
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
+
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut_wPhotonsFD/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 
@@ -201,18 +202,9 @@ void BetaFitAndSave() {
     //</editor-fold>
 
     //<editor-fold desc="Setting histogram and preforming a fit">
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
     TH1D *hpx = (TH1D *) f->Get("#beta of n from '#gamma' (1n, FD)");
     TH1D *hBeta_Clone = (TH1D *) hpx->Clone("#beta of n from '#gamma' - fitted");
-
-    //    hBeta_Clone->Rebin(2);
-
     Int_t Color = hBeta_Clone->GetLineColor();
-
-//    TH1D *hBeta = BetaPlot.GetHistogram();
-//    TH1D *hBeta_Clone = (TH1D *) hBeta->Clone((BetaPlot.GetHistogramStatTitle() + " - fitted").c_str());
-//    Int_t Color = hBeta_Clone->GetLineColor();
-    //    hBeta_Clone->SetLineColor(kBlack);
 
     TF1 *func = new TF1("fit", FitFunction, 0, 2, 3); // create a function with 3 parameters in the range [-3,3]
     func->SetLineColor(kRed);
@@ -249,7 +241,8 @@ void BetaFitAndSave() {
 
     // Adding limits to "Mean_value"
     double BetaMean_valueUlim = 1.02;
-    double BetaMean_valueLlim = 1.0075;
+    double BetaMean_valueLlim = 1.008;
+//    double BetaMean_valueLlim = 1.0075;
     func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
     cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
 //    // Adding limits to "Mean_value"
