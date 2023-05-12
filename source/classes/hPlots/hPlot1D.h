@@ -42,6 +42,7 @@ protected:
                                                      {"Histogram1DTitleReactions", ""}};
     std::string HistogramStatsTitle;
     std::string HistogramTitle;
+    std::string XaxisTitle;
     std::string FinalState;
     bool Title2 = false;
 
@@ -318,7 +319,7 @@ public:
     std::string GetHistogramStatTitle() const { return HistogramStatsTitle; }
 //    std::string GetHistogramStatTitle() const { return Histogram1DTitles["HistogramStatTitle"]; }
 
-    std::string GetXaxisTitle() { return Histogram1DTitles["XaxisTitle"]; }
+    std::string GetXaxisTitle() const { return XaxisTitle; }
 
     std::string GetYaxisTitle() { return Histogram1DTitles["YaxisTitle"]; }
 
@@ -328,7 +329,7 @@ public:
 
     double GetLowerXlim() { return HistogramXAxisLimits.at(0); }
 
-    bool GetNormalizeHistogram() { return NormalizeHistogram; }
+    bool GetNormalizeHistogram() const { return NormalizeHistogram; }
 
     bool GetCustomNormalization() { return CustomNormalization; }
 
@@ -336,9 +337,9 @@ public:
 
     std::string GetHistogram1DTitleReactions() { return Histogram1DTitles["Histogram1DTitleReactions"]; }
 
-    double GetTitleSize() { return Histogram1DTitleSizes.at(0); }
+    double GetTitleSize() const { return Histogram1DTitleSizes.at(0); }
 
-    double GetLabelSizeX() { return Histogram1DTitleSizes.at(1); }
+    double GetLabelSizeX() const { return Histogram1DTitleSizes.at(1); }
 
     double GetLabelSizeY() { return Histogram1DTitleSizes.at(2); }
 
@@ -360,7 +361,7 @@ public:
 
     int GetkColor() { return LineColor; }
 
-    bool GetCenterTitle() { return CenterTitle; }
+    bool GetCenterTitle() const { return CenterTitle; }
 
     bool GetAddToStack() { return AddToStack; }
 

@@ -22,84 +22,17 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "GeneralFunctions.h"
-#include "../classes/DSCuts/DSCuts.h"
-#include "../classes/hPlots/hPlot1D.h"
-#include "../constants.h"
-#include "Math_func/poly34.cpp"
+#include "FitFunction.h"
+#include "../GeneralFunctions.h"
+#include "../GetParticleProperties/GetParticleName.h"
+#include "../GetParticleProperties/GetParticleNameShort.h"
+#include "../Math_func/poly34.cpp"
+#include "../drawtext.h"
+#include "../../classes/DSCuts/DSCuts.h"
+#include "../../classes/hPlots/hPlot1D.h"
+#include "../../constants.h"
 
 using namespace std;
-
-void drawtext() {
-    Int_t i, n;
-    Double_t x, y;
-    TLatex l;
-
-    l.SetTextSize(0.025);
-    l.SetTextFont(0);
-//    l.SetTextFont(42);
-    l.SetTextAlign(21);
-    l.SetTextColor(kMagenta);
-//    l.SetTextColor(kBlue);
-    l.SetLineColor(kWhite);
-
-    auto g = (TGraph *) gPad->GetListOfPrimitives()->FindObject("Graph");
-    n = g->GetN();
-
-    for (i = 0; i < n; i++) {
-        g->GetPoint(i, x, y);
-        l.PaintText(x, y + 0.02, Form("(%4.4f,%4.1f)", x, y));
-    }
-}
-
-/*void drawtext_Max() {
-    Int_t i, n;
-    Double_t x, y;
-    TLatex l;
-
-    l.SetTextSize(0.025);
-    l.SetTextFont(42);
-    l.SetTextAlign(21);
-    l.SetTextColor(kBlue);
-
-    auto g = (TGraph *) gPad->GetListOfPrimitives()->FindObject("Graph");
-    n = g->GetN();
-    g->SetLineColor(kWhite);
-
-    for (i = 0; i < n; i++) {
-        g->GetPoint(i, x, y);
-        l.PaintText(x, y + 0.02, Form("(%4.3f,%4.3f)", x, y));
-    }
-}
-
-void drawtext_Min() {
-    Int_t i, n;
-    Double_t x, y;
-    TLatex l;
-
-    l.SetTextSize(0.025);
-    l.SetTextFont(42);
-    l.SetTextAlign(21);
-    l.SetTextColor(kBlue);
-
-    auto g = (TGraph *) gPad->GetListOfPrimitives()->FindObject("Graph");
-    n = g->GetN();
-    g->SetLineColor(kWhite);
-
-    for (i = 0; i < n; i++) {
-        g->GetPoint(i, x, y);
-        l.PaintText(x, y + 0.02, Form("(%4.3f,%4.3f)", x, y));
-    }
-}*/
-
-Double_t FitFunction(Double_t *v, Double_t *par) {
-    Double_t arg = 0;
-//    if (par[1] != 0) { arg = (v[0] - 1) / par[1]; } // 2 parameters
-    if (par[2] != 0) { arg = (v[0] - par[1]) / par[2]; } // 3 parameters
-
-    Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
-    return fitval;
-}
 
 void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
 
@@ -134,34 +67,39 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
     //</editor-fold>
 
     //<editor-fold desc="Setting particle">
-    string BetaParticle, BetaParticleShort;
+    string BetaParticle = GetParticleName(BetaPlot.GetHistogramTitle());
+    string BetaParticleShort = GetParticleNameShort(BetaPlot.GetHistogramTitle());
 
-    if (findSubstring(BetaPlot.GetHistogramTitle(), "Electron") || findSubstring(BetaPlot.GetHistogramTitle(), "electron")) {
-        BetaParticle = "Electron";
-        BetaParticleShort = "e";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "Proton") || findSubstring(BetaPlot.GetHistogramTitle(), "proton")) {
-        BetaParticle = "Proton";
-        BetaParticleShort = "p";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "Neutron") || findSubstring(BetaPlot.GetHistogramTitle(), "neutron")) {
-        BetaParticle = "Neutron";
-        BetaParticleShort = "n";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "#pi^{+}")) {
-        BetaParticle = "Piplus";
-        BetaParticleShort = "#pi^{+}";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "#pi^{-}")) {
-        BetaParticle = "Piminus";
-        BetaParticleShort = "#pi^{-}";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "K^{+}")) {
-        BetaParticle = "Kplus";
-        BetaParticleShort = "K^{+}";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "K^{-}")) {
-        BetaParticle = "Kminus";
-        BetaParticleShort = "K^{-}";
-    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "#gamma") || findSubstring(BetaPlot.GetHistogramTitle(), "photon")
-               || findSubstring(BetaPlot.GetHistogramTitle(), "Photon")) {
-        BetaParticle = "Photon";
-        BetaParticleShort = "#gamma";
-    }
+//    if (findSubstring(BetaPlot.GetHistogramTitle(), "neutrals") || findSubstring(BetaPlot.GetHistogramTitle(), "Neutrals")
+//        || findSubstring(BetaPlot.GetHistogramTitle(), "neut.") || findSubstring(BetaPlot.GetHistogramTitle(), "Neut.")) {
+//        BetaParticle = "Neutrals";
+//        BetaParticleShort = "neut";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "Electron") || findSubstring(BetaPlot.GetHistogramTitle(), "electron")) {
+//        BetaParticle = "Electron";
+//        BetaParticleShort = "e";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "Proton") || findSubstring(BetaPlot.GetHistogramTitle(), "proton")) {
+//        BetaParticle = "Proton";
+//        BetaParticleShort = "p";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "Neutron") || findSubstring(BetaPlot.GetHistogramTitle(), "neutron")) {
+//        BetaParticle = "Neutron";
+//        BetaParticleShort = "n";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "#pi^{+}")) {
+//        BetaParticle = "Piplus";
+//        BetaParticleShort = "#pi^{+}";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "#pi^{-}")) {
+//        BetaParticle = "Piminus";
+//        BetaParticleShort = "#pi^{-}";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "K^{+}")) {
+//        BetaParticle = "Kplus";
+//        BetaParticleShort = "K^{+}";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "K^{-}")) {
+//        BetaParticle = "Kminus";
+//        BetaParticleShort = "K^{-}";
+//    } else if (findSubstring(BetaPlot.GetHistogramTitle(), "#gamma") || findSubstring(BetaPlot.GetHistogramTitle(), "photon")
+//               || findSubstring(BetaPlot.GetHistogramTitle(), "Photon")) {
+//        BetaParticle = "Photon";
+//        BetaParticleShort = "#gamma";
+//    }
     //</editor-fold>
 
     //<editor-fold desc="Setting histogram">
@@ -195,7 +133,7 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         // Adding limits to "Mean_value"
 //    double BetaMean_valueUlim = 1.0075;
         double BetaMean_valueUlim = 1.02;
-    double BetaMean_valueLlim = 1.0075;
+        double BetaMean_valueLlim = 1.0075;
 //        double BetaMean_valueLlim = 1.005;
         func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
         cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
@@ -348,7 +286,7 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         Rel_deltaP->GetYaxis()->SetTitleSize(0.06);
         Rel_deltaP->GetYaxis()->SetLabelSize(0.0425);
         Rel_deltaP->GetYaxis()->CenterTitle(true);
-        Rel_deltaP->GetYaxis()->SetTitle(("#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}} = #frac{1}{(1 - #beta^{2})#beta}").c_str());
+        Rel_deltaP->GetYaxis()->SetTitle(("#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}} = #frac{#delta#beta}{(1 - #beta^{2})#beta}").c_str());
         Rel_deltaP->SetLineColor(kBlack);
         Rel_deltaP->SetLineWidth(2);
         Rel_deltaP->Draw();
@@ -434,7 +372,8 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         W_Max->GetYaxis()->SetTitleSize(0.06);
         W_Max->GetYaxis()->SetLabelSize(0.0425);
         W_Max->GetYaxis()->CenterTitle(true);
-        W_Max->GetYaxis()->SetTitle(("W(#beta) = #beta^{3} - #beta + #delta#beta(#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}})^{-1}").c_str());
+        W_Max->GetYaxis()->SetTitle(
+                ("W(#beta) = #beta^{3} - #beta + #delta#beta(#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}})^{-1}").c_str());
         W_Max->SetLineColor(kBlack);
         W_Max->SetLineWidth(2);
         W_Max->Draw();

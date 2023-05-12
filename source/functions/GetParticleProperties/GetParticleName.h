@@ -19,7 +19,10 @@ using namespace std;
 string GetParticleName(string Source) {
     string ParticleName;
 
-    if (findSubstring(Source, "Electron") || findSubstring(Source, "electron")) {
+    if (findSubstring(Source, "neutrals") || findSubstring(Source, "Neutrals")
+        || findSubstring(Source, "neut.") || findSubstring(Source, "Neut.")) {
+        ParticleName = "neut";
+    } else if (findSubstring(Source, "Electron") || findSubstring(Source, "electron")) {
         ParticleName = "Electron";
     } else if (findSubstring(Source, "Proton") || findSubstring(Source, "proton")) {
         ParticleName = "Proton";

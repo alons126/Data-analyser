@@ -90,16 +90,16 @@ private:
                                                  "01_Beta_plots/05_1n/01_Neutron_beta_from_fPhotons_plots_1n/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_1n",
 
                                                  "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n",
-                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/01_FD_neutrals_All_plots_1n",
-                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/02_FD_neutrals_noPCAL_hit_plots_1n",
-                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/03_FD_neutrals_noPCAL_yesECIN_plots_1n",
-                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/04_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n",
+                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/01_All_FD_neutrals_All_plots_1n",
+                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/02_All_FD_neutrals_noPCAL_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/03_All_FD_neutrals_noPCAL_yesECIN_plots_1n",
+                                                 "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/04_All_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n",
 
-                                                 "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n",
-                                                 "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n",
-                                                 "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n",
-                                                 "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n",
-                                                 "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n",
+                                                 "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n",
+                                                 "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n",
+                                                 "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n",
+                                                 "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n",
+                                                 "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n",
 
 
 

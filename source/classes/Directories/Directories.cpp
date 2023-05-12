@@ -217,25 +217,25 @@ Directories::Directories(std::string plots_path) {
     Beta_Directory_map["All_FD_neutrals_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                               Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n") + "/";
     Beta_Directory_map["All_FD_neutrals_01_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/01_FD_neutrals_All_plots_1n") + "/";
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/01_All_FD_neutrals_All_plots_1n") + "/";
     Beta_Directory_map["All_FD_neutrals_02_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/02_FD_neutrals_noPCAL_hit_plots_1n") + "/";
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/02_All_FD_neutrals_noPCAL_hit_plots_1n") + "/";
     Beta_Directory_map["All_FD_neutrals_03_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/03_FD_neutrals_noPCAL_yesECIN_plots_1n") + "/";
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/03_All_FD_neutrals_noPCAL_yesECIN_plots_1n") + "/";
     Beta_Directory_map["All_FD_neutrals_04_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/04_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n") + "/";
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02_All_FD_neutrals_beta_plots_1n/04_All_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n") + "/";
 
 
-    Beta_Directory_map["All_FD_neutrals_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n") + "/";
-    Beta_Directory_map["All_FD_neutrals_noPDG0_01_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n") + "/";
-    Beta_Directory_map["All_FD_neutrals_noPDG0_02_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n") + "/";
-    Beta_Directory_map["All_FD_neutrals_noPDG0_03_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n") + "/";
-    Beta_Directory_map["All_FD_neutrals_noPDG0_04_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_All_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n") + "/";
+    Beta_Directory_map["FD_neutrals_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n") + "/";
+    Beta_Directory_map["FD_neutrals_noPDG0_01_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n") + "/";
+    Beta_Directory_map["FD_neutrals_noPDG0_02_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n") + "/";
+    Beta_Directory_map["FD_neutrals_noPDG0_03_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n") + "/";
+    Beta_Directory_map["FD_neutrals_noPDG0_04_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                              Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n") + "/";
 
 
 

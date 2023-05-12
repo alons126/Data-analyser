@@ -43,13 +43,16 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
-#include "source/functions/BetaFit.h"
+#include "source/functions/FitFunctions/BetaFit.h"
+#include "source/functions/FitFunctions/BetaFitApprax.h"
 #include "source/functions/DrawAndSaveEfficiencyPlots.h"
 #include "source/functions/GetFDNeutrons.h"
 #include "source/functions/GetFDNeutronP.h"
 #include "source/functions/GetFDPhotons.h"
 #include "source/functions/GetGoodParticles.h"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
+#include "source/functions/StackPlot3.h"
+#include "source/functions/StackPlot4.h"
 
 using namespace std;
 using namespace clas12;
@@ -156,13 +159,13 @@ void EventAnalyser() {
 //                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
 //                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
                 if (!apply_neutron_Beta_Fit) {
+//                    plots_path =
+//                            WorkingDirectory + "plots_" + SampleName + "_-02_ALL_CUTS_NoBetaCut_wPhotonsFD"; // NOTE: not acctually a beta cut - but a neutron mom cut
                     plots_path = WorkingDirectory + "plots_" + SampleName + "_-02_ALL_CUTS_NoBetaCut"; // NOTE: not acctually a beta cut - but a neutron mom cut
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_NoBetaCut.txt";
 //                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_NoBetaCut"; // NOTE: not acctually a beta cut - but a neutron mom cut
 //                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_NoBetaCut.txt";
                 } else if (apply_neutron_Beta_Fit) {
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCutDISABLED9999";
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCutDISABLED61";
                     plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut";
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut.txt";
                 }
@@ -278,6 +281,7 @@ void EventAnalyser() {
     //<editor-fold desc="n_momentum_cuts">
     DSCuts n_momentum_cuts;
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
 
     DSCuts n_momentum_cuts_ABF_FD_All_neutrals; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_All_neutrals_noPDG0; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
@@ -306,6 +310,7 @@ void EventAnalyser() {
 
     DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
     DSCuts Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
 
     DSCuts Beta_cut_ABF_FD_All_neutrals = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
     DSCuts Beta_cut_ABF_FD_All_neutrals_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
@@ -363,7 +368,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Calculation settings">
     /* settings to enable/disable specific FS plot calculations. */
-    bool calculate_truth_level = true, calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
+    bool calculate_truth_level = false, calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1270,93 +1275,112 @@ void EventAnalyser() {
     //<editor-fold desc="Beta histograms">
 
     //<editor-fold desc="Beta plots (1n)">
-    hPlot1D hBeta_n_from_ph_1n_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
-                                            directories.Beta_Directory_map["Neutron_beta_from_ph_01_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
-                                            0.98, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_n_from_ph_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' ZOOMOUT", "#beta",
-                                                    directories.Beta_Directory_map["Neutron_beta_from_ph_01_1n_Directory"], "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
-                                                    Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
 
+    //<editor-fold desc="Beta of neutrons from 'photons' (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                               directories.Beta_Directory_map["Neutron_beta_from_ph_01_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                               0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                       directories.Beta_Directory_map["Neutron_beta_from_ph_01_1n_Directory"], "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                       Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
 
-    hPlot1D hBeta_all_neutrals_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta", "All FD neutrals #beta", "#beta",
-                                               directories.Beta_Directory_map["All_FD_neutrals_01_1n_Directory"], "01_Beta_Neutrals_1n",
-                                               Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals - ZOOMOUT", "All FD neutrals - ZOOMOUT", "#beta",
-                                                       directories.Beta_Directory_map["All_FD_neutrals_01_1n_Directory"], "01_Beta_Neutrals_1n_ZOOMOUT",
-                                                       Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPDG0_1n_FD = hPlot1D("1n", "FD", "h1", "FD neutrals (no PDG=0) #beta", "#beta",
-//    hPlot1D hBeta_all_neutrals_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta", "FD neutrals (no PDG=0) #beta", "#beta",
-                                                      directories.Beta_Directory_map["All_FD_neutrals_noPDG0_01_1n_Directory"], "01_Beta_Neutrals_1n",
-                                                      Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) - ZOOMOUT", "FD neutrals (no PDG=0) - ZOOMOUT", "#beta",
-                                                              directories.Beta_Directory_map["All_FD_neutrals_noPDG0_01_1n_Directory"], "01_Beta_Neutrals_1n_ZOOMOUT",
-                                                              Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
+    hPlot1D hBeta_n_from_ph_02_1n_FD = hPlot1D("1n", "FD", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                               directories.Beta_Directory_map["Neutron_beta_from_ph_02_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                               Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                       "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                       "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_1n_Directory"],
+                                                       "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
 
+    hPlot1D hBeta_n_from_ph_03_1n_FD = hPlot1D("1n", "FD", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                               directories.Beta_Directory_map["Neutron_beta_from_ph_03_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                               Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                       "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                       directories.Beta_Directory_map["Neutron_beta_from_ph_03_1n_Directory"],
+                                                       "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                       Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
 
-    hPlot1D hBeta_all_neutrals_noPCAL_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL hit", "All FD neutrals #beta w/o PCAL hit", "#beta",
-                                                      directories.Beta_Directory_map["All_FD_neutrals_02_1n_Directory"], "01_Beta_Neutrals_noPCAL_hit_1n",
-                                                      Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL hit - ZOOMOUT", "All FD neutrals w/o PCAL hit - ZOOMOUT",
-                                                              "#beta", directories.Beta_Directory_map["All_FD_neutrals_02_1n_Directory"],
-                                                              "01_Beta_Neutrals_noPCAL_hit_1n_ZOOMOUT",
-                                                              Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_noPDG0_1n_FD = hPlot1D("1n", "FD", "h2", "FD neutrals (no PDG=0) #beta w/o PCAL hit",
-//    hPlot1D hBeta_all_neutrals_noPCAL_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL hit", "FD neutrals (no PDG=0) #beta w/o PCAL hit",
-                                                             "#beta",
-                                                             directories.Beta_Directory_map["All_FD_neutrals_noPDG0_02_1n_Directory"],
-                                                             "01_Beta_Neutrals_noPCAL_hit_1n",
-                                                             Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL hit - ZOOMOUT",
-                                                                     "FD neutrals (no PDG=0) w/o PCAL hit - ZOOMOUT",
-                                                                     "#beta", directories.Beta_Directory_map["All_FD_neutrals_noPDG0_02_1n_Directory"],
-                                                                     "01_Beta_Neutrals_noPCAL_hit_1n_ZOOMOUT",
-                                                                     Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 50);
+    hPlot1D hBeta_n_from_ph_04_1n_FD = hPlot1D("1n", "FD", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT", "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                               "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_1n_Directory"],
+                                               "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                       "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                       directories.Beta_Directory_map["Neutron_beta_from_ph_04_1n_Directory"],
+                                                       "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                       Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
 
+    //<editor-fold desc="Beta of all FD neutrals (1n, FD)">
+    hPlot1D hBeta_All_FD_Neut_01_1n_FD = hPlot1D("1n", "FD", "#beta of all FD neut.", "#beta of all FD neut.", "#beta",
+                                                 directories.Beta_Directory_map["All_FD_neutrals_01_1n_Directory"], "01_Beta_All_FD_Neutrals_1n",
+                                                 Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_All_FD_Neut_01_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - ZOOMOUT", "#beta of all FD neut. - ZOOMOUT", "#beta",
+                                                         directories.Beta_Directory_map["All_FD_neutrals_01_1n_Directory"], "01_Beta_All_FD_Neutrals_1n_ZOOMOUT",
+                                                         Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
 
-    hPlot1D hBeta_all_neutrals_noPCAL_wECIN_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL & w/ ECIN", "All FD neutrals #beta w/o PCAL hit & ECIN hit",
-                                                            "#beta", directories.Beta_Directory_map["All_FD_neutrals_03_1n_Directory"],
-                                                            "01_Beta_Neutrals_noPCAL_wECIN_hit_1n",
-                                                            Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_wECIN_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL & w/ ECIN - ZOOMOUT",
-                                                                    "All FD neutrals #beta w/o PCAL hit & ECIN hit - ZOOMOUT", "#beta",
-                                                                    directories.Beta_Directory_map["All_FD_neutrals_03_1n_Directory"],
-                                                                    "01_Beta_Neutrals_noPCAL_wECIN_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                    Beta_dist_ZOOMOUT_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD = hPlot1D("1n", "FD", "h3",
-//    hPlot1D hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL & w/ ECIN",
-                                                                   "FD neutrals (no PDG=0) #beta w/o PCAL hit & ECIN hit",
-                                                                   "#beta", directories.Beta_Directory_map["All_FD_neutrals_noPDG0_03_1n_Directory"],
-                                                                   "01_Beta_Neutrals_noPCAL_wECIN_hit_1n",
-                                                                   Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL & w/ ECIN - ZOOMOUT",
-                                                                           "FD neutrals (no PDG=0) #beta w/o PCAL hit & ECIN hit - ZOOMOUT", "#beta",
-                                                                           directories.Beta_Directory_map["All_FD_neutrals_noPDG0_03_1n_Directory"],
-                                                                           "01_Beta_Neutrals_noPCAL_wECIN_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                           Beta_dist_ZOOMOUT_uboundary, 50);
+    hPlot1D hBeta_All_FD_Neut_02_1n_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - !PCAL", "#beta of all FD neut. w/o PCAL hit", "#beta",
+                                                 directories.Beta_Directory_map["All_FD_neutrals_02_1n_Directory"], "01_Beta_All_FD_Neutrals_noPCAL_1n",
+                                                 Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_All_FD_Neut_02_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - !PCAL - ZOOMOUT", "#beta of all FD neut. w/o PCAL hit - ZOOMOUT",
+                                                         "#beta", directories.Beta_Directory_map["All_FD_neutrals_02_1n_Directory"],
+                                                         "01_Beta_All_FD_Neutrals_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
 
+    hPlot1D hBeta_All_FD_Neut_03_1n_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - !PCAL & ECIN", "#beta of all FD neut. w/o PCAL & w/ECIN", "#beta",
+                                                 directories.Beta_Directory_map["All_FD_neutrals_03_1n_Directory"], "01_Beta_All_FD_Neutrals_noPCAL_yesECIN_1n",
+                                                 Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_All_FD_Neut_03_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - !PCAL & ECIN - ZOOMOUT",
+                                                         "#beta of all FD neut. w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                         directories.Beta_Directory_map["All_FD_neutrals_03_1n_Directory"],
+                                                         "01_Beta_All_FD_Neutrals_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                         Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
 
-    hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL/ECIN & w/ ECOUT",
-                                                                    "All FD neutrals #beta w/o PCAL/ECIN hit &  w/ ECOUT hit",
-                                                                    "#beta", directories.Beta_Directory_map["All_FD_neutrals_04_1n_Directory"],
-                                                                    "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n",
-                                                                    Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "All FD neutrals #beta w/o PCAL/ECIN & w/ ECOUT - ZOOMOUT",
-                                                                            "All FD neutrals #beta w/o PCAL/ECIN hit &  w/ ECOUT hit - ZOOMOUT", "#beta",
-                                                                            directories.Beta_Directory_map["All_FD_neutrals_04_1n_Directory"],
-                                                                            "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                            Beta_dist_ZOOMOUT_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD = hPlot1D("1n", "FD", "h4",
-//    hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN & w/ ECOUT",
-                                                                           "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN hit &  w/ ECOUT hit",
-                                                                           "#beta",
-                                                                           directories.Beta_Directory_map["All_FD_neutrals_noPDG0_04_1n_Directory"],
-                                                                           "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n",
-                                                                           Beta_dist_lboundary, Beta_dist_uboundary, 50);
-    hPlot1D hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN & w/ ECOUT - ZOOMOUT",
-                                                                                   "FD neutrals (no PDG=0) #beta w/o PCAL/ECIN hit &  w/ ECOUT hit - ZOOMOUT", "#beta",
-                                                                                   directories.Beta_Directory_map["All_FD_neutrals_noPDG0_04_1n_Directory"],
-                                                                                   "01_Beta_Neutrals_noPCAL_noECIN_wECOUT_hit_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
-                                                                                   Beta_dist_ZOOMOUT_uboundary, 50);
+    hPlot1D hBeta_All_FD_Neut_04_1n_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - !PCAL & !ECIN & ECOUT", "#beta of all FD neut. w/o PCAL/ECIN & w/ECOUT",
+                                                 "#beta", directories.Beta_Directory_map["All_FD_neutrals_04_1n_Directory"],
+                                                 "01_Beta_All_FD_Neutrals_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_All_FD_Neut_04_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of all FD neut. - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                         "#beta of all FD neut. w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                         directories.Beta_Directory_map["All_FD_neutrals_04_1n_Directory"],
+                                                         "01_Beta_All_FD_Neutrals_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                         Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of all FD neutrals - no PDG=0 (1n, FD)">
+    hPlot1D hBeta_FD_Neut_noPDG0_01_1n_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0)", "#beta of FD neut. (noPDG0)", "#beta",
+                                                    directories.Beta_Directory_map["FD_neutrals_noPDG0_01_1n_Directory"], "01_Beta_FD_Neutrals_1n",
+                                                    Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_FD_Neut_noPDG0_01_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - ZOOMOUT", "#beta of FD neut. (noPDG0) - ZOOMOUT", "#beta",
+                                                            directories.Beta_Directory_map["FD_neutrals_noPDG0_01_1n_Directory"], "01_Beta_FD_Neutrals_1n_ZOOMOUT",
+                                                            Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_FD_Neut_noPDG0_02_1n_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - !PCAL", "#beta of FD neut. (no PDG=0) w/o PCAL hit", "#beta",
+                                                    directories.Beta_Directory_map["FD_neutrals_noPDG0_02_1n_Directory"], "01_Beta_FD_Neutrals_noPCAL_1n",
+                                                    Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_FD_Neut_noPDG0_02_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - !PCAL - ZOOMOUT",
+                                                            "#beta of FD neut. (no PDG=0) w/o PCAL hit - ZOOMOUT",
+                                                            "#beta", directories.Beta_Directory_map["FD_neutrals_noPDG0_02_1n_Directory"],
+                                                            "01_Beta_FD_Neutrals_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_FD_Neut_noPDG0_03_1n_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - !PCAL & ECIN", "#beta of FD neut. (noPDG0) w/o PCAL & w/ECIN", "#beta",
+                                                    directories.Beta_Directory_map["FD_neutrals_noPDG0_03_1n_Directory"], "01_Beta_FD_Neutrals_noPCAL_yesECIN_1n",
+                                                    Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_FD_Neut_noPDG0_03_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - !PCAL & ECIN - ZOOMOUT",
+                                                            "#beta of FD neut. (noPDG0) w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                            directories.Beta_Directory_map["FD_neutrals_noPDG0_03_1n_Directory"],
+                                                            "01_Beta_FD_Neutrals_noPCAL_yesECIN_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary,
+                                                            Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_FD_Neut_noPDG0_04_1n_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - !PCAL & !ECIN & ECOUT",
+                                                    "#beta of FD neut. (noPDG0) w/o PCAL/ECIN & w/ECOUT",
+                                                    "#beta", directories.Beta_Directory_map["FD_neutrals_noPDG0_04_1n_Directory"],
+                                                    "01_Beta_FD_Neutrals_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_FD_Neut_noPDG0_04_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "#beta of FD neut. (noPDG0) - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                            "#beta of FD neut. (noPDG0) w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                            directories.Beta_Directory_map["FD_neutrals_noPDG0_04_1n_Directory"],
+                                                            "01_Beta_FD_Neutrals_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                            Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P plots">
@@ -3479,6 +3503,7 @@ void EventAnalyser() {
             /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
             n_momentum_cuts = DSCuts("Momentum_cuts", "", "Neutron", "", 0, 0.3, 9999);
             n_momentum_cuts_ABF_FD_n_from_ph = DSCuts("Momentum_cuts_ECAL", "FD-ECAL", "Neutron", "", 0, 0.3, 9999);
+            n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL", "Neutron", "", 0, 0.3, 9999);
 
             n_momentum_cuts_ABF_FD_All_neutrals = DSCuts("Momentum_cuts_All_neutrals", "FD-ECAL", "Neutron", "", 0, 0.3, 9999);
             n_momentum_cuts_ABF_FD_All_neutrals_noPDG0 = DSCuts("Momentum_cuts_All_neutrals_noPDG0", "FD-ECAL", "Neutron", "", 0, 0.3, 9999);
@@ -5406,7 +5431,7 @@ void EventAnalyser() {
 
                     //<editor-fold desc="Fill Beta plots (1n, FD only)">
 
-                    //<editor-fold desc="Beta plots for neutrons from photons (1n, FD)">
+                    //<editor-fold desc="Beta plots for neutrons from 'photons' (1n, FD)">
                     for (int &i: NeutronsFD_ind) {
                         int PDGtmp = allParticles[i]->par()->getPid();
                         double P_n_temp = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
@@ -5420,62 +5445,94 @@ void EventAnalyser() {
                             if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
                             if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron. Exiting...\n\n", exit(EXIT_FAILURE); }
 
-                            hBeta_n_from_ph_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                            hBeta_n_from_ph_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_n_from_ph_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
 
                             if (fabs(allParticles[i]->par()->getBeta() - Beta_cut_for_map.GetMean()) <= Beta_cut_for_map.FitStd) {
                                 hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
                             }
+
+                            //<editor-fold desc="Beta_n_from_ph - !PCAL">
+                            if (!inPCALtmp) {
+                                hBeta_n_from_ph_02_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_02_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN">
+                            if (!inPCALtmp && inECINtmp) {
+                                hBeta_n_from_ph_03_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT">
+                            if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                hBeta_n_from_ph_04_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            }
+                            //</editor-fold>
                         }
                     }
                     //</editor-fold>
 
+                    //<editor-fold desc="Filling Beta plots from FD neutrrals">
                     for (int i = 0; i < allParticles.size(); i++) {
-                        if (allParticles[i]->getRegion() == FD && allParticles[i]->par()->getCharge() == 0) {
+                        if ((allParticles[i]->getRegion() == FD) && (allParticles[i]->par()->getCharge() == 0)) {
                             bool inPCAL_1n_temp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                             bool inECIN_1n_temp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                             bool inECOUT_1n_temp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
-                            hBeta_all_neutrals_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                            hBeta_all_neutrals_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            //<editor-fold desc="All_FD_Neut">
+                            hBeta_All_FD_Neut_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_All_FD_Neut_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
 
                             if (allParticles[i]->par()->getPid() != 0) {
-                                hBeta_all_neutrals_noPDG0_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                hBeta_all_neutrals_noPDG0_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_FD_Neut_noPDG0_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_FD_Neut_noPDG0_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             }
+                            //</editor-fold>
 
+                            //<editor-fold desc="All_FD_Neut - !PCAL">
                             if (!inPCAL_1n_temp) {
-                                hBeta_all_neutrals_noPCAL_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                hBeta_all_neutrals_noPCAL_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_All_FD_Neut_02_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_All_FD_Neut_02_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
 
                                 if (allParticles[i]->par()->getPid() != 0) {
-                                    hBeta_all_neutrals_noPCAL_noPDG0_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                    hBeta_all_neutrals_noPCAL_noPDG0_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
-                                }
-
-                                if (inECIN_1n_temp) {
-                                    hBeta_all_neutrals_noPCAL_wECIN_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                    hBeta_all_neutrals_noPCAL_wECIN_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
-
-                                    if (allParticles[i]->par()->getPid() != 0) {
-                                        hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                        hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
-                                    }
-                                }
-
-                                if (!inECIN_1n_temp && inECOUT_1n_temp) {
-                                    hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                    hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
-
-                                    if (allParticles[i]->par()->getPid() != 0) {
-                                        hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                                        hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
-                                    }
+                                    hBeta_FD_Neut_noPDG0_02_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_FD_Neut_noPDG0_02_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                                 }
                             }
+                            //</editor-fold>
+
+                            //<editor-fold desc="All_FD_Neut - !PCAL && ECIN">
+                            if (!inPCAL_1n_temp && inECIN_1n_temp) {
+                                hBeta_All_FD_Neut_03_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_All_FD_Neut_03_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+
+                                if (allParticles[i]->par()->getPid() != 0) {
+                                    hBeta_FD_Neut_noPDG0_03_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_FD_Neut_noPDG0_03_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                                }
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold desc="All_FD_Neut - !PCAL && !ECIN && ECOUT">
+                            if (!inPCAL_1n_temp && !inECIN_1n_temp && inECOUT_1n_temp) {
+                                hBeta_All_FD_Neut_04_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_All_FD_Neut_04_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+
+                                if (allParticles[i]->par()->getPid() != 0) {
+                                    hBeta_FD_Neut_noPDG0_04_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_FD_Neut_noPDG0_04_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                                }
+                            }
+                            //</editor-fold>
                         }
                     }
+                    //</editor-fold>
+
                     //</editor-fold>
 
                     //<editor-fold desc="Beta vs. P from identified particles">
@@ -6998,47 +7055,68 @@ void EventAnalyser() {
 
 //  Beta plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Beta vs. P plots (1n)">
-        hBeta_n_from_ph_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_n_from_ph_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        //<editor-fold desc="Beta plots (1n)">
+        hBeta_n_from_ph_01_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
 
-        hBeta_all_neutrals_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPDG0_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPDG0_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-
-        hBeta_all_neutrals_noPCAL_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_noPDG0_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_noPDG0_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-
-        hBeta_all_neutrals_noPCAL_wECIN_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_wECIN_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-
-        hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-        hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD, "!PCAL", hBeta_n_from_ph_03_1n_FD, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD, "!PCAL && !ECIN && ECIN");
 
         if (!apply_neutron_Beta_Fit) {
-            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_1n_FD, plots);
-
-            BetaFit(SampleName, Beta_cut_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals, hBeta_all_neutrals_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_All_neutrals_noPDG0, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0, hBeta_all_neutrals_noPDG0_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL, hBeta_all_neutrals_noPCAL_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_noPDG0, hBeta_all_neutrals_noPCAL_noPDG0_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN, hBeta_all_neutrals_noPCAL_wECIN_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_wECIN_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0, hBeta_all_neutrals_noPCAL_wECIN_noPDG0_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, hBeta_all_neutrals_noPCAL_noECIN_wECOUT_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0,
-                    hBeta_all_neutrals_noPCAL_noECIN_wECOUT_noPDG0_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
         }
 
+        hBeta_All_FD_Neut_01_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_01_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_02_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_02_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_03_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_03_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_04_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_All_FD_Neut_04_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
 
+        StackPlot3(SampleName, plots,
+                   hBeta_All_FD_Neut_02_1n_FD, "!PCAL", hBeta_All_FD_Neut_03_1n_FD, "!PCAL && ECIN", hBeta_All_FD_Neut_04_1n_FD, "!PCAL && !ECIN && ECIN");
+        StackPlot4(SampleName, plots,
+                   hBeta_All_FD_Neut_01_1n_FD, "All FD neutrals", hBeta_All_FD_Neut_02_1n_FD, "!PCAL",
+                   hBeta_All_FD_Neut_03_1n_FD, "!PCAL && ECIN", hBeta_All_FD_Neut_04_1n_FD, "!PCAL && !ECIN && ECIN");
 
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals, hBeta_All_FD_Neut_01_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL, hBeta_All_FD_Neut_02_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN, hBeta_All_FD_Neut_03_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, hBeta_All_FD_Neut_04_1n_FD, plots);
+        }
 
+        hBeta_FD_Neut_noPDG0_01_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_01_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_02_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_02_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_03_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_03_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_04_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_FD_Neut_noPDG0_04_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_FD_Neut_noPDG0_02_1n_FD, "!PCAL", hBeta_FD_Neut_noPDG0_03_1n_FD, "!PCAL && ECIN", hBeta_FD_Neut_noPDG0_04_1n_FD, "!PCAL && !ECIN && ECIN");
+        StackPlot4(SampleName, plots,
+                   hBeta_FD_Neut_noPDG0_01_1n_FD, "FD neutrals (no PDG=0)", hBeta_FD_Neut_noPDG0_02_1n_FD, "!PCAL",
+                   hBeta_FD_Neut_noPDG0_03_1n_FD, "!PCAL && ECIN", hBeta_FD_Neut_noPDG0_04_1n_FD, "!PCAL && !ECIN && ECIN");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_All_neutrals_noPDG0, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0, hBeta_FD_Neut_noPDG0_01_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_noPDG0, hBeta_FD_Neut_noPDG0_02_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_wECIN_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0, hBeta_FD_Neut_noPDG0_03_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0,
+                    hBeta_FD_Neut_noPDG0_04_1n_FD, plots);
+        }
         //</editor-fold>
 
     } else {
@@ -8634,12 +8712,12 @@ void EventAnalyser() {
 
     //<editor-fold desc="Saving proton pid cuts to .par file">
     if (!apply_neutron_Beta_Fit) { // log neutron beta cut from fit
-        DSCuts Beta_Fit_Cuts[] = {n_momentum_cuts, n_momentum_cuts_ABF_FD_n_from_ph,
+        DSCuts Beta_Fit_Cuts[] = {n_momentum_cuts, n_momentum_cuts_ABF_FD_n_from_ph,n_momentum_cuts_ABF_FD_n_from_ph_apprax,
                                   n_momentum_cuts_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0,
                                   n_momentum_cuts_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL_noPDG0,
                                   n_momentum_cuts_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0,
                                   n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0};
-        int Beta_Fit_Cuts_length = 10;
+        int Beta_Fit_Cuts_length = 11;
 
         ofstream Fitted_n_Mom_Cuts;
         std::string Fitted_n_Mom_CutsFilePath = CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par";
@@ -9015,6 +9093,8 @@ void EventAnalyser() {
     myLogFile << "\n-- Momentum thresholds (1n) -----------------------------------------------" << "\n";
     myLogFile << "P_n_lower_cut_1n (n_momentum_cuts - ECAL) = " << n_momentum_cuts_ABF_FD_n_from_ph.GetLowerCut() << "\n";
     myLogFile << "P_n_upper_cut_1n (n_momentum_cuts - ECAL) = " << n_momentum_cuts_ABF_FD_n_from_ph.GetUpperCut() << "\n";
+    myLogFile << "P_n_lower_cut_1n_apprax (n_momentum_cuts - ECAL apprax) = " << n_momentum_cuts_ABF_FD_n_from_ph_apprax.GetLowerCut() << "\n";
+    myLogFile << "P_n_upper_cut_1n_apprax (n_momentum_cuts - ECAL apprax) = " << n_momentum_cuts_ABF_FD_n_from_ph_apprax.GetUpperCut() << "\n";
     myLogFile << "P_n_lower_cut_1n (n_momentum_cuts - noPCAL) = " << n_momentum_cuts_ABF_FD_noPCAL.GetLowerCut() << "\n";
     myLogFile << "P_n_upper_cut_1n (n_momentum_cuts - noPCAL) = " << n_momentum_cuts_ABF_FD_noPCAL.GetUpperCut() << "\n";
     myLogFile << "P_n_lower_cut_1n (n_momentum_cuts - ECIN) = " << n_momentum_cuts_ABF_FD_noPCAL_wECIN.GetLowerCut() << "\n";
