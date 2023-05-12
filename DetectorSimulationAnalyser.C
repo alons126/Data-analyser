@@ -131,7 +131,7 @@ void EventAnalyser() {
 
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
-    bool apply_neutron_Beta_Fit = false;
+    bool apply_neutron_Beta_Fit = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -161,6 +161,8 @@ void EventAnalyser() {
 //                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_NoBetaCut"; // NOTE: not acctually a beta cut - but a neutron mom cut
 //                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_NoBetaCut.txt";
                 } else if (apply_neutron_Beta_Fit) {
+//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCutDISABLED9999";
+//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCutDISABLED61";
                     plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut";
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut.txt";
                 }
@@ -361,7 +363,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Calculation settings">
     /* settings to enable/disable specific FS plot calculations. */
-    bool calculate_truth_level = true, calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
+    bool calculate_truth_level = false, calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
