@@ -46,10 +46,15 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/FitFunctions/BetaFit.h"
 #include "source/functions/FitFunctions/BetaFitApprax.h"
 #include "source/functions/DrawAndSaveEfficiencyPlots.h"
-#include "source/functions/GetFDNeutrons.h"
-#include "source/functions/GetFDNeutronP.h"
-#include "source/functions/GetFDPhotons.h"
-#include "source/functions/GetGoodParticles.h"
+#include "source/functions/PID_functions/ChargedParticleID.h"
+#include "source/functions/PID_functions/GetFDNeutrons.h"
+#include "source/functions/PID_functions/GetFDNeutronP.h"
+#include "source/functions/PID_functions/GetFDPhotons.h"
+#include "source/functions/PID_functions/GetGoodParticles.h"
+//#include "source/functions/PID_functions/NeutralParticleID.h"
+#include "source/functions/PID_functions/FDNeutralParticle.h"
+#include "source/functions/PID_functions/FDNeutralParticleID.h"
+#include "source/functions/PID_functions/nParticleID.h"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
 #include "source/functions/StackPlot3.h"
 #include "source/functions/StackPlot4.h"
@@ -3666,13 +3671,51 @@ void EventAnalyser() {
 
         //<editor-fold desc="Configure good particles & basic event selection">
         /* Configure particles within general momentum cuts (i.e. "identified particles") */
-        vector<int> Electron_ind = GetGoodParticles(electrons, e_mom_th);
-        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_mom_th, apply_neutron_Beta_Fit);
-        vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_mom_th);
-        vector<int> Protons_ind = GetGoodParticles(protons, p_mom_th);
-        vector<int> Piplus_ind = GetGoodParticles(piplus, pip_mom_th);
-        vector<int> Piminus_ind = GetGoodParticles(piminus, pim_mom_th);
 
+        //<editor-fold desc="Charged particles' identification">
+        vector<int> Electron_ind = ChargedParticleID(electrons, e_mom_th);
+        vector<int> Protons_ind = ChargedParticleID(protons, p_mom_th);
+        vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
+        vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
+/*
+        vector<int> Electron_ind = ChargedParticleID(electrons, e_mom_th);
+        vector<int> Protons_ind = ChargedParticleID(protons, p_mom_th);
+        vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
+        vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
+*/
+
+/*
+//        vector<int> Electron_ind = GetGoodParticles(electrons, e_mom_th);
+//        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_mom_th, apply_neutron_Beta_Fit);
+//        vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_mom_th);
+//        vector<int> Protons_ind = GetGoodParticles(protons, p_mom_th);
+//        vector<int> Piplus_ind = GetGoodParticles(piplus, pip_mom_th);
+//        vector<int> Piminus_ind = GetGoodParticles(piminus, pim_mom_th);
+*/
+        //</editor-fold>
+
+        //<editor-fold desc="Neutral particles' identification (FD only)">
+        vector<int> FD_Neutrons, NeutronsFD_ind, FD_Photons, PhotonsFD_ind;
+
+        /* Get FD neutrons and photons, according to the definitions: */
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons); // Get FD neutrons and photons, according to the definitions
+
+        /* Get FD neutrons and photons above momentum threshold: */
+        FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_neutron_Beta_Fit);
+
+//        cout << "\n\n1n: allParticles[NeutronsFD_ind.at(0)]->par()->getPid() = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid()
+//             << "\n\n", exit(EXIT_FAILURE);
+
+
+//        vector<int> NeutronsFD_ind = IDNeutronsFD;
+//        vector<int> PhotonsFD_ind = IDPhotonsFD;
+//        vector<int> IDNeutronsFD = NeutralParticleID(allParticles, n_mom_th, "Neutrons", apply_neutron_Beta_Fit);
+//        vector<int> IDPhotonsFD = NeutralParticleID(allParticles, ph_mom_th, "Photons", apply_neutron_Beta_Fit);
+//        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_mom_th, apply_neutron_Beta_Fit); //original
+//        vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_mom_th); //original
+        //</editor-fold>
+
+        //<editor-fold desc="Setting up event selection">
         /* set up basic event selection: */
         bool single_electron = (Electron_ind.size() == 1);                              // no electron above momentum threshold
         bool no_carged_Kaons = ((Nkp == 0) && (Nkm == 0));                              // no cKaons whatsoever
@@ -3680,6 +3723,8 @@ void EventAnalyser() {
         bool no_deuterons = (Nd == 0);
 
         bool basic_event_selection = (single_electron && no_carged_Kaons && no_carged_pions && no_deuterons);
+        //</editor-fold>
+
         //</editor-fold>
 
         /* Safety check that allParticles.size(), Nf are the same */
@@ -3761,6 +3806,8 @@ void EventAnalyser() {
             }
         }
         //</editor-fold>
+
+//  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_neutron_Beta_Fit) { // run only for CLAS12 simulation & AFTER beta fit
@@ -4109,9 +4156,7 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-//  Fill All particles (All e) plots ----------------------------------------------------------------------------------------------------------------------------
-
-        // TODO: remove or change - clas12ana comes with 1e cut already
+//  Fill All particles (All e) plots ------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="All particles plots">
         /* Declaration of electron variables for all particles analysis.
@@ -5277,9 +5322,21 @@ void EventAnalyser() {
             if (Piminus_ind.size() != 0) { cout << "\n\n1n: Piminus_ind.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (Electron_ind.size() != 1) { cout << "\n\n1n: Electron_ind.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
             if (deuterons.size() != 0) { cout << "\n\n1n: deuterons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
-            for (int i = 0; i < PhotonsFD_ind.size(); i++) {
+
+            for (int &i: NeutronsFD_ind) {
+                bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(i)]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                if (NeutronInPCAL_1n) { cout << "\n\n1n: a neutron have been found with a PCAL hit. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!((allParticles[i]->par()->getPid() == 2112) || (allParticles[i]->par()->getPid() == 22))) {
+                    cout << "\n\n1n: A neutron PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << "). Exiting...\n\n", exit(EXIT_FAILURE);
+                }
+            }
+
+            for (int &i: PhotonsFD_ind) {
                 bool PhotonInPCAL_1n = (allParticles[PhotonsFD_ind.at(i)]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                if (!PhotonInPCAL_1n) { cout << "\n\n1n: a photon have been found with out PCAL hit. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!PhotonInPCAL_1n) { cout << "\n\n1n: a photon have been found without a PCAL hit. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (allParticles[i]->par()->getPid() != 22) {
+                    cout << "\n\n1n: A photon PDG is not 2112 or 22 (" << allParticles[i]->par()->getPid() << "). Exiting...\n\n", exit(EXIT_FAILURE);
+                }
             }
             //</editor-fold>
 
@@ -5300,7 +5357,9 @@ void EventAnalyser() {
                 int NeutronPDG = allParticles[NeutronsFD_ind.at(0)]->par()->getPid();
 
                 if (allParticles[NeutronsFD_ind.at(0)]->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
-                if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) { cout << "\n\n1n: neutral PDG is not 2112 or 22. Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) {
+                    cout << "\n\n1n: neutral PDG is not 2112 or 22 (" << NeutronPDG << "). Exiting...\n\n", exit(EXIT_FAILURE);
+                }
                 if (NeutronInPCAL_1n) { cout << "\n\n1n: neutron hit in PCAL. Exiting...\n\n", exit(EXIT_FAILURE); }
                 if (!(NeutronInECIN_1n || NeutronInECOUT_1n)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT. Exiting...\n\n", exit(EXIT_FAILURE); }
                 //</editor-fold>

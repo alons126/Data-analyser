@@ -14,7 +14,7 @@
 #include "clas12reader.h"
 #include "region_particle.h"
 
-#include "../classes/DSCuts/DSCuts.h"
+#include "../../classes/DSCuts/DSCuts.h"
 
 using namespace std;
 
@@ -26,7 +26,8 @@ vector<int> GetGoodParticles(vector<region_part_ptr> &Particle, // particle
     for (int i = 0; i < Particle.size(); i++) {
         double Momentum = Particle[i]->getP();
 
-        if ((Momentum >= Momentum_cuts.GetLowerCut()) && (Momentum <= Momentum_cuts.GetUpperCut())) { GoodParticles.push_back(i); }
+        if (Momentum >= Momentum_cuts.GetLowerCut()) { GoodParticles.push_back(i); }
+//        if ((Momentum >= Momentum_cuts.GetLowerCut()) && (Momentum <= Momentum_cuts.GetUpperCut())) { GoodParticles.push_back(i); }
     }
 
     return GoodParticles;
