@@ -42,14 +42,10 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000 * 2, 750 * 2); // normal res
-//    TCanvas *Canvas = new TCanvas("canvas", "canvas", 2000, 1500); // high res
-//    TCanvas *Canvas = new TCanvas("canvas", "canvas", 1650, 1150);
-//    Canvas->cd();
     Canvas->SetGrid();
     Canvas->SetBottomMargin(0.14);
 
-    Canvas->SetLeftMargin(0.17);
-//    Canvas->SetLeftMargin(0.16);
+    Canvas->SetLeftMargin(0.18);
     Canvas->SetRightMargin(0.12);
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();

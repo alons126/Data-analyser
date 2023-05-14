@@ -139,7 +139,7 @@ void EventAnalyser() {
 
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
-    bool apply_neutron_Beta_Fit = false;
+    bool apply_neutron_Beta_Fit = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -152,31 +152,15 @@ void EventAnalyser() {
         if (!apply_cuts) {
             plots_path = WorkingDirectory + "plots_" + SampleName + "_-00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-00_NO_CUTS.txt";
-//            plots_path = WorkingDirectory + "plots_" + SampleName + "_-_NO_CUTS";
-//            plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_NO_CUTS.txt";
         } else {
             if (!apply_chi2_cuts_1e_cut) {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_woChi2";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-//                plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS";
-//                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS.txt";
                 if (!apply_neutron_Beta_Fit) {
-//                    plots_path =
-//                            WorkingDirectory + "plots_" + SampleName + "_-02_ALL_CUTS_NoBetaCut_wPhotonsFD"; // NOTE: not acctually a beta cut - but a neutron mom cut
                     plots_path = WorkingDirectory + "plots_" + SampleName + "_-02_ALL_CUTS_NoBetaCut"; // NOTE: not acctually a beta cut - but a neutron mom cut
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_NoBetaCut.txt";
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-_ALL_CUTS_NoBetaCut"; // NOTE: not acctually a beta cut - but a neutron mom cut
-//                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-_ALL_CUTS_NoBetaCut.txt";
                 } else if (apply_neutron_Beta_Fit) {
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut";
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_protCut";
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_wPhotonsFD";
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_wPhotonsFD_protCut";
-
-
                     plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut"; //original
                     plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut.txt";
                 }
@@ -289,17 +273,12 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum thresholds */
-    DSCuts e_mom_th = DSCuts("Momentum threshold", "", "Electron", "", 0, -9999, 9999);
-//    DSCuts p_mom_th = DSCuts("Momentum threshold", "", "Proton", "", 0, 1.5, 9999);
-    DSCuts p_mom_th = DSCuts("Momentum threshold", "", "Proton", "", 0, 0.3, 9999);
-//    DSCuts pip_mom_th = DSCuts("Momentum threshold", "", "Piplus", "", 0, 1.25, 9999);
-    DSCuts pip_mom_th = DSCuts("Momentum threshold", "", "Piplus", "", 0, 0.2, 9999);
-//    DSCuts pim_mom_th = DSCuts("Momentum threshold", "", "Piplus", "", 0, 1.35, 9999);
-    DSCuts pim_mom_th = DSCuts("Momentum threshold", "", "Piplus", "", 0, 0.2, 9999);
-//    DSCuts ph_mom_th = DSCuts("Momentum threshold", "", "Photons", "", 0, 0.75, 9999);
-    DSCuts ph_mom_th = DSCuts("Momentum threshold", "", "Photons", "", 0, 0.3, 9999);
-//    DSCuts n_mom_th = DSCuts("Momentum threshold", "", "Photons", "", 0, 1.75, 9999);
-    DSCuts n_mom_th = DSCuts("Momentum threshold", "", "Photons", "", 0, 0.3, 9999);
+    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
+    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
+    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
+    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
     //</editor-fold>
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -328,6 +307,18 @@ void EventAnalyser() {
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     //</editor-fold>
 
+    //</editor-fold>
+
+    //<editor-fold desc="Truth-level momentum cuts">
+    /* Momentum cuts */
+    DSCuts TL_e_momentum_cuts = DSCuts("Momentum", "", "Electron", "", 0, e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut());
+
+    DSCuts TL_p_momentum_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut());
+    DSCuts TL_pip_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
+    DSCuts TL_pim_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
+    DSCuts TL_pi0_momentum_cuts = DSCuts("Momentum", "", "Pizero", "", 0, -9999, 9999);
+    DSCuts TL_ph_momentum_cuts = DSCuts("Momentum", "", "Photons", "", 0, ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut());
+    DSCuts TL_n_momentum_cuts;
     //</editor-fold>
 
     /* FD theta range (1n & 1p) */
@@ -393,11 +384,11 @@ void EventAnalyser() {
     Directories directories = Directories(Plots_Folder);
     //</editor-fold>
 
-// Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
+// Event selection settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Calculation settings">
+    //<editor-fold desc="Event selection settings">
     /* settings to enable/disable specific FS plot calculations. */
-    bool calculate_truth_level = true;
+    bool calculate_truth_level = false;
     bool calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
     //</editor-fold>
 
@@ -1224,8 +1215,14 @@ void EventAnalyser() {
     hPlot1D hP_n_APID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                       directories.Momentum_th_Directory_map["Momentum_th_1n_Directory"], "02a_P_n_APID_1n_FD",
                                       Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_n_BPID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
+                                      directories.Momentum_th_Directory_map["Momentum_th_1n_Directory"], "02b_P_n_BPID_1n_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_n_APID_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum APID - ZOOMOUT", "Neutron momentum P_{n} APID - ZOOMOUT", "P_{n} [GeV/c]",
-                                              directories.Momentum_th_Directory_map["Momentum_th_1n_Directory"], "02b_P_n_APID_1n_ZOOMOUT_FD",
+                                              directories.Momentum_th_Directory_map["Momentum_th_1n_Directory"], "02c_P_n_APID_1n_ZOOMOUT_FD",
+                                              Momentum_lboundary, 20.);
+    hPlot1D hP_n_BPID_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum BPID - ZOOMOUT", "Neutron momentum P_{n} BPID - ZOOMOUT", "P_{n} [GeV/c]",
+                                              directories.Momentum_th_Directory_map["Momentum_th_1n_Directory"], "02d_P_n_BPID_1n_ZOOMOUT_FD",
                                               Momentum_lboundary, 20.);
 
     hPlot1D hP_p_APID_1n_CD = hPlot1D("1n", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
@@ -1571,8 +1568,6 @@ void EventAnalyser() {
 //    //</editor-fold>
 //
 //    //</editor-fold>
-
-    //</editor-fold>
 
     //</editor-fold>
 
@@ -3338,183 +3333,177 @@ void EventAnalyser() {
     //<editor-fold desc="Efficiency plots (1p)">
 
     //<editor-fold desc="Truth level momentum plots (1p)">
-    hPlot1D hP_e_truth_1p = hPlot1D("1p", "", "TL Electron momentum", "Electron momentum P^{truth}_{e}", "P^{truth}_{e} [GeV/c]",
-                                    directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "01_P_e_truth_1p", Momentum_lboundary,
-                                    Momentum_uboundary);
-    hPlot1D hP_e_BC_truth_1p = hPlot1D("1p", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} - before cuts", "P^{truth}_{e} [GeV/c]",
-                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "01_P_e_truth_BC_truth_1p", Momentum_lboundary,
-                                       Momentum_uboundary);
+    hPlot1D hP_e_AC_truth_1p = hPlot1D("1p", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
+                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "01_P_e_truth_AC_1p",
+                                       Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_e_BC_truth_1p = hPlot1D("1p", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
+                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "01_P_e_truth_BC_truth_1p",
+                                       Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_n_truth_1p = hPlot1D("1p", "", "TL Neutron momentum", "Neutron momentum P^{truth}_{n}", "P^{truth}_{n} [GeV/c]",
-                                    directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "02_P_n_truth_1p", Momentum_lboundary,
-                                    Momentum_uboundary);
-    hPlot1D hP_n_BC_truth_1p = hPlot1D("1p", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} - before cuts", "P^{truth}_{n} [GeV/c]",
-                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "02_P_n_truth_BC_1p", Momentum_lboundary,
-                                       Momentum_uboundary);
+    hPlot1D hP_n_AC_truth_1p = hPlot1D("1p", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
+                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "02_P_n_truth_AC_1p",
+                                       Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_n_BC_truth_1p = hPlot1D("1p", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
+                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "02_P_n_truth_BC_1p",
+                                       Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_truth_1p = hPlot1D("1p", "", "TL Proton momentum", "Proton momentum P^{truth}_{p}", "P^{truth}_{p} [GeV/c]",
-                                    directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03a_P_p_truth_1p", Momentum_lboundary,
-                                    Momentum_uboundary);
-    hPlot1D hP_p_BC_truth_1p = hPlot1D("1p", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} - before cuts", "P^{truth}_{p} [GeV/c]",
-                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03a_P_p_truth_BC_1p", Momentum_lboundary,
-                                       Momentum_uboundary);
-    hPlot1D hP_p_truth_1p_FD = hPlot1D("1p", "FD", "TL Proton momentum", "Proton momentum P^{truth}_{p}", "P^{truth}_{p} [GeV/c]",
-                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03b_P_p_truth_1p_FD_FD", Momentum_lboundary,
-                                       Momentum_uboundary);
-    hPlot1D hP_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} - before cuts", "P^{truth}_{p} [GeV/c]",
-                                          directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03b_P_p_truth_BC_1p_FD", Momentum_lboundary,
-                                          Momentum_uboundary);
+    hPlot1D hP_p_AC_truth_1p = hPlot1D("1p", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03a_P_p_truth_AC_1p",
+                                       Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BC_truth_1p = hPlot1D("1p", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                       directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03a_P_p_truth_BC_1p",
+                                       Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+                                          directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03b_P_p_truth_AC_1p_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+                                          directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "03b_P_p_truth_BC_1p_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pip_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum", "#pi^{+} momentum P^{truth}_{#pi^{+}}", "P^{truth}_{#pi^{+}} [GeV/c]",
-                                      directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "04_P_piplus_truth_1p",
-                                      Momentum_lboundary,
-                                      Momentum_uboundary);
-    hPlot1D hP_pip_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} - before cuts", "P^{truth}_{#pi^{+}} [GeV/c]",
-                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "04_P_piplus_BC_truth_1p",
-                                         Momentum_lboundary,
-                                         Momentum_uboundary);
+    hPlot1D hP_pip_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "04_P_piplus_truth_AC_1p",
+                                         Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_pip_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "04_P_piplus_truth_BC_1p",
+                                         Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pim_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum", "#pi^{-} momentum P^{truth}_{#pi^{-}}", "P^{truth}_{#pi^{-}} [GeV/c]",
-                                      directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "05_P_piminus_truth_1p",
-                                      Momentum_lboundary,
-                                      Momentum_uboundary);
-    hPlot1D hP_pim_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} - before cuts", "P^{truth}_{#pi^{-}} [GeV/c]",
-                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "05_P_piminus_BC_truth_1p",
-                                         Momentum_lboundary,
-                                         Momentum_uboundary);
+    hPlot1D hP_pim_AC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "05_P_piminus_truth_AC_1p",
+                                         Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_pim_BC_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "05_P_piminus_truth_BC_1p",
+                                         Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_ph_truth_1p = hPlot1D("1p", "", "TL #gamma momentum", "#gamma momentum P^{truth}_{#gamma}", "P^{truth}_{#gamma} [GeV/c]",
-                                     directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_truth_1p",
-                                     Momentum_lboundary,
-                                     Momentum_uboundary);
-    hPlot1D hP_ph_BC_truth_1p = hPlot1D("1p", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} - before cuts", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_BC_truth_1p",
-                                        Momentum_lboundary,
-                                        Momentum_uboundary);
+    hPlot1D hP_ph_AC_truth_1p = hPlot1D("1p", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_truth_AC_1p",
+                                        Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_ph_BC_truth_1p = hPlot1D("1p", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "06_P_ph_truth_BC_1p",
+                                        Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1p)">
-    hPlot1D hTheta_e_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e}", "#theta^{truth}_{e} of Outgoing Electron", "#theta^{truth}_{e} [Deg]",
+    hPlot1D hTheta_e_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron", "#theta^{truth}_{e} [Deg]",
                                         directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "01_Theta_e_truth_1p", Theta_lboundary_FD,
                                         Theta_uboundary_FD);
-    hPlot1D hTheta_e_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron - before cuts", "#theta^{truth}_{e} [Deg]",
-                                           directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "01_Theta_e_truth_BC_truth_1p",
+    hPlot1D hTheta_e_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+                                           directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "01_Theta_e_truth_truth_BC_1p",
                                            Theta_lboundary_FD,
                                            Theta_uboundary_FD);
 
-    hPlot1D hTheta_n_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n}", "#theta^{truth}_{n} of Outgoing Neutron", "#theta^{truth}_{n} [Deg]",
+    hPlot1D hTheta_n_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron", "#theta^{truth}_{n} [Deg]",
                                         directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "02_Theta_n_truth_1p", Theta_lboundary_FD,
                                         Theta_uboundary_FD);
-    hPlot1D hTheta_n_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron - before cuts", "#theta^{truth}_{n} [Deg]",
+    hPlot1D hTheta_n_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "02_Theta_n_truth_BC_1p", Theta_lboundary_FD,
                                            Theta_uboundary_FD);
 
-    hPlot1D hTheta_p_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p}", "#theta^{truth}_{n} of Outgoing Proton", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{n} of Outgoing Proton", "#theta^{truth}_{p} [Deg]",
                                         directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03a_Theta_p_truth_1p", Theta_lboundary_FD,
                                         Theta_uboundary_FD);
-    hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton - before cuts", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03a_Theta_p_truth_BC_1p", Theta_lboundary_FD,
                                            Theta_uboundary_FD);
-    hPlot1D hTheta_p_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p}", "#theta^{truth}_{n} of Outgoing Proton", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{n} of Outgoing Proton", "#theta^{truth}_{p} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03b_Theta_p_truth_1p_FD", Theta_lboundary_FD,
                                            Theta_uboundary_FD);
-    hPlot1D hTheta_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton - before cuts", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03b_Theta_p_truth_BC_1p_FD", Theta_lboundary_FD,
                                               Theta_uboundary_FD);
 
-    hPlot1D hTheta_pip_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}}", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+}",
+    hPlot1D hTheta_pip_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+}",
                                           "#theta^{truth}_{#pi^{+}} [Deg]",
                                           directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "04_Theta_piplus_truth_1p",
                                           Theta_lboundary_FD,
                                           Theta_uboundary_FD);
-    hPlot1D hTheta_pip_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} - before cuts",
+    hPlot1D hTheta_pip_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
                                              "#theta^{truth}_{#pi^{+}} [Deg]",
-                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "04_Theta_piplus_BC_truth_1p",
+                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "04_Theta_piplus_truth_BC_1p",
                                              Theta_lboundary_FD,
                                              Theta_uboundary_FD);
 
-    hPlot1D hTheta_pim_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}}", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-}",
+    hPlot1D hTheta_pim_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-}",
                                           "#theta^{truth}_{#pi^{-}} [Deg]",
                                           directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "05_Theta_piminus_truth_1p",
                                           Theta_lboundary_FD,
                                           Theta_uboundary_FD);
-    hPlot1D hTheta_pim_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} - before cuts",
+    hPlot1D hTheta_pim_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
                                              "#theta^{truth}_{#pi^{-}} [Deg]",
-                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "05_Theta_piminus_BC_truth_1p",
+                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "05_Theta_piminus_truth_BC_1p",
                                              Theta_lboundary_FD,
                                              Theta_uboundary_FD);
 
-    hPlot1D hTheta_ph_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma}", "#theta^{truth}_{#gamma} of Outgoing #gamma",
+    hPlot1D hTheta_ph_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma",
                                          "#theta^{truth}_{#gamma} [Deg]",
                                          directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_truth_1p",
                                          Theta_lboundary_FD,
                                          Theta_uboundary_FD);
-    hPlot1D hTheta_ph_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma - before cuts",
+    hPlot1D hTheta_ph_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
                                             "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_BC_truth_1p",
+                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "06_Theta_Photons_truth_BC_1p",
                                             Theta_lboundary_FD,
                                             Theta_uboundary_FD);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1p)">
-    hPlot1D hPhi_e_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e}", "#phi^{truth}_{e} of Outgoing Electron", "#phi^{truth}_{e} [Deg]",
+    hPlot1D hPhi_e_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron", "#phi^{truth}_{e} [Deg]",
                                       directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "01_Phi_e_truth_1p", Phi_lboundary_FD,
                                       Phi_uboundary_FD);
-    hPlot1D hPhi_e_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron - before cuts", "#phi^{truth}_{e} [Deg]",
-                                         directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "01_Phi_e_truth_BC_truth_1p",
+    hPlot1D hPhi_e_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
+                                         directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "01_Phi_e_truth_truth_BC_1p",
                                          Phi_lboundary_FD,
                                          Phi_uboundary_FD);
 
-    hPlot1D hPhi_n_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n}", "#phi^{truth}_{n} of Outgoing Neutron", "#phi^{truth}_{n} [Deg]",
+    hPlot1D hPhi_n_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron", "#phi^{truth}_{n} [Deg]",
                                       directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "02_Phi_n_truth_1p", Phi_lboundary_FD,
                                       Phi_uboundary_FD);
-    hPlot1D hPhi_n_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron - before cuts", "#phi^{truth}_{n} [Deg]",
+    hPlot1D hPhi_n_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "02_Phi_n_truth_BC_1p", Phi_lboundary_FD,
                                          Phi_uboundary_FD);
 
-    hPlot1D hPhi_p_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p}", "#phi^{truth}_{n} of Outgoing Proton", "#phi^{truth}_{p} [Deg]",
+    hPlot1D hPhi_p_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton", "#phi^{truth}_{p} [Deg]",
                                       directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "03a_Phi_p_truth_1p", Phi_lboundary_FD,
                                       Phi_uboundary_FD);
-    hPlot1D hPhi_p_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton - before cuts", "#phi^{truth}_{p} [Deg]",
+    hPlot1D hPhi_p_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "03a_Phi_p_truth_BC_1p", Phi_lboundary_FD,
                                          Phi_uboundary_FD);
-    hPlot1D hPhi_p_truth_1p_FD = hPlot1D("1p", "FD", "TL #phi^{truth}_{p}", "#phi^{truth}_{n} of Outgoing Proton", "#phi^{truth}_{p} [Deg]",
+    hPlot1D hPhi_p_truth_1p_FD = hPlot1D("1p", "FD", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton", "#phi^{truth}_{p} [Deg]",
                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "03b_Phi_p_truth_1p_FD", Phi_lboundary_FD,
                                          Phi_uboundary_FD);
-    hPlot1D hPhi_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton - before cuts", "#phi^{truth}_{p} [Deg]",
+    hPlot1D hPhi_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
                                             directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "03b_Phi_p_truth_BC_1p_FD", Phi_lboundary_FD,
                                             Phi_uboundary_FD);
 
-    hPlot1D hPhi_pip_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}}", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+}",
+    hPlot1D hPhi_pip_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+}",
                                         "#phi^{truth}_{#pi^{+}} [Deg]",
                                         directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "04_Phi_piplus_truth_1p",
                                         Phi_lboundary_FD,
                                         Phi_uboundary_FD);
-    hPlot1D hPhi_pip_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} - before cuts",
+    hPlot1D hPhi_pip_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
                                            "#phi^{truth}_{#pi^{+}} [Deg]",
-                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "04_Phi_piplus_BC_truth_1p",
+                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "04_Phi_piplus_truth_BC_1p",
                                            Phi_lboundary_FD,
                                            Phi_uboundary_FD);
 
-    hPlot1D hPhi_pim_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}}", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-}",
+    hPlot1D hPhi_pim_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-}",
                                         "#phi^{truth}_{#pi^{-}} [Deg]",
                                         directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "05_Phi_piminus_truth_1p",
                                         Phi_lboundary_FD,
                                         Phi_uboundary_FD);
-    hPlot1D hPhi_pim_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} - before cuts",
+    hPlot1D hPhi_pim_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
                                            "#phi^{truth}_{#pi^{-}} [Deg]",
-                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "05_Phi_piminus_BC_truth_1p",
+                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "05_Phi_piminus_truth_BC_1p",
                                            Phi_lboundary_FD,
                                            Phi_uboundary_FD);
 
-    hPlot1D hPhi_ph_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma}", "#phi^{truth}_{#gamma} of Outgoing #gamma",
+    hPlot1D hPhi_ph_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma",
                                        "#phi^{truth}_{#gamma} [Deg]",
                                        directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_truth_1p",
                                        Phi_lboundary_FD,
                                        Phi_uboundary_FD);
-    hPlot1D hPhi_ph_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma - before cuts",
+    hPlot1D hPhi_ph_BC_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC",
                                           "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_BC_truth_1p",
+                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "06_Phi_Photons_truth_BC_1p",
                                           Phi_lboundary_FD,
                                           Phi_uboundary_FD);
     //</editor-fold>
@@ -3812,10 +3801,9 @@ void EventAnalyser() {
             clasAna.readInputParam((CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             /* Setting neutron momentum cut after beta fit */
-//            n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, n_mom_th.GetLowerCut(), 3.62323);
-            n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, n_mom_th.GetLowerCut(), clasAna.getNeutronMomentumCut());
-//            cout << "\n\n\n\nclasAna.getNeutronMomentumCut() = " << clasAna.getNeutronMomentumCut() << "\n\n\n";
-//            exit(EXIT_FAILURE);
+            n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
+            TL_n_momentum_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+//            n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, n_mom_th.GetLowerCut(), clasAna.getNeutronMomentumCut());
         }
 
         clasAna.printParams();
@@ -3857,8 +3845,12 @@ void EventAnalyser() {
     int num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0;
 
     int num_of_events_1p_inFD = 0;
-    int num_of_events_1n_inFD_wAllPhotons = 0, num_of_events_1n_inFD_wAllPh_wBetaLT1 = 0, num_of_events_1n_inFD_woFDphotons = 0, num_of_events_1n_inFD_woFDphotons_AV = 0;
-    int num_of_events_1e1n1p_wFakeNeut = 0, num_of_events_2p = 0; // = number of events
+
+    int num_of_events_1n_inFD = 0, num_of_events_1n_inFD_AV = 0;
+
+    int num_of_events_1e1n1p_wFakeNeut = 0;
+
+    int num_of_events_2p = 0;
     //</editor-fold>
 
 //  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -3904,21 +3896,6 @@ void EventAnalyser() {
         vector<int> Protons_ind = ChargedParticleID(protons, p_mom_th);
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
         vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
-/*
-        vector<int> Electron_ind = ChargedParticleID(electrons, e_mom_th);
-        vector<int> Protons_ind = ChargedParticleID(protons, p_mom_th);
-        vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
-        vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
-*/
-
-/*
-//        vector<int> Electron_ind = GetGoodParticles(electrons, e_mom_th);
-//        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_mom_th, apply_neutron_Beta_Fit);
-//        vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_mom_th);
-//        vector<int> Protons_ind = GetGoodParticles(protons, p_mom_th);
-//        vector<int> Piplus_ind = GetGoodParticles(piplus, pip_mom_th);
-//        vector<int> Piminus_ind = GetGoodParticles(piminus, pim_mom_th);
-*/
         //</editor-fold>
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
@@ -3929,17 +3906,6 @@ void EventAnalyser() {
 
         /* Get FD neutrons and photons above momentum threshold: */
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_neutron_Beta_Fit);
-
-//        cout << "\n\n1n: allParticles[NeutronsFD_ind.at(0)]->par()->getPid() = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid()
-//             << "\n\n", exit(EXIT_FAILURE);
-
-
-//        vector<int> NeutronsFD_ind = IDNeutronsFD;
-//        vector<int> PhotonsFD_ind = IDPhotonsFD;
-//        vector<int> IDNeutronsFD = NeutralParticleID(allParticles, n_mom_th, "Neutrons", apply_neutron_Beta_Fit);
-//        vector<int> IDPhotonsFD = NeutralParticleID(allParticles, ph_mom_th, "Photons", apply_neutron_Beta_Fit);
-//        vector<int> NeutronsFD_ind = GetFDNeutrons(allParticles, n_mom_th, apply_neutron_Beta_Fit); //original
-//        vector<int> PhotonsFD_ind = GetFDPhotons(allParticles, ph_mom_th); //original
         //</editor-fold>
 
         //<editor-fold desc="Setting up event selection">
@@ -4036,6 +4002,8 @@ void EventAnalyser() {
 
 //  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
 
+        //TODO: add pi0 histograms
+
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_neutron_Beta_Fit) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
@@ -4045,11 +4013,14 @@ void EventAnalyser() {
             /* Particle index vectors */
             vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
 
-            /* Particle index vectors (for particles above momentum threshold) */
-            vector<int> TL_Electron_mom_ind, TL_Neutrons_mom_ind, TL_Protons_mom_ind, TL_piplus_mom_ind, TL_piminus_mom_ind, TL_Photons_mom_ind;
+            /* Particle index vectors (for FD particles) */
+            vector<int> TL_NeutronsFD_ind, TL_ProtonsFD_ind, TL_PhotonsFD_ind;
 
-            int TL_Electron = 0, TL_Neutrons = 0, TL_Protons = 0, TL_piplus = 0, TL_piminus = 0, TL_pizero = 0, TL_Photons = 0, TL_OtherPart = 0;
-            int TL_Electron_mom = 0, TL_Neutrons_mom = 0, TL_Protons_mom = 0, TL_piplus_mom = 0, TL_piminus_mom = 0, TL_Photons_mom = 0;
+            /* Particle index vectors (for particles above momentum threshold) */
+            vector<int> TL_Electron_mom_ind, TL_Neutrons_mom_ind, TL_Protons_mom_ind, TL_piplus_mom_ind, TL_piminus_mom_ind, TL_pizero_mom_ind, TL_Photons_mom_ind;
+
+            /* Particle index vectors (for FD particles above momentum threshold) */
+            vector<int> TL_NeutronsFD_mom_ind, TL_ProtonsFD_mom_ind, TL_PhotonsFD_mom_ind;
 
             for (Int_t i = 0; i < Ngen; i++) {
                 mcpbank->setEntry(i);
@@ -4060,72 +4031,79 @@ void EventAnalyser() {
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
+                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+
+
                 if (particlePDGtmp == 11) {
-                    if ((Particle_TL_Momentum >= e_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= e_mom_th.GetUpperCut())) {
-                        TL_Electron_mom_ind.push_back(i);
-                        ++TL_Electron_mom;
-                    }
+                    if ((Particle_TL_Momentum >= TL_e_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_e_momentum_cuts.GetUpperCut())) { TL_Electron_mom_ind.push_back(i); }
 
                     TL_Electron_ind.push_back(i);
-                    ++TL_Electron;
                 } else if (particlePDGtmp == 2212) {
-                    if ((Particle_TL_Momentum >= p_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= p_mom_th.GetUpperCut())) {
-                        TL_Protons_mom_ind.push_back(i);
-                        ++TL_Protons_mom;
-                    }
+                    if ((Particle_TL_Momentum >= TL_p_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_p_momentum_cuts.GetUpperCut())) { TL_Protons_mom_ind.push_back(i); }
 
                     TL_Protons_ind.push_back(i);
-                    ++TL_Protons;
-                } else if (particlePDGtmp == 2112) {
-                    if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
-                        TL_Neutrons_mom_ind.push_back(i);
-                        ++TL_Neutrons_mom;
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_p_momentum_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_p_momentum_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind.push_back(i); }
+
+                        TL_ProtonsFD_ind.push_back(i);
                     }
+                } else if (particlePDGtmp == 2112) {
+                    if ((Particle_TL_Momentum >= TL_n_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_n_momentum_cuts.GetUpperCut())) { TL_Neutrons_mom_ind.push_back(i); }
 
                     TL_Neutrons_ind.push_back(i);
-                    ++TL_Neutrons;
-                } else if (particlePDGtmp == 211) {
-                    if ((Particle_TL_Momentum >= pip_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pip_mom_th.GetUpperCut())) {
-                        TL_piplus_mom_ind.push_back(i);
-                        ++TL_piplus_mom;
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_n_momentum_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_n_momentum_cuts.GetUpperCut())) { TL_NeutronsFD_mom_ind.push_back(i); }
+
+                        TL_NeutronsFD_ind.push_back(i);
                     }
+                } else if (particlePDGtmp == 211) {
+                    if ((Particle_TL_Momentum >= TL_pip_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pip_momentum_cuts.GetUpperCut())) { TL_piplus_mom_ind.push_back(i); }
 
                     TL_piplus_ind.push_back(i);
-                    ++TL_piplus;
                 } else if (particlePDGtmp == -211) {
-                    if ((Particle_TL_Momentum >= pim_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pim_mom_th.GetUpperCut())) {
-                        TL_piminus_mom_ind.push_back(i);
-                        ++TL_piminus_mom;
-                    }
+                    if ((Particle_TL_Momentum >= TL_pim_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pim_momentum_cuts.GetUpperCut())) { TL_piminus_mom_ind.push_back(i); }
 
                     TL_piminus_ind.push_back(i);
-                    ++TL_piminus;
                 } else if (particlePDGtmp == 22) {
-                    if ((Particle_TL_Momentum >= ph_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= ph_mom_th.GetUpperCut())) {
-                        TL_Photons_mom_ind.push_back(i);
-                        ++TL_Photons_mom;
-                    }
+                    if ((Particle_TL_Momentum >= TL_ph_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_ph_momentum_cuts.GetUpperCut())) { TL_Photons_mom_ind.push_back(i); }
 
                     TL_Photons_ind.push_back(i);
-                    ++TL_Photons;
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_ph_momentum_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_ph_momentum_cuts.GetUpperCut())) { TL_PhotonsFD_mom_ind.push_back(i); }
+
+                        TL_PhotonsFD_ind.push_back(i);
+                    }
                 } else if (particlePDGtmp == 111) {
+                    if ((Particle_TL_Momentum >= TL_pi0_momentum_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pi0_momentum_cuts.GetUpperCut())) { TL_pizero_mom_ind.push_back(i); }
+
                     TL_pizero_ind.push_back(i);
-                    ++TL_pizero;
                 } else {
                     TL_OtherPart_ind.push_back(i);
-                    ++TL_OtherPart;
                 }
             }
             //</editor-fold>
 
-            bool no_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                           // No cPions above momentum threshold
-            bool no_Photons = (TL_Photons_mom_ind.size() == 0);                                                           // No cPions above momentum threshold
-            bool no_OtherPart = (TL_OtherPart_ind.size() == 0);                                                           // No other part. above momentum threshold
-            bool Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                              // One electron above momentum threshold
-            bool Basic_ES_TL = (Event_Selection_1e_cut && no_cPions && no_OtherPart && no_Photons);
+            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                           // No cPions above momentum threshold
+            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                           // No other part. above momentum threshold
+            bool no_TL_FDPhotons = (TL_Photons_mom_ind.size() == 0);                                                         // No cPions above momentum threshold
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                              // One electron above momentum threshold
+            bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDPhotons);
 
-            bool Event_Selection_1p = (Basic_ES_TL && TL_Protons_mom_ind.size() == 1);                                    // One proton above momentum threshold
-            bool Event_Selection_1n = (Basic_ES_TL && TL_Protons_mom_ind.size() == 0 && TL_Neutrons_mom_ind.size() == 1); // One neutron above momentum threshold
+            bool TL_Event_Selection_1p = (TL_Basic_ES && TL_Protons_mom_ind.size() == 1);                                    // One proton above momentum threshold
+            bool TL_Event_Selection_1n = (TL_Basic_ES && TL_Protons_mom_ind.size() == 0 && TL_Neutrons_mom_ind.size() == 1); // One neutron above momentum threshold
 
             for (Int_t i = 0; i < Ngen; i++) {
                 mcpbank->setEntry(i);
@@ -4139,8 +4117,8 @@ void EventAnalyser() {
                 bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
 
                 if (particlePDGtmp == 11) {
-                    if (Event_Selection_1e_cut) {
-                        if ((Particle_TL_Momentum >= e_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= e_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1e_cut) {
+                        if ((Particle_TL_Momentum >= TL_e_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_momentum_cuts.GetUpperCut())) {
                             hP_e_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                             hTheta_e_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_e_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
@@ -4151,9 +4129,9 @@ void EventAnalyser() {
                         hPhi_e_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1p) {
-                        if ((Particle_TL_Momentum >= e_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= e_mom_th.GetUpperCut())) {
-                            hP_e_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                    if (TL_Event_Selection_1p) {
+                        if ((Particle_TL_Momentum >= TL_e_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_momentum_cuts.GetUpperCut())) {
+                            hP_e_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
                             hTheta_e_truth_1p.hFill(Particle_TL_Theta, Weight);
                             hPhi_e_truth_1p.hFill(Particle_TL_Phi, Weight);
                         }
@@ -4163,8 +4141,8 @@ void EventAnalyser() {
                         hPhi_e_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1n) {
-                        if ((Particle_TL_Momentum >= e_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= e_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1n) {
+                        if ((Particle_TL_Momentum >= TL_e_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_momentum_cuts.GetUpperCut())) {
                             hP_e_truth_1n.hFill(Particle_TL_Momentum, Weight);
                             hTheta_e_truth_1n.hFill(Particle_TL_Theta, Weight);
                             hPhi_e_truth_1n.hFill(Particle_TL_Phi, Weight);
@@ -4175,8 +4153,9 @@ void EventAnalyser() {
                         hPhi_e_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
                     }
                 } else if (particlePDGtmp == 2112) {
-                    if (Event_Selection_1e_cut) {
-                        if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1e_cut) {
+                        if ((Particle_TL_Momentum >= TL_n_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_momentum_cuts.GetUpperCut())) {
+//                        if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
                             hP_n_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                             hTheta_n_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_n_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
@@ -4187,9 +4166,10 @@ void EventAnalyser() {
                         hPhi_n_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1p) {
-                        if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
-                            hP_n_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                    if (TL_Event_Selection_1p) {
+                        if ((Particle_TL_Momentum >= TL_n_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_momentum_cuts.GetUpperCut())) {
+//                        if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
+                            hP_n_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
                             hTheta_n_truth_1p.hFill(Particle_TL_Theta, Weight);
                             hPhi_n_truth_1p.hFill(Particle_TL_Phi, Weight);
                         }
@@ -4199,8 +4179,9 @@ void EventAnalyser() {
                         hPhi_n_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1n) {
-                        if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1n) {
+                        if ((Particle_TL_Momentum >= TL_n_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_momentum_cuts.GetUpperCut())) {
+//                        if ((Particle_TL_Momentum >= n_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= n_mom_th.GetUpperCut())) {
                             hP_n_truth_1n.hFill(Particle_TL_Momentum, Weight);
                             hTheta_n_truth_1n.hFill(Particle_TL_Theta, Weight);
                             hPhi_n_truth_1n.hFill(Particle_TL_Phi, Weight);
@@ -4223,8 +4204,8 @@ void EventAnalyser() {
                         }
                     }
                 } else if (particlePDGtmp == 2212) {
-                    if (Event_Selection_1e_cut) {
-                        if ((Particle_TL_Momentum >= p_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= p_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1e_cut) {
+                        if ((Particle_TL_Momentum >= TL_p_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_momentum_cuts.GetUpperCut())) {
                             hP_p_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                             hTheta_p_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_p_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
@@ -4235,14 +4216,14 @@ void EventAnalyser() {
                         hPhi_p_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1p) {
-                        if ((Particle_TL_Momentum >= p_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= p_mom_th.GetUpperCut())) {
-                            hP_p_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                    if (TL_Event_Selection_1p) {
+                        if ((Particle_TL_Momentum >= TL_p_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_momentum_cuts.GetUpperCut())) {
+                            hP_p_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
                             hTheta_p_truth_1p.hFill(Particle_TL_Theta, Weight);
                             hPhi_p_truth_1p.hFill(Particle_TL_Phi, Weight);
 
                             if (inFD) {
-                                hP_p_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
+                                hP_p_AC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
                                 hTheta_p_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
                                 hPhi_p_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
                             }
@@ -4259,8 +4240,8 @@ void EventAnalyser() {
                         }
                     }
 
-                    if (Event_Selection_1n) {
-                        if ((Particle_TL_Momentum >= p_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= p_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1n) {
+                        if ((Particle_TL_Momentum >= TL_p_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_momentum_cuts.GetUpperCut())) {
                             hP_p_truth_1n.hFill(Particle_TL_Momentum, Weight);
                             hTheta_p_truth_1n.hFill(Particle_TL_Theta, Weight);
                             hPhi_p_truth_1n.hFill(Particle_TL_Phi, Weight);
@@ -4271,8 +4252,8 @@ void EventAnalyser() {
                         hPhi_p_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
                     }
                 } else if (particlePDGtmp == 211) {
-                    if (Event_Selection_1e_cut) {
-                        if ((Particle_TL_Momentum >= pip_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pip_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1e_cut) {
+                        if ((Particle_TL_Momentum >= TL_pip_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_momentum_cuts.GetUpperCut())) {
                             hP_pip_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pip_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pip_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
@@ -4283,9 +4264,9 @@ void EventAnalyser() {
                         hPhi_pip_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1p) {
-                        if ((Particle_TL_Momentum >= pip_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pip_mom_th.GetUpperCut())) {
-                            hP_pip_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                    if (TL_Event_Selection_1p) {
+                        if ((Particle_TL_Momentum >= TL_pip_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_momentum_cuts.GetUpperCut())) {
+                            hP_pip_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pip_truth_1p.hFill(Particle_TL_Theta, Weight);
                             hPhi_pip_truth_1p.hFill(Particle_TL_Phi, Weight);
                         }
@@ -4295,8 +4276,8 @@ void EventAnalyser() {
                         hPhi_pip_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1n) {
-                        if ((Particle_TL_Momentum >= pip_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pip_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1n) {
+                        if ((Particle_TL_Momentum >= TL_pip_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_momentum_cuts.GetUpperCut())) {
                             hP_pip_truth_1n.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pip_truth_1n.hFill(Particle_TL_Theta, Weight);
                             hPhi_pip_truth_1n.hFill(Particle_TL_Phi, Weight);
@@ -4307,8 +4288,8 @@ void EventAnalyser() {
                         hPhi_pip_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
                     }
                 } else if (particlePDGtmp == -211) {
-                    if (Event_Selection_1e_cut) {
-                        if ((Particle_TL_Momentum >= pim_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pim_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1e_cut) {
+                        if ((Particle_TL_Momentum >= TL_pim_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_momentum_cuts.GetUpperCut())) {
                             hP_pim_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pim_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
@@ -4319,9 +4300,9 @@ void EventAnalyser() {
                         hPhi_pim_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1p) {
-                        if ((Particle_TL_Momentum >= pim_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pim_mom_th.GetUpperCut())) {
-                            hP_pim_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                    if (TL_Event_Selection_1p) {
+                        if ((Particle_TL_Momentum >= TL_pim_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_momentum_cuts.GetUpperCut())) {
+                            hP_pim_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pim_truth_1p.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_truth_1p.hFill(Particle_TL_Phi, Weight);
                         }
@@ -4331,8 +4312,8 @@ void EventAnalyser() {
                         hPhi_pim_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1n) {
-                        if ((Particle_TL_Momentum >= pim_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= pim_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1n) {
+                        if ((Particle_TL_Momentum >= TL_pim_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_momentum_cuts.GetUpperCut())) {
                             hP_pim_truth_1n.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pim_truth_1n.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_truth_1n.hFill(Particle_TL_Phi, Weight);
@@ -4343,8 +4324,8 @@ void EventAnalyser() {
                         hPhi_pim_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
                     }
                 } else if (particlePDGtmp == 22) {
-                    if (Event_Selection_1e_cut) {
-                        if ((Particle_TL_Momentum >= ph_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= ph_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1e_cut) {
+                        if ((Particle_TL_Momentum >= TL_ph_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_momentum_cuts.GetUpperCut())) {
                             hP_pim_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pim_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
@@ -4355,9 +4336,9 @@ void EventAnalyser() {
                         hPhi_pim_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1p) {
-                        if ((Particle_TL_Momentum >= ph_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= ph_mom_th.GetUpperCut())) {
-                            hP_pim_truth_1p.hFill(Particle_TL_Momentum, Weight);
+                    if (TL_Event_Selection_1p) {
+                        if ((Particle_TL_Momentum >= TL_ph_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_momentum_cuts.GetUpperCut())) {
+                            hP_pim_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pim_truth_1p.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_truth_1p.hFill(Particle_TL_Phi, Weight);
                         }
@@ -4367,8 +4348,8 @@ void EventAnalyser() {
                         hPhi_pim_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
                     }
 
-                    if (Event_Selection_1n) {
-                        if ((Particle_TL_Momentum >= ph_mom_th.GetLowerCut()) && (Particle_TL_Momentum <= ph_mom_th.GetUpperCut())) {
+                    if (TL_Event_Selection_1n) {
+                        if ((Particle_TL_Momentum >= TL_ph_momentum_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_momentum_cuts.GetUpperCut())) {
                             hP_pim_truth_1n.hFill(Particle_TL_Momentum, Weight);
                             hTheta_pim_truth_1n.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_truth_1n.hFill(Particle_TL_Phi, Weight);
@@ -5571,13 +5552,32 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
+
+
+
+            bool mom_cut_1n = true;
+
+            //            //<editor-fold desc="Setting neutron momentum cut">
+////            cout << "\n\n\n\nn_momentum_cuts.GetUpperCut() = " << n_momentum_cuts.GetUpperCut() << "\n\n\n";
+////            exit(EXIT_FAILURE);
+//
+//            bool mom_cut_1n;
+//
+//            if (!apply_neutron_Beta_Fit) {
+//                mom_cut_1n = true;
+//            } else if (apply_neutron_Beta_Fit) {
+//                mom_cut_1n = (GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_neutron_Beta_Fit) <= n_momentum_cuts.GetUpperCut());
+//            }
+//            //</editor-fold>
+
+
+
+
             // looking at 1n events in the FD only & below theta_n cut:
-            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) {
+            if ((allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) && mom_cut_1n) {
 //            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD &&
 //                ((allParticles[NeutronsFD_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
-                ++num_of_events_1n_inFD_wAllPhotons; // 1n event count after momentum and theta_n cuts
-
-                ++num_of_events_1n_inFD_woFDphotons; // 1n event count after momentum cuts, theta_n cuts and no photons in the FD cut.
+                ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
 
                 bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                 bool NeutronInECIN_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
@@ -5663,7 +5663,7 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Fillings 1n histograms">
                 if (NeutronPassVeto) {
-                    ++num_of_events_1n_inFD_woFDphotons_AV;
+                    ++num_of_events_1n_inFD_AV;
 
                     //<editor-fold desc="Filling cut variable plots (1n)">
                     /* Filling Nphe plots (1n) */
@@ -5702,8 +5702,21 @@ void EventAnalyser() {
                     //</editor-fold>
 
                     //<editor-fold desc="Neutron momentum (1n)">
-                    hP_n_APID_1n_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
-                    hP_n_APID_1n_ZOOMOUT_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
+
+                    //<editor-fold desc="Neutron momentum - all contributions (1n)">
+//                    hP_n_APID_1n_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
+//                    hP_n_APID_1n_ZOOMOUT_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
+                    for (int &i: NeutronsFD_ind) {
+                        hP_n_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // after mom. th.
+                        hP_n_APID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // after mom. th.
+                    }
+
+                    /* Neutron mom. after th. (verified neutrons) */
+                    for (int &i: FD_Neutrons) {
+                        hP_n_BPID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // before mom. th.
+                        hP_n_BPID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // before mom. th.
+                    }
+                    //</editor-fold>
 
                     //<editor-fold desc="Neutron momentum - verified neutrons (1n)">
                     /* Neutron mom. before th. (verified neutrons) */
@@ -5834,7 +5847,6 @@ void EventAnalyser() {
                     for (int &i: NeutronsFD_ind) {
                         int PDGtmp = allParticles[i]->par()->getPid();
                         double P_n_temp = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
-
 
                         bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
                         bool inECINtmp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
@@ -7390,7 +7402,9 @@ void EventAnalyser() {
         hP_e_BPID_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
 
         hP_n_APID_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_n_BPID_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         hP_n_APID_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_n_BPID_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
 
         hP_p_APID_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_p_BPID_1n_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
@@ -8920,23 +8934,23 @@ void EventAnalyser() {
         //<editor-fold desc="Efficiency plots (1p, CD & FD)">
 
         //<editor-fold desc="Momentum efficiency plots (1p)">
-        hP_e_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
+        hP_e_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
         hP_e_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_n_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_n_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         hP_n_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-        hP_p_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_p_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_AC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_p_BC_truth_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_pip_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_pip_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
         hP_pip_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pim_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_pim_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
         hP_pim_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_ph_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_ph_AC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
         hP_ph_BC_truth_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
 
-        DrawAndSaveEfficiencyPlots(SampleName, hP_e_truth_1p, hP_e_APID_1p_FD, plots);
-        DrawAndSaveEfficiencyPlots(SampleName, hP_p_truth_1p_FD, hP_p_APID_1p_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_e_AC_truth_1p, hP_e_APID_1p_FD, plots);
+        DrawAndSaveEfficiencyPlots(SampleName, hP_p_AC_truth_1p_FD, hP_p_APID_1p_FD, plots);
         //</editor-fold>
 
         //<editor-fold desc="Theta efficiency plots (1p)">
@@ -9093,7 +9107,7 @@ void EventAnalyser() {
 
 // Saving proton pid cuts to .par file ----------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Saving proton pid cuts to .par file">
+    //<editor-fold desc="Saving pid cuts to .par file">
     if (apply_cuts == true &&
         apply_chi2_cuts_1e_cut == false) { // log pid cuts only if all other cuts are enabled //todo: review this. make code preform cuts only in this case
         DSCuts chi2cuts[] = {Chi2_Proton_cuts_CD, Chi2_Proton_cuts_FD, Chi2_piplus_cuts_CD, Chi2_piplus_cuts_FD, Chi2_piminus_cuts_CD, Chi2_piminus_cuts_FD};
@@ -9122,11 +9136,11 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Saving proton pid cuts to .par file">
+    //<editor-fold desc="Saving neutron momentum and beta cuts to .par file">
     if (!apply_neutron_Beta_Fit) { // log neutron beta cut from fit
         /* Log cuts from 'photons' fit first */
-        DSCuts Beta_Fit_Cuts[] = {n_mom_th, n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
-        int Beta_Fit_Cuts_length = 3;
+        DSCuts Beta_Fit_Cuts[] = {n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
+        int Beta_Fit_Cuts_length = 2;
 
         ofstream Fitted_n_Mom_Cuts;
         std::string Fitted_n_Mom_CutsFilePath = CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par";
@@ -9138,6 +9152,11 @@ void EventAnalyser() {
         Fitted_n_Mom_Cuts << "# Cuts are fitted for - " + SampleName << "\n";
         Fitted_n_Mom_Cuts << "\n";
         Fitted_n_Mom_Cuts << "# Beta std by detector (pid:mean:sigma) - sigma_FD=" << n_momentum_cuts.FitStdFactor << ":\n";
+
+        Fitted_n_Mom_Cuts << n_mom_th.GetCutVariable() << "\t\t\t" << n_mom_th.GetPartPDG() << ":" << n_mom_th.Cuts.at(0) << ":" << n_mom_th.GetLowerCut() << ":"
+                          << n_mom_th.GetRegion() << "\n";
+
+        Fitted_n_Mom_Cuts << "\n";
 
         for (int i = 0; i < Beta_Fit_Cuts_length; i++) {
             Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
@@ -9610,10 +9629,8 @@ void EventAnalyser() {
     myLogFile << "-- Event counts -----------------------------------------------------------\n";
     myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
     myLogFile << "num_of_events_1p_inFD:\t\t\t\t" << num_of_events_1p_inFD << "\n";
-    myLogFile << "num_of_events_1n_inFD_wAllPhotons:\t\t" << num_of_events_1n_inFD_wAllPhotons << "\n";
-    myLogFile << "num_of_events_1n_inFD_wAllPh_wBetaLT1:\t\t" << num_of_events_1n_inFD_wAllPh_wBetaLT1 << "\n";
-    myLogFile << "num_of_events_1n_inFD_woFDphotons:\t\t" << num_of_events_1n_inFD_woFDphotons << "\n";
-    myLogFile << "num_of_events_1n_inFD_woFDphotons_AV:\t" << num_of_events_1n_inFD_woFDphotons_AV << "\n";
+    myLogFile << "num_of_events_1n_inFD:\t\t\t\t" << num_of_events_1n_inFD << "\n";
+    myLogFile << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n";
 //    myLogFile << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n";
     myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
     myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
@@ -9700,10 +9717,8 @@ void EventAnalyser() {
     cout << "-- Event counts -----------------------------------------------------------\n";
     cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
     cout << "num_of_events_1p_inFD:\t\t\t" << num_of_events_1p_inFD << "\n";
-    cout << "num_of_events_1n_inFD_wAllPhotons:\t" << num_of_events_1n_inFD_wAllPhotons << "\n";
-    cout << "num_of_events_1n_inFD_wAllPh_wBetaLT1:\t" << num_of_events_1n_inFD_wAllPh_wBetaLT1 << "\n";
-    cout << "num_of_events_1n_inFD_woFDphotons:\t" << num_of_events_1n_inFD_woFDphotons << "\n";
-    cout << "num_of_events_1n_inFD_woFDphotons_AV:\t" << num_of_events_1n_inFD_woFDphotons_AV << "\n";
+    cout << "num_of_events_1n_inFD:\t\t\t" << num_of_events_1n_inFD << "\n";
+    cout << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n";
     cout << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n";
     cout << "num_of_events_1e2p_all:\t\t\t" << num_of_events_1e2p_all << "\n";
     cout << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";

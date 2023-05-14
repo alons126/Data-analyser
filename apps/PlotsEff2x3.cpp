@@ -34,36 +34,47 @@ void PlotsEff2x3() {
     string saveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        saveName = "./All_neutrals_10_NOPDG0.png";
+        saveName = "./Eff_10.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        saveName = "./All_neutrals_100_NOPDG0.png";
+        saveName = "./Eff_100.png";
+    } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
+        saveName = "./Eff_250.png";
     } else if (SampleName == "C12_simulation_6GeV_T5") {
-        saveName = "./All_neutrals_ALL_NOPDG0.png";
+        saveName = "./Eff_All.png";
     }
 
     //<editor-fold desc="Canvas definitions">
-    TCanvas *Canvas2x6 = new TCanvas("Canvas2x6", "Canvas2x6", 1000 * 2, 750 * 3); // normal res
-//    TCanvas *Canvas = new TCanvas("Canvas2x6", "Canvas2x6", 2000*4, 1500*4); // high res
-//    TCanvas *Canvas = new TCanvas("Canvas2x6", "Canvas2x6", 1650*4, 1150*4);
-
-//    Canvas->cd();
-//    Canvas2x6->SetGrid();
-//    Canvas2x6->SetBottomMargin(0.14);
-//
-//    Canvas2x6->SetLeftMargin(0.17);
-////    Canvas2x6->SetLeftMargin(0.16);
-//    Canvas2x6->SetRightMargin(0.12);
+    TCanvas *Canvas2x6 = new TCanvas("Canvas2x6", "Canvas2x6", 1000 * 3, 750 * 2); // normal res
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
 
-    Canvas2x6->Divide(2, 3);
+    Canvas2x6->Divide(3, 2);
 
-    TH1D *RecPlot_1p = (TH1D *) f->Get("h1 (1p, FD)");
-    TH1D *TruthPlot_1p = (TH1D *) f->Get("Truth Neutron momentum (1p, FD)");
-    TH1D *EffPlot_1p = (TH1D *) f->Get("h3 (1p, FD)");
-    TH1D *RecPlot_1n = (TH1D *) f->Get("h4 (1n, FD)");
-    TH1D *TruthPlot_1n = (TH1D *) f->Get("Rec. Neutron momentum (1n, FD)");
-    TH1D *EffPlot_1n = (TH1D *) f->Get("h4 (1n, FD)");
+    TH1D *RecPlot_1p = (TH1D *) f->Get("Proton momentum APID (1p, FD)");
+    RecPlot_1p->Sumw2();
+    RecPlot_1p->Rebin(2);
+
+    TH1D *TruthPlot_1p = (TH1D *) f->Get("TL Proton momentum AC (1p)");
+    TruthPlot_1p->Sumw2();
+    TruthPlot_1p->Rebin(2);
+
+    TH1D *EffPlot_1p = (TH1D *) f->Get("Proton momentum #epsilon (1p)");
+//    EffPlot_1p->Sumw2();
+//    EffPlot_1p->Rebin(2);
+//    EffPlot_1p->Divide(TruthPlot_1p);
+
+    TH1D *RecPlot_1n = (TH1D *) f->Get("Neutron momentum APID (1n, FD)");
+    RecPlot_1n->Sumw2();
+    RecPlot_1n->Rebin(2);
+
+    TH1D *TruthPlot_1n = (TH1D *) f->Get("TL Neutron momentum AC (1n)");
+    TruthPlot_1n->Sumw2();
+    TruthPlot_1n->Rebin(2);
+
+    TH1D *EffPlot_1n = (TH1D *) f->Get("Neutron momentum #epsilon (1n)");
+//    EffPlot_1n->Sumw2();
+//    EffPlot_1n->Rebin(2);
+//    EffPlot_1n->Divide(TruthPlot_1n);
 
     if (!RecPlot_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_1p) { cout << "\n\nEmpty hist\n\n\n"; }

@@ -802,6 +802,9 @@ Directories::Directories(std::string plots_path) {
                                                                 Find(Efficiency_Daughter_Folders, "05_1e2p/03_Phi_efficiency_plots_1e2p") + "/";
     Efficiency_Directory_map["Phi_efficiency_Directory_2p"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
                                                               Find(Efficiency_Daughter_Folders, "06_2p/03_Phi_efficiency_plots_2p") + "/";
+
+    Efficiency_Directory_map["1p_1n_efficiency_comparison_Directory"] = Plots_Folder + "/" + Efficiency_Parent_Directory + "/" +
+                                                                        Find(Efficiency_Daughter_Folders, "07_1p_1n_efficiency_comparison") + "/";
     //</editor-fold>
 
 }

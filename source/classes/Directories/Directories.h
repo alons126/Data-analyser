@@ -281,7 +281,9 @@ private:
                                                        "05_1e2p/03_Phi_efficiency_plots_1e2p",
 
                                                        "06_2p", "06_2p/01_Momentum_efficiency_plots_2p", "06_2p/02_Theta_efficiency_plots_2p",
-                                                       "06_2p/03_Phi_efficiency_plots_2p"};
+                                                       "06_2p/03_Phi_efficiency_plots_2p",
+
+                                                       "07_1p_1n_efficiency_comparison"};
     //</editor-fold>
 
 // Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -84,11 +84,11 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
         FitStdFactor = 1;
     }
 
-    if (p == "electron" || p == "Electron") {
+    if (p == "electron" || p == "Electron" || p == "electrons" || p == "Electrons") {
         particlePDG = 11;
-    } else if (p == "neutron" || p == "Neutron") {
+    } else if (p == "neutron" || p == "Neutron" || p == "neutrons" || p == "Neutrons") {
         particlePDG = 2112;
-    } else if (p == "proton" || p == "Proton") {
+    } else if (p == "proton" || p == "Proton" || p == "protons" || p == "Protons") {
         particlePDG = 2212;
     } else if (p == "kplus" || p == "Kplus") {
         particlePDG = 321;
@@ -98,6 +98,8 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
         particlePDG = 211;
     } else if (p == "piminus" || p == "Piminus") {
         particlePDG = -211;
+    } else if (p == "pizero" || p == "Pizero") {
+        particlePDG = 111;
     }
 }
 

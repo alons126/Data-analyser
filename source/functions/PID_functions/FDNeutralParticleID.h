@@ -40,7 +40,7 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
         double Momentum = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
 
         /* Log neutrons above momentum cuts (given by Momentum_th): */
-        if (Momentum >= Neutron_momentum_th.GetLowerCut()) { FD_Neutrons_ind.push_back(i); }
+        if (Momentum >= Neutron_momentum_th.GetLowerCut() && Momentum <= Neutron_momentum_th.GetUpperCut()) { FD_Neutrons_ind.push_back(i); }
     } // end of loop over ID_Neutrons_FD vector
 
     for (int &i: ID_Photons_FD) { // Identify photons above momentum threshold
@@ -55,7 +55,7 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
         double Momentum = allParticles[i]->getP();
 
         /* Log photons above momentum cuts (given by Momentum_cuts): */
-        if (Momentum >= Photon_momentum_th.GetLowerCut()) { FD_Photons_ind.push_back(i); }
+        if (Momentum >= Photon_momentum_th.GetLowerCut() && Momentum <= Photon_momentum_th.GetUpperCut()) { FD_Photons_ind.push_back(i); }
     } // end of loop over ID_Photons_FD vector
 }
 

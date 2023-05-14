@@ -35,7 +35,6 @@ void drawtext() {
 //    l.SetTextFont(42);
     l.SetTextAlign(21);
     l.SetTextColor(kMagenta);
-//    l.SetTextColor(kBlue);
     l.SetLineColor(kWhite);
 
     auto g = (TGraph *) gPad->GetListOfPrimitives()->FindObject("Graph");
@@ -57,29 +56,9 @@ Double_t FitFunction(Double_t *v, Double_t *par) {
 }
 
 void BetaFitAndSaveApprax() {
-//void BetaFitAndSave(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot) {
-//void BetaFitAndSave(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
     cout << "\n\n";
 
-/*
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_10";
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_100";
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5";
-*/
-
-/*
-    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_10";
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_first_100_-_ALL_CUTS2222/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_100";
-//    TFile *f = new TFile("./plots_C12_simulation_6GeV_T5_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5";
-*/
-
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+    //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
@@ -101,15 +80,11 @@ void BetaFitAndSaveApprax() {
     double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
 
     //<editor-fold desc="Canvas definitions">
-    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
-//    TCanvas *Canvas = new TCanvas("canvas", "canvas", 2000, 1500); // high res
-//    TCanvas *Canvas = new TCanvas("canvas", "canvas", 1650, 1150);
-//    Canvas->cd();
+    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000*2, 750*2); // normal res
     Canvas->SetGrid();
     Canvas->SetBottomMargin(0.14);
 
-    Canvas->SetLeftMargin(0.17);
-//    Canvas->SetLeftMargin(0.16);
+    Canvas->SetLeftMargin(0.18);
     Canvas->SetRightMargin(0.12);
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
@@ -243,8 +218,6 @@ void BetaFitAndSaveApprax() {
 
     double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
     double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
-//    double x_1_FitParam = gStyle->GetStatX(), y_1_FitParam = y_1_Cut_legend - 0.14;
-//    double x_2_FitParam = gStyle->GetStatX() - 0.2, y_2_FitParam = y_1_Cut_legend - 0.245;
 
     TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
     FitParam->SetBorderSize(1);
@@ -280,9 +253,7 @@ void BetaFitAndSaveApprax() {
     deltaP->GetYaxis()->SetLabelSize(0.0425);
     deltaP->GetYaxis()->CenterTitle(true);
     deltaP->GetYaxis()->SetTitle(("#deltaP_{" + BetaParticleShort + "} = #frac{m_{" + BetaParticleShort + "}#delta#beta}{(1 - #beta^{2})^{3/2}}").c_str());
-//    deltaP->GetYaxis()->SetTitle(("#deltaP_{" + BetaParticleShort + "} = #frac{m_{" + BetaParticleShort + "}#cdot#delta#beta}{(1-#beta^{2})^{3/2}}").c_str());
 
-    //    deltaP->SetLineColor(kBlack);
     deltaP->SetLineColor(Color);
     deltaP->Draw();
 
