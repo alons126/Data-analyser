@@ -42,7 +42,7 @@ void drawtext() {
 
     for (i = 0; i < n; i++) {
         g->GetPoint(i, x, y);
-        l.PaintText(x, y + 0.02, Form("(%4.4f,%4.1f)", x, y));
+        l.PaintText(x, y + 0.02, Form("(%4.5f,%4.1f)", x, y));
     }
 }
 

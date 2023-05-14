@@ -265,7 +265,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         string Rel_deltaPStatsTitle = "#deltaP_{" + BetaParticleShort + "} (" + BetaPlot.GetFinalState() + ")";
         string Rel_deltaPTitle =
                 BetaParticle + " relative uncertainty #deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "}" + " (apprax. ," + BetaPlot.GetFinalState() + ")";
-        string Rel_deltaPfunc = to_string(FitStd) + "/ ( (1 - x*x) * x )";
+        string Rel_deltaPfunc = to_string(FitStd) + "/ (1 - x*x)";
 
         auto *Rel_deltaP = new TF1(Rel_deltaPStatsTitle.c_str(), Rel_deltaPfunc.c_str(), 0.9, 1);
         Rel_deltaP->SetTitle(Rel_deltaPTitle.c_str());
@@ -277,7 +277,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         Rel_deltaP->GetYaxis()->SetTitleSize(0.06);
         Rel_deltaP->GetYaxis()->SetLabelSize(0.0425);
         Rel_deltaP->GetYaxis()->CenterTitle(true);
-        Rel_deltaP->GetYaxis()->SetTitle(("#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}} = #frac{#delta#beta}{(1 - #beta^{2})}").c_str());
+        Rel_deltaP->GetYaxis()->SetTitle(("#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}} = #frac{#delta#beta}{1 - #beta^{2}}").c_str());
         Rel_deltaP->SetLineColor(kBlack);
         Rel_deltaP->SetLineWidth(2);
         Rel_deltaP->Draw();
@@ -310,7 +310,7 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         Cut_legend->Draw("same");
 
         string Rel_deltaPSaveNameDir = BetaPlot.GetHistogram1DSaveNamePath() + "Approximatied_beta/" + sNameFlag + "02b_P_" + BetaParticleShort
-                                       + "apprax_rel_uncertainty_" + BetaPlot.GetFinalState() + ".png";
+                                       + "_apprax_rel_uncertainty_" + BetaPlot.GetFinalState() + ".png";
 
         const Int_t n = 2;
         auto gr = new TGraph(n);

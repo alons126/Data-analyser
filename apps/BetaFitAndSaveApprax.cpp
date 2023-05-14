@@ -47,46 +47,6 @@ void drawtext() {
     }
 }
 
-/*void drawtext_Max() {
-    Int_t i, n;
-    Double_t x, y;
-    TLatex l;
-
-    l.SetTextSize(0.025);
-    l.SetTextFont(42);
-    l.SetTextAlign(21);
-    l.SetTextColor(kBlue);
-
-    auto g = (TGraph *) gPad->GetListOfPrimitives()->FindObject("Graph");
-    n = g->GetN();
-    g->SetLineColor(kWhite);
-
-    for (i = 0; i < n; i++) {
-        g->GetPoint(i, x, y);
-        l.PaintText(x, y + 0.02, Form("(%4.3f,%4.3f)", x, y));
-    }
-}
-
-void drawtext_Min() {
-    Int_t i, n;
-    Double_t x, y;
-    TLatex l;
-
-    l.SetTextSize(0.025);
-    l.SetTextFont(42);
-    l.SetTextAlign(21);
-    l.SetTextColor(kBlue);
-
-    auto g = (TGraph *) gPad->GetListOfPrimitives()->FindObject("Graph");
-    n = g->GetN();
-    g->SetLineColor(kWhite);
-
-    for (i = 0; i < n; i++) {
-        g->GetPoint(i, x, y);
-        l.PaintText(x, y + 0.02, Form("(%4.3f,%4.3f)", x, y));
-    }
-}*/
-
 Double_t FitFunction(Double_t *v, Double_t *par) {
     Double_t arg = 0;
 //    if (par[1] != 0) { arg = (v[0] - 1) / par[1]; } // 2 parameters
@@ -96,7 +56,7 @@ Double_t FitFunction(Double_t *v, Double_t *par) {
     return fitval;
 }
 
-void BetaFitAndSave() {
+void BetaFitAndSaveApprax() {
 //void BetaFitAndSave(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot) {
 //void BetaFitAndSave(const string &SampleName, DSCuts &Beta_cuts, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
     cout << "\n\n";
@@ -241,8 +201,8 @@ void BetaFitAndSave() {
 
     // Adding limits to "Mean_value"
     double BetaMean_valueUlim = 1.02;
-    double BetaMean_valueLlim = 1.008;
-//    double BetaMean_valueLlim = 1.0075;
+//    double BetaMean_valueLlim = 1.008;
+    double BetaMean_valueLlim = 1.0075;
     func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
     cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
 //    // Adding limits to "Mean_value"
@@ -335,7 +295,7 @@ void BetaFitAndSave() {
 //    deltaPParam->AddText(("#delta#beta = " + to_string_with_precision(FitStd, 8)).c_str());
     deltaPParam->Draw("same");
 
-    string deltaPSaveNameDir = "./" + sNameFlag + "02a_P_" + BetaParticleShort + "_uncertainty" + BetaFinalState + ".png";
+    string deltaPSaveNameDir = "./" + sNameFlag + "02a_P_" + BetaParticleShort + "_uncertainty_" + BetaFinalState + ".png";
     const char *deltaPSaveDir = deltaPSaveNameDir.c_str();
     Canvas->SaveAs(deltaPSaveDir);
 
@@ -343,49 +303,34 @@ void BetaFitAndSave() {
     //</editor-fold>
 
     //<editor-fold desc="Solve deltaP/P for beta in range 0.9<=beta<1">
-    double Beta_Max, P_Beta_Max, Beta_Min, P_Beta_Min;
-    double Beta_Max_sol[3], Beta_Min_sol[3];
+    double Beta_Max_Apprax, P_Beta_Max_Apprax, Beta_Min_Apprax, P_Beta_Min_Apprax;
 
-    SolveP3(Beta_Max_sol, 0, -1, FitStd / deltaPRel_UncertaintyU);
-    SolveP3(Beta_Min_sol, 0, -1, FitStd / deltaPRel_UncertaintyL);
+    cout << "\nSolutions for deltaP/P = 20%:\n";
 
-    cout << "\nSolutions for W(beta) = 0 for 20%:\n";
+    Beta_Max_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyU);
+    P_Beta_Max_Apprax = m_n * Beta_Max_Apprax / sqrt(1 - Beta_Max_Apprax * Beta_Max_Apprax);
 
-    for (int i = 0; i < 3; i++) {
-        cout << "Beta_Max_sol[" << i << "] = " << Beta_Max_sol[i] << "\n";
+    cout << "Beta_Max_Apprax = " << Beta_Max_Apprax << " is chosen\n";
+    cout << "P(Beta_Max_Apprax) = " << P_Beta_Max_Apprax << "\n\n";
 
-        //TODO: see if other checks for the solution are required!!!
-        if (Beta_Max_sol[i] >= 0.9 && Beta_Max_sol[i] < 1) { Beta_Max = Beta_Max_sol[i]; }
-    }
+    cout << "Solutions for deltaP/P = 10%:\n";
 
-    P_Beta_Max = m_n * Beta_Max / sqrt(1 - Beta_Max * Beta_Max);
+    Beta_Min_Apprax = sqrt(1 - FitStd / deltaPRel_UncertaintyL);
+    P_Beta_Min_Apprax = m_n * Beta_Min_Apprax / sqrt(1 - Beta_Min_Apprax * Beta_Min_Apprax);
 
-    cout << "W(beta) const Max = " << FitStd / deltaPRel_UncertaintyU << "\n";
-    cout << "Beta_Max = " << Beta_Max << " is chosen\n";
-    cout << "P(Beta_Max) = " << P_Beta_Max << "\n\n";
+    cout << "Beta_Min_Apprax = " << Beta_Min_Apprax << " is chosen\n";
+    cout << "P(Beta_Min_Apprax) = " << P_Beta_Min_Apprax << "\n\n";
 
-    cout << "Solutions for W(beta) = 0 for 10%:\n";
+////        cout << "\n\n\n\n" << BetaPlot.GetHistogram1DSaveNamePath() << "Approximatied_beta/" << "\n\n\n\n";
+//        exit(EXIT_FAILURE);
 
-    for (int i = 0; i < 3; i++) {
-        cout << "Beta_Min_sol[" << i << "] = " << Beta_Min_sol[i] << "\n";
-
-        //TODO: see if other checks for the solution are required!!!
-        if (Beta_Min_sol[i] >= 0.9 && Beta_Min_sol[i] < 1) { Beta_Min = Beta_Min_sol[i]; }
-    }
-
-    P_Beta_Min = m_n * Beta_Min / sqrt(1 - Beta_Min * Beta_Min);
-
-    cout << "W(beta) const Max = " << FitStd / deltaPRel_UncertaintyL << "\n";
-    cout << "Beta_Min = " << Beta_Min << " is chosen\n";
-    cout << "P(Beta_Min) = " << P_Beta_Min << "\n\n";
-
-    n_momentum_cuts.SetUpperCut(P_Beta_Max);
+    n_momentum_cuts.SetUpperCut(P_Beta_Max_Apprax);
     //</editor-fold>
 
     //<editor-fold desc="Plot deltaP/P as function of beta">
     string Rel_deltaPStatsTitle = "#deltaP_{" + BetaParticleShort + "} (" + BetaFinalState + ")";
     string Rel_deltaPTitle = BetaParticle + " relative uncertainty #deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} (" + BetaFinalState + ")";
-    string Rel_deltaPfunc = to_string(FitStd) + "/ ( (1 - x*x) * x )";
+    string Rel_deltaPfunc = to_string(FitStd) +  + "/ (1 - x*x)";
 
     auto *Rel_deltaP = new TF1(Rel_deltaPStatsTitle.c_str(), Rel_deltaPfunc.c_str(), 0.9, 1);
     Rel_deltaP->SetTitle(Rel_deltaPTitle.c_str());
@@ -397,7 +342,7 @@ void BetaFitAndSave() {
     Rel_deltaP->GetYaxis()->SetTitleSize(0.06);
     Rel_deltaP->GetYaxis()->SetLabelSize(0.0425);
     Rel_deltaP->GetYaxis()->CenterTitle(true);
-    Rel_deltaP->GetYaxis()->SetTitle(("#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}} = #frac{1}{(1 - #beta^{2})#beta}").c_str());
+    Rel_deltaP->GetYaxis()->SetTitle(("#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}} = #frac{#delta#beta}{1 - #beta^{2}}").c_str());
     Rel_deltaP->SetLineColor(kBlack);
     Rel_deltaP->SetLineWidth(2);
     Rel_deltaP->Draw();
@@ -428,7 +373,7 @@ void BetaFitAndSave() {
     TLegendEntry *Cut_legend_lower_lim = Cut_legend->AddEntry(lower_cut, "10% cut", "l");
     Cut_legend->Draw("same");
 
-    string Rel_deltaPSaveNameDir = "./" + sNameFlag + "02b_P_" + BetaParticleShort + "_rel_uncertainty" + BetaFinalState + ".png";
+    string Rel_deltaPSaveNameDir = "./" + sNameFlag + "02b_P_" + BetaParticleShort + "_apprax_rel_uncertainty_" + BetaFinalState + ".png";
 
     const Int_t n = 2;
     auto gr = new TGraph(n);
@@ -436,85 +381,12 @@ void BetaFitAndSave() {
     gr->SetMarkerSize(20);
     auto ex = new TExec("ex", "drawtext();");
     gr->GetListOfFunctions()->Add(ex);
-    gr->SetPoint(0, Beta_Max, deltaPRel_UncertaintyU);
-    gr->SetPoint(1, Beta_Min, deltaPRel_UncertaintyL);
+    gr->SetPoint(0, Beta_Max_Apprax, deltaPRel_UncertaintyU);
+    gr->SetPoint(1, Beta_Min_Apprax, deltaPRel_UncertaintyL);
     gr->Draw("same");
-
-/*
-    const Int_t n_Max = 1;
-    auto gr_Max = new TGraph(n_Max);
-    gr_Max->SetMarkerStyle(20);
-    auto ex_Max = new TExec("ex_Max", "drawtext_Max();");
-    gr_Max->GetListOfFunctions()->Add(ex_Max);
-    gr_Max->SetPoint(0, Beta_Max, deltaPRel_UncertaintyU);
-    gr_Max->Draw("same");
-
-    const Int_t n_Min = 1;
-    auto gr_Min = new TGraph(n_Min);
-    gr_Min->SetMarkerStyle(20);
-    auto ex_Min = new TExec("ex_Min", "drawtext_Min();");
-    gr_Min->GetListOfFunctions()->Add(ex_Min);
-    gr_Min->SetPoint(0, Beta_Min, deltaPRel_UncertaintyL);
-    gr_Min->Draw("same");
-*/
 
     const char *Rel_deltaPSaveDir = Rel_deltaPSaveNameDir.c_str();
     Canvas->SaveAs(Rel_deltaPSaveDir);
-    Canvas->Clear();
-    //</editor-fold>
-
-    //<editor-fold desc="Plot w as function of beta">
-    string WStatsTitle = "W(#beta) (" + BetaFinalState + ")";
-    string WTitle = "The W(#beta) function (" + BetaFinalState + ")";
-    string W_Maxfunc = "x*x*x - x + " + to_string(FitStd / deltaPRel_UncertaintyU);
-    string W_Minfunc = "x*x*x - x + " + to_string(FitStd / deltaPRel_UncertaintyL);
-
-    auto *W_Max = new TF1(WStatsTitle.c_str(), W_Maxfunc.c_str(), 0.9, 1);
-    W_Max->SetLineWidth(2);
-    W_Max->SetLineStyle(2);
-    W_Max->SetTitle(WTitle.c_str());
-    W_Max->GetXaxis()->SetTitleSize(0.06);
-    W_Max->GetXaxis()->SetLabelSize(0.0425);
-    W_Max->GetXaxis()->CenterTitle(true);
-    W_Max->GetXaxis()->SetTitle("#beta");
-    W_Max->GetYaxis()->SetRangeUser(W_yLLim, W_yULim);
-    W_Max->GetYaxis()->SetTitleSize(0.06);
-    W_Max->GetYaxis()->SetLabelSize(0.0425);
-    W_Max->GetYaxis()->CenterTitle(true);
-    W_Max->GetYaxis()->SetTitle(("W(#beta) = #beta^{3} - #beta + #delta#beta(#frac{#deltaP_{" + BetaParticleShort + "}}{P_{" + BetaParticleShort + "}})^{-1}").c_str());
-    W_Max->SetLineColor(kBlack);
-    W_Max->SetLineWidth(2);
-    W_Max->Draw();
-
-    auto *W_Min = new TF1(WStatsTitle.c_str(), W_Minfunc.c_str(), 0.9, 1);
-    W_Min->SetLineWidth(2);
-    W_Min->SetLineStyle(10);
-    W_Min->SetLineColor(kBlack);
-    W_Min->SetLineWidth(2);
-    W_Min->Draw("same");
-
-    TLine *Beta_Max_cut = new TLine(Beta_Max, W_yULim, Beta_Max, W_yLLim);
-    Beta_Max_cut->SetLineWidth(2);
-    Beta_Max_cut->SetLineColor(kBlue);
-    Beta_Max_cut->Draw("same");
-
-    TLine *Beta_Min_cut = new TLine(Beta_Min, W_yULim, Beta_Min, W_yLLim);
-    Beta_Min_cut->SetLineWidth(2);
-    Beta_Min_cut->SetLineColor(kRed);
-    Beta_Min_cut->Draw("same");
-
-    TLine *XAxis = new TLine(W_xLLim, 0., W_xULim, 0.);
-    XAxis->SetLineColor(kBlack);
-    XAxis->Draw("same");
-
-    auto W_legend = new TLegend(gStyle->GetStatX(), gStyle->GetStatY() - 0.2 + 0.1, gStyle->GetStatX() - 0.2, gStyle->GetStatY() - 0.3 + 0.1);
-    TLegendEntry *W_legend_upper_lim = W_legend->AddEntry(Beta_Max_cut, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} = 0.2").c_str(), "l");
-    TLegendEntry *W_legend_lower_lim = W_legend->AddEntry(Beta_Min_cut, ("#deltaP_{" + BetaParticleShort + "}/P_{" + BetaParticleShort + "} = 0.1").c_str(), "l");
-    W_legend->Draw("same");
-
-    string WSaveNameDir = "./" + sNameFlag + "03_W_function.png";
-    const char *WSaveDir = WSaveNameDir.c_str();
-    Canvas->SaveAs(WSaveDir);
     Canvas->Clear();
     //</editor-fold>
 

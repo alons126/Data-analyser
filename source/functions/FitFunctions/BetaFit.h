@@ -133,7 +133,8 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         // Adding limits to "Mean_value"
 //    double BetaMean_valueUlim = 1.0075;
         double BetaMean_valueUlim = 1.02;
-        double BetaMean_valueLlim = 1.0075;
+        double BetaMean_valueLlim = 1.008;
+//        double BetaMean_valueLlim = 1.0075;
 //        double BetaMean_valueLlim = 1.005;
         func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
         cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";

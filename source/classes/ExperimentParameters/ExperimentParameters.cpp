@@ -11,6 +11,9 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
         } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100") {
             sName = "C12_simulation_6GeV_T5_first_100";
 //            sName = "C12_simulation_Q205_598636MeV_T5_first_100";
+        } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250") {
+            sName = "C12_simulation_6GeV_T5_first_250";
+//            sName = "C12_simulation_Q205_598636MeV_T5_first_250";
         } else if (AnalyseFileSample == "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5") {
             sName = "C12_simulation_6GeV_T5";
 //            sName = "C12_simulation_Q205_598636MeV_T5";
