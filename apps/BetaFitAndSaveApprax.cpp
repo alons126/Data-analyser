@@ -82,8 +82,11 @@ void BetaFitAndSaveApprax() {
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-_ALL_CUTS/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
 
-    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_100";
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_100";
+
+    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_250";
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut_wPhotonsFD/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
@@ -200,9 +203,9 @@ void BetaFitAndSaveApprax() {
 
 
     // Adding limits to "Mean_value"
-    double BetaMean_valueUlim = 1.02;
+    double BetaMean_valueUlim = 1.01;
 //    double BetaMean_valueLlim = 1.008;
-    double BetaMean_valueLlim = 1.0075;
+    double BetaMean_valueLlim = 1.005;
     func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
     cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";
 //    // Adding limits to "Mean_value"
