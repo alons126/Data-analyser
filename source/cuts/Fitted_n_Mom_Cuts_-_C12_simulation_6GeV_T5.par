@@ -6,8 +6,8 @@
 
 # Beta std by detector (pid:mean:sigma) - sigma_FD=1:
 Momentum threshold			9:0:9999:CD & FD
-Momentum_cuts_ECAL			2112:0:3.4:FD-ECAL
-#Momentum _cuts_ECAL			2112:0:4.00825:FD-ECAL #from fit app
+Momentum_cuts_ECAL			2112:0:4.00825:FD-ECAL #from fit app
+#Momentum _cuts_ECAL			2112:0:3.4:FD-ECAL #test
 #Momentum _cuts_ECAL			2112:0:3.68955:FD-ECAL #fit original
 Momentum_cuts_ECAL_apprax			2112:0:3.75172:FD-ECAL
 

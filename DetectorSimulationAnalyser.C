@@ -313,7 +313,7 @@ void EventAnalyser() {
     /* Momentum cuts */
     DSCuts TL_e_mom_cuts = DSCuts("Momentum", "", "Electron", "", 0, e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut());
 
-    DSCuts TL_n_mom_cuts;
+    DSCuts TL_n_mom_cuts = DSCuts("Momentum", "", "Neutrons", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());;
     DSCuts TL_p_mom_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut());
     DSCuts TL_pip_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
     DSCuts TL_pim_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
@@ -4058,13 +4058,13 @@ void EventAnalyser() {
             vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
 
             /* Particle index vectors (for FD particles) */
-            vector<int> TL_NeutronsFD_ind, TL_ProtonsFD_ind, TL_PhotonsFD_ind;
+            vector<int> TL_NeutronsFD_ind, TL_ProtonsFD_ind, TL_pi0FD_ind, TL_PhotonsFD_ind;
 
             /* Particle index vectors (for particles above momentum threshold) */
             vector<int> TL_Electron_mom_ind, TL_Neutrons_mom_ind, TL_Protons_mom_ind, TL_piplus_mom_ind, TL_piminus_mom_ind, TL_pizero_mom_ind, TL_Photons_mom_ind;
 
             /* Particle index vectors (for FD particles above momentum threshold) */
-            vector<int> TL_NeutronsFD_mom_ind, TL_ProtonsFD_mom_ind, TL_PhotonsFD_mom_ind;
+            vector<int> TL_NeutronsFD_mom_ind, TL_ProtonsFD_mom_ind, TL_pi0FD_mom_ind, TL_PhotonsFD_mom_ind;
 
             for (Int_t i = 0; i < Ngen; i++) {
                 mcpbank->setEntry(i);
@@ -4121,6 +4121,13 @@ void EventAnalyser() {
                         (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pizero_mom_ind.push_back(i); }
 
                     TL_pizero_ind.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pi0FD_mom_ind.push_back(i); }
+
+                        TL_pi0FD_ind.push_back(i);
+                    }
                 } else if (particlePDGtmp == 22) {
                     if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
                         (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_Photons_mom_ind.push_back(i); }
@@ -4139,14 +4146,34 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                           // No cPions above momentum threshold
-            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                           // No other part. above momentum threshold
-            bool no_TL_FDPhotons = (TL_Photons_mom_ind.size() == 0);                                                         // No cPions above momentum threshold
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                              // One electron above momentum threshold
+            /* Setting up basic TL event selection */
+            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                 // No id. cPions above momentum threshold
+            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                 // No other part. above momentum threshold
+            bool no_TL_FDPhotons = (TL_PhotonsFD_mom_ind.size() == 0);                                             // No id. photons in the FD above momentum threshold
+            bool no_TL_FDpi0 = (TL_pi0FD_mom_ind.size() == 0);                                                     // No id. pi0 in the FD above momentum threshold
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                    // One id. electron above momentum threshold
+            bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDPhotons && no_TL_FDpi0);
+/*
+            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                 // No cPions above momentum threshold
+            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                 // No other part. above momentum threshold
+            bool no_TL_FDPhotons = (TL_Photons_mom_ind.size() == 0);                                             // No cPions above momentum threshold
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                    // One electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDPhotons);
+*/
 
+            /* Setting up 1p TL event selection */
+            bool one_FDproton_1p = (TL_Protons_mom_ind.size() == 1 && TL_Protons_mom_ind.size() == 1);
+
+            /* Setting up 1n TL event selection */
+            bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
+            bool no_protons_1n = (TL_ProtonsFD_mom_ind.size() == 0);
+
+            bool TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);                                // One id. FD proton above momentum threshold
+            bool TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);              // One id. FD neutron above momentum threshold & no id. protons
+/*
             bool TL_Event_Selection_1p = (TL_Basic_ES && TL_Protons_mom_ind.size() == 1);                                    // One proton above momentum threshold
             bool TL_Event_Selection_1n = (TL_Basic_ES && TL_Protons_mom_ind.size() == 0 && TL_Neutrons_mom_ind.size() == 1); // One neutron above momentum threshold
+*/
 
             //<editor-fold desc="Fill TL histograms">
             for (Int_t i = 0; i < Ngen; i++) {
