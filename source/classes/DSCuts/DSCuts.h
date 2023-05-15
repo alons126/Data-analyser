@@ -90,15 +90,15 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
         particlePDG = 2112;
     } else if (p == "proton" || p == "Proton" || p == "protons" || p == "Protons") {
         particlePDG = 2212;
-    } else if (p == "kplus" || p == "Kplus") {
+    } else if (p == "kplus" || p == "Kplus" || p == "k+" || p == "K+") {
         particlePDG = 321;
-    } else if (p == "kminus" || p == "Kminus") {
+    } else if (p == "kminus" || p == "Kminus" || p == "k-" || p == "K-") {
         particlePDG = -321;
-    } else if (p == "piplus" || p == "Piplus") {
+    } else if (p == "piplus" || p == "Piplus" || p == "pi+" || p == "Pi+") {
         particlePDG = 211;
-    } else if (p == "piminus" || p == "Piminus") {
+    } else if (p == "piminus" || p == "Piminus" || p == "pi-" || p == "Pi-") {
         particlePDG = -211;
-    } else if (p == "pizero" || p == "Pizero") {
+    } else if (p == "pizero" || p == "Pizero" || p == "pi0" || p == "Pi0") {
         particlePDG = 111;
     }
 }
