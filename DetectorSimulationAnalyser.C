@@ -284,15 +284,6 @@ void EventAnalyser() {
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Momentum cuts">
-    /* Momentum cuts */
-    DSCuts e_momentum_cuts = DSCuts("Momentum", "", "Electron", "", 0, e_mom_th.GetLowerCut(), 9999);
-    DSCuts n_momentum_cuts;
-    DSCuts p_momentum_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), 2.5);
-    DSCuts pip_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), 1);
-    DSCuts pim_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pim_mom_th.GetLowerCut(), 1);
-    DSCuts ph_momentum_cuts = DSCuts("Momentum", "", "Photons", "", 0, ph_mom_th.GetLowerCut(), 9999);
-
     //<editor-fold desc="Neutron momentum cuts (1n, FD only)">
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
@@ -305,8 +296,6 @@ void EventAnalyser() {
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
-    //</editor-fold>
-
     //</editor-fold>
 
     //<editor-fold desc="Truth-level momentum cuts">
@@ -3834,7 +3823,6 @@ void EventAnalyser() {
 
         if (!apply_neutron_Beta_Fit) {
             /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
-            n_momentum_cuts = DSCuts("Momentum_cuts", "", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_n_from_ph = DSCuts("Momentum_cuts_ECAL", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
 
@@ -3853,7 +3841,6 @@ void EventAnalyser() {
             /* Setting neutron momentum cut after beta fit */
             n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
             TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
-//            n_momentum_cuts = DSCuts("Momentum", "", "Neutron", "", 0, n_mom_th.GetLowerCut(), clasAna.getNeutronMomentumCut());
         }
 
         clasAna.printParams();
@@ -3960,10 +3947,10 @@ void EventAnalyser() {
 
         //<editor-fold desc="Setting up event selection">
         /* set up basic event selection: */
-        bool single_electron = (Electron_ind.size() == 1);                              // no electron above momentum threshold
-        bool no_carged_Kaons = ((Nkp == 0) && (Nkm == 0));                              // no cKaons whatsoever
-        bool no_carged_pions = ((Piplus_ind.size() == 0) && (Piminus_ind.size() == 0)); // no charged pions above momentum threshold
-        bool no_deuterons = (Nd == 0);
+        bool single_electron = (Electron_ind.size() == 1);                                                 // one electron above momentum threshold
+        bool no_carged_Kaons = ((Nkp == 0) && (Nkm == 0));                                                 // no charged Kaons whatsoever
+        bool no_carged_pions = ((Piplus_ind.size() == 0) && (Piminus_ind.size() == 0));                    // no charged Pions above momentum threshold
+        bool no_deuterons = (Nd == 0);                                                                     // no Deuterons whatsoever
 
         bool basic_event_selection = (single_electron && no_carged_Kaons && no_carged_pions && no_deuterons);
         //</editor-fold>
@@ -4151,20 +4138,12 @@ void EventAnalyser() {
             //</editor-fold>
 
             /* Setting up basic TL event selection */
-            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                 // No id. cPions above momentum threshold
-            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                 // No other part. above momentum threshold
-            bool no_TL_FDPhotons = (TL_PhotonsFD_mom_ind.size() == 0);                                             // No id. photons in the FD above momentum threshold
-            bool no_TL_FDpi0 = (TL_pi0FD_mom_ind.size() == 0);                                                     // No id. pi0 in the FD above momentum threshold
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                    // One id. electron above momentum threshold
+            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);        // No id. cPions above momentum threshold
+            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                        // No other part. above momentum threshold
+            bool no_TL_FDPhotons = (TL_PhotonsFD_mom_ind.size() == 0);                                    // No id. photons in the FD above momentum threshold
+            bool no_TL_FDpi0 = (TL_pi0FD_mom_ind.size() == 0);                                            // No id. pi0 in the FD above momentum threshold
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                           // One id. electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDPhotons && no_TL_FDpi0);
-/*
-            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                 // No cPions above momentum threshold
-            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                 // No other part. above momentum threshold
-            bool no_TL_FDPhotons = (TL_Photons_mom_ind.size() == 0);                                             // No cPions above momentum threshold
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                                    // One electron above momentum threshold
-            bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDPhotons);
-*/
-
             /* Setting up 1p TL event selection */
             bool one_FDproton_1p = (TL_Protons_mom_ind.size() == 1 && TL_Protons_mom_ind.size() == 1);
 
@@ -4174,10 +4153,6 @@ void EventAnalyser() {
 
             bool TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);                                // One id. FD proton above momentum threshold
             bool TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);              // One id. FD neutron above momentum threshold & no id. protons
-/*
-            bool TL_Event_Selection_1p = (TL_Basic_ES && TL_Protons_mom_ind.size() == 1);                                    // One proton above momentum threshold
-            bool TL_Event_Selection_1n = (TL_Basic_ES && TL_Protons_mom_ind.size() == 0 && TL_Neutrons_mom_ind.size() == 1); // One neutron above momentum threshold
-*/
 
             //<editor-fold desc="Fill TL histograms">
             for (Int_t i = 0; i < Ngen; i++) {
@@ -5686,29 +5661,8 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-
-
-
-            bool mom_cut_1n = true;
-
-            //            //<editor-fold desc="Setting neutron momentum cut">
-////            cout << "\n\n\n\nn_momentum_cuts.GetUpperCut() = " << n_momentum_cuts.GetUpperCut() << "\n\n\n";
-////            exit(EXIT_FAILURE);
-//
-//            bool mom_cut_1n;
-//
-//            if (!apply_neutron_Beta_Fit) {
-//                mom_cut_1n = true;
-//            } else if (apply_neutron_Beta_Fit) {
-//                mom_cut_1n = (GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_neutron_Beta_Fit) <= n_momentum_cuts.GetUpperCut());
-//            }
-//            //</editor-fold>
-
-
-
-
             // looking at 1n events in the FD only & below theta_n cut:
-            if ((allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) && mom_cut_1n) {
+            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) {
 //            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD &&
 //                ((allParticles[NeutronsFD_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
@@ -9333,7 +9287,7 @@ void EventAnalyser() {
         Fitted_n_Mom_Cuts << "\n";
         Fitted_n_Mom_Cuts << "# Cuts are fitted for - " + SampleName << "\n";
         Fitted_n_Mom_Cuts << "\n";
-        Fitted_n_Mom_Cuts << "# Beta std by detector (pid:mean:sigma) - sigma_FD=" << n_momentum_cuts.FitStdFactor << ":\n";
+        Fitted_n_Mom_Cuts << "# Beta std by detector (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
 
         Fitted_n_Mom_Cuts << n_mom_th.GetCutVariable() << "\t\t\t" << n_mom_th.GetPartPDG() << ":" << n_mom_th.Cuts.at(0) << ":" << n_mom_th.GetLowerCut() << ":"
                           << n_mom_th.GetRegion() << "\n";
@@ -9713,14 +9667,6 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n";
 
     myLogFile << "\n-- Momentum cuts (1n, FD only) --------------------------------------------" << "\n";
-
-    myLogFile << "Electrons:\t{" << e_momentum_cuts.GetLowerCut() << ", " << e_momentum_cuts.GetUpperCut() << "}\n";
-    myLogFile << "Protons:\t{" << p_momentum_cuts.GetLowerCut() << ", " << p_momentum_cuts.GetUpperCut() << "}\n";
-    myLogFile << "Piplus:\t{" << pip_momentum_cuts.GetLowerCut() << ", " << pip_momentum_cuts.GetUpperCut() << "}\n";
-    myLogFile << "Piminus:\t{" << pim_momentum_cuts.GetLowerCut() << ", " << pim_momentum_cuts.GetUpperCut() << "}\n";
-    myLogFile << "Photons:\t{" << ph_momentum_cuts.GetLowerCut() << ", " << ph_momentum_cuts.GetUpperCut() << "}\n\n";
-
-    myLogFile << "Neutrons (n_momentum_cuts):\t\t\t{" << n_momentum_cuts.GetLowerCut() << ", " << n_momentum_cuts.GetUpperCut() << "}\n";
     myLogFile << "Neutrons (n_momentum_cuts - ECAL):\t\t{" << n_momentum_cuts_ABF_FD_n_from_ph.GetLowerCut() << ", " << n_momentum_cuts_ABF_FD_n_from_ph.GetUpperCut()
               << "}\n";
     myLogFile << "Neutrons (n_momentum_cuts - ECAL apprax):\t{" << n_momentum_cuts_ABF_FD_n_from_ph_apprax.GetLowerCut() << ", "
@@ -9737,13 +9683,13 @@ void EventAnalyser() {
     myLogFile << "TL Momentum thresholds {min, max}\n";
     myLogFile << "===========================================================================\n";
 
-    myLogFile << "TL_e_mom_cuts:\t" << TL_e_mom_cuts.GetLowerCut() << ", " << TL_e_mom_cuts.GetUpperCut() << "}\n";
-    myLogFile << "TL_n_mom_cuts:\t" << TL_n_mom_cuts.GetLowerCut() << ", " << TL_n_mom_cuts.GetUpperCut() << "}\n";
-    myLogFile << "TL_p_mom_cuts:\t" << TL_p_mom_cuts.GetLowerCut() << ", " << TL_p_mom_cuts.GetUpperCut() << "}\n";
-    myLogFile << "TL_pip_mom_cuts:\t" << TL_pip_mom_cuts.GetLowerCut() << ", " << TL_pip_mom_cuts.GetUpperCut() << "}\n";
-    myLogFile << "TL_pim_mom_cuts:\t" << TL_pim_mom_cuts.GetLowerCut() << ", " << TL_pim_mom_cuts.GetUpperCut() << "}\n";
-    myLogFile << "TL_pi0_mom_cuts:\t" << TL_pi0_mom_cuts.GetLowerCut() << ", " << TL_pi0_mom_cuts.GetUpperCut() << "}\n";
-    myLogFile << "TL_ph_mom_cuts:\t" << TL_ph_mom_cuts.GetLowerCut() << ", " << TL_ph_mom_cuts.GetUpperCut() << "}\n\n";
+    myLogFile << "TL_e_mom_cuts:\t{" << TL_e_mom_cuts.GetLowerCut() << ", " << TL_e_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_n_mom_cuts:\t{" << TL_n_mom_cuts.GetLowerCut() << ", " << TL_n_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_p_mom_cuts:\t{" << TL_p_mom_cuts.GetLowerCut() << ", " << TL_p_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_pip_mom_cuts:\t{" << TL_pip_mom_cuts.GetLowerCut() << ", " << TL_pip_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_pim_mom_cuts:\t{" << TL_pim_mom_cuts.GetLowerCut() << ", " << TL_pim_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_pi0_mom_cuts:\t{" << TL_pi0_mom_cuts.GetLowerCut() << ", " << TL_pi0_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_ph_mom_cuts:\t{" << TL_ph_mom_cuts.GetLowerCut() << ", " << TL_ph_mom_cuts.GetUpperCut() << "}\n\n";
     //</editor-fold>
 
     //<editor-fold desc="dV cuts (CD & FD)">

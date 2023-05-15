@@ -25,10 +25,10 @@ void PlotsEff2x3() {
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_10";
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_100";
-    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5";
+    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5_first_100";
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5";
 
     //<editor-fold desc="Momentum efficiency plots">
     string MomEffMomEffSaveName;
