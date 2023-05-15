@@ -3402,11 +3402,11 @@ void EventAnalyser() {
                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "07a_P_ph_BC_truth_1p",
                                         Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "07b_P_ph_AC_truth_1p_FD",
-                                        Momentum_lboundary, Momentum_uboundary);
+                                           directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "07b_P_ph_AC_truth_1p_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "07b_P_ph_BC_truth_1p_FD",
-                                        Momentum_lboundary, Momentum_uboundary);
+                                           directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1p"], "07b_P_ph_BC_truth_1p_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1p)">
@@ -3424,16 +3424,16 @@ void EventAnalyser() {
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "02_Theta_n_BC_truth_1p",
                                            Theta_lboundary_FD, Theta_uboundary_FD);
 
-    hPlot1D hTheta_p_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{n} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_AC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03a_Theta_p_AC_truth_1p",
                                            Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03a_Theta_p_BC_truth_1p",
                                            Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_p_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{n} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03b_Theta_p_AC_truth_1p_FD",
                                               Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "03b_Theta_p_BC_truth_1p_FD",
                                               Theta_lboundary_FD, Theta_uboundary_FD);
 
@@ -3470,12 +3470,14 @@ void EventAnalyser() {
     hPlot1D hTheta_ph_BC_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "07a_Theta_ph_BC_truth_1p",
                                             Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC", "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "07b_Theta_ph_AC_truth_1p_FD",
-                                            Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "07b_Theta_ph_BC_truth_1p_FD",
-                                            Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hTheta_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
+                                               "#theta^{truth}_{#gamma} [Deg]",
+                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "07b_Theta_ph_AC_truth_1p_FD",
+                                               Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hTheta_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
+                                               "#theta^{truth}_{#gamma} [Deg]",
+                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1p"], "07b_Theta_ph_BC_truth_1p_FD",
+                                               Theta_lboundary_FD, Theta_uboundary_FD);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1p)">
@@ -3534,11 +3536,11 @@ void EventAnalyser() {
                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "07a_Phi_ph_BC_truth_1p",
                                           Phi_lboundary_FD, Phi_uboundary_FD);
     hPlot1D hPhi_ph_AC_truth_1p_FD = hPlot1D("1p", "FD", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "07b_Phi_ph_AC_truth_1p_FD",
-                                          Phi_lboundary_FD, Phi_uboundary_FD);
+                                             directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "07b_Phi_ph_AC_truth_1p_FD",
+                                             Phi_lboundary_FD, Phi_uboundary_FD);
     hPlot1D hPhi_ph_BC_truth_1p_FD = hPlot1D("1p", "FD", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "07b_Phi_ph_BC_truth_1p_FD",
-                                          Phi_lboundary_FD, Phi_uboundary_FD);
+                                             directories.Efficiency_Directory_map["Phi_efficiency_Directory_1p"], "07b_Phi_ph_BC_truth_1p_FD",
+                                             Phi_lboundary_FD, Phi_uboundary_FD);
     //</editor-fold>
 
     //</editor-fold>
@@ -3601,11 +3603,11 @@ void EventAnalyser() {
                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "07a_P_ph_BC_truth_1n",
                                         Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "07b_P_ph_AC_truth_1n_FD",
-                                        Momentum_lboundary, Momentum_uboundary);
+                                           directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "07b_P_ph_AC_truth_1n_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
-                                        directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "07b_P_ph_BC_truth_1n_FD",
-                                        Momentum_lboundary, Momentum_uboundary);
+                                           directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "07b_P_ph_BC_truth_1n_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta plots (1n)">
@@ -3629,10 +3631,10 @@ void EventAnalyser() {
                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "02b_Theta_n_BC_truth_1n_FD",
                                               Theta_lboundary_FD, Theta_uboundary_FD);
 
-    hPlot1D hTheta_p_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{n} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_AC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "03_Theta_p_AC_truth_1n",
                                            Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_p_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{n} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+    hPlot1D hTheta_p_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "03_Theta_p_BC_truth_1n",
                                            Theta_lboundary_FD, Theta_uboundary_FD);
 
@@ -3669,12 +3671,14 @@ void EventAnalyser() {
     hPlot1D hTheta_ph_BC_truth_1n = hPlot1D("1n", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
                                             directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "07a_Theta_ph_BC_truth_1n",
                                             Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC", "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "07b_Theta_ph_AC_truth_1n_FD",
-                                            Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hTheta_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
-                                            directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "07b_Theta_ph_BC_truth_1n_FD",
-                                            Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hTheta_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC",
+                                               "#theta^{truth}_{#gamma} [Deg]",
+                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "07b_Theta_ph_AC_truth_1n_FD",
+                                               Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hTheta_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC",
+                                               "#theta^{truth}_{#gamma} [Deg]",
+                                               directories.Efficiency_Directory_map["Theta_efficiency_Directory_1n"], "07b_Theta_ph_BC_truth_1n_FD",
+                                               Theta_lboundary_FD, Theta_uboundary_FD);
     //</editor-fold>
 
     //<editor-fold desc="Truth level phi plots (1n)">
@@ -3733,11 +3737,11 @@ void EventAnalyser() {
                                           directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "07a_Phi_hp_BC_truth_1n",
                                           Phi_lboundary_FD, Phi_uboundary_FD);
     hPlot1D hPhi_ph_AC_truth_1n_FD = hPlot1D("1n", "FD", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "07b_Phi_ph_AC_truth_1n_FD",
-                                          Phi_lboundary_FD, Phi_uboundary_FD);
+                                             directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "07b_Phi_ph_AC_truth_1n_FD",
+                                             Phi_lboundary_FD, Phi_uboundary_FD);
     hPlot1D hPhi_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
-                                          directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "07b_Phi_hp_BC_truth_1n_FD",
-                                          Phi_lboundary_FD, Phi_uboundary_FD);
+                                             directories.Efficiency_Directory_map["Phi_efficiency_Directory_1n"], "07b_Phi_hp_BC_truth_1n_FD",
+                                             Phi_lboundary_FD, Phi_uboundary_FD);
     //</editor-fold>
 
     //</editor-fold>
@@ -3945,12 +3949,12 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
-        vector<int> FD_Neutrons, NeutronsFD_ind, FD_Photons, PhotonsFD_ind;
-
         /* Get FD neutrons and photons, according to the definitions: */
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons); // Get FD neutrons and photons, according to the definitions
+        vector<int> FD_Neutrons, FD_Photons;                                                              // FD neutrons and photons to be set by definition
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                          // Get FD neutrons and photons, according to the definitions
 
         /* Get FD neutrons and photons above momentum threshold: */
+        vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                         // FD neutrons and photons by definition - within momentum th.
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_neutron_Beta_Fit);
         //</editor-fold>
 

@@ -24,8 +24,12 @@ using namespace std;
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 void FDNeutralParticleID(vector<region_part_ptr> allParticles,
-                         vector<int> &FD_Neutrons_ind, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
-                         vector<int> &FD_Photons_ind, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
+                         vector<int> &FD_Neutrons_within_th,
+                         vector<int> &ID_Neutrons_FD,
+                         DSCuts &Neutron_momentum_th,
+                         vector<int> &FD_Photons_within_th,
+                         vector<int> &ID_Photons_FD,
+                         DSCuts &Photon_momentum_th,
                          bool apply_neutron_Beta_Fit) {
 
     for (int &i: ID_Neutrons_FD) { // Identify neutron above momentum threshold
@@ -40,7 +44,7 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
         double Momentum = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
 
         /* Log neutrons above momentum cuts (given by Momentum_th): */
-        if (Momentum >= Neutron_momentum_th.GetLowerCut() && Momentum <= Neutron_momentum_th.GetUpperCut()) { FD_Neutrons_ind.push_back(i); }
+        if (Momentum >= Neutron_momentum_th.GetLowerCut() && Momentum <= Neutron_momentum_th.GetUpperCut()) { FD_Neutrons_within_th.push_back(i); }
     } // end of loop over ID_Neutrons_FD vector
 
     for (int &i: ID_Photons_FD) { // Identify photons above momentum threshold
@@ -55,7 +59,7 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
         double Momentum = allParticles[i]->getP();
 
         /* Log photons above momentum cuts (given by Momentum_cuts): */
-        if (Momentum >= Photon_momentum_th.GetLowerCut() && Momentum <= Photon_momentum_th.GetUpperCut()) { FD_Photons_ind.push_back(i); }
+        if (Momentum >= Photon_momentum_th.GetLowerCut() && Momentum <= Photon_momentum_th.GetUpperCut()) { FD_Photons_within_th.push_back(i); }
     } // end of loop over ID_Photons_FD vector
 }
 
