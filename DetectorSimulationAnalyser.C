@@ -46,6 +46,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/FitFunctions/BetaFit.h"
 #include "source/functions/FitFunctions/BetaFitApprax.h"
 #include "source/functions/DrawAndSaveEfficiencyPlots.h"
+#include "source/functions/GetPi0MomTh.h"
 #include "source/functions/PID_functions/ChargedParticleID.h"
 #include "source/functions/PID_functions/GetFDNeutrons.h"
 #include "source/functions/PID_functions/GetFDNeutronP.h"
@@ -286,7 +287,6 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum cuts">
     /* Momentum cuts */
     DSCuts e_momentum_cuts = DSCuts("Momentum", "", "Electron", "", 0, e_mom_th.GetLowerCut(), 9999);
-
     DSCuts n_momentum_cuts;
     DSCuts p_momentum_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), 2.5);
     DSCuts pip_momentum_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), 1);
@@ -317,7 +317,7 @@ void EventAnalyser() {
     DSCuts TL_p_mom_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut());
     DSCuts TL_pip_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
     DSCuts TL_pim_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
-    DSCuts TL_pi0_mom_cuts = DSCuts("Momentum", "", "Pizero", "", 0, 0.5, 9999);
+    DSCuts TL_pi0_mom_cuts = DSCuts("Momentum", "", "Pizero", "", 0, GetPi0MomTh(ph_mom_th), 9999);
     DSCuts TL_ph_mom_cuts = DSCuts("Momentum", "", "Photons", "", 0, ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut());
     //</editor-fold>
 
@@ -9696,15 +9696,15 @@ void EventAnalyser() {
 
     //<editor-fold desc="Momentum thresholds">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Momentum thresholds\n";
+    myLogFile << "Momentum thresholds {min, max}\n";
     myLogFile << "===========================================================================\n";
 
-    myLogFile << "e_mom_th = " << e_mom_th.GetLowerCut() << "\n";
-    myLogFile << "n_mom_th = " << n_mom_th.GetLowerCut() << "\n";
-    myLogFile << "ph_mom_th = " << ph_mom_th.GetLowerCut() << "\n";
-    myLogFile << "p_mom_th = " << p_mom_th.GetLowerCut() << "\n";
-    myLogFile << "pip_mom_th = " << pip_mom_th.GetLowerCut() << "\n";
-    myLogFile << "pim_mom_th = " << pim_mom_th.GetLowerCut() << "\n\n";
+    myLogFile << "e_mom_th = " << e_mom_th.GetLowerCut() << ", " << e_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "n_mom_th = " << n_mom_th.GetLowerCut() << ", " << n_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "ph_mom_th = " << ph_mom_th.GetLowerCut() << ", " << ph_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "p_mom_th = " << p_mom_th.GetLowerCut() << ", " << p_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "pip_mom_th = " << pip_mom_th.GetLowerCut() << ", " << pip_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "pim_mom_th = " << pim_mom_th.GetLowerCut() << ", " << pim_mom_th.GetUpperCut() << "}\n";
     //</editor-fold>
 
     //<editor-fold desc="Momentum cuts">
@@ -9730,6 +9730,20 @@ void EventAnalyser() {
               << n_momentum_cuts_ABF_FD_noPCAL_wECIN.GetUpperCut() << "}\n";
     myLogFile << "Neutrons (n_momentum_cuts - ECOUT):\t\t{" << n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT.GetLowerCut() << ", "
               << n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT.GetUpperCut() << "}\n\n";
+    //</editor-fold>
+
+    //<editor-fold desc="TL Momentum thresholds">
+    myLogFile << "\n===========================================================================\n";
+    myLogFile << "TL Momentum thresholds {min, max}\n";
+    myLogFile << "===========================================================================\n";
+
+    myLogFile << "TL_e_mom_cuts:\t" << TL_e_mom_cuts.GetLowerCut() << ", " << TL_e_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_n_mom_cuts:\t" << TL_n_mom_cuts.GetLowerCut() << ", " << TL_n_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_p_mom_cuts:\t" << TL_p_mom_cuts.GetLowerCut() << ", " << TL_p_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_pip_mom_cuts:\t" << TL_pip_mom_cuts.GetLowerCut() << ", " << TL_pip_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_pim_mom_cuts:\t" << TL_pim_mom_cuts.GetLowerCut() << ", " << TL_pim_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_pi0_mom_cuts:\t" << TL_pi0_mom_cuts.GetLowerCut() << ", " << TL_pi0_mom_cuts.GetUpperCut() << "}\n";
+    myLogFile << "TL_ph_mom_cuts:\t" << TL_ph_mom_cuts.GetLowerCut() << ", " << TL_ph_mom_cuts.GetUpperCut() << "}\n\n";
     //</editor-fold>
 
     //<editor-fold desc="dV cuts (CD & FD)">
