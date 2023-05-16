@@ -21,7 +21,7 @@
 
 using namespace std;
 
-void PlotsEff2x3Electron() {
+void PlotsEff2x3Nucleon() {
 
     TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
     string SampleName = "C12_simulation_6GeV_T5_first_10";
@@ -29,8 +29,9 @@ void PlotsEff2x3Electron() {
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
 
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut_fixedTLcuts/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    TFile *f = new TFile("no_FD_photons/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSample is:\t" << SampleName << "\n\n";
@@ -39,13 +40,13 @@ void PlotsEff2x3Electron() {
     string MomEffMomEffSaveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        MomEffMomEffSaveName = "./01_MomentumEff10Electron.png";
+        MomEffMomEffSaveName = "./01_MomentumEff10Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        MomEffMomEffSaveName = "./01_MomentumEff100Electron.png";
+        MomEffMomEffSaveName = "./01_MomentumEff100Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
-        MomEffMomEffSaveName = "./01_MomentumEff250Electron.png";
+        MomEffMomEffSaveName = "./01_MomentumEff250Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5") {
-        MomEffMomEffSaveName = "./01_MomentumEffElectron.png";
+        MomEffMomEffSaveName = "./01_MomentumEffNucleon.png";
     }
 
     TCanvas *Canvas2x6 = new TCanvas("Canvas2x6", "Canvas2x6", 1000 * 3, 750 * 2); // normal res
@@ -54,37 +55,37 @@ void PlotsEff2x3Electron() {
 
     Canvas2x6->Divide(3, 2);
 
-    TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Electron momentum APID (1p)");
+    TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Proton momentum APID (1p, FD)");
     RecPlot_mom_1p->SetLineColor(kBlue);
     RecPlot_mom_1p->SetStats(1);
     RecPlot_mom_1p->Sumw2();
     RecPlot_mom_1p->Rebin(2);
 
-    TH1D *TruthPlot_mom_1p = (TH1D *) f->Get("TL Electron momentum AC (1p)");
+    TH1D *TruthPlot_mom_1p = (TH1D *) f->Get("TL Proton momentum AC (1p, FD)");
     TruthPlot_mom_1p->SetLineColor(kBlue);
     TruthPlot_mom_1p->SetStats(1);
     TruthPlot_mom_1p->Sumw2();
     TruthPlot_mom_1p->Rebin(2);
 
-    TH1D *EffPlot_mom_1p = (TH1D *) f->Get("Electron momentum #epsilon (1p)");
+    TH1D *EffPlot_mom_1p = (TH1D *) f->Get("Proton momentum #epsilon (1p)");
     EffPlot_mom_1p->SetLineColor(kBlue);
 //    EffPlot_mom_1p->Sumw2();
 //    EffPlot_mom_1p->Rebin(2);
 //    EffPlot_mom_1p->Divide(TruthPlot_mom_1p);
 
-    TH1D *RecPlot_mom_1n = (TH1D *) f->Get("Electron momentum APID (1n)");
+    TH1D *RecPlot_mom_1n = (TH1D *) f->Get("Neutron momentum APID (1n, FD)");
     RecPlot_mom_1n->SetLineColor(kBlue);
     RecPlot_mom_1n->SetStats(1);
     RecPlot_mom_1n->Sumw2();
     RecPlot_mom_1n->Rebin(2);
 
-    TH1D *TruthPlot_mom_1n = (TH1D *) f->Get("TL Electron momentum AC (1n)");
+    TH1D *TruthPlot_mom_1n = (TH1D *) f->Get("TL Neutron momentum AC (1n, FD)");
     TruthPlot_mom_1n->SetLineColor(kBlue);
     TruthPlot_mom_1n->SetStats(1);
     TruthPlot_mom_1n->Sumw2();
     TruthPlot_mom_1n->Rebin(2);
 
-    TH1D *EffPlot_mom_1n = (TH1D *) f->Get("Electron momentum #epsilon (1n)");
+    TH1D *EffPlot_mom_1n = (TH1D *) f->Get("Neutron momentum #epsilon (1n)");
     EffPlot_mom_1n->SetLineColor(kBlue);
 //    EffPlot_mom_1n->Sumw2();
 //    EffPlot_mom_1n->Rebin(2);
@@ -147,48 +148,48 @@ void PlotsEff2x3Electron() {
     string ThetaEffSaveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        ThetaEffSaveName = "./02_ThetaEff10Electron.png";
+        ThetaEffSaveName = "./02_ThetaEff10Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        ThetaEffSaveName = "./02_ThetaEff100Electron.png";
+        ThetaEffSaveName = "./02_ThetaEff100Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
-        ThetaEffSaveName = "./02_ThetaEff250Electron.png";
+        ThetaEffSaveName = "./02_ThetaEff250Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5") {
-        ThetaEffSaveName = "./02_ThetaEffElectron.png";
+        ThetaEffSaveName = "./02_ThetaEffNucleon.png";
     }
 
     Canvas2x6->Divide(3, 2);
 
-    TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{e} (All Int., 1p, FD)");
+    TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{p} (All Int., 1p, FD)");
     RecPlot_Theta_1p->SetLineColor(kBlue);
     RecPlot_Theta_1p->SetStats(1);
     RecPlot_Theta_1p->Sumw2();
     RecPlot_Theta_1p->Rebin(2);
 
-    TH1D *TruthPlot_Theta_1p = (TH1D *) f->Get("TL #theta^{truth}_{e} AC (1p)");
+    TH1D *TruthPlot_Theta_1p = (TH1D *) f->Get("TL #theta^{truth}_{p} AC (1p, FD)");
     TruthPlot_Theta_1p->SetLineColor(kBlue);
     TruthPlot_Theta_1p->SetStats(1);
     TruthPlot_Theta_1p->Sumw2();
     TruthPlot_Theta_1p->Rebin(2);
 
-    TH1D *EffPlot_Theta_1p = (TH1D *) f->Get("Electron theta #epsilon (1p)");
+    TH1D *EffPlot_Theta_1p = (TH1D *) f->Get("Proton theta #epsilon (1p)");
     EffPlot_Theta_1p->SetLineColor(kBlue);
 //    EffPlot_Theta_1p->Sumw2();
 //    EffPlot_Theta_1p->Rebin(2);
 //    EffPlot_Theta_1p->Divide(TruthPlot_Theta_1p);
 
-    TH1D *RecPlot_Theta_1n = (TH1D *) f->Get("#theta_{e} (All Int., 1n, FD)");
+    TH1D *RecPlot_Theta_1n = (TH1D *) f->Get("#theta_{n} (All Int., 1n, FD)");
     RecPlot_Theta_1n->SetLineColor(kBlue);
     RecPlot_Theta_1n->SetStats(1);
     RecPlot_Theta_1n->Sumw2();
     RecPlot_Theta_1n->Rebin(2);
 
-    TH1D *TruthPlot_Theta_1n = (TH1D *) f->Get("TL #theta^{truth}_{e} AC (1n)");
+    TH1D *TruthPlot_Theta_1n = (TH1D *) f->Get("TL #theta^{truth}_{n} AC (1n, FD)");
     TruthPlot_Theta_1n->SetLineColor(kBlue);
     TruthPlot_Theta_1n->SetStats(1);
     TruthPlot_Theta_1n->Sumw2();
     TruthPlot_Theta_1n->Rebin(2);
 
-    TH1D *EffPlot_Theta_1n = (TH1D *) f->Get("Electron theta #epsilon (1n)");
+    TH1D *EffPlot_Theta_1n = (TH1D *) f->Get("Neutron theta #epsilon (1n)");
     EffPlot_Theta_1n->SetLineColor(kBlue);
 //    EffPlot_Theta_1n->Sumw2();
 //    EffPlot_Theta_1n->Rebin(2);
@@ -251,49 +252,49 @@ void PlotsEff2x3Electron() {
     string PhiEffSaveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        PhiEffSaveName = "./03_PhiEff10Electron.png";
+        PhiEffSaveName = "./03_PhiEff10Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        PhiEffSaveName = "./03_PhiEff100Electron.png";
+        PhiEffSaveName = "./03_PhiEff100Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
-        PhiEffSaveName = "./03_PhiEff250Electron.png";
+        PhiEffSaveName = "./03_PhiEff250Nucleon.png";
     } else if (SampleName == "C12_simulation_6GeV_T5") {
-        PhiEffSaveName = "./03_PhiEff.pngElectron.png";
+        PhiEffSaveName = "./03_PhiEffNucleon.png";
     }
 
     Canvas2x6->Divide(3, 2);
 
-    TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{e} 1p (All Int., FD)");
+    TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{p} (All Int., 1p, FD)");
     RecPlot_Phi_1p->SetLineColor(kBlue);
     RecPlot_Phi_1p->SetStats(1);
     RecPlot_Phi_1p->Sumw2();
     RecPlot_Phi_1p->Rebin(2);
 
-    TH1D *TruthPlot_Phi_1p = (TH1D *) f->Get("TL #phi^{truth}_{e} AC (1p)");
+    TH1D *TruthPlot_Phi_1p = (TH1D *) f->Get("TL #phi^{truth}_{p} AC (1p, FD)");
     TruthPlot_Phi_1p->SetLineColor(kBlue);
     TruthPlot_Phi_1p->SetStats(1);
     TruthPlot_Phi_1p->Sumw2();
     TruthPlot_Phi_1p->Rebin(2);
 
-    TH1D *EffPlot_Phi_1p = (TH1D *) f->Get("Electron phi #epsilon (1p)");
+    TH1D *EffPlot_Phi_1p = (TH1D *) f->Get("Proton phi #epsilon (1p)");
     EffPlot_Phi_1p->SetLineColor(kBlue);
 
 //    EffPlot_Phi_1p->Sumw2();
 //    EffPlot_Phi_1p->Rebin(2);
 //    EffPlot_Phi_1p->Divide(TruthPlot_Phi_1p);
 
-    TH1D *RecPlot_Phi_1n = (TH1D *) f->Get("#phi_{e} 1n (All Int., FD)");
+    TH1D *RecPlot_Phi_1n = (TH1D *) f->Get("#phi_{n} (All Int., 1n, FD)");
     RecPlot_Phi_1n->SetLineColor(kBlue);
     RecPlot_Phi_1n->SetStats(1);
     RecPlot_Phi_1n->Sumw2();
     RecPlot_Phi_1n->Rebin(2);
 
-    TH1D *TruthPlot_Phi_1n = (TH1D *) f->Get("TL #phi^{truth}_{e} AC (1n)");
+    TH1D *TruthPlot_Phi_1n = (TH1D *) f->Get("TL #phi^{truth}_{n} AC (1n, FD)");
     TruthPlot_Phi_1n->SetLineColor(kBlue);
     TruthPlot_Phi_1n->SetStats(1);
     TruthPlot_Phi_1n->Sumw2();
     TruthPlot_Phi_1n->Rebin(2);
 
-    TH1D *EffPlot_Phi_1n = (TH1D *) f->Get("Electron phi #epsilon (1n)");
+    TH1D *EffPlot_Phi_1n = (TH1D *) f->Get("Neutron phi #epsilon (1n)");
     EffPlot_Phi_1n->SetLineColor(kBlue);
 
 //    EffPlot_Phi_1n->Sumw2();

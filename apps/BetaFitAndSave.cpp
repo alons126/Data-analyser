@@ -67,6 +67,7 @@ void BetaFitAndSave() {
 //    string SampleName = "C12_simulation_6GeV_T5_first_250";
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut_wPhotonsFD/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut_fixedTLcuts/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 

@@ -374,9 +374,11 @@ void EventAnalyser() {
 // Event selection settings -------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Event selection settings">
-    /* settings to enable/disable specific FS plot calculations. */
+    /* Settings to enable/disable specific FS plot calculations. */
     bool calculate_truth_level = true;
     bool calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
+
+    bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4038,6 +4040,8 @@ void EventAnalyser() {
 //  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
+        bool TL_Event_Selection_1p, TL_Event_Selection_1n;
+
         if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_neutron_Beta_Fit) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
@@ -4150,8 +4154,8 @@ void EventAnalyser() {
             bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
             bool no_protons_1n = (TL_ProtonsFD_mom_ind.size() == 0);
 
-            bool TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);                                // One id. FD proton above momentum threshold
-            bool TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);              // One id. FD neutron above momentum threshold & no id. protons
+            TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);                                // One id. FD proton above momentum threshold
+            TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);              // One id. FD neutron above momentum threshold & no id. protons
 
             //<editor-fold desc="Fill TL histograms">
             for (Int_t i = 0; i < Ngen; i++) {
@@ -5255,8 +5259,138 @@ void EventAnalyser() {
             if (deuterons.size() != 0) { cout << "\n\n1p: deuterons.size() is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
             //</editor-fold>
 
+            //<editor-fold desc="Truth-level 1p enforcement configuration">
+            /* Configure rather to apply 1p truth level ES on rec. plots or not. */
+            bool apply_TL_1p_ES;
+
+            if (Rec_wTL_ES) { // Enforce TL event selection
+                apply_TL_1p_ES = TL_Event_Selection_1p; // Events will be logged only is TL_Event_Selection_1p is true
+            } else { // Don't enforce TL event selection
+                apply_TL_1p_ES = true; // Events will be logged regardless of TL_Event_Selection_1p is true
+            }
+
+//            //<editor-fold desc="Setting TL ES conditions">
+//            auto mcpbank_1p = c12->mcparts();
+//            const Int_t Ngen_1p = mcpbank_1p->getRows();
+//
+//            //<editor-fold desc="Particle counting">
+//            /* Particle index vectors */
+//            vector<int> TL_Electron_ind_1p, TL_Neutrons_ind_1p, TL_Protons_ind_1p;
+//            vector<int>  TL_piplus_ind_1p, TL_piminus_ind_1p, TL_pizero_ind_1p, TL_Photons_ind_1p, TL_OtherPart_ind_1p;
+//
+//            /* Particle index vectors (for FD particles) */
+//            vector<int> TL_NeutronsFD_ind_1p, TL_ProtonsFD_ind_1p, TL_pi0FD_ind_1p, TL_PhotonsFD_ind_1p;
+//
+//            /* Particle index vectors (for particles above momentum threshold) */
+//            vector<int> TL_Electron_mom_ind_1p, TL_Neutrons_mom_ind_1p, TL_Protons_mom_ind_1p, TL_piplus_mom_ind_1p, TL_piminus_mom_ind_1p, TL_pizero_mom_ind_1p, TL_Photons_mom_ind_1p;
+//
+//            /* Particle index vectors (for FD particles above momentum threshold) */
+//            vector<int> TL_NeutronsFD_mom_ind_1p, TL_ProtonsFD_mom_ind_1p, TL_pi0FD_mom_ind_1p, TL_PhotonsFD_mom_ind_1p;
+//
+//            for (Int_t i = 0; i < Ngen_1p; i++) {
+//                mcpbank_1p->setEntry(i);
+//
+//                int particlePDGtmp = mcpbank_1p->getPid();
+//
+//                double Particle_TL_Momentum = rCalc(mcpbank_1p->getPx(), mcpbank_1p->getPy(), mcpbank_1p->getPz());
+//                double Particle_TL_Theta = acos((mcpbank_1p->getPz()) / rCalc(mcpbank_1p->getPx(), mcpbank_1p->getPy(), mcpbank_1p->getPz())) * 180.0 / pi;
+//                double Particle_TL_Phi = atan2(mcpbank_1p->getPy(), mcpbank_1p->getPx()) * 180.0 / pi;
+//
+//                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//
+//                if (particlePDGtmp == 11) {
+//                    if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) { TL_Electron_mom_ind_1p.push_back(i); }
+//
+//                    TL_Electron_ind_1p.push_back(i);
+//                } else if (particlePDGtmp == 2112) {
+//                    if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_Neutrons_mom_ind_1p.push_back(i); }
+//
+//                    TL_Neutrons_ind_1p.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_NeutronsFD_mom_ind_1p.push_back(i); }
+//
+//                        TL_NeutronsFD_ind_1p.push_back(i);
+//                    }
+//                } else if (particlePDGtmp == 2212) {
+//                    if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_Protons_mom_ind_1p.push_back(i); }
+//
+//                    TL_Protons_ind_1p.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind_1p.push_back(i); }
+//
+//                        TL_ProtonsFD_ind_1p.push_back(i);
+//                    }
+//                } else if (particlePDGtmp == 211) {
+//                    if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) { TL_piplus_mom_ind_1p.push_back(i); }
+//
+//                    TL_piplus_ind_1p.push_back(i);
+//                } else if (particlePDGtmp == -211) {
+//                    if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) { TL_piminus_mom_ind_1p.push_back(i); }
+//
+//                    TL_piminus_ind_1p.push_back(i);
+//                } else if (particlePDGtmp == 111) {
+//                    if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pizero_mom_ind_1p.push_back(i); }
+//
+//                    TL_pizero_ind_1p.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pi0FD_mom_ind_1p.push_back(i); }
+//
+//                        TL_pi0FD_ind_1p.push_back(i);
+//                    }
+//                } else if (particlePDGtmp == 22) {
+//                    if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_Photons_mom_ind_1p.push_back(i); }
+//
+//                    TL_Photons_ind_1p.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_PhotonsFD_mom_ind_1p.push_back(i); }
+//
+//                        TL_PhotonsFD_ind_1p.push_back(i);
+//                    }
+//                } else {
+//                    TL_OtherPart_ind_1p.push_back(i);
+//                }
+//            }
+//            //</editor-fold>
+//
+//            /* Setting up basic TL event selection */
+//            bool no_TL_cPions_1p = (TL_piplus_mom_ind_1p.size() == 0 && TL_piminus_mom_ind_1p.size() == 0);        // No id. cPions above momentum threshold
+//            bool no_TL_OtherPart_1p = (TL_OtherPart_ind_1p.size() == 0);                                        // No other part. above momentum threshold
+//            bool no_TL_FDPhotons_1p = (TL_PhotonsFD_mom_ind_1p.size() == 0);                                    // No id. photons in the FD above momentum threshold
+//            bool no_TL_FDpi0_1p = (TL_pi0FD_mom_ind_1p.size() == 0);                                            // No id. pi0 in the FD above momentum threshold
+//            bool TL_Event_Selection_1e_cut_1p = (TL_Electron_mom_ind_1p.size() == 1);                           // One id. electron above momentum threshold
+//            bool TL_Basic_ES = (TL_Event_Selection_1e_cut_1p && no_TL_cPions_1p && no_TL_OtherPart_1p && no_TL_FDPhotons_1p && no_TL_FDpi0_1p);
+//
+//            /* Setting up 1p TL event selection */
+//            bool one_FDproton_1p_1p = (TL_Protons_mom_ind_1p.size() == 1 && TL_ProtonsFD_mom_ind_1p.size() == 1);
+//
+//            /* Setting up 1n TL event selection */
+//            bool one_FDNeutron_1n_1p = (TL_NeutronsFD_mom_ind_1p.size() == 1);
+//            bool no_protons_1n_1p = (TL_ProtonsFD_mom_ind_1p.size() == 0);
+//
+//            bool TL_Event_Selection_1p_1p = (TL_Basic_ES && one_FDproton_1p_1p);                                // One id. FD proton above momentum threshold
+//            bool TL_Event_Selection_1n_1p = (TL_Basic_ES && one_FDNeutron_1n_1p && no_protons_1n_1p);              // One id. FD neutron above momentum threshold & no id. protons
+//            //</editor-fold>
+
+            //</editor-fold>
+
             // looking at events with 1p in the FD only:
-            if (protons[Protons_ind.at(0)]->getRegion() == FD) {
+            if ((protons[Protons_ind.at(0)]->getRegion() == FD) && apply_TL_1p_ES) {
+//            if (protons[Protons_ind.at(0)]->getRegion() == FD) {
 //            if ((protons[Protons_ind.at(0)]->getRegion() == FD) &&
 //                ((protons[Protons_ind.at(0)]->getTheta() * 180.0 / pi) <= Theta_nuc_cut.GetUpperCut())) {
                 ++num_of_events_1p_inFD; // 1p event count after momentum and theta_p cuts
@@ -5630,7 +5764,136 @@ void EventAnalyser() {
         bool event_selection_1n = (basic_event_selection && (Protons_ind.size() == 0) && (NeutronsFD_ind.size() == 1) && (PhotonsFD_ind.size() == 0));
 //        bool event_selection_1n = (basic_event_selection && (Protons_ind.size() == 0) && (NeutronsFD_ind.size() == 1));
 
-        if (calculate_1n && event_selection_1n) { // for 1n calculations (with any number of neutrals)
+        //<editor-fold desc="Truth-level 1n enforcement configuration">
+        /* Configure rather to apply 1n truth level ES on rec. plots or not. */
+        bool apply_TL_1n_ES;
+
+        if (Rec_wTL_ES) { // Enforce TL event selection
+            apply_TL_1n_ES = TL_Event_Selection_1n; // Events will be logged only is TL_Event_Selection_1n is true
+        } else { // Don't enforce TL event selection
+            apply_TL_1n_ES = true; // Events will be logged regardless of TL_Event_Selection_1n is true
+        }
+
+//            //<editor-fold desc="Setting TL ES conditions">
+//            auto mcpbank_1n = c12->mcparts();
+//            const Int_t Ngen_1n = mcpbank_1n->getRows();
+//
+//            //<editor-fold desc="Particle counting">
+//            /* Particle index vectors */
+//            vector<int> TL_Electron_ind_1n, TL_Neutrons_ind_1n, TL_Protons_ind_1n;
+//            vector<int>  TL_piplus_ind_1n, TL_piminus_ind_1n, TL_pizero_ind_1n, TL_Photons_ind_1n, TL_OtherPart_ind_1n;
+//
+//            /* Particle index vectors (for FD particles) */
+//            vector<int> TL_NeutronsFD_ind_1n, TL_ProtonsFD_ind_1n, TL_pi0FD_ind_1n, TL_PhotonsFD_ind_1n;
+//
+//            /* Particle index vectors (for particles above momentum threshold) */
+//            vector<int> TL_Electron_mom_ind_1n, TL_Neutrons_mom_ind_1n, TL_Protons_mom_ind_1n, TL_piplus_mom_ind_1n, TL_piminus_mom_ind_1n, TL_pizero_mom_ind_1n, TL_Photons_mom_ind_1n;
+//
+//            /* Particle index vectors (for FD particles above momentum threshold) */
+//            vector<int> TL_NeutronsFD_mom_ind_1n, TL_ProtonsFD_mom_ind_1n, TL_pi0FD_mom_ind_1n, TL_PhotonsFD_mom_ind_1n;
+//
+//            for (Int_t i = 0; i < Ngen_1n; i++) {
+//                mcpbank_1n->setEntry(i);
+//
+//                int particlePDGtmp = mcpbank_1n->getPid();
+//
+//                double Particle_TL_Momentum = rCalc(mcpbank_1n->getPx(), mcpbank_1n->getPy(), mcpbank_1n->getPz());
+//                double Particle_TL_Theta = acos((mcpbank_1n->getPz()) / rCalc(mcpbank_1n->getPx(), mcpbank_1n->getPy(), mcpbank_1n->getPz())) * 180.0 / pi;
+//                double Particle_TL_Phi = atan2(mcpbank_1n->getPy(), mcpbank_1n->getPx()) * 180.0 / pi;
+//
+//                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//
+//                if (particlePDGtmp == 11) {
+//                    if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) { TL_Electron_mom_ind_1n.push_back(i); }
+//
+//                    TL_Electron_ind_1n.push_back(i);
+//                } else if (particlePDGtmp == 2112) {
+//                    if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_Neutrons_mom_ind_1n.push_back(i); }
+//
+//                    TL_Neutrons_ind_1n.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_NeutronsFD_mom_ind_1n.push_back(i); }
+//
+//                        TL_NeutronsFD_ind_1n.push_back(i);
+//                    }
+//                } else if (particlePDGtmp == 2212) {
+//                    if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_Protons_mom_ind_1n.push_back(i); }
+//
+//                    TL_Protons_ind_1n.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind_1n.push_back(i); }
+//
+//                        TL_ProtonsFD_ind_1n.push_back(i);
+//                    }
+//                } else if (particlePDGtmp == 211) {
+//                    if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) { TL_piplus_mom_ind_1n.push_back(i); }
+//
+//                    TL_piplus_ind_1n.push_back(i);
+//                } else if (particlePDGtmp == -211) {
+//                    if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) { TL_piminus_mom_ind_1n.push_back(i); }
+//
+//                    TL_piminus_ind_1n.push_back(i);
+//                } else if (particlePDGtmp == 111) {
+//                    if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pizero_mom_ind_1n.push_back(i); }
+//
+//                    TL_pizero_ind_1n.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pi0FD_mom_ind_1n.push_back(i); }
+//
+//                        TL_pi0FD_ind_1n.push_back(i);
+//                    }
+//                } else if (particlePDGtmp == 22) {
+//                    if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+//                        (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_Photons_mom_ind_1n.push_back(i); }
+//
+//                    TL_Photons_ind_1n.push_back(i);
+//
+//                    if (inFD) {
+//                        if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+//                            (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_PhotonsFD_mom_ind_1n.push_back(i); }
+//
+//                        TL_PhotonsFD_ind_1n.push_back(i);
+//                    }
+//                } else {
+//                    TL_OtherPart_ind_1n.push_back(i);
+//                }
+//            }
+//            //</editor-fold>
+//
+//            /* Setting up basic TL event selection */
+//            bool no_TL_cPions_1n = (TL_piplus_mom_ind_1n.size() == 0 && TL_piminus_mom_ind_1n.size() == 0);        // No id. cPions above momentum threshold
+//            bool no_TL_OtherPart_1n = (TL_OtherPart_ind_1n.size() == 0);                                        // No other part. above momentum threshold
+//            bool no_TL_FDPhotons_1n = (TL_PhotonsFD_mom_ind_1n.size() == 0);                                    // No id. photons in the FD above momentum threshold
+//            bool no_TL_FDpi0_1n = (TL_pi0FD_mom_ind_1n.size() == 0);                                            // No id. pi0 in the FD above momentum threshold
+//            bool TL_Event_Selection_1e_cut_1n = (TL_Electron_mom_ind_1n.size() == 1);                           // One id. electron above momentum threshold
+//            bool TL_Basic_ES = (TL_Event_Selection_1e_cut_1n && no_TL_cPions_1n && no_TL_OtherPart_1n && no_TL_FDPhotons_1n && no_TL_FDpi0_1n);
+//
+//            /* Setting up 1p TL event selection */
+//            bool one_FDproton_1p_1n = (TL_Protons_mom_ind_1n.size() == 1 && TL_ProtonsFD_mom_ind_1n.size() == 1);
+//
+//            /* Setting up 1n TL event selection */
+//            bool one_FDNeutron_1n_1n = (TL_NeutronsFD_mom_ind_1n.size() == 1);
+//            bool no_protons_1n_1n = (TL_ProtonsFD_mom_ind_1n.size() == 0);
+//
+//            bool TL_Event_Selection_1p_1n = (TL_Basic_ES && one_FDproton_1p_1n);                                // One id. FD proton above momentum threshold
+//            bool TL_Event_Selection_1n_1n = (TL_Basic_ES && one_FDNeutron_1n_1n && no_protons_1n_1n);              // One id. FD neutron above momentum threshold & no id. protons
+//            //</editor-fold>
+
+        //</editor-fold>
+
+        if (calculate_1n && event_selection_1n && apply_TL_1n_ES) { // for 1n calculations (with any number of neutrals)
 
             //<editor-fold desc="Safety check (1n)">
             /* Safety check that we are looking at 1n */
