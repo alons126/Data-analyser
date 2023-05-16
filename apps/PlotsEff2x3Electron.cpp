@@ -23,14 +23,34 @@ using namespace std;
 
 void PlotsEff2x3Electron() {
 
+/*
+//void PlotsEff2x3Electron(string SampleName) {
+
+//    TFile *f;
+//
+//    if (SampleName == "C12_simulation_6GeV_T5_first_10)") {
+//        f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+//    } else if (SampleName == "C12_simulation_6GeV_T5_first_100)"){
+//        f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+//    } else if (SampleName == "C12_simulation_6GeV_T5_first_250)"){
+//        f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+//    } else if (SampleName == "C12_simulation_6GeV_T5)"){
+//        f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+//    }
+
+//    string SampleName = "C12_simulation_6GeV_T5_first_10";
+*/
+
     TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
     string SampleName = "C12_simulation_6GeV_T5_first_10";
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
 
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_250";
+
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut_fixedTLcuts/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSample is:\t" << SampleName << "\n\n";
@@ -56,6 +76,8 @@ void PlotsEff2x3Electron() {
 
     TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Electron momentum APID (1p)");
     RecPlot_mom_1p->SetLineColor(kBlue);
+    RecPlot_mom_1p->SetLineStyle(0);
+    RecPlot_mom_1p->SetLineWidth(2);
     RecPlot_mom_1p->SetStats(1);
     RecPlot_mom_1p->Sumw2();
     RecPlot_mom_1p->Rebin(2);
@@ -73,6 +95,8 @@ void PlotsEff2x3Electron() {
 //    EffPlot_mom_1p->Divide(TruthPlot_mom_1p);
 
     TH1D *RecPlot_mom_1n = (TH1D *) f->Get("Electron momentum APID (1n)");
+    RecPlot_mom_1n->SetLineStyle(0);
+    RecPlot_mom_1n->SetLineWidth(2);
     RecPlot_mom_1n->SetLineColor(kBlue);
     RecPlot_mom_1n->SetStats(1);
     RecPlot_mom_1n->Sumw2();
@@ -159,6 +183,8 @@ void PlotsEff2x3Electron() {
     Canvas2x6->Divide(3, 2);
 
     TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{e} (All Int., 1p, FD)");
+    RecPlot_Theta_1p->SetLineStyle(0);
+    RecPlot_Theta_1p->SetLineWidth(2);
     RecPlot_Theta_1p->SetLineColor(kBlue);
     RecPlot_Theta_1p->SetStats(1);
     RecPlot_Theta_1p->Sumw2();
@@ -177,6 +203,8 @@ void PlotsEff2x3Electron() {
 //    EffPlot_Theta_1p->Divide(TruthPlot_Theta_1p);
 
     TH1D *RecPlot_Theta_1n = (TH1D *) f->Get("#theta_{e} (All Int., 1n, FD)");
+    RecPlot_Theta_1n->SetLineStyle(0);
+    RecPlot_Theta_1n->SetLineWidth(2);
     RecPlot_Theta_1n->SetLineColor(kBlue);
     RecPlot_Theta_1n->SetStats(1);
     RecPlot_Theta_1n->Sumw2();
@@ -263,6 +291,8 @@ void PlotsEff2x3Electron() {
     Canvas2x6->Divide(3, 2);
 
     TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{e} 1p (All Int., FD)");
+    RecPlot_Phi_1p->SetLineStyle(0);
+    RecPlot_Phi_1p->SetLineWidth(2);
     RecPlot_Phi_1p->SetLineColor(kBlue);
     RecPlot_Phi_1p->SetStats(1);
     RecPlot_Phi_1p->Sumw2();
@@ -282,6 +312,8 @@ void PlotsEff2x3Electron() {
 //    EffPlot_Phi_1p->Divide(TruthPlot_Phi_1p);
 
     TH1D *RecPlot_Phi_1n = (TH1D *) f->Get("#phi_{e} 1n (All Int., FD)");
+    RecPlot_Phi_1n->SetLineStyle(0);
+    RecPlot_Phi_1n->SetLineWidth(2);
     RecPlot_Phi_1n->SetLineColor(kBlue);
     RecPlot_Phi_1n->SetStats(1);
     RecPlot_Phi_1n->Sumw2();
