@@ -25,7 +25,7 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
         }
     } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/C12_G18_10a_02_11b_207052MeV") { // C12, simulation, 2GeV, ifarm
         if (AnalyseFileSample == "reconhipo") {
-            sName = "C12_simulation_2GeV";
+            sName = "C12_simulation_G18_2GeV";
 //            sName = "C12_G18_10a_02_11b_207052MeV";
         }
     } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") { // C, simulation, 6GeV, ifarm

@@ -121,7 +121,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -138,7 +138,7 @@ void EventAnalyser() {
 
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
-    bool apply_neutron_Beta_Fit = true;
+    bool apply_neutron_Beta_Fit = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
