@@ -67,8 +67,6 @@ using namespace clas12;
 
 // TODO: add sumw2 to all histograms after their definition
 
-// TODO: get BetaFit outside of pid phase!!!
-
 
 
 void EventAnalyser() {
@@ -3579,10 +3577,10 @@ void EventAnalyser() {
                                          Momentum_lboundary, Momentum_uboundary);
 
     hPlot1D hP_pi0_AC_truth_1n = hPlot1D("1n", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
-                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_piminus_AC_truth_1n",
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_pi0_AC_truth_1n",
                                          Momentum_lboundary, Momentum_uboundary);
     hPlot1D hP_pi0_BC_truth_1n = hPlot1D("1n", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
-                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_piminus_BC_truth_1n",
+                                         directories.Efficiency_Directory_map["Momentum_efficiency_Directory_1n"], "06_P_pi0_BC_truth_1n",
                                          Momentum_lboundary, Momentum_uboundary);
 
     hPlot1D hP_ph_AC_truth_1n = hPlot1D("1n", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
@@ -4144,8 +4142,9 @@ void EventAnalyser() {
             bool no_TL_FDpi0 = (TL_pi0FD_mom_ind.size() == 0);                                            // No id. pi0 in the FD above momentum threshold
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1);                           // One id. electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDPhotons && no_TL_FDpi0);
+
             /* Setting up 1p TL event selection */
-            bool one_FDproton_1p = (TL_Protons_mom_ind.size() == 1 && TL_Protons_mom_ind.size() == 1);
+            bool one_FDproton_1p = (TL_Protons_mom_ind.size() == 1 && TL_ProtonsFD_mom_ind.size() == 1);
 
             /* Setting up 1n TL event selection */
             bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);

@@ -63,12 +63,12 @@ void BetaFitAndSave() {
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
 
-    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_250";
+//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+//    string SampleName = "C12_simulation_6GeV_T5_first_250";
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut_wPhotonsFD/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5";
+    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSampleName:\t" << SampleName << "\n\n";
 
@@ -79,7 +79,7 @@ void BetaFitAndSave() {
     double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
 
     //<editor-fold desc="Canvas definitions">
-    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000*2, 750*2); // normal res
+    TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
     Canvas->SetGrid();
     Canvas->SetBottomMargin(0.14);
 
