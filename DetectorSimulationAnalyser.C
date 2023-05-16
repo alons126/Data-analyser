@@ -186,6 +186,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts output">
     /* Print out the cuts within the run (for self-observation) */
+    if (!apply_chi2_cuts_1e_cut) { apply_neutron_Beta_Fit = false; }
 
     if (!apply_cuts) {
         cout << "Cuts are disabled:\n";
