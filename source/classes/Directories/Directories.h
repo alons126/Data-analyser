@@ -232,29 +232,27 @@ private:
                                                 "02_1n1p", "02_1n1p/01_Neutron_vs_cParticles_hits_FTOF_1n1p"};
     //</editor-fold>
 
-    //<editor-fold desc="Efficiency plots directories">
+    //<editor-fold desc="Efficiency & Acceptance Correction plots directories">
     // todo: change this folder's name
-    bool create_Efficiency_Dir = true;
-    std::string Efficiency_Parent_Directory = "10_Efficiency_plots";
-    vector<std::string> Efficiency_Daughter_Folders = {"", "01_1e_cut", "01_1e_cut/01_Momentum_efficiency_plots_1e_cut", "01_1e_cut/02_Theta_efficiency_plots_1e_cut",
-                                                       "01_1e_cut/03_Phi_efficiency_plots_1e_cut",
+    bool create_Eff_and_ACorr_Dir = true;
+    std::string Eff_and_ACorr_Parent_Directory = "10_Eff_and_ACorr_plots";
+    vector<std::string> Eff_and_ACorr_Daughter_Folders = {"", "01_1e_cut", "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut", "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut",
+                                                          "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut",
 
-                                                       "02_1p", "02_1p/01_Momentum_efficiency_plots_1p", "02_1p/02_Theta_efficiency_plots_1p",
-                                                       "02_1p/03_Phi_efficiency_plots_1p",
+                                                          "02_1p", "02_1p/01_Momentum_Eff_and_ACorr_plots_1p", "02_1p/02_Theta_Eff_and_ACorr_plots_1p",
+                                                          "02_1p/03_Phi_Eff_and_ACorr_plots_1p",
 
-                                                       "03_1n", "03_1n/01_Momentum_efficiency_plots_1n", "03_1n/02_Theta_efficiency_plots_1n",
-                                                       "03_1n/03_Phi_efficiency_plots_1n",
+                                                          "03_1n", "03_1n/01_Momentum_Eff_and_ACorr_plots_1n", "03_1n/02_Theta_Eff_and_ACorr_plots_1n",
+                                                          "03_1n/03_Phi_Eff_and_ACorr_plots_1n",
 
-                                                       "04_1n1p", "04_1n1p/01_Momentum_efficiency_plots_1n1p", "04_1n1p/02_Theta_efficiency_plots_1n1p",
-                                                       "04_1n1p/03_Phi_efficiency_plots_1n1p",
+                                                          "04_1n1p", "04_1n1p/01_Momentum_Eff_and_ACorr_plots_1n1p", "04_1n1p/02_Theta_Eff_and_ACorr_plots_1n1p",
+                                                          "04_1n1p/03_Phi_Eff_and_ACorr_plots_1n1p",
 
-                                                       "05_1e2p", "05_1e2p/01_Momentum_efficiency_plots_1e2p", "05_1e2p/02_Theta_efficiency_plots_1e2p",
-                                                       "05_1e2p/03_Phi_efficiency_plots_1e2p",
+                                                          "05_1e2p", "05_1e2p/01_Momentum_Eff_and_ACorr_plots_1e2p", "05_1e2p/02_Theta_Eff_and_ACorr_plots_1e2p",
+                                                          "05_1e2p/03_Phi_Eff_and_ACorr_plots_1e2p",
 
-                                                       "06_2p", "06_2p/01_Momentum_efficiency_plots_2p", "06_2p/02_Theta_efficiency_plots_2p",
-                                                       "06_2p/03_Phi_efficiency_plots_2p",
-
-                                                       "07_1p_1n_efficiency_comparison"};
+                                                          "06_2p", "06_2p/01_Momentum_Eff_and_ACorr_plots_2p", "06_2p/02_Theta_Eff_and_ACorr_plots_2p",
+                                                          "06_2p/03_Phi_Eff_and_ACorr_plots_2p"};
     //</editor-fold>
 
 // Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -280,7 +278,7 @@ public:
     map<std::string, std::string> Ecal_Directory_map;
     map<std::string, std::string> TVariables_Directory_map;
     map<std::string, std::string> ToF_Directory_map;
-    map<std::string, std::string> Efficiency_Directory_map;
+    map<std::string, std::string> Eff_and_ACorr_Directory_map;
 
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
 

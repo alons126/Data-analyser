@@ -19,6 +19,8 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
+#include "../source/functions/findSubstring.h"
+
 using namespace std;
 
 void PlotsEff2x3Nucleon(string SampleName) {
@@ -27,44 +29,92 @@ void PlotsEff2x3Nucleon(string SampleName) {
     //<editor-fold desc="Setting file">
     TFile *f;
 
-    if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_100"){
-        f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_250"){
-        f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-    } else if (SampleName == "C12_simulation_6GeV_T5"){
-        f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    if (findSubstring(SampleName, "C12_simulation_6GeV_T5_first_10")) {
+        if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        }
+    } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5_first_100")) {
+        if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        }
+    } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5_first_250")) {
+        if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        }
+    } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5")) {
+        if (SampleName == "C12_simulation_6GeV_T5_noBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_noBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_noBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_noBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        }
     }
     //</editor-fold>
 
-    //<editor-fold desc="Setting Canvas3x2Nucleon">
-    TCanvas *Canvas3x2Nucleon = new TCanvas("Canvas3x2Nucleon", "Canvas3x2Nucleon", 1000 * 3, 750 * 2); // normal res
+    //<editor-fold desc="Setting CanvasEff2x3Nucleon">
+    TCanvas *CanvasEff2x3Nucleon = new TCanvas("CanvasEff2x3Nucleon", "CanvasEff2x3Nucleon", 1000 * 3, 750 * 2); // normal res
 
-    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
-
-    Canvas3x2Nucleon->Divide(3, 2);
+//    CanvasEff2x3Nucleon->cd();
+//    CanvasEff2x3Nucleon->Divide(3, 2);
     //</editor-fold>
 
     //<editor-fold desc="Momentum efficiency plots">
     string MomEffMomEffSaveName = "./01_Nucleon_Mom_Eff_" + SampleName + ".png";
 
-/*
-    string MomEffMomEffSaveName;
-
-    if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        MomEffMomEffSaveName = "./01_Nucleon_Mom_Eff_" + SampleName + ".png";
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        MomEffMomEffSaveName = "./01_Nucleon_Mom_Eff_" + SampleName + ".png";
-        MomEffMomEffSaveName = "./01_Nucleon_Mom_Eff_" + SampleName + "Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
-        MomEffMomEffSaveName = "./01_Nucleon_Mom_Eff_" + SampleName + "Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5") {
-        MomEffMomEffSaveName = "./01_Nucleon_Mom_Eff_" + SampleName + "Nucleon.png";
-    }
-*/
-
-    Canvas3x2Nucleon->Divide(3, 2);
+    CanvasEff2x3Nucleon->Divide(3, 2);
 
     TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Proton momentum APID (1p, FD)");
     RecPlot_mom_1p->SetLineColor(kBlue);
@@ -78,7 +128,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     TruthPlot_mom_1p->Sumw2();
     TruthPlot_mom_1p->Rebin(2);
 
-    TH1D *EffPlot_mom_1p = (TH1D *) f->Get("Proton momentum #epsilon (1p)");
+    TH1D *EffPlot_mom_1p = (TH1D *) f->Get("Proton momentum #epsilon_{eff} (1p)");
     EffPlot_mom_1p->SetLineColor(kBlue);
 //    EffPlot_mom_1p->Sumw2();
 //    EffPlot_mom_1p->Rebin(2);
@@ -96,7 +146,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     TruthPlot_mom_1n->Sumw2();
     TruthPlot_mom_1n->Rebin(2);
 
-    TH1D *EffPlot_mom_1n = (TH1D *) f->Get("Neutron momentum #epsilon (1n)");
+    TH1D *EffPlot_mom_1n = (TH1D *) f->Get("Neutron momentum #epsilon_{eff} (1n)");
     EffPlot_mom_1n->SetLineColor(kBlue);
 //    EffPlot_mom_1n->Sumw2();
 //    EffPlot_mom_1n->Rebin(2);
@@ -109,70 +159,56 @@ void PlotsEff2x3Nucleon(string SampleName) {
     if (!TruthPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    Canvas3x2Nucleon->cd(1);
-    Canvas3x2Nucleon->cd(1)->SetGrid();
-    Canvas3x2Nucleon->cd(1)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(1)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(1)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(1);
+    CanvasEff2x3Nucleon->cd(1)->SetGrid();
+    CanvasEff2x3Nucleon->cd(1)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(1)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(1)->SetRightMargin(0.12);
     RecPlot_mom_1p->Draw();
 
-    Canvas3x2Nucleon->cd(2);
-    Canvas3x2Nucleon->cd(2)->SetGrid();
-    Canvas3x2Nucleon->cd(2)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(2)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(2)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(2);
+    CanvasEff2x3Nucleon->cd(2)->SetGrid();
+    CanvasEff2x3Nucleon->cd(2)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(2)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(2)->SetRightMargin(0.12);
     TruthPlot_mom_1p->Draw();
 
-    Canvas3x2Nucleon->cd(3);
-    Canvas3x2Nucleon->cd(3)->SetGrid();
-    Canvas3x2Nucleon->cd(3)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(3)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(3)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(3);
+    CanvasEff2x3Nucleon->cd(3)->SetGrid();
+    CanvasEff2x3Nucleon->cd(3)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(3)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(3)->SetRightMargin(0.12);
     EffPlot_mom_1p->Draw();
 
-    Canvas3x2Nucleon->cd(4);
-    Canvas3x2Nucleon->cd(4)->SetGrid();
-    Canvas3x2Nucleon->cd(4)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(4)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(4)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(4);
+    CanvasEff2x3Nucleon->cd(4)->SetGrid();
+    CanvasEff2x3Nucleon->cd(4)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(4)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(4)->SetRightMargin(0.12);
     RecPlot_mom_1n->Draw();
 
-    Canvas3x2Nucleon->cd(5);
-    Canvas3x2Nucleon->cd(5)->SetGrid();
-    Canvas3x2Nucleon->cd(5)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(5)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(5)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(5);
+    CanvasEff2x3Nucleon->cd(5)->SetGrid();
+    CanvasEff2x3Nucleon->cd(5)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(5)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(5)->SetRightMargin(0.12);
     TruthPlot_mom_1n->Draw();
 
-    Canvas3x2Nucleon->cd(6);
-    Canvas3x2Nucleon->cd(6)->SetGrid();
-    Canvas3x2Nucleon->cd(6)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(6)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(6)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(6);
+    CanvasEff2x3Nucleon->cd(6)->SetGrid();
+    CanvasEff2x3Nucleon->cd(6)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(6)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(6)->SetRightMargin(0.12);
     EffPlot_mom_1n->Draw();
 
-    Canvas3x2Nucleon->SaveAs(MomEffMomEffSaveName.c_str());
-    Canvas3x2Nucleon->Clear();
+    CanvasEff2x3Nucleon->SaveAs(MomEffMomEffSaveName.c_str());
+    CanvasEff2x3Nucleon->Clear();
     //</editor-fold>
 
     //<editor-fold desc="Theta efficiency plots">
     string ThetaEffSaveName = "./02_Nucleon_Theta_Eff_" + SampleName + ".png";
 
-/*
-    string ThetaEffSaveName;
-
-    if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        ThetaEffSaveName = "./02_ThetaEff10Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        ThetaEffSaveName = "./02_ThetaEff100Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
-        ThetaEffSaveName = "./02_ThetaEff250Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5") {
-        ThetaEffSaveName = "./02_ThetaEffNucleon.png";
-    }
-*/
-
-    Canvas3x2Nucleon->Divide(3, 2);
+    CanvasEff2x3Nucleon->Divide(3, 2);
 
     TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{p} (All Int., 1p, FD)");
     RecPlot_Theta_1p->SetLineColor(kBlue);
@@ -186,7 +222,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     TruthPlot_Theta_1p->Sumw2();
     TruthPlot_Theta_1p->Rebin(2);
 
-    TH1D *EffPlot_Theta_1p = (TH1D *) f->Get("Proton theta #epsilon (1p)");
+    TH1D *EffPlot_Theta_1p = (TH1D *) f->Get("Proton theta #epsilon_{eff} (1p)");
     EffPlot_Theta_1p->SetLineColor(kBlue);
 //    EffPlot_Theta_1p->Sumw2();
 //    EffPlot_Theta_1p->Rebin(2);
@@ -204,7 +240,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     TruthPlot_Theta_1n->Sumw2();
     TruthPlot_Theta_1n->Rebin(2);
 
-    TH1D *EffPlot_Theta_1n = (TH1D *) f->Get("Neutron theta #epsilon (1n)");
+    TH1D *EffPlot_Theta_1n = (TH1D *) f->Get("Neutron theta #epsilon_{eff} (1n)");
     EffPlot_Theta_1n->SetLineColor(kBlue);
 //    EffPlot_Theta_1n->Sumw2();
 //    EffPlot_Theta_1n->Rebin(2);
@@ -217,70 +253,56 @@ void PlotsEff2x3Nucleon(string SampleName) {
     if (!TruthPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    Canvas3x2Nucleon->cd(1);
-    Canvas3x2Nucleon->cd(1)->SetGrid();
-    Canvas3x2Nucleon->cd(1)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(1)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(1)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(1);
+    CanvasEff2x3Nucleon->cd(1)->SetGrid();
+    CanvasEff2x3Nucleon->cd(1)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(1)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(1)->SetRightMargin(0.12);
     RecPlot_Theta_1p->Draw();
 
-    Canvas3x2Nucleon->cd(2);
-    Canvas3x2Nucleon->cd(2)->SetGrid();
-    Canvas3x2Nucleon->cd(2)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(2)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(2)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(2);
+    CanvasEff2x3Nucleon->cd(2)->SetGrid();
+    CanvasEff2x3Nucleon->cd(2)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(2)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(2)->SetRightMargin(0.12);
     TruthPlot_Theta_1p->Draw();
 
-    Canvas3x2Nucleon->cd(3);
-    Canvas3x2Nucleon->cd(3)->SetGrid();
-    Canvas3x2Nucleon->cd(3)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(3)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(3)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(3);
+    CanvasEff2x3Nucleon->cd(3)->SetGrid();
+    CanvasEff2x3Nucleon->cd(3)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(3)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(3)->SetRightMargin(0.12);
     EffPlot_Theta_1p->Draw();
 
-    Canvas3x2Nucleon->cd(4);
-    Canvas3x2Nucleon->cd(4)->SetGrid();
-    Canvas3x2Nucleon->cd(4)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(4)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(4)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(4);
+    CanvasEff2x3Nucleon->cd(4)->SetGrid();
+    CanvasEff2x3Nucleon->cd(4)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(4)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(4)->SetRightMargin(0.12);
     RecPlot_Theta_1n->Draw();
 
-    Canvas3x2Nucleon->cd(5);
-    Canvas3x2Nucleon->cd(5)->SetGrid();
-    Canvas3x2Nucleon->cd(5)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(5)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(5)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(5);
+    CanvasEff2x3Nucleon->cd(5)->SetGrid();
+    CanvasEff2x3Nucleon->cd(5)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(5)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(5)->SetRightMargin(0.12);
     TruthPlot_Theta_1n->Draw();
 
-    Canvas3x2Nucleon->cd(6);
-    Canvas3x2Nucleon->cd(6)->SetGrid();
-    Canvas3x2Nucleon->cd(6)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(6)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(6)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(6);
+    CanvasEff2x3Nucleon->cd(6)->SetGrid();
+    CanvasEff2x3Nucleon->cd(6)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(6)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(6)->SetRightMargin(0.12);
     EffPlot_Theta_1n->Draw();
 
-    Canvas3x2Nucleon->SaveAs(ThetaEffSaveName.c_str());
-    Canvas3x2Nucleon->Clear();
+    CanvasEff2x3Nucleon->SaveAs(ThetaEffSaveName.c_str());
+    CanvasEff2x3Nucleon->Clear();
     //</editor-fold>
 
     //<editor-fold desc="Phi efficiency plots">
     string PhiEffSaveName = "./03_Nucleon_Phi_Eff_" + SampleName + ".png";
 
-/*
-    string PhiEffSaveName;
-
-    if (SampleName == "C12_simulation_6GeV_T5_first_10") {
-        PhiEffSaveName = "./03_PhiEff10Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_100") {
-        PhiEffSaveName = "./03_PhiEff100Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5_first_250") {
-        PhiEffSaveName = "./03_PhiEff250Nucleon.png";
-    } else if (SampleName == "C12_simulation_6GeV_T5") {
-        PhiEffSaveName = "./03_PhiEffNucleon.png";
-    }
-*/
-
-    Canvas3x2Nucleon->Divide(3, 2);
+    CanvasEff2x3Nucleon->Divide(3, 2);
 
     TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{p} (All Int., 1p, FD)");
     RecPlot_Phi_1p->SetLineColor(kBlue);
@@ -294,7 +316,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     TruthPlot_Phi_1p->Sumw2();
     TruthPlot_Phi_1p->Rebin(2);
 
-    TH1D *EffPlot_Phi_1p = (TH1D *) f->Get("Proton phi #epsilon (1p)");
+    TH1D *EffPlot_Phi_1p = (TH1D *) f->Get("Proton phi #epsilon_{eff} (1p)");
     EffPlot_Phi_1p->SetLineColor(kBlue);
 
 //    EffPlot_Phi_1p->Sumw2();
@@ -313,7 +335,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     TruthPlot_Phi_1n->Sumw2();
     TruthPlot_Phi_1n->Rebin(2);
 
-    TH1D *EffPlot_Phi_1n = (TH1D *) f->Get("Neutron phi #epsilon (1n)");
+    TH1D *EffPlot_Phi_1n = (TH1D *) f->Get("Neutron phi #epsilon_{eff} (1n)");
     EffPlot_Phi_1n->SetLineColor(kBlue);
 
 //    EffPlot_Phi_1n->Sumw2();
@@ -327,50 +349,50 @@ void PlotsEff2x3Nucleon(string SampleName) {
     if (!TruthPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    Canvas3x2Nucleon->cd(1);
-    Canvas3x2Nucleon->cd(1)->SetGrid();
-    Canvas3x2Nucleon->cd(1)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(1)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(1)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(1);
+    CanvasEff2x3Nucleon->cd(1)->SetGrid();
+    CanvasEff2x3Nucleon->cd(1)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(1)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(1)->SetRightMargin(0.12);
     RecPlot_Phi_1p->Draw();
 
-    Canvas3x2Nucleon->cd(2);
-    Canvas3x2Nucleon->cd(2)->SetGrid();
-    Canvas3x2Nucleon->cd(2)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(2)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(2)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(2);
+    CanvasEff2x3Nucleon->cd(2)->SetGrid();
+    CanvasEff2x3Nucleon->cd(2)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(2)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(2)->SetRightMargin(0.12);
     TruthPlot_Phi_1p->Draw();
 
-    Canvas3x2Nucleon->cd(3);
-    Canvas3x2Nucleon->cd(3)->SetGrid();
-    Canvas3x2Nucleon->cd(3)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(3)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(3)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(3);
+    CanvasEff2x3Nucleon->cd(3)->SetGrid();
+    CanvasEff2x3Nucleon->cd(3)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(3)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(3)->SetRightMargin(0.12);
     EffPlot_Phi_1p->Draw();
 
-    Canvas3x2Nucleon->cd(4);
-    Canvas3x2Nucleon->cd(4)->SetGrid();
-    Canvas3x2Nucleon->cd(4)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(4)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(4)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(4);
+    CanvasEff2x3Nucleon->cd(4)->SetGrid();
+    CanvasEff2x3Nucleon->cd(4)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(4)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(4)->SetRightMargin(0.12);
     RecPlot_Phi_1n->Draw();
 
-    Canvas3x2Nucleon->cd(5);
-    Canvas3x2Nucleon->cd(5)->SetGrid();
-    Canvas3x2Nucleon->cd(5)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(5)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(5)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(5);
+    CanvasEff2x3Nucleon->cd(5)->SetGrid();
+    CanvasEff2x3Nucleon->cd(5)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(5)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(5)->SetRightMargin(0.12);
     TruthPlot_Phi_1n->Draw();
 
-    Canvas3x2Nucleon->cd(6);
-    Canvas3x2Nucleon->cd(6)->SetGrid();
-    Canvas3x2Nucleon->cd(6)->SetBottomMargin(0.14);
-    Canvas3x2Nucleon->cd(6)->SetLeftMargin(0.17);
-    Canvas3x2Nucleon->cd(6)->SetRightMargin(0.12);
+    CanvasEff2x3Nucleon->cd(6);
+    CanvasEff2x3Nucleon->cd(6)->SetGrid();
+    CanvasEff2x3Nucleon->cd(6)->SetBottomMargin(0.14);
+    CanvasEff2x3Nucleon->cd(6)->SetLeftMargin(0.17);
+    CanvasEff2x3Nucleon->cd(6)->SetRightMargin(0.12);
     EffPlot_Phi_1n->Draw();
 
-    Canvas3x2Nucleon->SaveAs(PhiEffSaveName.c_str());
-    Canvas3x2Nucleon->Clear();
+    CanvasEff2x3Nucleon->SaveAs(PhiEffSaveName.c_str());
+    CanvasEff2x3Nucleon->Clear();
     //</editor-fold>
 
     cout << "\n";

@@ -82,29 +82,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     //<editor-fold desc="Setting particle">
     string EfficiencyRecTitle = RPlot_Clone->GetTitle();
     string EfficiencyParticle = GetParticleName(EfficiencyRecTitle);
-
-/*
-    string EfficiencyParticle;
-
-    if (findSubstring(EfficiencyRecTitle, "Electron") || findSubstring(EfficiencyRecTitle, "electron")) {
-        EfficiencyParticle = "Electron";
-    } else if (findSubstring(EfficiencyRecTitle, "Proton") || findSubstring(EfficiencyRecTitle, "proton")) {
-        EfficiencyParticle = "Proton";
-    } else if (findSubstring(EfficiencyRecTitle, "Neutron") || findSubstring(EfficiencyRecTitle, "neutron")) {
-        EfficiencyParticle = "Neutron";
-    } else if (findSubstring(EfficiencyRecTitle, "#pi^{+}")) {
-        EfficiencyParticle = "Piplus";
-    } else if (findSubstring(EfficiencyRecTitle, "#pi^{-}")) {
-        EfficiencyParticle = "Piminus";
-    } else if (findSubstring(EfficiencyRecTitle, "#K^{+}")) {
-        EfficiencyParticle = "Kplus";
-    } else if (findSubstring(EfficiencyRecTitle, "#K^{-}")) {
-        EfficiencyParticle = "Kminus";
-    } else if (findSubstring(EfficiencyRecTitle, "#gamma") || findSubstring(EfficiencyRecTitle, "photon")
-               || findSubstring(EfficiencyRecTitle, "Photon")) {
-        EfficiencyParticle = "Photon";
-    }
-*/
+    string EfficiencyParticleShort = GetParticleNameShort(EfficiencyRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
@@ -121,7 +99,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string EfficiencyXLabel;
 
     if (findSubstring(EfficiencyRecTitle, "momentum")) { // for momentum efficiency plots
-        EfficiencyXLabel = "Momentum [GeV/c]";
+        EfficiencyXLabel = "P_{" + EfficiencyParticleShort + "} [GeV/c]";
     } else if (findSubstring(EfficiencyRecTitle, "#theta")) { // for momentum efficiency plots
         EfficiencyXLabel = "#theta [Deg]";
     } else if (findSubstring(EfficiencyRecTitle, "#phi")) { // for momentum efficiency plots
@@ -135,8 +113,8 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string xLabel_Truth_temp = TLPlot_Clone->GetXaxis()->GetTitle();
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
-    string EfficiencyYLabel = "#epsilon = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
-//    string EfficiencyYLabel = "#epsilon = " + xLabel_REC + "/" + xLabel_Truth;
+    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
+//    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "/" + xLabel_Truth;
     //</editor-fold>
 
     //<editor-fold desc="Setting Final state">
@@ -197,8 +175,8 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string Efficiency_plot_SaveName = EfficiencySaveDir + sNameFlag + "_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_" + EfficiencyFS + ".png";
     //</editor-fold>
 
-    TH1D *Efficiency_plot = (TH1D *) Histogram1D_REC->Clone((EfficiencyParticle + " " + EfficiencyType + " #epsilon" + " (" + EfficiencyFS + ")").c_str());
-    Efficiency_plot->SetTitle((EfficiencyTitle + " efficiency #epsilon (" + EfficiencyFS + ")").c_str());
+    TH1D *Efficiency_plot = (TH1D *) Histogram1D_REC->Clone((EfficiencyParticle + " " + EfficiencyType + " #epsilon_{eff}" + " (" + EfficiencyFS + ")").c_str());
+    Efficiency_plot->SetTitle((EfficiencyTitle + " efficiency #epsilon_{eff} (" + EfficiencyFS + ")").c_str());
     Efficiency_plot->GetYaxis()->SetTitle((EfficiencyYLabel).c_str());
     Efficiency_plot->GetXaxis()->SetTitle((EfficiencyXLabel).c_str());
 
@@ -426,7 +404,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     string EfficiencyXLabel;
 
     if (findSubstring(EfficiencyRecTitle, "momentum")) { // for momentum efficiency plots
-        EfficiencyXLabel = "Momentum [GeV/c]";
+        EfficiencyXLabel = "P_{" + EfficiencyParticleShort + "} [GeV/c]";
     } else if (findSubstring(EfficiencyRecTitle, "#theta")) { // for momentum efficiency plots
         EfficiencyXLabel = EfficiencyTitle + " [Deg]";
 //        EfficiencyXLabel = "#theta [Deg]";
@@ -442,8 +420,8 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     string xLabel_Truth_temp = TLPlot_Clone->GetXaxis()->GetTitle();
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
-    string EfficiencyYLabel = "#epsilon = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
-//    string EfficiencyYLabel = "#epsilon = " + xLabel_REC + "/" + xLabel_Truth;
+    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
+//    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "/" + xLabel_Truth;
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
@@ -491,8 +469,8 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
 //    string Efficiency_plot_SaveName = EfficiencySaveDir + sNameFlag + "_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_" + EfficiencyFS + ".png";
     //</editor-fold>
 
-    TH1D *Efficiency_plot = (TH1D *) RPlot_Clone->Clone((EfficiencyParticle + " " + EfficiencyType + " #epsilon" + " (" + EfficiencyFS + ")").c_str());
-    Efficiency_plot->SetTitle((EfficiencyTitle + " efficiency #epsilon (" + EfficiencyFS + ")").c_str());
+    TH1D *Efficiency_plot = (TH1D *) RPlot_Clone->Clone((EfficiencyParticle + " " + EfficiencyType + " #epsilon_{eff}" + " (" + EfficiencyFS + ")").c_str());
+    Efficiency_plot->SetTitle((EfficiencyTitle + " efficiency #epsilon_{eff} (" + EfficiencyFS + ")").c_str());
     Efficiency_plot->GetYaxis()->SetTitle((EfficiencyYLabel).c_str());
     Efficiency_plot->GetXaxis()->SetTitle((EfficiencyXLabel).c_str());
 

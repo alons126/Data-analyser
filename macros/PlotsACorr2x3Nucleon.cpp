@@ -23,8 +23,8 @@
 
 using namespace std;
 
-void PlotsEff2x3Electron(string SampleName) {
-    cout << "\nSaving efficiency plots for Electrons...\n\n";
+void PlotsACorr2x3Nucleon(string SampleName) {
+    cout << "\nSaving acceptance correction plots for Nucleons...\n\n";
 
     //<editor-fold desc="Setting file">
     TFile *f;
@@ -104,307 +104,295 @@ void PlotsEff2x3Electron(string SampleName) {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Setting CanvasEff2x3Electron">
-    TCanvas *CanvasEff2x3Electron = new TCanvas("CanvasEff2x3Electron", "CanvasEff2x3Electron", 1000 * 3, 750 * 2); // normal res
+    //<editor-fold desc="Setting CanvasACorr2x3Nucleon">
+    TCanvas *CanvasACorr2x3Nucleon = new TCanvas("CanvasACorr2x3Nucleon", "CanvasACorr2x3Nucleon", 1000 * 3, 750 * 2); // normal res
 
-//    CanvasEff2x3Electron->cd();
-//    CanvasEff2x3Electron->Divide(3, 2);
+//    CanvasACorr2x3Nucleon->cd();
+//    CanvasACorr2x3Nucleon->Divide(3, 2);
     //</editor-fold>
 
-    //<editor-fold desc="Momentum efficiency plots">
-    string MomEffMomEffSaveName = "./01_Electron_Mom_Eff_" + SampleName + ".png";
+    //<editor-fold desc="Momentum acceptance correction plots">
+    string MomACorrSaveName = "./01_Nucleon_Mom_ACorr_" + SampleName + ".png";
 
-    CanvasEff2x3Electron->Divide(3, 2);
+    CanvasACorr2x3Nucleon->Divide(3, 2);
 
-    TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Electron momentum APID (1p)");
+    TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Proton momentum APID (1p, FD)");
     RecPlot_mom_1p->SetLineColor(kBlue);
-    RecPlot_mom_1p->SetLineStyle(0);
-    RecPlot_mom_1p->SetLineWidth(2);
     RecPlot_mom_1p->SetStats(1);
     RecPlot_mom_1p->Sumw2();
     RecPlot_mom_1p->Rebin(2);
 
-    TH1D *TruthPlot_mom_1p = (TH1D *) f->Get("TL Electron momentum AC (1p)");
+    TH1D *TruthPlot_mom_1p = (TH1D *) f->Get("TL Proton momentum AC (1p, FD)");
     TruthPlot_mom_1p->SetLineColor(kBlue);
     TruthPlot_mom_1p->SetStats(1);
     TruthPlot_mom_1p->Sumw2();
     TruthPlot_mom_1p->Rebin(2);
 
-    TH1D *EffPlot_mom_1p = (TH1D *) f->Get("Electron momentum #epsilon_{eff} (1p)");
-    EffPlot_mom_1p->SetLineColor(kBlue);
-//    EffPlot_mom_1p->Sumw2();
-//    EffPlot_mom_1p->Rebin(2);
-//    EffPlot_mom_1p->Divide(TruthPlot_mom_1p);
+    TH1D *ACorrPlot_mom_1p = (TH1D *) f->Get("Proton momentum #alpha (1p)");
+    ACorrPlot_mom_1p->SetLineColor(kBlue);
+//    ACorrPlot_mom_1p->Sumw2();
+//    ACorrPlot_mom_1p->Rebin(2);
+//    ACorrPlot_mom_1p->Divide(TruthPlot_mom_1p);
 
-    TH1D *RecPlot_mom_1n = (TH1D *) f->Get("Electron momentum APID (1n)");
-    RecPlot_mom_1n->SetLineStyle(0);
-    RecPlot_mom_1n->SetLineWidth(2);
+    TH1D *RecPlot_mom_1n = (TH1D *) f->Get("Neutron momentum APID (1n, FD)");
     RecPlot_mom_1n->SetLineColor(kBlue);
     RecPlot_mom_1n->SetStats(1);
     RecPlot_mom_1n->Sumw2();
     RecPlot_mom_1n->Rebin(2);
 
-    TH1D *TruthPlot_mom_1n = (TH1D *) f->Get("TL Electron momentum AC (1n)");
+    TH1D *TruthPlot_mom_1n = (TH1D *) f->Get("TL Neutron momentum AC (1n, FD)");
     TruthPlot_mom_1n->SetLineColor(kBlue);
     TruthPlot_mom_1n->SetStats(1);
     TruthPlot_mom_1n->Sumw2();
     TruthPlot_mom_1n->Rebin(2);
 
-    TH1D *EffPlot_mom_1n = (TH1D *) f->Get("Electron momentum #epsilon_{eff} (1n)");
-    EffPlot_mom_1n->SetLineColor(kBlue);
-//    EffPlot_mom_1n->Sumw2();
-//    EffPlot_mom_1n->Rebin(2);
-//    EffPlot_mom_1n->Divide(TruthPlot_mom_1n);
+    TH1D *ACorrPlot_mom_1n = (TH1D *) f->Get("Neutron momentum #alpha (1n)");
+    ACorrPlot_mom_1n->SetLineColor(kBlue);
+//    ACorrPlot_mom_1n->Sumw2();
+//    ACorrPlot_mom_1n->Rebin(2);
+//    ACorrPlot_mom_1n->Divide(TruthPlot_mom_1n);
 
     if (!RecPlot_mom_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_mom_1p) { cout << "\n\nEmpty hist\n\n\n"; }
-    if (!EffPlot_mom_1p) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!ACorrPlot_mom_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!RecPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
-    if (!EffPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!ACorrPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    CanvasEff2x3Electron->cd(1);
-    CanvasEff2x3Electron->cd(1)->SetGrid();
-    CanvasEff2x3Electron->cd(1)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(1)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(1)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(1);
+    CanvasACorr2x3Nucleon->cd(1)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(1)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(1)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(1)->SetRightMargin(0.12);
     RecPlot_mom_1p->Draw();
 
-    CanvasEff2x3Electron->cd(2);
-    CanvasEff2x3Electron->cd(2)->SetGrid();
-    CanvasEff2x3Electron->cd(2)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(2)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(2)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(2);
+    CanvasACorr2x3Nucleon->cd(2)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(2)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(2)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(2)->SetRightMargin(0.12);
     TruthPlot_mom_1p->Draw();
 
-    CanvasEff2x3Electron->cd(3);
-    CanvasEff2x3Electron->cd(3)->SetGrid();
-    CanvasEff2x3Electron->cd(3)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(3)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(3)->SetRightMargin(0.12);
-    EffPlot_mom_1p->Draw();
+    CanvasACorr2x3Nucleon->cd(3);
+    CanvasACorr2x3Nucleon->cd(3)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(3)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(3)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(3)->SetRightMargin(0.12);
+    ACorrPlot_mom_1p->Draw();
 
-    CanvasEff2x3Electron->cd(4);
-    CanvasEff2x3Electron->cd(4)->SetGrid();
-    CanvasEff2x3Electron->cd(4)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(4)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(4)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(4);
+    CanvasACorr2x3Nucleon->cd(4)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(4)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(4)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(4)->SetRightMargin(0.12);
     RecPlot_mom_1n->Draw();
 
-    CanvasEff2x3Electron->cd(5);
-    CanvasEff2x3Electron->cd(5)->SetGrid();
-    CanvasEff2x3Electron->cd(5)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(5)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(5)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(5);
+    CanvasACorr2x3Nucleon->cd(5)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(5)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(5)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(5)->SetRightMargin(0.12);
     TruthPlot_mom_1n->Draw();
 
-    CanvasEff2x3Electron->cd(6);
-    CanvasEff2x3Electron->cd(6)->SetGrid();
-    CanvasEff2x3Electron->cd(6)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(6)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(6)->SetRightMargin(0.12);
-    EffPlot_mom_1n->Draw();
+    CanvasACorr2x3Nucleon->cd(6);
+    CanvasACorr2x3Nucleon->cd(6)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(6)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(6)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(6)->SetRightMargin(0.12);
+    ACorrPlot_mom_1n->Draw();
 
-    CanvasEff2x3Electron->SaveAs(MomEffMomEffSaveName.c_str());
-    CanvasEff2x3Electron->Clear();
+    CanvasACorr2x3Nucleon->SaveAs(MomACorrSaveName.c_str());
+    CanvasACorr2x3Nucleon->Clear();
     //</editor-fold>
 
-    //<editor-fold desc="Theta efficiency plots">
-    string ThetaEffSaveName = "./02_Electron_Theta_Eff_" + SampleName + ".png";
+    //<editor-fold desc="Theta acceptance correction plots">
+    string ThetaACorrSaveName = "./02_Nucleon_Theta_ACorr_" + SampleName + ".png";
 
-    CanvasEff2x3Electron->Divide(3, 2);
+    CanvasACorr2x3Nucleon->Divide(3, 2);
 
-    TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{e} (All Int., 1p, FD)");
-    RecPlot_Theta_1p->SetLineStyle(0);
-    RecPlot_Theta_1p->SetLineWidth(2);
+    TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{p} (All Int., 1p, FD)");
     RecPlot_Theta_1p->SetLineColor(kBlue);
     RecPlot_Theta_1p->SetStats(1);
     RecPlot_Theta_1p->Sumw2();
     RecPlot_Theta_1p->Rebin(2);
 
-    TH1D *TruthPlot_Theta_1p = (TH1D *) f->Get("TL #theta^{truth}_{e} AC (1p)");
+    TH1D *TruthPlot_Theta_1p = (TH1D *) f->Get("TL #theta^{truth}_{p} AC (1p, FD)");
     TruthPlot_Theta_1p->SetLineColor(kBlue);
     TruthPlot_Theta_1p->SetStats(1);
     TruthPlot_Theta_1p->Sumw2();
     TruthPlot_Theta_1p->Rebin(2);
 
-    TH1D *EffPlot_Theta_1p = (TH1D *) f->Get("Electron theta #epsilon_{eff} (1p)");
-    EffPlot_Theta_1p->SetLineColor(kBlue);
-//    EffPlot_Theta_1p->Sumw2();
-//    EffPlot_Theta_1p->Rebin(2);
-//    EffPlot_Theta_1p->Divide(TruthPlot_Theta_1p);
+    TH1D *ACorrPlot_Theta_1p = (TH1D *) f->Get("Proton theta #alpha (1p)");
+    ACorrPlot_Theta_1p->SetLineColor(kBlue);
+//    ACorrPlot_Theta_1p->Sumw2();
+//    ACorrPlot_Theta_1p->Rebin(2);
+//    ACorrPlot_Theta_1p->Divide(TruthPlot_Theta_1p);
 
-    TH1D *RecPlot_Theta_1n = (TH1D *) f->Get("#theta_{e} (All Int., 1n, FD)");
-    RecPlot_Theta_1n->SetLineStyle(0);
-    RecPlot_Theta_1n->SetLineWidth(2);
+    TH1D *RecPlot_Theta_1n = (TH1D *) f->Get("#theta_{n} (All Int., 1n, FD)");
     RecPlot_Theta_1n->SetLineColor(kBlue);
     RecPlot_Theta_1n->SetStats(1);
     RecPlot_Theta_1n->Sumw2();
     RecPlot_Theta_1n->Rebin(2);
 
-    TH1D *TruthPlot_Theta_1n = (TH1D *) f->Get("TL #theta^{truth}_{e} AC (1n)");
+    TH1D *TruthPlot_Theta_1n = (TH1D *) f->Get("TL #theta^{truth}_{n} AC (1n, FD)");
     TruthPlot_Theta_1n->SetLineColor(kBlue);
     TruthPlot_Theta_1n->SetStats(1);
     TruthPlot_Theta_1n->Sumw2();
     TruthPlot_Theta_1n->Rebin(2);
 
-    TH1D *EffPlot_Theta_1n = (TH1D *) f->Get("Electron theta #epsilon_{eff} (1n)");
-    EffPlot_Theta_1n->SetLineColor(kBlue);
-//    EffPlot_Theta_1n->Sumw2();
-//    EffPlot_Theta_1n->Rebin(2);
-//    EffPlot_Theta_1n->Divide(TruthPlot_Theta_1n);
+    TH1D *ACorrPlot_Theta_1n = (TH1D *) f->Get("Neutron theta #alpha (1n)");
+    ACorrPlot_Theta_1n->SetLineColor(kBlue);
+//    ACorrPlot_Theta_1n->Sumw2();
+//    ACorrPlot_Theta_1n->Rebin(2);
+//    ACorrPlot_Theta_1n->Divide(TruthPlot_Theta_1n);
 
     if (!RecPlot_Theta_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_Theta_1p) { cout << "\n\nEmpty hist\n\n\n"; }
-    if (!EffPlot_Theta_1p) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!ACorrPlot_Theta_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!RecPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
-    if (!EffPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!ACorrPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    CanvasEff2x3Electron->cd(1);
-    CanvasEff2x3Electron->cd(1)->SetGrid();
-    CanvasEff2x3Electron->cd(1)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(1)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(1)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(1);
+    CanvasACorr2x3Nucleon->cd(1)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(1)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(1)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(1)->SetRightMargin(0.12);
     RecPlot_Theta_1p->Draw();
 
-    CanvasEff2x3Electron->cd(2);
-    CanvasEff2x3Electron->cd(2)->SetGrid();
-    CanvasEff2x3Electron->cd(2)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(2)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(2)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(2);
+    CanvasACorr2x3Nucleon->cd(2)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(2)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(2)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(2)->SetRightMargin(0.12);
     TruthPlot_Theta_1p->Draw();
 
-    CanvasEff2x3Electron->cd(3);
-    CanvasEff2x3Electron->cd(3)->SetGrid();
-    CanvasEff2x3Electron->cd(3)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(3)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(3)->SetRightMargin(0.12);
-    EffPlot_Theta_1p->Draw();
+    CanvasACorr2x3Nucleon->cd(3);
+    CanvasACorr2x3Nucleon->cd(3)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(3)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(3)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(3)->SetRightMargin(0.12);
+    ACorrPlot_Theta_1p->Draw();
 
-    CanvasEff2x3Electron->cd(4);
-    CanvasEff2x3Electron->cd(4)->SetGrid();
-    CanvasEff2x3Electron->cd(4)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(4)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(4)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(4);
+    CanvasACorr2x3Nucleon->cd(4)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(4)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(4)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(4)->SetRightMargin(0.12);
     RecPlot_Theta_1n->Draw();
 
-    CanvasEff2x3Electron->cd(5);
-    CanvasEff2x3Electron->cd(5)->SetGrid();
-    CanvasEff2x3Electron->cd(5)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(5)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(5)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(5);
+    CanvasACorr2x3Nucleon->cd(5)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(5)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(5)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(5)->SetRightMargin(0.12);
     TruthPlot_Theta_1n->Draw();
 
-    CanvasEff2x3Electron->cd(6);
-    CanvasEff2x3Electron->cd(6)->SetGrid();
-    CanvasEff2x3Electron->cd(6)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(6)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(6)->SetRightMargin(0.12);
-    EffPlot_Theta_1n->Draw();
+    CanvasACorr2x3Nucleon->cd(6);
+    CanvasACorr2x3Nucleon->cd(6)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(6)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(6)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(6)->SetRightMargin(0.12);
+    ACorrPlot_Theta_1n->Draw();
 
-    CanvasEff2x3Electron->SaveAs(ThetaEffSaveName.c_str());
-    CanvasEff2x3Electron->Clear();
+    CanvasACorr2x3Nucleon->SaveAs(ThetaACorrSaveName.c_str());
+    CanvasACorr2x3Nucleon->Clear();
     //</editor-fold>
 
-    //<editor-fold desc="Phi efficiency plots">
-    string PhiEffSaveName = "./03_Electron_Phi_Eff_" + SampleName + ".png";
+    //<editor-fold desc="Phi acceptance correction plots">
+    string PhiACorrSaveName = "./03_Nucleon_Phi_ACorr_" + SampleName + ".png";
 
-    CanvasEff2x3Electron->Divide(3, 2);
+    CanvasACorr2x3Nucleon->Divide(3, 2);
 
-    TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{e} 1p (All Int., FD)");
-    RecPlot_Phi_1p->SetLineStyle(0);
-    RecPlot_Phi_1p->SetLineWidth(2);
+    TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{p} (All Int., 1p, FD)");
     RecPlot_Phi_1p->SetLineColor(kBlue);
     RecPlot_Phi_1p->SetStats(1);
     RecPlot_Phi_1p->Sumw2();
     RecPlot_Phi_1p->Rebin(2);
 
-    TH1D *TruthPlot_Phi_1p = (TH1D *) f->Get("TL #phi^{truth}_{e} AC (1p)");
+    TH1D *TruthPlot_Phi_1p = (TH1D *) f->Get("TL #phi^{truth}_{p} AC (1p, FD)");
     TruthPlot_Phi_1p->SetLineColor(kBlue);
     TruthPlot_Phi_1p->SetStats(1);
     TruthPlot_Phi_1p->Sumw2();
     TruthPlot_Phi_1p->Rebin(2);
 
-    TH1D *EffPlot_Phi_1p = (TH1D *) f->Get("Electron phi #epsilon_{eff} (1p)");
-    EffPlot_Phi_1p->SetLineColor(kBlue);
+    TH1D *ACorrPlot_Phi_1p = (TH1D *) f->Get("Proton phi #alpha (1p)");
+    ACorrPlot_Phi_1p->SetLineColor(kBlue);
 
-//    EffPlot_Phi_1p->Sumw2();
-//    EffPlot_Phi_1p->Rebin(2);
-//    EffPlot_Phi_1p->Divide(TruthPlot_Phi_1p);
+//    ACorrPlot_Phi_1p->Sumw2();
+//    ACorrPlot_Phi_1p->Rebin(2);
+//    ACorrPlot_Phi_1p->Divide(TruthPlot_Phi_1p);
 
-    TH1D *RecPlot_Phi_1n = (TH1D *) f->Get("#phi_{e} 1n (All Int., FD)");
-    RecPlot_Phi_1n->SetLineStyle(0);
-    RecPlot_Phi_1n->SetLineWidth(2);
+    TH1D *RecPlot_Phi_1n = (TH1D *) f->Get("#phi_{n} (All Int., 1n, FD)");
     RecPlot_Phi_1n->SetLineColor(kBlue);
     RecPlot_Phi_1n->SetStats(1);
     RecPlot_Phi_1n->Sumw2();
     RecPlot_Phi_1n->Rebin(2);
 
-    TH1D *TruthPlot_Phi_1n = (TH1D *) f->Get("TL #phi^{truth}_{e} AC (1n)");
+    TH1D *TruthPlot_Phi_1n = (TH1D *) f->Get("TL #phi^{truth}_{n} AC (1n, FD)");
     TruthPlot_Phi_1n->SetLineColor(kBlue);
     TruthPlot_Phi_1n->SetStats(1);
     TruthPlot_Phi_1n->Sumw2();
     TruthPlot_Phi_1n->Rebin(2);
 
-    TH1D *EffPlot_Phi_1n = (TH1D *) f->Get("Electron phi #epsilon_{eff} (1n)");
-    EffPlot_Phi_1n->SetLineColor(kBlue);
+    TH1D *ACorrPlot_Phi_1n = (TH1D *) f->Get("Neutron phi #alpha (1n)");
+    ACorrPlot_Phi_1n->SetLineColor(kBlue);
 
-//    EffPlot_Phi_1n->Sumw2();
-//    EffPlot_Phi_1n->Rebin(2);
-//    EffPlot_Phi_1n->Divide(TruthPlot_Phi_1n);
+//    ACorrPlot_Phi_1n->Sumw2();
+//    ACorrPlot_Phi_1n->Rebin(2);
+//    ACorrPlot_Phi_1n->Divide(TruthPlot_Phi_1n);
 
     if (!RecPlot_Phi_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_Phi_1p) { cout << "\n\nEmpty hist\n\n\n"; }
-    if (!EffPlot_Phi_1p) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!ACorrPlot_Phi_1p) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!RecPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!TruthPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
-    if (!EffPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
+    if (!ACorrPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    CanvasEff2x3Electron->cd(1);
-    CanvasEff2x3Electron->cd(1)->SetGrid();
-    CanvasEff2x3Electron->cd(1)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(1)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(1)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(1);
+    CanvasACorr2x3Nucleon->cd(1)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(1)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(1)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(1)->SetRightMargin(0.12);
     RecPlot_Phi_1p->Draw();
 
-    CanvasEff2x3Electron->cd(2);
-    CanvasEff2x3Electron->cd(2)->SetGrid();
-    CanvasEff2x3Electron->cd(2)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(2)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(2)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(2);
+    CanvasACorr2x3Nucleon->cd(2)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(2)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(2)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(2)->SetRightMargin(0.12);
     TruthPlot_Phi_1p->Draw();
 
-    CanvasEff2x3Electron->cd(3);
-    CanvasEff2x3Electron->cd(3)->SetGrid();
-    CanvasEff2x3Electron->cd(3)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(3)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(3)->SetRightMargin(0.12);
-    EffPlot_Phi_1p->Draw();
+    CanvasACorr2x3Nucleon->cd(3);
+    CanvasACorr2x3Nucleon->cd(3)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(3)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(3)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(3)->SetRightMargin(0.12);
+    ACorrPlot_Phi_1p->Draw();
 
-    CanvasEff2x3Electron->cd(4);
-    CanvasEff2x3Electron->cd(4)->SetGrid();
-    CanvasEff2x3Electron->cd(4)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(4)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(4)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(4);
+    CanvasACorr2x3Nucleon->cd(4)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(4)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(4)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(4)->SetRightMargin(0.12);
     RecPlot_Phi_1n->Draw();
 
-    CanvasEff2x3Electron->cd(5);
-    CanvasEff2x3Electron->cd(5)->SetGrid();
-    CanvasEff2x3Electron->cd(5)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(5)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(5)->SetRightMargin(0.12);
+    CanvasACorr2x3Nucleon->cd(5);
+    CanvasACorr2x3Nucleon->cd(5)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(5)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(5)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(5)->SetRightMargin(0.12);
     TruthPlot_Phi_1n->Draw();
 
-    CanvasEff2x3Electron->cd(6);
-    CanvasEff2x3Electron->cd(6)->SetGrid();
-    CanvasEff2x3Electron->cd(6)->SetBottomMargin(0.14);
-    CanvasEff2x3Electron->cd(6)->SetLeftMargin(0.17);
-    CanvasEff2x3Electron->cd(6)->SetRightMargin(0.12);
-    EffPlot_Phi_1n->Draw();
+    CanvasACorr2x3Nucleon->cd(6);
+    CanvasACorr2x3Nucleon->cd(6)->SetGrid();
+    CanvasACorr2x3Nucleon->cd(6)->SetBottomMargin(0.14);
+    CanvasACorr2x3Nucleon->cd(6)->SetLeftMargin(0.17);
+    CanvasACorr2x3Nucleon->cd(6)->SetRightMargin(0.12);
+    ACorrPlot_Phi_1n->Draw();
 
-    CanvasEff2x3Electron->SaveAs(PhiEffSaveName.c_str());
-    CanvasEff2x3Electron->Clear();
+    CanvasACorr2x3Nucleon->SaveAs(PhiACorrSaveName.c_str());
+    CanvasACorr2x3Nucleon->Clear();
     //</editor-fold>
 
     cout << "\n";
