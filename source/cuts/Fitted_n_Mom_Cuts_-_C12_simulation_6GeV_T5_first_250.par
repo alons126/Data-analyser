@@ -5,16 +5,16 @@
 # Cuts are fitted for - C12_simulation_6GeV_T5_first_250
 
 # Beta std by detector (pid:mean:sigma) - sigma_FD=1:
-Momentum threshold			9:0:9999:CD & FD
-Momentum_cuts_ECAL			2112:0:3.89633:FD-ECAL #fit original
-#Momentum _cuts_ECAL			2112:0:2.6:FD-ECAL #test
-Momentum_cuts_ECAL_apprax			2112:0:3.91237:FD-ECAL
+Momentum_th			2112:0:0.3:CD & FD
 
-Momentum_cuts_All_neutrals			2112:0:3.6796:FD-ECAL
-Momentum_cuts_All_neutrals_noPDG0			2112:0:3.6796:FD-ECAL
-Momentum_cuts_noPCAL			2112:0:2.20681:FD-noPCAL
-Momentum_cuts_noPCAL_noPDG0			2112:0:2.20681:FD-noPCAL
-Momentum_cuts_ECIN			2112:0:2.55473:FD-ECIN
-Momentum_cuts_ECIN_noPDG0			2112:0:2.55473:FD-ECIN
-Momentum_cuts_ECOUT			2112:0:11.3662:FD-ECOUT
-Momentum_cuts_ECOUT_noPDG0			2112:0:11.3662:FD-ECOUT
+Momentum_cuts_ECAL			2112:0:13.1904:FD-ECAL
+Momentum_cuts_ECAL_apprax			2112:0:12.94:FD-ECAL
+
+Momentum_cuts_All_neutrals			2112:0:11.5453:FD-ECAL
+Momentum_cuts_All_neutrals_noPDG0			2112:0:11.5453:FD-ECAL
+Momentum_cuts_noPCAL			2112:0:11.8894:FD-noPCAL
+Momentum_cuts_noPCAL_noPDG0			2112:0:11.8894:FD-noPCAL
+Momentum_cuts_ECIN			2112:0:6.32289:FD-ECIN
+Momentum_cuts_ECIN_noPDG0			2112:0:6.32289:FD-ECIN
+Momentum_cuts_ECOUT			2112:0:12.9971:FD-ECOUT
+Momentum_cuts_ECOUT_noPDG0			2112:0:12.9971:FD-ECOUT

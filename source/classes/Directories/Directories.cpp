@@ -180,138 +180,18 @@ Directories::Directories(std::string plots_path) {
         MakeDirectory(create_Momentum_th_Dir, Momentum_th_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    Momentum_th_Directory_map["Momentum_th_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
+    Momentum_Directory_map["Momentum_th_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
                                                                 Find(Momentum_th_Daughter_Folders, "01_1e_cut") + "/";
-    Momentum_th_Directory_map["Momentum_th_1p_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
+    Momentum_Directory_map["Momentum_th_1p_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
                                                             Find(Momentum_th_Daughter_Folders, "02_1p") + "/";
-    Momentum_th_Directory_map["Momentum_th_1n_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
+    Momentum_Directory_map["Momentum_th_1n_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
                                                             Find(Momentum_th_Daughter_Folders, "05_1n") + "/";
-    Momentum_th_Directory_map["Momentum_th_1e2p_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
+    Momentum_Directory_map["Momentum_th_1e2p_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
                                                               Find(Momentum_th_Daughter_Folders, "03_1e2p") + "/";
-    Momentum_th_Directory_map["Momentum_th_2p_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
+    Momentum_Directory_map["Momentum_th_2p_Directory"] = Plots_Folder + "/" + Momentum_th_Parent_Directory + "/" +
                                                             Find(Momentum_th_Daughter_Folders, "04_2p") + "/";
     //</editor-fold>
 
-    //</editor-fold>
-
-    //<editor-fold desc="Momentum cut plots directories">
-    for (std::string folders_name: Momentum_cut_Daughter_Folders) {
-        MakeDirectory(create_Momentum_cut_Dir, Momentum_cut_Parent_Directory, folders_name, false, Plots_Folder);
-    }
-
-    Momentum_cut_Directory_map["Momentum_cut_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                  Find(Momentum_cut_Daughter_Folders, "01_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Electrons_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                            Find(Momentum_cut_Daughter_Folders, "01_1e_cut/01_Electrons_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Protons_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                          Find(Momentum_cut_Daughter_Folders, "01_1e_cut/02_Protons_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kplus_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "01_1e_cut/03_Kplus_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kminus_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                         Find(Momentum_cut_Daughter_Folders, "01_1e_cut/04_Kminus_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piplus_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                         Find(Momentum_cut_Daughter_Folders, "01_1e_cut/05_Piplus_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piminus_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                          Find(Momentum_cut_Daughter_Folders, "01_1e_cut/06_Piminus_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Neutrons_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                           Find(Momentum_cut_Daughter_Folders, "01_1e_cut/07_Neutrons_1e_cut") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Photons_1e_cut_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                          Find(Momentum_cut_Daughter_Folders, "01_1e_cut/08_Photons_1e_cut") + "/";
-
-    Momentum_cut_Directory_map["Momentum_cut_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                              Find(Momentum_cut_Daughter_Folders, "02_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Electrons_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "02_1p/01_Electrons_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Protons_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "02_1p/02_Protons_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kplus_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                    Find(Momentum_cut_Daughter_Folders, "02_1p/03_Kplus_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kminus_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                     Find(Momentum_cut_Daughter_Folders, "02_1p/04_Kminus_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piplus_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                     Find(Momentum_cut_Daughter_Folders, "02_1p/05_Piplus_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piminus_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "02_1p/06_Piminus_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Neutrons_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "02_1p/07_Neutrons_1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Photons_1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "02_1p/08_Photons_1p") + "/";
-
-    Momentum_cut_Directory_map["Momentum_cut_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                              Find(Momentum_cut_Daughter_Folders, "03_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Electrons_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "03_1n/01_Electrons_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Protons_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "03_1n/02_Protons_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kplus_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                    Find(Momentum_cut_Daughter_Folders, "03_1n/03_Kplus_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kminus_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                     Find(Momentum_cut_Daughter_Folders, "03_1n/04_Kminus_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piplus_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                     Find(Momentum_cut_Daughter_Folders, "03_1n/05_Piplus_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piminus_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "03_1n/06_Piminus_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Neutrons_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "03_1n/07_Neutrons_1n") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Photons_1n_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "03_1n/08_Photons_1n") + "/";
-
-    Momentum_cut_Directory_map["Momentum_cut_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                Find(Momentum_cut_Daughter_Folders, "04_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Electrons_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                          Find(Momentum_cut_Daughter_Folders, "04_1n1p/01_Electrons_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Protons_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "04_1n1p/02_Protons_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kplus_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "04_1n1p/03_Kplus_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kminus_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "04_1n1p/04_Kminus_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piplus_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "04_1n1p/05_Piplus_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piminus_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "04_1n1p/06_Piminus_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Neutrons_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                         Find(Momentum_cut_Daughter_Folders, "04_1n1p/07_Neutrons_1n1p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Photons_1n1p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "04_1n1p/08_Photons_1n1p") + "/";
-
-    Momentum_cut_Directory_map["Momentum_cut_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                Find(Momentum_cut_Daughter_Folders, "05_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Electrons_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                          Find(Momentum_cut_Daughter_Folders, "05_1e2p/01_Electrons_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Protons_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "05_1e2p/02_Protons_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kplus_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "05_1e2p/03_Kplus_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kminus_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "05_1e2p/04_Kminus_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piplus_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "05_1e2p/05_Piplus_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piminus_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "05_1e2p/06_Piminus_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Neutrons_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                         Find(Momentum_cut_Daughter_Folders, "05_1e2p/07_Neutrons_1e2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Photons_1e2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "05_1e2p/08_Photons_1e2p") + "/";
-
-    Momentum_cut_Directory_map["Momentum_cut_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                              Find(Momentum_cut_Daughter_Folders, "06_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Electrons_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                        Find(Momentum_cut_Daughter_Folders, "06_2p/01_Electrons_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Protons_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "06_2p/02_Protons_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kplus_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                    Find(Momentum_cut_Daughter_Folders, "06_2p/03_Kplus_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Kminus_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                     Find(Momentum_cut_Daughter_Folders, "06_2p/04_Kminus_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piplus_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                     Find(Momentum_cut_Daughter_Folders, "06_2p/05_Piplus_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Piminus_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "06_2p/06_Piminus_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Neutrons_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                       Find(Momentum_cut_Daughter_Folders, "06_2p/07_Neutrons_2p") + "/";
-    Momentum_cut_Directory_map["Momentum_cut_Photons_2p_Directory"] = Plots_Folder + "/" + Momentum_cut_Parent_Directory + "/" +
-                                                                      Find(Momentum_cut_Daughter_Folders, "06_2p/08_Photons_2p") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Beta plots directories">
@@ -375,8 +255,12 @@ Directories::Directories(std::string plots_path) {
                                                                     "01_Beta_plots/05_1n/03_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n") +
                                                                "/";
 
+    Beta_Directory_map["Beta_vs_other_variables_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+                                                                 Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/04_Beta_vs_other_variables_plots_1n") +
+                                                                 "/";
 
-    Beta_Directory_map["All_neutrals_beta_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
+
+/*    Beta_Directory_map["All_neutrals_beta_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                            Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02a_All_neutrals_beta_plots_1n") + "/";
     Beta_Directory_map["All_neutrals_beta_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                                   Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02b_All_neutrals_beta_plots_noPDG0_1n") + "/";
@@ -402,7 +286,7 @@ Directories::Directories(std::string plots_path) {
     Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                                                            Find(Beta_Daughter_Folders,
                                                                                                 "01_Beta_plots/05_1n/05b_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_plots_1n") +
-                                                                                           "/";
+                                                                                           "/";*/
 
 
     Beta_Directory_map["Beta_VS_P_All_e_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +

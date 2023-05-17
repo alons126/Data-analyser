@@ -26,13 +26,12 @@ using namespace std;
 
 void PlotsEff2x3() {
 
-//    string SampleName = "C12_simulation_6GeV_T5_first_10";
+    string SampleName = "C12_simulation_6GeV_T5_first_10";
+//    string SampleName = "C12_simulation_6GeV_T5_first_100";
+//    string SampleName = "C12_simulation_6GeV_T5_first_250";
+//    string SampleName = "C12_simulation_6GeV_T5";
 //
-//    PlotsEff2x3Nucleon(SampleName);
-//    PlotsEff2x3Electron(SampleName);
-
-    system("root -l -b -q /home/alon/project/apps/PlotsEff2x3Nucleon.cpp");
-    system("root -l -b -q /home/alon/project/apps/PlotsEff2x3Electron.cpp");
-
+    PlotsEff2x3Nucleon(SampleName);
+    PlotsEff2x3Electron(SampleName);
 }
 

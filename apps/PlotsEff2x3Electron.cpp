@@ -21,41 +21,35 @@
 
 using namespace std;
 
-void PlotsEff2x3Electron() {
+void PlotsEff2x3Electron(string SampleName) {
+    cout << "\nSaving efficiency plots for Electrons...\n\n";
 
-/*
-//void PlotsEff2x3Electron(string SampleName) {
+    //<editor-fold desc="Setting file">
+    TFile *f;
 
-//    TFile *f;
-//
-//    if (SampleName == "C12_simulation_6GeV_T5_first_10)") {
-//        f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-//    } else if (SampleName == "C12_simulation_6GeV_T5_first_100)"){
-//        f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-//    } else if (SampleName == "C12_simulation_6GeV_T5_first_250)"){
-//        f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-//    } else if (SampleName == "C12_simulation_6GeV_T5)"){
-//        f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-//    }
+    if (SampleName == "C12_simulation_6GeV_T5_first_10") {
+        f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+    } else if (SampleName == "C12_simulation_6GeV_T5_first_100"){
+        f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+    } else if (SampleName == "C12_simulation_6GeV_T5_first_250"){
+        f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+    } else if (SampleName == "C12_simulation_6GeV_T5"){
+        f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    }
+    //</editor-fold>
 
-//    string SampleName = "C12_simulation_6GeV_T5_first_10";
-*/
+    //<editor-fold desc="Setting Canvas3x2Electron">
+    TCanvas *Canvas3x2Electron = new TCanvas("Canvas3x2Electron", "Canvas3x2Electron", 1000 * 3, 750 * 2); // normal res
 
-    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-    string SampleName = "C12_simulation_6GeV_T5_first_10";
+    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
 
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_100";
-
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5_first_250";
-
-//    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-//    string SampleName = "C12_simulation_6GeV_T5";
-
-    cout << "\nSample is:\t" << SampleName << "\n\n";
+    Canvas3x2Electron->Divide(3, 2);
+    //</editor-fold>
 
     //<editor-fold desc="Momentum efficiency plots">
+    string MomEffMomEffSaveName = "./01_Electron_Mom_Eff_" + SampleName + ".png";
+
+    /*
     string MomEffMomEffSaveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
@@ -67,12 +61,9 @@ void PlotsEff2x3Electron() {
     } else if (SampleName == "C12_simulation_6GeV_T5") {
         MomEffMomEffSaveName = "./01_MomentumEffElectron.png";
     }
+*/
 
-    TCanvas *Canvas2x6 = new TCanvas("Canvas2x6", "Canvas2x6", 1000 * 3, 750 * 2); // normal res
-
-    float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
-
-    Canvas2x6->Divide(3, 2);
+    Canvas3x2Electron->Divide(3, 2);
 
     TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Electron momentum APID (1p)");
     RecPlot_mom_1p->SetLineColor(kBlue);
@@ -121,53 +112,56 @@ void PlotsEff2x3Electron() {
     if (!TruthPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_mom_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    Canvas2x6->cd(1);
-    Canvas2x6->cd(1)->SetGrid();
-    Canvas2x6->cd(1)->SetBottomMargin(0.14);
-    Canvas2x6->cd(1)->SetLeftMargin(0.17);
-    Canvas2x6->cd(1)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(1);
+    Canvas3x2Electron->cd(1)->SetGrid();
+    Canvas3x2Electron->cd(1)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(1)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(1)->SetRightMargin(0.12);
     RecPlot_mom_1p->Draw();
 
-    Canvas2x6->cd(2);
-    Canvas2x6->cd(2)->SetGrid();
-    Canvas2x6->cd(2)->SetBottomMargin(0.14);
-    Canvas2x6->cd(2)->SetLeftMargin(0.17);
-    Canvas2x6->cd(2)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(2);
+    Canvas3x2Electron->cd(2)->SetGrid();
+    Canvas3x2Electron->cd(2)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(2)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(2)->SetRightMargin(0.12);
     TruthPlot_mom_1p->Draw();
 
-    Canvas2x6->cd(3);
-    Canvas2x6->cd(3)->SetGrid();
-    Canvas2x6->cd(3)->SetBottomMargin(0.14);
-    Canvas2x6->cd(3)->SetLeftMargin(0.17);
-    Canvas2x6->cd(3)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(3);
+    Canvas3x2Electron->cd(3)->SetGrid();
+    Canvas3x2Electron->cd(3)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(3)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(3)->SetRightMargin(0.12);
     EffPlot_mom_1p->Draw();
 
-    Canvas2x6->cd(4);
-    Canvas2x6->cd(4)->SetGrid();
-    Canvas2x6->cd(4)->SetBottomMargin(0.14);
-    Canvas2x6->cd(4)->SetLeftMargin(0.17);
-    Canvas2x6->cd(4)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(4);
+    Canvas3x2Electron->cd(4)->SetGrid();
+    Canvas3x2Electron->cd(4)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(4)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(4)->SetRightMargin(0.12);
     RecPlot_mom_1n->Draw();
 
-    Canvas2x6->cd(5);
-    Canvas2x6->cd(5)->SetGrid();
-    Canvas2x6->cd(5)->SetBottomMargin(0.14);
-    Canvas2x6->cd(5)->SetLeftMargin(0.17);
-    Canvas2x6->cd(5)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(5);
+    Canvas3x2Electron->cd(5)->SetGrid();
+    Canvas3x2Electron->cd(5)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(5)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(5)->SetRightMargin(0.12);
     TruthPlot_mom_1n->Draw();
 
-    Canvas2x6->cd(6);
-    Canvas2x6->cd(6)->SetGrid();
-    Canvas2x6->cd(6)->SetBottomMargin(0.14);
-    Canvas2x6->cd(6)->SetLeftMargin(0.17);
-    Canvas2x6->cd(6)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(6);
+    Canvas3x2Electron->cd(6)->SetGrid();
+    Canvas3x2Electron->cd(6)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(6)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(6)->SetRightMargin(0.12);
     EffPlot_mom_1n->Draw();
 
-    Canvas2x6->SaveAs(MomEffMomEffSaveName.c_str());
-    Canvas2x6->Clear();
+    Canvas3x2Electron->SaveAs(MomEffMomEffSaveName.c_str());
+    Canvas3x2Electron->Clear();
     //</editor-fold>
 
     //<editor-fold desc="Theta efficiency plots">
+    string ThetaEffSaveName = "./02_Electron_Theta_Eff_" + SampleName + ".png";
+
+/*
     string ThetaEffSaveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
@@ -179,8 +173,9 @@ void PlotsEff2x3Electron() {
     } else if (SampleName == "C12_simulation_6GeV_T5") {
         ThetaEffSaveName = "./02_ThetaEffElectron.png";
     }
+*/
 
-    Canvas2x6->Divide(3, 2);
+    Canvas3x2Electron->Divide(3, 2);
 
     TH1D *RecPlot_Theta_1p = (TH1D *) f->Get("#theta_{e} (All Int., 1p, FD)");
     RecPlot_Theta_1p->SetLineStyle(0);
@@ -229,53 +224,56 @@ void PlotsEff2x3Electron() {
     if (!TruthPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_Theta_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    Canvas2x6->cd(1);
-    Canvas2x6->cd(1)->SetGrid();
-    Canvas2x6->cd(1)->SetBottomMargin(0.14);
-    Canvas2x6->cd(1)->SetLeftMargin(0.17);
-    Canvas2x6->cd(1)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(1);
+    Canvas3x2Electron->cd(1)->SetGrid();
+    Canvas3x2Electron->cd(1)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(1)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(1)->SetRightMargin(0.12);
     RecPlot_Theta_1p->Draw();
 
-    Canvas2x6->cd(2);
-    Canvas2x6->cd(2)->SetGrid();
-    Canvas2x6->cd(2)->SetBottomMargin(0.14);
-    Canvas2x6->cd(2)->SetLeftMargin(0.17);
-    Canvas2x6->cd(2)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(2);
+    Canvas3x2Electron->cd(2)->SetGrid();
+    Canvas3x2Electron->cd(2)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(2)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(2)->SetRightMargin(0.12);
     TruthPlot_Theta_1p->Draw();
 
-    Canvas2x6->cd(3);
-    Canvas2x6->cd(3)->SetGrid();
-    Canvas2x6->cd(3)->SetBottomMargin(0.14);
-    Canvas2x6->cd(3)->SetLeftMargin(0.17);
-    Canvas2x6->cd(3)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(3);
+    Canvas3x2Electron->cd(3)->SetGrid();
+    Canvas3x2Electron->cd(3)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(3)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(3)->SetRightMargin(0.12);
     EffPlot_Theta_1p->Draw();
 
-    Canvas2x6->cd(4);
-    Canvas2x6->cd(4)->SetGrid();
-    Canvas2x6->cd(4)->SetBottomMargin(0.14);
-    Canvas2x6->cd(4)->SetLeftMargin(0.17);
-    Canvas2x6->cd(4)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(4);
+    Canvas3x2Electron->cd(4)->SetGrid();
+    Canvas3x2Electron->cd(4)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(4)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(4)->SetRightMargin(0.12);
     RecPlot_Theta_1n->Draw();
 
-    Canvas2x6->cd(5);
-    Canvas2x6->cd(5)->SetGrid();
-    Canvas2x6->cd(5)->SetBottomMargin(0.14);
-    Canvas2x6->cd(5)->SetLeftMargin(0.17);
-    Canvas2x6->cd(5)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(5);
+    Canvas3x2Electron->cd(5)->SetGrid();
+    Canvas3x2Electron->cd(5)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(5)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(5)->SetRightMargin(0.12);
     TruthPlot_Theta_1n->Draw();
 
-    Canvas2x6->cd(6);
-    Canvas2x6->cd(6)->SetGrid();
-    Canvas2x6->cd(6)->SetBottomMargin(0.14);
-    Canvas2x6->cd(6)->SetLeftMargin(0.17);
-    Canvas2x6->cd(6)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(6);
+    Canvas3x2Electron->cd(6)->SetGrid();
+    Canvas3x2Electron->cd(6)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(6)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(6)->SetRightMargin(0.12);
     EffPlot_Theta_1n->Draw();
 
-    Canvas2x6->SaveAs(ThetaEffSaveName.c_str());
-    Canvas2x6->Clear();
+    Canvas3x2Electron->SaveAs(ThetaEffSaveName.c_str());
+    Canvas3x2Electron->Clear();
     //</editor-fold>
 
     //<editor-fold desc="Phi efficiency plots">
+    string PhiEffSaveName = "./03_Electron_Phi_Eff_" + SampleName + ".png";
+
+/*
     string PhiEffSaveName;
 
     if (SampleName == "C12_simulation_6GeV_T5_first_10") {
@@ -287,8 +285,9 @@ void PlotsEff2x3Electron() {
     } else if (SampleName == "C12_simulation_6GeV_T5") {
         PhiEffSaveName = "./03_PhiEff.pngElectron.png";
     }
+*/
 
-    Canvas2x6->Divide(3, 2);
+    Canvas3x2Electron->Divide(3, 2);
 
     TH1D *RecPlot_Phi_1p = (TH1D *) f->Get("#phi_{e} 1p (All Int., FD)");
     RecPlot_Phi_1p->SetLineStyle(0);
@@ -339,51 +338,53 @@ void PlotsEff2x3Electron() {
     if (!TruthPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
     if (!EffPlot_Phi_1n) { cout << "\n\nEmpty hist\n\n\n"; }
 
-    Canvas2x6->cd(1);
-    Canvas2x6->cd(1)->SetGrid();
-    Canvas2x6->cd(1)->SetBottomMargin(0.14);
-    Canvas2x6->cd(1)->SetLeftMargin(0.17);
-    Canvas2x6->cd(1)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(1);
+    Canvas3x2Electron->cd(1)->SetGrid();
+    Canvas3x2Electron->cd(1)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(1)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(1)->SetRightMargin(0.12);
     RecPlot_Phi_1p->Draw();
 
-    Canvas2x6->cd(2);
-    Canvas2x6->cd(2)->SetGrid();
-    Canvas2x6->cd(2)->SetBottomMargin(0.14);
-    Canvas2x6->cd(2)->SetLeftMargin(0.17);
-    Canvas2x6->cd(2)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(2);
+    Canvas3x2Electron->cd(2)->SetGrid();
+    Canvas3x2Electron->cd(2)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(2)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(2)->SetRightMargin(0.12);
     TruthPlot_Phi_1p->Draw();
 
-    Canvas2x6->cd(3);
-    Canvas2x6->cd(3)->SetGrid();
-    Canvas2x6->cd(3)->SetBottomMargin(0.14);
-    Canvas2x6->cd(3)->SetLeftMargin(0.17);
-    Canvas2x6->cd(3)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(3);
+    Canvas3x2Electron->cd(3)->SetGrid();
+    Canvas3x2Electron->cd(3)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(3)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(3)->SetRightMargin(0.12);
     EffPlot_Phi_1p->Draw();
 
-    Canvas2x6->cd(4);
-    Canvas2x6->cd(4)->SetGrid();
-    Canvas2x6->cd(4)->SetBottomMargin(0.14);
-    Canvas2x6->cd(4)->SetLeftMargin(0.17);
-    Canvas2x6->cd(4)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(4);
+    Canvas3x2Electron->cd(4)->SetGrid();
+    Canvas3x2Electron->cd(4)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(4)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(4)->SetRightMargin(0.12);
     RecPlot_Phi_1n->Draw();
 
-    Canvas2x6->cd(5);
-    Canvas2x6->cd(5)->SetGrid();
-    Canvas2x6->cd(5)->SetBottomMargin(0.14);
-    Canvas2x6->cd(5)->SetLeftMargin(0.17);
-    Canvas2x6->cd(5)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(5);
+    Canvas3x2Electron->cd(5)->SetGrid();
+    Canvas3x2Electron->cd(5)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(5)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(5)->SetRightMargin(0.12);
     TruthPlot_Phi_1n->Draw();
 
-    Canvas2x6->cd(6);
-    Canvas2x6->cd(6)->SetGrid();
-    Canvas2x6->cd(6)->SetBottomMargin(0.14);
-    Canvas2x6->cd(6)->SetLeftMargin(0.17);
-    Canvas2x6->cd(6)->SetRightMargin(0.12);
+    Canvas3x2Electron->cd(6);
+    Canvas3x2Electron->cd(6)->SetGrid();
+    Canvas3x2Electron->cd(6)->SetBottomMargin(0.14);
+    Canvas3x2Electron->cd(6)->SetLeftMargin(0.17);
+    Canvas3x2Electron->cd(6)->SetRightMargin(0.12);
     EffPlot_Phi_1n->Draw();
 
-    Canvas2x6->SaveAs(PhiEffSaveName.c_str());
-    Canvas2x6->Clear();
+    Canvas3x2Electron->SaveAs(PhiEffSaveName.c_str());
+    Canvas3x2Electron->Clear();
     //</editor-fold>
+
+    cout << "\n";
 
 }
 
