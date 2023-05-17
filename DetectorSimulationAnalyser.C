@@ -94,7 +94,7 @@ void EventAnalyser() {
 
     bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 
-    bool Enable_FD_photons = true; // Enforce TL event selection on Rec. plots
+    bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -161,8 +161,27 @@ void EventAnalyser() {
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
 
     bool custom_cuts_naming = true;
+    string Beta_Fit_Status, FD_photons_Status, Efficiency_Status;
 
     if (custom_cuts_naming) {
+        if (apply_neutron_Beta_Fit) {
+            Beta_Fit_Status = "wBC_";
+        } else {
+            Beta_Fit_Status = "noBC_";
+        }
+
+        if (Enable_FD_photons) {
+            FD_photons_Status = "wFDph_";
+        } else {
+            FD_photons_Status = "noFDph_";
+        }
+
+        if (Rec_wTL_ES) {
+            Efficiency_Status = "Eff2";
+        } else {
+            Efficiency_Status = "Eff1";
+        }
+
         if (!apply_cuts) {
             plots_path = WorkingDirectory + "plots_" + SampleName + "_-00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-00_NO_CUTS.txt";
@@ -171,6 +190,10 @@ void EventAnalyser() {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_" + Beta_Fit_Status + FD_photons_Status + Efficiency_Status;
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + Beta_Fit_Status + FD_photons_Status
+                                           + Efficiency_Status + ".txt";
+/*
                 if (!apply_neutron_Beta_Fit) {
                     if (Enable_FD_photons) {
                         plots_path =
@@ -195,8 +218,11 @@ void EventAnalyser() {
 //                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut"; //original
 //                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut.txt";
                 }
+*/
             }
         }
+    } else {
+        Beta_Fit_Status, FD_photons_Status, Efficiency_Status = "";
     }
     //</editor-fold>
 
@@ -345,21 +371,34 @@ void EventAnalyser() {
     DSCuts ThetaFD = DSCuts("Theta FD", "FD", "", "1n & 1p", 1, 5., 40.);
 
     /* Beta cut (1n, FD) */
-    DSCuts Beta_cut_for_map = DSCuts("Beta_nuc", "FD", "", "1n", 1, -0.973608, 0.973608); // std = 1.01426e-02
-    Beta_cut_for_map.FitStd = 1.01426 * 0.01;
+    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, 0, 9999);
 
-    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+//    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_FD_n_from_ph;
+    DSCuts Beta_cut_ABF_FD_n_from_ph_apprax;
+
+    DSCuts Beta_cut_ABF_All_FD_neutrals;
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0;
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL;
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL;
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN;
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN;
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT;
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT;
+/*
+//    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
     DSCuts Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
     DSCuts Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
 
-    DSCuts Beta_cut_ABF_FD_All_neutrals = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_All_neutrals_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_noPCAL = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_noPCAL_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_noPCAL_wECIN = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_noPCAL_wECIN_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_All_FD_neutrals = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
+    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
+*/
 
     /* Nucleon theta cut (1p & 1n, FD) */
     DSCuts Theta_nuc_cut = DSCuts("Theta_nuc", "FD", "", "1p & 1n", 0, -9999, 32.);
@@ -457,70 +496,70 @@ void EventAnalyser() {
 //    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-    bool Q2_plots = true;
-//    bool Q2_plots = false;
-//    cout << "\n\n\n\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;\n\n\n\n";
+//    bool Q2_plots = true;
+    bool Q2_plots = false;
+    cout << "\n\n\n\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;";
+    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-    bool E_e_plots = true;
-//    bool E_e_plots = false;
-//    cout << "\n\n\n\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;\n\n\n\n";
+//    bool E_e_plots = true;
+    bool E_e_plots = false;
+    cout << "\n\n\n\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;";
+    cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_plots_master = true; // Master ET plots selector
+    bool ETrans_plots_master = false; // Master ET plots selector
+    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;";
+    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
 
     /* Ecal plots */
-    bool Ecal_plots = true;
-//    bool Ecal_plots = false;
-//    cout << "\n\n\n\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+//    bool Ecal_plots = true;
+    bool Ecal_plots = false;
+    cout << "\n\n\n\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;";
+    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-    bool TVariables_plots = true;
-//    bool TVariables_plots = false;
-//    cout << "\n\n\n\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;";
-//    cout << "\nbool TVariables_plots = false;\n\n\n\n";
+//    bool TVariables_plots = true;
+    bool TVariables_plots = false;
+    cout << "\n\n\n\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;";
+    cout << "\nbool TVariables_plots = false;\n\n\n\n";
 
     /* ToF plots */
     bool ToF_plots = false;
@@ -629,10 +668,10 @@ void EventAnalyser() {
 
     /* Beta plots */
     double dBeta_sigma_boundary = 0.1;
-    double Beta_dist_uboundary = Beta_cut.GetMean() + dBeta_sigma_boundary, Beta_dist_lboundary = Beta_cut.GetMean() - dBeta_sigma_boundary;
+    double Beta_dist_uboundary = 1 + dBeta_sigma_boundary, Beta_dist_lboundary = 1 - dBeta_sigma_boundary;
 
     double dBeta_sigma_ZOOMOUT_boundary = 0.1;
-    double Beta_dist_ZOOMOUT_uboundary = Beta_cut.GetMean() + dBeta_sigma_ZOOMOUT_boundary;
+    double Beta_dist_ZOOMOUT_uboundary = 1 + dBeta_sigma_ZOOMOUT_boundary;
     double Beta_dist_ZOOMOUT_lboundary = 0.9;
 
     double Beta_boundary = 3., P_boundary = beamE * 1.425;
@@ -3656,16 +3695,29 @@ void EventAnalyser() {
         if (!apply_neutron_Beta_Fit) {
             /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
             n_momentum_cuts_ABF_FD_n_from_ph = DSCuts("Momentum_cuts_ECAL", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL_apprax", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
 
-            n_momentum_cuts_ABF_FD_All_neutrals = DSCuts("Momentum_cuts_All_neutrals", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_All_neutrals_noPDG0 = DSCuts("Momentum_cuts_All_neutrals_noPDG0", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_noPCAL = DSCuts("Momentum_cuts_noPCAL", "FD-noPCAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_noPCAL_noPDG0 = DSCuts("Momentum_cuts_noPCAL_noPDG0", "FD-noPCAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_All_neutrals = DSCuts("Momentum_cuts_All_neutrals", "FD-ECAL", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_All_neutrals_noPDG0 = DSCuts("Momentum_cuts_All_neutrals_noPDG0", "FD-ECAL", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_noPCAL = DSCuts("Momentum_cuts_noPCAL", "FD-noPCAL", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_noPCAL_noPDG0 = DSCuts("Momentum_cuts_noPCAL_noPDG0", "FD-noPCAL", "", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_noPCAL_wECIN = DSCuts("Momentum_cuts_ECIN", "FD-ECIN", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0 = DSCuts("Momentum_cuts_ECIN_noPDG0", "FD-ECIN", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT = DSCuts("Momentum_cuts_ECOUT", "FD-ECOUT", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-            n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0 = DSCuts("Momentum_cuts_ECOUT_noPDG0", "FD-ECOUT", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0 = DSCuts("Momentum_cuts_ECIN_noPDG0", "FD-ECIN", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT = DSCuts("Momentum_cuts_ECOUT", "FD-ECOUT", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+            n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0 = DSCuts("Momentum_cuts_ECOUT_noPDG0", "FD-ECOUT", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+
+            /* Setting neutron beta cut */
+            Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
+
+            Beta_cut_ABF_All_FD_neutrals = DSCuts("Beta_cut_All_FD_neutrals", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_FD_neutrals_noPDG0 = DSCuts("Beta_cut_FD_neutrals_noPDG0", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_All_FD_neutrals_noPCAL = DSCuts("Beta_cut_All_FD_neutrals_noPCAL", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL = DSCuts("Beta_cut_FD_neutrals_noPDG0_noPCAL", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN = DSCuts("Beta_cut_All_FD_neutrals_noPCAL_wECIN", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN = DSCuts("Beta_cut_FD_neutrals_noPDG0_noPCAL_wECIN", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT = DSCuts("Beta_cut_All_FD_neutrals_noPCAL_noECIN_wECOUT", "FD", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT = DSCuts("Beta_cut_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT", "FD", "", "1n", 1, -9999, 9999);
         } else if (apply_neutron_Beta_Fit) {
             cout << "Loading fitted Beta cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
@@ -3673,6 +3725,7 @@ void EventAnalyser() {
             /* Setting neutron momentum cut after beta fit */
             n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
             TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+            Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());
         }
 
         clasAna.printParams();
@@ -6058,7 +6111,7 @@ void EventAnalyser() {
                             hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
 
-                            if (fabs(allParticles[i]->par()->getBeta() - Beta_cut_for_map.GetMean()) <= Beta_cut_for_map.FitStd) {
+                            if (fabs(allParticles[i]->par()->getBeta() - Beta_cut.GetMean()) <= Beta_cut.FitStd) {
                                 hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
                             }
 
@@ -7715,10 +7768,10 @@ void EventAnalyser() {
                    hBeta_All_FD_Neut_03_1n_FD, "!PCAL && ECIN", hBeta_All_FD_Neut_04_1n_FD, "!PCAL && !ECIN && ECOUT");
 
         if (!apply_neutron_Beta_Fit) {
-            BetaFit(SampleName, Beta_cut_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals, hBeta_All_FD_Neut_01_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL, hBeta_All_FD_Neut_02_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN, hBeta_All_FD_Neut_03_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, hBeta_All_FD_Neut_04_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_All_FD_neutrals, n_momentum_cuts_ABF_FD_All_neutrals, hBeta_All_FD_Neut_01_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_All_FD_neutrals_noPCAL, n_momentum_cuts_ABF_FD_noPCAL, hBeta_All_FD_Neut_02_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN, hBeta_All_FD_Neut_03_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, hBeta_All_FD_Neut_04_1n_FD, plots);
         }
 
         hBeta_FD_Neut_noPDG0_01_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
@@ -7737,10 +7790,10 @@ void EventAnalyser() {
                    hBeta_FD_Neut_noPDG0_03_1n_FD, "!PCAL && ECIN", hBeta_FD_Neut_noPDG0_04_1n_FD, "!PCAL && !ECIN && ECOUT");
 
         if (!apply_neutron_Beta_Fit) {
-            BetaFit(SampleName, Beta_cut_ABF_FD_All_neutrals_noPDG0, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0, hBeta_FD_Neut_noPDG0_01_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_noPDG0, hBeta_FD_Neut_noPDG0_02_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_wECIN_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0, hBeta_FD_Neut_noPDG0_03_1n_FD, plots);
-            BetaFit(SampleName, Beta_cut_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0,
+            BetaFit(SampleName, Beta_cut_ABF_FD_neutrals_noPDG0, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0, hBeta_FD_Neut_noPDG0_01_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL, n_momentum_cuts_ABF_FD_noPCAL_noPDG0, hBeta_FD_Neut_noPDG0_02_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0, hBeta_FD_Neut_noPDG0_03_1n_FD, plots);
+            BetaFit(SampleName, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0,
                     hBeta_FD_Neut_noPDG0_04_1n_FD, plots);
         }
         //</editor-fold>
@@ -9387,8 +9440,8 @@ void EventAnalyser() {
     //<editor-fold desc="Saving neutron momentum and beta cuts to .par file">
     if (!apply_neutron_Beta_Fit) { // log neutron beta cut from fit
         /* Log cuts from 'photons' fit first */
-        DSCuts Beta_Fit_Cuts[] = {n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
-        int Beta_Fit_Cuts_length = 2;
+        DSCuts Neutron_Momentum_Cuts[] = {n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
+        int Neutron_Momentum_Cuts_length = 2;
 
         ofstream Fitted_n_Mom_Cuts;
         std::string Fitted_n_Mom_CutsFilePath = CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par";
@@ -9397,33 +9450,56 @@ void EventAnalyser() {
         Fitted_n_Mom_Cuts << "# CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #\n";
         Fitted_n_Mom_Cuts << "######################################################################\n";
         Fitted_n_Mom_Cuts << "\n";
-        Fitted_n_Mom_Cuts << "# Cuts are fitted for - " + SampleName << "\n";
+        Fitted_n_Mom_Cuts << "# Cuts are fitted for - " + SampleName + ":\t" + Beta_Fit_Status + FD_photons_Status + Efficiency_Status << "\n";
         Fitted_n_Mom_Cuts << "\n";
-        Fitted_n_Mom_Cuts << "# Beta std by detector (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        //<editor-fold desc="Neutron momentum cuts by detector">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts by detector (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
 
         Fitted_n_Mom_Cuts << n_mom_th.GetCutVariable() << "\t\t\t" << n_mom_th.GetPartPDG() << ":" << n_mom_th.Cuts.at(0) << ":" << n_mom_th.GetLowerCut() << ":"
                           << n_mom_th.GetRegion() << "\n";
 
         Fitted_n_Mom_Cuts << "\n";
 
-        for (int i = 0; i < Beta_Fit_Cuts_length; i++) {
-            Fitted_n_Mom_Cuts << Beta_Fit_Cuts[i].GetCutVariable() << "\t\t\t" << Beta_Fit_Cuts[i].GetPartPDG() << ":" << Beta_Fit_Cuts[i].Cuts.at(0) << ":"
-                              << Beta_Fit_Cuts[i].GetUpperCut() << ":" << Beta_Fit_Cuts[i].GetRegion() << "\n";
+        for (int i = 0; i < Neutron_Momentum_Cuts_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts[i].GetUpperCut() << ":" << Neutron_Momentum_Cuts[i].GetRegion()
+                              << "\n";
         }
 
         Fitted_n_Mom_Cuts << "\n";
 
         /* Log cuts from other tests */
-        DSCuts Beta_Fit_Cuts_test[] = {n_momentum_cuts_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0,
-                                       n_momentum_cuts_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL_noPDG0,
-                                       n_momentum_cuts_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0,
-                                       n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0};
-        int Beta_Fit_Cuts_test_length = 8;
+        DSCuts Neutron_Momentum_Cuts_test[] = {n_momentum_cuts_ABF_FD_All_neutrals, n_momentum_cuts_ABF_FD_All_neutrals_noPDG0,
+                                               n_momentum_cuts_ABF_FD_noPCAL, n_momentum_cuts_ABF_FD_noPCAL_noPDG0,
+                                               n_momentum_cuts_ABF_FD_noPCAL_wECIN, n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0,
+                                               n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0};
+        int Neutron_Momentum_Cuts_test_length = 8;
 
-        for (int i = 0; i < Beta_Fit_Cuts_test_length; i++) {
-            Fitted_n_Mom_Cuts << Beta_Fit_Cuts_test[i].GetCutVariable() << "\t\t\t" << Beta_Fit_Cuts_test[i].GetPartPDG() << ":" << Beta_Fit_Cuts_test[i].Cuts.at(0) <<
-                              ":" << Beta_Fit_Cuts_test[i].GetUpperCut() << ":" << Beta_Fit_Cuts_test[i].GetRegion() << "\n";
+        for (int i = 0; i < Neutron_Momentum_Cuts_test_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_test[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_test[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_test[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_test[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_test[i].GetRegion() << "\n";
         }
+        //</editor-fold>
+
+        Fitted_n_Mom_Cuts << "\n\n";
+
+        //<editor-fold desc="Beta std by detector">
+        Fitted_n_Mom_Cuts << "# Beta std by detector (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits[] = {Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax,
+                                  Beta_cut_ABF_All_FD_neutrals, Beta_cut_ABF_FD_neutrals_noPDG0,
+                                  Beta_cut_ABF_All_FD_neutrals_noPCAL, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL,
+                                  Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN,
+                                  Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT};
+        int Beta_cut_Fits_length = 10;
+
+        for (int i = 0; i < Beta_cut_Fits_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits[i].GetPartPDG() << ":" << Beta_cut_Fits[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits[i].GetUpperCut() << ":" << Beta_cut_Fits[i].GetRegion() << "\n";
+        }
+        //</editor-fold>
 
         Fitted_n_Mom_Cuts.close();
 

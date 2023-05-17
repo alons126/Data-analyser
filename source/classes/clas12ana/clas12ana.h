@@ -194,6 +194,8 @@ public:
 
     double getNeutronMomentumCut() { return Neutron_Momentum_cut; }; // My addition
 
+    double getNeutralBetaCut() { return FD_Neutral_Beta_cut; }; // My addition
+
     std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
 
     void addToAllParticles(region_part_ptr p) { allparticles.push_back(p); } // My addition
@@ -378,6 +380,7 @@ private:
 
     double htcc_Nphe_cut = 2; // My addition
     double Neutron_Momentum_cut = 9999; // My addition
+    double FD_Neutral_Beta_cut = 9999; // My addition
 
     // ME: in the old version, SF cuts where:
     //todo: CHECK WITH JUSTIN WHAT TO DO WITH THEM!
@@ -1126,6 +1129,29 @@ void clas12ana::readInputParam(const char *filename) {
 //                    cout << "Neutron_Momentum_cut:\t" << Neutron_Momentum_cut << "\n\n\n\n";
 ////                    vertex_cuts.insert(pair<string, vector<double> >(pid, par));
 //                    exit(EXIT_FAILURE);
+                }
+            }
+
+            else if (parameter == "Beta_cut_ECAL") { // My addition
+                //TODO: organize this properly with a map for each pdg.
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                string pid = "";
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0)
+                        pid = pid_v;
+                    else
+                        par.push_back(atof(pid_v.c_str()));
+
+                    count++;
+                }
+
+                if (pid != "") {
+                    FD_Neutral_Beta_cut = par.at(1);
                 }
             }
 
