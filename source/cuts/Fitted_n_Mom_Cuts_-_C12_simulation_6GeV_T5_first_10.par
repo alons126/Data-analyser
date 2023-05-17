@@ -7,15 +7,14 @@
 # Beta std by detector (pid:mean:sigma) - sigma_FD=1:
 Momentum_th			2112:0:0.3:CD & FD
 
-Momentum_cuts_ECAL			2112:0:4.0:FD-ECAL #forced value
-#Momentum _cuts_ECAL			2112:0:15.9316:FD-ECAL #fit original
-Momentum_cuts_ECAL_apprax			2112:0:13.9083:FD-ECAL
+Momentum_cuts_ECAL			2112:0:16.3654:FD-ECAL
+Momentum_cuts_ECAL_apprax			2112:0:16.3781:FD-ECAL
 
-Momentum_cuts_All_neutrals			2112:0:5.99103:FD-ECAL
-Momentum_cuts_All_neutrals_noPDG0			2112:0:5.99103:FD-ECAL
-Momentum_cuts_noPCAL			2112:0:2.50198:FD-noPCAL
-Momentum_cuts_noPCAL_noPDG0			2112:0:2.50198:FD-noPCAL
-Momentum_cuts_ECIN			2112:0:11.647:FD-ECIN
-Momentum_cuts_ECIN_noPDG0			2112:0:11.647:FD-ECIN
-Momentum_cuts_ECOUT			2112:0:3.5858:FD-ECOUT
-Momentum_cuts_ECOUT_noPDG0			2112:0:3.5858:FD-ECOUT
+Momentum_cuts_All_neutrals			2112:0:12.9634:FD-ECAL
+Momentum_cuts_All_neutrals_noPDG0			2112:0:12.9634:FD-ECAL
+Momentum_cuts_noPCAL			2112:0:2.21451:FD-noPCAL
+Momentum_cuts_noPCAL_noPDG0			2112:0:2.21451:FD-noPCAL
+Momentum_cuts_ECIN			2112:0:12.6105:FD-ECIN
+Momentum_cuts_ECIN_noPDG0			2112:0:12.6105:FD-ECIN
+Momentum_cuts_ECOUT			2112:0:13.7536:FD-ECOUT
+Momentum_cuts_ECOUT_noPDG0			2112:0:13.7536:FD-ECOUT
