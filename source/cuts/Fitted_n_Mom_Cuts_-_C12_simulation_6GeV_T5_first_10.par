@@ -7,7 +7,8 @@
 # Beta std by detector (pid:mean:sigma) - sigma_FD=1:
 Momentum_th			2112:0:0.3:CD & FD
 
-Momentum_cuts_ECAL			2112:0:15.9316:FD-ECAL
+Momentum_cuts_ECAL			2112:0:4.0:FD-ECAL #forced value
+#Momentum _cuts_ECAL			2112:0:15.9316:FD-ECAL #fit original
 Momentum_cuts_ECAL_apprax			2112:0:13.9083:FD-ECAL
 
 Momentum_cuts_All_neutrals			2112:0:5.99103:FD-ECAL
