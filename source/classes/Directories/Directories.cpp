@@ -259,36 +259,6 @@ Directories::Directories(std::string plots_path) {
                                                                  Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/04_Beta_vs_other_variables_plots_1n") +
                                                                  "/";
 
-
-/*    Beta_Directory_map["All_neutrals_beta_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                           Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02a_All_neutrals_beta_plots_1n") + "/";
-    Beta_Directory_map["All_neutrals_beta_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                  Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/02b_All_neutrals_beta_plots_noPDG0_1n") + "/";
-
-    Beta_Directory_map["All_neutrals_beta_noPCAL_hit_1n_Directory"] =
-            Plots_Folder + "/" + Beta_Parent_Directory + "/" + Find(Beta_Daughter_Folders, "01_Beta_plots/05_1n/03a_All_neutrals_beta_noPCAL_hit_plots_1n") + "/";
-    Beta_Directory_map["All_neutrals_beta_noPCAL_hit_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                             Find(Beta_Daughter_Folders,
-                                                                                  "01_Beta_plots/05_1n/03b_All_neutrals_beta_noPCAL_hit_plots_noPDG0_1n") + "/";
-
-    Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                            Find(Beta_Daughter_Folders,
-                                                                                 "01_Beta_plots/05_1n/04a_All_neutrals_beta_noPCAL_wECIN_hit_plots_1n") + "/";
-    Beta_Directory_map["All_neutrals_beta_noPCAL_wECIN_hit_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                                   Find(Beta_Daughter_Folders,
-                                                                                        "01_Beta_plots/05_1n/04b_All_neutrals_beta_noPCAL_wECIN_hit_noPDG0_plots_1n") +
-                                                                                   "/";
-
-    Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                                    Find(Beta_Daughter_Folders,
-                                                                                         "01_Beta_plots/05_1n/05a_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_plots_1n") +
-                                                                                    "/";
-    Beta_Directory_map["All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                                           Find(Beta_Daughter_Folders,
-                                                                                                "01_Beta_plots/05_1n/05b_All_neutrals_beta_noPCAL_noECIN_wECOUT_hit_noPDG0_plots_1n") +
-                                                                                           "/";*/
-
-
     Beta_Directory_map["Beta_VS_P_All_e_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                       Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/01_All_e") + "/";
     Beta_Directory_map["Beta_VS_P_by_charge_All_e_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +

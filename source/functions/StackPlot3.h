@@ -185,6 +185,7 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
         TLegendEntry *Histogram1_Entry = HistogramStackLegend->AddEntry(Histogram1_Clone, Hist1_legened.c_str(), "l");
         TLegendEntry *Histogram2_Entry = HistogramStackLegend->AddEntry(Histogram2_Clone, Hist2_legened.c_str(), "l");
         TLegendEntry *Histogram3_Entry = HistogramStackLegend->AddEntry(Histogram3_Clone, Hist3_legened.c_str(), "l");
+        HistogramStackLegend->SetTextSize(0.017);
         HistogramStackLegend->Draw();
     }
 

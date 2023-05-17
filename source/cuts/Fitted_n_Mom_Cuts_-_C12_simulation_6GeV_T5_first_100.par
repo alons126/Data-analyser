@@ -21,13 +21,13 @@ Momentum_cuts_ECOUT_noPDG0			0:0:12.2468:FD-ECOUT
 
 
 # Beta std by detector (pid:mean:sigma) - sigma_FD=1:
-Beta_cut_ECAL			0:1:0.0107856:FD-ECAL
+Beta_cut_ECAL			0:1.008:0.0107856:FD-ECAL
 Beta_cut_ECAL_apprax			0:1:0.0109266:FD-ECAL_apprax
-Beta_cut_All_neutrals			0:1:0.0124618:FD-ECAL
-Beta_cut_All_neutrals_noPDG0			0:1:0.0124618:FD
-Beta_cut_noPCAL			0:1:0.0243717:FD
-Beta_cut_noPCAL_noPDG0			0:1:0.0243717:FD
-Beta_cut_ECIN			0:1:0.0215075:FD
-Beta_cut_ECIN_noPDG0			0:1:0.0215075:FD
-Beta_cut_ECOUT			0:1:0.00116685:FD
-Beta_cut_ECOUT_noPDG0			0:1:0.00116685:FD
+Beta_cut_All_FD_neutrals			0:1.008:0.0124618:FD
+Beta_cut_FD_neutrals_noPDG0			0:1.008:0.0124618:FD
+Beta_cut_All_FD_neutrals_noPCAL			0:1.008:0.0243717:FD
+Beta_cut_FD_neutrals_noPDG0_noPCAL			0:1.008:0.0243717:FD
+Beta_cut_All_FD_neutrals_noPCAL_wECIN			0:1.008:0.0215075:FD
+Beta_cut_FD_neutrals_noPDG0_noPCAL_wECIN			0:1.008:0.0215075:FD
+Beta_cut_All_FD_neutrals_noPCAL_noECIN_wECOUT			0:1.01375:0.00116685:FD
+Beta_cut_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT			0:1.01375:0.00116685:FD

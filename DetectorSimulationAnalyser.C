@@ -87,10 +87,10 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Event selection settings">
-    bool calculate_truth_level = true;
-
     /* Settings to enable/disable specific FS plot calculations (Rec only): */
     bool calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
+
+    bool calculate_truth_level = true;
 
     bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 
@@ -153,8 +153,8 @@ void EventAnalyser() {
 
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
-    bool apply_neutron_Beta_Fit = false;
 
+    bool apply_neutron_Beta_Fit = false;
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
     //<editor-fold desc="Custom cuts naming">
@@ -373,32 +373,12 @@ void EventAnalyser() {
     /* Beta cut (1n, FD) */
     DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, 0, 9999);
 
-//    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_n_from_ph;
-    DSCuts Beta_cut_ABF_FD_n_from_ph_apprax;
+    DSCuts Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax;
 
-    DSCuts Beta_cut_ABF_All_FD_neutrals;
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0;
-    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL;
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL;
-    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN;
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN;
-    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT;
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT;
-/*
-//    DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-
-    DSCuts Beta_cut_ABF_All_FD_neutrals = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0 = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT = DSCuts("Beta_nuc", "FD", "", "1n", 1, -9999, 9999);
-    DSCuts Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT = DSCuts("Beta_nuc_noPDG0", "FD", "", "1n", 1, -9999, 9999);
-*/
+    DSCuts Beta_cut_ABF_All_FD_neutrals, Beta_cut_ABF_FD_neutrals_noPDG0;
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL;
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_wECIN, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN;
+    DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT;
 
     /* Nucleon theta cut (1p & 1n, FD) */
     DSCuts Theta_nuc_cut = DSCuts("Theta_nuc", "FD", "", "1p & 1n", 0, -9999, 32.);
@@ -496,70 +476,70 @@ void EventAnalyser() {
 //    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
-    cout << "\n\n\n\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;\n\n\n\n";
+    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//    cout << "\n\n\n\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
-    cout << "\n\n\n\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;\n\n\n\n";
+    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//    cout << "\n\n\n\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
-    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
+    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
-    cout << "\n\n\n\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//    cout << "\n\n\n\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-//    bool TVariables_plots = true;
-    bool TVariables_plots = false;
-    cout << "\n\n\n\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;\n\n\n\n";
+    bool TVariables_plots = true;
+//    bool TVariables_plots = false;
+//    cout << "\n\n\n\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;\n\n\n\n";
 
     /* ToF plots */
     bool ToF_plots = false;
@@ -1450,26 +1430,80 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Beta of neutrons from 'photons' for different variables (1n, FD)">
-    hPlot2D hBeta_nfph_vs_numOfFDph_1n_FD = hPlot2D("1n", "FD", "#beta vs. #(FD photons)", "#beta vs. #(FD photons)", "#(FD photons)", "#beta",
+    hPlot2D hBeta_nfph_vs_numOfFDph_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. #(FD photons)", "#beta_{n} (from 'photons') vs. #(FD photons)",
+                                                    "#(FD photons)", "#beta_{n}",
                                                     directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "01_Beta_nfph_vs_numOfFDph_1n_FD",
                                                     0, 10, 0.9, 1.1);
 
-    hPlot2D hBeta_nfph_vs_Theta_n_1n_FD = hPlot2D("1n", "FD", "#beta vs. #theta_{n}", "#beta vs. #theta_{n}", "#theta_{n} [Deg]", "#beta",
+    hPlot2D hBeta_nfph_vs_Theta_n_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. #theta_{n}", "#beta_{n} (from 'photons') vs. #theta_{n}",
+                                                  "#theta_{n} [Deg]", "#beta_{n}",
                                                   directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "02_Beta_nfph_vs_Theta_n_1n_FD",
                                                   0, 50, 0.9, 1.1);
 
-    hPlot2D hBeta_nfph_vs_Phi_n_1n_FD = hPlot2D("1n", "FD", "#beta vs. #phi_{n}", "#beta vs. #phi_{n}", "#phi_{n} [Deg]", "#beta",
+    hPlot2D hBeta_nfph_vs_Phi_n_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. #phi_{n}", "#beta_{n} (from 'photons') vs. #phi_{n}", "#phi_{n} [Deg]",
+                                                "#beta_{n}",
                                                 directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "03_Beta_nfph_vs_Phi_n_1n_FD",
                                                 -180, 180, 0.9, 1.1);
 
-    hPlot2D hBeta_nfph_vs_SF_1n_FD = hPlot2D("1n", "FD", "#beta vs. SF", "#beta vs. Sampling fraction f", "f = (E_{n,PCAL} + E_{n,IN} + E_{n,OUT})/P_{n}", "#beta",
+    hPlot2D hBeta_nfph_vs_SF_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. SF", "#beta_{n} (from 'photons') vs. Sampling fraction f",
+                                             "f = (E_{n,PCAL} + E_{n,IN} + E_{n,OUT})/P_{n}", "#beta_{n}",
                                              directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "04_Beta_nfph_vs_SF_1n_FD",
                                              SF_lboundary, SF_uboundary, 0.9, 1.1);
 
-    hPlot2D hBeta_nfph_vs_VcalECIN_1n_FD = hPlot2D("1n", "FD", "#beta vs. ECIN V coordinate", "#beta vs. ECIN V coordinate",
-                                                   "f = (E_{n,PCAL} + E_{n,IN} + E_{n,OUT})/P_{n}", "#beta",
-                                                   directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "04_Beta_nfph_vs_SF_1n_FD",
+    hPlot2D hBeta_nfph_vs_SF_PCAL_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. SF_PCAL", "#beta_{n} (from 'photons') vs. Sampling fraction f_PCAL",
+                                                  "f_PCAL = E_{n,PCAL}/P_{n}", "#beta_{n}",
+                                                  directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "05_Beta_nfph_vs_SF_PCAL_1n_FD",
+                                                  SF_lboundary, SF_uboundary, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_E_PCAL_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. E_{PCAL}", "#beta_{n} (from 'photons') vs. E_{PCAL}",
+                                                 "E_{n,PCAL} [GeV]", "#beta_{n}",
+                                                 directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "06_Beta_nfph_vs_E_PCAL_1n_FD",
+                                                 SF_lboundary, SF_uboundary, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_SF_ECIN_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. SF_ECIN", "#beta_{n} (from 'photons') vs. Sampling fraction f_ECIN",
+                                                  "f_ECIN = E_{n,ECIN}/P_{n}", "#beta_{n}",
+                                                  directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "07_Beta_nfph_vs_SF_ECIN_1n_FD",
+                                                  SF_lboundary, SF_uboundary, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_E_ECIN_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. E_{ECIN}", "#beta_{n} (from 'photons') vs. E_{ECIN}",
+                                                 "E_{n,ECIN} [GeV]", "#beta_{n}",
+                                                 directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "08_Beta_nfph_vs_E_ECIN_1n_FD",
+                                                 SF_lboundary, SF_uboundary, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_SF_ECOUT_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. SF_ECOUT", "#beta_{n} (from 'photons') vs. Sampling fraction f_ECOUT",
+                                                   "f_ECOUT = E_{n,ECOUT}/P_{n}", "#beta_{n}",
+                                                   directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "09_Beta_nfph_vs_SF_ECOUT_1n_FD",
                                                    SF_lboundary, SF_uboundary, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_E_ECOUT_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. E_{ECOUT}", "#beta_{n} (from 'photons') vs. E_{ECOUT}",
+                                                  "E_{n,ECOUT} [GeV]", "#beta_{n}",
+                                                  directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "10_Beta_nfph_vs_E_ECOUT_1n_FD",
+                                                  SF_lboundary, SF_uboundary, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_VcalECIN_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. ECIN V coordinate", "#beta_{n} (from 'photons') vs. ECIN V coordinate",
+                                                   "ECIN V coordinate [cm]", "#beta_{n}",
+                                                   directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "11_Beta_nfph_vs_VcalECIN_1n_FD",
+                                                   0, 50, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_WcalECIN_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. ECIN W coordinate", "#beta_{n} (from 'photons') vs. ECIN W coordinate",
+                                                   "ECIN W coordinate [cm]", "#beta_{n}",
+                                                   directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "12_Beta_nfph_vs_WcalECIN_1n_FD",
+                                                   0, 50, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_VcalECOUT_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. ECOUT V coordinate", "#beta_{n} (from 'photons') vs. ECOUT V coordinate",
+                                                    "ECOUT V coordinate [cm]", "#beta_{n}",
+                                                    directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "13_Beta_nfph_vs_VcalECOUT_1n_FD",
+                                                    0, 50, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_WcalECOUT_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. ECOUT W coordinate", "#beta_{n} (from 'photons') vs. ECOUT W coordinate",
+                                                    "ECOUT W coordinate [cm]", "#beta_{n}",
+                                                    directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "14_Beta_nfph_vs_WcalECOUT_1n_FD",
+                                                    0, 50, 0.9, 1.1);
+
+    hPlot2D hBeta_nfph_vs_P_e_1n_FD = hPlot2D("1n", "FD", "#beta_{n} (from 'photons') vs. P_{e}", "#beta_{n} (from 'photons') vs. P_{e}",
+                                              " P_{e} [GeV/c]", "#beta_{n}",
+                                              directories.Beta_Directory_map["Beta_vs_other_variables_1n_Directory"], "15_Beta_nfph_vs_P_e_1n_FD",
+                                              0, 50, 0.9, 1.1);
     //</editor-fold>
 
     //</editor-fold>
@@ -2172,10 +2206,6 @@ void EventAnalyser() {
                                                            "#theta_{n} vs. #phi_{n}  for 'photons' with #beta~1", "#phi_{n} [Deg]", "#theta_{n} [Deg]",
                                                            directories.Angle_Directory_map["Theta_n_VS_Phi_n_1n_Directory"],
                                                            "02_Theta_n_VS_Phi_n_around_beta1_All_Int_1n_FD", -180, 180, 0, 50);
-
-//    TH2D *hTheta_n_VS_Phi_n_around_beta1_1n_FD = new TH2D("#theta_{n} vs. #phi_{n} (1n, FD)", "#theta_{n} vs. #phi_{n} (1n, FD);#phi_{n} [Deg];#theta_{n} [Deg]",
-//                                             250, -180, 180, 250, 0, 50);
-//    string hTheta_n_VS_Phi_n_around_beta1_1n_FD_Dir = directories.Angle_Directory_map["Theta_n_VS_Phi_n_1n_Directory"];
     //</editor-fold>
 
 // Theta_p_e_p_n (1n, FD only) ------------------------------------------------------------------------------------------------------------------------------------------
@@ -3722,10 +3752,12 @@ void EventAnalyser() {
             cout << "Loading fitted Beta cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
-            /* Setting neutron momentum cut after beta fit */
+            /* Setting cuts after beta fit */
             n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
             TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
             Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());
+            Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());
+//            Beta_cut.SetMean(1.);
         }
 
         clasAna.printParams();
@@ -4035,7 +4067,8 @@ void EventAnalyser() {
 
             /* Setting up 1n TL event selection */
             bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
-            bool no_protons_1n = (TL_ProtonsFD_mom_ind.size() == 0);
+            bool no_protons_1n = (TL_Protons_mom_ind.size() == 0);
+//            bool no_protons_1n = (TL_ProtonsFD_mom_ind.size() == 0);
 
             bool TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);                                // One id. FD proton above momentum threshold
             bool TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);              // One id. FD neutron above momentum threshold & no id. protons
@@ -5127,7 +5160,6 @@ void EventAnalyser() {
         //<editor-fold desc="1p (FD only)">
         /* 1p event selection: 1p = Protons_ind.size() = 1 and any number of neutrons, other neutrals and particles with pdg=0.*/
         bool event_selection_1p = (basic_event_selection && (Protons_ind.size() == 1) && (Enable_FD_photons || (PhotonsFD_ind.size() == 0)));
-//        bool event_selection_1p = (basic_event_selection && (Protons_ind.size() == 1) && (PhotonsFD_ind.size() == 0));
 
         if (calculate_1p && event_selection_1p) { // for 1p calculations (with any number of neutrals)
 
@@ -5148,7 +5180,6 @@ void EventAnalyser() {
 
             // looking at events with 1p in the FD only:
             if (protons[Protons_ind.at(0)]->getRegion() == FD) {
-//            if ((protons[Protons_ind.at(0)]->getRegion() == FD) && apply_TL_1p_ES) {
                 ++num_of_events_1p_inFD; // 1p event count after momentum and theta_p cuts
 
                 TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
@@ -5280,7 +5311,8 @@ void EventAnalyser() {
 
                 /* Setting up 1n TL event selection */
                 bool one_FDNeutron_1n_1p = (TL_NeutronsFD_mom_ind_1p.size() == 1);
-                bool no_protons_1n_1p = (TL_ProtonsFD_mom_ind_1p.size() == 0);
+                bool no_protons_1n_1p = (TL_Protons_mom_ind_1p.size() == 0);
+//                bool no_protons_1n_1p = (TL_ProtonsFD_mom_ind_1p.size() == 0);
 
                 /* One id. FD proton above momentum threshold: */
                 TL_Event_Selection_1p_1p = (TL_Basic_ES && one_FDproton_1p_1p);
@@ -5655,7 +5687,6 @@ void EventAnalyser() {
         /* 1n event selection: 1n = NeutronsFD_ind.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
         bool event_selection_1n = (basic_event_selection && (Protons_ind.size() == 0) && (NeutronsFD_ind.size() == 1) &&
                                    (Enable_FD_photons || (PhotonsFD_ind.size() == 0)));
-//        bool event_selection_1n = (basic_event_selection && (Protons_ind.size() == 0) && (NeutronsFD_ind.size() == 1) && (PhotonsFD_ind.size() == 0));
 
         if (calculate_1n && event_selection_1n) { // for 1n calculations (with any number of neutrals)
 
@@ -5692,9 +5723,10 @@ void EventAnalyser() {
             //</editor-fold>
 
             // looking at 1n events in the FD only & below theta_n cut:
-            if ((allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD)) {
-//            if ((allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) && apply_TL_1n_ES) {
+            if (allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD) {
                 ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
+
+                int NeutronPDG = allParticles[NeutronsFD_ind.at(0)]->par()->getPid();
 
                 bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                 bool NeutronInECIN_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
@@ -5702,8 +5734,6 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Safety check (1n)">
                 /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
-                int NeutronPDG = allParticles[NeutronsFD_ind.at(0)]->par()->getPid();
-
                 if (allParticles[NeutronsFD_ind.at(0)]->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
                 if (!((NeutronPDG == 22) || (NeutronPDG == 2112))) {
                     cout << "\n\n1n: neutral PDG is not 2112 or 22 (" << NeutronPDG << "). Exiting...\n\n", exit(EXIT_FAILURE);
@@ -5894,7 +5924,8 @@ void EventAnalyser() {
 
                 /* Setting up 1n TL event selection */
                 bool one_FDNeutron_1n_1n = (TL_NeutronsFD_mom_ind_1n.size() == 1);
-                bool no_protons_1n_1n = (TL_ProtonsFD_mom_ind_1n.size() == 0);
+                bool no_protons_1n_1n = (TL_Protons_mom_ind_1n.size() == 0);
+//                bool no_protons_1n_1n = (TL_ProtonsFD_mom_ind_1n.size() == 0);
 
                 /* One id. FD proton above momentum threshold: */
                 bool TL_Event_Selection_1p_1n = (TL_Basic_ES && one_FDproton_1p_1n);
@@ -6111,10 +6142,6 @@ void EventAnalyser() {
                             hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
 
-                            if (fabs(allParticles[i]->par()->getBeta() - Beta_cut.GetMean()) <= Beta_cut.FitStd) {
-                                hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
-                            }
-
                             //<editor-fold desc="Beta_n_from_ph - !PCAL">
                             if (!inPCALtmp) {
                                 hBeta_n_from_ph_02_1n_FD.hFill(allParticles[i]->par()->getBeta());
@@ -6135,8 +6162,64 @@ void EventAnalyser() {
                                 hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             }
                             //</editor-fold>
+
+
+
+
+
+                            //<editor-fold desc="Beta of neutrons from 'photons' for different variables">
+                            hBeta_nfph_vs_numOfFDph_1n_FD.hFill(PhotonsFD_ind.size(), allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_Theta_n_1n_FD.hFill(allParticles[i]->getTheta() * 180 / pi, allParticles[i]->par()->getBeta(), Weight);
+                            hBeta_nfph_vs_Phi_n_1n_FD.hFill(allParticles[i]->getPhi() * 180 / pi, allParticles[i]->par()->getBeta(), Weight);
+
+                            double neutron_SF = (allParticles[i]->cal(clas12::PCAL)->getEnergy() + allParticles[i]->cal(clas12::ECIN)->getEnergy() +
+                                                 allParticles[i]->cal(clas12::ECOUT)->getEnergy()) / P_n_temp;
+                            hBeta_nfph_vs_SF_1n_FD.hFill(neutron_SF, allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_SF_PCAL_1n_FD.hFill((allParticles[i]->cal(clas12::PCAL)->getEnergy()) / P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                            hBeta_nfph_vs_E_PCAL_1n_FD.hFill(allParticles[i]->cal(clas12::PCAL)->getEnergy(), allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_SF_ECIN_1n_FD.hFill((allParticles[i]->cal(clas12::ECIN)->getEnergy()) / P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                            hBeta_nfph_vs_E_ECIN_1n_FD.hFill(allParticles[i]->cal(clas12::ECIN)->getEnergy(), allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_SF_ECOUT_1n_FD.hFill((allParticles[i]->cal(clas12::ECOUT)->getEnergy()) / P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                            hBeta_nfph_vs_E_ECOUT_1n_FD.hFill(allParticles[i]->cal(clas12::ECOUT)->getEnergy(), allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_VcalECIN_1n_FD.hFill(allParticles[i]->cal(clas12::ECIN)->getLv(), allParticles[i]->par()->getBeta(), Weight);
+                            hBeta_nfph_vs_WcalECIN_1n_FD.hFill(allParticles[i]->cal(clas12::ECIN)->getLw(), allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_VcalECOUT_1n_FD.hFill(allParticles[i]->cal(clas12::ECOUT)->getLv(), allParticles[i]->par()->getBeta(), Weight);
+                            hBeta_nfph_vs_WcalECOUT_1n_FD.hFill(allParticles[i]->cal(clas12::ECOUT)->getLw(), allParticles[i]->par()->getBeta(), Weight);
+
+                            hBeta_nfph_vs_P_e_1n_FD.hFill(electrons[Electron_ind.at(0)]->getP(), allParticles[i]->par()->getBeta(), Weight);
+                            //</editor-fold>
+
                         }
                     }
+
+                    //<editor-fold desc="Testing Theta_n_VS_Phi_n_around_beta1">
+                    for (int &i: FD_Neutrons) {
+                        int PDGtmp = allParticles[i]->par()->getPid();
+                        double P_n_temp = allParticles[i]->getP();;
+
+                        bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                        bool inECINtmp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                        bool inECOUTtmp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+                        bool ided_neutron = (P_n_temp >= n_mom_th.GetLowerCut());
+
+                        if (PDGtmp == 22 && ided_neutron) {
+                            if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
+                            if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron. Exiting...\n\n", exit(EXIT_FAILURE); }
+
+                            if (fabs(allParticles[i]->par()->getBeta() - Beta_cut.GetMean()) <= Beta_cut.GetUpperCut()) {
+                                hTheta_n_VS_Phi_n_around_beta1_1n_FD.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
+                            }
+                        }
+                    }
+                    //</editor-fold>
+
                     //</editor-fold>
 
                     //<editor-fold desc="Filling Beta plots from FD neutrrals">
@@ -7735,6 +7818,8 @@ void EventAnalyser() {
 //  Beta plots ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Beta plots (1n)">
+
+        //<editor-fold desc="Beta plots (1n)">
         hBeta_n_from_ph_01_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_02_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
@@ -7796,6 +7881,26 @@ void EventAnalyser() {
             BetaFit(SampleName, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT, n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0,
                     hBeta_FD_Neut_noPDG0_04_1n_FD, plots);
         }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta plots (1n)">
+        hBeta_nfph_vs_numOfFDph_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_Theta_n_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_Phi_n_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_SF_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_SF_PCAL_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_E_PCAL_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_SF_ECIN_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_E_ECIN_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_SF_ECOUT_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_E_ECOUT_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_VcalECIN_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_WcalECIN_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_VcalECOUT_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_WcalECOUT_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        hBeta_nfph_vs_P_e_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
+        //</editor-fold>
+
         //</editor-fold>
 
     } else {
@@ -9566,8 +9671,14 @@ void EventAnalyser() {
     myLogFile << "Calculation settings\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
-    myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n\n";
+    myLogFile << "calculate_1p = " << BoolToString(calculate_1p) << "\n";
+    myLogFile << "calculate_1n = " << BoolToString(calculate_1n) << "\n";
+    myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
+    myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n\n";
+
+    myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
+    myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n";
+    myLogFile << "Enable_FD_photons = " << BoolToString(Enable_FD_photons) << "\n\n";
 
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
@@ -9678,7 +9789,8 @@ void EventAnalyser() {
     myLogFile << "apply_momentum_cuts_1p = " << BoolToString(apply_momentum_cuts_1p) << "\n";
     myLogFile << "apply_momentum_cuts_1n = " << BoolToString(apply_momentum_cuts_1n) << "\n";
     myLogFile << "apply_momentum_cuts_2p = " << BoolToString(apply_momentum_cuts_2p) << "\n";
-    myLogFile << "apply_momentum_cuts_1n1p = " << BoolToString(apply_momentum_cuts_1n1p) << "\n";
+    myLogFile << "apply_momentum_cuts_1n1p = " << BoolToString(apply_momentum_cuts_1n1p) << "\n\n";
+
     myLogFile << "apply_neutron_Beta_Fit = " << BoolToString(apply_neutron_Beta_Fit) << "\n\n";
     //</editor-fold>
 
@@ -9885,7 +9997,7 @@ void EventAnalyser() {
     myLogFile << "dV cuts (CD & FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "dVz_cuts = " << dVz_cuts.GetUpperCut() << "\n";
+    myLogFile << "dVz_cuts = " << dVz_cuts.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Beta cut (1n, FD)">
@@ -9893,7 +10005,8 @@ void EventAnalyser() {
     myLogFile << "Beta cut (1n, FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "Beta_cut.GetUpperCut() (1 fit std) = " << Beta_cut.GetUpperCut() << "\n\n";
+    myLogFile << "Beta_cut.GetUpperCut() (1 fit std) = " << Beta_cut.GetUpperCut() << "\n";
+    myLogFile << "Beta_cut.GetMean() = " << Beta_cut.GetMean() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Nucleon theta cut (1p & 1n, FD)">

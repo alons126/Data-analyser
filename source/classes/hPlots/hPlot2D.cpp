@@ -117,6 +117,7 @@ hPlot2D::hPlot2D(std::string hst, std::string ht, std::string xat, std::string y
 //<editor-fold desc="histPlotter2D function (regular)">
 void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                             std::string Histogram2DSaveName, bool showStats = true) {
+    Histogram2DCanvas->cd();
 
     std::string sNameFlag;
 
@@ -203,6 +204,8 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                             std::string Histogram2DSaveName, TF1 *Beta_function1, TF1 *Beta_function2, TF1 *Beta_function3, TF1 *Beta_function4, TF1 *Beta_function5,
                             TF1 *Beta_function6, TF1 *Beta_function7, TF1 *Beta_function8, TF1 *Beta_function9, bool showStats = true) {
+    Histogram2DCanvas->cd();
+
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {
@@ -284,6 +287,8 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 //<editor-fold desc="histPlotter2D function (Beta vs. P plots, single particle)">
 void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                             std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, bool showStats = true, bool plot_legend = true) {
+    Histogram2DCanvas->cd();
+
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {
@@ -365,6 +370,8 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas, TH2D *Histogram2D, TList *Histogram_list, std::string Histogram2DSaveNameDir,
                             std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, TF1 *Beta_function2, std::string particle2, TF1 *Beta_function3,
                             std::string particle3, bool showStats, bool plot_legend) {
+    Histogram2DCanvas->cd();
+
     std::string sNameFlag;
 
     if (findSubstring(SampleName, "simulation")) {

@@ -156,6 +156,7 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         double FitStd = fit->GetParameter(2); // get p2
 
         Beta_cut.SetUpperCut(fit->GetParameter(2));
+        Beta_cut.SetMean(fit->GetParameter(1));
         //</editor-fold>
 
         //<editor-fold desc="Drawing fit parameters and saving">

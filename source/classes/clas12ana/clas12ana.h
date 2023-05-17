@@ -196,6 +196,8 @@ public:
 
     double getNeutralBetaCut() { return FD_Neutral_Beta_cut; }; // My addition
 
+    double getNeutralBetaCutMean() { return FD_Neutral_Beta_Mean; }; // My addition
+
     std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
 
     void addToAllParticles(region_part_ptr p) { allparticles.push_back(p); } // My addition
@@ -379,8 +381,9 @@ private:
     bool f_NpheCuts = false; // My addition
 
     double htcc_Nphe_cut = 2; // My addition
-    double Neutron_Momentum_cut = 9999; // My addition
-    double FD_Neutral_Beta_cut = 9999; // My addition
+    double Neutron_Momentum_cut = 9999.; // My addition
+    double FD_Neutral_Beta_cut = 9999.; // My addition
+    double FD_Neutral_Beta_Mean = 1.; // My addition
 
     // ME: in the old version, SF cuts where:
     //todo: CHECK WITH JUSTIN WHAT TO DO WITH THEM!
@@ -1151,6 +1154,7 @@ void clas12ana::readInputParam(const char *filename) {
                 }
 
                 if (pid != "") {
+                    FD_Neutral_Beta_Mean = par.at(0);
                     FD_Neutral_Beta_cut = par.at(1);
                 }
             }
