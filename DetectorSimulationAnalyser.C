@@ -92,7 +92,7 @@ void EventAnalyser() {
 
     bool calculate_truth_level = true;
 
-    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
 
     bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
     //</editor-fold>
