@@ -156,7 +156,8 @@ void EventAnalyser() {
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
 
-    bool apply_neutron_Beta_Fit = false;
+    bool apply_neutron_Beta_Fit = true;
+
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
     //<editor-fold desc="Custom cuts naming">
