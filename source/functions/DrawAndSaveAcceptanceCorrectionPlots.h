@@ -175,8 +175,8 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     string ACorrection_plot_SaveName = ACorrectionSaveDir + sNameFlag + "_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_" + ACorrectionFS + ".png";
     //</editor-fold>
 
-    TH1D *ACorrection_plot = (TH1D *) Histogram1D_REC->Clone((ACorrectionParticle + " " + ACorrectionType + " #alpha" + " (" + ACorrectionFS + ")").c_str());
-//    TH1D *ACorrection_plot = (TH1D *) Histogram1D_REC->Clone((ACorrectionParticle + " " + ACorrectionType + " #epsilon_{eff}" + " (" + ACorrectionFS + ")").c_str());
+    TH1D *ACorrection_plot = (TH1D *) TLPlot_Clone->Clone((ACorrectionParticle + " " + ACorrectionType + " #alpha" + " (" + ACorrectionFS + ")").c_str());
+//    TH1D *ACorrection_plot = (TH1D *) RPlot_Clone->Clone((ACorrectionParticle + " " + ACorrectionType + " #epsilon_{eff}" + " (" + ACorrectionFS + ")").c_str());
     ACorrection_plot->SetTitle((ACorrectionTitle + " acceptance correction #alpha = 1/#epsilon_{eff} (" + ACorrectionFS + ")").c_str());
     ACorrection_plot->GetYaxis()->SetTitle((ACorrectionYLabel).c_str());
     ACorrection_plot->GetXaxis()->SetTitle((ACorrectionXLabel).c_str());
