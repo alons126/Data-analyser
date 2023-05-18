@@ -7,7 +7,7 @@
 # Neutron momentum cuts by detector (pid:mean:sigma) - sigma_FD=1:
 Momentum_th			2112:0:0.3:CD & FD
 
-Momentum_cuts_ECAL			2112:0:2.0:FD-ECAL
+Momentum_cuts_ECAL			2112:0:9999:FD-ECAL
 #Momentum _cuts_ECAL			2112:0:9999:FD-ECAL #fit original
 Momentum_cuts_ECAL_apprax			2112:0:9999:FD-ECAL_apprax
 

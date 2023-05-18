@@ -96,7 +96,7 @@ void EventAnalyser() {
 
     bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 //
-    bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
+    bool Enable_FD_photons = true; // Enforce TL event selection on Rec. plots
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -156,7 +156,7 @@ void EventAnalyser() {
     /* Momentum cuts */
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
 
-    bool apply_neutron_Beta_Fit = true;
+    bool apply_neutron_Beta_Fit = false;
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
     //<editor-fold desc="Custom cuts naming">
@@ -335,10 +335,16 @@ void EventAnalyser() {
     /* Momentum thresholds */
     DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
     DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
-    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
+    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
     DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
     DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
+//    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
+//    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
+//    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+//    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+//    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
+//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
     //</editor-fold>
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -5401,6 +5407,8 @@ void EventAnalyser() {
                             hP_piplus_APID_1p_CD.hFill(piplus[i]->getP(), Weight); // after mom. th.
                         } else if (piplus[i]->getRegion() == FD) {
                             hP_piplus_APID_1p_FD.hFill(piplus[i]->getP(), Weight); // after mom. th.
+                        } else {
+                            cout << "\n\nPiplus_ind[" << i << "] is not in CD or FD!\n";
                         }
                     }
 
@@ -5409,6 +5417,8 @@ void EventAnalyser() {
                             hP_piplus_BPID_1p_CD.hFill(piplus[i]->getP(), Weight); // before mom. th.
                         } else if (piplus[i]->getRegion() == FD) {
                             hP_piplus_BPID_1p_FD.hFill(piplus[i]->getP(), Weight); // before mom. th.
+                        } else {
+                            cout << "\n\npiplus[" << i << "] is not in CD or FD!\n";
                         }
                     }
                     //</editor-fold>
@@ -5419,6 +5429,8 @@ void EventAnalyser() {
                             hP_piminus_APID_1p_CD.hFill(piminus[i]->getP(), Weight); // after mom. th.
                         } else if (piminus[i]->getRegion() == FD) {
                             hP_piminus_APID_1p_FD.hFill(piminus[i]->getP(), Weight); // after mom. th.
+                        } else {
+                            cout << "\n\nPiminus_ind[" << i << "] is not in CD or FD!\n";
                         }
                     }
 
@@ -5427,6 +5439,8 @@ void EventAnalyser() {
                             hP_piminus_BPID_1p_CD.hFill(piminus[i]->getP(), Weight); // before mom. th.
                         } else if (piminus[i]->getRegion() == FD) {
                             hP_piminus_BPID_1p_FD.hFill(piminus[i]->getP(), Weight); // before mom. th.
+                        } else {
+                            cout << "\n\npiminus[" << i << "] is not in CD or FD!\n";
                         }
                     }
                     //</editor-fold>

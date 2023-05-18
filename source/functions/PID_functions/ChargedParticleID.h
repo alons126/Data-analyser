@@ -28,7 +28,7 @@ vector<int> ChargedParticleID(vector<region_part_ptr> &Particle, DSCuts &Momentu
 
         double Momentum = Particle[i]->getP();
 
-        if ((Momentum >= Momentum_th.GetLowerCut())) { ChargedParticle.push_back(i); }
+        if ((Momentum >= Momentum_th.GetLowerCut()) && (Momentum <= Momentum_th.GetUpperCut())) { ChargedParticle.push_back(i); }
     }
 
     return ChargedParticle;
