@@ -67,7 +67,8 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 std::string AnalyseFilePath = "lustre19/expphy/volatile/clas12/asportes/simulationFiles/C12_G18_10a_02_11b_207052MeV";
 std::string AnalyseFileSample = "reconhipo"; // My MC files
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_10a_02_11b_207052MeV_1*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //</editor-fold>
 
 ////<editor-fold desc="C12 5.98636GeV (ifarm MC files - T5 MC files)">
