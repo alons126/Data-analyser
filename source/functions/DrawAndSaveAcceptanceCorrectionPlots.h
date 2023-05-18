@@ -265,7 +265,7 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     ACorrection_plot->Divide(RPlot_Clone);
 //    ACorrection_plot->Divide(TLPlot_Clone);
     ACorrection_plot->Draw();
-    ACorrection_plot->SetStats(1);
+    ACorrection_plot->SetStats(0);
     Histogram_list->Add(ACorrection_plot);
     Canvas->SaveAs((ACorrection_plot_SaveName).c_str());
     Canvas->Clear();
@@ -558,7 +558,7 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     ACorrection_plot->Rebin(2);
     ACorrection_plot->Divide(RPlot_Clone);
 //    ACorrection_plot->Divide(TLPlot_Clone);
-    ACorrection_plot->SetStats(1);
+    ACorrection_plot->SetStats(0);
     ACorrection_plot->Draw();
 
     Histogram_list->Add(ACorrection_plot);
