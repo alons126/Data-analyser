@@ -11,11 +11,14 @@
 #include "../constants.h"
 
 double GetPi0MomTh(DSCuts &ph_mom_th) {
-    double Photons_momentum_th = ph_mom_th.GetLowerCut();
+    if (fabs(ph_mom_th.GetLowerCut()) == 9999) {
+        return -9999;
+    } else {
+        double Photons_momentum_th = ph_mom_th.GetLowerCut();
+        double Pi0MomTh = sqrt((2 * Photons_momentum_th) * (2 * Photons_momentum_th) - m_pizero * m_pizero);
 
-    double Pi0MomTh = sqrt((2*Photons_momentum_th)*(2*Photons_momentum_th)-m_pizero*m_pizero);
-
-    return Pi0MomTh;
+        return Pi0MomTh;
+    }
 }
 
 #endif //GETPI0MOMTH_H

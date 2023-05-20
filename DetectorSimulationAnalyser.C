@@ -94,9 +94,9 @@ void EventAnalyser() {
 
     bool calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
 
-    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
 //
-    bool Enable_FD_photons = true; // Enforce TL event selection on Rec. plots
+    bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -196,36 +196,10 @@ void EventAnalyser() {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_" + Beta_Fit_Status + FD_photons_Status + Efficiency_Status;
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + Beta_Fit_Status + FD_photons_Status
                                            + Efficiency_Status + ".txt";
-/*
-                if (!apply_neutron_Beta_Fit) {
-                    if (Enable_FD_photons) {
-                        plots_path =
-                                WorkingDirectory + "plots_" + SampleName + "_-02_ALL_CUTS_NoBetaCut_wFDphotons"; // NOTE: not acctually a beta cut - but a neutron mom cut
-                        plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_NoBetaCut_wFDphotons.txt";
-                    } else if (!Enable_FD_photons) {
-                        plots_path = WorkingDirectory + "plots_" + SampleName +
-                                     "_-02_ALL_CUTS_NoBetaCut_NoFDphotons"; // NOTE: not acctually a beta cut - but a neutron mom cut
-                        plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_NoBetaCut_NoFDphotons.txt";
-                    }
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-02_ALL_CUTS_NoBetaCut"; // NOTE: not acctually a beta cut - but a neutron mom cut
-//                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_NoBetaCut.txt";
-                } else if (apply_neutron_Beta_Fit) {
-                    if (Enable_FD_photons) {
-                        plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_wFDphotons"; //original
-                        plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_wFDphotons.txt";
-                    } else if (!Enable_FD_photons) {
-                        plots_path = WorkingDirectory + "plots_" + SampleName +
-                                     "_-02_ALL_CUTS_WithBetaCut_NoFDphotons"; // NOTE: not acctually a beta cut - but a neutron mom cut
-                        plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_WithBetaCut_NoFDphotons.txt";
-                    }
-//                    plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_WithBetaCut"; //original
-//                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut.txt";
-                }
-*/
             }
         }
     } else {
-        Beta_Fit_Status, FD_photons_Status, Efficiency_Status = "";
+        Beta_Fit_Status = FD_photons_Status = Efficiency_Status = "";
     }
     //</editor-fold>
 
@@ -334,18 +308,18 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum thresholds */
+//    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
+//    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
+//    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
+//    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piminus", "", 0, -9999, 9999);
+//    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, -9999, 9999);
+//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
     DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
     DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
-    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
-    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
+    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
     DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
-//    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-//    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
-//    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-//    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-//    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
-//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
     //</editor-fold>
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4072,7 +4046,7 @@ void EventAnalyser() {
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
             /* Setting up 1p TL event selection */
-            bool one_FDproton_1p = (TL_Protons_mom_ind.size() == 1 && TL_ProtonsFD_mom_ind.size() == 1);
+            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1));
 
             /* Setting up 1n TL event selection */
             bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
@@ -5408,8 +5382,6 @@ void EventAnalyser() {
                             hP_piplus_APID_1p_CD.hFill(piplus[i]->getP(), Weight); // after mom. th.
                         } else if (piplus[i]->getRegion() == FD) {
                             hP_piplus_APID_1p_FD.hFill(piplus[i]->getP(), Weight); // after mom. th.
-                        } else {
-                            cout << "\n\nPiplus_ind[" << i << "] is not in CD or FD!\n";
                         }
                     }
 
@@ -5418,8 +5390,6 @@ void EventAnalyser() {
                             hP_piplus_BPID_1p_CD.hFill(piplus[i]->getP(), Weight); // before mom. th.
                         } else if (piplus[i]->getRegion() == FD) {
                             hP_piplus_BPID_1p_FD.hFill(piplus[i]->getP(), Weight); // before mom. th.
-                        } else {
-                            cout << "\n\npiplus[" << i << "] is not in CD or FD!\n";
                         }
                     }
                     //</editor-fold>
@@ -5430,8 +5400,6 @@ void EventAnalyser() {
                             hP_piminus_APID_1p_CD.hFill(piminus[i]->getP(), Weight); // after mom. th.
                         } else if (piminus[i]->getRegion() == FD) {
                             hP_piminus_APID_1p_FD.hFill(piminus[i]->getP(), Weight); // after mom. th.
-                        } else {
-                            cout << "\n\nPiminus_ind[" << i << "] is not in CD or FD!\n";
                         }
                     }
 
@@ -5440,8 +5408,6 @@ void EventAnalyser() {
                             hP_piminus_BPID_1p_CD.hFill(piminus[i]->getP(), Weight); // before mom. th.
                         } else if (piminus[i]->getRegion() == FD) {
                             hP_piminus_BPID_1p_FD.hFill(piminus[i]->getP(), Weight); // before mom. th.
-                        } else {
-                            cout << "\n\npiminus[" << i << "] is not in CD or FD!\n";
                         }
                     }
                     //</editor-fold>
@@ -6383,11 +6349,11 @@ void EventAnalyser() {
 
                         if (piminus[i]->getRegion() == CD) {
                             hBeta_vs_P_1n_CD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
-                            hBeta_vs_P_1n_Piminus_Only_CD.hFill(P_pim_temp, piplus[i]->par()->getBeta(), Weight);
+                            hBeta_vs_P_1n_Piminus_Only_CD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
                             hBeta_vs_P_neg_part_1n_CD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
                         } else if (piminus[i]->getRegion() == FD) {
                             hBeta_vs_P_1n_FD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
-                            hBeta_vs_P_1n_Piminus_Only_FD.hFill(P_pim_temp, piplus[i]->par()->getBeta(), Weight);
+                            hBeta_vs_P_1n_Piminus_Only_FD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
                             hBeta_vs_P_neg_part_1n_FD.hFill(P_pim_temp, piminus[i]->par()->getBeta(), Weight);
                         }
                     } // end of loop over identified piminus vector
