@@ -1,5 +1,5 @@
-#ifndef NEUTRON_VETO_HH
-#define NEUTRON_VETO_HH
+#ifndef Neutron_veto_HH
+#define Neutron_veto_HH
 #define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 #define PBWIDTH 60
 
