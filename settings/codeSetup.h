@@ -146,6 +146,15 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
 ////std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/" + "first_50_test" + "/";
 
+<<<<<<< Updated upstream
+=======
+//std::string AnalyseFilePath = "pnfs/genie/scratch/users/asportes/script_jobs/detector_sim_truth_level";
+//std::string AnalyseFileSample = "detector_sim_truth_level/C12_G18_10a_02_11b_2GeV_QEL_test";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "Ca48_G18_10a_02_11b_207052MeV.root";
+//std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_2070MeV.root";
+
+>>>>>>> Stashed changes
 //std::string AnalyseFilePath = "home/alon/project";
 //std::string AnalyseFileSample = "Downloads";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";

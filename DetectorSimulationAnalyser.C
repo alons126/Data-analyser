@@ -2445,6 +2445,265 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+<<<<<<< Updated upstream
+=======
+    //<editor-fold desc="Other angle plots (pFDpCD)">
+
+// Theta_p_e_p_tot (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
+    THStack *sTheta_p_e_p_tot_pFDpCD = new THStack("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
+                                               "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
+    TH1D *hTheta_p_e_p_tot_pFDpCD = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);"
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+    string hTheta_p_e_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_q_p (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p (pFDpCD, CD & FD)">
+
+    //<editor-fold desc="Theta_q_p_tot (CD & FD)">
+    THStack *sTheta_q_p_tot_pFDpCD = new THStack("#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
+                                             "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];");
+    TH1D *hTheta_q_p_tot_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{tot}} (All Int., pFDpCD)",
+                                       "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);"
+                                       "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+    string hTheta_q_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (pFDpCD, CD & FD)">
+    THStack *sTheta_q_p_pFDpCD = new THStack("#theta_{#vec{q},#vec{P}} (All Int., pFDpCD)",
+                                         "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., pFDpCD);#theta_{#vec{q},#vec{P}} [Deg];");
+    TH1D *hTheta_q_p_L_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{1}} (All Int., pFDpCD)",
+                                     "#theta_{#vec{q},#vec{P}_{1}} - Opening Angle Between #vec{q} and leading proton #vec{P}_{1} (All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{1}}",
+                                     100, 0, 180);
+    TH1D *hTheta_q_p_R_pFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{2}} (All Int., pFDpCD)",
+                                     "#theta_{#vec{q},#vec{P}_{2}} - Opening Angle Between #vec{q} and recoil proton #vec{P}_{2} (All Int., pFDpCD);#theta_{#vec{q},#vec{P}_{2}}",
+                                     100, 0, 180);
+    string hTheta_q_p_L_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    string hTheta_q_p_R_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+// Theta_q_p_L vs |P_L|/|q| (pFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_tot (CD & FD)">
+    TH2D *hTheta_q_p_L_vs_p_L_q_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{1}} vs. r_{1} (All Int., pFDpCD)",
+                                              "#theta_{#vec{q},#vec{P}_{1}} vs. r_{1}=|#vec{P_{1}}|/|#vec{q}| (All Int., pFDpCD);r_{1};#theta_{#vec{q},#vec{P}_{1}}",
+                                              250, 0, 1.05, 250, 0, 180);
+    string hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_p1_p2 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_p2 (CD & FD)">
+    THStack *sTheta_p1_p2_pFDpCD = new THStack("#theta_{p_{1},p_{2}} (All Int., pFDpCD)",
+                                           "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (pFDpCD);#theta_{p_{1},p_{2}} [Deg];");
+    TH1D *hTheta_p1_p2_All_Int_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (All Int., pFDpCD)",
+                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_QEL_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (QEL only, pFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_MEC_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (MEC only, pFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_RES_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (RES only, pFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_DIS_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (DIS only, pFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    string sTheta_p1_p2_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    string hTheta_p1_p2_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_RES_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    //</editor-fold>
+
+// Theta_p1_p2 vs. W (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_p2 vs. W (CD & FD)">
+    TH2D *hTheta_p1_p2_vs_W_pFDpCD = new TH2D("#theta_{p_{1},p_{2}} vs. W (All Int., pFDpCD)",
+                                          "#theta_{p_{1},p_{2}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{p_{1},p_{2}} [Deg];",
+                                          250, 0, beamE * 1.1, 250, 0, 180);
+    string hTheta_p1_p2_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., pFDpCD)",
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., pFDpCD);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+                                                                 250, 10, 80, 250, 10, 80);
+//                                                                 250, 0, 120, 250, 0, 120);
+//                                                                 250, 0, 180, 250, 0, 180);
+    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Ghost tracks handling (CD only) --------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (pFDpCD)">
+    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC",
+                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                      directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_BC_pFDpCD", 0, 180, -3, 3, 150, 150);
+    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
+                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                      directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_AC_pFDpCD", 0, 180, -3, 3, 150, 150);
+    //</editor-fold>
+
+    //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (pFDpCD)">
+    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC",
+                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]",
+                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+                                                      "02_Theta_p1_p2_VS_Pos1-Pos2_BC_pFDpCD", 0, 180, 0, 100, 150, 150);
+    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
+                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]",
+                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+                                                      "02_Theta_p1_p2_VS_Pos1-Pos2_AC_pFDpCD", 0, 180, 0, 100, 150, 150);
+    //</editor-fold>
+
+//    //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
+//                                                   "ToF_{1}-ToF_{2} [ns]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"], "01_Theta_R1_R2_VS_ToF1_ToF2_pFDpCD",
+//                                                   0, 180, -3, 3);
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
+//                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+//                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_pFDpCD", 0, 180, 0, 100);
+//    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Other angle plots (nFDpCD)">
+
+// Theta_p_e_p_tot (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p_e_p_tot (nFDpCD, CD & FD)">
+    THStack *sTheta_p_e_p_tot_nFDpCD = new THStack("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
+                                               "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., nFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
+    TH1D *hTheta_p_e_p_tot_nFDpCD = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., nFDpCD)",
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., nFDpCD);"
+                                         "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+    string hTheta_p_e_p_tot_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_q_p (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p (nFDpCD, CD & FD)">
+
+    //<editor-fold desc="Theta_q_p_tot (CD & FD)">
+    THStack *sTheta_q_p_tot_nFDpCD = new THStack("#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)",
+                                             "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., nFDpCD);#theta_{#vec{q},#vec{P}_{tot}} [Deg];");
+    TH1D *hTheta_q_p_tot_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{tot}} (All Int., nFDpCD)",
+                                       "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., nFDpCD);"
+                                       "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+    string hTheta_q_p_tot_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (nFDpCD, CD & FD)">
+    THStack *sTheta_q_p_nFDpCD = new THStack("#theta_{#vec{q},#vec{P}} (All Int., nFDpCD)",
+                                         "#theta_{#vec{q},#vec{P}} - Opening Angle Between #vec{q} and #vec{P} (All Int., nFDpCD);#theta_{#vec{q},#vec{P}} [Deg];");
+    TH1D *hTheta_q_p_L_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{1}} (All Int., nFDpCD)",
+                                     "#theta_{#vec{q},#vec{P}_{1}} - Opening Angle Between #vec{q} and leading proton #vec{P}_{1} (All Int., nFDpCD);#theta_{#vec{q},#vec{P}_{1}}",
+                                     100, 0, 180);
+    TH1D *hTheta_q_p_R_nFDpCD = new TH1D("#theta_{#vec{q},#vec{P}_{2}} (All Int., nFDpCD)",
+                                     "#theta_{#vec{q},#vec{P}_{2}} - Opening Angle Between #vec{q} and recoil proton #vec{P}_{2} (All Int., nFDpCD);#theta_{#vec{q},#vec{P}_{2}}",
+                                     100, 0, 180);
+    string hTheta_q_p_L_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string hTheta_q_p_R_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+// Theta_q_p_L vs |P_L|/|q| (nFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_tot (CD & FD)">
+    TH2D *hTheta_q_p_L_vs_p_L_q_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{1}} vs. r_{1} (All Int., nFDpCD)",
+                                              "#theta_{#vec{q},#vec{P}_{1}} vs. r_{1}=|#vec{P_{1}}|/|#vec{q}| (All Int., nFDpCD);r_{1};#theta_{#vec{q},#vec{P}_{1}}",
+                                              250, 0, 1.05, 250, 0, 180);
+    string hTheta_q_p_L_vs_p_L_q_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_p1_p2 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_p2 (CD & FD)">
+    THStack *sTheta_p1_p2_nFDpCD = new THStack("#theta_{p_{1},p_{2}} (All Int., nFDpCD)",
+                                           "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (nFDpCD);#theta_{p_{1},p_{2}} [Deg];");
+    TH1D *hTheta_p1_p2_All_Int_nFDpCD = new TH1D("#theta_{p_{1},p_{2}} (All Int., nFDpCD)",
+                                             "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (All Int., nFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_QEL_nFDpCD = new TH1D("#theta_{p_{1},p_{2}} (QEL only, nFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (QEL only, nFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_MEC_nFDpCD = new TH1D("#theta_{p_{1},p_{2}} (MEC only, nFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (MEC only, nFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_RES_nFDpCD = new TH1D("#theta_{p_{1},p_{2}} (RES only, nFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (RES only, nFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    TH1D *hTheta_p1_p2_DIS_nFDpCD = new TH1D("#theta_{p_{1},p_{2}} (DIS only, nFDpCD)",
+                                         "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, nFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
+    string sTheta_p1_p2_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string hTheta_p1_p2_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_RES_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    //</editor-fold>
+
+// Theta_p1_p2 vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_p2 vs. W (CD & FD)">
+    TH2D *hTheta_p1_p2_vs_W_nFDpCD = new TH2D("#theta_{p_{1},p_{2}} vs. W (All Int., nFDpCD)",
+                                          "#theta_{p_{1},p_{2}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{p_{1},p_{2}} [Deg];",
+                                          250, 0, beamE * 1.1, 250, 0, 180);
+    string hTheta_p1_p2_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., nFDpCD)",
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., nFDpCD);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+                                                                 250, 10, 80, 250, 10, 80);
+//                                                                 250, 0, 120, 250, 0, 120);
+//                                                                 250, 0, 180, 250, 0, 180);
+    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+// Ghost tracks handling (CD only) --------------------------------------------------------------------------------------------------------------------------------------
+
+//    //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (nFDpCD)">
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_nFDpCD = hPlot2D("nFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC",
+//                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+//                                                      directories.Angle_Directory_map["Ghost_tracks_handling_nFDpCD_Directory"],
+//                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_BC_nFDpCD", 0, 180, -3, 3, 150, 150);
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_nFDpCD = hPlot2D("nFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
+//                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+//                                                      directories.Angle_Directory_map["Ghost_tracks_handling_nFDpCD_Directory"],
+//                                                      "01_Theta_p1_p2_VS_ToF1-ToF2_AC_nFDpCD", 0, 180, -3, 3, 150, 150);
+//    //</editor-fold>
+
+//    //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (nFDpCD)">
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_nFDpCD = hPlot2D("nFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC",
+//                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]",
+//                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_nFDpCD_Directory"],
+//                                                      "02_Theta_p1_p2_VS_Pos1-Pos2_BC_nFDpCD", 0, 180, 0, 100, 150, 150);
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_nFDpCD = hPlot2D("nFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
+//                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]",
+//                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_nFDpCD_Directory"],
+//                                                      "02_Theta_p1_p2_VS_Pos1-Pos2_AC_nFDpCD", 0, 180, 0, 100, 150, 150);
+//    //</editor-fold>
+
+//    //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_nFDpCD = hPlot2D("nFDpCD", "CD-CTOF", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
+//                                                   "ToF_{1}-ToF_{2} [ns]", directories.Angle_Directory_map["Ghost_tracks_handling_nFDpCD_Directory"], "01_Theta_R1_R2_VS_ToF1_ToF2_nFDpCD",
+//                                                   0, 180, -3, 3);
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_nFDpCD = hPlot2D("nFDpCD", "CD-CTOF", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
+//                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_nFDpCD_Directory"],
+//                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_nFDpCD", 0, 180, 0, 100);
+//    //</editor-fold>
+
+    //</editor-fold>
+
+>>>>>>> Stashed changes
     //</editor-fold>
 
     //</editor-fold>
@@ -8527,6 +8786,191 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+<<<<<<< Updated upstream
+=======
+        //<editor-fold desc="pFDpCD plots">
+
+// Theta_p_e_p_tot (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
+        double Theta_p_e_p_tot_pFDpCD_integral = hTheta_p_e_p_tot_pFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_p_e_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_pFDpCD_integral,
+                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// Theta_q_p (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_q_p_tot (pFDpCD, CD & FD)">
+        double Theta_q_p_tot_pFDpCD_integral = hTheta_q_p_tot_pFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_q_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_q_p_tot_pFDpCD_integral,
+                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_q_p_pFDpCD, "02_Theta_q_p_tot_All_Int_pFDpCD", hTheta_q_p_tot_pFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (pFDpCD, CD & FD)">
+        double Theta_q_p_L_pFDpCD_integral = hTheta_q_p_L_pFDpCD->Integral(), Theta_q_p_R_pFDpCD_integral = hTheta_q_p_R_pFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_q_p_L_pFDpCD, norm_Angle_plots_master, true, Theta_q_p_L_pFDpCD_integral,
+                      "#theta_{#vec{q},#vec{P}_{1}} - Opening Angle Between #vec{q} and leading proton #vec{P}_{1}", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sTheta_q_p_pFDpCD, "03_Theta_q_p_1_All_Int_pFDpCD", hTheta_q_p_L_pFDpCD_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hTheta_q_p_R_pFDpCD, norm_Angle_plots_master, true, Theta_q_p_R_pFDpCD_integral,
+                      "#theta_{#vec{q},#vec{P}_{2}} - Opening Angle Between #vec{q} and recoil proton #vec{P}_{2}", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sTheta_q_p_pFDpCD, "03_Theta_q_p_2_All_Int_pFDpCD", hTheta_q_p_R_pFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// Theta_q_p_L vs |P_L|/|q| (pFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="hTheta_p1_p2_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_q_p_L_vs_p_L_q_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir, "04_Theta_q_p_L_vs_p_L_q_pFDpCD");
+        //</editor-fold>
+
+// Theta_p1_p2 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_p2 (pFDpCD, CD & FD)">
+        double Theta_p1_p2_pFDpCD_integral = hTheta_p1_p2_All_Int_pFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_p1_p2_All_Int_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "00_Theta_p1_p2_All_Int_pFDpCD", hTheta_p1_p2_All_Int_pFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_QEL_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "QEL only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "01_Theta_p1_p2_QEL_only_pFDpCD", hTheta_p1_p2_QEL_pFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_MEC_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "MEC only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "02_Theta_p1_p2_MEC_only_pFDpCD", hTheta_p1_p2_MEC_pFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_RES_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "RES only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "03_Theta_p1_p2_RES_only_pFDpCD", hTheta_p1_p2_RES_pFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_DIS_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "DIS only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "04_Theta_p1_p2_DIS_only_pFDpCD", hTheta_p1_p2_DIS_pFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+
+        stackPlotter1D(c1, sTheta_p1_p2_pFDpCD, norm_E_e_plots, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "pFDpCD", plots, hTheta_p1_p2_All_Int_pFDpCD,
+                       hTheta_p1_p2_QEL_pFDpCD, hTheta_p1_p2_MEC_pFDpCD, hTheta_p1_p2_RES_pFDpCD, hTheta_p1_p2_DIS_pFDpCD, "05_Theta_p1_p2_Stack", sTheta_p1_p2_pFDpCD_Dir, "");
+        //</editor-fold>
+
+// hTheta_p1_p2_vs_W_pFDpCD (pFDpCD, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="hTheta_p1_p2_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_p2_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_pFDpCD_Dir, "06_Theta_p1_p2_vs_W_pFDpCD");
+        //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD_Dir,
+                      "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD");
+        //</editor-fold>
+
+//  Ghost tracks handling (pFDpCD, CD only) ---------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (pFDpCD, CD)">
+        hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_p1_p2_VS_ToF1_ToF2_AC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (pFDpCD, CD)">
+        hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_p1_p2_VS_Pos1_Pos2_AC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="nFDpCD plots">
+
+// Theta_p_e_p_tot (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p_e_p_tot (nFDpCD, CD & FD)">
+        double Theta_p_e_p_tot_nFDpCD_integral = hTheta_p_e_p_tot_nFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_p_e_p_tot_nFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_nFDpCD_integral,
+                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., nFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_p_e_p_tot_nFDpCD, "01_Theta_p_e_p_tot_All_Int_nFDpCD", hTheta_p_e_p_tot_nFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// Theta_q_p (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_q_p_tot (nFDpCD, CD & FD)">
+        double Theta_q_p_tot_nFDpCD_integral = hTheta_q_p_tot_nFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_q_p_tot_nFDpCD, norm_Angle_plots_master, true, Theta_q_p_tot_nFDpCD_integral,
+                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., nFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_q_p_nFDpCD, "02_Theta_q_p_tot_All_Int_nFDpCD", hTheta_q_p_tot_nFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+        //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (nFDpCD, CD & FD)">
+        double Theta_q_p_L_nFDpCD_integral = hTheta_q_p_L_nFDpCD->Integral(), Theta_q_p_R_nFDpCD_integral = hTheta_q_p_R_nFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_q_p_L_nFDpCD, norm_Angle_plots_master, true, Theta_q_p_L_nFDpCD_integral,
+                      "#theta_{#vec{q},#vec{P}_{1}} - Opening Angle Between #vec{q} and leading proton #vec{P}_{1}", "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sTheta_q_p_nFDpCD, "03_Theta_q_p_1_All_Int_nFDpCD", hTheta_q_p_L_nFDpCD_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hTheta_q_p_R_nFDpCD, norm_Angle_plots_master, true, Theta_q_p_R_nFDpCD_integral,
+                      "#theta_{#vec{q},#vec{P}_{2}} - Opening Angle Between #vec{q} and recoil proton #vec{P}_{2}", "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sTheta_q_p_nFDpCD, "03_Theta_q_p_2_All_Int_nFDpCD", hTheta_q_p_R_nFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// Theta_q_p_L vs |P_L|/|q| (nFDpCD, CD & FD) -------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="hTheta_p1_p2_vs_W_nFDpCD (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_q_p_L_vs_p_L_q_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_q_p_L_vs_p_L_q_nFDpCD_Dir, "04_Theta_q_p_L_vs_p_L_q_nFDpCD");
+        //</editor-fold>
+
+// Theta_p1_p2 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_p2 (nFDpCD, CD & FD)">
+        double Theta_p1_p2_nFDpCD_integral = hTheta_p1_p2_All_Int_nFDpCD->Integral();
+
+        histPlotter1D(c1, hTheta_p1_p2_All_Int_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "00_Theta_p1_p2_All_Int_nFDpCD", hTheta_p1_p2_All_Int_nFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_QEL_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "QEL only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "01_Theta_p1_p2_QEL_only_nFDpCD", hTheta_p1_p2_QEL_nFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_MEC_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "MEC only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "02_Theta_p1_p2_MEC_only_nFDpCD", hTheta_p1_p2_MEC_nFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_RES_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "RES only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "03_Theta_p1_p2_RES_only_nFDpCD", hTheta_p1_p2_RES_nFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+        histPlotter1D(c1, hTheta_p1_p2_DIS_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
+                      "DIS only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "04_Theta_p1_p2_DIS_only_nFDpCD", hTheta_p1_p2_DIS_nFDpCD_Dir, "", kBlue,
+                      true, true, true, false);
+
+        stackPlotter1D(c1, sTheta_p1_p2_nFDpCD, norm_E_e_plots, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "nFDpCD", plots, hTheta_p1_p2_All_Int_nFDpCD,
+                       hTheta_p1_p2_QEL_nFDpCD, hTheta_p1_p2_MEC_nFDpCD, hTheta_p1_p2_RES_nFDpCD, hTheta_p1_p2_DIS_nFDpCD, "05_Theta_p1_p2_Stack", sTheta_p1_p2_nFDpCD_Dir, "");
+        //</editor-fold>
+
+// hTheta_p1_p2_vs_W_nFDpCD (nFDpCD, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="hTheta_p1_p2_vs_W_nFDpCD (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_p2_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_nFDpCD_Dir, "06_Theta_p1_p2_vs_W_nFDpCD");
+        //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD_Dir,
+                      "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD");
+        //</editor-fold>
+
+//  Ghost tracks handling (nFDpCD, CD only) ---------------------------------------------------------------------------------------------------------------------------------
+
+//        //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (nFDpCD, CD)">
+//        hTheta_p1_p2_VS_ToF1_ToF2_BC_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+//        hTheta_p1_p2_VS_ToF1_ToF2_AC_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+//        //</editor-fold>
+
+//        //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (nFDpCD, CD)">
+//        hTheta_p1_p2_VS_Pos1_Pos2_BC_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+//        hTheta_p1_p2_VS_Pos1_Pos2_AC_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+//        //</editor-fold>
+
+        //</editor-fold>
+
+>>>>>>> Stashed changes
 //  Neutron veto plots -------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Neutron veto plots (1e cut)">

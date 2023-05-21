@@ -171,10 +171,17 @@ Directories::Directories(std::string plots_path) {
     SF_Directory_map["SF_VS_P_e_pFDpCD_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
                                                      Find(SF_Daughter_Folders, "05_pFDpCD/02_SF_VS_P_e_plots") + "/";
 
+<<<<<<< Updated upstream
     SF_Directory_map["SF_plots_nFDpCD_cuts_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
                                                          Find(SF_Daughter_Folders, "06_nFDpCD/01_SF_plots") + "/";
     SF_Directory_map["SF_VS_P_e_plots_nFDpCD_cuts_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
                                                                 Find(SF_Daughter_Folders, "06_nFDpCD/02_SF_VS_P_e_plots") + "/";
+=======
+    SF_Directory_map["SF_nFDpCD_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
+                                              Find(SF_Daughter_Folders, "06_nFDpCD/01_SF_plots") + "/";
+    SF_Directory_map["SF_VS_P_e_nFDpCD_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
+                                                     Find(SF_Daughter_Folders, "06_nFDpCD/02_SF_VS_P_e_plots") + "/";
+>>>>>>> Stashed changes
     //</editor-fold>
 
     //<editor-fold desc="Edge cuts histograms plots directories">
@@ -258,95 +265,101 @@ Directories::Directories(std::string plots_path) {
                                                                       "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_1n") +
                                                                  "/";
     Beta_Directory_map["Neutron_beta_from_ph_01_S1_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/01_fPhotons_All_plots_S1_1n") + "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/01_fPhotons_All_plots_S1_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_02_S1_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/02_fPhotons_noPCAL_hit_plots_S1_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/02_fPhotons_noPCAL_hit_plots_S1_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_03_S1_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/03_fPhotons_noPCAL_yesECIN_plots_S1_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/03_fPhotons_noPCAL_yesECIN_plots_S1_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_04_S1_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S1_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/01_Sector_1/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S1_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_01_S2_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/01_fPhotons_All_plots_S2_1n") + "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/01_fPhotons_All_plots_S2_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_02_S2_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/02_fPhotons_noPCAL_hit_plots_S2_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/02_fPhotons_noPCAL_hit_plots_S2_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_03_S2_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/03_fPhotons_noPCAL_yesECIN_plots_S2_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/03_fPhotons_noPCAL_yesECIN_plots_S2_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_04_S2_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S2_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/02_Sector_2/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S2_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_01_S3_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/01_fPhotons_All_plots_S3_1n") + "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/01_fPhotons_All_plots_S3_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_02_S3_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/02_fPhotons_noPCAL_hit_plots_S3_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/02_fPhotons_noPCAL_hit_plots_S3_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_03_S3_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/03_fPhotons_noPCAL_yesECIN_plots_S3_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/03_fPhotons_noPCAL_yesECIN_plots_S3_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_04_S3_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S3_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/03_Sector_3/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S3_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_01_S4_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/01_fPhotons_All_plots_S4_1n") + "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/01_fPhotons_All_plots_S4_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_02_S4_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/02_fPhotons_noPCAL_hit_plots_S4_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/02_fPhotons_noPCAL_hit_plots_S4_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_03_S4_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/03_fPhotons_noPCAL_yesECIN_plots_S4_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/03_fPhotons_noPCAL_yesECIN_plots_S4_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_04_S4_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S4_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/04_Sector_4/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S4_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_01_S5_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/01_fPhotons_All_plots_S5_1n") + "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/01_fPhotons_All_plots_S5_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_02_S5_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/02_fPhotons_noPCAL_hit_plots_S5_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/02_fPhotons_noPCAL_hit_plots_S5_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_03_S5_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/03_fPhotons_noPCAL_yesECIN_plots_S5_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/03_fPhotons_noPCAL_yesECIN_plots_S5_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_04_S5_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S5_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/05_Sector_5/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S5_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_01_S6_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/01_fPhotons_All_plots_S6_1n") + "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/01_fPhotons_All_plots_S6_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_02_S6_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/02_fPhotons_noPCAL_hit_plots_S6_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/02_fPhotons_noPCAL_hit_plots_S6_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_03_S6_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/03_fPhotons_noPCAL_yesECIN_plots_S6_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/03_fPhotons_noPCAL_yesECIN_plots_S6_1n") +
+                                                                    "/";
     Beta_Directory_map["Neutron_beta_from_ph_04_S6_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
-                                                                 Find(Beta_Daughter_Folders,
-                                                                      "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S6_1n") +
-                                                                 "/";
+                                                                    Find(Beta_Daughter_Folders,
+                                                                         "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S6_1n") +
+                                                                    "/";
 
     Beta_Directory_map["All_FD_neutrals_1n_Directory"] = Plots_Folder + "/" + Beta_Parent_Directory + "/" +
                                                          Find(Beta_Daughter_Folders, "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n") + "/";
@@ -821,12 +834,12 @@ Directories::Directories(std::string plots_path) {
                                                       Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/01_QEL_only") + "/";
     Ecal_Directory_map["Ecal_MEC_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                       Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/02_MEC_only") + "/";
-    Ecal_Directory_map["Ecal_RESF_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                       Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/03_RES_only") + "/";
-    Ecal_Directory_map["Ecal_DISF_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                       Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/04_DIS_only") + "/";
+    Ecal_Directory_map["Ecal_RES_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                      Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/03_RES_only") + "/";
+    Ecal_Directory_map["Ecal_DIS_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                      Find(Ecal_Daughter_Folders, "05_pFDpCD/01_Ecal_rec_by_reaction_pFDpCD/04_DIS_only") + "/";
     Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                                               Find(Ecal_Daughter_Folders, "05_pFDpCD/02_Ecal_rec_vs_TKI_pFDpCD") + "/";
+                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD/02_Ecal_rec_vs_TKI_pFDpCD") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_pFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD/03_Chi2_for_Ecal_above_Ebeam_pFDpCD") + "/";
 
@@ -838,12 +851,12 @@ Directories::Directories(std::string plots_path) {
                                                       Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/01_QEL_only") + "/";
     Ecal_Directory_map["Ecal_MEC_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                       Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/02_MEC_only") + "/";
-    Ecal_Directory_map["Ecal_RESF_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                       Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/03_RES_only") + "/";
-    Ecal_Directory_map["Ecal_DISF_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                       Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/04_DIS_only") + "/";
+    Ecal_Directory_map["Ecal_RES_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                      Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/03_RES_only") + "/";
+    Ecal_Directory_map["Ecal_DIS_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
+                                                      Find(Ecal_Daughter_Folders, "06_nFDpCD/01_Ecal_rec_by_reaction_nFDpCD/04_DIS_only") + "/";
     Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
-                                                                               Find(Ecal_Daughter_Folders, "06_nFDpCD/02_Ecal_rec_vs_TKI_nFDpCD") + "/";
+                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD/02_Ecal_rec_vs_TKI_nFDpCD") + "/";
     Ecal_Directory_map["Chi2_Ecal_test_nFDpCD_Directory"] = Plots_Folder + "/" + Ecal_Parent_Directory + "/" +
                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD/03_Chi2_for_Ecal_above_Ebeam_nFDpCD") + "/";
     //</editor-fold>
