@@ -92,7 +92,8 @@ void EventAnalyser() {
 
     bool calculate_truth_level = true;
 
-    bool calculate_1p = true, calculate_1n = true, calculate_1n1p = false, calculate_2p = false;
+    bool calculate_1p = true, calculate_1n = true;
+    bool calculate_2p = false, calculate_pFDpCD = false, calculate_nFDpCD = false;
 
     bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
 //
@@ -180,7 +181,7 @@ void EventAnalyser() {
         }
 
         if (Rec_wTL_ES) {
-            Efficiency_Status = "Eff2";
+            Efficiency_Status = "Eff2_no_mom_th";
         } else {
             Efficiency_Status = "Eff1";
         }
@@ -308,18 +309,18 @@ void EventAnalyser() {
     DSCuts DC_edge_cuts;
 
     /* Momentum thresholds */
-//    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-//    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
-//    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
-//    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piminus", "", 0, -9999, 9999);
-//    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, -9999, 9999);
-//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
     DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
-    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
-    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
-    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
+    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
+    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
+    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piminus", "", 0, -9999, 9999);
+    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, -9999, 9999);
+    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
+//    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
+//    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
+//    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+//    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
+//    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
+//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
     //</editor-fold>
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -6551,7 +6552,7 @@ void EventAnalyser() {
 //  1n1p ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="1n1p">
-        if (calculate_1n1p && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of other neutrals)
+        if (calculate_nFDpCD && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of other neutrals)
             ++num_of_events_1e1n1p_wFakeNeut;
 
             //<editor-fold desc="Safty check (1n1p)">
@@ -9677,7 +9678,7 @@ void EventAnalyser() {
 
     myLogFile << "calculate_1p = " << BoolToString(calculate_1p) << "\n";
     myLogFile << "calculate_1n = " << BoolToString(calculate_1n) << "\n";
-    myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
+    myLogFile << "calculate_nFDpCD = " << BoolToString(calculate_nFDpCD) << "\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n\n";
 
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
