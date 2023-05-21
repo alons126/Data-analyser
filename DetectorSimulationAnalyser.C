@@ -181,7 +181,7 @@ void EventAnalyser() {
         }
 
         if (Rec_wTL_ES) {
-            Efficiency_Status = "Eff2_no_mom_th";
+            Efficiency_Status = "Eff2_with_mom_th";
         } else {
             Efficiency_Status = "Eff1";
         }
