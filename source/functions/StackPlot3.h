@@ -57,16 +57,21 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     TH1D *Histogram1 = Hist1.GetHistogram();
     TH1D *Histogram1_Clone = (TH1D *) Histogram1->Clone((Hist1.GetHistogramStatTitle() + " - cloned").c_str());
     Histogram1_Clone->SetStats(0);
+    Histogram1_Clone->Draw("hist err");
     HistogramStack->Add(Histogram1_Clone);
 
     TH1D *Histogram2 = Hist2.GetHistogram();
     TH1D *Histogram2_Clone = (TH1D *) Histogram2->Clone((Hist2.GetHistogramStatTitle() + " - cloned").c_str());
     Histogram2_Clone->SetStats(0);
+    Histogram2_Clone->Draw("hist err");
+//    Histogram2_Clone->Draw("hist err same");
     HistogramStack->Add(Histogram2_Clone);
 
     TH1D *Histogram3 = Hist3.GetHistogram();
     TH1D *Histogram3_Clone = (TH1D *) Histogram3->Clone((Hist3.GetHistogramStatTitle() + " - cloned").c_str());
     Histogram3_Clone->SetStats(0);
+    Histogram3_Clone->Draw("hist err");
+//    Histogram3_Clone->Draw("hist err same");
     HistogramStack->Add(Histogram3_Clone);
 
     //<editor-fold desc="setting sNameFlag">

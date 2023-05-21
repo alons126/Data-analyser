@@ -171,9 +171,9 @@ Directories::Directories(std::string plots_path) {
     SF_Directory_map["SF_VS_P_e_pFDpCD_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
                                                      Find(SF_Daughter_Folders, "05_pFDpCD/02_SF_VS_P_e_plots") + "/";
 
-    SF_Directory_map["SF_plots_nFDpCD_cuts_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
+    SF_Directory_map["SF_nFDpCD_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
                                                          Find(SF_Daughter_Folders, "06_nFDpCD/01_SF_plots") + "/";
-    SF_Directory_map["SF_VS_P_e_plots_nFDpCD_cuts_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
+    SF_Directory_map["SF_VS_P_e_nFDpCD_Directory"] = Plots_Folder + "/" + SF_Parent_Directory + "/" +
                                                                 Find(SF_Daughter_Folders, "06_nFDpCD/02_SF_VS_P_e_plots") + "/";
     //</editor-fold>
 

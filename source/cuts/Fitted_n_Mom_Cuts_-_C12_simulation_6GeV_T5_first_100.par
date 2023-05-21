@@ -2,32 +2,84 @@
 # CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #
 ######################################################################
 
-# Cuts are fitted for - C12_simulation_6GeV_T5_first_100:	noBC_noFDph_Eff1
+# Cuts are fitted for - C12_simulation_6GeV_T5_first_100:	noBC_wFDph_Eff1
 
 # Neutron momentum cuts by detector (pid:mean:sigma) - sigma_FD=1:
 Momentum_th			2112:0:0.3:CD & FD
 
-Momentum_cuts_ECAL			2112:0:3.87637:FD-ECAL
-Momentum_cuts_ECAL_apprax			2112:0:3.90841:FD-ECAL_apprax
+Momentum_cuts_ECAL			2112:0:3.89874:FD-ECAL
+Momentum_cuts_ECAL_apprax			2112:0:3.92808:FD-ECAL_apprax
 
-Momentum_cuts_All_neutrals			0:0:3.58066:FD-ECAL
-Momentum_cuts_All_neutrals_noPDG0			0:0:3.58066:FD-ECAL
-Momentum_cuts_noPCAL			0:0:2.42313:FD-noPCAL
-Momentum_cuts_noPCAL_noPDG0			0:0:2.42313:FD-noPCAL
-Momentum_cuts_ECIN			2112:0:2.61592:FD-ECIN
-Momentum_cuts_ECIN_noPDG0			0:0:2.61592:FD-ECIN
-Momentum_cuts_ECOUT			0:0:12.2468:FD-ECOUT
-Momentum_cuts_ECOUT_noPDG0			0:0:12.2468:FD-ECOUT
+Momentum_cuts_All_neutrals			0:0:12.4555:FD-ECAL
+Momentum_cuts_All_neutrals_noPDG0			0:0:12.4555:FD-ECAL
+Momentum_cuts_noPCAL			0:0:2.16735:FD-noPCAL
+Momentum_cuts_noPCAL_noPDG0			0:0:2.16735:FD-noPCAL
+Momentum_cuts_ECIN			2112:0:2.35002:FD-ECIN
+Momentum_cuts_ECIN_noPDG0			0:0:2.35002:FD-ECIN
+Momentum_cuts_ECOUT			0:0:11.2829:FD-ECOUT
+Momentum_cuts_ECOUT_noPDG0			0:0:11.2829:FD-ECOUT
+
+
+# Neutron momentum cuts for sector 1 (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts_ECAL-S1			2112:0:5.10452:FD-ECAL-S1
+Momentum_cuts_ECAL-S1_apprax			2112:0:4.97026:FD-ECAL-S1_apprax
+
+# Neutron momentum cuts for sector 2 (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts_ECAL-S2			2112:0:3.95562:FD-ECAL-S2
+Momentum_cuts_ECAL-S2_apprax			2112:0:15.8293:FD-ECAL-S2_apprax
+
+# Neutron momentum cuts for sector 3 (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts_ECAL-S3			2112:0:4.90421:FD-ECAL-S3
+Momentum_cuts_ECAL-S3_apprax			2112:0:4.95022:FD-ECAL-S3_apprax
+
+# Neutron momentum cuts for sector 4 (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts_ECAL-S4			2112:0:3.77585:FD-ECAL-S4
+Momentum_cuts_ECAL-S4_apprax			2112:0:3.83009:FD-ECAL-S4_apprax
+
+# Neutron momentum cuts for sector 5 (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts_ECAL-S5			2112:0:14.2574:FD-ECAL-S5
+Momentum_cuts_ECAL-S5_apprax			2112:0:17.8365:FD-ECAL-S5_apprax
+
+# Neutron momentum cuts for sector 6 (pid:mean:sigma) - sigma_FD=1:
+Momentum_cuts_ECAL-S6			2112:0:7.00351:FD-ECAL-S6
+Momentum_cuts_ECAL-S6_apprax			2112:0:7.0354:FD-ECAL-S6_apprax
+
 
 
 # Beta std by detector (pid:mean:sigma) - sigma_FD=1:
-Beta_cut_ECAL			0:1.008:0.0107856:FD-ECAL
-Beta_cut_ECAL_apprax			0:1:0.0109266:FD-ECAL_apprax
-Beta_cut_All_FD_neutrals			0:1.008:0.0124618:FD
-Beta_cut_FD_neutrals_noPDG0			0:1.008:0.0124618:FD
-Beta_cut_All_FD_neutrals_noPCAL			0:1.008:0.0243717:FD
-Beta_cut_FD_neutrals_noPDG0_noPCAL			0:1.008:0.0243717:FD
-Beta_cut_All_FD_neutrals_noPCAL_wECIN			0:1.008:0.0215075:FD
-Beta_cut_FD_neutrals_noPDG0_noPCAL_wECIN			0:1.008:0.0215075:FD
-Beta_cut_All_FD_neutrals_noPCAL_noECIN_wECOUT			0:1.01375:0.00116685:FD
-Beta_cut_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT			0:1.01375:0.00116685:FD
+Beta_cut_ECAL			0:1.008:0.0106723:FD-ECAL
+Beta_cut_ECAL_apprax			0:1:0.0108233:FD-ECAL_apprax
+Beta_cut_All_FD_neutrals			0:1.01369:0.0011284:FD
+Beta_cut_FD_neutrals_noPDG0			0:1.01369:0.0011284:FD
+Beta_cut_All_FD_neutrals_noPCAL			0:1.008:0.0290294:FD
+Beta_cut_FD_neutrals_noPDG0_noPCAL			0:1.008:0.0290294:FD
+Beta_cut_All_FD_neutrals_noPCAL_wECIN			0:1.008:0.025594:FD
+Beta_cut_FD_neutrals_noPDG0_noPCAL_wECIN			0:1.008:0.025594:FD
+Beta_cut_All_FD_neutrals_noPCAL_noECIN_wECOUT			0:1.0138:0.00137258:FD
+Beta_cut_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT			0:1.0138:0.00137258:FD
+
+
+# Beta std for sector 1 (pid:mean:sigma) - sigma_FD=1:
+Beta_cut_ECAL-S1			0:1.008:0.00644569:FD-ECAL-S1
+Beta_cut_ECAL-S1_apprax			0:1:0.00690044:FD-ECAL-S1_apprax
+
+# Beta std for sector 2 (pid:mean:sigma) - sigma_FD=1:
+Beta_cut_ECAL-S2			0:1.0084:0.010392:FD-ECAL-S2
+Beta_cut_ECAL-S2_apprax			0:1:0.000702156:FD-ECAL-S2_apprax
+
+# Beta std for sector 3 (pid:mean:sigma) - sigma_FD=1:
+Beta_cut_ECAL-S3			0:1.01211:0.00695447:FD-ECAL-S3
+Beta_cut_ECAL-S3_apprax			0:1:0.00695448:FD-ECAL-S3_apprax
+
+# Beta std for sector 4 (pid:mean:sigma) - sigma_FD=1:
+Beta_cut_ECAL-S4			0:1.008:0.0113166:FD-ECAL-S4
+Beta_cut_ECAL-S4_apprax			0:1:0.0113524:FD-ECAL-S4_apprax
+
+# Beta std for sector 5 (pid:mean:sigma) - sigma_FD=1:
+Beta_cut_ECAL-S5			0:1.01415:0.000862942:FD-ECAL-S5
+Beta_cut_ECAL-S5_apprax			0:1:0.00055343:FD-ECAL-S5_apprax
+
+# Beta std for sector 6 (pid:mean:sigma) - sigma_FD=1:
+Beta_cut_ECAL-S6			0:1.01311:0.00350454:FD-ECAL-S6
+Beta_cut_ECAL-S6_apprax			0:1:0.00350452:FD-ECAL-S6_apprax
+
