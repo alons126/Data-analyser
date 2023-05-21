@@ -44,6 +44,7 @@ protected:
     std::string HistogramTitle;
     std::string XaxisTitle;
     std::string FinalState;
+    std::string DetectorRegion;
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */
@@ -357,7 +358,7 @@ public:
     std::string GetFinalState() const { return FinalState; }
 //    std::string GetFinalState() { return Histogram1DTitles["FinalState"]; }
 
-    std::string GetDetectorRegion() { return Histogram1DTitles["DetectorRegion"]; }
+    std::string GetDetectorRegion() const { return DetectorRegion; }
 
     int GetkColor() { return LineColor; }
 

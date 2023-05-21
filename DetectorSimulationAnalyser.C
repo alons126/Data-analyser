@@ -95,9 +95,9 @@ void EventAnalyser() {
     bool calculate_1p = true, calculate_1n = true;
     bool calculate_2p = false, calculate_pFDpCD = false, calculate_nFDpCD = false;
 
-    bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 //
-    bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
+    bool Enable_FD_photons = true; // Enforce TL event selection on Rec. plots
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -155,9 +155,10 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Momentum cuts */
-    bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true, apply_momentum_cuts_2p = true, apply_momentum_cuts_1n1p = true;
+    bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true;
+    bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
-    bool apply_neutron_Beta_Fit = true;
+    bool apply_neutron_Beta_Fit = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -181,7 +182,8 @@ void EventAnalyser() {
         }
 
         if (Rec_wTL_ES) {
-            Efficiency_Status = "Eff2_with_mom_th";
+            Efficiency_Status = "Eff2";
+//            Efficiency_Status = "Eff2_with_mom_th";
         } else {
             Efficiency_Status = "Eff1";
         }
@@ -229,7 +231,7 @@ void EventAnalyser() {
 
         apply_Nphe_cut = apply_chi2_cuts_1e_cut = apply_Vz_cuts = apply_dVz_cuts = false;
         apply_ECAL_SF_cuts = apply_ECAL_P_cuts = apply_ECAL_fiducial_cuts = apply_DC_fiducial_cut = false;
-        apply_momentum_cuts_1p = apply_momentum_cuts_1n = apply_momentum_cuts_2p = apply_momentum_cuts_1n1p = false;
+        apply_momentum_cuts_1p = apply_momentum_cuts_1n = apply_momentum_cuts_2p = apply_momentum_cuts_pFDpCD = apply_momentum_cuts_nFDpCD = false;
     } else {
         cout << "Cuts are enabled:\n";
     }
@@ -245,7 +247,8 @@ void EventAnalyser() {
     cout << "apply_momentum_cuts_1p:\t\t" << BoolToString(apply_momentum_cuts_1p) << "\n";
     cout << "apply_momentum_cuts_1n:\t\t" << BoolToString(apply_momentum_cuts_1n) << "\n";
     cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
-    cout << "apply_momentum_cuts_1n1p:\t" << BoolToString(apply_momentum_cuts_1n1p) << "\n";
+    cout << "apply_momentum_cuts_pFDpCD:\t" << BoolToString(apply_momentum_cuts_pFDpCD) << "\n";
+    cout << "apply_momentum_cuts_nFDpCD:\t" << BoolToString(apply_momentum_cuts_nFDpCD) << "\n";
     cout << "apply_neutron_Beta_Fit:\t\t" << BoolToString(apply_neutron_Beta_Fit) << "\n\n\n";
     //</editor-fold>
 
@@ -326,6 +329,7 @@ void EventAnalyser() {
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron momentum cuts (1n, FD only)">
+    /* All sectors */
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
 
@@ -337,6 +341,20 @@ void EventAnalyser() {
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
+
+    /* Specific sectors */
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S1; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file (sector 1).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S1_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta (sector 1).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S2; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file (sector 2).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S2_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta (sector 2).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S3; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file (sector 3).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S3_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta (sector 3).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S4; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file (sector 4).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S4_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta (sector 4).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S5; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file (sector 5).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S5_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta (sector 5).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S6; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file (sector 6).
+    DSCuts n_momentum_cuts_ABF_FD_n_from_ph_S6_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta (sector 6).
     //</editor-fold>
 
     //<editor-fold desc="Truth-level momentum cuts">
@@ -357,7 +375,13 @@ void EventAnalyser() {
     /* Beta cut (1n, FD) */
     DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, 0, 9999);
 
-    DSCuts Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax;
+    DSCuts Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax; // All sectors
+    DSCuts Beta_cut_ABF_FD_n_from_ph_S1, Beta_cut_ABF_FD_n_from_ph_S1_apprax; // Sector 1
+    DSCuts Beta_cut_ABF_FD_n_from_ph_S2, Beta_cut_ABF_FD_n_from_ph_S2_apprax; // Sector 2
+    DSCuts Beta_cut_ABF_FD_n_from_ph_S3, Beta_cut_ABF_FD_n_from_ph_S3_apprax; // Sector 3
+    DSCuts Beta_cut_ABF_FD_n_from_ph_S4, Beta_cut_ABF_FD_n_from_ph_S4_apprax; // Sector 4
+    DSCuts Beta_cut_ABF_FD_n_from_ph_S5, Beta_cut_ABF_FD_n_from_ph_S5_apprax; // Sector 5
+    DSCuts Beta_cut_ABF_FD_n_from_ph_S6, Beta_cut_ABF_FD_n_from_ph_S6_apprax; // Sector 6
 
     DSCuts Beta_cut_ABF_All_FD_neutrals, Beta_cut_ABF_FD_neutrals_noPDG0;
     DSCuts Beta_cut_ABF_All_FD_neutrals_noPCAL, Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL;
@@ -867,11 +891,14 @@ void EventAnalyser() {
 
     //<editor-fold desc="Vertex plots (1e cut)">
     hPlot1D hVx_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{x}^{e}", "V_{x}^{e} histogram", "V_{x}^{e} [cm]",
-                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "01_Electron_Vx", -Vertex_boundary, Vertex_boundary);
+                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "01_Electron_Vx", -Vertex_boundary,
+                                             Vertex_boundary);
     hPlot1D hVy_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{y}^{e}", "V_{y}^{e} histogram", "V_{y}^{e} [cm]",
-                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "02_Electron_Vy", -Vertex_boundary, Vertex_boundary);
+                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "02_Electron_Vy", -Vertex_boundary,
+                                             Vertex_boundary);
     hPlot1D hVz_Electron_1e_cut_FD = hPlot1D("1e cut", "", "V_{z}^{e}", "V_{z}^{e} histogram", "V_{z}^{e} [cm]",
-                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "03_Electron_Vz", -Vertex_boundary, Vertex_boundary);
+                                             directories.Vertex_Directory_map["Vertex_Electron_1e_cut_Vtx_Directory"], "03_Electron_Vz", -Vertex_boundary,
+                                             Vertex_boundary);
 
     hPlot1D hVx_Proton_1e_cut_CD = hPlot1D("1e cut", "CD", "V_{x}^{p}", "V_{x}^{p} histogram", "V_{x}^{p} [cm]",
                                            directories.Vertex_Directory_map["Vertex_Proton_1e_cut_Vtx_Directory"], "01_Proton_Vx", -Vertex_boundary, Vertex_boundary);
@@ -1394,7 +1421,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Beta of neutrons from 'photons' (1n, FD)">
 
-    //<editor-fold desc="Beta of neutrons from 'photons' (1n, FD)">
+    //<editor-fold desc="Beta of neutrons from 'photons' - all sectors (1n, FD)">
     hPlot1D hBeta_n_from_ph_01_1n_FD = hPlot1D("1n", "FD", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
                                                directories.Beta_Directory_map["Neutron_beta_from_ph_01_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
                                                0.98, Beta_dist_uboundary, 65);
@@ -1427,6 +1454,234 @@ void EventAnalyser() {
                                                        directories.Beta_Directory_map["Neutron_beta_from_ph_04_1n_Directory"],
                                                        "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
                                                        Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of neutrons from 'photons' - sector 1 (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD_S1 = hPlot1D("1n", "FD-S1", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_01_S1_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                                  0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S1 = hPlot1D("1n", "FD-S1", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_01_S1_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_02_1n_FD_S1 = hPlot1D("1n", "FD-S1", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_02_S1_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S1 = hPlot1D("1n", "FD-S1", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                          "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_S1_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_03_1n_FD_S1 = hPlot1D("1n", "FD-S1", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_03_S1_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S1 = hPlot1D("1n", "FD-S1", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_03_S1_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_04_1n_FD_S1 = hPlot1D("1n", "FD-S1", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT",
+                                                  "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                                  "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_S1_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S1 = hPlot1D("1n", "FD-S1", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_04_S1_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of neutrons from 'photons' - sector 2 (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD_S2 = hPlot1D("1n", "FD-S2", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_01_S2_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                                  0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S2 = hPlot1D("1n", "FD-S2", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_01_S2_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_02_1n_FD_S2 = hPlot1D("1n", "FD-S2", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_02_S2_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S2 = hPlot1D("1n", "FD-S2", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                          "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_S2_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_03_1n_FD_S2 = hPlot1D("1n", "FD-S2", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_03_S2_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S2 = hPlot1D("1n", "FD-S2", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_03_S2_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_04_1n_FD_S2 = hPlot1D("1n", "FD-S2", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT",
+                                                  "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                                  "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_S2_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S2 = hPlot1D("1n", "FD-S2", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_04_S2_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of neutrons from 'photons' - sector 3 (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD_S3 = hPlot1D("1n", "FD-S3", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_01_S3_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                                  0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S3 = hPlot1D("1n", "FD-S3", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_01_S3_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_02_1n_FD_S3 = hPlot1D("1n", "FD-S3", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_02_S3_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S3 = hPlot1D("1n", "FD-S3", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                          "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_S3_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_03_1n_FD_S3 = hPlot1D("1n", "FD-S3", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_03_S3_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S3 = hPlot1D("1n", "FD-S3", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_03_S3_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_04_1n_FD_S3 = hPlot1D("1n", "FD-S3", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT",
+                                                  "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                                  "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_S3_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S3 = hPlot1D("1n", "FD-S3", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_04_S3_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of neutrons from 'photons' - sector 4 (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD_S4 = hPlot1D("1n", "FD-S4", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_01_S4_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                                  0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S4 = hPlot1D("1n", "FD-S4", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_01_S4_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_02_1n_FD_S4 = hPlot1D("1n", "FD-S4", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_02_S4_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S4 = hPlot1D("1n", "FD-S4", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                          "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_S4_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_03_1n_FD_S4 = hPlot1D("1n", "FD-S4", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_03_S4_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S4 = hPlot1D("1n", "FD-S4", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_03_S4_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_04_1n_FD_S4 = hPlot1D("1n", "FD-S4", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT",
+                                                  "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                                  "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_S4_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S4 = hPlot1D("1n", "FD-S4", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_04_S4_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of neutrons from 'photons' - sector 5 (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD_S5 = hPlot1D("1n", "FD-S5", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_01_S5_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                                  0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S5 = hPlot1D("1n", "FD-S5", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_01_S5_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_02_1n_FD_S5 = hPlot1D("1n", "FD-S5", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_02_S5_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S5 = hPlot1D("1n", "FD-S5", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                          "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_S5_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_03_1n_FD_S5 = hPlot1D("1n", "FD-S5", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_03_S5_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S5 = hPlot1D("1n", "FD-S5", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_03_S5_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_04_1n_FD_S5 = hPlot1D("1n", "FD-S5", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT",
+                                                  "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                                  "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_S5_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S5 = hPlot1D("1n", "FD-S5", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_04_S5_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+    //</editor-fold>
+
+    //<editor-fold desc="Beta of neutrons from 'photons' - sector 6 (1n, FD)">
+    hPlot1D hBeta_n_from_ph_01_1n_FD_S6 = hPlot1D("1n", "FD-S6", "#beta of n from '#gamma'", "Neutron #beta from 'photons'", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_01_S6_1n_Directory"], "01_Beta_Neutron_from_photons_1n",
+                                                  0.98, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S6 = hPlot1D("1n", "FD-S6", "#beta of n from '#gamma' - ZOOMOUT", "Neutron #beta from 'photons' - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_01_S6_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_02_1n_FD_S6 = hPlot1D("1n", "FD-S6", "Neutron #beta from 'photons' - !PCAL", "Neutron #beta from 'photons' w/o PCAL hit", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_02_S6_1n_Directory"], "01_Beta_Neutron_from_photons_noPCAL_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S6 = hPlot1D("1n", "FD-S6", "Neutron #beta from 'photons' - !PCAL - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL hit - ZOOMOUT",
+                                                          "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_02_S6_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_1n_ZOOMOUT", Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_03_1n_FD_S6 = hPlot1D("1n", "FD-S6", "Neutron #beta from 'photons' - !PCAL & ECIN", "Neutron #beta from 'photons' w/o PCAL & w/ECIN", "#beta",
+                                                  directories.Beta_Directory_map["Neutron_beta_from_ph_03_S6_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n",
+                                                  Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S6 = hPlot1D("1n", "FD-S6", "Neutron #beta from 'photons' - !PCAL & ECIN - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL & w/ECIN - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_03_S6_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_yesECIN_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
+
+    hPlot1D hBeta_n_from_ph_04_1n_FD_S6 = hPlot1D("1n", "FD-S6", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT",
+                                                  "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT",
+                                                  "#beta", directories.Beta_Directory_map["Neutron_beta_from_ph_04_S6_1n_Directory"],
+                                                  "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n", Beta_dist_lboundary, Beta_dist_uboundary, 65);
+    hPlot1D hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S6 = hPlot1D("1n", "FD-S6", "Neutron #beta from 'photons' - !PCAL & !ECIN & ECOUT - ZOOMOUT",
+                                                          "Neutron #beta from 'photons' w/o PCAL/ECIN & w/ECOUT - ZOOMOUT", "#beta",
+                                                          directories.Beta_Directory_map["Neutron_beta_from_ph_04_S6_1n_Directory"],
+                                                          "01_Beta_Neutron_from_photons_noPCAL_noECIN_yesECOUT_1n_ZOOMOUT",
+                                                          Beta_dist_ZOOMOUT_lboundary, Beta_dist_ZOOMOUT_uboundary, 65);
     //</editor-fold>
 
     //<editor-fold desc="Beta of neutrons from 'photons' for different variables (1n, FD)">
@@ -3723,7 +3978,8 @@ void EventAnalyser() {
         }
 
         if (!apply_neutron_Beta_Fit) {
-            /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
+
+            //<editor-fold desc="Setting neutron momentum cut before beta fit - all sectors (i.e., no cut!)">
             n_momentum_cuts_ABF_FD_n_from_ph = DSCuts("Momentum_cuts_ECAL", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL_apprax", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
 
@@ -3735,8 +3991,43 @@ void EventAnalyser() {
             n_momentum_cuts_ABF_FD_noPCAL_wECIN_noPDG0 = DSCuts("Momentum_cuts_ECIN_noPDG0", "FD-ECIN", "", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT = DSCuts("Momentum_cuts_ECOUT", "FD-ECOUT", "", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_noPCAL_noECIN_wECOUT_noPDG0 = DSCuts("Momentum_cuts_ECOUT_noPDG0", "FD-ECOUT", "", "", 0, n_mom_th.GetLowerCut(), 9999);
+            //</editor-fold>
 
-            /* Setting neutron beta cut */
+            //<editor-fold desc="Setting neutron momentum cut before beta fit - specific sectors (i.e., no cut!)">
+            /* Setting neutron momentum cut before beta fit - specific sectors (i.e., no cut!) */
+            n_momentum_cuts_ABF_FD_n_from_ph_S1 = DSCuts("Momentum_cuts_ECAL-S1", "FD-ECAL-S1", "Neutron", "", 0,
+                                                         n_mom_th.GetLowerCut(), 9999); // S1
+            n_momentum_cuts_ABF_FD_n_from_ph_S1_apprax = DSCuts("Momentum_cuts_ECAL-S1_apprax", "FD-ECAL-S1_apprax", "Neutron", "", 0,
+                                                                n_mom_th.GetLowerCut(), 9999); // S1
+
+            n_momentum_cuts_ABF_FD_n_from_ph_S2 = DSCuts("Momentum_cuts_ECAL-S2", "FD-ECAL-S2", "Neutron", "", 0,
+                                                         n_mom_th.GetLowerCut(), 9999); // S2
+            n_momentum_cuts_ABF_FD_n_from_ph_S2_apprax = DSCuts("Momentum_cuts_ECAL-S2_apprax", "FD-ECAL-S2_apprax", "Neutron", "", 0,
+                                                                n_mom_th.GetLowerCut(), 9999); // S2
+
+            n_momentum_cuts_ABF_FD_n_from_ph_S3 = DSCuts("Momentum_cuts_ECAL-S3", "FD-ECAL-S3", "Neutron", "", 0,
+                                                         n_mom_th.GetLowerCut(), 9999); // S3
+            n_momentum_cuts_ABF_FD_n_from_ph_S3_apprax = DSCuts("Momentum_cuts_ECAL-S3_apprax", "FD-ECAL-S3_apprax", "Neutron", "", 0,
+                                                                n_mom_th.GetLowerCut(), 9999); // S3
+
+            n_momentum_cuts_ABF_FD_n_from_ph_S4 = DSCuts("Momentum_cuts_ECAL-S4", "FD-ECAL-S4", "Neutron", "", 0,
+                                                         n_mom_th.GetLowerCut(), 9999); // S4
+            n_momentum_cuts_ABF_FD_n_from_ph_S4_apprax = DSCuts("Momentum_cuts_ECAL-S4_apprax", "FD-ECAL-S4_apprax", "Neutron", "", 0,
+                                                                n_mom_th.GetLowerCut(), 9999); // S4
+
+            n_momentum_cuts_ABF_FD_n_from_ph_S5 = DSCuts("Momentum_cuts_ECAL-S5", "FD-ECAL-S5", "Neutron", "", 0,
+                                                         n_mom_th.GetLowerCut(), 9999); // S5
+            n_momentum_cuts_ABF_FD_n_from_ph_S5_apprax = DSCuts("Momentum_cuts_ECAL-S5_apprax", "FD-ECAL-S5_apprax", "Neutron", "", 0,
+                                                                n_mom_th.GetLowerCut(), 9999); // S5
+
+            n_momentum_cuts_ABF_FD_n_from_ph_S6 = DSCuts("Momentum_cuts_ECAL-S6", "FD-ECAL-S6", "Neutron", "", 0,
+                                                         n_mom_th.GetLowerCut(), 9999); // S6
+            n_momentum_cuts_ABF_FD_n_from_ph_S6_apprax = DSCuts("Momentum_cuts_ECAL-S6_apprax", "FD-ECAL-S6_apprax", "Neutron", "", 0,
+                                                                n_mom_th.GetLowerCut(), 9999); // S6
+            //</editor-fold>
+
+            //<editor-fold desc="Setting neutron beta cut - all sectors">
+            /* Setting neutron beta cut - all sectors */
             Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
             Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
 
@@ -3748,6 +4039,29 @@ void EventAnalyser() {
             Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_wECIN = DSCuts("Beta_cut_FD_neutrals_noPDG0_noPCAL_wECIN", "FD", "", "1n", 1, -9999, 9999);
             Beta_cut_ABF_All_FD_neutrals_noPCAL_noECIN_wECOUT = DSCuts("Beta_cut_All_FD_neutrals_noPCAL_noECIN_wECOUT", "FD", "", "1n", 1, -9999, 9999);
             Beta_cut_ABF_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT = DSCuts("Beta_cut_FD_neutrals_noPDG0_noPCAL_noECIN_wECOUT", "FD", "", "1n", 1, -9999, 9999);
+            //</editor-fold>
+
+            //<editor-fold desc="Setting neutron beta cut - specific sectors">
+            /* Setting neutron beta cut - specific sectors */
+            Beta_cut_ABF_FD_n_from_ph_S1 = DSCuts("Beta_cut_ECAL-S1", "FD-ECAL-S1", "", "1n", 1, -9999, 9999); // S1
+            Beta_cut_ABF_FD_n_from_ph_S1_apprax = DSCuts("Beta_cut_ECAL-S1_apprax", "FD-ECAL-S1_apprax", "", "1n", 1, -9999, 9999); // S1
+
+            Beta_cut_ABF_FD_n_from_ph_S2 = DSCuts("Beta_cut_ECAL-S2", "FD-ECAL-S2", "", "1n", 1, -9999, 9999); // S2
+            Beta_cut_ABF_FD_n_from_ph_S2_apprax = DSCuts("Beta_cut_ECAL-S2_apprax", "FD-ECAL-S2_apprax", "", "1n", 1, -9999, 9999); // S2
+
+            Beta_cut_ABF_FD_n_from_ph_S3 = DSCuts("Beta_cut_ECAL-S3", "FD-ECAL-S3", "", "1n", 1, -9999, 9999); // S3
+            Beta_cut_ABF_FD_n_from_ph_S3_apprax = DSCuts("Beta_cut_ECAL-S3_apprax", "FD-ECAL-S3_apprax", "", "1n", 1, -9999, 9999); // S3
+
+            Beta_cut_ABF_FD_n_from_ph_S4 = DSCuts("Beta_cut_ECAL-S4", "FD-ECAL-S4", "", "1n", 1, -9999, 9999); // S4
+            Beta_cut_ABF_FD_n_from_ph_S4_apprax = DSCuts("Beta_cut_ECAL-S4_apprax", "FD-ECAL-S4_apprax", "", "1n", 1, -9999, 9999); // S4
+
+            Beta_cut_ABF_FD_n_from_ph_S5 = DSCuts("Beta_cut_ECAL-S5", "FD-ECAL-S5", "", "1n", 1, -9999, 9999); // S5
+            Beta_cut_ABF_FD_n_from_ph_S5_apprax = DSCuts("Beta_cut_ECAL-S5_apprax", "FD-ECAL-S5_apprax", "", "1n", 1, -9999, 9999); // S5
+
+            Beta_cut_ABF_FD_n_from_ph_S6 = DSCuts("Beta_cut_ECAL-S6", "FD-ECAL-S6", "", "1n", 1, -9999, 9999); // S6
+            Beta_cut_ABF_FD_n_from_ph_S6_apprax = DSCuts("Beta_cut_ECAL-S6_apprax", "FD-ECAL-S6_apprax", "", "1n", 1, -9999, 9999); // S6
+            //</editor-fold>
+
         } else if (apply_neutron_Beta_Fit) {
             cout << "Loading fitted Beta cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
@@ -6138,6 +6452,7 @@ void EventAnalyser() {
                             if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD. Exiting...\n\n", exit(EXIT_FAILURE); }
                             if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron. Exiting...\n\n", exit(EXIT_FAILURE); }
 
+                            //<editor-fold desc="Filling beta of neutrons from 'photons' - all sectors">
                             hBeta_n_from_ph_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
                             hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
                             hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
@@ -6163,9 +6478,191 @@ void EventAnalyser() {
                             }
                             //</editor-fold>
 
+                            //</editor-fold>
 
+                            //<editor-fold desc="Filling beta of neutrons from 'photons' - specific sectors">
+                            if (allParticles[i]->getSector() == 1) {
 
+                                //<editor-fold desc="Sector 1">
+                                hBeta_n_from_ph_01_1n_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S1.hFill(allParticles[i]->par()->getBeta());
+//                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD_S1.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
 
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL (sector 1)">
+                                if (!inPCALtmp) {
+                                    hBeta_n_from_ph_02_1n_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN (sector 1)">
+                                if (!inPCALtmp && inECINtmp) {
+                                    hBeta_n_from_ph_03_1n_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT (sector 1)">
+                                if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                    hBeta_n_from_ph_04_1n_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S1.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //</editor-fold>
+
+                            } else if (allParticles[i]->getSector() == 2) {
+
+                                //<editor-fold desc="Sector 2">
+                                hBeta_n_from_ph_01_1n_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S2.hFill(allParticles[i]->par()->getBeta());
+//                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD_S2.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL (sector 2)">
+                                if (!inPCALtmp) {
+                                    hBeta_n_from_ph_02_1n_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN (sector 2)">
+                                if (!inPCALtmp && inECINtmp) {
+                                    hBeta_n_from_ph_03_1n_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT (sector 2)">
+                                if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                    hBeta_n_from_ph_04_1n_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S2.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //</editor-fold>
+
+                            } else if (allParticles[i]->getSector() == 3) {
+
+                                //<editor-fold desc="Sector 3">
+                                hBeta_n_from_ph_01_1n_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S3.hFill(allParticles[i]->par()->getBeta());
+//                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD_S3.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL (sector 3)">
+                                if (!inPCALtmp) {
+                                    hBeta_n_from_ph_02_1n_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN (sector 3)">
+                                if (!inPCALtmp && inECINtmp) {
+                                    hBeta_n_from_ph_03_1n_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT (sector 3)">
+                                if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                    hBeta_n_from_ph_04_1n_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S3.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //</editor-fold>
+
+                            } else if (allParticles[i]->getSector() == 4) {
+
+                                //<editor-fold desc="Sector 4">
+                                hBeta_n_from_ph_01_1n_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S4.hFill(allParticles[i]->par()->getBeta());
+//                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD_S4.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL (sector 4)">
+                                if (!inPCALtmp) {
+                                    hBeta_n_from_ph_02_1n_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN (sector 4)">
+                                if (!inPCALtmp && inECINtmp) {
+                                    hBeta_n_from_ph_03_1n_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT (sector 4)">
+                                if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                    hBeta_n_from_ph_04_1n_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S4.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //</editor-fold>
+
+                            } else if (allParticles[i]->getSector() == 5) {
+
+                                //<editor-fold desc="Sector 5">
+                                hBeta_n_from_ph_01_1n_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S5.hFill(allParticles[i]->par()->getBeta());
+//                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD_S5.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL (sector 5)">
+                                if (!inPCALtmp) {
+                                    hBeta_n_from_ph_02_1n_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN (sector 5)">
+                                if (!inPCALtmp && inECINtmp) {
+                                    hBeta_n_from_ph_03_1n_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT (sector 5)">
+                                if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                    hBeta_n_from_ph_04_1n_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S5.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //</editor-fold>
+
+                            } else if (allParticles[i]->getSector() == 6) {
+
+                                //<editor-fold desc="Sector 6">
+                                hBeta_n_from_ph_01_1n_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S6.hFill(allParticles[i]->par()->getBeta());
+//                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD_S6.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL (sector 6)">
+                                if (!inPCALtmp) {
+                                    hBeta_n_from_ph_02_1n_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN (sector 6)">
+                                if (!inPCALtmp && inECINtmp) {
+                                    hBeta_n_from_ph_03_1n_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT (sector 6)">
+                                if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                    hBeta_n_from_ph_04_1n_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                    hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S6.hFill(allParticles[i]->par()->getBeta());
+                                }
+                                //</editor-fold>
+
+                                //</editor-fold>
+
+                            }
+                            //</editor-fold>
 
                             //<editor-fold desc="Beta of neutrons from 'photons' for different variables">
                             hBeta_nfph_vs_numOfFDph_1n_FD.hFill(PhotonsFD_ind.size(), allParticles[i]->par()->getBeta(), Weight);
@@ -6903,7 +7400,7 @@ void EventAnalyser() {
 
                 /* Filling momentum histograms */
                 // Electrton momentum (2p):
-                if (electrons[Electron_ind.at(0)]->getRegion() == FD) {                    hP_e_2p_FD.hFill(P_e, Weight);                }
+                if (electrons[Electron_ind.at(0)]->getRegion() == FD) { hP_e_2p_FD.hFill(P_e, Weight); }
 
                 for (int i = 0; i < Ne; i++) {
                     if (electrons[i]->getRegion() == FD) { hP_e_BC_2p_FD.hFill(P_e, Weight); } // before mom cuts
@@ -7806,7 +8303,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Beta plots (1n)">
 
-        //<editor-fold desc="Beta plots (1n)">
+        //<editor-fold desc="Beta of neutrons from 'photons' - all sectors (1n)">
         hBeta_n_from_ph_01_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_02_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
@@ -7870,7 +8367,121 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-        //<editor-fold desc="Beta plots (1n)">
+        //<editor-fold desc="Beta of neutrons from 'photons' - sector 1 (1n)">
+        hBeta_n_from_ph_01_1n_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S1.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD_S1, "!PCAL", hBeta_n_from_ph_03_1n_FD_S1, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD_S1, "!PCAL && !ECIN && ECOUT");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph_S1, n_momentum_cuts_ABF_FD_n_from_ph_S1, hBeta_n_from_ph_01_1n_FD_S1, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_S1_apprax, n_momentum_cuts_ABF_FD_n_from_ph_S1_apprax, hBeta_n_from_ph_01_1n_FD_S1, plots);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta of neutrons from 'photons' - sector 2 (1n)">
+        hBeta_n_from_ph_01_1n_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S2.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD_S2, "!PCAL", hBeta_n_from_ph_03_1n_FD_S2, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD_S2, "!PCAL && !ECIN && ECOUT");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph_S2, n_momentum_cuts_ABF_FD_n_from_ph_S2, hBeta_n_from_ph_01_1n_FD_S2, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_S2_apprax, n_momentum_cuts_ABF_FD_n_from_ph_S2_apprax, hBeta_n_from_ph_01_1n_FD_S2, plots);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta of neutrons from 'photons' - sector 3 (1n)">
+        hBeta_n_from_ph_01_1n_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S3.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD_S3, "!PCAL", hBeta_n_from_ph_03_1n_FD_S3, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD_S3, "!PCAL && !ECIN && ECOUT");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph_S3, n_momentum_cuts_ABF_FD_n_from_ph_S3, hBeta_n_from_ph_01_1n_FD_S3, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_S3_apprax, n_momentum_cuts_ABF_FD_n_from_ph_S3_apprax, hBeta_n_from_ph_01_1n_FD_S3, plots);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta of neutrons from 'photons' - sector 4 (1n)">
+        hBeta_n_from_ph_01_1n_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S4.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD_S4, "!PCAL", hBeta_n_from_ph_03_1n_FD_S4, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD_S4, "!PCAL && !ECIN && ECOUT");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph_S4, n_momentum_cuts_ABF_FD_n_from_ph_S4, hBeta_n_from_ph_01_1n_FD_S4, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_S4_apprax, n_momentum_cuts_ABF_FD_n_from_ph_S4_apprax, hBeta_n_from_ph_01_1n_FD_S4, plots);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta of neutrons from 'photons' - sector 5 (1n)">
+        hBeta_n_from_ph_01_1n_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S5.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD_S5, "!PCAL", hBeta_n_from_ph_03_1n_FD_S5, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD_S5, "!PCAL && !ECIN && ECOUT");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph_S5, n_momentum_cuts_ABF_FD_n_from_ph_S5, hBeta_n_from_ph_01_1n_FD_S5, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_S5_apprax, n_momentum_cuts_ABF_FD_n_from_ph_S5_apprax, hBeta_n_from_ph_01_1n_FD_S5, plots);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta of neutrons from 'photons' - sector 6 (1n)">
+        hBeta_n_from_ph_01_1n_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_01_1n_ZOOMOUT_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_02_1n_ZOOMOUT_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_03_1n_ZOOMOUT_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+        hBeta_n_from_ph_04_1n_ZOOMOUT_FD_S6.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        StackPlot3(SampleName, plots,
+                   hBeta_n_from_ph_02_1n_FD_S6, "!PCAL", hBeta_n_from_ph_03_1n_FD_S6, "!PCAL && ECIN", hBeta_n_from_ph_04_1n_FD_S6, "!PCAL && !ECIN && ECOUT");
+
+        if (!apply_neutron_Beta_Fit) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph_S6, n_momentum_cuts_ABF_FD_n_from_ph_S6, hBeta_n_from_ph_01_1n_FD_S6, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_S6_apprax, n_momentum_cuts_ABF_FD_n_from_ph_S6_apprax, hBeta_n_from_ph_01_1n_FD_S6, plots);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Beta of neutrons from 'photons' for different variables (1n)">
         hBeta_nfph_vs_numOfFDph_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
         hBeta_nfph_vs_Theta_n_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
         hBeta_nfph_vs_Phi_n_1n_FD.hDrawAndSave(SampleName, c1, plots, false);
@@ -9595,6 +10206,102 @@ void EventAnalyser() {
 
         Fitted_n_Mom_Cuts << "\n\n";
 
+        //<editor-fold desc="Neutron momentum cuts by sector">
+
+        //<editor-fold desc="Neutron momentum cuts for sector 1">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts for sector 1 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Neutron_Momentum_Cuts_S1[] = {n_momentum_cuts_ABF_FD_n_from_ph_S1, n_momentum_cuts_ABF_FD_n_from_ph_S1_apprax};
+        int Neutron_Momentum_Cuts_S1_length = 2;
+
+        for (int i = 0; i < Neutron_Momentum_Cuts_S1_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_S1[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_S1[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_S1[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_S1[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_S1[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron momentum cuts for sector 2">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts for sector 2 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Neutron_Momentum_Cuts_S2[] = {n_momentum_cuts_ABF_FD_n_from_ph_S2, n_momentum_cuts_ABF_FD_n_from_ph_S2_apprax};
+        int Neutron_Momentum_Cuts_S2_length = 2;
+
+        for (int i = 0; i < Neutron_Momentum_Cuts_S2_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_S2[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_S2[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_S2[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_S2[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_S2[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron momentum cuts for sector 3">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts for sector 3 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Neutron_Momentum_Cuts_S3[] = {n_momentum_cuts_ABF_FD_n_from_ph_S3, n_momentum_cuts_ABF_FD_n_from_ph_S3_apprax};
+        int Neutron_Momentum_Cuts_S3_length = 2;
+
+        for (int i = 0; i < Neutron_Momentum_Cuts_S3_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_S3[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_S3[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_S3[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_S3[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_S3[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron momentum cuts for sector 4">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts for sector 4 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Neutron_Momentum_Cuts_S4[] = {n_momentum_cuts_ABF_FD_n_from_ph_S4, n_momentum_cuts_ABF_FD_n_from_ph_S4_apprax};
+        int Neutron_Momentum_Cuts_S4_length = 2;
+
+        for (int i = 0; i < Neutron_Momentum_Cuts_S4_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_S4[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_S4[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_S4[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_S4[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_S4[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron momentum cuts for sector 5">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts for sector 5 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Neutron_Momentum_Cuts_S5[] = {n_momentum_cuts_ABF_FD_n_from_ph_S5, n_momentum_cuts_ABF_FD_n_from_ph_S5_apprax};
+        int Neutron_Momentum_Cuts_S5_length = 2;
+
+        for (int i = 0; i < Neutron_Momentum_Cuts_S5_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_S5[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_S5[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_S5[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_S5[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_S5[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron momentum cuts for sector 6">
+        Fitted_n_Mom_Cuts << "# Neutron momentum cuts for sector 6 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Neutron_Momentum_Cuts_S6[] = {n_momentum_cuts_ABF_FD_n_from_ph_S6, n_momentum_cuts_ABF_FD_n_from_ph_S6_apprax};
+        int Neutron_Momentum_Cuts_S6_length = 2;
+
+        for (int i = 0; i < Neutron_Momentum_Cuts_S6_length; i++) {
+            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts_S6[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts_S6[i].GetPartPDG() << ":"
+                              << Neutron_Momentum_Cuts_S6[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts_S6[i].GetUpperCut() << ":"
+                              << Neutron_Momentum_Cuts_S6[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //</editor-fold>
+
+        Fitted_n_Mom_Cuts << "\n\n";
+
         //<editor-fold desc="Beta std by detector">
         Fitted_n_Mom_Cuts << "# Beta std by detector (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
 
@@ -9609,6 +10316,102 @@ void EventAnalyser() {
             Fitted_n_Mom_Cuts << Beta_cut_Fits[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits[i].GetPartPDG() << ":" << Beta_cut_Fits[i].Cuts.at(0) << ":"
                               << Beta_cut_Fits[i].GetUpperCut() << ":" << Beta_cut_Fits[i].GetRegion() << "\n";
         }
+        //</editor-fold>
+
+        Fitted_n_Mom_Cuts << "\n\n";
+
+        //<editor-fold desc="Beta std by sector">
+
+        //<editor-fold desc="Beta std for sector 1">
+        Fitted_n_Mom_Cuts << "# Beta std for sector 1 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits_S1[] = {Beta_cut_ABF_FD_n_from_ph_S1, Beta_cut_ABF_FD_n_from_ph_S1_apprax};
+
+        int Beta_cut_Fits_S1_length = 2;
+
+        for (int i = 0; i < Beta_cut_Fits_S1_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits_S1[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits_S1[i].GetPartPDG() << ":" << Beta_cut_Fits_S1[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits_S1[i].GetUpperCut() << ":" << Beta_cut_Fits_S1[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Beta std for sector 2">
+        Fitted_n_Mom_Cuts << "# Beta std for sector 2 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits_S2[] = {Beta_cut_ABF_FD_n_from_ph_S2, Beta_cut_ABF_FD_n_from_ph_S2_apprax};
+
+        int Beta_cut_Fits_S2_length = 2;
+
+        for (int i = 0; i < Beta_cut_Fits_S2_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits_S2[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits_S2[i].GetPartPDG() << ":" << Beta_cut_Fits_S2[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits_S2[i].GetUpperCut() << ":" << Beta_cut_Fits_S2[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Beta std for sector 3">
+        Fitted_n_Mom_Cuts << "# Beta std for sector 3 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits_S3[] = {Beta_cut_ABF_FD_n_from_ph_S3, Beta_cut_ABF_FD_n_from_ph_S3_apprax};
+
+        int Beta_cut_Fits_S3_length = 2;
+
+        for (int i = 0; i < Beta_cut_Fits_S3_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits_S3[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits_S3[i].GetPartPDG() << ":" << Beta_cut_Fits_S3[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits_S3[i].GetUpperCut() << ":" << Beta_cut_Fits_S3[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Beta std for sector 4">
+        Fitted_n_Mom_Cuts << "# Beta std for sector 4 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits_S4[] = {Beta_cut_ABF_FD_n_from_ph_S4, Beta_cut_ABF_FD_n_from_ph_S4_apprax};
+
+        int Beta_cut_Fits_S4_length = 2;
+
+        for (int i = 0; i < Beta_cut_Fits_S4_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits_S4[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits_S4[i].GetPartPDG() << ":" << Beta_cut_Fits_S4[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits_S4[i].GetUpperCut() << ":" << Beta_cut_Fits_S4[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Beta std for sector 5">
+        Fitted_n_Mom_Cuts << "# Beta std for sector 5 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits_S5[] = {Beta_cut_ABF_FD_n_from_ph_S5, Beta_cut_ABF_FD_n_from_ph_S5_apprax};
+
+        int Beta_cut_Fits_S5_length = 2;
+
+        for (int i = 0; i < Beta_cut_Fits_S5_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits_S5[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits_S5[i].GetPartPDG() << ":" << Beta_cut_Fits_S5[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits_S5[i].GetUpperCut() << ":" << Beta_cut_Fits_S5[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
+        //<editor-fold desc="Beta std for sector 6">
+        Fitted_n_Mom_Cuts << "# Beta std for sector 6 (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        DSCuts Beta_cut_Fits_S6[] = {Beta_cut_ABF_FD_n_from_ph_S6, Beta_cut_ABF_FD_n_from_ph_S6_apprax};
+
+        int Beta_cut_Fits_S6_length = 2;
+
+        for (int i = 0; i < Beta_cut_Fits_S6_length; i++) {
+            Fitted_n_Mom_Cuts << Beta_cut_Fits_S6[i].GetCutVariable() << "\t\t\t" << Beta_cut_Fits_S6[i].GetPartPDG() << ":" << Beta_cut_Fits_S6[i].Cuts.at(0) << ":"
+                              << Beta_cut_Fits_S6[i].GetUpperCut() << ":" << Beta_cut_Fits_S6[i].GetRegion() << "\n";
+        }
+
+        Fitted_n_Mom_Cuts << "\n";
+        //</editor-fold>
+
         //</editor-fold>
 
         Fitted_n_Mom_Cuts.close();
@@ -9794,7 +10597,8 @@ void EventAnalyser() {
     myLogFile << "apply_momentum_cuts_1p = " << BoolToString(apply_momentum_cuts_1p) << "\n";
     myLogFile << "apply_momentum_cuts_1n = " << BoolToString(apply_momentum_cuts_1n) << "\n";
     myLogFile << "apply_momentum_cuts_2p = " << BoolToString(apply_momentum_cuts_2p) << "\n";
-    myLogFile << "apply_momentum_cuts_1n1p = " << BoolToString(apply_momentum_cuts_1n1p) << "\n\n";
+    myLogFile << "apply_momentum_cuts_pFDpCD = " << BoolToString(apply_momentum_cuts_pFDpCD) << "\n";
+    myLogFile << "apply_momentum_cuts_nFDpCD = " << BoolToString(apply_momentum_cuts_nFDpCD) << "\n\n";
 
     myLogFile << "apply_neutron_Beta_Fit = " << BoolToString(apply_neutron_Beta_Fit) << "\n\n";
     //</editor-fold>

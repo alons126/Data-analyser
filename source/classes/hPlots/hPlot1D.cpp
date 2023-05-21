@@ -25,6 +25,7 @@ hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dReg
     Histogram1DTitles["FinalState"] = fState;
     FinalState = fState;
     Histogram1DTitles["DetectorRegion"] = dRegion;
+    DetectorRegion = dRegion;
     Histogram1DTitles["XaxisTitle"] = xat;
     XaxisTitle = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -46,6 +47,7 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
     Histogram1DTitles["FinalState"] = fState;
     FinalState = fState;
     Histogram1DTitles["DetectorRegion"] = dRegion;
+    DetectorRegion = dRegion;
     Histogram1DTitles["XaxisTitle"] = xat;
     XaxisTitle = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -65,6 +67,7 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
     Histogram1DTitles["FinalState"] = fState;
     FinalState = fState;
     Histogram1DTitles["DetectorRegion"] = dRegion;
+    DetectorRegion = dRegion;
     Histogram1DTitles["XaxisTitle"] = xat;
     XaxisTitle = xat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
