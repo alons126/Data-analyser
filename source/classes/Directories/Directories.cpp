@@ -499,10 +499,35 @@ Directories::Directories(std::string plots_path) {
                                                            Find(Angle_Daughter_Folders, "04_2p/03_Theta_e_VS_Phi_e_2p_plots") + "/";
     Angle_Directory_map["Opening_angle_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                         Find(Angle_Daughter_Folders, "04_2p/04_Opening_angles_2p_plots") + "/";
-    Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                                  Find(Angle_Daughter_Folders, "06_2p/04_Opening_angles_2p_plots/01_Theta_p1_p2_by_interaction") + "/";
+    Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                  Find(Angle_Daughter_Folders, "04_2p/04_Opening_angles_2p_plots/00_Theta_p1_p2_by_interaction") + "/";
     Angle_Directory_map["Ghost_tracks_handling_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                                 Find(Angle_Daughter_Folders, "04_2p/05_Ghost_tracks_handling_2p_plots") + "/";
+
+    Angle_Directory_map["Theta_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                      Find(Angle_Daughter_Folders, "05_pFDpCD/01_Theta_e_pFDpCD_plots") + "/";
+    Angle_Directory_map["Phi_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                    Find(Angle_Daughter_Folders, "05_pFDpCD/02_Phi_e_pFDpCD_plots") + "/";
+    Angle_Directory_map["Theta_e_VS_Phi_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                               Find(Angle_Daughter_Folders, "05_pFDpCD/03_Theta_e_VS_Phi_e_pFDpCD_plots") + "/";
+    Angle_Directory_map["Theta_pFD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                        Find(Angle_Daughter_Folders, "05_pFDpCD/04_Theta_pFD_pFDpCD_plots") + "/";
+    Angle_Directory_map["Phi_pFD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                      Find(Angle_Daughter_Folders, "05_pFDpCD/05_Phi_pFD_pFDpCD_plots") + "/";
+    Angle_Directory_map["Theta_pFD_VS_Phi_pFD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                   Find(Angle_Daughter_Folders, "05_pFDpCD/06_Theta_pFD_VS_Phi_pFD_pFDpCD_plots") + "/";
+    Angle_Directory_map["Theta_pCD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                        Find(Angle_Daughter_Folders, "05_pFDpCD/07_Theta_pCD_pFDpCD_plots") + "/";
+    Angle_Directory_map["Phi_pCD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                      Find(Angle_Daughter_Folders, "05_pFDpCD/08_Phi_pCD_pFDpCD_plots") + "/";
+    Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                   Find(Angle_Daughter_Folders, "05_pFDpCD/09_Theta_pCD_VS_Phi_pCD_pFDpCD_plots") + "/";
+    Angle_Directory_map["Opening_angles_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                             Find(Angle_Daughter_Folders, "05_pFDpCD/10_Opening_angles_pFDpCD_plots") + "/";
+    Angle_Directory_map["Opening_angle_by_interaction_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                       Find(Angle_Daughter_Folders, "05_pFDpCD/10_Opening_angles_pFDpCD_plots/00_Theta_p1_p2_by_interaction") + "/";
+    Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                    Find(Angle_Daughter_Folders, "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots") + "/";
 
     Angle_Directory_map["Theta_e_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                       Find(Angle_Daughter_Folders, "06_nFDpCD/01_Theta_e_nFDpCD_plots") + "/";
@@ -526,29 +551,6 @@ Directories::Directories(std::string plots_path) {
                                                              Find(Angle_Daughter_Folders, "06_nFDpCD/10_Opening_angles_nFDpCD_plots") + "/";
     Angle_Directory_map["Neutron_veto_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                            Find(Angle_Daughter_Folders, "06_nFDpCD/11_Neutron_veto_nFDpCD_plots") + "/";
-
-    Angle_Directory_map["Theta_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                      Find(Angle_Daughter_Folders, "05_pFDpCD/01_Theta_e_pFDpCD_plots") + "/";
-    Angle_Directory_map["Phi_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                    Find(Angle_Daughter_Folders, "05_pFDpCD/02_Phi_e_pFDpCD_plots") + "/";
-    Angle_Directory_map["Theta_e_VS_Phi_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                               Find(Angle_Daughter_Folders, "05_pFDpCD/03_Theta_e_VS_Phi_e_pFDpCD_plots") + "/";
-    Angle_Directory_map["Theta_pFD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                        Find(Angle_Daughter_Folders, "05_pFDpCD/04_Theta_pFD_pFDpCD_plots") + "/";
-    Angle_Directory_map["Phi_pFD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                      Find(Angle_Daughter_Folders, "05_pFDpCD/05_Phi_pFD_pFDpCD_plots") + "/";
-    Angle_Directory_map["Theta_pFD_VS_Phi_pFD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                                   Find(Angle_Daughter_Folders, "05_pFDpCD/06_Theta_pFD_VS_Phi_pFD_pFDpCD_plots") + "/";
-    Angle_Directory_map["Theta_pCD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                        Find(Angle_Daughter_Folders, "05_pFDpCD/07_Theta_pCD_pFDpCD_plots") + "/";
-    Angle_Directory_map["Phi_pCD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                      Find(Angle_Daughter_Folders, "05_pFDpCD/08_Phi_pCD_pFDpCD_plots") + "/";
-    Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                                   Find(Angle_Daughter_Folders, "05_pFDpCD/09_Theta_pCD_VS_Phi_pCD_pFDpCD_plots") + "/";
-    Angle_Directory_map["Opening_angles_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                             Find(Angle_Daughter_Folders, "05_pFDpCD/10_Opening_angles_pFDpCD_plots") + "/";
-    Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                                    Find(Angle_Daughter_Folders, "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots") + "/";
 
     Angle_Directory_map["Phi_Proton_1e2pXy_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                          Find(Angle_Daughter_Folders, "07_1e2pXy/04_Phi_Proton_1e2pXy_plots") + "/";

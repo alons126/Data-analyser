@@ -2994,11 +2994,11 @@ void EventAnalyser() {
     TH1D *hTheta_p1_p2_DIS_2p = new TH1D("#theta_{p_{1},p_{2}} (DIS only, 2p)",
                                          "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, 2p);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     string sTheta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
-    string hTheta_p1_p2_All_Int_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_QEL_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_MEC_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_RES_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_DIS_2p_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_All_Int_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
+    string hTheta_p1_p2_QEL_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
+    string hTheta_p1_p2_MEC_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
+    string hTheta_p1_p2_RES_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
+    string hTheta_p1_p2_DIS_2p_Dir = directories.Angle_Directory_map["Opening_angle_by_interaction_2p_Directory"];
     //</editor-fold>
 
 // Theta_p1_p2 vs. W (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
@@ -3010,22 +3010,54 @@ void EventAnalyser() {
     string hTheta_p1_p2_vs_W_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
     //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
-    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p)",
-                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                 250, 10, 80, 250, 10, 80);
-    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+                                                                 150, 30, 50, 150, 30, 50);
+//                                                                 250, 30, 50, 250, 30, 50);
+//                                                                 250, 20, 60, 250, 20, 60);
+//                                                                 250, 10, 80, 250, 10, 80);
+    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
     //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for every Theta_p1_p2 < 10 (2p, CD & FD) --------------------------------------------------------------------------------------------------------
+// dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
-    TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_10_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
+    TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
+                                                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
+                                                       100, -360, 360);
+//                                                       150, -360, 360);
+    TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
+                                                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
+                                                       100, -100, 100);
+//                                                       150, -100, 100);
+    string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    //</editor-fold>
+
+// Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                                     "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                    250, 10, 80, 250, 10, 80);
-    string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_10_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+                                                                    150, 30, 50, 150, 30, 50);
+//                                                                    250, 30, 50, 250, 30, 50);
+//                                                                 250, 20, 60, 250, 20, 60);
+//                                                                 250, 10, 80, 250, 10, 80);
+    string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    //</editor-fold>
+
+// dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
+    TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
+                                                        "#delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
+                                                        100, -360, 360);
+//                                                        150, -360, 360);
+//                                                       150, -60, 60);
+    string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
     //</editor-fold>
 
 // Ghost tracks handling (CD only) --------------------------------------------------------------------------------------------------------------------------------------
@@ -3129,11 +3161,11 @@ void EventAnalyser() {
     TH1D *hTheta_p1_p2_DIS_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (DIS only, pFDpCD)",
                                              "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     string sTheta_p1_p2_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
-    string hTheta_p1_p2_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_RES_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_RES_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_p1_p2 vs. W (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
@@ -3145,11 +3177,11 @@ void EventAnalyser() {
     string hTheta_p1_p2_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
-    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., pFDpCD)",
-                                                                     "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., pFDpCD);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., pFDpCD)",
+                                                                     "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., pFDpCD);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                      250, 10, 80, 250, 10, 80);
 //                                                                 250, 0, 120, 250, 0, 120);
 //                                                                 250, 0, 180, 250, 0, 180);
@@ -3257,11 +3289,11 @@ void EventAnalyser() {
     TH1D *hTheta_p1_p2_DIS_nFDpCD = new TH1D("#theta_{p_{1},p_{2}} (DIS only, nFDpCD)",
                                              "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, nFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     string sTheta_p1_p2_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
-    string hTheta_p1_p2_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_RES_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
-    string hTheta_p1_p2_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_Directory"];
+    string hTheta_p1_p2_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string hTheta_p1_p2_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string hTheta_p1_p2_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string hTheta_p1_p2_RES_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string hTheta_p1_p2_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_p1_p2 vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
@@ -3273,11 +3305,11 @@ void EventAnalyser() {
     string hTheta_p1_p2_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (CD & FD)">
-    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<10#circ (All Int., nFDpCD)",
-                                                                     "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<10#circ (All Int., nFDpCD);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
+    TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., nFDpCD)",
+                                                                     "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., nFDpCD);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                      250, 10, 80, 250, 10, 80);
 //                                                                 250, 0, 120, 250, 0, 120);
 //                                                                 250, 0, 180, 250, 0, 180);
@@ -8679,8 +8711,26 @@ void EventAnalyser() {
 
                 hTheta_p1_p2_vs_W_2p->Fill(W_2p, Theta_p1_p2_2p, Weight);
 
-                if (Theta_p1_p2_2p < 10) { hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p->Fill(Theta_p2, Theta_p1, Weight); }
-                hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_10_2p->Fill(Theta_p2, Theta_p1, Weight);
+
+                double dPhi_hit_2p = Phi_p1 - Phi_p2;
+
+/*
+                if (dPhi_hit_2p > 180) {
+                    dPhi_hit_2p = Phi_p1 - Phi_p2 - 360;
+                } else if (dPhi_hit_2p < -180) {
+                    dPhi_hit_2p = Phi_p1 - Phi_p2 + 360;
+                }
+*/
+
+                if (Theta_p1_p2_2p < 20.) {
+                    hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p->Fill(Theta_p2, Theta_p1, Weight);
+                    hdPhi_p1_p2_for_Theta_p1_p2_20_2p->Fill(dPhi_hit_2p, Weight);
+                    hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p->Fill(dPhi_hit_2p, Weight);
+                }
+
+                hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p->Fill(Theta_p2, Theta_p1, Weight);
+                hdPhi_p1_p2_for_all_Theta_p1_p2_2p->Fill(dPhi_hit_2p, Weight);
+
 
                 Theta_q_p_tot_2p = acos((q_2p_3v.Px() * P_tot_2p_3v.Px() + q_2p_3v.Py() * P_tot_2p_3v.Py() + q_2p_3v.Pz() * P_tot_2p_3v.Pz())
                                         / (q_2p_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_2p in deg
@@ -10937,19 +10987,51 @@ void EventAnalyser() {
         histPlotter2D(c1, hTheta_p1_p2_vs_W_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_2p_Dir, "06_Theta_p1_p2_vs_W_2p");
         //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD)">
-        histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p_Dir,
-                      "07a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p");
+
+
+
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir,
+                      "07a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p");
+        //</editor-fold>
+
+// dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD)">
+        double hdPhi_p1_p2_for_Theta_p1_p2_20_2p_integral = hdPhi_p1_p2_for_Theta_p1_p2_20_2p->Integral();
+        double hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_integral = hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_p1_p2_for_Theta_p1_p2_20_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_Theta_p1_p2_20_2p_integral,
+                      "#delta#phi for #theta_{p_{1},p_{2}}<20#circ", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "08a_dphi_p1_p2_for_Theta_p1_p2_20_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_integral,
+                      "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "08c_dphi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (2p, CD & FD)">
-        histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_10_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_10_2p_Dir, "07b_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_2p");
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "07b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
         //</editor-fold>
+
+// dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="dPhi_p1_p2 for every Theta_p1_p2 (CD & FD)">
+        double hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral = hdPhi_p1_p2_for_all_Theta_p1_p2_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_p1_p2_for_all_Theta_p1_p2_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral,
+                      "#delta#phi for every #theta_{p_{1},p_{2}}", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "08b_dphi_p1_p2_for_every_Theta_p1_p2_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+
+
+
 
 //  Ghost tracks handling (2p, CD only) ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -11044,9 +11126,9 @@ void EventAnalyser() {
         histPlotter2D(c1, hTheta_p1_p2_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_pFDpCD_Dir, "06_Theta_p1_p2_vs_W_pFDpCD");
         //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (pFDpCD, CD & FD)">
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (pFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
                       hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD_Dir,
                       "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_pFDpCD");
@@ -11145,9 +11227,9 @@ void EventAnalyser() {
         histPlotter2D(c1, hTheta_p1_p2_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_nFDpCD_Dir, "06_Theta_p1_p2_vs_W_nFDpCD");
         //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 10 (nFDpCD, CD & FD)">
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (nFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
                       hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD_Dir,
                       "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD");
