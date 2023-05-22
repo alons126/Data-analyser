@@ -53,8 +53,8 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //// Local files:
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
@@ -67,8 +67,8 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 //std::string AnalyseFilePath = "lustre19/expphy/volatile/clas12/asportes/simulationFiles/C12_G18_10a_02_11b_207052MeV";
 //std::string AnalyseFileSample = "reconhipo"; // My MC files
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_10a_02_11b_207052MeV_1*.hipo";
-////std::string AnalyseFile = AnalyseFileDir + "*.hipo";
+////std::string AnalyseFile = AnalyseFileDir + "recon_C12_G18_10a_02_11b_207052MeV_1*.hipo";
+//std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////</editor-fold>
 
 ////<editor-fold desc="C12 5.98636GeV (ifarm MC files - T5 MC files)">
@@ -146,15 +146,12 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
 ////std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/" + "first_50_test" + "/";
 
-<<<<<<< Updated upstream
-=======
 //std::string AnalyseFilePath = "pnfs/genie/scratch/users/asportes/script_jobs/detector_sim_truth_level";
 //std::string AnalyseFileSample = "detector_sim_truth_level/C12_G18_10a_02_11b_2GeV_QEL_test";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 ////std::string AnalyseFile = AnalyseFileDir + "Ca48_G18_10a_02_11b_207052MeV.root";
 //std::string AnalyseFile = AnalyseFileDir + "e_on_1000060120_2070MeV.root";
 
->>>>>>> Stashed changes
 //std::string AnalyseFilePath = "home/alon/project";
 //std::string AnalyseFileSample = "Downloads";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";

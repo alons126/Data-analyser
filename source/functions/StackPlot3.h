@@ -57,16 +57,21 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     TH1D *Histogram1 = Hist1.GetHistogram();
     TH1D *Histogram1_Clone = (TH1D *) Histogram1->Clone((Hist1.GetHistogramStatTitle() + " - cloned").c_str());
     Histogram1_Clone->SetStats(0);
+    Histogram1_Clone->Draw("hist err");
     HistogramStack->Add(Histogram1_Clone);
 
     TH1D *Histogram2 = Hist2.GetHistogram();
     TH1D *Histogram2_Clone = (TH1D *) Histogram2->Clone((Hist2.GetHistogramStatTitle() + " - cloned").c_str());
     Histogram2_Clone->SetStats(0);
+    Histogram2_Clone->Draw("hist err");
+//    Histogram2_Clone->Draw("hist err same");
     HistogramStack->Add(Histogram2_Clone);
 
     TH1D *Histogram3 = Hist3.GetHistogram();
     TH1D *Histogram3_Clone = (TH1D *) Histogram3->Clone((Hist3.GetHistogramStatTitle() + " - cloned").c_str());
     Histogram3_Clone->SetStats(0);
+    Histogram3_Clone->Draw("hist err");
+//    Histogram3_Clone->Draw("hist err same");
     HistogramStack->Add(Histogram3_Clone);
 
     //<editor-fold desc="setting sNameFlag">
@@ -91,11 +96,18 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     string Histogram1DTitleReactions = "";
     string xLable = Hist1.GetXaxisTitle();
     string finalState = Hist1.GetFinalState();
+    string Detector = Hist1.GetDetectorRegion();
+
     string HistogramStackSaveNamePath0 = Hist1.GetHistogram1DSaveNamePath().substr(0, Hist1.GetHistogram1DSaveNamePath().find_last_of("/"));
     string HistogramStackSaveNamePath1 = HistogramStackSaveNamePath0.substr(0, HistogramStackSaveNamePath0.find_last_of("/"));
     string HistogramStackSaveNamePath = HistogramStackSaveNamePath1.substr(0, HistogramStackSaveNamePath1.find_last_of("/")) + "/";
     string HistogramStackSaveName = HistogramStackSaveNamePath1.substr(HistogramStackSaveNamePath1.find_last_of('/') + 1) + "_Stack3";
 //    string HistogramStackSaveName = Hist1.GetHistogram1DSaveName() + "_Stack";
+
+
+//    cout << "\n\n\nfinalState = " << finalState << "\n\n";
+//    exit(EXIT_FAILURE);
+
 
     double TitleSize = Hist1.GetTitleSize();
     double LabelSize = Hist1.GetLabelSizeX();
@@ -117,17 +129,33 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     if (normalize_Histogram) {
         string title;
 
-        if (Histogram1DTitleReactions != "") {
-            if (finalState == "") {
-                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")" + " - Normalized";
-            } else {
-                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+        if (findSubstring(Detector,"FD-S")) {
+            if (Histogram1DTitleReactions != "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + Detector + ")" + " - Normalized";
+                } else {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ", " + Detector + ")" + " - Normalized";
+                }
+            } else if (Histogram1DTitleReactions == "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " (" + Detector + ")" + " - Normalized";
+                } else {
+                    title = Histogram1DTitle + " (" + finalState + ", " + Detector + ")" + " - Normalized";
+                }
             }
-        } else if (Histogram1DTitleReactions == "") {
-            if (finalState == "") {
-                title = Histogram1DTitle + " - Normalized";
-            } else {
-                title = Histogram1DTitle + " (" + finalState + ")" + " - Normalized";
+        } else {
+            if (Histogram1DTitleReactions != "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")" + " - Normalized";
+                } else {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")" + " - Normalized";
+                }
+            } else if (Histogram1DTitleReactions == "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " - Normalized";
+                } else {
+                    title = Histogram1DTitle + " (" + finalState + ")" + " - Normalized";
+                }
             }
         }
 
@@ -148,17 +176,33 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     } else {
         string title;
 
-        if (Histogram1DTitleReactions != "") {
-            if (finalState == "") {
-                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")";
-            } else {
-                title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+        if (findSubstring(Detector,"FD-S")) {
+            if (Histogram1DTitleReactions != "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + Detector + ")";
+                } else {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ", " + Detector + ")";
+                }
+            } else if (Histogram1DTitleReactions == "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " (" + Detector + ")";
+                } else {
+                    title = Histogram1DTitle + " (" + finalState + ", " + Detector + ")";
+                }
             }
-        } else if (Histogram1DTitleReactions == "") {
-            if (finalState == "") {
-                title = Histogram1DTitle;
-            } else {
-                title = Histogram1DTitle + " (" + finalState + ")";
+        } else {
+            if (Histogram1DTitleReactions != "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ")";
+                } else {
+                    title = Histogram1DTitle + " (" + Histogram1DTitleReactions + ", " + finalState + ")";
+                }
+            } else if (Histogram1DTitleReactions == "") {
+                if (finalState == "") {
+                    title = Histogram1DTitle;
+                } else {
+                    title = Histogram1DTitle + " (" + finalState + ")";
+                }
             }
         }
 
