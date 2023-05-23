@@ -3161,11 +3161,11 @@ void EventAnalyser() {
     TH1D *hTheta_p1_p2_DIS_pFDpCD = new TH1D("#theta_{p_{1},p_{2}} (DIS only, pFDpCD)",
                                              "#theta_{p_{1},p_{2}} - Opening Angle Between Protons (DIS only, pFDpCD);#theta_{p_{1},p_{2}} [Deg];", 100, 0, 180);
     string sTheta_p1_p2_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
-    string hTheta_p1_p2_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
-    string hTheta_p1_p2_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
-    string hTheta_p1_p2_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
-    string hTheta_p1_p2_RES_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
-    string hTheta_p1_p2_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Theta_p1_p2_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_All_Int_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_QEL_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_MEC_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_RES_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
+    string hTheta_p1_p2_DIS_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_pFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_p1_p2 vs. W (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
