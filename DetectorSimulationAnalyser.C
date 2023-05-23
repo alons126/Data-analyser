@@ -53,7 +53,6 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/PID_functions/GetFDNeutronP.h"
 #include "source/functions/PID_functions/GetFDPhotons.h"
 #include "source/functions/PID_functions/GetGoodParticles.h"
-//#include "source/functions/PID_functions/NeutralParticleID.h"
 #include "source/functions/PID_functions/FDNeutralParticle.h"
 #include "source/functions/PID_functions/FDNeutralParticleID.h"
 #include "source/functions/PID_functions/nParticleID.h"
@@ -64,11 +63,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 using namespace std;
 using namespace clas12;
 
-
-
 // TODO: add sumw2 to all histograms after their definition
-
-
 
 void EventAnalyser() {
     cout << "\n\n===========================================================================\n";
@@ -95,8 +90,10 @@ void EventAnalyser() {
     bool calculate_1p = false, calculate_1n = false;
     bool calculate_2p = true, calculate_pFDpCD = true, calculate_nFDpCD = false;
 
+    //TODO: recheck with Adi about charged pions in the CD - to ignore them or not?
+
     bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
-//
+
     bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
     //</editor-fold>
 
