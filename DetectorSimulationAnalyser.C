@@ -49,13 +49,14 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/DrawAndSaveEfficiencyPlots.h"
 #include "source/functions/GetPi0MomTh.h"
 #include "source/functions/PID_functions/ChargedParticleID.h"
-#include "source/functions/PID_functions/GetFDNeutrons.h"
-#include "source/functions/PID_functions/GetFDNeutronP.h"
-#include "source/functions/PID_functions/GetFDPhotons.h"
-#include "source/functions/PID_functions/GetGoodParticles.h"
 #include "source/functions/PID_functions/FDNeutralParticle.h"
 #include "source/functions/PID_functions/FDNeutralParticleID.h"
-#include "source/functions/PID_functions/nParticleID.h"
+#include "source/functions/PID_functions/GetFDNeutronP.h"
+#include "source/functions/PID_functions/GetFDNeutrons.h"
+#include "source/functions/PID_functions/GetFDPhotons.h"
+#include "source/functions/PID_functions/GetGoodParticles.h"
+#include "source/functions/PID_functions/GetGoodProtons.h"
+//#include "source/functions/PID_functions/nParticleID.h"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
 #include "source/functions/StackPlot3.h"
 #include "source/functions/StackPlot4.h"
@@ -393,9 +394,12 @@ void EventAnalyser() {
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
 
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
-    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
-    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
+    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
+    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
+    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 15.);
+//    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
+//    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
+//    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
     DSCuts p1_Theta_p_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", 40., -9999, 7.5);
     DSCuts p2_Theta_p_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", 40., -9999, 7.5);
     DSCuts phi_p1_p2_diff_cuts_pFDpCD = DSCuts("dPhi_p1_p2", "", "Proton", "pFDpCD", 0, -9999, 15.);
@@ -3027,8 +3031,8 @@ void EventAnalyser() {
                                                        100, -360, 360);
 //                                                       150, -360, 360);
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
-                                                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
-                                                       100, -100, 100);
+                                                              "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
+                                                              100, -100, 100);
 //                                                       150, -100, 100);
     string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
     string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
@@ -3038,8 +3042,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                                                    "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                    150, 30, 50, 150, 30, 50);
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
+                                                                 150, 30, 50, 150, 30, 50);
 //                                                                    250, 30, 50, 250, 30, 50);
 //                                                                 250, 20, 60, 250, 20, 60);
 //                                                                 250, 10, 80, 250, 10, 80);
@@ -5209,7 +5213,11 @@ void EventAnalyser() {
 
         //<editor-fold desc="Charged particles' identification">
         vector<int> Electron_ind = ChargedParticleID(electrons, e_mom_th);
-        vector<int> Protons_ind = ChargedParticleID(protons, p_mom_th);
+
+//        vector<int> Protons_ind = ChargedParticleID(protons, p_mom_th); // original
+        vector<int> Protons_ind0 = ChargedParticleID(protons, p_mom_th); // within P_p th.
+        vector<int> Protons_ind = GetGoodProtons(protons, Protons_ind0, p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, phi_p1_p2_diff_cuts_2p); // within P_p th. & single det.
+
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
         vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
         //</editor-fold>
