@@ -241,6 +241,7 @@ private:
                                                   "04_2p/01_Theta_e_2p_plots", "04_2p/02_Phi_e_2p_plots", "04_2p/03_Theta_e_VS_Phi_e_2p_plots",
                                                   "04_2p/04_Opening_angles_2p_plots", "04_2p/04_Opening_angles_2p_plots/00_Theta_p1_p2_by_interaction",
                                                   "04_2p/05_Ghost_tracks_handling_2p_plots", "04_2p/05_Ghost_tracks_handling_2p_plots/01_CFoF_hits_2p_plots",
+                                                  "04_2p/05_Ghost_tracks_handling_2p_plots/01_CFoF_hits_2p_plots/00_CFoF_hits_Monitoring_2p_plots",
                                                   "04_2p/05_Ghost_tracks_handling_2p_plots/02_Double_detection_2p_plots",
 
 //                                                  "05_pFDpCD",
@@ -251,6 +252,7 @@ private:
                                                   "05_pFDpCD/10_Opening_angles_pFDpCD_plots", "05_pFDpCD/10_Opening_angles_pFDpCD_plots/00_Theta_p1_p2_by_interaction",
                                                   "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots",
                                                   "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots",
+                                                  "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots/00_CFoF_hits_Monitoring_pFDpCD_plots",
                                                   "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/02_Double_detection_pFDpCD_plots",
 
 //                                                  "06_nFDpCD",
