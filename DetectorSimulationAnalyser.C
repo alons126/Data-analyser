@@ -88,7 +88,7 @@ void EventAnalyser() {
 
     bool calculate_truth_level = false;
 
-    bool calculate_1p = false, calculate_1n = false;
+    bool calculate_1p = true, calculate_1n = true;
     bool calculate_2p = true, calculate_pFDpCD = true, calculate_nFDpCD = false;
 
     //TODO: recheck with Adi about charged pions in the CD - to ignore them or not?
@@ -394,9 +394,9 @@ void EventAnalyser() {
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
 
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 15.);
+    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
+    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
+    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
 //    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
 //    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
 //    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
@@ -447,109 +447,109 @@ void EventAnalyser() {
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-    cout << "\n\n\n\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;\n\n\n\n";
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
-    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
+    bool Beta_plots = true;
+//    bool Beta_plots = false;
+//    cout << "\n\n\n\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;\n\n\n\n";
+    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
-    bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
-//    cout << "\n\n\n\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots_master = false; // Master angle plots selector
+    bool Theta_e_plots = false, Phi_e_plots = false;
+    cout << "\n\n\n\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
-    cout << "\n\n\n\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;\n\n\n\n";
+    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//    cout << "\n\n\n\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
-    cout << "\n\n\n\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;\n\n\n\n";
+    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//    cout << "\n\n\n\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
-    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
+    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
-    cout << "\n\n\n\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//    cout << "\n\n\n\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-//    bool TVariables_plots = true;
-    bool TVariables_plots = false;
-    cout << "\n\n\n\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;\n\n\n\n";
+    bool TVariables_plots = true;
+//    bool TVariables_plots = false;
+//    cout << "\n\n\n\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;\n\n\n\n";
 
     /* ToF plots */
     bool ToF_plots = false;
@@ -3426,6 +3426,23 @@ void EventAnalyser() {
     TH1D *hE_e_1e_cut_FD = new TH1D("E_{e} (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hE_e_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
 
+    TH1D *hE_e_1e_cut_FD_1p = new TH1D("E_{e} for 1p (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1p_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1p_mom = new TH1D("E_{e} for 1p_mom (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1p_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1p_noFDph = new TH1D("E_{e} for 1p w/o FDph (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1p_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1p_mom_noFDph = new TH1D("E_{e} for 1p_mom w/o FDph (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1p_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFD = new TH1D("E_{e} for 1pFD (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFD_mom = new TH1D("E_{e} for 1pFD_mom (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFD_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFD_noFDph = new TH1D("E_{e} for 1pFD w/o FDph (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFD_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFD_mom_noFDph = new TH1D("E_{e} for 1pFD_mom w/o FDph (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+
     TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)",
                                                        "E_{e} vs. #theta_{e} (All Int., 1e Cut);#theta_{e} [Deg];E_{e} [GeV]", 250, 0, 50, 250, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
@@ -6173,6 +6190,23 @@ void EventAnalyser() {
 
             hE_e_VS_Theta_e_All_Int_1e_cut_FD->Fill(Theta_e, E_e);
             hE_e_1e_cut_FD->Fill(E_e);
+
+
+            if (protons.size() == 1) { hE_e_1e_cut_FD_1p->Fill(E_e); }
+
+            if (Protons_ind.size() == 1) { hE_e_1e_cut_FD_1p_mom->Fill(E_e); }
+
+            if (protons.size() == 1 && PhotonsFD_ind.size() == 0) { hE_e_1e_cut_FD_1p_noFDph->Fill(E_e); }
+
+            if (Protons_ind.size() == 1 && PhotonsFD_ind.size() == 0) { hE_e_1e_cut_FD_1p_mom_noFDph->Fill(E_e); }
+
+            if (protons.size() == 1 && protons[0]->getRegion() == FD) { hE_e_1e_cut_FD_1pFD->Fill(E_e); }
+
+            if (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == FD) { hE_e_1e_cut_FD_1pFD_mom->Fill(E_e); }
+
+            if (protons.size() == 1 && protons[0]->getRegion() == FD && PhotonsFD_ind.size() == 0) { hE_e_1e_cut_FD_1pFD_noFDph->Fill(E_e); }
+
+            if (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == FD && PhotonsFD_ind.size() == 0) { hE_e_1e_cut_FD_1pFD_mom_noFDph->Fill(E_e); }
         }
         //</editor-fold>
 
@@ -11368,6 +11402,31 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hE_e_1e_cut_FD, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut,
                       "01_E_e_1e_cut", hE_e_1e_cut_FD_Dir, "", kBlue, true, true, true);
+
+        histPlotter1D(c1, hE_e_1e_cut_FD_1p, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sE_e_1e_cut,
+                      "02_hE_e_1e_cut_FD_1p", hE_e_1e_cut_FD_1p_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1p_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sE_e_1e_cut,
+                      "03_hE_e_1e_cut_FD_1p_mom", hE_e_1e_cut_FD_1p_mom_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1p_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sE_e_1e_cut,
+                      "04_hE_e_1e_cut_FD_1p_noFDph", hE_e_1e_cut_FD_1p_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1p_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sE_e_1e_cut,
+                      "05_hE_e_1e_cut_FD_1p_mom_noFDph", hE_e_1e_cut_FD_1p_mom_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFD, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sE_e_1e_cut,
+                      "06_hE_e_1e_cut_FD_1pFD", hE_e_1e_cut_FD_1pFD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_mom", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sE_e_1e_cut,
+                      "07_hE_e_1e_cut_FD_1pFD_mom", hE_e_1e_cut_FD_1pFD_mom_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_noFDph", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sE_e_1e_cut,
+                      "08_hE_e_1e_cut_FD_1pFD_noFDph", hE_e_1e_cut_FD_1pFD_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_mom_noFDph", "1e Cut", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sE_e_1e_cut,
+                      "09_hE_e_1e_cut_FD_1pFD_mom_noFDph", hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir, "", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="E_e plots (1p, FD)">
