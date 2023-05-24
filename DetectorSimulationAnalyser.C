@@ -88,7 +88,7 @@ void EventAnalyser() {
 
     bool calculate_truth_level = false;
 
-    bool calculate_1p = false, calculate_1n = false;
+    bool calculate_1p = true, calculate_1n = true;
     bool calculate_2p = true, calculate_pFDpCD = true, calculate_nFDpCD = false;
 
     //TODO: recheck with Adi about charged pions in the CD - to ignore them or not?
@@ -394,9 +394,9 @@ void EventAnalyser() {
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
 
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 15.);
+    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
+    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
+    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
 //    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
 //    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
 //    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
@@ -447,17 +447,17 @@ void EventAnalyser() {
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-    cout << "\n\n\n\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;\n\n\n\n";
+    bool Beta_plots = true;
+//    bool Beta_plots = false;
+//    cout << "\n\n\n\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;\n\n\n\n";
 //    bool Beta_vs_P_plots = true;
     bool Beta_vs_P_plots = false;
     cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
@@ -486,70 +486,70 @@ void EventAnalyser() {
 //    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
-    cout << "\n\n\n\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;\n\n\n\n";
+    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//    cout << "\n\n\n\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
-    cout << "\n\n\n\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;\n\n\n\n";
+    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//    cout << "\n\n\n\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
-    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
+    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
-    cout << "\n\n\n\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//    cout << "\n\n\n\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-//    bool TVariables_plots = true;
-    bool TVariables_plots = false;
-    cout << "\n\n\n\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;\n\n\n\n";
+    bool TVariables_plots = true;
+//    bool TVariables_plots = false;
+//    cout << "\n\n\n\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;\n\n\n\n";
 
     /* ToF plots */
     bool ToF_plots = false;
@@ -3017,10 +3017,7 @@ void EventAnalyser() {
     TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                  150, 30, 50, 150, 30, 50);
-//                                                                 250, 30, 50, 250, 30, 50);
-//                                                                 250, 20, 60, 250, 20, 60);
-//                                                                 250, 10, 80, 250, 10, 80);
-    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -3029,13 +3026,11 @@ void EventAnalyser() {
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
                                                        "#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
                                                        100, -360, 360);
-//                                                       150, -360, 360);
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
                                                               "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
                                                               100, -100, 100);
-//                                                       150, -100, 100);
-    string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
-    string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+    string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------
@@ -3044,10 +3039,7 @@ void EventAnalyser() {
     TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                  150, 30, 50, 150, 30, 50);
-//                                                                    250, 30, 50, 250, 30, 50);
-//                                                                 250, 20, 60, 250, 20, 60);
-//                                                                 250, 10, 80, 250, 10, 80);
-    string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -3056,43 +3048,32 @@ void EventAnalyser() {
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                         "#delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
                                                         100, -360, 360);
-//                                                        150, -360, 360);
-//                                                       150, -60, 60);
-    string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Opening_angle_2p_Directory"];
+    string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // Ghost tracks handling (CD only) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (2p)">
     hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC",
-                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
-                                                      directories.Angle_Directory_map["Ghost_tracks_handling_2p_Directory"],
+                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                      directories.Angle_Directory_map["CToF_hits_2p_Directory"],
                                                       "01_Theta_p1_p2_VS_ToF1-ToF2_BC_2p", 0, 180, -3, 3, 150, 150);
     hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
-                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
-                                                      directories.Angle_Directory_map["Ghost_tracks_handling_2p_Directory"],
+                                                      "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                      directories.Angle_Directory_map["CToF_hits_2p_Directory"],
                                                       "01_Theta_p1_p2_VS_ToF1-ToF2_AC_2p", 0, 180, -3, 3, 150, 150);
     //</editor-fold>
 
     //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (2p)">
     hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC",
-                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]",
-                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_2p_Directory"],
+                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC", "#theta_{p_{1},p_{2}} [Deg]",
+                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["CToF_hits_2p_Directory"],
                                                       "02_Theta_p1_p2_VS_Pos1-Pos2_BC_2p", 0, 180, 0, 100, 150, 150);
     hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
-                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]",
-                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_2p_Directory"],
+                                                      "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]",
+                                                      "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["CToF_hits_2p_Directory"],
                                                       "02_Theta_p1_p2_VS_Pos1-Pos2_AC_2p", 0, 180, 0, 100, 150, 150);
     //</editor-fold>
-
-//    //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
-//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
-//                                                   "ToF_{1}-ToF_{2} [ns]", directories.Angle_Directory_map["Ghost_tracks_handling_2p_Directory"], "01_Theta_R1_R2_VS_ToF1_ToF2_2p",
-//                                                   0, 180, -3, 3);
-//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
-//                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_2p_Directory"],
-//                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_2p", 0, 180, 0, 100);
-//    //</editor-fold>
 
     //</editor-fold>
 
@@ -3193,22 +3174,22 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (pFDpCD)">
     hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC",
-                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
                                                           directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
                                                           "01_Theta_p1_p2_VS_ToF1-ToF2_BC_pFDpCD", 0, 180, -3, 3, 150, 150);
     hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
-                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
                                                           directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
                                                           "01_Theta_p1_p2_VS_ToF1-ToF2_AC_pFDpCD", 0, 180, -3, 3, 150, 150);
     //</editor-fold>
 
     //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (pFDpCD)">
     hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC",
-                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - Before Cut", "#theta_{p_{1},p_{2}} [Deg]",
+                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC", "#theta_{p_{1},p_{2}} [Deg]",
                                                           "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
                                                           "02_Theta_p1_p2_VS_Pos1-Pos2_BC_pFDpCD", 0, 180, 0, 100, 150, 150);
     hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
-                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} - After Cut", "#theta_{p_{1},p_{2}} [Deg]",
+                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]",
                                                           "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
                                                           "02_Theta_p1_p2_VS_Pos1-Pos2_AC_pFDpCD", 0, 180, 0, 100, 150, 150);
     //</editor-fold>
@@ -3716,7 +3697,6 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Energy Transfer (ET) histograms">
-
     string tET_All_Ang = "Energy transfer #omega for every #theta_{e}", tET15 = "Energy transfer #omega Around #theta_{e} = 15#circ";
 
     //<editor-fold desc="ET for every theta_e (1p)">
@@ -8184,7 +8164,6 @@ void EventAnalyser() {
         bool event_selection_2p = (basic_event_selection && (Protons_ind.size() == 2));
 
         if (calculate_2p && event_selection_2p) { // for 2p calculations (with any number of neutrals, neutrons and pdg=0)
-//        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
             //<editor-fold desc="Safty check (2p)">
@@ -11000,7 +10979,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD)">
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir,
-                      "07a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p");
+                      "01a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p");
         //</editor-fold>
 
 // dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -11011,17 +10990,17 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hdPhi_p1_p2_for_Theta_p1_p2_20_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_Theta_p1_p2_20_2p_integral,
                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
-                      "08a_dphi_p1_p2_for_Theta_p1_p2_20_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
+                      "02a_dphi_p1_p2_for_Theta_p1_p2_20_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
         histPlotter1D(c1, hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_integral,
                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
-                      "08c_dphi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
+                      "02c_dphi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD)">
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "07b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
+                      hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "01b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
         //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -11031,7 +11010,7 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hdPhi_p1_p2_for_all_Theta_p1_p2_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral,
                       "#delta#phi for every #theta_{p_{1},p_{2}}", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
-                      "08b_dphi_p1_p2_for_every_Theta_p1_p2_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
+                      "02b_dphi_p1_p2_for_every_Theta_p1_p2_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
 
