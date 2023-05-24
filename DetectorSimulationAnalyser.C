@@ -3443,14 +3443,30 @@ void EventAnalyser() {
     string hE_e_1e_cut_FD_1pFD_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     TH1D *hE_e_1e_cut_FD_1pFD_mom_noFDph = new TH1D("E_{e} for 1pFD_mom w/o FDph (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
-    TH1D *hE_e_1e_cut_FD_1pFDtheta = new TH1D("E_{e} for 1p in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_1e_cut_FD_1pFDtheta_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
-    TH1D *hE_e_1e_cut_FD_1pFDtheta_mom = new TH1D("E_{e} for 1p_mom in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_1e_cut_FD_1pFDtheta_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
-    TH1D *hE_e_1e_cut_FD_1pFDtheta_noFDph = new TH1D("E_{e} for 1p w/o FDph in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_1e_cut_FD_1pFDtheta_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
-    TH1D *hE_e_1e_cut_FD_1pFDtheta_mom_noFDph = new TH1D("E_{e} for 1p_mom w/o FDph in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_1e_cut_FD_1pFDtheta_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax40 = new TH1D("E_{e} for 1p in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax40_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax40_mom = new TH1D("E_{e} for 1p_mom in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax40_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax40_noFDph = new TH1D("E_{e} for 1p w/o FDph in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax40_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax40_mom_noFDph = new TH1D("E_{e} for 1p_mom w/o FDph in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax40_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax50 = new TH1D("E_{e} for 1p in 5#circ#leq#theta_{p}#leq50#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax50_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax50_mom = new TH1D("E_{e} for 1p_mom in 5#circ#leq#theta_{p}#leq50#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax50_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax50_noFDph = new TH1D("E_{e} for 1p w/o FDph in 5#circ#leq#theta_{p}#leq50#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax50_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax50_mom_noFDph = new TH1D("E_{e} for 1p_mom w/o FDph in 5#circ#leq#theta_{p}#leq50#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax50_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax60 = new TH1D("E_{e} for 1p in 5#circ#leq#theta_{p}#leq60#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax60_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax60_mom = new TH1D("E_{e} for 1p_mom in 5#circ#leq#theta_{p}#leq60#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax60_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax60_noFDph = new TH1D("E_{e} for 1p w/o FDph in 5#circ#leq#theta_{p}#leq60#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax60_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDthetaMax60_mom_noFDph = new TH1D("E_{e} for 1p_mom w/o FDph in 5#circ#leq#theta_{p}#leq60#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDthetaMax60_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
 
 
     TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)",
@@ -6222,7 +6238,15 @@ void EventAnalyser() {
                 double Theta_p = protons[0]->getTheta() * 180.0 / pi;
 
                 if (Theta_p >= 5 && Theta_p <= 40) {
-                    hE_e_1e_cut_FD_1pFDtheta->Fill(E_e);
+                    hE_e_1e_cut_FD_1pFDthetaMax40->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 50) {
+                    hE_e_1e_cut_FD_1pFDthetaMax50->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 60) {
+                    hE_e_1e_cut_FD_1pFDthetaMax60->Fill(E_e);
                 }
             }
 
@@ -6230,7 +6254,15 @@ void EventAnalyser() {
                 double Theta_p = protons[Protons_ind.at(0)]->getTheta() * 180.0 / pi;
 
                 if (Theta_p >= 5 && Theta_p <= 40) {
-                    hE_e_1e_cut_FD_1pFDtheta_mom->Fill(E_e);
+                    hE_e_1e_cut_FD_1pFDthetaMax40_mom->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 50) {
+                    hE_e_1e_cut_FD_1pFDthetaMax50_mom->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 60) {
+                    hE_e_1e_cut_FD_1pFDthetaMax60_mom->Fill(E_e);
                 }
             }
 
@@ -6238,7 +6270,15 @@ void EventAnalyser() {
                 double Theta_p = protons[0]->getTheta() * 180.0 / pi;
 
                 if (Theta_p >= 5 && Theta_p <= 40) {
-                    hE_e_1e_cut_FD_1pFDtheta_noFDph->Fill(E_e);
+                    hE_e_1e_cut_FD_1pFDthetaMax40_noFDph->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 50) {
+                    hE_e_1e_cut_FD_1pFDthetaMax50_noFDph->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 60) {
+                    hE_e_1e_cut_FD_1pFDthetaMax60_noFDph->Fill(E_e);
                 }
             }
 
@@ -6246,7 +6286,15 @@ void EventAnalyser() {
                 double Theta_p = protons[0]->getTheta() * 180.0 / pi;
 
                 if (Theta_p >= 5 && Theta_p <= 40) {
-                    hE_e_1e_cut_FD_1pFDtheta_mom_noFDph->Fill(E_e);
+                    hE_e_1e_cut_FD_1pFDthetaMax40_mom_noFDph->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 50) {
+                    hE_e_1e_cut_FD_1pFDthetaMax50_mom_noFDph->Fill(E_e);
+                }
+
+                if (Theta_p >= 5 && Theta_p <= 60) {
+                    hE_e_1e_cut_FD_1pFDthetaMax60_mom_noFDph->Fill(E_e);
                 }
             }
         }
@@ -11460,17 +11508,39 @@ void EventAnalyser() {
                       false, true, sE_e_1e_cut, "08_hE_e_1e_cut_FD_1pFD_noFDph", hE_e_1e_cut_FD_1pFD_noFDph_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_mom_noFDph", "1e Cut", 0.06, 0.0425, 0.0425,
                       plots, 2, false, true, sE_e_1e_cut, "09_hE_e_1e_cut_FD_1pFD_mom_noFDph", hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir, "", kBlue, true, true, true);
-        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p in 5#circ#leq#theta_{p}#leq40#circ", "1e Cut", 0.06,
-                      0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "10_hE_e_1e_cut_FD_1pFDtheta", hE_e_1e_cut_FD_1pFDtheta_Dir, "", kBlue, true, true, true);
-        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom in 5#circ#leq#theta_{p}#leq40#circ", "1e Cut",
-                      0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "11_hE_e_1e_cut_FD_1pFDtheta_mom", hE_e_1e_cut_FD_1pFDtheta_mom_Dir, "", kBlue, true,
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax40, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p in 5#circ#leq#theta_{p}#leq40#circ", "1e Cut", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "10_hE_e_1e_cut_FD_1pFDthetaMax40", hE_e_1e_cut_FD_1pFDthetaMax40_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax40_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom in 5#circ#leq#theta_{p}#leq40#circ", "1e Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "11_hE_e_1e_cut_FD_1pFDthetaMax40_mom", hE_e_1e_cut_FD_1pFDthetaMax40_mom_Dir, "", kBlue, true,
                       true, true);
-        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph in 5#circ#leq#theta_{p}#leq40#circ",
-                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "12_hE_e_1e_cut_FD_1pFDtheta_noFDph", hE_e_1e_cut_FD_1pFDtheta_noFDph_Dir, "",
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax40_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph in 5#circ#leq#theta_{p}#leq40#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "12_hE_e_1e_cut_FD_1pFDthetaMax40_noFDph", hE_e_1e_cut_FD_1pFDthetaMax40_noFDph_Dir, "",
                       kBlue, true, true, true);
-        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph in 5#circ#leq#theta_{p}#leq40#circ",
-                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "13_hE_e_1e_cut_FD_1pFDtheta_mom_noFDph",
-                      hE_e_1e_cut_FD_1pFDtheta_mom_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax40_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph in 5#circ#leq#theta_{p}#leq40#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "13_hE_e_1e_cut_FD_1pFDthetaMax40_mom_noFDph",
+                      hE_e_1e_cut_FD_1pFDthetaMax40_mom_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax50, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p in 5#circ#leq#theta_{p}#leq50#circ", "1e Cut", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "14_hE_e_1e_cut_FD_1pFDthetaMax50", hE_e_1e_cut_FD_1pFDthetaMax50_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax50_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom in 5#circ#leq#theta_{p}#leq50#circ", "1e Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "15_hE_e_1e_cut_FD_1pFDthetaMax50_mom", hE_e_1e_cut_FD_1pFDthetaMax50_mom_Dir, "", kBlue, true,
+                      true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax50_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph in 5#circ#leq#theta_{p}#leq50#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "16_hE_e_1e_cut_FD_1pFDthetaMax50_noFDph", hE_e_1e_cut_FD_1pFDthetaMax50_noFDph_Dir, "",
+                      kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax50_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph in 5#circ#leq#theta_{p}#leq50#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "17_hE_e_1e_cut_FD_1pFDthetaMax50_mom_noFDph",
+                      hE_e_1e_cut_FD_1pFDthetaMax50_mom_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax60, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p in 5#circ#leq#theta_{p}#leq60#circ", "1e Cut", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "18_hE_e_1e_cut_FD_1pFDthetaMax60", hE_e_1e_cut_FD_1pFDthetaMax60_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax60_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom in 5#circ#leq#theta_{p}#leq60#circ", "1e Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "19_hE_e_1e_cut_FD_1pFDthetaMax60_mom", hE_e_1e_cut_FD_1pFDthetaMax60_mom_Dir, "", kBlue, true,
+                      true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax60_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph in 5#circ#leq#theta_{p}#leq60#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "20_hE_e_1e_cut_FD_1pFDthetaMax60_noFDph", hE_e_1e_cut_FD_1pFDthetaMax60_noFDph_Dir, "",
+                      kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDthetaMax60_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph in 5#circ#leq#theta_{p}#leq60#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "21_hE_e_1e_cut_FD_1pFDthetaMax60_mom_noFDph",
+                      hE_e_1e_cut_FD_1pFDthetaMax60_mom_noFDph_Dir, "", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="E_e plots (1p, FD)">
