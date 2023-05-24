@@ -508,9 +508,12 @@ Directories::Directories(std::string plots_path) {
                                                     Find(Angle_Daughter_Folders, "04_2p/05_Ghost_tracks_handling_2p_plots/01_CFoF_hits_2p_plots") + "/";
     Angle_Directory_map["CToF_hits_monitoring_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                                Find(Angle_Daughter_Folders,
-                                                                    "04_2p/05_Ghost_tracks_handling_2p_plots/01_CFoF_hits_2p_plots/00_CFoF_hits_Monitoring_2p_plots") + "/";
+                                                                    "04_2p/05_Ghost_tracks_handling_2p_plots/01_CFoF_hits_2p_plots/00_CFoF_hits_monitoring_2p_plots") + "/";
     Angle_Directory_map["Double_detection_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                            Find(Angle_Daughter_Folders, "04_2p/05_Ghost_tracks_handling_2p_plots/02_Double_detection_2p_plots") + "/";
+    Angle_Directory_map["Double_detection_monitoring_2p_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                               Find(Angle_Daughter_Folders,
+                                                                    "04_2p/05_Ghost_tracks_handling_2p_plots/02_Double_detection_2p_plots/00_Double_detection_monitoring_2p_plots") + "/";
 
     Angle_Directory_map["Theta_e_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                       Find(Angle_Daughter_Folders, "05_pFDpCD/01_Theta_e_pFDpCD_plots") + "/";
@@ -543,9 +546,9 @@ Directories::Directories(std::string plots_path) {
                                                                    Find(Angle_Daughter_Folders,
                                                                         "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots/00_CFoF_hits_Monitoring_pFDpCD_plots") +
                                                                    "/";
-    Angle_Directory_map["Double_detection_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
-                                                               Find(Angle_Daughter_Folders,
-                                                                    "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/02_Double_detection_pFDpCD_plots") + "/";
+    Angle_Directory_map["Double_detection_monitoring_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                      Find(Angle_Daughter_Folders,
+                                                                           "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/02_Double_detection_pFDpCD_plots/00_Double_detection_monitoring_pFDpCD_plots") + "/";
 
     Angle_Directory_map["Theta_e_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                       Find(Angle_Daughter_Folders, "06_nFDpCD/01_Theta_e_nFDpCD_plots") + "/";

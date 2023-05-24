@@ -2473,11 +2473,47 @@ void EventAnalyser() {
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                  150, 30, 50, 150, 30, 50);
     string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 2 id. p. BC (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 2 id. p. RE (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 3 id. p. BC (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 3 id. p. RE (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 4 id. p. BC (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 4 id. p. RE (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
+    //<editor-fold desc="dPhi_p1_p2 for Theta_p1_p2 < 20 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
                                                        "#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
                                                        100, -360, 360);
@@ -2495,6 +2531,42 @@ void EventAnalyser() {
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                  150, 30, 50, 150, 30, 50);
     string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}}<20#circ  for 2 id. p. BC (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}}<20#circ  for 2 id. p. RE (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}}<20#circ  for 3 id. p. BC (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}}<20#circ  for 3 id. p. RE (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}}<20#circ  for 4 id. p. BC (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
+
+    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p = new TH2D(
+            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}}<20#circ  for 4 id. p. RE (All Int., 2p)",
+            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
+            150, 30, 50, 150, 30, 50);
+    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -7207,7 +7279,113 @@ void EventAnalyser() {
 //  2p cuts -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="2p cuts">
-        if (Protons_ind0.size() == 2) { ++num_of_events_2p_wFakeProtons; }
+
+        //<editor-fold desc="Counting number of id. 2p events with fake protons">
+        if (basic_event_selection && Protons_ind0.size() == 2) { ++num_of_events_2p_wFakeProtons; }
+
+        //<editor-fold desc="Monitor fake protons handling (2p)">
+        for (int i = 0; i < Protons_ind0.size(); i++) {
+            auto proton_i_2p = protons[Protons_ind0.at(i)];
+            TVector3 proton_i_2p_2p_3v;
+            proton_i_2p_2p_3v.SetMagThetaPhi(proton_i_2p->getP(), proton_i_2p->getTheta(), proton_i_2p->getPhi());                  // first proton in protons vector
+            double Theta_pi = proton_i_2p->getTheta() * 180.0 / pi;                                                                                // Theta_pi in deg
+            double Phi_pi = proton_i_2p->getPhi() * 180.0 / pi;                                                                                      // Phi_pi in deg
+
+            for (int j = i + 1; j < Protons_ind0.size(); j++) {
+                auto proton_j_2p = protons[Protons_ind0.at(j)];
+                TVector3 proton_j_2p_2p_3v;
+                proton_j_2p_2p_3v.SetMagThetaPhi(proton_j_2p->getP(), proton_j_2p->getTheta(), proton_j_2p->getPhi());              // first proton in protons vector
+                double Theta_pj = proton_j_2p->getTheta() * 180.0 / pi;                                                                            // Theta_pj in deg
+                double Phi_pj = proton_j_2p->getPhi() * 180.0 / pi;                                                                                  // Phi_pj in deg
+
+                double Theta_pi_pj_2p = acos((proton_i_2p_2p_3v.Px() * proton_j_2p_2p_3v.Px() + proton_i_2p_2p_3v.Py() * proton_j_2p_2p_3v.Py() +
+                                              proton_i_2p_2p_3v.Pz() * proton_j_2p_2p_3v.Pz()) /
+                                             (proton_i_2p_2p_3v.Mag() * proton_j_2p_2p_3v.Mag())) * 180.0 / pi;                              // Theta_pi_pj_2p in deg
+                double dPhi_ij_2p = Phi_pi - Phi_pj;                                                                                             // dPhi_ij_2p in deg
+
+                if ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == CD)) { // if both 2p protons are in the CD
+                    TVector3 pi_hit_pos, pj_hit_pos, pos_diff_ij;
+                    pi_hit_pos.SetXYZ(proton_i_2p->sci(clas12::CTOF)->getX(), proton_i_2p->sci(clas12::CTOF)->getY(), proton_i_2p->sci(clas12::CTOF)->getZ());
+                    pj_hit_pos.SetXYZ(proton_j_2p->sci(clas12::CTOF)->getX(), proton_j_2p->sci(clas12::CTOF)->getY(), proton_j_2p->sci(clas12::CTOF)->getZ());
+
+                    pos_diff_ij.SetXYZ(pi_hit_pos.Px() - pj_hit_pos.Px(), pi_hit_pos.Py() - pj_hit_pos.Py(), pi_hit_pos.Pz() - pj_hit_pos.Pz());
+                    double time_diff_ij = proton_i_2p->getTime() - proton_j_2p->getTime();
+
+                    if (Protons_ind0.size() == 2) {
+                        hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+                        hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
+
+                        if (pos_diff_ij.Mag() == 0) {
+                            hdTheta_pi_pj_VS_ToFi_ToFj_RE_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+                            hTheta_pi_pj_VS_Posi_Posj_RE_2idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
+                        }
+                    }
+
+                    if (Protons_ind0.size() == 3) {
+                        hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+                        hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
+
+                        if (pos_diff_ij.Mag() == 0) {
+                            hdTheta_pi_pj_VS_ToFi_ToFj_RE_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+                            hTheta_pi_pj_VS_Posi_Posj_RE_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
+                        }
+                    }
+
+                    if (Protons_ind0.size() == 4) {
+                        hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+                        hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
+
+                        if (pos_diff_ij.Mag() == 0) {
+                            hdTheta_pi_pj_VS_ToFi_ToFj_RE_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+                            hTheta_pi_pj_VS_Posi_Posj_RE_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
+                        }
+                    }
+                } else if (((proton_i_2p->getRegion() == FD) && (proton_j_2p->getRegion() == CD)) ||
+                           ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == FD))) {
+
+                    bool p_i_around_40 = (fabs(Theta_pi - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
+                    bool p_j_around_40 = (fabs(Theta_pj - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
+                    bool small_dPhi = (fabs(dPhi_ij_2p - phi_p1_p2_diff_cuts_2p.GetMean()) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
+
+                    if (Protons_ind0.size() == 2) {
+                        if (Theta_pi_pj_2p < 20) {
+                            hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
+
+                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p->Fill(Theta_pj, Theta_pi); }
+                        }
+
+                        hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
+
+                        if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p->Fill(Theta_pj, Theta_pi); }
+                    }
+
+                    if (Protons_ind0.size() == 3) {
+                        if (Theta_pi_pj_2p < 20) {
+                            hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
+
+                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p->Fill(Theta_pj, Theta_pi); }
+                        }
+
+                        hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
+
+                        if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p->Fill(Theta_pj, Theta_pi); }
+                    }
+
+                    if (Protons_ind0.size() == 4) {
+                        if (Theta_pi_pj_2p < 20) {
+                            hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
+
+                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p->Fill(Theta_pj, Theta_pi); }
+                        }
+
+                        hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
+
+                        if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p->Fill(Theta_pj, Theta_pi); }
+                    }
+                }
+            } // end of second for loop over Protons_ind0 (with j)
+        } // end of first for loop over Protons_ind0 (with i)
+        //</editor-fold>
 
         /* 2p event selection: 2p = Protons_ind.size() = 2 and any number of neutrons, other neutrals and particles with pdg=0. */
         bool event_selection_2p = (basic_event_selection && (Protons_ind.size() == 2));
@@ -7264,69 +7442,112 @@ void EventAnalyser() {
             double Phi_p1 = P_1_2p_3v.Phi() * 180.0 / pi, Phi_p2 = P_2_2p_3v.Phi() * 180.0 / pi;                                                // Phi_p1, Phi_p2 in deg
             double Theta_p1_p2_2p = acos((P_1_2p_3v.Px() * P_2_2p_3v.Px() + P_1_2p_3v.Py() * P_2_2p_3v.Py() + P_1_2p_3v.Pz() * P_2_2p_3v.Pz())
                                          / (P_1_2p_3v.Mag() * P_2_2p_3v.Mag())) * 180.0 / pi;                                                   // Theta_p1_p2_2p in deg
-
-            //  Monitor fake protons handling (2p) ----------------------------------------------------------------------------------------------------------------------
-
-            //<editor-fold desc="Monitor fake protons handling (2p)">
-            for (int i = 0; i < Protons_ind0.size(); i++) {
-                auto proton_i = protons[Protons_ind0.at(i)];
-                TVector3 proton_i_2p_3v;
-                proton_i_2p_3v.SetMagThetaPhi(proton_i->getP(), proton_i->getTheta(), proton_i->getPhi());                              // first proton in protons vector
-                double Theta_pi = proton_i->getTheta() * 180.0 / pi;                                                                                   // Theta_pi in deg
-                double Phi_pi = proton_i->getPhi() * 180.0 / pi;                                                                                         // Phi_pi in deg
-
-                for (int j = i + 1; j < Protons_ind0.size(); j++) {
-                    auto proton_j = protons[Protons_ind0.at(j)];
-                    TVector3 proton_j_2p_3v;
-                    proton_j_2p_3v.SetMagThetaPhi(proton_j->getP(), proton_j->getTheta(), proton_j->getPhi());                          // first proton in protons vector
-                    double Theta_pj = proton_j->getTheta() * 180.0 / pi;                                                                               // Theta_pj in deg
-                    double Phi_pj = proton_j->getPhi() * 180.0 / pi;                                                                                     // Phi_pj in deg
-
-                    double Theta_pi_pj_2p = acos((proton_i_2p_3v.Px() * proton_j_2p_3v.Px() + proton_i_2p_3v.Py() * proton_j_2p_3v.Py() +
-                                                  proton_i_2p_3v.Pz() * proton_j_2p_3v.Pz()) /
-                                                 (proton_i_2p_3v.Mag() * proton_j_2p_3v.Mag())) * 180.0 / pi;        // Theta_pi_p2_2p in deg
-
-                    if ((proton_i->getRegion() == CD) && (proton_j->getRegion() == CD)) { // if both 2p protons are in the CD
-                        TVector3 pi_hit_pos, pj_hit_pos, pos_diff_ij;
-                        pi_hit_pos.SetXYZ(proton_i->sci(clas12::CTOF)->getX(), proton_i->sci(clas12::CTOF)->getY(), proton_i->sci(clas12::CTOF)->getZ());
-                        pj_hit_pos.SetXYZ(proton_j->sci(clas12::CTOF)->getX(), proton_j->sci(clas12::CTOF)->getY(), proton_j->sci(clas12::CTOF)->getZ());
-
-                        pos_diff_ij.SetXYZ(pi_hit_pos.Px() - pj_hit_pos.Px(), pi_hit_pos.Py() - pj_hit_pos.Py(), pi_hit_pos.Pz() - pj_hit_pos.Pz());
-                        double time_diff_ij = proton_i->getTime() - proton_j->getTime();
-
-                        if (Protons_ind0.size() == 2) {
-                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                            hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
-
-                            if (pos_diff_ij.Mag() == 0) {
-                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                                hTheta_pi_pj_VS_Posi_Posj_RE_2idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
-                            }
-                        }
-
-                        if (Protons_ind0.size() == 3) {
-                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                            hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
-
-                            if (pos_diff_ij.Mag() == 0) {
-                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                                hTheta_pi_pj_VS_Posi_Posj_RE_3idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
-                            }
-                        }
-
-                        if (Protons_ind0.size() == 4) {
-                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                            hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
-
-                            if (pos_diff_ij.Mag() == 0) {
-                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                                hTheta_pi_pj_VS_Posi_Posj_RE_4idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
-                            }
-                        }
-                    }
-                } // end of second for loop over Protons_ind0 (with j)
-            } // end of first for loop over Protons_ind0 (with i)
-            //</editor-fold>
+//
+//            //  Monitor fake protons handling (2p) ----------------------------------------------------------------------------------------------------------------------
+//
+//            //<editor-fold desc="Monitor fake protons handling (2p)">
+//            for (int i = 0; i < Protons_ind0.size(); i++) {
+//                auto proton_i_2p = protons[Protons_ind0.at(i)];
+//                TVector3 proton_i_2p_2p_3v;
+//                proton_i_2p_2p_3v.SetMagThetaPhi(proton_i_2p->getP(), proton_i_2p->getTheta(), proton_i_2p->getPhi());                  // first proton in protons vector
+//                double Theta_pi = proton_i_2p->getTheta() * 180.0 / pi;                                                                                // Theta_pi in deg
+//                double Phi_pi = proton_i_2p->getPhi() * 180.0 / pi;                                                                                      // Phi_pi in deg
+//
+//                for (int j = i + 1; j < Protons_ind0.size(); j++) {
+//                    auto proton_j_2p = protons[Protons_ind0.at(j)];
+//                    TVector3 proton_j_2p_2p_3v;
+//                    proton_j_2p_2p_3v.SetMagThetaPhi(proton_j_2p->getP(), proton_j_2p->getTheta(), proton_j_2p->getPhi());              // first proton in protons vector
+//                    double Theta_pj = proton_j_2p->getTheta() * 180.0 / pi;                                                                            // Theta_pj in deg
+//                    double Phi_pj = proton_j_2p->getPhi() * 180.0 / pi;                                                                                  // Phi_pj in deg
+//
+//                    double Theta_pi_pj_2p = acos((proton_i_2p_2p_3v.Px() * proton_j_2p_2p_3v.Px() + proton_i_2p_2p_3v.Py() * proton_j_2p_2p_3v.Py() +
+//                                                  proton_i_2p_2p_3v.Pz() * proton_j_2p_2p_3v.Pz()) /
+//                                                 (proton_i_2p_2p_3v.Mag() * proton_j_2p_2p_3v.Mag())) * 180.0 / pi;                              // Theta_pi_pj_2p in deg
+//                    double dPhi_ij_2p = Phi_pi - Phi_pj;                                                                                             // dPhi_ij_2p in deg
+//
+//                    if ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == CD)) { // if both 2p protons are in the CD
+//                        TVector3 pi_hit_pos, pj_hit_pos, pos_diff_ij;
+//                        pi_hit_pos.SetXYZ(proton_i_2p->sci(clas12::CTOF)->getX(), proton_i_2p->sci(clas12::CTOF)->getY(), proton_i_2p->sci(clas12::CTOF)->getZ());
+//                        pj_hit_pos.SetXYZ(proton_j_2p->sci(clas12::CTOF)->getX(), proton_j_2p->sci(clas12::CTOF)->getY(), proton_j_2p->sci(clas12::CTOF)->getZ());
+//
+//                        pos_diff_ij.SetXYZ(pi_hit_pos.Px() - pj_hit_pos.Px(), pi_hit_pos.Py() - pj_hit_pos.Py(), pi_hit_pos.Pz() - pj_hit_pos.Pz());
+//                        double time_diff_ij = proton_i_2p->getTime() - proton_j_2p->getTime();
+//
+//                        if (Protons_ind0.size() == 2) {
+//                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+//                            hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
+//
+//                            if (pos_diff_ij.Mag() == 0) {
+//                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+//                                hTheta_pi_pj_VS_Posi_Posj_RE_2idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
+//                            }
+//                        }
+//
+//                        if (Protons_ind0.size() == 3) {
+//                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+//                            hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
+//
+//                            if (pos_diff_ij.Mag() == 0) {
+//                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+//                                hTheta_pi_pj_VS_Posi_Posj_RE_3idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
+//                            }
+//                        }
+//
+//                        if (Protons_ind0.size() == 4) {
+//                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+//                            hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
+//
+//                            if (pos_diff_ij.Mag() == 0) {
+//                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
+//                                hTheta_pi_pj_VS_Posi_Posj_RE_4idp_2p.hFill(Theta_p1_p2_2p, pos_diff_ij.Mag(), Weight);
+//                            }
+//                        }
+//                    } else if (((proton_i_2p->getRegion() == FD) && (proton_j_2p->getRegion() == CD)) ||
+//                               ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == FD))) {
+//
+//                        bool p_i_around_40 = (fabs(Theta_pi - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
+//                        bool p_j_around_40 = (fabs(Theta_pj - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
+//                        bool small_dPhi = (fabs(dPhi_ij_2p - phi_p1_p2_diff_cuts_2p.GetMean()) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
+//
+//                        if (Protons_ind0.size() == 2) {
+//                            if (Theta_pi_pj_2p < 20) {
+//                                hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
+//
+//                                if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p->Fill(Theta_pj, Theta_pi); }
+//                            }
+//
+//                            hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
+//
+//                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p->Fill(Theta_pj, Theta_pi); }
+//                        }
+//
+//                        if (Protons_ind0.size() == 3) {
+//                            if (Theta_pi_pj_2p < 20) {
+//                                hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
+//
+//                                if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p->Fill(Theta_pj, Theta_pi); }
+//                            }
+//
+//                            hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
+//
+//                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p->Fill(Theta_pj, Theta_pi); }
+//                        }
+//
+//                        if (Protons_ind0.size() == 4) {
+//                            if (Theta_pi_pj_2p < 20) {
+//                                hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
+//
+//                                if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p->Fill(Theta_pj, Theta_pi); }
+//                            }
+//
+//                            hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
+//
+//                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p->Fill(Theta_pj, Theta_pi); }
+//                        }
+//                    }
+//                } // end of second for loop over Protons_ind0 (with j)
+//            } // end of first for loop over Protons_ind0 (with i)
+//            //</editor-fold>
 
             //  Fillings 2p histograms ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -9620,6 +9841,19 @@ void EventAnalyser() {
 // Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p_Dir, "01a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p_Dir, "01b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p_Dir, "02a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p_Dir, "02b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_3idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p_Dir, "03a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p_Dir, "03b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_4idp_2p");
+
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir,
                       "01a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p");
         //</editor-fold>
@@ -9641,6 +9875,19 @@ void EventAnalyser() {
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p_Dir, "04a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p_Dir, "04b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p_Dir, "05a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p_Dir, "05b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_3idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p_Dir, "06a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p");
+        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p_Dir, "06b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_4idp_2p");
+
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
                       hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "01b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
         //</editor-fold>
@@ -11798,7 +12045,7 @@ void EventAnalyser() {
     myLogFile << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n";
     myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
     myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
-    myLogFile << "num_of_events_2p_wFakeProtons:\t\t\t\t" << num_of_events_2p_wFakeProtons << "\n";
+    myLogFile << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n";
     myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n";
     myLogFile << "num_of_events_1epFDpCD:\t\t\t\t" << num_of_events_with_1epFDpCD << "\n";
     myLogFile << "num_of_events_1epFDpFD:\t\t\t\t" << num_of_events_with_1epFDpFD << "\n";
@@ -11897,7 +12144,7 @@ void EventAnalyser() {
     cout << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n";
     cout << "num_of_events_1e2p_all:\t\t\t" << num_of_events_1e2p_all << "\n";
     cout << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
-    cout << "num_of_events_2p_wFakeProtons:\t\t\t\t" << num_of_events_2p_wFakeProtons << "\n";
+    cout << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n";
     cout << "num_of_events_2p:\t\t\t" << num_of_events_2p << "\n";
     cout << "num_of_events_1epFDpCD:\t\t\t" << num_of_events_with_1epFDpCD << "\n";
     cout << "num_of_events_1epFDpFD:\t\t\t" << num_of_events_with_1epFDpFD << "\n";
