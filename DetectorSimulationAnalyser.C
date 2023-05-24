@@ -3426,6 +3426,7 @@ void EventAnalyser() {
     TH1D *hE_e_1e_cut_FD = new TH1D("E_{e} (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hE_e_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
 
+
     TH1D *hE_e_1e_cut_FD_1p = new TH1D("E_{e} for 1p (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hE_e_1e_cut_FD_1p_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     TH1D *hE_e_1e_cut_FD_1p_mom = new TH1D("E_{e} for 1p_mom (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
@@ -3442,6 +3443,15 @@ void EventAnalyser() {
     string hE_e_1e_cut_FD_1pFD_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
     TH1D *hE_e_1e_cut_FD_1pFD_mom_noFDph = new TH1D("E_{e} for 1pFD_mom w/o FDph (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
     string hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDtheta = new TH1D("E_{e} for 1p in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDtheta_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDtheta_mom = new TH1D("E_{e} for 1p_mom in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDtheta_mom_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDtheta_noFDph = new TH1D("E_{e} for 1p w/o FDph in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDtheta_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    TH1D *hE_e_1e_cut_FD_1pFDtheta_mom_noFDph = new TH1D("E_{e} for 1p_mom w/o FDph in 5#circ#leq#theta_{p}#leq40#circ  (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_1e_cut_FD_1pFDtheta_mom_noFDph_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+
 
     TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)",
                                                        "E_{e} vs. #theta_{e} (All Int., 1e Cut);#theta_{e} [Deg];E_{e} [GeV]", 250, 0, 50, 250, 0, beamE * 1.1);
@@ -6207,6 +6217,38 @@ void EventAnalyser() {
             if (protons.size() == 1 && protons[0]->getRegion() == FD && PhotonsFD_ind.size() == 0) { hE_e_1e_cut_FD_1pFD_noFDph->Fill(E_e); }
 
             if (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == FD && PhotonsFD_ind.size() == 0) { hE_e_1e_cut_FD_1pFD_mom_noFDph->Fill(E_e); }
+
+            if (protons.size() == 1) {
+                double Theta_p = protons[0]->getTheta() * 180.0 / pi;
+
+                if (Theta_p >= 5 && Theta_p <= 40) {
+                    hE_e_1e_cut_FD_1pFDtheta->Fill(E_e);
+                }
+            }
+
+            if (Protons_ind.size() == 1) {
+                double Theta_p = protons[Protons_ind.at(0)]->getTheta() * 180.0 / pi;
+
+                if (Theta_p >= 5 && Theta_p <= 40) {
+                    hE_e_1e_cut_FD_1pFDtheta_mom->Fill(E_e);
+                }
+            }
+
+            if (protons.size() == 1 && PhotonsFD_ind.size() == 0) {
+                double Theta_p = protons[0]->getTheta() * 180.0 / pi;
+
+                if (Theta_p >= 5 && Theta_p <= 40) {
+                    hE_e_1e_cut_FD_1pFDtheta_noFDph->Fill(E_e);
+                }
+            }
+
+            if (Protons_ind.size() == 1 && PhotonsFD_ind.size() == 0) {
+                double Theta_p = protons[0]->getTheta() * 180.0 / pi;
+
+                if (Theta_p >= 5 && Theta_p <= 40) {
+                    hE_e_1e_cut_FD_1pFDtheta_mom_noFDph->Fill(E_e);
+                }
+            }
         }
         //</editor-fold>
 
@@ -8218,7 +8260,6 @@ void EventAnalyser() {
         bool event_selection_2p = (basic_event_selection && (Protons_ind.size() == 2));
 
         if (calculate_2p && event_selection_2p) { // for 2p calculations (with any number of neutrals, neutrons and pdg=0)
-//        if ((calculate_2p == true) && ((Nf == 3) && (Np == 2))) { // for 2p calculations
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
 
             //<editor-fold desc="Safty check (2p)">
@@ -11404,29 +11445,32 @@ void EventAnalyser() {
                       "01_E_e_1e_cut", hE_e_1e_cut_FD_Dir, "", kBlue, true, true, true);
 
         histPlotter1D(c1, hE_e_1e_cut_FD_1p, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sE_e_1e_cut,
-                      "02_hE_e_1e_cut_FD_1p", hE_e_1e_cut_FD_1p_Dir, "", kBlue, true, true, true);
+                      sE_e_1e_cut, "02_hE_e_1e_cut_FD_1p", hE_e_1e_cut_FD_1p_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1p_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sE_e_1e_cut,
-                      "03_hE_e_1e_cut_FD_1p_mom", hE_e_1e_cut_FD_1p_mom_Dir, "", kBlue, true, true, true);
+                      sE_e_1e_cut, "03_hE_e_1e_cut_FD_1p_mom", hE_e_1e_cut_FD_1p_mom_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1p_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true, sE_e_1e_cut,
-                      "04_hE_e_1e_cut_FD_1p_noFDph", hE_e_1e_cut_FD_1p_noFDph_Dir, "", kBlue, true, true, true);
+                      true, sE_e_1e_cut, "04_hE_e_1e_cut_FD_1p_noFDph", hE_e_1e_cut_FD_1p_noFDph_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1p_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2,
-                      false, true, sE_e_1e_cut,
-                      "05_hE_e_1e_cut_FD_1p_mom_noFDph", hE_e_1e_cut_FD_1p_mom_noFDph_Dir, "", kBlue, true, true, true);
+                      false, true, sE_e_1e_cut, "05_hE_e_1e_cut_FD_1p_mom_noFDph", hE_e_1e_cut_FD_1p_mom_noFDph_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1pFD, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sE_e_1e_cut,
-                      "06_hE_e_1e_cut_FD_1pFD", hE_e_1e_cut_FD_1pFD_Dir, "", kBlue, true, true, true);
+                      sE_e_1e_cut, "06_hE_e_1e_cut_FD_1pFD", hE_e_1e_cut_FD_1pFD_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_mom", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true, sE_e_1e_cut,
-                      "07_hE_e_1e_cut_FD_1pFD_mom", hE_e_1e_cut_FD_1pFD_mom_Dir, "", kBlue, true, true, true);
+                      true, sE_e_1e_cut, "07_hE_e_1e_cut_FD_1pFD_mom", hE_e_1e_cut_FD_1pFD_mom_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_noFDph", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2,
-                      false, true, sE_e_1e_cut,
-                      "08_hE_e_1e_cut_FD_1pFD_noFDph", hE_e_1e_cut_FD_1pFD_noFDph_Dir, "", kBlue, true, true, true);
+                      false, true, sE_e_1e_cut, "08_hE_e_1e_cut_FD_1pFD_noFDph", hE_e_1e_cut_FD_1pFD_noFDph_Dir, "", kBlue, true, true, true);
         histPlotter1D(c1, hE_e_1e_cut_FD_1pFD_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1pFD_mom_noFDph", "1e Cut", 0.06, 0.0425, 0.0425,
-                      plots, 2, false, true, sE_e_1e_cut,
-                      "09_hE_e_1e_cut_FD_1pFD_mom_noFDph", hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir, "", kBlue, true, true, true);
+                      plots, 2, false, true, sE_e_1e_cut, "09_hE_e_1e_cut_FD_1pFD_mom_noFDph", hE_e_1e_cut_FD_1pFD_mom_noFDph_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p in 5#circ#leq#theta_{p}#leq40#circ", "1e Cut", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "10_hE_e_1e_cut_FD_1pFDtheta", hE_e_1e_cut_FD_1pFDtheta_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta_mom, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom in 5#circ#leq#theta_{p}#leq40#circ", "1e Cut",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "11_hE_e_1e_cut_FD_1pFDtheta_mom", hE_e_1e_cut_FD_1pFDtheta_mom_Dir, "", kBlue, true,
+                      true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_noFDph in 5#circ#leq#theta_{p}#leq40#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "12_hE_e_1e_cut_FD_1pFDtheta_noFDph", hE_e_1e_cut_FD_1pFDtheta_noFDph_Dir, "",
+                      kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_1e_cut_FD_1pFDtheta_mom_noFDph, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram for 1p_mom_noFDph in 5#circ#leq#theta_{p}#leq40#circ",
+                      "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut, "13_hE_e_1e_cut_FD_1pFDtheta_mom_noFDph",
+                      hE_e_1e_cut_FD_1pFDtheta_mom_noFDph_Dir, "", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="E_e plots (1p, FD)">
