@@ -4651,8 +4651,9 @@ void EventAnalyser() {
         //<editor-fold desc="Charged particles' identification">
         vector<int> Electron_ind = ChargedParticleID(electrons, e_mom_th);
 
-        vector<int> Protons_ind0 = ChargedParticleID(protons, p_mom_th); // within P_p th.
-        vector<int> Protons_ind = GetGoodProtons(protons, Protons_ind0, p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, phi_p1_p2_diff_cuts_2p); // within P_p th. & single det.
+        vector<int> IDProtons_ind = ChargedParticleID(protons, p_mom_th); // identified protons (i.e., within P_p th.)
+        vector<int> Protons_ind = GetGoodProtons(protons, IDProtons_ind,
+                                                 p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, phi_p1_p2_diff_cuts_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
 
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
         vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
@@ -4762,16 +4763,16 @@ void EventAnalyser() {
 
         //<editor-fold desc="Monitoring handling fake protons">
         if (basic_event_selection) {
-            if (Protons_ind0.size() == 2) { ++num_of_events_2p_wFakeProtons; }
+            if (IDProtons_ind.size() == 2) { ++num_of_events_2p_wFakeProtons; }
 
-            for (int i = 0; i < Protons_ind0.size(); i++) {
-                auto proton_i_2p = protons[Protons_ind0.at(i)];
+            for (int i = 0; i < IDProtons_ind.size(); i++) {
+                auto proton_i_2p = protons[IDProtons_ind.at(i)];
                 TVector3 proton_i_2p_2p_3v;
                 proton_i_2p_2p_3v.SetMagThetaPhi(proton_i_2p->getP(), proton_i_2p->getTheta(), proton_i_2p->getPhi());                  // first proton in protons vector
                 double Theta_pi = proton_i_2p->getTheta() * 180.0 / pi, Phi_pi = proton_i_2p->getPhi() * 180.0 / pi;                           // Theta_pi; Phi_pi in deg
 
-                for (int j = i + 1; j < Protons_ind0.size(); j++) {
-                    auto proton_j_2p = protons[Protons_ind0.at(j)];
+                for (int j = i + 1; j < IDProtons_ind.size(); j++) {
+                    auto proton_j_2p = protons[IDProtons_ind.at(j)];
                     TVector3 proton_j_2p_2p_3v;
                     proton_j_2p_2p_3v.SetMagThetaPhi(proton_j_2p->getP(), proton_j_2p->getTheta(), proton_j_2p->getPhi());              // first proton in protons vector
                     double Theta_pj = proton_j_2p->getTheta() * 180.0 / pi, Phi_pj = proton_j_2p->getPhi() * 180.0 / pi;                       // Theta_pi; Phi_pi in deg
@@ -4789,7 +4790,7 @@ void EventAnalyser() {
                         pos_diff_ij.SetXYZ(pi_hit_pos.Px() - pj_hit_pos.Px(), pi_hit_pos.Py() - pj_hit_pos.Py(), pi_hit_pos.Pz() - pj_hit_pos.Pz());
                         double time_diff_ij = proton_i_2p->getTime() - proton_j_2p->getTime();
 
-                        if (Protons_ind0.size() == 2) {
+                        if (IDProtons_ind.size() == 2) {
                             hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
                             hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
 
@@ -4800,7 +4801,7 @@ void EventAnalyser() {
                             }
                         }
 
-                        if (Protons_ind0.size() == 3 && Protons_ind.size() == 2) {
+                        if (IDProtons_ind.size() == 3 && Protons_ind.size() == 2) {
                             hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
                             hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
 
@@ -4811,7 +4812,7 @@ void EventAnalyser() {
                             }
                         }
 
-                        if (Protons_ind0.size() == 4 && Protons_ind.size() == 2) {
+                        if (IDProtons_ind.size() == 4 && Protons_ind.size() == 2) {
                             hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
                             hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
 
@@ -4828,7 +4829,7 @@ void EventAnalyser() {
                         bool p_j_around_40 = (fabs(Theta_pj - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
                         bool small_dPhi = (fabs(dPhi_ij_2p - phi_p1_p2_diff_cuts_2p.GetMean()) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
 
-                        if (Protons_ind0.size() == 2) {
+                        if (IDProtons_ind.size() == 2) {
                             if (Theta_pi_pj_2p < 20) {
                                 hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
 
@@ -4843,7 +4844,7 @@ void EventAnalyser() {
                             }
                         }
 
-                        if (Protons_ind0.size() == 3 && Protons_ind.size() == 2) {
+                        if (IDProtons_ind.size() == 3 && Protons_ind.size() == 2) {
                             if (Theta_pi_pj_2p < 20) {
                                 hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
 
@@ -4858,7 +4859,7 @@ void EventAnalyser() {
                             }
                         }
 
-                        if (Protons_ind0.size() == 4 && Protons_ind.size() == 2) {
+                        if (IDProtons_ind.size() == 4 && Protons_ind.size() == 2) {
                             if (Theta_pi_pj_2p < 20) {
                                 hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
 
@@ -4873,8 +4874,8 @@ void EventAnalyser() {
                             }
                         }
                     }
-                } // end of second for loop over Protons_ind0 (with j)
-            } // end of first for loop over Protons_ind0 (with i)
+                } // end of second for loop over IDProtons_ind (with j)
+            } // end of first for loop over IDProtons_ind (with i)
         }
         //</editor-fold>
 
