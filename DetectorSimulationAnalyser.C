@@ -1355,35 +1355,65 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (2p)">
 
     //<editor-fold desc="Momentum threshold plots (2p)">
-    hPlot1D hP_e_2p_FD = hPlot1D("2p", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
-                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_2p_FD = hPlot1D("2p", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_2p_Directory"], "01_P_e_BC_2p_FD", 0, beamE * 1.1);
+    hPlot1D hP_e_APID_2p_FD = hPlot1D("2p", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "01a_P_e_APID_2p_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_e_BPID_2p_FD = hPlot1D("2p", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "01b_P_e_BPID_2p_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_2p_CD = hPlot1D("2p", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
-                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_CD = hPlot1D("2p", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_2p_Directory"], "02_P_p_BC_2p_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_APID_2p_CD = hPlot1D("2p", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "02a_P_p_APID_2p_CD",
+                                      Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BPID_2p_CD = hPlot1D("2p", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "02b_P_p_BPID_2p_CD",
+                                      Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_APID_2p_FD = hPlot1D("2p", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "03c_P_p_APID_2p_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BPID_2p_FD = hPlot1D("2p", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "03d_P_p_BPID_2p_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_2p_FD = hPlot1D("2p", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
-                                 directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_2p_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_2p_FD = hPlot1D("2p", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_2p_Directory"], "03_P_p_BC_2p_FD", 0, beamE * 1.1);
+    hPlot1D hP_piplus_APID_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_2p_Directory"], "04a_P_piplus_APID_2p_CD",
+                                           Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_BPID_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_2p_Directory"], "04b_P_piplus_BPID_2p_CD",
+                                           Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_APID_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_2p_Directory"], "04c_P_piplus_APID_2p_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_BPID_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_2p_Directory"], "04d_P_piplus_BPID_2p_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pip_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
-                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
-                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "04_P_piplus_BC_2p_FD", 0, beamE * 1.1);
+    hPlot1D hP_piminus_APID_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
+                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "05a_P_piminus_APID_2p_CD",
+                                            Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_BPID_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
+                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "05b_P_piminus_BPID_2p_CD",
+                                            Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_APID_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
+                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "05c_P_piminus_APID_2p_FD",
+                                            Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_BPID_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
+                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "05d_P_piminus_BPID_2p_FD",
+                                            Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pim_BC_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
-                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
-                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "05_P_piminus_BC_2p_FD", 0, beamE * 1.1);
+    hPlot1D hP_ph_APID_2p_FD = hPlot1D("2p", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
+                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "06c_P_ph_APID_2p_FD",
+                                       Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_ph_BPID_2p_FD = hPlot1D("2p", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
+                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "06d_P_ph_BPID_2p_FD",
+                                       Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_n_BC_2p_CD = hPlot1D("2p", "CD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_2p_FD = hPlot1D("2p", "FD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
-                                    directories.Momentum_Directory_map["Momentum_2p_Directory"], "06_P_n_BC_2p_FD", 0, beamE * 1.1);
+    hPlot1D hP_n_APID_2p_FD = hPlot1D("2p", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "07c_P_n_APID_2p_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_n_BPID_2p_FD = hPlot1D("2p", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_2p_Directory"], "07d_P_n_BPID_2p_FD",
+                                      Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Leading (P_1) and recoil (P_2) Momentum threshold plots (2p)">
@@ -1404,35 +1434,65 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (pFDpCD)">
 
     //<editor-fold desc="Momentum threshold plots (pFDpCD)">
-    hPlot1D hP_e_pFDpCD_FD = hPlot1D("pFDpCD", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
-                                     directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "01_P_e_pFDpCD_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_pFDpCD_FD = hPlot1D("pFDpCD", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "01_P_e_BC_pFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_e_APID_pFDpCD_FD = hPlot1D("pFDpCD", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "01a_P_e_APID_pFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_e_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "01b_P_e_BPID_pFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
-                                     directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "02_P_p_pFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "02_P_p_BC_pFDpCD_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_APID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "02a_P_p_APID_pFDpCD_CD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BPID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "02b_P_p_BPID_pFDpCD_CD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "03c_P_p_APID_pFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "03d_P_p_BPID_pFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
-                                     directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "03_P_p_pFDpCD_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "03_P_p_BC_pFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_piplus_APID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04a_P_piplus_APID_pFDpCD_CD",
+                                               Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_BPID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04b_P_piplus_BPID_pFDpCD_CD",
+                                               Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04c_P_piplus_APID_pFDpCD_FD",
+                                               Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04d_P_piplus_BPID_pFDpCD_FD",
+                                               Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pip_BC_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04_P_piplus_BC_pFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04_P_piplus_BC_pFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_piminus_APID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05a_P_piminus_APID_pFDpCD_CD",
+                                                Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_BPID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05b_P_piminus_BPID_pFDpCD_CD",
+                                                Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05c_P_piminus_APID_pFDpCD_FD",
+                                                Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05d_P_piminus_BPID_pFDpCD_FD",
+                                                Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pim_BC_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05_P_piminus_BC_pFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05_P_piminus_BC_pFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_ph_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "06c_P_ph_APID_pFDpCD_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_ph_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "06d_P_ph_BPID_pFDpCD_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_n_BC_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "06_P_n_BC_pFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "06_P_n_BC_pFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_n_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "07c_P_n_APID_pFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_n_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "07d_P_n_BPID_pFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Leading (P_1) and recoil (P_2) Momentum threshold plots (pFDpCD)">
@@ -1453,35 +1513,65 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (nFDpCD)">
 
     //<editor-fold desc="Momentum threshold plots (nFDpCD)">
-    hPlot1D hP_e_nFDpCD_FD = hPlot1D("nFDpCD", "", "Electron momentum", "Electron momentum P_{e}", "P_{e} [GeV/c]",
-                                     directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "01_P_e_nFDpCD_FD", 0, beamE * 1.1);
-    hPlot1D hP_e_BC_nFDpCD_FD = hPlot1D("nFDpCD", "", "Electron momentum BC", "Electron momentum P_{e} - before cuts", "P_{e} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "01_P_e_BC_nFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_e_APID_nFDpCD_FD = hPlot1D("nFDpCD", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "01a_P_e_APID_nFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_e_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "01b_P_e_BPID_nFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
-                                     directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "02_P_p_nFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "02_P_p_BC_nFDpCD_CD", 0, beamE * 1.1);
+    hPlot1D hP_p_APID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "02a_P_p_APID_nFDpCD_CD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BPID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "02b_P_p_BPID_nFDpCD_CD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "03c_P_p_APID_nFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_p_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "03d_P_p_BPID_nFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_p_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Proton momentum", "Proton momentum P_{p}", "P_{p} [GeV/c]",
-                                     directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "03_P_p_nFDpCD_FD", 0, beamE * 1.1);
-    hPlot1D hP_p_BC_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Proton momentum BC", "Proton momentum P_{p} - before cuts", "P_{p} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "03_P_p_BC_nFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_piplus_APID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04a_P_piplus_APID_nFDpCD_CD",
+                                               Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_BPID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04b_P_piplus_BPID_nFDpCD_CD",
+                                               Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04c_P_piplus_APID_nFDpCD_FD",
+                                               Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piplus_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
+                                               directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04d_P_piplus_BPID_nFDpCD_FD",
+                                               Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pip_BC_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04_P_piplus_BC_nFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_pip_BC_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{+} momentum BC", "#pi^{+} momentum P_{#pi^{+}} - before cuts", "P_{#pi^{+}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04_P_piplus_BC_nFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_piminus_APID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05a_P_piminus_APID_nFDpCD_CD",
+                                                Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_BPID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05b_P_piminus_BPID_nFDpCD_CD",
+                                                Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05c_P_piminus_APID_nFDpCD_FD",
+                                                Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_piminus_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
+                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05d_P_piminus_BPID_nFDpCD_FD",
+                                                Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_pim_BC_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05_P_piminus_BC_nFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_pim_BC_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{-} momentum BC", "#pi^{-} momentum P_{#pi^{-}} - before cuts", "P_{#pi^{-}} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05_P_piminus_BC_nFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_ph_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "06c_P_ph_APID_nFDpCD_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_ph_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "06d_P_ph_BPID_nFDpCD_FD",
+                                           Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_n_BC_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "06_P_n_BC_nFDpCD_CD", 0, beamE * 1.1);
-    hPlot1D hP_n_BC_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum BC", "Neutron momentum P_{n} - before cuts", "P_{n} [GeV/c]",
-                                        directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "06_P_n_BC_nFDpCD_FD", 0, beamE * 1.1);
+    hPlot1D hP_n_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07c_P_n_APID_nFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
+    hPlot1D hP_n_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07d_P_n_BPID_nFDpCD_FD",
+                                          Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="Leading (P_1) and recoil (P_2) Momentum threshold plots (nFDpCD)">
@@ -2549,14 +2639,100 @@ void EventAnalyser() {
 
     //<editor-fold desc="Other angle plots (pFDpCD)">
 
+// Theta_pFD ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_pFD histograms">
+    THStack *sTheta_pFD_pFDpCD_FD = new THStack("#theta_{pFD} (pFDpCD)", "#theta_{pFD} of FD proton (pFDpCD);#theta_{pFD} [Deg];");
+
+    TH1D *hTheta_pFD_All_Int_pFDpCD_FD = new TH1D("#theta_{pFD} (All Int., pFDpCD)", "#theta_{pFD} of FD proton (All Int., pFDpCD);#theta_{pFD} [Deg];", 100, 0, 50);
+    TH1D *hTheta_pFD_QEL_pFDpCD_FD = new TH1D("#theta_{pFD} (QEL Only, pFDpCD)", "#theta_{pFD} of FD proton (QEL Only, pFDpCD);#theta_{pFD} [Deg];", 100, 0, 50);
+    TH1D *hTheta_pFD_MEC_pFDpCD_FD = new TH1D("#theta_{pFD} (MEC Only, pFDpCD)", "#theta_{pFD} of FD proton (MEC Only, pFDpCD);#theta_{pFD} [Deg];", 100, 0, 50);
+    TH1D *hTheta_pFD_RES_pFDpCD_FD = new TH1D("#theta_{pFD} (RES Only, pFDpCD)", "#theta_{pFD} of FD proton (RES Only, pFDpCD);#theta_{pFD} [Deg];", 100, 0, 50);
+    TH1D *hTheta_pFD_DIS_pFDpCD_FD = new TH1D("#theta_{pFD} (DIS Only, pFDpCD)", "#theta_{pFD} of FD proton (DIS Only, pFDpCD);#theta_{pFD} [Deg];", 100, 0, 50);
+    string hTheta_pFD_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
+    string hTheta_pFD_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
+    string hTheta_pFD_MEC_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
+    string hTheta_pFD_RES_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
+    string hTheta_pFD_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Phi_pFD --------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Phi_pFD histograms">
+    THStack *sPhi_pFD_pFDpCD_FD = new THStack("#phi_{pFD} (pFDpCD)", "#phi_{pFD} of FD proton (pFDpCD);#phi_{pFD} [Deg];");
+
+    TH1D *hPhi_pFD_All_Int_pFDpCD_FD = new TH1D("#phi_{pFD} (All Int., pFDpCD)", "#phi_{pFD} of FD proton (All Int., pFDpCD);#phi_{pFD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pFD_QEL_pFDpCD_FD = new TH1D("#phi_{pFD} (QEL Only, pFDpCD)", "#phi_{pFD} of FD proton (QEL Only, pFDpCD);#phi_{pFD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pFD_MEC_pFDpCD_FD = new TH1D("#phi_{pFD} (MEC Only, pFDpCD)", "#phi_{pFD} of FD proton (MEC Only, pFDpCD);#phi_{pFD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pFD_RES_pFDpCD_FD = new TH1D("#phi_{pFD} (RES Only, pFDpCD)", "#phi_{pFD} of FD proton (RES Only, pFDpCD);#phi_{pFD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pFD_DIS_pFDpCD_FD = new TH1D("#phi_{pFD} (DIS Only, pFDpCD)", "#phi_{pFD} of FD proton (DIS Only, pFDpCD);#phi_{pFD} [Deg];", 100, -180, 180);
+    string hPhi_pFD_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
+    string hPhi_pFD_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
+    string hPhi_pFD_MEC_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
+    string hPhi_pFD_RES_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
+    string hPhi_pFD_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_pFD vs. Phi_pFD ------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_pFD vs. Phi_pFD histograms">
+    TH2D *hTheta_pFD_VS_Phi_pFD_pFDpCD_FD = new TH2D("#theta_{pFD} vs. #phi_{pFD} of FD proton (All Int., pFDpCD)",
+                                                     "#theta_{pFD} vs. #phi_{pFD} of FD proton (All Int., pFDpCD);#phi_{pFD} [Deg];#theta_{pFD} [Deg]",
+                                                     250, -200, 200, 250, 0, 50);
+    string hTheta_pFD_VS_Phi_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_VS_Phi_pFD_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_pCD ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_pCD histograms">
+    THStack *sTheta_pCD_pFDpCD_CD = new THStack("#theta_{pCD} (pFDpCD)", "#theta_{pCD} of CD proton (pFDpCD);#theta_{pCD} [Deg];");
+
+    TH1D *hTheta_pCD_All_Int_pFDpCD_CD = new TH1D("#theta_{pCD} (All Int., pFDpCD)", "#theta_{pCD} of CD proton (All Int., pFDpCD);#theta_{pCD} [Deg];", 100, 30, 145);
+    TH1D *hTheta_pCD_QEL_pFDpCD_CD = new TH1D("#theta_{pCD} (QEL Only, pFDpCD)", "#theta_{pCD} of CD proton (QEL Only, pFDpCD);#theta_{pCD} [Deg];", 100, 30, 145);
+    TH1D *hTheta_pCD_MEC_pFDpCD_CD = new TH1D("#theta_{pCD} (MEC Only, pFDpCD)", "#theta_{pCD} of CD proton (MEC Only, pFDpCD);#theta_{pCD} [Deg];", 100, 30, 145);
+    TH1D *hTheta_pCD_RES_pFDpCD_CD = new TH1D("#theta_{pCD} (RES Only, pFDpCD)", "#theta_{pCD} of CD proton (RES Only, pFDpCD);#theta_{pCD} [Deg];", 100, 30, 145);
+    TH1D *hTheta_pCD_DIS_pFDpCD_CD = new TH1D("#theta_{pCD} (DIS Only, pFDpCD)", "#theta_{pCD} of CD proton (DIS Only, pFDpCD);#theta_{pCD} [Deg];", 100, 30, 145);
+    string hTheta_pCD_All_Int_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
+    string hTheta_pCD_QEL_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
+    string hTheta_pCD_MEC_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
+    string hTheta_pCD_RES_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
+    string hTheta_pCD_DIS_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Phi_pCD --------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Phi_pCD histograms">
+    THStack *sPhi_pCD_pFDpCD_CD = new THStack("#phi_{pCD} (pFDpCD)", "#phi_{pCD} of CD proton (pFDpCD);#phi_{pCD} [Deg];");
+
+    TH1D *hPhi_pCD_All_Int_pFDpCD_CD = new TH1D("#phi_{pCD} (All Int., pFDpCD)", "#phi_{pCD} of CD proton (All Int., pFDpCD);#phi_{pCD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pCD_QEL_pFDpCD_CD = new TH1D("#phi_{pCD} (QEL Only, pFDpCD)", "#phi_{pCD} of CD proton (QEL Only, pFDpCD);#phi_{pCD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pCD_MEC_pFDpCD_CD = new TH1D("#phi_{pCD} (MEC Only, pFDpCD)", "#phi_{pCD} of CD proton (MEC Only, pFDpCD);#phi_{pCD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pCD_RES_pFDpCD_CD = new TH1D("#phi_{pCD} (RES Only, pFDpCD)", "#phi_{pCD} of CD proton (RES Only, pFDpCD);#phi_{pCD} [Deg];", 100, -180, 180);
+    TH1D *hPhi_pCD_DIS_pFDpCD_CD = new TH1D("#phi_{pCD} (DIS Only, pFDpCD)", "#phi_{pCD} of CD proton (DIS Only, pFDpCD);#phi_{pCD} [Deg];", 100, -180, 180);
+    string hPhi_pCD_All_Int_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
+    string hPhi_pCD_QEL_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
+    string hPhi_pCD_MEC_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
+    string hPhi_pCD_RES_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
+    string hPhi_pCD_DIS_pFDpCD_CD_Dir = directories.Angle_Directory_map["Phi_pCD_pFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_pCD vs. Phi_pCD ------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_pCD vs. Phi_pCD histograms">
+    TH2D *hTheta_pCD_VS_Phi_pCD_pFDpCD_CD = new TH2D("#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., pFDpCD)",
+                                                     "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., pFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
+                                                     250, -200, 200, 250, 30, 145);
+    string hTheta_pCD_VS_Phi_pCD_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"];
+    //</editor-fold>
+
 // Theta_p_e_p_tot (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
     THStack *sTheta_p_e_p_tot_pFDpCD = new THStack("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
                                                    "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];");
     TH1D *hTheta_p_e_p_tot_pFDpCD = new TH1D("#theta_{#vec{P}_{e},#vec{P}_{tot}} (All Int., pFDpCD)",
-                                             "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);"
-                                             "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 100, 0, 180);
+                                             "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2} (All Int., pFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
+                                             100, 0, 180);
     string hTheta_p_e_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -7330,59 +7506,85 @@ void EventAnalyser() {
             /* Filling Nphe plots (2p) */
             hNphe_2p_FD.hFill(Nphe, Weight);
 
-            /* Filling momentum histograms */
-            // Electrton momentum (2p):
-            if (e_2p->getRegion() == FD) { hP_e_2p_FD.hFill(P_e, Weight); }
+            //<editor-fold desc="Filling momentum histograms (2p)">
+
+            //<editor-fold desc="Electron momentum (2p)">
+            if (e_2p->getRegion() == FD) { hP_e_APID_2p_FD.hFill(P_e, Weight); }
 
             for (int i = 0; i < Ne; i++) {
-                if (electrons[i]->getRegion() == FD) { hP_e_BC_2p_FD.hFill(P_e, Weight); } // before mom cuts
-            }
+                if (electrons[i]->getRegion() == FD) { hP_e_BPID_2p_FD.hFill(P_e, Weight); }
+            } // before mom. th.
+            //</editor-fold>
 
-            // Proton0 momentum (2p):
-            if (p_first_2p->getRegion() == CD) {
-                hP_p_2p_CD.hFill(P_p_first_2p_3v.Mag(), Weight);
-            } else if (p_first_2p->getRegion() == FD) {
-                hP_p_2p_FD.hFill(P_p_first_2p_3v.Mag(), Weight);
-            }
-
-            // Proton1 momentum (2p):
-            if (p_second_2p->getRegion() == CD) {
-                hP_p_2p_CD.hFill(P_p_second_2p_3v.Mag(), Weight);
-            } else if (p_second_2p->getRegion() == FD) {
-                hP_p_2p_FD.hFill(P_p_second_2p_3v.Mag(), Weight);
-            }
-
-            for (int i = 0; i < Nn; i++) {
-                if (neutrons[i]->getRegion() == CD) {
-                    hP_n_BC_2p_CD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
-                } else if (neutrons[i]->getRegion() == FD) {
-                    hP_n_BC_2p_FD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
+            //<editor-fold desc="Proton momentum (2p)">
+            //TODO: remove 2p plots for protons in CD (we're looking at 2p in the FD only!)
+            for (int &i: Protons_ind) {
+                if (protons[i]->getRegion() == CD) {
+                    hP_p_APID_2p_CD.hFill(protons[i]->getP(), Weight); // after mom. th.
+                } else if (protons[i]->getRegion() == FD) {
+                    hP_p_APID_2p_FD.hFill(protons[i]->getP(), Weight); // after mom. th.
                 }
             }
 
             for (int i = 0; i < Np; i++) {
                 if (protons[i]->getRegion() == CD) {
-                    hP_p_BC_2p_CD.hFill(protons[i]->getP(), Weight); // before mom cuts
+                    hP_p_BPID_2p_CD.hFill(protons[i]->getP(), Weight); // before mom. th.
                 } else if (protons[i]->getRegion() == FD) {
-                    hP_p_BC_2p_FD.hFill(protons[i]->getP(), Weight); // before mom cuts
+                    hP_p_BPID_2p_FD.hFill(protons[i]->getP(), Weight); // before mom. th.
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Piplus momentum (2p)">
+            for (int &i: Piplus_ind) {
+                if (piplus[i]->getRegion() == CD) {
+                    hP_piplus_APID_2p_CD.hFill(piplus[i]->getP(), Weight); // after mom. th.
+                } else if (piplus[i]->getRegion() == FD) {
+                    hP_piplus_APID_2p_FD.hFill(piplus[i]->getP(), Weight); // after mom. th.
                 }
             }
 
             for (int i = 0; i < Npip; i++) {
                 if (piplus[i]->getRegion() == CD) {
-                    hP_pip_BC_2p_CD.hFill(piplus[i]->getP(), Weight); // before mom cuts
+                    hP_piplus_BPID_2p_CD.hFill(piplus[i]->getP(), Weight); // before mom. th.
                 } else if (piplus[i]->getRegion() == FD) {
-                    hP_pip_BC_2p_FD.hFill(piplus[i]->getP(), Weight); // before mom cuts
+                    hP_piplus_BPID_2p_FD.hFill(piplus[i]->getP(), Weight); // before mom. th.
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Piminus momentum (2p)">
+            for (int &i: Piminus_ind) {
+                if (piminus[i]->getRegion() == CD) {
+                    hP_piminus_APID_2p_CD.hFill(piminus[i]->getP(), Weight); // after mom. th.
+                } else if (piminus[i]->getRegion() == FD) {
+                    hP_piminus_APID_2p_FD.hFill(piminus[i]->getP(), Weight); // after mom. th.
                 }
             }
 
-            for (int i = 0; i < Npim; i++) {
+            for (int i = 0; i < piminus.size(); i++) {
                 if (piminus[i]->getRegion() == CD) {
-                    hP_pim_BC_2p_CD.hFill(piminus[i]->getP(), Weight); // before mom cuts
+                    hP_piminus_BPID_2p_CD.hFill(piminus[i]->getP(), Weight); // before mom. th.
                 } else if (piminus[i]->getRegion() == FD) {
-                    hP_piminus_BPID_1n_FD.hFill(piminus[i]->getP(), Weight); // before mom cuts
+                    hP_piminus_BPID_2p_FD.hFill(piminus[i]->getP(), Weight); // before mom. th.
                 }
             }
+            //</editor-fold>
+
+            //<editor-fold desc="Photon momentum (2p)">
+            for (int &i: PhotonsFD_ind) { hP_ph_APID_2p_FD.hFill(allParticles[i]->getP(), Weight); } // after mom. th.
+
+            for (int &i: FD_Photons) { hP_ph_BPID_2p_FD.hFill(allParticles[i]->getP(), Weight); } // before mom. th.
+            //</editor-fold>
+
+            //<editor-fold desc="Neutron momentum (2p)">
+            for (int &i: NeutronsFD_ind) { hP_n_APID_2p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // after mom. th.
+
+            for (int &i: FD_Neutrons) { hP_n_BPID_2p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
+            //</editor-fold>
+
+            //</editor-fold>
+
             //</editor-fold>
 
             //<editor-fold desc="Filling Beta vs. P plots (2p)">
@@ -7727,7 +7929,16 @@ void EventAnalyser() {
             auto e_pFDpCD = electrons[Electron_ind.at(0)];
             auto p_first_pFDpCD = protons[Protons_ind.at(0)];
             auto p_second_pFDpCD = protons[Protons_ind.at(1)];
-//            region_part_ptr
+
+            //<editor-fold desc="Determine pCD and pFD (pFDpCD)">
+            region_part_ptr pCD, pFD;
+
+            if (protons[Protons_ind.at(0)]->getRegion() == FD) {
+                pFD = protons[Protons_ind.at(0)], pCD = protons[Protons_ind.at(1)];
+            } else if (protons[Protons_ind.at(0)]->getRegion() == CD) {
+                pCD = protons[Protons_ind.at(0)], pFD = protons[Protons_ind.at(1)];
+            }
+            //</editor-fold>
 
             /* NOTE: p_first corresponds to protons[Protons_ind.at(0)] & p_second corresponds to protons[Protons_ind.at(1)] */
             TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_p_first_pFDpCD_3v, P_p_second_pFDpCD_3v, P_tot_pFDpCD_3v, P_1_pFDpCD_3v, P_2_pFDpCD_3v;
@@ -7758,6 +7969,10 @@ void EventAnalyser() {
             }
 
             /* Angles of leading and recoil protons */
+            double Theta_pFD = pFD->getTheta() * 180.0 / pi, Theta_pCD =
+                    pCD->getTheta() * 180.0 / pi;                                       // Theta_pFD, Theta_pCD in deg
+            double Phi_pFD = pFD->getPhi() * 180.0 / pi, Phi_pCD =
+                    pCD->getTheta() * 180.0 / pi;                                                 // Phi_pFD, Phi_pCD in deg
             double Theta_p1 = P_1_pFDpCD_3v.Theta() * 180.0 / pi, Theta_p2 = P_2_pFDpCD_3v.Theta() * 180.0 / pi;                             // Theta_p1, Theta_p2 in deg
             double Phi_p1 = P_1_pFDpCD_3v.Phi() * 180.0 / pi, Phi_p2 = P_2_pFDpCD_3v.Phi() * 180.0 / pi;                                         // Phi_p1, Phi_p2 in deg
             double Theta_p1_p2_pFDpCD = acos((P_1_pFDpCD_3v.Px() * P_2_pFDpCD_3v.Px() + P_1_pFDpCD_3v.Py() * P_2_pFDpCD_3v.Py()
@@ -7808,59 +8023,85 @@ void EventAnalyser() {
             /* Filling Nphe plots (pFDpCD) */
             hNphe_pFDpCD_FD.hFill(Nphe, Weight);
 
-            /* Filling momentum histograms */
-            // Electrton momentum (pFDpCD):
-            if (e_pFDpCD->getRegion() == FD) { hP_e_pFDpCD_FD.hFill(P_e, Weight); }
+            //<editor-fold desc="Filling momentum histograms (pFDpCD)">
+
+            //<editor-fold desc="Electron momentum (pFDpCD)">
+            if (e_pFDpCD->getRegion() == FD) { hP_e_APID_pFDpCD_FD.hFill(P_e, Weight); }
 
             for (int i = 0; i < Ne; i++) {
-                if (electrons[i]->getRegion() == FD) { hP_e_BC_pFDpCD_FD.hFill(P_e, Weight); } // before mom cuts
-            }
+                if (electrons[i]->getRegion() == FD) { hP_e_BPID_pFDpCD_FD.hFill(P_e, Weight); }
+            } // before mom. th.
+            //</editor-fold>
 
-            // Proton0 momentum (pFDpCD):
-            if (p_first_pFDpCD->getRegion() == CD) {
-                hP_p_pFDpCD_CD.hFill(P_p_first_pFDpCD_3v.Mag(), Weight);
-            } else if (p_first_pFDpCD->getRegion() == FD) {
-                hP_p_pFDpCD_FD.hFill(P_p_first_pFDpCD_3v.Mag(), Weight);
-            }
-
-            // Proton1 momentum (pFDpCD):
-            if (p_second_pFDpCD->getRegion() == CD) {
-                hP_p_pFDpCD_CD.hFill(P_p_second_pFDpCD_3v.Mag(), Weight);
-            } else if (p_second_pFDpCD->getRegion() == FD) {
-                hP_p_pFDpCD_FD.hFill(P_p_second_pFDpCD_3v.Mag(), Weight);
-            }
-
-            for (int i = 0; i < Nn; i++) {
-                if (neutrons[i]->getRegion() == CD) {
-                    hP_n_BC_pFDpCD_CD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
-                } else if (neutrons[i]->getRegion() == FD) {
-                    hP_n_BC_pFDpCD_FD.hFill(neutrons[i]->getP(), Weight); // before mom cuts
+            //<editor-fold desc="Proton momentum (pFDpCD)">
+            //TODO: remove pFDpCD plots for protons in CD (we're looking at pFDpCD in the FD only!)
+            for (int &i: Protons_ind) {
+                if (protons[i]->getRegion() == CD) {
+                    hP_p_APID_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // after mom. th.
+                } else if (protons[i]->getRegion() == FD) {
+                    hP_p_APID_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // after mom. th.
                 }
             }
 
             for (int i = 0; i < Np; i++) {
                 if (protons[i]->getRegion() == CD) {
-                    hP_p_BC_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // before mom cuts
+                    hP_p_BPID_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // before mom. th.
                 } else if (protons[i]->getRegion() == FD) {
-                    hP_p_BC_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // before mom cuts
+                    hP_p_BPID_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // before mom. th.
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Piplus momentum (pFDpCD)">
+            for (int &i: Piplus_ind) {
+                if (piplus[i]->getRegion() == CD) {
+                    hP_piplus_APID_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // after mom. th.
+                } else if (piplus[i]->getRegion() == FD) {
+                    hP_piplus_APID_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // after mom. th.
                 }
             }
 
             for (int i = 0; i < Npip; i++) {
                 if (piplus[i]->getRegion() == CD) {
-                    hP_pip_BC_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // before mom cuts
+                    hP_piplus_BPID_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // before mom. th.
                 } else if (piplus[i]->getRegion() == FD) {
-                    hP_pip_BC_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // before mom cuts
+                    hP_piplus_BPID_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // before mom. th.
+                }
+            }
+            //</editor-fold>
+
+            //<editor-fold desc="Piminus momentum (pFDpCD)">
+            for (int &i: Piminus_ind) {
+                if (piminus[i]->getRegion() == CD) {
+                    hP_piminus_APID_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // after mom. th.
+                } else if (piminus[i]->getRegion() == FD) {
+                    hP_piminus_APID_pFDpCD_FD.hFill(piminus[i]->getP(), Weight); // after mom. th.
                 }
             }
 
-            for (int i = 0; i < Npim; i++) {
+            for (int i = 0; i < piminus.size(); i++) {
                 if (piminus[i]->getRegion() == CD) {
-                    hP_pim_BC_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // before mom cuts
+                    hP_piminus_BPID_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // before mom. th.
                 } else if (piminus[i]->getRegion() == FD) {
-                    hP_piminus_BPID_1n_FD.hFill(piminus[i]->getP(), Weight); // before mom cuts
+                    hP_piminus_BPID_pFDpCD_FD.hFill(piminus[i]->getP(), Weight); // before mom. th.
                 }
             }
+            //</editor-fold>
+
+            //<editor-fold desc="Photon momentum (pFDpCD)">
+            for (int &i: PhotonsFD_ind) { hP_ph_APID_pFDpCD_FD.hFill(allParticles[i]->getP(), Weight); } // after mom. th.
+
+            for (int &i: FD_Photons) { hP_ph_BPID_pFDpCD_FD.hFill(allParticles[i]->getP(), Weight); } // before mom. th.
+            //</editor-fold>
+
+            //<editor-fold desc="Neutron momentum (pFDpCD)">
+            for (int &i: NeutronsFD_ind) { hP_n_APID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // after mom. th.
+
+            for (int &i: FD_Neutrons) { hP_n_BPID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
+            //</editor-fold>
+
+            //</editor-fold>
+
             //</editor-fold>
 
             //<editor-fold desc="Filling Beta vs. P plots (pFDpCD)">
@@ -8037,6 +8278,38 @@ void EventAnalyser() {
                     }
                 }
             } // end of loop over electrons vector
+
+            //<editor-fold desc="Filling pFD & pCD angle plots">
+            hTheta_pFD_All_Int_pFDpCD_FD->Fill(Theta_pFD, Weight);
+            hTheta_pCD_All_Int_pFDpCD_CD->Fill(Theta_pCD, Weight);
+            hPhi_pFD_All_Int_pFDpCD_FD->Fill(Phi_pFD, Weight);
+            hPhi_pCD_All_Int_pFDpCD_CD->Fill(Phi_pCD, Weight);
+            hTheta_pFD_VS_Phi_pFD_pFDpCD_FD->Fill(Phi_pFD, Theta_pFD, Weight);
+            hTheta_pCD_VS_Phi_pCD_pFDpCD_CD->Fill(Phi_pCD, Theta_pCD, Weight);
+
+            if (qel) {
+                hTheta_pFD_QEL_pFDpCD_FD->Fill(Theta_pFD, Weight);
+                hTheta_pCD_QEL_pFDpCD_CD->Fill(Theta_pCD, Weight);
+                hPhi_pFD_QEL_pFDpCD_FD->Fill(Phi_pFD, Weight);
+                hPhi_pCD_QEL_pFDpCD_CD->Fill(Phi_pCD, Weight);
+            } else if (mec) {
+                hTheta_pFD_MEC_pFDpCD_FD->Fill(Theta_pFD, Weight);
+                hTheta_pCD_MEC_pFDpCD_CD->Fill(Theta_pCD, Weight);
+                hPhi_pFD_MEC_pFDpCD_FD->Fill(Phi_pFD, Weight);
+                hPhi_pCD_MEC_pFDpCD_CD->Fill(Phi_pCD, Weight);
+            } else if (res) {
+                hTheta_pFD_RES_pFDpCD_FD->Fill(Theta_pFD, Weight);
+                hTheta_pCD_RES_pFDpCD_CD->Fill(Theta_pCD, Weight);
+                hPhi_pFD_RES_pFDpCD_FD->Fill(Phi_pFD, Weight);
+                hPhi_pCD_RES_pFDpCD_CD->Fill(Phi_pCD, Weight);
+            } else if (dis) {
+                hTheta_pFD_DIS_pFDpCD_FD->Fill(Theta_pFD, Weight);
+                hTheta_pCD_DIS_pFDpCD_CD->Fill(Theta_pCD, Weight);
+                hPhi_pFD_DIS_pFDpCD_FD->Fill(Phi_pFD, Weight);
+                hPhi_pCD_DIS_pFDpCD_CD->Fill(Phi_pCD, Weight);
+            }
+            //</editor-fold>
+
 
             /* Filling Q2 histograms (pFDpCD) */
             if (e_pFDpCD->getRegion() == FD) { hQ2_pFDpCD_FD->Fill(Q2, Weight); }
@@ -8717,60 +8990,81 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Momentum plots (2p, CD & FD)">
-        hP_e_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_p_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_e_APID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
+        hP_e_BPID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
 
-        hP_e_BC_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_p_BC_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_BC_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_pip_BC_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pip_BC_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pim_BC_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_pim_BC_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_n_BC_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-        hP_n_BC_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
 
-        hP_p_1_2p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_2_2p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_APID_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_BPID_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_APID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_BPID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+
+        hP_piminus_APID_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_BPID_2p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_APID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_BPID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+
+        hP_ph_APID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+        hP_ph_BPID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+
+        hP_n_APID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_n_BPID_2p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Momentum plots (pFDpCD, CD & FD)">
-        hP_e_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_p_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_e_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
+        hP_e_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
 
-        hP_e_BC_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_p_BC_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_BC_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_pip_BC_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pip_BC_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pim_BC_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_pim_BC_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_n_BC_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-        hP_n_BC_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
 
-        hP_p_1_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_2_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_APID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_BPID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+
+        hP_piminus_APID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_BPID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+
+        hP_ph_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+        hP_ph_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+
+        hP_n_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_n_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="Momentum plots (nFDpCD, CD & FD)">
-        hP_e_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_p_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_e_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
+        hP_e_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
 
-        hP_e_BC_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
-        hP_p_BC_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_BC_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_pip_BC_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pip_BC_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
-        hP_pim_BC_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_pim_BC_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
-        hP_n_BC_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-        hP_n_BC_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
 
-        hP_p_1_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-        hP_p_2_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_APID_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_BPID_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+        hP_piplus_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);
+
+        hP_piminus_APID_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_BPID_nFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+        hP_piminus_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut(), 0, false);
+
+        hP_ph_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+        hP_ph_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
+
+        hP_n_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="P1 vs P2 plots (2p, CD & FD)">
@@ -9137,34 +9431,24 @@ void EventAnalyser() {
         double Theta_e_DIS_pFDpCD_integral = hTheta_e_DIS_pFDpCD_FD->Integral();
 
         histPlotter1D(c1, hTheta_e_All_Int_pFDpCD_FD, norm_Angle_plots_master, true, Theta_e_All_Int_pFDpCD_integral, "#theta_{e} of Outgoing Electron",
-                      "All Int., pFDpCD", 0.06,
-                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "00_Theta_e_All_Int_pFDpCD", hTheta_e_All_Int_pFDpCD_FD_Dir, "FD", kBlue, true, true,
-                      true, false,
-                      true, 17.5, 22.5, false);
+                      "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "00_Theta_e_All_Int_pFDpCD", hTheta_e_All_Int_pFDpCD_FD_Dir,
+                      "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_QEL_pFDpCD_FD, norm_Angle_plots_master, true, Theta_e_QEL_pFDpCD_integral, "#theta_{e} of Outgoing Electron", "QEL Only, pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "01_Theta_e_QEL_Only_pFDpCD", hTheta_e_QEL_pFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "01_Theta_e_QEL_Only_pFDpCD", hTheta_e_QEL_pFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_MEC_pFDpCD_FD, norm_Angle_plots_master, true, Theta_e_MEC_pFDpCD_integral, "#theta_{e} of Outgoing Electron", "MEC Only, pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "02_Theta_e_MEC_Only_pFDpCD", hTheta_e_MEC_pFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "02_Theta_e_MEC_Only_pFDpCD", hTheta_e_MEC_pFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_RES_pFDpCD_FD, norm_Angle_plots_master, true, Theta_e_RES_pFDpCD_integral, "#theta_{e} of Outgoing Electron", "RES Only, pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "03_Theta_e_RES_Only_pFDpCD", hTheta_e_RES_pFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "03_Theta_e_RES_Only_pFDpCD", hTheta_e_RES_pFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_DIS_pFDpCD_FD, norm_Angle_plots_master, true, Theta_e_DIS_pFDpCD_integral, "#theta_{e} of Outgoing Electron", "DIS Only, pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "04_Theta_e_DIS_Only_pFDpCD", hTheta_e_DIS_pFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_pFDpCD_FD, "04_Theta_e_DIS_Only_pFDpCD", hTheta_e_DIS_pFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
 
         stackPlotter1D(c1, sTheta_e_pFDpCD_FD, norm_Angle_plots_master, "#theta_{e} of Outgoing Electron", "pFDpCD", plots, hTheta_e_All_Int_pFDpCD_FD,
-                       hTheta_e_QEL_pFDpCD_FD,
-                       hTheta_e_MEC_pFDpCD_FD, hTheta_e_RES_pFDpCD_FD, hTheta_e_DIS_pFDpCD_FD, "05_Theta_e_Stack_pFDpCD", hTheta_e_All_Int_pFDpCD_FD_Dir, "FD");
+                       hTheta_e_QEL_pFDpCD_FD, hTheta_e_MEC_pFDpCD_FD, hTheta_e_RES_pFDpCD_FD, hTheta_e_DIS_pFDpCD_FD, "05_Theta_e_Stack_pFDpCD",
+                       hTheta_e_All_Int_pFDpCD_FD_Dir, "FD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e plots (nFDpCD, FD)">
@@ -9175,34 +9459,24 @@ void EventAnalyser() {
         double Theta_e_DIS_nFDpCD_integral = hTheta_e_DIS_nFDpCD_FD->Integral();
 
         histPlotter1D(c1, hTheta_e_All_Int_nFDpCD_FD, norm_Angle_plots_master, true, Theta_e_All_Int_nFDpCD_integral, "#theta_{e} of Outgoing Electron",
-                      "All Int., nFDpCD", 0.06,
-                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "00_Theta_e_All_Int_nFDpCD", hTheta_e_All_Int_nFDpCD_FD_Dir, "FD", kBlue, true, true,
-                      true, false,
-                      true, 17.5, 22.5, false);
+                      "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "00_Theta_e_All_Int_nFDpCD", hTheta_e_All_Int_nFDpCD_FD_Dir,
+                      "FD", kBlue, true, true, true, false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_QEL_nFDpCD_FD, norm_Angle_plots_master, true, Theta_e_QEL_nFDpCD_integral, "#theta_{e} of Outgoing Electron", "QEL Only, nFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "01_Theta_e_QEL_Only_nFDpCD", hTheta_e_QEL_nFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "01_Theta_e_QEL_Only_nFDpCD", hTheta_e_QEL_nFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_MEC_nFDpCD_FD, norm_Angle_plots_master, true, Theta_e_MEC_nFDpCD_integral, "#theta_{e} of Outgoing Electron", "MEC Only, nFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "02_Theta_e_MEC_Only_nFDpCD", hTheta_e_MEC_nFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "02_Theta_e_MEC_Only_nFDpCD", hTheta_e_MEC_nFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_RES_nFDpCD_FD, norm_Angle_plots_master, true, Theta_e_RES_nFDpCD_integral, "#theta_{e} of Outgoing Electron", "RES Only, nFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "03_Theta_e_RES_Only_nFDpCD", hTheta_e_RES_nFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "03_Theta_e_RES_Only_nFDpCD", hTheta_e_RES_nFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
         histPlotter1D(c1, hTheta_e_DIS_nFDpCD_FD, norm_Angle_plots_master, true, Theta_e_DIS_nFDpCD_integral, "#theta_{e} of Outgoing Electron", "DIS Only, nFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "04_Theta_e_DIS_Only_nFDpCD", hTheta_e_DIS_nFDpCD_FD_Dir, "FD", kBlue, true, true, true, false,
-                      true, 17.5,
-                      22.5, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_e_nFDpCD_FD, "04_Theta_e_DIS_Only_nFDpCD", hTheta_e_DIS_nFDpCD_FD_Dir, "FD", kBlue, true, true, true,
+                      false, true, 17.5, 22.5, false);
 
         stackPlotter1D(c1, sTheta_e_nFDpCD_FD, norm_Angle_plots_master, "#theta_{e} of Outgoing Electron", "nFDpCD", plots, hTheta_e_All_Int_nFDpCD_FD,
-                       hTheta_e_QEL_nFDpCD_FD,
-                       hTheta_e_MEC_nFDpCD_FD, hTheta_e_RES_nFDpCD_FD, hTheta_e_DIS_nFDpCD_FD, "05_Theta_e_Stack_nFDpCD", hTheta_e_All_Int_nFDpCD_FD_Dir, "FD");
+                       hTheta_e_QEL_nFDpCD_FD, hTheta_e_MEC_nFDpCD_FD, hTheta_e_RES_nFDpCD_FD, hTheta_e_DIS_nFDpCD_FD, "05_Theta_e_Stack_nFDpCD",
+                       hTheta_e_All_Int_nFDpCD_FD_Dir, "FD");
         //</editor-fold>
 
 //  Phi_e plots (FD only) -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -9286,20 +9560,15 @@ void EventAnalyser() {
         double Phi_e_DIS_pFDpCD_integral = hPhi_e_DIS_pFDpCD_FD->Integral();
 
         histPlotter1D(c1, hPhi_e_All_Int_pFDpCD_FD, norm_Angle_plots_master, true, Phi_e_All_Int_pFDpCD_integral, "#phi_{e} of Outgoing Electron", "All Int., pFDpCD",
-                      0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sPhi_e, "00_phi_e_All_Int_cut_pFDpCD", hPhi_e_All_Int_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sPhi_e, "00_phi_e_All_Int_cut_pFDpCD", hPhi_e_All_Int_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_QEL_pFDpCD_FD, norm_Angle_plots_master, true, Phi_e_QEL_pFDpCD_integral, "#phi_{e} of Outgoing Electron", "QEL Only, pFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_pFDpCD", hPhi_e_QEL_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_pFDpCD", hPhi_e_QEL_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_MEC_pFDpCD_FD, norm_Angle_plots_master, true, Phi_e_MEC_pFDpCD_integral, "#phi_{e} of Outgoing Electron", "MEC Only, pFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_pFDpCD", hPhi_e_MEC_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_pFDpCD", hPhi_e_MEC_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_RES_pFDpCD_FD, norm_Angle_plots_master, true, Phi_e_RES_pFDpCD_integral, "#phi_{e} of Outgoing Electron", "RES Only, pFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_pFDpCD", hPhi_e_RES_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_pFDpCD", hPhi_e_RES_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_DIS_pFDpCD_FD, norm_Angle_plots_master, true, Phi_e_DIS_pFDpCD_integral, "#phi_{e} of Outgoing Electron", "DIS Only, pFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_pFDpCD", hPhi_e_DIS_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_pFDpCD", hPhi_e_DIS_pFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="Phi_e plots (nFDpCD, FD)">
@@ -9310,20 +9579,15 @@ void EventAnalyser() {
         double Phi_e_DIS_nFDpCD_integral = hPhi_e_DIS_nFDpCD_FD->Integral();
 
         histPlotter1D(c1, hPhi_e_All_Int_nFDpCD_FD, norm_Angle_plots_master, true, Phi_e_All_Int_nFDpCD_integral, "#phi_{e} of Outgoing Electron", "All Int., nFDpCD",
-                      0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sPhi_e, "00_phi_e_All_Int_cut_nFDpCD", hPhi_e_All_Int_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sPhi_e, "00_phi_e_All_Int_cut_nFDpCD", hPhi_e_All_Int_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_QEL_nFDpCD_FD, norm_Angle_plots_master, true, Phi_e_QEL_nFDpCD_integral, "#phi_{e} of Outgoing Electron", "QEL Only, nFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_nFDpCD", hPhi_e_QEL_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "01_Phi_e_QEL_Only_nFDpCD", hPhi_e_QEL_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_MEC_nFDpCD_FD, norm_Angle_plots_master, true, Phi_e_MEC_nFDpCD_integral, "#phi_{e} of Outgoing Electron", "MEC Only, nFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_nFDpCD", hPhi_e_MEC_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "02_Phi_e_MEC_Only_nFDpCD", hPhi_e_MEC_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_RES_nFDpCD_FD, norm_Angle_plots_master, true, Phi_e_RES_nFDpCD_integral, "#phi_{e} of Outgoing Electron", "RES Only, nFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_nFDpCD", hPhi_e_RES_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "03_Phi_e_RES_Only_nFDpCD", hPhi_e_RES_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         histPlotter1D(c1, hPhi_e_DIS_nFDpCD_FD, norm_Angle_plots_master, true, Phi_e_DIS_nFDpCD_integral, "#phi_{e} of Outgoing Electron", "DIS Only, nFDpCD", 0.06,
-                      0.0425, 0.0425,
-                      plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_nFDpCD", hPhi_e_DIS_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_e, "04_Phi_e_DIS_Only_nFDpCD", hPhi_e_DIS_nFDpCD_FD_Dir, "FD", kBlue, true, true, true);
         //</editor-fold>
 
 //  Phi of protons (1e2pXy) ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -9350,18 +9614,15 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Theta_e vs. Phi_e plots (1p, FD)">
-        histPlotter2D(c1, hTheta_e_VS_Phi_e_1p_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_e_VS_Phi_e_1p_FD_Dir,
-                      "Theta_e_VS_Phi_e_All_Int_1p_FD");
+        histPlotter2D(c1, hTheta_e_VS_Phi_e_1p_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_e_VS_Phi_e_1p_FD_Dir, "Theta_e_VS_Phi_e_All_Int_1p_FD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e vs. Phi_e plots (1n, FD)">
-        histPlotter2D(c1, hTheta_e_VS_Phi_e_1n_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_e_VS_Phi_e_1n_FD_Dir,
-                      "Theta_e_VS_Phi_e_All_Int_1n_FD");
+        histPlotter2D(c1, hTheta_e_VS_Phi_e_1n_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_e_VS_Phi_e_1n_FD_Dir, "Theta_e_VS_Phi_e_All_Int_1n_FD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e vs. Phi_e plots (2p, FD)">
-        histPlotter2D(c1, hTheta_e_VS_Phi_e_2p_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_e_VS_Phi_e_2p_FD_Dir,
-                      "Theta_e_VS_Phi_e_All_Int_2p_FD");
+        histPlotter2D(c1, hTheta_e_VS_Phi_e_2p_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_e_VS_Phi_e_2p_FD_Dir, "Theta_e_VS_Phi_e_All_Int_2p_FD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_e vs. Phi_e plots (pFDpCD, FD)">
@@ -9404,8 +9665,8 @@ void EventAnalyser() {
         double Theta_p_e_p_p_1p_integral = hTheta_p_e_p_p_1p->Integral();
 
         histPlotter1D(c1, hTheta_p_e_p_p_1p, norm_Angle_plots_master, true, Theta_p_e_p_p_1p_integral,
-                      "#theta_{#vec{P}_{e},#vec{P}_{p}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{p}", "All Int., 1p", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_p_e_p_p_1p, "01_Theta_p_e_p_p_All_Int_1p", hTheta_p_e_p_p_1p_Dir, "FD", kBlue, true, true, true, false);
+                      "#theta_{#vec{P}_{e},#vec{P}_{p}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{p}", "All Int., 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_p_e_p_p_1p, "01_Theta_p_e_p_p_All_Int_1p", hTheta_p_e_p_p_1p_Dir, "FD", kBlue, true, true, true, false);
         //</editor-fold>
 
 //  Theta_q_p_p (1p, FD only) ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -9414,8 +9675,8 @@ void EventAnalyser() {
         double Theta_q_p_p_1p_1p_integral = hTheta_q_p_p_1p->Integral();
 
         histPlotter1D(c1, hTheta_q_p_p_1p, norm_Angle_plots_master, true, Theta_q_p_p_1p_1p_integral,
-                      "#theta_{#vec{q},#vec{P}_{p}} - Opening Angle Between #vec{q} and #vec{P}_{p}", "All Int., 1p", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_p_1p, "02_Theta_q_p_p_All_Int_1p", hTheta_q_p_p_1p_Dir, "FD", kBlue, true, true, true, false);
+                      "#theta_{#vec{q},#vec{P}_{p}} - Opening Angle Between #vec{q} and #vec{P}_{p}", "All Int., 1p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_q_p_p_1p, "02_Theta_q_p_p_All_Int_1p", hTheta_q_p_p_1p_Dir, "FD", kBlue, true, true, true, false);
         //</editor-fold>
 
 //  Theta_q_p_p vs. |P_p|/|q| (1p, FD only) -------------------------------------------------------------------------------------------------------------------------------
@@ -9458,8 +9719,8 @@ void EventAnalyser() {
         double Theta_p_e_p_n_1n_integral = hTheta_p_e_p_n_1n->Integral();
 
         histPlotter1D(c1, hTheta_p_e_p_n_1n, norm_Angle_plots_master, true, Theta_p_e_p_n_1n_integral,
-                      "#theta_{#vec{P}_{e},#vec{P}_{n}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{n}", "All Int., 1n", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_p_e_p_n_1n, "01_Theta_p_e_p_n_All_Int_1n", hTheta_p_e_p_n_1n_Dir, "FD", kBlue, true, true, true, false);
+                      "#theta_{#vec{P}_{e},#vec{P}_{n}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{n}", "All Int., 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_p_e_p_n_1n, "01_Theta_p_e_p_n_All_Int_1n", hTheta_p_e_p_n_1n_Dir, "FD", kBlue, true, true, true, false);
         //</editor-fold>
 
 //  Theta_q_p_n (1n, FD only) -------------------------------------------------------------------------------------------------------------------------------------------
@@ -9468,8 +9729,8 @@ void EventAnalyser() {
         double Theta_q_p_n_1n_1n_integral = hTheta_q_p_n_1n->Integral();
 
         histPlotter1D(c1, hTheta_q_p_n_1n, norm_Angle_plots_master, true, Theta_q_p_n_1n_1n_integral,
-                      "#theta_{#vec{q},#vec{P}_{n}} - Opening Angle Between #vec{q} and #vec{P}_{n}", "All Int., 1n", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_n_1n, "02_Theta_q_p_n_All_Int_1n", hTheta_q_p_n_1n_Dir, "FD", kBlue, true, true, true, false);
+                      "#theta_{#vec{q},#vec{P}_{n}} - Opening Angle Between #vec{q} and #vec{P}_{n}", "All Int., 1n", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_q_p_n_1n, "02_Theta_q_p_n_All_Int_1n", hTheta_q_p_n_1n_Dir, "FD", kBlue, true, true, true, false);
         //</editor-fold>
 
 //  Theta_q_p_n vs. |p_n|/|q| (1n, FD only) -----------------------------------------------------------------------------------------------------------------------------
@@ -9504,8 +9765,8 @@ void EventAnalyser() {
         double Theta_q_p_tot_2p_integral = hTheta_q_p_tot_2p->Integral();
 
         histPlotter1D(c1, hTheta_q_p_tot_2p, norm_Angle_plots_master, true, Theta_q_p_tot_2p_integral,
-                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., 2p", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_2p, "02_Theta_q_p_tot_All_Int_2p", hTheta_q_p_tot_2p_Dir, "", kBlue, true, true, true, false);
+                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., 2p", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sTheta_q_p_2p, "02_Theta_q_p_tot_All_Int_2p", hTheta_q_p_tot_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
         //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (2p, CD & FD)">
@@ -9598,8 +9859,8 @@ void EventAnalyser() {
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD)">
-        histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "01b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
+        histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir,
+                      "01b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 monitoring plots">
         if (apply_nucleon_cuts && GoodProtonsMonitorPlots) {
@@ -9676,6 +9937,124 @@ void EventAnalyser() {
 
         //<editor-fold desc="pFDpCD plots">
 
+//  Theta_pFD plots (FD only) ---------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pFD plots (pFDpCD, FD)">
+        double Theta_pFD_All_Int_pFDpCD_integral = hTheta_pFD_All_Int_pFDpCD_FD->Integral();
+        double Theta_pFD_QEL_pFDpCD_integral = hTheta_pFD_QEL_pFDpCD_FD->Integral();
+        double Theta_pFD_MEC_pFDpCD_integral = hTheta_pFD_MEC_pFDpCD_FD->Integral();
+        double Theta_pFD_RES_pFDpCD_integral = hTheta_pFD_RES_pFDpCD_FD->Integral();
+        double Theta_pFD_DIS_pFDpCD_integral = hTheta_pFD_DIS_pFDpCD_FD->Integral();
+
+        histPlotter1D(c1, hTheta_pFD_All_Int_pFDpCD_FD, norm_Angle_plots_master, true, Theta_pFD_All_Int_pFDpCD_integral, "#theta_{pFD} of FD proton", "All Int., pFDpCD",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_pFD_pFDpCD_FD, "00_Theta_pFD_All_Int_pFDpCD", hTheta_pFD_All_Int_pFDpCD_FD_Dir, "", kBlue,
+                      true, true, true, false, true, 17.5, 22.5, false);
+        histPlotter1D(c1, hTheta_pFD_QEL_pFDpCD_FD, norm_Angle_plots_master, true, Theta_pFD_QEL_pFDpCD_integral, "#theta_{pFD} of FD proton", "QEL Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pFD_pFDpCD_FD, "01_Theta_pFD_QEL_Only_pFDpCD", hTheta_pFD_QEL_pFDpCD_FD_Dir, "", kBlue, true,
+                      true, true, false, true, 17.5, 22.5, false);
+        histPlotter1D(c1, hTheta_pFD_MEC_pFDpCD_FD, norm_Angle_plots_master, true, Theta_pFD_MEC_pFDpCD_integral, "#theta_{pFD} of FD proton", "MEC Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pFD_pFDpCD_FD, "02_Theta_pFD_MEC_Only_pFDpCD", hTheta_pFD_MEC_pFDpCD_FD_Dir, "", kBlue, true,
+                      true, true, false, true, 17.5, 22.5, false);
+        histPlotter1D(c1, hTheta_pFD_RES_pFDpCD_FD, norm_Angle_plots_master, true, Theta_pFD_RES_pFDpCD_integral, "#theta_{pFD} of FD proton", "RES Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pFD_pFDpCD_FD, "03_Theta_pFD_RES_Only_pFDpCD", hTheta_pFD_RES_pFDpCD_FD_Dir, "", kBlue, true,
+                      true, true, false, true, 17.5, 22.5, false);
+        histPlotter1D(c1, hTheta_pFD_DIS_pFDpCD_FD, norm_Angle_plots_master, true, Theta_pFD_DIS_pFDpCD_integral, "#theta_{pFD} of FD proton", "DIS Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pFD_pFDpCD_FD, "04_Theta_pFD_DIS_Only_pFDpCD", hTheta_pFD_DIS_pFDpCD_FD_Dir, "", kBlue, true,
+                      true, true, false, true, 17.5, 22.5, false);
+
+        stackPlotter1D(c1, sTheta_pFD_pFDpCD_FD, norm_Angle_plots_master, "#theta_{pFD} of FD proton", "pFDpCD", plots, hTheta_pFD_All_Int_pFDpCD_FD,
+                       hTheta_pFD_QEL_pFDpCD_FD, hTheta_pFD_MEC_pFDpCD_FD, hTheta_pFD_RES_pFDpCD_FD, hTheta_pFD_DIS_pFDpCD_FD, "05_Theta_pFD_Stack_pFDpCD",
+                       hTheta_pFD_All_Int_pFDpCD_FD_Dir, "");
+        //</editor-fold>
+
+//  Phi_pFD plots (FD only) -----------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Phi_pFD plots (pFDpCD, FD)">
+        double Phi_pFD_All_Int_pFDpCD_integral = hPhi_pFD_All_Int_pFDpCD_FD->Integral();
+        double Phi_pFD_QEL_pFDpCD_integral = hPhi_pFD_QEL_pFDpCD_FD->Integral();
+        double Phi_pFD_MEC_pFDpCD_integral = hPhi_pFD_MEC_pFDpCD_FD->Integral();
+        double Phi_pFD_RES_pFDpCD_integral = hPhi_pFD_RES_pFDpCD_FD->Integral();
+        double Phi_pFD_DIS_pFDpCD_integral = hPhi_pFD_DIS_pFDpCD_FD->Integral();
+
+        histPlotter1D(c1, hPhi_pFD_All_Int_pFDpCD_FD, norm_Angle_plots_master, true, Phi_pFD_All_Int_pFDpCD_integral, "#phi_{pFD} of FD proton", "All Int., pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_pFD_pFDpCD_FD, "00_phi_pFD_All_Int_cut_pFDpCD", hPhi_pFD_All_Int_pFDpCD_FD_Dir, "", kBlue, true, true,
+                      true);
+        histPlotter1D(c1, hPhi_pFD_QEL_pFDpCD_FD, norm_Angle_plots_master, true, Phi_pFD_QEL_pFDpCD_integral, "#phi_{pFD} of FD proton", "QEL Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pFD_pFDpCD_FD, "01_Phi_pFD_QEL_Only_pFDpCD", hPhi_pFD_QEL_pFDpCD_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_pFD_MEC_pFDpCD_FD, norm_Angle_plots_master, true, Phi_pFD_MEC_pFDpCD_integral, "#phi_{pFD} of FD proton", "MEC Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pFD_pFDpCD_FD, "02_Phi_pFD_MEC_Only_pFDpCD", hPhi_pFD_MEC_pFDpCD_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_pFD_RES_pFDpCD_FD, norm_Angle_plots_master, true, Phi_pFD_RES_pFDpCD_integral, "#phi_{pFD} of FD proton", "RES Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pFD_pFDpCD_FD, "03_Phi_pFD_RES_Only_pFDpCD", hPhi_pFD_RES_pFDpCD_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_pFD_DIS_pFDpCD_FD, norm_Angle_plots_master, true, Phi_pFD_DIS_pFDpCD_integral, "#phi_{pFD} of FD proton", "DIS Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pFD_pFDpCD_FD, "04_Phi_pFD_DIS_Only_pFDpCD", hPhi_pFD_DIS_pFDpCD_FD_Dir, "", kBlue, true, true, true);
+        //</editor-fold>
+
+//  Theta_pFD vs. Phi_pFD plots (FD only) -----------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pFD vs. Phi_pFD plots (pFDpCD, FD)">
+        histPlotter2D(c1, hTheta_pFD_VS_Phi_pFD_pFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_pFD_VS_Phi_pFD_pFDpCD_FD_Dir,
+                      "Theta_pFD_VS_Phi_pFD_All_Int_pFDpCD_FD");
+        //</editor-fold>
+
+//  Theta_pCD plots (CD only) ---------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pCD plots (pFDpCD, CD)">
+        double Theta_pCD_All_Int_pFDpCD_integral = hTheta_pCD_All_Int_pFDpCD_CD->Integral();
+        double Theta_pCD_QEL_pFDpCD_integral = hTheta_pCD_QEL_pFDpCD_CD->Integral();
+        double Theta_pCD_MEC_pFDpCD_integral = hTheta_pCD_MEC_pFDpCD_CD->Integral();
+        double Theta_pCD_RES_pFDpCD_integral = hTheta_pCD_RES_pFDpCD_CD->Integral();
+        double Theta_pCD_DIS_pFDpCD_integral = hTheta_pCD_DIS_pFDpCD_CD->Integral();
+
+        histPlotter1D(c1, hTheta_pCD_All_Int_pFDpCD_CD, norm_Angle_plots_master, true, Theta_pCD_All_Int_pFDpCD_integral, "#theta_{pCD} of CD proton", "All Int., pFDpCD",
+                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_pCD_pFDpCD_CD, "00_Theta_pCD_All_Int_pFDpCD", hTheta_pCD_All_Int_pFDpCD_CD_Dir, "", kBlue, true,
+                      true, true, false, true, 47.5, 87.5, false);
+        histPlotter1D(c1, hTheta_pCD_QEL_pFDpCD_CD, norm_Angle_plots_master, true, Theta_pCD_QEL_pFDpCD_integral, "#theta_{pFD} of FD proton", "QEL Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pCD_pFDpCD_CD, "01_Theta_pCD_QEL_Only_pFDpCD", hTheta_pCD_QEL_pFDpCD_CD_Dir, "", kBlue, true, true,
+                      true, false, true, 47.5, 87.5, false);
+        histPlotter1D(c1, hTheta_pCD_MEC_pFDpCD_CD, norm_Angle_plots_master, true, Theta_pCD_MEC_pFDpCD_integral, "#theta_{pFD} of FD proton", "MEC Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pCD_pFDpCD_CD, "02_Theta_pCD_MEC_Only_pFDpCD", hTheta_pCD_MEC_pFDpCD_CD_Dir, "", kBlue, true, true,
+                      true, false, true, 47.5, 87.5, false);
+        histPlotter1D(c1, hTheta_pCD_RES_pFDpCD_CD, norm_Angle_plots_master, true, Theta_pCD_RES_pFDpCD_integral, "#theta_{pFD} of FD proton", "RES Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pCD_pFDpCD_CD, "03_Theta_pCD_RES_Only_pFDpCD", hTheta_pCD_RES_pFDpCD_CD_Dir, "", kBlue, true, true,
+                      true, false, true, 47.5, 87.5, false);
+        histPlotter1D(c1, hTheta_pCD_DIS_pFDpCD_CD, norm_Angle_plots_master, true, Theta_pCD_DIS_pFDpCD_integral, "#theta_{pFD} of FD proton", "DIS Only, pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_pCD_pFDpCD_CD, "04_Theta_pCD_DIS_Only_pFDpCD", hTheta_pCD_DIS_pFDpCD_CD_Dir, "", kBlue, true, true,
+                      true, false, true, 47.5, 87.5, false);
+
+        stackPlotter1D(c1, sTheta_pCD_pFDpCD_CD, norm_Angle_plots_master, "#theta_{pFD} of FD proton", "pFDpCD", plots, hTheta_pCD_All_Int_pFDpCD_CD,
+                       hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD, hTheta_pCD_DIS_pFDpCD_CD, "05_Theta_pCD_Stack_pFDpCD",
+                       hTheta_pCD_All_Int_pFDpCD_CD_Dir, "");
+        //</editor-fold>
+
+//  Phi_pCD plots (FD only) -----------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Phi_pFD plots (pFDpCD, FD)">
+        double Phi_pCD_All_Int_pFDpCD_integral = hPhi_pCD_All_Int_pFDpCD_CD->Integral();
+        double Phi_pCD_QEL_pFDpCD_integral = hPhi_pCD_QEL_pFDpCD_CD->Integral();
+        double Phi_pCD_MEC_pFDpCD_integral = hPhi_pCD_MEC_pFDpCD_CD->Integral();
+        double Phi_pCD_RES_pFDpCD_integral = hPhi_pCD_RES_pFDpCD_CD->Integral();
+        double Phi_pCD_DIS_pFDpCD_integral = hPhi_pCD_DIS_pFDpCD_CD->Integral();
+
+        histPlotter1D(c1, hPhi_pCD_All_Int_pFDpCD_CD, norm_Angle_plots_master, true, Phi_pCD_All_Int_pFDpCD_integral, "#phi_{pFD} of FD proton", "All Int., pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sPhi_pCD_pFDpCD_CD, "00_phi_pCD_All_Int_cut_pFDpCD", hPhi_pCD_All_Int_pFDpCD_CD_Dir, "", kBlue, true, true,
+                      true);
+        histPlotter1D(c1, hPhi_pCD_QEL_pFDpCD_CD, norm_Angle_plots_master, true, Phi_pCD_QEL_pFDpCD_integral, "#phi_{pFD} of FD proton", "QEL Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pCD_pFDpCD_CD, "01_Phi_pCD_QEL_Only_pFDpCD", hPhi_pCD_QEL_pFDpCD_CD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_pCD_MEC_pFDpCD_CD, norm_Angle_plots_master, true, Phi_pCD_MEC_pFDpCD_integral, "#phi_{pFD} of FD proton", "MEC Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pCD_pFDpCD_CD, "02_Phi_pCD_MEC_Only_pFDpCD", hPhi_pCD_MEC_pFDpCD_CD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_pCD_RES_pFDpCD_CD, norm_Angle_plots_master, true, Phi_pCD_RES_pFDpCD_integral, "#phi_{pFD} of FD proton", "RES Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pCD_pFDpCD_CD, "03_Phi_pCD_RES_Only_pFDpCD", hPhi_pCD_RES_pFDpCD_CD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hPhi_pCD_DIS_pFDpCD_CD, norm_Angle_plots_master, true, Phi_pCD_DIS_pFDpCD_integral, "#phi_{pFD} of FD proton", "DIS Only, pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sPhi_pCD_pFDpCD_CD, "04_Phi_pCD_DIS_Only_pFDpCD", hPhi_pCD_DIS_pFDpCD_CD_Dir, "", kBlue, true, true, true);
+        //</editor-fold>
+
+//  Theta_pCD vs. Phi_pCD plots (FD only) -----------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pCD vs. Phi_pCD plots (pFDpCD, FD)">
+        histPlotter2D(c1, hTheta_pCD_VS_Phi_pCD_pFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_pCD_VS_Phi_pCD_pFDpCD_CD_Dir,
+                      "Theta_pCD_VS_Phi_pCD_All_Int_pFDpCD_CD");
+        //</editor-fold>
+
 // Theta_p_e_p_tot (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
@@ -9683,9 +10062,8 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_p_e_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_pFDpCD_integral,
                       "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue, true, true,
-                      true, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue, true,
+                      true, true, false);
         //</editor-fold>
 
 // Theta_q_p (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
@@ -9723,24 +10101,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_p1_p2_All_Int_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "00_Theta_p1_p2_All_Int_pFDpCD",
-                      hTheta_p1_p2_All_Int_pFDpCD_Dir, "", kBlue,
-                      true, true, true, false);
+                      hTheta_p1_p2_All_Int_pFDpCD_Dir, "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_QEL_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "QEL only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "01_Theta_p1_p2_QEL_only_pFDpCD", hTheta_p1_p2_QEL_pFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_MEC_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "MEC only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "02_Theta_p1_p2_MEC_only_pFDpCD", hTheta_p1_p2_MEC_pFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_RES_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "RES only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "03_Theta_p1_p2_RES_only_pFDpCD", hTheta_p1_p2_RES_pFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_DIS_pFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_pFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "DIS only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_pFDpCD, "04_Theta_p1_p2_DIS_only_pFDpCD", hTheta_p1_p2_DIS_pFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
 
         stackPlotter1D(c1, sTheta_p1_p2_pFDpCD, norm_E_e_plots, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "pFDpCD", plots, hTheta_p1_p2_All_Int_pFDpCD,
                        hTheta_p1_p2_QEL_pFDpCD, hTheta_p1_p2_MEC_pFDpCD, hTheta_p1_p2_RES_pFDpCD, hTheta_p1_p2_DIS_pFDpCD, "05_Theta_p1_p2_Stack",
@@ -9801,8 +10174,7 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hdPhi_p1_p2_for_small_dTheta_pFDpCD, norm_Angle_plots_master, true, hdPhi_p1_p2_for_small_dTheta_pFDpCD_integral,
                       "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sTheta_q_p_pFDpCD,
-                      "03a_dPhi_p1_p2_for_small_dTheta_pFDpCD", hdPhi_p1_p2_for_small_dTheta_pFDpCD_Dir, "", kBlue, true, true, true, false);
+                      sTheta_q_p_pFDpCD, "03a_dPhi_p1_p2_for_small_dTheta_pFDpCD", hdPhi_p1_p2_for_small_dTheta_pFDpCD_Dir, "", kBlue, true, true, true, false);
 
         double hdPhi_p1_p2_for_small_dTheta_ZOOMIN_pFDpCD_integral = hdPhi_p1_p2_for_small_dTheta_ZOOMIN_pFDpCD->Integral();
 
@@ -9833,9 +10205,8 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_p_e_p_tot_nFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_nFDpCD_integral,
                       "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{1}+#vec{P}_{2}", "All Int., nFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_p_e_p_tot_nFDpCD, "01_Theta_p_e_p_tot_All_Int_nFDpCD", hTheta_p_e_p_tot_nFDpCD_Dir, "", kBlue, true, true,
-                      true, false);
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_nFDpCD, "01_Theta_p_e_p_tot_All_Int_nFDpCD", hTheta_p_e_p_tot_nFDpCD_Dir, "", kBlue, true,
+                      true, true, false);
         //</editor-fold>
 
 // Theta_q_p (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -9873,24 +10244,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_p1_p2_All_Int_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "00_Theta_p1_p2_All_Int_nFDpCD",
-                      hTheta_p1_p2_All_Int_nFDpCD_Dir, "", kBlue,
-                      true, true, true, false);
+                      hTheta_p1_p2_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_QEL_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "QEL only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "01_Theta_p1_p2_QEL_only_nFDpCD", hTheta_p1_p2_QEL_nFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_MEC_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "MEC only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "02_Theta_p1_p2_MEC_only_nFDpCD", hTheta_p1_p2_MEC_nFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_RES_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "RES only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "03_Theta_p1_p2_RES_only_nFDpCD", hTheta_p1_p2_RES_nFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_p1_p2_DIS_nFDpCD, norm_Angle_plots_master, true, Theta_p1_p2_nFDpCD_integral, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons",
                       "DIS only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_p1_p2_nFDpCD, "04_Theta_p1_p2_DIS_only_nFDpCD", hTheta_p1_p2_DIS_nFDpCD_Dir,
-                      "", kBlue,
-                      true, true, true, false);
+                      "", kBlue, true, true, true, false);
 
         stackPlotter1D(c1, sTheta_p1_p2_nFDpCD, norm_E_e_plots, "#theta_{p_{1},p_{2}} - Opening Angle Between Protons", "nFDpCD", plots, hTheta_p1_p2_All_Int_nFDpCD,
                        hTheta_p1_p2_QEL_nFDpCD, hTheta_p1_p2_MEC_nFDpCD, hTheta_p1_p2_RES_nFDpCD, hTheta_p1_p2_DIS_nFDpCD, "05_Theta_p1_p2_Stack",
@@ -9907,8 +10273,7 @@ void EventAnalyser() {
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (nFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD_Dir,
-                      "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD");
+                      hTheta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD_Dir, "07_Theta_p1_vs_theta_p2_for_Theta_p1_p2_10_nFDpCD");
         //</editor-fold>
 
 //  Ghost tracks handling (nFDpCD, CD only) ---------------------------------------------------------------------------------------------------------------------------------
