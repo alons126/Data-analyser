@@ -4458,18 +4458,14 @@ void EventAnalyser() {
     int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_with_exactly_1e_from_file = 0, num_of_events_more_then_1e = 0;
 
     int num_of_events_1e1p_all = 0, num_of_events_with_1e1p = 0;
-    int num_of_events_1e2p_all = 0, num_of_events_1e2p_all_woFDphotons = 0, num_of_events_with_1e2p = 0;
-    int num_of_events_with_1epFDpCD = 0, num_of_events_with_1epFDpFD = 0, num_of_events_with_1epCDpCD = 0;
-//    int num_of_events_1e1p_all = 0, num_of_events_1e2p_all = 0, num_of_events_1e2p_all_woFDphotons = 0;
-//    int num_of_events_with_1e1p = 0, num_of_events_with_1e2p = 0, num_of_events_with_1epFDpCD = 0;
 
     int num_of_events_1p_inFD = 0;
 
     int num_of_events_1n_inFD = 0, num_of_events_1n_inFD_AV = 0;
 
-    int num_of_events_1e1n1p_wFakeNeut = 0;
-
+    int num_of_events_1e2p_all = 0, num_of_events_1e2p_all_woFDphotons = 0, num_of_events_with_1e2p = 0;
     int num_of_events_2p_wFakeProtons = 0, num_of_events_2p = 0;
+    int num_of_events_with_1epFDpCD = 0, num_of_events_with_1epFDpFD = 0, num_of_events_with_1epCDpCD = 0;
 
     int num_of_events_pFDpCD = 0;
     //</editor-fold>
@@ -5356,12 +5352,12 @@ void EventAnalyser() {
         if (Electron_ind.at(0) != 0) { cout << "\n\n1e cut: Electron_ind.at(0) is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
         //</editor-fold>
 
-        //<editor-fold desc="events counts with protons (1e cut)">
-        if (Nf_Prime == 2 && Np == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
-        if (Protons_ind.size() == 1) { ++num_of_events_1e1p_all; } // #(1p) events with 1 identified protons (i.e. above momentum cuts)
-        if (Protons_ind.size() == 2) { ++num_of_events_1e2p_all; } // #(2p) events with 2 identified protons (i.e. above momentum cuts)
-        if (Protons_ind.size() == 2 && PhotonsFD_ind.size() == 0) { ++num_of_events_1e2p_all_woFDphotons; }
-        //</editor-fold>
+//        //<editor-fold desc="events counts with protons (1e cut)">
+//        if (Nf_Prime == 2 && Np == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
+//        if (Protons_ind.size() == 1) { ++num_of_events_1e1p_all; } // #(1p) events with 1 identified protons (i.e. above momentum cuts)
+//        if (Protons_ind.size() == 2) { ++num_of_events_1e2p_all; } // #(2p) events with 2 identified protons (i.e. above momentum cuts)
+//        if (Protons_ind.size() == 2 && PhotonsFD_ind.size() == 0) { ++num_of_events_1e2p_all_woFDphotons; }
+//        //</editor-fold>
 
         /* Electron 1e cut variables definitions */
         TVector3 P_e_1e;
@@ -7081,60 +7077,61 @@ void EventAnalyser() {
 
 //  1n1p ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="1n1p">
-        if (calculate_nFDpCD && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of other neutrals)
-            ++num_of_events_1e1n1p_wFakeNeut;
-
-            //<editor-fold desc="Safty check (1n1p)">
-            /* Safety check that we are looking at 1n1p */
-            if (neutrons.size() != 1) { cout << "\n\n1n1p: neutrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (protons.size() != 1) { cout << "\n\n1n1p: protons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kplus.size() != 0) { cout << "\n\n1n1p: Kplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (Kminus.size() != 0) { cout << "\n\n1n1p: Kminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (piplus.size() != 0) { cout << "\n\n1n1p: piplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (piminus.size() != 0) { cout << "\n\n1n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (piminus.size() != 0) { cout << "\n\n1n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (electrons.size() != 1) { cout << "\n\n1n1p: electrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
-            if (deuterons.size() != 0) { cout << "\n\n1n1p: deuterons.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
-            //</editor-fold>
-
-            //todo: add mom cuts for 1n1p
-
-            //TODO: rename and move from ToF to angles folder
-            bool e_hit_PCAL_1n1p = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
-            bool p_hit_PCAL_1n1p = (protons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if proton hit the PCAL
-
-            bool n_hit_PCAL_1n1p = (neutrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if neutron hit the PCAL
-            bool n_hit_ECIN_1n1p = (neutrons[0]->cal(clas12::ECIN)->getDetector() == 7); // check if neutron hit the ECIN
-            bool n_hit_ECOUT_1n1p = (neutrons[0]->cal(clas12::ECOUT)->getDetector() == 7); // check if neutron hit the ECOUT
-
-            if (!n_hit_PCAL_1n1p && (n_hit_ECIN_1n1p || n_hit_ECOUT_1n1p)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
-                auto n_detlayer_1n1p = n_hit_ECIN_1n1p ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
-
-                // neutron ECIN/ECAL hit vector and angles:
-                TVector3 n_hit_1n1p_3v(neutrons[0]->cal(n_detlayer_1n1p)->getX(), neutrons[0]->cal(n_detlayer_1n1p)->getY(), neutrons[0]->cal(n_detlayer_1n1p)->getZ());
-                double n_hit_Theta_1n1p = n_hit_1n1p_3v.Theta() * 180 / pi, n_hit_Phi_1n1p = n_hit_1n1p_3v.Phi() * 180 / pi;
-
-                if (e_hit_PCAL_1n1p) { // if there's an electron hit in the PCAL
-                    // electron PCAL hit vector and angles:
-                    TVector3 e_hit_1n1p_3v(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), electrons[0]->cal(clas12::PCAL)->getZ());
-                    double e_hit_Theta_1n1p = e_hit_1n1p_3v.Theta() * 180 / pi, e_hit_Phi_1n1p = e_hit_1n1p_3v.Phi() * 180 / pi;
-
-                    // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
-                    hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n1p.hFill(n_hit_Phi_1n1p - e_hit_Phi_1n1p, n_hit_Theta_1n1p - e_hit_Theta_1n1p, Weight);
-                }
-
-                if (p_hit_PCAL_1n1p) { // if there's an proton hit in the PCAL
-                    // proton PCAL hit vector and angles:
-                    TVector3 p_hit_1n1p_3v(protons[0]->cal(clas12::PCAL)->getX(), protons[0]->cal(clas12::PCAL)->getY(), protons[0]->cal(clas12::PCAL)->getZ());
-                    double p_hit_Theta_1n1p = p_hit_1n1p_3v.Theta() * 180 / pi, p_hit_Phi_1n1p = p_hit_1n1p_3v.Phi() * 180 / pi;
-
-                    // subtracting the angles between the neutron hit and proton hit to see if we have fake neutrons:
-                    hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1n1p.hFill(n_hit_Phi_1n1p - p_hit_Phi_1n1p, n_hit_Theta_1n1p - p_hit_Theta_1n1p, Weight);
-                }
-            }
-        } // end of 1n1p cuts if
-        //</editor-fold>
+    //TODO: remove these 1n1p stuff
+//        //<editor-fold desc="1n1p">
+//        if (calculate_nFDpCD && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of other neutrals)
+//            ++num_of_events_1e1n1p_wFakeNeut;
+//
+//            //<editor-fold desc="Safty check (1n1p)">
+//            /* Safety check that we are looking at 1n1p */
+//            if (neutrons.size() != 1) { cout << "\n\n1n1p: neutrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (protons.size() != 1) { cout << "\n\n1n1p: protons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (Kplus.size() != 0) { cout << "\n\n1n1p: Kplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (Kminus.size() != 0) { cout << "\n\n1n1p: Kminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (piplus.size() != 0) { cout << "\n\n1n1p: piplus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (piminus.size() != 0) { cout << "\n\n1n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (piminus.size() != 0) { cout << "\n\n1n1p: piminus.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (electrons.size() != 1) { cout << "\n\n1n1p: electrons.size() is different than 1 exiting...\n\n", exit(EXIT_FAILURE); }
+//            if (deuterons.size() != 0) { cout << "\n\n1n1p: deuterons.size() is different than 0 exiting...\n\n", exit(EXIT_FAILURE); }
+//            //</editor-fold>
+//
+//            //todo: add mom cuts for 1n1p
+//
+//            //TODO: rename and move from ToF to angles folder
+//            bool e_hit_PCAL_1n1p = (electrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if electron hit the PCAL
+//            bool p_hit_PCAL_1n1p = (protons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if proton hit the PCAL
+//
+//            bool n_hit_PCAL_1n1p = (neutrons[0]->cal(clas12::PCAL)->getDetector() == 7); // check if neutron hit the PCAL
+//            bool n_hit_ECIN_1n1p = (neutrons[0]->cal(clas12::ECIN)->getDetector() == 7); // check if neutron hit the ECIN
+//            bool n_hit_ECOUT_1n1p = (neutrons[0]->cal(clas12::ECOUT)->getDetector() == 7); // check if neutron hit the ECOUT
+//
+//            if (!n_hit_PCAL_1n1p && (n_hit_ECIN_1n1p || n_hit_ECOUT_1n1p)) { // if neutron did not hit PCAL & hit either ECIN or ECOUT
+//                auto n_detlayer_1n1p = n_hit_ECIN_1n1p ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+//
+//                // neutron ECIN/ECAL hit vector and angles:
+//                TVector3 n_hit_1n1p_3v(neutrons[0]->cal(n_detlayer_1n1p)->getX(), neutrons[0]->cal(n_detlayer_1n1p)->getY(), neutrons[0]->cal(n_detlayer_1n1p)->getZ());
+//                double n_hit_Theta_1n1p = n_hit_1n1p_3v.Theta() * 180 / pi, n_hit_Phi_1n1p = n_hit_1n1p_3v.Phi() * 180 / pi;
+//
+//                if (e_hit_PCAL_1n1p) { // if there's an electron hit in the PCAL
+//                    // electron PCAL hit vector and angles:
+//                    TVector3 e_hit_1n1p_3v(electrons[0]->cal(clas12::PCAL)->getX(), electrons[0]->cal(clas12::PCAL)->getY(), electrons[0]->cal(clas12::PCAL)->getZ());
+//                    double e_hit_Theta_1n1p = e_hit_1n1p_3v.Theta() * 180 / pi, e_hit_Phi_1n1p = e_hit_1n1p_3v.Phi() * 180 / pi;
+//
+//                    // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
+//                    hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n1p.hFill(n_hit_Phi_1n1p - e_hit_Phi_1n1p, n_hit_Theta_1n1p - e_hit_Theta_1n1p, Weight);
+//                }
+//
+//                if (p_hit_PCAL_1n1p) { // if there's an proton hit in the PCAL
+//                    // proton PCAL hit vector and angles:
+//                    TVector3 p_hit_1n1p_3v(protons[0]->cal(clas12::PCAL)->getX(), protons[0]->cal(clas12::PCAL)->getY(), protons[0]->cal(clas12::PCAL)->getZ());
+//                    double p_hit_Theta_1n1p = p_hit_1n1p_3v.Theta() * 180 / pi, p_hit_Phi_1n1p = p_hit_1n1p_3v.Phi() * 180 / pi;
+//
+//                    // subtracting the angles between the neutron hit and proton hit to see if we have fake neutrons:
+//                    hdTheta_n_p_VS_dPhi_n_p_Protons_BV_1n1p.hFill(n_hit_Phi_1n1p - p_hit_Phi_1n1p, n_hit_Theta_1n1p - p_hit_Theta_1n1p, Weight);
+//                }
+//            }
+//        } // end of 1n1p cuts if
+//        //</editor-fold>
 
 //  1e2pXy (or (e,e'pp)X) -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -11718,17 +11715,21 @@ void EventAnalyser() {
     myLogFile << "#(events) pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     myLogFile << "-- Event counts -----------------------------------------------------------\n";
-    myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
-    myLogFile << "num_of_events_1p_inFD:\t\t\t\t" << num_of_events_1p_inFD << "\n";
+//    myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
+    myLogFile << "num_of_events_1p_inFD:\t\t\t\t" << num_of_events_1p_inFD << "\n\n";
+
     myLogFile << "num_of_events_1n_inFD:\t\t\t\t" << num_of_events_1n_inFD << "\n";
-    myLogFile << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n";
-    myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
-    myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
+    myLogFile << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n\n";
+
+//    myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
+//    myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
     myLogFile << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n";
-    myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n";
+    myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n\n";
+
     myLogFile << "num_of_events_1epFDpCD:\t\t\t\t" << num_of_events_with_1epFDpCD << "\n";
     myLogFile << "num_of_events_1epFDpFD:\t\t\t\t" << num_of_events_with_1epFDpFD << "\n";
-    myLogFile << "num_of_events_1epCDpCD:\t\t\t\t" << num_of_events_with_1epCDpCD << "\n";
+    myLogFile << "num_of_events_1epCDpCD:\t\t\t\t" << num_of_events_with_1epCDpCD << "\n\n";
+
     myLogFile << "num_of_events_pFDpCD:\t\t\t\t" << num_of_events_pFDpCD << "\n\n\n";
     //</editor-fold>
 
@@ -11828,19 +11829,21 @@ void EventAnalyser() {
     cout << "#(events) pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     cout << "-- Event counts -----------------------------------------------------------\n";
-    cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
-    cout << "num_of_events_1p_inFD:\t\t\t" << num_of_events_1p_inFD << "\n";
+//    cout << "num_of_events_1e1p_all:\t\t\t" << num_of_events_1e1p_all << "\n";
+    cout << "num_of_events_1p_inFD:\t\t\t" << num_of_events_1p_inFD << "\n\n";
+
     cout << "num_of_events_1n_inFD:\t\t\t" << num_of_events_1n_inFD << "\n";
-    cout << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n";
-    cout << "num_of_events_1e1n1p_wFakeNeut:\t\t" << num_of_events_1e1n1p_wFakeNeut << "\n\n";
+    cout << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n\n";
 
 //    cout << "num_of_events_1e2p_all:\t\t\t" << num_of_events_1e2p_all << "\n";
 //    cout << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
     cout << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n";
-    cout << "num_of_events_2p:\t\t\t" << num_of_events_2p << "\n";
+    cout << "num_of_events_2p:\t\t\t" << num_of_events_2p << "\n\n";
+
     cout << "num_of_events_1epFDpCD:\t\t\t" << num_of_events_with_1epFDpCD << "\n";
     cout << "num_of_events_1epFDpFD:\t\t\t" << num_of_events_with_1epFDpFD << "\n";
-    cout << "num_of_events_1epCDpCD:\t\t\t" << num_of_events_with_1epCDpCD << "\n";
+    cout << "num_of_events_1epCDpCD:\t\t\t" << num_of_events_with_1epCDpCD << "\n\n";
+
     cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     cout << "---------------------------------------------------------------------------\n";
