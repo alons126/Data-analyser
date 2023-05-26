@@ -113,10 +113,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
     double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -274,8 +272,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
                             bool plot_max = true) {
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -429,10 +427,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-//    double x_1 = 0.2, y_1 = 0.3, x_2 = 0.9, y_2 = 0.7;
     double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-//    double x_1 = 0.15, y_1 = 0.3, x_2 = 0.85, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -583,8 +579,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
                             bool apply_plot_cuts = false, double plot_upper_cut = 0, double plot_lower_cut = 0, double plot_Xmax = 0, bool plot_max = true) {
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -739,7 +735,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
     double x_1 = 0.175, y_1 = 0.3, x_2 = 0.875, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -881,8 +877,8 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
                             bool apply_plot_cuts = false, double plot_cut = 0, double plot_Xmax = 0, bool plot_max = true) {
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
-    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-    double diplayTextSize = 0.1225;
+    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+    double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
         Histogram1D_integral = Histogram1D->Integral();
@@ -1035,7 +1031,7 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
@@ -1211,7 +1207,7 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
 //  Normalization factor:
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {
@@ -1383,7 +1379,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 
     double Histogram1D_integral; // To be calculated only if normalize_Histogram == true
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     if (normalize_Histogram == true && custom_normalization == false) {

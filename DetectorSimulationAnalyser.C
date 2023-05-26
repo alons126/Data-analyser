@@ -330,28 +330,22 @@ void EventAnalyser() {
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Neutron momentum cuts (1n, FD only)">
-    /* Neutron beta cuts */
+    //<editor-fold desc="Other cuts">
+    /* Neutron beta cuts (1n & nFDpCD, FD only) */
     DSCuts Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax;
-//    DSCuts Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
-//    DSCuts Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
 
-    /* Neutron momentum cuts */
+    /* Neutron momentum cuts (1n & nFDpCD, FD only) */
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
-    //</editor-fold>
 
-    //<editor-fold desc="Truth-level momentum cuts">
-    /* Momentum cuts */
+    /* Truth-level momentum cuts */
     DSCuts TL_e_mom_cuts = DSCuts("Momentum", "", "Electron", "", 0, e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut());
-
     DSCuts TL_n_mom_cuts = DSCuts("Momentum", "", "Neutrons", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());;
     DSCuts TL_p_mom_cuts = DSCuts("Momentum", "", "Proton", "", 0, p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut());
     DSCuts TL_pip_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut());
     DSCuts TL_pim_mom_cuts = DSCuts("Momentum", "", "Piplus", "", 0, pim_mom_th.GetLowerCut(), pim_mom_th.GetUpperCut());
     DSCuts TL_pi0_mom_cuts = DSCuts("Momentum", "", "Pizero", "", 0, GetPi0MomTh(ph_mom_th), 9999);
     DSCuts TL_ph_mom_cuts = DSCuts("Momentum", "", "Photons", "", 0, ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut());
-    //</editor-fold>
 
     /* FD theta range (1n & 1p) */
     DSCuts ThetaFD = DSCuts("Theta FD", "FD", "", "1n & 1p", 1, 5., 40.);
@@ -369,12 +363,11 @@ void EventAnalyser() {
     DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
     DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
     DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
-//    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
-//    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
-//    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
     DSCuts p1_Theta_p_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", p1_Theta_p_cuts_2p.GetMean(), -9999, p1_Theta_p_cuts_2p.GetUpperCut());
     DSCuts p2_Theta_p_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", p2_Theta_p_cuts_2p.GetMean(), -9999, p2_Theta_p_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -2493,12 +2486,13 @@ void EventAnalyser() {
 
     //<editor-fold desc="dPhi_p1_p2 for Theta_p1_p2 < 20 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
-                                                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
-                                                       100, -360, 360);
-    TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
-                                                              "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
-                                                              100, -100, 100);
+                                                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);"
+                                                       "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 100, -360, 360);
     string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
+                                                              "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p);"
+                                                              "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 100, -25, 25);
     string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
@@ -2515,10 +2509,24 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                                        "#delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
-                                                        75, -360, 360);
-//                                                        100, -360, 360);
+                                                        "#delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);"
+                                                        "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -360, 360);
     string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} - ZOOMIN (All Int., 2p)",
+                                                               "#delta#phi for every #theta_{p_{1},p_{2}} - ZOOMIN(All Int., 2p);"
+                                                               "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -25, 25);
+    string hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_p1_p2_for_small_dTheta_2p = new TH1D("#delta#phi for small #Delta#theta_{1/2} (All Int., 2p)",
+                                                     "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ;"
+                                                     "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -100, 100);
+    string hdPhi_p1_p2_for_small_dTheta_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p = new TH1D("#delta#phi for small #Delta#theta_{1/2} - ZOOMIN (All Int., 2p)",
+                                                            "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ - ZOOMIN;"
+                                                            "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -25, 25);
+    string hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // Ghost tracks handling (2p, CD only) ----------------------------------------------------------------------------------------------------------------------------------
@@ -7545,7 +7553,13 @@ void EventAnalyser() {
 
             hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p->Fill(Theta_p2, Theta_p1, Weight);
             hdPhi_p1_p2_for_all_Theta_p1_p2_2p->Fill(dPhi_hit_2p, Weight);
+            hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p->Fill(dPhi_hit_2p, Weight);
 
+            if ((fabs(Theta_p1 - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut()) &&
+                (fabs(Theta_p2 - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut())) {
+                hdPhi_p1_p2_for_small_dTheta_2p->Fill(dPhi_hit_2p, Weight);
+                hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->Fill(dPhi_hit_2p, Weight);
+            }
 
             Theta_q_p_tot_2p = acos((q_2p_3v.Px() * P_tot_2p_3v.Px() + q_2p_3v.Py() * P_tot_2p_3v.Py() + q_2p_3v.Pz() * P_tot_2p_3v.Pz())
                                     / (q_2p_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_2p in deg
@@ -9584,14 +9598,35 @@ void EventAnalyser() {
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dPhi_p1_p2 for every Theta_p1_p2 (CD & FD)">
-        double dPhi_p1_p2_max = hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetBinCenter(hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetMaximumBin());
-        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetBinCenter(hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetMaximumBin()));
-
         double hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral = hdPhi_p1_p2_for_all_Theta_p1_p2_2p->Integral();
 
         histPlotter1D(c1, hdPhi_p1_p2_for_all_Theta_p1_p2_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral,
                       "#delta#phi for every #theta_{p_{1},p_{2}}", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
                       "02b_dphi_p1_p2_for_every_Theta_p1_p2_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
+
+        double hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p_integral = hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p_integral,
+                      "#delta#phi for every #theta_{p_{1},p_{2}} - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "02c_dphi_p1_p2_for_every_Theta_p1_p2_All_Int_ZOOMIN_2p", hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
+
+//        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p->GetMaximumBin()));
+
+        double hdPhi_p1_p2_for_small_dTheta_2p_integral = hdPhi_p1_p2_for_small_dTheta_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_p1_p2_for_small_dTheta_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_small_dTheta_2p_integral,
+                      "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "03a_dPhi_p1_p2_for_small_dTheta_2p", hdPhi_p1_p2_for_small_dTheta_2p_Dir, "", kBlue, true, true, true, false);
+
+//        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_2p->GetMaximumBin()));
+
+        double hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_integral = hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_integral,
+                      "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_q_p_2p, "03b_dPhi_p1_p2_for_small_dTheta_ZOOMIN_2p", hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
+
+        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
         //</editor-fold>
 
 //  Ghost tracks handling (2p, CD only) ---------------------------------------------------------------------------------------------------------------------------------
@@ -11730,7 +11765,7 @@ void EventAnalyser() {
     myLogFile << "#(events) w/ 1e2p:\t\t\t\t" << num_of_events_with_1e2p << "\n\n";
 
     myLogFile << "-- 1epFDpCD event counts --------------------------------------------------\n";
-    myLogFile << "#(events) w/ 1epFDpCD:\t\t\t" << num_of_events_with_1epFDpCD << "\n\n";
+    myLogFile << "#(events) w/ 1epFDpCD:\t\t\t\t" << num_of_events_with_1epFDpCD << "\n\n";
 
     myLogFile << "-- 2p event counts --------------------------------------------------------\n";
     myLogFile << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n\n";
@@ -11751,14 +11786,14 @@ void EventAnalyser() {
     myLogFile << "#(events) 2p:\t\t\t\t\t" << num_of_events_2p << "\n\n";
 
     myLogFile << "-- pFDpCD event counts ----------------------------------------------------\n";
-    myLogFile << "#(events) pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
+    myLogFile << "#(events) pFDpCD:\t\t\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     myLogFile << "-- Event counts -----------------------------------------------------------\n";
 //    myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
     myLogFile << "num_of_events_1p_inFD:\t\t\t\t" << num_of_events_1p_inFD << "\n\n";
 
     myLogFile << "num_of_events_1n_inFD:\t\t\t\t" << num_of_events_1n_inFD << "\n";
-    myLogFile << "num_of_events_1n_inFD_AV:\t\t" << num_of_events_1n_inFD_AV << "\n\n";
+    myLogFile << "num_of_events_1n_inFD_AV:\t\t\t" << num_of_events_1n_inFD_AV << "\n\n";
 
 //    myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
 //    myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";

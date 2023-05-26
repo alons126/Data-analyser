@@ -129,9 +129,9 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
-//    double diplayTextSize = 0.1225;
+//    double diplayTextSize = 0.1;
 
     Histogram2D->SetTitleSize(Histogram2DTitleSizes.at(0), "xyz");
     Histogram2D->GetXaxis()->SetLabelSize(Histogram2DTitleSizes.at(1));
@@ -216,7 +216,7 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     Histogram2D->SetTitleSize(Histogram2DTitleSizes.at(0), "xyz");
@@ -299,7 +299,7 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
 
     float DefStatX = gStyle->GetStatX(), DefStatY = gStyle->GetStatY();
     double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
-//    double x_1 = 0.16, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
+//    double x_1 = 0.18, y_1 = 0.3, x_2 = 0.86, y_2 = 0.7;
     double diplayTextSize = 0.1;
 
     Histogram2D->SetTitleSize(Histogram2DTitleSizes.at(0), "xyz");

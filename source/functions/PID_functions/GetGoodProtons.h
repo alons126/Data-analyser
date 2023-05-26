@@ -71,10 +71,15 @@ vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &pro
                 }
             }
         }
+
         if (GoodProt) { GoodProtons.push_back(IDProtons_ind.at(i)); }
     }
 
-    //<editor-fold desc="Safety check">
+    //<editor-fold desc="Safety checks">
+    if (!apply_nucleon_cuts && (GoodProtons.size() != IDProtons_ind.size())) {
+        cout << "\n\nGetGoodProtons(): GoodProtons and IDProtons_ind are not the same withot neucleon cut! exiting...\n\n", exit(EXIT_FAILURE);
+    }
+
     if (GoodProtons.size() > IDProtons_ind.size()) {
         cout << "\n\nGetGoodProtons(): GoodProtons.size() can't be greater than IDProtons_ind.size()! exiting...\n\n", exit(EXIT_FAILURE);
     }
