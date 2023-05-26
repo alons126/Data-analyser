@@ -2688,34 +2688,39 @@ void EventAnalyser() {
 // Ghost tracks handling (CD only) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (pFDpCD)">
-    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC",
-                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
-                                                          directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
-                                                          "01_Theta_p1_p2_VS_ToF1-ToF2_BC_pFDpCD", 0, 180, -3, 3, 150, 150);
     hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
                                                           "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
-                                                          directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+                                                          directories.Angle_Directory_map["CToF_hits_pFDpCD_Directory"],
                                                           "01_Theta_p1_p2_VS_ToF1-ToF2_AC_pFDpCD", 0, 180, -3, 3, 150, 150);
     //</editor-fold>
 
     //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (pFDpCD)">
-    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC",
-                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC", "#theta_{p_{1},p_{2}} [Deg]",
-                                                          "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
-                                                          "02_Theta_p1_p2_VS_Pos1-Pos2_BC_pFDpCD", 0, 180, 0, 100, 150, 150);
     hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
                                                           "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]",
-                                                          "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+                                                          "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["CToF_hits_pFDpCD_Directory"],
                                                           "02_Theta_p1_p2_VS_Pos1-Pos2_AC_pFDpCD", 0, 180, 0, 100, 150, 150);
     //</editor-fold>
 
-//    //<editor-fold desc="Theta_p1_p2 vs position1-position2 and TOF1-TOF2 plots">
-//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} vs. ToF_{1}-ToF_{2}", "#theta_{R1,R2} [Deg]",
-//                                                   "ToF_{1}-ToF_{2} [ns]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"], "01_Theta_R1_R2_VS_ToF1_ToF2_pFDpCD",
-//                                                   0, 180, -3, 3);
-//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{R1,R2} vs. Position_{1}-Position_{2}", "#theta_{R1,R2} vs. Position_{1}-Position_{2}",
-//                                                   "#theta_{R1,R2} [Deg]", "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
-//                                                   "02_Theta_R1_R2_VS_Pos1_Pos2_pFDpCD", 0, 180, 0, 100);
+//    //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (pFDpCD)">
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC",
+//                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} BC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+//                                                          directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+//                                                          "01_Theta_p1_p2_VS_ToF1-ToF2_BC_pFDpCD", 0, 180, -3, 3, 150, 150);
+//    hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
+//                                                          "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
+//                                                          directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+//                                                          "01_Theta_p1_p2_VS_ToF1-ToF2_AC_pFDpCD", 0, 180, -3, 3, 150, 150);
+//    //</editor-fold>
+//
+//    //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (pFDpCD)">
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC",
+//                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} BC", "#theta_{p_{1},p_{2}} [Deg]",
+//                                                          "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+//                                                          "02_Theta_p1_p2_VS_Pos1-Pos2_BC_pFDpCD", 0, 180, 0, 100, 150, 150);
+//    hPlot2D hTheta_p1_p2_VS_Pos1_Pos2_AC_pFDpCD = hPlot2D("pFDpCD", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC",
+//                                                          "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]",
+//                                                          "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["Ghost_tracks_handling_pFDpCD_Directory"],
+//                                                          "02_Theta_p1_p2_VS_Pos1-Pos2_AC_pFDpCD", 0, 180, 0, 100, 150, 150);
 //    //</editor-fold>
 
     //</editor-fold>
@@ -8149,7 +8154,7 @@ void EventAnalyser() {
             hEcal_vs_dP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
             hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
 
-            if ((p_first_pFDpCD->getRegion() == CD) && (p_second_pFDpCD->getRegion() == CD)) { // if both pFDpCD protons are in the CD
+            if ((p_first_pFDpCD->getRegion() == CD) && (p_second_pFDpCD->getRegion() == CD)) { // if both pFDpCD protons are in the CD (self-observation only!)
                 TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
                 p1_hit_pos.SetXYZ(p_first_pFDpCD->sci(clas12::CTOF)->getX(), p_first_pFDpCD->sci(clas12::CTOF)->getY(), p_first_pFDpCD->sci(clas12::CTOF)->getZ());
                 p2_hit_pos.SetXYZ(p_second_pFDpCD->sci(clas12::CTOF)->getX(), p_second_pFDpCD->sci(clas12::CTOF)->getY(), p_second_pFDpCD->sci(clas12::CTOF)->getZ());
@@ -8473,31 +8478,31 @@ void EventAnalyser() {
         //<editor-fold desc="dV plots (1p, CD & FD)">
         hdVx_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -dVz_cuts.GetUpperCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_1p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (1n, CD & FD)">
         hdVx_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -dVz_cuts.GetUpperCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_1n.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (2p, CD & FD)">
         hdVx_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -dVz_cuts.GetUpperCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_2p.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (pFDpCD, CD & FD)">
         hdVx_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -dVz_cuts.GetUpperCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
         //</editor-fold>
 
         //<editor-fold desc="dV plots (nFDpCD, CD & FD)">
         hdVx_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
         hdVy_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., 9999, 9999, 0, false);
-        hdVz_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., -dVz_cuts.GetUpperCut(), dVz_cuts.GetUpperCut(), 0, false);
+        hdVz_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Vertex_plots, true, 1., dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut(), 0, false);
         //</editor-fold>
 
     } else {
@@ -9810,12 +9815,10 @@ void EventAnalyser() {
 //  Ghost tracks handling (pFDpCD, CD only) -----------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (pFDpCD, CD)">
-        hTheta_p1_p2_VS_ToF1_ToF2_BC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         hTheta_p1_p2_VS_ToF1_ToF2_AC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
         //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (pFDpCD, CD)">
-        hTheta_p1_p2_VS_Pos1_Pos2_BC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         hTheta_p1_p2_VS_Pos1_Pos2_AC_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
