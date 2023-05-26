@@ -655,6 +655,11 @@ void EventAnalyser() {
     //<editor-fold desc="Debugging settings">
     /* Saving a printout of the number of particles in nEvents2print events. Used for clas12ana debugging. */
 
+    bool GoodProtonsMonitorPlots = true;
+
+    SetGPMonitoringPlots(GoodProtonsMonitorPlots, directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
+                         directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"]);
+
     bool PrintEvents = false;
     int Ne_in_event = 1, Nf_in_event = 2, nEvents2print = 10000;
 
@@ -2473,42 +2478,6 @@ void EventAnalyser() {
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                  150, 30, 50, 150, 30, 50);
     string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 2 id. p. BC (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 2 id. p. RE (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 3 id. p. BC (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 3 id. p. AE (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons AE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 4 id. p. BC (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ  for 4 id. p. AE (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons AE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -2524,52 +2493,16 @@ void EventAnalyser() {
     string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
-// Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------
+// Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                                  "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
                                                                  150, 30, 50, 150, 30, 50);
     string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}} for 2 id. p. BC (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}} for 2 id. p. RE (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 2 id. protons RE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}} for 3 id. p. BC (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}} for 3 id. p. AE (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 3 id. protons AE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}} for 4 id. p. BC (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons BC (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
-
-    TH2D *hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p = new TH2D(
-            "#theta_{p_{i}} vs. #theta_{p_{j}} #forall#theta_{p_{i},p_{j}} for 4 id. p. AE (All Int., 2p)",
-            "#theta_{p_{i}} vs. #theta_{p_{j}} for every #theta_{p_{i},p_{j}}<20#circ between proton pairs for 4 id. protons AE (All Int., 2p);#theta_{p_{j}} [Deg];#theta_{p_{i}} [Deg];",
-            150, 30, 50, 150, 30, 50);
-    string hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p_Dir = directories.Angle_Directory_map["Double_detection_monitoring_2p_Directory"];
     //</editor-fold>
 
-// dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+// dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
@@ -2578,49 +2511,13 @@ void EventAnalyser() {
     string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
-// Ghost tracks handling (CD only) --------------------------------------------------------------------------------------------------------------------------------------
+// Ghost tracks handling (2p, CD only) ----------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p1_p2 vs. TOF1-TOF2 plots (2p)">
     hPlot2D hTheta_p1_p2_VS_ToF1_ToF2_AC_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC",
                                                       "#theta_{p_{1},p_{2}} vs. ToF_{1}-ToF_{2} AC", "#theta_{p_{1},p_{2}} [Deg]", "ToF_{1}-ToF_{2} [ns]",
                                                       directories.Angle_Directory_map["CToF_hits_2p_Directory"],
                                                       "01_Theta_p1_p2_VS_ToF1-ToF2_AC_2p", 0, 180, -3, 3, 150, 150);
-    hPlot2D hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p = hPlot2D("2p", "CD-CTOF",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 2 id. p. BC",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 2 id. protons BC",
-                                                            "#theta_{p_{i},p_{j}} [Deg]", "ToF_{i}-ToF_{j} [ns]",
-                                                            directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                            "01a_Theta_pi_pj_VS_ToFi-ToFj_2idp_BC_2p", 0, 180, -3, 3, 150, 150);
-    hPlot2D hdTheta_pi_pj_VS_ToFi_ToFj_RE_2idp_2p = hPlot2D("2p", "CD-CTOF",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 2 id. p. RE",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 2 id. protons RE",
-                                                            "#theta_{p_{i},p_{j}} [Deg]", "ToF_{i}-ToF_{j} [ns]",
-                                                            directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                            "01b_Theta_pi_pj_VS_ToFi-ToFj_2idp_RE_2p", 0, 180, -3, 3, 150, 150);
-    hPlot2D hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p = hPlot2D("2p", "CD-CTOF",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 3 id. p. BC",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 3 id. protons BC",
-                                                            "#theta_{p_{i},p_{j}} [Deg]", "ToF_{i}-ToF_{j} [ns]",
-                                                            directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                            "02a_Theta_pi_pj_VS_ToFi-ToFj_3idp_BC_2p", 0, 180, -3, 3, 150, 150);
-    hPlot2D hdTheta_pi_pj_VS_ToFi_ToFj_AE_3idp_2p = hPlot2D("2p", "CD-CTOF",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 3 id. p. AE",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 3 id. protons AE",
-                                                            "#theta_{p_{i},p_{j}} [Deg]", "ToF_{i}-ToF_{j} [ns]",
-                                                            directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                            "02b_Theta_pi_pj_VS_ToFi-ToFj_3idp_RE_2p", 0, 180, -3, 3, 150, 150);
-    hPlot2D hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p = hPlot2D("2p", "CD-CTOF",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 4 id. p. BC",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 4 id. protons BC",
-                                                            "#theta_{p_{i},p_{j}} [Deg]", "ToF_{i}-ToF_{j} [ns]",
-                                                            directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                            "03a_Theta_pi_pj_VS_ToFi-ToFj_4idp_BC_2p", 0, 180, -3, 3, 150, 150);
-    hPlot2D hdTheta_pi_pj_VS_ToFi_ToFj_AE_4idp_2p = hPlot2D("2p", "CD-CTOF",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} for 4 id. p. AE",
-                                                            "#theta_{p_{i},p_{j}} vs. ToF_{i}-ToF_{j} between proton pairs for 4 id. protons AE",
-                                                            "#theta_{p_{i},p_{j}} [Deg]", "ToF_{i}-ToF_{j} [ns]",
-                                                            directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                            "03b_Theta_pi_pj_VS_ToFi-ToFj_4idp_RE_2p", 0, 180, -3, 3, 150, 150);
     //</editor-fold>
 
     //<editor-fold desc="Theta_p1_p2 vs. position1-position2 plots (2p)">
@@ -2628,36 +2525,6 @@ void EventAnalyser() {
                                                       "#theta_{p_{1},p_{2}} vs. Position_{1}-Position_{2} AC", "#theta_{p_{1},p_{2}} [Deg]",
                                                       "Position_{1}-Position_{2} [cm]", directories.Angle_Directory_map["CToF_hits_2p_Directory"],
                                                       "02_Theta_p1_p2_VS_Pos1-Pos2_AC_2p", 0, 180, 0, 100, 150, 150);
-    hPlot2D hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 2 id. p. BC",
-                                                           "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 2 id. protons BC",
-                                                           "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                           directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                           "04a_Theta_pi_pj_VS_Posi-Posj_2idp_BC_2p", 0, 180, 0, 100, 150, 150);
-    hPlot2D hTheta_pi_pj_VS_Posi_Posj_RE_2idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 2 id. p. RE",
-                                                           "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 2 id. protons RE",
-                                                           "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                           directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                           "04b_Theta_pi_pj_VS_Posi-Posj_2idp_RE_2p", 0, 180, 0, 100, 150, 150);
-    hPlot2D hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 3 id. p. BC",
-                                                           "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 3 id. protons BC",
-                                                           "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                           directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                           "05a_Theta_pi_pj_VS_Posi-Posj_3idp_BC_2p", 0, 180, 0, 100, 150, 150);
-    hPlot2D hTheta_pi_pj_VS_Posi_Posj_AE_3idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 3 id. p. AE",
-                                                           "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 3 id. protons AE",
-                                                           "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                           directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                           "05b_Theta_pi_pj_VS_Posi-Posj_3idp_RE_2p", 0, 180, 0, 100, 150, 150);
-    hPlot2D hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 4 id. p. BC",
-                                                           "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 4 id. protons BC",
-                                                           "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                           directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                           "06a_Theta_pi_pj_VS_Posi-Posj_4idp_BC_2p", 0, 180, 0, 100, 150, 150);
-    hPlot2D hTheta_pi_pj_VS_Posi_Posj_AE_4idp_2p = hPlot2D("2p", "CD-CTOF", "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} for 4 id. p. AE",
-                                                           "#theta_{p_{i},p_{j}} vs. Position_{i}-Position_{j} between proton pairs for 4 id. protons AE",
-                                                           "#theta_{p_{i},p_{j}} [Deg]", "Position_{i}-Position_{j} [cm]",
-                                                           directories.Angle_Directory_map["CToF_hits_monitoring_2p_Directory"],
-                                                           "06b_Theta_pi_pj_VS_Posi-Posj_4idp_RE_2p", 0, 180, 0, 100, 150, 150);
     //</editor-fold>
 
     //</editor-fold>
@@ -4602,10 +4469,7 @@ void EventAnalyser() {
 
     int num_of_events_1e1n1p_wFakeNeut = 0;
 
-    int num_of_events_2p_wFakeProtons = 0;
-    int num_of_RM_2p_events_sCTOFhp = 0, num_of_AD_2p_events_from_3p_sCTOFhp = 0, num_of_AD_2p_events_from_4p_sCTOFhp = 0;
-    int num_of_RM_2p_events_dCDaFDd = 0, num_of_AD_2p_events_from_3p_dCDaFDd = 0, num_of_AD_2p_events_from_4p_dCDaFDd = 0;
-    int num_of_events_2p = 0;
+    int num_of_events_2p_wFakeProtons = 0, num_of_events_2p = 0;
 
     int num_of_events_pFDpCD = 0;
     //</editor-fold>
@@ -4705,20 +4569,6 @@ void EventAnalyser() {
 
         double Weight = 1;
 
-        //<editor-fold desc="Some event counts">
-        if (Ne == 0) { // Log total #(events) with and without electrons
-            ++num_of_events_without_any_e; // logging Total #(events) w/o any e
-        } else {
-            ++num_of_events_with_any_e; // logging Total #(events) w/ any e
-        }
-
-        if (Ne >= 1) { // At least 1e cut (log only)
-            ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
-
-            if (Ne > 1) { ++num_of_events_more_then_1e; /* logging #(events) w/ more then 1e */ }
-        }
-        //</editor-fold>
-
         //<editor-fold desc="Process ID">
         bool qel = false, mec = false, res = false, dis = false;
         double processID = c12->mcevent()->getWeight(); // code = 1.,2.,3.,4. = type = qel, mec, res, dis
@@ -4738,7 +4588,23 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-        //<editor-fold desc="Debugging (print events to file)">
+        //<editor-fold desc="Debugging & monitoring">
+
+        //<editor-fold desc="Some event counts">
+        if (Ne == 0) { // Log total #(events) with and without electrons
+            ++num_of_events_without_any_e; // logging Total #(events) w/o any e
+        } else {
+            ++num_of_events_with_any_e; // logging Total #(events) w/ any e
+        }
+
+        if (Ne >= 1) { // At least 1e cut (log only)
+            ++num_of_events_with_at_least_1e; // logging #(events) w/ at least 1e
+
+            if (Ne > 1) { ++num_of_events_more_then_1e; /* logging #(events) w/ more then 1e */ }
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Print events to file">
         if (PrintEvents) {
             bool EventPrintSelection = (Ne == Ne_in_event && Nf >= Nf_in_event);
             int event = c12->runconfig()->getEvent();
@@ -4762,121 +4628,13 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Monitoring handling fake protons">
-        if (basic_event_selection) {
+        if (GoodProtonsMonitorPlots && basic_event_selection) {
             if (IDProtons_ind.size() == 2) { ++num_of_events_2p_wFakeProtons; }
 
-            for (int i = 0; i < IDProtons_ind.size(); i++) {
-                auto proton_i_2p = protons[IDProtons_ind.at(i)];
-                TVector3 proton_i_2p_2p_3v;
-                proton_i_2p_2p_3v.SetMagThetaPhi(proton_i_2p->getP(), proton_i_2p->getTheta(), proton_i_2p->getPhi());                  // first proton in protons vector
-                double Theta_pi = proton_i_2p->getTheta() * 180.0 / pi, Phi_pi = proton_i_2p->getPhi() * 180.0 / pi;                           // Theta_pi; Phi_pi in deg
-
-                for (int j = i + 1; j < IDProtons_ind.size(); j++) {
-                    auto proton_j_2p = protons[IDProtons_ind.at(j)];
-                    TVector3 proton_j_2p_2p_3v;
-                    proton_j_2p_2p_3v.SetMagThetaPhi(proton_j_2p->getP(), proton_j_2p->getTheta(), proton_j_2p->getPhi());              // first proton in protons vector
-                    double Theta_pj = proton_j_2p->getTheta() * 180.0 / pi, Phi_pj = proton_j_2p->getPhi() * 180.0 / pi;                       // Theta_pi; Phi_pi in deg
-
-                    double Theta_pi_pj_2p = acos((proton_i_2p_2p_3v.Px() * proton_j_2p_2p_3v.Px() + proton_i_2p_2p_3v.Py() * proton_j_2p_2p_3v.Py() +
-                                                  proton_i_2p_2p_3v.Pz() * proton_j_2p_2p_3v.Pz()) /
-                                                 (proton_i_2p_2p_3v.Mag() * proton_j_2p_2p_3v.Mag())) * 180.0 / pi;                              // Theta_pi_pj_2p in deg
-                    double dPhi_ij_2p = Phi_pi - Phi_pj;                                                                                             // dPhi_ij_2p in deg
-
-                    if ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == CD)) { // if both 2p protons are in the CD
-                        TVector3 pi_hit_pos, pj_hit_pos, pos_diff_ij;
-                        pi_hit_pos.SetXYZ(proton_i_2p->sci(clas12::CTOF)->getX(), proton_i_2p->sci(clas12::CTOF)->getY(), proton_i_2p->sci(clas12::CTOF)->getZ());
-                        pj_hit_pos.SetXYZ(proton_j_2p->sci(clas12::CTOF)->getX(), proton_j_2p->sci(clas12::CTOF)->getY(), proton_j_2p->sci(clas12::CTOF)->getZ());
-
-                        pos_diff_ij.SetXYZ(pi_hit_pos.Px() - pj_hit_pos.Px(), pi_hit_pos.Py() - pj_hit_pos.Py(), pi_hit_pos.Pz() - pj_hit_pos.Pz());
-                        double time_diff_ij = proton_i_2p->getTime() - proton_j_2p->getTime();
-
-                        if (IDProtons_ind.size() == 2) {
-                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                            hTheta_pi_pj_VS_Posi_Posj_BC_2idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
-
-                            if (pos_diff_ij.Mag() == 0) {
-                                ++num_of_RM_2p_events_sCTOFhp;
-                                hdTheta_pi_pj_VS_ToFi_ToFj_RE_2idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                                hTheta_pi_pj_VS_Posi_Posj_RE_2idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
-                            }
-                        }
-
-                        if (IDProtons_ind.size() == 3 && Protons_ind.size() == 2) {
-                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                            hTheta_pi_pj_VS_Posi_Posj_BC_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
-
-                            if (pos_diff_ij.Mag() == 0) {
-                                ++num_of_AD_2p_events_from_3p_sCTOFhp;
-                                hdTheta_pi_pj_VS_ToFi_ToFj_AE_3idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                                hTheta_pi_pj_VS_Posi_Posj_AE_3idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
-                            }
-                        }
-
-                        if (IDProtons_ind.size() == 4 && Protons_ind.size() == 2) {
-                            hdTheta_pi_pj_VS_ToFi_ToFj_BC_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                            hTheta_pi_pj_VS_Posi_Posj_BC_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
-
-                            if (pos_diff_ij.Mag() == 0) {
-                                ++num_of_AD_2p_events_from_4p_sCTOFhp;
-                                hdTheta_pi_pj_VS_ToFi_ToFj_AE_4idp_2p.hFill(Theta_pi_pj_2p, time_diff_ij, Weight);
-                                hTheta_pi_pj_VS_Posi_Posj_AE_4idp_2p.hFill(Theta_pi_pj_2p, pos_diff_ij.Mag(), Weight);
-                            }
-                        }
-                    } else if (((proton_i_2p->getRegion() == FD) && (proton_j_2p->getRegion() == CD)) ||
-                               ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == FD))) {
-
-                        bool p_i_around_40 = (fabs(Theta_pi - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
-                        bool p_j_around_40 = (fabs(Theta_pj - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
-                        bool small_dPhi = (fabs(dPhi_ij_2p - phi_p1_p2_diff_cuts_2p.GetMean()) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
-
-                        if (IDProtons_ind.size() == 2) {
-                            if (Theta_pi_pj_2p < 20) {
-                                hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
-
-                                if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p->Fill(Theta_pj, Theta_pi); }
-                            }
-
-                            hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p->Fill(Theta_pj, Theta_pi);
-
-                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
-                                ++num_of_RM_2p_events_dCDaFDd;
-                                hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p->Fill(Theta_pj, Theta_pi);
-                            }
-                        }
-
-                        if (IDProtons_ind.size() == 3 && Protons_ind.size() == 2) {
-                            if (Theta_pi_pj_2p < 20) {
-                                hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
-
-                                if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p->Fill(Theta_pj, Theta_pi); }
-                            }
-
-                            hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p->Fill(Theta_pj, Theta_pi);
-
-                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
-                                ++num_of_AD_2p_events_from_3p_dCDaFDd;
-                                hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p->Fill(Theta_pj, Theta_pi);
-                            }
-                        }
-
-                        if (IDProtons_ind.size() == 4 && Protons_ind.size() == 2) {
-                            if (Theta_pi_pj_2p < 20) {
-                                hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
-
-                                if ((p_i_around_40 && p_j_around_40) && small_dPhi) { hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p->Fill(Theta_pj, Theta_pi); }
-                            }
-
-                            hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p->Fill(Theta_pj, Theta_pi);
-
-                            if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
-                                ++num_of_AD_2p_events_from_4p_dCDaFDd;
-                                hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p->Fill(Theta_pj, Theta_pi);
-                            }
-                        }
-                    }
-                } // end of second for loop over IDProtons_ind (with j)
-            } // end of first for loop over IDProtons_ind (with i)
+            GPMonitoring(GoodProtonsMonitorPlots, protons, IDProtons_ind, Protons_ind, p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, phi_p1_p2_diff_cuts_2p, Weight);
         }
+        //</editor-fold>
+
         //</editor-fold>
 
 //  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
@@ -9741,28 +9499,29 @@ void EventAnalyser() {
         histPlotter2D(c1, hTheta_p1_p2_vs_W_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p1_p2_vs_W_2p_Dir, "06_Theta_p1_p2_vs_W_2p");
         //</editor-fold>
 
-
-
-
-
 // Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (2p, CD & FD)">
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p_Dir, "01a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p_Dir, "01b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p_Dir, "02a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p_Dir, "02b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p_Dir, "03a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p_Dir, "03b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p");
-
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir,
                       "01a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p");
+
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 monitoring plots">
+        if (GoodProtonsMonitorPlots) {
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p_Dir, "01a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p_Dir, "01b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p_Dir, "02a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_3idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p_Dir, "02b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_3idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p_Dir, "03a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_4idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p_Dir, "03b_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_AE_4idp_2p");
+        }
+        //</editor-fold>
+
         //</editor-fold>
 
 // dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -9782,21 +9541,26 @@ void EventAnalyser() {
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD)">
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p_Dir, "04a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p_Dir, "04b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p_Dir, "05a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p_Dir, "05b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p_Dir, "06a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p");
-        histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
-                      hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p_Dir, "06b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p");
-
         histPlotter2D(c1, hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
                       hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "01b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
+
+        //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 monitoring plots">
+        if (GoodProtonsMonitorPlots) {
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p_Dir, "04a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p_Dir, "04b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p_Dir, "05a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_3idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p_Dir, "05b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_3idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p_Dir, "06a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_4idp_2p");
+            histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                          hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p_Dir, "06b_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_AE_4idp_2p");
+        }
+        //</editor-fold>
+
         //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -9808,10 +9572,6 @@ void EventAnalyser() {
                       "#delta#phi for every #theta_{p_{1},p_{2}}", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
                       "02b_dphi_p1_p2_for_every_Theta_p1_p2_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
-
-
-
-
 
 //  Ghost tracks handling (2p, CD only) ---------------------------------------------------------------------------------------------------------------------------------
 
