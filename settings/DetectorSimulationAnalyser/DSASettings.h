@@ -90,7 +90,7 @@ bool apply_DC_fiducial_cut ;
 bool apply_momentum_cuts_1p , apply_momentum_cuts_1n ;
 bool apply_momentum_cuts_2p , apply_momentum_cuts_pFDpCD , apply_momentum_cuts_nFDpCD ;
 
-bool apply_neutron_Beta_Fit ;
+bool apply_nucleon_cuts ;
 
 //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -239,10 +239,10 @@ DSCuts Neutron_veto_cut;
 /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
 DSCuts p1_Theta_p_cuts_2p;
 DSCuts p2_Theta_p_cuts_2p;
-DSCuts phi_p1_p2_diff_cuts_2p;
+DSCuts dphi_p1_p2_2p;
 DSCuts p1_Theta_p_cuts_pFDpCD;
 DSCuts p2_Theta_p_cuts_pFDpCD;
-DSCuts phi_p1_p2_diff_cuts_pFDpCD;
+DSCuts dphi_pFD_pCD_pFDpCD;
 //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -645,7 +645,7 @@ void SetSettings () {
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true;
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
-    bool apply_neutron_Beta_Fit = false;
+    bool apply_nucleon_cuts = false;
 
 //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -656,7 +656,7 @@ void SetSettings () {
     string Beta_Fit_Status, FD_photons_Status, Efficiency_Status;
 
     if (custom_cuts_naming) {
-        if (apply_neutron_Beta_Fit) {
+        if (apply_nucleon_cuts) {
             Beta_Fit_Status = "wBC_";
         } else {
             Beta_Fit_Status = "noBC_";
@@ -712,7 +712,7 @@ void SetSettings () {
 
 //<editor-fold desc="Cuts output">
 /* Print out the cuts within the run (for self-observation) */
-    if (!apply_chi2_cuts_1e_cut) { apply_neutron_Beta_Fit = false; }
+    if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
 
     if (!apply_cuts) {
         cout << "Cuts are disabled:\n";
@@ -737,7 +737,7 @@ void SetSettings () {
     cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
     cout << "apply_momentum_cuts_pFDpCD:\t" << BoolToString(apply_momentum_cuts_pFDpCD) << "\n";
     cout << "apply_momentum_cuts_nFDpCD:\t" << BoolToString(apply_momentum_cuts_nFDpCD) << "\n";
-    cout << "apply_neutron_Beta_Fit:\t\t" << BoolToString(apply_neutron_Beta_Fit) << "\n\n\n";
+    cout << "apply_nucleon_cuts:\t\t" << BoolToString(apply_nucleon_cuts) << "\n\n\n";
 //</editor-fold>
 
 //</editor-fold>
@@ -885,10 +885,10 @@ void SetSettings () {
 /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
     DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
     DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
-    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
     DSCuts p1_Theta_p_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", 40., -9999, 7.5);
     DSCuts p2_Theta_p_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", 40., -9999, 7.5);
-    DSCuts phi_p1_p2_diff_cuts_pFDpCD = DSCuts("dPhi_p1_p2", "", "Proton", "pFDpCD", 0, -9999, 15.);
+    DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_p1_p2", "", "Proton", "pFDpCD", 0, -9999, 15.);
 //</editor-fold>
 
 // ======================================================================================================================================================================

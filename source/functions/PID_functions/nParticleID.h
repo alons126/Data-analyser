@@ -24,7 +24,7 @@ using namespace std;
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 void nParticleID(vector<region_part_ptr> &allParticles, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
-                 bool apply_neutron_Beta_Fit) {
+                 bool apply_nucleon_cuts) {
 
     for (int i = 0; i < allParticles.size(); i++) {
         if ((allParticles[i]->par()->getCharge() == 0) && (allParticles[i]->getRegion() == FD)) { // If particle is neutral and in the FD
@@ -48,7 +48,7 @@ void nParticleID(vector<region_part_ptr> &allParticles, vector<int> &ID_Neutrons
 //                        ID_Neutrons_FD.push_back(i);
 //
                     /* Particles that get in here are neutrons. Now we take neutrons who pass momentum cuts. */
-                    double Momentum = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
+                    double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
                     /* Log neutrons above momentum cuts (given by Momentum_th): */
                     if (Momentum >= Neutron_momentum_th.GetLowerCut()) { ID_Neutrons_FD.push_back(i); }

@@ -52,8 +52,8 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/PID_functions/FDNeutralParticle.h"
 #include "source/functions/PID_functions/FDNeutralParticleID.h"
 #include "source/functions/PID_functions/GetFDNeutronP.h"
-#include "source/functions/PID_functions/GetFDNeutrons.h"
-#include "source/functions/PID_functions/GetFDPhotons.h"
+//#include "source/functions/PID_functions/GetFDNeutrons.h"
+//#include "source/functions/PID_functions/GetFDPhotons.h"
 #include "source/functions/PID_functions/GetGoodParticles.h"
 #include "source/functions/PID_functions/GetGoodProtons.h"
 #include "source/functions/NeutronECAL_Cut_Veto.h"
@@ -95,6 +95,8 @@ void EventAnalyser() {
     bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 
     bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
+
+    if (!calculate_2p) { calculate_pFDpCD = false; }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -155,7 +157,7 @@ void EventAnalyser() {
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true;
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
-    bool apply_neutron_Beta_Fit = false;
+    bool apply_nucleon_cuts = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -163,13 +165,15 @@ void EventAnalyser() {
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
 
     bool custom_cuts_naming = true;
-    string Beta_Fit_Status, FD_photons_Status, Efficiency_Status;
+    string Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status;
 
     if (custom_cuts_naming) {
-        if (apply_neutron_Beta_Fit) {
-            Beta_Fit_Status = "wBC_";
+        if (apply_nucleon_cuts) {
+//            Nucleon_Cuts_Status = "NPwC_";
+            Nucleon_Cuts_Status = "wBC_";
         } else {
-            Beta_Fit_Status = "noBC_";
+//            Nucleon_Cuts_Status = "NPwoC_";
+            Nucleon_Cuts_Status = "noBC_";
         }
 
         if (Enable_FD_photons) {
@@ -194,13 +198,13 @@ void EventAnalyser() {
                 plots_path = WorkingDirectory + "plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_" + Beta_Fit_Status + FD_photons_Status + Efficiency_Status;
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + Beta_Fit_Status + FD_photons_Status
+                plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_" + Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status;
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + Nucleon_Cuts_Status + FD_photons_Status
                                            + Efficiency_Status + ".txt";
             }
         }
     } else {
-        Beta_Fit_Status = FD_photons_Status = Efficiency_Status = "";
+        Nucleon_Cuts_Status = FD_photons_Status = Efficiency_Status = "";
     }
     //</editor-fold>
 
@@ -222,7 +226,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Cuts output">
     /* Print out the cuts within the run (for self-observation) */
-    if (!apply_chi2_cuts_1e_cut) { apply_neutron_Beta_Fit = false; }
+    if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
 
     if (!apply_cuts) {
         cout << "Cuts are disabled:\n";
@@ -247,7 +251,7 @@ void EventAnalyser() {
     cout << "apply_momentum_cuts_2p:\t\t" << BoolToString(apply_momentum_cuts_2p) << "\n";
     cout << "apply_momentum_cuts_pFDpCD:\t" << BoolToString(apply_momentum_cuts_pFDpCD) << "\n";
     cout << "apply_momentum_cuts_nFDpCD:\t" << BoolToString(apply_momentum_cuts_nFDpCD) << "\n";
-    cout << "apply_neutron_Beta_Fit:\t\t" << BoolToString(apply_neutron_Beta_Fit) << "\n\n\n";
+    cout << "apply_nucleon_cuts:\t\t" << BoolToString(apply_nucleon_cuts) << "\n\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -327,7 +331,12 @@ void EventAnalyser() {
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Neutron momentum cuts (1n, FD only)">
-    /* All sectors */
+    /* Neutron beta cuts */
+    DSCuts Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax;
+//    DSCuts Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
+//    DSCuts Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
+
+    /* Neutron momentum cuts */
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph_apprax; // Appraximated max. momentum, obtained by taking Beta=1, such that deltaBeta/Beta=deltaBeta.
     //</editor-fold>
@@ -359,13 +368,13 @@ void EventAnalyser() {
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
     DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
     DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
-    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
 //    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
 //    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
-//    DSCuts phi_p1_p2_diff_cuts_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
+//    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
     DSCuts p1_Theta_p_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", p1_Theta_p_cuts_2p.GetMean(), -9999, p1_Theta_p_cuts_2p.GetUpperCut());
     DSCuts p2_Theta_p_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", p2_Theta_p_cuts_2p.GetMean(), -9999, p2_Theta_p_cuts_2p.GetUpperCut());
-    DSCuts phi_p1_p2_diff_cuts_pFDpCD = DSCuts("dPhi_p1_p2", "", "Proton", "pFDpCD", phi_p1_p2_diff_cuts_2p.GetMean(), -9999, phi_p1_p2_diff_cuts_2p.GetUpperCut());
+    DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -410,28 +419,28 @@ void EventAnalyser() {
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-    cout << "\n\n\n\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;\n\n\n\n";
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
-    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
+    bool Beta_plots = true;
+//    bool Beta_plots = false;
+//    cout << "\n\n\n\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;\n\n\n\n";
+    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
     bool Angle_plots_master = true; // Master angle plots selector
@@ -449,86 +458,86 @@ void EventAnalyser() {
 //    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
-    cout << "\n\n\n\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;\n\n\n\n";
+    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//    cout << "\n\n\n\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
-    cout << "\n\n\n\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;\n\n\n\n";
+    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//    cout << "\n\n\n\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
-    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
+    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
-    cout << "\n\n\n\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//    cout << "\n\n\n\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-//    bool TVariables_plots = true;
-    bool TVariables_plots = false;
-    cout << "\n\n\n\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;";
-    cout << "\nbool TVariables_plots = false;\n\n\n\n";
+    bool TVariables_plots = true;
+//    bool TVariables_plots = false;
+//    cout << "\n\n\n\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;";
+//    cout << "\nbool TVariables_plots = false;\n\n\n\n";
 
     /* ToF plots */
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
-    cout << "\n\n\n\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+//    cout << "\n\n\n\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -2507,7 +2516,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                         "#delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];",
-                                                        100, -360, 360);
+                                                        75, -360, 360);
+//                                                        100, -360, 360);
     string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
@@ -4407,19 +4417,25 @@ void EventAnalyser() {
             clasAna.setVertexCorrCuts(dVz_cuts.GetLowerCut(), dVz_cuts.GetUpperCut()); // setting dVz cuts?
         }
 
-        if (!apply_neutron_Beta_Fit) {
-            /* Setting neutron momentum cut before beta fit - all sectors (i.e., no cut!) */
+        if (!apply_nucleon_cuts) {
+            /* Setting neutron momentum cut before beta fit (i.e., no cut!) */
             n_momentum_cuts_ABF_FD_n_from_ph = DSCuts("Momentum_cuts_ECAL", "FD-ECAL", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
             n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL_apprax", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
-        } else if (apply_neutron_Beta_Fit) {
-            cout << "Loading fitted Beta cuts...\n\n";
-            clasAna.readInputParam((CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
-            /* Setting cuts after beta fit */
+            /* Setting variables to log beta fit parameters into (i.e., no cut!) */
+            Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
+            Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
+
+        } else if (apply_nucleon_cuts) {
+            cout << "Loading fitted Beta cuts...\n\n";
+            clasAna.readInputParam((CutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+
+            /* Setting nucleon cuts */
             n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
             TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
             Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());
             Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());
+            dphi_p1_p2_2p.SetMean(clasAna.getdPhiCutMean());
         }
 
         clasAna.printParams();
@@ -4512,8 +4528,8 @@ void EventAnalyser() {
         vector<int> Electron_ind = ChargedParticleID(electrons, e_mom_th);
 
         vector<int> IDProtons_ind = ChargedParticleID(protons, p_mom_th); // identified protons (i.e., within P_p th.)
-        vector<int> Protons_ind = GetGoodProtons(protons, IDProtons_ind,
-                                                 p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, phi_p1_p2_diff_cuts_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
+        vector<int> Protons_ind = GetGoodProtons(apply_nucleon_cuts, protons, IDProtons_ind,
+                                                 p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, dphi_p1_p2_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
 
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
         vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
@@ -4526,7 +4542,7 @@ void EventAnalyser() {
 
         /* Get FD neutrons and photons above momentum threshold: */
         vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                         // FD neutrons and photons by definition - within momentum th.
-        FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_neutron_Beta_Fit);
+        FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
         //</editor-fold>
 
         //<editor-fold desc="Setting up event selection">
@@ -4627,7 +4643,7 @@ void EventAnalyser() {
         if (GoodProtonsMonitorPlots && basic_event_selection) {
             if (IDProtons_ind.size() == 2) { ++num_of_events_2p_wFakeProtons; }
 
-            GPMonitoring(GoodProtonsMonitorPlots, protons, IDProtons_ind, Protons_ind, p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, phi_p1_p2_diff_cuts_2p, Weight);
+            GPMonitoring(GoodProtonsMonitorPlots, protons, IDProtons_ind, Protons_ind, p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, dphi_p1_p2_2p, Weight);
         }
         //</editor-fold>
 
@@ -4636,7 +4652,7 @@ void EventAnalyser() {
 //  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
-        if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_neutron_Beta_Fit) { // run only for CLAS12 simulation & AFTER beta fit
+        if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_nucleon_cuts) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -6071,9 +6087,9 @@ void EventAnalyser() {
                     //</editor-fold>
 
                     //<editor-fold desc="Neutron momentum (1p)">
-                    for (int &i: NeutronsFD_ind) { hP_n_APID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); } // after mom. th.
+                    for (int &i: NeutronsFD_ind) { hP_n_APID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // after mom. th.
 
-                    for (int &i: FD_Neutrons) { hP_n_BPID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); } // before mom. th.
+                    for (int &i: FD_Neutrons) { hP_n_BPID_1p_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
                     //</editor-fold>
 
                     //</editor-fold>
@@ -6380,7 +6396,7 @@ void EventAnalyser() {
                 P_e_1n_3v.SetMagThetaPhi(electrons[Electron_ind.at(0)]->getP(), electrons[Electron_ind.at(0)]->getTheta(),
                                          electrons[Electron_ind.at(0)]->getPhi());                                                          // electron 3 momentum
                 q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                          // 3 momentum transfer
-                P_n_1n_3v.SetMagThetaPhi(GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_neutron_Beta_Fit), allParticles[NeutronsFD_ind.at(0)]->getTheta(),
+                P_n_1n_3v.SetMagThetaPhi(GetFDNeutronP(allParticles[NeutronsFD_ind.at(0)], apply_nucleon_cuts), allParticles[NeutronsFD_ind.at(0)]->getTheta(),
                                          allParticles[NeutronsFD_ind.at(0)]->getPhi());                                                         // neutron 3 momentum
                 P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                    // electron t. momentum
                 P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                     // neutron t. momentum
@@ -6623,14 +6639,14 @@ void EventAnalyser() {
 //                    hP_n_APID_1n_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
 //                    hP_n_APID_1n_ZOOMOUT_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
                     for (int &i: NeutronsFD_ind) {
-                        hP_n_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // after mom. th.
-                        hP_n_APID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // after mom. th.
+                        hP_n_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
+                        hP_n_APID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
                     }
 
                     /* Neutron mom. after th. (verified neutrons) */
                     for (int &i: FD_Neutrons) {
-                        hP_n_BPID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // before mom. th.
-                        hP_n_BPID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // before mom. th.
+                        hP_n_BPID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // before mom. th.
+                        hP_n_BPID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // before mom. th.
                     }
                     //</editor-fold>
 
@@ -6671,7 +6687,7 @@ void EventAnalyser() {
 
                         // 'photon' mom before cuts:
                         if ((allParticles[i]->getRegion() == FD) && (ParticlePDGtmp == 22) && (!inPCALtmp && (inECINtmp || inECOUTtmp))) {
-                            hP_n_Ph_BPID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // before mom. th.
+                            hP_n_Ph_BPID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // before mom. th.
                         }
                     }
 
@@ -6684,7 +6700,7 @@ void EventAnalyser() {
                         bool inECOUTtmp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
                         if ((allParticles[i]->getRegion() == FD) && (ParticlePDGtmp == 22) && (!inPCALtmp && (inECINtmp || inECOUTtmp))) {
-                            hP_n_Ph_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit), Weight); // after mom. th.
+                            hP_n_Ph_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
                         }
                     }
                     //</editor-fold>
@@ -6762,7 +6778,7 @@ void EventAnalyser() {
                     //<editor-fold desc="Beta plots for neutrons from 'photons' (1n, FD)">
                     for (int &i: NeutronsFD_ind) {
                         int PDGtmp = allParticles[i]->par()->getPid();
-                        double P_n_temp = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
+                        double P_n_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
                         bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
                         bool inECINtmp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
@@ -6823,7 +6839,7 @@ void EventAnalyser() {
 
                     //<editor-fold desc="Beta vs. P from identified neutrons (1n, FD)">
                     for (int &i: NeutronsFD_ind) {
-                        double P_n_temp = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
+                        double P_n_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
                         if (allParticles[i]->getRegion() == CD) {
                             hBeta_vs_P_1n_CD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
@@ -7077,7 +7093,7 @@ void EventAnalyser() {
 
 //  1n1p ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //TODO: remove these 1n1p stuff
+        //TODO: remove these 1n1p stuff
 //        //<editor-fold desc="1n1p">
 //        if (calculate_nFDpCD && ((Nf_Prime == 2) && (Np == 1) && (Nn == 1))) { // for 1n1p calculations (with any number of other neutrals)
 //            ++num_of_events_1e1n1p_wFakeNeut;
@@ -7686,7 +7702,7 @@ void EventAnalyser() {
             //<editor-fold desc="Single edge detection cut (on CD-FD border)">
             bool p1_Theta_p_cut = (fabs(Theta_p1 - p1_Theta_p_cuts_pFDpCD.GetMean()) < p1_Theta_p_cuts_pFDpCD.GetUpperCut()); // Lead proton theta_p cut
             bool p2_Theta_p_cut = (fabs(Theta_p2 - p2_Theta_p_cuts_pFDpCD.GetMean()) < p2_Theta_p_cuts_pFDpCD.GetUpperCut()); // Recoil proton theta_p cut
-            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < phi_p1_p2_diff_cuts_pFDpCD.GetUpperCut());
+            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < dphi_pFD_pCD_pFDpCD.GetUpperCut());
 //            bool p1_Theta_p_cut = (fabs(Theta_p1 - 40.) < 5.); // Lead proton theta_p cut
 //            bool p2_Theta_p_cut = (fabs(Theta_p2 - 40.) < 5.); // Recoil proton theta_p cut
 //            bool Lead_and_Recoil_with_close_phi = (fabs(Phi_p1 - Phi_p2) < 15.);
@@ -8760,6 +8776,11 @@ void EventAnalyser() {
         hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_04_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
+
+        if (!apply_nucleon_cuts) {
+            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
+            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
+        }
         //</editor-fold>
 
         //</editor-fold>
@@ -9503,7 +9524,7 @@ void EventAnalyser() {
                       "01a_Theta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p");
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 monitoring plots">
-        if (GoodProtonsMonitorPlots) {
+        if (apply_nucleon_cuts && GoodProtonsMonitorPlots) {
             histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
                           hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p_Dir, "01a_hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_BC_2idp_2p");
             histPlotter2D(c1, hTheta_pi_vs_theta_pj_for_Theta_pi_pj_20_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
@@ -9542,7 +9563,7 @@ void EventAnalyser() {
                       hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir, "01b_Theta_p1_vs_theta_p2_for_every_Theta_p1_p2_2p");
 
         //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 monitoring plots">
-        if (GoodProtonsMonitorPlots) {
+        if (apply_nucleon_cuts && GoodProtonsMonitorPlots) {
             histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
                           hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p_Dir, "04a_hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_BC_2idp_2p");
             histPlotter2D(c1, hTheta_pi_vs_theta_pj_forall_Theta_pi_pj_RE_2idp_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
@@ -9563,6 +9584,9 @@ void EventAnalyser() {
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dPhi_p1_p2 for every Theta_p1_p2 (CD & FD)">
+        double dPhi_p1_p2_max = hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetBinCenter(hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetMaximumBin());
+        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetBinCenter(hdPhi_p1_p2_for_all_Theta_p1_p2_2p->GetMaximumBin()));
+
         double hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral = hdPhi_p1_p2_for_all_Theta_p1_p2_2p->Integral();
 
         histPlotter1D(c1, hdPhi_p1_p2_for_all_Theta_p1_p2_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_all_Theta_p1_p2_2p_integral,
@@ -11205,40 +11229,51 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Saving neutron momentum and beta cuts to .par file">
-    if (!apply_neutron_Beta_Fit) { // log neutron beta cut from fit
-        /* Log cuts from 'photons' fit first */
+    //<editor-fold desc="Saving nucleon cuts to .par file">
+    if (!apply_nucleon_cuts) { // log nucleon cuts
+        ofstream Nucleon_Cuts;
+        std::string Nucleon_CutsFilePath = CutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par";
+
+        Nucleon_Cuts.open(Nucleon_CutsFilePath);
+        Nucleon_Cuts << "######################################################################\n";
+        Nucleon_Cuts << "# CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #\n";
+        Nucleon_Cuts << "######################################################################\n";
+        Nucleon_Cuts << "\n";
+        Nucleon_Cuts << "# Cuts are fitted for - " + SampleName + ":\t" + Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
+        Nucleon_Cuts << "\n";
+
+        //<editor-fold desc="Neutron momentum cuts">
+        Nucleon_Cuts << "# Neutron momentum cuts (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
+
+        Nucleon_Cuts << n_mom_th.GetCutVariable() << "\t\t\t" << n_mom_th.GetPartPDG() << ":" << n_mom_th.Cuts.at(0) << ":" << n_mom_th.GetLowerCut() << ":"
+                     << n_mom_th.GetRegion() << "\n";
+
+        Nucleon_Cuts << "\n";
+
         DSCuts Neutron_Momentum_Cuts[] = {n_momentum_cuts_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph_apprax};
         int Neutron_Momentum_Cuts_length = 2;
 
-        ofstream Fitted_n_Mom_Cuts;
-        std::string Fitted_n_Mom_CutsFilePath = CutsDirectory + "Fitted_n_Mom_Cuts_-_" + SampleName + ".par";
-        Fitted_n_Mom_Cuts.open(Fitted_n_Mom_CutsFilePath);
-        Fitted_n_Mom_Cuts << "######################################################################\n";
-        Fitted_n_Mom_Cuts << "# CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #\n";
-        Fitted_n_Mom_Cuts << "######################################################################\n";
-        Fitted_n_Mom_Cuts << "\n";
-        Fitted_n_Mom_Cuts << "# Cuts are fitted for - " + SampleName + ":\t" + Beta_Fit_Status + FD_photons_Status + Efficiency_Status << "\n";
-        Fitted_n_Mom_Cuts << "\n";
-
-        //<editor-fold desc="Neutron momentum cuts by detector">
-        Fitted_n_Mom_Cuts << "# Neutron momentum cuts by detector (pid:mean:sigma) - sigma_FD=" << n_mom_th.FitStdFactor << ":\n";
-
-        Fitted_n_Mom_Cuts << n_mom_th.GetCutVariable() << "\t\t\t" << n_mom_th.GetPartPDG() << ":" << n_mom_th.Cuts.at(0) << ":" << n_mom_th.GetLowerCut() << ":"
-                          << n_mom_th.GetRegion() << "\n";
-
-        Fitted_n_Mom_Cuts << "\n";
-
         for (int i = 0; i < Neutron_Momentum_Cuts_length; i++) {
-            Fitted_n_Mom_Cuts << Neutron_Momentum_Cuts[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts[i].GetPartPDG() << ":"
-                              << Neutron_Momentum_Cuts[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts[i].GetUpperCut() << ":" << Neutron_Momentum_Cuts[i].GetRegion()
-                              << "\n";
+            Nucleon_Cuts << Neutron_Momentum_Cuts[i].GetCutVariable() << "\t\t\t" << Neutron_Momentum_Cuts[i].GetPartPDG() << ":"
+                         << Neutron_Momentum_Cuts[i].Cuts.at(0) << ":" << Neutron_Momentum_Cuts[i].GetUpperCut() << ":" << Neutron_Momentum_Cuts[i].GetRegion()
+                         << "\n";
         }
+
+        Nucleon_Cuts << "\n";
         //</editor-fold>
 
-        Fitted_n_Mom_Cuts.close();
+        //<editor-fold desc="Proton CD-FD double detection dPhi_p1_p2 cuts">
+        Nucleon_Cuts << "# Proton CD-FD double detection dPhi_p1_p2 cuts (pid:mean:sigma) - sigma=" << dphi_p1_p2_2p.FitStdFactor << ":\n";
 
-        system(("cp " + Fitted_n_Mom_CutsFilePath + " " + plots_path).c_str()); // Copy fitted chi2 cuts file for easy download from ifarm
+        Nucleon_Cuts << dphi_p1_p2_2p.GetCutVariable() << "\t\t\t" << dphi_p1_p2_2p.GetPartPDG() << ":" << dphi_p1_p2_2p.GetMean() << ":" <<
+                     dphi_p1_p2_2p.GetUpperCut() << ":" << dphi_p1_p2_2p.GetRegion() << "\n";
+
+        Nucleon_Cuts << "\n";
+        //</editor-fold>
+
+        Nucleon_Cuts.close();
+
+        system(("cp " + Nucleon_CutsFilePath + " " + plots_path).c_str()); // Copy nucleon cuts file for easy download from the ifarm
     }
     //</editor-fold>
 
@@ -11423,7 +11458,7 @@ void EventAnalyser() {
     myLogFile << "apply_momentum_cuts_pFDpCD = " << BoolToString(apply_momentum_cuts_pFDpCD) << "\n";
     myLogFile << "apply_momentum_cuts_nFDpCD = " << BoolToString(apply_momentum_cuts_nFDpCD) << "\n\n";
 
-    myLogFile << "apply_neutron_Beta_Fit = " << BoolToString(apply_neutron_Beta_Fit) << "\n\n";
+    myLogFile << "apply_nucleon_cuts = " << BoolToString(apply_nucleon_cuts) << "\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -11661,7 +11696,8 @@ void EventAnalyser() {
     myLogFile << "p1_Theta_p_cuts_2p mean = " << p1_Theta_p_cuts_2p.GetMean() << "\n";
     myLogFile << "p2_Theta_p_cuts_2p = " << p2_Theta_p_cuts_2p.GetUpperCut() << "\n";
     myLogFile << "p2_Theta_p_cuts_2p mean = " << p2_Theta_p_cuts_2p.GetMean() << "\n";
-    myLogFile << "phi_p1_p2_diff_cuts_2p = " << phi_p1_p2_diff_cuts_2p.GetUpperCut() << "\n\n";
+    myLogFile << "dphi_p1_p2_2p.GetUpperCut() = " << dphi_p1_p2_2p.GetUpperCut() << "\n";
+    myLogFile << "dphi_p1_p2_2p.GetMean() = " << dphi_p1_p2_2p.GetMean() << "\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -11699,16 +11735,19 @@ void EventAnalyser() {
     myLogFile << "-- 2p event counts --------------------------------------------------------\n";
     myLogFile << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n\n";
 
-    myLogFile << "num_of_RM_2p_events_sCTOFhp:\t\t" << num_of_RM_2p_events_sCTOFhp << "\n";
-    myLogFile << "num_of_AD_2p_events_from_3p_sCTOFhp:\t" << num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
-    myLogFile << "num_of_AD_2p_events_from_4p_sCTOFhp:\t" << num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
-    myLogFile << "num_of_RM_2p_events_dCDaFDd:\t\t" << num_of_RM_2p_events_dCDaFDd << "\n";
-    myLogFile << "num_of_AD_2p_events_from_3p_dCDaFDd:\t" << num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
-    myLogFile << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+    if (apply_nucleon_cuts) {
+        myLogFile << "num_of_RM_2p_events_sCTOFhp:\t\t" << num_of_RM_2p_events_sCTOFhp << "\n";
+        myLogFile << "num_of_AD_2p_events_from_3p_sCTOFhp:\t" << num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
+        myLogFile << "num_of_AD_2p_events_from_4p_sCTOFhp:\t" << num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
+        myLogFile << "num_of_RM_2p_events_dCDaFDd:\t\t" << num_of_RM_2p_events_dCDaFDd << "\n";
+        myLogFile << "num_of_AD_2p_events_from_3p_dCDaFDd:\t" << num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
+        myLogFile << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
 
-    myLogFile << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - num_of_RM_2p_events_sCTOFhp - num_of_RM_2p_events_dCDaFDd +
-                                                            num_of_AD_2p_events_from_3p_sCTOFhp + num_of_AD_2p_events_from_4p_sCTOFhp +
-                                                            num_of_AD_2p_events_from_3p_dCDaFDd + num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+        myLogFile << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - num_of_RM_2p_events_sCTOFhp - num_of_RM_2p_events_dCDaFDd +
+                                                                num_of_AD_2p_events_from_3p_sCTOFhp + num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                                num_of_AD_2p_events_from_3p_dCDaFDd + num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+    }
+
     myLogFile << "#(events) 2p:\t\t\t\t\t" << num_of_events_2p << "\n\n";
 
     myLogFile << "-- pFDpCD event counts ----------------------------------------------------\n";
@@ -11813,16 +11852,19 @@ void EventAnalyser() {
     cout << "-- 2p event counts --------------------------------------------------------\n";
     cout << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n\n";
 
-    cout << "num_of_RM_2p_events_sCTOFhp:\t\t" << num_of_RM_2p_events_sCTOFhp << "\n";
-    cout << "num_of_AD_2p_events_from_3p_sCTOFhp:\t" << num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
-    cout << "num_of_AD_2p_events_from_4p_sCTOFhp:\t" << num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
-    cout << "num_of_RM_2p_events_dCDaFDd:\t\t" << num_of_RM_2p_events_dCDaFDd << "\n";
-    cout << "num_of_AD_2p_events_from_3p_dCDaFDd:\t" << num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
-    cout << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+    if (apply_nucleon_cuts) {
+        cout << "num_of_RM_2p_events_sCTOFhp:\t\t" << num_of_RM_2p_events_sCTOFhp << "\n";
+        cout << "num_of_AD_2p_events_from_3p_sCTOFhp:\t" << num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
+        cout << "num_of_AD_2p_events_from_4p_sCTOFhp:\t" << num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
+        cout << "num_of_RM_2p_events_dCDaFDd:\t\t" << num_of_RM_2p_events_dCDaFDd << "\n";
+        cout << "num_of_AD_2p_events_from_3p_dCDaFDd:\t" << num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
+        cout << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
 
-    cout << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - num_of_RM_2p_events_sCTOFhp - num_of_RM_2p_events_dCDaFDd +
-                                                       num_of_AD_2p_events_from_3p_sCTOFhp + num_of_AD_2p_events_from_4p_sCTOFhp +
-                                                       num_of_AD_2p_events_from_3p_dCDaFDd + num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+        cout << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - num_of_RM_2p_events_sCTOFhp - num_of_RM_2p_events_dCDaFDd +
+                                                           num_of_AD_2p_events_from_3p_sCTOFhp + num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                           num_of_AD_2p_events_from_3p_dCDaFDd + num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+    }
+
     cout << "#(events) 2p:\t\t\t\t" << num_of_events_2p << "\n\n";
 
     cout << "-- pFDpCD event counts ----------------------------------------------------\n";

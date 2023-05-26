@@ -30,7 +30,7 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
                          vector<int> &FD_Photons_within_th,
                          vector<int> &ID_Photons_FD,
                          DSCuts &Photon_momentum_th,
-                         bool apply_neutron_Beta_Fit) {
+                         bool apply_nucleon_cuts) {
 
     for (int &i: ID_Neutrons_FD) { // Identify neutron above momentum threshold
         /* Particles that get in here are neutrons. Now we take neutrons who pass momentum cuts. */
@@ -41,7 +41,7 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
             cout << "\n\nFDNeutralParticleID (Neutrons): Neutron PDG is not 2112 or 22 (" << NeutralPDG << "). Exiting...\n\n", exit(EXIT_FAILURE);
         }
 
-        double Momentum = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
+        double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
         /* Log neutrons above momentum cuts (given by Momentum_th): */
         if (Momentum >= Neutron_momentum_th.GetLowerCut() && Momentum <= Neutron_momentum_th.GetUpperCut()) { FD_Neutrons_within_th.push_back(i); }

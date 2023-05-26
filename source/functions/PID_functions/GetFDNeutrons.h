@@ -22,7 +22,7 @@ using namespace std;
  * Neutron = a neutral particle (i.e., neutron or photon) in the FD with no PCal hit and with an ECal hit. */
 
 //bool GetFDNeutrons(region_part_ptr &particle) {
-vector<int> GetFDNeutrons(vector<region_part_ptr> &allParticles, DSCuts &Momentum_cuts, bool apply_neutron_Beta_Fit) {
+vector<int> GetFDNeutrons(vector<region_part_ptr> &allParticles, DSCuts &Momentum_cuts, bool apply_nucleon_cuts) {
     vector<int> Neutrons_indices_in_allParticles;
 
     for (int i = 0; i < allParticles.size(); i++) {
@@ -35,7 +35,7 @@ vector<int> GetFDNeutrons(vector<region_part_ptr> &allParticles, DSCuts &Momentu
 
             if (!inPCAL && (inECIN || inECOUT)) { // if the criteria for a particle to be a neutron is upheld
                 /* Particles that get in here are neutrons. Now we take neutrons who pass momentum cuts. */
-                double Momentum = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
+                double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
                 /* Log neutrons above momentum cuts (given by Momentum_cuts): */
                 if ((Momentum >= Momentum_cuts.GetLowerCut()) && (Momentum <= Momentum_cuts.GetUpperCut())) { Neutrons_indices_in_allParticles.push_back(i); }

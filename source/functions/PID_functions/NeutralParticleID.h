@@ -23,7 +23,7 @@ using namespace std;
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 //bool GetFDNeutrons(region_part_ptr &particle) {
-vector<int> NeutralParticleID(vector<region_part_ptr> &allParticles, DSCuts &Momentum_th, const string &NeutralParticle2ID, bool apply_neutron_Beta_Fit) {
+vector<int> NeutralParticleID(vector<region_part_ptr> &allParticles, DSCuts &Momentum_th, const string &NeutralParticle2ID, bool apply_nucleon_cuts) {
     vector<int> Neutral_indices_in_allParticles;
 
     for (int i = 0; i < allParticles.size(); i++) {
@@ -48,7 +48,7 @@ vector<int> NeutralParticleID(vector<region_part_ptr> &allParticles, DSCuts &Mom
 //                        ID_Neutrons_FD.push_back(i);
 //
                         /* Particles that get in here are neutrons. Now we take neutrons who pass momentum cuts. */
-                        double Momentum = GetFDNeutronP(allParticles[i], apply_neutron_Beta_Fit);
+                        double Momentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
                         /* Log neutrons above momentum cuts (given by Momentum_th): */
                         if (Momentum >= Neutron_momentum_th.GetLowerCut()) { ID_Neutrons_FD.push_back(i); }

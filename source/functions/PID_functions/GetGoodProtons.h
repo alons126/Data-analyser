@@ -26,8 +26,8 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //<editor-fold desc="GetGoodProtons function">
-vector<int> GetGoodProtons(vector<region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                           DSCuts &p1_Theta_p_cuts_2p, DSCuts &p2_Theta_p_cuts_2p, DSCuts &phi_p1_p2_diff_cuts_2p) {
+vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &protons, const vector<int> &IDProtons_ind,
+                           DSCuts &p1_Theta_p_cuts_2p, DSCuts &p2_Theta_p_cuts_2p, DSCuts &dphi_p1_p2_2p) {
     vector<int> GoodProtons; // good protons vector fater the cuts
 
     /* Monitoring variables */
@@ -37,39 +37,40 @@ vector<int> GetGoodProtons(vector<region_part_ptr> &protons, const vector<int> &
     for (int i = 0; i < IDProtons_ind.size(); i++) {
         bool GoodProt = true; // when GoodProt == true at the end of the loop, the proton's index will be logged
 
-        for (int j = i + 1; j < IDProtons_ind.size(); j++) {
-            if ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) {
-                /* Set hit positions in the CTOF, and position difference: */
-                TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
-                p1_hit_pos.SetXYZ(protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getX(), protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getY(),
-                                  protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getZ());
-                p2_hit_pos.SetXYZ(protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getX(), protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getY(),
-                                  protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getZ());
-                pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
+        if (apply_nucleon_cuts) {
+            for (int j = i + 1; j < IDProtons_ind.size(); j++) {
+                if ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) {
+                    /* Set hit positions in the CTOF, and position difference: */
+                    TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
+                    p1_hit_pos.SetXYZ(protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getX(), protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getY(),
+                                      protons[IDProtons_ind.at(i)]->sci(clas12::CTOF)->getZ());
+                    p2_hit_pos.SetXYZ(protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getX(), protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getY(),
+                                      protons[IDProtons_ind.at(j)]->sci(clas12::CTOF)->getZ());
+                    pos_diff.SetXYZ(p1_hit_pos.Px() - p2_hit_pos.Px(), p1_hit_pos.Py() - p2_hit_pos.Py(), p1_hit_pos.Pz() - p2_hit_pos.Pz());
 
-                if (pos_diff.Mag() == 0) { // if protons have the same hit position
-                    /* Same hit position for protons i and j - don't log proton i (j will be logged later as a single proton) */
-                    GoodProt = false; // don't log proton i
-                    Cut_sCTOFhp = true; // monitor sCTOFhp
-                }
-            } else if (((protons[IDProtons_ind.at(i)]->getRegion() == FD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) ||
-                       ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == FD))) {
-                double Theta_p_i = protons[IDProtons_ind.at(i)]->getTheta() * 180.0 / pi, Phi_p_i = protons[IDProtons_ind.at(i)]->getPhi() * 180.0 / pi;
-                double Theta_p_j = protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi, Phi_p_j = protons[IDProtons_ind.at(j)]->getPhi() * 180.0 / pi;
-                double dPhi = Phi_p_i - Phi_p_j;
+                    if (pos_diff.Mag() == 0) { // if protons have the same hit position
+                        /* Same hit position for protons i and j - don't log proton i (j will be logged later as a single proton) */
+                        GoodProt = false; // don't log proton i
+                        Cut_sCTOFhp = true; // monitor sCTOFhp
+                    }
+                } else if (((protons[IDProtons_ind.at(i)]->getRegion() == FD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) ||
+                           ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == FD))) {
+                    double Theta_p_i = protons[IDProtons_ind.at(i)]->getTheta() * 180.0 / pi, Phi_p_i = protons[IDProtons_ind.at(i)]->getPhi() * 180.0 / pi;
+                    double Theta_p_j = protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi, Phi_p_j = protons[IDProtons_ind.at(j)]->getPhi() * 180.0 / pi;
+                    double dPhi = Phi_p_i - Phi_p_j;
 
-                bool p_i_around_40 = (fabs(Theta_p_i - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
-                bool p_j_around_40 = (fabs(Theta_p_j - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
-                bool small_dPhi = (fabs(dPhi - phi_p1_p2_diff_cuts_2p.GetMean()) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
+                    bool p_i_around_40 = (fabs(Theta_p_i - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
+                    bool p_j_around_40 = (fabs(Theta_p_j - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
+                    bool small_dPhi = (fabs(dPhi - dphi_p1_p2_2p.GetMean()) < dphi_p1_p2_2p.GetUpperCut());
 
-                if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
-                    /* Same angles for protons i and j on the border of the CD-FD - don't log proton i (j will be logged later as a single proton) */
-                    GoodProt = false; // don't log proton i
-                    Cut_dCDaFDd = true; // monitor dCDaFDd
+                    if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
+                        /* Same angles for protons i and j on the border of the CD-FD - don't log proton i (j will be logged later as a single proton) */
+                        GoodProt = false; // don't log proton i
+                        Cut_dCDaFDd = true; // monitor dCDaFDd
+                    }
                 }
             }
         }
-
         if (GoodProt) { GoodProtons.push_back(IDProtons_ind.at(i)); }
     }
 
@@ -334,7 +335,7 @@ int num_of_RM_2p_events_sCTOFhp = 0, num_of_AD_2p_events_from_3p_sCTOFhp = 0, nu
 int num_of_RM_2p_events_dCDaFDd = 0, num_of_AD_2p_events_from_3p_dCDaFDd = 0, num_of_AD_2p_events_from_4p_dCDaFDd = 0;
 
 void GPMonitoring(bool GoodProtonsMonitorPlots, vector<region_part_ptr> &protons, const vector<int> &IDProtons_ind, const vector<int> &Protons_ind,
-                  DSCuts &p1_Theta_p_cuts_2p, DSCuts &p2_Theta_p_cuts_2p, DSCuts &phi_p1_p2_diff_cuts_2p, double Weight) {
+                  DSCuts &p1_Theta_p_cuts_2p, DSCuts &p2_Theta_p_cuts_2p, DSCuts &dphi_p1_p2_2p, double Weight) {
     if (GoodProtonsMonitorPlots) {
         for (int i = 0; i < IDProtons_ind.size(); i++) {
             auto proton_i_2p = protons[IDProtons_ind.at(i)];
@@ -398,7 +399,7 @@ void GPMonitoring(bool GoodProtonsMonitorPlots, vector<region_part_ptr> &protons
 
                     bool p_i_around_40 = (fabs(Theta_pi - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
                     bool p_j_around_40 = (fabs(Theta_pj - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
-                    bool small_dPhi = (fabs(dPhi_ij_2p - phi_p1_p2_diff_cuts_2p.GetMean()) < phi_p1_p2_diff_cuts_2p.GetUpperCut());
+                    bool small_dPhi = (fabs(dPhi_ij_2p - dphi_p1_p2_2p.GetMean()) < dphi_p1_p2_2p.GetUpperCut());
 
                     if (IDProtons_ind.size() == 2) {
                         if (Theta_pi_pj_2p < 20) {
