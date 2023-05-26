@@ -546,6 +546,8 @@ Directories::Directories(std::string plots_path) {
                                                                    Find(Angle_Daughter_Folders,
                                                                         "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots/00_CFoF_hits_Monitoring_pFDpCD_plots") +
                                                                    "/";
+    Angle_Directory_map["Double_detection_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                           Find(Angle_Daughter_Folders, "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/02_Double_detection_pFDpCD_plots") + "/";
     Angle_Directory_map["Double_detection_monitoring_pFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                                       Find(Angle_Daughter_Folders,
                                                                            "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/02_Double_detection_pFDpCD_plots/00_Double_detection_monitoring_pFDpCD_plots") + "/";
