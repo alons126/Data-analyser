@@ -262,7 +262,10 @@ private:
                                                   "06_nFDpCD/04_Theta_nFD_nFDpCD_plots", "06_nFDpCD/05_Phi_nFD_nFDpCD_plots",
                                                   "06_nFDpCD/06_Theta_nFD_VS_Phi_nFD_nFDpCD_plots", "06_nFDpCD/07_Theta_pCD_nFDpCD_plots",
                                                   "06_nFDpCD/08_Phi_pCD_nFDpCD_plots", "06_nFDpCD/09_Theta_pCD_VS_Phi_pCD_nFDpCD_plots",
-                                                  "06_nFDpCD/10_Opening_angles_nFDpCD_plots", "06_nFDpCD/11_Neutron_veto_nFDpCD_plots",
+                                                  "06_nFDpCD/10_Opening_angles_nFDpCD_plots",
+                                                  "06_nFDpCD/11_Ghost_tracks_handling_nFDpCD_plots/02_Double_detection_nFDpCD_plots",
+                                                  "06_nFDpCD/11_Ghost_tracks_handling_nFDpCD_plots/02_Double_detection_nFDpCD_plots/00_Double_detection_monitoring_nFDpCD_plots",
+                                                  "06_nFDpCD/12_Neutron_veto_nFDpCD_plots",
 
 //                                                  "07_1e2pXy",
                                                   "07_1e2pXy/01_Theta_e_1e2pXy_plots", "07_1e2pXy/02_Phi_e_1e2pXy_plots", "07_1e2pXy/03_Theta_e_VS_Phi_e_1e2pXy_plots",
