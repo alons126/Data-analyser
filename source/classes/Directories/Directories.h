@@ -250,7 +250,7 @@ private:
                                                   "05_pFDpCD/04_Theta_pFD_pFDpCD_plots", "05_pFDpCD/05_Phi_pFD_pFDpCD_plots",
                                                   "05_pFDpCD/06_Theta_pFD_VS_Phi_pFD_pFDpCD_plots", "05_pFDpCD/07_Theta_pCD_pFDpCD_plots",
                                                   "05_pFDpCD/08_Phi_pCD_pFDpCD_plots", "05_pFDpCD/09_Theta_pCD_VS_Phi_pCD_pFDpCD_plots",
-                                                  "05_pFDpCD/10_Opening_angles_pFDpCD_plots", "05_pFDpCD/10_Opening_angles_pFDpCD_plots/00_Theta_p1_p2_by_interaction",
+                                                  "05_pFDpCD/10_Opening_angles_pFDpCD_plots", "05_pFDpCD/10_Opening_angles_pFDpCD_plots/00_Theta_pFD_pCD_by_interaction",
                                                   "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots",
                                                   "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots",
                                                   "05_pFDpCD/11_Ghost_tracks_handling_pFDpCD_plots/01_CFoF_hits_pFDpCD_plots/00_CFoF_hits_Monitoring_pFDpCD_plots",
