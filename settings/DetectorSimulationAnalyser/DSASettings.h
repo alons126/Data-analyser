@@ -237,11 +237,11 @@ DSCuts Theta_nuc_cut;
 DSCuts Neutron_veto_cut;
 
 /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-DSCuts p1_Theta_p_cuts_2p;
-DSCuts p2_Theta_p_cuts_2p;
+DSCuts Theta_p1_cuts_2p;
+DSCuts Theta_p2_cuts_2p;
 DSCuts dphi_p1_p2_2p;
-DSCuts p1_Theta_p_cuts_pFDpCD;
-DSCuts p2_Theta_p_cuts_pFDpCD;
+DSCuts Theta_p1_cuts_pFDpCD;
+DSCuts Theta_p2_cuts_pFDpCD;
 DSCuts dphi_pFD_pCD_pFDpCD;
 //</editor-fold>
 
@@ -883,11 +883,11 @@ void SetSettings () {
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
 
 /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
-    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
+    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 7.5);
+    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 7.5);
     DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
-    DSCuts p1_Theta_p_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", 40., -9999, 7.5);
-    DSCuts p2_Theta_p_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", 40., -9999, 7.5);
+    DSCuts Theta_p1_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", 40., -9999, 7.5);
+    DSCuts Theta_p2_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", 40., -9999, 7.5);
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_p1_p2", "", "Proton", "pFDpCD", 0, -9999, 15.);
 //</editor-fold>
 

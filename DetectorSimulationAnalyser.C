@@ -349,6 +349,7 @@ void EventAnalyser() {
 
     /* FD theta range (1n & 1p) */
     DSCuts ThetaFD = DSCuts("Theta FD", "FD", "", "1n & 1p", 1, 5., 40.);
+    DSCuts ThetaCD = DSCuts("Theta CD", "CD", "", "1n & 1p", 1, 40., 135.);
 
     /* Beta cut (1n, FD) */
     DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, 0, 9999);
@@ -360,14 +361,14 @@ void EventAnalyser() {
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
 
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-    DSCuts p1_Theta_p_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
-    DSCuts p2_Theta_p_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
+    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
+    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
     DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
-    DSCuts p1_Theta_p_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", p1_Theta_p_cuts_2p.GetMean(), -9999, p1_Theta_p_cuts_2p.GetUpperCut());
-    DSCuts p2_Theta_p_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", p2_Theta_p_cuts_2p.GetMean(), -9999, p2_Theta_p_cuts_2p.GetUpperCut());
+    DSCuts Theta_p1_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
+    DSCuts Theta_p2_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
-    DSCuts p1_Theta_p_cuts_nFDpCD = DSCuts("Theta_p1", "", "Proton", "nFDpCD", p1_Theta_p_cuts_2p.GetMean(), -9999, p1_Theta_p_cuts_2p.GetUpperCut());
-    DSCuts p2_Theta_p_cuts_nFDpCD = DSCuts("Theta_p2", "", "Proton", "nFDpCD", p2_Theta_p_cuts_2p.GetMean(), -9999, p2_Theta_p_cuts_2p.GetUpperCut());
+    DSCuts Theta_p1_cuts_nFDpCD = DSCuts("Theta_p1", "", "Proton", "nFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
+    DSCuts Theta_p2_cuts_nFDpCD = DSCuts("Theta_p2", "", "Proton", "nFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_nFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "nFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
     //</editor-fold>
 
@@ -5061,7 +5062,7 @@ void EventAnalyser() {
 
         vector<int> IDProtons_ind = ChargedParticleID(protons, p_mom_th); // identified protons (i.e., within P_p th.)
         vector<int> Protons_ind = GetGoodProtons(apply_nucleon_cuts, protons, IDProtons_ind,
-                                                 p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, dphi_p1_p2_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
+                                                 Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_p1_p2_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
 
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
         vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
@@ -5175,7 +5176,7 @@ void EventAnalyser() {
         if (GoodProtonsMonitorPlots && basic_event_selection) {
             if (IDProtons_ind.size() == 2) { ++num_of_events_2p_wFakeProtons; }
 
-            GPMonitoring(GoodProtonsMonitorPlots, protons, IDProtons_ind, Protons_ind, p1_Theta_p_cuts_2p, p2_Theta_p_cuts_2p, dphi_p1_p2_2p, Weight);
+            GPMonitoring(GoodProtonsMonitorPlots, protons, IDProtons_ind, Protons_ind, Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_p1_p2_2p, Weight);
         }
         //</editor-fold>
 
@@ -8051,8 +8052,8 @@ void EventAnalyser() {
             hdPhi_p1_p2_for_all_Theta_p1_p2_2p->Fill(dPhi_hit_2p, Weight);
             hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p->Fill(dPhi_hit_2p, Weight);
 
-            if ((fabs(Theta_p1 - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut()) &&
-                (fabs(Theta_p2 - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut())) {
+            if ((fabs(Theta_p1 - Theta_p1_cuts_2p.GetMean()) < Theta_p1_cuts_2p.GetUpperCut()) &&
+                (fabs(Theta_p2 - Theta_p2_cuts_2p.GetMean()) < Theta_p2_cuts_2p.GetUpperCut())) {
                 hdPhi_p1_p2_for_small_dTheta_2p->Fill(dPhi_hit_2p, Weight);
                 hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->Fill(dPhi_hit_2p, Weight);
             }
@@ -8200,14 +8201,14 @@ void EventAnalyser() {
                 * p_first corresponds to protons[Protons_ind.at(0)] & p_second corresponds to protons[Protons_ind.at(1)]
                 * P_1 corresponds to leading proton & P_2 corresponds to the recoil */
 
-            TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_p_first_pFDpCD_3v, P_p_second_pFDpCD_3v, P_tot_pFDpCD_3v, P_1_pFDpCD_3v, P_2_pFDpCD_3v;
+            TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_pFD_pFDpCD_3v, P_pCD_pFDpCD_3v, P_tot_pFDpCD_3v, P_1_pFDpCD_3v, P_2_pFDpCD_3v;
             TVector3 P_T_e_pFDpCD_3v, P_T_L_pFDpCD_3v, P_T_tot_pFDpCD_3v, dP_T_L_pFDpCD_3v, dP_T_tot_pFDpCD_3v;
 
             P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(), e_pFDpCD->getPhi());                                              // electron 3 momentum
             q_pFDpCD_3v = TVector3(Pvx - P_e_pFDpCD_3v.Px(), Pvy - P_e_pFDpCD_3v.Py(), Pvz - P_e_pFDpCD_3v.Pz());                                  // 3 momentum transfer
             P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
-            P_p_first_pFDpCD_3v.SetMagThetaPhi(p_first_pFDpCD->getP(), p_first_pFDpCD->getTheta(), p_first_pFDpCD->getPhi());           // first proton in protons vector
-            P_p_second_pFDpCD_3v.SetMagThetaPhi(p_second_pFDpCD->getP(), p_second_pFDpCD->getTheta(), p_second_pFDpCD->getPhi());      // second proton in protons vector
+            P_pFD_pFDpCD_3v.SetMagThetaPhi(pFD_pFDpCD->getP(), pFD_pFDpCD->getTheta(), pFD_pFDpCD->getPhi());                                           // pFD 3 momentum
+            P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(), pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
 
             double E_e_pFDpCD = sqrt(m_e * m_e + P_e_pFDpCD_3v.Mag2()), omega_pFDpCD = beamE - E_e_pFDpCD;
             double W_pFDpCD = sqrt((omega_pFDpCD + m_p) * (omega_pFDpCD + m_p) - q_pFDpCD_3v.Mag2());
@@ -8232,19 +8233,6 @@ void EventAnalyser() {
             /* Setting the leading as pFD and recoil as pCD: */
             P_1_pFDpCD_3v = TVector3(pFD_pFDpCD->par()->getPx(), pFD_pFDpCD->par()->getPy(), pFD_pFDpCD->par()->getPz());
             P_2_pFDpCD_3v = TVector3(pCD_pFDpCD->par()->getPx(), pCD_pFDpCD->par()->getPy(), pCD_pFDpCD->par()->getPz());
-/*
-            int lead_p_pFDpCD_ind, recoil_p_pFDpCD_ind; // indices of leading and recoil protons
-
-            if (P_p_first_pFDpCD_3v.Mag() >= P_p_second_pFDpCD_3v.Mag()) { // If p_first = protons[0] is leading proton
-                P_1_pFDpCD_3v = TVector3(P_p_first_pFDpCD_3v.Px(), P_p_first_pFDpCD_3v.Py(), P_p_first_pFDpCD_3v.Pz());
-                P_2_pFDpCD_3v = TVector3(P_p_second_pFDpCD_3v.Px(), P_p_second_pFDpCD_3v.Py(), P_p_second_pFDpCD_3v.Pz());
-                lead_p_pFDpCD_ind = Protons_ind.at(0), recoil_p_pFDpCD_ind = Protons_ind.at(1);
-            } else { // else if p_second = p_second_pFDpCD is leading proton
-                P_2_pFDpCD_3v = TVector3(P_p_first_pFDpCD_3v.Px(), P_p_first_pFDpCD_3v.Py(), P_p_first_pFDpCD_3v.Pz());
-                P_1_pFDpCD_3v = TVector3(P_p_second_pFDpCD_3v.Px(), P_p_second_pFDpCD_3v.Py(), P_p_second_pFDpCD_3v.Pz());
-                lead_p_pFDpCD_ind = Protons_ind.at(1), recoil_p_pFDpCD_ind = Protons_ind.at(0);
-            }
-*/
 
             /* Setting particle angles */
             double Theta_p1_pFDpCD = P_1_pFDpCD_3v.Theta() * 180.0 / pi, Phi_p1_pFDpCD = P_1_pFDpCD_3v.Phi() * 180.0 / pi;       // Theta_p1_pFDpCD, Phi_p1_pFDpCD in deg
@@ -8252,7 +8240,7 @@ void EventAnalyser() {
             double dPhi_hit_pFDpCD = Phi_p1_pFDpCD - Phi_p2_pFDpCD;
             double Theta_pFD_pCD_pFDpCD = acos((P_1_pFDpCD_3v.Px() * P_2_pFDpCD_3v.Px() + P_1_pFDpCD_3v.Py() * P_2_pFDpCD_3v.Py()
                                                 + P_1_pFDpCD_3v.Pz() * P_2_pFDpCD_3v.Pz())
-                                               / (P_1_pFDpCD_3v.Mag() * P_2_pFDpCD_3v.Mag())) * 180.0 / pi; // Theta_pFD_pCD_pFDpCD in deg
+                                               / (P_1_pFDpCD_3v.Mag() * P_2_pFDpCD_3v.Mag())) * 180.0 / pi;                                // Theta_pFD_pCD_pFDpCD in deg
             //</editor-fold>
 
             //</editor-fold>
@@ -8284,8 +8272,8 @@ void EventAnalyser() {
 
             //<editor-fold desc="Id. pFD and pCD protons (pFDpCD)">
             double Vx_pFD_pFDpCD = pFD_pFDpCD->par()->getVx(), Vy_pFD_pFDpCD = pFD_pFDpCD->par()->getVy(), Vz_pFD_pFDpCD = pFD_pFDpCD->par()->getVz();
-            double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
             double dVx_pFD_pFDpCD = Vx_pFD_pFDpCD - Vx_e_pFDpCD, dVy_pFD_pFDpCD = Vy_pFD_pFDpCD - Vy_e_pFDpCD, dVz_pFD_pFDpCD = Vz_pFD_pFDpCD - Vz_e_pFDpCD;
+            double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
             double dVx_pCD_pFDpCD = Vx_pCD_pFDpCD - Vx_e_pFDpCD, dVy_pCD_pFDpCD = Vy_pCD_pFDpCD - Vy_e_pFDpCD, dVz_pCD_pFDpCD = Vz_pCD_pFDpCD - Vz_e_pFDpCD;
 
             hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight), hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight), hdVz_pFD_pFDpCD.hFill(dVz_pFD_pFDpCD, Weight);
@@ -8597,18 +8585,16 @@ void EventAnalyser() {
 
             hP_pFD_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), Weight);                                                                                  // Leading proton (pFDpCD)
             hP_pCD_pFDpCD.hFill(P_2_pFDpCD_3v.Mag(), Weight);                                                                                   // Recoil proton (pFDpCD)
-            hP_p_1_vs_P_p_2_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), P_2_pFDpCD_3v.Mag(), Weight);
 
+            // for pFD leading and pCD recoil, hP_p_1_vs_P_p_2_pFDpCD and hP_pFD_vs_P_pCD_pFDpCD sould be the same:
+            hP_p_1_vs_P_p_2_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), P_2_pFDpCD_3v.Mag(), Weight);
             hP_pFD_vs_P_pCD_pFDpCD.hFill(pFD_pFDpCD->getP(), pCD_pFDpCD->getP(), Weight);
 
-            P_tot_pFDpCD_3v = TVector3(P_p_first_pFDpCD_3v.Px() + P_p_second_pFDpCD_3v.Px(),
-                                       P_p_first_pFDpCD_3v.Py() + P_p_second_pFDpCD_3v.Py(),
-                                       P_p_first_pFDpCD_3v.Pz() + P_p_second_pFDpCD_3v.Pz());                                                    // P_tot = P_pFD + P_pCD
+            P_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
+                                       P_pFD_pFDpCD_3v.Pz() + P_pCD_pFDpCD_3v.Pz());                                                             // P_tot = P_pFD + P_pCD
             P_T_L_pFDpCD_3v = TVector3(P_1_pFDpCD_3v.Px(), P_1_pFDpCD_3v.Py(), 0);                                                            // transverse part of P_pFD
-            P_T_tot_pFDpCD_3v = TVector3(P_p_first_pFDpCD_3v.Px() + P_p_second_pFDpCD_3v.Px(),
-                                         P_p_first_pFDpCD_3v.Py() + P_p_second_pFDpCD_3v.Py(), 0);                                            // transverse part of P_tot
-            dP_T_L_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_T_L_pFDpCD_3v.Px(),
-                                        P_e_pFDpCD_3v.Py() + P_T_L_pFDpCD_3v.Py(), 0);
+            P_T_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(), 0);        // transverse part of P_tot
+            dP_T_L_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_T_L_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py() + P_T_L_pFDpCD_3v.Py(), 0);
             dP_T_tot_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_1_pFDpCD_3v.Px() + P_2_pFDpCD_3v.Px(),
                                           P_e_pFDpCD_3v.Py() + P_1_pFDpCD_3v.Py() + P_2_pFDpCD_3v.Py(), 0);
 
@@ -8642,8 +8628,8 @@ void EventAnalyser() {
             hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
             hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
 
-            if ((fabs(Theta_p1_pFDpCD - p1_Theta_p_cuts_pFDpCD.GetMean()) < p1_Theta_p_cuts_pFDpCD.GetUpperCut()) &&
-                (fabs(Theta_p2_pFDpCD - p2_Theta_p_cuts_pFDpCD.GetMean()) < p2_Theta_p_cuts_pFDpCD.GetUpperCut())) {
+            if ((fabs(Theta_p1_pFDpCD - Theta_p1_cuts_pFDpCD.GetMean()) < Theta_p1_cuts_pFDpCD.GetUpperCut()) &&
+                (fabs(Theta_p2_pFDpCD - Theta_p2_cuts_pFDpCD.GetMean()) < Theta_p2_cuts_pFDpCD.GetUpperCut())) {
                 hdPhi_pFD_pCD_for_small_dTheta_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
                 hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
             }
@@ -8687,12 +8673,10 @@ void EventAnalyser() {
             hdP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight);
             hdP_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
 
-            dAlpha_T_L_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_L_pFDpCD_3v.Px()
-                                       + P_e_pFDpCD_3v.Py() * dP_T_L_pFDpCD_3v.Py()
+            dAlpha_T_L_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_L_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_L_pFDpCD_3v.Py()
                                        + P_e_pFDpCD_3v.Pz() * dP_T_L_pFDpCD_3v.Pz())
                                      / (P_T_e_pFDpCD_3v.Mag() * dP_T_L_pFDpCD_3v.Mag())) * 180.0 / pi;             // dP_T_L_pFDpCD_3v.Pz() = 0; dAlpha_T_L_pFDpCD in deg
-            dAlpha_T_tot_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_tot_pFDpCD_3v.Px()
-                                         + P_e_pFDpCD_3v.Py() * dP_T_tot_pFDpCD_3v.Py()
+            dAlpha_T_tot_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_tot_pFDpCD_3v.Py()
                                          + P_e_pFDpCD_3v.Pz() * dP_T_tot_pFDpCD_3v.Pz())
                                        / (P_T_e_pFDpCD_3v.Mag() * dP_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi;     // dP_T_tot_pFDpCD_3v.Pz() = 0; dAlpha_T_tot_pFDpCD in deg
             hdAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Weight);
@@ -8703,12 +8687,10 @@ void EventAnalyser() {
             hdP_T_L_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
             hdP_T_tot_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
 
-            dPhi_T_L_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_L_pFDpCD_3v.Px()
-                                     + P_T_e_pFDpCD_3v.Py() * P_T_L_pFDpCD_3v.Py()
+            dPhi_T_L_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_L_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_L_pFDpCD_3v.Py()
                                      + P_T_e_pFDpCD_3v.Pz() * P_T_L_pFDpCD_3v.Pz())
                                    / (P_T_e_pFDpCD_3v.Mag() * P_T_L_pFDpCD_3v.Mag())) * 180.0 / pi;                   // P_T_L_pFDpCD_3v.Pz() = 0; dPhi_T_L_pFDpCD in deg
-            dPhi_T_tot_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_tot_pFDpCD_3v.Px()
-                                       + P_T_e_pFDpCD_3v.Py() * P_T_tot_pFDpCD_3v.Py()
+            dPhi_T_tot_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_tot_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_tot_pFDpCD_3v.Py()
                                        + P_T_e_pFDpCD_3v.Pz() * P_T_tot_pFDpCD_3v.Pz())
                                      / (P_T_e_pFDpCD_3v.Mag() * P_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi;           // P_T_tot_pFDpCD_3v.Pz() = 0; dPhi_T_tot_pFDpCD in deg
             hdPhi_T_L_pFDpCD->Fill(dPhi_T_L_pFDpCD, Weight);
@@ -8720,6 +8702,7 @@ void EventAnalyser() {
             hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
             hEcal_vs_W_pFDpCD->Fill(W_pFDpCD, Ecal_pFDpCD, Weight);
 
+/*
             if ((p_first_pFDpCD->getRegion() == CD) && (p_second_pFDpCD->getRegion() == CD)) { // if both pFDpCD protons are in the CD (self-observation only!)
                 TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
                 p1_hit_pos.SetXYZ(p_first_pFDpCD->sci(clas12::CTOF)->getX(), p_first_pFDpCD->sci(clas12::CTOF)->getY(), p_first_pFDpCD->sci(clas12::CTOF)->getZ());
@@ -8731,6 +8714,7 @@ void EventAnalyser() {
                 hTheta_pFD_pCD_VS_ToFpFD_ToFpCD_AC_pFDpCD.hFill(Theta_pFD_pCD_pFDpCD, time_diff, Weight);
                 hTheta_pFD_pCD_VS_PospFD_PospCD_AC_pFDpCD.hFill(Theta_pFD_pCD_pFDpCD, pos_diff.Mag(), Weight);
             }
+*/
             //</editor-fold>
 
         } // end of 1epFDpCD & pFDpCD cuts if
@@ -9324,8 +9308,8 @@ void EventAnalyser() {
                 hdphi_nFD_pCD_for_all_Theta_nFD_pCD_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
                 hdphi_nFD_pCD_for_all_Theta_nFD_pCD_ZOOMIN_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
 
-                if ((fabs(Theta_p1_nFDpCD - p1_Theta_p_cuts_nFDpCD.GetMean()) < p1_Theta_p_cuts_nFDpCD.GetUpperCut()) &&
-                    (fabs(Theta_p2_nFDpCD - p2_Theta_p_cuts_nFDpCD.GetMean()) < p2_Theta_p_cuts_nFDpCD.GetUpperCut())) {
+                if ((fabs(Theta_p1_nFDpCD - Theta_p1_cuts_nFDpCD.GetMean()) < Theta_p1_cuts_nFDpCD.GetUpperCut()) &&
+                    (fabs(Theta_p2_nFDpCD - Theta_p2_cuts_nFDpCD.GetMean()) < Theta_p2_cuts_nFDpCD.GetUpperCut())) {
                     hdphi_nFD_pCD_for_small_dTheta_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
                     hdphi_nFD_pCD_for_small_dTheta_ZOOMIN_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
                 }
@@ -13396,10 +13380,10 @@ void EventAnalyser() {
     myLogFile << "Ghost tracks handling (2p, CD & FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "p1_Theta_p_cuts_2p = " << p1_Theta_p_cuts_2p.GetUpperCut() << "\n";
-    myLogFile << "p1_Theta_p_cuts_2p mean = " << p1_Theta_p_cuts_2p.GetMean() << "\n";
-    myLogFile << "p2_Theta_p_cuts_2p = " << p2_Theta_p_cuts_2p.GetUpperCut() << "\n";
-    myLogFile << "p2_Theta_p_cuts_2p mean = " << p2_Theta_p_cuts_2p.GetMean() << "\n";
+    myLogFile << "Theta_p1_cuts_2p = " << Theta_p1_cuts_2p.GetUpperCut() << "\n";
+    myLogFile << "Theta_p1_cuts_2p mean = " << Theta_p1_cuts_2p.GetMean() << "\n";
+    myLogFile << "Theta_p2_cuts_2p = " << Theta_p2_cuts_2p.GetUpperCut() << "\n";
+    myLogFile << "Theta_p2_cuts_2p mean = " << Theta_p2_cuts_2p.GetMean() << "\n";
     myLogFile << "dphi_p1_p2_2p.GetUpperCut() = " << dphi_p1_p2_2p.GetUpperCut() << "\n";
     myLogFile << "dphi_p1_p2_2p.GetMean() = " << dphi_p1_p2_2p.GetMean() << "\n\n";
     //</editor-fold>

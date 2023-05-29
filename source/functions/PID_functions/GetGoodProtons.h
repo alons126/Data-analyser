@@ -27,7 +27,7 @@ using namespace std;
 
 //<editor-fold desc="GetGoodProtons function">
 vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &protons, const vector<int> &IDProtons_ind,
-                           DSCuts &p1_Theta_p_cuts_2p, DSCuts &p2_Theta_p_cuts_2p, DSCuts &dphi_p1_p2_2p) {
+                           DSCuts &Theta_p1_cuts_2p, DSCuts &Theta_p2_cuts_2p, DSCuts &dphi_p1_p2_2p) {
     vector<int> GoodProtons; // good protons vector fater the cuts
 
     /* Monitoring variables */
@@ -59,8 +59,8 @@ vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &pro
                     double Theta_p_j = protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi, Phi_p_j = protons[IDProtons_ind.at(j)]->getPhi() * 180.0 / pi;
                     double dPhi = Phi_p_i - Phi_p_j;
 
-                    bool p_i_around_40 = (fabs(Theta_p_i - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
-                    bool p_j_around_40 = (fabs(Theta_p_j - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
+                    bool p_i_around_40 = (fabs(Theta_p_i - Theta_p1_cuts_2p.GetMean()) < Theta_p1_cuts_2p.GetUpperCut());
+                    bool p_j_around_40 = (fabs(Theta_p_j - Theta_p2_cuts_2p.GetMean()) < Theta_p2_cuts_2p.GetUpperCut());
                     bool small_dPhi = (fabs(dPhi - dphi_p1_p2_2p.GetMean()) < dphi_p1_p2_2p.GetUpperCut());
 
                     if ((p_i_around_40 && p_j_around_40) && small_dPhi) {
@@ -340,7 +340,7 @@ int num_of_RM_2p_events_sCTOFhp = 0, num_of_AD_2p_events_from_3p_sCTOFhp = 0, nu
 int num_of_RM_2p_events_dCDaFDd = 0, num_of_AD_2p_events_from_3p_dCDaFDd = 0, num_of_AD_2p_events_from_4p_dCDaFDd = 0;
 
 void GPMonitoring(bool GoodProtonsMonitorPlots, vector<region_part_ptr> &protons, const vector<int> &IDProtons_ind, const vector<int> &Protons_ind,
-                  DSCuts &p1_Theta_p_cuts_2p, DSCuts &p2_Theta_p_cuts_2p, DSCuts &dphi_p1_p2_2p, double Weight) {
+                  DSCuts &Theta_p1_cuts_2p, DSCuts &Theta_p2_cuts_2p, DSCuts &dphi_p1_p2_2p, double Weight) {
     if (GoodProtonsMonitorPlots) {
         for (int i = 0; i < IDProtons_ind.size(); i++) {
             auto proton_i_2p = protons[IDProtons_ind.at(i)];
@@ -402,8 +402,8 @@ void GPMonitoring(bool GoodProtonsMonitorPlots, vector<region_part_ptr> &protons
                 } else if (((proton_i_2p->getRegion() == FD) && (proton_j_2p->getRegion() == CD)) ||
                            ((proton_i_2p->getRegion() == CD) && (proton_j_2p->getRegion() == FD))) {
 
-                    bool p_i_around_40 = (fabs(Theta_pi - p1_Theta_p_cuts_2p.GetMean()) < p1_Theta_p_cuts_2p.GetUpperCut());
-                    bool p_j_around_40 = (fabs(Theta_pj - p2_Theta_p_cuts_2p.GetMean()) < p2_Theta_p_cuts_2p.GetUpperCut());
+                    bool p_i_around_40 = (fabs(Theta_pi - Theta_p1_cuts_2p.GetMean()) < Theta_p1_cuts_2p.GetUpperCut());
+                    bool p_j_around_40 = (fabs(Theta_pj - Theta_p2_cuts_2p.GetMean()) < Theta_p2_cuts_2p.GetUpperCut());
                     bool small_dPhi = (fabs(dPhi_ij_2p - dphi_p1_p2_2p.GetMean()) < dphi_p1_p2_2p.GetUpperCut());
 
                     if (IDProtons_ind.size() == 2) {
