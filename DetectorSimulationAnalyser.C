@@ -316,16 +316,16 @@ void EventAnalyser() {
     /* Momentum thresholds */
 //    DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
 //    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, -9999, 9999);
+//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
 //    DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, -9999, 9999);
 //    DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piminus", "", 0, -9999, 9999);
 //    DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, -9999, 9999);
-//    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, -9999, 9999);
     DSCuts e_mom_th = DSCuts("Momentum_th", "", "Electron", "", 0, -9999, 9999);
-    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.3, 9999);
+    DSCuts p_mom_th = DSCuts("Momentum_th", "", "Proton", "", 0, 0.4, 9999);
+    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.4, 9999);
     DSCuts pip_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts pim_mom_th = DSCuts("Momentum_th", "", "Piplus", "", 0, 0.2, 9999);
     DSCuts ph_mom_th = DSCuts("Momentum_th", "", "Photons", "", 0, 0.3, 9999);
-    DSCuts n_mom_th = DSCuts("Momentum_th", "", "Neutrons", "", 0, 0.3, 9999);
     //</editor-fold>
 
     // Other cuts -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -8808,30 +8808,13 @@ void EventAnalyser() {
             double Theta_nFD_nFDpCD = nFD_nFDpCD->getTheta() * 180.0 / pi, Phi_nFD_nFDpCD = nFD_nFDpCD->getPhi() * 180.0 / pi; // Theta_nFD_nFDpCD, Phi_nFD_nFDpCD in deg
             double Theta_pCD_nFDpCD = pCD_nFDpCD->getTheta() * 180.0 / pi, Phi_pCD_nFDpCD = pCD_nFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_nFDpCD, Phi_pCD_nFDpCD in deg
 
-            //<editor-fold desc="Determining leading, recoil protons and their angles (nFDpCD)">
-/*
-            int lead_p_nFDpCD_ind, recoil_p_nFDpCD_ind; // indices of leading and recoil protons
-
-            if (P_nFD_nFDpCD_3v.Mag() >= P_pCD_nFDpCD_3v.Mag()) { // If p_first = protons[0] is leading proton
-                P_nFD_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py(), P_nFD_nFDpCD_3v.Pz());
-                P_pCD_nFDpCD_3v = TVector3(P_pCD_nFDpCD_3v.Px(), P_pCD_nFDpCD_3v.Py(), P_pCD_nFDpCD_3v.Pz());
-                lead_p_nFDpCD_ind = Protons_ind.at(0), recoil_p_nFDpCD_ind = Protons_ind.at(1);
-            } else { // else if p_second = p_second_nFDpCD is leading proton
-                P_pCD_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py(), P_nFD_nFDpCD_3v.Pz());
-                P_nFD_nFDpCD_3v = TVector3(P_pCD_nFDpCD_3v.Px(), P_pCD_nFDpCD_3v.Py(), P_pCD_nFDpCD_3v.Pz());
-                lead_p_nFDpCD_ind = Protons_ind.at(1), recoil_p_nFDpCD_ind = Protons_ind.at(0);
-            }
-*/
-
             /* Setting particle angles */
             double Theta_p1_nFDpCD = Theta_nFD_nFDpCD, Phi_p1_nFDpCD = Phi_nFD_nFDpCD;                                           // Theta_p1_nFDpCD, Phi_p1_nFDpCD in deg
             double Theta_p2_nFDpCD = Theta_pCD_nFDpCD, Phi_p2_nFDpCD = Phi_pCD_nFDpCD;                                           // Theta_p2_nFDpCD, Phi_p2_nFDpCD in deg
             double dPhi_hit_nFDpCD = Phi_p1_nFDpCD - Phi_p2_nFDpCD;
             double Theta_nFD_pCD_nFDpCD = acos((P_nFD_nFDpCD_3v.Px() * P_pCD_nFDpCD_3v.Px() + P_nFD_nFDpCD_3v.Py() * P_pCD_nFDpCD_3v.Py()
                                                 + P_nFD_nFDpCD_3v.Pz() * P_pCD_nFDpCD_3v.Pz())
-                                               / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_nFD_pCD_nFDpCD in deg
-            //</editor-fold>
-
+                                               / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi;                            // Theta_nFD_pCD_nFDpCD in deg
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -8871,8 +8854,7 @@ void EventAnalyser() {
                     e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECIN)->getX(), e_nFDpCD->cal(clas12::ECIN)->getY(), e_nFDpCD->cal(clas12::ECIN)->getZ());
                     e_hit_Theta_nFDpCD = e_hit_nFDpCD_3v.Theta() * 180 / pi, e_hit_Phi_nFDpCD = e_hit_nFDpCD_3v.Phi() * 180 / pi;
                 } else if ((nFD_detlayer_nFDpCD == clas12::ECOUT) && (e_nFDpCD->cal(clas12::ECOUT)->getZ() != 0)) {
-                    e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECOUT)->getX(), e_nFDpCD->cal(clas12::ECOUT)->getY(),
-                                           e_nFDpCD->cal(clas12::ECOUT)->getZ());
+                    e_hit_nFDpCD_3v.SetXYZ(e_nFDpCD->cal(clas12::ECOUT)->getX(), e_nFDpCD->cal(clas12::ECOUT)->getY(), e_nFDpCD->cal(clas12::ECOUT)->getZ());
                     e_hit_Theta_nFDpCD = e_hit_nFDpCD_3v.Theta() * 180 / pi, e_hit_Phi_nFDpCD = e_hit_nFDpCD_3v.Phi() * 180 / pi;
                 } else {
                     int trajlayer = (nFD_detlayer_nFDpCD == clas12::ECIN) ? 4 : 7;
@@ -8928,12 +8910,9 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 //<editor-fold desc="Id. pFD and pCD protons (nFDpCD)">
-//                double Vx_nFD_nFDpCD = nFD_nFDpCD->par()->getVx(), Vy_nFD_nFDpCD = nFD_nFDpCD->par()->getVy(), Vz_nFD_nFDpCD = nFD_nFDpCD->par()->getVz();
                 double Vx_pCD_nFDpCD = pCD_nFDpCD->par()->getVx(), Vy_pCD_nFDpCD = pCD_nFDpCD->par()->getVy(), Vz_pCD_nFDpCD = pCD_nFDpCD->par()->getVz();
-//                double dVx_nFD_nFDpCD = Vx_nFD_nFDpCD - Vx_e_nFDpCD, dVy_nFD_nFDpCD = Vy_nFD_nFDpCD - Vy_e_nFDpCD, dVz_nFD_nFDpCD = Vz_nFD_nFDpCD - Vz_e_nFDpCD;
                 double dVx_pCD_nFDpCD = Vx_pCD_nFDpCD - Vx_e_nFDpCD, dVy_pCD_nFDpCD = Vy_pCD_nFDpCD - Vy_e_nFDpCD, dVz_pCD_nFDpCD = Vz_pCD_nFDpCD - Vz_e_nFDpCD;
 
-//                hdVx_nFD_nFDpCD.hFill(dVx_nFD_nFDpCD, Weight), hdVy_nFD_nFDpCD.hFill(dVy_nFD_nFDpCD, Weight), hdVz_nFD_nFDpCD.hFill(dVz_nFD_nFDpCD, Weight);
                 hdVx_pCD_nFDpCD.hFill(dVx_pCD_nFDpCD, Weight), hdVy_pCD_nFDpCD.hFill(dVy_pCD_nFDpCD, Weight), hdVz_pCD_nFDpCD.hFill(dVz_pCD_nFDpCD, Weight);
                 //</editor-fold>
 
@@ -9266,8 +9245,9 @@ void EventAnalyser() {
 
                 hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), Weight);                                                                    // Leading neucleon - nFD (nFDpCD)
                 hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight);                                                                     // Recoil neucleon - pCD (nFDpCD)
-                hP_p_1_vs_P_p_2_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), P_pCD_nFDpCD_3v.Mag(), Weight);
 
+                // for nFD leading and pCD recoil, hP_p_1_vs_P_p_2_nFDpCD and hP_nFD_vs_P_pCD_nFDpCD sould be the same:
+                hP_p_1_vs_P_p_2_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), P_pCD_nFDpCD_3v.Mag(), Weight);
                 hP_nFD_vs_P_pCD_nFDpCD.hFill(nFD_nFDpCD->getP(), pCD_nFDpCD->getP(), Weight);
 
                 P_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(),
