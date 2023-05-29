@@ -2810,6 +2810,15 @@ void EventAnalyser() {
     string hTheta_p_e_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
+// Theta_p_e_p_tot vs. W (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p_e_p_tot vs. W (pFDpCD)">
+    TH2D *hTheta_p_e_p_tot_vs_W_pFDpCD = new TH2D("\"#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 250, 0, beamE * 1.1, 250, 0, 180);
+    string hTheta_p_e_p_tot_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
 // Theta_q_p (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p (pFDpCD, CD & FD)">
@@ -3052,6 +3061,15 @@ void EventAnalyser() {
                                              "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{nFD}+#vec{P}_{pCD} "
                                              "(All Int., nFDpCD);#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 100, 0, 180);
     string hTheta_p_e_p_tot_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    //</editor-fold>
+
+// Theta_p_e_p_tot vs. W (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p_e_p_tot vs. W (nFDpCD)">
+    TH2D *hTheta_p_e_p_tot_vs_W_nFDpCD = new TH2D("#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", 250, 0, beamE * 1.1, 250, 0, 180);
+    string hTheta_p_e_p_tot_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_q_p (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
@@ -3804,6 +3822,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal reconstruction histograms">
 
+    //<editor-fold desc="Ecal reconstruction histograms (1p)">
+
     //<editor-fold desc="Ecal plots (1p)">
     THStack *sEcal_1p = new THStack("E_{cal} Reconstruction (1p)", "E_{cal} Reconstruction (1p);E_{cal} = E_{e} + T_{p} [GeV]");
     string sEcal_1p_Dir = directories.Ecal_Directory_map["Ecal_stack_1p_Directory"];
@@ -3837,6 +3857,23 @@ void EventAnalyser() {
     //</editor-fold>
 
     //</editor-fold>
+
+    //<editor-fold desc="Ecal vs. dAlpha_T (1p)">
+    TH2D *hEcal_vs_dAlpha_T_1p = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1p)",
+                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
+                                          250, 0, 180, 250, 0, beamE * 1.35);
+    string hEcal_vs_dAlpha_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"];
+    //</editor-fold>`
+
+    //<editor-fold desc="Ecal vs. dP_T (1p)">
+    TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1p)",
+                                      "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV/c];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+    string hEcal_vs_dP_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal reconstruction histograms (1n)">
 
     //<editor-fold desc="Ecal plots (1n)">
     THStack *sEcal_1n = new THStack("E_{cal} Reconstruction (1n)", "E_{cal} Reconstruction (1n);E_{cal} = E_{e} + T_{n} [GeV]");
@@ -3872,6 +3909,23 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+    //<editor-fold desc="Ecal vs. dAlpha_T (1n)">
+    TH2D *hEcal_vs_dAlpha_T_1n = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1n)",
+                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
+                                          250, 0, 180, 250, 0, beamE * 1.35);
+    string hEcal_vs_dAlpha_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"];
+    //</editor-fold>`
+
+    //<editor-fold desc="Ecal vs. dP_T (1n)">
+    TH2D *hEcal_vs_dP_T_1n = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1n)",
+                                      "E_{cal} vs. #deltaP_{T} (All Int., 1n);#deltaP_{T} [GeV/c];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+    string hEcal_vs_dP_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal reconstruction histograms (2p)">
+
     //<editor-fold desc="Ecal plots (2p)">
     THStack *sEcal_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]");
     string sEcal_2p_Dir = directories.Ecal_Directory_map["Ecal_stack_2p_Directory"];
@@ -3892,6 +3946,30 @@ void EventAnalyser() {
     string hEcal_RES_2p_Dir = directories.Ecal_Directory_map["Ecal_RES_2p_Directory"];
     string hEcal_DIS_2p_Dir = directories.Ecal_Directory_map["Ecal_DIS_2p_Directory"];
     //</editor-fold>
+
+    //<editor-fold desc="Ecal vs. dAlpha_T (2p)">
+    TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p)",
+                                            "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
+                                            250, 0, 180, 250, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p)",
+                                              "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                              250, 0, 180, 250, 0, beamE * 1.35);
+    string hEcal_vs_dAlpha_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
+    string hEcal_vs_dAlpha_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
+    //</editor-fold>`
+
+    //<editor-fold desc="Ecal vs. dP_T (2p)">
+    TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
+                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
+                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
+    string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
+    string hEcal_vs_dP_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal reconstruction histograms (pFDpCD)">
 
     //<editor-fold desc="Ecal plots (pFDpCD)">
     THStack *sEcal_pFDpCD = new THStack("E_{cal} Reconstruction (pFDpCD)", "E_{cal} Reconstruction (pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]");
@@ -3914,6 +3992,39 @@ void EventAnalyser() {
     string hEcal_DIS_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_DIS_pFDpCD_Directory"];
     //</editor-fold>
 
+    //<editor-fold desc="Ecal vs. dAlpha_T (pFDpCD)">
+    TH2D *hEcal_vs_dAlpha_T_L_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD)",
+                                                "E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
+                                                250, 0, 180, 250, 0, beamE * 1.35);
+    TH2D *hEcal_vs_dAlpha_T_tot_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
+                                                  "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
+                                                  250, 0, 180, 250, 0, beamE * 1.35);
+    string hEcal_vs_dAlpha_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
+    string hEcal_vs_dAlpha_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
+    //</editor-fold>`
+
+    //<editor-fold desc="Ecal vs. dP_T (pFDpCD)">
+    TH2D *hEcal_vs_dP_T_L_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD)",
+                                            "E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD);#deltaP_{T,L} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0,
+                                            beamE * 1.35);
+    TH2D *hEcal_vs_dP_T_tot_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
+                                              "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0,
+                                              beamE * 1.35);
+    string hEcal_vs_dP_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
+    string hEcal_vs_dP_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal vs. W (pFDpCD)">
+    TH2D *hEcal_vs_W_pFDpCD = new TH2D("E_{cal} vs. W (All Int., pFDpCD)",
+                                       "E_{cal} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                       "E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV];", 250, 0, beamE * 1.1, 250, 0, beamE * 1.35);
+    string hEcal_vs_W_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_pFDpCD_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Ecal reconstruction histograms (nFDpCD)">
+
     //<editor-fold desc="Ecal plots (nFDpCD)">
     THStack *sEcal_nFDpCD = new THStack("E_{cal} Reconstruction (nFDpCD)", "E_{cal} Reconstruction (nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]");
     string sEcal_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_nFDpCD_Directory"];
@@ -3935,42 +4046,6 @@ void EventAnalyser() {
     string hEcal_DIS_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_DIS_nFDpCD_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="Ecal vs. dAlpha_T (1p)">
-    TH2D *hEcal_vs_dAlpha_T_1p = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1p)",
-                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1p);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
-                                          250, 0, 180, 250, 0, beamE * 1.35);
-    string hEcal_vs_dAlpha_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"];
-    //</editor-fold>`
-
-    //<editor-fold desc="Ecal vs. dAlpha_T (1n)">
-    TH2D *hEcal_vs_dAlpha_T_1n = new TH2D("E_{cal} vs. #delta#alpha_{T} (All Int., 1n)",
-                                          "E_{cal} vs. #delta#alpha_{T} (All Int., 1n);#delta#alpha_{T} [Deg];E_{cal} [GeV];",
-                                          250, 0, 180, 250, 0, beamE * 1.35);
-    string hEcal_vs_dAlpha_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"];
-    //</editor-fold>`
-
-    //<editor-fold desc="Ecal vs. dAlpha_T (2p)">
-    TH2D *hEcal_vs_dAlpha_T_L_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p)",
-                                            "E_{cal} vs. #delta#alpha_{T,L} (All Int., 2p);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                            250, 0, 180, 250, 0, beamE * 1.35);
-    TH2D *hEcal_vs_dAlpha_T_tot_2p = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p)",
-                                              "E_{cal} vs. #delta#alpha_{T,tot} (All Int., 2p);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
-                                              250, 0, 180, 250, 0, beamE * 1.35);
-    string hEcal_vs_dAlpha_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
-    string hEcal_vs_dAlpha_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
-    //</editor-fold>`
-
-    //<editor-fold desc="Ecal vs. dAlpha_T (pFDpCD)">
-    TH2D *hEcal_vs_dAlpha_T_L_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD)",
-                                                "E_{cal} vs. #delta#alpha_{T,L} (All Int., pFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
-                                                250, 0, 180, 250, 0, beamE * 1.35);
-    TH2D *hEcal_vs_dAlpha_T_tot_pFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD)",
-                                                  "E_{cal} vs. #delta#alpha_{T,tot} (All Int., pFDpCD);#delta#alpha_{T,tot} [Deg];E_{cal} [GeV];",
-                                                  250, 0, 180, 250, 0, beamE * 1.35);
-    string hEcal_vs_dAlpha_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
-    string hEcal_vs_dAlpha_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
-    //</editor-fold>`
-
     //<editor-fold desc="Ecal vs. dAlpha_T (nFDpCD)">
     TH2D *hEcal_vs_dAlpha_T_L_nFDpCD = new TH2D("E_{cal} vs. #delta#alpha_{T,L} (All Int., nFDpCD)",
                                                 "E_{cal} vs. #delta#alpha_{T,L} (All Int., nFDpCD);#delta#alpha_{T,L} [Deg];E_{cal} [GeV];",
@@ -3981,38 +4056,6 @@ void EventAnalyser() {
     string hEcal_vs_dAlpha_T_L_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     string hEcal_vs_dAlpha_T_tot_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     //</editor-fold>`
-
-    //<editor-fold desc="Ecal vs. dP_T (1p)">
-    TH2D *hEcal_vs_dP_T_1p = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1p)",
-                                      "E_{cal} vs. #deltaP_{T} (All Int., 1p);#deltaP_{T} [GeV/c];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
-    string hEcal_vs_dP_T_1p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1p_Directory"];
-    //</editor-fold>
-
-    //<editor-fold desc="Ecal vs. dP_T (1n)">
-    TH2D *hEcal_vs_dP_T_1n = new TH2D("E_{cal} vs. #deltaP_{T} (All Int., 1n)",
-                                      "E_{cal} vs. #deltaP_{T} (All Int., 1n);#deltaP_{T} [GeV/c];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
-    string hEcal_vs_dP_T_1n_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_1n_Directory"];
-    //</editor-fold>
-
-    //<editor-fold desc="Ecal vs. dP_T (2p)">
-    TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
-    TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
-                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0, beamE * 1.35);
-    string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
-    string hEcal_vs_dP_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
-    //</editor-fold>
-
-    //<editor-fold desc="Ecal vs. dP_T (pFDpCD)">
-    TH2D *hEcal_vs_dP_T_L_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD)",
-                                            "E_{cal} vs. #deltaP_{T,L} (All Int., pFDpCD);#deltaP_{T,L} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0,
-                                            beamE * 1.35);
-    TH2D *hEcal_vs_dP_T_tot_pFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD)",
-                                              "E_{cal} vs. #deltaP_{T,tot} (All Int., pFDpCD);#deltaP_{T,tot} [GeV];E_{cal} [GeV];", 250, 0, dP_T_boundary, 250, 0,
-                                              beamE * 1.35);
-    string hEcal_vs_dP_T_L_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
-    string hEcal_vs_dP_T_tot_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_pFDpCD_Directory"];
-    //</editor-fold>
 
     //<editor-fold desc="Ecal vs. dP_T (nFDpCD)">
     TH2D *hEcal_vs_dP_T_L_nFDpCD = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., nFDpCD)",
@@ -4025,6 +4068,15 @@ void EventAnalyser() {
     string hEcal_vs_dP_T_tot_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_nFDpCD_Directory"];
     //</editor-fold>
 
+    //<editor-fold desc="Ecal vs. W (nFDpCD)">
+    TH2D *hEcal_vs_W_nFDpCD = new TH2D("E_{cal} vs. W (All Int., nFDpCD)",
+                                       "E_{cal} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                       "E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV];", 250, 0, beamE * 1.1, 250, 0, beamE * 1.35);
+    string hEcal_vs_W_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_nFDpCD_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -4033,7 +4085,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="TKI histograms">
 
-    //<editor-fold desc="TV plots (1p)">
+    //<editor-fold desc="TKI histograms (1p)">
     THStack *sdP_T_1p = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV/c]", 100, 0, dP_T_boundary);
     string hdP_T_1p_Dir = directories.TVariables_Directory_map["dP_T_1p_Directory"];
@@ -4052,7 +4104,7 @@ void EventAnalyser() {
     string hdP_T_vs_dAlpha_T_1p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="TV plots (1n)">
+    //<editor-fold desc="TKI histograms (1n)">
     THStack *sdP_T_1n = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1n)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1n);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_1n = new TH1D("#deltaP_{T} (1n)", "#deltaP_{T} histogram (1n);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,n}| [GeV/c]", 100, 0, dP_T_boundary);
     string hdP_T_1n_Dir = directories.TVariables_Directory_map["dP_T_1n_Directory"];
@@ -4071,7 +4123,7 @@ void EventAnalyser() {
     string hdP_T_vs_dAlpha_T_1n_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_1n_Directory"];
     //</editor-fold>
 
-    //<editor-fold desc="TV plots (2p)">
+    //<editor-fold desc="TKI histograms (2p)">
     THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV/c]", 100, 0,
                                 dP_T_boundary);
@@ -4103,14 +4155,15 @@ void EventAnalyser() {
     string hdP_T_tot_vs_dAlpha_T_tot_2p_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"];
     //</editor-fold>
 
+    //<editor-fold desc="TKI histograms (pFDpCD)">
+
     //<editor-fold desc="TV plots (pFDpCD)">
     THStack *sdP_T_pFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (pFDpCD);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_L_pFDpCD = new TH1D("#deltaP_{T,L} (pFDpCD)", "#deltaP_{T,L} by Leading FD Proton (pFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pFD}| [GeV/c]",
-                                    100, 0,
-                                    dP_T_boundary);
+                                    100, 0, dP_T_boundary);
     TH1D *hdP_T_tot_pFDpCD = new TH1D("#deltaP_{T,tot} (pFDpCD)",
-                                      "#deltaP_{T,tot} by Momentum Sum (pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]", 100, 0,
-                                      dP_T_boundary);
+                                      "#deltaP_{T,tot} by Momentum Sum (pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
+                                      100, 0, dP_T_boundary);
     string hdP_T_L_pFDpCD_Dir = directories.TVariables_Directory_map["dP_T_pFDpCD_Directory"];
     string hdP_T_tot_pFDpCD_Dir = directories.TVariables_Directory_map["dP_T_pFDpCD_Directory"];
 
@@ -4136,6 +4189,30 @@ void EventAnalyser() {
     string hdP_T_L_vs_dAlpha_T_L_pFDpCD_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_pFDpCD_Directory"];
     string hdP_T_tot_vs_dAlpha_T_tot_pFDpCD_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_pFDpCD_Directory"];
     //</editor-fold>
+
+    //<editor-fold desc="TKI vs. W (pFDpCD)">
+    TH2D *hdP_T_L_vs_W_pFDpCD = new TH2D("#deltaP_{T,L} vs. W (All Int., pFDpCD)",
+                                         "#deltaP_{T,L} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pFD}| [GeV/c];", 250, 0, beamE * 1.1, 250, 0, dP_T_boundary);
+    TH2D *hdP_T_tot_vs_W_pFDpCD = new TH2D("#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
+                                           "#deltaP_{T,tot} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                           "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c];", 250, 0, beamE * 1.1, 250, 0, dP_T_boundary);
+    string hdP_T_L_vs_W_pFDpCD_Dir = directories.TVariables_Directory_map["dP_T_pFDpCD_Directory"];
+    string hdP_T_tot_vs_W_pFDpCD_Dir = directories.TVariables_Directory_map["dP_T_pFDpCD_Directory"];
+
+    TH2D *hdAlpha_T_L_vs_W_pFDpCD = new TH2D("#delta#alpha_{T,L} vs. W (All Int., pFDpCD)",
+                                             "#delta#alpha_{T,L} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                             "#delta#alpha_{T,L} [Deg];", 250, 0, beamE * 1.1, 250, 0, 180);
+    TH2D *hdAlpha_T_tot_vs_W_pFDpCD = new TH2D("#delta#alpha_{T,tot} vs. W (All Int., pFDpCD)",
+                                               "#delta#alpha_{T,tot} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                               "#delta#alpha_{T,tot} [Deg];", 250, 0, beamE * 1.1, 250, 0, 180);
+    string hdAlpha_T_L_vs_W_pFDpCD_Dir = directories.TVariables_Directory_map["dAlpha_T_pFDpCD_Directory"];
+    string hdAlpha_T_tot_vs_W_pFDpCD_Dir = directories.TVariables_Directory_map["dAlpha_T_pFDpCD_Directory"];
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="TKI histograms (nFDpCD)">
 
     //<editor-fold desc="TV plots (nFDpCD)">
     THStack *sdP_T_nFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (nFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (nFDpCD);#deltaP_{T} [GeV/c]");
@@ -4169,6 +4246,28 @@ void EventAnalyser() {
                                                       250, 0, 180, 250, 0, dP_T_boundary);
     string hdP_T_L_vs_dAlpha_T_L_nFDpCD_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_nFDpCD_Directory"];
     string hdP_T_tot_vs_dAlpha_T_tot_nFDpCD_Dir = directories.TVariables_Directory_map["dP_T_vs_dAlpha_T_nFDpCD_Directory"];
+    //</editor-fold>
+
+    //<editor-fold desc="TKI vs. W (nFDpCD)">
+    TH2D *hdP_T_L_vs_W_nFDpCD = new TH2D("#deltaP_{T,L} vs. W (All Int., nFDpCD)",
+                                         "#deltaP_{T,L} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nFD}| [GeV/c];", 250, 0, beamE * 1.1, 250, 0, dP_T_boundary);
+    TH2D *hdP_T_tot_vs_W_nFDpCD = new TH2D("#deltaP_{T,tot} vs. W (All Int., nFDpCD)",
+                                           "#deltaP_{T,tot} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                           "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}| [GeV/c];", 250, 0, beamE * 1.1, 250, 0, dP_T_boundary);
+    string hdP_T_L_vs_W_nFDpCD_Dir = directories.TVariables_Directory_map["dP_T_nFDpCD_Directory"];
+    string hdP_T_tot_vs_W_nFDpCD_Dir = directories.TVariables_Directory_map["dP_T_nFDpCD_Directory"];
+
+    TH2D *hdAlpha_T_L_vs_W_nFDpCD = new TH2D("#delta#alpha_{T,L} vs. W (All Int., nFDpCD)",
+                                             "#delta#alpha_{T,L} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                             "#delta#alpha_{T,L} [Deg];", 250, 0, beamE * 1.1, 250, 0, 180);
+    TH2D *hdAlpha_T_tot_vs_W_nFDpCD = new TH2D("#delta#alpha_{T,tot} vs. W (All Int., nFDpCD)",
+                                               "#delta#alpha_{T,tot} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                               "#delta#alpha_{T,tot} [Deg];", 250, 0, beamE * 1.1, 250, 0, 180);
+    string hdAlpha_T_L_vs_W_nFDpCD_Dir = directories.TVariables_Directory_map["dAlpha_T_nFDpCD_Directory"];
+    string hdAlpha_T_tot_vs_W_nFDpCD_Dir = directories.TVariables_Directory_map["dAlpha_T_nFDpCD_Directory"];
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
@@ -6832,9 +6931,9 @@ void EventAnalyser() {
                 double E_e_1n = sqrt(m_e * m_e + P_e_1n_3v.Mag2()), E_n_1n = sqrt(m_n * m_n + P_n_1n_3v.Mag2()), Ecal_1n, dAlpha_T_1n, dPhi_T_1n;
                 double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
 
-                // Fake neutrons handling (neutron veto) ------------------------------------------------------------------------------------------------------------
+                // Fake FD neutrons handling (neutron veto) -------------------------------------------------------------------------------------------------------------
 
-                //<editor-fold desc="Fake neutrons handling (neutron veto)">
+                //<editor-fold desc="Fake FD neutrons handling (neutron veto)">
                 TVector3 n_hit_1n_3v, e_hit_1n_3v;
 
                 double n_hit_Phi_1n, n_hit_Theta_1n, e_hit_Phi_1n, e_hit_Theta_1n, dPhi_hit_1n, dTheta_hit_1n;
@@ -6884,7 +6983,7 @@ void EventAnalyser() {
                 if (!NeutronPassVeto) { hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight); }
                 //</editor-fold>
 
-                // Fillings 1n histograms ---------------------------------------------------------------------------------------------------------------------------
+                // Fillings 1n histograms -------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Fillings 1n histograms">
 
@@ -8493,8 +8592,8 @@ void EventAnalyser() {
 
             P_tot_pFDpCD_3v = TVector3(P_p_first_pFDpCD_3v.Px() + P_p_second_pFDpCD_3v.Px(),
                                        P_p_first_pFDpCD_3v.Py() + P_p_second_pFDpCD_3v.Py(),
-                                       P_p_first_pFDpCD_3v.Pz() + P_p_second_pFDpCD_3v.Pz());                                                        // P_tot = P_1 + P_2
-            P_T_L_pFDpCD_3v = TVector3(P_1_pFDpCD_3v.Px(), P_1_pFDpCD_3v.Py(), 0);                                                              // transverse part of P_1
+                                       P_p_first_pFDpCD_3v.Pz() + P_p_second_pFDpCD_3v.Pz());                                                    // P_tot = P_pFD + P_pCD
+            P_T_L_pFDpCD_3v = TVector3(P_1_pFDpCD_3v.Px(), P_1_pFDpCD_3v.Py(), 0);                                                            // transverse part of P_pFD
             P_T_tot_pFDpCD_3v = TVector3(P_p_first_pFDpCD_3v.Px() + P_p_second_pFDpCD_3v.Px(),
                                          P_p_first_pFDpCD_3v.Py() + P_p_second_pFDpCD_3v.Py(), 0);                                            // transverse part of P_tot
             dP_T_L_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_T_L_pFDpCD_3v.Px(),
@@ -8506,6 +8605,7 @@ void EventAnalyser() {
                                            + P_e_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
                                           / (P_e_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 / pi;                                 // Theta_p_e_p_tot_pFDpCD in deg
             hTheta_p_e_p_tot_pFDpCD->Fill(Theta_p_e_p_tot_pFDpCD, Weight);
+            hTheta_p_e_p_tot_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_p_e_p_tot_pFDpCD, Weight);
 
             hTheta_pFD_pCD_All_Int_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
 
@@ -8572,7 +8672,9 @@ void EventAnalyser() {
             //</editor-fold>
 
             hdP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Weight);
+            hdP_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
             hdP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight);
+            hdP_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
 
             dAlpha_T_L_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_L_pFDpCD_3v.Px()
                                        + P_e_pFDpCD_3v.Py() * dP_T_L_pFDpCD_3v.Py()
@@ -8583,7 +8685,9 @@ void EventAnalyser() {
                                          + P_e_pFDpCD_3v.Pz() * dP_T_tot_pFDpCD_3v.Pz())
                                        / (P_T_e_pFDpCD_3v.Mag() * dP_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi;     // dP_T_tot_pFDpCD_3v.Pz() = 0; dAlpha_T_tot_pFDpCD in deg
             hdAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Weight);
+            hdAlpha_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_L_pFDpCD, Weight);
             hdAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight);
+            hdAlpha_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_tot_pFDpCD, Weight);
 
             hdP_T_L_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
             hdP_T_tot_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
@@ -8603,6 +8707,7 @@ void EventAnalyser() {
             hEcal_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight);
             hEcal_vs_dP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
             hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
+            hEcal_vs_W_pFDpCD->Fill(W_pFDpCD, Ecal_pFDpCD, Weight);
 
             if ((p_first_pFDpCD->getRegion() == CD) && (p_second_pFDpCD->getRegion() == CD)) { // if both pFDpCD protons are in the CD (self-observation only!)
                 TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
@@ -8625,8 +8730,9 @@ void EventAnalyser() {
         //<editor-fold desc="nFDpCD cut">
         /* nFDpCD event selection: nFDpCD = Protons_ind.size() = 1 (CD) and NeutronsFD_ind.size() = 1 (FD) and any number of neutrons, other neutrals and particles with
                                    pdg=0.*/
-        bool single_pCD = (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == CD);
-        bool single_nFD = (NeutronsFD_ind.size() == 1 && allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD);
+        bool single_pCD = (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == CD); // there's only one id. proton + this proton is in the CD
+        bool single_nFD = (NeutronsFD_ind.size() == 1);
+//        bool single_nFD = (NeutronsFD_ind.size() == 1 && allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD);
         bool event_selection_nFDpCD = (basic_event_selection && single_pCD && single_nFD);
 
         if (calculate_nFDpCD && event_selection_nFDpCD) { // for nFDpCD calculations
@@ -8734,9 +8840,9 @@ void EventAnalyser() {
 
             //</editor-fold>
 
-            // Fake neutrons handling (neutron veto) --------------------------------------------------------------------------------------------------------------------
+            // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
 
-            //<editor-fold desc="Fake neutrons handling (neutron veto)">
+            //<editor-fold desc="Fake FD neutrons handling (neutron veto)">
 
             int NeutronPDG_nFDpCD = nFD_nFDpCD->par()->getPid();
 
@@ -9164,15 +9270,15 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), Weight);                                                                // Leading neucleon - neutron (nFDpCD)
-                hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight);                                                                  // Recoil neucleon - proton (nFDpCD)
+                hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), Weight);                                                                    // Leading neucleon - nFD (nFDpCD)
+                hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight);                                                                     // Recoil neucleon - pCD (nFDpCD)
                 hP_p_1_vs_P_p_2_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), P_pCD_nFDpCD_3v.Mag(), Weight);
 
                 hP_nFD_vs_P_pCD_nFDpCD.hFill(nFD_nFDpCD->getP(), pCD_nFDpCD->getP(), Weight);
 
                 P_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(),
-                                           P_nFD_nFDpCD_3v.Pz() + P_pCD_nFDpCD_3v.Pz());                                                             // P_tot = P_1 + P_2
-                P_T_L_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py(), 0);                                                      // transverse part of P_1
+                                           P_nFD_nFDpCD_3v.Pz() + P_pCD_nFDpCD_3v.Pz());                                                         // P_tot = P_nFD + P_pCD
+                P_T_L_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py(), 0);                                                    // transverse part of P_nFD
                 P_T_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(), 0);    // transverse part of P_tot
                 dP_T_L_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px() + P_T_L_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py() + P_T_L_nFDpCD_3v.Py(), 0);
                 dP_T_tot_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px() + P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(),
@@ -9182,6 +9288,7 @@ void EventAnalyser() {
                                                + P_e_nFDpCD_3v.Pz() * P_tot_nFDpCD_3v.Pz())
                                               / (P_e_nFDpCD_3v.Mag() * P_tot_nFDpCD_3v.Mag())) * 180.0 / pi;                             // Theta_p_e_p_tot_nFDpCD in deg
                 hTheta_p_e_p_tot_nFDpCD->Fill(Theta_p_e_p_tot_nFDpCD, Weight);
+                hTheta_p_e_p_tot_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_p_e_p_tot_nFDpCD, Weight);
 
                 hTheta_nFD_pCD_All_Int_nFDpCD->Fill(Theta_nFD_pCD_nFDpCD, Weight);
 
@@ -9229,9 +9336,9 @@ void EventAnalyser() {
                 hTheta_q_p_R_nFDpCD->Fill(Theta_q_p_R_nFDpCD, Weight);
                 hTheta_q_p_L_vs_p_L_q_nFDpCD->Fill(P_nFD_nFDpCD_3v.Mag() / q_nFDpCD_3v.Mag(), Theta_q_p_L_nFDpCD, Weight);
 
-                E_1_nFDpCD = sqrt(m_p * m_p + P_nFD_nFDpCD_3v.Mag2());
+                E_1_nFDpCD = sqrt(m_n * m_n + P_nFD_nFDpCD_3v.Mag2());
                 E_2_nFDpCD = sqrt(m_p * m_p + P_pCD_nFDpCD_3v.Mag2());
-                Ecal_nFDpCD = E_e_nFDpCD + (E_1_nFDpCD - m_p) + (E_2_nFDpCD - m_p);
+                Ecal_nFDpCD = E_e_nFDpCD + (E_1_nFDpCD - m_n) + (E_2_nFDpCD - m_p);
 
                 //<editor-fold desc="Filling Ecal plots">
                 hEcal_All_Int_nFDpCD->Fill(Ecal_nFDpCD, Weight); // Fill Ecal for all interactions
@@ -9248,7 +9355,9 @@ void EventAnalyser() {
                 //</editor-fold>
 
                 hdP_T_L_nFDpCD->Fill(dP_T_L_nFDpCD_3v.Mag(), Weight);
+                hdP_T_L_vs_W_nFDpCD->Fill(W_nFDpCD, dP_T_L_nFDpCD_3v.Mag(), Weight);
                 hdP_T_tot_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Weight);
+                hdP_T_tot_vs_W_nFDpCD->Fill(W_nFDpCD, dP_T_tot_nFDpCD_3v.Mag(), Weight);
 
                 dAlpha_T_L_nFDpCD = acos(-(P_e_nFDpCD_3v.Px() * dP_T_L_nFDpCD_3v.Px() + P_e_nFDpCD_3v.Py() * dP_T_L_nFDpCD_3v.Py()
                                            + P_e_nFDpCD_3v.Pz() * dP_T_L_nFDpCD_3v.Pz())
@@ -9257,7 +9366,9 @@ void EventAnalyser() {
                                              + P_e_nFDpCD_3v.Pz() * dP_T_tot_nFDpCD_3v.Pz())
                                            / (P_T_e_nFDpCD_3v.Mag() * dP_T_tot_nFDpCD_3v.Mag())) * 180.0 / pi; // dP_T_tot_nFDpCD_3v.Pz() = 0; dAlpha_T_tot_nFDpCD in deg
                 hdAlpha_T_L_nFDpCD->Fill(dAlpha_T_L_nFDpCD, Weight);
+                hdAlpha_T_L_vs_W_nFDpCD->Fill(W_nFDpCD, dAlpha_T_L_nFDpCD, Weight);
                 hdAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Weight);
+                hdAlpha_T_tot_vs_W_nFDpCD->Fill(W_nFDpCD, dAlpha_T_tot_nFDpCD, Weight);
 
                 hdP_T_L_vs_dAlpha_T_L_nFDpCD->Fill(dAlpha_T_L_nFDpCD, dP_T_L_nFDpCD_3v.Mag(), Weight);
                 hdP_T_tot_vs_dAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, dP_T_tot_nFDpCD_3v.Mag(), Weight);
@@ -9275,6 +9386,7 @@ void EventAnalyser() {
                 hEcal_vs_dAlpha_T_tot_nFDpCD->Fill(dAlpha_T_tot_nFDpCD, Ecal_nFDpCD, Weight);
                 hEcal_vs_dP_T_L_nFDpCD->Fill(dP_T_L_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight);
                 hEcal_vs_dP_T_tot_nFDpCD->Fill(dP_T_tot_nFDpCD_3v.Mag(), Ecal_nFDpCD, Weight);
+                hEcal_vs_W_nFDpCD->Fill(W_nFDpCD, Ecal_nFDpCD, Weight);
 
                 hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_AV_nFDpCD.hFill(dPhi_hit_e_nFD_nFDpCD, dTheta_hit_e_nFD_nFDpCD, Weight);
 
@@ -10968,8 +11080,15 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_p_e_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_pFDpCD_integral,
                       "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06,
-                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue, true,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01a_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue, true,
                       true, true, false);
+        //</editor-fold>
+
+// Theta_pFD_pCD vs. W (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pFD_pCD vs. W (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_p_e_p_tot_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p_e_p_tot_vs_W_pFDpCD_Dir,
+                      "01b_Theta_p_e_p_tot_vs_W_pFDpCD_Dir");
         //</editor-fold>
 
 // Theta_q_p (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
@@ -10997,7 +11116,7 @@ void EventAnalyser() {
 
 // Theta_q_pFD vs |P_L|/|q| (pFDpCD, CD & FD) ---------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="hTheta_pFD_pCD_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        //<editor-fold desc="Theta_q_pFD vs |P_L|/|q (pFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_q_p_L_vs_p_L_q_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir,
                       "04_Theta_q_p_L_vs_p_L_q_pFDpCD");
         //</editor-fold>
@@ -11232,8 +11351,15 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_p_e_p_tot_nFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_nFDpCD_integral,
                       "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{nFD}+#vec{P}_{pCD}", "All Int., nFDpCD", 0.06,
-                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_nFDpCD, "01_Theta_p_e_p_tot_All_Int_nFDpCD", hTheta_p_e_p_tot_nFDpCD_Dir, "", kBlue, true,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_nFDpCD, "01a_Theta_p_e_p_tot_All_Int_nFDpCD", hTheta_p_e_p_tot_nFDpCD_Dir, "", kBlue, true,
                       true, true, false);
+        //</editor-fold>
+
+// Theta_p_e_p_tot vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_p_e_p_tot vs. W (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_p_e_p_tot_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_p_e_p_tot_vs_W_nFDpCD_Dir,
+                      "01b_Theta_p_e_p_tot_vs_W_nFDpCD_Dir");
         //</editor-fold>
 
 //  Theta_q_p (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -12265,6 +12391,16 @@ void EventAnalyser() {
                       "03_Ecal_vs_dAlpha_T_tot_nFDpCD", false);
         //</editor-fold>
 
+//  Ecal vs. W (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Ecal vs. W (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hEcal_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_W_pFDpCD_Dir, "02_Ecal_vs_W_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="Ecal vs. W (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hEcal_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hEcal_vs_W_nFDpCD_Dir, "02_Ecal_vs_W_nFDpCD");
+        //</editor-fold>
+
     } else {
         cout << "\n\nEcal plots are disabled by user.\n\n";
     }
@@ -12299,16 +12435,16 @@ void EventAnalyser() {
 
         //<editor-fold desc="dP_T plots (pFDpCD)">
         histPlotter1D(c1, hdP_T_L_pFDpCD, norm_TVariables_plots, true, 1., "#deltaP_{T,L} by Leading FD Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_pFDpCD, "dP_T_L_pFDpCD", hdP_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      sdP_T_pFDpCD, "01a_dP_T_L_pFDpCD", hdP_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdP_T_tot_pFDpCD, norm_TVariables_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_pFDpCD, "dP_T_tot_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      sdP_T_pFDpCD, "02a_dP_T_tot_pFDpCD", hdP_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="dP_T plots (nFDpCD)">
         histPlotter1D(c1, hdP_T_L_nFDpCD, norm_TVariables_plots, true, 1., "#deltaP_{T,L} by Leading FD Neutron", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_nFDpCD, "dP_T_L_nFDpCD", hdP_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      sdP_T_nFDpCD, "01a_dP_T_L_nFDpCD", hdP_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdP_T_tot_nFDpCD, norm_TVariables_plots, true, 1., "#deltaP_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false, true,
-                      sdP_T_nFDpCD, "dP_T_tot_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      sdP_T_nFDpCD, "02a_dP_T_tot_nFDpCD", hdP_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         //</editor-fold>
 
 //  dAlpha_T plots (CD & FD) --------------------------------------------------------------------------------------------------------------------------------------------
@@ -12332,20 +12468,16 @@ void EventAnalyser() {
 
         //<editor-fold desc="dAlpha_T plots (pFDpCD)">
         histPlotter1D(c1, hdAlpha_T_L_pFDpCD, norm_TVariables_plots, true, 1., "#delta#alpha_{T,L} by Leading FD Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
-                      false,
-                      true, sdAlpha_T_pFDpCD, "dAlpha_T_L_pFDpCD", hdAlpha_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      false, true, sdAlpha_T_pFDpCD, "01a_dAlpha_T_L_pFDpCD", hdAlpha_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdAlpha_T_tot_pFDpCD, norm_TVariables_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
-                      false,
-                      true, sdAlpha_T_pFDpCD, "dAlpha_T_tot_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      false, true, sdAlpha_T_pFDpCD, "02a_dAlpha_T_tot_pFDpCD", hdAlpha_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="dAlpha_T plots (nFDpCD)">
         histPlotter1D(c1, hdAlpha_T_L_nFDpCD, norm_TVariables_plots, true, 1., "#delta#alpha_{T,L} by Leading FD Neutron", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
-                      false,
-                      true, sdAlpha_T_nFDpCD, "dAlpha_T_L_nFDpCD", hdAlpha_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      false, true, sdAlpha_T_nFDpCD, "01a_dAlpha_T_L_nFDpCD", hdAlpha_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdAlpha_T_tot_nFDpCD, norm_TVariables_plots, true, 1., "#delta#alpha_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2,
-                      false,
-                      true, sdAlpha_T_nFDpCD, "dAlpha_T_tot_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      false, true, sdAlpha_T_nFDpCD, "02a_dAlpha_T_tot_nFDpCD", hdAlpha_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         //</editor-fold>
 
 //  dPhi_T plots (CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -12369,20 +12501,16 @@ void EventAnalyser() {
 
         //<editor-fold desc="dPhi_T plots (pFDpCD)">
         histPlotter1D(c1, hdPhi_T_L_pFDpCD, norm_TVariables_plots, true, 1., "#delta#phi_{T,L} by Leading FD Proton", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true,
-                      sdPhi_T_pFDpCD, "dPhi_T_L_pFDpCD", hdPhi_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      true, sdPhi_T_pFDpCD, "dPhi_T_L_pFDpCD", hdPhi_T_L_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdPhi_T_tot_pFDpCD, norm_TVariables_plots, true, 1., "#delta#phi_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true,
-                      sdPhi_T_pFDpCD, "dPhi_T_tot_pFDpCD", hdPhi_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
+                      true, sdPhi_T_pFDpCD, "dPhi_T_tot_pFDpCD", hdPhi_T_tot_pFDpCD_Dir, "pFDpCD", kBlue, true, true, true);
         //</editor-fold>
 
         //<editor-fold desc="dPhi_T plots (nFDpCD)">
         histPlotter1D(c1, hdPhi_T_L_nFDpCD, norm_TVariables_plots, true, 1., "#delta#phi_{T,L} by Leading FD Neutron", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true,
-                      sdPhi_T_nFDpCD, "dPhi_T_L_nFDpCD", hdPhi_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      true, sdPhi_T_nFDpCD, "dPhi_T_L_nFDpCD", hdPhi_T_L_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         histPlotter1D(c1, hdPhi_T_tot_nFDpCD, norm_TVariables_plots, true, 1., "#delta#phi_{T,tot} by Momentum Sum", "All Int.", 0.06, 0.0425, 0.0425, plots, 2, false,
-                      true,
-                      sdPhi_T_nFDpCD, "dPhi_T_tot_nFDpCD", hdPhi_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
+                      true, sdPhi_T_nFDpCD, "dPhi_T_tot_nFDpCD", hdPhi_T_tot_nFDpCD_Dir, "nFDpCD", kBlue, true, true, true);
         //</editor-fold>
 
 //  dP_T vs. dAlpha_T plots (CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
@@ -12413,6 +12541,30 @@ void EventAnalyser() {
                       "01_dP_T_L_vs_dAlpha_T_L_nFDpCD", false);
         histPlotter2D(c1, hdP_T_tot_vs_dAlpha_T_tot_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hdP_T_tot_vs_dAlpha_T_tot_nFDpCD_Dir,
                       "02_dP_T_tot_vs_dAlpha_T_tot_nFDpCD", false);
+        //</editor-fold>
+
+//  dP_T vs. W (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="dP_T vs. W (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hdP_T_L_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_L_vs_W_pFDpCD_Dir, "01b_dP_T_L_vs_W_pFDpCD");
+        histPlotter2D(c1, hdP_T_tot_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_tot_vs_W_pFDpCD_Dir, "02b_dP_T_tot_vs_W_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="dP_T vs. W (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hdP_T_L_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_L_vs_W_nFDpCD_Dir, "01b_dP_T_L_vs_W_nFDpCD");
+        histPlotter2D(c1, hdP_T_tot_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdP_T_tot_vs_W_nFDpCD_Dir, "02b_dP_T_tot_vs_W_nFDpCD");
+        //</editor-fold>
+
+//  dAlpha_T vs. W (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="dAlpha_T vs. W (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hdAlpha_T_L_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdAlpha_T_L_vs_W_pFDpCD_Dir, "01b_dAlpha_T_L_vs_W_pFDpCD");
+        histPlotter2D(c1, hdAlpha_T_tot_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdAlpha_T_tot_vs_W_pFDpCD_Dir, "02b_dAlpha_T_tot_vs_W_pFDpCD");
+        //</editor-fold>
+
+        //<editor-fold desc="dAlpha_T vs. W (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hdAlpha_T_L_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdAlpha_T_L_vs_W_nFDpCD_Dir, "01b_dAlpha_T_L_vs_W_nFDpCD");
+        histPlotter2D(c1, hdAlpha_T_tot_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hdAlpha_T_tot_vs_W_nFDpCD_Dir, "02b_dAlpha_T_tot_vs_W_nFDpCD");
         //</editor-fold>
 
     } else {
