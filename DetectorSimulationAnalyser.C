@@ -332,7 +332,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Other cuts">
     /* Neutron beta cuts (1n & nFDpCD, FD only) */
-    DSCuts Beta_cut_ABF_FD_n_from_ph, Beta_cut_ABF_FD_n_from_ph_apprax;
+    DSCuts Beta_max_cut_ABF_FD_n_from_ph, Beta_max_cut_ABF_FD_n_from_ph_apprax;
 
     /* Neutron momentum cuts (1n & nFDpCD, FD only) */
     DSCuts n_momentum_cuts_ABF_FD_n_from_ph; // ABF = After Beta Fit. These are momentum cuts to logged to the fitted cuts file.
@@ -4943,18 +4943,27 @@ void EventAnalyser() {
             n_momentum_cuts_ABF_FD_n_from_ph_apprax = DSCuts("Momentum_cuts_ECAL_apprax", "FD-ECAL_apprax", "Neutron", "", 0, n_mom_th.GetLowerCut(), 9999);
 
             /* Setting variables to log beta fit parameters into (i.e., no cut!) */
-            Beta_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
-            Beta_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
+            Beta_max_cut_ABF_FD_n_from_ph = DSCuts("Beta_cut_ECAL", "FD-ECAL", "", "1n", 1, -9999, 9999);
+            Beta_max_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
 
         } else if (apply_nucleon_cuts) {
             cout << "Loading fitted Beta cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             /* Setting nucleon cuts */
-            n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
-            TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
-            Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());
-            Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());
+            if (findSubstring(SampleName, "2GeV") || findSubstring(SampleName, "2gev") || findSubstring(SampleName, "207052MeV") ||
+                findSubstring(SampleName, "207052mev") || findSubstring(SampleName, "2070MeV") || findSubstring(SampleName, "2070mev")) {
+                /* If sample is with 2GeV beam energy, no fit is needed. */
+                n_mom_th.SetUpperCut(beamE);
+                TL_n_mom_cuts.SetUpperCut(beamE);
+            } else {
+                /* Else, load values from fit. */
+                n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
+                TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+                Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());
+                Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());
+            }
+
             dphi_p1_p2_2p.SetMean(clasAna.getdPhiCutMean());
         }
 
@@ -8124,9 +8133,11 @@ void EventAnalyser() {
         //<editor-fold desc="pFDpCD cut">
 
         //<editor-fold desc="Configure if event is pFDpCD">
+        /* This event selection is a subgroup of the 2p selectin. Here we figure out if the event is pFDpCD or not. */
+
         bool is_pFDpCD = false;
 
-        if (calculate_pFDpCD && event_selection_2p) {
+        if (calculate_pFDpCD && event_selection_2p) { // if we have a 2p event with one id. proton in the CD and one in the FD, then is_pFDpCD is true
             is_pFDpCD = (((protons[Protons_ind.at(0)]->getRegion() == FD) && (protons[Protons_ind.at(1)]->getRegion() == CD)) ||
                          ((protons[Protons_ind.at(0)]->getRegion() == CD) && (protons[Protons_ind.at(1)]->getRegion() == FD)));
         }
@@ -8732,7 +8743,6 @@ void EventAnalyser() {
                                    pdg=0.*/
         bool single_pCD = (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == CD); // there's only one id. proton + this proton is in the CD
         bool single_nFD = (NeutronsFD_ind.size() == 1);
-//        bool single_nFD = (NeutronsFD_ind.size() == 1 && allParticles[NeutronsFD_ind.at(0)]->getRegion() == FD);
         bool event_selection_nFDpCD = (basic_event_selection && single_pCD && single_nFD);
 
         if (calculate_nFDpCD && event_selection_nFDpCD) { // for nFDpCD calculations
@@ -10108,9 +10118,11 @@ void EventAnalyser() {
         hBeta_n_from_ph_04_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
 
-        if (!apply_nucleon_cuts) {
-            BetaFit(SampleName, Beta_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
-            BetaFitApprax(SampleName, Beta_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
+        if (!apply_nucleon_cuts && !(findSubstring(SampleName, "2GeV") || findSubstring(SampleName, "2gev") || findSubstring(SampleName, "207052MeV") ||
+                                     findSubstring(SampleName, "207052mev") || findSubstring(SampleName, "2070MeV") || findSubstring(SampleName, "2070mev"))) {
+            /* If sample is with 2GeV beam energy, no fit is needed. */
+            BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
+            BetaFitApprax(SampleName, Beta_max_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
         }
         //</editor-fold>
 
@@ -11143,14 +11155,14 @@ void EventAnalyser() {
                       hTheta_pFD_pCD_DIS_pFDpCD_Dir, "", kBlue, true, true, true, false);
 
         stackPlotter1D(c1, sTheta_pFD_pCD_pFDpCD, norm_E_e_plots, "#theta_{pFD,pCD} - Opening Angle Between Protons", "pFDpCD", plots, hTheta_pFD_pCD_All_Int_pFDpCD,
-                       hTheta_pFD_pCD_QEL_pFDpCD, hTheta_pFD_pCD_MEC_pFDpCD, hTheta_pFD_pCD_RES_pFDpCD, hTheta_pFD_pCD_DIS_pFDpCD, "05_Theta_pFD_pCD_Stack",
+                       hTheta_pFD_pCD_QEL_pFDpCD, hTheta_pFD_pCD_MEC_pFDpCD, hTheta_pFD_pCD_RES_pFDpCD, hTheta_pFD_pCD_DIS_pFDpCD, "05a_Theta_pFD_pCD_Stack",
                        sTheta_pFD_pCD_pFDpCD_Dir, "");
         //</editor-fold>
 
 // hTheta_pFD_pCD_vs_W_pFDpCD (pFDpCD, CD & FD) ---------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="hTheta_pFD_pCD_vs_W_pFDpCD (pFDpCD, CD & FD)">
-        histPlotter2D(c1, hTheta_pFD_pCD_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_pFD_pCD_vs_W_pFDpCD_Dir, "06_Theta_pFD_pCD_vs_W_pFDpCD");
+        histPlotter2D(c1, hTheta_pFD_pCD_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_pFD_pCD_vs_W_pFDpCD_Dir, "05b_Theta_pFD_pCD_vs_W_pFDpCD");
         //</editor-fold>
 
 // Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (pFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------
@@ -11414,14 +11426,14 @@ void EventAnalyser() {
                       hTheta_nFD_pCD_DIS_nFDpCD_Dir, "", kBlue, true, true, true, false);
 
         stackPlotter1D(c1, sTheta_nFD_pCD_nFDpCD, norm_E_e_plots, "#theta_{nFD,pCD} - Opening Angle Between Nucleons", "nFDpCD", plots, hTheta_nFD_pCD_All_Int_nFDpCD,
-                       hTheta_nFD_pCD_QEL_nFDpCD, hTheta_nFD_pCD_MEC_nFDpCD, hTheta_nFD_pCD_RES_nFDpCD, hTheta_nFD_pCD_DIS_nFDpCD, "05_Theta_nFD_pCD_Stack",
+                       hTheta_nFD_pCD_QEL_nFDpCD, hTheta_nFD_pCD_MEC_nFDpCD, hTheta_nFD_pCD_RES_nFDpCD, hTheta_nFD_pCD_DIS_nFDpCD, "05a_Theta_nFD_pCD_Stack",
                        sTheta_nFD_pCD_nFDpCD_Dir, "");
         //</editor-fold>
 
 //  hTheta_nFD_pCD vs. W_nFDpCD (nFDpCD, CD & FD) -----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="hTheta_nFD_pCD_vs_W_nFDpCD (nFDpCD, CD & FD)">
-        histPlotter2D(c1, hTheta_nFD_pCD_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_nFD_pCD_vs_W_nFDpCD_Dir, "06_Theta_nFD_pCD_vs_W_nFDpCD");
+        histPlotter2D(c1, hTheta_nFD_pCD_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hTheta_nFD_pCD_vs_W_nFDpCD_Dir, "05b_Theta_nFD_pCD_vs_W_nFDpCD");
         //</editor-fold>
 
 //  Theta_pFD_vs_theta_pCD for Theta_nFD_pCD < 20 (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------
