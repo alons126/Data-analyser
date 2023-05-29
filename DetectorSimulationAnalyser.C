@@ -5729,6 +5729,7 @@ void EventAnalyser() {
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
 
             /* Setting up nFDpCD TL event selection */
+            bool one_FDNeutron_nFDpCD = (TL_NeutronsFD_mom_ind.size() == 1);
             bool one_proton_nFDpCD = (TL_Protons_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
@@ -5743,7 +5744,7 @@ void EventAnalyser() {
             bool TL_Event_Selection_pFDpCD = (TL_Basic_ES && two_protons_pFDpCD && one_FDproton_pFDpCD && one_CDproton_pFDpCD);
 
             // nFDpCD = id. FD neutron above momentum threshold & one id. CD proton:
-            bool TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
+            bool TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
 
             //<editor-fold desc="Fill TL histograms">
             for (Int_t i = 0; i < Ngen; i++) {
@@ -8942,167 +8943,297 @@ void EventAnalyser() {
 
             //</editor-fold>
 
-            //  Fillings pFDpCD histograms ---------------------------------------------------------------------------------------------------------------------------------
+            //  Fillings pFDpCD histograms ------------------------------------------------------------------------------------------------------------------------------
+
+            //<editor-fold desc="Truth-level pFDpCD enforcement configuration">
+            /* Configure rather to apply pFDpCD truth level ES on rec. plots or not. */
+            bool TL_Event_Selection_pFDpCD;
+
+            //<editor-fold desc="Setting TL ES conditions">
+            auto mcpbank_pFDpCD = c12->mcparts();
+            const Int_t Ngen_pFDpCD = mcpbank_pFDpCD->getRows();
+
+            //<editor-fold desc="Particle counting">
+            /* Particle index vectors */
+            vector<int> TL_Electron_ind_pFDpCD, TL_Neutrons_ind_pFDpCD, TL_Protons_ind_pFDpCD;
+            vector<int> TL_piplus_ind_pFDpCD, TL_piminus_ind_pFDpCD, TL_pizero_ind_pFDpCD, TL_Photons_ind_pFDpCD, TL_OtherPart_ind_pFDpCD;
+
+            /* Particle index vectors (for FD particles) */
+            vector<int> TL_NeutronsFD_ind_pFDpCD, TL_ProtonsFD_ind_pFDpCD, TL_pi0FD_ind_pFDpCD, TL_PhotonsFD_ind_pFDpCD;
+
+            /* Particle index vectors (for particles above momentum threshold) */
+            vector<int> TL_Electron_mom_ind_pFDpCD, TL_Neutrons_mom_ind_pFDpCD, TL_Protons_mom_ind_pFDpCD, TL_piplus_mom_ind_pFDpCD, TL_piminus_mom_ind_pFDpCD, TL_pizero_mom_ind_pFDpCD, TL_Photons_mom_ind_pFDpCD;
+
+            /* Particle index vectors (for FD particles above momentum threshold) */
+            vector<int> TL_NeutronsFD_mom_ind_pFDpCD, TL_ProtonsFD_mom_ind_pFDpCD, TL_ProtonsCD_mom_ind_pFDpCD, TL_pi0FD_mom_ind_pFDpCD, TL_PhotonsFD_mom_ind_pFDpCD;
+
+            for (Int_t i = 0; i < Ngen_pFDpCD; i++) {
+                mcpbank_pFDpCD->setEntry(i);
+
+                int particlePDGtmp = mcpbank_pFDpCD->getPid();
+
+                double Particle_TL_Momentum = rCalc(mcpbank_pFDpCD->getPx(), mcpbank_pFDpCD->getPy(), mcpbank_pFDpCD->getPz());
+                double Particle_TL_Theta =
+                        acos((mcpbank_pFDpCD->getPz()) / rCalc(mcpbank_pFDpCD->getPx(), mcpbank_pFDpCD->getPy(), mcpbank_pFDpCD->getPz())) * 180.0 / pi;
+                double Particle_TL_Phi = atan2(mcpbank_pFDpCD->getPy(), mcpbank_pFDpCD->getPx()) * 180.0 / pi;
+
+                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+
+                if (particlePDGtmp == 11) {
+                    if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) { TL_Electron_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_Electron_ind_pFDpCD.push_back(i);
+                } else if (particlePDGtmp == 2112) {
+                    if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_Neutrons_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_Neutrons_ind_pFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_NeutronsFD_mom_ind_pFDpCD.push_back(i); }
+
+                        TL_NeutronsFD_ind_pFDpCD.push_back(i);
+                    }
+                } else if (particlePDGtmp == 2212) {
+                    if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_Protons_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_Protons_ind_pFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind_pFDpCD.push_back(i); }
+
+                        TL_ProtonsFD_ind_pFDpCD.push_back(i);
+                    }
+                } else if (particlePDGtmp == 211) {
+                    if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) { TL_piplus_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_piplus_ind_pFDpCD.push_back(i);
+                } else if (particlePDGtmp == -211) {
+                    if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) { TL_piminus_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_piminus_ind_pFDpCD.push_back(i);
+                } else if (particlePDGtmp == 111) {
+                    if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pizero_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_pizero_ind_pFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pi0FD_mom_ind_pFDpCD.push_back(i); }
+
+                        TL_pi0FD_ind_pFDpCD.push_back(i);
+                    }
+                } else if (particlePDGtmp == 22) {
+                    if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_Photons_mom_ind_pFDpCD.push_back(i); }
+
+                    TL_Photons_ind_pFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_PhotonsFD_mom_ind_pFDpCD.push_back(i); }
+
+                        TL_PhotonsFD_ind_pFDpCD.push_back(i);
+                    }
+                } else {
+                    TL_OtherPart_ind_pFDpCD.push_back(i);
+                }
+            }
+            //</editor-fold>
+
+            /* Setting up basic TL event selection */
+            bool no_TL_cPions_pFDpCD = (TL_piplus_mom_ind_pFDpCD.size() == 0 && TL_piminus_mom_ind_pFDpCD.size() == 0);         // No id. cPions above momentum threshold
+            bool no_TL_OtherPart_pFDpCD = (TL_OtherPart_ind_pFDpCD.size() == 0);                                               // No other part. above momentum threshold
+            bool no_TL_FDpi0_pFDpCD = (Enable_FD_photons || (TL_pi0FD_mom_ind_pFDpCD.size() == 0));                      // No id. pi0 in the FD above momentum threshold
+            bool no_TL_FDPhotons_pFDpCD = (Enable_FD_photons || (TL_PhotonsFD_mom_ind_pFDpCD.size() == 0));          // No id. photons in the FD above momentum threshold
+            bool TL_Event_Selection_1e_cut_pFDpCD = (TL_Electron_mom_ind_pFDpCD.size() == 1);                                // One id. electron above momentum threshold
+            bool TL_Basic_ES_pFDpCD = (TL_Event_Selection_1e_cut_pFDpCD && no_TL_cPions_pFDpCD && no_TL_OtherPart_pFDpCD && no_TL_FDpi0_pFDpCD && no_TL_FDPhotons_pFDpCD);
+
+            /* Setting up pFDpCD TL event selection */
+            bool two_protons_pFDpCD = (TL_Protons_mom_ind_pFDpCD.size() == 2);
+            bool one_FDproton_pFDpCD = (TL_ProtonsFD_mom_ind_pFDpCD.size() == 1);
+            bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind_pFDpCD.size() == 1);
+
+            // pFDpCD = One id. FD proton above momentum threshold & one id. CD proton:
+            bool TL_Event_Selection_pFDpCD_pFDpCD = (TL_Basic_ES_pFDpCD && two_protons_pFDpCD && one_FDproton_pFDpCD && one_CDproton_pFDpCD);
+            //</editor-fold>
+
+            bool apply_TL_pFDpCD_ES;
+
+            if (Rec_wTL_ES) { // Enforce TL event selection
+                apply_TL_pFDpCD_ES = TL_Event_Selection_pFDpCD_pFDpCD; // Events will be logged only is TL_Event_Selection_pFDpCD is true
+            } else if (!Rec_wTL_ES) { // Don't enforce TL event selection
+                apply_TL_pFDpCD_ES = true; // Events will be logged regardless of TL_Event_Selection_pFDpCD is true
+            }
+            //</editor-fold>
 
             //<editor-fold desc="Fillings pFDpCD histograms">
-            ++num_of_events_pFDpCD;
+            if (apply_TL_pFDpCD_ES) {
+                ++num_of_events_pFDpCD;
 
-            //<editor-fold desc="Filling cut parameters histograms (pFDpCD)">
-            /* Filling Nphe plots (pFDpCD) */
-            hNphe_pFDpCD_FD.hFill(e_pFDpCD->che(clas12::HTCC)->getNphe(), Weight);
+                //<editor-fold desc="Filling cut parameters histograms (pFDpCD)">
+                /* Filling Nphe plots (pFDpCD) */
+                hNphe_pFDpCD_FD.hFill(e_pFDpCD->che(clas12::HTCC)->getNphe(), Weight);
 
-            /* Filling Chi2 histograms (pFDpCD) */
-            hChi2_Electron_pFDpCD_FD.hFill(e_pFDpCD->par()->getChi2Pid(), Weight);
-            hChi2_Proton_pFDpCD_CD.hFill(pCD_pFDpCD->par()->getChi2Pid(), Weight);
-            hChi2_Proton_pFDpCD_FD.hFill(pFD_pFDpCD->par()->getChi2Pid(), Weight);
+                /* Filling Chi2 histograms (pFDpCD) */
+                hChi2_Electron_pFDpCD_FD.hFill(e_pFDpCD->par()->getChi2Pid(), Weight);
+                hChi2_Proton_pFDpCD_CD.hFill(pCD_pFDpCD->par()->getChi2Pid(), Weight);
+                hChi2_Proton_pFDpCD_FD.hFill(pFD_pFDpCD->par()->getChi2Pid(), Weight);
 
-            //<editor-fold desc="Filling dVx, dVy, dVz histograms (pFDpCD)">
+                //<editor-fold desc="Filling dVx, dVy, dVz histograms (pFDpCD)">
 
-            //<editor-fold desc="All protons (pFDpCD)">
-            for (auto &p: protons) {
-                double Vx_p_pFDpCD = p->par()->getVx(), Vy_p_pFDpCD = p->par()->getVy(), Vz_p_pFDpCD = p->par()->getVz();
-                double dVx_pFDpCD = Vx_p_pFDpCD - Vx_e_pFDpCD, dVy_pFDpCD = Vy_p_pFDpCD - Vy_e_pFDpCD, dVz_pFDpCD = Vz_p_pFDpCD - Vz_e_pFDpCD;
+                //<editor-fold desc="All protons (pFDpCD)">
+                for (auto &p: protons) {
+                    double Vx_p_pFDpCD = p->par()->getVx(), Vy_p_pFDpCD = p->par()->getVy(), Vz_p_pFDpCD = p->par()->getVz();
+                    double dVx_pFDpCD = Vx_p_pFDpCD - Vx_e_pFDpCD, dVy_pFDpCD = Vy_p_pFDpCD - Vy_e_pFDpCD, dVz_pFDpCD = Vz_p_pFDpCD - Vz_e_pFDpCD;
 
-                hdVx_pFDpCD.hFill(dVx_pFDpCD, Weight), hdVy_pFDpCD.hFill(dVy_pFDpCD, Weight), hdVz_pFDpCD.hFill(dVz_pFDpCD, Weight);
-            } // end of loop over protons vector
-            //</editor-fold>
+                    hdVx_pFDpCD.hFill(dVx_pFDpCD, Weight), hdVy_pFDpCD.hFill(dVy_pFDpCD, Weight), hdVz_pFDpCD.hFill(dVz_pFDpCD, Weight);
+                } // end of loop over protons vector
+                //</editor-fold>
 
-            //<editor-fold desc="Id. pFD and pCD protons (pFDpCD)">
-            double Vx_pFD_pFDpCD = pFD_pFDpCD->par()->getVx(), Vy_pFD_pFDpCD = pFD_pFDpCD->par()->getVy(), Vz_pFD_pFDpCD = pFD_pFDpCD->par()->getVz();
-            double dVx_pFD_pFDpCD = Vx_pFD_pFDpCD - Vx_e_pFDpCD, dVy_pFD_pFDpCD = Vy_pFD_pFDpCD - Vy_e_pFDpCD, dVz_pFD_pFDpCD = Vz_pFD_pFDpCD - Vz_e_pFDpCD;
-            double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
-            double dVx_pCD_pFDpCD = Vx_pCD_pFDpCD - Vx_e_pFDpCD, dVy_pCD_pFDpCD = Vy_pCD_pFDpCD - Vy_e_pFDpCD, dVz_pCD_pFDpCD = Vz_pCD_pFDpCD - Vz_e_pFDpCD;
+                //<editor-fold desc="Id. pFD and pCD protons (pFDpCD)">
+                double Vx_pFD_pFDpCD = pFD_pFDpCD->par()->getVx(), Vy_pFD_pFDpCD = pFD_pFDpCD->par()->getVy(), Vz_pFD_pFDpCD = pFD_pFDpCD->par()->getVz();
+                double dVx_pFD_pFDpCD = Vx_pFD_pFDpCD - Vx_e_pFDpCD, dVy_pFD_pFDpCD = Vy_pFD_pFDpCD - Vy_e_pFDpCD, dVz_pFD_pFDpCD = Vz_pFD_pFDpCD - Vz_e_pFDpCD;
+                double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
+                double dVx_pCD_pFDpCD = Vx_pCD_pFDpCD - Vx_e_pFDpCD, dVy_pCD_pFDpCD = Vy_pCD_pFDpCD - Vy_e_pFDpCD, dVz_pCD_pFDpCD = Vz_pCD_pFDpCD - Vz_e_pFDpCD;
 
-            hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight), hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight), hdVz_pFD_pFDpCD.hFill(dVz_pFD_pFDpCD, Weight);
-            hdVx_pCD_pFDpCD.hFill(dVx_pCD_pFDpCD, Weight), hdVy_pCD_pFDpCD.hFill(dVy_pCD_pFDpCD, Weight), hdVz_pCD_pFDpCD.hFill(dVz_pCD_pFDpCD, Weight);
-            //</editor-fold>
+                hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight), hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight), hdVz_pFD_pFDpCD.hFill(dVz_pFD_pFDpCD, Weight);
+                hdVx_pCD_pFDpCD.hFill(dVx_pCD_pFDpCD, Weight), hdVy_pCD_pFDpCD.hFill(dVy_pCD_pFDpCD, Weight), hdVz_pCD_pFDpCD.hFill(dVz_pCD_pFDpCD, Weight);
+                //</editor-fold>
 
-            //</editor-fold>
+                //</editor-fold>
 
-            /* Filling SF histograms (pFDpCD) */
-            hSF_pFDpCD_FD.hFill(EoP_e_pFDpCD, Weight), hSF_VS_P_e_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), EoP_e_pFDpCD, Weight);
+                /* Filling SF histograms (pFDpCD) */
+                hSF_pFDpCD_FD.hFill(EoP_e_pFDpCD, Weight), hSF_VS_P_e_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), EoP_e_pFDpCD, Weight);
 
-            /* Filling fiducial plots (pFDpCD) */
-            hVcal_VS_EoP_pFDpCD_PCAL.hFill(e_pFDpCD->cal(clas12::PCAL)->getLv(), EoP_e_pFDpCD, Weight);
-            hWcal_VS_EoP_pFDpCD_PCAL.hFill(e_pFDpCD->cal(clas12::PCAL)->getLw(), EoP_e_pFDpCD, Weight);
+                /* Filling fiducial plots (pFDpCD) */
+                hVcal_VS_EoP_pFDpCD_PCAL.hFill(e_pFDpCD->cal(clas12::PCAL)->getLv(), EoP_e_pFDpCD, Weight);
+                hWcal_VS_EoP_pFDpCD_PCAL.hFill(e_pFDpCD->cal(clas12::PCAL)->getLw(), EoP_e_pFDpCD, Weight);
 
-            //<editor-fold desc="Filling momentum histograms (pFDpCD)">
+                //<editor-fold desc="Filling momentum histograms (pFDpCD)">
 
-            //<editor-fold desc="Electron momentum (pFDpCD)">
-            hP_e_APID_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), Weight); // after mom. th.
+                //<editor-fold desc="Electron momentum (pFDpCD)">
+                hP_e_APID_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), Weight); // after mom. th.
 
-            for (int i = 0; i < electrons.size(); i++) {
-                if (electrons[i]->getRegion() == FD) { hP_e_BPID_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), Weight); } // before mom. th.
-            }
-            //</editor-fold>
-
-            //<editor-fold desc="Proton momentum (pFDpCD)">
-            //TODO: remove pFDpCD plots for protons in CD (we're looking at pFDpCD in the FD only!)
-            for (int &i: Protons_ind) {
-                if (protons[i]->getRegion() == CD) {
-                    hP_p_APID_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // after mom. th.
-                } else if (protons[i]->getRegion() == FD) {
-                    hP_p_APID_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // after mom. th.
+                for (int i = 0; i < electrons.size(); i++) {
+                    if (electrons[i]->getRegion() == FD) { hP_e_BPID_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), Weight); } // before mom. th.
                 }
-            }
+                //</editor-fold>
 
-            for (int i = 0; i < protons.size(); i++) {
-                if (protons[i]->getRegion() == CD) {
-                    hP_p_BPID_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // before mom. th.
-                } else if (protons[i]->getRegion() == FD) {
-                    hP_p_BPID_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // before mom. th.
+                //<editor-fold desc="Proton momentum (pFDpCD)">
+                //TODO: remove pFDpCD plots for protons in CD (we're looking at pFDpCD in the FD only!)
+                for (int &i: Protons_ind) {
+                    if (protons[i]->getRegion() == CD) {
+                        hP_p_APID_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // after mom. th.
+                    } else if (protons[i]->getRegion() == FD) {
+                        hP_p_APID_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // after mom. th.
+                    }
                 }
-            }
-            //</editor-fold>
 
-            //<editor-fold desc="Piplus momentum (pFDpCD)">
-            for (int &i: Piplus_ind) {
-                if (piplus[i]->getRegion() == CD) {
-                    hP_piplus_APID_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // after mom. th.
-                } else if (piplus[i]->getRegion() == FD) {
-                    hP_piplus_APID_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // after mom. th.
+                for (int i = 0; i < protons.size(); i++) {
+                    if (protons[i]->getRegion() == CD) {
+                        hP_p_BPID_pFDpCD_CD.hFill(protons[i]->getP(), Weight); // before mom. th.
+                    } else if (protons[i]->getRegion() == FD) {
+                        hP_p_BPID_pFDpCD_FD.hFill(protons[i]->getP(), Weight); // before mom. th.
+                    }
                 }
-            }
+                //</editor-fold>
 
-            for (int i = 0; i < piplus.size(); i++) {
-                if (piplus[i]->getRegion() == CD) {
-                    hP_piplus_BPID_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // before mom. th.
-                } else if (piplus[i]->getRegion() == FD) {
-                    hP_piplus_BPID_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // before mom. th.
+                //<editor-fold desc="Piplus momentum (pFDpCD)">
+                for (int &i: Piplus_ind) {
+                    if (piplus[i]->getRegion() == CD) {
+                        hP_piplus_APID_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // after mom. th.
+                    } else if (piplus[i]->getRegion() == FD) {
+                        hP_piplus_APID_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // after mom. th.
+                    }
                 }
-            }
-            //</editor-fold>
 
-            //<editor-fold desc="Piminus momentum (pFDpCD)">
-            for (int &i: Piminus_ind) {
-                if (piminus[i]->getRegion() == CD) {
-                    hP_piminus_APID_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // after mom. th.
-                } else if (piminus[i]->getRegion() == FD) {
-                    hP_piminus_APID_pFDpCD_FD.hFill(piminus[i]->getP(), Weight); // after mom. th.
+                for (int i = 0; i < piplus.size(); i++) {
+                    if (piplus[i]->getRegion() == CD) {
+                        hP_piplus_BPID_pFDpCD_CD.hFill(piplus[i]->getP(), Weight); // before mom. th.
+                    } else if (piplus[i]->getRegion() == FD) {
+                        hP_piplus_BPID_pFDpCD_FD.hFill(piplus[i]->getP(), Weight); // before mom. th.
+                    }
                 }
-            }
+                //</editor-fold>
 
-            for (int i = 0; i < piminus.size(); i++) {
-                if (piminus[i]->getRegion() == CD) {
-                    hP_piminus_BPID_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // before mom. th.
-                } else if (piminus[i]->getRegion() == FD) {
-                    hP_piminus_BPID_pFDpCD_FD.hFill(piminus[i]->getP(), Weight); // before mom. th.
+                //<editor-fold desc="Piminus momentum (pFDpCD)">
+                for (int &i: Piminus_ind) {
+                    if (piminus[i]->getRegion() == CD) {
+                        hP_piminus_APID_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // after mom. th.
+                    } else if (piminus[i]->getRegion() == FD) {
+                        hP_piminus_APID_pFDpCD_FD.hFill(piminus[i]->getP(), Weight); // after mom. th.
+                    }
                 }
-            }
-            //</editor-fold>
 
-            //<editor-fold desc="Photon momentum (pFDpCD)">
-            for (int &i: PhotonsFD_ind) { hP_ph_APID_pFDpCD_FD.hFill(allParticles[i]->getP(), Weight); } // after mom. th.
-
-            for (int &i: FD_Photons) { hP_ph_BPID_pFDpCD_FD.hFill(allParticles[i]->getP(), Weight); } // before mom. th.
-            //</editor-fold>
-
-            //<editor-fold desc="Neutron momentum (pFDpCD)">
-            for (int &i: NeutronsFD_ind) { hP_n_APID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // after mom. th.
-
-            for (int &i: FD_Neutrons) { hP_n_BPID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //</editor-fold>
-
-            //<editor-fold desc="Filling Beta vs. P plots (pFDpCD)">
-
-            //<editor-fold desc="Beta vs. P from electrons (pFDpCD, CD & FD)">
-            if (e_pFDpCD->getRegion() == FD) {
-                hBeta_vs_P_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
-                hBeta_vs_P_pFDpCD_Electrons_Only_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
-
-                if (e_pFDpCD->par()->getCharge() == 1) {
-                    hBeta_vs_P_positive_part_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
-                } else if (e_pFDpCD->par()->getCharge() == 0) {
-                    hBeta_vs_P_neutral_part_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
-                } else if (e_pFDpCD->par()->getCharge() == -1) {
-                    hBeta_vs_P_negative_part_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
+                for (int i = 0; i < piminus.size(); i++) {
+                    if (piminus[i]->getRegion() == CD) {
+                        hP_piminus_BPID_pFDpCD_CD.hFill(piminus[i]->getP(), Weight); // before mom. th.
+                    } else if (piminus[i]->getRegion() == FD) {
+                        hP_piminus_BPID_pFDpCD_FD.hFill(piminus[i]->getP(), Weight); // before mom. th.
+                    }
                 }
-            }
-            //</editor-fold>
+                //</editor-fold>
 
-            //<editor-fold desc="Beta vs. P from protons (pFDpCD, CD & FD)">
-            for (int i = 0; i < protons.size(); i++) {
-                if (protons[i]->getRegion() == CD) {
-                    hBeta_vs_P_pFDpCD_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_pFDpCD_Protons_Only_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_positive_part_pFDpCD_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
-                } else if (protons[i]->getRegion() == FD) {
-                    hBeta_vs_P_pFDpCD_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_pFDpCD_Protons_Only_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_positive_part_pFDpCD_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                //<editor-fold desc="Photon momentum (pFDpCD)">
+                for (int &i: PhotonsFD_ind) { hP_ph_APID_pFDpCD_FD.hFill(allParticles[i]->getP(), Weight); } // after mom. th.
+
+                for (int &i: FD_Photons) { hP_ph_BPID_pFDpCD_FD.hFill(allParticles[i]->getP(), Weight); } // before mom. th.
+                //</editor-fold>
+
+                //<editor-fold desc="Neutron momentum (pFDpCD)">
+                for (int &i: NeutronsFD_ind) { hP_n_APID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // after mom. th.
+
+                for (int &i: FD_Neutrons) { hP_n_BPID_pFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); } // before mom. th.
+                //</editor-fold>
+
+                //</editor-fold>
+
+                //</editor-fold>
+
+                //<editor-fold desc="Filling Beta vs. P plots (pFDpCD)">
+
+                //<editor-fold desc="Beta vs. P from electrons (pFDpCD, CD & FD)">
+                if (e_pFDpCD->getRegion() == FD) {
+                    hBeta_vs_P_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
+                    hBeta_vs_P_pFDpCD_Electrons_Only_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
+
+                    if (e_pFDpCD->par()->getCharge() == 1) {
+                        hBeta_vs_P_positive_part_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
+                    } else if (e_pFDpCD->par()->getCharge() == 0) {
+                        hBeta_vs_P_neutral_part_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
+                    } else if (e_pFDpCD->par()->getCharge() == -1) {
+                        hBeta_vs_P_negative_part_pFDpCD_FD.hFill(e_pFDpCD->getP(), e_pFDpCD->par()->getBeta(), Weight);
+                    }
                 }
-            } // end of loop over protons vector
+                //</editor-fold>
 
-            hBeta_vs_P_pFD_pFDpCD_Protons_Only_FD.hFill(pFD_pFDpCD->getP(), pFD_pFDpCD->par()->getBeta(), Weight);
-            hBeta_vs_P_pCD_pFDpCD_Protons_Only_CD.hFill(pCD_pFDpCD->getP(), pCD_pFDpCD->par()->getBeta(), Weight);
-            //</editor-fold>
+                //<editor-fold desc="Beta vs. P from protons (pFDpCD, CD & FD)">
+                for (int i = 0; i < protons.size(); i++) {
+                    if (protons[i]->getRegion() == CD) {
+                        hBeta_vs_P_pFDpCD_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_pFDpCD_Protons_Only_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_positive_part_pFDpCD_CD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                    } else if (protons[i]->getRegion() == FD) {
+                        hBeta_vs_P_pFDpCD_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_pFDpCD_Protons_Only_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_positive_part_pFDpCD_FD.hFill(protons[i]->getP(), protons[i]->par()->getBeta(), Weight);
+                    }
+                } // end of loop over protons vector
 
-            //<editor-fold desc="Beta vs. P from other particles (pFDpCD, CD & FD)">
-            /* This is for self-consistency. Contributions from other particles should be zero */
+                hBeta_vs_P_pFD_pFDpCD_Protons_Only_FD.hFill(pFD_pFDpCD->getP(), pFD_pFDpCD->par()->getBeta(), Weight);
+                hBeta_vs_P_pCD_pFDpCD_Protons_Only_CD.hFill(pCD_pFDpCD->getP(), pCD_pFDpCD->par()->getBeta(), Weight);
+                //</editor-fold>
+
+                //<editor-fold desc="Beta vs. P from other particles (pFDpCD, CD & FD)">
+                /* This is for self-consistency. Contributions from other particles should be zero */
 
 //            //<editor-fold desc="Beta vs. P from neutrons (pFDpCD, CD & FD)">
 //            for (int i = 0; i < neutrons.size(); i++) {
@@ -9130,274 +9261,287 @@ void EventAnalyser() {
 //            } // end of loop over neutrons vector
 //            //</editor-fold>
 
-            //<editor-fold desc="Beta vs. P from Kplus (pFDpCD, CD & FD)">
-            for (int i = 0; i < Kplus.size(); i++) {
-                if (Kplus[i]->getRegion() == CD) {
-                    hBeta_vs_P_pFDpCD_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_positive_part_pFDpCD_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
-                } else if (Kplus[i]->getRegion() == FD) {
-                    hBeta_vs_P_pFDpCD_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_positive_part_pFDpCD_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
-                }
-            } // end of loop over Kplus vector
-            //</editor-fold>
+                //<editor-fold desc="Beta vs. P from Kplus (pFDpCD, CD & FD)">
+                for (int i = 0; i < Kplus.size(); i++) {
+                    if (Kplus[i]->getRegion() == CD) {
+                        hBeta_vs_P_pFDpCD_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_positive_part_pFDpCD_CD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+                    } else if (Kplus[i]->getRegion() == FD) {
+                        hBeta_vs_P_pFDpCD_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_positive_part_pFDpCD_FD.hFill(Kplus[i]->getP(), Kplus[i]->par()->getBeta(), Weight);
+                    }
+                } // end of loop over Kplus vector
+                //</editor-fold>
 
-            //<editor-fold desc="Beta vs. P from Kminus (pFDpCD, CD & FD)">
-            for (int i = 0; i < Kminus.size(); i++) {
-                if (Kminus[i]->getRegion() == CD) {
-                    hBeta_vs_P_pFDpCD_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_negative_part_pFDpCD_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
-                } else if (Kminus[i]->getRegion() == FD) {
-                    hBeta_vs_P_pFDpCD_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_negative_part_pFDpCD_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
-                }
-            } // end of loop over Kminus vector
-            //</editor-fold>
+                //<editor-fold desc="Beta vs. P from Kminus (pFDpCD, CD & FD)">
+                for (int i = 0; i < Kminus.size(); i++) {
+                    if (Kminus[i]->getRegion() == CD) {
+                        hBeta_vs_P_pFDpCD_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_negative_part_pFDpCD_CD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+                    } else if (Kminus[i]->getRegion() == FD) {
+                        hBeta_vs_P_pFDpCD_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_negative_part_pFDpCD_FD.hFill(Kminus[i]->getP(), Kminus[i]->par()->getBeta(), Weight);
+                    }
+                } // end of loop over Kminus vector
+                //</editor-fold>
 
-            //<editor-fold desc="Beta vs. P from piplus (pFDpCD, CD & FD)">
-            for (int i = 0; i < piplus.size(); i++) {
-                if (piplus[i]->getRegion() == CD) {
-                    hBeta_vs_P_pFDpCD_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_positive_part_pFDpCD_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                } else if (piplus[i]->getRegion() == FD) {
-                    hBeta_vs_P_pFDpCD_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_positive_part_pFDpCD_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
-                }
-            } // end of loop over piplus vector
-            //</editor-fold>
+                //<editor-fold desc="Beta vs. P from piplus (pFDpCD, CD & FD)">
+                for (int i = 0; i < piplus.size(); i++) {
+                    if (piplus[i]->getRegion() == CD) {
+                        hBeta_vs_P_pFDpCD_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_positive_part_pFDpCD_CD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+                    } else if (piplus[i]->getRegion() == FD) {
+                        hBeta_vs_P_pFDpCD_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_positive_part_pFDpCD_FD.hFill(piplus[i]->getP(), piplus[i]->par()->getBeta(), Weight);
+                    }
+                } // end of loop over piplus vector
+                //</editor-fold>
 
-            //<editor-fold desc="Beta vs. P from piminus (pFDpCD, CD & FD)">
-            for (int i = 0; i < piminus.size(); i++) {
-                if (piminus[i]->getRegion() == CD) {
-                    hBeta_vs_P_pFDpCD_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_negative_part_pFDpCD_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                } else if (piminus[i]->getRegion() == FD) {
-                    hBeta_vs_P_pFDpCD_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                    hBeta_vs_P_negative_part_pFDpCD_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
-                }
-            } // end of loop over piminus vector
-            //</editor-fold>
+                //<editor-fold desc="Beta vs. P from piminus (pFDpCD, CD & FD)">
+                for (int i = 0; i < piminus.size(); i++) {
+                    if (piminus[i]->getRegion() == CD) {
+                        hBeta_vs_P_pFDpCD_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_negative_part_pFDpCD_CD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+                    } else if (piminus[i]->getRegion() == FD) {
+                        hBeta_vs_P_pFDpCD_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+                        hBeta_vs_P_negative_part_pFDpCD_FD.hFill(piminus[i]->getP(), piminus[i]->par()->getBeta(), Weight);
+                    }
+                } // end of loop over piminus vector
+                //</editor-fold>
 
-            //</editor-fold>
+                //</editor-fold>
 
-            //</editor-fold>
+                //</editor-fold>
 
-            //<editor-fold desc="Filling electron-realted histograms (pFDpCD)">
-            hTheta_e_All_Int_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
-            hPhi_e_All_Int_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
-            hTheta_e_VS_Phi_e_pFDpCD_FD->Fill(Phi_e_pFDpCD, Theta_e_pFDpCD, Weight);
+                //<editor-fold desc="Filling electron-realted histograms (pFDpCD)">
+                hTheta_e_All_Int_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
+                hPhi_e_All_Int_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
+                hTheta_e_VS_Phi_e_pFDpCD_FD->Fill(Phi_e_pFDpCD, Theta_e_pFDpCD, Weight);
 
-            hQ2_pFDpCD_FD->Fill(Q2_pFDpCD, Weight);
+                hQ2_pFDpCD_FD->Fill(Q2_pFDpCD, Weight);
 
-            hE_e_All_Int_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
-            hE_e_VS_Theta_e_All_Int_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+                hE_e_All_Int_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                hE_e_VS_Theta_e_All_Int_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
 
-            hET_All_Ang_All_Int_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-
-            if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
-                hET15_All_Int_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-                hE_e_15_All_Int_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
-            }
-
-            if (qel) {
-                hTheta_e_QEL_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
-                hPhi_e_QEL_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
-                hE_e_QEL_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
-                hE_e_VS_Theta_e_QEL_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
-
-                hET_All_Ang_QEL_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                hET_All_Ang_All_Int_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
 
                 if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
-                    hET15_QEL_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-                    hE_e_15_QEL_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    hET15_All_Int_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                    hE_e_15_All_Int_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
                 }
-            } else if (mec) {
-                hTheta_e_MEC_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
-                hPhi_e_MEC_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
-                hE_e_MEC_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
-                hE_e_VS_Theta_e_MEC_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
 
-                hET_All_Ang_MEC_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-                if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
-                    hET15_MEC_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-                    hE_e_15_MEC_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                if (qel) {
+                    hTheta_e_QEL_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
+                    hPhi_e_QEL_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
+                    hE_e_QEL_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    hE_e_VS_Theta_e_QEL_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+
+                    hET_All_Ang_QEL_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+
+                    if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
+                        hET15_QEL_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                        hE_e_15_QEL_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    }
+                } else if (mec) {
+                    hTheta_e_MEC_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
+                    hPhi_e_MEC_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
+                    hE_e_MEC_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    hE_e_VS_Theta_e_MEC_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+
+                    hET_All_Ang_MEC_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                    if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
+                        hET15_MEC_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                        hE_e_15_MEC_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    }
+                } else if (res) {
+                    hTheta_e_RES_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
+                    hPhi_e_RES_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
+                    hE_e_RES_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    hE_e_VS_Theta_e_RES_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+
+                    hET_All_Ang_RES_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+
+                    if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
+                        hET15_RES_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                        hE_e_15_RES_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    }
+                } else if (dis) {
+                    hTheta_e_DIS_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
+                    hPhi_e_DIS_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
+                    hE_e_DIS_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    hE_e_VS_Theta_e_DIS_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+
+                    hET_All_Ang_DIS_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+
+                    if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
+                        hET15_DIS_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                        hE_e_15_DIS_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                    }
                 }
-            } else if (res) {
-                hTheta_e_RES_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
-                hPhi_e_RES_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
-                hE_e_RES_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
-                hE_e_VS_Theta_e_RES_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+                //</editor-fold>
 
-                hET_All_Ang_RES_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                //<editor-fold desc="Filling pFD & pCD angle plots">
+                hTheta_pFD_All_Int_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
+                hTheta_pCD_All_Int_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
+                hPhi_pFD_All_Int_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
+                hPhi_pCD_All_Int_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
+                hTheta_pFD_VS_Phi_pFD_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Theta_pFD_pFDpCD, Weight);
+                hTheta_pCD_VS_Phi_pCD_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Theta_pCD_pFDpCD, Weight);
 
-                if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
-                    hET15_RES_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-                    hE_e_15_RES_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                if (qel) {
+                    hTheta_pFD_QEL_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
+                    hTheta_pCD_QEL_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
+                    hPhi_pFD_QEL_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
+                    hPhi_pCD_QEL_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
+                } else if (mec) {
+                    hTheta_pFD_MEC_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
+                    hTheta_pCD_MEC_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
+                    hPhi_pFD_MEC_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
+                    hPhi_pCD_MEC_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
+                } else if (res) {
+                    hTheta_pFD_RES_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
+                    hTheta_pCD_RES_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
+                    hPhi_pFD_RES_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
+                    hPhi_pCD_RES_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
+                } else if (dis) {
+                    hTheta_pFD_DIS_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
+                    hTheta_pCD_DIS_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
+                    hPhi_pFD_DIS_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
+                    hPhi_pCD_DIS_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
                 }
-            } else if (dis) {
-                hTheta_e_DIS_pFDpCD_FD->Fill(Theta_e_pFDpCD, Weight);
-                hPhi_e_DIS_pFDpCD_FD->Fill(Phi_e_pFDpCD, Weight);
-                hE_e_DIS_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
-                hE_e_VS_Theta_e_DIS_pFDpCD_FD->Fill(Theta_e_pFDpCD, E_e_pFDpCD, Weight);
+                //</editor-fold>
 
-                hET_All_Ang_DIS_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
+                hP_pFD_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(),
+                                    Weight);                                                                                  // Leading proton (pFDpCD)
+                hP_pCD_pFDpCD.hFill(P_2_pFDpCD_3v.Mag(),
+                                    Weight);                                                                                   // Recoil proton (pFDpCD)
 
-                if ((Theta_e_pFDpCD >= 14.0) && (Theta_e_pFDpCD <= 16.0)) {
-                    hET15_DIS_pFDpCD_FD->Fill(beamE - E_e_pFDpCD, Weight);
-                    hE_e_15_DIS_pFDpCD_FD->Fill(E_e_pFDpCD, Weight);
+                // for pFD leading and pCD recoil, hP_p_1_vs_P_p_2_pFDpCD and hP_pFD_vs_P_pCD_pFDpCD sould be the same:
+                hP_p_1_vs_P_p_2_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), P_2_pFDpCD_3v.Mag(), Weight);
+                hP_pFD_vs_P_pCD_pFDpCD.hFill(pFD_pFDpCD->getP(), pCD_pFDpCD->getP(), Weight);
+
+                P_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
+                                           P_pFD_pFDpCD_3v.Pz() +
+                                           P_pCD_pFDpCD_3v.Pz());                                                             // P_tot = P_pFD + P_pCD
+                P_T_L_pFDpCD_3v = TVector3(P_1_pFDpCD_3v.Px(), P_1_pFDpCD_3v.Py(),
+                                           0);                                                            // transverse part of P_pFD
+                P_T_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
+                                             0);        // transverse part of P_tot
+                dP_T_L_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_T_L_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py() + P_T_L_pFDpCD_3v.Py(), 0);
+                dP_T_tot_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_1_pFDpCD_3v.Px() + P_2_pFDpCD_3v.Px(),
+                                              P_e_pFDpCD_3v.Py() + P_1_pFDpCD_3v.Py() + P_2_pFDpCD_3v.Py(), 0);
+
+                Theta_p_e_p_tot_pFDpCD = acos((P_e_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py()
+                                               + P_e_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
+                                              / (P_e_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 /
+                                         pi;                                 // Theta_p_e_p_tot_pFDpCD in deg
+                hTheta_p_e_p_tot_pFDpCD->Fill(Theta_p_e_p_tot_pFDpCD, Weight);
+                hTheta_p_e_p_tot_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_p_e_p_tot_pFDpCD, Weight);
+
+                hTheta_pFD_pCD_All_Int_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
+
+                if (qel) {
+                    hTheta_pFD_pCD_QEL_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
+                } else if (mec) {
+                    hTheta_pFD_pCD_MEC_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
+                } else if (res) {
+                    hTheta_pFD_pCD_RES_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
+                } else if (dis) {
+                    hTheta_pFD_pCD_DIS_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
                 }
-            }
-            //</editor-fold>
 
-            //<editor-fold desc="Filling pFD & pCD angle plots">
-            hTheta_pFD_All_Int_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
-            hTheta_pCD_All_Int_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
-            hPhi_pFD_All_Int_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
-            hPhi_pCD_All_Int_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
-            hTheta_pFD_VS_Phi_pFD_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Theta_pFD_pFDpCD, Weight);
-            hTheta_pCD_VS_Phi_pCD_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Theta_pCD_pFDpCD, Weight);
+                hTheta_pFD_pCD_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_pFD_pCD_pFDpCD, Weight);
 
-            if (qel) {
-                hTheta_pFD_QEL_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
-                hTheta_pCD_QEL_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
-                hPhi_pFD_QEL_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
-                hPhi_pCD_QEL_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
-            } else if (mec) {
-                hTheta_pFD_MEC_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
-                hTheta_pCD_MEC_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
-                hPhi_pFD_MEC_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
-                hPhi_pCD_MEC_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
-            } else if (res) {
-                hTheta_pFD_RES_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
-                hTheta_pCD_RES_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
-                hPhi_pFD_RES_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
-                hPhi_pCD_RES_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
-            } else if (dis) {
-                hTheta_pFD_DIS_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
-                hTheta_pCD_DIS_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
-                hPhi_pFD_DIS_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
-                hPhi_pCD_DIS_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
-            }
-            //</editor-fold>
+                if (Theta_pFD_pCD_pFDpCD < 20.) {
+                    hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(Theta_p2_pFDpCD, Theta_p1_pFDpCD, Weight);
+                    hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
+                    hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
+                }
 
-            hP_pFD_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), Weight);                                                                                  // Leading proton (pFDpCD)
-            hP_pCD_pFDpCD.hFill(P_2_pFDpCD_3v.Mag(), Weight);                                                                                   // Recoil proton (pFDpCD)
+                hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD->Fill(Theta_p2_pFDpCD, Theta_p1_pFDpCD, Weight);
+                hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
+                hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
 
-            // for pFD leading and pCD recoil, hP_p_1_vs_P_p_2_pFDpCD and hP_pFD_vs_P_pCD_pFDpCD sould be the same:
-            hP_p_1_vs_P_p_2_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), P_2_pFDpCD_3v.Mag(), Weight);
-            hP_pFD_vs_P_pCD_pFDpCD.hFill(pFD_pFDpCD->getP(), pCD_pFDpCD->getP(), Weight);
-
-            P_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
-                                       P_pFD_pFDpCD_3v.Pz() + P_pCD_pFDpCD_3v.Pz());                                                             // P_tot = P_pFD + P_pCD
-            P_T_L_pFDpCD_3v = TVector3(P_1_pFDpCD_3v.Px(), P_1_pFDpCD_3v.Py(), 0);                                                            // transverse part of P_pFD
-            P_T_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(), 0);        // transverse part of P_tot
-            dP_T_L_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_T_L_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py() + P_T_L_pFDpCD_3v.Py(), 0);
-            dP_T_tot_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px() + P_1_pFDpCD_3v.Px() + P_2_pFDpCD_3v.Px(),
-                                          P_e_pFDpCD_3v.Py() + P_1_pFDpCD_3v.Py() + P_2_pFDpCD_3v.Py(), 0);
-
-            Theta_p_e_p_tot_pFDpCD = acos((P_e_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py()
-                                           + P_e_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
-                                          / (P_e_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 / pi;                                 // Theta_p_e_p_tot_pFDpCD in deg
-            hTheta_p_e_p_tot_pFDpCD->Fill(Theta_p_e_p_tot_pFDpCD, Weight);
-            hTheta_p_e_p_tot_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_p_e_p_tot_pFDpCD, Weight);
-
-            hTheta_pFD_pCD_All_Int_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
-
-            if (qel) {
-                hTheta_pFD_pCD_QEL_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
-            } else if (mec) {
-                hTheta_pFD_pCD_MEC_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
-            } else if (res) {
-                hTheta_pFD_pCD_RES_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
-            } else if (dis) {
-                hTheta_pFD_pCD_DIS_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
-            }
-
-            hTheta_pFD_pCD_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_pFD_pCD_pFDpCD, Weight);
-
-            if (Theta_pFD_pCD_pFDpCD < 20.) {
-                hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(Theta_p2_pFDpCD, Theta_p1_pFDpCD, Weight);
-                hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
-                hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
-            }
-
-            hTheta_pFD_vs_theta_pCD_forall_Theta_pFD_pCD_pFDpCD->Fill(Theta_p2_pFDpCD, Theta_p1_pFDpCD, Weight);
-            hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
-            hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
-
-            if ((fabs(Theta_p1_pFDpCD - Theta_p1_cuts_pFDpCD.GetMean()) < Theta_p1_cuts_pFDpCD.GetUpperCut()) &&
-                (fabs(Theta_p2_pFDpCD - Theta_p2_cuts_pFDpCD.GetMean()) < Theta_p2_cuts_pFDpCD.GetUpperCut())) {
-                hdPhi_pFD_pCD_for_small_dTheta_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
-                hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
-            }
+                if ((fabs(Theta_p1_pFDpCD - Theta_p1_cuts_pFDpCD.GetMean()) < Theta_p1_cuts_pFDpCD.GetUpperCut()) &&
+                    (fabs(Theta_p2_pFDpCD - Theta_p2_cuts_pFDpCD.GetMean()) < Theta_p2_cuts_pFDpCD.GetUpperCut())) {
+                    hdPhi_pFD_pCD_for_small_dTheta_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
+                    hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD->Fill(dPhi_hit_pFDpCD, Weight);
+                }
 
 
-            Theta_q_p_tot_pFDpCD = acos((q_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py()
-                                         + q_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
-                                        / (q_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 / pi;                                       // Theta_q_p_tot_pFDpCD in deg
-            hTheta_q_p_tot_pFDpCD->Fill(Theta_q_p_tot_pFDpCD, Weight);
+                Theta_q_p_tot_pFDpCD = acos((q_pFDpCD_3v.Px() * P_tot_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_tot_pFDpCD_3v.Py()
+                                             + q_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
+                                            / (q_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 /
+                                       pi;                                       // Theta_q_p_tot_pFDpCD in deg
+                hTheta_q_p_tot_pFDpCD->Fill(Theta_q_p_tot_pFDpCD, Weight);
 
-            Theta_q_p_L_pFDpCD = acos((q_pFDpCD_3v.Px() * P_1_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_1_pFDpCD_3v.Py()
-                                       + q_pFDpCD_3v.Pz() * P_1_pFDpCD_3v.Pz())
-                                      / (q_pFDpCD_3v.Mag() * P_1_pFDpCD_3v.Mag())) * 180.0 / pi;                        // Theta_q_p_L_pFDpCD = Theta_q_p_1_pFDpCD in deg
-            Theta_q_p_R_pFDpCD = acos((q_pFDpCD_3v.Px() * P_2_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_2_pFDpCD_3v.Py()
-                                       + q_pFDpCD_3v.Pz() * P_2_pFDpCD_3v.Pz())
-                                      / (q_pFDpCD_3v.Mag() * P_2_pFDpCD_3v.Mag())) * 180.0 / pi;                        // Theta_q_p_R_pFDpCD = Theta_q_p_2_pFDpCD in deg
-            hTheta_q_p_L_pFDpCD->Fill(Theta_q_p_L_pFDpCD, Weight);
-            hTheta_q_p_R_pFDpCD->Fill(Theta_q_p_R_pFDpCD, Weight);
-            hTheta_q_p_L_vs_p_L_q_pFDpCD->Fill(P_1_pFDpCD_3v.Mag() / q_pFDpCD_3v.Mag(), Theta_q_p_L_pFDpCD, Weight);
+                Theta_q_p_L_pFDpCD = acos((q_pFDpCD_3v.Px() * P_1_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_1_pFDpCD_3v.Py()
+                                           + q_pFDpCD_3v.Pz() * P_1_pFDpCD_3v.Pz())
+                                          / (q_pFDpCD_3v.Mag() * P_1_pFDpCD_3v.Mag())) * 180.0 /
+                                     pi;                        // Theta_q_p_L_pFDpCD = Theta_q_p_1_pFDpCD in deg
+                Theta_q_p_R_pFDpCD = acos((q_pFDpCD_3v.Px() * P_2_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_2_pFDpCD_3v.Py()
+                                           + q_pFDpCD_3v.Pz() * P_2_pFDpCD_3v.Pz())
+                                          / (q_pFDpCD_3v.Mag() * P_2_pFDpCD_3v.Mag())) * 180.0 /
+                                     pi;                        // Theta_q_p_R_pFDpCD = Theta_q_p_2_pFDpCD in deg
+                hTheta_q_p_L_pFDpCD->Fill(Theta_q_p_L_pFDpCD, Weight);
+                hTheta_q_p_R_pFDpCD->Fill(Theta_q_p_R_pFDpCD, Weight);
+                hTheta_q_p_L_vs_p_L_q_pFDpCD->Fill(P_1_pFDpCD_3v.Mag() / q_pFDpCD_3v.Mag(), Theta_q_p_L_pFDpCD, Weight);
 
-            E_1_pFDpCD = sqrt(m_p * m_p + P_1_pFDpCD_3v.Mag2());
-            E_2_pFDpCD = sqrt(m_p * m_p + P_2_pFDpCD_3v.Mag2());
-            Ecal_pFDpCD = E_e_pFDpCD + (E_1_pFDpCD - m_p) + (E_2_pFDpCD - m_p);
+                E_1_pFDpCD = sqrt(m_p * m_p + P_1_pFDpCD_3v.Mag2());
+                E_2_pFDpCD = sqrt(m_p * m_p + P_2_pFDpCD_3v.Mag2());
+                Ecal_pFDpCD = E_e_pFDpCD + (E_1_pFDpCD - m_p) + (E_2_pFDpCD - m_p);
 
-            //<editor-fold desc="Filling Ecal plots">
-            hEcal_All_Int_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for all interactions
+                //<editor-fold desc="Filling Ecal plots">
+                hEcal_All_Int_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for all interactions
 
-            if (qel) {
-                hEcal_QEL_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for QEL only
-            } else if (mec) {
-                hEcal_MEC_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for MEC only
-            } else if (res) {
-                hEcal_RES_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for RES only
-            } else if (dis) {
-                hEcal_DIS_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for DIS only
-            }
-            //</editor-fold>
+                if (qel) {
+                    hEcal_QEL_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for QEL only
+                } else if (mec) {
+                    hEcal_MEC_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for MEC only
+                } else if (res) {
+                    hEcal_RES_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for RES only
+                } else if (dis) {
+                    hEcal_DIS_pFDpCD->Fill(Ecal_pFDpCD, Weight); // Fill Ecal for DIS only
+                }
+                //</editor-fold>
 
-            hdP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Weight);
-            hdP_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
-            hdP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight);
-            hdP_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
+                hdP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Weight);
+                hdP_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
+                hdP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Weight);
+                hdP_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
 
-            dAlpha_T_L_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_L_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_L_pFDpCD_3v.Py()
-                                       + P_e_pFDpCD_3v.Pz() * dP_T_L_pFDpCD_3v.Pz())
-                                     / (P_T_e_pFDpCD_3v.Mag() * dP_T_L_pFDpCD_3v.Mag())) * 180.0 / pi;             // dP_T_L_pFDpCD_3v.Pz() = 0; dAlpha_T_L_pFDpCD in deg
-            dAlpha_T_tot_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_tot_pFDpCD_3v.Py()
-                                         + P_e_pFDpCD_3v.Pz() * dP_T_tot_pFDpCD_3v.Pz())
-                                       / (P_T_e_pFDpCD_3v.Mag() * dP_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi;     // dP_T_tot_pFDpCD_3v.Pz() = 0; dAlpha_T_tot_pFDpCD in deg
-            hdAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Weight);
-            hdAlpha_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_L_pFDpCD, Weight);
-            hdAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight);
-            hdAlpha_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_tot_pFDpCD, Weight);
+                dAlpha_T_L_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_L_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_L_pFDpCD_3v.Py()
+                                           + P_e_pFDpCD_3v.Pz() * dP_T_L_pFDpCD_3v.Pz())
+                                         / (P_T_e_pFDpCD_3v.Mag() * dP_T_L_pFDpCD_3v.Mag())) * 180.0 /
+                                    pi;             // dP_T_L_pFDpCD_3v.Pz() = 0; dAlpha_T_L_pFDpCD in deg
+                dAlpha_T_tot_pFDpCD = acos(-(P_e_pFDpCD_3v.Px() * dP_T_tot_pFDpCD_3v.Px() + P_e_pFDpCD_3v.Py() * dP_T_tot_pFDpCD_3v.Py()
+                                             + P_e_pFDpCD_3v.Pz() * dP_T_tot_pFDpCD_3v.Pz())
+                                           / (P_T_e_pFDpCD_3v.Mag() * dP_T_tot_pFDpCD_3v.Mag())) * 180.0 /
+                                      pi;     // dP_T_tot_pFDpCD_3v.Pz() = 0; dAlpha_T_tot_pFDpCD in deg
+                hdAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Weight);
+                hdAlpha_T_L_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_L_pFDpCD, Weight);
+                hdAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Weight);
+                hdAlpha_T_tot_vs_W_pFDpCD->Fill(W_pFDpCD, dAlpha_T_tot_pFDpCD, Weight);
 
-            hdP_T_L_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
-            hdP_T_tot_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
+                hdP_T_L_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, dP_T_L_pFDpCD_3v.Mag(), Weight);
+                hdP_T_tot_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, dP_T_tot_pFDpCD_3v.Mag(), Weight);
 
-            dPhi_T_L_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_L_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_L_pFDpCD_3v.Py()
-                                     + P_T_e_pFDpCD_3v.Pz() * P_T_L_pFDpCD_3v.Pz())
-                                   / (P_T_e_pFDpCD_3v.Mag() * P_T_L_pFDpCD_3v.Mag())) * 180.0 / pi;                   // P_T_L_pFDpCD_3v.Pz() = 0; dPhi_T_L_pFDpCD in deg
-            dPhi_T_tot_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_tot_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_tot_pFDpCD_3v.Py()
-                                       + P_T_e_pFDpCD_3v.Pz() * P_T_tot_pFDpCD_3v.Pz())
-                                     / (P_T_e_pFDpCD_3v.Mag() * P_T_tot_pFDpCD_3v.Mag())) * 180.0 / pi;           // P_T_tot_pFDpCD_3v.Pz() = 0; dPhi_T_tot_pFDpCD in deg
-            hdPhi_T_L_pFDpCD->Fill(dPhi_T_L_pFDpCD, Weight);
-            hdPhi_T_tot_pFDpCD->Fill(dPhi_T_tot_pFDpCD, Weight);
+                dPhi_T_L_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_L_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_L_pFDpCD_3v.Py()
+                                         + P_T_e_pFDpCD_3v.Pz() * P_T_L_pFDpCD_3v.Pz())
+                                       / (P_T_e_pFDpCD_3v.Mag() * P_T_L_pFDpCD_3v.Mag())) * 180.0 /
+                                  pi;                   // P_T_L_pFDpCD_3v.Pz() = 0; dPhi_T_L_pFDpCD in deg
+                dPhi_T_tot_pFDpCD = acos(-(P_T_e_pFDpCD_3v.Px() * P_T_tot_pFDpCD_3v.Px() + P_T_e_pFDpCD_3v.Py() * P_T_tot_pFDpCD_3v.Py()
+                                           + P_T_e_pFDpCD_3v.Pz() * P_T_tot_pFDpCD_3v.Pz())
+                                         / (P_T_e_pFDpCD_3v.Mag() * P_T_tot_pFDpCD_3v.Mag())) * 180.0 /
+                                    pi;           // P_T_tot_pFDpCD_3v.Pz() = 0; dPhi_T_tot_pFDpCD in deg
+                hdPhi_T_L_pFDpCD->Fill(dPhi_T_L_pFDpCD, Weight);
+                hdPhi_T_tot_pFDpCD->Fill(dPhi_T_tot_pFDpCD, Weight);
 
-            hEcal_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Ecal_pFDpCD, Weight);
-            hEcal_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight);
-            hEcal_vs_dP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
-            hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
-            hEcal_vs_W_pFDpCD->Fill(W_pFDpCD, Ecal_pFDpCD, Weight);
+                hEcal_vs_dAlpha_T_L_pFDpCD->Fill(dAlpha_T_L_pFDpCD, Ecal_pFDpCD, Weight);
+                hEcal_vs_dAlpha_T_tot_pFDpCD->Fill(dAlpha_T_tot_pFDpCD, Ecal_pFDpCD, Weight);
+                hEcal_vs_dP_T_L_pFDpCD->Fill(dP_T_L_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
+                hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
+                hEcal_vs_W_pFDpCD->Fill(W_pFDpCD, Ecal_pFDpCD, Weight);
 
 /*
             if ((p_first_pFDpCD->getRegion() == CD) && (p_second_pFDpCD->getRegion() == CD)) { // if both pFDpCD protons are in the CD (self-observation only!)
@@ -9411,7 +9555,7 @@ void EventAnalyser() {
                 hTheta_pFD_pCD_VS_ToFpFD_ToFpCD_AC_pFDpCD.hFill(Theta_pFD_pCD_pFDpCD, time_diff, Weight);
                 hTheta_pFD_pCD_VS_PospFD_PospCD_AC_pFDpCD.hFill(Theta_pFD_pCD_pFDpCD, pos_diff.Mag(), Weight);
             }
-*/
+*/}
             //</editor-fold>
 
         } // end of 1epFDpCD & pFDpCD cuts if
@@ -9582,8 +9726,138 @@ void EventAnalyser() {
 
             //  Fillings nFDpCD histograms ------------------------------------------------------------------------------------------------------------------------------
 
+            //<editor-fold desc="Truth-level nFDpCD enforcement configuration">
+            /* Configure rather to apply nFDpCD truth level ES on rec. plots or not. */
+            bool TL_Event_Selection_nFDpCD;
+
+            //<editor-fold desc="Setting TL ES conditions">
+            auto mcpbank_nFDpCD = c12->mcparts();
+            const Int_t Ngen_nFDpCD = mcpbank_nFDpCD->getRows();
+
+            //<editor-fold desc="Particle counting">
+            /* Particle index vectors */
+            vector<int> TL_Electron_ind_nFDpCD, TL_Neutrons_ind_nFDpCD, TL_Protons_ind_nFDpCD;
+            vector<int> TL_piplus_ind_nFDpCD, TL_piminus_ind_nFDpCD, TL_pizero_ind_nFDpCD, TL_Photons_ind_nFDpCD, TL_OtherPart_ind_nFDpCD;
+
+            /* Particle index vectors (for FD particles) */
+            vector<int> TL_NeutronsFD_ind_nFDpCD, TL_ProtonsFD_ind_nFDpCD, TL_pi0FD_ind_nFDpCD, TL_PhotonsFD_ind_nFDpCD;
+
+            /* Particle index vectors (for particles above momentum threshold) */
+            vector<int> TL_Electron_mom_ind_nFDpCD, TL_Neutrons_mom_ind_nFDpCD, TL_Protons_mom_ind_nFDpCD, TL_piplus_mom_ind_nFDpCD, TL_piminus_mom_ind_nFDpCD, TL_pizero_mom_ind_nFDpCD, TL_Photons_mom_ind_nFDpCD;
+
+            /* Particle index vectors (for FD particles above momentum threshold) */
+            vector<int> TL_NeutronsFD_mom_ind_nFDpCD, TL_ProtonsFD_mom_ind_nFDpCD, TL_ProtonsCD_mom_ind_nFDpCD, TL_pi0FD_mom_ind_nFDpCD, TL_PhotonsFD_mom_ind_nFDpCD;
+
+            for (Int_t i = 0; i < Ngen_nFDpCD; i++) {
+                mcpbank_nFDpCD->setEntry(i);
+
+                int particlePDGtmp = mcpbank_nFDpCD->getPid();
+
+                double Particle_TL_Momentum = rCalc(mcpbank_nFDpCD->getPx(), mcpbank_nFDpCD->getPy(), mcpbank_nFDpCD->getPz());
+                double Particle_TL_Theta =
+                        acos((mcpbank_nFDpCD->getPz()) / rCalc(mcpbank_nFDpCD->getPx(), mcpbank_nFDpCD->getPy(), mcpbank_nFDpCD->getPz())) * 180.0 / pi;
+                double Particle_TL_Phi = atan2(mcpbank_nFDpCD->getPy(), mcpbank_nFDpCD->getPx()) * 180.0 / pi;
+
+                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+
+                if (particlePDGtmp == 11) {
+                    if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) { TL_Electron_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_Electron_ind_nFDpCD.push_back(i);
+                } else if (particlePDGtmp == 2112) {
+                    if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_Neutrons_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_Neutrons_ind_nFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_NeutronsFD_mom_ind_nFDpCD.push_back(i); }
+
+                        TL_NeutronsFD_ind_nFDpCD.push_back(i);
+                    }
+                } else if (particlePDGtmp == 2212) {
+                    if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_Protons_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_Protons_ind_nFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind_nFDpCD.push_back(i); }
+
+                        TL_ProtonsFD_ind_nFDpCD.push_back(i);
+                    }
+                } else if (particlePDGtmp == 211) {
+                    if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) { TL_piplus_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_piplus_ind_nFDpCD.push_back(i);
+                } else if (particlePDGtmp == -211) {
+                    if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) { TL_piminus_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_piminus_ind_nFDpCD.push_back(i);
+                } else if (particlePDGtmp == 111) {
+                    if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pizero_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_pizero_ind_nFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) { TL_pi0FD_mom_ind_nFDpCD.push_back(i); }
+
+                        TL_pi0FD_ind_nFDpCD.push_back(i);
+                    }
+                } else if (particlePDGtmp == 22) {
+                    if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+                        (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_Photons_mom_ind_nFDpCD.push_back(i); }
+
+                    TL_Photons_ind_nFDpCD.push_back(i);
+
+                    if (inFD) {
+                        if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) { TL_PhotonsFD_mom_ind_nFDpCD.push_back(i); }
+
+                        TL_PhotonsFD_ind_nFDpCD.push_back(i);
+                    }
+                } else {
+                    TL_OtherPart_ind_nFDpCD.push_back(i);
+                }
+            }
+            //</editor-fold>
+
+            /* Setting up basic TL event selection */
+            bool no_TL_cPions_nFDpCD = (TL_piplus_mom_ind_nFDpCD.size() == 0 && TL_piminus_mom_ind_nFDpCD.size() == 0);         // No id. cPions above momentum threshold
+            bool no_TL_OtherPart_nFDpCD = (TL_OtherPart_ind_nFDpCD.size() == 0);                                               // No other part. above momentum threshold
+            bool no_TL_FDpi0_nFDpCD = (Enable_FD_photons || (TL_pi0FD_mom_ind_nFDpCD.size() == 0));                      // No id. pi0 in the FD above momentum threshold
+            bool no_TL_FDPhotons_nFDpCD = (Enable_FD_photons || (TL_PhotonsFD_mom_ind_nFDpCD.size() == 0));          // No id. photons in the FD above momentum threshold
+            bool TL_Event_Selection_1e_cut_nFDpCD = (TL_Electron_mom_ind_nFDpCD.size() == 1);                                // One id. electron above momentum threshold
+            bool TL_Basic_ES_nFDpCD = (TL_Event_Selection_1e_cut_nFDpCD && no_TL_cPions_nFDpCD && no_TL_OtherPart_nFDpCD && no_TL_FDpi0_nFDpCD && no_TL_FDPhotons_nFDpCD);
+
+            /* Setting up nFDpCD TL event selection */
+            bool one_FDNeutron_nFDpCD = (TL_NeutronsFD_mom_ind_nFDpCD.size() == 1);
+            bool one_proton_nFDpCD = (TL_Protons_mom_ind_nFDpCD.size() == 1);
+            bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind_nFDpCD.size() == 0);
+            bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind_nFDpCD.size() == 1);
+
+            // nFDpCD = One id. FD proton above momentum threshold & one id. CD proton:
+            bool TL_Event_Selection_nFDpCD_nFDpCD = (TL_Basic_ES_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
+            //</editor-fold>
+
+            bool apply_TL_nFDpCD_ES;
+
+            if (Rec_wTL_ES) { // Enforce TL event selection
+                apply_TL_nFDpCD_ES = TL_Event_Selection_nFDpCD_nFDpCD; // Events will be logged only is TL_Event_Selection_nFDpCD is true
+            } else if (!Rec_wTL_ES) { // Don't enforce TL event selection
+                apply_TL_nFDpCD_ES = true; // Events will be logged regardless of TL_Event_Selection_nFDpCD is true
+            }
+            //</editor-fold>
+
             //<editor-fold desc="Applying neutron veto and Fillings nFDpCD histograms">
-            if (NeutronPassVeto_nFDpCD) {
+            if (apply_TL_nFDpCD_ES && NeutronPassVeto_nFDpCD) {
                 ++num_of_events_nFDpCD_AV;
 
                 //<editor-fold desc="Filling cut parameters histograms (nFDpCD)">
