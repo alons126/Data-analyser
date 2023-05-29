@@ -140,7 +140,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     RecPlot_mom_1p->Sumw2();
     RecPlot_mom_1p->Rebin(2);
 
-    TH1D *TruthPlot_mom_1p = (TH1D *) f->Get("TL Proton momentum AC (1p, FD)");
+    TH1D *TruthPlot_mom_1p = (TH1D *) f->Get("FD TL Proton momentum AC (1p, FD)");
     TruthPlot_mom_1p->SetLineColor(kBlue);
     TruthPlot_mom_1p->SetStats(1);
     TruthPlot_mom_1p->Sumw2();
@@ -158,7 +158,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     RecPlot_mom_1n->Sumw2();
     RecPlot_mom_1n->Rebin(2);
 
-    TH1D *TruthPlot_mom_1n = (TH1D *) f->Get("TL Neutron momentum AC (1n, FD)");
+    TH1D *TruthPlot_mom_1n = (TH1D *) f->Get("FD TL Neutron momentum AC (1n, FD)");
     TruthPlot_mom_1n->SetLineColor(kBlue);
     TruthPlot_mom_1n->SetStats(1);
     TruthPlot_mom_1n->Sumw2();
@@ -234,7 +234,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     RecPlot_Theta_1p->Sumw2();
     RecPlot_Theta_1p->Rebin(2);
 
-    TH1D *TruthPlot_Theta_1p = (TH1D *) f->Get("TL #theta^{truth}_{p} AC (1p, FD)");
+    TH1D *TruthPlot_Theta_1p = (TH1D *) f->Get("FD TL #theta^{truth}_{p} AC (1p, FD)");
     TruthPlot_Theta_1p->SetLineColor(kBlue);
     TruthPlot_Theta_1p->SetStats(1);
     TruthPlot_Theta_1p->Sumw2();
@@ -252,7 +252,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     RecPlot_Theta_1n->Sumw2();
     RecPlot_Theta_1n->Rebin(2);
 
-    TH1D *TruthPlot_Theta_1n = (TH1D *) f->Get("TL #theta^{truth}_{n} AC (1n, FD)");
+    TH1D *TruthPlot_Theta_1n = (TH1D *) f->Get("FD TL #theta^{truth}_{n} AC (1n, FD)");
     TruthPlot_Theta_1n->SetLineColor(kBlue);
     TruthPlot_Theta_1n->SetStats(1);
     TruthPlot_Theta_1n->Sumw2();
@@ -328,7 +328,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     RecPlot_Phi_1p->Sumw2();
     RecPlot_Phi_1p->Rebin(2);
 
-    TH1D *TruthPlot_Phi_1p = (TH1D *) f->Get("TL #phi^{truth}_{p} AC (1p, FD)");
+    TH1D *TruthPlot_Phi_1p = (TH1D *) f->Get("FD TL #phi^{truth}_{p} AC (1p, FD)");
     TruthPlot_Phi_1p->SetLineColor(kBlue);
     TruthPlot_Phi_1p->SetStats(1);
     TruthPlot_Phi_1p->Sumw2();
@@ -347,7 +347,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     RecPlot_Phi_1n->Sumw2();
     RecPlot_Phi_1n->Rebin(2);
 
-    TH1D *TruthPlot_Phi_1n = (TH1D *) f->Get("TL #phi^{truth}_{n} AC (1n, FD)");
+    TH1D *TruthPlot_Phi_1n = (TH1D *) f->Get("FD TL #phi^{truth}_{n} AC (1n, FD)");
     TruthPlot_Phi_1n->SetLineColor(kBlue);
     TruthPlot_Phi_1n->SetStats(1);
     TruthPlot_Phi_1n->Sumw2();
