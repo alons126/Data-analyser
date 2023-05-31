@@ -17,61 +17,7 @@ struct cutpar {
     vector<double> par = {}; //pi- parameters
 };
 
-
-//#######
-/*
-Strategy
-Code:
-PID quality cuts
-Remove known issues of ghost tracks
-Debuging plots toggle output
-//e.g.
-electrons = c12->getById(11)
-
-clasAna.pidCuts(particles);
-
-clasAna.ecalCuts(electrons);
-clasAna.dcCuts(particles)
-clasAna.pidCuts(particles);
-clasAna.vertexCuts(particles)
-
-electrons = clasAna.getByPid(particles,11)
-protons   = clasAna.getByPid(particles,2212)
-pips      = clasAna.getByPid(particles,211)
-pims      = clasAna.getByPid(particles,-211)
-
-clasAna.vertexCuts(electrons[0],protons)
-clasAna.vertexCuts(electrons[0],pips)
-n
-clasAna.RemoveDuplicates(protons) //remove protons too close
-
-auto proton_l = clasAna.GetLeadSRC(c12)
-auto proton_r = clasAna.GetRecSRC(c12)
-
-//throws away elements of vector which do not satisfy cuts
-//keeps tracks of statistics to print out report of survive
-
-nn
-
-User:
-Reaction channel
-FD, CD separation
-TLorentzVector
-
- */
-//##########
-
-//#############
-//Analysis suite for CLAS12 analysis
-//#############
-
-/*
-std::vector<region_part_ptr> clas12reader::getByCharge(int ch){
-  return container_filter(_detParticles, [ch](region_part_ptr dr)
-              {return dr->par()->getCharge()==ch;});
-}
-*/
-
+//helper function for DC fiducials
 TVector3 rotate(TVector3 vec, int sector) {
     double rot_ang = -(sector - 1) * 60 * TMath::DegToRad();
 
@@ -80,6 +26,10 @@ TVector3 rotate(TVector3 vec, int sector) {
     return vec;
 }
 
+// #################################################################### //
+// Analysis suite for CLAS12 analysis                                   //
+// #################################################################### //
+
 class clas12ana : public clas12reader {
 
 public:
@@ -87,11 +37,15 @@ public:
 
     void Init();
 
-    void InitCuts();
+    void InitSFEcalCuts();
+
+    void InitSFPCuts();
 
     void readInputParam(const char *inFile);
 
-    void readEcalPar(const char *filename);
+    void readEcalPPar(const char *filename);
+
+    void readEcalSFPar(const char *filename);
 
     void printParams();
 
@@ -109,23 +63,16 @@ public:
 
     double getSF(region_part_ptr p);
 
-    void pidCuts(std::vector<region_part_ptr> &particles);
+    //   void pidCuts(std::vector<region_part_ptr> &particles);
+    //   void pidCuts(std::vector<std::vector<region_part_ptr>> &particles);
 
-    void pidCuts(std::vector<std::vector<region_part_ptr>> &particles);
+    void setEcalPCuts(bool flag = true) { f_ecalPCuts = flag; }; //option to have several cuts
 
     void setEcalSFCuts(bool flag = true) { f_ecalSFCuts = flag; }; //option to have several cuts
 
-    double getEcalSFUpperCut() { return sf_max_cut; }; // My addition
-
-    double getEcalSFLowerCut() { return sf_min_cut; }; // My addition
-
     void setDCEdgeCuts(bool flag = true) { f_DCEdgeCuts = flag; };
 
-    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
-
     void setEcalEdgeCuts(bool flag = true) { f_ecalEdgeCuts = flag; };
-
-    double getEcalEdgeCuts() { return ecal_edge_cut; }; // My addition
 
     void setPidCuts(bool flag = true) { f_pidCuts = flag; };
 
@@ -133,70 +80,64 @@ public:
 
     void setVertexCorrCuts(bool flag = true) { f_corr_vertexCuts = flag; };
 
-    void setNpheCuts(bool flag = true) { f_NpheCuts = flag; }; // My addition
-
-    double getNpheCuts() { return htcc_Nphe_cut; }; // My addition
-
-    void ecalCuts(std::vector<region_part_ptr> &particles);
-
-    void vertexCuts(std::vector<region_part_ptr> &particles);
-
-    void vertexCuts(region_part_ptr electron, std::vector<region_part_ptr> &particles);
-
     TVector3 getCOM(TLorentzVector l, TLorentzVector r, TLorentzVector q);
 
     std::vector<region_part_ptr> getByPid(int pid) {
-        if (pid == 11) { // My addition
+        if (pid == 11)
             return electrons;
-        } else if (pid == 2212) {
+        else if (pid == 2212)
             return protons;
-        } else if (pid == 45) {
+        else if (pid == 2112)
+            return neutrons;
+        else if (pid == 45)
             return deuterons;
-        } else if (pid == 211) {
+        else if (pid == 211)
             return piplus;
-        } else if (pid == -211) {
+        else if (pid == -211)
             return piminus;
-        } else if (pid == 321) {
+        else if (pid == 321)
             return kplus;
-        } else if (pid == -321) {
+        else if (pid == -321)
             return kminus;
-        } else if (pid == 0 || pid == 2112) {
+        else if (pid == 0)
             return neutrals;
-        } else {
+        else
             return otherpart;
-        }
     }
 
     void setByPid(region_part_ptr p) {
         int pid = p->par()->getPid();
-        if (pid == 11) { // My addition
+        if (pid == 11)
             electrons.push_back(p);
-        } else if (pid == 2212) {
+        else if (pid == 2212)
             protons.push_back(p);
-        } else if (pid == 45) {
+        else if (pid == 2112)
+            neutrons.push_back(p);
+        else if (pid == 45)
             deuterons.push_back(p);
-        } else if (pid == 211) {
+        else if (pid == 211)
             piplus.push_back(p);
-        } else if (pid == -211) {
+        else if (pid == -211)
             piminus.push_back(p);
-        } else if (pid == 321) {
+        else if (pid == 321)
             kplus.push_back(p);
-        } else if (pid == -321) {
+        else if (pid == -321)
             kminus.push_back(p);
-        } else if (pid == 0 || pid == 2112) {
+        else if (pid == 0)
             neutrals.push_back(p);
-        } else {
+        else
             otherpart.push_back(p);
-        }
     }
+
+    double getEventMult() { return event_mult; };
 
     void debugByPid(region_part_ptr p);
 
     bool EcalEdgeCuts(region_part_ptr p);
 
-    bool HTCCNpheCuts(region_part_ptr p); // My addition
+    bool checkEcalPCuts(region_part_ptr p);
 
-    bool checkEcalCuts(region_part_ptr p);
+    bool checkEcalSFCuts(region_part_ptr p);
 
     bool checkPidCut(region_part_ptr p);
 
@@ -206,12 +147,12 @@ public:
 
     bool DCEdgeCuts(region_part_ptr p);
 
-    void setVxcuts(double min, double max) { // My addition:
+    void setVxcuts(double min, double max) {
         vertex_x_cuts.at(0) = min;
         vertex_x_cuts.at(1) = max;
     };
 
-    void setVycuts(double min, double max) { // My addition:
+    void setVycuts(double min, double max) {
         vertex_y_cuts.at(0) = min;
         vertex_y_cuts.at(1) = max;
     };
@@ -230,21 +171,84 @@ public:
 
     void getLeadRecoilSRC(TLorentzVector beam, TLorentzVector target, TLorentzVector el);
 
-    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; } // My addition:
-//    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; };
+    std::vector<region_part_ptr> getLeadSRC() { return lead_proton; };
 
-    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; } // My addition:
-//    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; };
+    std::vector<region_part_ptr> getRecoilSRC() { return recoil_proton; };
 
     //  void getByChi2Pid(std::vector<region_part_ptr> &p,double mean, double sigma);
     std::vector<region_part_ptr> getByPid(std::vector<region_part_ptr> particles, int pid);
     //  std::vector<region_part_ptr> getByPidChi2(int pid, double chi2);
+
+    //<editor-fold desc="My addition (methods)">
+    double getEcalSFUpperCut() { return SF_max_cut; }; // My addition
+
+    double getEcalSFLowerCut() { return SF_min_cut; }; // My addition
+
+    double getDCEdgeCuts() { return dc_edge_cut; }; // My addition
+
+    double getEcalEdgeCuts() { return ecal_edge_cut; }; // My addition
+
+    void setNpheCuts(bool flag = true) { f_NpheCuts = flag; }; // My addition
+
+    double getNpheCuts() { return htcc_Nphe_cut; }; // My addition
+
+    double getNeutronMomentumCut() { return Neutron_Momentum_cut; }; // My addition
+
+    double getNeutralBetaCut() { return FD_Neutral_Beta_cut; }; // My addition
+
+    double getNeutralBetaCutMean() { return FD_Neutral_Beta_Mean; }; // My addition
+
+    double getdPhiCutMean() {
+        if (dPhi_p1_p2_Mean == 9999.) {
+            return 0;
+        } else {
+            return dPhi_p1_p2_Mean;
+        }
+    }; // My addition
+
+    std::vector<region_part_ptr> getParticles() { return allparticles; } // My addition
+
+    void addToAllParticles(region_part_ptr p) { allparticles.push_back(p); } // My addition
+
+    bool HTCCNpheCuts(region_part_ptr p); // My addition
+
+    double GetPidCutSigma(int Pid, string region) { // My addition?
+        if (region == "CD") {
+            auto itter_CD = pid_cuts_cd.find(Pid);
+
+            return itter_CD->second.at(1);
+        } else if (region == "FD") {
+            auto itter_FD = pid_cuts_fd.find(Pid);
+
+            return itter_FD->second.at(1);
+        } else {
+            //todo: figure out what to do in this case
+            return -9999;
+        }
+    }
+
+    double GetPidCutMean(int Pid, string region) { // My addition?
+        if (region == "CD") {
+            auto itter_CD = pid_cuts_cd.find(Pid);
+
+            return itter_CD->second.at(0);
+        } else if (region == "FD") {
+            auto itter_FD = pid_cuts_fd.find(Pid);
+
+            return itter_FD->second.at(0);
+        } else {
+            //todo: figure out what to do in this case
+            return -9999;
+        }
+    }
+    //</editor-fold>
+
 private:
-    // Justin's original:
     std::vector<region_part_ptr> electrons;
     std::vector<region_part_ptr> protons;
     std::vector<region_part_ptr> deuterons;
     std::vector<region_part_ptr> neutrals;
+    std::vector<region_part_ptr> neutrons;
     std::vector<region_part_ptr> piplus;
     std::vector<region_part_ptr> piminus;
     std::vector<region_part_ptr> kplus;
@@ -256,9 +260,11 @@ private:
     std::vector<region_part_ptr> recoil_proton;
 
     //prototype function for fitting ECAL electron cuts
-    TF1 *ecal_fcn[2][7]; //0 upper 1 lower fiducial
-    double ecal_fcn_par[7][6]; //sector, parameter
-    int sigma_cut = 4;
+    TF1 *ecal_p_fcn[2][7]; //0 upper 1 lower fiducial
+    TF1 *ecal_sf_fcn[2][7]; //0 upper 1 lower fiducial
+    double ecal_p_fcn_par[7][6]; //sector, parameter
+    double ecal_sf_fcn_par[7][6]; //sector, parameter
+    int sigma_cut = 3;
     //vector to hold constants of function for each particle type
     //  vector<cutpar> dc_cuts;
     //  vector<cutpar> ecal_cuts;
@@ -268,31 +274,26 @@ private:
     //vector<cutpar> vertex_cuts;
 
     bool f_ecalSFCuts = false;
+    bool f_ecalPCuts = false;
     bool f_ecalEdgeCuts = false;
     bool f_DCEdgeCuts = false;
     bool f_pidCuts = false;
     bool f_vertexCuts = false;
     bool f_corr_vertexCuts = false;
-    bool f_NpheCuts = false; // My addition
 
     //  map<int,vector<double> > test_cuts;
     //  map<int,int> test_cuts;
-    map<int, vector<double> > pid_cuts; // map<pid, {min,max cut}>
-    map<int, vector<double> > pid_cuts_CD; // map<pid, {min,max cut}> (my addition)
-    map<int, vector<double> > pid_cuts_FD; // map<pid, {min,max cut}> (my addition)
+    map<int, vector<double> > pid_cuts_cd; // map<pid, {min,max cut}> Central Detector (CD)
+    map<int, vector<double> > pid_cuts_fd; // map<pid, {min,max cut}> Forward Detector (FD)
+
     vector<double> vertex_x_cuts = {-99, 99};
     vector<double> vertex_y_cuts = {-99, 99};
     vector<double> vertex_z_cuts = {-99, 99};
     map<string, vector<double> > vertex_cuts; //map< x,y,z, {min,max}>
     vector<double> vertex_corr_cuts = {-99, 99}; //electron vertex <-> particle vertex correlation cuts
 
-    double htcc_Nphe_cut = 2; // My addition
-
-    double sf_max_cut = .28;
-    double sf_min_cut = .2;
-
     double ecal_edge_cut = 14;
-    double dc_edge_cut = 10;
+//    double dc_edge_cut = 5; // Justin's original
 
     //SRC Cuts
     double q2_cut = 1.5; //Q^2 cut
@@ -328,45 +329,47 @@ private:
     TH1D *ecal_sf[7]; //ECAL sampling fraction
     TH1D *dc[4][7];   //DC hit map
 
-    TH2D *sf_debug_b[7] = {nullptr};
-    TH2D *sf_debug_a[7] = {nullptr};
+    TH2D *sf_e_debug_b[7] = {nullptr};
+    TH2D *sf_e_debug_a[7] = {nullptr};
+    TH2D *sf_p_debug_b[7] = {nullptr};
+    TH2D *sf_p_debug_a[7] = {nullptr};
 
-    TH2D *pid_cd_debug = new TH2D("pid_cd_debug", "PID Uncut CD", 250, 0, 3, 250, 0, 1.2);
-    TH2D *pid_fd_debug = new TH2D("pid_fd_debug", "PID Uncut FD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_cd_debug = new TH2D("pid_cd_debug", "PID Uncut CD", 100, 0, 3, 100, 0, 1.2);
+    TH2D *pid_fd_debug = new TH2D("pid_fd_debug", "PID Uncut FD", 100, 0, 5, 100, 0, 1.2);
 
-    TH2D *sf_v_ecalIN_debug = new TH2D("sf_v_ecalIN_debug", "", 250, 0, 30, 250, 0, .4);
-    TH2D *sf_w_ecalIN_debug = new TH2D("sf_w_ecalIN_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_v_ecalIN_debug = new TH2D("sf_v_ecalIN_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_w_ecalIN_debug = new TH2D("sf_w_ecalIN_debug", "", 100, 0, 30, 100, 0, .4);
 
-    TH2D *sf_v_ecalOUT_debug = new TH2D("sf_v_ecalOUT_debug", "", 250, 0, 30, 250, 0, .4);
-    TH2D *sf_w_ecalOUT_debug = new TH2D("sf_w_ecalOUT_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_v_ecalOUT_debug = new TH2D("sf_v_ecalOUT_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_w_ecalOUT_debug = new TH2D("sf_w_ecalOUT_debug", "", 100, 0, 30, 100, 0, .4);
 
-    TH2D *sf_v_pcal_debug = new TH2D("sf_v_pcal_debug", "", 250, 0, 30, 250, 0, .4);
-    TH2D *sf_w_pcal_debug = new TH2D("sf_w_pcal_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_v_pcal_debug = new TH2D("sf_v_pcal_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_w_pcal_debug = new TH2D("sf_w_pcal_debug", "", 100, 0, 30, 100, 0, .4);
 
-    TH2D *sf_v_ecalIN_a_debug = new TH2D("sf_v_ecalIN_a_debug", "", 250, 0, 30, 250, 0, .4);
-    TH2D *sf_w_ecalIN_a_debug = new TH2D("sf_w_ecalIN_a_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_v_ecalIN_a_debug = new TH2D("sf_v_ecalIN_a_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_w_ecalIN_a_debug = new TH2D("sf_w_ecalIN_a_debug", "", 100, 0, 30, 100, 0, .4);
 
-    TH2D *sf_v_ecalOUT_a_debug = new TH2D("sf_v_ecalOUT_a_debug", "", 250, 0, 30, 250, 0, .4);
-    TH2D *sf_w_ecalOUT_a_debug = new TH2D("sf_w_ecalOUT_a_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_v_ecalOUT_a_debug = new TH2D("sf_v_ecalOUT_a_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_w_ecalOUT_a_debug = new TH2D("sf_w_ecalOUT_a_debug", "", 100, 0, 30, 100, 0, .4);
 
-    TH2D *sf_v_pcal_a_debug = new TH2D("sf_v_pcal_a_debug", "", 250, 0, 30, 250, 0, .4);
-    TH2D *sf_w_pcal_a_debug = new TH2D("sf_w_pcal_a_debug", "", 250, 0, 30, 250, 0, .4);
+    TH2D *sf_v_pcal_a_debug = new TH2D("sf_v_pcal_a_debug", "", 100, 0, 30, 100, 0, .4);
+    TH2D *sf_w_pcal_a_debug = new TH2D("sf_w_pcal_a_debug", "", 100, 0, 30, 100, 0, .4);
 
-    TH2D *pid_proton_fd_debug = new TH2D("pid_proton_fd_debug", "PID Cut Proton FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_proton_cd_debug = new TH2D("pid_proton_cd_debug", "PID Cut Proton CD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_piplus_fd_debug = new TH2D("pid_piplus_fd_debug", "PID Cut #pi + FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_piplus_cd_debug = new TH2D("pid_piplus_cd_debug", "PID Cut #pi + CD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_kplus_fd_debug = new TH2D("pid_kplus_fd_debug", "PID Cut K+ FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_kplus_cd_debug = new TH2D("pid_kplus_cd_debug", "PID Cut K+ CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_proton_fd_debug = new TH2D("pid_proton_fd_debug", "PID Cut Proton FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_proton_cd_debug = new TH2D("pid_proton_cd_debug", "PID Cut Proton CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_piplus_fd_debug = new TH2D("pid_piplus_fd_debug", "PID Cut #pi + FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_piplus_cd_debug = new TH2D("pid_piplus_cd_debug", "PID Cut #pi + CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_kplus_fd_debug = new TH2D("pid_kplus_fd_debug", "PID Cut K+ FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_kplus_cd_debug = new TH2D("pid_kplus_cd_debug", "PID Cut K+ CD", 100, 0, 5, 100, 0, 1.2);
 
-    TH2D *pid_piminus_fd_debug = new TH2D("pid_piminus_fd_debug", "PID Cut #pi + FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_piminus_cd_debug = new TH2D("pid_piminus_cd_debug", "PID Cut #pi + CD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_kminus_fd_debug = new TH2D("pid_kminus_fd_debug", "PID Cut K+ FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_kminus_cd_debug = new TH2D("pid_kminus_cd_debug", "PID Cut K+ CD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_neutrals_fd_debug = new TH2D("pid_neutrals_fd_debug", "PID Cut neutrals FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_neutrals_cd_debug = new TH2D("pid_neutrals_cd_debug", "PID Cut neutrals CD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_deuteron_fd_debug = new TH2D("pid_deuteron_fd_debug", "PID Cut deuteron FD", 250, 0, 5, 250, 0, 1.2);
-    TH2D *pid_deuteron_cd_debug = new TH2D("pid_deuteron_cd_debug", "PID Cut deutereon CD", 250, 0, 5, 250, 0, 1.2);
+    TH2D *pid_piminus_fd_debug = new TH2D("pid_piminus_fd_debug", "PID Cut #pi + FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_piminus_cd_debug = new TH2D("pid_piminus_cd_debug", "PID Cut #pi + CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_kminus_fd_debug = new TH2D("pid_kminus_fd_debug", "PID Cut K+ FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_kminus_cd_debug = new TH2D("pid_kminus_cd_debug", "PID Cut K+ CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_neutrals_fd_debug = new TH2D("pid_neutrals_fd_debug", "PID Cut neutrals FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_neutrals_cd_debug = new TH2D("pid_neutrals_cd_debug", "PID Cut neutrals CD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_deuteron_fd_debug = new TH2D("pid_deuteron_fd_debug", "PID Cut deuteron FD", 100, 0, 5, 100, 0, 1.2);
+    TH2D *pid_deuteron_cd_debug = new TH2D("pid_deuteron_cd_debug", "PID Cut deutereon CD", 100, 0, 5, 100, 0, 1.2);
 
     TH1D *el_vz_debug = new TH1D("el_vz_debug", "El vertex ", 100, -20, 10);
     TH1D *el_vz_p_debug = new TH1D("el_vz_p_debug", "El-proton vertex ", 100, -10, 10);
@@ -379,192 +382,110 @@ private:
 
     TH2D *dc_hit_map_a_pion[4]; //3 regions
     TH2D *dc_hit_map_b_pion[4]; //3 regions
+
+    //<editor-fold desc="My addition (attributes)">
+    std::vector<region_part_ptr> allparticles; // My addition
+
+    bool f_NpheCuts = false; // My addition
+
+    double htcc_Nphe_cut = 2; // My addition
+    double Neutron_Momentum_cut = 9999.; // My addition
+    double FD_Neutral_Beta_cut = 9999.; // My addition
+    double FD_Neutral_Beta_Mean = 1.; // My addition
+    double dPhi_p1_p2_Mean = 9999.; // My addition
+
+    // ME: in the old version, SF cuts where:
+    //todo: CHECK WITH JUSTIN WHAT TO DO WITH THEM!
+    double SF_max_cut = .28;
+    double SF_min_cut = .2;
+
+    double dc_edge_cut = 10; // My addition (from Larry)
+
+    //<editor-fold desc="my debugging - multiplicity plots before cuts (= BC) - no #e cuts">
+    /* my debugging - multiplicity plots before cuts (= BC) - no #e cuts */
+//    TH2D *multi_p_vs_cpi_fd_BC_debug = new TH2D("multi_p_vs_cpi_fd_BC_debug",
+//                                                "#font[12]{#p} vs. #font[12]{##pi^{#pm}} BC (no #e cuts, FD);#font[12]{#p};#font[12]{##pi^{#pm}}", 10, 0, 10, 10, 0, 10);
+//    TH2D *multi_p_vs_cpi_cd_BC_debug = new TH2D("multi_p_vs_cpi_cd_BC_debug",
+//                                                "#font[12]{#p} vs. #font[12]{##pi^{#pm}} BC (no #e cuts, CD);#font[12]{#p};#font[12]{##pi^{#pm}}", 10, 0, 10, 10, 0, 10);
+    TH2D *multi_p_vs_cpi_BC_debug = new TH2D("multi_p_vs_cpi_BC_debug",
+                                             "#font[12]{#p} vs. #font[12]{##pi^{#pm}} BC (no #e cuts, CD & FD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+                                             10, 0, 10, 10, 0, 10);
+//    TH1D *multi_p_fd_BC_debug = new TH1D("multi_p_fd_BC_debug", "#font[12]{#p} BC (no #e cuts, FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_p_cd_BC_debug = new TH1D("multi_p_cd_BC_debug", "#font[12]{#p} BC (no #e cuts, CD);#font[12]{#p}", 10, 0, 10);
+    TH1D *multi_p_BC_debug = new TH1D("multi_p_BC_debug", "#font[12]{#p} BC (no #e cuts, CD & FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_cpi_fd_BC_debug = new TH1D("multi_cpi_fd_BC_debug", "#font[12]{##pi^{#pm}} BC (no #e cuts, FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+//    TH1D *multi_cpi_cd_BC_debug = new TH1D("multi_cpi_cd_BC_debug", "#font[12]{##pi^{#pm}} BC (no #e cuts, CD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    TH1D *multi_cpi_BC_debug = new TH1D("multi_cpi_BC_debug", "#font[12]{##pi^{#pm}} BC (no #e cuts, CD & FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    //</editor-fold>
+
+    //<editor-fold desc="my debugging - multiplicity plots after cuts (= AC) - no #e cuts">
+    /* my debugging - multiplicity plots after cuts (= AC) - no #e cuts */
+//    TH2D *multi_p_vs_cpi_fd_AC_debug = new TH2D("multi_p_vs_cpi_fd_AC_debug",
+//                                                "#font[12]{#p} vs. #font[12]{##pi^{#pm}} AC (no #e cuts, FD);#font[12]{#p};#font[12]{##pi^{#pm}}", 10, 0, 10, 10, 0, 10);
+//    TH2D *multi_p_vs_cpi_cd_AC_debug = new TH2D("multi_p_vs_cpi_cd_AC_debug",
+//                                                "#font[12]{#p} vs. #font[12]{##pi^{#pm}} AC (no #e cuts, CD);#font[12]{#p};#font[12]{##pi^{#pm}}", 10, 0, 10, 10, 0, 10);
+    TH2D *multi_p_vs_cpi_AC_debug = new TH2D("multi_p_vs_cpi_AC_debug",
+                                             "#font[12]{#p} vs. #font[12]{##pi^{#pm}} AC (no #e cuts, CD & FD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+                                             10, 0, 10, 10, 0, 10);
+//    TH1D *multi_p_fd_AC_debug = new TH1D("multi_p_fd_AC_debug", "#font[12]{#p} AC (no #e cuts, FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_p_cd_AC_debug = new TH1D("multi_p_cd_AC_debug", "#font[12]{#p} AC (no #e cuts, CD);#font[12]{#p}", 10, 0, 10);
+    TH1D *multi_p_AC_debug = new TH1D("multi_p_AC_debug", "#font[12]{#p} AC (no #e cuts, CD & FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_cpi_fd_AC_debug = new TH1D("multi_cpi_fd_AC_debug", "#font[12]{##pi^{#pm}} AC (no #e cuts, FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+//    TH1D *multi_cpi_cd_AC_debug = new TH1D("multi_cpi_cd_AC_debug", "#font[12]{##pi^{#pm}} AC (no #e cuts, CD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    TH1D *multi_cpi_AC_debug = new TH1D("multi_cpi_AC_debug", "#font[12]{##pi^{#pm}} AC (no #e cuts, CD & FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    //</editor-fold>
+
+    //<editor-fold desc="my debugging - multiplicity plots before cuts (= BC) - 1e cut">
+    /* my debugging - multiplicity plots before cuts (= BC) - 1e cut */
+//    TH2D *multi_p_vs_cpi_1e_cut_fd_BC_debug = new TH2D("multi_p_vs_cpi_1e_cut_fd_BC_debug",
+//                                                       "#font[12]{#p} vs. #font[12]{##pi^{#pm}} BC (1e cut, FD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+//                                                       10, 0, 10, 10, 0, 10);
+//    TH2D *multi_p_vs_cpi_1e_cut_cd_BC_debug = new TH2D("multi_p_vs_cpi_1e_cut_cd_BC_debug",
+//                                                       "#font[12]{#p} vs. #font[12]{##pi^{#pm}} BC (1e cut, CD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+//                                                       10, 0, 10, 10, 0, 10);
+    TH2D *multi_p_vs_cpi_1e_cut_BC_debug = new TH2D("multi_p_vs_cpi_1e_cut_BC_debug",
+                                                    "#font[12]{#p} vs. #font[12]{##pi^{#pm}} BC (1e cut, CD & FD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+                                                    10, 0, 10, 10, 0, 10);
+//    TH1D *multi_p_1e_cut_fd_BC_debug = new TH1D("multi_p_1e_cut_fd_BC_debug", "#font[12]{#p} BC (1e cut, FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_p_1e_cut_cd_BC_debug = new TH1D("multi_p_1e_cut_cd_BC_debug", "#font[12]{#p} BC (1e cut, CD);#font[12]{#p}", 10, 0, 10);
+    TH1D *multi_p_1e_cut_BC_debug = new TH1D("multi_p_1e_cut_BC_debug", "#font[12]{#p} BC (1e cut, CD & FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_cpi_1e_cut_fd_BC_debug = new TH1D("multi_cpi_1e_cut_fd_BC_debug", "#font[12]{##pi^{#pm}} BC (1e cut, FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+//    TH1D *multi_cpi_1e_cut_cd_BC_debug = new TH1D("multi_cpi_1e_cut_cd_BC_debug", "#font[12]{##pi^{#pm}} BC (1e cut, CD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    TH1D *multi_cpi_1e_cut_BC_debug = new TH1D("multi_cpi_1e_cut_BC_debug", "#font[12]{##pi^{#pm}} BC (1e cut, CD & FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    //</editor-fold>
+
+    //<editor-fold desc="my debugging - multiplicity plots after cuts (= AC) - 1e cut">
+    /* my debugging - multiplicity plots after cuts (= AC) - 1e cut */
+//    TH2D *multi_p_vs_cpi_1e_cut_fd_AC_debug = new TH2D("multi_p_vs_cpi_1e_cut_fd_AC_debug",
+//                                                       "#font[12]{#p} vs. #font[12]{##pi^{#pm}} AC (1e cut, FD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+//                                                       10, 0, 10, 10, 0, 10);
+//    TH2D *multi_p_vs_cpi_1e_cut_cd_AC_debug = new TH2D("multi_p_vs_cpi_1e_cut_cd_AC_debug",
+//                                                       "#font[12]{#p} vs. #font[12]{##pi^{#pm}} AC (1e cut, CD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+//                                                       10, 0, 10, 10, 0, 10);
+    TH2D *multi_p_vs_cpi_1e_cut_AC_debug = new TH2D("multi_p_vs_cpi_1e_cut_AC_debug",
+                                                    "#font[12]{#p} vs. #font[12]{##pi^{#pm}} AC (1e cut, CD & FD);#font[12]{#p};#font[12]{##pi^{#pm}}",
+                                                    10, 0, 10, 10, 0, 10);
+//    TH1D *multi_p_1e_cut_fd_AC_debug = new TH1D("multi_p_1e_cut_fd_AC_debug", "#font[12]{#p} AC (1e cut, FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_p_1e_cut_cd_AC_debug = new TH1D("multi_p_1e_cut_cd_AC_debug", "#font[12]{#p} AC (1e cut, CD);#font[12]{#p}", 10, 0, 10);
+    TH1D *multi_p_1e_cut_AC_debug = new TH1D("multi_p_1e_cut_AC_debug", "#font[12]{#p} AC (1e cut, CD & FD);#font[12]{#p}", 10, 0, 10);
+//    TH1D *multi_cpi_1e_cut_fd_AC_debug = new TH1D("multi_cpi_1e_cut_fd_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+//    TH1D *multi_cpi_1e_cut_cd_AC_debug = new TH1D("multi_cpi_1e_cut_cd_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, CD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    TH1D *multi_cpi_1e_cut_AC_debug = new TH1D("multi_cpi_1e_cut_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, CD & FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    //</editor-fold>
+
+    //</editor-fold>
+
 };
 
-void clas12ana::getLeadRecoilSRC(TLorentzVector beam, TLorentzVector target, TLorentzVector el) {
-    TLorentzVector ptr;
-    TLorentzVector q = beam - el; //photon 4-vector
-    double q2 = -q.M2();
-    double xb = q2 / (2 * mass_proton * (beam.E() - el.E())); //x-borken
-
-    if (!(q2 > q2_cut && xb > xb_cut))
-        return;
-
-    int lead_idx = -1;
-    int lead_mult = 0;
-    int recoil_idx = -1;
-
-    for (int idx_ptr = 0; idx_ptr < protons.size(); idx_ptr++) {
-        ptr.SetXYZM(protons.at(idx_ptr)->par()->getPx(), protons.at(idx_ptr)->par()->getPy(), protons.at(idx_ptr)->par()->getPz(), mass_proton);
-        double theta_pq = ptr.Vect().Angle(q.Vect()) *
-                          TMath::RadToDeg(); //angle between vectors p_miss and q
-        double p_q = ptr.Vect().Mag() / q.Vect().Mag(); // |p|/|q|
-        if (theta_pq < theta_pq_cut && (p_q < pq_cut[1] && p_q > pq_cut[0])) {
-            lead_idx = idx_ptr;
-            lead_mult++; //check for double lead
-        }
-    }
-
-    ptr.SetXYZM(0, 0, 0, 0);
-
-    if (lead_idx == -1)
-        return;
-
-    ptr.SetXYZM(protons.at(lead_idx)->par()->getPx(), protons.at(lead_idx)->par()->getPy(), protons.at(lead_idx)->par()->getPz(), mass_proton);
-
-    TLorentzVector miss = beam + target - el - ptr; //missing 4-vector
-    double pmiss = miss.P();
-    double mmiss = miss.M2();
-
-    if (pmiss > pmiss_cut && mmiss > mmiss_cut[0] && mmiss < mmiss_cut[1])
-        lead_proton.push_back(protons.at(lead_idx));
-
-    for (int idx_ptr = 0; idx_ptr < protons.size(); idx_ptr++) {
-        if (idx_ptr == lead_idx)
-            continue;
-
-        if (protons[idx_ptr]->par()->getP() > recoil_mom_cut)
-            recoil_proton.push_back(protons.at(idx_ptr));
-    }
-
-    return;
-}
-
-void clas12ana::debugByPid(region_part_ptr p) {
-    int pid = p->par()->getPid();
-    double par_mom = p->par()->getP();
-    double par_beta = p->par()->getBeta();
-
-    bool is_cd = (p->getRegion() == CD);
-    bool is_fd = (p->getRegion() == FD);
-
-    if (is_fd) {
-        if (pid == 2212)
-            pid_proton_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == 45)
-            pid_deuteron_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == 211)
-            pid_piplus_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == -211)
-            pid_piminus_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == 321)
-            pid_kplus_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == -321)
-            pid_kminus_fd_debug->Fill(par_mom, par_beta);
-        else if (pid == 0 || pid == 2112) // Justin's original
-            pid_neutrals_fd_debug->Fill(par_mom, par_beta);
-    } else if (is_cd) {
-        if (pid == 2212)
-            pid_proton_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == 45)
-            pid_deuteron_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == 211)
-            pid_piplus_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == -211)
-            pid_piminus_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == 321)
-            pid_kplus_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == -321)
-            pid_kminus_cd_debug->Fill(par_mom, par_beta);
-        else if (pid == 0 || pid == 2112) // Justin's original
-            pid_neutrals_cd_debug->Fill(par_mom, par_beta);
-    }
-}
-
-void clas12ana::InitDebugPlots() {
-    for (int i = 1; i <= 6; i++) {
-        sf_debug_b[i] = new TH2D(Form("sf_debug_b_sector_%d", i), Form("Sampling Fraction Before Cuts Sector_%d", i), 100, 0, 6, 100, 0, .4);
-        sf_debug_a[i] = new TH2D(Form("sf_debug_a_sector_%d", i), Form("Sampling Fraction  After Cuts Sector_%d", i), 100, 0, 6, 100, 0, .4);
-    }
-
-    //DC hit maps
-    for (int i = 1; i <= 3; i++) {
-        dc_hit_map_b[i] = new TH2D(Form("dc_hitmap_before_%d", i), Form("Region %d Before Cuts", i), 600, -300, 300, 600, -300, 300);
-        dc_hit_map_a[i] = new TH2D(Form("dc_hitmap_after_%d", i), Form("Region %d After Cuts", i), 600, -300, 300, 600, -300, 300);
-        dc_hit_map_a_proton[i] = new TH2D(Form("dc_hitmap_after_proton_%d", i), Form("Region %d After Cuts", i), 600, -300, 300, 600, -300, 300);
-        dc_hit_map_b_proton[i] = new TH2D(Form("dc_hitmap_before_proton_%d", i), Form("Region %d Before Cuts", i), 600, -300, 300, 600, -300, 300);
-        dc_hit_map_a_pion[i] = new TH2D(Form("dc_hitmap_after_pion_%d", i), Form("Region %d After Cuts", i), 600, -300, 300, 600, -300, 300);
-        dc_hit_map_b_pion[i] = new TH2D(Form("dc_hitmap_before_pion_%d", i), Form("Region %d Before Cuts", i), 600, -300, 300, 600, -300, 300);
-    }
-}
-
-void clas12ana::WriteDebugPlots() {
-    TFile *f_debugOut = new TFile(debug_fileName, "RECREATE");
-
-    for (int i = 1; i <= 6; i++) {
-        sf_debug_b[i]->Write();
-        sf_debug_a[i]->Write();
-
-    }
-
-    for (int i = 1; i <= 6; i++) {
-        ecal_fcn[0][i]->Write();
-        ecal_fcn[1][i]->Write();
-    }
-
-    for (int i = 1; i <= 3; i++)
-        dc_hit_map_b[i]->Write();
-
-    for (int i = 1; i <= 3; i++)
-        dc_hit_map_a[i]->Write();
-
-    for (int i = 1; i <= 3; i++)
-        dc_hit_map_b_proton[i]->Write();
-
-    for (int i = 1; i <= 3; i++)
-        dc_hit_map_a_proton[i]->Write();
-
-    for (int i = 1; i <= 3; i++)
-        dc_hit_map_b_pion[i]->Write();
-
-    for (int i = 1; i <= 3; i++)
-        dc_hit_map_a_pion[i]->Write();
-
-    sf_v_ecalIN_debug->Write();
-    sf_w_ecalIN_debug->Write();
-    sf_v_ecalOUT_debug->Write();
-    sf_w_ecalOUT_debug->Write();
-    sf_v_pcal_debug->Write();
-    sf_w_pcal_debug->Write();
-
-    sf_v_ecalIN_a_debug->Write();
-    sf_w_ecalIN_a_debug->Write();
-    sf_v_ecalOUT_a_debug->Write();
-    sf_w_ecalOUT_a_debug->Write();
-    sf_v_pcal_a_debug->Write();
-    sf_w_pcal_a_debug->Write();
-
-    pid_proton_fd_debug->Write();
-    pid_deuteron_fd_debug->Write();
-    pid_piplus_fd_debug->Write();
-    pid_piminus_fd_debug->Write();
-    pid_kplus_fd_debug->Write();
-    pid_kminus_fd_debug->Write();
-    pid_neutrals_fd_debug->Write(); // Justin's original
-
-    pid_proton_cd_debug->Write();
-    pid_deuteron_cd_debug->Write();
-    pid_piplus_cd_debug->Write();
-    pid_piminus_cd_debug->Write();
-    pid_kplus_cd_debug->Write();
-    pid_kminus_cd_debug->Write();
-    pid_neutrals_cd_debug->Write(); // Justin's original
-
-    pid_cd_debug->Write();
-    pid_fd_debug->Write();
-
-    el_vz_debug->Write();
-    el_vz_p_debug->Write();
-
-    f_debugOut->Close();
-}
 
 void clas12ana::Clear() {
-    //  particles.clear();
+    allparticles.clear(); // My addition
+    //  particles.clear(); // Justin's original
     electrons.clear();
     protons.clear();
     deuterons.clear();
-    neutrals.clear(); // Justin's original
+    neutrals.clear();
+    neutrons.clear();
     piplus.clear();
     piminus.clear();
     kplus.clear();
@@ -583,6 +504,28 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
     auto particles = c12->getDetParticles(); //particles is now a std::vector of particles for this event
     auto electrons_det = c12->getByID(11);
 
+    //<editor-fold desc="My addition">
+    auto protons_det = c12->getByID(2212);
+    auto piplus_det = c12->getByID(211);
+    auto piminus_det = c12->getByID(-211);
+
+    //<editor-fold desc="Filling multiplicity plots before cuts (BC) - no #e cuts">
+    multi_p_BC_debug->Fill(protons_det.size());
+    multi_cpi_BC_debug->Fill(piplus_det.size() + piminus_det.size());
+    multi_p_vs_cpi_BC_debug->Fill(protons_det.size(), piplus_det.size() + piminus_det.size());
+    //</editor-fold>
+
+    //<editor-fold desc="Filling multiplicity plots before cuts (BC) - 1e cut">
+    if (electrons_det.size() == 1) {
+        multi_p_1e_cut_BC_debug->Fill(protons_det.size());
+        multi_cpi_1e_cut_BC_debug->Fill(piplus_det.size() + piminus_det.size());
+        multi_p_vs_cpi_1e_cut_BC_debug->Fill(protons_det.size(), piplus_det.size() + piminus_det.size());
+    }
+    //</editor-fold>
+
+    int nf_initial = particles.size();
+
+    //<editor-fold desc="Debugging print">
 //    auto protons_det = c12->getByID(2212);
 //    auto deuterons_det = c12->getByID(45);
 //    auto piplus_det = c12->getByID(211);
@@ -591,6 +534,9 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 //    auto kminus_det = c12->getByID(-321);
 //    auto z_det = c12->getByID(0);
 //    auto n_det = c12->getByID(2112);
+    //</editor-fold>
+
+    //</editor-fold>
 
     /* ME: for any number of electrons */
     for (auto el = electrons_det.begin(); el != electrons_det.end();) {
@@ -598,6 +544,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
         int sector = (*el)->getSector();
         double el_mom = (*el)->getP();
         double el_sf = getSF(*el);
+        double el_pcal_energy = (*el)->cal(PCAL)->getEnergy();
 
         double ecin_v = (*el)->cal(ECIN)->getLv();
         double ecin_w = (*el)->cal(ECIN)->getLw();
@@ -615,34 +562,38 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
             sf_v_pcal_debug->Fill(pcal_v, el_sf);
             sf_w_pcal_debug->Fill(pcal_w, el_sf);
 
-            if (sector <= 6 && sector >= 1) { sf_debug_b[sector]->Fill(el_mom, el_sf); }
+            if (sector <= 6 && sector >= 1) {
+                sf_e_debug_b[sector]->Fill(el_pcal_energy, el_sf);
+                sf_p_debug_b[sector]->Fill(el_mom, el_sf);
+            }
 
             fillDCdebug(*el, dc_hit_map_b);
         }
 
-        if (!checkEcalCuts(*el) && f_ecalSFCuts) //ECAL SF cuts
-        {
-//            cout << "ECAL SF cuts (electrons)\n"; // My debugging
+/*
+        //HTCC photo electron cuts (Justin's original)
+        if ((*el)->che(HTCC)->getNphe() <= 2)
             el = electrons_det.erase(el);
-        } else if (!EcalEdgeCuts(*el) && f_ecalEdgeCuts) //ECAL edge cuts
-        {
-//            cout << "ECAL edge cuts (electrons)\n"; // My debugging
+*/
+
+        if (!checkEcalSFCuts(*el) && f_ecalSFCuts) { // ECAL SF cuts
             el = electrons_det.erase(el);
-        } else if (!HTCCNpheCuts(*el) && f_NpheCuts) //HTCC Nphe cuts (my addition)
-        {
-//            cout << "HTCC Nphe cuts (electrons)\n"; // My addition
+        } else if (!checkEcalPCuts(*el) && f_ecalPCuts) { // ECAL SF cuts
             el = electrons_det.erase(el);
-        } else if (!checkVertex(*el) && f_vertexCuts) //Vertex cut
-        {
-//            cout << "Vertex cut (electrons)\n"; // My debugging
+        } else if (!EcalEdgeCuts(*el) && f_ecalEdgeCuts) { // ECAL edge cuts
             el = electrons_det.erase(el);
-        } else if (!DCEdgeCuts(*el) && f_DCEdgeCuts) //DC edge cut
-        {
-//            cout << "DC edge cut (electrons)\n"; // My debugging
+        } else if (!HTCCNpheCuts(*el) && f_NpheCuts) { // HTCC Nphe cuts (my addition)
+            el = electrons_det.erase(el);
+        } else if (!checkVertex(*el) && f_vertexCuts) { // Vertex cut
+            el = electrons_det.erase(el);
+        } else if (!DCEdgeCuts(*el) && f_DCEdgeCuts) { // DC edge cut
             el = electrons_det.erase(el);
         } else {
             //DEBUG plots
-            if (debug_plots && sector <= 6 && sector >= 1) { sf_debug_a[sector]->Fill(el_mom, el_sf); }
+            if (debug_plots && sector <= 6 && sector >= 1) {
+                sf_e_debug_a[sector]->Fill((*el)->cal(PCAL)->getEnergy(), el_sf);
+                sf_p_debug_a[sector]->Fill(el_mom, el_sf);
+            }
 
             el_vz_debug->Fill((*el)->par()->getVz());
 
@@ -655,13 +606,9 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 
             ++el; //itterate
         }
-    }
+    } // end of loop over electrons_det vector
 
-    //<editor-fold desc="My cut fix">
-        if (electrons_det.size() == 1) //good trigger electron
-        {
-
-            if (debug_plots) { fillDCdebug(electrons_det[0], dc_hit_map_a); }
+    if (electrons_det.size() == 1) { //good trigger electron
 
 //        //<editor-fold desc="Debugging print - START">
 //        int op = particles.size() - electrons_det.size() - protons_det.size() - deuterons_det.size() - piplus_det.size() - piminus_det.size() - kplus_det.size() -
@@ -679,80 +626,78 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 //        cout << "otherpart.size() = " << op << "\n\n";
 //        //</editor-fold>
 
-            bool withinCut = true;
+        //       setByPid(electrons_det[0]); //set good trigger electron
 
-            for (auto p = particles.begin(); p != particles.end();) {
+        if (debug_plots)
+            fillDCdebug(electrons_det[0], dc_hit_map_a); //electron DC hit debug maps
+
+        //DON'T FORGET TO ADD ++p ITTERATOR in this loop, it's not added in the for statement for a reason
+        for (auto p = particles.begin(); p != particles.end();) {
+
+            if (debug_plots) {
+                if ((*p)->par()->getPid() == 2212)
+                    fillDCdebug(*p, dc_hit_map_b_proton);
+                if ((*p)->par()->getPid() == 211)
+                    fillDCdebug(*p, dc_hit_map_b_pion);
+            }
+
+            //neutrals and electrons don't follow cuts below, skip them
+            if ((*p)->par()->getCharge() == 0 || (*p)->par()->getPid() == 11) {
+                setByPid(*p);
+                addToAllParticles(*p); // add neutrals and electrons to allparticles (My addition)
+                ++p; //itterate
+                continue;
+                // ME: the continue (line above) will skip the rest of the cuts. Apparently, it was added here to allow the log of event_mult (recheck!)
+            } else {
+                if ((*p)->par()->getPid() != 11)
+                    event_mult++;
+            }
+
+            double par_mom = (*p)->par()->getP();
+            double par_beta = (*p)->par()->getBeta();
+
+            bool is_cd = ((*p)->getRegion() == CD);
+            bool is_fd = ((*p)->getRegion() == FD);
+
+            //DEBUG plots
+            if (debug_plots && ((*p)->par()->getCharge() >= 1) && ((*p)->par()->getPid() != 11)) {
+                if (is_cd)
+                    pid_cd_debug->Fill(par_mom, par_beta);
+                if (is_fd)
+                    pid_fd_debug->Fill(par_mom, par_beta);
+            }
+
+            //	   bool pid_cut    = checkPidCut(*p);
+            //	   bool vertex_cut = checkVertex(*p);
+            //	   bool vertex_corr_cut = checkVertexCorrelation(electrons_det[0],*p); //correlation between good electron and particles vertex
+            //	   bool dc_edge_cut     = DCEdgeCuts(*p);
+
+            if (!checkPidCut(*p) && f_pidCuts) { // PID cuts
+                p = particles.erase(p);
+            } else if (!checkVertex(*p) && f_vertexCuts) { // Vertex cut
+                p = particles.erase(p);
+            } else if (!DCEdgeCuts(*p) && f_DCEdgeCuts) { // DC edge cut
+                p = particles.erase(p);
+            } else if (!checkVertexCorrelation(electrons_det[0], *p) && f_corr_vertexCuts) { //Vertex correlation cut between electron
+                p = particles.erase(p);
+            } else { //itterate
+                setByPid(*p);
+                addToAllParticles(*p); // add all particles surviving the cuts in event to allparticles (My addition)
 
                 if (debug_plots) {
-                    if ((*p)->par()->getPid() == 2212) { fillDCdebug(*p, dc_hit_map_b_proton); }
-                    if ((*p)->par()->getPid() == 211) { fillDCdebug(*p, dc_hit_map_b_pion); }
+                    if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11)
+                        el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
+
+                    debugByPid(*p);
+                    if ((*p)->par()->getPid() == 2212)
+                        fillDCdebug(*p, dc_hit_map_a_proton);
+                    if ((*p)->par()->getPid() == 211)
+                        fillDCdebug(*p, dc_hit_map_a_pion);
                 }
 
-                if ((*p)->par()->getCharge() == 0) { //neutrals don't follow same cuts
-                    setByPid(*p); // My fix
-                    ++p; // My fix
-                } else {
-                    double par_mom = (*p)->par()->getP();
-                    double par_beta = (*p)->par()->getBeta();
-
-                    bool is_cd = ((*p)->getRegion() == CD);
-                    bool is_fd = ((*p)->getRegion() == FD);
-
-                    //DEBUG plots
-                    if (debug_plots && ((*p)->par()->getCharge() != 0) && ((*p)->par()->getPid() != 11)) {
-                        if (is_cd) { pid_cd_debug->Fill(par_mom, par_beta); }
-                        if (is_fd) { pid_fd_debug->Fill(par_mom, par_beta); }
-                    }
-
-                    if (!checkPidCut(*p) && f_pidCuts) //PID cuts
-                    {
-    //                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                        withinCut = false;
-                        break; //stop looping over event's particles is one of them is not within cuts
-                    } else if (!checkVertex(*p) && f_vertexCuts) //Vertex cut
-                    {
-    //                    cout << "Vertex cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                        withinCut = false;
-                        break; //stop looping over event's particles is one of them is not within cuts
-                    } else if (!DCEdgeCuts(*p) && f_DCEdgeCuts) //DC edge cut
-                    {
-    //                    cout << "DC edge cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                        withinCut = false;
-                        break; //stop looping over event's particles is one of them is not within cuts
-                    } else if (!checkVertexCorrelation(electrons_det[0], *p) && f_corr_vertexCuts) //Vertex correlation cut between electron
-                    {
-    //                    cout << "Vertex correlation cut between electron (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-                        withinCut = false;
-                        break; //stop looping over event's particles is one of them is not within cuts
-                    }
-
-                    ++p;
-                }
-            }// particle loop
-
-            if (withinCut == true) {
-                for (auto p = particles.begin(); p != particles.end();) {
-                    if ((*p)->par()->getCharge() == 0) { //neutrals don't follow same cuts
-                        setByPid(*p);
-                        ++p;
-                    } else {
-                        setByPid(*p);
-
-                        if (debug_plots) {
-                            if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11) {
-                                el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
-                            }
-
-                            debugByPid(*p);
-
-                            if ((*p)->par()->getPid() == 2212) { fillDCdebug(*p, dc_hit_map_a_proton); }
-                            if ((*p)->par()->getPid() == 211) { fillDCdebug(*p, dc_hit_map_a_pion); }
-                        }
-
-                        ++p;
-                    }
-                }// particle loop
+                ++p;
             }
+        }//particle loop
 
 //        //<editor-fold desc="Debugging print - END">
 //        cout << "#particles in event (END):\t" << electrons.size() + protons.size() + deuterons.size() + piplus.size() + piminus.size() + kplus.size() + kminus.size() +
@@ -768,113 +713,13 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 //        cout << "otherpart.size() = " << otherpart.size() << "\n\n\n\n";
 //        //</editor-fold>
 
-        }// good electron loop
-    //</editor-fold>
+        //<editor-fold desc="Filling multiplicity plots after cuts (AC) - 1e cut">
+        multi_p_1e_cut_AC_debug->Fill(protons.size());
+        multi_cpi_1e_cut_AC_debug->Fill(piplus.size() + piminus.size());
+        multi_p_vs_cpi_1e_cut_AC_debug->Fill(protons.size(), piplus.size() + piminus.size());
+        //</editor-fold>
 
-//    //<editor-fold desc="Justin's original cuts">
-//    if (electrons_det.size() == 1) //good trigger electron
-//    {
-//
-////        //<editor-fold desc="Debugging print - START">
-////        int op = particles.size() - electrons_det.size() - protons_det.size() - deuterons_det.size() - piplus_det.size() - piminus_det.size() - kplus_det.size() -
-////                 kminus_det.size() - (z_det.size() + n_det.size());
-////
-////        cout << "#particles in event (START):\t" << particles.size() << "\n";
-////        cout << "electrons.size() = " << electrons_det.size() << "\n";
-////        cout << "protons_det.size() = " << protons_det.size() << "\n";
-////        cout << "deuterons_det.size() = " << deuterons_det.size() << "\n";
-////        cout << "piplus_det.size() = " << piplus_det.size() << "\n";
-////        cout << "piminus_det.size() = " << piminus_det.size() << "\n";
-////        cout << "kplus_det.size() = " << kplus_det.size() << "\n";
-////        cout << "kminus_det.size() = " << kminus_det.size() << "\n";
-////        cout << "neutrals_det.size() = " << z_det.size() + n_det.size() << "\n";
-////        cout << "otherpart.size() = " << op << "\n\n";
-////        //</editor-fold>
-//
-//        if (debug_plots) { fillDCdebug(electrons_det[0], dc_hit_map_a); }
-//
-//        for (auto p = particles.begin(); p != particles.end();) {
-//
-//            if (debug_plots) {
-//                if ((*p)->par()->getPid() == 2212) { fillDCdebug(*p, dc_hit_map_b_proton); }
-//                if ((*p)->par()->getPid() == 211) { fillDCdebug(*p, dc_hit_map_b_pion); }
-//            }
-//
-//            if ((*p)->par()->getCharge() == 0) { //neutrals don't follow same cuts
-//                setByPid(*p); // My fix
-//                ++p; // My fix
-//            } else {
-//                double par_mom = (*p)->par()->getP();
-//                double par_beta = (*p)->par()->getBeta();
-//
-//                bool is_cd = ((*p)->getRegion() == CD);
-//                bool is_fd = ((*p)->getRegion() == FD);
-//
-//                //DEBUG plots
-//                if (debug_plots && ((*p)->par()->getCharge() != 0) && ((*p)->par()->getPid() != 11)) {
-//                    if (is_cd) { pid_cd_debug->Fill(par_mom, par_beta); }
-//                    if (is_fd) { pid_fd_debug->Fill(par_mom, par_beta); }
-//                }
-//
-//                //	   bool pid_cut    = checkPidCut(*p);
-//                //	   bool vertex_cut = checkVertex(*p);
-//                //	   bool vertex_corr_cut = checkVertexCorrelation(electrons_det[0],*p); //correlation between good electron and particles vertex
-//                //	   bool dc_edge_cut     = DCEdgeCuts(*p);
-//
-//                if (!checkPidCut(*p) && f_pidCuts) //PID cuts
-//                {
-////                    cout << "PID cuts (protons & cPions only); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-//                    p = particles.erase(p);
-//                } else if (!checkVertex(*p) && f_vertexCuts) //Vertex cut
-//                {
-////                    cout << "Vertex cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-//                    p = particles.erase(p);
-//                } else if (!DCEdgeCuts(*p) && f_DCEdgeCuts) //DC edge cut
-//                {
-////                    cout << "DC edge cut (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-//                    p = particles.erase(p);
-//                } else if (!checkVertexCorrelation(electrons_det[0], *p) && f_corr_vertexCuts) //Vertex correlation cut between electron
-//                {
-////                    cout << "Vertex correlation cut between electron (all p); PID: " << (*p)->par()->getPid() << "\n"; // My debugging
-//                    p = particles.erase(p);
-//                } else //itterate
-//                {
-//                    setByPid(*p); // Justin's original
-//
-//                    if (debug_plots) {
-//                        if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11) {
-//                            el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
-//                        }
-//
-//                        debugByPid(*p);
-//
-//                        if ((*p)->par()->getPid() == 2212) { fillDCdebug(*p, dc_hit_map_a_proton); }
-//                        if ((*p)->par()->getPid() == 211) { fillDCdebug(*p, dc_hit_map_a_pion); }
-//                    }
-//
-//                    ++p;
-//                }
-//            }
-//        }// particle loop
-//
-////        //<editor-fold desc="Debugging print - END">
-////        cout << "#particles in event (END):\t" << electrons.size() + protons.size() + deuterons.size() + piplus.size() + piminus.size() + kplus.size() + kminus.size() +
-////                                                  neutrals.size() + otherpart.size() << "\n";
-////        cout << "electrons.size() = " << electrons.size() << "\n";
-////        cout << "protons_det.size() = " << protons.size() << "\n";
-////        cout << "deuterons_det.size() = " << deuterons.size() << "\n";
-////        cout << "piplus_det.size() = " << piplus.size() << "\n";
-////        cout << "piminus_det.size() = " << piminus.size() << "\n";
-////        cout << "kplus_det.size() = " << kplus.size() << "\n";
-////        cout << "kminus_det.size() = " << kminus.size() << "\n";
-////        cout << "neutrals_det.size() = " << neutrals.size() << "\n";
-////        cout << "otherpart.size() = " << otherpart.size() << "\n\n\n\n";
-////        //</editor-fold>
-//
-//    }// good electron loop
-//    //</editor-fold>
-
-    event_mult = (piplus.size() + piminus.size() + kplus.size() + kminus.size() + deuterons.size());
+    }//good electron loop
 }
 
 void clas12ana::fillDCdebug(region_part_ptr p, TH2D **h) {
@@ -892,39 +737,61 @@ void clas12ana::plotDebug() {
 
     for (int i = 1; i <= 6; i++) {
         c1->cd(i);
-        sf_debug_b[i]->Draw("colz");
+        sf_p_debug_b[i]->Draw("colz");
     }
+
     for (int i = 7; i <= 12; i++) {
         c1->cd(i);
-        sf_debug_a[i]->Draw("colz");
+        sf_p_debug_a[i]->Draw("colz");
     }
 }
 
-void clas12ana::InitCuts() {
+void clas12ana::InitSFEcalCuts() { // ME: used to be InitCuts
+    cout << "PARAMETERS for SF vs Ecal cuts" << endl;
     for (int i = 1; i < 7; i++) {
         for (int j = 0; j < 6; j++) {
-            cout << "sector " << i << " j " << j << " par " << ecal_fcn_par[i][j] << endl;
-            ecal_fcn[0][i]->SetParameter(j, ecal_fcn_par[i][j]);
-            ecal_fcn[1][i]->SetParameter(j, ecal_fcn_par[i][j]);
+            cout << "sector " << i << " j " << j << " par " << ecal_sf_fcn_par[i][j] << endl;
+            ecal_sf_fcn[0][i]->SetParameter(j, ecal_sf_fcn_par[i][j]);
+            ecal_sf_fcn[1][i]->SetParameter(j, ecal_sf_fcn_par[i][j]);
         }
 
-        ecal_fcn[1][i]->SetParameter(6, sigma_cut);
-        ecal_fcn[1][i]->SetParameter(6, sigma_cut);
+        ecal_sf_fcn[0][i]->SetParameter(6, sigma_cut);
+        ecal_sf_fcn[1][i]->SetParameter(6, sigma_cut);
+    }
+}
+
+void clas12ana::InitSFPCuts() { // ME: used to be InitCuts
+    cout << "PARAMETERS for SF vs P cuts" << endl;
+    for (int i = 1; i < 7; i++) {
+        for (int j = 0; j < 6; j++) {
+            cout << "sector " << i << " j " << j << " par " << ecal_p_fcn_par[i][j] << endl;
+            ecal_p_fcn[0][i]->SetParameter(j, ecal_p_fcn_par[i][j]);
+            ecal_p_fcn[1][i]->SetParameter(j, ecal_p_fcn_par[i][j]);
+        }
+
+        ecal_p_fcn[0][i]->SetParameter(6, sigma_cut);
+        ecal_p_fcn[1][i]->SetParameter(6, sigma_cut);
     }
 }
 
 void clas12ana::Init() {
     for (int i = 0; i < 7; i++) {
-        ecal_fcn[0][i] = new TF1(Form("ecal_fcn_0_%d", i), "[0] + [1]/sqrt(x) + [2]/x - [6]* ([3] + [4]/sqrt(x) + [5]/x)", 0, 10);
-        ecal_fcn[1][i] = new TF1(Form("ecal_fcn_1_%d", i), "[0] + [1]/sqrt(x) + [2]/x + [6]* ([3] + [4]/sqrt(x) + [5]/x)", 0, 10);
+        ecal_sf_fcn[0][i] = new TF1(Form("ecal_sf_fcn_0_%d", i), "[0] + [1]/x + [2]/pow(x,2) - [6]*( [3] + [4]/x + [5]/pow(x,2))", 0, 1.5);
+        ecal_sf_fcn[1][i] = new TF1(Form("ecal_sf_fcn_1_%d", i), "[0] + [1]/x + [2]/pow(x,2) + [6]*( [3] + [4]/x + [5]/pow(x,2))", 0, 1.5);
+
+        ecal_p_fcn[0][i] = new TF1(Form("ecal_p_fcn_0_%d", i), "[0] + [1]/x + [2]/pow(x,2) - [6]*( [3] + [4]/x + [5]/pow(x,2))", 0, 10);
+        ecal_p_fcn[1][i] = new TF1(Form("ecal_p_fcn_1_%d", i), "[0] + [1]/x + [2]/pow(x,2) + [6]*( [3] + [4]/x + [5]/pow(x,2))", 0, 10);
     }
 
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 6; j++) {
-            if (j == 3)
-                ecal_fcn_par[i][j] = 9999;
+            if (j == 3) {
+                ecal_sf_fcn_par[i][j] = 9999;
+                ecal_p_fcn_par[i][j] = 9999;
+            }
 
-            ecal_fcn_par[i][j] = 0;
+            ecal_sf_fcn_par[i][j] = 0;
+            ecal_p_fcn_par[i][j] = 0;
         }
     }
 
@@ -932,31 +799,9 @@ void clas12ana::Init() {
         InitDebugPlots();
 }
 
-/*
-
-void clas12ana::vertexCuts(std::vector<region_part_ptr> &particles)
-  {
-    particles.erase(std::remove_if(particles.begin(), particles.end(), [this](const region_part_ptr& p) {
-	  return !( (p->par()->getVx() > vertex_x_cuts.at(0) && p->par()->getVx() < vertex_x_cuts.at(1))
-		    && (p->par()->getVy() > vertex_y_cuts.at(0) && p->par()->getVy() < vertex_y_cuts.at(1))
-		    && (p->par()->getVz() > vertex_z_cuts.at(0) && p->par()->getVz() < vertex_z_cuts.at(1)) );
-	}), particles.end());
-
-  }
-
- void clas12ana::vertexCuts(region_part_ptr electron, std::vector<region_part_ptr> &particles)
-  {
-    particles.erase(std::remove_if(particles.begin(), particles.end(), [electron,this](const region_part_ptr& p) {
-	  return ( (electron->par()->getVz() - p->par()->getVz()) > vertex_corr_cuts.at(1) || (electron->par()->getVz() - p->par()->getVz()) < vertex_corr_cuts.at(0) );
-      }), particles.end());
-
-  }
-
-*/
-
 bool clas12ana::DCEdgeCuts(region_part_ptr p) {
-    // true if inside cut
-    // cut all charged particles
+    //true if inside cut
+    //cut all charged particles
     if (p->par()->getCharge() != 0) {
         auto traj_index_1 = p->traj(DC, 6)->getIndex();  //layer 1
         auto traj_index_2 = p->traj(DC, 18)->getIndex(); //layer 2
@@ -987,7 +832,7 @@ bool clas12ana::EcalEdgeCuts(region_part_ptr p) {
         return true;
 }
 
-bool clas12ana::HTCCNpheCuts(region_part_ptr p) {
+bool clas12ana::HTCCNpheCuts(region_part_ptr p) { // My addition
     //true if inside cut
     double Nphe = p->che(HTCC)->getNphe();
 
@@ -1002,17 +847,63 @@ bool clas12ana::HTCCNpheCuts(region_part_ptr p) {
     }
 }
 
-bool clas12ana::checkEcalCuts(region_part_ptr p) {
-    // true if inside cut
+bool clas12ana::checkEcalSFCuts(region_part_ptr p) { // ME: used to be checkEcalCuts
+    //true if inside cut
+
+//    //<editor-fold desc="Justin's original">
+//    if (p->par()->getPid() == 11) {
+//        double sampling_frac = getSF(p);
+//        double energy = p->cal(PCAL)->getEnergy();
+//        //      double energy =  p->cal(ECIN)->getEnergy() +  p->cal(ECOUT)->getEnergy();
+//
+//        int sector = p->getSector();
+//
+//        //Turn on for functional form
+//        double sf_max_cut = ecal_sf_fcn[1][sector]->Eval(energy);
+//        double sf_min_cut = ecal_sf_fcn[0][sector]->Eval(energy);
+//        //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
+//        //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
+//
+//        //      double sf_max_cut = .28;
+//        //      double sf_min_cut = .2;
+//
+//        if (sampling_frac < sf_max_cut && sampling_frac > sf_min_cut)
+//            return true;
+//        else
+//            return false;
+//    } else
+//        return false;
+//    //</editor-fold>
+
+    //<editor-fold desc="My addition">
+    if (p->par()->getPid() == 11) {
+        double sampling_frac = getSF(p);
+
+        if (sampling_frac < SF_max_cut && sampling_frac > SF_min_cut)
+            return true;
+        else
+            return false;
+    } else
+        return false;
+    //</editor-fold>
+
+}
+
+bool clas12ana::checkEcalPCuts(region_part_ptr p) {
+    //true if inside cut
 
     if (p->par()->getPid() == 11) {
         double sampling_frac = getSF(p);
         int sector = p->getSector();
 
-        //      double sf_max_cut = ecal_fcn[1][sector]->Eval(p->par()->getP() );
-        //      double sf_min_cut = ecal_fcn[0][sector]->Eval(p->par()->getP() );
+        //Turn on for functional form
+        double sf_max_cut = ecal_p_fcn[1][sector]->Eval(p->par()->getP());
+        double sf_min_cut = ecal_p_fcn[0][sector]->Eval(p->par()->getP());
         //      cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< sampling_frac <<" mom "<<p->par()->getP()<<endl;
         //      cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
+
+        //      double sf_max_cut = .28;
+        //      double sf_min_cut = .2;
 
         if (sampling_frac < sf_max_cut && sampling_frac > sf_min_cut)
             return true;
@@ -1029,55 +920,12 @@ double clas12ana::getSF(region_part_ptr p) {
         return -9999.;
 }
 
-/*
-void clas12ana::ecalCuts(std::vector<region_part_ptr> &particles)
-{
-
-  //  if(!f_ecalSFCuts)// 
-  //    return true;
-
-  particles.erase(std::remove_if(particles.begin(), particles.end(), [this](const region_part_ptr& p){
-	if(p->par()->getPid() == 11)
-	  {
-	    double sf =  (p->cal(clas12::PCAL)->getEnergy() +  p->cal(clas12::ECIN)->getEnergy() +  p->cal(clas12::ECOUT)->getEnergy()) / p->par()->getP();
-	    int sector = p->getSector();
-
-	    double sf_max_cut = ecal_fcn[1][sector]->Eval(p->par()->getP() );
-	    double sf_min_cut = ecal_fcn[0][sector]->Eval(p->par()->getP() );
-	    cout<<"sf cut "<<sf_max_cut<<" "<<sf_min_cut<< " "<< p->par()->getP()<<endl;
-	    cout<<ecal_fcn[0][sector]->GetParameter(0)<<" "<<ecal_fcn[0][sector]->GetParameter(1)<<" "<<ecal_fcn[0][sector]->GetParameter(2)<<" sector "<<sector<<endl;
-	    //	    double sf_max_cut = .18;
-	    //	    double sf_min_cut = .16;
-	    
-
-	    if(sf > sf_max_cut || sf < sf_min_cut)
-	      return true;
-	    
-	    return false;
-	  }
-	
-	else
-	  return false;				  
-
-      }), particles.end());
-
-}
-
-void clas12ana::pidCuts(std::vector<std::vector<region_part_ptr>> &particles)
-{
-  for(auto &p : particles)
-    //    p.size();
-    pidCuts(p);
-
-}
-
-*/
-
 bool clas12ana::checkVertex(region_part_ptr p) {
     //true if inside cut
     return ((p->par()->getVx() > vertex_x_cuts.at(0) && p->par()->getVx() < vertex_x_cuts.at(1))
             && (p->par()->getVy() > vertex_y_cuts.at(0) && p->par()->getVy() < vertex_y_cuts.at(1))
             && (p->par()->getVz() > vertex_z_cuts.at(0) && p->par()->getVz() < vertex_z_cuts.at(1)));
+
 }
 
 bool clas12ana::checkVertexCorrelation(region_part_ptr el, region_part_ptr p) {
@@ -1086,90 +934,61 @@ bool clas12ana::checkVertexCorrelation(region_part_ptr el, region_part_ptr p) {
 }
 
 bool clas12ana::checkPidCut(region_part_ptr p) {
-    //true if inside cut
-    //electron pid is handled by ECal sampling fractions cuts not here
-    if (p->par()->getPid() == 11) { return true; }
+    //function returns true if inside PID cuts
 
-    if (p->getRegion() == CD) { // My addition
-        auto itter_CD = pid_cuts_CD.find(p->par()->getPid());
+    //electron pid is handled by ECal sampling fractions cuts NOT here
+    if (p->par()->getPid() == 11)
+        return true;
 
-        if (itter_CD != pid_cuts_CD.end()) {
-            return (abs(p->par()->getChi2Pid() - itter_CD->second.at(0)) < itter_CD->second.at(1));
-        } else {
-            return false;
-        }
-    } else if (p->getRegion() == FD) { // My addition
-        auto itter_FD = pid_cuts_FD.find(p->par()->getPid());
-
-        if (itter_FD != pid_cuts_FD.end()) {
-            return (abs(p->par()->getChi2Pid() - itter_FD->second.at(0)) < itter_FD->second.at(1));
-        } else {
-            return false;
-        }
-    } else { // Justin's original
-        auto itter = pid_cuts.find(p->par()->getPid());
-
-        if (itter != pid_cuts.end()) {
+    if (p->getRegion() == FD) { // forward detector cuts
+        auto itter = pid_cuts_fd.find(p->par()->getPid());
+        if (itter != pid_cuts_fd.end())
             return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
-        } else {
+        else
             return false;
-        }
+    } else if (p->getRegion() == CD) { // central detector cuts
+        auto itter = pid_cuts_cd.find(p->par()->getPid());
+        if (itter != pid_cuts_cd.end())
+            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) < itter->second.at(1));
+        else
+            return false;
     }
+
+    return true;
 }
 
 /*
-void clas12ana::vertexCuts(std::vector<region_part_ptr> &particles)
+void clas12ana::pidCuts(std::vector<region_part_ptr> &particles)
 {
 
+
+  for(auto &p : particles)
+    {
+      cout<<" Part ID " << p->par()->getPid() <<" " << endl;
+      cout<<" Part ID " << p->par()->getChi2Pid() << " "<< endl;
+    }  
+
+
   particles.erase(std::remove_if(particles.begin(), particles.end(), [this](const region_part_ptr& p) {
-	auto itter = vertex_cuts.find("x");
-	if(itter != vertex_cuts.end())
-	  return (abs(p->par()->getVx() - itter->second.at(0)) > itter->second.at(1));
+	auto itter = pid_cuts.find(p->par()->getPid());
+	if(itter != pid_cuts.end())
+	  return (abs(p->par()->getChi2Pid() - itter->second.at(0)) > itter->second.at(1));
 	else
 	  return false;
       }), particles.end());
 
-  particles.erase(std::remove_if(particles.begin(), particles.end(), [this](const region_part_ptr& p) {
-	auto itter = vertex_cuts.find("y");
-	if(itter != vertex_cuts.end())
-	  return (abs(p->par()->getVy() - itter->second.at(0)) > itter->second.at(1));
-	else
-	  return false;
-      }), particles.end());
 
-  particles.erase(std::remove_if(particles.begin(), particles.end(), [this](const region_part_ptr& p) {
-	auto itter = vertex_cuts.find("z");
-	if(itter != vertex_cuts.end())
-	  return (abs(p->par()->getVz() - itter->second.at(0)) > itter->second.at(1));
-	else
-	  return false;
-      }), particles.end());
+  cout <<"After remove "<<endl;
+  for(auto &p : particles)
+    {
+      cout<<" Part ID "<<p->par()->getPid()<<" "<<endl;
+      cout<<" Part ID "<<p->par()->getChi2Pid()<<" "<<endl;
+    }
 
 }
 */
 
-void clas12ana::pidCuts(std::vector<region_part_ptr> &particles) {
-    for (auto &p: particles) {
-        cout << " Part ID " << p->par()->getPid() << " " << endl;
-        cout << " Part ID " << p->par()->getChi2Pid() << " " << endl;
-    }
-
-    particles.erase(std::remove_if(particles.begin(), particles.end(), [this](const region_part_ptr &p) {
-        auto itter = pid_cuts.find(p->par()->getPid());
-        if (itter != pid_cuts.end())
-            return (abs(p->par()->getChi2Pid() - itter->second.at(0)) > itter->second.at(1));
-        else
-            return false;
-    }), particles.end());
-
-    cout << "After remove " << endl;
-    for (auto &p: particles) {
-        cout << " Part ID " << p->par()->getPid() << " " << endl;
-        cout << " Part ID " << p->par()->getChi2Pid() << " " << endl;
-    }
-}
-
-void clas12ana::readEcalPar(const char *filename) {
+void clas12ana::readEcalSFPar(const char *filename) {
     int num_par = 6;
     ifstream infile;
     infile.open(filename);
@@ -1189,11 +1008,40 @@ void clas12ana::readEcalPar(const char *filename) {
             //get parameters for a given sector
             for (int j = 0; j < num_par; j++) {
                 ss >> parameter;
-                ecal_fcn_par[i][j] = parameter;
+                ecal_sf_fcn_par[i][j] = parameter;
             }
         }
 
-        InitCuts();
+        InitSFEcalCuts();
+    } else
+        std::cout << "ECal parameter files does not exist!!!" << endl;
+}
+
+void clas12ana::readEcalPPar(const char *filename) {
+    int num_par = 6;
+    ifstream infile;
+    infile.open(filename);
+
+    if (infile.is_open()) {
+        string tp;
+
+        //remove 3 lines of header
+        for (int i = 0; i < 2; i++)
+            getline(infile, tp);
+        cout << tp << endl;
+
+        for (int i = 1; i < 7; i++) {
+            getline(infile, tp);  //read data from file object and put it into string.
+            stringstream ss(tp);
+            double parameter;
+            //get parameters for a given sector
+            for (int j = 0; j < num_par; j++) {
+                ss >> parameter;
+                ecal_p_fcn_par[i][j] = parameter;
+            }
+        }
+
+        InitSFPCuts();
     } else
         std::cout << "ECal parameter files does not exist!!!" << endl;
 }
@@ -1201,7 +1049,6 @@ void clas12ana::readEcalPar(const char *filename) {
 void clas12ana::readInputParam(const char *filename) {
     ifstream infile;
     infile.open(filename);
-    //  test_cuts.insert({ 1, 40 });
 
     if (infile.is_open()) {
         string tp;
@@ -1210,77 +1057,44 @@ void clas12ana::readInputParam(const char *filename) {
         for (int i = 0; i < 3; i++)
             getline(infile, tp);
 
-        while (getline(infile, tp))  //read data from file object and put it into string.
+        while (getline(infile,
+                       tp))  //read data from file object and put it into string.
         {
             stringstream ss(tp);
             string parameter, parameter2;
             double value;
             //get cut identifier
             ss >> parameter;
-            if (parameter == "pid_cuts") { // Justin's original
+            if (parameter == "pid_cuts") {
                 //get cut values
                 ss >> parameter2;
                 stringstream ss2(parameter2);
                 string pid_v;
-                int count = 0;
+                string detector;
+                int count = 0; //parameter number
                 int pid = -99;
                 vector<double> par;
 
                 while (getline(ss2, pid_v, ':')) {
-                    if (count == 0) {
+                    if (count == 0)
                         pid = stoi(pid_v);
-                    } else {
+                    else if (count < 3)
                         par.push_back(atof(pid_v.c_str()));
-                    }
+                    else if (count == 3)
+                        detector = pid_v;
 
                     count++;
                 }
-                if (pid != -99) {
-                    pid_cuts.insert(pair<int, vector<double> >(pid, par));
+                if (pid != -99) //if pid cut exists in file
+                {
+                    if (detector == "FD")
+                        pid_cuts_fd.insert(pair<int, vector<double> >(pid, par));
+                    else if (detector == "CD")
+                        pid_cuts_cd.insert(pair<int, vector<double> >(pid, par));
                 }
-            } else if (parameter == "pid_cuts_CD") { // My addition
-                //get cut values
-                ss >> parameter2;
-                stringstream ss2(parameter2);
-                string pid_v;
-                int count = 0;
-                int pid = -99;
-                vector<double> par;
+            }//end PID cuts section
 
-                while (getline(ss2, pid_v, ':')) {
-                    if (count == 0) {
-                        pid = stoi(pid_v);
-                    } else {
-                        par.push_back(atof(pid_v.c_str()));
-                    }
-
-                    count++;
-                }
-                if (pid != -99) {
-                    pid_cuts_CD.insert(pair<int, vector<double> >(pid, par));
-                }
-            } else if (parameter == "pid_cuts_FD") { // My addition
-                //get cut values
-                ss >> parameter2;
-                stringstream ss2(parameter2);
-                string pid_v;
-                int count = 0;
-                int pid = -99;
-                vector<double> par;
-
-                while (getline(ss2, pid_v, ':')) {
-                    if (count == 0) {
-                        pid = stoi(pid_v);
-                    } else {
-                        par.push_back(atof(pid_v.c_str()));
-                    }
-
-                    count++;
-                }
-                if (pid != -99) {
-                    pid_cuts_FD.insert(pair<int, vector<double> >(pid, par));
-                }
-            } else if (parameter == "vertex_cut") {
+            else if (parameter == "vertex_cut") {
                 ss >> parameter2;
                 stringstream ss2(parameter2);
                 string pid_v;
@@ -1299,9 +1113,79 @@ void clas12ana::readInputParam(const char *filename) {
 
                 if (pid != "")
                     vertex_cuts.insert(pair<string, vector<double> >(pid, par));
+            } else if (parameter == "Momentum_cuts_ECAL") { // My addition
+//            else if (parameter == "Momentum_cuts") { // My addition
+                //TODO: organize this properly with a map for each pdg.
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                string pid = "";
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0)
+                        pid = pid_v;
+                    else
+                        par.push_back(atof(pid_v.c_str()));
+
+                    count++;
+                }
+
+                if (pid != "") {
+                    Neutron_Momentum_cut = par.at(1);
+//                    cout << "\n\n\n\npar.at(0):\t\t" << par.at(0) << "\n";
+//                    cout << "par.at(1):\t\t" << par.at(1) << "\n";
+//                    cout << "Neutron_Momentum_cut:\t" << Neutron_Momentum_cut << "\n\n\n\n";
+////                    vertex_cuts.insert(pair<string, vector<double> >(pid, par));
+//                    exit(EXIT_FAILURE);
+                }
+            } else if (parameter == "Beta_cut_ECAL") { // My addition
+                //TODO: organize this properly with a map for each pdg.
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                string pid = "";
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0)
+                        pid = pid_v;
+                    else
+                        par.push_back(atof(pid_v.c_str()));
+
+                    count++;
+                }
+
+                if (pid != "") {
+                    FD_Neutral_Beta_Mean = par.at(0);
+                    FD_Neutral_Beta_cut = par.at(1);
+                }
+            } else if (parameter == "dPhi_p1_p2") { // My addition
+                //TODO: organize this properly with a map for each pdg.
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                string pid = "";
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0)
+                        pid = pid_v;
+                    else
+                        par.push_back(atof(pid_v.c_str()));
+
+                    count++;
+                }
+
+                if (pid != "") { dPhi_p1_p2_Mean = par.at(0); }
             }
 
             /*
+
+
                 else if(parameter == "cell_pos")
                   {
                 ss >> parameter2;
@@ -1344,24 +1228,16 @@ void clas12ana::printParams() {
     cout << endl;
     cout << "Target Parameters:" << endl;
 
-    cout << "PID cuts (CD):" << endl; // My addition
-    for (auto itr = pid_cuts_CD.begin(); itr != pid_cuts_CD.end(); ++itr) {
+    cout << "Central Detector PID cuts:" << endl;
+    for (auto itr = pid_cuts_cd.begin(); itr != pid_cuts_cd.end(); ++itr) {
         cout << '\t' << "Particle type: " << itr->first << '\t' << "{mean,sigma}: ";
         for (auto a: itr->second)
             cout << '\t' << a;
         cout << '\n';
     }
 
-    cout << "PID cuts (FD):" << endl; // My addition
-    for (auto itr = pid_cuts_FD.begin(); itr != pid_cuts_FD.end(); ++itr) {
-        cout << '\t' << "Particle type: " << itr->first << '\t' << "{mean,sigma}: ";
-        for (auto a: itr->second)
-            cout << '\t' << a;
-        cout << '\n';
-    }
-
-    cout << "PID cuts:" << endl;
-    for (auto itr = pid_cuts.begin(); itr != pid_cuts.end(); ++itr) {
+    cout << "Forward Detector PID cuts:" << endl;
+    for (auto itr = pid_cuts_fd.begin(); itr != pid_cuts_fd.end(); ++itr) {
         cout << '\t' << "Particle type: " << itr->first << '\t' << "{mean,sigma}: ";
         for (auto a: itr->second)
             cout << '\t' << a;
@@ -1369,52 +1245,12 @@ void clas12ana::printParams() {
     }
 
     cout << "Vertex cuts:" << endl;
-
     for (auto itr = vertex_cuts.begin(); itr != vertex_cuts.end(); ++itr) {
         cout << '\t' << "Particle type: " << itr->first << '\t' << "{min,max}: ";
         for (auto a: itr->second)
             cout << '\t' << a;
         cout << '\n';
     }
-}
-
-/*std::vector<region_part_ptr> clas12ana::getByChi2Pid(double mean,double sigma){
-  return container_filter(_detParticles, [ch](region_part_ptr dr)
-			  {return abs(dr->par()->getChi2Pid() - mean) < sigma;  });
-}
-
-*/
-
-//helper functions
-//filter vectors via a lambda function
-//see for example clas12reader::getByID()
-
-/*
-template <typename Cont, typename Pred>
-  Cont container_filter(const Cont &container, Pred predicate){
-  Cont result;
-  std::copy_if(container.begin(),container.end(),std::back_inserter(result), predicate);
-  return result;
-}
-
-*/
-
-std::vector<region_part_ptr> clas12ana::getByPid(std::vector<region_part_ptr> particles, int pid) {
-    //  return container_filter(this->getDetParticles(), [pid](region_part_ptr dr)
-    return container_filter(particles, [pid, this](region_part_ptr dr) {
-        cout << "ecal cuts " << checkEcalCuts(dr) << endl;
-        cout << "pid cuts " << checkPidCut(dr) << endl;
-        cout << "vertex cuts " << checkVertex(dr) << endl;
-        if (f_ecalSFCuts && !checkEcalCuts(dr))
-            return false;
-        if (f_pidCuts && !checkPidCut(dr))
-            return false;
-        if (f_vertexCuts && !checkVertex(dr))
-            return false;
-
-        return true;
-    });
-
 }
 
 TVector3 clas12ana::getCOM(TLorentzVector lead, TLorentzVector recoil, TLorentzVector q) {
@@ -1428,32 +1264,303 @@ TVector3 clas12ana::getCOM(TLorentzVector lead, TLorentzVector recoil, TLorentzV
 
     com *= 1000; //GeV to MeV
 
+    if (abs(com.Dot(vy)) < 20)
+        cout << com.Mag() << " " << com.Dot(vx) << " " << com.Dot(vy) << " " << com.Dot(vz) << " " << lead.P() << " " << recoil.P() << endl;
+
     return TVector3(com.Dot(vx), com.Dot(vy), com.Dot(vz));
 }
 
-/*
-void clas12ana::getByChi2Pid(std::vector<region_part_ptr> &particles, double mean, double sigma){
+void clas12ana::getLeadRecoilSRC(TLorentzVector beam, TLorentzVector target, TLorentzVector el) {
+    lead_proton.clear();
+    recoil_proton.clear();
 
-  for(auto &p : particles)
-    {
-    cout<<" Part ID "<<p->par()->getPid()<<" "<<endl;
-    cout<<" Part ID "<<p->par()->getChi2Pid()<<" "<<endl;
-    }  
-  particles.erase(std::remove_if(particles.begin(), particles.end(), [mean,sigma](const region_part_ptr& p) {
-	return abs(p->par()->getChi2Pid() - mean) > sigma;
-      }), particles.end());
+    TLorentzVector ptr;
+    TLorentzVector q = beam - el;                  //photon  4-vector
+    double q2 = -q.M2();
+    double xb = q2 / (2 * mass_proton * (beam.E() - el.E())); //x-borken
 
-  cout <<"After remove "<<endl;
-  for(auto &p : particles)
-    {
-    cout<<" Part ID "<<p->par()->getPid()<<" "<<endl;
-    cout<<" Part ID "<<p->par()->getChi2Pid()<<" "<<endl;
+    if (!(q2 > q2_cut && xb > xb_cut))
+        return;
+
+    int lead_idx = -1;
+    int lead_mult = 0;
+
+    for (int idx_ptr = 0; idx_ptr < protons.size(); idx_ptr++) {
+
+
+        ptr.SetXYZM(protons.at(idx_ptr)->par()->getPx(), protons.at(idx_ptr)->par()->getPy(), protons.at(idx_ptr)->par()->getPz(), mass_proton);
+
+        TLorentzVector miss = beam + target - el - ptr; //missing 4-vector
+        double pmiss = miss.P();
+        double mmiss = miss.M2();
+        double theta_pq = ptr.Vect().Angle(q.Vect()) *
+                          TMath::RadToDeg(); //angle between vectors p_miss and q
+        double p_q = ptr.Vect().Mag() / q.Vect().Mag(); // |p|/|q|
+        if (pmiss > pmiss_cut && mmiss > mmiss_cut[0] && mmiss < mmiss_cut[1] && theta_pq < theta_pq_cut && (p_q < pq_cut[1] && p_q > pq_cut[0])) {
+            lead_idx = idx_ptr;
+            lead_mult++; //check for double lead
+        }
     }
-  //  return container_filter(particles, [par](region_part_ptr dr)
-  //			  {return abs(dr->par()->getChi2Pid() - par.at(0)) < par.at(1);  });
+
+    ptr.SetXYZM(0, 0, 0, 0);
+
+    if (lead_idx == -1 || lead_mult != 1)
+        return;
+
+    lead_proton.push_back(protons.at(lead_idx));
+
+    int recoil_idx = -1;
+
+    for (int idx_ptr = 0; idx_ptr < protons.size(); idx_ptr++) {
+        if (idx_ptr == lead_idx)
+            continue;
+
+        if (protons[idx_ptr]->par()->getP() > recoil_mom_cut)
+            recoil_proton.push_back(protons.at(idx_ptr));
+    }
+
+    return;
+}
+
+/*
+void clas12ana::getLeadRecoilSRC(TLorentzVector beam, TLorentzVector target, TLorentzVector el)
+{
+  lead_proton.clear();
+  recoil_proton.clear();
+
+  TLorentzVector ptr;
+  TLorentzVector q = beam - el;                  //photon  4-vector	
+  double q2        = -q.M2();
+  double xb        = q2/(2 * mass_proton * (beam.E() - el.E()) ); //x-borken       
+
+  if( !(q2 > q2_cut && xb > xb_cut) )
+    return; 
+  
+  int lead_idx   = -1;
+  int lead_mult  = 0;
+  int recoil_idx = -1;
+
+  for(int idx_ptr = 0; idx_ptr < protons.size(); idx_ptr++)
+    {
+      ptr.SetXYZM(protons.at(idx_ptr)->par()->getPx(),protons.at(idx_ptr)->par()->getPy(),protons.at(idx_ptr)->par()->getPz(),mass_proton);
+      double theta_pq = ptr.Vect().Angle(q.Vect()) * TMath::RadToDeg(); //angle between vectors p_miss and q                                                                               
+      double p_q       = ptr.Vect().Mag()/q.Vect().Mag(); // |p|/|q|                               
+      if(theta_pq < theta_pq_cut && (p_q < pq_cut[1] && p_q > pq_cut[0]) )
+	{
+	  lead_idx = idx_ptr;
+	  lead_mult++; //check for double lead
+	}
+    }
+
+  ptr.SetXYZM(0,0,0,0);
+  
+  if(lead_idx == -1)
+    return;
+  
+  
+  ptr.SetXYZM(protons.at(lead_idx)->par()->getPx(),protons.at(lead_idx)->par()->getPy(),protons.at(lead_idx)->par()->getPz(),mass_proton);
+  
+  TLorentzVector miss = beam + target - el - ptr; //missing 4-vector                   
+  double pmiss = miss.P();
+  double mmiss   = miss.M();
+  
+  if( pmiss > pmiss_cut && mmiss > mmiss_cut[0] && mmiss < mmiss_cut[1] )
+      lead_proton.push_back(protons.at(lead_idx));
+
+
+
+  for(int idx_ptr = 0; idx_ptr < protons.size(); idx_ptr++)
+    {
+      if(idx_ptr == lead_idx)
+	continue;
+
+      if(protons[idx_ptr]->par()->getP() > recoil_mom_cut)
+	recoil_proton.push_back(protons.at(idx_ptr));
+
+    }
+
+
+  return;  
 }
 
 */
+
+void clas12ana::debugByPid(region_part_ptr p) {
+    int pid = p->par()->getPid();
+    double par_mom = p->par()->getP();
+    double par_beta = p->par()->getBeta();
+
+    bool is_cd = (p->getRegion() == CD);
+    bool is_fd = (p->getRegion() == FD);
+
+    if (is_fd) {
+        if (pid == 2212)
+            pid_proton_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == 45)
+            pid_deuteron_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == 211)
+            pid_piplus_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == -211)
+            pid_piminus_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == 321)
+            pid_kplus_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == -321)
+            pid_kminus_fd_debug->Fill(par_mom, par_beta);
+        else if (pid == 0 || pid == 2112)
+            pid_neutrals_fd_debug->Fill(par_mom, par_beta);
+    } else if (is_cd) {
+        if (pid == 2212)
+            pid_proton_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == 45)
+            pid_deuteron_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == 211)
+            pid_piplus_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == -211)
+            pid_piminus_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == 321)
+            pid_kplus_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == -321)
+            pid_kminus_cd_debug->Fill(par_mom, par_beta);
+        else if (pid == 0 || pid == 2112)
+            pid_neutrals_cd_debug->Fill(par_mom, par_beta);
+    }
+}
+
+void clas12ana::InitDebugPlots() {
+    for (int i = 1; i <= 6; i++) {
+        sf_p_debug_b[i] = new TH2D(Form("sf_p_debug_b_sector_%d", i), Form("Sampling Fraction Before Cuts Sector_%d", i), 100, 0, 6, 100, 0, .4);
+        sf_p_debug_a[i] = new TH2D(Form("sf_p_debug_a_sector_%d", i), Form("Sampling Fraction  After Cuts Sector_%d", i), 100, 0, 6, 100, 0, .4);
+
+        sf_e_debug_b[i] = new TH2D(Form("sf_e_debug_b_sector_%d", i), Form("Sampling Fraction Before Cuts Sector_%d", i), 100, 0, 1.5, 100, 0, .4);
+        sf_e_debug_a[i] = new TH2D(Form("sf_e_debug_a_sector_%d", i), Form("Sampling Fraction  After Cuts Sector_%d", i), 100, 0, 1.5, 100, 0, .4);
+    }
+
+    //DC hit maps
+    for (int i = 1; i <= 3; i++) {
+        dc_hit_map_b[i] = new TH2D(Form("dc_hitmap_before_%d", i), Form("Region %d Before Cuts", i), 600, -300, 300, 600, -300, 300);
+        dc_hit_map_a[i] = new TH2D(Form("dc_hitmap_after_%d", i), Form("Region %d After Cuts", i), 600, -300, 300, 600, -300, 300);
+        dc_hit_map_a_proton[i] = new TH2D(Form("dc_hitmap_after_proton_%d", i), Form("Region %d After Cuts", i), 600, -300, 300, 600, -300, 300);
+        dc_hit_map_b_proton[i] = new TH2D(Form("dc_hitmap_before_proton_%d", i), Form("Region %d Before Cuts", i), 600, -300, 300, 600, -300, 300);
+        dc_hit_map_a_pion[i] = new TH2D(Form("dc_hitmap_after_pion_%d", i), Form("Region %d After Cuts", i), 600, -300, 300, 600, -300, 300);
+        dc_hit_map_b_pion[i] = new TH2D(Form("dc_hitmap_before_pion_%d", i), Form("Region %d Before Cuts", i), 600, -300, 300, 600, -300, 300);
+    }
+}
+
+void clas12ana::WriteDebugPlots() {
+    TFile *f_debugOut = new TFile(debug_fileName, "RECREATE");
+
+    for (int i = 1; i <= 6; i++) {
+        sf_p_debug_b[i]->Write();
+        sf_p_debug_a[i]->Write();
+        sf_e_debug_b[i]->Write();
+        sf_e_debug_a[i]->Write();
+    }
+
+    for (int i = 1; i <= 6; i++) {
+        ecal_sf_fcn[0][i]->Write();
+        ecal_sf_fcn[1][i]->Write();
+        ecal_p_fcn[0][i]->Write();
+        ecal_p_fcn[1][i]->Write();
+    }
+
+    for (int i = 1; i <= 3; i++)
+        dc_hit_map_b[i]->Write();
+
+    for (int i = 1; i <= 3; i++)
+        dc_hit_map_a[i]->Write();
+
+    for (int i = 1; i <= 3; i++)
+        dc_hit_map_b_proton[i]->Write();
+
+    for (int i = 1; i <= 3; i++)
+        dc_hit_map_a_proton[i]->Write();
+
+    for (int i = 1; i <= 3; i++)
+        dc_hit_map_b_pion[i]->Write();
+
+    for (int i = 1; i <= 3; i++)
+        dc_hit_map_a_pion[i]->Write();
+
+    sf_v_ecalIN_debug->Write();
+    sf_w_ecalIN_debug->Write();
+    sf_v_ecalOUT_debug->Write();
+    sf_w_ecalOUT_debug->Write();
+    sf_v_pcal_debug->Write();
+    sf_w_pcal_debug->Write();
+
+    sf_v_ecalIN_a_debug->Write();
+    sf_w_ecalIN_a_debug->Write();
+    sf_v_ecalOUT_a_debug->Write();
+    sf_w_ecalOUT_a_debug->Write();
+    sf_v_pcal_a_debug->Write();
+    sf_w_pcal_a_debug->Write();
+
+    pid_proton_fd_debug->Write();
+    pid_deuteron_fd_debug->Write();
+    pid_piplus_fd_debug->Write();
+    pid_piminus_fd_debug->Write();
+    pid_kplus_fd_debug->Write();
+    pid_kminus_fd_debug->Write();
+    pid_neutrals_fd_debug->Write();
+
+    pid_proton_cd_debug->Write();
+    pid_deuteron_cd_debug->Write();
+    pid_piplus_cd_debug->Write();
+    pid_piminus_cd_debug->Write();
+    pid_kplus_cd_debug->Write();
+    pid_kminus_cd_debug->Write();
+    pid_neutrals_cd_debug->Write();
+
+    pid_cd_debug->Write();
+    pid_fd_debug->Write();
+
+    el_vz_debug->Write();
+    el_vz_p_debug->Write();
+
+    //<editor-fold desc="my debugging - multiplicity plots before and after cuts (no #e cuts)">
+//    multi_p_vs_cpi_fd_BC_debug->Write();
+//    multi_p_vs_cpi_fd_AC_debug->Write();
+//    multi_p_vs_cpi_cd_BC_debug->Write();
+//    multi_p_vs_cpi_cd_AC_debug->Write();
+    multi_p_vs_cpi_BC_debug->Write();
+    multi_p_vs_cpi_AC_debug->Write();
+//    multi_p_fd_BC_debug->Write();
+//    multi_p_fd_AC_debug->Write();
+//    multi_p_cd_BC_debug->Write();
+//    multi_p_cd_AC_debug->Write();
+    multi_p_BC_debug->Write();
+    multi_p_AC_debug->Write();
+//    multi_cpi_fd_BC_debug->Write();
+//    multi_cpi_fd_AC_debug->Write();
+//    multi_cpi_cd_BC_debug->Write();
+//    multi_cpi_cd_AC_debug->Write();
+    multi_cpi_BC_debug->Write();
+    multi_cpi_AC_debug->Write();
+    //</editor-fold>
+
+    //<editor-fold desc="my debugging - multiplicity plots before and after cuts (1e cut)">
+//    multi_p_vs_cpi_1e_cut_fd_BC_debug->Write();
+//    multi_p_vs_cpi_1e_cut_fd_AC_debug->Write();
+//    multi_p_vs_cpi_1e_cut_cd_BC_debug->Write();
+//    multi_p_vs_cpi_1e_cut_cd_AC_debug->Write();
+    multi_p_vs_cpi_1e_cut_BC_debug->Write();
+    multi_p_vs_cpi_1e_cut_AC_debug->Write();
+//    multi_p_1e_cut_fd_BC_debug->Write();
+//    multi_p_1e_cut_fd_AC_debug->Write();
+//    multi_p_1e_cut_cd_BC_debug->Write();
+//    multi_p_1e_cut_cd_AC_debug->Write();
+    multi_p_1e_cut_BC_debug->Write();
+    multi_p_1e_cut_AC_debug->Write();
+//    multi_cpi_1e_cut_fd_BC_debug->Write();
+//    multi_cpi_1e_cut_fd_AC_debug->Write();
+//    multi_cpi_1e_cut_cd_BC_debug->Write();
+//    multi_cpi_1e_cut_cd_AC_debug->Write();
+    multi_cpi_1e_cut_BC_debug->Write();
+    multi_cpi_1e_cut_AC_debug->Write();
+    //</editor-fold>
+
+    f_debugOut->Close();
+}
 
 #endif
 

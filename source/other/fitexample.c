@@ -17,7 +17,7 @@ std::string to_string_with_precision(const T a_value, const int n = 2) {
     return out.str();
 }
 
-Double_t fitf(Double_t *v, Double_t *par) {
+Double_t FitFunction(Double_t *v, Double_t *par) {
     Double_t arg = 0;
     if (par[2] != 0) arg = (v[0] - par[1]) / par[2];
 
@@ -33,7 +33,7 @@ void fitexample() {
 
 //    //create a function with 3 parameters in the range [-3,3]
 //    TF1 * func = new
-//    TF1("fit", fitf, -3, 3, 3);
+//    TF1("fit", FitFunction, -3, 3, 3);
 //    func->SetLineColor(kBlue);
 //    func->SetParameters(1000, hpx->GetMean(), hpx->GetRMS());
 //    func->SetParNames("Constant", "Mean_value", "Sigma");
@@ -143,7 +143,7 @@ void fitexample() {
 //
 //    //create a function with 3 parameters in the range [-3,3]
 //    TF1 * func = new
-//    TF1("fit", fitf, -3, 3, 3);
+//    TF1("fit", FitFunction, -3, 3, 3);
 //    func->SetParameters(500, hpx->GetMean(), hpx->GetRMS());
 //    func->SetParNames("Constant", "Mean_value", "Sigma");
 ////    func->SetParNames("p0", "p1", "p2");

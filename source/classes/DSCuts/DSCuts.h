@@ -2,22 +2,24 @@
 // Created by alons on 06/03/2023.
 //
 
-#ifndef PROJECT_DSCUTS_H
-#define PROJECT_DSCUTS_H
+#ifndef DSCUTS_H
+#define DSCUTS_H
 
 class DSCuts {
 public:
     /* Constructors */
-    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1); // Default constructor
+    // Default constructor:
+    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -9999, double ulim = 9999);
+//    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1);
 
     /* Set functions */
-//    void InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean = 0, double llim = -1, double ulim = -1);
-
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
 
     void SetMeanFit(double mf) { MeanFromHistogram = mf; }
 
     void SetStdFactor(double sf) { FitStdFactor = sf; }
+
+    void SetCutPram(double mean, double lcut, double ucut) { Cuts.at(0) = mean, Cuts.at(1) = lcut, Cuts.at(2) = ucut;  }
 
     void SetMean(double mean) { Cuts.at(0) = mean; }
 
@@ -56,13 +58,12 @@ public:
 
     std::string GetAppliedCuts() { return AppliedCuts; }
 
-    double MeanFromHistogram, MeanFromFit, FitStdFactor;
-    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
+    double MeanFromHistogram, MeanFromFit, FitStdFactor, FitStd;
+    vector<double> Cuts = {0, -9999, 9999}; // {mean, lower cut, upper cut}
+//    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 private:
     std::string CutVariable, Region, Particle, AppliedCuts;
     int particlePDG;
-//    double MeanFromHistogram, MeanFromFit, FitStdFactor;
-//    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 };
 
 DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) { // Default constructor
@@ -76,54 +77,30 @@ DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, dou
     }
 
     if (r == "CD") {
-//        FitStdFactor = 1; // sigma factor for CD cuts
-//        FitStdFactor = 1.5; // sigma factor for CD cuts
-//        FitStdFactor = 2; // sigma factor for CD cuts
         FitStdFactor = 3; // sigma factor for CD cuts
     } else if (r == "FD") {
-//        FitStdFactor = 1; // sigma factor for CD cuts
-//        FitStdFactor = 2; // sigma factor for CD cuts
-        FitStdFactor = 3; // sigma factor for CD cuts
+        FitStdFactor = 3; // sigma factor for FD cuts
     } else {
-//        FitStdFactor = 1;
-        FitStdFactor = 3;
+        FitStdFactor = 1;
     }
 
-    if (p == "electron" || p == "Electron") {
+    if (p == "electron" || p == "Electron" || p == "electrons" || p == "Electrons") {
         particlePDG = 11;
-    } else if (p == "proton" || p == "Proton") {
+    } else if (p == "neutron" || p == "Neutron" || p == "neutrons" || p == "Neutrons") {
+        particlePDG = 2112;
+    } else if (p == "proton" || p == "Proton" || p == "protons" || p == "Protons") {
         particlePDG = 2212;
-    } else if (p == "kplus" || p == "Kplus") {
+    } else if (p == "kplus" || p == "Kplus" || p == "k+" || p == "K+") {
         particlePDG = 321;
-    } else if (p == "kminus" || p == "Kminus") {
+    } else if (p == "kminus" || p == "Kminus" || p == "k-" || p == "K-") {
         particlePDG = -321;
-    } else if (p == "piplus" || p == "Piplus") {
+    } else if (p == "piplus" || p == "Piplus" || p == "pi+" || p == "Pi+") {
         particlePDG = 211;
-    } else if (p == "piminus" || p == "Piminus") {
+    } else if (p == "piminus" || p == "Piminus" || p == "pi-" || p == "Pi-") {
         particlePDG = -211;
+    } else if (p == "pizero" || p == "Pizero" || p == "pi0" || p == "Pi0") {
+        particlePDG = 111;
     }
 }
 
-//void DSCuts::InitSetter(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) {
-//    CutVariable = cv, Particle = p, AppliedCuts = ac;
-//    Cuts.at(0) = mean, Cuts.at(1) = llim, Cuts.at(2) = ulim;
-//
-//    if (r == "") {
-//        Region = "CD & FD";
-//    } else {
-//        Region = r;
-//    }
-//
-//    if (r == "CD") {
-//        FitStdFactor = 1; // sigma factor for CD cuts
-////        FitStdFactor = 1.5; // sigma factor for CD cuts
-////        FitStdFactor = 2; // sigma factor for CD cuts
-//    } else if (r == "FD") {
-//        FitStdFactor = 2; // sigma factor for CD cuts
-////        FitStdFactor = 3; // sigma factor for CD cuts
-//    } else {
-//        FitStdFactor = 1;
-//    }
-//}
-
-#endif //PROJECT_DSCUTS_H
+#endif //DSCUTS_H
