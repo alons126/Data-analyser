@@ -7,7 +7,7 @@
 // Constructor definition -----------------------------------------------------------------------------------------------------------------------------------------------
 
 hPlot2D::hPlot2D(std::string h2DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat,
-                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
+                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 150, int hnoYb = 150) {
     Histogram2DTitles["Histogram2DTitleReactions"] = h2DtReactions, Histogram2DTitles["FinalState"] = fState, Histogram2DTitles["DetectorRegion"] = dRegion;
     Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -24,7 +24,7 @@ hPlot2D::hPlot2D(std::string h2DtReactions, std::string fState, std::string dReg
 }
 
 hPlot2D::hPlot2D(std::string h2DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat,
-                 std::string sPath, std::string sName, double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
+                 std::string sPath, std::string sName, double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 150, int hnoYb = 150) {
     Histogram2DTitles["Histogram2DTitleReactions"] = h2DtReactions, Histogram2DTitles["FinalState"] = fState, Histogram2DTitles["DetectorRegion"] = dRegion;
     Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -52,7 +52,7 @@ hPlot2D::hPlot2D(std::string h2DtReactions, std::string fState, std::string dReg
 }
 
 hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat,
-                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
+                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 150, int hnoYb = 150) {
     Histogram2DTitles["FinalState"] = fState, Histogram2DTitles["DetectorRegion"] = dRegion;
     Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -68,7 +68,7 @@ hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::
 }
 
 hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string yat, std::string sPath, std::string sName,
-                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
+                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 150, int hnoYb = 150) {
     Histogram2DTitles["FinalState"] = fState, Histogram2DTitles["DetectorRegion"] = dRegion;
     Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
@@ -95,7 +95,7 @@ hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::
 }
 
 hPlot2D::hPlot2D(std::string hst, std::string ht, std::string xat, std::string yat,
-                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 250, int hnoYb = 250) {
+                 double LowerXlim, double UpperXlim, double LowerYlim, double UpperYlim, int hnoXb = 150, int hnoYb = 150) {
     Histogram2DTitles["HistogramStatTitle"] = hst, Histogram2DTitles["HistogramTitle"] = ht, Histogram2DTitles["XaxisTitle"] = xat, Histogram2DTitles["YaxisTitle"] = yat;
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramYAxisLimits.push_back(LowerYlim), HistogramYAxisLimits.push_back(UpperYlim);

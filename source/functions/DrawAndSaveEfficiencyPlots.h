@@ -32,15 +32,13 @@
 
 #include "GeneralFunctions.h"
 #include "GetParticleProperties/GetParticleName.h"
+#include "GetParticleProperties/GetParticleNameLC.h"
 #include "GetParticleProperties/GetParticleNameShort.h"
 #include "../classes/hPlots/hPlot1D.h"
 
 using namespace std;
 
 void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list) {
-
-    //TODO: add a continue for the case of running over data?
-
     bool weighted_plots = true;
 
     //<editor-fold desc="Canvas definitions">
@@ -82,6 +80,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     //<editor-fold desc="Setting particle">
     string EfficiencyRecTitle = RPlot_Clone->GetTitle();
     string EfficiencyParticle = GetParticleName(EfficiencyRecTitle);
+    string EfficiencyParticleLC = GetParticleNameLC(EfficiencyRecTitle);
     string EfficiencyParticleShort = GetParticleNameShort(EfficiencyRecTitle);
     //</editor-fold>
 
@@ -132,21 +131,34 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
         EfficiencyFS = "1e2p";
     } else if (findSubstring(EfficiencyRecTitle, "2p")) {
         EfficiencyFS = "2p";
+    } else if (findSubstring(EfficiencyRecTitle, "pFDpCD")) {
+        EfficiencyFS = "pFDpCD";
+    } else if (findSubstring(EfficiencyRecTitle, "nFDpCD")) {
+        EfficiencyFS = "nFDpCD";
     }
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
-    //TODO: find a way to delete old efficiency directories
-    //system(("rm -r " + TLPlot.GetHistogram1DSaveNamePath() + "*").c_str());
-
     string EfficiencySaveDir, EfficiencyTestSaveDir;
 
-    if (findSubstring(EfficiencyRecTitle, "FD")) {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
-        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
+    if (findSubstring(EfficiencyRecTitle, "Electron") || findSubstring(EfficiencyRecTitle, "electron")) {
+        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test/";
     } else {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
-        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
+        if (findSubstring(EfficiencyRecTitle, ", FD)") ||
+            findSubstring(EfficiencyRecTitle, "FD " + EfficiencyParticle) ||
+            findSubstring(EfficiencyRecTitle, "FD " + EfficiencyParticleLC)) {
+            EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/01_FD_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+            EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
+        } else if (findSubstring(EfficiencyRecTitle, ", CD)") ||
+                   findSubstring(EfficiencyRecTitle, "CD " + EfficiencyParticle) ||
+                   findSubstring(EfficiencyRecTitle, "CD " + EfficiencyParticleLC)) {
+            EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/02_CD_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+            EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_CD/";
+        } else {
+            EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+            EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
+        }
     }
 
     system(("mkdir -p " + EfficiencySaveDir).c_str());
@@ -269,12 +281,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     Canvas->Clear();
     //</editor-fold>
 
+    delete Canvas;
 }
 
 void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {
-
-    //TODO: add a continue for the case of running over data?
-
     bool weighted_plots = true;
 
     //<editor-fold desc="Canvas definitions">
@@ -295,40 +305,8 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     //<editor-fold desc="Setting particle">
     string EfficiencyRecTitle = RPlot->GetTitle();
     string EfficiencyParticle = GetParticleName(EfficiencyRecTitle);
+    string EfficiencyParticleLC = GetParticleNameLC(EfficiencyRecTitle);
     string EfficiencyParticleShort = GetParticleNameShort(EfficiencyRecTitle);
-
-/*
-    string EfficiencyRecTitle = RPlot->GetTitle();
-    string EfficiencyParticle;
-    string EfficiencyParticleShort;
-
-    if (findSubstring(EfficiencyRecTitle, "Electron") || findSubstring(EfficiencyRecTitle, "electron")) {
-        EfficiencyParticle = "Electron";
-        EfficiencyParticleShort = "e";
-    } else if (findSubstring(EfficiencyRecTitle, "Proton") || findSubstring(EfficiencyRecTitle, "proton")) {
-        EfficiencyParticle = "Proton";
-        EfficiencyParticleShort = "p";
-    } else if (findSubstring(EfficiencyRecTitle, "Neutron") || findSubstring(EfficiencyRecTitle, "neutron")) {
-        EfficiencyParticle = "Neutron";
-        EfficiencyParticleShort = "n";
-    } else if (findSubstring(EfficiencyRecTitle, "#pi^{+}")) {
-        EfficiencyParticle = "Piplus";
-        EfficiencyParticleShort = "#pi^{+}";
-    } else if (findSubstring(EfficiencyRecTitle, "#pi^{-}")) {
-        EfficiencyParticle = "Piminus";
-        EfficiencyParticleShort = "#pi^{-}";
-    } else if (findSubstring(EfficiencyRecTitle, "K^{+}")) {
-        EfficiencyParticle = "Kplus";
-        EfficiencyParticleShort = "K^{+}";
-    } else if (findSubstring(EfficiencyRecTitle, "K^{-}")) {
-        EfficiencyParticle = "Kminus";
-        EfficiencyParticleShort = "K^{-}";
-    } else if (findSubstring(EfficiencyRecTitle, "#gamma") || findSubstring(EfficiencyRecTitle, "photon")
-               || findSubstring(EfficiencyRecTitle, "Photon")) {
-        EfficiencyParticle = "Photon";
-        EfficiencyParticleShort = "#gamma";
-    }
-*/
     //</editor-fold>
 
     //<editor-fold desc="Setting Final state">
@@ -346,6 +324,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
         EfficiencyFS = "1e2p";
     } else if (findSubstring(EfficiencyRecTitle, "2p")) {
         EfficiencyFS = "2p";
+    } else if (findSubstring(EfficiencyRecTitle, "pFDpCD")) {
+        EfficiencyFS = "pFDpCD";
+    } else if (findSubstring(EfficiencyRecTitle, "nFDpCD")) {
+        EfficiencyFS = "nFDpCD";
     }
     //</editor-fold>
 
@@ -425,17 +407,26 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
-    //TODO: find a way to delete old efficiency directories
-    //system(("rm -r " + TLPlot.GetHistogram1DSaveNamePath() + "*").c_str());
-
     string EfficiencySaveDir, EfficiencyTestSaveDir;
 
-    if (findSubstring(EfficiencyRecTitle, "FD")) {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
-        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
+    if (findSubstring(EfficiencyRecTitle, "Electron") || findSubstring(EfficiencyRecTitle, "electron")) {
+        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test/";
     } else {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
-        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
+        if (findSubstring(EfficiencyRecTitle, ", FD)") ||
+            findSubstring(EfficiencyRecTitle, "FD " + EfficiencyParticle) ||
+            findSubstring(EfficiencyRecTitle, "FD " + EfficiencyParticleLC)) {
+            EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/01_FD_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+            EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
+        } else if (findSubstring(EfficiencyRecTitle, ", CD)") ||
+                   findSubstring(EfficiencyRecTitle, "CD " + EfficiencyParticle) ||
+                   findSubstring(EfficiencyRecTitle, "CD " + EfficiencyParticleLC)) {
+            EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/02_CD_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+            EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_CD/";
+        } else {
+            EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+            EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
+        }
     }
 
     system(("mkdir -p " + EfficiencySaveDir).c_str());
@@ -600,6 +591,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     Canvas->Clear();
     //</editor-fold>
 
+    delete Canvas;
 }
 
 #endif //DRAWANDSAVEEFFICIENCYPLOTS_H

@@ -164,10 +164,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string EfficiencySaveDir, EfficiencyTestSaveDir;
 
     if (findSubstring(EfficiencyRecTitle, "FD")) {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
+        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
         EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
     } else {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
         EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
     }
 
@@ -455,10 +455,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     string EfficiencySaveDir, EfficiencyTestSaveDir;
 
     if (findSubstring(EfficiencyRecTitle, "FD")) {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
+        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
         EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
     } else {
-        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
         EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
     }
 
@@ -756,10 +756,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
 //    string EfficiencySaveDir, EfficiencyTestSaveDir;
 //
 //    if (findSubstring(EfficiencyRecTitle, "FD")) {
-//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
+//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
 //        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
 //    } else {
-//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
 //        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
 //    }
 //
@@ -1045,10 +1045,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
 //    string EfficiencySaveDir, EfficiencyTestSaveDir;
 //
 //    if (findSubstring(EfficiencyRecTitle, "FD")) {
-//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
+//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "_FD/";
 //        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "_FD/";
 //    } else {
-//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
+//        EfficiencySaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + EfficiencyParticle + "_" + EfficiencyType + "_efficiency_plots_" + EfficiencyFS + "/";
 //        EfficiencyTestSaveDir = EfficiencySaveDir + "Cloned_hist_test" + "/";
 //    }
 //

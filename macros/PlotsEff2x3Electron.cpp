@@ -30,94 +30,94 @@ void PlotsEff2x3Electron(string SampleName) {
     TFile *f;
 
     if (findSubstring(SampleName, "C12_simulation_6GeV_T5_first_10")) {
-        if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        if (SampleName == "C12_simulation_6GeV_T5_first_10_noNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_noNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_noNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_10_wNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_10_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root");
         }
     } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5_first_100")) {
-        if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        if (SampleName == "C12_simulation_6GeV_T5_first_100_noNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_noNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_noNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_100_wNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_100_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100_plots.root");
         }
     } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5_first_250")) {
-        if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        if (SampleName == "C12_simulation_6GeV_T5_first_250_noNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_noNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_noNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_first_250_wNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
         }
     } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5")) {
-        if (SampleName == "C12_simulation_6GeV_T5_noBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_noBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_noBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_noBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        if (SampleName == "C12_simulation_6GeV_T5_noNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_noNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_noNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_noNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
         }
     } else if (findSubstring(SampleName, "C12_simulation_G18_2GeV")) {
-        if (SampleName == "C12_simulation_G18_2GeV_noBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noBC_noFDph_Eff1/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_noBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noBC_noFDph_Eff2/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_noBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noBC_wFDph_Eff1/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_noBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noBC_wFDph_Eff2/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_wBC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wBC_noFDph_Eff1/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_wBC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wBC_noFDph_Eff2/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_wBC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wBC_wFDph_Eff1/reconhipo_plots.root");
-        } else if (SampleName == "C12_simulation_G18_2GeV_wBC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wBC_wFDph_Eff2/reconhipo_plots.root");
+        if (SampleName == "C12_simulation_G18_2GeV_noNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noNC_noFDph_Eff1/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_noNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noNC_noFDph_Eff2/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_noNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noNC_wFDph_Eff1/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_noNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_noNC_wFDph_Eff2/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_wNC_noFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wNC_noFDph_Eff1/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_wNC_noFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wNC_noFDph_Eff2/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_wNC_wFDph_Eff1") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wNC_wFDph_Eff1/reconhipo_plots.root");
+        } else if (SampleName == "C12_simulation_G18_2GeV_wNC_wFDph_Eff2") {
+            f = new TFile("plots_C12_simulation_G18_2GeV_-03_ALL_CUTS_wNC_wFDph_Eff2/reconhipo_plots.root");
         }
     }
     //</editor-fold>

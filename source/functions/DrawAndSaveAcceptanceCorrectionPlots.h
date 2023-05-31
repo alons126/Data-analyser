@@ -32,14 +32,13 @@
 
 #include "GeneralFunctions.h"
 #include "GetParticleProperties/GetParticleName.h"
+#include "GetParticleProperties/GetParticleNameLC.h"
 #include "GetParticleProperties/GetParticleNameShort.h"
 #include "../classes/hPlots/hPlot1D.h"
 
 using namespace std;
 
 void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list) {
-
-    //TODO: add a continue for the case of running over data?
 
     bool weighted_plots = true;
 
@@ -82,6 +81,7 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     //<editor-fold desc="Setting particle">
     string ACorrectionRecTitle = RPlot_Clone->GetTitle();
     string ACorrectionParticle = GetParticleName(ACorrectionRecTitle);
+    string ACorrectionParticleLC = GetParticleNameLC(ACorrectionRecTitle);
     string ACorrectionParticleShort = GetParticleNameShort(ACorrectionRecTitle);
     //</editor-fold>
 
@@ -132,21 +132,36 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
         ACorrectionFS = "1e2p";
     } else if (findSubstring(ACorrectionRecTitle, "2p")) {
         ACorrectionFS = "2p";
+    } else if (findSubstring(ACorrectionRecTitle, "pFDpCD")) {
+        ACorrectionFS = "pFDpCD";
+    } else if (findSubstring(ACorrectionRecTitle, "nFDpCD")) {
+        ACorrectionFS = "nFDpCD";
     }
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
-    //TODO: find a way to delete old ACorrection directories
-    //system(("rm -r " + TLPlot.GetHistogram1DSaveNamePath() + "*").c_str());
-
     string ACorrectionSaveDir, ACorrectionTestSaveDir;
 
-    if (findSubstring(ACorrectionRecTitle, "FD")) {
-        ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "_FD/";
-        ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test" + "_FD/";
+    if (findSubstring(ACorrectionRecTitle, "Electron") || findSubstring(ACorrectionRecTitle, "electron")) {
+        ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "/";
+        ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
     } else {
-        ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "/";
-        ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test" + "/";
+        if (findSubstring(ACorrectionRecTitle, ", FD)") ||
+            findSubstring(ACorrectionParticle, "FD " + ACorrectionParticle) ||
+            findSubstring(ACorrectionParticle, "FD " + ACorrectionParticleLC)) {
+            ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/01_FD_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" +
+                                 ACorrectionFS + "/";
+            ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
+        } else if (findSubstring(ACorrectionRecTitle, ", CD)") ||
+                   findSubstring(ACorrectionParticle, "CD " + ACorrectionParticle) ||
+                   findSubstring(ACorrectionParticle, "CD " + ACorrectionParticleLC)) {
+            ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/02_CD_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" +
+                                 ACorrectionFS + "/";
+            ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
+        } else {
+            ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "/";
+            ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test" + "/";
+        }
     }
 
     system(("mkdir -p " + ACorrectionSaveDir).c_str());
@@ -271,11 +286,10 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     Canvas->Clear();
     //</editor-fold>
 
+    delete Canvas;
 }
 
 void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {
-
-    //TODO: add a continue for the case of running over data?
 
     bool weighted_plots = true;
 
@@ -297,6 +311,7 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     //<editor-fold desc="Setting particle">
     string ACorrectionRecTitle = RPlot->GetTitle();
     string ACorrectionParticle = GetParticleName(ACorrectionRecTitle);
+    string ACorrectionParticleLC = GetParticleNameLC(ACorrectionRecTitle);
     string ACorrectionParticleShort = GetParticleNameShort(ACorrectionRecTitle);
     //</editor-fold>
 
@@ -315,6 +330,10 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
         ACorrectionFS = "1e2p";
     } else if (findSubstring(ACorrectionRecTitle, "2p")) {
         ACorrectionFS = "2p";
+    } else if (findSubstring(ACorrectionRecTitle, "pFDpCD")) {
+        ACorrectionFS = "pFDpCD";
+    } else if (findSubstring(ACorrectionRecTitle, "nFDpCD")) {
+        ACorrectionFS = "nFDpCD";
     }
     //</editor-fold>
 
@@ -394,17 +413,28 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
-    //TODO: find a way to delete old ACorrection directories
-    //system(("rm -r " + TLPlot.GetHistogram1DSaveNamePath() + "*").c_str());
-
     string ACorrectionSaveDir, ACorrectionTestSaveDir;
 
-    if (findSubstring(ACorrectionRecTitle, "FD")) {
-        ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "_FD/";
-        ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test" + "_FD/";
+    if (findSubstring(ACorrectionRecTitle, "Electron") || findSubstring(ACorrectionRecTitle, "electron")) {
+        ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/00_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "/";
+        ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
     } else {
-        ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "/";
-        ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test" + "/";
+        if (findSubstring(ACorrectionRecTitle, ", FD)") ||
+            findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticle) ||
+            findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticleLC)) {
+            ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/01_FD_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_"
+                                 + ACorrectionFS + "/";
+            ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
+        } else if (findSubstring(ACorrectionRecTitle, ", CD)") ||
+                   findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticle) ||
+                   findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticleLC)) {
+            ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/02_CD_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_"
+                                 + ACorrectionFS + "/";
+            ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
+        } else {
+            ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" + ACorrectionFS + "/";
+            ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test" + "/";
+        }
     }
 
     system(("mkdir -p " + ACorrectionSaveDir).c_str());
@@ -566,6 +596,7 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     Canvas->Clear();
     //</editor-fold>
 
+    delete Canvas;
 }
 
 #endif //DRAWANDSAVEACCEPTANCECORRECTIONPLOTS_H
