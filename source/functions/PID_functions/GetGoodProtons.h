@@ -18,6 +18,7 @@
 #include "../../classes/DSCuts/DSCuts.h"
 #include "../../classes/hPlots/hPlot1D.h"
 #include "../../classes/hPlots/hPlot2D.h"
+#include "../AngleCalc/CalcdPhi.h"
 
 using namespace std;
 
@@ -55,9 +56,11 @@ vector<int> GetGoodProtons(bool apply_nucleon_cuts, vector<region_part_ptr> &pro
                     }
                 } else if (((protons[IDProtons_ind.at(i)]->getRegion() == FD) && (protons[IDProtons_ind.at(j)]->getRegion() == CD)) ||
                            ((protons[IDProtons_ind.at(i)]->getRegion() == CD) && (protons[IDProtons_ind.at(j)]->getRegion() == FD))) {
-                    double Theta_p_i = protons[IDProtons_ind.at(i)]->getTheta() * 180.0 / pi, Phi_p_i = protons[IDProtons_ind.at(i)]->getPhi() * 180.0 / pi;
-                    double Theta_p_j = protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi, Phi_p_j = protons[IDProtons_ind.at(j)]->getPhi() * 180.0 / pi;
-                    double dPhi = Phi_p_i - Phi_p_j;
+                    double Theta_p_i = protons[IDProtons_ind.at(i)]->getTheta() * 180.0 / pi, Theta_p_j = protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi;
+                    double dPhi = CalcdPhi(protons[IDProtons_ind.at(i)], protons[IDProtons_ind.at(j)]);
+//                    double Theta_p_i = protons[IDProtons_ind.at(i)]->getTheta() * 180.0 / pi, Phi_p_i = protons[IDProtons_ind.at(i)]->getPhi() * 180.0 / pi;
+//                    double Theta_p_j = protons[IDProtons_ind.at(j)]->getTheta() * 180.0 / pi, Phi_p_j = protons[IDProtons_ind.at(j)]->getPhi() * 180.0 / pi;
+//                    double dPhi = Phi_p_i - Phi_p_j;
 
                     bool p_i_around_40 = (fabs(Theta_p_i - Theta_p1_cuts_2p.GetMean()) < Theta_p1_cuts_2p.GetUpperCut());
                     bool p_j_around_40 = (fabs(Theta_p_j - Theta_p2_cuts_2p.GetMean()) < Theta_p2_cuts_2p.GetUpperCut());

@@ -52,6 +52,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/PID_functions/FDNeutralParticle.h"
 #include "source/functions/PID_functions/FDNeutralParticleID.h"
 #include "source/functions/PID_functions/GetFDNeutronP.h"
+#include "source/functions/AngleCalc/CalcdPhi.h"
 //#include "source/functions/PID_functions/GetFDNeutrons.h"
 //#include "source/functions/PID_functions/GetFDPhotons.h"
 #include "source/functions/PID_functions/GetGoodParticles.h"
@@ -156,7 +157,7 @@ void EventAnalyser() {
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true;
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
-    bool apply_nucleon_cuts = true;
+    bool apply_nucleon_cuts = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -391,13 +392,11 @@ void EventAnalyser() {
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
     DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
     DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15);
-//    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5); //original
-//    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5); //original
-//    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 10.); //original
-//    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
-//    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
-//    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2-original", "", "Proton", "2p", 0, -9999, 15);
+    DSCuts Theta_pFD_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
+    DSCuts Theta_pCD_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
+    DSCuts dphi_pFD_pCD_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15);
+
     DSCuts Theta_p1_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
     DSCuts Theta_p2_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
@@ -2682,17 +2681,26 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
-                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                 65, 30, 50, 65, 30, 50);
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);#theta_{p_{2}} [Deg];"
+                                                                 "#theta_{p_{1}} [Deg];", 65, 30, 50, 65, 30, 50);
     string hTheta_p1_vs_theta_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
-// dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (2p, CD & FD) ----------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 < 20 (CD & FD)">
+    TH2D *hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p = new TH2D("#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p)",
+                                                                     "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., 2p);#theta_{pCD} [Deg];"
+                                                                     "#theta_{pFD} [Deg];", 65, 30, 50, 65, 30, 50);
+    string hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+    //</editor-fold>
+
+// dPhi_p1_p2 for Theta_p1_p2 < 20 (2p, CD & FD) ------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="dPhi_p1_p2 for Theta_p1_p2 < 20 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p)",
                                                        "#delta#phi for #theta_{p_{1},p_{2}}<20#circ (All Int., 2p);"
-                                                       "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 100, -360, 360);
+                                                       "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 100, -180, 180);
     string hdPhi_p1_p2_for_Theta_p1_p2_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN (All Int., 2p)",
@@ -2701,37 +2709,84 @@ void EventAnalyser() {
     string hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
+// dPhi_pFD_pCD for Theta_pFD_pCD < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="dPhi_p1_p2 for Theta_pFD_pCD < 20 (CD & FD)">
+    TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p = new TH1D("#delta#phi for #theta_{pFD,pCD}<20#circ (All Int., 2p)",
+                                                           "#delta#phi for #theta_{pFD,pCD}<20#circ (All Int., 2p);"
+                                                           "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
+    string hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{pFD,pCD}<20#circ - ZOOMIN (All Int., 2p)",
+                                                                  "#delta#phi for #theta_{pFD,pCD}<20#circ - ZOOMIN (All Int., 2p);"
+                                                                  "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
+    string hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+    //</editor-fold>
+
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for Theta_p1_p2 (CD & FD)">
+    //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
     TH2D *hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p = new TH2D("#theta_{p_{1}} vs. #theta_{p_{1}} #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
-                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];#theta_{p_{1}} [Deg];",
-                                                                 65, 30, 50, 65, 30, 50);
+                                                                 "#theta_{p_{1}} vs. #theta_{p_{2}} for every #theta_{p_{1},p_{2}} (All Int., 2p);#theta_{p_{2}} [Deg];"
+                                                                 "#theta_{p_{1}} [Deg];", 65, 30, 50, 65, 30, 50);
     string hTheta_p1_vs_theta_p2_forall_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+    //</editor-fold>
+
+// Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (2p, CD & FD) ---------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (CD & FD)">
+    TH2D *hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p = new TH2D("#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD}<20#circ (All Int., 2p)",
+                                                                     "#theta_{pFD} vs. #theta_{pCD} #forall#theta_{pFD,pCD}<20#circ (All Int., 2p);#theta_{pCD} [Deg];"
+                                                                     "#theta_{pFD} [Deg];", 65, 30, 50, 65, 30, 50);
+    string hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) -----------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (CD & FD)">
+    //<editor-fold desc="dPhi_p1_p2 for every Theta_p1_p2 (CD & FD)">
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} (All Int., 2p)",
                                                         "#delta#phi for every #theta_{p_{1},p_{2}} (All Int., 2p);"
-                                                        "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -360, 360);
+                                                        "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 50, -180, 180);
     string hdPhi_p1_p2_for_all_Theta_p1_p2_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p = new TH1D("#delta#phi #forall#theta_{p_{1},p_{2}} - ZOOMIN (All Int., 2p)",
                                                                "#delta#phi for every #theta_{p_{1},p_{2}} - ZOOMIN(All Int., 2p);"
-                                                               "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -25, 25);
+                                                               "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 50, -40, 40);
     string hdPhi_p1_p2_for_all_Theta_p1_p2_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_p1_p2_for_small_dTheta_2p = new TH1D("#delta#phi for small #Delta#theta_{1/2} (All Int., 2p)",
-                                                     "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ;"
-                                                     "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -100, 100);
+                                                     "#delta#phi for small #Delta#theta_{1/2} = |#theta_{1/2}-40#circ|;"
+                                                     "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 50, -180, 180);
     string hdPhi_p1_p2_for_small_dTheta_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
 
     TH1D *hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p = new TH1D("#delta#phi for small #Delta#theta_{1/2} - ZOOMIN (All Int., 2p)",
-                                                            "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ - ZOOMIN;"
-                                                            "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 75, -25, 25);
+                                                            "#delta#phi for small #Delta#theta_{1/2} = |#theta_{1/2}-40#circ| - ZOOMIN;"
+                                                            "#delta#phi = #phi_{p,1} - #phi_{p,2} [Deg];", 50, -40, 40);
     string hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+    //</editor-fold>
+
+// dPhi_pFD_pCD for every Theta_pFD_pCD (2p, CD & FD) --------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="dPhi_pFD_pCD for every Theta_pFD_pCD (CD & FD)">
+    TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p = new TH1D("#delta#phi for #theta_{pFD,pCD} (All Int., 2p)",
+                                                            "#delta#phi for #theta_{pFD,pCD} (All Int., 2p);"
+                                                            "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
+    string hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p = new TH1D("#delta#phi for #theta_{pFD,pCD} - ZOOMIN (All Int., 2p)",
+                                                                   "#delta#phi for #theta_{pFD,pCD} - ZOOMIN (All Int., 2p);"
+                                                                   "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
+    string hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_pFD_pCD_for_small_dTheta_2p = new TH1D("#delta#phi for small #Delta#theta_{pFD/pCD} (All Int., 2p)",
+                                                       "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ|;"
+                                                       "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
+    string hdPhi_pFD_pCD_for_small_dTheta_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
+
+    TH1D *hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p = new TH1D("#delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN (All Int., 2p)",
+                                                              "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ| - ZOOMIN;"
+                                                              "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
+    string hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p_Dir = directories.Angle_Directory_map["Double_detection_2p_Directory"];
     //</editor-fold>
 
 // Ghost tracks handling (2p, CD only) ----------------------------------------------------------------------------------------------------------------------------------
@@ -2945,12 +3000,12 @@ void EventAnalyser() {
     //<editor-fold desc="dPhi_pFD_pCD for Theta_pFD_pCD < 20 (CD & FD)">
     TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_pFDpCD = new TH1D("#delta#phi for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD)",
                                                                "#delta#phi for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD);"
-                                                               "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 100, -360, 360);
+                                                               "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
     string hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
 
     TH1D *hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_pFDpCD = new TH1D("#delta#phi for #theta_{pFD,pCD}<20#circ - ZOOMIN (All Int., pFDpCD)",
                                                                       "#delta#phi for #theta_{pFD,pCD}<20#circ - ZOOMIN (All Int., pFDpCD);"
-                                                                      "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 100, -25, 25);
+                                                                      "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
     string hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -2968,22 +3023,22 @@ void EventAnalyser() {
     //<editor-fold desc="dPhi_pFD_pCD for every Theta_pFD_pCD (CD & FD)">
     TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_pFDpCD = new TH1D("#delta#phi #forall#theta_{pFD,pCD} (All Int., pFDpCD)",
                                                                 "#delta#phi for every #theta_{pFD,pCD} (All Int., pFDpCD);"
-                                                                "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -360, 360);
+                                                                "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
     string hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
 
     TH1D *hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_pFDpCD = new TH1D("#delta#phi #forall#theta_{pFD,pCD} - ZOOMIN (All Int., pFDpCD)",
                                                                        "#delta#phi for every #theta_{pFD,pCD} - ZOOMIN(All Int., pFDpCD);"
-                                                                       "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -25, 25);
+                                                                       "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
     string hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
 
     TH1D *hdPhi_pFD_pCD_for_small_dTheta_pFDpCD = new TH1D("#delta#phi for small #Delta#theta_{pFD/pCD} (All Int., pFDpCD)",
-                                                           "#delta#phi for small #Delta#theta_{pFD/pCD} = #theta_{pFD/pCD}-40#circ;"
-                                                           "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -100, 100);
+                                                           "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ|;"
+                                                           "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
     string hdPhi_pFD_pCD_for_small_dTheta_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
 
     TH1D *hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD = new TH1D("#delta#phi for small #Delta#theta_{pFD/pCD} - ZOOMIN (All Int., pFDpCD)",
-                                                                  "#delta#phi for small #Delta#theta_{pFD/pCD} = #theta_{pFD/pCD}-40#circ - ZOOMIN;"
-                                                                  "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -25, 25);
+                                                                  "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ| - ZOOMIN;"
+                                                                  "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
     string hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -3105,7 +3160,7 @@ void EventAnalyser() {
     string hTheta_p_e_p_tot_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_p_e_p_tot vs. W (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+// Theta_p_e_p_tot vs. W (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p_e_p_tot vs. W (nFDpCD)">
     TH2D *hTheta_p_e_p_tot_vs_W_nFDpCD = new TH2D("#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
@@ -3152,7 +3207,7 @@ void EventAnalyser() {
     string hTheta_q_p_L_vs_p_L_q_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_nFD_pCD (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------
+// Theta_nFD_pCD (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_nFD_pCD (CD & FD)">
     THStack *sTheta_nFD_pCD_nFDpCD = new THStack("#theta_{nFD,pCD} (All Int., nFDpCD)",
@@ -3175,7 +3230,7 @@ void EventAnalyser() {
     string hTheta_nFD_pCD_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_nFD_pCD vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
+// Theta_nFD_pCD vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_nFD_pCD vs. W (CD & FD)">
     TH2D *hTheta_nFD_pCD_vs_W_nFDpCD = new TH2D("#theta_{nFD,pCD} vs. W (All Int., nFDpCD)",
@@ -3184,12 +3239,12 @@ void EventAnalyser() {
     string hTheta_nFD_pCD_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_nFD_vs_theta_pCD for Theta_nFD_pCD < 20 (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------
+// Theta_nFD_vs_theta_pCD for Theta_nFD_pCD < 20 (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_nFD_vs_theta_pCD for Theta_nFD_pCD < 20 (CD & FD)">
     TH2D *hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_20_nFDpCD = new TH2D("#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD)",
-                                                                         "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);#theta_{pCD} [Deg];#theta_{nFD} [Deg];",
-                                                                         65, 30, 50, 65, 30, 50);
+                                                                         "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{nFD} [Deg];", 65, 30, 50, 65, 30, 50);
     string hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_20_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -3198,12 +3253,12 @@ void EventAnalyser() {
     //<editor-fold desc="dphi_nFD_pCD for Theta_nFD_pCD < 20 (CD & FD)">
     TH1D *hdphi_nFD_pCD_for_Theta_nFD_pCD_20_nFDpCD = new TH1D("#delta#phi for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD)",
                                                                "#delta#phi for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);"
-                                                               "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 100, -360, 360);
+                                                               "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
     string hdphi_nFD_pCD_for_Theta_nFD_pCD_20_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
 
     TH1D *hdphi_nFD_pCD_for_Theta_nFD_pCD_20_ZOOMIN_nFDpCD = new TH1D("#delta#phi for #theta_{nFD,pCD}<20#circ - ZOOMIN (All Int., nFDpCD)",
                                                                       "#delta#phi for #theta_{nFD,pCD}<20#circ - ZOOMIN (All Int., nFDpCD);"
-                                                                      "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 100, -25, 25);
+                                                                      "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
     string hdphi_nFD_pCD_for_Theta_nFD_pCD_20_ZOOMIN_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -3221,22 +3276,22 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_nFD_vs_theta_pCD for every Theta_nFD_pCD (CD & FD)">
     TH1D *hdphi_nFD_pCD_for_all_Theta_nFD_pCD_nFDpCD = new TH1D("#delta#phi #forall#theta_{nFD,pCD} (All Int., nFDpCD)",
                                                                 "#delta#phi for every #theta_{nFD,pCD} (All Int., nFDpCD);"
-                                                                "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -360, 360);
+                                                                "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
     string hdphi_nFD_pCD_for_all_Theta_nFD_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
 
     TH1D *hdphi_nFD_pCD_for_all_Theta_nFD_pCD_ZOOMIN_nFDpCD = new TH1D("#delta#phi #forall#theta_{nFD,pCD} - ZOOMIN (All Int., nFDpCD)",
                                                                        "#delta#phi for every #theta_{nFD,pCD} - ZOOMIN(All Int., nFDpCD);"
-                                                                       "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -25, 25);
+                                                                       "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -40, 40);
     string hdphi_nFD_pCD_for_all_Theta_nFD_pCD_ZOOMIN_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
 
     TH1D *hdphi_nFD_pCD_for_small_dTheta_nFDpCD = new TH1D("#delta#phi for small #Delta#theta_{nFD/pCD} (All Int., nFDpCD)",
                                                            "#delta#phi for small #Delta#theta_{nFD/pCD} = #theta_{nFD/pCD}-40#circ;"
-                                                           "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -100, 100);
+                                                           "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -180, 180);
     string hdphi_nFD_pCD_for_small_dTheta_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
 
     TH1D *hdphi_nFD_pCD_for_small_dTheta_ZOOMIN_nFDpCD = new TH1D("#delta#phi for small #Delta#theta_{nFD/pCD} - ZOOMIN (All Int., nFDpCD)",
                                                                   "#delta#phi for small #Delta#theta_{nFD/pCD} = #theta_{nFD/pCD}-40#circ - ZOOMIN;"
-                                                                  "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 75, -25, 25);
+                                                                  "#delta#phi = #phi_{pFD} - #phi_{pCD} [Deg];", 50, -50, 05);
     string hdphi_nFD_pCD_for_small_dTheta_ZOOMIN_nFDpCD_Dir = directories.Angle_Directory_map["Double_detection_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -3244,8 +3299,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Theta_nFD_vs_theta_pCD for Theta_nFD_pCD < 20 (CD & FD)">
     TH2D *hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_10_nFDpCD = new TH2D("#theta_{nFD} vs. #theta_{nFD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD)",
-                                                                         "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);#theta_{pCD} [Deg];#theta_{nFD} [Deg];",
-                                                                         65, 10, 80, 65, 10, 80);
+                                                                         "#theta_{nFD} vs. #theta_{pCD} for #theta_{nFD,pCD}<20#circ (All Int., nFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{nFD} [Deg];", 65, 10, 80, 65, 10, 80);
     string hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_10_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -8791,6 +8846,9 @@ void EventAnalyser() {
             hTheta_p1_p2_vs_W_2p->Fill(W_2p, Theta_p1_p2_2p, Weight);
 
 
+            //<editor-fold desc="Filling double-detection plots (2p)">
+
+            //<editor-fold desc="old">
             double dPhi_hit_2p = Phi_p1 - Phi_p2;
 
             if (Theta_p1_p2_2p < 20.) {
@@ -8808,6 +8866,39 @@ void EventAnalyser() {
                 hdPhi_p1_p2_for_small_dTheta_2p->Fill(dPhi_hit_2p, Weight);
                 hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->Fill(dPhi_hit_2p, Weight);
             }
+            //</editor-fold>
+
+            //<editor-fold desc="Filling double-detection plots for 1pFD1pCD (2p)">
+            if ((p_first_2p->getRegion() == FD && p_second_2p->getRegion() == CD) || (p_first_2p->getRegion() == CD && p_second_2p->getRegion() == FD)) {
+                double dPhi_hit_pFDpCD_2p = CalcdPhi(p_first_2p, p_second_2p);
+
+                double Theta_pFD, Theta_pCD;
+
+                if (p_first_2p->getRegion() == FD && p_second_2p->getRegion() == CD) {
+                    Theta_pFD = p_first_2p->getTheta() * 180.0 / pi, Theta_pCD = p_second_2p->getTheta() * 180.0 / pi;
+                } else if (p_first_2p->getRegion() == CD && p_second_2p->getRegion() == FD) {
+                    Theta_pFD = p_second_2p->getTheta() * 180.0 / pi, Theta_pCD = p_first_2p->getTheta() * 180.0 / pi;
+                }
+
+                if (Theta_p1_p2_2p < 20.) { // Theta_p1_p2_2p does no change for pFDpCD, so no new calaculation is needed
+                    hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p->Fill(Theta_pCD, Theta_pFD, Weight);
+                    hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
+                    hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
+                }
+
+                hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p->Fill(Theta_pCD, Theta_pFD, Weight);
+                hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
+                hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
+
+                if ((fabs(Theta_pFD - Theta_pFD_cuts_2p.GetMean()) < Theta_pFD_cuts_2p.GetUpperCut()) &&
+                    (fabs(Theta_pCD - Theta_pCD_cuts_2p.GetMean()) < Theta_pCD_cuts_2p.GetUpperCut())) {
+                    hdPhi_pFD_pCD_for_small_dTheta_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
+                    hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p->Fill(dPhi_hit_pFDpCD_2p, Weight);
+                }
+            }
+            //</editor-fold>
+
+            //</editor-fold>
 
             Theta_q_p_tot_2p = acos((q_2p_3v.Px() * P_tot_2p_3v.Px() + q_2p_3v.Py() * P_tot_2p_3v.Py() + q_2p_3v.Pz() * P_tot_2p_3v.Pz())
                                     / (q_2p_3v.Mag() * P_tot_2p_3v.Mag())) * 180.0 / pi; // Theta_q_p_tot_2p in deg
@@ -8988,10 +9079,17 @@ void EventAnalyser() {
             /* Setting particle angles */
             double Theta_p1_pFDpCD = P_1_pFDpCD_3v.Theta() * 180.0 / pi, Phi_p1_pFDpCD = P_1_pFDpCD_3v.Phi() * 180.0 / pi;       // Theta_p1_pFDpCD, Phi_p1_pFDpCD in deg
             double Theta_p2_pFDpCD = P_2_pFDpCD_3v.Theta() * 180.0 / pi, Phi_p2_pFDpCD = P_2_pFDpCD_3v.Phi() * 180.0 / pi;       // Theta_p2_pFDpCD, Phi_p2_pFDpCD in deg
-            double dPhi_hit_pFDpCD = Phi_p1_pFDpCD - Phi_p2_pFDpCD;
             double Theta_pFD_pCD_pFDpCD = acos((P_1_pFDpCD_3v.Px() * P_2_pFDpCD_3v.Px() + P_1_pFDpCD_3v.Py() * P_2_pFDpCD_3v.Py()
                                                 + P_1_pFDpCD_3v.Pz() * P_2_pFDpCD_3v.Pz())
                                                / (P_1_pFDpCD_3v.Mag() * P_2_pFDpCD_3v.Mag())) * 180.0 / pi;                                // Theta_pFD_pCD_pFDpCD in deg
+
+            double dPhi_hit_pFDpCD = Phi_p1_pFDpCD - Phi_p2_pFDpCD;
+
+            if (dPhi_hit_pFDpCD > 180) {
+                dPhi_hit_pFDpCD = dPhi_hit_pFDpCD - 360;
+            } else if (dPhi_hit_pFDpCD < -180) {
+                dPhi_hit_pFDpCD = dPhi_hit_pFDpCD + 360;
+            }
             //</editor-fold>
 
             //</editor-fold>
@@ -11869,6 +11967,13 @@ void EventAnalyser() {
 
         //</editor-fold>
 
+// Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (2p, CD & FD) ----------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p_Dir, "04a_Theta_pFD_vs_Theta_pCD_for_Theta_pFD_pCD_20_2p_20_2p");
+        //</editor-fold>
+
 // dphi_nFD_pCD for Theta_p1_p2 < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="dphi_nFD_pCD for Theta_p1_p2 < 20 (2p, CD & FD)">
@@ -11881,6 +11986,20 @@ void EventAnalyser() {
         histPlotter1D(c1, hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_integral,
                       "#delta#phi for #theta_{p_{1},p_{2}}<20#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
                       "02c_dphi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_All_Int_2p", hdPhi_p1_p2_for_Theta_p1_p2_20_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
+// dphi_nFD_pCD for Theta_pFD_pCD < 20 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="dphi_nFD_pCD for Theta_pFD_pCD < 20 (2p, CD & FD)">
+        double hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p_integral = hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p->Integral();
+        double hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p_integral = hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p_integral,
+                      "#delta#phi for #theta_{pFD,pCD}<20#circ", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "05a_dPhi_pFD_pCD_for_Theta_pFD_pCD_20_All_Int_2p", hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p_Dir, "", kBlue, true, true, true, false);
+        histPlotter1D(c1, hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p_integral,
+                      "#delta#phi for #theta_{pFD,pCD}<20#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "05b_dPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_All_Int_2p", hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
 // Theta_p1_vs_Theta_p2 for every Theta_p1_p2 (2p, CD & FD) -------------------------------------------------------------------------------------------------------------
@@ -11906,6 +12025,13 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
+        //</editor-fold>
+
+// Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (2p, CD & FD) ---------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Theta_pFD_vs_Theta_pCD for every Theta_pFD_pCD (2p, CD & FD)">
+        histPlotter2D(c1, hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false,
+                      hTheta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p_Dir, "04b_Theta_pFD_vs_Theta_pCD_forall_Theta_pFD_pCD_2p_2p");
         //</editor-fold>
 
 // dPhi_p1_p2 for every Theta_p1_p2 (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
@@ -11937,6 +12063,39 @@ void EventAnalyser() {
 
         dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_2p->GetMaximumBin()));
 //        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
+        //</editor-fold>
+
+// dPhi_pFD_pCD for every Theta_pFD_pCD (2p, CD & FD) --------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="dPhi_pFD_pCD for every Theta_pFD_pCD (CD & FD)">
+        double hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p_integral = hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_2p_integral,
+                      "#delta#phi for every #theta_{pFD,pCD}", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "06a_dPhi_pFD_pCD_for_every_Theta_pFD_pCD_All_Int_2p", hdPhi_pFD_pCD_for_Theta_pFD_pCD_20_2p_Dir, "", kBlue, true, true, true, false);
+
+        double hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p_integral = hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p_integral,
+                      "#delta#phi for every #theta_{pFD,pCD} - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_q_p_2p,
+                      "06b_dPhi_pFD_pCD_for_every_Theta_pFD_pCD_All_Int_ZOOMIN_2p", hdPhi_pFD_pCD_for_all_Theta_pFD_pCD_ZOOMIN_2p_Dir, "", kBlue, true, true, true,
+                      false);
+
+        double hdPhi_pFD_pCD_for_small_dTheta_2p_integral = hdPhi_pFD_pCD_for_small_dTheta_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_pFD_pCD_for_small_dTheta_2p, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_small_dTheta_2p_integral,
+                      "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ|", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_q_p_2p,
+                      "07a_dPhi_pFD_pCD_for_small_dTheta_2p", hdPhi_pFD_pCD_for_small_dTheta_2p_Dir, "", kBlue, true, true, true, false);
+
+        double hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p_integral = hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p->Integral();
+
+        histPlotter1D(c1, hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p_integral,
+                      "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ| - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_q_p_2p, "07b_dPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p", hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
+
+//        dphi_pFD_pCD_2p.SetMean(hdPhi_pFD_pCD_for_small_dTheta_2p->GetBinCenter(hdPhi_pFD_pCD_for_small_dTheta_2p->GetMaximumBin()));
+        dphi_pFD_pCD_2p.SetMean(hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
         //</editor-fold>
 
 //  Ghost tracks handling (2p, CD only) ---------------------------------------------------------------------------------------------------------------------------------
@@ -12209,13 +12368,14 @@ void EventAnalyser() {
         double hdPhi_pFD_pCD_for_small_dTheta_pFDpCD_integral = hdPhi_pFD_pCD_for_small_dTheta_pFDpCD->Integral();
 
         histPlotter1D(c1, hdPhi_pFD_pCD_for_small_dTheta_pFDpCD, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_small_dTheta_pFDpCD_integral,
-                      "#delta#phi for small #Delta#theta_{pFD/pCD} = #theta_{pFD/pCD}-40#circ", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ|", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sTheta_q_p_pFDpCD, "03a_dPhi_pFD_pCD_for_small_dTheta_pFDpCD", hdPhi_pFD_pCD_for_small_dTheta_pFDpCD_Dir, "", kBlue, true, true, true, false);
 
         double hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD_integral = hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD->Integral();
 
         histPlotter1D(c1, hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD, norm_Angle_plots_master, true, hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD_integral,
-                      "#delta#phi for small #Delta#theta_{pFD/pCD} = #theta_{pFD/pCD}-40#circ - ZOOMIN", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      "#delta#phi for small #Delta#theta_{pFD/pCD} = |#theta_{pFD/pCD}-40#circ| - ZOOMIN", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true,
                       sTheta_q_p_pFDpCD, "03b_dPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD", hdPhi_pFD_pCD_for_small_dTheta_ZOOMIN_pFDpCD_Dir, "", kBlue, true, true, true,
                       false);
         //</editor-fold>
@@ -14205,6 +14365,8 @@ void EventAnalyser() {
 
         Nucleon_Cuts << dphi_p1_p2_2p.GetCutVariable() << "\t\t\t" << dphi_p1_p2_2p.GetPartPDG() << ":" << dphi_p1_p2_2p.GetMean() << ":" <<
                      dphi_p1_p2_2p.GetUpperCut() << ":" << dphi_p1_p2_2p.GetRegion() << "\n";
+        Nucleon_Cuts << dphi_pFD_pCD_2p.GetCutVariable() << "\t\t\t" << dphi_pFD_pCD_2p.GetPartPDG() << ":" << dphi_pFD_pCD_2p.GetMean() << ":" <<
+                     dphi_pFD_pCD_2p.GetUpperCut() << ":" << dphi_pFD_pCD_2p.GetRegion() << "\n";
 
         Nucleon_Cuts << "\n";
         //</editor-fold>
@@ -14636,6 +14798,8 @@ void EventAnalyser() {
     myLogFile << "Theta_p2_cuts_2p mean = " << Theta_p2_cuts_2p.GetMean() << "\n";
     myLogFile << "dphi_p1_p2_2p.GetUpperCut() = " << dphi_p1_p2_2p.GetUpperCut() << "\n";
     myLogFile << "dphi_p1_p2_2p.GetMean() = " << dphi_p1_p2_2p.GetMean() << "\n\n";
+    myLogFile << "dphi_pFD_pCD_2p.GetUpperCut() = " << dphi_pFD_pCD_2p.GetUpperCut() << "\n";
+    myLogFile << "dphi_pFD_pCD_2p.GetMean() = " << dphi_pFD_pCD_2p.GetMean() << "\n\n";
     //</editor-fold>
 
     //</editor-fold>
