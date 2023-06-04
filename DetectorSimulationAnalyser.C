@@ -391,7 +391,7 @@ void EventAnalyser() {
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
     DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
     DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 12.5);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15);
 //    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5); //original
 //    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5); //original
 //    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 10.); //original
@@ -5524,6 +5524,25 @@ void EventAnalyser() {
         /* Total number of particles in event (= Nf) */
         int Nf = Nn + Np + Nkp + Nkm + Npip + Npim + Ne + Nd + Nneut + No;
 
+        //<editor-fold desc="Nph_CD, Nph_FD, No_Prime and Nf_Prime declarations and definitions">
+        int Nph_CD = 0, Nph_FD = 0;
+
+        for (int i = 0; i < No; i++) {
+            if ((otherpart[i]->getRegion() == CD) && (otherpart[i]->par()->getPid() == 22)) {
+                ++Nph_CD;
+            } else if ((otherpart[i]->getRegion() == FD) && (otherpart[i]->par()->getPid() == 22)) {
+                ++Nph_FD;
+            }
+        } // end of loop over otherpart vector
+
+        /* No_Prime does not include (ignored particles): Neutrals, Neutrons, Photons in the CD (?) */
+        int No_Prime = No; // don't ignore photons in CD
+//        int No_Prime = No - Nph_CD; // ignore photons in CD
+        int N_charged_p = Np + Nkp + Nkm + Npip + Npim + Ne + Nd; // Particles that are not ignored
+
+        int Nf_Prime = N_charged_p + No_Prime;
+        //</editor-fold>
+
         //<editor-fold desc="Configure good particles & basic event selection">
         /* Configure particles within general momentum cuts (i.e. "identified particles") */
 
@@ -5560,28 +5579,6 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        /* Safety check that allParticles.size(), Nf are the same */
-        if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
-
-        //<editor-fold desc="Nph_CD, Nph_FD, No_Prime and Nf_Prime declarations and definitions">
-        int Nph_CD = 0, Nph_FD = 0;
-
-        for (int i = 0; i < No; i++) {
-            if ((otherpart[i]->getRegion() == CD) && (otherpart[i]->par()->getPid() == 22)) {
-                ++Nph_CD;
-            } else if ((otherpart[i]->getRegion() == FD) && (otherpart[i]->par()->getPid() == 22)) {
-                ++Nph_FD;
-            }
-        } // end of loop over otherpart vector
-
-        /* No_Prime does not include (ignored particles): Neutrals, Neutrons, Photons in the CD (?) */
-        int No_Prime = No; // don't ignore photons in CD
-//        int No_Prime = No - Nph_CD; // ignore photons in CD
-        int N_charged_p = Np + Nkp + Nkm + Npip + Npim + Ne + Nd; // Particles that are not ignored
-
-        int Nf_Prime = N_charged_p + No_Prime;
-        //</editor-fold>
-
         double Weight = 1;
 
         //<editor-fold desc="Process ID">
@@ -5604,6 +5601,11 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Debugging & monitoring">
+
+        //<editor-fold desc="Safety checks">
+        /* Safety check that allParticles.size(), Nf are the same */
+        if (allParticles.size() != Nf) { cout << "\n\nallParticles.size() is different than Nf! Exiting...\n\n", exit(EXIT_FAILURE); }
+        //</editor-fold>
 
         //<editor-fold desc="Some event counts">
         if (Ne == 0) { // Log total #(events) with and without electrons
