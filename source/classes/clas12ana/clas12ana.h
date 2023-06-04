@@ -1162,7 +1162,8 @@ void clas12ana::readInputParam(const char *filename) {
                     FD_Neutral_Beta_Mean = par.at(0);
                     FD_Neutral_Beta_cut = par.at(1);
                 }
-            } else if (parameter == "dPhi_p1_p2") { // My addition
+            } else if (parameter == "dPhi_pFD_pCD") { // My addition
+//            } else if (parameter == "dPhi_p1_p2") { // My addition
                 //TODO: organize this properly with a map for each pdg.
                 ss >> parameter2;
                 stringstream ss2(parameter2);

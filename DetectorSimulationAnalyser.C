@@ -157,7 +157,7 @@ void EventAnalyser() {
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true;
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
-    bool apply_nucleon_cuts = false;
+    bool apply_nucleon_cuts = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -392,14 +392,16 @@ void EventAnalyser() {
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
     DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
     DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2-original", "", "Proton", "2p", 0, -9999, 15);
-    DSCuts Theta_pFD_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts Theta_pCD_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts dphi_pFD_pCD_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15);
 
-    DSCuts Theta_p1_cuts_pFDpCD = DSCuts("Theta_p1", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
-    DSCuts Theta_p2_cuts_pFDpCD = DSCuts("Theta_p2", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
+    DSCuts Theta_pFD_cuts_2p = DSCuts("Theta_p1 leading", "", "Proton", "2p", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
+    DSCuts Theta_pCD_cuts_2p = DSCuts("Theta_p2 recoil", "", "Proton", "2p", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
+    DSCuts dphi_pFD_pCD_2p = DSCuts("dPhi_pFD_pCD", "", "Proton", "2p", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
+
+    DSCuts Theta_p1_cuts_pFDpCD = DSCuts("Theta_p1 leading", "", "Proton", "pFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
+    DSCuts Theta_p2_cuts_pFDpCD = DSCuts("Theta_p2 recoil", "", "Proton", "pFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_pFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "pFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
+
     DSCuts Theta_p1_cuts_nFDpCD = DSCuts("Theta_p1", "", "Proton", "nFDpCD", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
     DSCuts Theta_p2_cuts_nFDpCD = DSCuts("Theta_p2", "", "Proton", "nFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_nFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "nFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
@@ -745,7 +747,7 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram definitions">
     /* Histogram definitions and settings. */
 
-    cout << "\n\nDefining histograms...";
+    cout << "\nDefining histograms...\n\n";
 
     //TODO: add weights to all histograms
 
@@ -2907,7 +2909,7 @@ void EventAnalyser() {
     string hTheta_p_e_p_tot_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_p_e_p_tot vs. W (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+// Theta_p_e_p_tot vs. W (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p_e_p_tot vs. W (pFDpCD)">
     TH2D *hTheta_p_e_p_tot_vs_W_pFDpCD = new TH2D("\"#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
@@ -2916,7 +2918,7 @@ void EventAnalyser() {
     string hTheta_p_e_p_tot_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
-// Theta_q_p (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------------
+// Theta_q_p_tot (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p (pFDpCD, CD & FD)">
 
@@ -2943,6 +2945,15 @@ void EventAnalyser() {
     string hTheta_q_p_R_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
+    //</editor-fold>
+
+// Theta_q_p_tot vs. W (pFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_q_p_tot vs. W (CD & FD)">
+    TH2D *hTheta_q_p_tot_vs_W_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD)",
+                                                "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                                "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 65, 0, beamE * 1.1, 65, 0, 180);
+    string hTheta_q_p_tot_vs_W_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_q_pFD vs |P_L|/|q| (pFDpCD, CD & FD) ---------------------------------------------------------------------------------------------------------------------------
@@ -3196,6 +3207,15 @@ void EventAnalyser() {
     string hTheta_q_p_R_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
+    //</editor-fold>
+
+// Theta_q_p_tot vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Theta_nFD_pCD vs. W (CD & FD)">
+    TH2D *hTheta_q_p_tot_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
+                                                "#theta_{#vec{q},#vec{P}_{tot}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                                "#theta_{#vec{q},#vec{P}_{tot}} [Deg];", 65, 0, beamE * 1.1, 65, 0, 180);
+    string hTheta_q_p_tot_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_q_p_L vs |P_L|/|q| (nFDpCD, CD & FD) ---------------------------------------------------------------------------------------------------------------------------
@@ -5384,7 +5404,7 @@ void EventAnalyser() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Code execution">
-    cout << "Reading target parameter files\n\n";
+    cout << "\nReading target parameter files\n\n";
 
     clas12ana clasAna;
 
@@ -5393,7 +5413,7 @@ void EventAnalyser() {
         if (!apply_chi2_cuts_1e_cut) {
             clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
         } else if (apply_chi2_cuts_1e_cut) {
-            cout << "Loading fitted pid cuts...\n\n";
+            cout << "\nLoading fitted pid cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             /* Overwriting PID cuts according to SampleName */
@@ -5471,7 +5491,7 @@ void EventAnalyser() {
             Beta_max_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
 
         } else if (apply_nucleon_cuts) {
-            cout << "Loading fitted Beta cuts...\n\n";
+            cout << "\n\nLoading fitted Beta cuts...\n\n";
             clasAna.readInputParam((CutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             if (!Rec_wTL_ES) {
@@ -5491,6 +5511,8 @@ void EventAnalyser() {
             }
 
             dphi_p1_p2_2p.SetMean(clasAna.getdPhiCutMean());
+            dphi_pFD_pCD_2p.SetMean(clasAna.getdPhiCutMean());
+            dphi_pFD_pCD_pFDpCD.SetMean(clasAna.getdPhiCutMean());
         }
 
         clasAna.printParams();
@@ -5537,6 +5559,8 @@ void EventAnalyser() {
     int num_of_events_1e2p_all = 0, num_of_events_1e2p_all_woFDphotons = 0, num_of_events_with_1e2p = 0;
     int num_of_events_2p_wFakeProtons = 0, num_of_events_2p = 0;
 
+    int num_of_events_pFDpCD_wal1nFD = 0;
+    int num_of_events_pFDpCD_wmt1nFD = 0;
     int num_of_events_pFDpCD = 0;
     int num_of_events_with_1epFDpCD = 0, num_of_events_with_1epFDpFD = 0, num_of_events_with_1epCDpCD = 0;
 
@@ -5606,7 +5630,7 @@ void EventAnalyser() {
 
         vector<int> IDProtons_ind = ChargedParticleID(protons, p_mom_th); // identified protons (i.e., within P_p th.)
         vector<int> Protons_ind = GetGoodProtons(apply_nucleon_cuts, protons, IDProtons_ind,
-                                                 Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_p1_p2_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
+                                                 Theta_p1_cuts_2p, Theta_p2_cuts_2p, dphi_pFD_pCD_2p); // good identified protons (no sCTOFhp and no dCDaFDd)
 
         vector<int> Piplus_ind = ChargedParticleID(piplus, pip_mom_th);
         vector<int> Piminus_ind = ChargedParticleID(piminus, pim_mom_th);
@@ -8845,10 +8869,9 @@ void EventAnalyser() {
 
             hTheta_p1_p2_vs_W_2p->Fill(W_2p, Theta_p1_p2_2p, Weight);
 
-
             //<editor-fold desc="Filling double-detection plots (2p)">
 
-            //<editor-fold desc="old">
+            //<editor-fold desc="Filling double-detection plots for 2p">
             double dPhi_hit_2p = Phi_p1 - Phi_p2;
 
             if (Theta_p1_p2_2p < 20.) {
@@ -8868,7 +8891,7 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            //<editor-fold desc="Filling double-detection plots for 1pFD1pCD (2p)">
+            //<editor-fold desc="Filling double-detection plots for pFDpCD">
             if ((p_first_2p->getRegion() == FD && p_second_2p->getRegion() == CD) || (p_first_2p->getRegion() == CD && p_second_2p->getRegion() == FD)) {
                 double dPhi_hit_pFDpCD_2p = CalcdPhi(p_first_2p, p_second_2p);
 
@@ -9236,6 +9259,18 @@ void EventAnalyser() {
             //<editor-fold desc="Fillings pFDpCD histograms">
             if (apply_TL_pFDpCD_ES) {
                 ++num_of_events_pFDpCD;
+
+
+                if (NeutronsFD_ind.size() >= 1) {
+                    ++num_of_events_pFDpCD_wal1nFD;
+
+                    if (NeutronsFD_ind.size() > 1) {
+                        ++num_of_events_pFDpCD_wmt1nFD;
+                    }
+                }
+
+
+
 
                 //<editor-fold desc="Filling cut parameters histograms (pFDpCD)">
                 /* Filling Nphe plots (pFDpCD) */
@@ -9633,6 +9668,7 @@ void EventAnalyser() {
                                              + q_pFDpCD_3v.Pz() * P_tot_pFDpCD_3v.Pz())
                                             / (q_pFDpCD_3v.Mag() * P_tot_pFDpCD_3v.Mag())) * 180.0 / pi;                                   // Theta_q_p_tot_pFDpCD in deg
                 hTheta_q_p_tot_pFDpCD->Fill(Theta_q_p_tot_pFDpCD, Weight);
+                hTheta_q_p_tot_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_q_p_tot_pFDpCD, Weight);
 
                 Theta_q_p_L_pFDpCD = acos((q_pFDpCD_3v.Px() * P_1_pFDpCD_3v.Px() + q_pFDpCD_3v.Py() * P_1_pFDpCD_3v.Py()
                                            + q_pFDpCD_3v.Pz() * P_1_pFDpCD_3v.Pz())
@@ -10430,6 +10466,7 @@ void EventAnalyser() {
                                              + q_nFDpCD_3v.Pz() * P_tot_nFDpCD_3v.Pz())
                                             / (q_nFDpCD_3v.Mag() * P_tot_nFDpCD_3v.Mag())) * 180.0 / pi;                                   // Theta_q_p_tot_nFDpCD in deg
                 hTheta_q_p_tot_nFDpCD->Fill(Theta_q_p_tot_nFDpCD, Weight);
+                hTheta_q_p_tot_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_q_p_tot_nFDpCD, Weight);
 
                 Theta_q_p_L_nFDpCD = acos((q_nFDpCD_3v.Px() * P_nFD_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_nFD_nFDpCD_3v.Py()
                                            + q_nFDpCD_3v.Pz() * P_nFD_nFDpCD_3v.Pz())
@@ -11181,6 +11218,10 @@ void EventAnalyser() {
         //<editor-fold desc="P_nFD vs P_pCD plots (nFDpCD, CD & FD)">
         hP_nFD_vs_P_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
+
+
+//        DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
+
 
     } else {
         cout << "\n\nMomentum plots are disabled by user.\n\n";
@@ -12267,7 +12308,12 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_q_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_q_p_tot_pFDpCD_integral,
                       "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_pFDpCD, "02_Theta_q_p_tot_All_Int_pFDpCD", hTheta_q_p_tot_pFDpCD_Dir, "", kBlue, true, true, true, false);
+                      0.0425, plots, 2, false, true, sTheta_q_p_pFDpCD, "02a_Theta_q_p_tot_All_Int_pFDpCD", hTheta_q_p_tot_pFDpCD_Dir, "", kBlue, true, true, true,
+                      false);
+        //</editor-fold>
+
+        //<editor-fold desc="hTheta_q_p_tot_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_q_p_tot_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_tot_vs_W_pFDpCD_Dir, "02b_Theta_q_p_tot_vs_W_pFDpCD");
         //</editor-fold>
 
         //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (pFDpCD, CD & FD)">
@@ -12537,8 +12583,13 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_q_p_tot_nFDpCD, norm_Angle_plots_master, true, Theta_q_p_tot_nFDpCD_integral,
                       "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{nFD}+#vec{P}_{pCD}", "All Int., nFDpCD", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_nFDpCD, "02_Theta_q_p_tot_All_Int_nFDpCD", hTheta_q_p_tot_nFDpCD_Dir, "", kBlue, true, true, true, false);
+                      0.0425, plots, 2, false, true, sTheta_q_p_nFDpCD, "02a_Theta_q_p_tot_All_Int_nFDpCD", hTheta_q_p_tot_nFDpCD_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
+
+        //<editor-fold desc="hTheta_q_p_tot_vs_W_nFDpCD (nFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_q_p_tot_vs_W_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_tot_vs_W_nFDpCD_Dir, "02b_Theta_q_p_tot_vs_W_nFDpCD");
+        //</editor-fold>
+
 
         //<editor-fold desc="Theta_q_p_L and Theta_q_p_R (nFDpCD, CD & FD)">
         double Theta_q_p_L_nFDpCD_integral = hTheta_q_p_L_nFDpCD->Integral(), Theta_q_p_R_nFDpCD_integral = hTheta_q_p_R_nFDpCD->Integral();
@@ -14361,7 +14412,7 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Proton CD-FD double detection dPhi_p1_p2 cuts">
-        Nucleon_Cuts << "# Proton CD-FD double detection dPhi_p1_p2 cuts (pid:mean:sigma) - sigma=" << dphi_p1_p2_2p.FitStdFactor << ":\n";
+        Nucleon_Cuts << "# Proton CD-FD double detection dPhi cuts (pid:mean:sigma) - sigma=" << dphi_p1_p2_2p.FitStdFactor << ":\n";
 
         Nucleon_Cuts << dphi_p1_p2_2p.GetCutVariable() << "\t\t\t" << dphi_p1_p2_2p.GetPartPDG() << ":" << dphi_p1_p2_2p.GetMean() << ":" <<
                      dphi_p1_p2_2p.GetUpperCut() << ":" << dphi_p1_p2_2p.GetRegion() << "\n";
@@ -14991,7 +15042,10 @@ void EventAnalyser() {
     cout << "num_of_events_1epFDpFD:\t\t\t" << num_of_events_with_1epFDpFD << "\n";
     cout << "num_of_events_1epCDpCD:\t\t\t" << num_of_events_with_1epCDpCD << "\n\n";
 
-    cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
+    cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n";
+    cout << "num_of_events_pFDpCD_wal1nFD:\t\t" << num_of_events_pFDpCD_wal1nFD << "\n";
+    cout << "num_of_events_pFDpCD_wmt1nFD:\t\t" << num_of_events_pFDpCD_wmt1nFD << "\n\n";
+//    cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     cout << "num_of_events_nFDpCD:\t\t\t" << num_of_events_nFDpCD << "\n";
     cout << "num_of_events_nFDpCD_AV:\t\t" << num_of_events_nFDpCD_AV << "\n\n";

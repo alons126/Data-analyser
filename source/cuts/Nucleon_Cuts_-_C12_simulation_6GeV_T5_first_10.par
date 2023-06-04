@@ -11,5 +11,6 @@ Momentum_cuts_ECAL			2112:0:17.459:FD-ECAL
 Momentum_cuts_ECAL_apprax			2112:0:17.4709:FD-ECAL_apprax
 
 # Proton CD-FD double detection dPhi_p1_p2 cuts (pid:mean:sigma) - sigma=1:
-dPhi_p1_p2			2212:1.33333:10:CD & FD
+dPhi_p1_p2			2212:3.6:15:CD & FD
+dPhi_pFD_pCD			2212:-7.2:15:CD & FD
 
