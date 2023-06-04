@@ -156,7 +156,7 @@ void EventAnalyser() {
     bool apply_momentum_cuts_1p = true, apply_momentum_cuts_1n = true;
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
-    bool apply_nucleon_cuts = false;
+    bool apply_nucleon_cuts = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -192,6 +192,7 @@ void EventAnalyser() {
         }
 
         if (!apply_nucleon_cuts) {
+//            Efficiency_Status = "dTheta5anddPhi10";
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
@@ -200,6 +201,10 @@ void EventAnalyser() {
                 Efficiency_Status = "Eff2";
             } else {
                 Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1_dTheta5anddPhi125";
+//                Efficiency_Status = "Eff1_dTheta5anddPhi15";
+//                Efficiency_Status = "Eff1_dTheta5anddPhi10";
+//                Efficiency_Status = "Eff1";
             }
         }
 
@@ -384,9 +389,12 @@ void EventAnalyser() {
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
 
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
-    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
-    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
-    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 10.);
+    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
+    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 12.5);
+//    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5); //original
+//    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5); //original
+//    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 10.); //original
 //    DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 2.5);
 //    DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 2.5);
 //    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 5., -9999, 5.);
@@ -1562,14 +1570,14 @@ void EventAnalyser() {
 
     //<editor-fold desc="P1 vs P2 (pFDpCD, CD & FD)">
     hPlot2D hP_p_1_vs_P_p_2_pFDpCD = hPlot2D("pFDpCD", "", "P_{1} vs. P_{2}", "P_{1} vs. P_{2}", "P_{1} [GeV/c]", "P_{2} [GeV/c]",
-                                             directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "09_P_p_1_vs_P_p_2", 0, beamE * 1.1, 0, beamE * 1.1);
-    hP_p_1_vs_P_p_2_pFDpCD.SetZLinearScalePlot(true);
+                                             directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "09_P_p_1_vs_P_p_2",
+                                             0, beamE * 1.1, 0, beamE * 1.1, 65, 65);
     //</editor-fold>
 
     //<editor-fold desc="pFD vs pCD (pFDpCD, CD & FD)">
     hPlot2D hP_pFD_vs_P_pCD_pFDpCD = hPlot2D("pFDpCD", "", "P_{pFD} vs. P_{pCD}", "P_{pFD} vs. P_{pCD}", "P_{pFD} [GeV/c]", "P_{pCD} [GeV/c]",
-                                             directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "10_P_pFD_vs_P_pCD", 0, beamE * 1.1, 0, beamE * 1.1);
-    hP_pFD_vs_P_pCD_pFDpCD.SetZLinearScalePlot(true);
+                                             directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "10_P_pFD_vs_P_pCD",
+                                             0, beamE * 1.1, 0, beamE * 1.1, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -1648,15 +1656,13 @@ void EventAnalyser() {
     //<editor-fold desc="P1 vs P2 (nFDpCD, CD & FD)">
     hPlot2D hP_p_1_vs_P_p_2_nFDpCD = hPlot2D("nFDpCD", "", "P_{1} vs. P_{2}", "P_{1} vs. P_{2}", "P_{1} [GeV/c]", "P_{2} [GeV/c]",
                                              directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "09_P_p_1_vs_P_p_2",
-                                             0, beamE * 1.1, 0, beamE * 1.1);
-    hP_p_1_vs_P_p_2_nFDpCD.SetZLinearScalePlot(true);
+                                             0, beamE * 1.1, 0, beamE * 1.1, 65, 65);
     //</editor-fold>
 
     //<editor-fold desc="nFD vs pCD (nFDpCD, CD & FD)">
     hPlot2D hP_nFD_vs_P_pCD_nFDpCD = hPlot2D("nFDpCD", "", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} [GeV/c]", "P_{pCD} [GeV/c]",
                                              directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "10_P_nFD_vs_P_pCD",
-                                             0, beamE * 1.1, 0, beamE * 1.1);
-    hP_nFD_vs_P_pCD_nFDpCD.SetZLinearScalePlot(true);
+                                             0, beamE * 1.1, 0, beamE * 1.1, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -11927,7 +11933,8 @@ void EventAnalyser() {
                       "#delta#phi for small #Delta#theta_{1/2} = #theta_{1/2}-40#circ - ZOOMIN", "All Int., 2p", 0.06, 0.0425, 0.0425, plots, 2, false, true,
                       sTheta_q_p_2p, "03b_dPhi_p1_p2_for_small_dTheta_ZOOMIN_2p", hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p_Dir, "", kBlue, true, true, true, false);
 
-        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
+        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_2p->GetMaximumBin()));
+//        dphi_p1_p2_2p.SetMean(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetBinCenter(hdPhi_p1_p2_for_small_dTheta_ZOOMIN_2p->GetMaximumBin()));
         //</editor-fold>
 
 //  Ghost tracks handling (2p, CD only) ---------------------------------------------------------------------------------------------------------------------------------
