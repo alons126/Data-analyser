@@ -31,9 +31,9 @@
 #include <TROOT.h>
 
 #include "GeneralFunctions.h"
-#include "GetParticleProperties/GetParticleName.h"
-#include "GetParticleProperties/GetParticleNameLC.h"
-#include "GetParticleProperties/GetParticleNameShort.h"
+#include "EventProperties/GetParticleName.h"
+#include "EventProperties/GetParticleNameLC.h"
+#include "EventProperties/GetParticleNameShort.h"
 #include "../classes/hPlots/hPlot1D.h"
 
 using namespace std;

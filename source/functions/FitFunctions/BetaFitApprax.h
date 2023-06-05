@@ -24,8 +24,8 @@
 
 #include "FitFunction.h"
 #include "../GeneralFunctions.h"
-#include "../GetParticleProperties/GetParticleName.h"
-#include "../GetParticleProperties/GetParticleNameShort.h"
+#include "../EventProperties/GetParticleName.h"
+#include "../EventProperties/GetParticleNameShort.h"
 #include "../drawtext.h"
 #include "../../classes/DSCuts/DSCuts.h"
 #include "../../classes/hPlots/hPlot1D.h"

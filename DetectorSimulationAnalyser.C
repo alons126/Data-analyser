@@ -47,6 +47,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/FitFunctions/BetaFitApprax.h"
 #include "source/functions/DrawAndSaveAcceptanceCorrectionPlots.h"
 #include "source/functions/DrawAndSaveEfficiencyPlots.h"
+#include "source/functions/DrawAndSaveFSRatio.h"
 #include "source/functions/GetPi0MomTh.h"
 #include "source/functions/PID_functions/ChargedParticleID.h"
 #include "source/functions/PID_functions/FDNeutralParticle.h"
@@ -11220,8 +11221,10 @@ void EventAnalyser() {
         //</editor-fold>
 
 
-//        DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
+        DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
 
+        cout << "\n\n\nExited after DrawAndSaveFSRatio finished\n\n\n";
+        quit();
 
     } else {
         cout << "\n\nMomentum plots are disabled by user.\n\n";
