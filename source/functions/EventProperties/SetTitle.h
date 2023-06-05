@@ -17,17 +17,41 @@
 
 using namespace std;
 
-string SetTitle(const string &RecTitle) {
+string SetTitle(const string &RecTitle, const string &PlotsT, const string &DRegion) {
     string Title;
 
     string Particle = GetParticleName(RecTitle);
     string ParticleShort = GetParticleNameShort(RecTitle);
     string Type = SetType(RecTitle);
 
-    if (Type == "momentum") {
-        Title = Particle + " " + Type;
+    if (PlotsT == "FSRatio") {
+        if (Particle == "Electron") {
+            if (Type == "momentum") {
+                Title = Particle + " " + Type + " ratio";
+            } else {
+                Title = Particle + " #" + Type + "_{" + ParticleShort + "} ratio";
+            }
+        } else {
+            if (DRegion == "FD") {
+                if (Type == "momentum") {
+                    Title = DRegion + " nucleon " + Type + " ratio";
+                } else {
+                    Title = DRegion + " nucleon #" + Type + "_{" + ParticleShort + "} ratio";
+                }
+            } else if (DRegion == "CD") {
+                if (Type == "momentum") {
+                    Title = DRegion + " proton " + Type + " ratio";
+                } else {
+                    Title = DRegion + " proton #" + Type + "_{" + ParticleShort + "} ratio";
+                }
+            }
+        }
     } else {
-        Title = "#" + Type + "_{" + ParticleShort + "}";
+        if (Type == "momentum") {
+            Title = Particle + " " + Type;
+        } else {
+            Title = "#" + Type + "_{" + ParticleShort + "}";
+        }
     }
 
     return Title;

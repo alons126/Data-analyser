@@ -34,12 +34,13 @@
 #include "EventProperties/GetParticleName.h"
 #include "EventProperties/GetParticleNameLC.h"
 #include "EventProperties/GetParticleNameShort.h"
+#include "EventProperties/SetDRegion.h"
 #include "EventProperties/SetFSRatioSaveDir.h"
-#include "EventProperties/SetSaveDir.h"
-#include "EventProperties/SetType.h"
-#include "EventProperties/SetTitle.h"
+//#include "EventProperties/SetSaveDir.h"
 #include "EventProperties/SetStatsTitle.h"
 #include "EventProperties/SettingSaveNames.h"
+#include "EventProperties/SetTitle.h"
+#include "EventProperties/SetType.h"
 #include "EventProperties/SetXAxisTitle.h"
 #include "EventProperties/SetYAxisTitle.h"
 #include "../classes/hPlots/hPlot1D.h"
@@ -69,7 +70,8 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     TH1D *nFDpCD_Plot_Clone_test = (TH1D *) Histogram1D_nFDpCD->Clone((nFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string nFDpCD_Plot_Clone_test_rebined_StatsTitle = "Rec. " + nFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *nFDpCD_Plot_Clone_test_rebined = (TH1D *) Histogram1D_nFDpCD->Clone((nFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    nFDpCD_Plot_Clone_test_rebined->Rebin(2);
+
+    if (nFDpCD_Plot_Clone_test_rebined->GetNbinsX() > 100) { nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_pFDpCD = pFDpCD_Plot.GetHistogram();
     string pFDpCD_Plot_Clone_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned";
@@ -79,97 +81,30 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *pFDpCD_Plot_Clone_test_rebined = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     pFDpCD_Plot_Clone_test_rebined->Rebin(2);
+
+    if (pFDpCD_Plot_Clone_test_rebined->GetNbinsX() > 100) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
+
     //</editor-fold>
 
     //<editor-fold desc="Setting particle">
     string FSRatioRecTitle = nFDpCD_Plot_Clone->GetTitle();
+
     string FSRatioParticle = GetParticleName(FSRatioRecTitle);
     string FSRatioParticleLC = GetParticleNameLC(FSRatioRecTitle);
     string FSRatioParticleShort = GetParticleNameShort(FSRatioRecTitle);
-    //</editor-fold>
 
-    //<editor-fold desc="Setting title">
     string FSRatioType = SetType(FSRatioRecTitle);
     string FSRatioPlotsT = "FSRatio";
-    string FSRatioTitle = SetTitle(FSRatioRecTitle);
+    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
+    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
 
-    /*
-    string FSRatioType;
-
-    if (findSubstring(FSRatioRecTitle, "momentum")) { // for momentum FSRatio plots
-        FSRatioType = "momentum";
-    }
-
-    string FSRatioTitle = FSRatioParticle + " " + FSRatioType;
-*/
-    //</editor-fold>
-
-    //<editor-fold desc="Setting X axis label">
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
-
-    /*
-    string FSRatioXLabel;
-
-    if (findSubstring(FSRatioRecTitle, "momentum")) { // for momentum FSRatio plots
-        FSRatioXLabel = "P_{" + FSRatioParticleShort + "} [GeV/c]";
-    } else if (findSubstring(FSRatioRecTitle, "#theta")) { // for momentum FSRatio plots
-        FSRatioXLabel = "#theta [Deg]";
-    } else if (findSubstring(FSRatioRecTitle, "#phi")) { // for momentum FSRatio plots
-        FSRatioXLabel = "#phi [Deg]";
-    }
-*/
-    //</editor-fold>
-
-    //<editor-fold desc="Setting y axis label">
     string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
 
-    /*
-    string xLabel_REC_temp = nFDpCD_Plot_Clone->GetXaxis()->GetTitle();
-    string xLabel_REC = xLabel_REC_temp.substr(0, xLabel_REC_temp.find_last_of('[') - 1);
-    string xLabel_Truth_temp = pFDpCD_Plot_Clone->GetXaxis()->GetTitle();
-    string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
-
-    string FSRatioYLabel = "nFDpCD/pFDpCD";
-//    string FSRatioYLabel = string("#alpha = ") + "#frac{1}{#epsilon_{eff}} = " + xLabel_Truth + "/" + xLabel_REC + "^{rec}";
-*/
-    //</editor-fold>
-
-    //<editor-fold desc="Setting save directory">
     string FSRatioSaveDir, FSRatioTestSaveDir;
-//    SetSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram1DSaveNamePath(),
-//                      FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
-    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram1DSaveNamePath(),
+    SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram1DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
 
-    /*
-    string FSRatioSaveDir, FSRatioTestSaveDir;
-
-    if (findSubstring(FSRatioRecTitle, "Electron") || findSubstring(FSRatioRecTitle, "electron")) {
-        FSRatioSaveDir = pFDpCD_Plot.GetHistogram1DSaveNamePath() + "/00_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots/";
-        FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test/";
-    } else {
-        if (findSubstring(FSRatioRecTitle, ", FD)") ||
-            findSubstring(FSRatioRecTitle, "FD " + FSRatioParticle) ||
-            findSubstring(FSRatioRecTitle, "FD " + FSRatioParticleLC)) {
-            FSRatioSaveDir = pFDpCD_Plot.GetHistogram1DSaveNamePath() + "/01_FD_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots/";
-            FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test/";
-        } else if (findSubstring(FSRatioRecTitle, ", CD)") ||
-                   findSubstring(FSRatioRecTitle, "CD " + FSRatioParticle) ||
-                   findSubstring(FSRatioRecTitle, "CD " + FSRatioParticleLC)) {
-            FSRatioSaveDir = pFDpCD_Plot.GetHistogram1DSaveNamePath() + "/02_CD_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots/";
-            FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test/";
-        } else {
-            FSRatioSaveDir = pFDpCD_Plot.GetHistogram1DSaveNamePath() + "/" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots/";
-            FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test" + "/";
-        }
-    }
-
-    system(("mkdir -p " + FSRatioSaveDir).c_str());
-    system(("mkdir -p " + FSRatioTestSaveDir).c_str());
-*/
-    //</editor-fold>
-
-    //<editor-fold desc="Setting save name">
     string nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName;
     string pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName;
     string sNameFlag, FSRatio_plot_SaveName;
@@ -177,25 +112,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     SettingSaveNames(SampleName, FSRatioType, FSRatioParticle, FSRatioSaveDir, FSRatioTestSaveDir, FSRatioPlotsT,
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
-                     sNameFlag, FSRatio_plot_SaveName);
-
-    /*
-    string sNameFlag;
-
-    if (findSubstring(SampleName, "simulation")) {
-        sNameFlag = "s";
-    } else if (findSubstring(SampleName, "data")) {
-        sNameFlag = "d";
-    }
-
-    string nFDpCD_Plot_Clone_SaveName = FSRatioSaveDir + sNameFlag + "_" + FSRatioParticle + "_" + FSRatioType + "_Rec_Clone.png";
-    string nFDpCD_Plot_Clone_test_SaveName = FSRatioTestSaveDir + sNameFlag + "01a_" + FSRatioParticle + "_" + FSRatioType + "_Rec_Clone_test.png";
-    string nFDpCD_Plot_Clone_test_rebined_SaveName = FSRatioTestSaveDir + sNameFlag + "01b_" + FSRatioParticle + "_" + FSRatioType + "_Rec_Clone_test_rebined.png";
-    string pFDpCD_Plot_Clone_SaveName = FSRatioSaveDir + sNameFlag + "_" + FSRatioParticle + "_" + FSRatioType + "_Truth_Clone.png";
-    string pFDpCD_Plot_Clone_test_SaveName = FSRatioTestSaveDir + sNameFlag + "02a_" + FSRatioParticle + "_" + FSRatioType + "_Truth_Clone_test.png";
-    string pFDpCD_Plot_Clone_test_rebined_SaveName = FSRatioTestSaveDir + sNameFlag + "02b_" + FSRatioParticle + "_" + FSRatioType + "_Truth_Clone_test_rebined.png";
-    string FSRatio_plot_SaveName = FSRatioSaveDir + sNameFlag + "_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio.png";
-*/
+                     sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
     //</editor-fold>
 
     TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + "FSRatio").c_str());
@@ -283,7 +200,8 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
 
     if (weighted_plots) { FSRatio_plot->Sumw2(); }
 
-    FSRatio_plot->Rebin(2);
+    if (FSRatio_plot->GetNbinsX() > 100) { FSRatio_plot->Rebin(2); }
+
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
     FSRatio_plot->Draw();
     FSRatio_plot->SetStats(0);
@@ -354,7 +272,10 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
 
     //<editor-fold desc="Setting title">
     string FSRatioType = SetType(FSRatioRecTitle);
-    string FSRatioTitle = SetTitle(FSRatioRecTitle);
+    string FSRatioPlotsT = "FSRatio";
+    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
+    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
+//    string FSRatioTitle = SetTitle(FSRatioRecTitle);
 
 /*
     string FSRatioType, FSRatioTitle;

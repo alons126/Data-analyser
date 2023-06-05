@@ -18,7 +18,7 @@
 
 using namespace std;
 
-string SetYAxisTitle(string PlotT, const string &Numerator, const string &Denominator) {
+string SetYAxisTitle(const string& PlotT, const string &Numerator, const string &Denominator) {
     string YAxisTitle;
 
     string xLabelNum = Numerator.substr(0, Numerator.find_last_of('[') - 1);

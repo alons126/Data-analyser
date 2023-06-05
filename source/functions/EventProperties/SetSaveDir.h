@@ -20,23 +20,66 @@
 
 using namespace std;
 
-void SetSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePath,
+void SetSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePath, const string &PlotsT, const string &DRegion,
                 const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
-    if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
-        SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "__plots/";
-        TestSaveDir = SaveDir + "Cloned_hist_test/";
-    } else {
-        if (findSubstring(RecTitle, ", FD)") || findSubstring(RecTitle, "FD " + Particle) ||
-            findSubstring(RecTitle, "FD " + ParticleLC)) {
-            SaveDir = Histogram1DSaveNamePath + "/01_FD_" + Particle + "_" + Type + "__plots/";
-            TestSaveDir = SaveDir + "Cloned_hist_test/";
-        } else if (findSubstring(RecTitle, ", CD)") || findSubstring(RecTitle, "CD " + Particle) ||
-                   findSubstring(RecTitle, "CD " + ParticleLC)) {
-            SaveDir = Histogram1DSaveNamePath + "/02_CD_" + Particle + "_" + Type + "__plots/";
+/*
+    if (PlotsT == "FSRatio") {
+        if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
+            SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "_plots/";
             TestSaveDir = SaveDir + "Cloned_hist_test/";
         } else {
-            SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "__plots/";
-            TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+            if (DRegion == "FD" || DRegion == "CD") {
+                SaveDir = Histogram1DSaveNamePath + "/";
+                TestSaveDir = SaveDir + "Cloned_hist_test/";
+            } else {
+                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+            }
+*/
+    if (PlotsT == "FSRatio") {
+        if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
+            SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "_plots/";
+            TestSaveDir = SaveDir + "Cloned_hist_test/";
+        } else {
+/*
+            if (DRegion == "FD" || DRegion == "CD") {
+                SaveDir = Histogram1DSaveNamePath + "/";
+                TestSaveDir = SaveDir + "Cloned_hist_test/";
+            } else {
+                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+            }
+*/
+            if (DRegion == "FD") {
+//                SaveDir = Histogram1DSaveNamePath + "/";
+                SaveDir = Histogram1DSaveNamePath + "/01_FD_Nucleon_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test/";
+            } else if (DRegion == "CD") {
+//                SaveDir = Histogram1DSaveNamePath + "/";
+                SaveDir = Histogram1DSaveNamePath + "/02_CD_Nucleon_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test/";
+            } else {
+                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+            }
+        }
+    } else {
+        if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
+            SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "_plots/";
+            TestSaveDir = SaveDir + "Cloned_hist_test/";
+        } else {
+            if (findSubstring(RecTitle, ", FD)") || findSubstring(RecTitle, "FD " + Particle) ||
+                findSubstring(RecTitle, "FD " + ParticleLC)) {
+                SaveDir = Histogram1DSaveNamePath + "/01_FD_" + Particle + "_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test/";
+            } else if (findSubstring(RecTitle, ", CD)") || findSubstring(RecTitle, "CD " + Particle) ||
+                       findSubstring(RecTitle, "CD " + ParticleLC)) {
+                SaveDir = Histogram1DSaveNamePath + "/02_CD_" + Particle + "_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test/";
+            } else {
+                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
+                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+            }
         }
     }
 

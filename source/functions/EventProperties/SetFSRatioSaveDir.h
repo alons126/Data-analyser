@@ -21,28 +21,12 @@
 
 using namespace std;
 
-void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePathOriginal,
-                       const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
-//    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal;
-    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/";
-//    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/00_FS_Ratio_plots";
+void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePathOriginal, const string &PlotsT,
+                       const string &DRegion, const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
+    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                     "/06a_FS_" + Type + "_ratio_plots";
 
-
-
-
-//    cout << "\n\n\nHistogram1DSaveNamePath = " << Histogram1DSaveNamePath << "\n\n\n";
-//    exit(EXIT_FAILURE);
-
-
-
-
-//    system(("mkdir -p " + Histogram1DSaveNamePath).c_str());
-    SetSaveDir(SaveDir, TestSaveDir, RecTitle, Histogram1DSaveNamePath, Particle, ParticleLC, ParticleShort, Type);
+    SetSaveDir(SaveDir, TestSaveDir, RecTitle, Histogram1DSaveNamePath, PlotsT, DRegion, Particle, ParticleLC, ParticleShort, Type);
 }
-
-
-//    cout << "\n\n\nHistogram1DSaveNamePath = " << Histogram1DSaveNamePath << "\n\n\n";
-//    exit(EXIT_FAILURE);
-
 
 #endif //SETFSRATIOSAVEDIR_H

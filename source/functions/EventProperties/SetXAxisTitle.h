@@ -26,9 +26,7 @@ string SetXAxisTitle(const string &RecTitle) {
 
     if (findSubstring(RecTitle, "momentum")) {
         XAxisTitle = "P_{" + ParticleShort + "} [GeV/c]";
-    } else if (findSubstring(RecTitle, "#theta")) {
-        XAxisTitle = RecTitle + " [Deg]";
-    } else if (findSubstring(RecTitle, "#phi")) {
+    } else if (findSubstring(RecTitle, "#theta") || findSubstring(RecTitle, "#phi")) {
         XAxisTitle = RecTitle + " [Deg]";
     }
 

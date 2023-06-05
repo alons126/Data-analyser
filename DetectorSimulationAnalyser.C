@@ -1651,7 +1651,7 @@ void EventAnalyser() {
     //<editor-fold desc="Leading (P_1) and recoil (P_2) Momentum threshold plots (nFDpCD)">
     hPlot1D hP_nFD_nFDpCD = hPlot1D("nFDpCD", "", "FD neutron (leading) momentum", "FD neutron (leading) momentum", "P_{nFD} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "08_P_nFD_nFDpCD", 0, beamE * 1.1);
-    hPlot1D hP_pCD_nFDpCD = hPlot1D("nFDpCD", "", "CD proton (recoil) momentum", "CD proton (recoil) momentum P_{2}", "P_{pCD} [GeV/c]",
+    hPlot1D hP_pCD_nFDpCD = hPlot1D("nFDpCD", "", "CD proton (recoil) momentum", "CD proton (recoil) momentum", "P_{pCD} [GeV/c]",
                                     directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "08_P_pCD_nFDpCD", 0, beamE * 1.1);
     //</editor-fold>
 
@@ -11221,7 +11221,9 @@ void EventAnalyser() {
         //</editor-fold>
 
 
+        DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
         DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
+        DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
 
         cout << "\n\n\nExited after DrawAndSaveFSRatio finished\n\n\n";
         quit();
