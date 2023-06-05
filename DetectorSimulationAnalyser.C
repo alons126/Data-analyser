@@ -11220,13 +11220,14 @@ void EventAnalyser() {
         hP_nFD_vs_P_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
+        if (apply_nucleon_cuts) {
+            DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
 
-        DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
-        DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
-        DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
-
-        cout << "\n\n\nExited after DrawAndSaveFSRatio finished\n\n\n";
-        quit();
+//        cout << "\n\n\nExited after DrawAndSaveFSRatio finished for momentum!\n\n\n";
+//        quit();
+        }
 
     } else {
         cout << "\n\nMomentum plots are disabled by user.\n\n";
@@ -12588,7 +12589,8 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_q_p_tot_nFDpCD, norm_Angle_plots_master, true, Theta_q_p_tot_nFDpCD_integral,
                       "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{nFD}+#vec{P}_{pCD}", "All Int., nFDpCD", 0.06, 0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_nFDpCD, "02a_Theta_q_p_tot_All_Int_nFDpCD", hTheta_q_p_tot_nFDpCD_Dir, "", kBlue, true, true, true, false);
+                      0.0425, plots, 2, false, true, sTheta_q_p_nFDpCD, "02a_Theta_q_p_tot_All_Int_nFDpCD", hTheta_q_p_tot_nFDpCD_Dir, "", kBlue, true, true, true,
+                      false);
         //</editor-fold>
 
         //<editor-fold desc="hTheta_q_p_tot_vs_W_nFDpCD (nFDpCD, CD & FD)">
@@ -12730,6 +12732,15 @@ void EventAnalyser() {
         //</editor-fold>
 
         //</editor-fold>
+
+        if (apply_nucleon_cuts) {
+            DrawAndSaveFSRatio(SampleName, hTheta_e_All_Int_pFDpCD_FD, hTheta_e_All_Int_pFDpCD_FD_Dir, hTheta_e_All_Int_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD_Dir, hTheta_nFD_All_Int_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD_Dir, hPhi_nFD_All_Int_nFDpCD_FD, plots);
+
+            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for angles!\n\n\n";
+            quit();
+        }
 
     } else {
         cout << "\n\nAngle plots are disabled by user.\n\n";

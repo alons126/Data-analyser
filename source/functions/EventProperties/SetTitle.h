@@ -29,20 +29,20 @@ string SetTitle(const string &RecTitle, const string &PlotsT, const string &DReg
             if (Type == "momentum") {
                 Title = Particle + " " + Type + " ratio";
             } else {
-                Title = Particle + " #" + Type + "_{" + ParticleShort + "} ratio";
+                Title = Particle + " #" + Type + " ratio";
             }
         } else {
             if (DRegion == "FD") {
                 if (Type == "momentum") {
                     Title = DRegion + " nucleon " + Type + " ratio";
                 } else {
-                    Title = DRegion + " nucleon #" + Type + "_{" + ParticleShort + "} ratio";
+                    Title = DRegion + " nucleon #" + Type + " ratio";
                 }
             } else if (DRegion == "CD") {
                 if (Type == "momentum") {
                     Title = DRegion + " proton " + Type + " ratio";
                 } else {
-                    Title = DRegion + " proton #" + Type + "_{" + ParticleShort + "} ratio";
+                    Title = DRegion + " proton #" + Type + " ratio";
                 }
             }
         }
