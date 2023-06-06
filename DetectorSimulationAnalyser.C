@@ -2898,6 +2898,17 @@ void EventAnalyser() {
     string hTheta_pCD_VS_Phi_pCD_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"];
     //</editor-fold>
 
+// W (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+
+    //TODO: move from here
+
+    //<editor-fold desc="W (pFDpCD, CD & FD)">
+    THStack *sW_pFDpCD = new THStack("W distribution (All Int., pFDpCD)", "W distribution (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];");
+    TH1D *hW_pFDpCD = new TH1D("W distribution (All Int., pFDpCD)", "W distribution (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];",
+                               65, 0, beamE * 1.1);
+    string hW_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
+    //</editor-fold>
+
 // Theta_p_e_p_tot (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
@@ -3158,6 +3169,17 @@ void EventAnalyser() {
                                                      "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., nFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
                                                      65, -200, 200, 65, 30, 155);
     string hTheta_pCD_VS_Phi_pCD_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_nFDpCD_Directory"];
+    //</editor-fold>
+
+// W (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+
+    //TODO: move from here
+
+    //<editor-fold desc="W (nFDpCD, CD & FD)">
+    THStack *sW_nFDpCD = new THStack("W distribution (All Int., nFDpCD)", "W distribution (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];");
+    TH1D *hW_nFDpCD = new TH1D("W distribution (All Int., nFDpCD)", "W distribution (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];",
+                               65, 0, beamE * 1.1);
+    string hW_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_p_e_p_tot (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
@@ -9608,6 +9630,8 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
+                hW_pFDpCD->Fill(W_pFDpCD, Weight);
+
                 hP_pFD_pFDpCD.hFill(P_1_pFDpCD_3v.Mag(), Weight);                                                                              // Leading proton (pFDpCD)
                 hP_pCD_pFDpCD.hFill(P_2_pFDpCD_3v.Mag(), Weight);                                                                               // Recoil proton (pFDpCD)
 
@@ -10415,6 +10439,8 @@ void EventAnalyser() {
                     hPhi_pCD_DIS_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Weight);
                 }
                 //</editor-fold>
+
+                hW_nFDpCD->Fill(W_nFDpCD, Weight);
 
                 hP_nFD_nFDpCD.hFill(P_nFD_nFDpCD_3v.Mag(), Weight);                                                                    // Leading neucleon - nFD (nFDpCD)
                 hP_pCD_nFDpCD.hFill(P_pCD_nFDpCD_3v.Mag(), Weight);                                                                     // Recoil neucleon - pCD (nFDpCD)
@@ -12294,6 +12320,15 @@ void EventAnalyser() {
                       "Theta_pCD_VS_Phi_pCD_All_Int_pFDpCD_CD");
         //</editor-fold>
 
+// W (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="W (pFDpCD, CD & FD)">
+        double W_pFDpCD_integral = hW_pFDpCD->Integral();
+
+        histPlotter1D(c1, hW_pFDpCD, norm_Angle_plots_master, true, W_pFDpCD_integral, "W distribution", "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_p_e_p_tot_pFDpCD, "00_W_pFDpCD", hW_pFDpCD_Dir, "", kBlue, true, true, true, false);
+        //</editor-fold>
+
 // Theta_p_e_p_tot (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
@@ -12567,6 +12602,15 @@ void EventAnalyser() {
         //<editor-fold desc="Theta_pCD vs. Phi_pCD plots (nFDpCD, FD)">
         histPlotter2D(c1, hTheta_pCD_VS_Phi_pCD_nFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_Phi_pCD_nFDpCD_CD_Dir,
                       "Theta_pCD_VS_Phi_pCD_All_Int_nFDpCD_CD");
+        //</editor-fold>
+
+// W (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="W (nFDpCD, CD & FD)">
+        double W_nFDpCD_integral = hW_nFDpCD->Integral();
+
+        histPlotter1D(c1, hW_nFDpCD, norm_Angle_plots_master, true, W_nFDpCD_integral, "W distribution", "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true,
+                      sTheta_p_e_p_tot_nFDpCD, "00_W_nFDpCD", hW_nFDpCD_Dir, "", kBlue, true, true, true, false);
         //</editor-fold>
 
 //  Theta_p_e_p_tot (nFDpCD, CD & FD) ----------------------------------------------------------------------------------------------------------------------------------------

@@ -477,7 +477,6 @@ private:
 
 };
 
-
 void clas12ana::Clear() {
     allparticles.clear(); // My addition
     //  particles.clear(); // Justin's original
