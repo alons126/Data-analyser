@@ -3368,44 +3368,44 @@ void EventAnalyser() {
     //<editor-fold desc="Q2 histograms">
 
     //<editor-fold desc="Q2 histograms (no #(e) cut)">
-    THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_All_e = new THStack("Q^{2} (no #(e) cut, CD & FD)", "Q^{2} Histogram (no #(e) cut, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_All_e_FD = new TH1D("Q^{2} (no #(e) cut, FD)", "Q^{2} (no #(e) cut, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_All_e_FD_Dir = directories.Q2_Directory_map["Q2_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1e cut)">
-    THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_1e_cut = new THStack("Q^{2} (1e Cut ,CD & FD)", "Q^{2} Histogram (1e Cut, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_1e_cut_FD = new TH1D("Q^{2} (1e Cut, FD)", "Q^{2} (1e Cut, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_1e_cut_FD_Dir = directories.Q2_Directory_map["Q2_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1p)">
-    THStack *sQ2_1p = new THStack("Q^{2} (1p, CD & FD)", "Q^{2} (1p, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_1p_FD = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_1p = new THStack("Q^{2} (1p, CD & FD)", "Q^{2} (1p, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_1p_FD = new TH1D("Q^{2} (1p, FD)", "Q^{2} (1p, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_1p_FD_Dir = directories.Q2_Directory_map["Q2_1p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (1n)">
-    THStack *sQ2_1n = new THStack("Q^{2} (1n, CD & FD)", "Q^{2} (1n, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_1n_FD = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_1n = new THStack("Q^{2} (1n, CD & FD)", "Q^{2} (1n, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_1n_FD = new TH1D("Q^{2} (1n, FD)", "Q^{2} (1n, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_1n_FD_Dir = directories.Q2_Directory_map["Q2_1n_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (2p)">
-    THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_2p = new THStack("Q^{2} (2p, CD & FD)", "Q^{2} (2p, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_2p_FD = new TH1D("Q^{2} (2p, FD)", "Q^{2} (2p, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_2p_FD_Dir = directories.Q2_Directory_map["Q2_2p_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (pFDpCD)">
-    THStack *sQ2_pFDpCD = new THStack("Q^{2} (pFDpCD, CD & FD)", "Q^{2} (pFDpCD, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_pFDpCD_FD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_pFDpCD = new THStack("Q^{2} (pFDpCD, CD & FD)", "Q^{2} (pFDpCD, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_pFDpCD_FD = new TH1D("Q^{2} (pFDpCD, FD)", "Q^{2} (pFDpCD, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_pFDpCD_FD_Dir = directories.Q2_Directory_map["Q2_pFDpCD_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Q2 histograms (nFDpCD)">
-    THStack *sQ2_nFDpCD = new THStack("Q^{2} (nFDpCD, CD & FD)", "Q^{2} (nFDpCD, CD & FD);Q^{2} [GeV^{2}];");
-    TH1D *hQ2_nFDpCD_FD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}];", 100, 0, beamE * 1.1);
+    THStack *sQ2_nFDpCD = new THStack("Q^{2} (nFDpCD, CD & FD)", "Q^{2} (nFDpCD, CD & FD);Q^{2} [GeV^{2}/c^2];");
+    TH1D *hQ2_nFDpCD_FD = new TH1D("Q^{2} (nFDpCD, FD)", "Q^{2} (nFDpCD, FD);Q^{2} [GeV^{2}/c^2];", 100, 0, beamE * 1.1);
     string hQ2_nFDpCD_FD_Dir = directories.Q2_Directory_map["Q2_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -9067,7 +9067,7 @@ void EventAnalyser() {
                 * p_first corresponds to protons[Protons_ind.at(0)] & p_second corresponds to protons[Protons_ind.at(1)]
                 * P_1 corresponds to leading proton & P_2 corresponds to the recoil */
 
-            TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_pFD_pFDpCD_3v, P_pCD_pFDpCD_3v, P_tot_pFDpCD_3v, P_1_pFDpCD_3v, P_2_pFDpCD_3v;
+            TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_pFD_pFDpCD_3v, P_pCD_pFDpCD_3v, P_miss_pFDpCD_3v, P_tot_pFDpCD_3v, P_1_pFDpCD_3v, P_2_pFDpCD_3v;
             TVector3 P_T_e_pFDpCD_3v, P_T_L_pFDpCD_3v, P_T_tot_pFDpCD_3v, dP_T_L_pFDpCD_3v, dP_T_tot_pFDpCD_3v;
 
             P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(), e_pFDpCD->getPhi());                                              // electron 3 momentum
@@ -9075,6 +9075,11 @@ void EventAnalyser() {
             P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
             P_pFD_pFDpCD_3v.SetMagThetaPhi(pFD_pFDpCD->getP(), pFD_pFDpCD->getTheta(), pFD_pFDpCD->getPhi());                                           // pFD 3 momentum
             P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(), pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
+
+            //TODO: confirm definition of P_miss for 2p2h with Larry
+//            P_miss_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() - q_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() - q_pFDpCD_3v.Py(),
+//                                        P_pFD_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz());                                                                               // P_miss
+            P_miss_pFDpCD_3v = P_pFD_pFDpCD_3v - q_pFDpCD_3v;                                                                                                   // P_miss
 
             double E_e_pFDpCD = sqrt(m_e * m_e + P_e_pFDpCD_3v.Mag2()), omega_pFDpCD = beamE - E_e_pFDpCD;
             double W_pFDpCD = sqrt((omega_pFDpCD + m_p) * (omega_pFDpCD + m_p) - q_pFDpCD_3v.Mag2());
@@ -9089,6 +9094,7 @@ void EventAnalyser() {
             e_out_pFDpCD.SetPxPyPzE(e_pFDpCD->par()->getPx(), e_pFDpCD->par()->getPy(), e_pFDpCD->par()->getPz(), E_e_pFDpCD);
             Q_pFDpCD = beam - e_out_pFDpCD;                                                                                          // definition of 4-momentum transfer
             Q2_pFDpCD = fabs(Q_pFDpCD.Mag2());
+            double xB_pFDpCD = Q2_pFDpCD / (2 * m_p * omega_pFDpCD);
 
             /* Setting particle angles */
             double Theta_e_pFDpCD = e_pFDpCD->getTheta() * 180.0 / pi, Phi_e_pFDpCD = e_pFDpCD->getPhi() * 180.0 / pi;             // Theta_e_pFDpCD, Phi_e_pFDpCD in deg
@@ -9261,17 +9267,13 @@ void EventAnalyser() {
             if (apply_TL_pFDpCD_ES) {
                 ++num_of_events_pFDpCD;
 
-
+                //<editor-fold desc="Counting pFDpCD events with one or more FD neutrons (pFDpCD)">
                 if (NeutronsFD_ind.size() >= 1) {
                     ++num_of_events_pFDpCD_wal1nFD;
 
-                    if (NeutronsFD_ind.size() > 1) {
-                        ++num_of_events_pFDpCD_wmt1nFD;
-                    }
+                    if (NeutronsFD_ind.size() > 1) { ++num_of_events_pFDpCD_wmt1nFD; }
                 }
-
-
-
+                //</editor-fold>
 
                 //<editor-fold desc="Filling cut parameters histograms (pFDpCD)">
                 /* Filling Nphe plots (pFDpCD) */
@@ -9733,7 +9735,7 @@ void EventAnalyser() {
                 hEcal_vs_dP_T_tot_pFDpCD->Fill(dP_T_tot_pFDpCD_3v.Mag(), Ecal_pFDpCD, Weight);
                 hEcal_vs_W_pFDpCD->Fill(W_pFDpCD, Ecal_pFDpCD, Weight);
 
-/*
+                /*
             if ((p_first_pFDpCD->getRegion() == CD) && (p_second_pFDpCD->getRegion() == CD)) { // if both pFDpCD protons are in the CD (self-observation only!)
                 TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
                 p1_hit_pos.SetXYZ(p_first_pFDpCD->sci(clas12::CTOF)->getX(), p_first_pFDpCD->sci(clas12::CTOF)->getY(), p_first_pFDpCD->sci(clas12::CTOF)->getZ());
@@ -9745,7 +9747,8 @@ void EventAnalyser() {
                 hTheta_pFD_pCD_VS_ToFpFD_ToFpCD_AC_pFDpCD.hFill(Theta_pFD_pCD_pFDpCD, time_diff, Weight);
                 hTheta_pFD_pCD_VS_PospFD_PospCD_AC_pFDpCD.hFill(Theta_pFD_pCD_pFDpCD, pos_diff.Mag(), Weight);
             }
-*/}
+*/
+            }
             //</editor-fold>
 
         } // end of 1epFDpCD & pFDpCD cuts if
@@ -9807,11 +9810,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting nFDpCD analysis variables">
-            /* NOTE:
-                * p_first corresponds to protons[Protons_ind.at(0)] & p_second corresponds to protons[Protons_ind.at(1)]
-                * Neutron is the leading particle & the proton is the recoil */
-
-            TVector3 P_e_nFDpCD_3v, q_nFDpCD_3v, P_nFD_nFDpCD_3v, P_pCD_nFDpCD_3v, P_tot_nFDpCD_3v;
+            TVector3 P_e_nFDpCD_3v, q_nFDpCD_3v, P_nFD_nFDpCD_3v, P_pCD_nFDpCD_3v, P_miss_nFDpCD_3v, P_tot_nFDpCD_3v;
             TVector3 P_T_e_nFDpCD_3v, P_T_L_nFDpCD_3v, P_T_tot_nFDpCD_3v, dP_T_L_nFDpCD_3v, dP_T_tot_nFDpCD_3v;
 
             P_e_nFDpCD_3v.SetMagThetaPhi(e_nFDpCD->getP(), e_nFDpCD->getTheta(), e_nFDpCD->getPhi());                                              // electron 3 momentum
@@ -9819,6 +9818,11 @@ void EventAnalyser() {
             P_T_e_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
             P_nFD_nFDpCD_3v.SetMagThetaPhi(GetFDNeutronP(nFD_nFDpCD, apply_nucleon_cuts), nFD_nFDpCD->getTheta(), nFD_nFDpCD->getPhi());         // FD neutron 3 momentum
             P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(), pCD_nFDpCD->getPhi());                                     // CD proton 3 momentum
+
+            //TODO: confirm definition of P_miss for 2p2h with Larry
+//            P_miss_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() - q_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() - q_nFDpCD_3v.Py(),
+//                                        P_nFD_nFDpCD_3v.Pz() - q_nFDpCD_3v.Pz());                                                                               // P_miss
+            P_miss_nFDpCD_3v = P_nFD_nFDpCD_3v - q_nFDpCD_3v;                                                                                                   // P_miss
 
             double E_e_nFDpCD = sqrt(m_e * m_e + P_e_nFDpCD_3v.Mag2()), omega_nFDpCD = beamE - E_e_nFDpCD;
             double W_nFDpCD = sqrt((omega_nFDpCD + m_p) * (omega_nFDpCD + m_p) - q_nFDpCD_3v.Mag2());
@@ -9833,6 +9837,7 @@ void EventAnalyser() {
             e_out_nFDpCD.SetPxPyPzE(e_nFDpCD->par()->getPx(), e_nFDpCD->par()->getPy(), e_nFDpCD->par()->getPz(), E_e_nFDpCD);
             Q_nFDpCD = beam - e_out_nFDpCD;                                                                                          // definition of 4-momentum transfer
             Q2_nFDpCD = fabs(Q_nFDpCD.Mag2());
+            double xB_nFDpCD = Q2_nFDpCD / (2 * m_p * omega_nFDpCD);
 
             /* Setting particle angles */
             double Theta_e_nFDpCD = e_nFDpCD->getTheta() * 180.0 / pi, Phi_e_nFDpCD = e_nFDpCD->getPhi() * 180.0 / pi;             // Theta_e_nFDpCD, Phi_e_nFDpCD in deg
@@ -12736,10 +12741,12 @@ void EventAnalyser() {
         if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hTheta_e_All_Int_pFDpCD_FD, hTheta_e_All_Int_pFDpCD_FD_Dir, hTheta_e_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD_Dir, hTheta_nFD_All_Int_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD_Dir, hTheta_pCD_All_Int_nFDpCD_CD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD_Dir, hPhi_nFD_All_Int_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD_Dir, hPhi_pCD_All_Int_nFDpCD_CD, plots);
 
-            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for angles!\n\n\n";
-            quit();
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for angles!\n\n\n";
+//            quit();
         }
 
     } else {

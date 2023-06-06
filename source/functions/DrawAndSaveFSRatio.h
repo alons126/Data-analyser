@@ -781,6 +781,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     if (weighted_plots) { pFDpCD_Plot_Clone->Sumw2(); }
 
     pFDpCD_Plot_Clone->Rebin(2);
+    pFDpCD_Plot_Clone->SetLineWidth(2);
     pFDpCD_Plot_Clone->Draw();
     pFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(pFDpCD_Plot_Clone);
