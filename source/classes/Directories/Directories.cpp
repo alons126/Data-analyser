@@ -432,6 +432,20 @@ Directories::Directories(std::string plots_path) {
                                                                  Find(Beta_Daughter_Folders, "02_Beta_VS_P_plots/06_nFDpCD/By_charge") + "/";
     //</editor-fold>
 
+    //<editor-fold desc="W plots directories">
+    for (std::string folders_name: W_Daughter_Folders) {
+        MakeDirectory(create_W_Dir, W_Parent_Directory, folders_name, false, Plots_Folder);
+    }
+
+    W_Directory_map["W_All_e_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "00_All_e") + "/";
+    W_Directory_map["W_1e_cut_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "01_1e_cut") + "/";
+    W_Directory_map["W_1p_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "02_1p") + "/";
+    W_Directory_map["W_1n_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "03_1n") + "/";
+    W_Directory_map["W_2p_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "04_2p") + "/";
+    W_Directory_map["W_pFDpCD_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "05_pFDpCD") + "/";
+    W_Directory_map["W_nFDpCD_Directory"] = Plots_Folder + "/" + W_Parent_Directory + "/" + Find(W_Daughter_Folders, "06_nFDpCD") + "/";
+    //</editor-fold>
+
     //<editor-fold desc="Angle plots directories">
     for (std::string folders_name: Angle_Daughter_Folders) {
         MakeDirectory(create_Angle_Dir, Angle_Parent_Directory, folders_name, false, Plots_Folder);

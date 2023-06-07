@@ -142,9 +142,23 @@ private:
 
     //</editor-fold>
 
+    //<editor-fold desc="W plots directories">
+    bool create_W_Dir = true;
+    std::string W_Parent_Directory = "02_W_plots";
+    vector<std::string> W_Daughter_Folders = {"",
+//                                                 "00_All_e",
+//                                                 "01_1e_cut",
+//                                                 "02_1p",
+//                                                 "03_1n",
+//                                                 "04_2p",
+                                              "05_pFDpCD",
+                                              "06_nFDpCD"
+    };
+    //</editor-fold>
+
     //<editor-fold desc="Beta plots directories">
     bool create_Beta_Dir = true;
-    std::string Beta_Parent_Directory = "02_Beta_plots";
+    std::string Beta_Parent_Directory = "03_Beta_plots";
     vector<std::string> Beta_Daughter_Folders = {"",
                                                  "01_Beta_fit_plots",
                                                  "01_Beta_fit_plots/03_1n",
@@ -214,7 +228,7 @@ private:
 
     //<editor-fold desc="Angle plots directories">
     bool create_Angle_Dir = true;
-    std::string Angle_Parent_Directory = "03_Angle_plots";
+    std::string Angle_Parent_Directory = "04_Angle_plots";
     vector<std::string> Angle_Daughter_Folders = {"",
 //                                                  "00_All_e",
                                                   "00_All_e/01_Theta_e_All_e_plots", "00_All_e/02_Phi_e_All_e_plots",
@@ -275,7 +289,7 @@ private:
 
     //<editor-fold desc="Q2 plots directories">
     bool create_Q2_Dir = true;
-    std::string Q2_Parent_Directory = "04_Q2_plots";
+    std::string Q2_Parent_Directory = "05_Q2_plots";
     vector<std::string> Q2_Daughter_Folders = {"",
                                                "00_All_e",
                                                "01_1e_cut",
@@ -290,7 +304,7 @@ private:
 
     //<editor-fold desc="E_e plots directories">
     bool create_E_e_Dir = true;
-    std::string E_e_Parent_Directory = "05_E_e_plots";
+    std::string E_e_Parent_Directory = "06_E_e_plots";
     vector<std::string> E_e_Daughter_Folders = {"",
 
                                                 "01_1e_cut",
@@ -315,7 +329,7 @@ private:
 
     //<editor-fold desc="ETrans plots directories">
     bool create_ETrans_Dir = true;
-    std::string ETrans_Parent_Directory = "06_ET_plots";
+    std::string ETrans_Parent_Directory = "07_ET_plots";
     vector<std::string> ETrans_Daughter_Folders = {"",
                                                    "02_1p",
                                                    "02_1p/02_Around_15_Deg_1p", "02_1p/02_Around_15_Deg_1p/00_All_interactions", "02_1p/02_Around_15_Deg_1p/01_QEL_only",
@@ -358,7 +372,7 @@ private:
 
     //<editor-fold desc="Ecal plots directories">
     bool create_Ecal_Dir = true;
-    std::string Ecal_Parent_Directory = "07_Ecal_rec_plots";
+    std::string Ecal_Parent_Directory = "08_Ecal_rec_plots";
     vector<std::string> Ecal_Daughter_Folders = {"",
                                                  "02_1p",
                                                  "02_1p/01_Ecal_rec_by_reaction_1p/00_All_interactions",
@@ -394,7 +408,7 @@ private:
 
     //<editor-fold desc="TKI plots directories">
     bool create_TKI_Dir = true;
-    std::string TKI_Parent_Directory = "08_TKI_plots";
+    std::string TKI_Parent_Directory = "09_TKI_plots";
     vector<std::string> TKI_Daughter_Folders = {"",
                                                 "03_1n",
                                                 "03_1n/01_dP_T_1n", "03_1n/02_dAlpha_T_1n", "03_1n/03_dPhi_T_1n",
@@ -416,7 +430,7 @@ private:
     //<editor-fold desc="ToF plots directories">
     // todo: change this folder's name
     bool create_ToF_Dir = true;
-    std::string ToF_Parent_Directory = "09_ToF_plots";
+    std::string ToF_Parent_Directory = "10_ToF_plots";
     vector<std::string> ToF_Daughter_Folders = {"",
                                                 "01_1e_cut",
                                                 "01_1e_cut/01_Neutron_vs_cParticles_hits_FTOF_1e_cut",
@@ -427,7 +441,7 @@ private:
     //<editor-fold desc="Efficiency & Acceptance Correction plots directories">
     // todo: change this folder's name
     bool create_Eff_and_ACorr_Dir = true;
-    std::string Eff_and_ACorr_Parent_Directory = "10_Eff_and_ACorr_plots";
+    std::string Eff_and_ACorr_Parent_Directory = "11_Eff_and_ACorr_plots";
     vector<std::string> Eff_and_ACorr_Daughter_Folders = {"",
                                                           "01_1e_cut",
                                                           "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut", "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut",
@@ -474,6 +488,7 @@ public:
     map<std::string, std::string> Fiducial_Directory_map;
     map<std::string, std::string> Momentum_Directory_map;
 
+    map<std::string, std::string> W_Directory_map;
     map<std::string, std::string> Beta_Directory_map;
     map<std::string, std::string> Angle_Directory_map;
     map<std::string, std::string> Q2_Directory_map;
