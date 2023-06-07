@@ -2434,10 +2434,10 @@ void EventAnalyser() {
     string hPhi_e_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
 
     TH2D *hPhi_e_VS_P_e_pFDpCD_FD = new TH2D("#phi_{e} vs. P_{e} (All Int., pFDpCD)",
-                                               "#phi_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]", 65, 0, beamE * 1.1, 65, -180, 180);
+                                             "#phi_{e} vs. P_{e} (All Int., pFDpCD);P_{e} [GeV/c];#phi_{e} [Deg]", 65, 0, beamE * 1.1, 65, -180, 180);
     TH2D *hPhi_e_VS_W_pFDpCD_FD = new TH2D("#phi_{e} vs. W (All Int., pFDpCD)",
-                                             "#phi_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
-                                             65, 0, beamE * 1.1, 65, -180, 180);
+                                           "#phi_{e} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#phi_{e} [Deg]",
+                                           65, 0, beamE * 1.1, 65, -180, 180);
     string hPhi_e_VS_P_e_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     //</editor-fold>
@@ -2931,10 +2931,10 @@ void EventAnalyser() {
     string hTheta_pFD_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
 
     TH2D *hTheta_pFD_VS_P_pFD_pFDpCD_FD = new TH2D("#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-                                               "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#theta_{pFD} [Deg]", 65, 0, beamE * 1.1, 65, 0, 50);
+                                                   "#theta_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#theta_{pFD} [Deg]", 65, 0, beamE * 1.1, 65, 0, 50);
     TH2D *hTheta_pFD_VS_W_pFDpCD_FD = new TH2D("#theta_{pFD} vs. W (All Int., pFDpCD, FD)",
-                                             "#theta_{pFD} vs. W (All Int., pFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{pFD} [Deg]",
-                                             65, 0, beamE * 1.1, 65, 0, 50);
+                                               "#theta_{pFD} vs. W (All Int., pFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];#theta_{pFD} [Deg]",
+                                               65, 0, beamE * 1.1, 65, 0, 50);
     string hTheta_pFD_VS_P_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
     string hTheta_pFD_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_pFDpCD_Directory"];
     //</editor-fold>
@@ -2956,10 +2956,10 @@ void EventAnalyser() {
     string hPhi_pFD_DIS_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
 
     TH2D *hPhi_pFD_VS_P_pFD_pFDpCD_FD = new TH2D("#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD)",
-                                                   "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#phi_{pFD} [Deg]", 65, 0, beamE * 1.1, 65, -180, 180);
+                                                 "#phi_{pFD} vs. P_{pFD} (All Int., pFDpCD, FD);P_{pFD} [GeV/c];#phi_{pFD} [Deg]", 65, 0, beamE * 1.1, 65, -180, 180);
     TH2D *hPhi_pFD_VS_W_pFDpCD_FD = new TH2D("#phi_{pFD} vs. W (All Int., pFDpCD, FD)",
-                                               "#phi_{pFD} vs. W (All Int., pFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                               "#phi_{pFD} [Deg]", 65, 0, beamE * 1.1, 65, -180, 180);
+                                             "#phi_{pFD} vs. W (All Int., pFDpCD, FD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
+                                             "#phi_{pFD} [Deg]", 65, 0, beamE * 1.1, 65, -180, 180);
     string hPhi_pFD_VS_P_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
     string hPhi_pFD_VS_W_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_pFD_pFDpCD_Directory"];
     //</editor-fold>
@@ -3409,12 +3409,12 @@ void EventAnalyser() {
                                                "#theta_{nFD,pCD} - Opening Angle Between Protons (RES only, nFDpCD);#theta_{nFD,pCD} [Deg];", 100, 0, 180);
     TH1D *hTheta_nFD_pCD_DIS_nFDpCD = new TH1D("#theta_{nFD,pCD} (DIS only, nFDpCD)",
                                                "#theta_{nFD,pCD} - Opening Angle Between Protons (DIS only, nFDpCD);#theta_{nFD,pCD} [Deg];", 100, 0, 180);
-    string sTheta_nFD_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
-    string hTheta_nFD_pCD_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
-    string hTheta_nFD_pCD_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
-    string hTheta_nFD_pCD_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
-    string hTheta_nFD_pCD_RES_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
-    string hTheta_nFD_pCD_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
+    string sTheta_nFD_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
+    string hTheta_nFD_pCD_All_Int_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
+    string hTheta_nFD_pCD_QEL_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
+    string hTheta_nFD_pCD_MEC_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
+    string hTheta_nFD_pCD_RES_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
+    string hTheta_nFD_pCD_DIS_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"];
     //</editor-fold>
 
 // Theta_nFD_pCD vs. W (nFDpCD, CD & FD) --------------------------------------------------------------------------------------------------------------------------------
@@ -9759,31 +9759,28 @@ void EventAnalyser() {
                 //<editor-fold desc="Filling pFD & pCD angle plots">
                 FillByInt(hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_QEL_pFDpCD_FD, hTheta_pFD_MEC_pFDpCD_FD, hTheta_pFD_RES_pFDpCD_FD, hTheta_pFD_DIS_pFDpCD_FD,
                           qel, mec, res, dis, Theta_pFD_pFDpCD, Weight);
-//                hTheta_pFD_All_Int_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
                 hTheta_pFD_VS_P_pFD_pFDpCD_FD->Fill(P_pFD_pFDpCD_3v.Mag(), Theta_pFD_pFDpCD, Weight);
                 hTheta_pFD_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Theta_pFD_pFDpCD, Weight);
 
                 FillByInt(hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD, hTheta_pCD_DIS_pFDpCD_CD,
                           qel, mec, res, dis, Theta_pCD_pFDpCD, Weight);
-//                hTheta_pCD_All_Int_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
                 hTheta_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Theta_pCD_pFDpCD, Weight);
                 hTheta_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Theta_pCD_pFDpCD, Weight);
 
                 FillByInt(hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_QEL_pFDpCD_FD, hPhi_pFD_MEC_pFDpCD_FD, hPhi_pFD_RES_pFDpCD_FD, hPhi_pFD_DIS_pFDpCD_FD,
                           qel, mec, res, dis, Phi_pFD_pFDpCD, Weight);
-//                hPhi_pFD_All_Int_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
                 hPhi_pFD_VS_P_pFD_pFDpCD_FD->Fill(P_pFD_pFDpCD_3v.Mag(), Phi_pFD_pFDpCD, Weight);
                 hPhi_pFD_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Phi_pFD_pFDpCD, Weight);
 
                 FillByInt(hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_QEL_pFDpCD_CD, hPhi_pCD_MEC_pFDpCD_CD, hPhi_pCD_RES_pFDpCD_CD, hPhi_pCD_DIS_pFDpCD_CD,
                           qel, mec, res, dis, Phi_pCD_pFDpCD, Weight);
-//                hPhi_pCD_All_Int_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
                 hPhi_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Phi_pCD_pFDpCD, Weight);
                 hPhi_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Phi_pCD_pFDpCD, Weight);
 
                 hTheta_pFD_VS_Phi_pFD_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Theta_pFD_pFDpCD, Weight);
                 hTheta_pCD_VS_Phi_pCD_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Theta_pCD_pFDpCD, Weight);
 
+                /*
                 if (qel) {
                     hTheta_pFD_QEL_pFDpCD_FD->Fill(Theta_pFD_pFDpCD, Weight);
                     hTheta_pCD_QEL_pFDpCD_CD->Fill(Theta_pCD_pFDpCD, Weight);
@@ -9805,6 +9802,7 @@ void EventAnalyser() {
                     hPhi_pFD_DIS_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Weight);
                     hPhi_pCD_DIS_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Weight);
                 }
+*/
                 //</editor-fold>
 
                 FillByInt(hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD, qel, mec, res, dis, W_pFDpCD, Weight);
@@ -9833,6 +9831,11 @@ void EventAnalyser() {
                 //<editor-fold desc="Filling Theta_pFD_pCD plots (pFDpCD)">
 
                 //<editor-fold desc="General Theta_pFD_pCD plots (pFDpCD)">
+                FillByInt(hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_QEL_pFDpCD, hTheta_pFD_pCD_MEC_pFDpCD, hTheta_pFD_pCD_RES_pFDpCD, hTheta_pFD_pCD_DIS_pFDpCD,
+                          qel, mec, res, dis, Theta_pFD_pCD_pFDpCD, Weight);
+                hTheta_pFD_pCD_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_pFD_pCD_pFDpCD, Weight);
+
+                /*
                 hTheta_pFD_pCD_All_Int_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
 
                 if (qel) {
@@ -9844,8 +9847,7 @@ void EventAnalyser() {
                 } else if (dis) {
                     hTheta_pFD_pCD_DIS_pFDpCD->Fill(Theta_pFD_pCD_pFDpCD, Weight);
                 }
-
-                hTheta_pFD_pCD_vs_W_pFDpCD->Fill(W_pFDpCD, Theta_pFD_pCD_pFDpCD, Weight);
+*/
                 //</editor-fold>
 
                 //<editor-fold desc="Plots for small Theta_pFD_pCD (pFDpCD)">
@@ -10593,54 +10595,26 @@ void EventAnalyser() {
                 //<editor-fold desc="Filling nFD & pCD angle plots">
                 FillByInt(hTheta_nFD_All_Int_nFDpCD_FD, hTheta_nFD_QEL_nFDpCD_FD, hTheta_nFD_MEC_nFDpCD_FD, hTheta_nFD_RES_nFDpCD_FD, hTheta_nFD_DIS_nFDpCD_FD,
                           qel, mec, res, dis, Theta_nFD_nFDpCD, Weight);
-//                hTheta_nFD_All_Int_nFDpCD_FD->Fill(Theta_nFD_nFDpCD, Weight);
                 hTheta_nFD_VS_P_nFD_nFDpCD_FD->Fill(P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Weight);
                 hTheta_nFD_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Theta_nFD_nFDpCD, Weight);
 
                 FillByInt(hTheta_pCD_All_Int_nFDpCD_CD, hTheta_pCD_QEL_nFDpCD_CD, hTheta_pCD_MEC_nFDpCD_CD, hTheta_pCD_RES_nFDpCD_CD, hTheta_pCD_DIS_nFDpCD_CD,
                           qel, mec, res, dis, Theta_pCD_nFDpCD, Weight);
-//                hTheta_pCD_All_Int_nFDpCD_CD->Fill(Theta_pCD_nFDpCD, Weight);
                 hTheta_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Theta_pCD_nFDpCD, Weight);
                 hTheta_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Theta_pCD_nFDpCD, Weight);
 
                 FillByInt(hPhi_nFD_All_Int_nFDpCD_FD, hPhi_nFD_QEL_nFDpCD_FD, hPhi_nFD_MEC_nFDpCD_FD, hPhi_nFD_RES_nFDpCD_FD, hPhi_nFD_DIS_nFDpCD_FD,
                           qel, mec, res, dis, Phi_nFD_nFDpCD, Weight);
-//                hPhi_nFD_All_Int_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Weight);
                 hPhi_nFD_VS_P_nFD_nFDpCD_FD->Fill(P_nFD_nFDpCD_3v.Mag(), Phi_nFD_nFDpCD, Weight);
                 hPhi_nFD_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Phi_nFD_nFDpCD, Weight);
 
                 FillByInt(hPhi_pCD_All_Int_nFDpCD_CD, hPhi_pCD_QEL_nFDpCD_CD, hPhi_pCD_MEC_nFDpCD_CD, hPhi_pCD_RES_nFDpCD_CD, hPhi_pCD_DIS_nFDpCD_CD,
                           qel, mec, res, dis, Phi_pCD_nFDpCD, Weight);
-//                hPhi_pCD_All_Int_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Weight);
                 hPhi_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Phi_pCD_nFDpCD, Weight);
                 hPhi_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Phi_pCD_nFDpCD, Weight);
 
                 hTheta_nFD_VS_Phi_nFD_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Theta_nFD_nFDpCD, Weight);
                 hTheta_pCD_VS_Phi_pCD_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Theta_pCD_nFDpCD, Weight);
-
-                /*
-                if (qel) {
-                    hTheta_nFD_QEL_nFDpCD_FD->Fill(Theta_nFD_nFDpCD, Weight);
-                    hTheta_pCD_QEL_nFDpCD_CD->Fill(Theta_pCD_nFDpCD, Weight);
-                    hPhi_nFD_QEL_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Weight);
-                    hPhi_pCD_QEL_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Weight);
-                } else if (mec) {
-                    hTheta_nFD_MEC_nFDpCD_FD->Fill(Theta_nFD_nFDpCD, Weight);
-                    hTheta_pCD_MEC_nFDpCD_CD->Fill(Theta_pCD_nFDpCD, Weight);
-                    hPhi_nFD_MEC_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Weight);
-                    hPhi_pCD_MEC_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Weight);
-                } else if (res) {
-                    hTheta_nFD_RES_nFDpCD_FD->Fill(Theta_nFD_nFDpCD, Weight);
-                    hTheta_pCD_RES_nFDpCD_CD->Fill(Theta_pCD_nFDpCD, Weight);
-                    hPhi_nFD_RES_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Weight);
-                    hPhi_pCD_RES_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Weight);
-                } else if (dis) {
-                    hTheta_nFD_DIS_nFDpCD_FD->Fill(Theta_nFD_nFDpCD, Weight);
-                    hTheta_pCD_DIS_nFDpCD_CD->Fill(Theta_pCD_nFDpCD, Weight);
-                    hPhi_nFD_DIS_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Weight);
-                    hPhi_pCD_DIS_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Weight);
-                }
-*/
                 //</editor-fold>
 
                 FillByInt(hW_All_Int_nFDpCD, hW_QEL_nFDpCD, hW_MEC_nFDpCD, hW_RES_nFDpCD, hW_DIS_nFDpCD, qel, mec, res, dis, W_nFDpCD, Weight);
@@ -10666,6 +10640,14 @@ void EventAnalyser() {
                 hTheta_p_e_p_tot_nFDpCD->Fill(Theta_p_e_p_tot_nFDpCD, Weight);
                 hTheta_p_e_p_tot_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_p_e_p_tot_nFDpCD, Weight);
 
+                //<editor-fold desc="Filling Theta_nFD_pCD plots (nFDpCD)">
+
+                //<editor-fold desc="General Theta_nFD_pCD plots (nFDpCD)">
+                FillByInt(hTheta_nFD_pCD_All_Int_nFDpCD, hTheta_nFD_pCD_QEL_nFDpCD, hTheta_nFD_pCD_MEC_nFDpCD, hTheta_nFD_pCD_RES_nFDpCD, hTheta_nFD_pCD_DIS_nFDpCD,
+                          qel, mec, res, dis, Theta_nFD_pCD_nFDpCD, Weight);
+                hTheta_nFD_pCD_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_nFD_pCD_nFDpCD, Weight);
+
+                /*
                 hTheta_nFD_pCD_All_Int_nFDpCD->Fill(Theta_nFD_pCD_nFDpCD, Weight);
 
                 if (qel) {
@@ -10678,8 +10660,11 @@ void EventAnalyser() {
                     hTheta_nFD_pCD_DIS_nFDpCD->Fill(Theta_nFD_pCD_nFDpCD, Weight);
                 }
 
-                hTheta_nFD_pCD_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_nFD_pCD_nFDpCD, Weight);
+                 hTheta_nFD_pCD_vs_W_nFDpCD->Fill(W_nFDpCD, Theta_nFD_pCD_nFDpCD, Weight);
+                */
+                //</editor-fold>
 
+                //<editor-fold desc="Plots for small Theta_nFD_pCD (nFDpCD)">
                 if (Theta_nFD_pCD_nFDpCD < 20.) {
                     hTheta_nFD_vs_theta_pCD_for_Theta_nFD_pCD_20_nFDpCD->Fill(Theta_p2_nFDpCD, Theta_p1_nFDpCD, Weight);
                     hdphi_nFD_pCD_for_Theta_nFD_pCD_20_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
@@ -10695,7 +10680,9 @@ void EventAnalyser() {
                     hdphi_nFD_pCD_for_small_dTheta_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
                     hdphi_nFD_pCD_for_small_dTheta_ZOOMIN_nFDpCD->Fill(dPhi_hit_e_nFD_nFDpCD, Weight);
                 }
+                //</editor-fold>
 
+                //</editor-fold>
 
                 Theta_q_p_tot_nFDpCD = acos((q_nFDpCD_3v.Px() * P_tot_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_tot_nFDpCD_3v.Py()
                                              + q_nFDpCD_3v.Pz() * P_tot_nFDpCD_3v.Pz())
@@ -10708,7 +10695,7 @@ void EventAnalyser() {
                                           / (q_nFDpCD_3v.Mag() * P_nFD_nFDpCD_3v.Mag())) * 180.0 / pi;                  // Theta_q_p_L_nFDpCD = Theta_q_p_1_nFDpCD in deg
                 Theta_q_p_R_nFDpCD = acos((q_nFDpCD_3v.Px() * P_pCD_nFDpCD_3v.Px() + q_nFDpCD_3v.Py() * P_pCD_nFDpCD_3v.Py()
                                            + q_nFDpCD_3v.Pz() * P_pCD_nFDpCD_3v.Pz())
-                                          / (q_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi; // Theta_q_p_R_nFDpCD = Theta_q_p_2_nFDpCD in deg
+                                          / (q_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi;                  // Theta_q_p_R_nFDpCD = Theta_q_p_2_nFDpCD in deg
                 hTheta_q_p_L_nFDpCD->Fill(Theta_q_p_L_nFDpCD, Weight);
                 hTheta_q_p_R_nFDpCD->Fill(Theta_q_p_R_nFDpCD, Weight);
                 hTheta_q_p_L_vs_p_L_q_nFDpCD->Fill(P_nFD_nFDpCD_3v.Mag() / q_nFDpCD_3v.Mag(), Theta_q_p_L_nFDpCD, Weight);
@@ -12499,7 +12486,8 @@ void EventAnalyser() {
                        hTheta_pFD_QEL_pFDpCD_FD, hTheta_pFD_MEC_pFDpCD_FD, hTheta_pFD_RES_pFDpCD_FD, hTheta_pFD_DIS_pFDpCD_FD, "05_Theta_pFD_Stack_pFDpCD",
                        hTheta_pFD_All_Int_pFDpCD_FD_Dir, "");
 
-        histPlotter2D(c1, hTheta_pFD_VS_P_pFD_pFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pFD_VS_P_pFD_pFDpCD_FD_Dir, "Theta_pFD_VS_P_pFD_pFDpCD_FD");
+        histPlotter2D(c1, hTheta_pFD_VS_P_pFD_pFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pFD_VS_P_pFD_pFDpCD_FD_Dir,
+                      "Theta_pFD_VS_P_pFD_pFDpCD_FD");
         histPlotter2D(c1, hTheta_pFD_VS_W_pFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pFD_VS_W_pFDpCD_FD_Dir, "Theta_pFD_VS_W_pFDpCD_FD");
         //</editor-fold>
 
@@ -12564,7 +12552,8 @@ void EventAnalyser() {
                        hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD, hTheta_pCD_DIS_pFDpCD_CD, "05_Theta_pCD_Stack_pFDpCD",
                        hTheta_pCD_All_Int_pFDpCD_CD_Dir, "");
 
-        histPlotter2D(c1, hTheta_pCD_VS_P_pCD_pFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_P_pCD_pFDpCD_CD_Dir, "Theta_pCD_VS_P_pCD_pFDpCD_CD");
+        histPlotter2D(c1, hTheta_pCD_VS_P_pCD_pFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_P_pCD_pFDpCD_CD_Dir,
+                      "Theta_pCD_VS_P_pCD_pFDpCD_CD");
         histPlotter2D(c1, hTheta_pCD_VS_W_pFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_W_pFDpCD_CD_Dir, "Theta_pCD_VS_W_pFDpCD_CD");
         //</editor-fold>
 
@@ -12786,7 +12775,8 @@ void EventAnalyser() {
                        hTheta_nFD_QEL_nFDpCD_FD, hTheta_nFD_MEC_nFDpCD_FD, hTheta_nFD_RES_nFDpCD_FD, hTheta_nFD_DIS_nFDpCD_FD, "05_Theta_nFD_Stack_nFDpCD",
                        hTheta_nFD_All_Int_nFDpCD_FD_Dir, "");
 
-        histPlotter2D(c1, hTheta_nFD_VS_P_nFD_nFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_VS_P_nFD_nFDpCD_FD_Dir, "Theta_nFD_VS_P_nFD_nFDpCD_FD");
+        histPlotter2D(c1, hTheta_nFD_VS_P_nFD_nFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_VS_P_nFD_nFDpCD_FD_Dir,
+                      "Theta_nFD_VS_P_nFD_nFDpCD_FD");
         histPlotter2D(c1, hTheta_nFD_VS_W_nFDpCD_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_VS_W_nFDpCD_FD_Dir, "Theta_nFD_VS_W_nFDpCD_FD");
         //</editor-fold>
 
@@ -12851,7 +12841,8 @@ void EventAnalyser() {
                        hTheta_pCD_QEL_nFDpCD_CD, hTheta_pCD_MEC_nFDpCD_CD, hTheta_pCD_RES_nFDpCD_CD, hTheta_pCD_DIS_nFDpCD_CD, "05_Theta_pCD_Stack_nFDpCD",
                        hTheta_pCD_All_Int_nFDpCD_CD_Dir, "");
 
-        histPlotter2D(c1, hTheta_pCD_VS_P_pCD_nFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_P_pCD_nFDpCD_CD_Dir, "Theta_pCD_VS_P_pCD_nFDpCD_CD");
+        histPlotter2D(c1, hTheta_pCD_VS_P_pCD_nFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_P_pCD_nFDpCD_CD_Dir,
+                      "Theta_pCD_VS_P_pCD_nFDpCD_CD");
         histPlotter2D(c1, hTheta_pCD_VS_W_nFDpCD_CD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pCD_VS_W_nFDpCD_CD_Dir, "Theta_pCD_VS_W_nFDpCD_CD");
         //</editor-fold>
 
@@ -12945,9 +12936,8 @@ void EventAnalyser() {
         double Theta_nFD_pCD_nFDpCD_integral = hTheta_nFD_pCD_All_Int_nFDpCD->Integral();
 
         histPlotter1D(c1, hTheta_nFD_pCD_All_Int_nFDpCD, norm_Angle_plots_master, true, Theta_nFD_pCD_nFDpCD_integral,
-                      "#theta_{nFD,pCD} - Opening Angle Between Nucleons",
-                      "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_nFD_pCD_nFDpCD, "00_Theta_nFD_pCD_All_Int_nFDpCD",
-                      hTheta_nFD_pCD_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, false);
+                      "#theta_{nFD,pCD} - Opening Angle Between Nucleons", "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_nFD_pCD_nFDpCD,
+                      "00_Theta_nFD_pCD_All_Int_nFDpCD", hTheta_nFD_pCD_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, false);
         histPlotter1D(c1, hTheta_nFD_pCD_QEL_nFDpCD, norm_Angle_plots_master, true, Theta_nFD_pCD_nFDpCD_integral, "#theta_{nFD,pCD} - Opening Angle Between Nucleons",
                       "QEL only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_nFD_pCD_nFDpCD, "01_Theta_nFD_pCD_QEL_only_nFDpCD",
                       hTheta_nFD_pCD_QEL_nFDpCD_Dir, "", kBlue, true, true, true, false);

@@ -590,6 +590,9 @@ Directories::Directories(std::string plots_path) {
                                                                    Find(Angle_Daughter_Folders, "06_nFDpCD/09_Theta_pCD_VS_Phi_pCD_nFDpCD_plots") + "/";
     Angle_Directory_map["Opening_angles_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                              Find(Angle_Daughter_Folders, "06_nFDpCD/10_Opening_angles_nFDpCD_plots") + "/";
+    Angle_Directory_map["Opening_angles_by_interaction_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
+                                                                            Find(Angle_Daughter_Folders,
+                                                                                 "06_nFDpCD/10_Opening_angles_nFDpCD_plots/00_Theta_nFD_pCD_by_interaction") + "/";
     Angle_Directory_map["Neutron_veto_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
                                                            Find(Angle_Daughter_Folders, "06_nFDpCD/12_Neutron_veto_nFDpCD_plots") + "/";
     Angle_Directory_map["Double_detection_nFDpCD_Directory"] = Plots_Folder + "/" + Angle_Parent_Directory + "/" +
