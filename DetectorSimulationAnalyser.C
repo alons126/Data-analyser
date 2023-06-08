@@ -2914,6 +2914,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Other angle plots (pFDpCD)">
 
+    //<editor-fold desc="Nucleons' angles plots (pFDpCD)">
+
 // Theta_pFD ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_pFD histograms">
@@ -3032,6 +3034,8 @@ void EventAnalyser() {
     string hTheta_pCD_VS_Phi_pCD_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"];
     //</editor-fold>
 
+    //</editor-fold>
+
 // Theta_p_e_p_tot (pFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_p_e_p_tot (pFDpCD, CD & FD)">
@@ -3135,9 +3139,9 @@ void EventAnalyser() {
 // Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (CD & FD) ------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_pFD_vs_Theta_pCD for Theta_pFD_pCD < 20 (CD & FD)">
-    TH2D *hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD = new TH2D("#theta_{p_{pFD}} vs. #theta_{p_{pCD}} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD)",
-                                                                         "#theta_{p_{pFD}} vs. #theta_{p_{pCD}} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD);"
-                                                                         "#theta_{p_{pCD}} [Deg];#theta_{p_{pFD}} [Deg];", 65, 30, 50, 65, 30, 50);
+    TH2D *hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD = new TH2D("#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD)",
+                                                                         "#theta_{pFD} vs. #theta_{pCD} for #theta_{pFD,pCD}<20#circ (All Int., pFDpCD);"
+                                                                         "#theta_{pCD} [Deg];#theta_{pFD} [Deg];", 65, 30, 50, 65, 30, 50);
     string hTheta_pFD_vs_theta_pCD_for_Theta_pFD_pCD_20_pFDpCD_Dir = directories.Angle_Directory_map["Double_detection_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -3207,6 +3211,8 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Other angle plots (nFDpCD)">
+
+    //<editor-fold desc="Nucleons' angles plots (nFDpCD)">
 
 // Theta_nFD ------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -3324,6 +3330,8 @@ void EventAnalyser() {
                                                      "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., nFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
                                                      65, -200, 200, 65, 30, 155);
     string hTheta_pCD_VS_Phi_pCD_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_nFDpCD_Directory"];
+    //</editor-fold>
+
     //</editor-fold>
 
 // Theta_p_e_p_tot (nFDpCD, CD & FD) ------------------------------------------------------------------------------------------------------------------------------------
@@ -10754,7 +10762,7 @@ void EventAnalyser() {
 
                 hdTheta_nFD_e_VS_dPhi_nFD_e_Electrons_AV_nFDpCD.hFill(dPhi_hit_e_nFD_nFDpCD, dTheta_hit_e_nFD_nFDpCD, Weight);
 
-/*
+                /*
             if ((nFD_nFDpCD->getRegion() == CD) && (p_second_nFDpCD->getRegion() == CD)) { // if both nFDpCD protons are in the CD (self-observation only!)
                 TVector3 p1_hit_pos, p2_hit_pos, pos_diff;
                 p1_hit_pos.SetXYZ(nFD_nFDpCD->sci(clas12::CTOF)->getX(), nFD_nFDpCD->sci(clas12::CTOF)->getY(), nFD_nFDpCD->sci(clas12::CTOF)->getZ());

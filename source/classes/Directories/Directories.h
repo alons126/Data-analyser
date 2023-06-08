@@ -276,7 +276,7 @@ private:
                                                   "06_nFDpCD/04_Theta_nFD_nFDpCD_plots", "06_nFDpCD/05_Phi_nFD_nFDpCD_plots",
                                                   "06_nFDpCD/06_Theta_nFD_VS_Phi_nFD_nFDpCD_plots", "06_nFDpCD/07_Theta_pCD_nFDpCD_plots",
                                                   "06_nFDpCD/08_Phi_pCD_nFDpCD_plots", "06_nFDpCD/09_Theta_pCD_VS_Phi_pCD_nFDpCD_plots",
-                                                  "06_nFDpCD/10_Opening_angles_nFDpCD_plots","06_nFDpCD/10_Opening_angles_nFDpCD_plots/00_Theta_nFD_pCD_by_interaction",
+                                                  "06_nFDpCD/10_Opening_angles_nFDpCD_plots", "06_nFDpCD/10_Opening_angles_nFDpCD_plots/00_Theta_nFD_pCD_by_interaction",
                                                   "06_nFDpCD/11_Ghost_tracks_handling_nFDpCD_plots/02_Double_detection_nFDpCD_plots",
                                                   "06_nFDpCD/11_Ghost_tracks_handling_nFDpCD_plots/02_Double_detection_nFDpCD_plots/00_Double_detection_monitoring_nFDpCD_plots",
                                                   "06_nFDpCD/12_Neutron_veto_nFDpCD_plots",
@@ -439,7 +439,6 @@ private:
     //</editor-fold>
 
     //<editor-fold desc="Efficiency & Acceptance Correction plots directories">
-    // todo: change this folder's name
     bool create_Eff_and_ACorr_Dir = true;
     std::string Eff_and_ACorr_Parent_Directory = "11_Eff_and_ACorr_plots";
     vector<std::string> Eff_and_ACorr_Daughter_Folders = {"",
@@ -473,6 +472,30 @@ private:
     };
     //</editor-fold>
 
+    //<editor-fold desc="Resolution plots directories">
+    bool create_Resolution_Dir = true;
+    std::string Resolution_Parent_Directory = "12_Resolution_plots";
+    vector<std::string> Resolution_Daughter_Folders = {"",
+                                                       "01_1e_cut",
+                                                       "01_1e_cut/01_Momentum_resolution_plots_1e_cut",
+
+                                                       "02_1p",
+                                                       "02_1p/01_Momentum_resolution_plots_1p",
+
+                                                       "03_1n",
+                                                       "03_1n/01_Momentum_resolution_plots_1n",
+
+                                                       "04_2p",
+                                                       "04_2p/01_Momentum_resolution_plots_2p",
+
+                                                       "05_pFDpCD",
+                                                       "05_pFDpCD/01_Momentum_resolution_plots_pFDpCD",
+
+                                                       "06_nFDpCD",
+                                                       "06_nFDpCD/01_Momentum_resolution_plots_nFDpCD",
+    };
+    //</editor-fold>
+
 // Private methods ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool FindSubstring(std::string string1, std::string string2);
@@ -498,6 +521,7 @@ public:
     map<std::string, std::string> TVariables_Directory_map;
     map<std::string, std::string> ToF_Directory_map;
     map<std::string, std::string> Eff_and_ACorr_Directory_map;
+    map<std::string, std::string> Resolution_Directory_map;
 
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------
 
