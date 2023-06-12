@@ -159,6 +159,7 @@ void EventAnalyser() {
     bool apply_momentum_cuts_2p = true, apply_momentum_cuts_pFDpCD = true, apply_momentum_cuts_nFDpCD = true;
 
     bool apply_nucleon_cuts = true;
+
     bool apply_nucleon_physical_cuts = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -427,11 +428,17 @@ void EventAnalyser() {
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="TList definition">
-    /* Definition of plots TList used to save all plots to .root file. */
+    /* Definition of plots TLists used to save all plots to .root file. */
 
+    /* General plots TList */
     TList *plots = new TList();
     string listName = plots_path + "/" + AnalyseFileSample + plots_file_type;
     const char *TListName = listName.c_str();
+
+    /* Histogram ref. TList (for TL fiducial cuts) */
+    TList *TL_ref_plots = new TList();
+    string TL_ref_listName = CutsDirectory + "TL_ref_plots.root";
+    const char *TL_ref_TListName = TL_ref_listName.c_str();
     //</editor-fold>
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -5580,43 +5587,49 @@ void EventAnalyser() {
                                                  "07b_Phi_hp_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
-    //<editor-fold desc="Hit map plots (nFDpCD, FD)">
-    hPlot2D hnFD_Hit_map_nFDpCD = hPlot2D("nFDpCD", "FD", "FD neutron hit map", "FD neutron hit map", "x_{nFD}", "y_{nFD}",
-                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"], "01_Neutron_FD_Hit_map_nFDpCD",
-                                          -1.1, 1.1, -1.1, 1.1, 100, 100);
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{e} [Deg]",
-                                                       "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                       "02_Neutron_FD_Hit_map_nFDpCD_test_AEC", -180, 180, 0, 50, 65, 65);
-//                                               -1.1, 1.1, -1.1, 1.1, 65, 65);
+    //<editor-fold desc="TL fiducial cuts (nFDpCD, FD)">
+
+    //<editor-fold desc="Fill reference histogram">
+    TH2D *hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD;
+    string hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir;
+    int ref_hist_numOfBins = 100;
+
+    if (!apply_nucleon_cuts) {
+        hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD = new TH2D("h", "#theta_{nFD} vs. #phi_{nFD} w/ PCAL hit - ref. plot (no #(e) cut, FD);#phi_{nFD} [Deg];#theta_{nFD} [Deg]",
+                                              ref_hist_numOfBins, Phi_lboundary, Phi_uboundary, ref_hist_numOfBins, Theta_lboundary_FD, Theta_uboundary_FD);
+//                                                  65, -200, 200, 65, 0, 50);
+        hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Load reference histogram">
+    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root").c_str());
+    TH2D *hist = (TH2D *) f->Get("h");
+    string hist_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
+
+    if (!hist) { cout << "\n\nEmpty hist\n\n\n", quit(); }
+    //</editor-fold>
+
+    hPlot2D hnFD_Hit_map_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
+                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                              "01a_Neutron_FD_Hit_map_BEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
+    hPlot2D hnFD_Hit_map_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map AEC", "FD neutron hit map AEC", "x_{nFD}", "y_{nFD}",
+                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                              "01b_Neutron_FD_Hit_map_AEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
+
     hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{e} [Deg]",
                                                        "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                       "03_Neutron_FD_Hit_map_nFDpCD_test_BEC", -180, 180, 0, 50, 65, 65);
-//                                               -1.1, 1.1, -1.1, 1.1, 65, 65);
+                                                       "02a_Theta_nFD_vs_Phi_nFD_BEC_nFDpCD",
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{e} [Deg]",
+                                                       "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                       "02b_Theta_nFD_vs_Phi_nFD_AEC_nFDpCD",
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
 
 //    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD}", "#theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD}", "#theta_{nFD}",
 //                                                   directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"], "02_Theta_nFD_vs_Phi_nFD_nFDpCD",
 //                                                   65, -180, 180, 65, 0, 50);
 
-    TH2D *hTheta_nFD_vs_Phi_nFD_test = new TH2D("h", "#theta_{neut} vs. #phi_{neut} w/ PCAL hit (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                100, -180, 180, 100, 0, 50);
-//                                                  65, -200, 200, 65, 0, 50);
-    string hTheta_nFD_vs_Phi_nFD_test_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
-
-//    TFile *f = TFile::Open((CutsDirectory + "hist.root").c_str());
-//    TFile *f = TFile::Open((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root").c_str());
-//    TFile *f = new TFile((CutsDirectory + "hist.root").c_str());
-//    cout << "\n\n\n" << CutsDirectory << "hist.root" << "\n\n\n";
-//    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root").c_str());
-    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root").c_str());
-//    f->ls();
-
-//    string hist_name = "#theta_{neut} vs. #phi_{neut} w/ PCAL hit (no #(e) cut, FD)";
-//    TH2D *hist;
-//    gDirectory->GetObject(hist_name.c_str(), hist);
-    TH2D *hist = (TH2D *) f->Get("h");
-    string hist_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
-
-    if (!hist) { cout << "\n\nEmpty hist\n\n\n", quit(); }
     //</editor-fold>
 
     //</editor-fold>
@@ -6269,93 +6282,15 @@ void EventAnalyser() {
                     if (TL_Event_Selection_nFDpCD) {
 
 
-                        hnFD_Hit_map_nFDpCD.hFill(x, y, Weight);
-//                        hTheta_nFD_vs_Phi_nFD_test.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
-
-
-
-                        //<editor-fold desc="original">
-                        //                        int numOfxBins = 100;
-//                        double HistogramUlimX_i = 180;
-//                        double HistogramLlimX_i = -180;
-//
-//                        double Delta_x = (HistogramUlimX_i - HistogramLlimX_i) / numOfxBins;
-//
-//                        int BinX;
-//
-//                        for (int i = 0; i < numOfxBins; i++) {
-//                            double min_x_i, max_x_i;
-//
-//                            min_x_i = HistogramLlimX_i + i * Delta_x;
-//                            max_x_i = min_x_i + Delta_x;
-//
-//                            /*
-//                            if (i == 0) {
-//                                LlimX_i = HistogramLlimX_i;
-//                            } else {
-//                                LlimX_i = HistogramLlimX_i + (i - 1) * Delta_x;
-//                            }
-//
-//                            UlimX_i = HistogramLlimX_i + i * Delta_x;
-//*/
-//
-//                            if (Particle_TL_Phi >= min_x_i && Particle_TL_Phi <= max_x_i) {
-//                                cout << "\n\n\n";
-//                                cout << "Particle_TL_Phi = " << Particle_TL_Phi << "\n";
-//                                cout << "max_x_i = " << max_x_i << "\n";
-//                                cout << "min_x_i = " << min_x_i << "\n";
-//                                cout << "i = " << i << "\n";
-//                                cout << "Delta_x = " << Delta_x << "\n\n\n";
-//                                BinX = i;
-//                            }
-//                        } // end of loop over electrons vector
-                        //</editor-fold>
-
-                        int BinX = GetBinFromVal(Particle_TL_Phi, 100, 180, -180);
-
-                        cout << "\n\n\nBinX = " << BinX << "\n\n\n";
-
-                        quit();
-
-
-
-                        int numOfyBins = 100;
-                        double hUlimY_i = 50;
-                        double hLlimY_i = 0;
-
-                        double Delta_y = hUlimY_i - hLlimY_i / numOfyBins;
-
-                        int BinY;
-
-                        for (int i = 0; i < numOfyBins; i++) {
-                            double LlimY_i, UlimY_i;
-
-                            if (i == 0) {
-                                LlimY_i = hLlimY_i;
-                            } else {
-                                LlimY_i = hLlimY_i + (i - 1) * Delta_y;
-                            }
-
-                            UlimY_i = hLlimY_i + i * Delta_y;
-
-                            if (Particle_TL_Theta >= LlimY_i && Particle_TL_Theta <= UlimY_i) {
-                                BinY = i;
-                            }
-                        } // end of loop over electrons vector
-
-
-//                        Histogram2D->GetXaxis()->
-//                        Int_t bin = hist->GetBin(binx,biny,binz);
-//                        hnFD_Hit_map_nFDpCD_test
-
-                        cout << "\n\n\n" << hist->GetBinContent(BinX, BinY) << "\n\n\n";
-                        cout << "BinX = " << BinX << "\n";
-                        cout << "BinY = " << BinY << "\n\n\n";
+                        int BinX = GetBinFromVal(Particle_TL_Phi, ref_hist_numOfBins, Phi_lboundary, Phi_uboundary, false, "Phi");
+                        int BinY = GetBinFromVal(Particle_TL_Theta, ref_hist_numOfBins, Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
                         if (hist->GetBinContent(BinX, BinY) != 0) {
                             hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+                            hnFD_Hit_map_nFDpCD_AEC.hFill(x, y, Weight);
                         }
 
+                        hnFD_Hit_map_nFDpCD_BEC.hFill(x, y, Weight);
                         hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
 
 
@@ -6798,25 +6733,19 @@ void EventAnalyser() {
 
 //  Fill All particles (All e) plots ------------------------------------------------------------------------------------------------------------------------------------
 
+        if (!apply_nucleon_cuts) {
+            for (int i = 0; i < allParticles.size(); i++) {
+                if ((allParticles[i]->par()->getCharge() == 0) && (allParticles[i]->getRegion() == FD)) {
+                    bool PCALhit = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+                    bool ECINhit = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                    bool ECOUThit = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
-
-
-        for (int i = 0; i < allParticles.size(); i++) {
-//            * 180.0 / pi
-            if ((allParticles[i]->par()->getCharge() == 0) && (allParticles[i]->getRegion() == FD)) {
-                bool PCALhit = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-                bool ECINhit = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-                bool ECOUThit = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-
-                if (!PCALhit && (ECINhit || ECOUThit)) {
-                    hTheta_nFD_vs_Phi_nFD_test->Fill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
+                    if (!PCALhit && (ECINhit || ECOUThit)) {
+                        hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD->Fill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
+                    }
                 }
-            }
-        } // end of loop over electrons vector
-
-
-
-
+            } // end of loop over electrons vector
+        }
 
         //<editor-fold desc="All particles plots">
         /* Declaration of electron variables for all particles analysis.
@@ -14903,16 +14832,17 @@ void EventAnalyser() {
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_nFDpCD_CD, hPhi_pCD_All_Int_nFDpCD_CD, plots);
         //</editor-fold>
 
-
-
-        hnFD_Hit_map_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC.hDrawAndSave(SampleName, c1, plots, true);
-//        hTheta_nFD_vs_Phi_nFD_nFDpCD.hDrawAndSave(SampleName, c1, plots, false);
-//        histPlotter2D(c1, hist, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hist_Dir, "hist");
-        histPlotter2D(c1, hTheta_nFD_vs_Phi_nFD_test, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_vs_Phi_nFD_test_Dir, "Theta_nFD_vs_Phi_nFD_test");
-
-
+        //<editor-fold desc="TL fiducial plots">
+        if (!apply_nucleon_cuts) {
+            histPlotter2D(c1, hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, TL_ref_plots, false, hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir,
+                          "00_Theta_nFD_vs_Phi_nFD_ref_plot_nFDpCD");
+        } else {
+            hnFD_Hit_map_nFDpCD_BEC.hDrawAndSave(SampleName, c1, plots, true);
+            hnFD_Hit_map_nFDpCD_AEC.hDrawAndSave(SampleName, c1, plots, true);
+            hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC.hDrawAndSave(SampleName, c1, plots, true);
+            hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hDrawAndSave(SampleName, c1, plots, true);
+        }
+        //</editor-fold>
 
         //</editor-fold>
 
@@ -15687,11 +15617,25 @@ void EventAnalyser() {
     //<editor-fold desc="Saving histogram list">
     cout << "\n\nSaving histogram list...";
 
-    TFile *fout = new TFile(TListName, "recreate");
-    fout->cd();
+    //<editor-fold desc="Saving histogram TList">
+    TFile *plots_fout = new TFile(TListName, "recreate");
+    plots_fout->cd();
     plots->Write();
-    fout->Write();
-    fout->Close();
+    plots_fout->Write();
+    plots_fout->Close();
+    //</editor-fold>
+
+    //<editor-fold desc="Saving ref. histogram TList">
+    TFile *TL_ref_fout;
+
+    if (!apply_nucleon_cuts) {
+        TL_ref_fout = new TFile(TL_ref_TListName, "recreate");
+        TL_ref_fout->cd();
+        TL_ref_plots->Write();
+        TL_ref_fout->Write();
+        TL_ref_fout->Close();
+    }
+    //</editor-fold>
 
     cout << " done.\n\n";
     //</editor-fold>
