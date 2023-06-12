@@ -988,6 +988,8 @@ Directories::Directories(std::string plots_path) {
                                                                       Find(Eff_and_ACorr_Daughter_Folders, "02_1p/02_Theta_Eff_and_ACorr_plots_1p") + "/";
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "02_1p/03_Phi_Eff_and_ACorr_plots_1p") + "/";
+    Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                         Find(Eff_and_ACorr_Daughter_Folders, "02_1p/04_Proton_FD_Hit_map_1p") + "/";
 
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "03_1n/01_Momentum_Eff_and_ACorr_plots_1n") + "/";
@@ -995,13 +997,8 @@ Directories::Directories(std::string plots_path) {
                                                                       Find(Eff_and_ACorr_Daughter_Folders, "03_1n/02_Theta_Eff_and_ACorr_plots_1n") + "/";
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "03_1n/03_Phi_Eff_and_ACorr_plots_1n") + "/";
-
-//    Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_2p_Directory_1e2p"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-//                                                                           Find(Eff_and_ACorr_Daughter_Folders, "05_1e2p/01_Momentum_Eff_and_ACorr_plots_1e2p") + "/";
-//    Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_Directory_1e2p"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-//                                                                        Find(Eff_and_ACorr_Daughter_Folders, "05_1e2p/02_Theta_Eff_and_ACorr_plots_1e2p") + "/";
-//    Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_Directory_1e2p"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-//                                                                      Find(Eff_and_ACorr_Daughter_Folders, "05_1e2p/03_Phi_Eff_and_ACorr_plots_1e2p") + "/";
+    Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                    Find(Eff_and_ACorr_Daughter_Folders, "03_1n/04_Neutron_FD_Hit_map_1n") + "/";
 
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_2p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "04_2p/01_Momentum_Eff_and_ACorr_plots_2p") + "/";
@@ -1016,6 +1013,8 @@ Directories::Directories(std::string plots_path) {
                                                                           Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/02_Theta_Eff_and_ACorr_plots_pFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/03_Phi_Eff_and_ACorr_plots_pFDpCD") + "/";
+    Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                    Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/04_Proton_FD_Hit_map_pFDpCD") + "/";
 
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/01_Momentum_Eff_and_ACorr_plots_nFDpCD") + "/";

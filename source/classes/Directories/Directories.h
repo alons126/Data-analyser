@@ -448,11 +448,11 @@ private:
 
                                                           "02_1p",
                                                           "02_1p/01_Momentum_Eff_and_ACorr_plots_1p", "02_1p/02_Theta_Eff_and_ACorr_plots_1p",
-                                                          "02_1p/03_Phi_Eff_and_ACorr_plots_1p",
+                                                          "02_1p/03_Phi_Eff_and_ACorr_plots_1p", "02_1p/04_Proton_FD_Hit_map_1p",
 
                                                           "03_1n",
                                                           "03_1n/01_Momentum_Eff_and_ACorr_plots_1n", "03_1n/02_Theta_Eff_and_ACorr_plots_1n",
-                                                          "03_1n/03_Phi_Eff_and_ACorr_plots_1n",
+                                                          "03_1n/03_Phi_Eff_and_ACorr_plots_1n", "03_1n/04_Neutron_FD_Hit_map_1n",
 
 //                                                          "05_1e2p",
 //                                                          "05_1e2p/01_Momentum_Eff_and_ACorr_plots_1e2p", "05_1e2p/02_Theta_Eff_and_ACorr_plots_1e2p",
@@ -460,15 +460,15 @@ private:
 
                                                           "04_2p",
                                                           "04_2p/01_Momentum_Eff_and_ACorr_plots_2p", "04_2p/02_Theta_Eff_and_ACorr_plots_2p",
-                                                          "04_2p/03_Phi_Eff_and_ACorr_plots_2p",
+                                                          "04_2p/03_Phi_Eff_and_ACorr_plots_2p", "04_2p/04_Proton_FD_Hit_map_2p",
 
                                                           "05_pFDpCD",
                                                           "05_pFDpCD/01_Momentum_Eff_and_ACorr_plots_pFDpCD", "05_pFDpCD/02_Theta_Eff_and_ACorr_plots_pFDpCD",
-                                                          "05_pFDpCD/03_Phi_Eff_and_ACorr_plots_pFDpCD",
+                                                          "05_pFDpCD/03_Phi_Eff_and_ACorr_plots_pFDpCD", "05_pFDpCD/04_Proton_FD_Hit_map_pFDpCD",
 
                                                           "06_nFDpCD",
                                                           "06_nFDpCD/01_Momentum_Eff_and_ACorr_plots_nFDpCD", "06_nFDpCD/02_Theta_Eff_and_ACorr_plots_nFDpCD",
-                                                          "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD", "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD"
+                                                          "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD", "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD",
     };
     //</editor-fold>
 

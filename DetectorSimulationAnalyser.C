@@ -4945,6 +4945,218 @@ void EventAnalyser() {
                                              "07b_Phi_ph_BC_truth_1p_FD", Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
+    //<editor-fold desc="TL fiducial cuts (1p)">
+    hPlot2D hpFD_Hit_map_1p_BEC = hPlot2D("1p", "FD", "FD proton hit map BEC", "FD proton hit map BEC", "x_{pFD}", "y_{pFD}",
+                                          directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
+                                          "01a_Proton_FD_Hit_map_BEC_1p", -1.1, 1.1, -1.1, 1.1, 100, 100);
+    hPlot2D hpFD_Hit_map_1p_AEC = hPlot2D("1p", "FD", "FD proton hit map AEC", "FD proton hit map AEC", "x_{pFD}", "y_{pFD}",
+                                          directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
+                                          "01b_Proton_FD_Hit_map_AEC_1p", -1.1, 1.1, -1.1, 1.1, 100, 100);
+
+    hPlot2D hTheta_pFD_vs_Phi_pFD_1p_BEC = hPlot2D("1p", "FD", "#theta_{pFD} vs. #phi_{pFD} BEC", "TL #theta_{pFD} vs. #phi_{pFD} BEC", "#phi_{pFD} [Deg]",
+                                                   "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
+                                                   "02a_Theta_pFD_vs_Phi_pFD_BEC_1p",
+                                                   Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    hPlot2D hTheta_pFD_vs_Phi_pFD_1p_AEC = hPlot2D("1p", "FD", "#theta_{pFD} vs. #phi_{pFD} AEC", "TL #theta_{pFD} vs. #phi_{pFD} AEC", "#phi_{pFD} [Deg]",
+                                                   "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"],
+                                                   "02b_Theta_pFD_vs_Phi_pFD_AEC_1p",
+                                                   Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    //</editor-fold>
+
+//    //<editor-fold desc="Truth level momentum plots with fiducial cuts (1p)">
+//    hPlot1D hP_e_AED_truth_1p = hPlot1D("1p", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_AED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_e_AED_truth_1p = hPlot1D("1p", "", "TL Electron momentum AC", "Electron momentum P^{truth}_{e} AC", "P^{truth}_{e} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_AED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_e_BED_truth_1p = hPlot1D("1p", "", "TL Electron momentum BC", "Electron momentum P^{truth}_{e} BC", "P^{truth}_{e} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "01_P_e_BED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//
+//    hPlot1D hP_n_AED_truth_1p = hPlot1D("1p", "", "TL Neutron momentum AC", "Neutron momentum P^{truth}_{n} AC", "P^{truth}_{n} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "02_P_n_AED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_n_BED_truth_1p = hPlot1D("1p", "", "TL Neutron momentum BC", "Neutron momentum P^{truth}_{n} BC", "P^{truth}_{n} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "02_P_n_BED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//
+//    hPlot1D hP_p_AED_truth_1p = hPlot1D("1p", "", "TL Proton momentum AC", "Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_AED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_p_BED_truth_1p = hPlot1D("1p", "", "TL Proton momentum BC", "Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+//                                        directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03a_P_p_BED_truth_1p",
+//                                        Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_p_AED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL Proton momentum AC", "FD Proton momentum P^{truth}_{p} AC", "P^{truth}_{p} [GeV/c]",
+//                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_p_AED_truth_1p_FD",
+//                                           Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_p_BED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL Proton momentum BC", "FD Proton momentum P^{truth}_{p} BC", "P^{truth}_{p} [GeV/c]",
+//                                           directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "03b_P_p_BED_truth_1p_FD",
+//                                           Momentum_lboundary, Momentum_uboundary);
+//
+//    hPlot1D hP_pip_AED_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum AC", "#pi^{+} momentum P^{truth}_{#pi^{+}} AC", "P^{truth}_{#pi^{+}} [GeV/c]",
+//                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_AED_truth_1p",
+//                                          Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_pip_BED_truth_1p = hPlot1D("1p", "", "TL #pi^{+} momentum BC", "#pi^{+} momentum P^{truth}_{#pi^{+}} BC", "P^{truth}_{#pi^{+}} [GeV/c]",
+//                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "04_P_piplus_BED_truth_1p",
+//                                          Momentum_lboundary, Momentum_uboundary);
+//
+//    hPlot1D hP_pim_AED_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum AC", "#pi^{-} momentum P^{truth}_{#pi^{-}} AC", "P^{truth}_{#pi^{-}} [GeV/c]",
+//                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "05_P_piminus_AED_truth_1p",
+//                                          Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_pim_BED_truth_1p = hPlot1D("1p", "", "TL #pi^{-} momentum BC", "#pi^{-} momentum P^{truth}_{#pi^{-}} BC", "P^{truth}_{#pi^{-}} [GeV/c]",
+//                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "05_P_piminus_BED_truth_1p",
+//                                          Momentum_lboundary, Momentum_uboundary);
+//
+//    hPlot1D hP_pi0_AED_truth_1p = hPlot1D("1p", "", "TL #pi^{0} momentum AC", "#pi^{0} momentum P^{truth}_{#pi^{0}} AC", "P^{truth}_{#pi^{0}} [GeV/c]",
+//                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "06_P_pi0_AED_truth_1p",
+//                                          Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_pi0_BED_truth_1p = hPlot1D("1p", "", "TL #pi^{0} momentum BC", "#pi^{0} momentum P^{truth}_{#pi^{0}} BC", "P^{truth}_{#pi^{0}} [GeV/c]",
+//                                          directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "06_P_pi0_BED_truth_1p",
+//                                          Momentum_lboundary, Momentum_uboundary);
+//
+//    hPlot1D hP_ph_AED_truth_1p = hPlot1D("1p", "", "TL #gamma momentum AC", "#gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+//                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07a_P_ph_AED_truth_1p",
+//                                         Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_ph_BED_truth_1p = hPlot1D("1p", "", "TL #gamma momentum BC", "#gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+//                                         directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07a_P_ph_BED_truth_1p",
+//                                         Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_ph_AED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #gamma momentum AC", "FD #gamma momentum P^{truth}_{#gamma} AC", "P^{truth}_{#gamma} [GeV/c]",
+//                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07b_P_ph_AED_truth_1p_FD",
+//                                            Momentum_lboundary, Momentum_uboundary);
+//    hPlot1D hP_ph_BED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #gamma momentum BC", "FD #gamma momentum P^{truth}_{#gamma} BC", "P^{truth}_{#gamma} [GeV/c]",
+//                                            directories.Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"], "07b_P_ph_BED_truth_1p_FD",
+//                                            Momentum_lboundary, Momentum_uboundary);
+//    //</editor-fold>
+
+//    //<editor-fold desc="Truth level theta plots with fiducial cuts (1p)">
+//    hPlot1D hTheta_e_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} AC", "#theta^{truth}_{e} of Outgoing Electron AC", "#theta^{truth}_{e} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "01_Theta_e_AED_truth_1p",
+//                                            Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_e_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{e} BC", "#theta^{truth}_{e} of Outgoing Electron BC", "#theta^{truth}_{e} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "01_Theta_e_BED_truth_1p",
+//                                            Theta_lboundary_FD, Theta_uboundary_FD);
+//
+//    hPlot1D hTheta_n_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} AC", "#theta^{truth}_{n} of Outgoing Neutron AC", "#theta^{truth}_{n} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "02_Theta_n_AED_truth_1p",
+//                                            Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_n_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{n} BC", "#theta^{truth}_{n} of Outgoing Neutron BC", "#theta^{truth}_{n} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "02_Theta_n_BED_truth_1p",
+//                                            Theta_lboundary_FD, Theta_uboundary_FD);
+//
+//    hPlot1D hTheta_p_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing Proton AC", "#theta^{truth}_{p} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_AED_truth_1p",
+//                                            Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_p_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing Proton BC", "#theta^{truth}_{p} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03a_Theta_p_BED_truth_1p",
+//                                            Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_p_AED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC", "#theta^{truth}_{p} [Deg]",
+//                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_p_AED_truth_1p_FD",
+//                                               Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_p_BED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC", "#theta^{truth}_{p} [Deg]",
+//                                               directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "03b_Theta_p_BED_truth_1p_FD",
+//                                               Theta_lboundary_FD, Theta_uboundary_FD);
+//
+//    hPlot1D hTheta_pip_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} AC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC",
+//                                              "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                              "04_Theta_piplus_AED_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_pip_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{+}} BC", "#theta^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC",
+//                                              "#theta^{truth}_{#pi^{+}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                              "04_Theta_piplus_BED_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD);
+//
+//    hPlot1D hTheta_pim_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} AC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC",
+//                                              "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                              "05_Theta_piminus_AED_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_pim_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{-}} BC", "#theta^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC",
+//                                              "#theta^{truth}_{#pi^{-}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                              "05_Theta_piminus_BED_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD);
+//
+//    hPlot1D hTheta_pi0_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{0}} AC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC",
+//                                              "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                              "06_Theta_pi0_AED_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_pi0_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#pi^{0}} BC", "#theta^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC",
+//                                              "#theta^{truth}_{#pi^{0}} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                              "06_Theta_pi0_BED_truth_1p", Theta_lboundary_FD, Theta_uboundary_FD);
+//
+//    hPlot1D hTheta_ph_AED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of Outgoing #gamma AC", "#theta^{truth}_{#gamma} [Deg]",
+//                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "07a_Theta_ph_AED_truth_1p",
+//                                             Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_ph_BED_truth_1p = hPlot1D("1p", "", "TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of Outgoing #gamma BC", "#theta^{truth}_{#gamma} [Deg]",
+//                                             directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"], "07a_Theta_ph_BED_truth_1p",
+//                                             Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_ph_AED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{#gamma} AC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma AC",
+//                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                                "07b_Theta_ph_AED_truth_1p_FD", Theta_lboundary_FD, Theta_uboundary_FD);
+//    hPlot1D hTheta_ph_BED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #theta^{truth}_{#gamma} BC", "#theta^{truth}_{#gamma} of FD Outgoing #gamma BC",
+//                                                "#theta^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"],
+//                                                "07b_Theta_ph_BED_truth_1p_FD", Theta_lboundary_FD, Theta_uboundary_FD);
+//    //</editor-fold>
+
+//    //<editor-fold desc="Truth level phi plots with fiducial cuts (1p)">
+//    hPlot1D hPhi_e_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} AC", "#phi^{truth}_{e} of Outgoing Electron AC", "#phi^{truth}_{e} [Deg]",
+//                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "01_Phi_e_AED_truth_1p",
+//                                          Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_e_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{e} BC", "#phi^{truth}_{e} of Outgoing Electron BC", "#phi^{truth}_{e} [Deg]",
+//                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "01_Phi_e_BED_truth_1p",
+//                                          Phi_lboundary, Phi_uboundary);
+//
+//    hPlot1D hPhi_n_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} AC", "#phi^{truth}_{n} of Outgoing Neutron AC", "#phi^{truth}_{n} [Deg]",
+//                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "02_Phi_n_AED_truth_1p",
+//                                          Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_n_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{n} BC", "#phi^{truth}_{n} of Outgoing Neutron BC", "#phi^{truth}_{n} [Deg]",
+//                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "02_Phi_n_BED_truth_1p",
+//                                          Phi_lboundary, Phi_uboundary);
+//
+//    hPlot1D hPhi_p_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+//                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_AED_truth_1p",
+//                                          Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_p_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+//                                          directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03a_Phi_p_BED_truth_1p",
+//                                          Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_p_AED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} AC", "#phi^{truth}_{n} of FD Outgoing Proton AC", "#phi^{truth}_{p} [Deg]",
+//                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_p_AED_truth_1p_FD",
+//                                             Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_p_BED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{p} BC", "#phi^{truth}_{n} of FD Outgoing Proton BC", "#phi^{truth}_{p} [Deg]",
+//                                             directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "03b_Phi_p_BED_truth_1p_FD",
+//                                             Phi_lboundary, Phi_uboundary);
+//
+//    hPlot1D hPhi_pip_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} AC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} AC", "#phi^{truth}_{#pi^{+}} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_AED_truth_1p",
+//                                            Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_pip_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{+}} BC", "#phi^{truth}_{#pi^{+}} of Outgoing #pi^{+} BC", "#phi^{truth}_{#pi^{+}} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "04_Phi_piplus_BED_truth_1p",
+//                                            Phi_lboundary, Phi_uboundary);
+//
+//    hPlot1D hPhi_pim_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} AC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} AC", "#phi^{truth}_{#pi^{-}} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "05_Phi_piminus_AED_truth_1p",
+//                                            Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_pim_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{-}} BC", "#phi^{truth}_{#pi^{-}} of Outgoing #pi^{-} BC", "#phi^{truth}_{#pi^{-}} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "05_Phi_piminus_BED_truth_1p",
+//                                            Phi_lboundary, Phi_uboundary);
+//
+//    hPlot1D hPhi_pi0_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{0}} AC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} AC", "#phi^{truth}_{#pi^{0}} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "06_Phi_pi0_AED_truth_1p",
+//                                            Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_pi0_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#pi^{0}} BC", "#phi^{truth}_{#pi^{0}} of Outgoing #pi^{0} BC", "#phi^{truth}_{#pi^{0}} [Deg]",
+//                                            directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "06_Phi_pi0_BED_truth_1p",
+//                                            Phi_lboundary, Phi_uboundary);
+//
+//    hPlot1D hPhi_ph_AED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of Outgoing #gamma AC", "#phi^{truth}_{#gamma} [Deg]",
+//                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07a_Phi_ph_AED_truth_1p",
+//                                           Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_ph_BED_truth_1p = hPlot1D("1p", "", "TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of Outgoing #gamma BC", "#phi^{truth}_{#gamma} [Deg]",
+//                                           directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"], "07a_Phi_ph_BED_truth_1p",
+//                                           Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_ph_AED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{#gamma} AC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma AC",
+//                                              "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"],
+//                                              "07b_Phi_ph_AED_truth_1p_FD", Phi_lboundary, Phi_uboundary);
+//    hPlot1D hPhi_ph_BED_truth_1p_FD = hPlot1D("1p", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
+//                                              "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"],
+//                                              "07b_Phi_ph_BED_truth_1p_FD", Phi_lboundary, Phi_uboundary);
+//    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Efficiency plots (1n)">
@@ -5142,6 +5354,26 @@ void EventAnalyser() {
     hPlot1D hPhi_ph_BC_truth_1n_FD = hPlot1D("1n", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
                                              "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"],
                                              "07b_Phi_hp_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary);
+    //</editor-fold>
+
+    //<editor-fold desc="TL fiducial cuts (1n)">
+    hPlot2D hnFD_Hit_map_1n_BEC = hPlot2D("1n", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
+                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
+                                          "01a_Neutron_FD_Hit_map_BEC_1n", -1.1, 1.1, -1.1, 1.1, 100, 100);
+    hPlot2D hnFD_Hit_map_1n_AEC = hPlot2D("1n", "FD", "FD neutron hit map AEC", "FD neutron hit map AEC", "x_{nFD}", "y_{nFD}",
+                                          directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
+                                          "01b_Neutron_FD_Hit_map_AEC_1n", -1.1, 1.1, -1.1, 1.1, 100, 100);
+
+    hPlot2D hTheta_nFD_vs_Phi_nFD_1n_BEC = hPlot2D("1n", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{nFD} [Deg]",
+                                                   "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
+                                                   "02a_Theta_nFD_vs_Phi_nFD_BEC_1n",
+                                                   Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_1n_AEC = hPlot2D("1n", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{nFD} [Deg]",
+                                                   "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"],
+                                                   "02b_Theta_nFD_vs_Phi_nFD_AEC_1n",
+                                                   Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -5355,6 +5587,26 @@ void EventAnalyser() {
     hPlot1D hPhi_ph_BC_truth_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "FD TL #phi^{truth}_{#gamma} BC", "#phi^{truth}_{#gamma} of FD Outgoing #gamma BC",
                                                  "#phi^{truth}_{#gamma} [Deg]", directories.Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"],
                                                  "07b_Phi_ph_BC_truth_pFDpCD_FD", Phi_lboundary, Phi_uboundary);
+    //</editor-fold>
+
+    //<editor-fold desc="TL fiducial cuts (pFDpCD)">
+    hPlot2D hpFD_Hit_map_pFDpCD_BEC = hPlot2D("pFDpCD", "FD", "FD proton hit map BEC", "FD proton hit map BEC", "x_{pFD}", "y_{pFD}",
+                                              directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                              "01a_Proton_FD_Hit_map_BEC_pFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
+    hPlot2D hpFD_Hit_map_pFDpCD_AEC = hPlot2D("pFDpCD", "FD", "FD proton hit map AEC", "FD proton hit map AEC", "x_{pFD}", "y_{pFD}",
+                                              directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                              "01b_Proton_FD_Hit_map_AEC_pFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
+
+    hPlot2D hTheta_pFD_vs_Phi_pFD_pFDpCD_BEC = hPlot2D("pFDpCD", "FD", "#theta_{pFD} vs. #phi_{pFD} BEC", "TL #theta_{pFD} vs. #phi_{pFD} BEC", "#phi_{pFD} [Deg]",
+                                                       "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                                       "02a_Theta_pFD_vs_Phi_pFD_BEC_pFDpCD",
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    hPlot2D hTheta_pFD_vs_Phi_pFD_pFDpCD_AEC = hPlot2D("pFDpCD", "FD", "#theta_{pFD} vs. #phi_{pFD} AEC", "TL #theta_{pFD} vs. #phi_{pFD} AEC", "#phi_{pFD} [Deg]",
+                                                       "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"],
+                                                       "02b_Theta_pFD_vs_Phi_pFD_AEC_pFDpCD",
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -5588,7 +5840,27 @@ void EventAnalyser() {
                                                  "07b_Phi_hp_BC_truth_1n_FD", Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
-    //<editor-fold desc="TL fiducial cuts (nFDpCD, FD)">
+    //<editor-fold desc="TL fiducial cuts (nFDpCD)">
+    hPlot2D hnFD_Hit_map_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
+                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                              "01a_Neutron_FD_Hit_map_BEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
+    hPlot2D hnFD_Hit_map_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map AEC", "FD neutron hit map AEC", "x_{nFD}", "y_{nFD}",
+                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                              "01b_Neutron_FD_Hit_map_AEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
+
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{nFD} [Deg]",
+                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                       "02a_Theta_nFD_vs_Phi_nFD_BEC_nFDpCD",
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{nFD} [Deg]",
+                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                       "02b_Theta_nFD_vs_Phi_nFD_AEC_nFDpCD",
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    //</editor-fold>
+
+    //</editor-fold>
 
     //<editor-fold desc="Fill reference histogram">
     TH2D *hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD;
@@ -5613,27 +5885,6 @@ void EventAnalyser() {
     string hist_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
 
     if (!hist) { cout << "\n\n\nLoad reference histogram: ref. histogram is empty! Exiting...\n\n\n", quit(); }
-    //</editor-fold>
-
-    hPlot2D hnFD_Hit_map_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
-                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                              "01a_Neutron_FD_Hit_map_BEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
-    hPlot2D hnFD_Hit_map_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map AEC", "FD neutron hit map AEC", "x_{nFD}", "y_{nFD}",
-                                              directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                              "01b_Neutron_FD_Hit_map_AEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
-
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{nFD} [Deg]",
-                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                       "02a_Theta_nFD_vs_Phi_nFD_BEC_nFDpCD",
-                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
-//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{nFD} [Deg]",
-                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
-                                                       "02b_Theta_nFD_vs_Phi_nFD_AEC_nFDpCD",
-                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
-//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
-    //</editor-fold>
-
     //</editor-fold>
 
     //</editor-fold>
@@ -6028,7 +6279,16 @@ void EventAnalyser() {
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
-                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                double x = sin(Particle_TL_Theta * pi / 180.0) * cos(Particle_TL_Phi * pi / 180.0);
+//                double y = sin(Particle_TL_Theta * pi / 180.0) * sin(Particle_TL_Phi * pi / 180.0);
+
+                int BinX = GetBinFromAng(Particle_TL_Phi, hist->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+                int BinY = GetBinFromAng(Particle_TL_Theta, hist->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+
+                bool inSomeSector = (hist->GetBinContent(BinX, BinY) != 0);
+
+                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()) && inSomeSector);
+//                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (particlePDGtmp == 11) {
@@ -6153,9 +6413,6 @@ void EventAnalyser() {
                 double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
-
-                double x = sin(Particle_TL_Theta * pi / 180.0) * cos(Particle_TL_Phi * pi / 180.0);
-                double y = sin(Particle_TL_Theta * pi / 180.0) * sin(Particle_TL_Phi * pi / 180.0);
 
                 bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
@@ -6283,18 +6540,15 @@ void EventAnalyser() {
 
                     if (TL_Event_Selection_nFDpCD) {
 
-
-                        int BinX = GetBinFromAng(Particle_TL_Phi, hist->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                        int BinY = GetBinFromAng(Particle_TL_Theta, hist->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-
-                        if (hist->GetBinContent(BinX, BinY) != 0) {
-                            hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
-                            hnFD_Hit_map_nFDpCD_AEC.hFill(x, y, Weight);
-                        }
-
-                        hnFD_Hit_map_nFDpCD_BEC.hFill(x, y, Weight);
-                        hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
-
+                        //                        //<editor-fold desc="hit map fill">
+//                        if (inSomeSector) {
+//                            hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                            hnFD_Hit_map_nFDpCD_AEC.hFill(x, y, Weight);
+//                        }
+//
+//                        hnFD_Hit_map_nFDpCD_BEC.hFill(x, y, Weight);
+//                        hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                        //</editor-fold>
 
                         if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
                             hP_n_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
@@ -11708,13 +11962,6 @@ void EventAnalyser() {
         hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_04_1n_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
         hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hDrawAndSave(SampleName, c1, plots, norm_Beta_plots, true, 1., 9999, 9999, 0, false);
-
-        if (!apply_nucleon_cuts && !(findSubstring(SampleName, "2GeV") || findSubstring(SampleName, "2gev") || findSubstring(SampleName, "207052MeV") ||
-                                     findSubstring(SampleName, "207052mev") || findSubstring(SampleName, "2070MeV") || findSubstring(SampleName, "2070mev"))) {
-            /* If sample is with 2GeV beam energy, no fit is needed. */
-            BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
-            BetaFitApprax(SampleName, Beta_max_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
-        }
         //</editor-fold>
 
         //</editor-fold>
@@ -11722,6 +11969,16 @@ void EventAnalyser() {
     } else {
         cout << "\n\nBeta plots are disabled by user.\n\n";
     } // end of Beta plot if
+
+//    if (!apply_nucleon_cuts) {
+//        /* If sample is with 2GeV beam energy, no fit is needed. */
+    if (!apply_nucleon_cuts &&
+        !(findSubstring(SampleName, "2GeV") || findSubstring(SampleName, "2gev") || findSubstring(SampleName, "207052MeV") ||
+          findSubstring(SampleName, "207052mev") || findSubstring(SampleName, "2070MeV") || findSubstring(SampleName, "2070mev"))) {
+        /* If sample is with 2GeV beam energy, no fit is needed. */
+        BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
+        BetaFitApprax(SampleName, Beta_max_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Beta vs. P plots">
@@ -15630,13 +15887,13 @@ void EventAnalyser() {
     //<editor-fold desc="Saving ref. histogram TList">
     TFile *TL_ref_fout;
 
-    if (!apply_nucleon_cuts) {
-        TL_ref_fout = new TFile(TL_ref_TListName, "recreate");
-        TL_ref_fout->cd();
-        TL_ref_plots->Write();
-        TL_ref_fout->Write();
-        TL_ref_fout->Close();
-    }
+//    if (!apply_nucleon_cuts) {
+//        TL_ref_fout = new TFile(TL_ref_TListName, "recreate");
+//        TL_ref_fout->cd();
+//        TL_ref_plots->Write();
+//        TL_ref_fout->Write();
+//        TL_ref_fout->Close();
+//    }
     //</editor-fold>
 
     cout << " done.\n\n";
