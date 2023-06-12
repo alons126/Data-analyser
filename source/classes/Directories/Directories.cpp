@@ -912,49 +912,49 @@ Directories::Directories(std::string plots_path) {
         MakeDirectory(create_TKI_Dir, TKI_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    TVariables_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                                 Find(Ecal_Daughter_Folders, "02_1p") + "/";
-    TVariables_Directory_map["dP_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                     Find(TKI_Daughter_Folders, "02_1p/01_dP_T_1p") + "/";
-    TVariables_Directory_map["dAlpha_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dAlpha_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                         Find(TKI_Daughter_Folders, "02_1p/02_dAlpha_T_1p") + "/";
-    TVariables_Directory_map["dPhi_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dPhi_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                       Find(TKI_Daughter_Folders, "02_1p/03_dPhi_T_1p") + "/";
 
-    TVariables_Directory_map["dP_T_vs_dAlpha_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_vs_dAlpha_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                                 Find(Ecal_Daughter_Folders, "03_1n") + "/";
-    TVariables_Directory_map["dP_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                     Find(TKI_Daughter_Folders, "03_1n/01_dP_T_1n") + "/";
-    TVariables_Directory_map["dAlpha_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dAlpha_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                         Find(TKI_Daughter_Folders, "03_1n/02_dAlpha_T_1n") + "/";
-    TVariables_Directory_map["dPhi_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dPhi_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                       Find(TKI_Daughter_Folders, "03_1n/03_dPhi_T_1n") + "/";
 
-    TVariables_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                                 Find(Ecal_Daughter_Folders, "04_2p") + "/";
-    TVariables_Directory_map["dP_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                     Find(TKI_Daughter_Folders, "04_2p/01_dP_T_2p") + "/";
-    TVariables_Directory_map["dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                         Find(TKI_Daughter_Folders, "04_2p/02_dAlpha_T_2p") + "/";
-    TVariables_Directory_map["dPhi_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dPhi_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                       Find(TKI_Daughter_Folders, "04_2p/03_dPhi_T_2p") + "/";
 
-    TVariables_Directory_map["dP_T_vs_dAlpha_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_vs_dAlpha_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                                     Find(Ecal_Daughter_Folders, "05_pFDpCD") + "/";
-    TVariables_Directory_map["dP_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                         Find(TKI_Daughter_Folders, "05_pFDpCD/01_dP_T_pFDpCD") + "/";
-    TVariables_Directory_map["dAlpha_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dAlpha_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                             Find(TKI_Daughter_Folders, "05_pFDpCD/02_dAlpha_T_pFDpCD") + "/";
-    TVariables_Directory_map["dPhi_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dPhi_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                           Find(TKI_Daughter_Folders, "05_pFDpCD/03_dPhi_T_pFDpCD") + "/";
 
-    TVariables_Directory_map["dP_T_vs_dAlpha_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_vs_dAlpha_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                                     Find(Ecal_Daughter_Folders, "06_nFDpCD") + "/";
-    TVariables_Directory_map["dP_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dP_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                         Find(TKI_Daughter_Folders, "06_nFDpCD/01_dP_T_nFDpCD") + "/";
-    TVariables_Directory_map["dAlpha_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dAlpha_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                             Find(TKI_Daughter_Folders, "06_nFDpCD/02_dAlpha_T_nFDpCD") + "/";
-    TVariables_Directory_map["dPhi_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
+    TKI_Directory_map["dPhi_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
                                                           Find(TKI_Daughter_Folders, "06_nFDpCD/03_dPhi_T_nFDpCD") + "/";
     //</editor-fold>
 
@@ -1023,6 +1023,8 @@ Directories::Directories(std::string plots_path) {
                                                                           Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/02_Theta_Eff_and_ACorr_plots_nFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD") + "/";
+    Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                        Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Resolution plots directories">

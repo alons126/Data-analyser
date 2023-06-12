@@ -468,7 +468,7 @@ private:
 
                                                           "06_nFDpCD",
                                                           "06_nFDpCD/01_Momentum_Eff_and_ACorr_plots_nFDpCD", "06_nFDpCD/02_Theta_Eff_and_ACorr_plots_nFDpCD",
-                                                          "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD"
+                                                          "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD", "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD"
     };
     //</editor-fold>
 
@@ -518,7 +518,7 @@ public:
     map<std::string, std::string> E_e_Directory_map;
     map<std::string, std::string> ETrans_Directory_map;
     map<std::string, std::string> Ecal_Directory_map;
-    map<std::string, std::string> TVariables_Directory_map;
+    map<std::string, std::string> TKI_Directory_map;
     map<std::string, std::string> ToF_Directory_map;
     map<std::string, std::string> Eff_and_ACorr_Directory_map;
     map<std::string, std::string> Resolution_Directory_map;
