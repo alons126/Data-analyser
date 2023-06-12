@@ -2,12 +2,12 @@
 // Created by alons on 12/06/2023.
 //
 
-#ifndef GETBINFROMVAL_H
-#define GETBINFROMVAL_H
+#ifndef GETBINFROMANG_H
+#define GETBINFROMANG_H
 
 using namespace std;
 
-int GetBinFromVal(double Angle, double AngleBins, double AngleMin, double AngleMax, bool printOut = false, const string &AngleType = "") {
+int GetBinFromAng(double Angle, double AngleBins, double AngleMin, double AngleMax, bool printOut = false, const string &AngleType = "") {
     int Bin = 0;
 //    int Bin = -1;
 
@@ -37,4 +37,4 @@ int GetBinFromVal(double Angle, double AngleBins, double AngleMin, double AngleM
     return Bin;
 }
 
-#endif //GETBINFROMVAL_H
+#endif //GETBINFROMANG_H

@@ -43,7 +43,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
-#include "source/functions/AngleCalc/GetBinFromVal.h"
+#include "source/functions/AngleCalc/GetBinFromAng.h"
 #include "source/functions/FitFunctions/BetaFit.h"
 #include "source/functions/FitFunctions/BetaFitApprax.h"
 #include "source/functions/DrawAndSaveAcceptanceCorrectionPlots.h"
@@ -6284,8 +6284,8 @@ void EventAnalyser() {
                     if (TL_Event_Selection_nFDpCD) {
 
 
-                        int BinX = GetBinFromVal(Particle_TL_Phi, hist->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                        int BinY = GetBinFromVal(Particle_TL_Theta, hist->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+                        int BinX = GetBinFromAng(Particle_TL_Phi, hist->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+                        int BinY = GetBinFromAng(Particle_TL_Theta, hist->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
                         if (hist->GetBinContent(BinX, BinY) != 0) {
                             hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
