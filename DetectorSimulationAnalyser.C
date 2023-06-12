@@ -160,6 +160,7 @@ void EventAnalyser() {
 
     bool apply_nucleon_cuts = true;
 
+
     bool apply_nucleon_physical_cuts = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -5592,22 +5593,26 @@ void EventAnalyser() {
     //<editor-fold desc="Fill reference histogram">
     TH2D *hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD;
     string hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir;
-    int ref_hist_numOfBins = 100;
+    int ref_hist_numOfBins = 250;
+//    int ref_hist_numOfBins = 100;
 
     if (!apply_nucleon_cuts) {
         hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD = new TH2D("h", "#theta_{nFD} vs. #phi_{nFD} w/ PCAL hit - ref. plot (no #(e) cut, FD);#phi_{nFD} [Deg];#theta_{nFD} [Deg]",
-                                              ref_hist_numOfBins, Phi_lboundary, Phi_uboundary, ref_hist_numOfBins, Theta_lboundary_FD, Theta_uboundary_FD);
-//                                                  65, -200, 200, 65, 0, 50);
+                                                         ref_hist_numOfBins, Phi_lboundary, Phi_uboundary, ref_hist_numOfBins, Theta_lboundary_FD, Theta_uboundary_FD);
         hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
     }
     //</editor-fold>
 
     //<editor-fold desc="Load reference histogram">
-    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root").c_str());
+    TFile *f = new TFile((CutsDirectory + "TL_ref_plots.root").c_str());
+//    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root").c_str());
+
+    if (!f) { cout << "\n\n\nLoad reference histogram: no ref. histogram file have found! Exiting...\n\n\n", quit(); }
+
     TH2D *hist = (TH2D *) f->Get("h");
     string hist_Dir = directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"];
 
-    if (!hist) { cout << "\n\nEmpty hist\n\n\n", quit(); }
+    if (!hist) { cout << "\n\n\nLoad reference histogram: ref. histogram is empty! Exiting...\n\n\n", quit(); }
     //</editor-fold>
 
     hPlot2D hnFD_Hit_map_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "FD neutron hit map BEC", "FD neutron hit map BEC", "x_{nFD}", "y_{nFD}",
@@ -5617,19 +5622,16 @@ void EventAnalyser() {
                                               directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
                                               "01b_Neutron_FD_Hit_map_AEC_nFDpCD", -1.1, 1.1, -1.1, 1.1, 100, 100);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{e} [Deg]",
-                                                       "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} BEC", "TL #theta_{nFD} vs. #phi_{nFD} BEC", "#phi_{nFD} [Deg]",
+                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
                                                        "02a_Theta_nFD_vs_Phi_nFD_BEC_nFDpCD",
-                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
-    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{e} [Deg]",
-                                                       "#theta_{e} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
+    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD} AEC", "TL #theta_{nFD} vs. #phi_{nFD} AEC", "#phi_{nFD} [Deg]",
+                                                       "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"],
                                                        "02b_Theta_nFD_vs_Phi_nFD_AEC_nFDpCD",
-                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
-
-//    hPlot2D hTheta_nFD_vs_Phi_nFD_nFDpCD = hPlot2D("nFDpCD", "FD", "#theta_{nFD} vs. #phi_{nFD}", "#theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD}", "#theta_{nFD}",
-//                                                   directories.Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"], "02_Theta_nFD_vs_Phi_nFD_nFDpCD",
-//                                                   65, -180, 180, 65, 0, 50);
-
+                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+//                                                       Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
@@ -6152,8 +6154,8 @@ void EventAnalyser() {
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
-                double x = sin(Particle_TL_Theta) * cos(Particle_TL_Phi);
-                double y = sin(Particle_TL_Theta) * sin(Particle_TL_Phi);
+                double x = sin(Particle_TL_Theta * pi / 180.0) * cos(Particle_TL_Phi * pi / 180.0);
+                double y = sin(Particle_TL_Theta * pi / 180.0) * sin(Particle_TL_Phi * pi / 180.0);
 
                 bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
@@ -6282,8 +6284,8 @@ void EventAnalyser() {
                     if (TL_Event_Selection_nFDpCD) {
 
 
-                        int BinX = GetBinFromVal(Particle_TL_Phi, ref_hist_numOfBins, Phi_lboundary, Phi_uboundary, false, "Phi");
-                        int BinY = GetBinFromVal(Particle_TL_Theta, ref_hist_numOfBins, Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+                        int BinX = GetBinFromVal(Particle_TL_Phi, hist->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+                        int BinY = GetBinFromVal(Particle_TL_Theta, hist->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
                         if (hist->GetBinContent(BinX, BinY) != 0) {
                             hTheta_nFD_vs_Phi_nFD_nFDpCD_AEC.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);

@@ -7,10 +7,10 @@
 # Neutron momentum cuts (pid:mean:sigma) - sigma_FD=1:
 Momentum_th			2112:0:0.4:CD & FD
 
-Momentum_cuts_ECAL			2112:0:3.97867:FD-ECAL
-Momentum_cuts_ECAL_apprax			2112:0:3.98827:FD-ECAL_apprax
+Momentum_cuts_ECAL			2112:0:9999:FD-ECAL
+Momentum_cuts_ECAL_apprax			2112:0:9999:FD-ECAL_apprax
 
-# Proton CD-FD double detection dPhi_p1_p2 cuts (pid:mean:sigma) - sigma=1:
+# Proton CD-FD double detection dPhi cuts (pid:mean:sigma) - sigma=1:
 dPhi_p1_p2			2212:3.6:15:CD & FD
 dPhi_pFD_pCD			2212:-5.6:15:CD & FD
 
