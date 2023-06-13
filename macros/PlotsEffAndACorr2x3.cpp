@@ -37,8 +37,8 @@ void PlotsEffAndACorr2x3() {
 //    string SampleName = "C12_simulation_G18_2GeV_wNC_noFDph_Eff2";
 //    string SampleName = "C12_simulation_G18_2GeV_wNC_wFDph_Eff2";
 
-    PlotsACorr2x3Nucleon(SampleName);
-    PlotsACorr2x3Electron(SampleName);
+//    PlotsACorr2x3Nucleon(SampleName);
+//    PlotsACorr2x3Electron(SampleName);
 
     PlotsEff2x3Nucleon(SampleName);
     PlotsEff2x3Electron(SampleName);

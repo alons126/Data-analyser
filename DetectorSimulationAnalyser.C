@@ -2492,17 +2492,17 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_e vs. Phi_e">
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
     TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                65, -200, 200, 65, 0, 50);
+                                                65, -180, 180, 65, 0, 50);
     string hTheta_e_VS_Phi_e_All_e_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_All_e_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1e cut) */
     TH2D *hTheta_e_VS_Phi_e_1e_cut_FD = new TH2D("#theta_{e} vs. #phi_{e} (1e Cut, FD)", "#theta_{e} vs. #phi_{e} (1e Cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                                 65, -200, 200, 65, 0, 50);
+                                                 65, -180, 180, 65, 0, 50);
     string hTheta_e_VS_Phi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1e_cut_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1p) */
     TH2D *hTheta_e_VS_Phi_e_1p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 1p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 1p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                             65, -200, 200, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+                                             65, -180, 180, 65, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_e_VS_Phi_e_1p_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_1p_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1n) */
@@ -2512,17 +2512,17 @@ void EventAnalyser() {
 
     /* Theta_e vs. Phi_e histograms (2p) */
     TH2D *hTheta_e_VS_Phi_e_2p_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., 2p, FD)", "#theta_{e} vs. #phi_{e} (All Int., 2p, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
-                                             65, -200, 200, 65, 0, 50);
+                                             65, -180, 180, 65, 0, 50);
     string hTheta_e_VS_Phi_e_2p_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_2p_Directory"];
 
     /* Theta_e vs. Phi_e histograms (pFDpCD) */
     TH2D *hTheta_e_VS_Phi_e_pFDpCD_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD)",
-                                                 "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]", 65, -200, 200, 65, 0, 50);
+                                                 "#theta_{e} vs. #phi_{e} (All Int., pFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]", 65, -180, 180, 65, 0, 50);
     string hTheta_e_VS_Phi_e_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_pFDpCD_Directory"];
 
     /* Theta_e vs. Phi_e histograms (nFDpCD) */
     TH2D *hTheta_e_VS_Phi_e_nFDpCD_FD = new TH2D("#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD)",
-                                                 "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]", 65, -200, 200, 65, 0, 50);
+                                                 "#theta_{e} vs. #phi_{e} (All Int., nFDpCD, FD);#phi_{e} [Deg];#theta_{e} [Deg]", 65, -180, 180, 65, 0, 50);
     string hTheta_e_VS_Phi_e_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -2993,7 +2993,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pFD vs. Phi_pFD histograms">
     TH2D *hTheta_pFD_VS_Phi_pFD_pFDpCD_FD = new TH2D("#theta_{pFD} vs. #phi_{pFD} of FD proton (All Int., pFDpCD)",
                                                      "#theta_{pFD} vs. #phi_{pFD} of FD proton (All Int., pFDpCD);#phi_{pFD} [Deg];#theta_{pFD} [Deg]",
-                                                     65, -200, 200, 65, 0, 50);
+                                                     65, -180, 180, 65, 0, 50);
     string hTheta_pFD_VS_Phi_pFD_pFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_pFD_VS_Phi_pFD_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -3052,7 +3052,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pCD vs. Phi_pCD histograms">
     TH2D *hTheta_pCD_VS_Phi_pCD_pFDpCD_CD = new TH2D("#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., pFDpCD)",
                                                      "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., pFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
-                                                     65, -200, 200, 65, 30, 155);
+                                                     65, -180, 180, 65, 30, 155);
     string hTheta_pCD_VS_Phi_pCD_pFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -3291,7 +3291,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_nFD vs. Phi_nFD histograms">
     TH2D *hTheta_nFD_VS_Phi_nFD_nFDpCD_FD = new TH2D("#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., nFDpCD)",
                                                      "#theta_{nFD} vs. #phi_{nFD} of FD neutron (All Int., nFDpCD);#phi_{nFD} [Deg];#theta_{nFD} [Deg]",
-                                                     65, -200, 200, 65, 0, 50);
+                                                     65, -180, 180, 65, 0, 50);
     string hTheta_nFD_VS_Phi_nFD_nFDpCD_FD_Dir = directories.Angle_Directory_map["Theta_nFD_VS_Phi_nFD_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -3350,7 +3350,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_pCD vs. Phi_pCD histograms">
     TH2D *hTheta_pCD_VS_Phi_pCD_nFDpCD_CD = new TH2D("#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., nFDpCD)",
                                                      "#theta_{pCD} vs. #phi_{pCD} of CD proton (All Int., nFDpCD);#phi_{pCD} [Deg];#theta_{pCD} [Deg]",
-                                                     65, -200, 200, 65, 30, 155);
+                                                     65, -180, 180, 65, 30, 155);
     string hTheta_pCD_VS_Phi_pCD_nFDpCD_CD_Dir = directories.Angle_Directory_map["Theta_pCD_VS_Phi_pCD_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -15775,7 +15775,7 @@ void EventAnalyser() {
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "-- Total counts -----------------------------------------------------------\n";
-    myLogFile << "Total #(events):\t\t\t\t\t" << num_of_events << "\n";
+    myLogFile << "Total #(events):\t\t\t\t" << num_of_events << "\n";
     myLogFile << "Total #(events) w/o any e:\t\t\t" << num_of_events_without_any_e << "\n";
     myLogFile << "Total #(events) w/ any e:\t\t\t" << num_of_events_with_any_e << "\n\n";
 
@@ -15800,37 +15800,34 @@ void EventAnalyser() {
     myLogFile << "#(events) w/ 1epFDpCD:\t\t\t\t" << num_of_events_with_1epFDpCD << "\n\n";
 
     myLogFile << "-- 2p event counts --------------------------------------------------------\n";
-    myLogFile << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n\n";
+    myLogFile << "num_of_events_2p_wFakeProtons:\t\t\t" << num_of_events_2p_wFakeProtons << "\n\n";
 
     if (apply_nucleon_cuts) {
-        myLogFile << "num_of_RM_2p_events_sCTOFhp:\t\t" << num_of_RM_2p_events_sCTOFhp << "\n";
-        myLogFile << "num_of_AD_2p_events_from_3p_sCTOFhp:\t" << num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
-        myLogFile << "num_of_AD_2p_events_from_4p_sCTOFhp:\t" << num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
-        myLogFile << "num_of_RM_2p_events_dCDaFDd:\t\t" << num_of_RM_2p_events_dCDaFDd << "\n";
-        myLogFile << "num_of_AD_2p_events_from_3p_dCDaFDd:\t" << num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
-        myLogFile << "num_of_AD_2p_events_from_4p_dCDaFDd:\t" << num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
+        myLogFile << "num_of_RM_2p_events_sCTOFhp:\t\t\t" << num_of_RM_2p_events_sCTOFhp << "\n";
+        myLogFile << "num_of_AD_2p_events_from_3p_sCTOFhp:\t\t" << num_of_AD_2p_events_from_3p_sCTOFhp << "\n";
+        myLogFile << "num_of_AD_2p_events_from_4p_sCTOFhp:\t\t" << num_of_AD_2p_events_from_4p_sCTOFhp << "\n";
+        myLogFile << "num_of_RM_2p_events_dCDaFDd:\t\t\t" << num_of_RM_2p_events_dCDaFDd << "\n";
+        myLogFile << "num_of_AD_2p_events_from_3p_dCDaFDd:\t\t" << num_of_AD_2p_events_from_3p_dCDaFDd << "\n";
+        myLogFile << "num_of_AD_2p_events_from_4p_dCDaFDd:\t\t" << num_of_AD_2p_events_from_4p_dCDaFDd << "\n\n";
 
-        myLogFile << "num_of_events_2p (from monitoring):\t" << num_of_events_2p_wFakeProtons - num_of_RM_2p_events_sCTOFhp - num_of_RM_2p_events_dCDaFDd +
-                                                                num_of_AD_2p_events_from_3p_sCTOFhp + num_of_AD_2p_events_from_4p_sCTOFhp +
-                                                                num_of_AD_2p_events_from_3p_dCDaFDd + num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
+        myLogFile << "num_of_events_2p (from monitoring):\t\t" << num_of_events_2p_wFakeProtons - num_of_RM_2p_events_sCTOFhp - num_of_RM_2p_events_dCDaFDd +
+                                                                  num_of_AD_2p_events_from_3p_sCTOFhp + num_of_AD_2p_events_from_4p_sCTOFhp +
+                                                                  num_of_AD_2p_events_from_3p_dCDaFDd + num_of_AD_2p_events_from_4p_dCDaFDd << "\n";
     }
 
     myLogFile << "#(events) 2p:\t\t\t\t\t" << num_of_events_2p << "\n\n";
 
     myLogFile << "-- pFDpCD event counts ----------------------------------------------------\n";
-    myLogFile << "#(events) pFDpCD:\t\t\t\t\t" << num_of_events_pFDpCD << "\n\n";
+    myLogFile << "#(events) pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     myLogFile << "-- Event counts -----------------------------------------------------------\n";
-//    myLogFile << "num_of_events_1e1p_all:\t\t\t\t" << num_of_events_1e1p_all << "\n";
     myLogFile << "num_of_events_1p_inFD:\t\t\t\t" << num_of_events_1p_inFD << "\n\n";
 
     myLogFile << "num_of_events_1n_inFD:\t\t\t\t" << num_of_events_1n_inFD << "\n";
     myLogFile << "num_of_events_1n_inFD_AV:\t\t\t" << num_of_events_1n_inFD_AV << "\n\n";
 
-//    myLogFile << "num_of_events_1e2p_all:\t\t\t\t" << num_of_events_1e2p_all << "\n";
-//    myLogFile << "num_of_events_1e2p_all_woFDphotons:\t" << num_of_events_1e2p_all_woFDphotons << "\n";
-    myLogFile << "num_of_events_2p_wFakeProtons:\t\t" << num_of_events_2p_wFakeProtons << "\n";
-    myLogFile << "num_of_events_2p:\t\t\t\t\t" << num_of_events_2p << "\n\n";
+    myLogFile << "num_of_events_2p_wFakeProtons:\t\t\t" << num_of_events_2p_wFakeProtons << "\n";
+    myLogFile << "num_of_events_2p:\t\t\t\t" << num_of_events_2p << "\n\n";
 
     myLogFile << "num_of_events_1epFDpCD:\t\t\t\t" << num_of_events_with_1epFDpCD << "\n";
     myLogFile << "num_of_events_1epFDpFD:\t\t\t\t" << num_of_events_with_1epFDpFD << "\n";
@@ -15838,7 +15835,7 @@ void EventAnalyser() {
 
     myLogFile << "num_of_events_pFDpCD:\t\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
-    myLogFile << "num_of_events_nFDpCD:\t\t\t" << num_of_events_nFDpCD << "\n\n";
+    myLogFile << "num_of_events_nFDpCD:\t\t\t\t" << num_of_events_nFDpCD << "\n";
     myLogFile << "num_of_events_nFDpCD_AV:\t\t\t" << num_of_events_nFDpCD_AV << "\n\n\n";
     //</editor-fold>
 
@@ -15861,8 +15858,6 @@ void EventAnalyser() {
         for (int i = 0; i < chi2cuts_length; i++) {
             myLogFile << "pid_cuts" << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":" << chi2cuts[i].GetUpperCut() << ":"
                       << chi2cuts[i].GetRegion() << "\n";
-//            myLogFile << "pid_cuts_" << chi2cuts[i].GetRegion() << "\t\t" << chi2cuts[i].GetPartPDG() << ":" << chi2cuts[i].Cuts.at(0) << ":"
-//                      << chi2cuts[i].GetUpperCut() << "\n";
         }
     }
     //</editor-fold>
