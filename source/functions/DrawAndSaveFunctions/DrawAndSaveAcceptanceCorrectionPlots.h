@@ -30,11 +30,11 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "GeneralFunctions.h"
-#include "EventProperties/GetParticleName.h"
-#include "EventProperties/GetParticleNameLC.h"
-#include "EventProperties/GetParticleNameShort.h"
-#include "../classes/hPlots/hPlot1D.h"
+#include "../GeneralFunctions.h"
+#include "../EventProperties/GetParticleName.h"
+#include "../EventProperties/GetParticleNameLC.h"
+#include "../EventProperties/GetParticleNameShort.h"
+#include "../../classes/hPlots/hPlot1D.h"
 
 using namespace std;
 

@@ -30,19 +30,19 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "GeneralFunctions.h"
-#include "EventProperties/GetParticleName.h"
-#include "EventProperties/GetParticleNameLC.h"
-#include "EventProperties/GetParticleNameShort.h"
-#include "EventProperties/SetDRegion.h"
-#include "EventProperties/SetFSRatioSaveDir.h"
-#include "EventProperties/SetStatsTitle.h"
-#include "EventProperties/SettingSaveNames.h"
-#include "EventProperties/SetTitle.h"
-#include "EventProperties/SetType.h"
-#include "EventProperties/SetXAxisTitle.h"
-#include "EventProperties/SetYAxisTitle.h"
-#include "../classes/hPlots/hPlot1D.h"
+#include "../GeneralFunctions.h"
+#include "../EventProperties/GetParticleName.h"
+#include "../EventProperties/GetParticleNameLC.h"
+#include "../EventProperties/GetParticleNameShort.h"
+#include "../EventProperties/SetDRegion.h"
+#include "../EventProperties/SetFSRatioSaveDir.h"
+#include "../EventProperties/SetStatsTitle.h"
+#include "../EventProperties/SettingSaveNames.h"
+#include "../EventProperties/SetTitle.h"
+#include "../EventProperties/SetType.h"
+#include "../EventProperties/SetXAxisTitle.h"
+#include "../EventProperties/SetYAxisTitle.h"
+#include "../../classes/hPlots/hPlot1D.h"
 
 using namespace std;
 

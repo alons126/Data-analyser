@@ -61,6 +61,8 @@ public:
 
     void setdebug_fileName(TString db_fileName) { debug_fileName = db_fileName; }
 
+    void set_hit_map_ref_fileName(TString db_fileName) { hit_map_ref_Out_filename = db_fileName; }
+
     double getSF(region_part_ptr p);
 
     //   void pidCuts(std::vector<region_part_ptr> &particles);
@@ -241,6 +243,8 @@ public:
             return -9999;
         }
     }
+
+    void FillECALHitMap(region_part_ptr p); // My addition
     //</editor-fold>
 
 private:
@@ -325,6 +329,7 @@ private:
 
     //debugging tools
     TString debug_fileName = "./debugOutputFile.root";
+    TString hit_map_ref_Out_filename = "./hit_map_ref.root";
     bool debug_plots = true;
     TH1D *ecal_sf[7]; //ECAL sampling fraction
     TH1D *dc[4][7];   //DC hit map
@@ -471,6 +476,32 @@ private:
 //    TH1D *multi_cpi_1e_cut_fd_AC_debug = new TH1D("multi_cpi_1e_cut_fd_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
 //    TH1D *multi_cpi_1e_cut_cd_AC_debug = new TH1D("multi_cpi_1e_cut_cd_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, CD);#font[12]{##pi^{#pm}}", 10, 0, 10);
     TH1D *multi_cpi_1e_cut_AC_debug = new TH1D("multi_cpi_1e_cut_AC_debug", "#font[12]{##pi^{#pm}} AC (1e cut, CD & FD);#font[12]{##pi^{#pm}}", 10, 0, 10);
+    //</editor-fold>
+
+    //<editor-fold desc="Hit maps for efficiency plots (My addition)">
+
+    //<editor-fold desc="Original">
+    //TODO: delete these plots
+    TH2D *hTheta_e_vs_Phi_e_fiducial_cuts_map_ECAL = new TH2D("Electron_fiducial_cuts_map_ECAL", "#theta_{e} vs. #phi_{e};#phi_{e} [Deg];#theta_{e} [Deg]",
+                                                              250, -180, 180, 250, 0, 50);  // My addition
+
+    TH2D *hTheta_p_vs_Phi_p_hit_map_DC_NO_CUTS = new TH2D("Proton_hit_map_DC_NO_CUTS", "#theta_{p} vs. #phi_{p} - NO DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
+                                                          250, -180, 180, 250, 0, 50);  // My addition
+    TH2D *hTheta_p_vs_Phi_p_hit_map_DC_WITH_CUTS = new TH2D("Proton_hit_map_DC_WITH_CUTS", "#theta_{p} vs. #phi_{p} - WITH DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
+                                                            150, -180, 180, 150, 0, 50);  // My addition
+
+    TH2D *hTheta_vs_Phi_hit_map_ECAL_no_fiducial_cuts = new TH2D("hit_map_ECAL_no_fiducial_cuts", "ECAL #theta vs. #phi - no fiducial cuts;#phi [Deg];#theta [Deg]",
+                                                                 250, -180, 180, 250, 0, 50);  // My addition
+    TH2D *hTheta_vs_Phi_hit_map_ECAL_w_fiducial_cuts = new TH2D("hit_map_ECAL_w_fiducial_cuts", "ECAL #theta vs. #phi - with fiducial cuts;#phi [Deg];#theta [Deg]",
+                                                                250, -180, 180, 250, 0, 50);  // My addition
+    //</editor-fold>
+
+    TH2D *hAng_hit_map_electrons = new TH2D("Electron_hit_map", "Electron hit map with ECAL & DC fiducial cuts;#phi [Deg];#theta [Deg]",
+                                            250, -180, 180, 250, 0, 50);  // My addition
+    TH2D *hAng_hit_map_protons = new TH2D("Protons_hit_map", "Protons hit map with DC fiducial cuts;#phi [Deg];#theta [Deg]",
+                                          250, -180, 180, 250, 0, 50);  // My addition
+    TH2D *hAng_hit_map_neutrons = new TH2D("Neutrons_hit_map", "Neutrons hit map (no fiducial cuts);#phi [Deg];#theta [Deg]",
+                                           250, -180, 180, 250, 0, 50);  // My addition
     //</editor-fold>
 
     //</editor-fold>
@@ -627,13 +658,18 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 
         //       setByPid(electrons_det[0]); //set good trigger electron
 
-        if (debug_plots)
+        if (debug_plots) {
             fillDCdebug(electrons_det[0], dc_hit_map_a); //electron DC hit debug maps
+            hTheta_e_vs_Phi_e_fiducial_cuts_map_ECAL->Fill(electrons_det[0]->getPhi() * 180.0 / pi, electrons_det[0]->getTheta() * 180.0 / pi); // My addition
+            hAng_hit_map_electrons->Fill(electrons_det[0]->getPhi() * 180.0 / pi, electrons_det[0]->getTheta() * 180.0 / pi); // My addition
+        }
 
         //DON'T FORGET TO ADD ++p ITTERATOR in this loop, it's not added in the for statement for a reason
         for (auto p = particles.begin(); p != particles.end();) {
 
             if (debug_plots) {
+                FillECALHitMap(*p); // My addition
+
                 if ((*p)->par()->getPid() == 2212)
                     fillDCdebug(*p, dc_hit_map_b_proton);
                 if ((*p)->par()->getPid() == 211)
@@ -684,6 +720,11 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
                 addToAllParticles(*p); // add all particles surviving the cuts in event to allparticles (My addition)
 
                 if (debug_plots) {
+                    if ((*p)->par()->getPid() == 2212 && (*p)->getRegion() == FD) { // My addition!!
+                        hTheta_p_vs_Phi_p_hit_map_DC_WITH_CUTS->Fill((*p)->getPhi() * 180.0 / pi, (*p)->getTheta() * 180.0 / pi);
+                        hAng_hit_map_protons->Fill((*p)->getPhi() * 180.0 / pi, (*p)->getTheta() * 180.0 / pi);
+                    }
+
                     if ((*p)->par()->getCharge() != 0 && (*p)->par()->getPid() != 11)
                         el_vz_p_debug->Fill((*p)->par()->getVz() - electrons_det[0]->par()->getVz());
 
@@ -1449,6 +1490,14 @@ void clas12ana::InitDebugPlots() {
 void clas12ana::WriteDebugPlots() {
     TFile *f_debugOut = new TFile(debug_fileName, "RECREATE");
 
+    //<editor-fold desc="My addition">
+    hTheta_e_vs_Phi_e_fiducial_cuts_map_ECAL->Write();  // My addition
+    hTheta_p_vs_Phi_p_hit_map_DC_NO_CUTS->Write();  // My addition
+    hTheta_p_vs_Phi_p_hit_map_DC_WITH_CUTS->Write();  // My addition
+    hTheta_vs_Phi_hit_map_ECAL_no_fiducial_cuts->Write();  // My addition
+    hTheta_vs_Phi_hit_map_ECAL_w_fiducial_cuts->Write();  // My addition
+    //</editor-fold>
+
     for (int i = 1; i <= 6; i++) {
         sf_p_debug_b[i]->Write();
         sf_p_debug_a[i]->Write();
@@ -1560,6 +1609,54 @@ void clas12ana::WriteDebugPlots() {
     //</editor-fold>
 
     f_debugOut->Close();
+
+    //<editor-fold desc="write hit_map_ref file (my addition)">
+    TFile *hit_map_ref_Out = new TFile(hit_map_ref_Out_filename, "RECREATE");
+    hAng_hit_map_electrons->Write();  // My addition
+    hAng_hit_map_protons->Write();  // My addition
+    hAng_hit_map_neutrons->Write();  // My addition
+
+    hit_map_ref_Out->Close();
+    //</editor-fold>
+
+}
+
+void clas12ana::FillECALHitMap(region_part_ptr p) { // My addition
+    if (p->getRegion() == FD) {
+        if (p->par()->getCharge() == 0) {
+            double fiducial_cut = dc_edge_cut;
+//        double fiducial_cut = ecal_edge_cut;
+
+            bool PCALhit = (p->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+            bool ECINhit = (p->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+            bool ECOUThit = (p->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+            if (!PCALhit && (ECINhit || ECOUThit)) {
+                hTheta_vs_Phi_hit_map_ECAL_no_fiducial_cuts->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+                hAng_hit_map_neutrons->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+
+                auto detlayer = ECINhit ? clas12::ECIN : clas12::ECOUT; /* determine the earliest layer that the neutral hit in */
+
+                if (p->cal(detlayer)->getLv() > fiducial_cut && p->cal(detlayer)->getLw() > fiducial_cut) {
+                    hTheta_vs_Phi_hit_map_ECAL_w_fiducial_cuts->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+                }
+
+                /*
+                if (ECINhit) {
+                    if (p->cal(clas12::ECIN)->getLv() > fiducial_cut && p->cal(clas12::ECIN)->getLw() > fiducial_cut) {
+                        hTheta_vs_Phi_hit_map_ECAL_w_fiducial_cuts->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+                    }
+                } else if (ECOUThit) {
+                    if (p->cal(clas12::ECOUT)->getLv() > fiducial_cut && p->cal(clas12::ECOUT)->getLw() > fiducial_cut) {
+                        hTheta_vs_Phi_hit_map_ECAL_w_fiducial_cuts->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+                    }
+                }
+    */
+            }
+        } else if (p->par()->getPid() == 2212) {
+            hTheta_p_vs_Phi_p_hit_map_DC_NO_CUTS->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+        }
+    }
 }
 
 #endif

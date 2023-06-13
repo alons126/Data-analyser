@@ -46,7 +46,11 @@ public:
 
     double GetLowerCut() { return Cuts.at(1); }
 
+    double GetLowerCutConst() const { return Cuts.at(1); }
+
     double GetUpperCut() { return Cuts.at(2); }
+
+    double GetUpperCutConst() const { return Cuts.at(2); }
 
     std::string GetCutVariable() { return CutVariable; }
 

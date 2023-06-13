@@ -913,49 +913,49 @@ Directories::Directories(std::string plots_path) {
     }
 
     TKI_Directory_map["dP_T_vs_dAlpha_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                                Find(Ecal_Daughter_Folders, "02_1p") + "/";
+                                                         Find(Ecal_Daughter_Folders, "02_1p") + "/";
     TKI_Directory_map["dP_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                    Find(TKI_Daughter_Folders, "02_1p/01_dP_T_1p") + "/";
+                                             Find(TKI_Daughter_Folders, "02_1p/01_dP_T_1p") + "/";
     TKI_Directory_map["dAlpha_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                        Find(TKI_Daughter_Folders, "02_1p/02_dAlpha_T_1p") + "/";
+                                                 Find(TKI_Daughter_Folders, "02_1p/02_dAlpha_T_1p") + "/";
     TKI_Directory_map["dPhi_T_1p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                      Find(TKI_Daughter_Folders, "02_1p/03_dPhi_T_1p") + "/";
+                                               Find(TKI_Daughter_Folders, "02_1p/03_dPhi_T_1p") + "/";
 
     TKI_Directory_map["dP_T_vs_dAlpha_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                                Find(Ecal_Daughter_Folders, "03_1n") + "/";
+                                                         Find(Ecal_Daughter_Folders, "03_1n") + "/";
     TKI_Directory_map["dP_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                    Find(TKI_Daughter_Folders, "03_1n/01_dP_T_1n") + "/";
+                                             Find(TKI_Daughter_Folders, "03_1n/01_dP_T_1n") + "/";
     TKI_Directory_map["dAlpha_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                        Find(TKI_Daughter_Folders, "03_1n/02_dAlpha_T_1n") + "/";
+                                                 Find(TKI_Daughter_Folders, "03_1n/02_dAlpha_T_1n") + "/";
     TKI_Directory_map["dPhi_T_1n_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                      Find(TKI_Daughter_Folders, "03_1n/03_dPhi_T_1n") + "/";
+                                               Find(TKI_Daughter_Folders, "03_1n/03_dPhi_T_1n") + "/";
 
     TKI_Directory_map["dP_T_vs_dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                                Find(Ecal_Daughter_Folders, "04_2p") + "/";
+                                                         Find(Ecal_Daughter_Folders, "04_2p") + "/";
     TKI_Directory_map["dP_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                    Find(TKI_Daughter_Folders, "04_2p/01_dP_T_2p") + "/";
+                                             Find(TKI_Daughter_Folders, "04_2p/01_dP_T_2p") + "/";
     TKI_Directory_map["dAlpha_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                        Find(TKI_Daughter_Folders, "04_2p/02_dAlpha_T_2p") + "/";
+                                                 Find(TKI_Daughter_Folders, "04_2p/02_dAlpha_T_2p") + "/";
     TKI_Directory_map["dPhi_T_2p_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                      Find(TKI_Daughter_Folders, "04_2p/03_dPhi_T_2p") + "/";
+                                               Find(TKI_Daughter_Folders, "04_2p/03_dPhi_T_2p") + "/";
 
     TKI_Directory_map["dP_T_vs_dAlpha_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                                    Find(Ecal_Daughter_Folders, "05_pFDpCD") + "/";
+                                                             Find(Ecal_Daughter_Folders, "05_pFDpCD") + "/";
     TKI_Directory_map["dP_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                        Find(TKI_Daughter_Folders, "05_pFDpCD/01_dP_T_pFDpCD") + "/";
+                                                 Find(TKI_Daughter_Folders, "05_pFDpCD/01_dP_T_pFDpCD") + "/";
     TKI_Directory_map["dAlpha_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                            Find(TKI_Daughter_Folders, "05_pFDpCD/02_dAlpha_T_pFDpCD") + "/";
+                                                     Find(TKI_Daughter_Folders, "05_pFDpCD/02_dAlpha_T_pFDpCD") + "/";
     TKI_Directory_map["dPhi_T_pFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                          Find(TKI_Daughter_Folders, "05_pFDpCD/03_dPhi_T_pFDpCD") + "/";
+                                                   Find(TKI_Daughter_Folders, "05_pFDpCD/03_dPhi_T_pFDpCD") + "/";
 
     TKI_Directory_map["dP_T_vs_dAlpha_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                                    Find(Ecal_Daughter_Folders, "06_nFDpCD") + "/";
+                                                             Find(Ecal_Daughter_Folders, "06_nFDpCD") + "/";
     TKI_Directory_map["dP_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                        Find(TKI_Daughter_Folders, "06_nFDpCD/01_dP_T_nFDpCD") + "/";
+                                                 Find(TKI_Daughter_Folders, "06_nFDpCD/01_dP_T_nFDpCD") + "/";
     TKI_Directory_map["dAlpha_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                            Find(TKI_Daughter_Folders, "06_nFDpCD/02_dAlpha_T_nFDpCD") + "/";
+                                                     Find(TKI_Daughter_Folders, "06_nFDpCD/02_dAlpha_T_nFDpCD") + "/";
     TKI_Directory_map["dPhi_T_nFDpCD_Directory"] = Plots_Folder + "/" + TKI_Parent_Directory + "/" +
-                                                          Find(TKI_Daughter_Folders, "06_nFDpCD/03_dPhi_T_nFDpCD") + "/";
+                                                   Find(TKI_Daughter_Folders, "06_nFDpCD/03_dPhi_T_nFDpCD") + "/";
     //</editor-fold>
 
     //<editor-fold desc="ToF plots directories">
@@ -974,14 +974,19 @@ Directories::Directories(std::string plots_path) {
         MakeDirectory(create_Eff_and_ACorr_Dir, Eff_and_ACorr_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
+    Eff_and_ACorr_Directory_map["Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
+                                                                    + Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                        Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut") +
-                                                                        "/";
+                                                                        Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                           Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut") + "/";
+    Eff_and_ACorr_Directory_map["Hit_maps_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                        Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Loaded_ref_hit_maps") + "/";
 
+    Eff_and_ACorr_Directory_map["Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
+                                                                + Find(Eff_and_ACorr_Daughter_Folders, "02_1p") + "/";
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "02_1p/01_Momentum_Eff_and_ACorr_plots_1p") + "/";
     Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
@@ -989,8 +994,10 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "02_1p/03_Phi_Eff_and_ACorr_plots_1p") + "/";
     Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                         Find(Eff_and_ACorr_Daughter_Folders, "02_1p/04_Proton_FD_Hit_map_1p") + "/";
+                                                                    Find(Eff_and_ACorr_Daughter_Folders, "02_1p/04_Proton_FD_Hit_map_1p") + "/";
 
+    Eff_and_ACorr_Directory_map["Eff_and_ACorr_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
+                                                                + Find(Eff_and_ACorr_Daughter_Folders, "03_1n") + "/";
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "03_1n/01_Momentum_Eff_and_ACorr_plots_1n") + "/";
     Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
@@ -998,8 +1005,10 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "03_1n/03_Phi_Eff_and_ACorr_plots_1n") + "/";
     Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_1n_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                    Find(Eff_and_ACorr_Daughter_Folders, "03_1n/04_Neutron_FD_Hit_map_1n") + "/";
+                                                                     Find(Eff_and_ACorr_Daughter_Folders, "03_1n/04_Neutron_FD_Hit_map_1n") + "/";
 
+    Eff_and_ACorr_Directory_map["Eff_and_ACorr_2p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
+                                                                + Find(Eff_and_ACorr_Daughter_Folders, "04_2p") + "/";
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_2p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "04_2p/01_Momentum_Eff_and_ACorr_plots_2p") + "/";
     Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_2p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
@@ -1007,6 +1016,8 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_2p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                     Find(Eff_and_ACorr_Daughter_Folders, "04_2p/03_Phi_Eff_and_ACorr_plots_2p") + "/";
 
+    Eff_and_ACorr_Directory_map["Eff_and_ACorr_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
+                                                                    + Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/01_Momentum_Eff_and_ACorr_plots_pFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
@@ -1014,8 +1025,10 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/03_Phi_Eff_and_ACorr_plots_pFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Proton_FD_Hit_map_pFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                    Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/04_Proton_FD_Hit_map_pFDpCD") + "/";
+                                                                        Find(Eff_and_ACorr_Daughter_Folders, "05_pFDpCD/04_Proton_FD_Hit_map_pFDpCD") + "/";
 
+    Eff_and_ACorr_Directory_map["Eff_and_ACorr_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
+                                                                    + Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Mom_Eff_and_ACorr_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/01_Momentum_Eff_and_ACorr_plots_nFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
@@ -1023,7 +1036,7 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                        Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD") + "/";
+                                                                         Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Resolution plots directories">
@@ -1037,19 +1050,19 @@ Directories::Directories(std::string plots_path) {
                                                                        Find(Resolution_Daughter_Folders, "01_1e_cut/01_Momentum_resolution_plots_1e_cut") + "/";
 
     Resolution_Directory_map["Resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                              Find(Resolution_Daughter_Folders, "02_1p") + "/";
+                                                          Find(Resolution_Daughter_Folders, "02_1p") + "/";
     Resolution_Directory_map["Momentum_resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                       Find(Resolution_Daughter_Folders, "02_1p/01_Momentum_resolution_plots_1p") + "/";
+                                                                   Find(Resolution_Daughter_Folders, "02_1p/01_Momentum_resolution_plots_1p") + "/";
 
     Resolution_Directory_map["Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                              Find(Resolution_Daughter_Folders, "03_1n") + "/";
+                                                          Find(Resolution_Daughter_Folders, "03_1n") + "/";
     Resolution_Directory_map["Momentum_resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                       Find(Resolution_Daughter_Folders, "03_1n/01_Momentum_resolution_plots_1n") + "/";
+                                                                   Find(Resolution_Daughter_Folders, "03_1n/01_Momentum_resolution_plots_1n") + "/";
 
     Resolution_Directory_map["Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                              Find(Resolution_Daughter_Folders, "04_2p") + "/";
+                                                          Find(Resolution_Daughter_Folders, "04_2p") + "/";
     Resolution_Directory_map["Momentum_resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                       Find(Resolution_Daughter_Folders, "04_2p/01_Momentum_resolution_plots_2p") + "/";
+                                                                   Find(Resolution_Daughter_Folders, "04_2p/01_Momentum_resolution_plots_2p") + "/";
 
     Resolution_Directory_map["Resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                               Find(Resolution_Daughter_Folders, "05_pFDpCD") + "/";
