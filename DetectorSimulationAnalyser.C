@@ -97,11 +97,11 @@ void EventAnalyser() {
     bool calculate_2p = true;
     bool calculate_pFDpCD = true, calculate_nFDpCD = true;
 
-    bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
-
-    bool limless_mom_eff_plots = false; // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 
     bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
+
+    bool limless_mom_eff_plots = false; // Enforce TL event selection on Rec. plots
 
     if (!calculate_2p) { calculate_pFDpCD = false; }
     //</editor-fold>
@@ -483,8 +483,8 @@ void EventAnalyser() {
     bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
+//    bool W_plots = false;
     cout << "\n\n\n\nbool W_plots = false;";
     cout << "\nbool W_plots = false;";
     cout << "\nbool W_plots = false;";
@@ -496,8 +496,8 @@ void EventAnalyser() {
     cout << "\nbool W_plots = false;\n\n\n\n";
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
+    bool Beta_plots = true;
+//    bool Beta_plots = false;
     cout << "\n\n\n\nbool Beta_plots = false;";
     cout << "\nbool Beta_plots = false;";
     cout << "\nbool Beta_plots = false;";
@@ -507,8 +507,8 @@ void EventAnalyser() {
     cout << "\nbool Beta_plots = false;";
     cout << "\nbool Beta_plots = false;";
     cout << "\nbool Beta_plots = false;\n\n\n\n";
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
     cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
     cout << "\nbool Beta_vs_P_plots = false;";
     cout << "\nbool Beta_vs_P_plots = false;";
@@ -535,8 +535,8 @@ void EventAnalyser() {
 //    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
+//    bool Q2_plots = false;
     cout << "\n\n\n\nbool Q2_plots = false;";
     cout << "\nbool Q2_plots = false;";
     cout << "\nbool Q2_plots = false;";
@@ -548,8 +548,8 @@ void EventAnalyser() {
     cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
+//    bool E_e_plots = false;
     cout << "\n\n\n\nbool E_e_plots = false;";
     cout << "\nbool E_e_plots = false;";
     cout << "\nbool E_e_plots = false;";
@@ -561,8 +561,8 @@ void EventAnalyser() {
     cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
     cout << "\n\n\n\nbool ETrans_plots_master = false;";
     cout << "\nbool ETrans_plots_master = false;";
     cout << "\nbool ETrans_plots_master = false;";
@@ -575,8 +575,8 @@ void EventAnalyser() {
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
     cout << "\n\n\n\nbool Ecal_plots = false;";
     cout << "\nbool Ecal_plots = false;";
     cout << "\nbool Ecal_plots = false;";
@@ -588,8 +588,8 @@ void EventAnalyser() {
     cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
+//    bool TKI_plots = false;
     cout << "\n\n\n\nbool TKI_plots = false;";
     cout << "\nbool TKI_plots = false;";
     cout << "\nbool TKI_plots = false;";
@@ -617,8 +617,8 @@ void EventAnalyser() {
 //    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
+    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
     cout << "\n\n\n\nbool Resolution_plots = false;";
     cout << "\nbool Resolution_plots = false;";
     cout << "\nbool Resolution_plots = false;";
