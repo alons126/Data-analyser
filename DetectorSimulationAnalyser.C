@@ -9037,8 +9037,6 @@ void EventAnalyser() {
                     auto mcpbank_Res = c12->mcparts();
                     const Int_t Ngen_Res = mcpbank_Res->getRows();
 
-                    cout << "\n\n\n===============================================\n";
-
                     for (Int_t i = 0; i < Ngen_Res; i++) {
                         mcpbank_Res->setEntry(i);
 
@@ -9097,19 +9095,24 @@ void EventAnalyser() {
                             hPhi_nFD_TL_1n.hFill(TLNeutronPhi, Weight);
                             hTheta_nFD_TL_VS_Phi_nFD_TL_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
 
-                            if ((fabs(P_n_1n_3v.Theta() * 180.0 / pi - TLNeutronTheta) < 5) && (fabs(P_n_1n_3v.Phi() * 180.0 / pi - TLNeutronPhi) < 5)) {
+                            if ((fabs(P_n_1n_3v.Theta() * 180.0 / pi - TLNeutronTheta) < 10) && (fabs(P_n_1n_3v.Phi() * 180.0 / pi - TLNeutronPhi) < 10)) {
+//                            if ((fabs(P_n_1n_3v.Theta() * 180.0 / pi - TLNeutronTheta) < 5) && (fabs(P_n_1n_3v.Phi() * 180.0 / pi - TLNeutronPhi) < 5)) {
                                 hP_nFD_Res_1n.hFill((P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
                                 hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, (P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
                             }
 
-//                            cout << "i = " << i << "\n";
-//                            cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-//                            cout << "Theta TL = " << TLNeutronTheta << "\n";
-//                            cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-//                            cout << "Phi TL = " << TLNeutronPhi << "\n";
-//                            cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n\n\n";
+                            cout << "i = " << i << "\n";
+                            cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
+                            cout << "Theta TL = " << TLNeutronTheta << "\n";
+                            cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
+                            cout << "Phi TL = " << TLNeutronPhi << "\n";
+                            cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
+                            cout << "PID TL = " << pid << "\n";
+                            cout << "PID Rec = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid() << "\n";
                         }
                     }
+
+                    cout << "===============================================\n\n\n";
                     //</editor-fold>
 
 
