@@ -44,4 +44,18 @@ double CalcdPhi(region_part_ptr proton1, region_part_ptr proton2) {
     return dPhi;
 }
 
+double CalcdPhi(double dPhiTemp) {
+    double dPhi;
+
+    if (dPhiTemp > 180.0) {
+        dPhi = dPhiTemp - 360.0;
+    } else if (dPhiTemp < -180.0) {
+        dPhi = dPhiTemp + 360.0;
+    } else {
+        dPhi = dPhiTemp;
+    }
+
+    return dPhi;
+}
+
 #endif //CALCDPHI_H

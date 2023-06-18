@@ -200,19 +200,18 @@ void EventAnalyser() {
         }
 
         if (!apply_nucleon_cuts) {
-//            Efficiency_Status = "dTheta5anddPhi10";
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-//                Efficiency_Status = "Eff2_noNucMomTh";
-//                Efficiency_Status = "Eff2_noMomTh";
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1";
-//                Efficiency_Status = "Eff1_dTheta5anddPhi125";
-//                Efficiency_Status = "Eff1_dTheta5anddPhi15";
-//                Efficiency_Status = "Eff1_dTheta5anddPhi10";
+//                Efficiency_Status = "Eff1_NoMomTh";
+                Efficiency_Status = "Eff1_withMomTh";
 //                Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1_YESav_NOlimless";
+//                Efficiency_Status = "Eff1_YESav_YESlimless";
+//                Efficiency_Status = "Eff1_NOav_YESlimless";
+//                Efficiency_Status = "Eff1_NOav_NOlimless";
             }
         }
 
@@ -606,17 +605,17 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-//    cout << "\n\n\n\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+//    bool Efficiency_plots = true;
+    bool Efficiency_plots = false;
+    cout << "\n\n\n\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
     bool Resolution_plots = true;
@@ -5788,6 +5787,40 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Resolution histograms">
+    hPlot1D hdTheta_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} BC", "#Delta#theta_{nFD} of FD neutron BC",
+                                           "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00a_DeltaTheta_nFD_BC_TL_1n",
+                                           -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_nFD_TL_ZOOMIN_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN BC", "#Delta#theta_{nFD} of FD neutron - ZOOMIN BC",
+                                                  "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "00b_DeltaTheta_nFD_BC_TL_ZOOMIN_1n",
+                                                  -10.0, 10.0);
+    hPlot1D hdPhi_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} BC", "#Delta#phi_{nFD} of FD neutron BC",
+                                         "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                         directories.Resolution_Directory_map["Resolution_1n_Directory"], "00c_DeltaPhi_nFD_BC_TL_1n",
+                                         Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_nFD_TL_ZOOMIN_BC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} - ZOOMIN BC", "#Delta#phi_{nFD} of FD neutron - ZOOMIN BC",
+                                                "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "00d_DeltaPhi_nFD_BC_TL_ZOOMIN_1n",
+                                                -20, 20);
+
+    hPlot1D hdTheta_nFD_TL_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} AdPC", "#Delta#theta_{nFD} of FD neutron AdPC",
+                                             "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "00e_DeltaTheta_nFD_AdPC_TL_1n",
+                                             -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN AdPC", "#Delta#theta_{nFD} of FD neutron - ZOOMIN AdPC",
+                                                    "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00f_DeltaTheta_nFD_AdPC_TL_ZOOMIN_1n",
+                                                    -10.0, 10.0);
+    hPlot1D hdPhi_nFD_TL_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} AdPC", "#Delta#phi_{nFD} of FD neutron AdPC",
+                                           "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00g_DeltaPhi_nFD_AdPC_TL_1n",
+                                           Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} - ZOOMIN AdPC", "#Delta#phi_{nFD} of FD neutron - ZOOMIN AdPC",
+                                                  "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "00h_DeltaPhi_nFD_AdPC_TL_ZOOMIN_1n",
+                                                  -20, 20);
+
     hPlot1D hTheta_nFD_TL_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} AC", "#theta^{truth}_{nFD} of FD neutron AC", "#theta^{truth}_{nFD} [Deg]",
                                        directories.Resolution_Directory_map["Resolution_1n_Directory"], "01_Theta_nFD_AC_TL_1n",
                                        Theta_lboundary_FD, Theta_uboundary_FD);
@@ -5821,13 +5854,13 @@ void EventAnalyser() {
     string hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     TH2D *hnonTL_Theta_nFD_TL_VS_P_nFD_TL_1n = new TH2D("non-TL #theta_{nFD} vs. P_{nFD} (1n, FD)",
-                                                          "non-TL #theta_{nFD} vs. P_{nFD} (1n, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
-                                                          65, 0, beamE * 1.1, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                        "non-TL #theta_{nFD} vs. P_{nFD} (1n, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
+                                                        65, 0, beamE * 1.1, 65, Theta_lboundary_FD, Theta_uboundary_FD);
     string hnonTL_Theta_nFD_TL_VS_P_nFD_TL_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     TH2D *hnonTL_Phi_nFD_TL_VS_P_nFD_TL_1n = new TH2D("non-TL #phi_{nFD} vs. P_{nFD} (1n, FD)",
-                                                          "non-TL #phi_{nFD} vs. P_{nFD} (1n, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
-                                                          65, 0, beamE * 1.1, 65, Phi_lboundary, Phi_uboundary);
+                                                      "non-TL #phi_{nFD} vs. P_{nFD} (1n, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
+                                                      65, 0, beamE * 1.1, 65, Phi_lboundary, Phi_uboundary);
     string hnonTL_Phi_nFD_TL_VS_P_nFD_TL_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hnonTL_P_nFD_1n = hPlot1D("1n", "", "non-TL momentum", "non-TL momentum of FD neutron", "Momentum [GeV/c]",
@@ -5867,13 +5900,13 @@ void EventAnalyser() {
     string hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_fph_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     TH2D *hnonTL_Theta_nFD_TL_VS_P_nFD_TL_fph_1n = new TH2D("non-TL #theta_{nFD} vs. P_{nFD} from '#gamma' (1n, FD)",
-                                                        "non-TL #theta_{nFD} vs. P_{nFD} from '#gamma' (1n, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
-                                                        65, 0, beamE * 1.1, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                            "non-TL #theta_{nFD} vs. P_{nFD} from '#gamma' (1n, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
+                                                            65, 0, beamE * 1.1, 65, Theta_lboundary_FD, Theta_uboundary_FD);
     string hnonTL_Theta_nFD_TL_VS_P_nFD_TL_fph_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     TH2D *hnonTL_Phi_nFD_TL_VS_P_nFD_TL_fph_1n = new TH2D("non-TL #phi_{nFD} vs. P_{nFD} from '#gamma' (1n, FD)",
-                                                      "non-TL #phi_{nFD} vs. P_{nFD} from '#gamma' (1n, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
-                                                      65, 0, beamE * 1.1, 65, Phi_lboundary, Phi_uboundary);
+                                                          "non-TL #phi_{nFD} vs. P_{nFD} from '#gamma' (1n, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
+                                                          65, 0, beamE * 1.1, 65, Phi_lboundary, Phi_uboundary);
     string hnonTL_Phi_nFD_TL_VS_P_nFD_TL_fph_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hnonTL_P_nFD_fph_1n = hPlot1D("1n", "", "non-TL momentum from '#gamma'", "non-TL momentum of FD neutron from '#gamma'", "Momentum [GeV/c]",
@@ -5897,13 +5930,13 @@ void EventAnalyser() {
     string hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_VN_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     TH2D *hnonTL_Theta_nFD_TL_VS_P_nFD_TL_VN_1n = new TH2D("non-TL #theta_{nFD} vs. P_{nFD} from VN (1n, FD)",
-                                                            "non-TL #theta_{nFD} vs. P_{nFD} from VN (1n, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
-                                                            65, 0, beamE * 1.1, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                           "non-TL #theta_{nFD} vs. P_{nFD} from VN (1n, FD);P_{nFD} [GeV/c];#theta_{nFD} [Deg]",
+                                                           65, 0, beamE * 1.1, 65, Theta_lboundary_FD, Theta_uboundary_FD);
     string hnonTL_Theta_nFD_TL_VS_P_nFD_TL_VN_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     TH2D *hnonTL_Phi_nFD_TL_VS_P_nFD_TL_VN_1n = new TH2D("non-TL #phi_{nFD} vs. P_{nFD} from VN (1n, FD)",
-                                                          "non-TL #phi_{nFD} vs. P_{nFD} from VN (1n, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
-                                                          65, 0, beamE * 1.1, 65, Phi_lboundary, Phi_uboundary);
+                                                         "non-TL #phi_{nFD} vs. P_{nFD} from VN (1n, FD);P_{nFD} [GeV/c];#phi_{nFD} [Deg]",
+                                                         65, 0, beamE * 1.1, 65, Phi_lboundary, Phi_uboundary);
     string hnonTL_Phi_nFD_TL_VS_P_nFD_TL_VN_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hnonTL_P_nFD_VN_1n = hPlot1D("1n", "", "non-TL momentum from VN", "non-TL momentum of FD neutron from VN", "Momentum [GeV/c]",
@@ -9133,127 +9166,11 @@ void EventAnalyser() {
 
                     hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);
 
-
-
-
-
-
-                    //<editor-fold desc="Res plots">
-                    bool counted_event = false;
-
-                    int Good_TL_Rec_neutrons = 0;
-
-                    auto mcpbank_Res = c12->mcparts();
-                    const Int_t Ngen_Res = mcpbank_Res->getRows();
-
-                    for (Int_t i = 0; i < Ngen_Res; i++) {
-                        mcpbank_Res->setEntry(i);
-
-                        double TLNeutronP = rCalc(mcpbank_Res->getPx(), mcpbank_Res->getPy(), mcpbank_Res->getPz());
-                        double TLNeutronTheta = acos(mcpbank_Res->getPz() / TLNeutronP) * 180.0 / pi;
-                        double TLNeutronPhi = atan2(mcpbank_Res->getPy(), mcpbank_Res->getPx()) * 180.0 / pi;
-
-                        double TLNeutronPhi_shifted, RecoNeutronPhi_shifted;
-
-                        //<editor-fold desc="Phi shift">
-                        if (TLNeutronPhi < 0) {
-                            TLNeutronPhi_shifted = TLNeutronPhi + 360;
-                        } else {
-                            TLNeutronPhi_shifted = TLNeutronPhi;
-                        }
-
-                        if (P_n_1n_3v.Phi() * 180.0 / pi < 0) {
-                            RecoNeutronPhi_shifted = (P_n_1n_3v.Phi() * 180.0 / pi) + 360;
-                        } else {
-                            RecoNeutronPhi_shifted = (P_n_1n_3v.Phi() * 180.0 / pi);
-                        }
-                        //</editor-fold>
-
-                        auto pid = mcpbank_Res->getPid();
-
-                        int BinX_n = GetBinFromAng(TLNeutronPhi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                        int BinY_n = GetBinFromAng(TLNeutronTheta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-//                        int BinX_n = GetBinFromAng(TLNeutronPhi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-//                        int BinY_n = GetBinFromAng(TLNeutronTheta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-
-                        bool n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
-
-                        bool inFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
-                        bool n_inFD = (n_inSomeSector && (TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
-
-                        bool id_n = (TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut());
-
-                        if (pid == 2112 && id_n && n_inFD) {
-                            hTheta_nFD_TL_1n.hFill(TLNeutronTheta, Weight);
-                            hPhi_nFD_TL_1n.hFill(TLNeutronPhi, Weight);
-                            hTheta_nFD_TL_VS_Phi_nFD_TL_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
-
-                            if ((fabs(P_n_1n_3v.Theta() * 180.0 / pi - TLNeutronTheta) < 10) && (fabs(RecoNeutronPhi_shifted - TLNeutronPhi_shifted) < 10)) {
-                                hP_nFD_Res_1n.hFill((P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
-                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, (P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
-                                counted_event = true;
-                                ++Good_TL_Rec_neutrons;
-                            }
-//                            else {
-//                                cout << "\ni = " << i << "\n";
-//                                cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-//                                cout << "Theta TL = " << TLNeutronTheta << "\n";
-//                                cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-//                                cout << "Phi TL = " << TLNeutronPhi << "\n";
-//                                cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
-//                                cout << "TLNeutronPhi_shifted = " << TLNeutronPhi_shifted << "\n";
-//                                cout << "RecoNeutronPhi_shifted = " << RecoNeutronPhi_shifted << "\n";
-//                                cout << "PID TL = " << pid << "\n";
-//                                cout << "PID Rec = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid() << "\n";
-//                            }
-                        }
-                    }
-
-                    if (!counted_event) {
-                        hnonTL_Theta_nFD_1n.hFill(P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                        hnonTL_Phi_nFD_1n.hFill(P_n_1n_3v.Phi() * 180.0 / pi, Weight);
-                        hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_1n->Fill(P_n_1n_3v.Phi() * 180.0 / pi, P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                        hnonTL_Theta_nFD_TL_VS_P_nFD_TL_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                        hnonTL_Phi_nFD_TL_VS_P_nFD_TL_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Phi() * 180.0 / pi, Weight);
-                        hnonTL_P_nFD_1n.hFill(P_n_1n_3v.Mag(), Weight);
-                        hnonTL_Beta_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
-                        hnonTL_Beta_vs_P_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
-                        hnonTL_PID_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
-                        hnonTL_PID_vs_P_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
-                        hnonTL_PID_ZOOMIN_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
-                        hnonTL_PID_vs_P_ZOOMIN_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
-                        hnonTL_PID_ZOOMIN2_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
-                        hnonTL_PID_vs_P_ZOOMIN2_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
-
-                        if (allParticles[NeutronsFD_ind.at(0)]->par()->getPid() == 22) {
-                            hnonTL_Theta_nFD_fph_1n.hFill(P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                            hnonTL_Phi_nFD_fph_1n.hFill(P_n_1n_3v.Phi() * 180.0 / pi, Weight);
-                            hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_fph_1n->Fill(P_n_1n_3v.Phi() * 180.0 / pi, P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                            hnonTL_Theta_nFD_TL_VS_P_nFD_TL_fph_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                            hnonTL_Phi_nFD_TL_VS_P_nFD_TL_fph_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Phi() * 180.0 / pi, Weight);
-                            hnonTL_P_nFD_fph_1n.hFill(P_n_1n_3v.Mag(), Weight);
-                            hnonTL_Beta_fph_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
-                            hnonTL_Beta_vs_P_fph_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
-                        } else if (allParticles[NeutronsFD_ind.at(0)]->par()->getPid() == 2112) {
-                            hnonTL_Theta_nFD_VN_1n.hFill(P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                            hnonTL_Phi_nFD_VN_1n.hFill(P_n_1n_3v.Phi() * 180.0 / pi, Weight);
-                            hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_VN_1n->Fill(P_n_1n_3v.Phi() * 180.0 / pi, P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                            hnonTL_Theta_nFD_TL_VS_P_nFD_TL_VN_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, Weight);
-                            hnonTL_Phi_nFD_TL_VS_P_nFD_TL_VN_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Phi() * 180.0 / pi, Weight);
-                            hnonTL_P_nFD_VN_1n.hFill(P_n_1n_3v.Mag(), Weight);
-                            hnonTL_Beta_VN_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
-                            hnonTL_Beta_vs_P_VN_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
-                        }
-                    }
-
-                    if (Good_TL_Rec_neutrons > 1) {
-                        ++num_of_events_1n_inFD_AV_wmt1gTLn;
-                    }
-
-//                    cout << "===============================================\n\n\n";
-                    //</editor-fold>
-
-//                    //<editor-fold desc="Res plots">
+//                    //<editor-fold desc="Fill resolution histograms (1n)">
+//                    bool counted_event = false;
+//
+//                    int Good_TL_Rec_neutrons = 0;
+//
 //                    auto mcpbank_Res = c12->mcparts();
 //                    const Int_t Ngen_Res = mcpbank_Res->getRows();
 //
@@ -9264,120 +9181,166 @@ void EventAnalyser() {
 //                        double TLNeutronTheta = acos(mcpbank_Res->getPz() / TLNeutronP) * 180.0 / pi;
 //                        double TLNeutronPhi = atan2(mcpbank_Res->getPy(), mcpbank_Res->getPx()) * 180.0 / pi;
 //
-//                        double TLNeutronPhi_shifted, RecoNeutronPhi_shifted;
-//
-//                        if (TLNeutronPhi < 0) {
-//                            TLNeutronPhi_shifted = TLNeutronPhi + 360;
-//                        } else {
-//                            TLNeutronPhi_shifted = TLNeutronPhi;
-//                        }
-//
-//                        if (P_n_1n_3v.Phi() * 180.0 / pi < 0) {
-//                            RecoNeutronPhi_shifted = (P_n_1n_3v.Phi() * 180.0 / pi) + 360;
-//                        } else {
-//                            RecoNeutronPhi_shifted = (P_n_1n_3v.Phi() * 180.0 / pi);
-//                        }
+//                        double dNeutronTheta = (P_n_1n_3v.Theta() * 180.0 / pi) - TLNeutronTheta;
+//                        double dNeutronPhi = CalcdPhi((P_n_1n_3v.Phi() * 180.0 / pi) - TLNeutronPhi);
 //
 //                        auto pid = mcpbank_Res->getPid();
 //
-//                        int BinX_n = GetBinFromAng(TLNeutronPhi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-//                        int BinY_n = GetBinFromAng(TLNeutronTheta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//                        int BinX_n = GetBinFromAng(TLNeutronPhi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                        int BinY_n = GetBinFromAng(TLNeutronTheta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+////                        int BinX_n = GetBinFromAng(TLNeutronPhi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+////                        int BinY_n = GetBinFromAng(TLNeutronTheta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 //
-////                        bool inSomeSector = (Neutron_hit_map->GetBinContent(BinX, BinY) != 0);
 //                        bool n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
-////                        bool n_inSomeSector = (Proton_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
 //
-//                        bool inFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
-//                        bool n_inFD = (n_inSomeSector && (TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
-//                        bool id_n = (TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut());
+//                        bool InFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
+//                        bool InFDSectors = (n_inSomeSector && (TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
+//                        bool PassNeutronMomTh = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
 //
-//                        /*
-//                        double TLNeutronP = rCalc(mcpbank_Res->getPx(), mcpbank_Res->getPy(), mcpbank_Res->getPz());
-//                        double TLNeutronTheta = acos(mcpbank_Res->getPz() / TLNeutronP) * 180.0 / pi;
-//                        double TLNeutronPhi = atan2(mcpbank_Res->getPy(), mcpbank_Res->getPx()) * 180.0 / pi;
+//                        double dPhiCut = 10.;
+//                        double dThetaCut = 5.;
 //
-//                        auto pid = mcpbank_Res->getPid();
-//
-//
-//                        double x = sin(TLNeutronTheta * pi / 180.0) * cos(TLNeutronPhi * pi / 180.0);
-//                        double y = sin(TLNeutronTheta * pi / 180.0) * sin(TLNeutronPhi * pi / 180.0);
-//
-//
-//                        bool id_n = true;
-////                    bool id_n = (TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut());
-////                    bool inFD = true;
-//                        bool inFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
-//*/
-//
-//                        /*
-//                        if (pid == 11 && i != 0) {
-//                            cout << "i = " << i << "\n";
-//                            quit();
-////                            cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-////                            cout << "Theta TL = " << TLNeutronTheta << "\n";
-////                            cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-////                            cout << "Phi TL = " << TLNeutronPhi << "\n";
-////                            cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n\n\n";
-//                        }
-//*/
-//
-//
-//
+//                        if (pid == 2112 && InFD && PassNeutronMomTh) {
 ////                        if (pid == 2112) {
-////                        if (pid == 2112 && id_n) {
-//                        if (pid == 2112 && n_inFD) {
-////                        if (pid == 2112 && id_n && n_inFD) {
-////                        if (pid == 2112 && id_n && inFD) {
+////                        if (pid == 2112 && InFDSectors) {
+////                        if (pid == 2112 && PassNeutronMomTh && InFDSectors) {
+//                            hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
+//                            hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
+//                            hdPhi_nFD_TL_BC_1n.hFill(dNeutronPhi, Weight);
+//                            hdPhi_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronPhi, Weight);
+////                            if (InFD) {
+//////                            if (InFDSectors) {
+////                                hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
+////                                hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
+////                                hdPhi_nFD_TL_BC_1n.hFill(dNeutronPhi, Weight);
+////                                hdPhi_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronPhi, Weight);
+////                            }
+//
 //                            hTheta_nFD_TL_1n.hFill(TLNeutronTheta, Weight);
 //                            hPhi_nFD_TL_1n.hFill(TLNeutronPhi, Weight);
 //                            hTheta_nFD_TL_VS_Phi_nFD_TL_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
 //
-//                            if ((fabs(P_n_1n_3v.Theta() * 180.0 / pi - TLNeutronTheta) < 10) && (fabs(RecoNeutronPhi_shifted - TLNeutronPhi_shifted) < 10)) {
-////                            if ((fabs(P_n_1n_3v.Theta() * 180.0 / pi - TLNeutronTheta) < 5) && (fabs(RecoNeutronPhi_shifted - TLNeutronPhi_shifted) < 5)) {
-//                                hP_nFD_Res_1n.hFill((P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
-//                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, (P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
-//                            } else {
-//                                cout << "\ni = " << i << "\n";
-//                                cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-//                                cout << "Theta TL = " << TLNeutronTheta << "\n";
-//                                cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-//                                cout << "Phi TL = " << TLNeutronPhi << "\n";
-//                                cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
-//                                cout << "TLNeutronPhi_shifted = " << TLNeutronPhi_shifted << "\n";
-//                                cout << "RecoNeutronPhi_shifted = " << RecoNeutronPhi_shifted << "\n";
-//                                cout << "PID TL = " << pid << "\n";
-//                                cout << "PID Rec = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid() << "\n";
+//                            if (fabs(dNeutronPhi) < dPhiCut) {
+//                                hdTheta_nFD_TL_AdPC_1n.hFill(dNeutronTheta, Weight);
+//                                hdTheta_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronTheta, Weight);
+//                                hdPhi_nFD_TL_AdPC_1n.hFill(dNeutronPhi, Weight);
+//                                hdPhi_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronPhi, Weight);
 //                            }
 //
-////                            cout << "\ni = " << i << "\n";
-////                            cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-////                            cout << "Theta TL = " << TLNeutronTheta << "\n";
-////                            cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-////                            cout << "Phi TL = " << TLNeutronPhi << "\n";
-////                            cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
-////                            cout << "PID TL = " << pid << "\n";
-////                            cout << "PID Rec = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid() << "\n";
-//                        } else if (pid == 22 || pid == 111) {
-////                            cout << "\ni = " << i << "\n";
-////                            cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-////                            cout << "Theta TL = " << TLNeutronTheta << "\n";
-////                            cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-////                            cout << "Phi TL = " << TLNeutronPhi << "\n";
-////                            cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
-//                            cout << "\nPID TL = " << pid << "\n";
-//                            cout << "PID Rec = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid() << "\n";
-//                            cout << "PCAL hit = " << BoolToString(NeutronInPCAL_1n) << "\n";
+//                            if ((fabs(dNeutronTheta) < dThetaCut) && (fabs(dNeutronPhi) < dPhiCut)) {
+//                                hP_nFD_Res_1n.hFill((P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
+//                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, (P_n_1n_3v.Mag() - TLNeutronP) / TLNeutronP, Weight);
+//                                counted_event = true;
+//                                ++Good_TL_Rec_neutrons;
+//                            }
+////                            else if (TLNeutronTheta < 40.) {
+////                                cout << "\ni = " << i << "\n";
+////                                cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
+////                                cout << "Theta TL = " << TLNeutronTheta << "\n";
+////                                cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
+////                                cout << "Phi TL = " << TLNeutronPhi << "\n";
+////                                cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
+////                                cout << "PID TL = " << pid << "\n";
+////                                cout << "PID Rec = " << allParticles[NeutronsFD_ind.at(0)]->par()->getPid() << "\n";
+////                            }
 //                        }
 //                    }
 //
-//                    cout << "===============================================\n\n\n";
+//                    if (!counted_event) {
+//                        hnonTL_Theta_nFD_1n.hFill(P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                        hnonTL_Phi_nFD_1n.hFill(P_n_1n_3v.Phi() * 180.0 / pi, Weight);
+//                        hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_1n->Fill(P_n_1n_3v.Phi() * 180.0 / pi, P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                        hnonTL_Theta_nFD_TL_VS_P_nFD_TL_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                        hnonTL_Phi_nFD_TL_VS_P_nFD_TL_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Phi() * 180.0 / pi, Weight);
+//                        hnonTL_P_nFD_1n.hFill(P_n_1n_3v.Mag(), Weight);
+//                        hnonTL_Beta_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
+//                        hnonTL_Beta_vs_P_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
+//                        hnonTL_PID_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
+//                        hnonTL_PID_vs_P_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
+//                        hnonTL_PID_ZOOMIN_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
+//                        hnonTL_PID_vs_P_ZOOMIN_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
+//                        hnonTL_PID_ZOOMIN2_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
+//                        hnonTL_PID_vs_P_ZOOMIN2_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getPid(), Weight);
+//
+//                        if (allParticles[NeutronsFD_ind.at(0)]->par()->getPid() == 22) {
+//                            hnonTL_Theta_nFD_fph_1n.hFill(P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                            hnonTL_Phi_nFD_fph_1n.hFill(P_n_1n_3v.Phi() * 180.0 / pi, Weight);
+//                            hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_fph_1n->Fill(P_n_1n_3v.Phi() * 180.0 / pi, P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                            hnonTL_Theta_nFD_TL_VS_P_nFD_TL_fph_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                            hnonTL_Phi_nFD_TL_VS_P_nFD_TL_fph_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Phi() * 180.0 / pi, Weight);
+//                            hnonTL_P_nFD_fph_1n.hFill(P_n_1n_3v.Mag(), Weight);
+//                            hnonTL_Beta_fph_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
+//                            hnonTL_Beta_vs_P_fph_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
+//                        } else if (allParticles[NeutronsFD_ind.at(0)]->par()->getPid() == 2112) {
+//                            hnonTL_Theta_nFD_VN_1n.hFill(P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                            hnonTL_Phi_nFD_VN_1n.hFill(P_n_1n_3v.Phi() * 180.0 / pi, Weight);
+//                            hnonTL_Theta_nFD_TL_VS_Phi_nFD_TL_VN_1n->Fill(P_n_1n_3v.Phi() * 180.0 / pi, P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                            hnonTL_Theta_nFD_TL_VS_P_nFD_TL_VN_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, Weight);
+//                            hnonTL_Phi_nFD_TL_VS_P_nFD_TL_VN_1n->Fill(P_n_1n_3v.Mag(), P_n_1n_3v.Phi() * 180.0 / pi, Weight);
+//                            hnonTL_P_nFD_VN_1n.hFill(P_n_1n_3v.Mag(), Weight);
+//                            hnonTL_Beta_VN_1n.hFill(allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
+//                            hnonTL_Beta_vs_P_VN_1n.hFill(P_n_1n_3v.Mag(), allParticles[NeutronsFD_ind.at(0)]->par()->getBeta(), Weight);
+//                        }
+//                    }
+//
+//                    if (Good_TL_Rec_neutrons > 1) { ++num_of_events_1n_inFD_AV_wmt1gTLn; }
+//
+////                    cout << "===============================================\n\n\n";
+//
+//
+//
+//
+//
+//
+//
 //                    //</editor-fold>
 
 
 
+                    cout << "\n\n\n";
 
+                    auto particles = c12->getDetParticles(); //particles is now a std::vector of particles for this event
+                    auto mcpbank_Res = c12->mcparts();
+                    const Int_t Ngen_Res = mcpbank_Res->getRows();
 
+                    for (Int_t i = 0; i < particles.size(); i++) {
+                        mcpbank_Res->setEntry(i);
 
+                        double TLNeutronP = rCalc(mcpbank_Res->getPx(), mcpbank_Res->getPy(), mcpbank_Res->getPz());
+                        double TLNeutronTheta = acos(mcpbank_Res->getPz() / TLNeutronP) * 180.0 / pi;
+                        double TLNeutronPhi = atan2(mcpbank_Res->getPy(), mcpbank_Res->getPx()) * 180.0 / pi;
+
+                        double dNeutronTheta = (P_n_1n_3v.Theta() * 180.0 / pi) - TLNeutronTheta;
+                        double dNeutronPhi = CalcdPhi((P_n_1n_3v.Phi() * 180.0 / pi) - TLNeutronPhi);
+
+                        auto pid = mcpbank_Res->getPid();
+
+                        if (pid == 2112) {
+                            cout << "particles[i]->par()->getPid() = " << particles[i]->par()->getPid() << "\n";
+                            cout << "mcpbank_Res->getPid() = " << mcpbank_Res->getPid() << "\n";
+                        }
+                    }
+/*
+                    for (Int_t i = 0; i < Ngen_Res; i++) {
+                        mcpbank_Res->setEntry(i);
+
+                        double TLNeutronP = rCalc(mcpbank_Res->getPx(), mcpbank_Res->getPy(), mcpbank_Res->getPz());
+                        double TLNeutronTheta = acos(mcpbank_Res->getPz() / TLNeutronP) * 180.0 / pi;
+                        double TLNeutronPhi = atan2(mcpbank_Res->getPy(), mcpbank_Res->getPx()) * 180.0 / pi;
+
+                        double dNeutronTheta = (P_n_1n_3v.Theta() * 180.0 / pi) - TLNeutronTheta;
+                        double dNeutronPhi = CalcdPhi((P_n_1n_3v.Phi() * 180.0 / pi) - TLNeutronPhi);
+
+                        auto pid = mcpbank_Res->getPid();
+
+                        if (pid == 2112) {
+                            cout << "particles[i]->par()->getPid() = " << particles[i]->par()->getPid() << "\n";
+                            cout << "mcpbank_Res->getPid() = " << mcpbank_Res->getPid() << "\n";
+                        }
+                    }
+*/
+
+                    cout << "===============================================\n\n\n";
 
                 } // end of if NeutronPassVeto is true (i.e. if neutron did not hit PCAL & hit either ECIN or ECOUT)
                 //</editor-fold>
@@ -15939,6 +15902,16 @@ void EventAnalyser() {
 //  Resolution plots -----------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Resolution plots (1n, CD & FD)">
+        hdTheta_nFD_TL_BC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hdTheta_nFD_TL_ZOOMIN_BC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hdPhi_nFD_TL_BC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hdPhi_nFD_TL_ZOOMIN_BC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+
+        hdTheta_nFD_TL_AdPC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hdTheta_nFD_TL_ZOOMIN_AdPC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hdPhi_nFD_TL_AdPC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+        hdPhi_nFD_TL_ZOOMIN_AdPC_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+
         hTheta_nFD_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         hPhi_nFD_TL_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         histPlotter2D(c1, hTheta_nFD_TL_VS_Phi_nFD_TL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_TL_VS_Phi_nFD_TL_1n_Dir,
@@ -16442,12 +16415,12 @@ void EventAnalyser() {
     myLogFile << "Momentum thresholds {min, max}\n";
     myLogFile << "===========================================================================\n";
 
-    myLogFile << "e_mom_th = " << e_mom_th.GetLowerCut() << ", " << e_mom_th.GetUpperCut() << "}\n";
-    myLogFile << "n_mom_th = " << n_mom_th.GetLowerCut() << ", " << n_mom_th.GetUpperCut() << "}\n";
-    myLogFile << "p_mom_th = " << p_mom_th.GetLowerCut() << ", " << p_mom_th.GetUpperCut() << "}\n";
-    myLogFile << "ph_mom_th = " << ph_mom_th.GetLowerCut() << ", " << ph_mom_th.GetUpperCut() << "}\n";
-    myLogFile << "pip_mom_th = " << pip_mom_th.GetLowerCut() << ", " << pip_mom_th.GetUpperCut() << "}\n";
-    myLogFile << "pim_mom_th = " << pim_mom_th.GetLowerCut() << ", " << pim_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "e_mom_th = {" << e_mom_th.GetLowerCut() << ", " << e_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "n_mom_th = {" << n_mom_th.GetLowerCut() << ", " << n_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "p_mom_th = {" << p_mom_th.GetLowerCut() << ", " << p_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "ph_mom_th = {" << ph_mom_th.GetLowerCut() << ", " << ph_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "pip_mom_th = {" << pip_mom_th.GetLowerCut() << ", " << pip_mom_th.GetUpperCut() << "}\n";
+    myLogFile << "pim_mom_th = {" << pim_mom_th.GetLowerCut() << ", " << pim_mom_th.GetUpperCut() << "}\n";
     //</editor-fold>
 
     //<editor-fold desc="Momentum cuts">
