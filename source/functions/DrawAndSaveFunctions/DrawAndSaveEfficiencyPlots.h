@@ -112,7 +112,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string xLabel_Truth_temp = TLPlot_Clone->GetXaxis()->GetTitle();
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
-    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
+    string EfficiencyYLabel = "#epsilon_{eff} = #frac{rec.}{truth}";
+//    string EfficiencyYLabel = "#epsilon_{eff} = rec./truth";
+//    string EfficiencyYLabel = "#epsilon_{eff} = rec/truth";
+//    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
 //    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "/" + xLabel_Truth;
     //</editor-fold>
 
@@ -402,7 +405,10 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     string xLabel_Truth_temp = TLPlot_Clone->GetXaxis()->GetTitle();
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
-    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
+    string EfficiencyYLabel = "#epsilon_{eff} = #frac{rec.}{truth}";
+//    string EfficiencyYLabel = "#epsilon_{eff} = rec./truth";
+//    string EfficiencyYLabel = "#epsilon_{eff} = rec/truth";
+//    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
 //    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "/" + xLabel_Truth;
     //</editor-fold>
 
