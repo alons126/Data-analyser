@@ -29,10 +29,11 @@ using namespace std;
 void PlotsEffAndACorr2x3() {
 
 //    string SampleName = "C12_simulation_6GeV_T5_first_10_wNC_wFDph_Eff1";
+    string SampleName = "C12_simulation_6GeV_T5_first_10_wNC_noFDph_Eff2";
 //    string SampleName = "C12_simulation_6GeV_T5_first_100";
 //    string SampleName = "C12_simulation_6GeV_T5_first_250";
 //    string SampleName = "C12_simulation_6GeV_T5";
-    string SampleName = "C12_simulation_6GeV_T5_wNC_noFDph_Eff2";
+//    string SampleName = "C12_simulation_6GeV_T5_wNC_noFDph_Eff2";
 
 //    string SampleName = "C12_simulation_G18_2GeV_wNC_noFDph_Eff2";
 //    string SampleName = "C12_simulation_G18_2GeV_wNC_wFDph_Eff2";
