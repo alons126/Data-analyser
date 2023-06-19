@@ -395,15 +395,12 @@ void EventAnalyser() {
     DSCuts TL_pi0_mom_cuts = DSCuts("Momentum", "", "Pizero", "", 0, GetPi0MomTh(ph_mom_th), 9999);
     DSCuts TL_ph_mom_cuts = DSCuts("Momentum", "", "Photons", "", 0, ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut());
 
-    /* FD theta range (1n & 1p) */
-    DSCuts ThetaFD = DSCuts("Theta FD", "FD", "", "1n & 1p", 1, 5., 40.);
-    DSCuts ThetaCD = DSCuts("Theta CD", "CD", "", "1n & 1p", 1, 40., 135.);
+    /* FD & CD theta range */
+    DSCuts ThetaFD = DSCuts("Theta FD", "FD", "", "", 1, 5., 40.);
+    DSCuts ThetaCD = DSCuts("Theta CD", "CD", "", "", 1, 40., 135.);
 
     /* Beta cut (1n, FD) */
     DSCuts Beta_cut = DSCuts("Beta_nuc", "FD", "", "1n", 1, 0, 9999);
-
-    /* Nucleon theta cut (1p & 1n, FD) */
-    DSCuts Theta_nuc_cut = DSCuts("Theta_nuc", "FD", "", "1p & 1n", 0, -9999, 32.);
 
     /* Neutron veto cut (1n & nFDpCD, FD) */
     DSCuts Neutron_veto_cut = DSCuts("Neutron veto", "FD", "", "1n", 0, 100, 9999);
@@ -411,7 +408,7 @@ void EventAnalyser() {
     /* Ghost tracks handling (2p & pFDpCD, CD & FD) */
     DSCuts Theta_p1_cuts_2p = DSCuts("Theta_p1", "", "Proton", "2p", 40., -9999, 5.);
     DSCuts Theta_p2_cuts_2p = DSCuts("Theta_p2", "", "Proton", "2p", 40., -9999, 5.);
-    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15);
+    DSCuts dphi_p1_p2_2p = DSCuts("dPhi_p1_p2", "", "Proton", "2p", 0, -9999, 15.);
 
     DSCuts Theta_pFD_cuts_2p = DSCuts("Theta_p1 leading", "", "Proton", "2p", Theta_p1_cuts_2p.GetMean(), -9999, Theta_p1_cuts_2p.GetUpperCut());
     DSCuts Theta_pCD_cuts_2p = DSCuts("Theta_p2 recoil", "", "Proton", "2p", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
@@ -426,10 +423,13 @@ void EventAnalyser() {
     DSCuts dphi_pFD_pCD_nFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "nFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
     /* Kinematic cuts (based on nucleons efficiency) */
-    DSCuts Theta_pFD_cut_pFDpCD = DSCuts("Theta_pFD cut", "FD", "Proton", "pFDpCD", 0, 10., 32.);
     DSCuts P_pFD_cut_pFDpCD = DSCuts("P_pFD cut", "FD", "Proton", "nFDpCD", 0, 10., 32.);
     DSCuts Theta_nFD_cut = DSCuts("Theta_nFD cut", "FD", "Neutron", "pFDpCD", 0, 10., 32.);
     DSCuts P_nFD_cut = DSCuts("P_nFD cut", "FD", "Neutron", "nFDpCD", 0, 10., 32.);
+
+    /* Nucleon theta cut (1p & 1n, FD) */
+    DSCuts Nucleon_theta_cut = DSCuts("Nucleon theta cut", "FD", "", "", 0, 0, 32.);
+    DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
     //</editor-fold>
 
     //</editor-fold>
@@ -6284,6 +6284,7 @@ void EventAnalyser() {
                 /* Else, load values from fit. */
                 n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
                 TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+                Nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
                 Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());
                 Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());
             }
@@ -6553,6 +6554,7 @@ void EventAnalyser() {
 
                 int particlePDGtmp = mcpbank->getPid();
 
+
                 double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
@@ -6576,6 +6578,13 @@ void EventAnalyser() {
                 bool p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
+
+                bool isFDneutron = ((particlePDGtmp == 2112) && n_inFD);
+                bool isFDproton = ((particlePDGtmp == 2212) && p_inFD);
+                bool AngleCutsPass = ((Particle_TL_Theta >= Nucleon_theta_cut.GetLowerCut()) && (Particle_TL_Theta <= Nucleon_theta_cut.GetUpperCut()));
+                bool MomentumCutsPass = ((Particle_TL_Momentum >= Nucleon_momentum_cut.GetLowerCut()) && (Particle_TL_Momentum <= Nucleon_momentum_cut.GetUpperCut()));
+                bool KinematicalCutsPass = (AngleCutsPass && MomentumCutsPass);
+//                if (!apply_kinematical_cuts || ((isFDneutron || isFDproton) && !KinematicalCutsPass)) { continue; }
 
                 if (particlePDGtmp == 11) {
                     if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
@@ -9959,7 +9968,7 @@ void EventAnalyser() {
             //<editor-fold desc="Applying physical cuts">
             bool within_physical_cuts_pFDpCD;
 
-            bool good_Theta_pFD_pFDpCD = ((Theta_pFD_pFDpCD >= Theta_pFD_cut_pFDpCD.GetLowerCut()) && (Theta_pFD_pFDpCD <= Theta_pFD_cut_pFDpCD.GetUpperCut()));
+            bool good_Theta_pFD_pFDpCD = ((Theta_pFD_pFDpCD >= Nucleon_theta_cut.GetLowerCut()) && (Theta_pFD_pFDpCD <= Nucleon_theta_cut.GetUpperCut()));
             bool good_P_pFD_pFDpCD = ((P_pFD_pFDpCD_3v.Mag() >= P_pFD_cut_pFDpCD.GetLowerCut()) && (P_pFD_pFDpCD_3v.Mag() <= P_pFD_cut_pFDpCD.GetUpperCut()));
 
             within_physical_cuts_pFDpCD = (!apply_kinematical_cuts || (good_Theta_pFD_pFDpCD && good_P_pFD_pFDpCD));
@@ -16111,7 +16120,7 @@ void EventAnalyser() {
     myLogFile << "Nucleon theta cut (1p & 1n, FD)\n";
     myLogFile << "===========================================================================\n\n";
 
-    myLogFile << "Theta_nuc_cut.GetUpperCut() = " << Theta_nuc_cut.GetUpperCut() << "\n\n";
+    myLogFile << "Nucleon_theta_cut.GetUpperCut() = " << Nucleon_theta_cut.GetUpperCut() << "\n\n";
     //</editor-fold>
 
     //<editor-fold desc="Neutron veto cut (1n & nFDpCD, FD)">
