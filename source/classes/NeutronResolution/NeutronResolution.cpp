@@ -30,8 +30,6 @@ NeutronResolution::NeutronResolution(double beamE, const string &SavePath, doubl
                            to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
         string hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                           to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
-//        string hCutName = to_string(SliceNumber) + "_n_res_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
-//                          to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
         hPlot1D hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
                                            hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
@@ -185,6 +183,7 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
+//<editor-fold desc="LogFitDataToFile function">
 void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
     ofstream Neutron_res_fit_param;
@@ -210,3 +209,94 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
 
     system(("cp " + Neutron_res_fit_paramFilePath + " " + plots_path).c_str()); // Copy fitted parameters file to plots folder for easy download from the ifarm
 }
+//</editor-fold>
+
+// ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadFitDataParam function">
+void NeutronResolution::ReadFitDataParam(const char *filename) {
+    ifstream infile;
+    infile.open(filename);
+
+    if (infile.is_open()) {
+        string tp;
+
+        //remove 3 lines of header
+        for (int i = 0; i < 3; i++) { getline(infile, tp); }
+
+        // getline(infile, tp) = read data from file object and put it into string.
+        while (getline(infile, tp)) {
+            stringstream ss(tp);
+            string parameter, parameter2;
+
+            double value;
+
+            //get cut identifier
+            ss >> parameter;
+
+            if (findSubstring(parameter, "Slice_#")) {
+                //get cut values
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string SliceParam;
+                int count = 0; // parameter number
+
+                string CutNameTemp = parameter;
+                int SliceNumberTemp;
+                double SliceLowerBoundaryTemp;
+                double SliceUpperBoundaryTemp;
+                double FitMeanTemp;
+                double FitSigmaTemp;
+
+                while (getline(ss2, SliceParam, ':')) {
+                    if (count == 0) {
+                        SliceNumberTemp = stoi(SliceParam);
+                    } else if (count == 1) {
+                        SliceLowerBoundaryTemp = stod(SliceParam);
+                    } else if (count == 2) {
+                        SliceUpperBoundaryTemp = stod(SliceParam);
+                    } else if (count == 3) {
+                        FitMeanTemp = stod(SliceParam);
+                    } else if (count == 4) {
+                        FitSigmaTemp = stod(SliceParam);
+                    }
+
+                    count++;
+                }
+
+                DSCuts TempCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
+                TempCut.SetSliceUpperb(SliceLowerBoundaryTemp);
+                TempCut.SetSliceLowerb(SliceUpperBoundaryTemp);
+                TempCut.SetSliceNumber(SliceNumberTemp);
+
+                LoadedResolutionSlicesFitVar.push_back(TempCut);
+            }
+        }
+    }
+//    else {
+//        cout << "Parameter file didn't read in " << endl;
+//    }
+}
+//</editor-fold>
+
+// ProtonSmear function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ProtonSmear function">
+double NeutronResolution::ProtonSmear(bool apply_proton_smearing, double Momentum) {
+    if (!apply_proton_smearing) {
+        return Momentum;
+    } else {
+        for (DSCuts LoadedResolutionSlice: LoadedResolutionSlicesFitVar) {
+            TRandom3 *Rand = new TRandom3();
+            double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
+
+            //TODO: check with Adi/Julia if the smearing factor can be negative
+            double SmearingFactor = (Smearing * Smearing);
+
+            if ((LoadedResolutionSlice.GetSliceLowerb() <= Momentum) && (LoadedResolutionSlice.GetSliceUpperb() >= Momentum)) { return SmearingFactor * Momentum; }
+        }
+    }
+
+    return Momentum;
+}
+//</editor-fold>

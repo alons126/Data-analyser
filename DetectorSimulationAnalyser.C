@@ -165,6 +165,7 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_kinematical_cuts = false;
+    bool apply_proton_smearing = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -6135,11 +6136,21 @@ void EventAnalyser() {
     hPlot2D hnonTL_Beta_vs_P_VN_1n = hPlot2D("1n", "", "non-TL #beta vs. P from VN", "non-TL #beta vs. P from VN", "P [GeV/c]", "#beta",
                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "23_nonTL_beta_vs_P_VN_1n", 0, beamE * 1.1, 0, 1.1);
 
+    //<editor-fold desc="Definition of neutron resolution class (1n)">
+    NeutronResolution nResPlots;
 
-    NeutronResolution nResPlots = NeutronResolution(beamE, directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"]);
+    if (!apply_proton_smearing) {
+        nResPlots = NeutronResolution(beamE, directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"]);
+    } else {
+        nResPlots.ReadFitDataParam((CutsDirectory + "/Neutron_res_fit_param_-_C12_simulation_6GeV_T5_first_10.par").c_str());
+    }
+
+//    NeutronResolution nResPlots = NeutronResolution(beamE, directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"]);
 //    NeutronResolution nResPlots = NeutronResolution(SampleName, beamE);
 //    exit(EXIT_FAILURE);
 
+//    nResPlots.ReadFitDataParam((CutsDirectory + "/Neutron_res_fit_param_-_C12_simulation_6GeV_T5_first_10.par").c_str());
+    //</editor-fold>
 
 
 

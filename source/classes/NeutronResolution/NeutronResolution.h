@@ -33,7 +33,6 @@
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
-//#include "../../functions/to_string_with_precision.h"
 
 using namespace std;
 
@@ -42,13 +41,14 @@ private:
     vector<hPlot1D> ResolutionSlices;
     vector<vector<double>> ResolutionSlicesLimits;
     vector<DSCuts> ResolutionSlicesFitVar;
+    vector<DSCuts> LoadedResolutionSlicesFitVar;
     vector<int> FittedSlices;
 
     double hSliceUpperLim = 1.5;
     double hSliceLowerLim = -1.5;
 //    double hSliceUpperLim = 3.;
 //    double hSliceLowerLim = -3.;
-    int hSliceNumOfBin = 65.;
+    int hSliceNumOfBin = 65;
 
     TList *ResSlicePlots = new TList();
     TFolder *FittedNeutronResolutionSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
@@ -56,10 +56,14 @@ private:
     string SlicesSavePath;
     string SlicesSaveNamePrefix;
 
-    double delta;
+    double delta{};
     int NumberOfSlices = 0;
 
 public:
+
+// default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
+
+    NeutronResolution() = default;
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -81,7 +85,14 @@ public:
 
     void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory, const string &Nucleon_Cuts_Status,
                           const string &FD_photons_Status, const string &Efficiency_Status);
-};
 
+// ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadFitDataParam(const char *filename);
+
+// ProtonSmear function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    double ProtonSmear(bool apply_proton_smearing, double Momentum);
+};
 
 #endif //NEUTRONRESOLUTION_H
