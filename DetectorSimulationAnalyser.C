@@ -35,14 +35,12 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TROOT.h>
 */
 
-#include "HipoChain.h"
-#include "clas12reader.h"
-
 #include "settings/codeSetup.h"
 #include "source/classes/clas12ana/clas12ana.h"
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
 #include "source/classes/hPlots/hPlot2D.cpp"
+#include "source/classes/NeutronResolution/NeutronResolution.cpp"
 #include "source/classes/TLCuts/TLCuts.cpp"
 #include "source/functions/AngleCalc/GetBinFromAng.h"
 #include "source/functions/FitFunctions/BetaFit.h"
@@ -63,6 +61,9 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/StackPlot3.h"
 #include "source/functions/StackPlot4.h"
 #include "source/functions/TLKinCutsCheck.h"
+
+#include "HipoChain.h"
+#include "clas12reader.h"
 
 using namespace std;
 using namespace clas12;
@@ -590,30 +591,30 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-//    cout << "\n\n\n\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+//    bool Efficiency_plots = true;
+    bool Efficiency_plots = false;
+    cout << "\n\n\n\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
-    cout << "\n\n\n\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;\n\n\n\n";
+    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
+//    cout << "\n\n\n\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;\n\n\n\n";
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -6135,6 +6136,13 @@ void EventAnalyser() {
                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "23_nonTL_beta_vs_P_VN_1n", 0, beamE * 1.1, 0, 1.1);
 
 
+    NeutronResolution nResPlots = NeutronResolution(beamE, directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"]);
+//    NeutronResolution nResPlots = NeutronResolution(SampleName, beamE);
+//    exit(EXIT_FAILURE);
+
+
+
+
     //<editor-fold desc="original (nFDpCD)">
     hPlot1D hTheta_nFD_TL_nFDpCD = hPlot1D("nFDpCD", "", "TL #theta^{truth}_{nFD} AC", "#theta^{truth}_{nFD} of FD neutron AC", "#theta^{truth}_{nFD} [Deg]",
                                            directories.Resolution_Directory_map["Resolution_nFDpCD_Directory"], "01_Theta_nFD_AC_TL_nFDpCD",
@@ -9088,6 +9096,9 @@ void EventAnalyser() {
 
 
                     hdTheta_n_e_VS_dPhi_n_e_Electrons_AV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);
+
+
+
 
                     //<editor-fold desc="Fill resolution histograms (1n)">
                     bool counted_event = false;
@@ -15623,6 +15634,9 @@ void EventAnalyser() {
         histPlotter2D(c1, hP_nFD_Res_VS_P_nFD_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_P_nFD_nFDpCD_Dir,
                       "05_P_nFD_Res_VS_P_nFD_nFDpCD");
         //</editor-fold>
+
+
+        nResPlots.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
 
     } else {
         cout << "\n\nResolution plots are disabled by user.\n\n";

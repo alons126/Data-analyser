@@ -983,7 +983,7 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["Hit_maps_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                        Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Loaded_ref_hit_maps") + "/";
+                                                                             Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Loaded_ref_hit_maps") + "/";
 
     Eff_and_ACorr_Directory_map["Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
                                                                 + Find(Eff_and_ACorr_Daughter_Folders, "02_1p") + "/";
@@ -1058,6 +1058,8 @@ Directories::Directories(std::string plots_path) {
                                                           Find(Resolution_Daughter_Folders, "03_1n") + "/";
     Resolution_Directory_map["Momentum_resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                                    Find(Resolution_Daughter_Folders, "03_1n/01_Momentum_resolution_plots_1n") + "/";
+    Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+                                                                          Find(Resolution_Daughter_Folders, "03_1n/02_Neutron_resolution_plots_1n") + "/";
 
     Resolution_Directory_map["Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                           Find(Resolution_Daughter_Folders, "04_2p") + "/";

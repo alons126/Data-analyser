@@ -481,6 +481,7 @@ private:
 
                                                        "03_1n",
                                                        "03_1n/01_Momentum_resolution_plots_1n",
+                                                       "03_1n/02_Neutron_resolution_plots_1n",
 
                                                        "04_2p",
                                                        "04_2p/01_Momentum_resolution_plots_2p",
