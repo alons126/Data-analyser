@@ -19,7 +19,7 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "../source/functions/findSubstring.h"
+#include "../../source/functions/findSubstring.h"
 
 using namespace std;
 
@@ -135,6 +135,7 @@ void PlotsEff2x3Nucleon(string SampleName) {
     CanvasEff2x3Nucleon->Divide(3, 2);
 
     TH1D *RecPlot_mom_1p = (TH1D *) f->Get("Proton momentum APID (1p, FD)");
+
     RecPlot_mom_1p->SetLineColor(kBlue);
     RecPlot_mom_1p->SetStats(1);
     RecPlot_mom_1p->Sumw2();

@@ -62,6 +62,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include "source/functions/NeutronECAL_Cut_Veto.h"
 #include "source/functions/StackPlot3.h"
 #include "source/functions/StackPlot4.h"
+#include "source/functions/TLKinCutsCheck.h"
 
 using namespace std;
 using namespace clas12;
@@ -73,7 +74,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.0";
+    string AnalyserVersion = "Version 1.1";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code settings                                                                               //
@@ -174,26 +175,24 @@ void EventAnalyser() {
 
     if (custom_cuts_naming) {
         if (apply_nucleon_cuts) {
-//            Nucleon_Cuts_Status = "NPwC_";
             Nucleon_Cuts_Status = "wNC_";
-//            Nucleon_Cuts_Status = "wBC_";
         } else {
-//            Nucleon_Cuts_Status = "NPwoC_";
             Nucleon_Cuts_Status = "noNC_";
-//            Nucleon_Cuts_Status = "noBC_";
         }
 
         if (!apply_nucleon_cuts) {
             if (Enable_FD_photons) {
                 FD_photons_Status = "wFDph";
             } else {
-                FD_photons_Status = "noFDph";
+                FD_photons_Status = "";
+//                FD_photons_Status = "noFDph";
             }
         } else {
             if (Enable_FD_photons) {
                 FD_photons_Status = "wFDph_";
             } else {
-                FD_photons_Status = "noFDph_";
+                FD_photons_Status = "";
+//                FD_photons_Status = "noFDph_";
             }
         }
 
@@ -201,27 +200,23 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
+//                Efficiency_Status = "Eff2_withKinCuts";
+//                Efficiency_Status = "Eff2_noKinCuts";
                 Efficiency_Status = "Eff2";
             } else {
-//                Efficiency_Status = "Eff1_NoMomTh";
                 Efficiency_Status = "Eff1";
-//                Efficiency_Status = "Eff1";
-//                Efficiency_Status = "Eff1_YESav_NOlimless";
-//                Efficiency_Status = "Eff1_YESav_YESlimless";
-//                Efficiency_Status = "Eff1_NOav_YESlimless";
-//                Efficiency_Status = "Eff1_NOav_NOlimless";
             }
         }
 
         if (!apply_cuts) {
-            plots_path = WorkingDirectory + "plots_" + SampleName + "_-00_NO_CUTS";
+            plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-00_NO_CUTS.txt";
         } else {
             if (!apply_chi2_cuts_1e_cut) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
+                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-                plots_path = WorkingDirectory + "plots_" + SampleName + "_-03_ALL_CUTS_" + Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status;
+                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_ALL_CUTS_" + Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status;
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + Nucleon_Cuts_Status + FD_photons_Status
                                            + Efficiency_Status + ".txt";
             }
@@ -414,12 +409,7 @@ void EventAnalyser() {
     DSCuts Theta_p2_cuts_nFDpCD = DSCuts("Theta_p2", "", "Proton", "nFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_nFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "nFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
-    /* Kinematic cuts (based on nucleons efficiency) */
-    DSCuts P_pFD_cut_pFDpCD = DSCuts("P_pFD cut", "FD", "Proton", "nFDpCD", 0, 10., 32.);
-    DSCuts Theta_nFD_cut = DSCuts("Theta_nFD cut", "FD", "Neutron", "pFDpCD", 0, 10., 32.);
-    DSCuts P_nFD_cut = DSCuts("P_nFD cut", "FD", "Neutron", "nFDpCD", 0, 10., 32.);
-
-    /* Nucleon theta cut (1p & 1n, FD) */
+    /* Rec. kinematic cuts (based on nucleons efficiency) */
     DSCuts FD_nucleon_theta_cut = DSCuts("FD Nucleon theta cut", "FD", "", "", 0, 0, 32.);
     DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
     DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., n_mom_th.GetUpperCut());
@@ -477,7 +467,6 @@ void EventAnalyser() {
 //
     bool Momentum_plots = true;
 //
-
 
     /* Beta plots */
 //    bool W_plots = true;
@@ -603,28 +592,28 @@ void EventAnalyser() {
     /* Efficiency plots */
     bool Efficiency_plots = true;
 //    bool Efficiency_plots = false;
-    cout << "\n\n\n\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+//    cout << "\n\n\n\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
-    bool Resolution_plots = true;
-//    bool Resolution_plots = false;
-//    cout << "\n\n\n\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;\n\n\n\n";
+//    bool Resolution_plots = true;
+    bool Resolution_plots = false;
+    cout << "\n\n\n\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;\n\n\n\n";
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -6524,6 +6513,8 @@ void EventAnalyser() {
 
 //  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
 
+        //TODO: confirm that the TL kin cuts are working!
+
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
@@ -6549,13 +6540,10 @@ void EventAnalyser() {
 
                 int particlePDGtmp = mcpbank->getPid();
 
-
                 double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
-                int BinX = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                int BinY = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
                 int BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
                 int BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
                 int BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
@@ -6563,7 +6551,6 @@ void EventAnalyser() {
                 int BinX_n = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
                 int BinY_n = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
-                bool inSomeSector = (Neutron_hit_map->GetBinContent(BinX, BinY) != 0);
                 bool e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
                 bool p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
                 bool n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
@@ -6574,12 +6561,14 @@ void EventAnalyser() {
                 bool n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
-                bool isFDneutron = ((particlePDGtmp == 2112) && n_inFD);
-                bool isFDproton = ((particlePDGtmp == 2212) && p_inFD);
-                bool AngleCutsPass = ((Particle_TL_Theta >= FD_nucleon_theta_cut.GetLowerCut()) && (Particle_TL_Theta <= FD_nucleon_theta_cut.GetUpperCut()));
-                bool MomentumCutsPass = ((Particle_TL_Momentum >= Nucleon_momentum_cut.GetLowerCut()) && (Particle_TL_Momentum <= Nucleon_momentum_cut.GetUpperCut()));
-                bool KinematicalCutsPass = (AngleCutsPass && MomentumCutsPass);
-//                if (!apply_kinematical_cuts || ((isFDneutron || isFDproton) && !KinematicalCutsPass)) { continue; }
+                bool Pass_FD_nucleon_theta_cuts = ((Particle_TL_Theta >= FD_nucleon_theta_cut.GetLowerCut()) &&
+                                                   (Particle_TL_Theta <= FD_nucleon_theta_cut.GetUpperCut()));
+                bool Pass_FD_nucleon_momentum_cuts = ((Particle_TL_Momentum >= FD_nucleon_momentum_cut.GetLowerCut()) &&
+                                                      (Particle_TL_Momentum <= FD_nucleon_momentum_cut.GetUpperCut()));
+//                bool Pass_FD_nucleon_theta_cuts = (!apply_kinematical_cuts || ((Particle_TL_Theta >= FD_nucleon_theta_cut.GetLowerCut()) &&
+//                                                                               (Particle_TL_Theta <= FD_nucleon_theta_cut.GetUpperCut())));
+//                bool Pass_FD_nucleon_momentum_cuts = (!apply_kinematical_cuts || ((Particle_TL_Momentum >= FD_nucleon_momentum_cut.GetLowerCut()) &&
+//                                                                                  (Particle_TL_Momentum <= FD_nucleon_momentum_cut.GetUpperCut())));
 
                 if (particlePDGtmp == 11) {
                     if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
@@ -6600,7 +6589,9 @@ void EventAnalyser() {
                     TL_Neutrons_ind.push_back(i);
 
                     if (n_inFD) {
-//                    if (inFD) {
+//                        if (apply_kinematical_cuts && !(Pass_FD_nucleon_theta_cuts && Pass_FD_nucleon_momentum_cuts)) { continue; }
+//                        if (apply_kinematical_cuts && !(Pass_FD_nucleon_theta_cuts || Pass_FD_nucleon_momentum_cuts)) { continue; }
+
                         if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
                             (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { TL_NeutronsFD_mom_ind.push_back(i); }
 
@@ -6613,7 +6604,9 @@ void EventAnalyser() {
                     TL_Protons_ind.push_back(i);
 
                     if (p_inFD) {
-//                    if (inFD) {
+//                        if (apply_kinematical_cuts && !(Pass_FD_nucleon_theta_cuts && Pass_FD_nucleon_momentum_cuts)) { continue; }
+//                        if (apply_kinematical_cuts && !(Pass_FD_nucleon_theta_cuts || Pass_FD_nucleon_momentum_cuts)) { continue; }
+
                         if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) &&
                             (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) { TL_ProtonsFD_mom_ind.push_back(i); }
 
@@ -6665,28 +6658,35 @@ void EventAnalyser() {
             //</editor-fold>
 
             /* Setting up basic TL event selection */
-            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                  // No id. cPions above momentum threshold
-            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                  // No other part. above momentum threshold
-            bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                               // No id. pi0 in the FD above momentum threshold
-            bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                       // No id. photons in the FD above momentum threshold
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 &&
-                                              TL_ElectronFD_mom_ind.size() == 1);                                   // One id. electron above momentum threshold
+            bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
+            bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
+            bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
+            bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
             /* Setting up 1p TL event selection */
-            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1));
+            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) &&
+                                    (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1));
 
             /* Setting up 1n TL event selection */
-            bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
+            bool one_FDNeutron_1n = ((TL_NeutronsFD_mom_ind.size() == 1) &&
+                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
             bool no_protons_1n = (TL_Protons_mom_ind.size() == 0);
 
             /* Setting up pFDpCD TL event selection */
 //            bool two_protons_pFDpCD = (TL_Protons_mom_ind.size() == 2);
-            bool one_FDproton_pFDpCD = (TL_ProtonsFD_mom_ind.size() == 1);
+            bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) &&
+                                        (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDproton_pFDpCD = (TL_ProtonsFD_mom_ind.size() == 1);
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
 
             /* Setting up nFDpCD TL event selection */
-            bool one_FDNeutron_nFDpCD = (TL_NeutronsFD_mom_ind.size() == 1);
+            bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_mom_ind.size() == 1) &&
+                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+//            bool one_FDNeutron_nFDpCD = (TL_NeutronsFD_mom_ind.size() == 1);
             bool one_proton_nFDpCD = (TL_Protons_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
@@ -6703,20 +6703,6 @@ void EventAnalyser() {
 
             // nFDpCD = One id. FD neutron & one id. CD proton:
             TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
-/*
-            // 1p = one id. FD proton:
-            bool TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);
-
-            // 1n = one id. FD neutron & no id. protons:
-            bool TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
-
-            // pFDpCD = One id. FD proton & one id. CD proton:
-            bool TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_FDproton_pFDpCD && one_CDproton_pFDpCD);
-//            bool TL_Event_Selection_pFDpCD = (TL_Basic_ES && two_protons_pFDpCD && one_FDproton_pFDpCD && one_CDproton_pFDpCD);
-
-            // nFDpCD = One id. FD neutron & one id. CD proton:
-            bool TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
-*/
 
             //<editor-fold desc="Fill TL histograms">
             for (Int_t i = 0; i < Ngen; i++) {
@@ -6728,8 +6714,6 @@ void EventAnalyser() {
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
-                int BinX = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                int BinY = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
                 int BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
                 int BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
                 int BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
@@ -6737,7 +6721,6 @@ void EventAnalyser() {
                 int BinX_n = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
                 int BinY_n = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
-                bool inSomeSector = (Neutron_hit_map->GetBinContent(BinX, BinY) != 0);
                 bool e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
                 bool p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
                 bool n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);

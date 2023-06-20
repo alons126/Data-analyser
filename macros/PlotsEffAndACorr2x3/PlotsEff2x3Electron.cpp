@@ -19,7 +19,7 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
-#include "../source/functions/findSubstring.h"
+#include "../../source/functions/findSubstring.h"
 
 using namespace std;
 
