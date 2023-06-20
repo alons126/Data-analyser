@@ -42,9 +42,12 @@ private:
     vector<hPlot1D> ResolutionSlices;
     vector<vector<double>> ResolutionSlicesLimits;
     vector<DSCuts> ResolutionSlicesFitVar;
+    vector<int> FittedSlices;
 
-    double hSliceUpperLim = 3.;
-    double hSliceLowerLim = -3.;
+    double hSliceUpperLim = 1.5;
+    double hSliceLowerLim = -1.5;
+//    double hSliceUpperLim = 3.;
+//    double hSliceLowerLim = -3.;
     int hSliceNumOfBin = 65.;
 
     TList *ResSlicePlots = new TList();
@@ -73,6 +76,11 @@ public:
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
     void DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &CutsDirectory);
+
+// LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory, const string &Nucleon_Cuts_Status,
+                          const string &FD_photons_Status, const string &Efficiency_Status);
 };
 
 

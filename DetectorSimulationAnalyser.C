@@ -15641,6 +15641,7 @@ void EventAnalyser() {
 
 
         nResPlots.SliceFitDrawAndSave(SampleName, beamE);
+        nResPlots.LogFitDataToFile(SampleName, plots_path, CutsDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
         nResPlots.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
 //        nResPlots.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
 //        nResPlots.SliceFitDrawAndSave(SampleName, beamE);

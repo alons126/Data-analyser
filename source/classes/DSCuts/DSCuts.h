@@ -19,7 +19,7 @@ public:
 
     void SetStdFactor(double sf) { FitStdFactor = sf; }
 
-    void SetCutPram(double mean, double lcut, double ucut) { Cuts.at(0) = mean, Cuts.at(1) = lcut, Cuts.at(2) = ucut;  }
+    void SetCutPram(double mean, double lcut, double ucut) { Cuts.at(0) = mean, Cuts.at(1) = lcut, Cuts.at(2) = ucut; }
 
     void SetMean(double mean) { Cuts.at(0) = mean; }
 
@@ -34,6 +34,12 @@ public:
     void SetPart(std::string p) { Particle = p; }
 
     void SetAppliedCuts(std::string ac) { AppliedCuts = ac; }
+
+    void SetSliceNumber(int sNumber) { SliceNumber = sNumber; }
+
+    void SetSliceUpperb(double sUpperb) { SliceUpperb = sUpperb; }
+
+    void SetSliceLowerb(double sLowerb) { SliceLowerb = sLowerb; }
 
     /* Get functions */
     double GetMeanHist() { return MeanFromHistogram; }
@@ -62,12 +68,21 @@ public:
 
     std::string GetAppliedCuts() { return AppliedCuts; }
 
+    int GetSliceNumber() { return SliceNumber; }
+
+    double GetSliceUpperb() { return SliceUpperb; }
+
+    double GetSliceLowerb() { return SliceLowerb; }
+
     double MeanFromHistogram, MeanFromFit, FitStdFactor, FitStd;
     vector<double> Cuts = {0, -9999, 9999}; // {mean, lower cut, upper cut}
 //    vector<double> Cuts = {0, -1, -1}; // {mean, lower cut, upper cut}
 private:
     std::string CutVariable, Region, Particle, AppliedCuts;
-    int particlePDG;
+
+    int particlePDG, SliceNumber;
+
+    double SliceUpperb, SliceLowerb; // To be used in neutron resolution fit only!
 };
 
 DSCuts::DSCuts(std::string cv, std::string r, std::string p, std::string ac, double mean, double llim, double ulim) { // Default constructor
