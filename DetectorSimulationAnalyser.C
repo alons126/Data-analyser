@@ -96,7 +96,7 @@ void EventAnalyser() {
     bool calculate_2p = true;
     bool calculate_pFDpCD = true, calculate_nFDpCD = true;
 
-    bool Rec_wTL_ES = true; // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
 
     bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
 
@@ -164,7 +164,7 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_cuts = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -9161,8 +9161,12 @@ void EventAnalyser() {
                             }
 
                             if ((fabs(dNeutronTheta) < dThetaCut) && (fabs(dNeutronPhi) < dPhiCut)) {
-                                hP_nFD_Res_1n.hFill((TLNeutronP - P_n_1n_3v.Mag()) / TLNeutronP, Weight);
-                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, (TLNeutronP - P_n_1n_3v.Mag()) / TLNeutronP, Weight);
+                                double nResolution = (TLNeutronP - P_n_1n_3v.Mag()) / TLNeutronP;
+
+                                nResPlots.hFillResPlots(TLNeutronP, nResolution, Weight);
+
+                                hP_nFD_Res_1n.hFill(nResolution, Weight);
+                                hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
                                 counted_event = true;
                                 ++Good_TL_Rec_neutrons;
                             }
@@ -15636,7 +15640,10 @@ void EventAnalyser() {
         //</editor-fold>
 
 
+        nResPlots.SliceFitDrawAndSave(SampleName, beamE);
         nResPlots.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
+//        nResPlots.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
+//        nResPlots.SliceFitDrawAndSave(SampleName, beamE);
 
     } else {
         cout << "\n\nResolution plots are disabled by user.\n\n";

@@ -31,33 +31,44 @@
 #include <TROOT.h>
 
 #include "../hPlots/hPlot1D.h"
-#include "../../functions/to_string_with_precision.h"
+#include "../DSCuts/DSCuts.h"
+#include "../../functions/GeneralFunctions.h"
+//#include "../../functions/to_string_with_precision.h"
 
 using namespace std;
 
 class NeutronResolution {
 private:
-//    vector<(TH1D *)> ResolutionSlices;
     vector<hPlot1D> ResolutionSlices;
+    vector<vector<double>> ResolutionSlicesLimits;
+    vector<DSCuts> ResolutionSlicesFitVar;
 
     double hSliceUpperLim = 3.;
     double hSliceLowerLim = -3.;
     int hSliceNumOfBin = 65.;
-//    string RunSampleName;
 
-    TFolder *NeutronResolutionSlices = new TFolder("Neutron resolution slices", "Neutron resolution slices");
+    TList *ResSlicePlots = new TList();
+    TFolder *FittedNeutronResolutionSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
 
     string SlicesSavePath;
     string SlicesSaveNamePrefix;
 
     double delta;
     int NumberOfSlices = 0;
+
 public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     NeutronResolution(double beamE, const string &SavePath = "./", double DeltaSlices = 0.1);
-//    NeutronResolution(const string &SampleName, double beamE, const string &SavePath = "./", double DeltaSlices = 0.1);
+
+// hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void hFillResPlots(double Momentum, double Resolution, double Weight);
+
+// SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
+
+    void SliceFitDrawAndSave(const string &SampleName, double beamE);
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
