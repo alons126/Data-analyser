@@ -90,7 +90,7 @@ void EventAnalyser() {
     //<editor-fold desc="Event selection settings">
     /* Settings to enable/disable specific FS plot calculations (Rec only): */
 
-    bool calculate_truth_level = true;
+    bool calculate_truth_level = false;
 
     bool calculate_1p = true, calculate_1n = true;
     bool calculate_2p = true;

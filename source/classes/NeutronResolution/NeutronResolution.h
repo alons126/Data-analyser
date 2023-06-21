@@ -6,6 +6,7 @@
 #define NEUTRONRESOLUTION_H
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <TF1.h>
 #include <math.h>
@@ -38,10 +39,10 @@ using namespace std;
 
 class NeutronResolution {
 private:
-    vector<hPlot1D> ResolutionSlices;
-    vector<vector<double>> ResolutionSlicesLimits;
-    vector<DSCuts> ResolutionSlicesFitVar;
-    vector<DSCuts> LoadedResolutionSlicesFitVar;
+    vector<hPlot1D> ResSlices;
+    vector<vector<double>> ResSlicesLimits;
+    vector<DSCuts> ResSlicesFitVar;
+    vector<DSCuts> LoadedResSlicesFitVar;
     vector<int> FittedSlices;
 
     double hSliceUpperLim = 1.5;
@@ -51,7 +52,7 @@ private:
     int hSliceNumOfBin = 65;
 
     TList *ResSlicePlots = new TList();
-    TFolder *FittedNeutronResolutionSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
+    TFolder *FittedNeutronResSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
 
     string SlicesSavePath;
     string SlicesSaveNamePrefix;

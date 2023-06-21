@@ -2,9 +2,11 @@
 # CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #
 ######################################################################
 
-# Neutron resolution parameters are for - C12_simulation_6GeV_T5_first_10:	wNC_Eff1
-
-# Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
+# Neutron resolution parameters are for:
+#sample:	C12_simulation_6GeV_T5_first_10
+#run_mode:	wNC_Eff1
+#delta:	0.1
+#Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
 Slice_#5_from_0.40_to_0.50			5:0.4:0.5:0.0461538:0.051298
 Slice_#6_from_0.50_to_0.60			6:0.5:0.6:0.473453:0.25877
