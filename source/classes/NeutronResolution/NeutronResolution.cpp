@@ -156,17 +156,18 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *
 
     for (int i = 0; i < NumberOfSlices; i++) { ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false); }
 
+    /* Save res and fitted res plots to plots directory: */
     TFile *PlotsFolder_fout = new TFile((plots_path + "/Neutron_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
     PlotsFolder_fout->cd();
     ResSlicePlots->Write();
     PlotsFolder_fout->Write();
     PlotsFolder_fout->Close();
 
-    TFile *CutsDirectory_fout = new TFile((CutsDirectory + "Neutron_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
-    CutsDirectory_fout->cd();
-    ResSlicePlots->Write();
-    CutsDirectory_fout->Write();
-    CutsDirectory_fout->Close();
+//    TFile *CutsDirectory_fout = new TFile((CutsDirectory + "Neutron_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
+//    CutsDirectory_fout->cd();
+//    ResSlicePlots->Write();
+//    CutsDirectory_fout->Write();
+//    CutsDirectory_fout->Close();
 }
 //</editor-fold>
 
@@ -249,35 +250,46 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
                 }
 
                 DSCuts TempCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
-                TempCut.SetSliceUpperb(SliceLowerBoundaryTemp);
-                TempCut.SetSliceLowerb(SliceUpperBoundaryTemp);
+                TempCut.SetSliceLowerb(SliceLowerBoundaryTemp);
+                TempCut.SetSliceUpperb(SliceUpperBoundaryTemp);
                 TempCut.SetSliceNumber(SliceNumberTemp);
 
                 LoadedResSlicesFitVar.push_back(TempCut);
             }
         }
+    } else {
+        cout << "\n\nReadFitDataParam: file not found!";
+//        cout << "\n\nReadFitDataParam: file not found! Exiting...\n\n", exit(EXIT_FAILURE);
     }
-//    else {
-//        cout << "Parameter file didn't read in " << endl;
-//    }
+
+    return;
 }
 //</editor-fold>
 
-// ProtonSmear function -------------------------------------------------------------------------------------------------------------------------------------------------
+// PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="ProtonSmear function">
-double NeutronResolution::ProtonSmear(bool apply_proton_smearing, double Momentum) {
+//<editor-fold desc="PSmear function">
+double NeutronResolution::PSmear(bool apply_proton_smearing, double Momentum) {
     if (!apply_proton_smearing) {
         return Momentum;
     } else {
+        TRandom3 *Rand = new TRandom3();
+
         for (DSCuts LoadedResolutionSlice: LoadedResSlicesFitVar) {
-            TRandom3 *Rand = new TRandom3();
-            double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
+            if ((LoadedResolutionSlice.GetSliceLowerb() <= Momentum) && (LoadedResolutionSlice.GetSliceUpperb() >= Momentum)) {
+//                TRandom3 *Rand = new TRandom3();
+                double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
 
-            //TODO: check with Adi/Julia if the smearing factor can be negative
-            double SmearingFactor = (Smearing * Smearing);
+                //TODO: check with Adi/Julia if the smearing factor can be negative
+                double SmearingFactor = abs(Smearing);
+//            double SmearingFactor = (Smearing * Smearing);
 
-            if ((LoadedResolutionSlice.GetSliceLowerb() <= Momentum) && (LoadedResolutionSlice.GetSliceUpperb() >= Momentum)) { return SmearingFactor * Momentum; }
+//            cout << "\n\nSmearingFactor = " << SmearingFactor << "\n";
+//            cout << "Momentum = " << Momentum << "\n";
+//            cout << "SmearingFactor * Momentum = " << SmearingFactor * Momentum << "\n";
+
+                return SmearingFactor * Momentum;
+            }
         }
     }
 

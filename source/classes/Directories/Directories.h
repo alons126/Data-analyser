@@ -473,24 +473,24 @@ private:
     bool create_Resolution_Dir = true;
     std::string Resolution_Parent_Directory = "12_Resolution_plots";
     vector<std::string> Resolution_Daughter_Folders = {"",
-                                                       "01_1e_cut",
-                                                       "01_1e_cut/01_Momentum_resolution_plots_1e_cut",
+//                                                       "01_1e_cut",
+//                                                       "01_1e_cut/01_Momentum_resolution_plots_1e_cut",
 
-                                                       "02_1p",
-                                                       "02_1p/01_Momentum_resolution_plots_1p",
+//                                                       "02_1p",
+//                                                       "02_1p/01_Momentum_resolution_plots_1p",
 
                                                        "03_1n",
                                                        "03_1n/01_Momentum_resolution_plots_1n",
                                                        "03_1n/02_Neutron_resolution_plots_1n",
 
-                                                       "04_2p",
-                                                       "04_2p/01_Momentum_resolution_plots_2p",
+//                                                       "04_2p",
+//                                                       "04_2p/01_Momentum_resolution_plots_2p",
 
-                                                       "05_pFDpCD",
-                                                       "05_pFDpCD/01_Momentum_resolution_plots_pFDpCD",
+//                                                       "05_pFDpCD",
+//                                                       "05_pFDpCD/01_Momentum_resolution_plots_pFDpCD",
 
-                                                       "06_nFDpCD",
-                                                       "06_nFDpCD/01_Momentum_resolution_plots_nFDpCD",
+//                                                       "06_nFDpCD",
+//                                                       "06_nFDpCD/01_Momentum_resolution_plots_nFDpCD",
     };
     //</editor-fold>
 

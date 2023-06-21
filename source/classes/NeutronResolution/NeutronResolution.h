@@ -31,6 +31,8 @@
 #include <TApplication.h>
 #include <TROOT.h>
 
+#include "clas12reader.h"
+
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
@@ -57,7 +59,7 @@ private:
     string SlicesSavePath;
     string SlicesSaveNamePrefix;
 
-    double delta{};
+    double delta;
     int NumberOfSlices = 0;
 
 public:
@@ -68,7 +70,7 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(double beamE, const string &SavePath = "./", double DeltaSlices = 0.1);
+    NeutronResolution(double beamE, const string &SavePath = "./", double DeltaSlices = 0.2);
 
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -91,9 +93,10 @@ public:
 
     void ReadFitDataParam(const char *filename);
 
-// ProtonSmear function --------------------------------------------------------------------------------------------------------------------------------------------
+// PSmear function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    double ProtonSmear(bool apply_proton_smearing, double Momentum);
+    double PSmear(bool apply_proton_smearing, double Momentum);
+
 };
 
 #endif //NEUTRONRESOLUTION_H

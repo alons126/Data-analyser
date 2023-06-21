@@ -1044,15 +1044,15 @@ Directories::Directories(std::string plots_path) {
         MakeDirectory(create_Resolution_Dir, Resolution_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    Resolution_Directory_map["Resolution_1e_cut_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                              Find(Resolution_Daughter_Folders, "01_1e_cut") + "/";
-    Resolution_Directory_map["Momentum_resolution_1e_cut_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                       Find(Resolution_Daughter_Folders, "01_1e_cut/01_Momentum_resolution_plots_1e_cut") + "/";
+//    Resolution_Directory_map["Resolution_1e_cut_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                              Find(Resolution_Daughter_Folders, "01_1e_cut") + "/";
+//    Resolution_Directory_map["Momentum_resolution_1e_cut_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                                       Find(Resolution_Daughter_Folders, "01_1e_cut/01_Momentum_resolution_plots_1e_cut") + "/";
 
-    Resolution_Directory_map["Resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                          Find(Resolution_Daughter_Folders, "02_1p") + "/";
-    Resolution_Directory_map["Momentum_resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                   Find(Resolution_Daughter_Folders, "02_1p/01_Momentum_resolution_plots_1p") + "/";
+//    Resolution_Directory_map["Resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                          Find(Resolution_Daughter_Folders, "02_1p") + "/";
+//    Resolution_Directory_map["Momentum_resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                                   Find(Resolution_Daughter_Folders, "02_1p/01_Momentum_resolution_plots_1p") + "/";
 
     Resolution_Directory_map["Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                           Find(Resolution_Daughter_Folders, "03_1n") + "/";
@@ -1061,56 +1061,20 @@ Directories::Directories(std::string plots_path) {
     Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
                                                                           Find(Resolution_Daughter_Folders, "03_1n/02_Neutron_resolution_plots_1n") + "/";
 
-    Resolution_Directory_map["Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                          Find(Resolution_Daughter_Folders, "04_2p") + "/";
-    Resolution_Directory_map["Momentum_resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                   Find(Resolution_Daughter_Folders, "04_2p/01_Momentum_resolution_plots_2p") + "/";
+//    Resolution_Directory_map["Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                          Find(Resolution_Daughter_Folders, "04_2p") + "/";
+//    Resolution_Directory_map["Momentum_resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                                   Find(Resolution_Daughter_Folders, "04_2p/01_Momentum_resolution_plots_2p") + "/";
 
-    Resolution_Directory_map["Resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                              Find(Resolution_Daughter_Folders, "05_pFDpCD") + "/";
-    Resolution_Directory_map["Momentum_resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                       Find(Resolution_Daughter_Folders, "05_pFDpCD/01_Momentum_resolution_plots_pFDpCD") + "/";
+//    Resolution_Directory_map["Resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                              Find(Resolution_Daughter_Folders, "05_pFDpCD") + "/";
+//    Resolution_Directory_map["Momentum_resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                                       Find(Resolution_Daughter_Folders, "05_pFDpCD/01_Momentum_resolution_plots_pFDpCD") + "/";
 
-    Resolution_Directory_map["Resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                              Find(Resolution_Daughter_Folders, "06_nFDpCD") + "/";
-    Resolution_Directory_map["Momentum_resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                       Find(Resolution_Daughter_Folders, "05_nFDpCD/01_Momentum_resolution_plots_nFDpCD") + "/";
-
-    /*
-    Resolution_Directory_map["Mom_Resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                    Find(Resolution_Daughter_Folders, "02_1p/01_Momentum_resolution_plots_plots_1p") + "/";
-    Resolution_Directory_map["Theta_Resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                      Find(Resolution_Daughter_Folders, "02_1p/02_Theta_Resolution_plots_1p") + "/";
-    Resolution_Directory_map["Phi_Resolution_1p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                    Find(Resolution_Daughter_Folders, "02_1p/03_Phi_Resolution_plots_1p") + "/";
-
-    Resolution_Directory_map["Mom_Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                    Find(Resolution_Daughter_Folders, "03_1n/01_Momentum_resolution_plots_plots_1n") + "/";
-    Resolution_Directory_map["Theta_Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                      Find(Resolution_Daughter_Folders, "03_1n/02_Theta_Resolution_plots_1n") + "/";
-    Resolution_Directory_map["Phi_Resolution_1n_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                    Find(Resolution_Daughter_Folders, "03_1n/03_Phi_Resolution_plots_1n") + "/";
-
-    Resolution_Directory_map["Mom_Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                    Find(Resolution_Daughter_Folders, "04_2p/01_Momentum_resolution_plots_plots_2p") + "/";
-    Resolution_Directory_map["Theta_Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                      Find(Resolution_Daughter_Folders, "04_2p/02_Theta_Resolution_plots_2p") + "/";
-    Resolution_Directory_map["Phi_Resolution_2p_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                    Find(Resolution_Daughter_Folders, "04_2p/03_Phi_Resolution_plots_2p") + "/";
-
-    Resolution_Directory_map["Mom_Resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                        Find(Resolution_Daughter_Folders, "05_pFDpCD/01_Momentum_resolution_plots_plots_pFDpCD") + "/";
-    Resolution_Directory_map["Theta_Resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                          Find(Resolution_Daughter_Folders, "05_pFDpCD/02_Theta_Resolution_plots_pFDpCD") + "/";
-    Resolution_Directory_map["Phi_Resolution_pFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                        Find(Resolution_Daughter_Folders, "05_pFDpCD/03_Phi_Resolution_plots_pFDpCD") + "/";
-
-    Resolution_Directory_map["Mom_Resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                        Find(Resolution_Daughter_Folders, "06_nFDpCD/01_Momentum_resolution_plots_plots_nFDpCD") + "/";
-    Resolution_Directory_map["Theta_Resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                          Find(Resolution_Daughter_Folders, "06_nFDpCD/02_Theta_Resolution_plots_nFDpCD") + "/";
-    Resolution_Directory_map["Phi_Resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
-                                                                        Find(Resolution_Daughter_Folders, "06_nFDpCD/03_Phi_Resolution_plots_nFDpCD") + "/";*/
+//    Resolution_Directory_map["Resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                              Find(Resolution_Daughter_Folders, "06_nFDpCD") + "/";
+//    Resolution_Directory_map["Momentum_resolution_nFDpCD_Directory"] = Plots_Folder + "/" + Resolution_Parent_Directory + "/" +
+//                                                                       Find(Resolution_Daughter_Folders, "05_nFDpCD/01_Momentum_resolution_plots_nFDpCD") + "/";
     //</editor-fold>
 
 }
