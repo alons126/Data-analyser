@@ -9,6 +9,7 @@
 //<editor-fold desc="AMaps constructor">
 AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
     BinSavePath = SavePath;
+
     string BinSavePathTLElectron = SavePath + "01a_Electron_TL_Hit_Maps/";
     system(("mkdir -p " + BinSavePathTLElectron).c_str());
     string BinSavePathRecoElectron = SavePath + "01b_Electron_Reco_Hit_Maps/";
@@ -33,8 +34,9 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
     system(("mkdir -p " + BinSavePathRecoNeutron).c_str());
     string BinSavePathRecoToTLNeutron = SavePath + "03c_Neutron_RecoToTL_Ratio/";
     system(("mkdir -p " + BinSavePathRecoToTLNeutron).c_str());
-    string BinSavePathAMapNeutron = BinSavePath + "03d_Neutron_AMap/";
-    system(("mkdir -p " + BinSavePathAMapNeutron).c_str());
+
+    string BinSavePathAMap = BinSavePath + "04_Finalized_AMaps/";
+    system(("mkdir -p " + BinSavePathAMap).c_str());
 
     SetBins(beamE, NumberOfBins);
 
@@ -54,7 +56,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                   to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hSaveNameTLElectron = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinTLElectron = hPlot2D("1e cut", "", hStatsTitleTLElectron, hTitleTLElectron, "#theta_{e} [Deg]", "#phi_{e} [Deg]", BinSavePathTLElectron,
+        hPlot2D hPBinTLElectron = hPlot2D("1e cut", "", hStatsTitleTLElectron, hTitleTLElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", BinSavePathTLElectron,
                                           hSaveNameTLElectron,
                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
         ElectronTLBinHitMaps.push_back(hPBinTLElectron);
@@ -67,7 +69,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                     to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hSaveNameRecoElectron = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoElectron = hPlot2D("1e cut", "", hStatsTitleRecoElectron, hTitleRecoElectron, "#theta_{e} [Deg]", "#phi_{e} [Deg]", BinSavePathRecoElectron,
+        hPlot2D hPBinRecoElectron = hPlot2D("1e cut", "", hStatsTitleRecoElectron, hTitleRecoElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", BinSavePathRecoElectron,
                                             hSaveNameRecoElectron,
                                             hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
         ElectronRecoBinHitMaps.push_back(hPBinRecoElectron);
@@ -80,7 +82,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                              to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hSaveNameRecoToTLRatioElectron = to_string(i + 1) + "_Electron_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoToTLRatioElectron = hPlot2D("1e cut", "", hStatsTitleRecoToTLRatioElectron, hTitleRecoToTLRatioElectron, "#theta_{e} [Deg]", "#phi_{e} [Deg]",
+        hPlot2D hPBinRecoToTLRatioElectron = hPlot2D("1e cut", "", hStatsTitleRecoToTLRatioElectron, hTitleRecoToTLRatioElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
                                                      BinSavePathRecoToTLElectron,
                                                      hSaveNameRecoToTLRatioElectron,
                                                      hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
@@ -96,7 +98,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                         to_string_with_precision(Charged_particle_min_Ration, 2);
         string hSaveNameSepAMapsElectron = to_string(i + 1) + "_Electron_AMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinSepAMapsElectron = hPlot2D("1e cut", "", hStatsTitleSepAMapsElectron, hTitleSepAMapsElectron, "#theta_{e} [Deg]", "#phi_{e} [Deg]",
+        hPlot2D hPBinSepAMapsElectron = hPlot2D("1e cut", "", hStatsTitleSepAMapsElectron, hTitleSepAMapsElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
                                                 BinSavePathSepAMapsElectron,
                                                 hSaveNameSepAMapsElectron,
                                                 hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
@@ -114,7 +116,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hSaveNameTLProton = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinTLProton = hPlot2D("1e cut", "", hStatsTitleTLProton, hTitleTLProton, "#theta_{p} [Deg]", "#phi_{p} [Deg]", BinSavePathTLProton, hSaveNameTLProton,
+        hPlot2D hPBinTLProton = hPlot2D("1e cut", "", hStatsTitleTLProton, hTitleTLProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", BinSavePathTLProton, hSaveNameTLProton,
                                         hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
         ProtonTLBinHitMaps.push_back(hPBinTLProton);
         //</editor-fold>
@@ -126,7 +128,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                   to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hSaveNameRecoProton = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoProton = hPlot2D("1e cut", "", hStatsTitleRecoProton, hTitleRecoProton, "#theta_{p} [Deg]", "#phi_{p} [Deg]", BinSavePathRecoProton,
+        hPlot2D hPBinRecoProton = hPlot2D("1e cut", "", hStatsTitleRecoProton, hTitleRecoProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", BinSavePathRecoProton,
                                           hSaveNameRecoProton,
                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
         ProtonRecoBinHitMaps.push_back(hPBinRecoProton);
@@ -139,7 +141,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hSaveNameRecoToTLRatioProton = to_string(i + 1) + "_Proton_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                               to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinRecoToTLRatioProton = hPlot2D("1e cut", "", hStatsTitleRecoToTLRatioProton, hTitleRecoToTLRatioProton, "#theta_{p} [Deg]", "#phi_{p} [Deg]",
+        hPlot2D hPBinRecoToTLRatioProton = hPlot2D("1e cut", "", hStatsTitleRecoToTLRatioProton, hTitleRecoToTLRatioProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]",
                                                    BinSavePathRecoToTLProton,
                                                    hSaveNameRecoToTLRatioProton,
                                                    hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
@@ -155,7 +157,7 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
                                       to_string_with_precision(Charged_particle_min_Ration, 2);
         string hSaveNameSepAMapsProton = to_string(i + 1) + "_Proton_AMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                          to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
-        hPlot2D hPBinSepAMapsProton = hPlot2D("1e cut", "", hStatsTitleSepAMapsProton, hTitleSepAMapsProton, "#theta_{p} [Deg]", "#phi_{p} [Deg]",
+        hPlot2D hPBinSepAMapsProton = hPlot2D("1e cut", "", hStatsTitleSepAMapsProton, hTitleSepAMapsProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]",
                                               BinSavePathSepAMapsProton,
                                               hSaveNameSepAMapsProton,
                                               hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
@@ -187,15 +189,33 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins) {
 
     //</editor-fold>
 
-    //<editor-fold desc="Neutron AMap">
-    string hStatsTitleAMapNeutron = "Neutron AMap for (Reco./TL)#geq" + to_string_with_precision(Neutral_particle_min_Ration, 2);
-    string hTitleAMapNeutron = "Neutron AMap for (Reco./TL)#geq" + to_string_with_precision(Neutral_particle_min_Ration, 2);
-    string hSaveNameAMapNeutron = "Neutron_AMap";
-    NeutronAMap = hPlot2D("1e cut", "", hStatsTitleAMapNeutron, hTitleAMapNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", BinSavePathAMapNeutron,
-                          hSaveNameAMapNeutron, hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-    NeutronAMap.ApplyZMinLim(Neutral_particle_min_Ration);
     //</editor-fold>
 
+    //<editor-fold desc="Finalized acceptance maps">
+    string hStatsTitleAMapElectron = "Electron_AMap";
+    string hTitleAMapElectron = "Electron AMap for (Reco./TL)#geq" + to_string_with_precision(Charged_particle_min_Ration, 2);
+    string hSaveNameAMapElectron = "01_Electron_AMap";
+    ElectronAMap = hPlot2D("", "", hStatsTitleAMapElectron, hTitleAMapElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", BinSavePathAMap, hSaveNameAMapElectron,
+                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+
+    string hStatsTitleAMapProton = "Proton_AMap";
+    string hTitleAMapProton = "Proton AMap for (Reco./TL)#geq" + to_string_with_precision(Charged_particle_min_Ration, 2);
+    string hSaveNameAMapProton = "02_Proton_AMap";
+    ProtonAMap = hPlot2D("", "", hStatsTitleAMapProton, hTitleAMapProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", BinSavePathAMap, hSaveNameAMapProton, hBinLowerXLim,
+                         hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+
+    string hStatsTitleAMapNeutron = "Neutron AMap for (Reco./TL)#geq" + to_string_with_precision(Neutral_particle_min_Ration, 2);
+    string hTitleAMapNeutron = "Neutron AMap for (Reco./TL)#geq" + to_string_with_precision(Neutral_particle_min_Ration, 2);
+    string hSaveNameAMapNeutron = "03_Neutron_AMap";
+    NeutronAMap = hPlot2D("", "", hStatsTitleAMapNeutron, hTitleAMapNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", BinSavePathAMap, hSaveNameAMapNeutron, hBinLowerXLim,
+                          hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+
+    string hStatsTitleAMapNucleon = "Nucleon_AMap";
+    string hTitleAMapNucleon = "Nucleon AMap for (Reco./TL)_{n}#geq" + to_string_with_precision(Neutral_particle_min_Ration, 2) + " and (Reco./TL)_{c}#geq" +
+                               to_string_with_precision(Charged_particle_min_Ration, 2);
+    string hSaveNameAMapNucleon = "04_Nucleon_AMap";
+    NucleonAMap = hPlot2D("", "", hStatsTitleAMapNucleon, hTitleAMapNucleon, "#phi_{nuc} [Deg]", "#theta_{nuc} [Deg]", BinSavePathAMap, hSaveNameAMapNucleon,
+                          hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
     //</editor-fold>
 
 }
@@ -357,7 +377,7 @@ void AMaps::CalcHitMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, b
 }
 //</editor-fold>
 
-// GenerateSeparateCPartAMaps function ---------------------------------------------------------------------------------------------------------------------------------------
+// GenerateSeparateCPartAMaps function ----------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GenerateSeparateCPartAMaps function">
 void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
@@ -378,52 +398,56 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
         ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
     }
 }
-/*
-void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
-    ElectronSepAMaps = ElectronRecoToTLRatio;
-    string ElectronSaveDir = BinSavePath + "01d_Electron_Separate_AMaps/";
-    system(("mkdir -p " + ElectronSaveDir).c_str());
-
-    ProtonSepAMaps = ProtonRecoToTLRatio;
-    string ProtonSaveDir = BinSavePath + "02d_Proton_Separate_AMaps/";
-    system(("mkdir -p " + ProtonSaveDir).c_str());
-
-    for (int i = 0; i < PBinsLimits.size(); i++) {
-        ElectronSepAMaps.at(i).SetHistogram2DSaveNamePath(ElectronSaveDir);
-        ElectronSepAMaps.at(i).ApplyZMinLim(cP_minR);
-
-        ProtonSepAMaps.at(i).SetHistogram2DSaveNamePath(ProtonSaveDir);
-        ProtonSepAMaps.at(i).ApplyZMinLim(cP_minR);
-    }
-}
-*/
 //</editor-fold>
 
-// GenerateNeutronAMaps -------------------------------------------------------------------------------------------------------------------------------------------------
+// GenerateCPartAMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="GenerateNeutronAMaps function">
-void AMaps::GenerateNeutronAMaps(double nP_minR) {
-    for (int i = 0; i < hBinNumOfXBins; i++) {
-        for (int j = 0; j < hBinNumOfYBins; j++) {
-            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) >= nP_minR) {
-                NeutronAMap.hFillByBin(i, j, NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j));
+//<editor-fold desc="GenerateCPartAMaps function">
+void AMaps::GenerateCPartAMaps(double cP_minR) {
+    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+        for (int i = 0; i < hBinNumOfXBins; i++) {
+            for (int j = 0; j < hBinNumOfYBins; j++) {
+                if (ElectronSepAMaps.at(bin).GetHistogram2D()->GetBinContent(i, j) >= cP_minR) {
+                    ElectronAMap.hFillByBin(i, j, ElectronRecoBinHitMaps.at(bin).GetHistogram2D()->GetBinContent(i, j));
+                }
+
+                if (ProtonSepAMaps.at(bin).GetHistogram2D()->GetBinContent(i, j) >= cP_minR) {
+                    ProtonAMap.hFillByBin(i, j, ProtonRecoBinHitMaps.at(bin).GetHistogram2D()->GetBinContent(i, j));
+                }
             }
         }
     }
 }
 //</editor-fold>
 
-//// CalcAMaps function ---------------------------------------------------------------------------------------------------------------------------------------------------
-//
-////<editor-fold desc="CalcAMaps function">
-//void AMaps::CalcAMaps(const hPlot2D& Histogram2D, double cP_minR, double nP_minR) {
-//    TH2D *TempHist = Histogram2D.GetHistogram2DConst();
-//
-//    for (int i = 0; i < PBinsLimits.size(); h++) {
-//
-//    }
-//}
-////</editor-fold>
+// GenerateNPartAMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GenerateNPartAMaps function">
+void AMaps::GenerateNPartAMaps(double nP_minR) {
+    for (int i = 0; i < hBinNumOfXBins; i++) {
+        for (int j = 0; j < hBinNumOfYBins; j++) {
+            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) >= nP_minR) {
+                NeutronAMap.hFillByBin(i, j, NeutronRecoHitMap.GetHistogram2D()->GetBinContent(i, j));
+//                NeutronAMap.hFillByBin(i, j, NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j));
+            }
+        }
+    }
+}
+//</editor-fold>
+
+// GenerateNucleonAMap function ----------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GenerateNucleonAMap function">
+void AMaps::GenerateNucleonAMap() {
+    for (int i = 0; i < hBinNumOfXBins; i++) {
+        for (int j = 0; j < hBinNumOfYBins; j++) {
+            if ((NeutronAMap.GetHistogram2D()->GetBinContent(i, j) != 0) && (ProtonAMap.GetHistogram2D()->GetBinContent(i, j) != 0)) {
+                NucleonAMap.hFillByBin(i, j, NeutronRecoHitMap.GetHistogram2D()->GetBinContent(i, j));
+            }
+        }
+    }
+}
+//</editor-fold>
 
 // DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -434,25 +458,36 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     system(("mkdir -p " + RefrenceHitMapsDirectory + SampleName).c_str());
 
     CalcHitMapsRatio(calc_Electron_RecoToTL_Ratio, calc_Proton_RecoToTL_Ratio, calc_Neutron_RecoToTL_Ratio);
+
     GenerateSeparateCPartAMaps(Charged_particle_min_Ration);
-    GenerateNeutronAMaps(Neutral_particle_min_Ration);
+    GenerateCPartAMaps(Charged_particle_min_Ration);
+    GenerateNPartAMaps(Neutral_particle_min_Ration);
+    GenerateNucleonAMap();
 
     for (int i = 0; i < PBinsLimits.size(); i++) {
+        /* Electron maps */
         ElectronTLBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
         ElectronRecoBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
         ElectronRecoToTLRatio.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
         ElectronSepAMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
 
+        /* Proton maps */
         ProtonTLBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
         ProtonRecoBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
         ProtonRecoToTLRatio.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
         ProtonSepAMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
     }
 
+    /* Neutron maps */
     NeutronTLHitMap.hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
     NeutronRecoHitMap.hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
     NeutronRecoToTLRatio.hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
+
+    /* Finalized acceptance maps */
+    ElectronAMap.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMaps, true);
+    ProtonAMap.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMaps, true);
     NeutronAMap.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMaps, true);
+    NucleonAMap.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMaps, true);
 
     //<editor-fold desc="Save TL hit maps to plots directory">
     /* TL hit maps */

@@ -118,14 +118,15 @@ void EventAnalyser() {
 
     /* Truth level calculation settings */
     bool calculate_truth_level = true; // TL master ON/OFF switch
-    bool plot_incusive_hit_maps = false;
-    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
+    bool generate_AMaps = true;        // Generate acceptance maps
+    bool Rec_wTL_ES = false;           // Enforce TL event selection on Rec. plots
+
     bool Enable_FD_photons = false;
     bool limless_mom_eff_plots = false;
 
     if (!calculate_2p) { calculate_pFDpCD = false; }
     if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
-    if (!calculate_truth_level) { plot_incusive_hit_maps = Rec_wTL_ES = false; }
+    if (!calculate_truth_level) { generate_AMaps = Rec_wTL_ES = false; }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -479,146 +480,146 @@ void EventAnalyser() {
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 //
-    bool Momentum_plots = false;
-//    bool Momentum_plots = true;
+//    bool Momentum_plots = false;
+    bool Momentum_plots = true;
 //
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
-    cout << "\n\n\n\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;";
-    cout << "\nbool W_plots = false;\n\n\n\n";
+    bool W_plots = true;
+//    bool W_plots = false;
+//    cout << "\n\n\n\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;";
+//    cout << "\nbool W_plots = false;\n\n\n\n";
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-    cout << "\n\n\n\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;";
-    cout << "\nbool Beta_plots = false;\n\n\n\n";
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
-    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;";
-    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
+    bool Beta_plots = true;
+//    bool Beta_plots = false;
+//    cout << "\n\n\n\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;";
+//    cout << "\nbool Beta_plots = false;\n\n\n\n";
+    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;";
+//    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-    bool Angle_plots_master = false; // Master angle plots selector
-    bool Theta_e_plots = false, Phi_e_plots = false;
-    cout << "\n\n\n\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;";
-    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
+//    cout << "\n\n\n\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;";
+//    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
-    cout << "\n\n\n\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;";
-    cout << "\nbool Q2_plots = false;\n\n\n\n";
+    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//    cout << "\n\n\n\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;";
+//    cout << "\nbool Q2_plots = false;\n\n\n\n";
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
-    cout << "\n\n\n\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;";
-    cout << "\nbool E_e_plots = false;\n\n\n\n";
+    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//    cout << "\n\n\n\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;";
+//    cout << "\nbool E_e_plots = false;\n\n\n\n";
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
-    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;";
-    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
+    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;";
+//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
-    cout << "\n\n\n\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;";
-    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//    cout << "\n\n\n\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;";
+//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
-    cout << "\n\n\n\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;";
-    cout << "\nbool TKI_plots = false;\n\n\n\n";
+    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//    cout << "\n\n\n\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;";
+//    cout << "\nbool TKI_plots = false;\n\n\n\n";
 
     /* ToF plots */
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
-    cout << "\n\n\n\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+//    cout << "\n\n\n\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
@@ -634,17 +635,17 @@ void EventAnalyser() {
 //    cout << "\nbool Hit_maps_plots = false;\n\n\n\n";
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
-    cout << "\n\n\n\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;";
-    cout << "\nbool Resolution_plots = false;\n\n\n\n";
+    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
+//    cout << "\n\n\n\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;";
+//    cout << "\nbool Resolution_plots = false;\n\n\n\n";
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -6017,8 +6018,10 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Hit maps histograms">
-    /* Hit maps are handeled only by the AMaps class */
-    AMaps aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], 1.1);
+    /* Hit maps are handled completely by the AMaps class */
+    AMaps aMaps;
+
+    if (generate_AMaps) { aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], 1.1); }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -6802,7 +6805,7 @@ void EventAnalyser() {
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (particlePDGtmp == 11) {
-                    if (TL_1e_cut) {
+                    if (TL_1e_cut && generate_AMaps) {
                         aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
                     }
 
@@ -6870,7 +6873,7 @@ void EventAnalyser() {
                         hPhi_e_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                     }
                 } else if (particlePDGtmp == 2112) {
-                    if (TL_1e_cut) {
+                    if (TL_1e_cut && generate_AMaps) {
                         aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
                     }
 
@@ -6964,7 +6967,7 @@ void EventAnalyser() {
                         }
                     }
                 } else if (particlePDGtmp == 2212) {
-                    if (TL_1e_cut) {
+                    if (TL_1e_cut && generate_AMaps) {
                         aMaps.hFillHitMaps("TL", "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
                     }
 
@@ -8126,35 +8129,37 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="Filling reco. hit maps">
-        aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
+        if (generate_AMaps) {
+            aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
 
-        for (int i = 0; i < protons.size(); i++) {
-            if (protons[i]->getRegion() == FD) {
-                aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+            for (int i = 0; i < protons.size(); i++) {
+                if (protons[i]->getRegion() == FD) {
+                    aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+                }
             }
-        }
-        /*
-        for (int &i: Protons_ind) {
-            if (protons[i]->getRegion() == FD) {
-                aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+            /*
+            for (int &i: Protons_ind) {
+                if (protons[i]->getRegion() == FD) {
+                    aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+                }
             }
-        }
-*/
+    */
 
-        //TODO: confirm with adi if I should fill these with of without ECAL veto.
-        for (int &i: FD_Neutrons) {
+            //TODO: confirm with adi if I should fill these with of without ECAL veto.
+            for (int &i: FD_Neutrons) {
 //        for (int &i: NeutronsFD_ind) {
-            if (allParticles[i]->getRegion() == FD) {
+                if (allParticles[i]->getRegion() == FD) {
 
 //                bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
-                bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
-                bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-                auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+                    bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                    bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
-                if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
-                    allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
-                    aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, allParticles[i]->getPhi() * 180.0 / pi,
-                                       Weight);
+                    if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
+                        allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
+                        aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, allParticles[i]->getPhi() * 180.0 / pi,
+                                           Weight);
+                    }
                 }
             }
         }
@@ -15650,7 +15655,7 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Hit maps histograms">
-    if (Hit_maps_plots) {
+    if (Hit_maps_plots && generate_AMaps) {
         cout << "\n\nPlotting Hit maps histograms...\n\n";
 
 //  Hit maps plots -----------------------------------------------------------------------------------------------------------------------------------------------------

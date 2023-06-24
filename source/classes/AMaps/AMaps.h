@@ -73,19 +73,20 @@ private:
     vector<hPlot2D> ProtonRecoToTLRatio;
     hPlot2D NeutronRecoToTLRatio;
 
-    vector<hPlot2D> ElectronSepAMaps;
-    vector<hPlot2D> ProtonSepAMaps;
+    vector<hPlot2D> ElectronSepAMaps; // separated electron AMaps for each bin
+    vector<hPlot2D> ProtonSepAMaps;   // separated electron AMaps for each bin
 
-    hPlot2D ElectronCombAMaps;
-    hPlot2D ProtonCombAMaps;
+    hPlot2D ElectronAMap; // combined electron AMap
+    hPlot2D ProtonAMap;   // combined proton AMap
     hPlot2D NeutronAMap;
+    hPlot2D NucleonAMap;
 
     bool calc_Electron_RecoToTL_Ratio = true;
     bool calc_Proton_RecoToTL_Ratio = true;
     bool calc_Neutron_RecoToTL_Ratio = true;
 
     double Charged_particle_min_Ration = 0.7;
-    double Neutral_particle_min_Ration = 0.5;
+    double Neutral_particle_min_Ration = 0.3;
 
     TList *TLHitMaps = new TList();
     TList *RecoHitMaps = new TList();
@@ -133,17 +134,21 @@ public:
 
     void CalcHitMapsRatio(bool ElectronRecoToTLDiv = true, bool PotonRecoToTLDiv = true, bool NeutronRecoToTLDiv = true);
 
-// GenerateSeparateCPartAMaps function ---------------------------------------------------------------------------------------------------------------------------------------
+// GenerateSeparateCPartAMaps function ----------------------------------------------------------------------------------------------------------------------------------
 
     void GenerateSeparateCPartAMaps(double cP_minR);
 
-// GenerateSeparateCPartAMaps function ---------------------------------------------------------------------------------------------------------------------------------------
+// GenerateCPartAMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
-    void GenerateNeutronAMaps(double nP_minR);
+    void GenerateCPartAMaps(double cP_minR);
 
-// CalcAMaps function ---------------------------------------------------------------------------------------------------------------------------------------------------
+// GenerateNPartAMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
-//    void CalcAMaps(const hPlot2D &Histogram2D, double cP_minR, double nP_minR);
+    void GenerateNPartAMaps(double nP_minR);
+
+// GenerateNucleonAMap function -----------------------------------------------------------------------------------------------------------------------------------------
+
+    void GenerateNucleonAMap();
 
 // DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
