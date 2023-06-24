@@ -214,6 +214,11 @@ void EventAnalyser() {
 //                Efficiency_Status = "Eff2_noKinCuts";
                 Efficiency_Status = "Eff2";
             } else {
+//                Efficiency_Status = "Eff1_65Bins";
+//                Efficiency_Status = "Eff1_100Bins";
+//                Efficiency_Status = "Eff1_150Bins";
+//                Efficiency_Status = "Eff1_200Bins";
+//                Efficiency_Status = "Eff1_250Bins";
                 Efficiency_Status = "Eff1";
             }
         }
@@ -477,7 +482,8 @@ void EventAnalyser() {
 //    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
     bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 //
-    bool Momentum_plots = true;
+    bool Momentum_plots = false;
+//    bool Momentum_plots = true;
 //
 
     /* Beta plots */
@@ -518,19 +524,19 @@ void EventAnalyser() {
     cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
 
     /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
-    bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
-//    cout << "\n\n\n\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots_master = false; // Master angle plots selector
+    bool Theta_e_plots = false, Phi_e_plots = false;
+    cout << "\n\n\n\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;";
+    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
 
     /* Q2 plots */
 //    bool Q2_plots = true;
@@ -602,17 +608,17 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-//    cout << "\n\n\n\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+//    bool Efficiency_plots = true;
+    bool Efficiency_plots = false;
+    cout << "\n\n\n\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;";
+    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
@@ -628,17 +634,17 @@ void EventAnalyser() {
 //    cout << "\nbool Hit_maps_plots = false;\n\n\n\n";
 
     /* Resolution plots */
-    bool Resolution_plots = true;
-//    bool Resolution_plots = false;
-//    cout << "\n\n\n\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;\n\n\n\n";
+//    bool Resolution_plots = true;
+    bool Resolution_plots = false;
+    cout << "\n\n\n\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;";
+    cout << "\nbool Resolution_plots = false;\n\n\n\n";
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -6479,8 +6485,8 @@ void EventAnalyser() {
 
         //<editor-fold desc="Neutral particles' identification (FD only)">
         /* Get FD neutrons and photons, according to the definitions: */
-        vector<int> FD_Neutrons, FD_Photons;                                                              // FD neutrons and photons to be set by definition
-        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                          // Get FD neutrons and photons, according to the definitions
+        vector<int> FD_Neutrons, FD_Photons;                                                                           // FD neutrons and photons to be set by definition
+        FDNeutralParticle(allParticles, FD_Neutrons, FD_Photons);                                            // Get FD neutrons and photons, according to the definitions
 
         /* Get FD neutrons and photons above momentum threshold: */
         vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                         // FD neutrons and photons by definition - within momentum th.
@@ -8122,19 +8128,33 @@ void EventAnalyser() {
         //<editor-fold desc="Filling reco. hit maps">
         aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
 
+        for (int i = 0; i < protons.size(); i++) {
+            if (protons[i]->getRegion() == FD) {
+                aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+            }
+        }
+        /*
         for (int &i: Protons_ind) {
             if (protons[i]->getRegion() == FD) {
                 aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
             }
         }
+*/
 
         //TODO: confirm with adi if I should fill these with of without ECAL veto.
-        for (int &i: NeutronsFD_ind) {
+        for (int &i: FD_Neutrons) {
+//        for (int &i: NeutronsFD_ind) {
             if (allParticles[i]->getRegion() == FD) {
 
-                if (allParticles[i]->cal(clas12::PCAL)->getLv() > clasAna.getEcalEdgeCuts() &&
-                    allParticles[i]->cal(clas12::PCAL)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
-                    aMaps.hFillHitMaps("Reco", "Neutron", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+//                bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
+                bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
+                bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+                auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+
+                if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
+                    allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
+                    aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, allParticles[i]->getPhi() * 180.0 / pi,
+                                       Weight);
                 }
             }
         }

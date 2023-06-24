@@ -43,15 +43,6 @@ class AMaps {
 private:
     vector<vector<double>> PBinsLimits;
 
-    vector<hPlot2D> ElectronTLBinHitMaps, ProtonTLBinHitMaps;
-    hPlot2D NeutronTLHitMap;
-
-    vector<hPlot2D> ElectronRecoBinHitMaps, ProtonRecoBinHitMaps;
-    hPlot2D NeutronRecoHitMap;
-
-    vector<hPlot2D> ElectronRecoToTLRatio, ProtonRecoToTLRatio;
-    hPlot2D NeutronRecoToTLRatio;
-
     int NumberOfPBins;
 
     double hBinLowerXLim = -180;
@@ -59,23 +50,50 @@ private:
     double hBinLowerYLim = 0;
     double hBinUpperYLim = 50;
 
-    int hBinNumOfXBins = 250;
-    int hBinNumOfYBins = 250;
+//    int hBinNumOfXBins = 65;
+//    int hBinNumOfYBins = 65;
+    int hBinNumOfXBins = 100;
+    int hBinNumOfYBins = 100;
+//    int hBinNumOfXBins = 150;
+//    int hBinNumOfYBins = 150;
+//    int hBinNumOfXBins = 200;
+//    int hBinNumOfYBins = 200;
+//    int hBinNumOfXBins = 250;
+//    int hBinNumOfYBins = 250;
+
+    vector<hPlot2D> ElectronTLBinHitMaps;
+    vector<hPlot2D> ProtonTLBinHitMaps;
+    hPlot2D NeutronTLHitMap;
+
+    vector<hPlot2D> ElectronRecoBinHitMaps;
+    vector<hPlot2D> ProtonRecoBinHitMaps;
+    hPlot2D NeutronRecoHitMap;
+
+    vector<hPlot2D> ElectronRecoToTLRatio;
+    vector<hPlot2D> ProtonRecoToTLRatio;
+    hPlot2D NeutronRecoToTLRatio;
+
+    vector<hPlot2D> ElectronSepAMaps;
+    vector<hPlot2D> ProtonSepAMaps;
+
+    hPlot2D ElectronCombAMaps;
+    hPlot2D ProtonCombAMaps;
+    hPlot2D NeutronAMap;
 
     bool calc_Electron_RecoToTL_Ratio = true;
     bool calc_Proton_RecoToTL_Ratio = true;
     bool calc_Neutron_RecoToTL_Ratio = true;
 
-    TList *RefrenceHitMapsPlots = new TList();
+    double Charged_particle_min_Ration = 0.7;
+    double Neutral_particle_min_Ration = 0.5;
+
     TList *TLHitMaps = new TList();
     TList *RecoHitMaps = new TList();
     TList *HitMapsRatio = new TList();
-//    TFolder *TLHitMaps = new TFolder("TL_hit_maps", "TL_hit_maps");
-//    TFolder *RecoHitMaps = new TFolder("Reco_hit_maps", "Reco_hit_maps");
-//    TFolder *HitMapsRatio = new TFolder("Div_Hit_Maps", "Div_Hit_Maps");
+    TList *Charged_particle_Sep_AMaps = new TList();
+    TList *AcceptanceMaps = new TList();
 
     string BinSavePath;
-    string BinSaveNamePrefix;
 
 public:
 
@@ -91,44 +109,56 @@ public:
 
     void SetBins(double beamE, double NumberOfBins);
 
-// isElectron function -----------------------------------------------------------------------------------------------------------------------------------------------
+// isElectron function --------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool isElectron(const string &SampleType);
 
-// isProton function -----------------------------------------------------------------------------------------------------------------------------------------------
+// isProton function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool isProton(const string &SampleType);
 
-// isNeutron function -----------------------------------------------------------------------------------------------------------------------------------------------
+// isNeutron function ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool isNeutron(const string &SampleType);
 
-// isTL function -----------------------------------------------------------------------------------------------------------------------------------------------
+// isTL function --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool isTL(const string &SampleType);
 
-// hFillHitMaps function -----------------------------------------------------------------------------------------------------------------------------------------------
+// hFillHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------------
 
     void hFillHitMaps(const string &SampleType, const string &particle, double Momentum, double Theta, double Phi, double Weight);
 
-// CalcHitMapsRatio function ----------------------------------------------------------------------------------------------------------------------------------------
+// CalcHitMapsRatio function --------------------------------------------------------------------------------------------------------------------------------------------
 
     void CalcHitMapsRatio(bool ElectronRecoToTLDiv = true, bool PotonRecoToTLDiv = true, bool NeutronRecoToTLDiv = true);
 
-// DrawAndSaveHitMaps function ----------------------------------------------------------------------------------------------------------------------------------------
+// GenerateSeparateCPartAMaps function ---------------------------------------------------------------------------------------------------------------------------------------
+
+    void GenerateSeparateCPartAMaps(double cP_minR);
+
+// GenerateSeparateCPartAMaps function ---------------------------------------------------------------------------------------------------------------------------------------
+
+    void GenerateNeutronAMaps(double nP_minR);
+
+// CalcAMaps function ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+//    void CalcAMaps(const hPlot2D &Histogram2D, double cP_minR, double nP_minR);
+
+// DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
     void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
 
-//// LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
+//// LogFitDataToFile function ------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory, const string &Nucleon_Cuts_Status,
 //                          const string &FD_photons_Status, const string &Efficiency_Status);
 //
-//// ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+//// ReadFitDataParam function ------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    void ReadFitDataParam(const char *filename);
 //
-//// PSmear function --------------------------------------------------------------------------------------------------------------------------------------------
+//// PSmear function ----------------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    double PSmear(bool apply_proton_smearing, double Momentum);
 

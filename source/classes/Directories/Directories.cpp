@@ -1047,7 +1047,9 @@ Directories::Directories(std::string plots_path) {
     }
 
     Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
-                                                          + Find(Hit_Maps_Daughter_Folders, "01_1e_cut/01_Hit_Maps_1e_cut") + "/";
+                                                          + Find(Hit_Maps_Daughter_Folders, "01_Hit_Maps_1e_cut") + "/";
+//    Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
+//                                                          + Find(Hit_Maps_Daughter_Folders, "01_1e_cut/01_Hit_Maps_1e_cut") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Resolution plots directories">

@@ -119,9 +119,15 @@ public:
     void hDivision(TH2D *hDenominator, bool FixZLimits = true, double MaxZLim = 1.25);
 
 // Other histogram methods:
+    void ApplyZMaxLim(double ZMaxLim) { Histogram2D->SetMaximum(ZMaxLim); }
+
+    void ApplyZMinLim(double ZMinLim) { Histogram2D->SetMinimum(ZMinLim); }
+
     void hFill(double Xdata, double Ydata) { Histogram2D->Fill(Xdata, Ydata); }
 
     void hFill(double Xdata, double Ydata, double weight) { Histogram2D->Fill(Xdata, Ydata, weight); }
+
+    void hFillByBin(int BinX, int BinY, double Content) { Histogram2D->SetBinContent(BinX, BinY, Content); }
 
     void SimpleDraw() { Histogram2D->Draw(); }
 

@@ -4,7 +4,7 @@
 
 # Neutron resolution parameters are for:
 #sample:	C12_simulation_6GeV_T5
-#run_mode:	wNC_Eff1
+#run_mode:	wNC_Eff1_250Bins
 #delta:		0.2
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
 
