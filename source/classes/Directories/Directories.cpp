@@ -982,8 +982,10 @@ Directories::Directories(std::string plots_path) {
                                                                           Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut") + "/";
-    Eff_and_ACorr_Directory_map["Hit_maps_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                             Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Loaded_ref_hit_maps") + "/";
+    Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                  Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_TL_hit_maps") + "/";
+    Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
+                                                                               Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/05_Loaded_reco_ref_hit_maps") + "/";
 
     Eff_and_ACorr_Directory_map["Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
                                                                 + Find(Eff_and_ACorr_Daughter_Folders, "02_1p") + "/";

@@ -26,12 +26,7 @@ std::string Ver = "DetSim testings";
 //<editor-fold desc="path definitions">
 /* Histogram plots output directory */
 std::string WorkingDirectory = GetCurrentDirectory() + "/";
-//std::string plots_path = "./plots/"; // old plots dir command
-//std::string plots_path = WorkingDirectory + "plots"; // new plots dir command
-//std::string plots_path = WorkingDirectory + "plots_T5tot_NO_CUTS";
-//std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS_woChi2";
-//std::string plots_path = WorkingDirectory + "plots_T5tot_ALL_CUTS";
-std::string plots_path = WorkingDirectory + "plots";
+std::string plots_path = WorkingDirectory + "00_plots";
 
 /* settings directory and directories */
 std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
@@ -39,6 +34,8 @@ std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
 /* source directory and directories */
 std::string SourcesDirectory = WorkingDirectory + "source" + "/";
 std::string CutsDirectory = SourcesDirectory + "cuts" + "/";
+std::string NeutronResolutionDirectory = CutsDirectory + "NeutronResolution" + "/";
+std::string RefrenceHitMapsDirectory = CutsDirectory + "RefrenceHitMaps" + "/";
 
 std::string plots_file_type = "_plots.root";
 std::string log_file_name = "Run_log.txt";
@@ -54,10 +51,10 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //// Local files:
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 ////std::string AnalyseFileSample = "recon_c12_6gev"; // Justin's ~1M
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250"; // my test with Justin's code; all particle data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";

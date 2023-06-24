@@ -36,6 +36,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 */
 
 #include "settings/codeSetup.h"
+#include "source/classes/AMaps/AMaps.cpp"
 #include "source/classes/clas12ana/clas12ana.h"
 #include "source/classes/DSCuts/DSCuts.h"
 #include "source/classes/hPlots/hPlot1D.cpp"
@@ -84,28 +85,6 @@ void EventAnalyser() {
     //<editor-fold desc="Code settings">
 
 // ======================================================================================================================================================================
-// Event selection settings
-// ======================================================================================================================================================================
-
-    //<editor-fold desc="Event selection settings">
-    /* Settings to enable/disable specific FS plot calculations (Rec only): */
-
-    bool calculate_truth_level = false;
-
-    bool calculate_1p = true, calculate_1n = true;
-    bool calculate_2p = true;
-    bool calculate_pFDpCD = true, calculate_nFDpCD = true;
-
-    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
-
-    bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
-
-    bool limless_mom_eff_plots = false; // Enforce TL event selection on Rec. plots
-
-    if (!calculate_2p) { calculate_pFDpCD = false; }
-    //</editor-fold>
-
-// ======================================================================================================================================================================
 // Input processing
 // ======================================================================================================================================================================
 
@@ -124,6 +103,29 @@ void EventAnalyser() {
     double beamE = Experiment.GetBeanEnergy(); // Configure beam energy from SampleName
     string Target = Experiment.GetTargetElement(); // Configure target (element) from SampleName
     int TargetPDG = Experiment.GetTargetElementPDG(); // Configure target PDG from SampleName
+    //</editor-fold>
+
+// ======================================================================================================================================================================
+// Event selection settings
+// ======================================================================================================================================================================
+
+    //<editor-fold desc="Event selection settings">
+    /* Settings to enable/disable specific FS plot calculations (Rec only): */
+
+    /* Final states to analyse */
+    bool calculate_1p = true, calculate_1n = true, calculate_2p = true;
+    bool calculate_pFDpCD = true, calculate_nFDpCD = true;
+
+    /* Truth level calculation settings */
+    bool calculate_truth_level = true; // TL master ON/OFF switch
+    bool plot_incusive_hit_maps = false;
+    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
+    bool Enable_FD_photons = false;
+    bool limless_mom_eff_plots = false;
+
+    if (!calculate_2p) { calculate_pFDpCD = false; }
+    if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
+    if (!calculate_truth_level) { plot_incusive_hit_maps = Rec_wTL_ES = false; }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -165,7 +167,7 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_kinematical_cuts = false;
-    bool apply_proton_smearing = true;
+    bool apply_proton_smearing = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -600,17 +602,17 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
-    cout << "\n\n\n\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;";
-    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+//    cout << "\n\n\n\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;";
+//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
     bool Resolution_plots = true;
@@ -1329,91 +1331,91 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (1p)">
     hPlot1D hP_e_APID_1p_FD = hPlot1D("1p", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "01a_P_e_APID_1p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_e_BPID_1p_FD = hPlot1D("1p", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "01b_P_e_BPID_1p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_p_APID_1p_CD, hP_p_APID_1p_FD;
 
     if (!apply_proton_smearing) {
         hP_p_APID_1p_CD = hPlot1D("1p", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                   directories.Momentum_Directory_map["Momentum_1p_Directory"], "02a_P_p_APID_1p_CD",
-                                  Momentum_lboundary, Momentum_uboundary);
+                                  Momentum_lboundary, Momentum_uboundary, 65);
         hP_p_APID_1p_FD = hPlot1D("1p", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                   directories.Momentum_Directory_map["Momentum_1p_Directory"], "03c_P_p_APID_1p_FD",
-                                  Momentum_lboundary, Momentum_uboundary);
+                                  Momentum_lboundary, Momentum_uboundary, 65);
     } else {
         hP_p_APID_1p_CD = hPlot1D("1p", "CD", "Proton momentum APID&PS", "Proton momentum P_{p} APID&PS", "P_{p} [GeV/c]",
                                   directories.Momentum_Directory_map["Momentum_1p_Directory"], "02a_P_p_APIDandPS_1p_CD",
-                                  Momentum_lboundary, Momentum_uboundary);
+                                  Momentum_lboundary, Momentum_uboundary, 65);
         hP_p_APID_1p_FD = hPlot1D("1p", "FD", "Proton momentum APID&PS", "Proton momentum P_{p} APID&PS", "P_{p} [GeV/c]",
                                   directories.Momentum_Directory_map["Momentum_1p_Directory"], "03c_P_p_APIDandPS_1p_FD",
-                                  Momentum_lboundary, Momentum_uboundary);
+                                  Momentum_lboundary, Momentum_uboundary, 65);
     }
 
     hPlot1D hP_p_BPID_1p_CD = hPlot1D("1p", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "02b_P_p_BPID_1p_CD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_1p_FD = hPlot1D("1p", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "03d_P_p_BPID_1p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piplus_APID_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "04a_P_piplus_APID_1p_CD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "04b_P_piplus_BPID_1p_CD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_APID_1p_FD = hPlot1D("1p", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "04c_P_piplus_APID_1p_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_1p_FD = hPlot1D("1p", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "04d_P_piplus_BPID_1p_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piminus_APID_1p_CD = hPlot1D("1p", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1p_Directory"], "05a_P_piminus_APID_1p_CD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_1p_CD = hPlot1D("1p", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1p_Directory"], "05b_P_piminus_BPID_1p_CD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_APID_1p_FD = hPlot1D("1p", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1p_Directory"], "05c_P_piminus_APID_1p_FD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_1p_FD = hPlot1D("1p", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1p_Directory"], "05d_P_piminus_BPID_1p_FD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_ph_APID_1p_FD = hPlot1D("1p", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_1p_Directory"], "06c_P_ph_APID_1p_FD",
-                                       Momentum_lboundary, Momentum_uboundary);
+                                       Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_ph_BPID_1p_FD = hPlot1D("1p", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_1p_Directory"], "06d_P_ph_BPID_1p_FD",
-                                       Momentum_lboundary, Momentum_uboundary);
+                                       Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_n_APID_1p_FD = hPlot1D("1p", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "07c_P_n_APID_1p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_BPID_1p_FD = hPlot1D("1p", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "07d_P_n_BPID_1p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     //</editor-fold>
 
     //<editor-fold desc="Momentum threshold plots (1n)">
     hPlot1D hP_e_APID_1n_FD = hPlot1D("1n", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "01a_P_e_APID_1n_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_e_BPID_1n_FD = hPlot1D("1n", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "01b_P_e_BPID_1n_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_n_APID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "02a_P_n_APID_1n_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_BPID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "02b_P_n_BPID_1n_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_APID_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum APID - ZOOMOUT", "Neutron momentum P_{n} APID - ZOOMOUT", "P_{n} [GeV/c]",
                                               directories.Momentum_Directory_map["Momentum_1n_Directory"], "02c_P_n_APID_1n_ZOOMOUT_FD",
                                               Momentum_lboundary, 20.);
@@ -1423,62 +1425,62 @@ void EventAnalyser() {
 
     hPlot1D hP_p_APID_1n_CD = hPlot1D("1n", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "03a_P_p_APID_1n_CD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_1n_CD = hPlot1D("1n", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "03b_P_p_BPID_1n_CD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_APID_1n_FD = hPlot1D("1n", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "03c_P_p_APID_1n_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_1n_FD = hPlot1D("1n", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1n_Directory"], "03d_P_p_BPID_1n_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piplus_APID_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1n_Directory"], "04a_P_piplus_APID_1n_CD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_1n_CD = hPlot1D("1n", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1n_Directory"], "04b_P_piplus_BPID_1n_CD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_APID_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1n_Directory"], "04c_P_piplus_APID_1n_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_1n_FD = hPlot1D("1n", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1n_Directory"], "04d_P_piplus_BPID_1n_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piminus_APID_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1n_Directory"], "05a_P_piminus_APID_1n_CD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_1n_CD = hPlot1D("1n", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1n_Directory"], "05b_P_piminus_BPID_1n_CD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_APID_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1n_Directory"], "05c_P_piminus_APID_1n_FD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_1n_FD = hPlot1D("1n", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_1n_Directory"], "05d_P_piminus_BPID_1n_FD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_n_VN_BPID_1n_FD = hPlot1D("1n", "FD", "P_{n} (from v. neutrons) BPID", "Neutron Momentum (from v. neutrons) BPID", "P_{n} [GeV/c]",
                                          directories.Momentum_Directory_map["Momentum_1n_Directory"], "06a_P_n_VNeutrons_BPID_1n_FD",
-                                         Momentum_lboundary, Momentum_uboundary);
+                                         Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_VN_APID_1n_FD = hPlot1D("1n", "FD", "P_{n} (from v. neutrons) APID", "Neutron Momentum (from v. neutrons) APID", "P_{n} [GeV/c]",
                                          directories.Momentum_Directory_map["Momentum_1n_Directory"], "06b_P_n_VNeutrons_APID_1n_FD",
-                                         Momentum_lboundary, Momentum_uboundary);
+                                         Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_Ph_BPID_1n_FD = hPlot1D("1n", "FD", "P_{n} (from 'Photons') BPID", "Neutron Momentum (from 'Photons') BPID", "P_{n} [GeV/c]",
                                          directories.Momentum_Directory_map["Momentum_1n_Directory"], "07a_P_n_From_Photons_BPID_1n_FD",
-                                         Momentum_lboundary, Momentum_uboundary);
+                                         Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_Ph_APID_1n_FD = hPlot1D("1n", "FD", "P_{n} (from 'Photons') APID", "Neutron Momentum (from 'Photons') APID", "P_{n} [GeV/c]",
                                          directories.Momentum_Directory_map["Momentum_1n_Directory"], "07b_P_n_From_Photons_APID_1n_FD",
-                                         Momentum_lboundary, Momentum_uboundary);
+                                         Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_ph_APID_1n_FD = hPlot1D("1n", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_1n_Directory"], "08a_P_ph_APID_1n_FD",
-                                       Momentum_lboundary, Momentum_uboundary);
+                                       Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_ph_BPID_1n_FD = hPlot1D("1n", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_1n_Directory"], "08b_P_ph_BPID_1n_FD",
-                                       Momentum_lboundary, Momentum_uboundary);
+                                       Momentum_lboundary, Momentum_uboundary, 65);
     //</editor-fold>
 
     //<editor-fold desc="Momentum threshold plots (2p)">
@@ -1486,63 +1488,63 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (2p)">
     hPlot1D hP_e_APID_2p_FD = hPlot1D("2p", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "01a_P_e_APID_2p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_e_BPID_2p_FD = hPlot1D("2p", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "01b_P_e_BPID_2p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_p_APID_2p_CD = hPlot1D("2p", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "02a_P_p_APID_2p_CD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_2p_CD = hPlot1D("2p", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "02b_P_p_BPID_2p_CD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_APID_2p_FD = hPlot1D("2p", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "03c_P_p_APID_2p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_2p_FD = hPlot1D("2p", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "03d_P_p_BPID_2p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piplus_APID_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "04a_P_piplus_APID_2p_CD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_2p_CD = hPlot1D("2p", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "04b_P_piplus_BPID_2p_CD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_APID_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "04c_P_piplus_APID_2p_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_2p_FD = hPlot1D("2p", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_2p_Directory"], "04d_P_piplus_BPID_2p_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piminus_APID_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_2p_Directory"], "05a_P_piminus_APID_2p_CD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_2p_CD = hPlot1D("2p", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_2p_Directory"], "05b_P_piminus_BPID_2p_CD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_APID_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_2p_Directory"], "05c_P_piminus_APID_2p_FD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_2p_FD = hPlot1D("2p", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                             directories.Momentum_Directory_map["Momentum_2p_Directory"], "05d_P_piminus_BPID_2p_FD",
-                                            Momentum_lboundary, Momentum_uboundary);
+                                            Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_ph_APID_2p_FD = hPlot1D("2p", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_2p_Directory"], "06c_P_ph_APID_2p_FD",
-                                       Momentum_lboundary, Momentum_uboundary);
+                                       Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_ph_BPID_2p_FD = hPlot1D("2p", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
                                        directories.Momentum_Directory_map["Momentum_2p_Directory"], "06d_P_ph_BPID_2p_FD",
-                                       Momentum_lboundary, Momentum_uboundary);
+                                       Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_n_APID_2p_FD = hPlot1D("2p", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "07c_P_n_APID_2p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_BPID_2p_FD = hPlot1D("2p", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_2p_Directory"], "07d_P_n_BPID_2p_FD",
-                                      Momentum_lboundary, Momentum_uboundary);
+                                      Momentum_lboundary, Momentum_uboundary, 65);
     //</editor-fold>
 
     //<editor-fold desc="Leading (P_1) and recoil (P_2) Momentum threshold plots (2p)">
@@ -1565,63 +1567,63 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (pFDpCD)">
     hPlot1D hP_e_APID_pFDpCD_FD = hPlot1D("pFDpCD", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "01a_P_e_APID_pFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_e_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "01b_P_e_BPID_pFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_p_APID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "02a_P_p_APID_pFDpCD_CD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "02b_P_p_BPID_pFDpCD_CD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "03c_P_p_APID_pFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "03d_P_p_BPID_pFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piplus_APID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04a_P_piplus_APID_pFDpCD_CD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04b_P_piplus_BPID_pFDpCD_CD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04c_P_piplus_APID_pFDpCD_FD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "04d_P_piplus_BPID_pFDpCD_FD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piminus_APID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05a_P_piminus_APID_pFDpCD_CD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_pFDpCD_CD = hPlot1D("pFDpCD", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05b_P_piminus_BPID_pFDpCD_CD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05c_P_piminus_APID_pFDpCD_FD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "05d_P_piminus_BPID_pFDpCD_FD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_ph_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "06c_P_ph_APID_pFDpCD_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_ph_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "06d_P_ph_BPID_pFDpCD_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_n_APID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "07c_P_n_APID_pFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_BPID_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_pFDpCD_Directory"], "07d_P_n_BPID_pFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     //</editor-fold>
 
     //<editor-fold desc="pFD and pCD momentum threshold plots (pFDpCD)">
@@ -1663,63 +1665,63 @@ void EventAnalyser() {
     //<editor-fold desc="Momentum threshold plots (nFDpCD)">
     hPlot1D hP_e_APID_nFDpCD_FD = hPlot1D("nFDpCD", "", "Electron momentum APID", "Electron momentum P_{e} APID", "P_{e} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "01a_P_e_APID_nFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_e_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "", "Electron momentum BPID", "Electron momentum P_{e} BPID", "P_{e} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "01b_P_e_BPID_nFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_p_APID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "02a_P_p_APID_nFDpCD_CD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "02b_P_p_BPID_nFDpCD_CD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "03c_P_p_APID_nFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_p_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "03d_P_p_BPID_nFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piplus_APID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04a_P_piplus_APID_nFDpCD_CD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04b_P_piplus_BPID_nFDpCD_CD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04c_P_piplus_APID_nFDpCD_FD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piplus_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{+} momentum BPID", "#pi^{+} momentum P_{#pi^{+}} BPID", "P_{#pi^{+}} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "04d_P_piplus_BPID_nFDpCD_FD",
-                                               Momentum_lboundary, Momentum_uboundary);
+                                               Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_piminus_APID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05a_P_piminus_APID_nFDpCD_CD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05b_P_piminus_BPID_nFDpCD_CD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{-} momentum APID", "#pi^{-} momentum P_{#pi^{-}} APID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05c_P_piminus_APID_nFDpCD_FD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_piminus_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "#pi^{-} momentum BPID", "#pi^{-} momentum P_{#pi^{-}} BPID", "P_{#pi^{-}} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "05d_P_piminus_BPID_nFDpCD_FD",
-                                                Momentum_lboundary, Momentum_uboundary);
+                                                Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_ph_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Photon momentum APID", "Photon momentum P_{#gamma} APID", "P_{#gamma} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "06c_P_ph_APID_nFDpCD_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_ph_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Photon momentum BPID", "Photon momentum P_{#gamma} BPID", "P_{#gamma} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "06d_P_ph_BPID_nFDpCD_FD",
-                                           Momentum_lboundary, Momentum_uboundary);
+                                           Momentum_lboundary, Momentum_uboundary, 65);
 
     hPlot1D hP_n_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07c_P_n_APID_nFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     hPlot1D hP_n_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07d_P_n_BPID_nFDpCD_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
+                                          Momentum_lboundary, Momentum_uboundary, 65);
     //</editor-fold>
 
     //<editor-fold desc="nFD and pCD momentum threshold plots (nFDpCD)">
@@ -4995,6 +4997,14 @@ void EventAnalyser() {
                                               Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
+    //<editor-fold desc="Inclusive truth-level hit maps (1e cut)">
+//    hPlot2D hElectron_hit_map_1e_cut = hPlot2D("1e cut", "", "Electron #theta", "non-TL #beta vs. P", "P [GeV/c]", "#beta",
+//                                               directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
+//                                               "10_nonTL_beta_vs_P_1n", 0, beamE * 1.1, 0, 1.1);
+
+    AMaps aMaps = AMaps(beamE, directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"], 1.1);
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Efficiency plots (1p)">
@@ -5977,15 +5987,15 @@ void EventAnalyser() {
     if (!f) { cout << "\n\n\nLoad reference histogram: no ref. histogram file have found! Exiting...\n\n\n", quit(); }
 
     TH2D *Electron_hit_map = (TH2D *) f->Get("Electron_hit_map");
-    string Electron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Hit_maps_Eff_and_ACorr_1e_cut_Directory"];
+    string Electron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
     if (!Electron_hit_map) { cout << "\n\n\nLoad reference histogram: Electron_hit_map is empty! Exiting...\n\n\n", quit(); }
 
     TH2D *Proton_hit_map = (TH2D *) f->Get("Protons_hit_map");
-    string Proton_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Hit_maps_Eff_and_ACorr_1e_cut_Directory"];
+    string Proton_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
     if (!Proton_hit_map) { cout << "\n\n\nLoad reference histogram: Protons_hit_map is empty! Exiting...\n\n\n", quit(); }
 
     TH2D *Neutron_hit_map = (TH2D *) f->Get("Neutrons_hit_map");
-    string Neutron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Hit_maps_Eff_and_ACorr_1e_cut_Directory"];
+    string Neutron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
     if (!Neutron_hit_map) { cout << "\n\n\nLoad reference histogram: Neutrons_hit_map is empty! Exiting...\n\n\n", quit(); }
     //</editor-fold>
 
@@ -6327,7 +6337,8 @@ void EventAnalyser() {
             if (!apply_proton_smearing) {
                 nRes = NeutronResolution(beamE, directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"]);
             } else {
-                nRes.ReadFitDataParam((CutsDirectory + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str());
+                nRes.ReadFitDataParam((NeutronResolutionDirectory + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str());
+//                nRes.ReadFitDataParam((CutsDirectory + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str());
             }
         }
 
@@ -6701,6 +6712,7 @@ void EventAnalyser() {
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
+            bool TL_1e_cut = (TL_Electron_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
             /* Setting up 1p TL event selection */
@@ -6770,6 +6782,10 @@ void EventAnalyser() {
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (particlePDGtmp == 11) {
+                    if (TL_1e_cut) {
+                        aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                    }
+
                     if (TL_Event_Selection_1e_cut) {
                         if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
                             hP_e_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -6834,6 +6850,10 @@ void EventAnalyser() {
                         hPhi_e_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                     }
                 } else if (particlePDGtmp == 2112) {
+                    if (TL_1e_cut) {
+                        aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                    }
+
                     if (TL_Event_Selection_1e_cut) {
                         if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
                             hP_n_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -6924,6 +6944,10 @@ void EventAnalyser() {
                         }
                     }
                 } else if (particlePDGtmp == 2212) {
+                    if (TL_1e_cut) {
+                        aMaps.hFillHitMaps("TL", "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                    }
+
                     if (TL_Event_Selection_1e_cut) {
                         if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
                             hP_p_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -15049,6 +15073,10 @@ void EventAnalyser() {
         histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
         //</editor-fold>
 
+
+        aMaps.DrawAndSaveHitMaps(SampleName, c1, RefrenceHitMapsDirectory);
+
+
         //</editor-fold>
 
         //<editor-fold desc="Efficiency plots (1p, CD & FD)">
@@ -15637,7 +15665,8 @@ void EventAnalyser() {
             hnonTL_Beta_vs_P_VN_1n.hDrawAndSave(SampleName, c1, plots, true);
 
             nRes.SliceFitDrawAndSave(SampleName, beamE);
-            nRes.LogFitDataToFile(SampleName, plots_path, CutsDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+            nRes.LogFitDataToFile(SampleName, plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+//            nRes.LogFitDataToFile(SampleName, plots_path, CutsDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
             nRes.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
         }
         //</editor-fold>

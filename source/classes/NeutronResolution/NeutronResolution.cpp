@@ -70,6 +70,16 @@ void NeutronResolution::hFillResPlots(double Momentum, double Resolution, double
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SliceFitDrawAndSave function">
+/* CFitFunction function for costume fit */
+Double_t CFitFunction(Double_t *v, Double_t *par) {
+    Double_t arg = 0;
+    if (par[2] != 0) { arg = (v[0] - par[1]) / par[2]; } // 3 parameters
+
+    Double_t fitval = par[0] * TMath::Exp(-0.5 * arg * arg);
+    return fitval;
+}
+
+/* SliceFitDrawAndSave function for the fit */
 void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double beamE) {
     for (int i = 0; i < NumberOfSlices; i++) {
         cout << "\n\n";
@@ -96,12 +106,21 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double bea
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
             FittedSlices.push_back(i); // Log slices that are been fitted
 
-            /* A fit to a gaussian with 3 parameters: f(x) = p0*exp(-0.5((x-p1)/p2)^2)). */
-            hSlice->Fit("gaus");
-
-            /* Get fitted function to TF1 plot */
-            TF1 *func = hSlice->GetFunction("gaus");
+            TF1 *func = new TF1("fit", CFitFunction, -1, 1, 3); // create a function with 3 parameters in the range [-3,3]
             func->SetLineColor(kRed);
+
+            double SliceMax = hSlice->GetMaximum();
+            double SliceMean = hSlice->GetMean();
+
+            func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
+            func->SetParNames("Constant", "Mean_value", "Sigma");
+
+            func->SetParLimits(1, -1.5, 1.5); // Mean limits
+            func->SetParLimits(2, 0.001, 0.35); // Sigma limits
+//            func->SetParLimits(2, 0.001, 0.325); // Sigma limits
+//            func->SetParLimits(2, 0.001, 0.25); // Sigma limits
+
+            hSlice->Fit("fit");
 
             double FitAmp = func->GetParameter(0);  // get p0
             double FitMean = func->GetParameter(1); // get p1
@@ -144,6 +163,84 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double bea
         }
     }
 }
+
+////<editor-fold desc="original">
+//void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double beamE) {
+//    for (int i = 0; i < NumberOfSlices; i++) {
+//        cout << "\n\n";
+//
+//        TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
+//        SliceFitCanvas->SetGrid();
+//        SliceFitCanvas->SetBottomMargin(0.14);
+//        SliceFitCanvas->SetLeftMargin(0.18);
+//        SliceFitCanvas->SetRightMargin(0.12);
+//        SliceFitCanvas->cd();
+//
+//        //<editor-fold desc="Setting sNameFlag">
+//        string sNameFlag;
+//
+//        if (findSubstring(SampleName, "simulation")) {
+//            sNameFlag = "s";
+//        } else if (findSubstring(SampleName, "data")) {
+//            sNameFlag = "d";
+//        }
+//        //</editor-fold>
+//
+//        TH1D *hSlice = (TH1D *) ResSlices.at(i).GetHistogram();
+//
+//        if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
+//            FittedSlices.push_back(i); // Log slices that are been fitted
+//
+//            /* A fit to a gaussian with 3 parameters: f(x) = p0*exp(-0.5((x-p1)/p2)^2)). */
+//            hSlice->Fit("gaus");
+//
+//            /* Get fitted function to TF1 plot */
+//            TF1 *func = hSlice->GetFunction("gaus");
+//            func->SetLineColor(kRed);
+//
+//            double FitAmp = func->GetParameter(0);  // get p0
+//            double FitMean = func->GetParameter(1); // get p1
+//            double FitStd = func->GetParameter(2);  // get p2
+//
+//            ResSlicesFitVar.at(i).SetMean(func->GetParameter(1));
+//            ResSlicesFitVar.at(i).SetUpperCut(func->GetParameter(2));
+//
+//            double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
+//            double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
+//            double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
+//            double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
+//
+//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
+//            FitParam->SetBorderSize(1);
+//            FitParam->SetTextFont(0);
+//            FitParam->SetFillColor(0);
+//            FitParam->SetTextAlign(12);
+//            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 8)).c_str());
+//            FitParam->AddText(("Fit mean = " + to_string_with_precision(FitMean, 8)).c_str());
+//            FitParam->AddText(("Fit std = " + to_string_with_precision(FitStd, 8)).c_str());
+//            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
+//            FitParam->Draw("same");
+//
+//            int SliceUpperLimPrecision;
+//            if (ResSlicesLimits.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
+//
+//            string hSlice_CloneSaveDir = ResSlices.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
+//            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices.at(i).GetHistogram1DSaveName() + "_fitted.png";
+//            system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
+//
+//            SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
+//
+//            FittedNeutronResSlices->Add(hSlice);
+//
+//            SliceFitCanvas->Clear();
+//            delete SliceFitCanvas;
+//        } else {
+//            continue;
+//        }
+//    }
+//}
+////</editor-fold>
+
 //</editor-fold>
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
@@ -258,11 +355,10 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
             }
         }
     } else {
-        cout << "\n\nReadFitDataParam: file not found!";
-//        cout << "\n\nReadFitDataParam: file not found! Exiting...\n\n", exit(EXIT_FAILURE);
+        cout << "\n\nReadFitDataParam: file not found! Exiting...\n\n", exit(0);
     }
 
-    return;
+//    return;
 }
 //</editor-fold>
 
@@ -278,7 +374,8 @@ double NeutronResolution::PSmear(bool apply_proton_smearing, double Momentum) {
         for (DSCuts LoadedResolutionSlice: LoadedResSlicesFitVar) {
             if ((LoadedResolutionSlice.GetSliceLowerb() <= Momentum) && (LoadedResolutionSlice.GetSliceUpperb() >= Momentum)) {
 //                TRandom3 *Rand = new TRandom3();
-                double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
+                double Smearing = Rand->Gaus(1, LoadedResolutionSlice.GetUpperCut());
+//                double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
 
                 //TODO: check with Adi/Julia if the smearing factor can be negative
                 double SmearingFactor = abs(Smearing);

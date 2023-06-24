@@ -445,7 +445,8 @@ private:
                                                           "01_1e_cut",
                                                           "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut", "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut",
                                                           "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut",
-                                                          "01_1e_cut/04_Loaded_ref_hit_maps",
+                                                          "01_1e_cut/04_TL_hit_maps",
+                                                          "01_1e_cut/05_Loaded_reco_ref_hit_maps",
 
                                                           "02_1p",
                                                           "02_1p/01_Momentum_Eff_and_ACorr_plots_1p", "02_1p/02_Theta_Eff_and_ACorr_plots_1p",
