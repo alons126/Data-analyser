@@ -445,7 +445,7 @@ private:
                                                           "01_1e_cut",
                                                           "01_1e_cut/01_Momentum_Eff_and_ACorr_plots_1e_cut", "01_1e_cut/02_Theta_Eff_and_ACorr_plots_1e_cut",
                                                           "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut",
-                                                          "01_1e_cut/04_TL_hit_maps",
+                                                          "01_1e_cut/04_Hit_maps",
                                                           "01_1e_cut/05_Loaded_reco_ref_hit_maps",
 
                                                           "02_1p",
@@ -470,9 +470,18 @@ private:
     };
     //</editor-fold>
 
+    //<editor-fold desc="Hit maps plots directories">
+    bool create_Hit_Maps_Dir = true;
+    std::string Hit_Maps_Parent_Directory = "12_Hit_Maps_plots";
+    vector<std::string> Hit_Maps_Daughter_Folders = {"",
+                                                          "01_1e_cut",
+                                                          "01_1e_cut/01_Hit_Maps_1e_cut",
+    };
+    //</editor-fold>
+
     //<editor-fold desc="Resolution plots directories">
     bool create_Resolution_Dir = true;
-    std::string Resolution_Parent_Directory = "12_Resolution_plots";
+    std::string Resolution_Parent_Directory = "13_Resolution_plots";
     vector<std::string> Resolution_Daughter_Folders = {"",
 //                                                       "01_1e_cut",
 //                                                       "01_1e_cut/01_Momentum_resolution_plots_1e_cut",
@@ -520,6 +529,7 @@ public:
     map<std::string, std::string> TKI_Directory_map;
     map<std::string, std::string> ToF_Directory_map;
     map<std::string, std::string> Eff_and_ACorr_Directory_map;
+    map<std::string, std::string> Hit_Maps_Directory_map;
     map<std::string, std::string> Resolution_Directory_map;
 
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------

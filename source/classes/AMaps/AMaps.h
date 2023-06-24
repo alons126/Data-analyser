@@ -49,6 +49,9 @@ private:
     vector<hPlot2D> ElectronRecoBinHitMaps, ProtonRecoBinHitMaps;
     hPlot2D NeutronRecoHitMap;
 
+    vector<hPlot2D> ElectronRecoToTLRatio, ProtonRecoToTLRatio;
+    hPlot2D NeutronRecoToTLRatio;
+
     int NumberOfPBins;
 
     double hBinLowerXLim = -180;
@@ -59,13 +62,17 @@ private:
     int hBinNumOfXBins = 250;
     int hBinNumOfYBins = 250;
 
+    bool calc_Electron_RecoToTL_Ratio = true;
+    bool calc_Proton_RecoToTL_Ratio = true;
+    bool calc_Neutron_RecoToTL_Ratio = true;
+
     TList *RefrenceHitMapsPlots = new TList();
     TList *TLHitMaps = new TList();
     TList *RecoHitMaps = new TList();
-    TList *DivHitMaps = new TList();
+    TList *HitMapsRatio = new TList();
 //    TFolder *TLHitMaps = new TFolder("TL_hit_maps", "TL_hit_maps");
 //    TFolder *RecoHitMaps = new TFolder("Reco_hit_maps", "Reco_hit_maps");
-//    TFolder *DivHitMaps = new TFolder("Div_Hit_Maps", "Div_Hit_Maps");
+//    TFolder *HitMapsRatio = new TFolder("Div_Hit_Maps", "Div_Hit_Maps");
 
     string BinSavePath;
     string BinSaveNamePrefix;
@@ -104,9 +111,13 @@ public:
 
     void hFillHitMaps(const string &SampleType, const string &particle, double Momentum, double Theta, double Phi, double Weight);
 
+// CalcHitMapsRatio function ----------------------------------------------------------------------------------------------------------------------------------------
+
+    void CalcHitMapsRatio(bool ElectronRecoToTLDiv = true, bool PotonRecoToTLDiv = true, bool NeutronRecoToTLDiv = true);
+
 // DrawAndSaveHitMaps function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &CutsDirectory);
+    void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
 
 //// LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 //

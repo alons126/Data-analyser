@@ -615,6 +615,19 @@ void EventAnalyser() {
 //    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
 
     /* Resolution plots */
+    bool Hit_maps_plots = true;
+//    bool Hit_maps_plots = false;
+//    cout << "\n\n\n\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;";
+//    cout << "\nbool Hit_maps_plots = false;\n\n\n\n";
+
+    /* Resolution plots */
     bool Resolution_plots = true;
 //    bool Resolution_plots = false;
 //    cout << "\n\n\n\nbool Resolution_plots = false;";
@@ -630,7 +643,7 @@ void EventAnalyser() {
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
         Cut_plots_master = W_plots = Beta_plots = Beta_vs_P_plots = Angle_plots_master = Q2_plots = E_e_plots = ETrans_plots_master = Ecal_plots = false;
-        TKI_plots = ToF_plots = Efficiency_plots = Resolution_plots = false;
+        TKI_plots = ToF_plots = Efficiency_plots = Hit_maps_plots = Resolution_plots = false;
     }
 
     if (!Cut_plots_master) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
@@ -4997,14 +5010,6 @@ void EventAnalyser() {
                                               Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
-    //<editor-fold desc="Inclusive truth-level hit maps (1e cut)">
-//    hPlot2D hElectron_hit_map_1e_cut = hPlot2D("1e cut", "", "Electron #theta", "non-TL #beta vs. P", "P [GeV/c]", "#beta",
-//                                               directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
-//                                               "10_nonTL_beta_vs_P_1n", 0, beamE * 1.1, 0, 1.1);
-
-    AMaps aMaps = AMaps(beamE, directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"], 1.1);
-    //</editor-fold>
-
     //</editor-fold>
 
     //<editor-fold desc="Efficiency plots (1p)">
@@ -5999,6 +6004,15 @@ void EventAnalyser() {
     if (!Neutron_hit_map) { cout << "\n\n\nLoad reference histogram: Neutrons_hit_map is empty! Exiting...\n\n\n", quit(); }
     //</editor-fold>
 
+    //</editor-fold>
+
+// ======================================================================================================================================================================
+// Hit maps histograms
+// ======================================================================================================================================================================
+
+    //<editor-fold desc="Hit maps histograms">
+    /* Hit maps are handeled only by the AMaps class */
+    AMaps aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], 1.1);
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -8103,6 +8117,27 @@ void EventAnalyser() {
         } // end of ToF loop over neutrons vector
         //</editor-fold>
 
+        //</editor-fold>
+
+        //<editor-fold desc="Filling reco. hit maps">
+        aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
+
+        for (int &i: Protons_ind) {
+            if (protons[i]->getRegion() == FD) {
+                aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+            }
+        }
+
+        //TODO: confirm with adi if I should fill these with of without ECAL veto.
+        for (int &i: NeutronsFD_ind) {
+            if (allParticles[i]->getRegion() == FD) {
+
+                if (allParticles[i]->cal(clas12::PCAL)->getLv() > clasAna.getEcalEdgeCuts() &&
+                    allParticles[i]->cal(clas12::PCAL)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
+                    aMaps.hFillHitMaps("Reco", "Neutron", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+                }
+            }
+        }
         //</editor-fold>
 
         //</editor-fold>
@@ -15073,10 +15108,6 @@ void EventAnalyser() {
         histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
         //</editor-fold>
 
-
-        aMaps.DrawAndSaveHitMaps(SampleName, c1, RefrenceHitMapsDirectory);
-
-
         //</editor-fold>
 
         //<editor-fold desc="Efficiency plots (1p, CD & FD)">
@@ -15591,6 +15622,25 @@ void EventAnalyser() {
 
     } else {
         cout << "\n\nEfficiency plots are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Hit maps histograms
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //<editor-fold desc="Hit maps histograms">
+    if (Hit_maps_plots) {
+        cout << "\n\nPlotting Hit maps histograms...\n\n";
+
+//  Hit maps plots -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Hit maps plots">
+        aMaps.DrawAndSaveHitMaps(SampleName, c1, RefrenceHitMapsDirectory);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nHit maps plots are disabled by user.\n\n";
     }
     //</editor-fold>
 

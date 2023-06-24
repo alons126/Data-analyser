@@ -1,0 +1,42 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/Data-analyser.dir/DetectorSimulationAnalyser.C.obj"
+  "CMakeFiles/Data-analyser.dir/TruthLevelAnalyser.c.obj"
+  "CMakeFiles/Data-analyser.dir/macros/BetaFitAndSave.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/BetaFitAndSaveApprax.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsBeta4x4.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsEffAndACorr2x3.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsEffAndACorr2x3/PlotsACorr2x3Electron.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsEffAndACorr2x3/PlotsACorr2x3Nucleon.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsEffAndACorr2x3/PlotsEff2x3.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsEffAndACorr2x3/PlotsEff2x3Electron.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/PlotsEffAndACorr2x3/PlotsEff2x3Nucleon.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/plotter_1x1.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/plotter_1x2.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/plotter_2x2.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/macros/process_events.C.obj"
+  "CMakeFiles/Data-analyser.dir/main.c.obj"
+  "CMakeFiles/Data-analyser.dir/source/Structures_beta/Histogram1D.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/AMaps/AMaps.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/Directories/Directories.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/ExperimentParameters/ExperimentParameters.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/NeutronResolution/NeutronResolution.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/TLCuts/TLCuts.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/clas12ana/clas12ana_ver_1_myedit/example_ana.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/clas12ana/example_ana.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/clas12ana/example_ana_-_Copy.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/clas12ana/skim_events.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/hPlots/hPlot1D.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/hPlots/hPlot1DStack.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/hPlots/hPlot2D.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/other/fitexample.c.obj"
+  "CMakeFiles/Data-analyser.dir/source/other/hPlot1D_example.cpp.obj"
+  "Data-analyser.exe"
+  "Data-analyser.exe.manifest"
+  "Data-analyser.pdb"
+  "libData-analyser.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C CXX)
+  include(CMakeFiles/Data-analyser.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

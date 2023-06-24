@@ -12,9 +12,9 @@ protected:
 
     /* Histogram titles & labels.
      * contains HistogramStatTitle, HistogramTitle, XaxisTitle, YaxisTitle, Histogram2DTitleReactions, FinalState and DetectorRegion. */
-    map<std::string, std::string> Histogram2DTitles{{"FinalState",                ""},
-                                                    {"DetectorRegion",            ""},
-                                                    {"Histogram2DTitleReactions", ""}};
+    map <std::string, std::string> Histogram2DTitles{{"FinalState",                ""},
+                                                     {"DetectorRegion",            ""},
+                                                     {"Histogram2DTitleReactions", ""}};
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */
@@ -114,7 +114,11 @@ public:
                       std::string particle2, TF1 *Beta_function3, std::string particle3, bool showStats = true, bool plot_legend = true);
     //</editor-fold>
 
-// Histogram methods:
+    // hDivision function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void hDivision(TH2D *hDenominator, bool FixZLimits = true, double MaxZLim = 1.25);
+
+// Other histogram methods:
     void hFill(double Xdata, double Ydata) { Histogram2D->Fill(Xdata, Ydata); }
 
     void hFill(double Xdata, double Ydata, double weight) { Histogram2D->Fill(Xdata, Ydata, weight); }
@@ -219,7 +223,11 @@ public:
     void SetPlotHistogramMax(bool phMax = true) { PlotHistogramMax = phMax; }
 
 //  Get methods:
-    TH2D GetHistogram2D() { return *Histogram2D; }
+//    TH2D GetHistogram2D() { return *Histogram2D; }
+
+    TH2D *GetHistogram2D() { return Histogram2D; }
+
+    TH2D *GetHistogram2DConst() const { return Histogram2D; }
 
     std::string GetHistogramTitle() { return Histogram2DTitles["HistogramTitle"]; }
 

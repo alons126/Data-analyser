@@ -983,7 +983,7 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                  Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_TL_hit_maps") + "/";
+                                                                  Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Hit_maps") + "/";
     Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                                Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/05_Loaded_reco_ref_hit_maps") + "/";
 
@@ -1039,6 +1039,15 @@ Directories::Directories(std::string plots_path) {
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/03_Phi_Eff_and_ACorr_plots_nFDpCD") + "/";
     Eff_and_ACorr_Directory_map["Neutron_FD_Hit_map_nFDpCD_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                          Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD") + "/";
+    //</editor-fold>
+
+    //<editor-fold desc="Efficiency & Acceptance Correction plots directories">
+    for (std::string folders_name: Hit_Maps_Daughter_Folders) {
+        MakeDirectory(create_Hit_Maps_Dir, Hit_Maps_Parent_Directory, folders_name, false, Plots_Folder);
+    }
+
+    Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
+                                                          + Find(Hit_Maps_Daughter_Folders, "01_1e_cut/01_Hit_Maps_1e_cut") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Resolution plots directories">

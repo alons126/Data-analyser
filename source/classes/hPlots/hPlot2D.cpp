@@ -161,15 +161,18 @@ void hPlot2D::histPlotter2D(std::string &SampleName, TCanvas *Histogram2DCanvas,
 
     if (ZLogScalePlot == true) {
         Histogram2DCanvas->SetLogz(1);
-        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
+        system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Log_Scale_plots").c_str());
+        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Log_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
+//        Histogram2DCanvas->SetLogz(1);
+//        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLogScale.png").c_str());
     }
 
     if (ZLinearScalePlot == true) {
         Histogram2DCanvas->SetLogz(0);
-        system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Linear_Scale_plots").c_str());
-        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Linear_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
+//        system(("mkdir -p " + Histogram2DSaveNameDir + "/z_Linear_Scale_plots").c_str());
+//        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + "/z_Linear_Scale_plots/" + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
 //        Histogram2DCanvas->SetLogz(0);
-//        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
+        Histogram2DCanvas->SaveAs((Histogram2DSaveNameDir + sNameFlag + Histogram2DSaveName + "_zLinearScale.png").c_str());
     }
 
     gStyle->SetStatX(DefStatX);
@@ -456,4 +459,17 @@ void hPlot2D::hDrawAndSave(std::string &SampleName, TCanvas *h2DCanvas, TList *h
 //</editor-fold>
 
 //</editor-fold>
+
+// hDivision function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="hDivision function">
+void hPlot2D::hDivision(TH2D *hDenominator, bool FixZLimits, double MaxZLim) {
+    Histogram2D->Divide(hDenominator);
+
+    if (FixZLimits) {
+        Histogram2D->SetMaximum(MaxZLim);
+    }
+}
+//</editor-fold>
+
 

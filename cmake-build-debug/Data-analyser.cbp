@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Data-analyser"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Data-analyser">
+				<Option output="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Data-analyser.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/Clas12Banks"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/Clas12Root"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/hipo4"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/rcdb/cpp/include"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/clas12root"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/settings"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/other"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/Directories"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DSCuts"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/ExperimentParameters"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/functions"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 Data-analyser"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Data-analyser/fast">
+				<Option output="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Data-analyser.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/Clas12Banks"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/Clas12Root"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/hipo4"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/rcdb/cpp/include"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/clas12root"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/settings"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/other"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/Directories"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DSCuts"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/ExperimentParameters"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/functions"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.3/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 Data-analyser/fast"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~2.3/bin/mingw/bin/mingw32-make.exe -f &quot;//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/DetectorSimulationAnalyser.C">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/TruthLevelAnalyser.c">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/BetaFitAndSave.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/BetaFitAndSaveApprax.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsBeta4x4.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsEffAndACorr2x3.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsEffAndACorr2x3/PlotsACorr2x3Electron.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsEffAndACorr2x3/PlotsACorr2x3Nucleon.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsEffAndACorr2x3/PlotsEff2x3.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsEffAndACorr2x3/PlotsEff2x3Electron.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/PlotsEffAndACorr2x3/PlotsEff2x3Nucleon.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/plots4x4.txt">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/plotter_1x1.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/plotter_1x2.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/plotter_2x2.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/macros/process_events.C">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/main.c">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/run.sh">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/settings/TruthLevelAnalyser.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/settings/codeSetup.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/Structures_beta/Histogram1D.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/AMaps/AMaps.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/AMaps/AMaps.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DSCuts/DSCuts.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/Directories/Directories.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/Directories/Directories.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/ExperimentParameters/ExperimentParameters.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/ExperimentParameters/ExperimentParameters.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/NeutronResolution/NeutronResolution.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/NeutronResolution/NeutronResolution.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TLCuts/TLCuts.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TLCuts/TLCuts.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters/TargetParameters.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/ana - Copy.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit/ana.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit/clas12ana.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit/ecal.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit/example_ana.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/ecal - Copy.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/example_ana - Copy.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/example_ana.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/other/clas12ana - Copy (2).h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/other/clas12ana - Copy.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/skim_events.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots/hPlot1D.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots/hPlot1D.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots/hPlot1DStack.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots/hPlot1DStack.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots/hPlot2D.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots/hPlot2D.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/constants.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/Fitted_PID_Cuts_-_C12_simulation_6GeV_T5_first_10.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/ana.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5_first_10.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5_first_100.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__Ca48_data_6GeV_run_015832.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__Ca48_simulation_G18_10a_02_11b_6GeV.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__LH2_data_6GeV_run_015032.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/ana.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/ecal.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/ecal.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other/DetectorSimulationCuts - Copy.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other/ana - Copy.par">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsPI_40Ca_x2.dat">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsPI_LD2_x2.dat">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsSF_40Ca_x2.dat">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsSF_LD2_x2.dat">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/AngleCalc/CalcdPhi.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/AngleCalc/GetBinFromAng.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/DrawAndSaveFunctions/DrawAndSaveAcceptanceCorrectionPlots.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/DrawAndSaveFunctions/DrawAndSaveEfficiencyPlots.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/DrawAndSaveFunctions/DrawAndSaveFSRatio.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/GetParticleName.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/GetParticleNameLC.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/GetParticleNameShort.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetDRegion.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetSaveDir.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetStatsTitle.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetTitle.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetType.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetXAxisTitle.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SetYAxisTitle.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/EventProperties/SettingSaveNames.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/FillByInt.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/GeneralFunctions.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/GetPi0MomTh.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/GetTruthLevelCuts.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/HistogramPlottingFunctions.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/NeutronECAL_Cut_Veto.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PID_functions/ChargedParticleID.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PID_functions/FDNeutralParticle.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PID_functions/FDNeutralParticleID.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PID_functions/GetGoodProtons.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PID_functions/NeutralParticleID.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PID_functions/nParticleID.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/PlotsEff2x3.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/StackPlot3.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/StackPlot4.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/TLKinCutsCheck.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/drawtext.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/findSubstring.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/neutron_veto.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/other/NeutronECAL_Cut_Veto.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/other/neutron_veto.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/quit.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/to_string_with_precision.h">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/other/fitexample.c">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/other/hPlot1D_example.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
