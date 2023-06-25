@@ -41,7 +41,14 @@ using namespace std;
 
 class AMaps {
 private:
+    hPlot2D ElectronAMapBC; // combined electron AMap
+    hPlot2D ProtonAMapBC;   // combined proton AMap
+    hPlot2D NeutronAMapBC;
+    hPlot2D NucleonAMapBC;
+
     vector<vector<double>> PBinsLimits;
+
+    double LowerBinMin = 0.3;
 
     int NumberOfPBins;
 
@@ -61,21 +68,26 @@ private:
 //    int hBinNumOfXBins = 250;
 //    int hBinNumOfYBins = 250;
 
+    /* TL hit maps */
     vector<hPlot2D> ElectronTLBinHitMaps;
     vector<hPlot2D> ProtonTLBinHitMaps;
     hPlot2D NeutronTLHitMap;
 
+    /* Reco. hit maps */
     vector<hPlot2D> ElectronRecoBinHitMaps;
     vector<hPlot2D> ProtonRecoBinHitMaps;
     hPlot2D NeutronRecoHitMap;
 
+    /* Reco./TL ratio maps */
     vector<hPlot2D> ElectronRecoToTLRatio;
     vector<hPlot2D> ProtonRecoToTLRatio;
     hPlot2D NeutronRecoToTLRatio;
 
+    /* Separated acceptance maps (= reco. above ration th.) */
     vector<hPlot2D> ElectronSepAMaps; // separated electron AMaps for each bin
     vector<hPlot2D> ProtonSepAMaps;   // separated electron AMaps for each bin
 
+    /* Acceptance maps (= reco. above ration th.) */
     hPlot2D ElectronAMap; // combined electron AMap
     hPlot2D ProtonAMap;   // combined proton AMap
     hPlot2D NeutronAMap;
@@ -85,9 +97,12 @@ private:
     bool calc_Proton_RecoToTL_Ratio = true;
     bool calc_Neutron_RecoToTL_Ratio = true;
 
-    double Charged_particle_min_Ration = 0.7;
-    double Neutral_particle_min_Ration = 0.3;
+    double Charged_particle_min_Ration = 0.;
+    double Neutral_particle_min_Ration = 0.;
+//    double Charged_particle_min_Ration = 0.7;
+//    double Neutral_particle_min_Ration = 0.3;
 
+    TList *AcceptanceMapsBC = new TList();
     TList *TLHitMaps = new TList();
     TList *RecoHitMaps = new TList();
     TList *HitMapsRatio = new TList();
@@ -104,7 +119,7 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    AMaps(double beamE, const string &SavePath = "./", double NumberOfBins = 50);
+    AMaps(double beamE, const string &SavePath = "./", double NumberOfBins = 50, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
 
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 

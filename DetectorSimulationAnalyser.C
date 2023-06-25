@@ -475,177 +475,120 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
+//    //<editor-fold desc="Plot selector - plot all">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
+//
+//    /* Beta plots */
+//    bool W_plots = true;
+//
+//    /* Beta plots */
+//    bool Beta_plots = true;
+//    bool Beta_vs_P_plots = true;
+//
+//    /* Angle plots */
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+//
+//    /* Q2 plots */
+//    bool Q2_plots = true;
+//
+//    /* E_e plots */
+//    bool E_e_plots = true;
+//
+//    /* ET plots */
+//    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+//    bool Ecal_plots = true;
+//
+//    /* Transverse variables plots */
+//    bool TKI_plots = true;
+//
+//    /* ToF plots */
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+//    bool Efficiency_plots = true;
+//
+//    /* Resolution plots */
+//    bool Hit_maps_plots = true;
+//
+//    /* Resolution plots */
+//    bool Resolution_plots = true;
+//    //</editor-fold>
+
+    //<editor-fold desc="Plot selector - selected plots">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 //
-//    bool Momentum_plots = false;
-    bool Momentum_plots = true;
+    bool Momentum_plots = false;
+//    bool Momentum_plots = true;
 //
 
     /* Beta plots */
-    bool W_plots = true;
-//    bool W_plots = false;
-//    cout << "\n\n\n\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;";
-//    cout << "\nbool W_plots = false;\n\n\n\n";
+//    bool W_plots = true;
+    bool W_plots = false;
 
     /* Beta plots */
-    bool Beta_plots = true;
-//    bool Beta_plots = false;
-//    cout << "\n\n\n\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;";
-//    cout << "\nbool Beta_plots = false;\n\n\n\n";
-    bool Beta_vs_P_plots = true;
-//    bool Beta_vs_P_plots = false;
-//    cout << "\n\n\n\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;";
-//    cout << "\nbool Beta_vs_P_plots = false;\n\n\n\n";
+//    bool Beta_plots = true;
+    bool Beta_plots = false;
+//    bool Beta_vs_P_plots = true;
+    bool Beta_vs_P_plots = false;
 
     /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
-    bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
-//    cout << "\n\n\n\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;";
-//    cout << "\nbool Angle_plots_master = false;\n\n\n\n";
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots_master = false; // Master angle plots selector
+    bool Theta_e_plots = false, Phi_e_plots = false;
 
     /* Q2 plots */
-    bool Q2_plots = true;
-//    bool Q2_plots = false;
-//    cout << "\n\n\n\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;";
-//    cout << "\nbool Q2_plots = false;\n\n\n\n";
+//    bool Q2_plots = true;
+    bool Q2_plots = false;
 
     /* E_e plots */
-    bool E_e_plots = true;
-//    bool E_e_plots = false;
-//    cout << "\n\n\n\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;";
-//    cout << "\nbool E_e_plots = false;\n\n\n\n";
+//    bool E_e_plots = true;
+    bool E_e_plots = false;
 
     /* ET plots */
-    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_plots_master = false; // Master ET plots selector
-//    cout << "\n\n\n\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;";
-//    cout << "\nbool ETrans_plots_master = false;\n\n\n\n";
+//    bool ETrans_plots_master = true; // Master ET plots selector
+    bool ETrans_plots_master = false; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-    bool Ecal_plots = true;
-//    bool Ecal_plots = false;
-//    cout << "\n\n\n\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;";
-//    cout << "\nbool Ecal_plots = false;\n\n\n\n";
+//    bool Ecal_plots = true;
+    bool Ecal_plots = false;
 
     /* Transverse variables plots */
-    bool TKI_plots = true;
-//    bool TKI_plots = false;
-//    cout << "\n\n\n\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;";
-//    cout << "\nbool TKI_plots = false;\n\n\n\n";
+//    bool TKI_plots = true;
+    bool TKI_plots = false;
 
     /* ToF plots */
+//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
-    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-//    cout << "\n\n\n\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;";
-//    cout << "\nbool Efficiency_plots = false;\n\n\n\n";
+//    bool Efficiency_plots = true;
+    bool Efficiency_plots = false;
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
 //    bool Hit_maps_plots = false;
-//    cout << "\n\n\n\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;";
-//    cout << "\nbool Hit_maps_plots = false;\n\n\n\n";
 
     /* Resolution plots */
-    bool Resolution_plots = true;
-//    bool Resolution_plots = false;
-//    cout << "\n\n\n\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;";
-//    cout << "\nbool Resolution_plots = false;\n\n\n\n";
+//    bool Resolution_plots = true;
+    bool Resolution_plots = false;
+    //</editor-fold>
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -6019,9 +5962,26 @@ void EventAnalyser() {
 
     //<editor-fold desc="Hit maps histograms">
     /* Hit maps are handled completely by the AMaps class */
+    //TODO: move hBinNumOfXBins/hBinNumOfYBins from here to settings section
+    int hBinNumOfXBins = 100;
+    int hBinNumOfYBins = 100;
+
+    hPlot2D ElectronAMapBC = hPlot2D("", "", "Electron_AMap_BC", "Electron AMap BC", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                     directories.Hit_Maps_Directory_map["AMaps_BC_1e_cut_Directory"], "01_Electron_AMap_BC",
+                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, hBinNumOfXBins, hBinNumOfYBins);
+    hPlot2D ProtonAMapBC = hPlot2D("", "", "Proton_AMap_BC", "Proton AMap BC", "#phi_{p} [Deg]", "#theta_{p} [Deg]",
+                                   directories.Hit_Maps_Directory_map["AMaps_BC_1e_cut_Directory"], "02_Proton_AMap_BC",
+                                   Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, hBinNumOfXBins, hBinNumOfYBins);
+    hPlot2D NeutronAMapBC = hPlot2D("", "", "Neutron_AMap_BC", "Neutron AMap BC", "#phi_{n} [Deg]", "#theta_{n} [Deg]",
+                                    directories.Hit_Maps_Directory_map["AMaps_BC_1e_cut_Directory"], "03_Neutron_AMap_BC",
+                                    Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, hBinNumOfXBins, hBinNumOfYBins);
+    hPlot2D NucleonAMapBC = hPlot2D("", "", "Nucleon_AMap_BC", "Nucleon AMap BC", "#phi_{nuc} [Deg]", "#theta_{nuc} [Deg]",
+                                    directories.Hit_Maps_Directory_map["AMaps_BC_1e_cut_Directory"], "04_Nucleon_AMap_BC",
+                                    Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, hBinNumOfXBins, hBinNumOfYBins);
+
     AMaps aMaps;
 
-    if (generate_AMaps) { aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], 1.1); }
+    if (generate_AMaps) { aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], 1.1, hBinNumOfXBins, hBinNumOfYBins); }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -8131,9 +8091,12 @@ void EventAnalyser() {
         //<editor-fold desc="Filling reco. hit maps">
         if (generate_AMaps) {
             aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
+            ElectronAMapBC.hFill(Phi_e, Theta_e, Weight);
 
             for (int i = 0; i < protons.size(); i++) {
                 if (protons[i]->getRegion() == FD) {
+                    ProtonAMapBC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
+
                     aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
                 }
             }
@@ -8157,6 +8120,8 @@ void EventAnalyser() {
 
                     if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
                         allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
+                        NeutronAMapBC.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
+
                         aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, allParticles[i]->getPhi() * 180.0 / pi,
                                            Weight);
                     }
@@ -15658,9 +15623,16 @@ void EventAnalyser() {
     if (Hit_maps_plots && generate_AMaps) {
         cout << "\n\nPlotting Hit maps histograms...\n\n";
 
-//  Hit maps plots -----------------------------------------------------------------------------------------------------------------------------------------------------
+//  Hit maps plots ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //<editor-fold desc="Hit maps plots">
+        //<editor-fold desc="AMap BC plots (1e cut)">
+        ElectronAMapBC.hDrawAndSave(SampleName, c1, plots, true);
+        ProtonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
+        NeutronAMapBC.hDrawAndSave(SampleName, c1, plots, true);
+        NucleonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Hit maps plots (1e cut)">
         aMaps.DrawAndSaveHitMaps(SampleName, c1, RefrenceHitMapsDirectory);
         //</editor-fold>
 

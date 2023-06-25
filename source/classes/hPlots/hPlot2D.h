@@ -116,6 +116,8 @@ public:
 
     // hDivision function -----------------------------------------------------------------------------------------------------------------------------------------------
 
+    void hAdd(TH2D *h) { Histogram2D->Add(h); }
+
     void hDivision(TH2D *hDenominator, bool FixZLimits = true, double MaxZLim = 1.25);
 
 // Other histogram methods:
@@ -254,6 +256,10 @@ public:
     double GetUpperYlim() { return HistogramYAxisLimits.at(1); }
 
     double GetLowerYlim() { return HistogramYAxisLimits.at(0); }
+
+    double GetXBinCenter(int xBin) { return Histogram2D->GetXaxis()->GetBinCenter(xBin); }
+
+    double GetYBinCenter(int yBin) { return Histogram2D->GetYaxis()->GetBinCenter(yBin); }
 
 //    bool GetNormalizeHistogram() { return NormalizeHistogram; }
 
