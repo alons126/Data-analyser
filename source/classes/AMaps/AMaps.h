@@ -41,10 +41,9 @@ using namespace std;
 
 class AMaps {
 private:
-    hPlot2D ElectronAMapBC; // combined electron AMap
-    hPlot2D ProtonAMapBC;   // combined proton AMap
-    hPlot2D NeutronAMapBC;
-    hPlot2D NucleonAMapBC;
+
+    /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
+    hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
     vector<vector<double>> PBinsLimits;
 
@@ -52,40 +51,26 @@ private:
 
     int NumberOfPBins;
 
-    double hBinLowerXLim = -180;
-    double hBinUpperXLim = 180;
-    double hBinLowerYLim = 0;
-    double hBinUpperYLim = 50;
+    double hBinLowerXLim = -180, hBinUpperXLim = 180;
+    double hBinLowerYLim = 0, hBinUpperYLim = 50;
 
-//    int hBinNumOfXBins = 65;
-//    int hBinNumOfYBins = 65;
-    int hBinNumOfXBins = 100;
-    int hBinNumOfYBins = 100;
-//    int hBinNumOfXBins = 150;
-//    int hBinNumOfYBins = 150;
-//    int hBinNumOfXBins = 200;
-//    int hBinNumOfYBins = 200;
-//    int hBinNumOfXBins = 250;
-//    int hBinNumOfYBins = 250;
+    int hBinNumOfXBins; // 100 by Default
+    int hBinNumOfYBins; // 100 by Default
 
     /* TL hit maps */
-    vector<hPlot2D> ElectronTLBinHitMaps;
-    vector<hPlot2D> ProtonTLBinHitMaps;
+    vector<hPlot2D> ElectronTLBinHitMaps, ProtonTLBinHitMaps;
     hPlot2D NeutronTLHitMap;
 
     /* Reco. hit maps */
-    vector<hPlot2D> ElectronRecoBinHitMaps;
-    vector<hPlot2D> ProtonRecoBinHitMaps;
+    vector<hPlot2D> ElectronRecoBinHitMaps, ProtonRecoBinHitMaps;
     hPlot2D NeutronRecoHitMap;
 
     /* Reco./TL ratio maps */
-    vector<hPlot2D> ElectronRecoToTLRatio;
-    vector<hPlot2D> ProtonRecoToTLRatio;
+    vector<hPlot2D> ElectronRecoToTLRatio, ProtonRecoToTLRatio;
     hPlot2D NeutronRecoToTLRatio;
 
     /* Separated acceptance maps (= reco. above ration th.) */
-    vector<hPlot2D> ElectronSepAMaps; // separated electron AMaps for each bin
-    vector<hPlot2D> ProtonSepAMaps;   // separated electron AMaps for each bin
+    vector<hPlot2D> ElectronSepAMaps, ProtonSepAMaps;   // separated AMaps for each bin
 
     /* Acceptance maps (= reco. above ration th.) */
     hPlot2D ElectronAMap; // combined electron AMap
@@ -93,14 +78,12 @@ private:
     hPlot2D NeutronAMap;
     hPlot2D NucleonAMap;
 
-    bool calc_Electron_RecoToTL_Ratio = true;
-    bool calc_Proton_RecoToTL_Ratio = true;
-    bool calc_Neutron_RecoToTL_Ratio = true;
+    bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
-    double Charged_particle_min_Ration = 0.;
-    double Neutral_particle_min_Ration = 0.;
-//    double Charged_particle_min_Ration = 0.7;
-//    double Neutral_particle_min_Ration = 0.3;
+//    double Charged_particle_min_Ratio = 0.;
+//    double Neutral_particle_min_Ratio = 0.;
+    double Charged_particle_min_Ratio = 0.7;
+    double Neutral_particle_min_Ratio = 0.3;
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLHitMaps = new TList();
@@ -169,11 +152,6 @@ public:
 
     void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
 
-//// LogFitDataToFile function ------------------------------------------------------------------------------------------------------------------------------------------
-//
-//    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory, const string &Nucleon_Cuts_Status,
-//                          const string &FD_photons_Status, const string &Efficiency_Status);
-//
 //// ReadFitDataParam function ------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    void ReadFitDataParam(const char *filename);
@@ -181,6 +159,18 @@ public:
 //// PSmear function ----------------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    double PSmear(bool apply_proton_smearing, double Momentum);
+
+// Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Set methods
+    void SetNeutralParticleMinRatio(double npmr) { Neutral_particle_min_Ratio = npmr; }
+
+    void SetCargedParticleMinRatio(double cpmr) { Charged_particle_min_Ratio = cpmr; }
+
+    // Get methods
+    double GetNeutralParticleMinRatio() { return Neutral_particle_min_Ratio; }
+
+    double GetCargedParticleMinRatio() { return Charged_particle_min_Ratio; }
 
 };
 
