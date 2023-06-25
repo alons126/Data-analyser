@@ -362,7 +362,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
                 if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
                     ElectronRecoBinHitMaps.at(i).hFill(Phi, Theta, Weight);
                     ElectronRecoToTLRatio.at(i).hFill(Phi, Theta, Weight);
-//                    ElectronSepAMaps.at(i).hFill(Phi, Theta, Weight);
+                    ElectronSepAMaps.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
@@ -373,7 +373,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
                 if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
                     ProtonRecoBinHitMaps.at(i).hFill(Phi, Theta, Weight);
                     ProtonRecoToTLRatio.at(i).hFill(Phi, Theta, Weight);
-//                    ProtonSepAMaps.at(i).hFill(Phi, Theta, Weight);
+                    ProtonSepAMaps.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
@@ -382,7 +382,7 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
 
             NeutronRecoHitMap.hFill(Phi, Theta, Weight);
             NeutronRecoToTLRatio.hFill(Phi, Theta, Weight);
-//            NeutronAMap.hFill(Phi, Theta, Weight);
+            NeutronAMap.hFill(Phi, Theta, Weight);
         }
     }
 }
@@ -411,13 +411,9 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
     for (int bin = 0; bin < PBinsLimits.size(); bin++) {
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) >= cP_minR) {
-                    ElectronSepAMaps.at(bin).hFillByBin(i, j, ElectronRecoBinHitMaps.at(bin).GetHistogram2D()->GetBinContent(i, j));
-                }
+                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
 
-                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) >= cP_minR) {
-                    ProtonSepAMaps.at(bin).hFillByBin(i, j, ProtonRecoBinHitMaps.at(bin).GetHistogram2D()->GetBinContent(i, j));
-                }
+                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
             }
         }
 
@@ -426,23 +422,6 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
     }
 }
 //</editor-fold>
-
-////<editor-fold desc="GenerateSeparateCPartAMaps function (original)">
-//void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
-//    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
-//        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-//            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-//                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
-//
-//                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
-//            }
-//        }
-//
-//        ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-//        ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-//    }
-//}
-////</editor-fold>
 
 // GenerateCPartAMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -463,9 +442,7 @@ void AMaps::GenerateCPartAMaps(double cP_minR) {
 void AMaps::GenerateNPartAMaps(double nP_minR) {
     for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
         for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) >= nP_minR) {
-                NeutronAMap.hFillByBin(i, j, NeutronRecoHitMap.GetHistogram2D()->GetBinContent(i, j));
-            }
+            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) < nP_minR) { NeutronAMap.hFillByBin(i, j, 0); }
         }
     }
 }
