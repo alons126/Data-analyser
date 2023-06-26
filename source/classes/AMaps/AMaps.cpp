@@ -7,10 +7,11 @@
 // AMaps constructor ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="AMaps constructor">
-AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins, int hbNumOfXBins, int hbNumOfYBins) {
+AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXBins, int hbNumOfYBins) {
     BinSavePath = SavePath;
     hBinNumOfXBins = hbNumOfXBins;
     hBinNumOfYBins = hbNumOfYBins;
+    NumberOfMomBins = nOfMomBins;
 
     string SavePathAMapsBC = BinSavePath + "00b_AMaps_BC_from_class/";
     system(("mkdir -p " + SavePathAMapsBC).c_str());
@@ -43,7 +44,8 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins, int hbNu
     string BinSavePathAMap = BinSavePath + "04_Finalized_AMaps/";
     system(("mkdir -p " + BinSavePathAMap).c_str());
 
-    SetBins(beamE, NumberOfBins);
+    SetBins(beamE);
+//    SetBins(beamE, nOfMomBins);
 
     //<editor-fold desc="Acceptance maps BC">
     string hStatsTitleAMapBCElectron = "Electron_AMap_BC", hTitleAMapBCElectron = "Electron AMap BC", hSaveNameAMapBCElectron = "01_e_AMap_BC";
@@ -245,7 +247,49 @@ AMaps::AMaps(double beamE, const string &SavePath, double NumberOfBins, int hbNu
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetBins function">
-void AMaps::SetBins(double beamE, double NumberOfBins) {
+void AMaps::SetBins(double beamE) {
+    double InvertedPLowerLim = (1 / beamE);
+    double InvertedPUpper = (1 / MomBinTh);
+    double Delta = (InvertedPUpper - InvertedPLowerLim) / NumberOfMomBins;
+
+    bool InvertedPrintOut = false;
+    bool RegPrintOut = false;
+
+    for (int i = 0; i < NumberOfMomBins; i++) {
+        double InvertedBinLower = InvertedPLowerLim + i * Delta;
+        double InvertedBinUpper = InvertedBinLower + Delta;
+
+        if (InvertedPrintOut) {
+            cout << "\n\nInvertedBinLower = " << InvertedBinLower << "\n";
+            cout << "InvertedBinUpper = " << InvertedBinUpper << "\n";
+            cout << "i = " << i << "\n";
+            cout << "Delta = " << Delta << "\n\n";
+        }
+
+        InvertedPBinsLimits.push_back({InvertedBinLower, InvertedBinUpper});
+    }
+
+    if (InvertedPrintOut) { exit(0); }
+
+    for (int i = (NumberOfMomBins - 1); i >= 0; i--) {
+        double BinLower = 1/InvertedPBinsLimits.at(i).at(1);
+        double BinUpper = 1/InvertedPBinsLimits.at(i).at(0);
+
+        if (RegPrintOut) {
+            cout << "\n\nBinLower = " << BinLower << "\n";
+            cout << "BinUpper = " << BinUpper << "\n";
+            cout << "i = " << i << "\n";
+        }
+
+        PBinsLimits.push_back({BinLower, BinUpper});
+    }
+
+    if (RegPrintOut) { exit(0); }
+}
+//</editor-fold>
+
+//<editor-fold desc="SetBins function (old)">
+void AMaps::SetBins(double beamE, double nOfMomBins) {
     double BinUpperLim = beamE;
 
     bool SliceAndDice = true;
@@ -256,22 +300,20 @@ void AMaps::SetBins(double beamE, double NumberOfBins) {
 
         if (BinNumber == 1) {
             UpperLim = BinUpperLim;
-            LowerLim = (BinUpperLim / NumberOfBins);
+            LowerLim = (BinUpperLim / nOfMomBins);
         } else {
             UpperLim = LowerLim;
-            LowerLim = (UpperLim / NumberOfBins);
+            LowerLim = (UpperLim / nOfMomBins);
         }
 
         PBinsLimits.push_back({LowerLim, UpperLim});
 
-        if (LowerLim <= LowerBinMin) {
+        if (LowerLim <= MomBinTh) {
             SliceAndDice = false;
         } else {
             ++BinNumber;
         }
     }
-
-    NumberOfPBins = BinNumber;
 }
 //</editor-fold>
 

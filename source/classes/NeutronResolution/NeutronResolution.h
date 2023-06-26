@@ -60,6 +60,7 @@ private:
     string SlicesSaveNamePrefix;
 
     double delta;
+    double deltaFactor = 1.;
     int NumberOfSlices = 0;
 
 public:
@@ -70,7 +71,7 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(double beamE, const string &SavePath = "./", double DeltaSlices = 0.2);
+    NeutronResolution(const string &SampleName, double beamE, double nMomTh, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false);
 
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 

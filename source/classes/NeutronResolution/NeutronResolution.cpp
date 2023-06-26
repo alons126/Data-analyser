@@ -7,23 +7,36 @@
 // NeutronResolution constructor ----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="NeutronResolution constructor">
-NeutronResolution::NeutronResolution(double beamE, const string &SavePath, double DeltaSlices) {
+NeutronResolution::NeutronResolution(const string &SampleName, double beamE, double nMomTh, const string &SavePath, double DeltaSlices, bool VaryingDelta) {
     SlicesSavePath = SavePath, delta = DeltaSlices;
 
+    double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim = SliceLowerLim + 0.3;
+//    double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim = SliceLowerLim + Delta;
+
     bool SliceAndDice = true;
-    double SliceLowerLim = 0., SliceUpperLim = SliceLowerLim + delta;
     int SliceNumber = 0;
+
+    /* Variables for debugging purposes: */
+    bool LimitsPrintOut = false;
+    bool LimitsPrintOutAndExit = false;
 
     while (SliceAndDice) {
         ++SliceNumber;
 
+        if (LimitsPrintOut) {
+            cout << "\n\n\nSliceLowerLim = " << SliceLowerLim << "\n";
+            cout << "SliceUpperLim = " << SliceUpperLim << "\n";
+            cout << "SliceNumber = " << SliceNumber << "\n";
+            cout << "Delta = " << Delta << "\n";
+        }
+
         int SliceUpperLimPrecision;
         if (SliceUpperLim == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
 
-        string hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + " #leq P^{truth}_{n} #leq " +
-                             to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " GeV/c";
-        string hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + " #leq P^{truth}_{n} #leq " +
-                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " GeV/c";
+        string hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                             to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
+        string hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
         string hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_n_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                            to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
         string hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
@@ -41,14 +54,46 @@ NeutronResolution::NeutronResolution(double beamE, const string &SavePath, doubl
         ResSlicesLimits.push_back({SliceLowerLim, SliceUpperLim});
         ResSlicesFitVar.push_back(ResSliceFitCuts);
 
-        if ((SliceLowerLim + delta) > beamE) {
+        if (SliceUpperLim == beamE) {
             SliceAndDice = false;
         } else {
-            SliceLowerLim += delta;
+            SliceLowerLim = SliceUpperLim;
 
-            if ((SliceUpperLim + delta) > beamE) { SliceUpperLim = beamE; } else { SliceUpperLim += delta; }
+            if (VaryingDelta) {
+                if (beamE == 5.98636) {
+                    if ((SliceLowerLim + Delta >= 1.9) && (SliceLowerLim + Delta < 2.2)) {
+                        Delta = delta * 1.5;
+                    } else if ((SliceLowerLim + Delta >= 2.2) && (SliceLowerLim + Delta < 2.7)) {
+                        Delta = delta * 2.5;
+                    } else if (SliceLowerLim + Delta >= 2.7) {
+                        Delta = beamE - SliceLowerLim;
+                    }
+                }
+            }
+
+            //            //<editor-fold desc="Working VaryingDelta (RECHECK!!!)">
+//            if (VaryingDelta) {
+//                if (beamE == 5.98636) {
+//                    if ((SliceLowerLim + Delta >= 1.9) && (SliceLowerLim + Delta < 2.2)) {
+//                        Delta = delta * 1.5;
+//                    } else if ((SliceLowerLim + Delta >= 2.2) && (SliceLowerLim + Delta < 2.7)) {
+//                        Delta = delta * 2.5;
+//                    } else if (SliceLowerLim + Delta >= 2.7) {
+//                        Delta = beamE - SliceLowerLim;
+//                    }
+//                }
+//            }
+//            //</editor-fold>
+
+            if ((SliceUpperLim + Delta) > beamE) {
+                SliceUpperLim = beamE;
+            } else {
+                SliceUpperLim = SliceLowerLim + Delta;
+            }
         }
     }
+
+    if (LimitsPrintOut && LimitsPrintOutAndExit) { exit(0); }
 
     NumberOfSlices = SliceNumber;
 }

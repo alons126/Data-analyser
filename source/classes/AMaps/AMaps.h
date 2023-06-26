@@ -45,17 +45,17 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
+    vector<vector<double>> InvertedPBinsLimits;
     vector<vector<double>> PBinsLimits;
-
-    double LowerBinMin = 0.3;
-
-    int NumberOfPBins;
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
 
-    int hBinNumOfXBins; // 100 by Default
-    int hBinNumOfYBins; // 100 by Default
+    int hBinNumOfXBins;                                // 100 by Default
+    int hBinNumOfYBins;                                // 100 by Default
+    int NumberOfMomBins;                               // 10 by Default
+
+    double MomBinTh = 0.4;
 
     /* TL hit maps */
     vector<hPlot2D> ElectronTLBinHitMaps, ProtonTLBinHitMaps;
@@ -102,11 +102,13 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    AMaps(double beamE, const string &SavePath = "./", double NumberOfBins = 50, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
+    AMaps(double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
 
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void SetBins(double beamE, double NumberOfBins);
+    void SetBins(double beamE);
+
+    void SetBins(double beamE, double NumberOfMomBins);
 
 // isElectron function --------------------------------------------------------------------------------------------------------------------------------------------------
 
