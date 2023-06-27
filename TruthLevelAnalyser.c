@@ -195,7 +195,7 @@ void gst::Loop() {
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot settings">
-    bool lowest_nentries = true;
+    bool lowest_nentries = false;
     int custom_nentries;
 
     if (lowest_nentries == true) {
@@ -343,9 +343,9 @@ void gst::Loop() {
 // Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
-    bool Theta_plots = true, Phi_plots = true;
+    bool Theta_plots = false, Phi_plots = false;
 
-    bool Energy_histogram_plots = true;
+    bool Energy_histogram_plots = false;
 
     bool ET_plots = true, ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
     if (ET_plots == false) {
@@ -354,11 +354,11 @@ void gst::Loop() {
 
     bool inclusive_plots = true;
 
-    bool E_cal_plots = true, other_E_cal_plots = false;
+    bool E_cal_plots = false, other_E_cal_plots = false;
 
-    bool momentum_plots = true;
+    bool momentum_plots = false;
 
-    bool MicroBooNE_plots = true;
+    bool MicroBooNE_plots = false;
     //</editor-fold>
 
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -4306,46 +4306,68 @@ void gst::Loop() {
         //<editor-fold desc="Energy Transfer histograms (all interactions)">
 
         //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
-        E_Trans_all_ang_all_int_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans_all_ang_all_int_upper_lim_2p = 1.7;
         E_Trans_all_ang_all_int_lower_lim_2p = 0;
-        E_Trans15_all_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans15_all_upper_lim_2p = 1.7;
         E_Trans15_all_lower_lim_2p = 0;
-        E_Trans45_all_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans45_all_upper_lim_2p = 1.7;
         E_Trans45_all_lower_lim_2p = 0;
-        E_Trans90_all_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans90_all_upper_lim_2p = 1.7;
         E_Trans90_all_lower_lim_2p = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
-        E_Trans_all_ang_all_int_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans_all_ang_all_int_upper_lim_1n1p = 1.7;
         E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
-        E_Trans15_all_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans15_all_upper_lim_1n1p = 1.7;
         E_Trans15_all_lower_lim_1n1p = 0;
-        E_Trans45_all_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans45_all_upper_lim_1n1p = 1.7;
         E_Trans45_all_lower_lim_1n1p = 0;
-        E_Trans90_all_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans90_all_upper_lim_1n1p = 1.7;
         E_Trans90_all_lower_lim_1n1p = 0;
         //</editor-fold>
+
+//        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
+//        E_Trans_all_ang_all_int_upper_lim_2p = BeamEnergy * 1.1;
+//        E_Trans_all_ang_all_int_lower_lim_2p = 0;
+//        E_Trans15_all_upper_lim_2p = BeamEnergy * 1.1;
+//        E_Trans15_all_lower_lim_2p = 0;
+//        E_Trans45_all_upper_lim_2p = BeamEnergy * 1.1;
+//        E_Trans45_all_lower_lim_2p = 0;
+//        E_Trans90_all_upper_lim_2p = BeamEnergy * 1.1;
+//        E_Trans90_all_lower_lim_2p = 0;
+//        //</editor-fold>
+
+//        //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
+//        E_Trans_all_ang_all_int_upper_lim_1n1p = BeamEnergy * 1.1;
+//        E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
+//        E_Trans15_all_upper_lim_1n1p = BeamEnergy * 1.1;
+//        E_Trans15_all_lower_lim_1n1p = 0;
+//        E_Trans45_all_upper_lim_1n1p = BeamEnergy * 1.1;
+//        E_Trans45_all_lower_lim_1n1p = 0;
+//        E_Trans90_all_upper_lim_1n1p = BeamEnergy * 1.1;
+//        E_Trans90_all_lower_lim_1n1p = 0;
+//        //</editor-fold>
 
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (QEL only)">
 
         //<editor-fold desc="Energy Transfer histograms (QEL only, 2p)">
-        E_Trans15_QEL_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans15_QEL_upper_lim_2p = 1.7;
         E_Trans15_QEL_lower_lim_2p = 0;
-        E_Trans45_QEL_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans45_QEL_upper_lim_2p = 1.7;
         E_Trans45_QEL_lower_lim_2p = 0;
-        E_Trans90_QEL_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans90_QEL_upper_lim_2p = 1.7;
         E_Trans90_QEL_lower_lim_2p = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (QEL only, 1n1p)">
-        E_Trans15_QEL_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans15_QEL_upper_lim_1n1p = 1.7;
         E_Trans15_QEL_lower_lim_1n1p = 0;
-        E_Trans45_QEL_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans45_QEL_upper_lim_1n1p = 1.7;
         E_Trans45_QEL_lower_lim_1n1p = 0;
-        E_Trans90_QEL_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans90_QEL_upper_lim_1n1p = 1.7;
         E_Trans90_QEL_lower_lim_1n1p = 0;
         //</editor-fold>
 
@@ -4354,20 +4376,20 @@ void gst::Loop() {
         //<editor-fold desc="Energy Transfer histograms (MEC only)">
 
         //<editor-fold desc="Energy Transfer histograms (MEC only, 2p)">
-        E_Trans15_MEC_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans15_MEC_upper_lim_2p = 1.7;
         E_Trans15_MEC_lower_lim_2p = 0;
-        E_Trans45_MEC_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans45_MEC_upper_lim_2p = 1.7;
         E_Trans45_MEC_lower_lim_2p = 0;
-        E_Trans90_MEC_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans90_MEC_upper_lim_2p = 1.7;
         E_Trans90_MEC_lower_lim_2p = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (MEC only, 1n1p)">
-        E_Trans15_MEC_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans15_MEC_upper_lim_1n1p = 1.7;
         E_Trans15_MEC_lower_lim_1n1p = 0;
-        E_Trans45_MEC_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans45_MEC_upper_lim_1n1p = 1.7;
         E_Trans45_MEC_lower_lim_1n1p = 0;
-        E_Trans90_MEC_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans90_MEC_upper_lim_1n1p = 1.7;
         E_Trans90_MEC_lower_lim_1n1p = 0;
         //</editor-fold>
 
@@ -4376,20 +4398,20 @@ void gst::Loop() {
         //<editor-fold desc="Energy Transfer histograms (RES only)">
 
         //<editor-fold desc="Energy Transfer histograms (RES only, 2p)">
-        E_Trans15_RES_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans15_RES_upper_lim_2p = 1.7;
         E_Trans15_RES_lower_lim_2p = 0;
-        E_Trans45_RES_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans45_RES_upper_lim_2p = 1.7;
         E_Trans45_RES_lower_lim_2p = 0;
-        E_Trans90_RES_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans90_RES_upper_lim_2p = 1.7;
         E_Trans90_RES_lower_lim_2p = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (RES only, 1n1p)">
-        E_Trans15_RES_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans15_RES_upper_lim_1n1p = 1.7;
         E_Trans15_RES_lower_lim_1n1p = 0;
-        E_Trans45_RES_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans45_RES_upper_lim_1n1p = 1.7;
         E_Trans45_RES_lower_lim_1n1p = 0;
-        E_Trans90_RES_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans90_RES_upper_lim_1n1p = 1.7;
         E_Trans90_RES_lower_lim_1n1p = 0;
         //</editor-fold>
 
@@ -4398,20 +4420,20 @@ void gst::Loop() {
         //<editor-fold desc="Energy Transfer histograms (DIS only)">
 
         //<editor-fold desc="Energy Transfer histograms (DIS only, 2p)">
-        E_Trans15_DIS_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans15_DIS_upper_lim_2p = 1.7;
         E_Trans15_DIS_lower_lim_2p = 0;
-        E_Trans45_DIS_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans45_DIS_upper_lim_2p = 1.7;
         E_Trans45_DIS_lower_lim_2p = 0;
-        E_Trans90_DIS_upper_lim_2p = BeamEnergy * 1.1;
+        E_Trans90_DIS_upper_lim_2p = 1.7;
         E_Trans90_DIS_lower_lim_2p = 0;
         //</editor-fold>
 
         //<editor-fold desc="Energy Transfer histograms (DIS only, 1n1p)">
-        E_Trans15_DIS_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans15_DIS_upper_lim_1n1p = 1.7;
         E_Trans15_DIS_lower_lim_1n1p = 0;
-        E_Trans45_DIS_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans45_DIS_upper_lim_1n1p = 1.7;
         E_Trans45_DIS_lower_lim_1n1p = 0;
-        E_Trans90_DIS_upper_lim_1n1p = BeamEnergy * 1.1;
+        E_Trans90_DIS_upper_lim_1n1p = 1.7;
         E_Trans90_DIS_lower_lim_1n1p = 0;
         //</editor-fold>
 
@@ -4420,51 +4442,51 @@ void gst::Loop() {
         //</editor-fold>
 
         //<editor-fold desc="Inclusive Energy Transfer histograms">
-        E_Trans15_all_inclusive_upper_lim = BeamEnergy * 1.1;
+        E_Trans15_all_inclusive_upper_lim = 1.7;
         E_Trans15_all_inclusive_lower_lim = 0;
-        E_Trans15_QEL_inclusive_upper_lim = BeamEnergy * 1.1;
+        E_Trans15_QEL_inclusive_upper_lim = 1.7;
         E_Trans15_QEL_inclusive_lower_lim = 0;
-        E_Trans15_MEC_inclusive_upper_lim = BeamEnergy * 1.1;
+        E_Trans15_MEC_inclusive_upper_lim = 1.7;
         E_Trans15_MEC_inclusive_lower_lim = 0;
-        E_Trans15_RES_inclusive_upper_lim = BeamEnergy * 1.1;
+        E_Trans15_RES_inclusive_upper_lim = 1.7;
         E_Trans15_RES_inclusive_lower_lim = 0;
-        E_Trans15_DIS_inclusive_upper_lim = BeamEnergy * 1.1;
+        E_Trans15_DIS_inclusive_upper_lim = 1.7;
         E_Trans15_DIS_inclusive_lower_lim = 0;
         E_Trans_VS_q_all_inclusive_upper_lim_x = 2.75;
         E_Trans_VS_q_all_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_all_inclusive_upper_lim_y = BeamEnergy * 1.1;
+        E_Trans_VS_q_all_inclusive_upper_lim_y = 1.7;
         E_Trans_VS_q_all_inclusive_lower_lim_y = 0;
         E_Trans_VS_q_QEL_inclusive_upper_lim_x = 2.75;
         E_Trans_VS_q_QEL_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_QEL_inclusive_upper_lim_y = BeamEnergy * 1.1;
+        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 1.7;
         E_Trans_VS_q_QEL_inclusive_lower_lim_y = 0;
         E_Trans_VS_q_MEC_inclusive_upper_lim_x = 2.75;
         E_Trans_VS_q_MEC_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_MEC_inclusive_upper_lim_y = BeamEnergy * 1.1;
+        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 1.7;
         E_Trans_VS_q_MEC_inclusive_lower_lim_y = 0;
         E_Trans_VS_q3_all_upper_lim_x_2p = 2.75;
         E_Trans_VS_q3_all_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_2p = BeamEnergy * 1.1;
+        E_Trans_VS_q3_all_upper_lim_y_2p = 1.7;
         E_Trans_VS_q3_all_lower_lim_y_2p = 0;
         E_Trans_VS_q3_QEL_upper_lim_x_2p = 2.75;
         E_Trans_VS_q3_QEL_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_2p = BeamEnergy * 1.1;
+        E_Trans_VS_q3_QEL_upper_lim_y_2p = 1.7;
         E_Trans_VS_q3_QEL_lower_lim_y_2p = 0;
         E_Trans_VS_q3_MEC_upper_lim_x_2p = 2.75;
         E_Trans_VS_q3_MEC_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_2p = BeamEnergy * 1.1;
+        E_Trans_VS_q3_MEC_upper_lim_y_2p = 1.7;
         E_Trans_VS_q3_MEC_lower_lim_y_2p = 0;
         E_Trans_VS_q3_all_upper_lim_x_1n1p = 2.75;
         E_Trans_VS_q3_all_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_1n1p = BeamEnergy * 1.1;
+        E_Trans_VS_q3_all_upper_lim_y_1n1p = 1.7;
         E_Trans_VS_q3_all_lower_lim_y_1n1p = 0;
         E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 2.75;
         E_Trans_VS_q3_QEL_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = BeamEnergy * 1.1;
+        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 1.7;
         E_Trans_VS_q3_QEL_lower_lim_y_1n1p = 0;
         E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 2.75;
         E_Trans_VS_q3_MEC_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = BeamEnergy * 1.1;
+        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 1.7;
         E_Trans_VS_q3_MEC_lower_lim_y_1n1p = 0;
         //</editor-fold>
 
@@ -4840,11 +4862,11 @@ void gst::Loop() {
 //    THStack("ET around 15 degrees Stack (all interactions, 2p)",
 //            "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (2p);E_{#nu}-E_{l} [GeV]");
     THStack *Energy_Transfer_all_int_15_Stack_2p = new
-    THStack("ET #omega around #theta_{l'}=15#circ (all interactions, 2p)",
-            "ET #omega around #theta_{l'}=15#circ (all int., 2p);#omega=E_{l}-E_{l'} [GeV]");
+    THStack("#omega around #theta_{l'} = 15#circ (2p)",
+            "#omega around #theta_{l'} = 15#circ (2p);#omega = E_{l} - E_{l'} [GeV]");
     THStack *Energy_Transfer_all_int_15_Stack_1n1p = new
-    THStack("ET around 15 deg Stack (all interactions, 1n1p)",
-            "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p);E_{#nu}-E_{l} [GeV]");
+    THStack("#omega around #theta_{l'} = 15#circ (1n1p)",
+            "#omega around #theta_{l'} = 15#circ (1n1p);#omega = E_{l} - E_{l'} [GeV]");
 
 
 //    TH1D *E_Trans_all_ang_all_int_2p = new
@@ -5915,8 +5937,8 @@ void gst::Loop() {
         if (calculate_2p == true) {
 //          Calculations with FSI turned ON:
             if (FSI_status == true) {
-                if (nfp == 2 && nfpip == 0 && nfpim == 0 && nfkp == 0 && nfkm == 0 && nfk0 == 0) { // See if there are 2FS protons and 2FS hadrons (2pXnXpi0)
-//                if (nfp == 2 && nfn == 0 && nf == 2) { // See if there are 2FS protons and 2FS hadrons (2p)
+//                if (nfp == 2 && nfpip == 0 && nfpim == 0 && nfkp == 0 && nfkm == 0 && nfk0 == 0) { // See if there are 2FS protons and 2FS hadrons (2pXnXpi0)
+                if (nfp == 2 && nfn == 0 && nf == 2) { // See if there are 2FS protons and 2FS hadrons (2p)
 
                     //<editor-fold desc="Proton selector (2p)">
                     for (int i = 0; i < nf; i++) {
@@ -8606,50 +8628,56 @@ void gst::Loop() {
 //        c1->Clear();
 
         //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
-        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "Energy transfer #omega around #theta_{l'}=15#circ", "2pXnX#pi^{0}", plots,
-//        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "Energy Transfer #omega for every #theta_{l'}", "2p", plots,
+//        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "Energy transfer #omega around #theta_{l'}=15#circ", "2pXnX#pi^{0}", plots,
+        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_2p, normalized_E_Trans15_plots, "#omega around #theta_{l'} = 15#circ", "2p", plots,
                        E_Trans15_all_2p, E_Trans15_QEL_2p, E_Trans15_MEC_2p, E_Trans15_RES_2p, E_Trans15_DIS_2p,
-                       "Energy_transfer_histogram_15_Stack_linear_scale_2p", "plots/Energy_transfer_histograms/", "");
+                       "Energy_transfer_histogram_15_Stack_linear_scale", "plots/Energy_transfer_histograms/", "");
 
         //</editor-fold>
 
 //  Energy transfer around 15 deg stack (1n1p only) ----------------------------------------------------
 
-        //<editor-fold desc="Energy transfer around 15 deg stack (1n1p only)">
-        Energy_Transfer_all_int_15_Stack_1n1p->Draw("nostack");
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
-        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+        //        //<editor-fold desc="Energy transfer around 15 deg stack (1n1p only)">
+//        Energy_Transfer_all_int_15_Stack_1n1p->Draw("nostack");
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetXaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//        Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetLabelSize(0.0425);
+//
+//        if (normalized_E_Trans15_plots) {
+//            Energy_Transfer_all_int_15_Stack_1n1p->SetTitle(
+//                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p) - Normalized");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Probability (%)");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        } else {
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Arbitrary units");
+//            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+//        }
+//
+//
+//        auto E_Trans_15_legend_1n1p = new
+//        TLegend(0.625, 0.625, 0.9, 0.9);
+////        auto E_Trans_15_legend_1n1p = new TLegend(0.65, 0.65, 0.9, 0.9);
+//
+//        TLegendEntry *E_Trans_15_all_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_all_1n1p, "All interactions", "l");
+//        TLegendEntry *E_Trans_15_QEL_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_QEL_1n1p, "QEL", "l");
+//        TLegendEntry *E_Trans_15_MEC_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_MEC_1n1p, "MEC", "l");
+//        TLegendEntry *E_Trans_15_RES_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_RES_1n1p, "RES", "l");
+//        TLegendEntry *E_Trans_15_DIS_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_DIS_1n1p, "DIS", "l");
+//
+//        E_Trans_15_legend_1n1p->Draw();
+//
+//        plots->Add(Energy_Transfer_all_int_15_Stack_1n1p);
+//        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_1n1p.png");
+//        c1->Clear();
 
-        if (normalized_E_Trans15_plots) {
-            Energy_Transfer_all_int_15_Stack_1n1p->SetTitle(
-                    "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (1n1p) - Normalized");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetXaxis()->SetTitle("E_{#nu}-E_{l} [GeV]");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Probability (%)");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        } else {
-            Energy_Transfer_all_int_15_Stack_1n1p->GetYaxis()->SetTitle("Arbitrary units");
-            Energy_Transfer_all_int_15_Stack_1n1p->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
-        }
+        //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
+        stackPlotter1D(c1, Energy_Transfer_all_int_15_Stack_1n1p, normalized_E_Trans15_plots, "#omega around #theta_{l'} = 15#circ", "1n1p", plots,
+                       E_Trans15_all_1n1p, E_Trans15_QEL_1n1p, E_Trans15_MEC_1n1p, E_Trans15_RES_1n1p, E_Trans15_DIS_1n1p,
+                       "Energy_transfer_histogram_15_Stack_linear_scale", "plots/Energy_transfer_histograms/", "");
 
-
-        auto E_Trans_15_legend_1n1p = new
-        TLegend(0.625, 0.625, 0.9, 0.9);
-//        auto E_Trans_15_legend_1n1p = new TLegend(0.65, 0.65, 0.9, 0.9);
-
-        TLegendEntry *E_Trans_15_all_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_all_1n1p, "All interactions", "l");
-        TLegendEntry *E_Trans_15_QEL_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_QEL_1n1p, "QEL", "l");
-        TLegendEntry *E_Trans_15_MEC_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_MEC_1n1p, "MEC", "l");
-        TLegendEntry *E_Trans_15_RES_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_RES_1n1p, "RES", "l");
-        TLegendEntry *E_Trans_15_DIS_entry_1n1p_stack = E_Trans_15_legend_1n1p->AddEntry(E_Trans15_DIS_1n1p, "DIS", "l");
-
-        E_Trans_15_legend_1n1p->Draw();
-
-        plots->Add(Energy_Transfer_all_int_15_Stack_1n1p);
-        c1->SaveAs("plots/Energy_transfer_histograms/Energy_transfer_histogram_15_Stack_linear_scale_1n1p.png");
-        c1->Clear();
-        //</editor-fold>
+//        //</editor-fold>
 
     }
 
@@ -8870,8 +8898,8 @@ void gst::Loop() {
         histPlotter1D(c1, hEcal_DIS_2p, normalized_E_cal_plots, false, 1., "Truth-level E_{cal}", "DIS only", 0.06, 0.0425, 0.0425, plots, 2, false, true, sEcal_2p,
                       "05_E_cal_DIS_only", "plots/E_cal_restorations/All_Int_Stack_IPS/", "2p", kBlack, true, true, true);
 
-        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2pXnX#pi^{0}", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
-//        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2p", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
+//        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2pXnX#pi^{0}", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
+        stackPlotter1D(c1, sEcal_2p, normalized_E_cal_plots, "Truth-level E_{cal}", "2p", plots, hEcal_all_int_2p, hEcal_QEL_2p, hEcal_MEC_2p, hEcal_RES_2p, hEcal_DIS_2p,
                        "00_E_cal_stack", "plots/E_cal_restorations/All_Int_Stack_IPS/", "");
 
     }

@@ -772,9 +772,10 @@ void EventAnalyser() {
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
     bool plot_and_fit_nRes = true;
     bool VaryingDelta = true;
+//    bool VaryingDelta = false;
 //    double DeltaSlices = 0.3;
-    double DeltaSlices = 0.2;
-//    double DeltaSlices = 0.05;
+//    double DeltaSlices = 0.2;
+    double DeltaSlices = 0.05;
 
     if (!calculate_truth_level) { plot_and_fit_nRes = false; } // Disable resolution-realted operations if not calculating TL plots
     if (apply_proton_smearing) { plot_and_fit_nRes = false; }  // Disable resolution-realted operations when applying proton smearing
