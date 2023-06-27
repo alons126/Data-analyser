@@ -12,7 +12,6 @@
 NeutronResolution::NeutronResolution(const string &SampleName, double beamE, double nMomTh, const string &SavePath, double DeltaSlices, bool VaryingDelta) {
     SlicesSavePath = SavePath, delta = DeltaSlices;
 
-//    double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim = SliceLowerLim + Delta;
     double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim;
 
     if (!VaryingDelta) {
@@ -20,8 +19,6 @@ NeutronResolution::NeutronResolution(const string &SampleName, double beamE, dou
     } else {
         SliceUpperLim = SliceLowerLim + 0.3;
     }
-//    double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim = SliceLowerLim + 0.3;
-////    double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim = SliceLowerLim + Delta;
 
     bool SliceAndDice = true;
     int SliceNumber = 0;
@@ -71,74 +68,23 @@ NeutronResolution::NeutronResolution(const string &SampleName, double beamE, dou
 
             if (VaryingDelta) {
                 if (beamE == 5.98636) {
-//                    if ((SliceLowerLim >= 0.4) && (SliceLowerLim < 0.7)) {
-//                        Delta = delta * 6;
-//                    } else
                     if ((SliceLowerLim >= 0.7) && (SliceLowerLim < 0.85)) { // 0.7-0.9
                         Delta = delta * 4;
                     } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.0)) { // 0.9-1.05
                         Delta = delta * 3;
-//                        cout << "\nTEST\n";
-//                        cout << "\nSliceLowerLim = " << SliceLowerLim << "\n";
-//                        cout << "\nSliceLowerLim + Delta = " << SliceLowerLim + Delta << "\n";
-                    } else if ((SliceLowerLim >= 1.0) && (SliceLowerLim < 1.6)) { // 0.9-1.05
+                    } else if ((SliceLowerLim >= 1.0) && (SliceLowerLim < 1.6)) { // 1.05-1.65
                         Delta = delta * 2;
-                    } else if ((SliceLowerLim >= 1.6) && (SliceLowerLim < 1.9)) {
+                    } else if ((SliceLowerLim >= 1.6) && (SliceLowerLim < 1.9)) { // 1.65-1.95
                         Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 1.9) && (SliceLowerLim < 2.1)) {
+                    } else if ((SliceLowerLim >= 1.9) && (SliceLowerLim < 2.1)) { // 1.95-2.15
                         Delta = delta * 4;
-                    } else if ((SliceLowerLim >= 2.1) && (SliceLowerLim < 2.45)) {
+                    } else if ((SliceLowerLim >= 2.1) && (SliceLowerLim < 2.45)) { // 2.15-2.5
                         Delta = delta * 7;
-                    } else if (SliceLowerLim >= 2.45) {
+                    } else if (SliceLowerLim >= 2.45) { // 2.5-beamE
                         Delta = beamE - SliceLowerLim;
                     }
-//                    if ((SliceLowerLim + Delta >= 0.4) && (SliceLowerLim + Delta < 0.7)) {
-//                        Delta = delta * 6;
-//                    } else if ((SliceLowerLim + Delta >= 0.7) && (SliceLowerLim + Delta < 0.9)) {
-//                        Delta = delta * 4;
-//                    } else if ((SliceLowerLim + Delta >= 0.9) && (SliceLowerLim + Delta < 1.05)) {
-//                        Delta = delta * 3;
-//                    } else if ((SliceLowerLim + Delta >= 1.05) && (SliceLowerLim + Delta < 1.65)) {
-//                        Delta = delta * 2;
-//                    } else if ((SliceLowerLim + Delta >= 1.65) && (SliceLowerLim + Delta < 1.95)) {
-//                        Delta = delta * 3;
-//                    } else if ((SliceLowerLim + Delta >= 1.95) && (SliceLowerLim + Delta < 2.15)) {
-//                        Delta = delta * 4;
-//                    } else if ((SliceLowerLim + Delta >= 2.15) && (SliceLowerLim + Delta < 2.5)) {
-//                        Delta = delta * 7;
-//                    } else if (SliceLowerLim + Delta >= 2.5) {
-//                        Delta = beamE - SliceLowerLim;
-//                    }
                 }
             }
-
-//            //<editor-fold desc="Working VaryingDelta 2 (RECHECK!!!)">
-//            if (VaryingDelta) {
-//                if (beamE == 5.98636) {
-//                    if ((SliceLowerLim + Delta >= 1.9) && (SliceLowerLim + Delta < 2.2)) {
-//                        Delta = delta * 1.5;
-//                    } else if ((SliceLowerLim + Delta >= 2.2) && (SliceLowerLim + Delta < 2.7)) {
-//                        Delta = delta * 2.5;
-//                    } else if (SliceLowerLim + Delta >= 2.7) {
-//                        Delta = beamE - SliceLowerLim;
-//                    }
-//                }
-//            }
-//            //</editor-fold>
-
-//            //<editor-fold desc="Working VaryingDelta (RECHECK!!!)">
-//            if (VaryingDelta) {
-//                if (beamE == 5.98636) {
-//                    if ((SliceLowerLim + Delta >= 1.9) && (SliceLowerLim + Delta < 2.2)) {
-//                        Delta = delta * 1.5;
-//                    } else if ((SliceLowerLim + Delta >= 2.2) && (SliceLowerLim + Delta < 2.7)) {
-//                        Delta = delta * 2.5;
-//                    } else if (SliceLowerLim + Delta >= 2.7) {
-//                        Delta = beamE - SliceLowerLim;
-//                    }
-//                }
-//            }
-//            //</editor-fold>
 
             if ((SliceUpperLim + Delta) > beamE) {
                 SliceUpperLim = beamE;
@@ -473,17 +419,12 @@ double NeutronResolution::PSmear(bool apply_proton_smearing, double Momentum) {
 
         for (DSCuts LoadedResolutionSlice: LoadedResSlicesFitVar) {
             if ((LoadedResolutionSlice.GetSliceLowerb() <= Momentum) && (LoadedResolutionSlice.GetSliceUpperb() >= Momentum)) {
-//                TRandom3 *Rand = new TRandom3();
                 double Smearing = Rand->Gaus(1, LoadedResolutionSlice.GetUpperCut());
 //                double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
 
                 //TODO: check with Adi/Julia if the smearing factor can be negative
-                double SmearingFactor = abs(Smearing);
-//            double SmearingFactor = (Smearing * Smearing);
-
-//            cout << "\n\nSmearingFactor = " << SmearingFactor << "\n";
-//            cout << "Momentum = " << Momentum << "\n";
-//            cout << "SmearingFactor * Momentum = " << SmearingFactor * Momentum << "\n";
+                double SmearingFactor = Smearing;
+//                double SmearingFactor = abs(Smearing);
 
                 return SmearingFactor * Momentum;
             }
