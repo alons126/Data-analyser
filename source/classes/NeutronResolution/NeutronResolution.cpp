@@ -422,11 +422,7 @@ double NeutronResolution::PSmear(bool apply_proton_smearing, double Momentum) {
                 double Smearing = Rand->Gaus(1, LoadedResolutionSlice.GetUpperCut());
 //                double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
 
-                //TODO: check with Adi/Julia if the smearing factor can be negative
-                double SmearingFactor = Smearing;
-//                double SmearingFactor = abs(Smearing);
-
-                return SmearingFactor * Momentum;
+                return Smearing * Momentum;
             }
         }
     }

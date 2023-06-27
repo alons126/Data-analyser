@@ -484,120 +484,120 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-    //<editor-fold desc="Plot selector - plot all">
-    /* Master plots variable */
-    bool Plot_selector_master = true; // Master plot selector for analysis
-
-    /* Cut variable plots */
-    bool Cut_plots_master = true; // Master cut plots selector
-    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-
-    /* Beta plots */
-    bool W_plots = true;
-
-    /* Beta plots */
-    bool Beta_plots = true;
-    bool Beta_vs_P_plots = true;
-
-    /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
-    bool Theta_e_plots = true, Phi_e_plots = true;
-
-    /* Q2 plots */
-    bool Q2_plots = true;
-
-    /* E_e plots */
-    bool E_e_plots = true;
-
-    /* ET plots */
-    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-
-    /* Ecal plots */
-    bool Ecal_plots = true;
-
-    /* Transverse variables plots */
-    bool TKI_plots = true;
-
-    /* ToF plots */
-    bool ToF_plots = false;
-
-    /* Efficiency plots */
-    bool Efficiency_plots = true;
-
-    /* Resolution plots */
-    bool Hit_maps_plots = true;
-
-    /* Resolution plots */
-    bool Resolution_plots = true;
-    //</editor-fold>
-
-//    //<editor-fold desc="Plot selector - selected plots">
+//    //<editor-fold desc="Plot selector - plot all">
 //    /* Master plots variable */
 //    bool Plot_selector_master = true; // Master plot selector for analysis
 //
 //    /* Cut variable plots */
 //    bool Cut_plots_master = true; // Master cut plots selector
-////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-////
-////    bool Momentum_plots = false;
-//    bool Momentum_plots = true;
-////
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 //
 //    /* Beta plots */
-////    bool W_plots = true;
-//    bool W_plots = false;
+//    bool W_plots = true;
 //
 //    /* Beta plots */
-////    bool Beta_plots = true;
-//    bool Beta_plots = false;
-////    bool Beta_vs_P_plots = true;
-//    bool Beta_vs_P_plots = false;
+//    bool Beta_plots = true;
+//    bool Beta_vs_P_plots = true;
 //
 //    /* Angle plots */
-////    bool Angle_plots_master = true; // Master angle plots selector
-////    bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
 //
 //    /* Q2 plots */
-////    bool Q2_plots = true;
-//    bool Q2_plots = false;
+//    bool Q2_plots = true;
 //
 //    /* E_e plots */
-////    bool E_e_plots = true;
-//    bool E_e_plots = false;
+//    bool E_e_plots = true;
 //
 //    /* ET plots */
-////    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_plots_master = true; // Master ET plots selector
 //    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 //
 //    /* Ecal plots */
-////    bool Ecal_plots = true;
-//    bool Ecal_plots = false;
+//    bool Ecal_plots = true;
 //
 //    /* Transverse variables plots */
-////    bool TKI_plots = true;
-//    bool TKI_plots = false;
+//    bool TKI_plots = true;
 //
 //    /* ToF plots */
-////    bool ToF_plots = true;
 //    bool ToF_plots = false;
 //
 //    /* Efficiency plots */
-////    bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
+//    bool Efficiency_plots = true;
 //
 //    /* Resolution plots */
 //    bool Hit_maps_plots = true;
-////    bool Hit_maps_plots = false;
 //
 //    /* Resolution plots */
 //    bool Resolution_plots = true;
-////    bool Resolution_plots = false;
 //    //</editor-fold>
+
+    //<editor-fold desc="Plot selector - selected plots">
+    /* Master plots variable */
+    bool Plot_selector_master = true; // Master plot selector for analysis
+
+    /* Cut variable plots */
+    bool Cut_plots_master = true; // Master cut plots selector
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+//
+//    bool Momentum_plots = false;
+    bool Momentum_plots = true;
+//
+
+    /* Beta plots */
+//    bool W_plots = true;
+    bool W_plots = false;
+
+    /* Beta plots */
+//    bool Beta_plots = true;
+    bool Beta_plots = false;
+//    bool Beta_vs_P_plots = true;
+    bool Beta_vs_P_plots = false;
+
+    /* Angle plots */
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots_master = false; // Master angle plots selector
+    bool Theta_e_plots = false, Phi_e_plots = false;
+
+    /* Q2 plots */
+//    bool Q2_plots = true;
+    bool Q2_plots = false;
+
+    /* E_e plots */
+//    bool E_e_plots = true;
+    bool E_e_plots = false;
+
+    /* ET plots */
+//    bool ETrans_plots_master = true; // Master ET plots selector
+    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+
+    /* Ecal plots */
+//    bool Ecal_plots = true;
+    bool Ecal_plots = false;
+
+    /* Transverse variables plots */
+//    bool TKI_plots = true;
+    bool TKI_plots = false;
+
+    /* ToF plots */
+//    bool ToF_plots = true;
+    bool ToF_plots = false;
+
+    /* Efficiency plots */
+//    bool Efficiency_plots = true;
+    bool Efficiency_plots = false;
+
+    /* Resolution plots */
+    bool Hit_maps_plots = true;
+//    bool Hit_maps_plots = false;
+
+    /* Resolution plots */
+    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
+    //</editor-fold>
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -774,16 +774,14 @@ void EventAnalyser() {
 
     //<editor-fold desc="Neutron resolution fit settings">
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
-    bool plot_and_fit_nRes = true;
+    bool plot_and_fit_nRes = false;
     bool VaryingDelta = true;
-//    bool VaryingDelta = false;
-//    double DeltaSlices = 0.3;
-//    double DeltaSlices = 0.2;
+
     double DeltaSlices = 0.05;
 
     if (!calculate_truth_level) { plot_and_fit_nRes = false; } // Disable resolution-realted operations if not calculating TL plots
     if (apply_proton_smearing) { plot_and_fit_nRes = false; }  // Disable resolution-realted operations when applying proton smearing
-    if (plot_and_fit_nRes) { apply_nBeta_fit_cuts = false; }  // Disable resolution-realted operations when applying proton smearing
+    if (plot_and_fit_nRes) { apply_nBeta_fit_cuts = false; }   // Disable upper momentum th. cut is resolution is being calculated
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
     NeutronResolution nRes;
@@ -6319,6 +6317,8 @@ void EventAnalyser() {
     while (chain.Next()) { // loop over events
         ++num_of_events; // logging Total #(events) in sample
 
+//        auto allParticles_det = c12->getDetParticles();
+
         auto electrons_det = c12->getByID(11);
         if (electrons_det.size() == 1) { ++num_of_events_with_exactly_1e_from_file; }
 
@@ -7597,6 +7597,11 @@ void EventAnalyser() {
 
 //  1e cut --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//        int reco_nFD_Pindex = allParticles[NeutronsFD_ind.at(0)]->cal(n_detlayer_1n)->getIndex();
+//        int TL_nFD_Pindex = mcpbank_nRes->match_to(allParticles[NeutronsFD_ind.at(0)]->getIndex());
+//        cout << "\n\n\nreco_e_Pindex = " << electrons[0]->mc()->getTheta() << "\n";
+//        cout << "TL_e_Pindex = " << electrons[0]->getTheta() << "\n";
+
         //<editor-fold desc="1e cut">
         /* Here we apply electron cut on everything that follows (1p, nFDpCD, 1e2p and 2p) */
 
@@ -8587,6 +8592,9 @@ void EventAnalyser() {
                 bool NeutronInECIN_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                 bool NeutronInECOUT_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
+                // determine the earliest layer that the neutral hit in (NeutronInPCAL_1n should always be false!):
+                auto n_detlayer_1n = NeutronInPCAL_1n ? clas12::PCAL : NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT;
+
                 //<editor-fold desc="Safety check (1n)">
                 /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
                 if (allParticles[NeutronsFD_ind.at(0)]->getRegion() != FD) { cout << "\n\n1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
@@ -8595,6 +8603,7 @@ void EventAnalyser() {
                 }
                 if (NeutronInPCAL_1n) { cout << "\n\n1n: neutron hit in PCAL! Exiting...\n\n", exit(EXIT_FAILURE); }
                 if (!(NeutronInECIN_1n || NeutronInECOUT_1n)) { cout << "\n\n1n: no neutron hit in ECIN or ECOUT! Exiting...\n\n", exit(EXIT_FAILURE); }
+                if (!(!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n))) { cout << "\n\n1n: not neutron by definition! Exiting...\n\n", exit(EXIT_FAILURE); }
                 //</editor-fold>
 
                 TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
@@ -8618,7 +8627,7 @@ void EventAnalyser() {
                 double n_hit_Phi_1n, n_hit_Theta_1n, e_hit_Phi_1n, e_hit_Theta_1n, dPhi_hit_1n, dTheta_hit_1n;
 
                 if (!NeutronInPCAL_1n && (NeutronInECIN_1n || NeutronInECOUT_1n)) { // if neutron did not hit PCAL, and hit either ECIN or ECOUT
-                    auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+//                    auto n_detlayer_1n = NeutronInECIN_1n ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
 
                     // neutron ECIN/ECAL hit vector and angles:
                     n_hit_1n_3v.SetXYZ(allParticles[NeutronsFD_ind.at(0)]->cal(n_detlayer_1n)->getX(),
@@ -8642,15 +8651,7 @@ void EventAnalyser() {
                         e_hit_Theta_1n = e_hit_1n_3v.Theta() * 180 / pi, e_hit_Phi_1n = e_hit_1n_3v.Phi() * 180 / pi;
                     }
 
-                    dPhi_hit_1n = n_hit_Phi_1n - e_hit_Phi_1n, dTheta_hit_1n = n_hit_Theta_1n - e_hit_Theta_1n;
-
-                    //<editor-fold desc="Shift dPhi (from symmetry)">
-                    if (dPhi_hit_1n > 180) {
-                        dPhi_hit_1n = n_hit_Phi_1n - e_hit_Phi_1n - 360;
-                    } else if (dPhi_hit_1n < -180) {
-                        dPhi_hit_1n = n_hit_Phi_1n - e_hit_Phi_1n + 360;
-                    }
-                    //</editor-fold>
+                    dPhi_hit_1n = CalcdPhi(n_hit_Phi_1n - e_hit_Phi_1n);
 
                     // subtracting the angles between the neutron hit and electron hit to see if we have fake neutrons:
                     hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);
@@ -9173,20 +9174,25 @@ void EventAnalyser() {
 
                     //<editor-fold desc="Fill resolution histograms (1n)">
                     if (plot_and_fit_nRes) {
-                        auto mcpbank_Res = c12->mcparts();
-                        const Int_t Ngen_Res = mcpbank_Res->getRows();
+                        auto mcpbank_nRes = c12->mcparts();
+                        const Int_t Ngen_nRes = mcpbank_nRes->getRows();
 
-                        for (Int_t i = 0; i < Ngen_Res; i++) {
-                            mcpbank_Res->setEntry(i);
+//                        int reco_nFD_Pindex = allParticles[NeutronsFD_ind.at(0)]->cal(n_detlayer_1n)->getIndex();
+//                        int TL_nFD_Pindex = mcpbank_nRes->match_to(allParticles[NeutronsFD_ind.at(0)]->getIndex());
+//                        cout << "\n\n\nreco_nFD_Pindex = " << reco_nFD_Pindex << "\n";
+//                        cout << "TL_nFD_Pindex = " << TL_nFD_Pindex << "\n";
 
-                            double TLNeutronP = rCalc(mcpbank_Res->getPx(), mcpbank_Res->getPy(), mcpbank_Res->getPz());
-                            double TLNeutronTheta = acos(mcpbank_Res->getPz() / TLNeutronP) * 180.0 / pi;
-                            double TLNeutronPhi = atan2(mcpbank_Res->getPy(), mcpbank_Res->getPx()) * 180.0 / pi;
+                        for (Int_t i = 0; i < Ngen_nRes; i++) {
+                            mcpbank_nRes->setEntry(i);
+
+                            double TLNeutronP = rCalc(mcpbank_nRes->getPx(), mcpbank_nRes->getPy(), mcpbank_nRes->getPz());
+                            double TLNeutronTheta = acos(mcpbank_nRes->getPz() / TLNeutronP) * 180.0 / pi;
+                            double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
 
                             double dNeutronTheta = (P_n_1n_3v.Theta() * 180.0 / pi) - TLNeutronTheta;
                             double dNeutronPhi = CalcdPhi((P_n_1n_3v.Phi() * 180.0 / pi) - TLNeutronPhi);
 
-                            auto pid = mcpbank_Res->getPid();
+                            auto pid = mcpbank_nRes->getPid();
 
                             bool InFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
                             bool PassNeutronMomTh = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
