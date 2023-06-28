@@ -220,15 +220,17 @@ void EventAnalyser() {
 //                Efficiency_Status = "Eff2_noKinCuts";
                 Efficiency_Status = "Eff2";
             } else {
+//                Efficiency_Status = "Eff1_5w40Bins";
 //                Efficiency_Status = "Eff1_5w50Bins";
 //                Efficiency_Status = "Eff1_5w65Bins";
 //                Efficiency_Status = "Eff1_5w100Bins";
+//                Efficiency_Status = "Eff1_10w40Bins";
 //                Efficiency_Status = "Eff1_10w50Bins";
-//                Efficiency_Status = "Eff1_10w65Bins";
+                Efficiency_Status = "Eff1_10w65Bins";
 //                Efficiency_Status = "Eff1_10w100Bins";
 
 //                Efficiency_Status = "Eff1_ResPlots2";
-                Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1";
 //                Efficiency_Status = "Eff1_d0_05_test";
             }
         }
@@ -725,7 +727,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Acceptance map generation settings">
     /* Hit maps are handled completely by the AMaps class */
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
 
     if (!calculate_truth_level) { generate_AMaps = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
@@ -733,7 +735,10 @@ void EventAnalyser() {
     //<editor-fold desc="Set Bins by case">
     int NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins;
 
-    if (Efficiency_Status == "Eff1_5w50Bins") {
+    if (Efficiency_Status == "Eff1_5w40Bins") {
+        NumberOfMomBins = 5;
+        hBinNumOfXBins = hBinNumOfYBins = 40;
+    } else if (Efficiency_Status == "Eff1_5w50Bins") {
         NumberOfMomBins = 5;
         hBinNumOfXBins = hBinNumOfYBins = 50;
     } else if (Efficiency_Status == "Eff1_5w65Bins") {
@@ -742,6 +747,9 @@ void EventAnalyser() {
     } else if (Efficiency_Status == "Eff1_5w100Bins") {
         NumberOfMomBins = 5;
         hBinNumOfXBins = hBinNumOfYBins = 100;
+    } else if (Efficiency_Status == "Eff1_10w40Bins") {
+        NumberOfMomBins = 10;
+        hBinNumOfXBins = hBinNumOfYBins = 40;
     } else if (Efficiency_Status == "Eff1_10w50Bins") {
         NumberOfMomBins = 10;
         hBinNumOfXBins = hBinNumOfYBins = 50;
@@ -765,7 +773,11 @@ void EventAnalyser() {
     //<editor-fold desc="Acceptance maps class declaration & definition">
     AMaps aMaps;
 
-    if (generate_AMaps) { aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins); }
+    if (generate_AMaps) {
+        aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
+    } else {
+        AMaps(RefrenceHitMapsDirectory, SampleName);
+    }
     //</editor-fold>
 
     //</editor-fold>
@@ -6488,7 +6500,7 @@ void EventAnalyser() {
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
-            //<editor-fold desc="Particle counting">
+            //<editor-fold desc="TL particles counting">
             /* Particle index vectors */
             vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
 
@@ -6626,13 +6638,15 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
+            //<editor-fold desc="Event selection for TL plots">
             /* Setting up basic TL event selection */
             bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
             bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
-            bool TL_1e_cut = (TL_Electron_mom_ind.size() == 1); // One id. FD electron above momentum threshold
+            bool HitMap_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut && (electrons.size() == 1)); // One id. FD electron above momentum threshold
+//            bool HitMap_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
             /* Setting up 1p TL event selection */
@@ -6673,8 +6687,9 @@ void EventAnalyser() {
 
             // nFDpCD = One id. FD neutron & one id. CD proton:
             TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
+            //</editor-fold>
 
-            //<editor-fold desc="Fill TL histograms">
+            //<editor-fold desc="Fill TL histograms and AMaps">
             for (Int_t i = 0; i < Ngen; i++) {
                 mcpbank->setEntry(i);
 
@@ -6683,10 +6698,14 @@ void EventAnalyser() {
                 double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
+//                double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
+//                double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
                 int BinX_e, BinY_e, BinX_p, BinY_p, BinX_n, BinY_n;
 
                 bool e_inSomeSector, p_inSomeSector, n_inSomeSector, inFD, e_inFD, p_inFD, n_inFD, inCD;
+                inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+                inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (fill_TL_plots) {
                     BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
@@ -6700,35 +6719,11 @@ void EventAnalyser() {
                     p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
                     n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
 
-                    inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                     e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                     p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                     n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                    inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
-                }
-                /*
-                int BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                int BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-                int BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                int BinY_p = GetBinFromAng(Particle_TL_Theta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-                int BinX_n = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-                int BinY_n = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
-                bool e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
-                bool p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
-                bool n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
-
-                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                bool e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                bool p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                bool n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
-*/
-
-                if (particlePDGtmp == 11) {
-                    if (TL_1e_cut && generate_AMaps) { aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); }
-
-                    if (fill_TL_plots) {
+                    if (particlePDGtmp == 11) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
                                 hP_e_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -6792,11 +6787,7 @@ void EventAnalyser() {
                             hTheta_e_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
                             hPhi_e_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                         }
-                    }
-                } else if (particlePDGtmp == 2112) {
-                    if (TL_1e_cut && generate_AMaps) { aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); }
-
-                    if (fill_TL_plots) {
+                    } else if (particlePDGtmp == 2112) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
                                 hP_n_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -6886,11 +6877,7 @@ void EventAnalyser() {
                                 hPhi_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
                             }
                         }
-                    }
-                } else if (particlePDGtmp == 2212) {
-                    if (TL_1e_cut && generate_AMaps) { aMaps.hFillHitMaps("TL", "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); }
-
-                    if (fill_TL_plots) {
+                    } else if (particlePDGtmp == 2212) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
                                 hP_p_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -7018,9 +7005,7 @@ void EventAnalyser() {
                                 hPhi_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Phi, Weight);
                             }
                         }
-                    }
-                } else if (particlePDGtmp == 211) {
-                    if (fill_TL_plots) {
+                    } else if (particlePDGtmp == 211) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) {
                                 hP_pip_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -7080,9 +7065,7 @@ void EventAnalyser() {
                             hTheta_pip_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
                             hPhi_pip_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                         }
-                    }
-                } else if (particlePDGtmp == -211) {
-                    if (fill_TL_plots) {
+                    } else if (particlePDGtmp == -211) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) {
                                 hP_pim_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -7142,9 +7125,7 @@ void EventAnalyser() {
                             hTheta_pim_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
                             hPhi_pim_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                         }
-                    }
-                } else if (particlePDGtmp == 111) {
-                    if (fill_TL_plots) {
+                    } else if (particlePDGtmp == 111) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) {
                                 hP_pi0_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -7204,9 +7185,7 @@ void EventAnalyser() {
                             hTheta_pi0_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
                             hPhi_pi0_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
                         }
-                    }
-                } else if (particlePDGtmp == 22) {
-                    if (fill_TL_plots) {
+                    } else if (particlePDGtmp == 22) {
                         if (TL_Event_Selection_1e_cut) {
                             if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) {
                                 hP_ph_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -7316,6 +7295,648 @@ void EventAnalyser() {
                         }
                     }
                 }
+
+//                if (generate_AMaps && TL_Event_Selection_1e_cut && inFD) {
+                if (generate_AMaps && HitMap_Event_Selection_1e_cut && inFD) {
+                    if (particlePDGtmp == 11) {
+                        aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                    } else if (particlePDGtmp == 2112) {
+                        aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                    } else if (particlePDGtmp == 2212) {
+                        aMaps.hFillHitMaps("TL", "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                    }
+                }
+
+//                //<editor-fold desc="Old">
+//                if (fill_TL_plots) {
+//                    BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                    BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//                    BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                    BinY_p = GetBinFromAng(Particle_TL_Theta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//                    BinX_n = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                    BinY_n = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//
+//                    e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
+//                    p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
+//                    n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
+//
+//                    inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                    e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                    p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                    n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                    inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
+//                }
+//                /*
+//                int BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                int BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//                int BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                int BinY_p = GetBinFromAng(Particle_TL_Theta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//                int BinX_n = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+//                int BinY_n = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+//
+//                bool e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
+//                bool p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
+//                bool n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
+//
+//                bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                bool e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                bool p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                bool n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
+//*/
+//
+//                if (particlePDGtmp == 11) {
+//                    if (TL_1e_cut && generate_AMaps) { aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); }
+//
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
+//                                hP_e_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_e_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_e_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_e_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_e_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_e_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
+//                                hP_e_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_e_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_e_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                                hTheta_e_vs_Phi_e_truth_1p.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                            }
+//
+//                            hP_e_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_e_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_e_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
+//                                hP_e_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_e_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_e_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                                hTheta_e_vs_Phi_e_truth_1n.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                            }
+//
+//                            hP_e_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_e_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_e_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
+//                                hP_e_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_e_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_e_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                                hTheta_e_vs_Phi_e_truth_pFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                            }
+//
+//                            hP_e_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_e_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_e_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_e_mom_cuts.GetUpperCut())) {
+//                                hP_e_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_e_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_e_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                                hTheta_e_vs_Phi_e_truth_nFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                            }
+//
+//                            hP_e_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_e_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_e_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//                    }
+//                } else if (particlePDGtmp == 2112) {
+//                    if (TL_1e_cut && generate_AMaps) { aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); }
+//
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
+//                                hP_n_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_n_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_n_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_n_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
+//                                hP_n_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_n_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_n_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_n_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
+//                                hP_n_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (n_inFD) {
+////                            if (inFD) {
+//                                    hP_n_AC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_n_AC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_n_AC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+//                                    hTheta_nFD_vs_Phi_nFD_truth_1n.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                                }
+//                            }
+//
+//                            hP_n_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_n_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_n_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (n_inFD) {
+////                            if (inFD) {
+//                                hP_n_BC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_BC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_BC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
+//                                hP_n_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_n_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_n_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_n_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
+//                                hP_n_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (n_inFD) {
+////                            if (inFD) {
+//                                    hP_n_AC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_n_AC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_n_AC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                                    hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                                }
+//                            }
+//
+//                            hP_n_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_n_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_n_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (n_inFD) {
+////                            if (inFD) {
+//                                hP_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_n_BC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//                    }
+//                } else if (particlePDGtmp == 2212) {
+//                    if (TL_1e_cut && generate_AMaps) { aMaps.hFillHitMaps("TL", "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); }
+//
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
+//                                hP_p_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_p_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_p_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_p_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
+//                                hP_p_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (p_inFD) {
+////                            if (inFD) {
+//                                    hP_p_AC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_p_AC_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_p_AC_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
+//                                    hTheta_pFD_vs_Phi_pFD_truth_1p.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                                }
+//                            }
+//
+//                            hP_p_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_p_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_p_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (p_inFD) {
+////                        if (inFD) {
+//                                hP_p_BC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_BC_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_BC_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
+//                                hP_p_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_p_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_p_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_p_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
+//                                hP_p_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (p_inFD) {
+////                        if (inFD) {
+//                                    hP_p_AC_truth_pFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_p_AC_truth_pFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_p_AC_truth_pFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                                    hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+//                                }
+//
+//                                if (inCD) {
+//                                    hP_p_AC_truth_pFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_p_AC_truth_pFDpCD_CD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_p_AC_truth_pFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//                            }
+//
+//                            hP_p_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_p_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_p_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (p_inFD) {
+////                        if (inFD) {
+//                                hP_p_BC_truth_pFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_BC_truth_pFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_BC_truth_pFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            if (inCD) {
+//                                hP_p_BC_truth_pFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_BC_truth_pFDpCD_CD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_BC_truth_pFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_p_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_p_mom_cuts.GetUpperCut())) {
+//                                hP_p_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (p_inFD) {
+////                        if (inFD) {
+//                                    hP_p_AC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_p_AC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_p_AC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//
+//                                if (inCD) {
+//                                    hP_p_AC_truth_nFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_p_AC_truth_nFDpCD_CD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_p_AC_truth_nFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//                            }
+//
+//                            hP_p_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_p_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_p_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (p_inFD) {
+////                        if (inFD) {
+//                                hP_p_BC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_BC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_BC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            if (inCD) {
+//                                hP_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_p_BC_truth_nFDpCD_CD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//                    }
+//                } else if (particlePDGtmp == 211) {
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) {
+//                                hP_pip_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pip_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pip_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pip_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pip_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pip_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) {
+//                                hP_pip_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pip_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pip_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pip_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pip_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pip_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) {
+//                                hP_pip_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pip_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pip_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pip_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pip_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pip_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) {
+//                                hP_pip_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pip_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pip_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pip_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pip_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pip_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_pip_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pip_mom_cuts.GetUpperCut())) {
+//                                hP_pip_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pip_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pip_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pip_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pip_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pip_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//                    }
+//                } else if (particlePDGtmp == -211) {
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) {
+//                                hP_pim_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pim_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pim_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pim_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pim_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pim_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) {
+//                                hP_pim_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pim_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pim_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pim_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pim_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pim_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) {
+//                                hP_pim_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pim_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pim_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pim_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pim_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pim_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) {
+//                                hP_pim_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pim_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pim_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pim_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pim_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pim_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_pim_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pim_mom_cuts.GetUpperCut())) {
+//                                hP_pim_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pim_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pim_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pim_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pim_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pim_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//                    }
+//                } else if (particlePDGtmp == 111) {
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) {
+//                                hP_pi0_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pi0_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pi0_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pi0_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pi0_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pi0_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) {
+//                                hP_pi0_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pi0_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pi0_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pi0_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pi0_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pi0_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) {
+//                                hP_pi0_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pi0_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pi0_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pi0_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pi0_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pi0_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) {
+//                                hP_pi0_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pi0_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pi0_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pi0_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pi0_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pi0_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_pi0_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_pi0_mom_cuts.GetUpperCut())) {
+//                                hP_pi0_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_pi0_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_pi0_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_pi0_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_pi0_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_pi0_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//                        }
+//                    }
+//                } else if (particlePDGtmp == 22) {
+//                    if (fill_TL_plots) {
+//                        if (TL_Event_Selection_1e_cut) {
+//                            if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) {
+//                                hP_ph_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                            }
+//
+//                            hP_ph_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_ph_BC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_ph_BC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+//                        }
+//
+//                        if (TL_Event_Selection_1p) {
+//                            if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) {
+//                                hP_ph_AC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_AC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_AC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (inFD) {
+//                                    hP_ph_AC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_ph_AC_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_ph_AC_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//                            }
+//
+//                            hP_ph_BC_truth_1p.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_ph_BC_truth_1p.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_ph_BC_truth_1p.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (inFD) {
+//                                hP_ph_BC_truth_1p_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_BC_truth_1p_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_BC_truth_1p_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//
+//                        if (TL_Event_Selection_1n) {
+//                            if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) {
+//                                hP_ph_AC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_AC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_AC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (inFD) {
+//                                    hP_ph_AC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_ph_AC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_ph_AC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//                            }
+//
+//                            hP_ph_BC_truth_1n.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_ph_BC_truth_1n.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_ph_BC_truth_1n.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (inFD) {
+//                                hP_ph_BC_truth_1n_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_BC_truth_1n_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_BC_truth_1n_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//
+//                        if (TL_Event_Selection_pFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) {
+//                                hP_ph_AC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_AC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_AC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (inFD) {
+//                                    hP_ph_AC_truth_pFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_ph_AC_truth_pFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_ph_AC_truth_pFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//                            }
+//
+//                            hP_ph_BC_truth_pFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_ph_BC_truth_pFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_ph_BC_truth_pFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (inFD) {
+//                                hP_ph_BC_truth_pFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_BC_truth_pFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_BC_truth_pFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//
+//                        if (TL_Event_Selection_nFDpCD) {
+//                            if ((Particle_TL_Momentum >= TL_ph_mom_cuts.GetLowerCut()) && (Particle_TL_Momentum <= TL_ph_mom_cuts.GetUpperCut())) {
+//                                hP_ph_AC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_AC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_AC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                                if (inFD) {
+//                                    hP_ph_AC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                    hTheta_ph_AC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                    hPhi_ph_AC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                                }
+//                            }
+//
+//                            hP_ph_BC_truth_nFDpCD.hFill(Particle_TL_Momentum, Weight);
+//                            hTheta_ph_BC_truth_nFDpCD.hFill(Particle_TL_Theta, Weight);
+//                            hPhi_ph_BC_truth_nFDpCD.hFill(Particle_TL_Phi, Weight);
+//
+//                            if (inFD) {
+//                                hP_ph_BC_truth_nFDpCD_FD.hFill(Particle_TL_Momentum, Weight);
+//                                hTheta_ph_BC_truth_nFDpCD_FD.hFill(Particle_TL_Theta, Weight);
+//                                hPhi_ph_BC_truth_nFDpCD_FD.hFill(Particle_TL_Phi, Weight);
+//                            }
+//                        }
+//                    }
+//                }
+//                //</editor-fold>
             } // end of for loop over TL particles
             //</editor-fold>
 
@@ -7614,12 +8235,14 @@ void EventAnalyser() {
         /* Safety check that we are looking at 1e cut. */
 
         // Check that we do have only one electron:
-        if (electrons.size() != 1) { cout << "\n\n1e cut: electrons.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (electrons.size() != 1) { cout << "\n\n1e cut: electrons.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (electrons[0]->getRegion() != FD) { cout << "\n\n1e cut: electrons is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
 
         // Check that our one electron is within momentum cuts:
         //TODO: might be problemetic if electron momentum cuts are changed. consider removing this if that does happen.
-        if (Electron_ind.size() != 1) { cout << "\n\n1e cut: Electron_ind.size() is different than 1. Exiting...\n\n", exit(EXIT_FAILURE); }
-        if (Electron_ind.at(0) != 0) { cout << "\n\n1e cut: Electron_ind.at(0) is different than 0. Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (Electron_ind.size() != 1) { cout << "\n\n1e cut: Electron_ind.size() is different than 1! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (Electron_ind.at(0) != 0) { cout << "\n\n1e cut: Electron_ind.at(0) is different than 0! Exiting...\n\n", exit(EXIT_FAILURE); }
+        if (electrons[Electron_ind.at(0)]->getRegion() != FD) { cout << "\n\n1e cut: Electron_ind.at(0) is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
         //</editor-fold>
 
 //        //<editor-fold desc="events counts with protons (1e cut)">
@@ -8064,40 +8687,34 @@ void EventAnalyser() {
 
         //<editor-fold desc="Filling reco. hit maps">
         if (generate_AMaps) {
-            aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
-            ElectronAMapBC.hFill(Phi_e, Theta_e, Weight);
-
-            for (int i = 0; i < protons.size(); i++) {
-                if (protons[i]->getRegion() == FD) {
-                    ProtonAMapBC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
-
-                    aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
-                }
+            if (electrons[0]->getRegion() == FD) {
+                ElectronAMapBC.hFill(Phi_e, Theta_e, Weight);
+                aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
             }
-            /*
+
+//            for (int i = 0; i < protons.size(); i++) {
             for (int &i: Protons_ind) {
                 if (protons[i]->getRegion() == FD) {
+                    ProtonAMapBC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
                     aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
                 }
             }
-    */
 
             //TODO: confirm with adi if I should fill these with of without ECAL veto.
-            for (int &i: FD_Neutrons) {
-//        for (int &i: NeutronsFD_ind) {
+//            for (int &i: FD_Neutrons) {
+            for (int &i: NeutronsFD_ind) {
                 if (allParticles[i]->getRegion() == FD) {
 
 //                bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                     bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                     bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
-                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT; // find first layer of hit
+                    auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT;           // find first layer of hit
 
                     if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
                         allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
-                        NeutronAMapBC.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
-
                         aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, allParticles[i]->getPhi() * 180.0 / pi,
                                            Weight);
+                        NeutronAMapBC.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
                     }
                 }
             }

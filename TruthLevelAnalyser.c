@@ -61,6 +61,7 @@ void gst::Loop() {
     system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Energy_transfer_VS_q3").c_str());
     system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/Inclusive_plots").c_str());
     system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/ET_All_Ang_2p").c_str());
+    system(("mkdir -p " + WorkingDirectory + "plots/Energy_transfer_histograms/ET_All_Ang_1n1p").c_str());
 
     system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots").c_str());
     system(("mkdir -p " + WorkingDirectory + "plots/MicroBooNE_plots/gamma_lab").c_str());
@@ -195,12 +196,12 @@ void gst::Loop() {
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot settings">
-    bool lowest_nentries = false;
+    bool lowest_nentries = true;
     int custom_nentries;
 
     if (lowest_nentries == true) {
-        custom_nentries = 10000; // 100 entries
-//        custom_nentries = 1000000; // 1M entries
+//        custom_nentries = 10000; // 100 entries
+        custom_nentries = 1000000; // 1M entries
 //        custom_nentries = 10000000; // 10M entries
     }
 
@@ -4875,27 +4876,51 @@ void gst::Loop() {
 //         100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
     THStack *sE_Trans_all_ang_2p = new
-    THStack("ET in all #theta_{l'} (2p)", "Energy Transfer #omega for every #theta_{l'} (2p);#omega=E_{l}-E_{l'} [GeV]");
+    THStack("#omega for every  #theta_{l'} (2p)", "#omega for every #theta_{l'} (2p);#omega = E_{l} - E_{l'} [GeV]");
     TH1D *E_Trans_all_ang_all_int_2p = new
-    TH1D("ET in all #theta_{l'} (all interactions, 2p)",
-         "Energy Transfer #omega for every #theta_{l'} (all int., 2p);#omega=E_{l}-E_{l'} [GeV]",
+    TH1D("#omega for every  #theta_{l'} (all interactions, 2p)",
+         "#omega for every #theta_{l'} (all int., 2p);#omega = E_{l} - E_{l'} [GeV]",
          100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     TH1D *E_Trans_all_ang_QEL_2p = new
-    TH1D("ET in all #theta_{l'} (QEL only, 2p)",
-         "Energy Transfer #omega for every #theta_{l'} (QEL only, 2p);#omega=E_{l}-E_{l'} [GeV]",
+    TH1D("#omega for every  #theta_{l'} (QEL only, 2p)",
+         "#omega for every #theta_{l'} (QEL only, 2p);#omega = E_{l} - E_{l'} [GeV]",
          100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     TH1D *E_Trans_all_ang_MEC_2p = new
-    TH1D("ET in all #theta_{l'} (MEC only, 2p)",
-         "Energy Transfer #omega for every #theta_{l'} (MEC only, 2p);#omega=E_{l}-E_{l'} [GeV]",
+    TH1D("#omega for every  #theta_{l'} (MEC only, 2p)",
+         "#omega for every #theta_{l'} (MEC only, 2p);#omega = E_{l} - E_{l'} [GeV]",
          100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     TH1D *E_Trans_all_ang_RES_2p = new
-    TH1D("ET in all #theta_{l'} (RES only, 2p)",
-         "Energy Transfer #omega for every #theta_{l'} (RES only, 2p);#omega=E_{l}-E_{l'} [GeV]",
+    TH1D("#omega for every  #theta_{l'} (RES only, 2p)",
+         "#omega for every #theta_{l'} (RES only, 2p);#omega = E_{l} - E_{l'} [GeV]",
          100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     TH1D *E_Trans_all_ang_DIS_2p = new
-    TH1D("ET in all #theta_{l'} (DIS only, 2p)",
-         "Energy Transfer #omega for every #theta_{l'} (DIS only, 2p);#omega=E_{l}-E_{l'} [GeV]",
+    TH1D("#omega for every  #theta_{l'} (DIS only, 2p)",
+         "#omega for every #theta_{l'} (DIS only, 2p);#omega = E_{l} - E_{l'} [GeV]",
          100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
+
+    THStack *sE_Trans_all_ang_1n1p = new
+    THStack("#omega for every  #theta_{l'} (1n1p)", "#omega for every #theta_{l'} (1n1p);#omega = E_{l} - E_{l'} [GeV]");
+
+    TH1D *E_Trans_all_ang_all_int_1n1p = new
+    TH1D("#omega for every  #theta_{l'} (all interactions, 1n1p)",
+         "#omega for every #theta_{l'} (all int., 1n1p);#omega = E_{l} - E_{l'} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
+    TH1D *E_Trans_all_ang_QEL_1n1p = new
+    TH1D("#omega for every  #theta_{l'} (QEL only, 1n1p)",
+         "#omega for every #theta_{l'} (QEL only, 1n1p);#omega = E_{l} - E_{l'} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
+    TH1D *E_Trans_all_ang_MEC_1n1p = new
+    TH1D("#omega for every  #theta_{l'} (MEC only, 1n1p)",
+         "#omega for every #theta_{l'} (MEC only, 1n1p);#omega = E_{l} - E_{l'} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
+    TH1D *E_Trans_all_ang_RES_1n1p = new
+    TH1D("#omega for every  #theta_{l'} (RES only, 1n1p)",
+         "#omega for every #theta_{l'} (RES only, 1n1p);#omega = E_{l} - E_{l'} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
+    TH1D *E_Trans_all_ang_DIS_1n1p = new
+    TH1D("#omega for every  #theta_{l'} (DIS only, 1n1p)",
+         "#omega for every #theta_{l'} (DIS only, 1n1p);#omega = E_{l} - E_{l'} [GeV]",
+         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
 
     TH1D *E_Trans15_all_2p = new
     TH1D("ET around 15 degrees (all interactions, 2p)",
@@ -4910,10 +4935,10 @@ void gst::Loop() {
          "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 89 #leq #theta_{l} #leq 91 (All Interactions, 2p);E_{#nu}-E_{l} [GeV]",
          100, E_Trans90_all_lower_lim_2p, E_Trans90_all_upper_lim_2p);
 
-    TH1D *E_Trans_all_ang_all_int_1n1p = new
-    TH1D("ET in all angles (all interactions, 1n1p)",
-         "Energy Transfer (E_{#nu}-E_{l}) in every angle (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
-         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
+//    TH1D *E_Trans_all_ang_all_int_1n1p = new
+//    TH1D("ET in all angles (all interactions, 1n1p)",
+//         "Energy Transfer (E_{#nu}-E_{l}) in every angle (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
+//         100, E_Trans_all_ang_all_int_lower_lim_1n1p, E_Trans_all_ang_all_int_upper_lim_1n1p);
     TH1D *E_Trans15_all_1n1p = new
     TH1D("ET around 15 degrees (all interactions, 1n1p)",
          "Energy Transfer (E_{#nu}-E_{l}) in the Angle Range 14 #leq #theta_{l} #leq 16 (All Interactions, 1n1p);E_{#nu}-E_{l} [GeV]",
@@ -5283,13 +5308,17 @@ void gst::Loop() {
     TH1D("Truth-level E_{cal} (all int., 2p)", "Truth-level E_{cal} (all interactions, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV]",
          100, E_Trans_all_ang_all_int_lower_lim_2p, E_Trans_all_ang_all_int_upper_lim_2p);
     TH1D *hEcal_QEL_2p = new
-    TH1D("Truth-level E_{cal} (QEL only, 2p)", "Truth-level E_{cal} (QEL only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_QEL_lower_lim_2p, E_cal_QEL_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (QEL only, 2p)", "Truth-level E_{cal} (QEL only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_QEL_lower_lim_2p,
+         E_cal_QEL_upper_lim_2p);
     TH1D *hEcal_MEC_2p = new
-    TH1D("Truth-level E_{cal} (MEC only, 2p)", "Truth-level E_{cal} (MEC only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_MEC_lower_lim_2p, E_cal_MEC_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (MEC only, 2p)", "Truth-level E_{cal} (MEC only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_MEC_lower_lim_2p,
+         E_cal_MEC_upper_lim_2p);
     TH1D *hEcal_RES_2p = new
-    TH1D("Truth-level E_{cal} (RES only, 2p)", "Truth-level E_{cal} (RES only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_RES_lower_lim_2p, E_cal_RES_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (RES only, 2p)", "Truth-level E_{cal} (RES only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_RES_lower_lim_2p,
+         E_cal_RES_upper_lim_2p);
     TH1D *hEcal_DIS_2p = new
-    TH1D("Truth-level E_{cal} (DIS only, 2p)", "Truth-level E_{cal} (DIS only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_DIS_lower_lim_2p, E_cal_DIS_upper_lim_2p);
+    TH1D("Truth-level E_{cal} (DIS only, 2p)", "Truth-level E_{cal} (DIS only, 2p);E_{cal} = E_{l} + T_{p_{1}} + T_{p_{2}} [GeV] [GeV]", 100, E_cal_DIS_lower_lim_2p,
+         E_cal_DIS_upper_lim_2p);
     //</editor-fold>
 
 // E_cal VS other variables (all interactions, 2p):
@@ -6074,15 +6103,15 @@ void gst::Loop() {
                         fsEl_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, El);
 
                         //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
-                        E_Trans_all_ang_all_int_2p->Fill(BeamEnergy - El);
+                        E_Trans_all_ang_all_int_2p->Fill(Ev - El);
                         if (qel == true) {
-                            E_Trans_all_ang_QEL_2p->Fill(BeamEnergy - El);
+                            E_Trans_all_ang_QEL_2p->Fill(Ev - El);
                         } else if (mec == true) {
-                            E_Trans_all_ang_MEC_2p->Fill(BeamEnergy - El);
+                            E_Trans_all_ang_MEC_2p->Fill(Ev - El);
                         } else if (res == true) {
-                            E_Trans_all_ang_RES_2p->Fill(BeamEnergy - El);
+                            E_Trans_all_ang_RES_2p->Fill(Ev - El);
                         } else if (dis == true) {
-                            E_Trans_all_ang_DIS_2p->Fill(BeamEnergy - El);
+                            E_Trans_all_ang_DIS_2p->Fill(Ev - El);
                         }
 
                         E_cal_VS_theta_lp_all_int_2p->Fill(Theta_lp_2p, E_cal_2p);
@@ -6542,7 +6571,18 @@ void gst::Loop() {
                         fsEl_1n1p->Fill(El);
                         //</editor-fold>
 
+                        //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
                         E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+
+                        if (qel == true) {
+                            E_Trans_all_ang_QEL_1n1p->Fill(Ev - El);
+                        } else if (mec == true) {
+                            E_Trans_all_ang_MEC_1n1p->Fill(Ev - El);
+                        } else if (res == true) {
+                            E_Trans_all_ang_RES_1n1p->Fill(Ev - El);
+                        } else if (dis == true) {
+                            E_Trans_all_ang_DIS_1n1p->Fill(Ev - El);
+                        }
 
                         if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                             E_Trans15_all_1n1p->Fill(Ev - El);
@@ -6707,7 +6747,18 @@ void gst::Loop() {
                         fsEl_1n1p->Fill(El);
                         //</editor-fold>
 
+                        //TODO: IPS plots - these plots are for IPS poster. Rename them to fit the code.
                         E_Trans_all_ang_all_int_1n1p->Fill(Ev - El);
+
+                        if (qel == true) {
+                            E_Trans_all_ang_QEL_1n1p->Fill(Ev - El);
+                        } else if (mec == true) {
+                            E_Trans_all_ang_MEC_1n1p->Fill(Ev - El);
+                        } else if (res == true) {
+                            E_Trans_all_ang_RES_1n1p->Fill(Ev - El);
+                        } else if (dis == true) {
+                            E_Trans_all_ang_DIS_1n1p->Fill(Ev - El);
+                        }
 
                         if (Theta_lp_1n1p >= 14.0 && Theta_lp_1n1p <= 16.0) {
                             E_Trans15_all_1n1p->Fill(Ev - El);
@@ -7651,33 +7702,55 @@ void gst::Loop() {
 //        stackPlotter1D(c1, sE_Trans_all_ang_2p, normalized_E_Trans_all_ang_all_int_plots, "Energy Transfer #omega for every #theta_{l'}", "2p", plots,
 //                       E_Trans_all_ang_all_int_2p, E_Trans_all_ang_QEL_2p, E_Trans_all_ang_MEC_2p, E_Trans_all_ang_RES_2p, E_Trans_all_ang_DIS_2p, "01_ET_All_Ang_stack",
 //                       "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "");
-        histPlotter1D(c1, E_Trans_all_ang_all_int_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer #omega for every #theta_{l'}",
+        histPlotter1D(c1, E_Trans_all_ang_all_int_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}",
                       "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, false, true, sE_Trans_all_ang_2p, "Energy_transfer_Ev-El_all_Deg_all_interactions",
-                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+//                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2p", kBlack, true, true, true);
 
-        histPlotter1D(c1, E_Trans_all_ang_QEL_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer #omega for every #theta_{l'}", "QEL only", 0.06,
+        histPlotter1D(c1, E_Trans_all_ang_QEL_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "QEL only", 0.06,
                       0.0425, 0.0425, plots, 2, false, true, sE_Trans_all_ang_2p, "Energy_transfer_Ev-El_all_Deg_QEL_only",
-                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
-        histPlotter1D(c1, E_Trans_all_ang_MEC_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer #omega for every #theta_{l'}", "MEC only", 0.06,
+//                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2p", kBlack, true, true, true);
+        histPlotter1D(c1, E_Trans_all_ang_MEC_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "MEC only", 0.06,
                       0.0425, 0.0425, plots, 2, false, true, sE_Trans_all_ang_2p, "Energy_transfer_Ev-El_all_Deg_MEC_only",
-                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
-        histPlotter1D(c1, E_Trans_all_ang_RES_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer #omega for every #theta_{l'}", "RES only", 0.06,
+//                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2p", kBlack, true, true, true);
+        histPlotter1D(c1, E_Trans_all_ang_RES_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "RES only", 0.06,
                       0.0425, 0.0425, plots, 2, false, true, sE_Trans_all_ang_2p, "Energy_transfer_Ev-El_all_Deg_RES_only",
-                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
-        histPlotter1D(c1, E_Trans_all_ang_DIS_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer #omega for every #theta_{l'}", "DIS only", 0.06,
+//                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2p", kBlack, true, true, true);
+        histPlotter1D(c1, E_Trans_all_ang_DIS_2p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "DIS only", 0.06,
                       0.0425, 0.0425, plots, 2, false, true, sE_Trans_all_ang_2p, "Energy_transfer_Ev-El_all_Deg_DIS_only",
-                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+//                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2pXnX#pi^{0}", kBlack, true, true, true);
+                      "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "2p", kBlack, true, true, true);
 
-        stackPlotter1D(c1, sE_Trans_all_ang_2p, normalized_E_Trans_all_ang_all_int_plots, "Energy Transfer #omega for every #theta_{l'}", "2pXnX#pi^{0}", plots,
+//        stackPlotter1D(c1, sE_Trans_all_ang_2p, normalized_E_Trans_all_ang_all_int_plots, "#omega for every #theta_{l'}", "2pXnX#pi^{0}", plots,
+        stackPlotter1D(c1, sE_Trans_all_ang_2p, normalized_E_Trans_all_ang_all_int_plots, "#omega for every #theta_{l'}", "2p", plots,
                        E_Trans_all_ang_all_int_2p, E_Trans_all_ang_QEL_2p, E_Trans_all_ang_MEC_2p, E_Trans_all_ang_RES_2p, E_Trans_all_ang_DIS_2p, "01_ET_All_Ang_stack",
                        "plots/Energy_transfer_histograms/ET_All_Ang_2p/", "");
         //</editor-fold>
 
         //<editor-fold desc="Energy transfer (Ev-El) for every theta_{l} (1n1p)">
-        histPlotter1D(c1, E_Trans_all_ang_all_int_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "Energy Transfer (E_{#nu}-E_{l}) for every angle",
-                      "All Interactions", 0.06, 0.0425, 0.0425, plots, 3, true, true, Energy_Transfer_all_int_15_Stack_1n1p,
-                      "Energy_transfer_Ev-El_all_Deg_all_interactions", "plots/Energy_transfer_histograms/Energy_transfer_histograms_all_interactions/", "1n1p", kBlack,
-                      true, false, true);
+        histPlotter1D(c1, E_Trans_all_ang_all_int_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "All Interactions", 0.06,
+                      0.0425, 0.0425, plots, 3, true, true, sE_Trans_all_ang_1n1p, "Energy_transfer_Ev-El_all_Deg_all_interactions",
+                      "plots/Energy_transfer_histograms/ET_All_Ang_1n1p/", "1n1p", kBlack, true, true, true);
+
+        histPlotter1D(c1, E_Trans_all_ang_QEL_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "QEL only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sE_Trans_all_ang_1n1p, "Energy_transfer_Ev-El_all_Deg_QEL_only", "plots/Energy_transfer_histograms/ET_All_Ang_1n1p/", "1n1p",
+                      kBlack, true, true, true);
+        histPlotter1D(c1, E_Trans_all_ang_MEC_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "MEC only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sE_Trans_all_ang_1n1p, "Energy_transfer_Ev-El_all_Deg_MEC_only", "plots/Energy_transfer_histograms/ET_All_Ang_1n1p/", "1n1p",
+                      kBlack, true, true, true);
+        histPlotter1D(c1, E_Trans_all_ang_RES_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "RES only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sE_Trans_all_ang_1n1p, "Energy_transfer_Ev-El_all_Deg_RES_only", "plots/Energy_transfer_histograms/ET_All_Ang_1n1p/", "1n1p",
+                      kBlack, true, true, true);
+        histPlotter1D(c1, E_Trans_all_ang_DIS_1n1p, normalized_E_Trans_all_ang_all_int_plots, false, 1., "#omega for every #theta_{l'}", "DIS only", 0.06, 0.0425, 0.0425,
+                      plots, 2, false, true, sE_Trans_all_ang_1n1p, "Energy_transfer_Ev-El_all_Deg_DIS_only", "plots/Energy_transfer_histograms/ET_All_Ang_1n1p/", "1n1p",
+                      kBlack, true, true, true);
+
+        stackPlotter1D(c1, sE_Trans_all_ang_1n1p, normalized_E_Trans_all_ang_all_int_plots, "#omega for every #theta_{l'}", "1n1p", plots, E_Trans_all_ang_all_int_1n1p,
+                       E_Trans_all_ang_QEL_1n1p, E_Trans_all_ang_MEC_1n1p, E_Trans_all_ang_RES_1n1p, E_Trans_all_ang_DIS_1n1p, "01_ET_All_Ang_stack",
+                       "plots/Energy_transfer_histograms/ET_All_Ang_1n1p/", "");
         //</editor-fold>
 
 

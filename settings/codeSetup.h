@@ -51,8 +51,8 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //<editor-fold desc="Local hipo files">
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
@@ -142,11 +142,12 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 
 //// root files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-////<editor-fold desc="root files">
+//////<editor-fold desc="root files">
 //std::string AnalyseFilePath = "home/alon/project";
 //std::string AnalyseFileSample = "Downloads";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
-//std::string AnalyseFile = AnalyseFileDir + "/" + "e_on_1000060120_2222MeV_em.gst.root";
+//std::string AnalyseFile = AnalyseFileDir + "/" + "12C_2222GeV_GEM21_11a_00_000_wfsi_mk2.root";
+////std::string AnalyseFile = AnalyseFileDir + "/" + "e_on_1000060120_2222MeV_em.gst.root";
 ////std::string AnalyseFile = "./e_on_1000060120_598636MeV.gst.root";
 
 //std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";

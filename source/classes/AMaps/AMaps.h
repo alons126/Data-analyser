@@ -51,9 +51,9 @@ private:
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
 
-    int hBinNumOfXBins;                                // 100 by Default
-    int hBinNumOfYBins;                                // 100 by Default
-    int NumberOfMomBins;                               // 10 by Default
+    int hBinNumOfXBins;  // 100 by Default
+    int hBinNumOfYBins;  // 100 by Default
+    int NumberOfMomBins; // 10 by Default
 
     double MomBinTh = 0.4;
 
@@ -94,6 +94,13 @@ private:
 
     string BinSavePath;
 
+    string AMapsBC_prefix = "00_AMapsBC_-_";
+    string Hit_Maps_TL_prefix = "01_Hit_Maps_TL_-_";
+    string Hit_Maps_Reco_prefix = "02_Hit_Maps_Reco_-_";
+    string Hit_Maps_Ratio_prefix = "03_Hit_Maps_Ratio_-_";
+    string cPart_Sep_AMaps_prefix = "04_cPart_Sep_AMaps_-_";
+    string AMaps_prefix = "05_AMaps_-_";
+
 public:
 
 // default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -102,7 +109,11 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    // AMaps generation constructor:
     AMaps(double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
+
+    // AMaps loading constructor:
+    AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
 
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -154,10 +165,10 @@ public:
 
     void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
 
-//// ReadFitDataParam function ------------------------------------------------------------------------------------------------------------------------------------------
-//
-//    void ReadFitDataParam(const char *filename);
-//
+// ReadHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+
 //// PSmear function ----------------------------------------------------------------------------------------------------------------------------------------------------
 //
 //    double PSmear(bool apply_proton_smearing, double Momentum);

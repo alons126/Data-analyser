@@ -4,9 +4,22 @@
 
 #include "AMaps.h"
 
-// AMaps constructor ----------------------------------------------------------------------------------------------------------------------------------------------------
+#include <TFile.h>
+#include <TTree.h>
+#include <TLorentzVector.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TLatex.h>
+#include <TChain.h>
+#include <TCanvas.h>
+#include <TStyle.h>
+#include <TDatabasePDG.h>
+#include <TApplication.h>
+#include <TROOT.h>
 
-//<editor-fold desc="AMaps constructor">
+// AMaps constructors ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="AMaps generation constructor">
 AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXBins, int hbNumOfYBins) {
     BinSavePath = SavePath;
     hBinNumOfXBins = hbNumOfXBins;
@@ -71,13 +84,15 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
         int BinUpperLimPrecision;
         if (BinUpperLim == beamE) { BinUpperLimPrecision = 3; } else { BinUpperLimPrecision = 2; }
 
+        string BinDensity = " (" + to_string(hBinNumOfXBins) + "x" + to_string(hBinNumOfYBins) + ")";
+
         //<editor-fold desc="Setting electron hit maps">
 
         //<editor-fold desc="Electron TL hit map">
-        string hStatsTitleTLElectron = "TL P_{e} bin for - " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
+        string hStatsTitleTLElectron = "TL P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleTLElectron = "TL P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
-                                  to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+                                  to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameTLElectron = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinTLElectron = hPlot2D("", "", hStatsTitleTLElectron, hTitleTLElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", BinSavePathTLElectron,
@@ -87,10 +102,10 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
         //</editor-fold>
 
         //<editor-fold desc="Electron Reco. hit maps">
-        string hStatsTitleRecoElectron = "Reco P_{e} bin for - " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
+        string hStatsTitleRecoElectron = "Reco P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
                                          to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoElectron = "Reco P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
-                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoElectron = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinRecoElectron = hPlot2D("", "", hStatsTitleRecoElectron, hTitleRecoElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", BinSavePathRecoElectron,
@@ -103,7 +118,7 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
         string hStatsTitleRecoToTLRatioElectron = "Electron Reco/TL ratio for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
                                                   to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoToTLRatioElectron = "Electron Reco/TL ratio for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
-                                             to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+                                             to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoToTLRatioElectron = to_string(i + 1) + "_e_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinRecoToTLRatioElectron = hPlot2D("", "", hStatsTitleRecoToTLRatioElectron, hTitleRecoToTLRatioElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
@@ -134,10 +149,10 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
         //<editor-fold desc="Setting proton hit maps">
 
         //<editor-fold desc="Proton TL hit maps">
-        string hStatsTitleTLProton = "TL P_{p} bin for - " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
+        string hStatsTitleTLProton = "TL P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleTLProton = "TL P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
-                                to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+                                to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameTLProton = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinTLProton = hPlot2D("", "", hStatsTitleTLProton, hTitleTLProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", BinSavePathTLProton, hSaveNameTLProton,
@@ -146,10 +161,10 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
         //</editor-fold>
 
         //<editor-fold desc="Proton Reco. hit maps">
-        string hStatsTitleRecoProton = "Reco P_{p} bin for - " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
+        string hStatsTitleRecoProton = "Reco P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoProton = "Reco P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
-                                  to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+                                  to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoProton = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinRecoProton = hPlot2D("", "", hStatsTitleRecoProton, hTitleRecoProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", BinSavePathRecoProton,
@@ -162,7 +177,7 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
         string hStatsTitleRecoToTLRatioProton = "Proton Reco/TL ratio for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
                                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoToTLRatioProton = "Proton Reco/TL ratio for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
-                                           to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+                                           to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
         string hSaveNameRecoToTLRatioProton = to_string(i + 1) + "_p_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                               to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinRecoToTLRatioProton = hPlot2D("", "", hStatsTitleRecoToTLRatioProton, hTitleRecoToTLRatioProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]",
@@ -244,6 +259,12 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
 }
 //</editor-fold>
 
+//<editor-fold desc="AMaps loading constructor">
+AMaps::AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
+    ReadHitMaps(RefrenceHitMapsDirectory, SampleName);
+}
+//</editor-fold>
+
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetBins function">
@@ -272,8 +293,8 @@ void AMaps::SetBins(double beamE) {
     if (InvertedPrintOut) { exit(0); }
 
     for (int i = (NumberOfMomBins - 1); i >= 0; i--) {
-        double BinLower = 1/InvertedPBinsLimits.at(i).at(1);
-        double BinUpper = 1/InvertedPBinsLimits.at(i).at(0);
+        double BinLower = 1 / InvertedPBinsLimits.at(i).at(1);
+        double BinUpper = 1 / InvertedPBinsLimits.at(i).at(0);
 
         if (RegPrintOut) {
             cout << "\n\nBinLower = " << BinLower << "\n";
@@ -553,42 +574,42 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
 
     //<editor-fold desc="Save TL hit maps to plots directory">
     /* Acceptance maps BC */
-    TFile *AMapsBC_plots_path_fout = new TFile((BinSavePath + "/00_AMapsBC_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *AMapsBC_plots_path_fout = new TFile((BinSavePath + "/" + AMapsBC_prefix + SampleName + ".root").c_str(), "recreate");
     AMapsBC_plots_path_fout->cd();
     AcceptanceMapsBC->Write();
     AMapsBC_plots_path_fout->Write();
     AMapsBC_plots_path_fout->Close();
 
     /* TL hit maps */
-    TFile *TLHitMaps_plots_path_fout = new TFile((BinSavePath + "/01_Hit_Maps_TL_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *TLHitMaps_plots_path_fout = new TFile((BinSavePath + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str(), "recreate");
     TLHitMaps_plots_path_fout->cd();
     TLHitMaps->Write();
     TLHitMaps_plots_path_fout->Write();
     TLHitMaps_plots_path_fout->Close();
 
     /* Reco hit maps */
-    TFile *RecoHitMaps_plots_path_fout = new TFile((BinSavePath + "/02_Hit_Maps_Reco_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *RecoHitMaps_plots_path_fout = new TFile((BinSavePath + "/" + Hit_Maps_Reco_prefix + SampleName + ".root").c_str(), "recreate");
     RecoHitMaps_plots_path_fout->cd();
     RecoHitMaps->Write();
     RecoHitMaps_plots_path_fout->Write();
     RecoHitMaps_plots_path_fout->Close();
 
     /* Ratio hit maps */
-    TFile *RatioHitMaps_plots_path_fout = new TFile((BinSavePath + "/03_Hit_Maps_Ratio_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *RatioHitMaps_plots_path_fout = new TFile((BinSavePath + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
     RatioHitMaps_plots_path_fout->cd();
     HitMapsRatio->Write();
     RatioHitMaps_plots_path_fout->Write();
     RatioHitMaps_plots_path_fout->Close();
 
     /* Charged particle separate AMaps */
-    TFile *cPartAMaps_plots_path_fout = new TFile((BinSavePath + "/04_cPart_Sep_AMaps_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *cPartAMaps_plots_path_fout = new TFile((BinSavePath + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str(), "recreate");
     cPartAMaps_plots_path_fout->cd();
     Charged_particle_Sep_AMaps->Write();
     cPartAMaps_plots_path_fout->Write();
     cPartAMaps_plots_path_fout->Close();
 
     /* Acceptance maps */
-    TFile *AMaps_plots_path_fout = new TFile((BinSavePath + "/05_AMaps_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *AMaps_plots_path_fout = new TFile((BinSavePath + "/" + AMaps_prefix + SampleName + ".root").c_str(), "recreate");
     AMaps_plots_path_fout->cd();
     AcceptanceMaps->Write();
     AMaps_plots_path_fout->Write();
@@ -597,47 +618,74 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
 
     //<editor-fold desc="Save TL hit maps to refrence hit maps directory">
     /* Acceptance maps BC */
-    TFile *AMapsBC_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/00_AMapsBC_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *AMapsBC_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + AMapsBC_prefix + SampleName + ".root").c_str(), "recreate");
     AMapsBC_plots_path_fout->cd();
     AcceptanceMapsBC->Write();
     AMapsBC_plots_path_fout->Write();
     AMapsBC_plots_path_fout->Close();
 
     /* TL hit maps */
-    TFile *TLHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/01_Hit_Maps_TL_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *TLHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str(), "recreate");
     TLHitMaps_ref_hit_maps_fout->cd();
     TLHitMaps->Write();
     TLHitMaps_ref_hit_maps_fout->Write();
     TLHitMaps_ref_hit_maps_fout->Close();
 
     /* Reco hit maps */
-    TFile *RecoHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/02_Hit_Maps_Reco_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *RecoHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root").c_str(), "recreate");
     RecoHitMaps_ref_hit_maps_fout->cd();
     RecoHitMaps->Write();
     RecoHitMaps_ref_hit_maps_fout->Write();
     RecoHitMaps_ref_hit_maps_fout->Close();
 
     /* Ratio hit maps */
-    TFile *RatioHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/03_Hit_Maps_Ratio_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *RatioHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
     RatioHitMaps_ref_hit_maps_fout->cd();
     HitMapsRatio->Write();
     RatioHitMaps_ref_hit_maps_fout->Write();
     RatioHitMaps_ref_hit_maps_fout->Close();
 
     /* Charged particle separate AMaps */
-    TFile *cPartAMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/04_cPart_Sep_AMaps_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *cPartAMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str(), "recreate");
     cPartAMaps_ref_hit_maps_fout->cd();
     Charged_particle_Sep_AMaps->Write();
     cPartAMaps_ref_hit_maps_fout->Write();
     cPartAMaps_ref_hit_maps_fout->Close();
 
     /* Acceptance maps */
-    TFile *AMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/05_AMaps_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *AMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + AMaps_prefix + SampleName + ".root").c_str(), "recreate");
     AMaps_ref_hit_maps_fout->cd();
     AcceptanceMaps->Write();
     AMaps_ref_hit_maps_fout->Write();
     AMaps_ref_hit_maps_fout->Close();
     //</editor-fold>
 
+}
+//</editor-fold>
+
+// ReadHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadHitMaps function">
+void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
+    TFile *AMapsBC_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMapsBC_prefix + SampleName + ".root").c_str());
+    if (!AMapsBC_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMapsBC root file! Exiting...\n", exit(0); }
+
+    TFile *Hit_Maps_TL_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str());
+    if (!Hit_Maps_TL_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
+
+    TFile *Hit_Maps_Reco_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root").c_str());
+    if (!Hit_Maps_Reco_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Reco root file! Exiting...\n", exit(0); }
+
+    TFile *Hit_Maps_Ratio_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root").c_str());
+    if (!Hit_Maps_Ratio_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Ratio root file! Exiting...\n", exit(0); }
+
+    TFile *cPart_Sep_AMaps_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str());
+    if (!cPart_Sep_AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load cPart_Sep_AMaps root file! Exiting...\n", exit(0); }
+
+    TFile *AMaps_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMaps_prefix + SampleName + ".root").c_str());
+    if (!AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMaps root file! Exiting...\n", exit(0); }
+
+
+//    cout << "\n\n\nloaded OK!\n", exit(0);
 }
 //</editor-fold>
