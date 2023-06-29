@@ -119,7 +119,7 @@ void EventAnalyser() {
     /* Truth level calculation settings */
     bool calculate_truth_level = true;      // TL master ON/OFF switch
     bool TL_with_one_reco_electron = false; // TL master ON/OFF switch
-    bool fill_TL_plots = false;              // Generate acceptance maps
+    bool fill_TL_plots = true;              // Generate acceptance maps
     bool Rec_wTL_ES = false;                // Enforce TL event selection on Rec. plots
 
     bool limless_mom_eff_plots = false;
@@ -544,8 +544,8 @@ void EventAnalyser() {
 //    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
     bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
 //
-//    bool Momentum_plots = false;
-    bool Momentum_plots = true;
+    bool Momentum_plots = false;
+//    bool Momentum_plots = true;
 //
 
     /* Beta plots */
@@ -598,8 +598,8 @@ void EventAnalyser() {
 //    bool Hit_maps_plots = false;
 
     /* Resolution plots */
-    bool Resolution_plots = true;
-//    bool Resolution_plots = false;
+//    bool Resolution_plots = true;
+    bool Resolution_plots = false;
     //</editor-fold>
 
     //<editor-fold desc="Turn off plots by master selectors">
@@ -728,10 +728,12 @@ void EventAnalyser() {
 
     //<editor-fold desc="Acceptance map generation settings">
     /* Hit maps are handled completely by the AMaps class */
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
+    bool AMaps_test = true; // Generate acceptance maps
 
     if (!calculate_truth_level) { generate_AMaps = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
+    if (generate_AMaps) { AMaps_test = false; }
 
     //<editor-fold desc="Set Bins by case">
     int NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins;
@@ -5053,6 +5055,22 @@ void EventAnalyser() {
                                               Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
+    //<editor-fold desc="Truth level theta vs. phi plots (1e_cut)">
+    hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e_cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+                                                     directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"], "01_Theta_e_vs_Phi_e_truth_1e_cut",
+                                                     Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+
+    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1e_cut = hPlot2D("1e_cut", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]",
+                                                         "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
+                                                         "02_Theta_nFD_vs_Phi_nFD_truth_1e_cut",
+                                                         Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+
+    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1e_cut = hPlot2D("1e_cut", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]",
+                                                         "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
+                                                         "03_Theta_pFD_vs_Phi_pFD_truth_1e_cut",
+                                                         Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
+    //</editor-fold>
+
     //</editor-fold>
 
     //<editor-fold desc="Efficiency plots (1p)">
@@ -6522,15 +6540,17 @@ void EventAnalyser() {
 
                 bool e_inSomeSector, n_inSomeSector, p_inSomeSector;
 
-//                if (!generate_AMaps) {
-//                    e_inSomeSector = aMaps.MatchAngToHitMap("Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                if (!generate_AMaps) {
+                    e_inSomeSector = aMaps.MatchAngToHitMap("Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
 //                    n_inSomeSector = aMaps.MatchAngToHitMap("Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
 //                    p_inSomeSector = aMaps.MatchAngToHitMap("Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-//                } else {
+                } else {
+                    e_inSomeSector = true;
 //                    e_inSomeSector = n_inSomeSector = p_inSomeSector = true;
-//                }
+                }
 
-                e_inSomeSector = n_inSomeSector = p_inSomeSector = true;
+//                e_inSomeSector = n_inSomeSector = p_inSomeSector = true;
+                n_inSomeSector = p_inSomeSector = true;
 
                 bool e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
@@ -6686,23 +6706,16 @@ void EventAnalyser() {
                 inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (fill_TL_plots) {
-
-
-
                     //TODO: finish MatchAngToHitMap
-
-
-
 //                    e_inSomeSector = true;
+                    p_inSomeSector = true;
+                    n_inSomeSector = true;
                     e_inSomeSector = aMaps.MatchAngToHitMap("Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+//                    p_inSomeSector = aMaps.MatchAngToHitMap("Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+//                    n_inSomeSector = aMaps.MatchAngToHitMap("Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+
                     e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-
-//                    p_inSomeSector = true;
-                    p_inSomeSector = aMaps.MatchAngToHitMap("Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
                     p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-
-//                    n_inSomeSector = true;
-                    n_inSomeSector = aMaps.MatchAngToHitMap("Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
                     n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
 
                     if (particlePDGtmp == 11) {
@@ -6711,6 +6724,7 @@ void EventAnalyser() {
                                 hP_e_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hTheta_e_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                                 hPhi_e_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+                                hTheta_e_vs_Phi_e_truth_1e_cut.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
                             }
 
                             hP_e_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -6775,6 +6789,11 @@ void EventAnalyser() {
                                 hP_n_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hTheta_n_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                                 hPhi_n_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+
+                                if (n_inFD) {
+//                            if (inFD) {
+                                    hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+                                }
                             }
 
                             hP_n_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -6865,6 +6884,11 @@ void EventAnalyser() {
                                 hP_p_AC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
                                 hTheta_p_AC_truth_1e_cut.hFill(Particle_TL_Theta, Weight);
                                 hPhi_p_AC_truth_1e_cut.hFill(Particle_TL_Phi, Weight);
+
+                                if (p_inFD) {
+//                            if (inFD) {
+                                    hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hFill(Particle_TL_Phi, Particle_TL_Theta, Weight);
+                                }
                             }
 
                             hP_p_BC_truth_1e_cut.hFill(Particle_TL_Momentum, Weight);
@@ -14970,6 +14994,12 @@ void EventAnalyser() {
         histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
         //</editor-fold>
 
+        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
+        hTheta_e_vs_Phi_e_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
         //</editor-fold>
 
         //<editor-fold desc="Efficiency plots (1p, CD & FD)">
@@ -15508,6 +15538,8 @@ void EventAnalyser() {
         //<editor-fold desc="Hit maps plots (1e cut)">
         aMaps.DrawAndSaveHitMaps(SampleName, c1, RefrenceHitMapsDirectory);
         //</editor-fold>
+
+//        if (AMaps_test) { aMaps.TestDrawAndSaveHitMaps(c1); }
 
     } else {
         cout << "\n\nHit maps plots are disabled by user.\n\n";

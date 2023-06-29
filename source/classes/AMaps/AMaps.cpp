@@ -59,6 +59,7 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
 
     SetBins(beamE);
 //    SetBins(beamE, nOfMomBins);
+//    SetMaps();
 
     //<editor-fold desc="Acceptance maps BC">
     string hStatsTitleAMapBCElectron = "Electron_AMap_BC", hTitleAMapBCElectron = "Electron AMap BC", hSaveNameAMapBCElectron = "01_e_AMap_BC";
@@ -261,10 +262,32 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
 
 //<editor-fold desc="AMaps loading constructor">
 AMaps::AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
-    ReadHitMaps(RefrenceHitMapsDirectory, SampleName);
+//    ReadHitMaps(RefrenceHitMapsDirectory, SampleName);
 
-//    cout << "\n\nPBinsLimits.size() = " << PBinsLimits.size() << "\n";
-//    exit(0);
+    ReadAMap("e_hit_map_file.par", Loaded_e_Hit_Map);
+    cout << "\n\nLoaded_e_Hit_Map.size() = " << Loaded_e_Hit_Map.size() << "\n\n";
+
+    ReadAMap("p_hit_map_file.par", Loaded_p_Hit_Map);
+
+    hBinNumOfXBins = 100;  // 100 by Default
+    hBinNumOfYBins = 100;  // 100 by Default
+}
+//</editor-fold>
+
+// SetMaps function -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SetMaps function">
+void AMaps::SetMaps() {
+    for (int i = 0; i < hBinNumOfYBins; i++) {
+        vector<int> col;
+
+        for (int j = 0; j < hBinNumOfXBins; j++) { col.push_back(0); }
+
+        e_Hit_Map.push_back(col);
+        p_Hit_Map.push_back(col);
+        n_Hit_Map.push_back(col);
+        nuc_Hit_Map.push_back(col);
+    }
 }
 //</editor-fold>
 
@@ -499,6 +522,27 @@ void AMaps::GenerateCPartAMaps(double cP_minR) {
         ElectronAMap.hAdd(ElectronSepAMaps.at(bin).GetHistogram2D());
         ProtonAMap.hAdd(ProtonSepAMaps.at(bin).GetHistogram2D());
     }
+
+    for (int i = 0; i < hBinNumOfYBins; i++) {
+        vector<int> e_col, p_col;
+
+        for (int j = 0; j < hBinNumOfXBins; j++) {
+            if (ElectronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
+                e_col.push_back(1);
+            } else {
+                e_col.push_back(0);
+            }
+
+            if (ProtonAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
+                p_col.push_back(1);
+            } else {
+                p_col.push_back(0);
+            }
+        }
+
+        e_Hit_Map.push_back(e_col);
+        p_Hit_Map.push_back(p_col);
+    }
 }
 //</editor-fold>
 
@@ -514,7 +558,7 @@ void AMaps::GenerateNPartAMaps(double nP_minR) {
 }
 //</editor-fold>
 
-// GenerateNucleonAMap function ----------------------------------------------------------------------------------------------------------------------------------------
+// GenerateNucleonAMap function -----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="GenerateNucleonAMap function">
 void AMaps::GenerateNucleonAMap() {
@@ -530,6 +574,42 @@ void AMaps::GenerateNucleonAMap() {
 }
 //</editor-fold>
 
+// SaveHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory) {
+    ofstream e_hit_map_file;
+    ofstream p_hit_map_file;
+
+    e_hit_map_file.open("e_hit_map_file.par");
+    p_hit_map_file.open("p_hit_map_file.par");
+
+    for (int i = 0; i < hBinNumOfYBins; i++) {
+        e_hit_map_file << "Line\t\t\t";
+        p_hit_map_file << "Line\t\t\t";
+//        e_hit_map_file << "Line_" << i + 1 << "\t\t\t";
+//        p_hit_map_file << "Line_" << i + 1 << "\t\t\t";
+
+        for (int j = 0; j < hBinNumOfXBins; j++) {
+            if (j != hBinNumOfXBins - 1) {
+                e_hit_map_file << e_Hit_Map.at(i).at(j) << ":";
+                p_hit_map_file << p_Hit_Map.at(i).at(j) << ":";
+            } else {
+                e_hit_map_file << e_Hit_Map.at(i).at(j);
+                p_hit_map_file << p_Hit_Map.at(i).at(j);
+            }
+        }
+
+        e_hit_map_file << "\n";
+        p_hit_map_file << "\n";
+    }
+
+    e_hit_map_file.close();
+    p_hit_map_file.close();
+
+    system(("cp e_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("cp p_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+}
+
 // DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveHitMaps function">
@@ -543,6 +623,8 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     GenerateCPartAMaps(Charged_particle_min_Ratio);
     GenerateNPartAMaps(Neutral_particle_min_Ratio);
     GenerateNucleonAMap();
+
+    SaveHitMaps(SampleName, RefrenceHitMapsDirectory);
 
     /* Acceptance maps BC */
     ElectronAMapBC.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMapsBC, true);
@@ -968,11 +1050,92 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 }
 //</editor-fold>
 
+// ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadAMap function">
+void AMaps::ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_hit_map) {
+    ifstream infile;
+    infile.open(filename);
+
+    if (infile.is_open()) {
+        string tp;
+
+//        // remove 3 lines of header
+//        for (int i = 0; i < 3; i++) { getline(infile, tp); }
+
+        int Line = 1;
+
+        // getline(infile, tp) = read data from file object and put it into string.
+        while (getline(infile, tp)) {
+            stringstream ss(tp);
+            string parameter, parameter2;
+            ss >> parameter; // get cut identifier
+
+            if (findSubstring(parameter, "Line")) {
+//            if (findSubstring(parameter, ("Line_" + to_string(Line)))) {
+                // get cut values
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+
+                string LineEntry;
+                vector<int> col;
+
+//                int count = 0; // parameter number
+//                string CutNameTemp = parameter;
+//                int SliceNumberTemp;
+//                double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, FitMeanTemp, FitSigmaTemp;
+
+                while (getline(ss2, LineEntry, ':')) {
+                    col.push_back(stoi(LineEntry));
+                }
+
+                cout << "\n\ncol.size() = " << col.size() << "\n\n";
+                Loaded_particle_hit_map.push_back(col);
+            }
+        }
+    } else {
+        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
+    }
+}
+//</editor-fold>
+
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="MatchAngToHitMap function">
 bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi) {
     if (isElectron(Particle)) {
+//        double Ylength;
+//        Ylength = (double) Loaded_e_Hit_Map.size();
+
+        for (int i = 0; i < hBinNumOfYBins; i++) {
+//        for (int i = 0; i < Loaded_e_Hit_Map.size(); i++) {
+            double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / hBinNumOfYBins;
+            double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+            double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+            if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+//                double Xlength;
+//                Xlength = (double) Loaded_e_Hit_Map.at(i).size();
+
+                for (int j = 0; j < hBinNumOfXBins; j++) {
+                    double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / hBinNumOfXBins;
+                    double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                    double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                    if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+
+//                        cout << "\n\n\nTEST TEST TEST\n\n\n";
+
+                        if (Loaded_e_Hit_Map.at(i).at(j) != 0) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } // end of find right phi if
+                }
+            } // end of find right theta if
+        }
+        /*
         for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
             double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
             double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -995,6 +1158,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                 }
             } // end of find right theta if
         }
+*/
+
         /*
         for (int k = 0; k < PBinsLimits.size(); k++) {
             if ((Momentum >= PBinsLimits.at(k).at(0)) && (Momentum < PBinsLimits.at(k).at(1))) {
@@ -1036,6 +1201,9 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
 
                     if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                         if (LoadedNucleonAMap->GetBinContent(i, j) != 0) {
+                            if (Phi > 100) {
+                                exit(0);
+                            }
 //                            cout << "\n\LoadedNucleonAMap->GetBinContent(i, j) = " << LoadedNucleonAMap->GetBinContent(i, j) << "\n\n";
                             return true;
                         } else {

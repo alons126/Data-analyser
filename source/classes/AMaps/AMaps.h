@@ -79,6 +79,14 @@ private:
     hPlot2D NeutronAMap;
     hPlot2D NucleonAMap;
 
+    vector<vector<int>> e_Hit_Map;
+    vector<vector<int>> p_Hit_Map;
+    vector<vector<int>> n_Hit_Map;
+    vector<vector<int>> nuc_Hit_Map;
+
+    vector<vector<int>> Loaded_e_Hit_Map;
+    vector<vector<int>> Loaded_p_Hit_Map;
+
     /* Loaded hit maps */
     vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
     TH2D *LoadedElectronAMaps0;
@@ -122,6 +130,10 @@ public:
 
     // AMaps loading constructor:
     AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+
+// SetMaps function -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetMaps();
 
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -169,6 +181,10 @@ public:
 
     void GenerateNucleonAMap();
 
+// SaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+
+    void SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory);
+
 // DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
     void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
@@ -177,11 +193,11 @@ public:
 
     int HistCounter(const char *fname);
 
-// SetHistBinsFromHistTitle function ----------------------------------------------------------------------------------------------------------------------------------------
+// SetHistBinsFromHistTitle function ------------------------------------------------------------------------------------------------------------------------------------
 
     void SetHistBinsFromHistTitle(TH2D *Histogram2D);
 
-// SetSlicesFromHistTitle function ----------------------------------------------------------------------------------------------------------------------------------------
+// SetSlicesFromHistTitle function --------------------------------------------------------------------------------------------------------------------------------------
 
     void SetSlicesFromHistTitle(TH2D *Histogram2D);
 
@@ -190,6 +206,10 @@ public:
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+
+// ReadAMap function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_hit_map);
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 
