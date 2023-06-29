@@ -262,6 +262,9 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
 //<editor-fold desc="AMaps loading constructor">
 AMaps::AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
     ReadHitMaps(RefrenceHitMapsDirectory, SampleName);
+
+//    cout << "\n\nPBinsLimits.size() = " << PBinsLimits.size() << "\n";
+//    exit(0);
 }
 //</editor-fold>
 
@@ -729,8 +732,8 @@ void AMaps::SetHistBinsFromHistTitle(TH2D *Histogram2D) {
 // SetSlicesFromHistTitle function --------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetSlicesFromHistTitle function">
-void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits) {
-    bool PrintOut = true;
+void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D) {
+    bool PrintOut = false;
 
     string Title = Histogram2D->GetTitle();
     string SliceLowerLimStr = Title.substr((Title.find_first_of('#')) - 4, 4);
@@ -739,7 +742,9 @@ void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> Mom
     double SliceLowerLim = stod(SliceLowerLimStr);
     double SliceUpperLim = stod(SliceUpperLimStr);
 
-    MomBinsLimits.push_back({SliceLowerLim, SliceUpperLim});
+    vector<double> MomBinsLimitsTemp = {SliceLowerLim, SliceUpperLim};
+
+    PBinsLimits.push_back(MomBinsLimitsTemp);
 
     if (PrintOut) {
         cout << "\n\nTitle = " << Title << "\n\n";
@@ -752,12 +757,41 @@ void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> Mom
 }
 //</editor-fold>
 
+//<editor-fold desc="SetSlicesFromHistTitle function (original)">
+void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits) {
+    bool PrintOut = false;
+
+    string Title = Histogram2D->GetTitle();
+    string SliceLowerLimStr = Title.substr((Title.find_first_of('#')) - 4, 4);
+    string SliceUpperLimStr = Title.substr(Title.find_last_of('#') + 4, 4);
+
+    double SliceLowerLim = stod(SliceLowerLimStr);
+    double SliceUpperLim = stod(SliceUpperLimStr);
+
+    vector<double> MomBinsLimitsTemp = {SliceLowerLim, SliceUpperLim};
+    PBinsLimits.push_back(MomBinsLimitsTemp);
+//    MomBinsLimits.push_back(MomBinsLimitsTemp);
+
+    if (PrintOut) {
+        cout << "\n\nTitle = " << Title << "\n\n";
+        cout << "SliceLowerLimStr = " << SliceLowerLimStr << "\n";
+        cout << "SliceUpperLimStr = " << SliceUpperLimStr << "\n\n";
+
+        cout << "SliceLowerLim = " << SliceLowerLim << "\n";
+        cout << "SliceUpperLim = " << SliceUpperLim << "\n\n";
+
+        cout << "MomBinsLimitsTemp.size() = " << MomBinsLimitsTemp.size() << "\n\n";
+    }
+}
+//</editor-fold>
+
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadHitMaps function">
 void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
     bool PrintKeys = false;
 
+    //<editor-fold desc="Load AMapsBC">
     string AMapsBC_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMapsBC_prefix + SampleName + ".root";
     TFile *AMapsBC_RootFile = new TFile(AMapsBC_RootFile_FileName.c_str());
     if (!AMapsBC_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMapsBC root file! Exiting...\n", exit(0); }
@@ -780,7 +814,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
             NucleonAMapBC.SetHistogram2D(TempHist);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Load Hit_Maps_TL">
     string Hit_Maps_TL_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root";
     TFile *Hit_Maps_TL_RootFile = new TFile(Hit_Maps_TL_RootFile_FileName.c_str());
     if (!Hit_Maps_TL_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
@@ -810,7 +846,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 
         ++counter;
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Load Hit_Maps_Reco">
     string Hit_Maps_Reco_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root";
     TFile *Hit_Maps_Reco_RootFile = new TFile(Hit_Maps_Reco_RootFile_FileName.c_str());
     if (!Hit_Maps_Reco_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Reco root file! Exiting...\n", exit(0); }
@@ -833,7 +871,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
             NeutronRecoHitMap.SetHistogram2D(TempHist);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Load Hit_Maps_Ratio">
     string Hit_Maps_Ratio_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root";
     TFile *Hit_Maps_Ratio_RootFile = new TFile(Hit_Maps_Ratio_RootFile_FileName.c_str());
     if (!Hit_Maps_Ratio_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Ratio root file! Exiting...\n", exit(0); }
@@ -856,7 +896,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
             NeutronRecoToTLRatio.SetHistogram2D(TempHist);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Load cPart_Sep_AMaps">
     string cPart_Sep_AMaps_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root";
     TFile *cPart_Sep_AMaps_RootFile = new TFile(cPart_Sep_AMaps_RootFile_FileName.c_str());
     if (!cPart_Sep_AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load cPart_Sep_AMaps root file! Exiting...\n", exit(0); }
@@ -877,7 +919,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
             ProtonSepAMaps.push_back(Temp2DHist);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Load AMaps">
     string AMaps_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMaps_prefix + SampleName + ".root";
     TFile *AMaps_RootFile = new TFile(AMaps_RootFile_FileName.c_str());
     if (!AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMaps root file! Exiting...\n", exit(0); }
@@ -902,7 +946,119 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
             NucleonAMap.SetHistogram2D(TempHist);
         }
     }
+    //</editor-fold>
 
-    cout << "\n\nHit maps loaded!\n";
+    cout << "\n\nHit maps loaded!\n\n";
+}
+//</editor-fold>
+
+// MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="MatchAngToHitMap function">
+bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi) {
+    if (isElectron(Particle)) {
+        for (int k = 0; k < PBinsLimits.size(); k++) {
+            if ((Momentum >= PBinsLimits.at(k).at(0)) && (Momentum < PBinsLimits.at(k).at(1))) {
+                for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
+                    double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
+                    double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                    double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                    if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                        for (int j = 0; j < (hBinNumOfXBins + 1); j++) {
+                            double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                            double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                            double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                            if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                if (ElectronSepAMaps.at(k).GetHistogram2D()->GetBinContent(i, j) != 0) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } // end of find right phi if
+                        }
+                    } // end of find right theta if
+                }
+            } // end of in momentum range if
+        } // end of loop over Slices
+    } else if (isProton(Particle)) {
+        for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
+            double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
+            double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+            double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+            if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                for (int j = 0; j < (hBinNumOfXBins + 1); j++) {
+                    double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                    double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                    double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                    if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                        if (NucleonAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
+//                        if (NeutronAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } // end of find right phi if
+                }
+            } // end of find right theta if
+        }
+        /*        for (int k = 0; k < PBinsLimits.size(); k++) {
+                if ((Momentum >= PBinsLimits.at(k).at(0)) && (Momentum < PBinsLimits.at(k).at(1))) {
+                    for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
+                        double dThetaTemp = (hBinLowerYLim - hBinUpperYLim) / (hBinNumOfYBins);
+                        double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                        double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                        if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                            for (int j = 0; j < (hBinNumOfXBins + 1); j++) {
+                                double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                                double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                                double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                                if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                    if (ProtonSepAMaps.at(k).GetHistogram2D()->GetBinContent(i, j) != 0) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                } // end of find right phi if
+                            }
+
+    //                        break;
+                        } // end of find right theta if
+                    }
+
+    //                break;
+                } // end of in momentum range if
+        } // end of loop over Slices*/
+    } else if (isNeutron(Particle)) {
+        for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
+            double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
+            double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+            double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+            if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                for (int j = 0; j < (hBinNumOfXBins + 1); j++) {
+                    double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                    double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                    double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                    if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                        if (NucleonAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
+//                        if (NeutronAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } // end of find right phi if
+                }
+            } // end of find right theta if
+        }
+    } // end of if isElectron(Particle)
+
+    return false;
 }
 //</editor-fold>

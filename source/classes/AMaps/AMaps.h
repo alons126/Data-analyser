@@ -176,11 +176,17 @@ public:
 
 // SetSlicesFromHistTitle function ----------------------------------------------------------------------------------------------------------------------------------------
 
+    void SetSlicesFromHistTitle(TH2D *Histogram2D);
+
     void SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits);
 
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+
+// MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    bool MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi);
 
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -193,6 +199,8 @@ public:
     double GetNeutralParticleMinRatio() { return Neutral_particle_min_Ratio; }
 
     double GetCargedParticleMinRatio() { return Charged_particle_min_Ratio; }
+
+    double GetPBinsLimitsSize() { return PBinsLimits.size(); }
 
 };
 

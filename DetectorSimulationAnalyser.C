@@ -117,13 +117,13 @@ void EventAnalyser() {
     bool calculate_pFDpCD = true, calculate_nFDpCD = true;
 
     /* Truth level calculation settings */
-    bool calculate_truth_level = true; // TL master ON/OFF switch
+    bool calculate_truth_level = true;     // TL master ON/OFF switch
     bool TL_with_one_reco_electron = true; // TL master ON/OFF switch
-    bool fill_TL_plots = false;        // Generate acceptance maps
-    bool Rec_wTL_ES = false;           // Enforce TL event selection on Rec. plots
+    bool fill_TL_plots = true;             // Generate acceptance maps
+    bool Rec_wTL_ES = false;               // Enforce TL event selection on Rec. plots
 
     bool limless_mom_eff_plots = false;
-    bool Enable_FD_photons = false;    // keep as false to decrease RES and DIS
+    bool Enable_FD_photons = false;        // keep as false to decrease RES and DIS
 
     if (!calculate_2p) { calculate_pFDpCD = false; }
     if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
@@ -228,10 +228,10 @@ void EventAnalyser() {
 //                Efficiency_Status = "Eff1_10w40Bins";
 //                Efficiency_Status = "Eff1_10w50Bins";
 //                Efficiency_Status = "Eff1_10w65Bins";
-                Efficiency_Status = "Eff1_10w100Bins";
+//                Efficiency_Status = "Eff1_10w100Bins";
 
 //                Efficiency_Status = "Eff1_ResPlots2";
-//                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1";
 //                Efficiency_Status = "Eff1_d0_05_test";
             }
         }
@@ -590,8 +590,8 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
+    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
@@ -777,7 +777,7 @@ void EventAnalyser() {
     if (generate_AMaps) {
         aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
     } else {
-        AMaps(RefrenceHitMapsDirectory, SampleName);
+        aMaps = AMaps(RefrenceHitMapsDirectory, SampleName);
     }
     //</editor-fold>
 
@@ -2641,10 +2641,6 @@ void EventAnalyser() {
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
     TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                 65, -180, 180, 65, 0, 50);
-//    75, -180, 180, 65, 0, 50);
-//    cout << "\n\nGetNbinsX()" << hTheta_e_VS_Phi_e_All_e_FD->GetNbinsX() << "\n";
-//    cout << "GetNbinsY()" << hTheta_e_VS_Phi_e_All_e_FD->GetNbinsY() << "\n";
-//    quit();
     string hTheta_e_VS_Phi_e_All_e_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_All_e_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1e cut) */
@@ -6705,8 +6701,6 @@ void EventAnalyser() {
                 double Particle_TL_Momentum = rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz());
                 double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
                 double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
-//                double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
-//                double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
                 int BinX_e, BinY_e, BinX_p, BinY_p, BinX_n, BinY_n;
 
@@ -6715,6 +6709,10 @@ void EventAnalyser() {
                 inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (fill_TL_plots) {
+                    e_inSomeSector = aMaps.MatchAngToHitMap("Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                    p_inSomeSector = aMaps.MatchAngToHitMap("Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                    n_inSomeSector = aMaps.MatchAngToHitMap("Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                    /*
                     BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
                     BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
                     BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
@@ -6725,9 +6723,12 @@ void EventAnalyser() {
                     e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
                     p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
                     n_inSomeSector = (Neutron_hit_map->GetBinContent(BinX_n, BinY_n) != 0);
+*/
 
                     e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                    p_inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                     p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
+//                    n_inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                     n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
 
                     if (particlePDGtmp == 11) {
