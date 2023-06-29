@@ -242,7 +242,7 @@ AMaps::AMaps(double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXB
     ProtonAMap = hPlot2D("", "", hStatsTitleAMapProton, hTitleAMapProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", BinSavePathAMap, hSaveNameAMapProton, hBinLowerXLim,
                          hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
 
-    string hStatsTitleAMapNeutron = "Neutron AMap for (Reco./TL)#geq" + to_string_with_precision(Neutral_particle_min_Ratio, 2);
+    string hStatsTitleAMapNeutron = "Neutron_AMap";
     string hTitleAMapNeutron = "Neutron AMap for (Reco./TL)#geq" + to_string_with_precision(Neutral_particle_min_Ratio, 2);
     string hSaveNameAMapNeutron = "03_n_AMap";
     NeutronAMap = hPlot2D("", "", hStatsTitleAMapNeutron, hTitleAMapNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", BinSavePathAMap, hSaveNameAMapNeutron, hBinLowerXLim,
@@ -804,13 +804,13 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 
         TH2D *TempHist = (TH2D *) keyAsObj;
 
-        if (findSubstring(key->GetName(), "Electron") || findSubstring(key->GetName(), "electron")) {
+        if (findSubstring(TempHist->GetTitle(), "Electron") || findSubstring(TempHist->GetTitle(), "electron")) {
             ElectronAMapBC.SetHistogram2D(TempHist);
-        } else if (findSubstring(key->GetName(), "Proton") || findSubstring(key->GetName(), "proton")) {
+        } else if (findSubstring(TempHist->GetTitle(), "Proton") || findSubstring(TempHist->GetTitle(), "proton")) {
             ProtonAMapBC.SetHistogram2D(TempHist);
-        } else if (findSubstring(key->GetName(), "Neutron") || findSubstring(key->GetName(), "neutron")) {
+        } else if (findSubstring(TempHist->GetTitle(), "Neutron") || findSubstring(TempHist->GetTitle(), "neutron")) {
             NeutronAMapBC.SetHistogram2D(TempHist);
-        } else if (findSubstring(key->GetName(), "Nucleon") || findSubstring(key->GetName(), "nucleon")) {
+        } else if (findSubstring(TempHist->GetTitle(), "Nucleon") || findSubstring(TempHist->GetTitle(), "nucleon")) {
             NucleonAMapBC.SetHistogram2D(TempHist);
         }
     }
@@ -835,12 +835,12 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 
         if (counter == 0) { SetHistBinsFromHistTitle(TempHist); }
 
-        if (findSubstring(key->GetName(), "{e}")) {
+        if (findSubstring(TempHist->GetTitle(), "{e}")) {
             ElectronTLBinHitMaps.push_back(Temp2DHist);
             SetSlicesFromHistTitle(TempHist, PBinsLimits);
-        } else if (findSubstring(key->GetName(), "{p}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
             ProtonTLBinHitMaps.push_back(Temp2DHist);
-        } else if (findSubstring(key->GetName(), "{n}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
             NeutronTLHitMap.SetHistogram2D(TempHist);
         }
 
@@ -863,11 +863,11 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         hPlot2D Temp2DHist;
         Temp2DHist.SetHistogram2D(TempHist);
 
-        if (findSubstring(key->GetName(), "{e}")) {
+        if (findSubstring(TempHist->GetTitle(), "{e}")) {
             ElectronRecoBinHitMaps.push_back(Temp2DHist);
-        } else if (findSubstring(key->GetName(), "{p}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
             ProtonRecoBinHitMaps.push_back(Temp2DHist);
-        } else if (findSubstring(key->GetName(), "{n}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
             NeutronRecoHitMap.SetHistogram2D(TempHist);
         }
     }
@@ -888,11 +888,11 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         hPlot2D Temp2DHist;
         Temp2DHist.SetHistogram2D(TempHist);
 
-        if (findSubstring(key->GetName(), "{e}")) {
+        if (findSubstring(TempHist->GetTitle(), "{e}")) {
             ElectronRecoToTLRatio.push_back(Temp2DHist);
-        } else if (findSubstring(key->GetName(), "{p}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
             ProtonRecoToTLRatio.push_back(Temp2DHist);
-        } else if (findSubstring(key->GetName(), "{n}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
             NeutronRecoToTLRatio.SetHistogram2D(TempHist);
         }
     }
@@ -913,9 +913,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         hPlot2D Temp2DHist;
         Temp2DHist.SetHistogram2D(TempHist);
 
-        if (findSubstring(key->GetName(), "{e}")) {
+        if (findSubstring(TempHist->GetTitle(), "Electron") || findSubstring(TempHist->GetTitle(), "electron")) {
             ElectronSepAMaps.push_back(Temp2DHist);
-        } else if (findSubstring(key->GetName(), "{p}")) {
+        } else if (findSubstring(TempHist->GetTitle(), "Proton") || findSubstring(TempHist->GetTitle(), "proton")) {
             ProtonSepAMaps.push_back(Temp2DHist);
         }
     }
@@ -927,25 +927,41 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
     if (!AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMaps root file! Exiting...\n", exit(0); }
 //    int NumOfAMaps = HistCounter(AMaps_RootFile_FileName.c_str());
 
-    for (TObject *keyAsObj: *AMaps_RootFile->GetListOfKeys()) {
-        auto key = dynamic_cast<TKey *>(keyAsObj);
+    LoadedElectronAMaps0 = (TH2D *) AMaps_RootFile->Get("Electron_AMap");
+    if (!LoadedElectronAMaps0) { cout << "\n\nAMaps::ReadHitMaps: could not load Electron_AMap from root file! Exiting...\n", exit(0); }
 
-        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+    LoadedProtonAMap = (TH2D *) AMaps_RootFile->Get("Proton_AMap");
+    if (!LoadedProtonAMap) { cout << "\n\nAMaps::ReadHitMaps: could not load Proton_AMap from root file! Exiting...\n", exit(0); }
 
-        TH2D *TempHist = (TH2D *) keyAsObj;
-        hPlot2D Temp2DHist;
-        Temp2DHist.SetHistogram2D(TempHist);
+    LoadedNeutronAMap = (TH2D *) AMaps_RootFile->Get("Neutron_AMap");
+    if (!LoadedNeutronAMap) { cout << "\n\nAMaps::ReadHitMaps: could not load Neutron_AMap from root file! Exiting...\n", exit(0); }
 
-        if (findSubstring(key->GetName(), "Electron") || findSubstring(key->GetName(), "electron")) {
-            ElectronAMap.SetHistogram2D(TempHist);
-        } else if (findSubstring(key->GetName(), "Proton") || findSubstring(key->GetName(), "proton")) {
-            ProtonAMap.SetHistogram2D(TempHist);
-        } else if (findSubstring(key->GetName(), "Neutron") || findSubstring(key->GetName(), "neutron")) {
-            NeutronAMap.SetHistogram2D(TempHist);
-        } else if (findSubstring(key->GetName(), "Nucleon") || findSubstring(key->GetName(), "nucleon")) {
-            NucleonAMap.SetHistogram2D(TempHist);
-        }
-    }
+    LoadedNucleonAMap = (TH2D *) AMaps_RootFile->Get("Nucleon_AMap");
+    if (!LoadedNucleonAMap) { cout << "\n\nAMaps::ReadHitMaps: could not load Nucleon_AMap from root file! Exiting...\n", exit(0); }
+
+
+//    for (TObject *keyAsObj: *AMaps_RootFile->GetListOfKeys()) {
+//        auto key = dynamic_cast<TKey *>(keyAsObj);
+//
+//        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+//
+//        TH2D *TempHist = (TH2D *) keyAsObj;
+//        hPlot2D Temp2DHist;
+//        Temp2DHist.SetHistogram2D(TempHist);
+//
+//        if (findSubstring(TempHist->GetTitle(), "Electron") || findSubstring(TempHist->GetTitle(), "electron")) {
+//            ElectronAMap.SetHistogram2D(TempHist);
+//        } else if (findSubstring(TempHist->GetTitle(), "Proton") || findSubstring(TempHist->GetTitle(), "proton")) {
+//            ProtonAMap.SetHistogram2D(TempHist);
+//            LoadedProtonAMap = (TH2D *) keyAsObj;
+//        } else if (findSubstring(TempHist->GetTitle(), "Neutron") || findSubstring(TempHist->GetTitle(), "neutron")) {
+//            NeutronAMap.SetHistogram2D(TempHist);
+//            LoadedNeutronAMap = (TH2D *) keyAsObj;
+//        } else if (findSubstring(TempHist->GetTitle(), "Nucleon") || findSubstring(TempHist->GetTitle(), "nucleon")) {
+//            NucleonAMap.SetHistogram2D(TempHist);
+//            LoadedNucleonAMap = (TH2D *) keyAsObj;
+//        }
+//    }
     //</editor-fold>
 
     cout << "\n\nHit maps loaded!\n\n";
@@ -957,6 +973,29 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 //<editor-fold desc="MatchAngToHitMap function">
 bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi) {
     if (isElectron(Particle)) {
+        for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
+            double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
+            double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+            double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+            if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                for (int j = 0; j < (hBinNumOfXBins + 1); j++) {
+                    double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                    double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                    double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                    if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                        if (LoadedElectronAMaps0->GetBinContent(i, j) != 0) {
+//                            cout << "\n\LoadedElectronAMaps0->GetBinContent(i, j) = " << LoadedElectronAMaps0->GetBinContent(i, j) << "\n\n";
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } // end of find right phi if
+                }
+            } // end of find right theta if
+        }
+        /*
         for (int k = 0; k < PBinsLimits.size(); k++) {
             if ((Momentum >= PBinsLimits.at(k).at(0)) && (Momentum < PBinsLimits.at(k).at(1))) {
                 for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
@@ -971,7 +1010,7 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-                                if (ElectronSepAMaps.at(k).GetHistogram2D()->GetBinContent(i, j) != 0) {
+                                if (ElectronSepAMaps.at(k).GetHistogram2D()->GetBinContent(i, j) != 0.) {
                                     return true;
                                 } else {
                                     return false;
@@ -982,6 +1021,7 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                 }
             } // end of in momentum range if
         } // end of loop over Slices
+*/
     } else if (isProton(Particle)) {
         for (int i = 0; i < (hBinNumOfYBins + 1); i++) {
             double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
@@ -995,8 +1035,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                     double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                     if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-                        if (NucleonAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
-//                        if (NeutronAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
+                        if (LoadedNucleonAMap->GetBinContent(i, j) != 0) {
+//                            cout << "\n\LoadedNucleonAMap->GetBinContent(i, j) = " << LoadedNucleonAMap->GetBinContent(i, j) << "\n\n";
                             return true;
                         } else {
                             return false;
@@ -1047,8 +1087,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                     double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                     if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-                        if (NucleonAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
-//                        if (NeutronAMap.GetHistogram2D()->GetBinContent(i, j) != 0) {
+                        if (LoadedNucleonAMap->GetBinContent(i, j) != 0) {
+//                            cout << "\n\LoadedNucleonAMap->GetBinContent(i, j) = " << LoadedNucleonAMap->GetBinContent(i, j) << "\n\n";
                             return true;
                         } else {
                             return false;

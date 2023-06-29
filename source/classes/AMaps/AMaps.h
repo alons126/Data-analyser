@@ -79,6 +79,13 @@ private:
     hPlot2D NeutronAMap;
     hPlot2D NucleonAMap;
 
+    /* Loaded hit maps */
+    vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
+    TH2D *LoadedElectronAMaps0;
+    TH2D *LoadedProtonAMap;
+    TH2D *LoadedNeutronAMap;
+    TH2D *LoadedNucleonAMap;
+
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
 //    double Charged_particle_min_Ratio = 0.;
