@@ -239,6 +239,8 @@ public:
 
     std::string GetHistogramTitle() { return Histogram2DTitles["HistogramTitle"]; }
 
+    std::string GetHistTitle() { return Histogram2D->GetTitle(); }
+
     std::string GetHistogramStatTitle() { return Histogram2DTitles["HistogramStatTitle"]; }
 
     std::string GetXaxisTitle() { return Histogram2DTitles["XaxisTitle"]; }

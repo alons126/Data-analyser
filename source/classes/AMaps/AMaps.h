@@ -11,6 +11,7 @@
 #include <TF1.h>
 #include <math.h>
 #include <map>
+#include <string>
 
 #include <cstdlib>
 #include <iomanip>
@@ -165,13 +166,21 @@ public:
 
     void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
 
-// ReadHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+// HistCounter function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    int HistCounter(const char *fname);
+
+// SetHistBinsFromHistTitle function ----------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetHistBinsFromHistTitle(TH2D *Histogram2D);
+
+// SetSlicesFromHistTitle function ----------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits);
+
+// ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
-
-//// PSmear function ----------------------------------------------------------------------------------------------------------------------------------------------------
-//
-//    double PSmear(bool apply_proton_smearing, double Momentum);
 
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 

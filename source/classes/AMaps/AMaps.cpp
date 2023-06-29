@@ -619,10 +619,10 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     //<editor-fold desc="Save TL hit maps to refrence hit maps directory">
     /* Acceptance maps BC */
     TFile *AMapsBC_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + AMapsBC_prefix + SampleName + ".root").c_str(), "recreate");
-    AMapsBC_plots_path_fout->cd();
+    AMapsBC_ref_hit_maps_fout->cd();
     AcceptanceMapsBC->Write();
-    AMapsBC_plots_path_fout->Write();
-    AMapsBC_plots_path_fout->Close();
+    AMapsBC_ref_hit_maps_fout->Write();
+    AMapsBC_ref_hit_maps_fout->Close();
 
     /* TL hit maps */
     TFile *TLHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str(), "recreate");
@@ -663,29 +663,246 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
 }
 //</editor-fold>
 
-// ReadHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+// HistCounter function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="HistCounter function">
+int AMaps::HistCounter(const char *fname) {
+    TKey *key;
+    TFile *f = TFile::Open(fname, "READ");
+
+//    if (!f || f->IsZombie()) {
+//        cout << "Unable to open " << fname << " for reading..." << endl;
+//        return;
+//    }
+
+    Int_t total = 0;
+    TIter next((TList *) f->GetListOfKeys());
+
+//    while (key == (TKey *) next())
+//    {
+//    while (key = (TKey *) next()) {
+    while ((key = (TKey *) next())) {
+        TClass *cl = gROOT->GetClass(key->GetClassName());
+
+        if (cl->InheritsFrom("TH1")) {
+            // the following line is not needed if you only want
+            // to count the histograms
+            TH1 *h = (TH1 *) key->ReadObj();
+//            cout << "Histo found: " << h->GetName() << " - " << h->GetTitle() << endl;
+            total++;
+        }
+    }
+
+    cout << "\n\nFound " << total << " Histograms\n" << endl;
+
+    return total;
+}
+//</editor-fold>
+
+// SetHistBinsFromHistTitle function ------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SetHistBinsFromHistTitle function">
+void AMaps::SetHistBinsFromHistTitle(TH2D *Histogram2D) {
+    bool PrintOut = false;
+
+//    hBinNumOfXBins = Histogram2D->GetNbinsX();
+//    hBinNumOfYBins = Histogram2D->GetNbinsY();
+
+    string Title = Histogram2D->GetTitle();
+    string NumOfXBinsStr = Title.substr((Title.find_last_of('(')) + 1, 3);
+    string NumOfYBinsStr = Title.substr(Title.find_last_of('x') + 1, 3);
+
+    hBinNumOfXBins = stoi(NumOfXBinsStr);
+    hBinNumOfYBins = stoi(NumOfYBinsStr);
+
+    if (PrintOut) {
+        cout << "\n\nTitle = " << Title << "\n\n";
+        cout << "NumOfXBinsStr = " << NumOfXBinsStr << "\n";
+        cout << "NumOfYBinsStr = " << NumOfYBinsStr << "\n\n";
+
+        cout << "hBinNumOfXBins = " << hBinNumOfXBins << "\n";
+        cout << "hBinNumOfYBins = " << hBinNumOfYBins << "\n\n";
+    }
+}
+//</editor-fold>
+
+// SetSlicesFromHistTitle function --------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SetSlicesFromHistTitle function">
+void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits) {
+    bool PrintOut = true;
+
+    string Title = Histogram2D->GetTitle();
+    string SliceLowerLimStr = Title.substr((Title.find_first_of('#')) - 4, 4);
+    string SliceUpperLimStr = Title.substr(Title.find_last_of('#') + 4, 4);
+
+    double SliceLowerLim = stod(SliceLowerLimStr);
+    double SliceUpperLim = stod(SliceUpperLimStr);
+
+    MomBinsLimits.push_back({SliceLowerLim, SliceUpperLim});
+
+    if (PrintOut) {
+        cout << "\n\nTitle = " << Title << "\n\n";
+        cout << "SliceLowerLimStr = " << SliceLowerLimStr << "\n";
+        cout << "SliceUpperLimStr = " << SliceUpperLimStr << "\n\n";
+
+        cout << "SliceLowerLim = " << SliceLowerLim << "\n";
+        cout << "SliceUpperLim = " << SliceUpperLim << "\n\n";
+    }
+}
+//</editor-fold>
+
+// ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadHitMaps function">
 void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
-    TFile *AMapsBC_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMapsBC_prefix + SampleName + ".root").c_str());
+    bool PrintKeys = false;
+
+    string AMapsBC_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMapsBC_prefix + SampleName + ".root";
+    TFile *AMapsBC_RootFile = new TFile(AMapsBC_RootFile_FileName.c_str());
     if (!AMapsBC_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMapsBC root file! Exiting...\n", exit(0); }
+//    int NumOfAMapsBC = HistCounter(AMapsBC_RootFile_FileName.c_str());
 
-    TFile *Hit_Maps_TL_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str());
+    for (TObject *keyAsObj: *AMapsBC_RootFile->GetListOfKeys()) {
+        auto key = dynamic_cast<TKey *>(keyAsObj);
+
+        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+
+        TH2D *TempHist = (TH2D *) keyAsObj;
+
+        if (findSubstring(key->GetName(), "Electron") || findSubstring(key->GetName(), "electron")) {
+            ElectronAMapBC.SetHistogram2D(TempHist);
+        } else if (findSubstring(key->GetName(), "Proton") || findSubstring(key->GetName(), "proton")) {
+            ProtonAMapBC.SetHistogram2D(TempHist);
+        } else if (findSubstring(key->GetName(), "Neutron") || findSubstring(key->GetName(), "neutron")) {
+            NeutronAMapBC.SetHistogram2D(TempHist);
+        } else if (findSubstring(key->GetName(), "Nucleon") || findSubstring(key->GetName(), "nucleon")) {
+            NucleonAMapBC.SetHistogram2D(TempHist);
+        }
+    }
+
+    string Hit_Maps_TL_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root";
+    TFile *Hit_Maps_TL_RootFile = new TFile(Hit_Maps_TL_RootFile_FileName.c_str());
     if (!Hit_Maps_TL_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
+//    int NumOfHit_Maps_TL = HistCounter(Hit_Maps_TL_RootFile_FileName.c_str());
 
-    TFile *Hit_Maps_Reco_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root").c_str());
+    int counter = 0;
+
+    for (TObject *keyAsObj: *Hit_Maps_TL_RootFile->GetListOfKeys()) {
+        auto key = dynamic_cast<TKey *>(keyAsObj);
+
+        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+
+        TH2D *TempHist = (TH2D *) keyAsObj;
+        hPlot2D Temp2DHist;
+        Temp2DHist.SetHistogram2D(TempHist);
+
+        if (counter == 0) { SetHistBinsFromHistTitle(TempHist); }
+
+        if (findSubstring(key->GetName(), "{e}")) {
+            ElectronTLBinHitMaps.push_back(Temp2DHist);
+            SetSlicesFromHistTitle(TempHist, PBinsLimits);
+        } else if (findSubstring(key->GetName(), "{p}")) {
+            ProtonTLBinHitMaps.push_back(Temp2DHist);
+        } else if (findSubstring(key->GetName(), "{n}")) {
+            NeutronTLHitMap.SetHistogram2D(TempHist);
+        }
+
+        ++counter;
+    }
+
+    string Hit_Maps_Reco_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root";
+    TFile *Hit_Maps_Reco_RootFile = new TFile(Hit_Maps_Reco_RootFile_FileName.c_str());
     if (!Hit_Maps_Reco_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Reco root file! Exiting...\n", exit(0); }
+//    int NumOfHit_Maps_Reco = HistCounter(Hit_Maps_Reco_RootFile_FileName.c_str());
 
-    TFile *Hit_Maps_Ratio_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root").c_str());
+    for (TObject *keyAsObj: *Hit_Maps_Reco_RootFile->GetListOfKeys()) {
+        auto key = dynamic_cast<TKey *>(keyAsObj);
+
+        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+
+        TH2D *TempHist = (TH2D *) keyAsObj;
+        hPlot2D Temp2DHist;
+        Temp2DHist.SetHistogram2D(TempHist);
+
+        if (findSubstring(key->GetName(), "{e}")) {
+            ElectronRecoBinHitMaps.push_back(Temp2DHist);
+        } else if (findSubstring(key->GetName(), "{p}")) {
+            ProtonRecoBinHitMaps.push_back(Temp2DHist);
+        } else if (findSubstring(key->GetName(), "{n}")) {
+            NeutronRecoHitMap.SetHistogram2D(TempHist);
+        }
+    }
+
+    string Hit_Maps_Ratio_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root";
+    TFile *Hit_Maps_Ratio_RootFile = new TFile(Hit_Maps_Ratio_RootFile_FileName.c_str());
     if (!Hit_Maps_Ratio_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Ratio root file! Exiting...\n", exit(0); }
+//    int NumOfHit_Maps_Ratio = HistCounter(Hit_Maps_Ratio_RootFile_FileName.c_str());
 
-    TFile *cPart_Sep_AMaps_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str());
+    for (TObject *keyAsObj: *Hit_Maps_Ratio_RootFile->GetListOfKeys()) {
+        auto key = dynamic_cast<TKey *>(keyAsObj);
+
+        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+
+        TH2D *TempHist = (TH2D *) keyAsObj;
+        hPlot2D Temp2DHist;
+        Temp2DHist.SetHistogram2D(TempHist);
+
+        if (findSubstring(key->GetName(), "{e}")) {
+            ElectronRecoToTLRatio.push_back(Temp2DHist);
+        } else if (findSubstring(key->GetName(), "{p}")) {
+            ProtonRecoToTLRatio.push_back(Temp2DHist);
+        } else if (findSubstring(key->GetName(), "{n}")) {
+            NeutronRecoToTLRatio.SetHistogram2D(TempHist);
+        }
+    }
+
+    string cPart_Sep_AMaps_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root";
+    TFile *cPart_Sep_AMaps_RootFile = new TFile(cPart_Sep_AMaps_RootFile_FileName.c_str());
     if (!cPart_Sep_AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load cPart_Sep_AMaps root file! Exiting...\n", exit(0); }
+//    int NumOfcPart_Sep_AMaps = HistCounter(cPart_Sep_AMaps_RootFile_FileName.c_str());
 
-    TFile *AMaps_RootFile = new TFile((RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMaps_prefix + SampleName + ".root").c_str());
+    for (TObject *keyAsObj: *cPart_Sep_AMaps_RootFile->GetListOfKeys()) {
+        auto key = dynamic_cast<TKey *>(keyAsObj);
+
+        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+
+        TH2D *TempHist = (TH2D *) keyAsObj;
+        hPlot2D Temp2DHist;
+        Temp2DHist.SetHistogram2D(TempHist);
+
+        if (findSubstring(key->GetName(), "{e}")) {
+            ElectronSepAMaps.push_back(Temp2DHist);
+        } else if (findSubstring(key->GetName(), "{p}")) {
+            ProtonSepAMaps.push_back(Temp2DHist);
+        }
+    }
+
+    string AMaps_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMaps_prefix + SampleName + ".root";
+    TFile *AMaps_RootFile = new TFile(AMaps_RootFile_FileName.c_str());
     if (!AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMaps root file! Exiting...\n", exit(0); }
+//    int NumOfAMaps = HistCounter(AMaps_RootFile_FileName.c_str());
 
+    for (TObject *keyAsObj: *AMaps_RootFile->GetListOfKeys()) {
+        auto key = dynamic_cast<TKey *>(keyAsObj);
 
-//    cout << "\n\n\nloaded OK!\n", exit(0);
+        if (PrintKeys) { cout << "Key name: " << key->GetName() << " Type: " << key->GetClassName() << endl; }
+
+        TH2D *TempHist = (TH2D *) keyAsObj;
+        hPlot2D Temp2DHist;
+        Temp2DHist.SetHistogram2D(TempHist);
+
+        if (findSubstring(key->GetName(), "Electron") || findSubstring(key->GetName(), "electron")) {
+            ElectronAMap.SetHistogram2D(TempHist);
+        } else if (findSubstring(key->GetName(), "Proton") || findSubstring(key->GetName(), "proton")) {
+            ProtonAMap.SetHistogram2D(TempHist);
+        } else if (findSubstring(key->GetName(), "Neutron") || findSubstring(key->GetName(), "neutron")) {
+            NeutronAMap.SetHistogram2D(TempHist);
+        } else if (findSubstring(key->GetName(), "Nucleon") || findSubstring(key->GetName(), "nucleon")) {
+            NucleonAMap.SetHistogram2D(TempHist);
+        }
+    }
+
+    cout << "\n\nHit maps loaded!\n";
 }
 //</editor-fold>

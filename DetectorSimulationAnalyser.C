@@ -118,6 +118,7 @@ void EventAnalyser() {
 
     /* Truth level calculation settings */
     bool calculate_truth_level = true; // TL master ON/OFF switch
+    bool TL_with_one_reco_electron = true; // TL master ON/OFF switch
     bool fill_TL_plots = false;        // Generate acceptance maps
     bool Rec_wTL_ES = false;           // Enforce TL event selection on Rec. plots
 
@@ -226,8 +227,8 @@ void EventAnalyser() {
 //                Efficiency_Status = "Eff1_5w100Bins";
 //                Efficiency_Status = "Eff1_10w40Bins";
 //                Efficiency_Status = "Eff1_10w50Bins";
-                Efficiency_Status = "Eff1_10w65Bins";
-//                Efficiency_Status = "Eff1_10w100Bins";
+//                Efficiency_Status = "Eff1_10w65Bins";
+                Efficiency_Status = "Eff1_10w100Bins";
 
 //                Efficiency_Status = "Eff1_ResPlots2";
 //                Efficiency_Status = "Eff1";
@@ -727,7 +728,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Acceptance map generation settings">
     /* Hit maps are handled completely by the AMaps class */
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
 
     if (!calculate_truth_level) { generate_AMaps = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
@@ -2640,6 +2641,10 @@ void EventAnalyser() {
     /* Theta_e vs. Phi_e histograms (no #(e) cut) */
     TH2D *hTheta_e_VS_Phi_e_All_e_FD = new TH2D("#theta_{e} vs. #phi_{e} (no #(e) cut, FD)", "#theta_{e} vs. #phi_{e}  (no #(e) cut, FD);#phi_{e} [Deg];#theta_{e} [Deg]",
                                                 65, -180, 180, 65, 0, 50);
+//    75, -180, 180, 65, 0, 50);
+//    cout << "\n\nGetNbinsX()" << hTheta_e_VS_Phi_e_All_e_FD->GetNbinsX() << "\n";
+//    cout << "GetNbinsY()" << hTheta_e_VS_Phi_e_All_e_FD->GetNbinsY() << "\n";
+//    quit();
     string hTheta_e_VS_Phi_e_All_e_FD_Dir = directories.Angle_Directory_map["Theta_e_VS_Phi_e_All_e_Directory"];
 
     /* Theta_e vs. Phi_e histograms (1e cut) */
@@ -6496,7 +6501,8 @@ void EventAnalyser() {
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
-        if (calculate_truth_level && findSubstring(SampleName, "simulation") && apply_nucleon_cuts) { // run only for CLAS12 simulation & AFTER beta fit
+        if (calculate_truth_level && apply_nucleon_cuts && (!TL_with_one_reco_electron || (electrons.size() == 1)) &&
+            findSubstring(SampleName, "simulation")) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -6645,7 +6651,8 @@ void EventAnalyser() {
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
             bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
-            bool HitMap_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut && (electrons.size() == 1)); // One id. FD electron above momentum threshold
+            bool HitMap_Event_Selection_1e_cut = TL_Event_Selection_1e_cut; // One id. FD electron above momentum threshold
+//            bool HitMap_Event_Selection_1e_cut = (TL_Event_Selection_1e_cut && (electrons.size() == 1)); // One id. FD electron above momentum threshold
 //            bool HitMap_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
