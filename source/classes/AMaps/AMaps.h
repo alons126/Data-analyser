@@ -206,13 +206,17 @@ public:
 
     void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
 
-// ReadAMap function -------------------------------------------------------------------------------------------------------------------------------------------------
+// ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_hit_map);
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 
     bool MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi);
+
+// IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+    bool IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi);
 
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 

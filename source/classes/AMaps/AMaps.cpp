@@ -1190,3 +1190,21 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
     return false;
 }
 //</editor-fold>
+
+// IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="MatchAngToHitMap function">
+bool AMaps::IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi) {
+    bool part_inSomeSector;
+
+    if (!generate_AMaps) {
+        part_inSomeSector = MatchAngToHitMap(Particle, Momentum, Theta, Phi);
+    } else {
+        part_inSomeSector = true;
+    }
+
+    bool inFDQuery = (part_inSomeSector && (Theta >= ThetaFD.GetLowerCutConst()) && (Theta <= ThetaFD.GetUpperCutConst()));
+
+    return inFDQuery;
+}
+//</editor-fold>

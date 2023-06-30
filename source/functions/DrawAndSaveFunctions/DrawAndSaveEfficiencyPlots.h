@@ -113,10 +113,6 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
     string EfficiencyYLabel = "#epsilon_{eff} = #frac{rec.}{truth}";
-//    string EfficiencyYLabel = "#epsilon_{eff} = rec./truth";
-//    string EfficiencyYLabel = "#epsilon_{eff} = rec/truth";
-//    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
-//    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "/" + xLabel_Truth;
     //</editor-fold>
 
     //<editor-fold desc="Setting Final state">
@@ -278,7 +274,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     Efficiency_plot->Rebin(2);
     Efficiency_plot->Divide(TLPlot_Clone);
     Efficiency_plot->Draw();
-    Efficiency_plot->SetStats(1);
+    Efficiency_plot->SetStats(0);
     Histogram_list->Add(Efficiency_plot);
     Canvas->SaveAs((Efficiency_plot_SaveName).c_str());
     Canvas->Clear();
