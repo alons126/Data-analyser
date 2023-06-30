@@ -86,8 +86,11 @@ private:
 
     vector<vector<int>> Loaded_e_Hit_Map;
     vector<vector<int>> Loaded_p_Hit_Map;
+    vector<vector<int>> Loaded_n_Hit_Map;
+    vector<vector<int>> Loaded_nuc_Hit_Map;
 
     /* Loaded hit maps */
+    //TODO: delete these histoframs if the .par loading works
     vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
     TH2D *LoadedElectronAMaps0;
     TH2D *LoadedProtonAMap;
@@ -108,7 +111,7 @@ private:
     TList *Charged_particle_Sep_AMaps = new TList();
     TList *AcceptanceMaps = new TList();
 
-    string BinSavePath;
+    string HitMapSavePath;
 
     string AMapsBC_prefix = "00_AMapsBC_-_";
     string Hit_Maps_TL_prefix = "01_Hit_Maps_TL_-_";
@@ -130,10 +133,6 @@ public:
 
     // AMaps loading constructor:
     AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
-
-// SetMaps function -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    void SetMaps();
 
 // SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
