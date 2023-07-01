@@ -134,16 +134,18 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
+    AMaps(bool reformat_e_bins, double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
 
-// SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
+// SetBins functions ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void SetBins(double beamE);
 
-    void SetBins(double beamE, double NumberOfMomBins);
+    void SetElectronBins(bool reformat_e_bins, double beamE);
+
+    void SetBins(double beamE, double NumberOfMomBins); // old
 
 // isElectron function --------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -185,7 +187,7 @@ public:
 
     void GenerateNucleonAMap();
 
-// SaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+// SaveHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     void SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory);
 
@@ -203,7 +205,7 @@ public:
 
 // SetSlicesFromHistTitle function --------------------------------------------------------------------------------------------------------------------------------------
 
-    void SetSlicesFromHistTitle(TH2D *Histogram2D);
+    void SetSlicesFromHistTitle(TH2D *Histogram2D, const string &Particle);
 
     void SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits);
 
@@ -226,16 +228,18 @@ public:
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Set methods
-    void SetNeutralParticleMinRatio(double npmr) { Neutral_particle_min_Ratio = npmr; }
+    void SetNPartMinRatio(double npmr) { Neutral_particle_min_Ratio = npmr; }
 
-    void SetCargedParticleMinRatio(double cpmr) { Charged_particle_min_Ratio = cpmr; }
+    void SetCPartMinRatio(double cpmr) { Charged_particle_min_Ratio = cpmr; }
 
     // Get methods
-    double GetNeutralParticleMinRatio() { return Neutral_particle_min_Ratio; }
+    double GetNPartMinRatio() { return Neutral_particle_min_Ratio; }
 
-    double GetCargedParticleMinRatio() { return Charged_particle_min_Ratio; }
+    double GetCPartMinRatio() { return Charged_particle_min_Ratio; }
 
     double GetPBinsLimitsSize() { return PBinsLimits.size(); }
+
+    double GetElectronPBinsLimitsSize() { return ElectronMomBinsLimits.size(); }
 
 };
 
