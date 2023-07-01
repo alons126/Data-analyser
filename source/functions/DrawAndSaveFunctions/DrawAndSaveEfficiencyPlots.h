@@ -585,7 +585,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
 
     Efficiency_plot->Rebin(2);
     Efficiency_plot->Divide(TLPlot_Clone);
-    Efficiency_plot->SetStats(1);
+    Efficiency_plot->SetStats(0);
     Efficiency_plot->Draw();
 
     Histogram_list->Add(Efficiency_plot);

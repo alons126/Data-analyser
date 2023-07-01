@@ -46,8 +46,13 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> InvertedPBinsLimits;
-    vector<vector<double>> PBinsLimits;
+    vector<vector<double>> InvertedPBinsLimits;           // proton inverted bins
+    vector<vector<double>> PBinsLimits;                   // proton inverted bins
+
+    vector<vector<double>> ElectronInvertedMomBinsLimits; // electron inverted bins
+    vector<vector<double>> ElectronMomBinsLimits;         // electron inverted bins
+    vector<vector<double>> ElectronInvertedMomBinsLimits_Temp; // electron inverted bins
+    vector<vector<double>> ElectronMomBinsLimits_Temp;         // electron inverted bins
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -90,7 +95,7 @@ private:
     vector<vector<int>> Loaded_nuc_Hit_Map;
 
     /* Loaded hit maps */
-    //TODO: delete these histoframs if the .par loading works
+    //TODO: delete these histograms if the .par loading works
     vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
     TH2D *LoadedElectronAMaps0;
     TH2D *LoadedProtonAMap;
