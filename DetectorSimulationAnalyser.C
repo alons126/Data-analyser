@@ -118,7 +118,7 @@ void EventAnalyser() {
 
     /* Truth level calculation settings */
     bool calculate_truth_level = true;      // TL master ON/OFF switch
-    bool TL_with_one_reco_electron = true; // TL master ON/OFF switch
+    bool TL_with_one_reco_electron = false; // TL master ON/OFF switch
     bool fill_TL_plots = false;              // Generate acceptance maps
     bool Rec_wTL_ES = false;                // Enforce TL event selection on Rec. plots
 
@@ -223,7 +223,9 @@ void EventAnalyser() {
             } else {
 //                Efficiency_Status = "Eff1_wFiducialCuts";
 //                Efficiency_Status = "Eff1_wFiducialCutsAnd1r_e";
-                Efficiency_Status = "Eff1";
+//                Efficiency_Status = "Eff1_AMaps";
+//                Efficiency_Status = "Eff1";
+                Efficiency_Status = "Eff1_ResPlots3";
             }
         }
 
@@ -719,7 +721,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Acceptance map generation settings">
     /* Hit maps are handled completely by the AMaps class */
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
+    bool reformat_e_bins = true;
 
     if (!calculate_truth_level) { generate_AMaps = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
@@ -761,7 +764,7 @@ void EventAnalyser() {
     AMaps aMaps;
 
     if (generate_AMaps) {
-        aMaps = AMaps(beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
+        aMaps = AMaps(reformat_e_bins, beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
     } else {
         aMaps = AMaps(RefrenceHitMapsDirectory, SampleName);
     }
@@ -773,7 +776,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Neutron resolution fit settings">
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
-    bool plot_and_fit_nRes = false;
+    bool plot_and_fit_nRes = true;
     bool VaryingDelta = true;
 
     double DeltaSlices = 0.05;
@@ -5854,13 +5857,13 @@ void EventAnalyser() {
                                                Theta_lboundary_FD, Theta_uboundary_FD);
     hPlot1D hTheta_p_AC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing FD Proton AC",
                                                   "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_p_AC_truth_nFDpCD_FD",                                                  Theta_lboundary_FD, Theta_uboundary_FD);
+                                                  "02b_Theta_p_AC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD);
     hPlot1D hTheta_p_BC_truth_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "FD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing FD Proton BC",
                                                   "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
                                                   "02b_Theta_p_BC_truth_nFDpCD_FD", Theta_lboundary_FD, Theta_uboundary_FD);
     hPlot1D hTheta_p_AC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} AC", "#theta^{truth}_{p} of Outgoing CD Proton AC",
                                                   "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
-                                                  "02b_Theta_p_AC_truth_nFDpCD_CD",                                                  Theta_lboundary_CD, Theta_uboundary_CD);
+                                                  "02b_Theta_p_AC_truth_nFDpCD_CD", Theta_lboundary_CD, Theta_uboundary_CD);
     hPlot1D hTheta_p_BC_truth_nFDpCD_CD = hPlot1D("nFDpCD", "CD", "CD TL #theta^{truth}_{p} BC", "#theta^{truth}_{p} of Outgoing CD Proton BC",
                                                   "#theta^{truth}_{p} [Deg]", directories.Eff_and_ACorr_Directory_map["Theta_Eff_and_ACorr_nFDpCD_Directory"],
                                                   "02b_Theta_p_BC_truth_nFDpCD_CD", Theta_lboundary_CD, Theta_uboundary_CD);
@@ -15549,6 +15552,9 @@ void EventAnalyser() {
             histPlotter2D(c1, hP_nFD_Res_VS_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_P_nFD_1n_Dir,
                           "s05_P_nFD_Res_VS_P_nFD_1n");
 
+        }
+
+        if (plot_and_fit_nRes) {
             nRes.SliceFitDrawAndSave(SampleName, beamE);
             nRes.LogFitDataToFile(SampleName, plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
             nRes.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);

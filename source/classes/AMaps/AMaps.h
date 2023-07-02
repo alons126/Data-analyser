@@ -46,8 +46,13 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> InvertedPBinsLimits;
-    vector<vector<double>> PBinsLimits;
+    vector<vector<double>> InvertedPBinsLimits;           // proton inverted bins
+    vector<vector<double>> PBinsLimits;                   // proton inverted bins
+
+    vector<vector<double>> ElectronInvertedMomBinsLimits; // electron inverted bins
+    vector<vector<double>> ElectronMomBinsLimits;         // electron inverted bins
+    vector<vector<double>> ElectronInvertedMomBinsLimits_Temp; // electron inverted bins
+    vector<vector<double>> ElectronMomBinsLimits_Temp;         // electron inverted bins
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -90,7 +95,7 @@ private:
     vector<vector<int>> Loaded_nuc_Hit_Map;
 
     /* Loaded hit maps */
-    //TODO: delete these histoframs if the .par loading works
+    //TODO: delete these histograms if the .par loading works
     vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
     TH2D *LoadedElectronAMaps0;
     TH2D *LoadedProtonAMap;
@@ -129,16 +134,18 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
+    AMaps(bool reformat_e_bins, double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
 
-// SetBins function -----------------------------------------------------------------------------------------------------------------------------------------------------
+// SetBins functions ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void SetBins(double beamE);
 
-    void SetBins(double beamE, double NumberOfMomBins);
+    void SetElectronBins(bool reformat_e_bins, double beamE);
+
+    void SetBins(double beamE, double NumberOfMomBins); // old
 
 // isElectron function --------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -180,7 +187,7 @@ public:
 
     void GenerateNucleonAMap();
 
-// SaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
+// SaveHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     void SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory);
 
@@ -198,7 +205,7 @@ public:
 
 // SetSlicesFromHistTitle function --------------------------------------------------------------------------------------------------------------------------------------
 
-    void SetSlicesFromHistTitle(TH2D *Histogram2D);
+    void SetSlicesFromHistTitle(TH2D *Histogram2D, const string &Particle);
 
     void SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> MomBinsLimits);
 
@@ -221,16 +228,18 @@ public:
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Set methods
-    void SetNeutralParticleMinRatio(double npmr) { Neutral_particle_min_Ratio = npmr; }
+    void SetNPartMinRatio(double npmr) { Neutral_particle_min_Ratio = npmr; }
 
-    void SetCargedParticleMinRatio(double cpmr) { Charged_particle_min_Ratio = cpmr; }
+    void SetCPartMinRatio(double cpmr) { Charged_particle_min_Ratio = cpmr; }
 
     // Get methods
-    double GetNeutralParticleMinRatio() { return Neutral_particle_min_Ratio; }
+    double GetNPartMinRatio() { return Neutral_particle_min_Ratio; }
 
-    double GetCargedParticleMinRatio() { return Charged_particle_min_Ratio; }
+    double GetCPartMinRatio() { return Charged_particle_min_Ratio; }
 
     double GetPBinsLimitsSize() { return PBinsLimits.size(); }
+
+    double GetElectronPBinsLimitsSize() { return ElectronMomBinsLimits.size(); }
 
 };
 
