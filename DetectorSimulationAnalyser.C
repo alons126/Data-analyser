@@ -131,7 +131,7 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution settings */
-    bool plot_and_fit_nRes = false;
+    bool plot_and_fit_MomRes = true;
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
 
@@ -186,7 +186,6 @@ void EventAnalyser() {
 
     //<editor-fold desc="Custom cuts naming">
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
-
     bool custom_cuts_naming = true;
     string Nucleon_Cuts_Status, FD_photons_Status, PSmearing_Status, Additional_Status, Efficiency_Status;
 
@@ -223,10 +222,14 @@ void EventAnalyser() {
             PSmearing_Status = "wPs_";
         }
 
-        if (!generate_AMaps) {
+        if (!generate_AMaps && !plot_and_fit_MomRes) {
             Additional_Status = "";
-        } else {
+        } else if (generate_AMaps && !plot_and_fit_MomRes) {
             Additional_Status = "AMaps_";
+        } else if (!generate_AMaps && plot_and_fit_MomRes) {
+            Additional_Status = "nRes_";
+        } else if (generate_AMaps && plot_and_fit_MomRes) {
+            Additional_Status = "nRes_AMaps_";
         }
 
         if (!apply_nucleon_cuts) {
@@ -594,17 +597,18 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
+//    bool Efficiency_plots = true;
     bool Efficiency_plots = false;
     bool TL_after_hit_maps_plots = true;
-//    bool Efficiency_plots = false;
+//    bool TL_after_hit_maps_plots = false;
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
 //    bool Hit_maps_plots = false;
 
     /* Resolution plots */
-//    bool Resolution_plots = true;
-    bool Resolution_plots = false;
+    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
     //</editor-fold>
 
     //<editor-fold desc="Turn off plots by master selectors">
@@ -795,18 +799,21 @@ void EventAnalyser() {
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
     cout << "\nSetting neutron resolution data...";
 
-    if (!calculate_truth_level) { plot_and_fit_nRes = false; } // Disable resolution-realted operations if not calculating TL plots
-    if (apply_proton_smearing) { plot_and_fit_nRes = false; }  // Disable resolution-realted operations when applying proton smearing
-    if (plot_and_fit_nRes) { apply_nBeta_fit_cuts = false; }   // Disable upper momentum th. cut is resolution is being calculated
+    if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
+    if (apply_proton_smearing) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
+    if (plot_and_fit_MomRes) { apply_nBeta_fit_cuts = false; }   // Disable upper momentum th. cut is resolution is being calculated
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
-    NeutronResolution nRes;
+    NeutronResolution nRes, pRes;
 
-    if (plot_and_fit_nRes) {
-        nRes = NeutronResolution(SampleName, beamE, n_mom_th.GetLowerCut(), directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"],
+    if (plot_and_fit_MomRes) {
+        nRes = NeutronResolution(SampleName, "Neutron", beamE, n_mom_th.GetLowerCut(), directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"],
+                                 DeltaSlices, VaryingDelta);
+        pRes = NeutronResolution(SampleName, "Proton", beamE, p_mom_th.GetLowerCut(), directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"],
                                  DeltaSlices, VaryingDelta);
     } else {
         nRes.ReadFitDataParam((NeutronResolutionDirectory + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str());
+        pRes.ReadFitDataParam((NeutronResolutionDirectory + "/Proton_res_fit_param_-_" + SampleName + ".par").c_str());
     }
     //</editor-fold>
 
@@ -6085,6 +6092,115 @@ void EventAnalyser() {
 // ======================================================================================================================================================================
 
     //<editor-fold desc="Resolution histograms">
+
+    //<editor-fold desc="Resolution histograms (1p)">
+    hPlot1D hdTheta_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} BC", "#Delta#theta_{pFD} of FD proton BC",
+                                           "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00a_DeltaTheta_pFD_BC_TL_1p",
+                                           -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_pFD_TL_ZOOMIN_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN BC", "#Delta#theta_{pFD} of FD proton - ZOOMIN BC",
+                                                  "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"], "00b_DeltaTheta_pFD_BC_TL_ZOOMIN_1p",
+                                                  -10.0, 10.0);
+    hPlot1D hdPhi_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} BC", "#Delta#phi_{pFD} of FD proton BC",
+                                         "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                         directories.Resolution_Directory_map["Resolution_1p_Directory"], "00c_DeltaPhi_pFD_BC_TL_1p",
+                                         Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_pFD_TL_ZOOMIN_BC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} - ZOOMIN BC", "#Delta#phi_{pFD} of FD proton - ZOOMIN BC",
+                                                "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                                directories.Resolution_Directory_map["Resolution_1p_Directory"], "00d_DeltaPhi_pFD_BC_TL_ZOOMIN_1p",
+                                                -20, 20);
+
+    hPlot1D hdTheta_pFD_TL_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} AdPC", "#Delta#theta_{pFD} of FD proton AdPC",
+                                             "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                             directories.Resolution_Directory_map["Resolution_1p_Directory"], "00e_DeltaTheta_pFD_AdPC_TL_1p",
+                                             -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN AdPC", "#Delta#theta_{pFD} of FD proton - ZOOMIN AdPC",
+                                                    "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "00f_DeltaTheta_pFD_AdPC_TL_ZOOMIN_1p",
+                                                    -10.0, 10.0);
+    hPlot1D hdPhi_pFD_TL_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} AdPC", "#Delta#phi_{pFD} of FD proton AdPC",
+                                           "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00g_DeltaPhi_pFD_AdPC_TL_1p",
+                                           Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} - ZOOMIN AdPC", "#Delta#phi_{pFD} of FD proton - ZOOMIN AdPC",
+                                                  "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"], "00h_DeltaPhi_pFD_AdPC_TL_ZOOMIN_1p",
+                                                  -20, 20);
+
+    hPlot1D hTheta_pFD_TL_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} AC", "#theta^{truth}_{pFD} of FD proton AC", "#theta^{truth}_{pFD} [Deg]",
+                                       directories.Resolution_Directory_map["Resolution_1p_Directory"], "01_Theta_pFD_AC_TL_1p",
+                                       Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hPhi_pFD_TL_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} AC", "#phi^{truth}_{pFD} of FD proton AC", "#phi^{truth}_{pFD} [Deg]",
+                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "02_Phi_pFD_AC_TL_1p",
+                                     Phi_lboundary, Phi_uboundary);
+    TH2D *hTheta_pFD_TL_VS_Phi_pFD_TL_1p = new TH2D("#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} (1p, FD)",
+                                                    "#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} (1p, FD);#phi^{truth}_{pFD} [Deg];#theta^{truth}_{pFD} [Deg]",
+                                                    65, Phi_lboundary, Phi_uboundary, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+    string hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
+
+    hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC",
+                                    "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}",
+                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p", -2, 2);
+    TH2D *hP_pFD_Res_VS_P_pFD_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD)",
+                                            "P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
+                                            "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+    string hP_pFD_Res_VS_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
+    /*    hPlot1D hdTheta_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} BC", "#Delta#theta_{pFD} of FD proton BC",
+                                           "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00a_DeltaTheta_pFD_BC_TL_1p",
+                                           -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_pFD_TL_ZOOMIN_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN BC", "#Delta#theta_{pFD} of FD proton - ZOOMIN BC",
+                                                  "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"], "00b_DeltaTheta_pFD_BC_TL_ZOOMIN_1p",
+                                                  -10.0, 10.0);
+    hPlot1D hdPhi_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} BC", "#Delta#phi_{pFD} of FD proton BC",
+                                         "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                         directories.Resolution_Directory_map["Resolution_1p_Directory"], "00c_DeltaPhi_pFD_BC_TL_1p",
+                                         Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_pFD_TL_ZOOMIN_BC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} - ZOOMIN BC", "#Delta#phi_{pFD} of FD proton - ZOOMIN BC",
+                                                "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                                directories.Resolution_Directory_map["Resolution_1p_Directory"], "00d_DeltaPhi_pFD_BC_TL_ZOOMIN_1p",
+                                                -20, 20);
+
+    hPlot1D hdTheta_pFD_TL_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} AdPC", "#Delta#theta_{pFD} of FD proton AdPC",
+                                             "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                             directories.Resolution_Directory_map["Resolution_1p_Directory"], "00e_DeltaTheta_pFD_AdPC_TL_1p",
+                                             -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} - ZOOMIN AdPC", "#Delta#theta_{pFD} of FD proton - ZOOMIN AdPC",
+                                                    "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
+                                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "00f_DeltaTheta_pFD_AdPC_TL_ZOOMIN_1p",
+                                                    -10.0, 10.0);
+    hPlot1D hdPhi_pFD_TL_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} AdPC", "#Delta#phi_{pFD} of FD proton AdPC",
+                                           "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1p_Directory"], "00g_DeltaPhi_pFD_AdPC_TL_1p",
+                                           Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_pFD_TL_ZOOMIN_AdPC_1p = hPlot1D("1p", "FD", "TL #Delta#phi_{pFD} - ZOOMIN AdPC", "#Delta#phi_{pFD} of FD proton - ZOOMIN AdPC",
+                                                  "#Delta#phi_{pFD} = #phi^{rec}_{pFD} - #phi^{truth}_{pFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1p_Directory"], "00h_DeltaPhi_pFD_AdPC_TL_ZOOMIN_1p",
+                                                  -20, 20);
+
+    hPlot1D hTheta_pFD_TL_1p = hPlot1D("1p", "", "TL #theta^{truth}_{pFD} AC", "#theta^{truth}_{pFD} of FD proton AC", "#theta^{truth}_{pFD} [Deg]",
+                                       directories.Resolution_Directory_map["Resolution_1p_Directory"], "01_Theta_pFD_AC_TL_1p",
+                                       Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hPhi_pFD_TL_1p = hPlot1D("1p", "", "TL #phi^{truth}_{pFD} AC", "#phi^{truth}_{pFD} of FD proton AC", "#phi^{truth}_{pFD} [Deg]",
+                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "02_Phi_pFD_AC_TL_1p",
+                                     Phi_lboundary, Phi_uboundary);
+    TH2D *hTheta_pFD_TL_VS_Phi_pFD_TL_1p = new TH2D("#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} (1p, FD)",
+                                                    "#theta^{truth}_{pFD} vs. #phi^{truth}_{pFD} (1p, FD);#phi^{truth}_{pFD} [Deg];#theta^{truth}_{pFD} [Deg]",
+                                                    65, Phi_lboundary, Phi_uboundary, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+    string hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
+
+    hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC",
+                                    "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}",
+                                    directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p", -2, 2);
+    TH2D *hP_pFD_Res_VS_P_pFD_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD)",
+                                            "P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
+                                            "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+    string hP_pFD_Res_VS_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];*/
+    //</editor-fold>
+
+    //<editor-fold desc="Resolution histograms (1n)">
     hPlot1D hdTheta_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} BC", "#Delta#theta_{nFD} of FD neutron BC",
                                            "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "00a_DeltaTheta_nFD_BC_TL_1n",
@@ -6137,6 +6253,60 @@ void EventAnalyser() {
                                             "P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
                                             "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", 65, 0, beamE * 1.1, 65, -2, 2);
     string hP_nFD_Res_VS_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
+    /*    hPlot1D hdTheta_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} BC", "#Delta#theta_{nFD} of FD neutron BC",
+                                           "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00a_DeltaTheta_nFD_BC_TL_1n",
+                                           -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_nFD_TL_ZOOMIN_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN BC", "#Delta#theta_{nFD} of FD neutron - ZOOMIN BC",
+                                                  "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "00b_DeltaTheta_nFD_BC_TL_ZOOMIN_1n",
+                                                  -10.0, 10.0);
+    hPlot1D hdPhi_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} BC", "#Delta#phi_{nFD} of FD neutron BC",
+                                         "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                         directories.Resolution_Directory_map["Resolution_1n_Directory"], "00c_DeltaPhi_nFD_BC_TL_1n",
+                                         Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_nFD_TL_ZOOMIN_BC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} - ZOOMIN BC", "#Delta#phi_{nFD} of FD neutron - ZOOMIN BC",
+                                                "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "00d_DeltaPhi_nFD_BC_TL_ZOOMIN_1n",
+                                                -20, 20);
+
+    hPlot1D hdTheta_nFD_TL_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} AdPC", "#Delta#theta_{nFD} of FD neutron AdPC",
+                                             "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                             directories.Resolution_Directory_map["Resolution_1n_Directory"], "00e_DeltaTheta_nFD_AdPC_TL_1n",
+                                             -Theta_uboundary_FD, Theta_uboundary_FD);
+    hPlot1D hdTheta_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} - ZOOMIN AdPC", "#Delta#theta_{nFD} of FD neutron - ZOOMIN AdPC",
+                                                    "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
+                                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "00f_DeltaTheta_nFD_AdPC_TL_ZOOMIN_1n",
+                                                    -10.0, 10.0);
+    hPlot1D hdPhi_nFD_TL_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} AdPC", "#Delta#phi_{nFD} of FD neutron AdPC",
+                                           "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                           directories.Resolution_Directory_map["Resolution_1n_Directory"], "00g_DeltaPhi_nFD_AdPC_TL_1n",
+                                           Phi_lboundary, Phi_uboundary);
+    hPlot1D hdPhi_nFD_TL_ZOOMIN_AdPC_1n = hPlot1D("1n", "FD", "TL #Delta#phi_{nFD} - ZOOMIN AdPC", "#Delta#phi_{nFD} of FD neutron - ZOOMIN AdPC",
+                                                  "#Delta#phi_{nFD} = #phi^{rec}_{nFD} - #phi^{truth}_{nFD} [Deg]",
+                                                  directories.Resolution_Directory_map["Resolution_1n_Directory"], "00h_DeltaPhi_nFD_AdPC_TL_ZOOMIN_1n",
+                                                  -20, 20);
+
+    hPlot1D hTheta_nFD_TL_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} AC", "#theta^{truth}_{nFD} of FD neutron AC", "#theta^{truth}_{nFD} [Deg]",
+                                       directories.Resolution_Directory_map["Resolution_1n_Directory"], "01_Theta_nFD_AC_TL_1n",
+                                       Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hPhi_nFD_TL_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} AC", "#phi^{truth}_{nFD} of FD neutron AC", "#phi^{truth}_{nFD} [Deg]",
+                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "02_Phi_nFD_AC_TL_1n",
+                                     Phi_lboundary, Phi_uboundary);
+    TH2D *hTheta_nFD_TL_VS_Phi_nFD_TL_1n = new TH2D("#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} (1n, FD)",
+                                                    "#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} (1n, FD);#phi^{truth}_{nFD} [Deg];#theta^{truth}_{nFD} [Deg]",
+                                                    65, Phi_lboundary, Phi_uboundary, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+    string hTheta_nFD_TL_VS_Phi_nFD_TL_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
+
+    hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC",
+                                    "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}",
+                                    directories.Resolution_Directory_map["Resolution_1n_Directory"], "04_P_nFD_Res_1n", -2, 2);
+    TH2D *hP_nFD_Res_VS_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD)",
+                                            "P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
+                                            "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+    string hP_nFD_Res_VS_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];*/
+    //</editor-fold>
+
     //</editor-fold>
 
     //</editor-fold>
@@ -8504,6 +8674,73 @@ void EventAnalyser() {
 
                 P_N_1p_3v = TVector3(P_e_1p_3v.Px() + P_p_1p_3v.Px() - Pvx, P_e_1p_3v.Py() + P_p_1p_3v.Py() - Pvy, P_e_1p_3v.Pz() + P_p_1p_3v.Pz() - Pvz);
                 hTheta_q_p_p_vs_p_N_q_1p->Fill(P_N_1p_3v.Mag() / q_1p_3v.Mag(), Theta_q_p_p_1p, Weight);
+
+
+
+                //<editor-fold desc="Fill resolution histograms (1p)">
+                if (plot_and_fit_MomRes) {
+                    auto mcpbank_pRes = c12->mcparts();
+                    const Int_t Ngen_pRes = mcpbank_pRes->getRows();
+
+                    for (Int_t i = 0; i < Ngen_pRes; i++) {
+                        mcpbank_pRes->setEntry(i);
+
+                        double TLProtonP = rCalc(mcpbank_pRes->getPx(), mcpbank_pRes->getPy(), mcpbank_pRes->getPz());
+                        double TLProtonTheta = acos(mcpbank_pRes->getPz() / TLProtonP) * 180.0 / pi;
+                        double TLProtonPhi = atan2(mcpbank_pRes->getPy(), mcpbank_pRes->getPx()) * 180.0 / pi;
+
+                        double dProtonTheta = (P_p_1p_3v.Theta() * 180.0 / pi) - TLProtonTheta;
+                        double dProtonPhi = CalcdPhi((P_p_1p_3v.Phi() * 180.0 / pi) - TLProtonPhi);
+
+                        auto pid = mcpbank_pRes->getPid();
+
+                        bool InFD = ((TLProtonTheta >= ThetaFD.GetLowerCut()) && (TLProtonTheta <= ThetaFD.GetUpperCut()));
+                        bool PassNeutronMomTh = ((TLProtonP >= n_mom_th.GetLowerCut()) && (TLProtonP <= n_mom_th.GetUpperCut()));
+
+                        double dPhiCut = 10., dThetaCut = 5.;
+
+                        if (pid == 2212 && InFD && PassNeutronMomTh) {
+                            hdTheta_pFD_TL_BC_1p.hFill(dProtonTheta, Weight);
+                            hdTheta_pFD_TL_ZOOMIN_BC_1p.hFill(dProtonTheta, Weight);
+                            hdPhi_pFD_TL_BC_1p.hFill(dProtonPhi, Weight);
+                            hdPhi_pFD_TL_ZOOMIN_BC_1p.hFill(dProtonPhi, Weight);
+
+                            hTheta_pFD_TL_1p.hFill(TLProtonTheta, Weight);
+                            hPhi_pFD_TL_1p.hFill(TLProtonPhi, Weight);
+                            hTheta_pFD_TL_VS_Phi_pFD_TL_1p->Fill(TLProtonPhi, TLProtonTheta, Weight);
+
+                            if (fabs(dProtonPhi) < dPhiCut) {
+                                hdTheta_pFD_TL_AdPC_1p.hFill(dProtonTheta, Weight);
+                                hdTheta_pFD_TL_ZOOMIN_AdPC_1p.hFill(dProtonTheta, Weight);
+                                hdPhi_pFD_TL_AdPC_1p.hFill(dProtonPhi, Weight);
+                                hdPhi_pFD_TL_ZOOMIN_AdPC_1p.hFill(dProtonPhi, Weight);
+                            }
+
+                            if ((fabs(dProtonTheta) < dThetaCut) && (fabs(dProtonPhi) < dPhiCut)) {
+                                double pResolution = (TLProtonP - P_p_1p_3v.Mag()) / TLProtonP;
+
+                                pRes.hFillResPlots(TLProtonP, pResolution, Weight);
+
+                                hP_pFD_Res_1p.hFill(pResolution, Weight);
+                                hP_pFD_Res_VS_P_pFD_1p->Fill(TLProtonP, pResolution, Weight);
+                            }
+//                            else if (TLProtonTheta < 40.) {
+//                                cout << "\ni = " << i << "\n";
+//                                cout << "PhotonsFD_ind.at(0) = " << PhotonsFD_ind.at(0) << "\n";
+//                                cout << "Theta TL = " << TLProtonTheta << "\n";
+//                                cout << "Theta Rec = " << P_p_1p_3v.Theta() * 180.0 / pi << "\n";
+//                                cout << "Phi TL = " << TLProtonPhi << "\n";
+//                                cout << "Phi Rec = " << P_p_1p_3v.Phi() * 180.0 / pi << "\n";
+//                                cout << "PID TL = " << pid << "\n";
+//                                cout << "PID Rec = " << protons[PhotonsFD_ind.at(0)]->par()->getPid() << "\n";
+//                            }
+                        }
+                    }
+                } // end of resolution calculation if
+                //</editor-fold>
+
+
+
             }
             //</editor-fold>
 
@@ -9142,7 +9379,7 @@ void EventAnalyser() {
 
 
                     //<editor-fold desc="Fill resolution histograms (1n)">
-                    if (plot_and_fit_nRes) {
+                    if (plot_and_fit_MomRes) {
                         auto mcpbank_nRes = c12->mcparts();
                         const Int_t Ngen_nRes = mcpbank_nRes->getRows();
 
@@ -10529,15 +10766,11 @@ void EventAnalyser() {
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Fake FD neutrons handling (neutron veto)">
-
             int NeutronPDG_nFDpCD = nFD_nFDpCD->par()->getPid();
 
-            bool NeutronInPCAL_nFDpCD = (nFD_nFDpCD->cal(clas12::PCAL)->getDetector() ==
-                                         7);                                                                  // PCAL hit
-            bool NeutronInECIN_nFDpCD = (nFD_nFDpCD->cal(clas12::ECIN)->getDetector() ==
-                                         7);                                                                  // ECIN hit
-            bool NeutronInECOUT_nFDpCD = (nFD_nFDpCD->cal(clas12::ECOUT)->getDetector() ==
-                                          7);                                                               // ECOUT hit
+            bool NeutronInPCAL_nFDpCD = (nFD_nFDpCD->cal(clas12::PCAL)->getDetector() == 7);                                                                  // PCAL hit
+            bool NeutronInECIN_nFDpCD = (nFD_nFDpCD->cal(clas12::ECIN)->getDetector() == 7);                                                                  // ECIN hit
+            bool NeutronInECOUT_nFDpCD = (nFD_nFDpCD->cal(clas12::ECOUT)->getDetector() == 7);                                                               // ECOUT hit
 
             //<editor-fold desc="Safety check (nFDpCD)">
             /* Safety check that we are looking at good neutron (BEFORE VETO!!!) */
@@ -15565,15 +15798,40 @@ void EventAnalyser() {
             histPlotter2D(c1, hTheta_nFD_TL_VS_Phi_nFD_TL_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_nFD_TL_VS_Phi_nFD_TL_1n_Dir,
                           "s03_Theta_nFD_VS_Phi_nFD_1n");
             hP_nFD_Res_1n.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
-            histPlotter2D(c1, hP_nFD_Res_VS_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_P_nFD_1n_Dir,
-                          "s05_P_nFD_Res_VS_P_nFD_1n");
-
+            histPlotter2D(c1, hP_nFD_Res_VS_P_nFD_1n, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_nFD_Res_VS_P_nFD_1n_Dir, "s05_P_nFD_Res_VS_P_nFD_1n");
         }
 
-        if (plot_and_fit_nRes) {
+        if (plot_and_fit_MomRes) {
             nRes.SliceFitDrawAndSave(SampleName, beamE);
-            nRes.LogFitDataToFile(SampleName, plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-            nRes.DrawAndSaveResSlices(SampleName, c1, plots_path, CutsDirectory);
+            nRes.LogFitDataToFile(SampleName, "Neutron", plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+            nRes.DrawAndSaveResSlices(SampleName, "Neutron", c1, plots_path, CutsDirectory);
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Resolution plots (1p, CD & FD)">
+        if (!apply_proton_smearing) {
+            hdTheta_pFD_TL_BC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hdTheta_pFD_TL_ZOOMIN_BC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hdPhi_pFD_TL_BC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hdPhi_pFD_TL_ZOOMIN_BC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+
+            hdTheta_pFD_TL_AdPC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hdTheta_pFD_TL_ZOOMIN_AdPC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hdPhi_pFD_TL_AdPC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hdPhi_pFD_TL_ZOOMIN_AdPC_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+
+            hTheta_pFD_TL_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            hPhi_pFD_TL_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            histPlotter2D(c1, hTheta_pFD_TL_VS_Phi_pFD_TL_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir,
+                          "s03_Theta_pFD_VS_Phi_pFD_1p");
+            hP_pFD_Res_1p.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
+            histPlotter2D(c1, hP_pFD_Res_VS_P_pFD_1p, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hP_pFD_Res_VS_P_pFD_1p_Dir, "s05_P_pFD_Res_VS_P_pFD_1p");
+        }
+
+        if (plot_and_fit_MomRes) {
+            pRes.SliceFitDrawAndSave(SampleName, beamE);
+            pRes.LogFitDataToFile(SampleName, "Proton", plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+            pRes.DrawAndSaveResSlices(SampleName, "Proton", c1, plots_path, CutsDirectory);
         }
         //</editor-fold>
 

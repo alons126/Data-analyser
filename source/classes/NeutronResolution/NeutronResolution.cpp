@@ -9,10 +9,11 @@
 //TODO: add a software that creates momentum slices with at least 1000 events each automatically
 
 //<editor-fold desc="NeutronResolution constructor">
-NeutronResolution::NeutronResolution(const string &SampleName, double beamE, double nMomTh, const string &SavePath, double DeltaSlices, bool VaryingDelta) {
+NeutronResolution::NeutronResolution(const string &SampleName, const string &Particle, double beamE, double ParticleMomTh, const string &SavePath, double DeltaSlices,
+                                     bool VaryingDelta) {
     SlicesSavePath = SavePath, delta = DeltaSlices;
 
-    double Delta = delta, SliceLowerLim = nMomTh, SliceUpperLim;
+    double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
 
     if (!VaryingDelta) {
         SliceUpperLim = SliceLowerLim + delta;
@@ -40,6 +41,41 @@ NeutronResolution::NeutronResolution(const string &SampleName, double beamE, dou
         int SliceUpperLimPrecision;
         if (SliceUpperLim == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
 
+        string hStatsTitle, hTitle, hSaveName, hCutName;
+
+        hPlot1D hResolutionSlice;
+
+        DSCuts ResSliceFitCuts;
+
+        if (Particle == "Neutron") {
+            hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                          to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
+            hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                     to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
+            hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_n_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
+                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
+            string hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
+                              to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
+
+            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
+                                       hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
+            ResSliceFitCuts = DSCuts(hCutName, "FD", "Neutron", "1n", 0, -9999, 9999);
+        } else if (Particle == "Proton") {
+            hStatsTitle = "p res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
+                          to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
+            hTitle = "Proton resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
+                     to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
+            hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_p_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
+                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
+            hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
+                       to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
+
+            hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                                       hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
+            ResSliceFitCuts = DSCuts(hCutName, "FD", "Proton", "1n", 0, -9999, 9999);
+
+        }
+        /*
         string hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
                              to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
         string hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
@@ -52,6 +88,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, double beamE, dou
         hPlot1D hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
                                            hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
         DSCuts ResSliceFitCuts = DSCuts(hCutName, "FD", "Neutron", "1n", 0, -9999, 9999);
+*/
 
         ResSliceFitCuts.SetSliceUpperb(SliceUpperLim);
         ResSliceFitCuts.SetSliceLowerb(SliceLowerLim);
@@ -209,90 +246,13 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double bea
         }
     }
 }
-
-////<editor-fold desc="original">
-//void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double beamE) {
-//    for (int i = 0; i < NumberOfSlices; i++) {
-//        cout << "\n\n";
-//
-//        TCanvas *SliceFitCanvas = new TCanvas("SliceFitCanvas", "SliceFitCanvas", 1000, 750); // normal res
-//        SliceFitCanvas->SetGrid();
-//        SliceFitCanvas->SetBottomMargin(0.14);
-//        SliceFitCanvas->SetLeftMargin(0.18);
-//        SliceFitCanvas->SetRightMargin(0.12);
-//        SliceFitCanvas->cd();
-//
-//        //<editor-fold desc="Setting sNameFlag">
-//        string sNameFlag;
-//
-//        if (findSubstring(SampleName, "simulation")) {
-//            sNameFlag = "s";
-//        } else if (findSubstring(SampleName, "data")) {
-//            sNameFlag = "d";
-//        }
-//        //</editor-fold>
-//
-//        TH1D *hSlice = (TH1D *) ResSlices.at(i).GetHistogram();
-//
-//        if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
-//            FittedSlices.push_back(i); // Log slices that are been fitted
-//
-//            /* A fit to a gaussian with 3 parameters: f(x) = p0*exp(-0.5((x-p1)/p2)^2)). */
-//            hSlice->Fit("gaus");
-//
-//            /* Get fitted function to TF1 plot */
-//            TF1 *func = hSlice->GetFunction("gaus");
-//            func->SetLineColor(kRed);
-//
-//            double FitAmp = func->GetParameter(0);  // get p0
-//            double FitMean = func->GetParameter(1); // get p1
-//            double FitStd = func->GetParameter(2);  // get p2
-//
-//            ResSlicesFitVar.at(i).SetMean(func->GetParameter(1));
-//            ResSlicesFitVar.at(i).SetUpperCut(func->GetParameter(2));
-//
-//            double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
-//            double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
-//            double x_1_FitParam = x_1_Cut_legend, y_1_FitParam = y_1_Cut_legend;
-//            double x_2_FitParam = x_2_Cut_legend, y_2_FitParam = y_2_Cut_legend;
-//
-//            TPaveText *FitParam = new TPaveText(x_1_FitParam, y_1_FitParam, x_2_FitParam, y_2_FitParam, "NDC");
-//            FitParam->SetBorderSize(1);
-//            FitParam->SetTextFont(0);
-//            FitParam->SetFillColor(0);
-//            FitParam->SetTextAlign(12);
-//            FitParam->AddText(("Fit amp = " + to_string_with_precision(FitAmp, 8)).c_str());
-//            FitParam->AddText(("Fit mean = " + to_string_with_precision(FitMean, 8)).c_str());
-//            FitParam->AddText(("Fit std = " + to_string_with_precision(FitStd, 8)).c_str());
-//            ((TText *) FitParam->GetListOfLines()->Last())->SetTextColor(kRed);
-//            FitParam->Draw("same");
-//
-//            int SliceUpperLimPrecision;
-//            if (ResSlicesLimits.at(i).at(1) == beamE) { SliceUpperLimPrecision = 3; } else { SliceUpperLimPrecision = 2; }
-//
-//            string hSlice_CloneSaveDir = ResSlices.at(i).GetHistogram1DSaveNamePath() + "00_Fitted_res_slices/";
-//            string hSlice_CloneSaveName = hSlice_CloneSaveDir + sNameFlag + ResSlices.at(i).GetHistogram1DSaveName() + "_fitted.png";
-//            system(("mkdir -p " + hSlice_CloneSaveDir).c_str());
-//
-//            SliceFitCanvas->SaveAs(hSlice_CloneSaveName.c_str());
-//
-//            FittedNeutronResSlices->Add(hSlice);
-//
-//            SliceFitCanvas->Clear();
-//            delete SliceFitCanvas;
-//        } else {
-//            continue;
-//        }
-//    }
-//}
-////</editor-fold>
-
 //</editor-fold>
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveResSlices function">
-void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &CutsDirectory) {
+void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path,
+                                             const string &CutsDirectory) {
     string SampleNameTemp = SampleName;
 
     ResSlicePlots->Add(FittedNeutronResSlices);
@@ -300,7 +260,7 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *
     for (int i = 0; i < NumberOfSlices; i++) { ResSlices.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, ResSlicePlots, false, true, 1., 9999, 9999, 0, false); }
 
     /* Save res and fitted res plots to plots directory: */
-    TFile *PlotsFolder_fout = new TFile((plots_path + "/Neutron_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
+    TFile *PlotsFolder_fout = new TFile((plots_path + "/" + Particle + "_resolution_plots_-_" + SampleName + ".root").c_str(), "recreate");
     PlotsFolder_fout->cd();
     ResSlicePlots->Write();
     PlotsFolder_fout->Write();
@@ -317,17 +277,17 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, TCanvas *
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LogFitDataToFile function">
-void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory,
+void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &CutsDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
     ofstream Neutron_res_fit_param;
-    std::string Neutron_res_fit_paramFilePath = CutsDirectory + "Neutron_res_fit_param_-_" + SampleName + ".par";
+    std::string Neutron_res_fit_paramFilePath = CutsDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
 
     Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
     Neutron_res_fit_param << "######################################################################\n";
     Neutron_res_fit_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #\n";
     Neutron_res_fit_param << "######################################################################\n";
     Neutron_res_fit_param << "\n";
-    Neutron_res_fit_param << "# Neutron resolution parameters are for:\n";
+    Neutron_res_fit_param << "# " + Particle + " resolution parameters are for:\n";
     Neutron_res_fit_param << "#sample:\t" << SampleName << "\n";
     Neutron_res_fit_param << "#run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
     Neutron_res_fit_param << "#delta:\t\t" << delta << "\n";

@@ -71,7 +71,8 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &SampleName, double beamE, double nMomTh, const string &SavePath = "./", double DeltaSlices = 0.2, bool VaryingDelta = false);
+    NeutronResolution(const string &SampleName, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./", double DeltaSlices = 0.2,
+                      bool VaryingDelta = false);
 
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -83,12 +84,12 @@ public:
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveResSlices(const string &SampleName, TCanvas *h1DCanvas, const string &plots_path, const string &CutsDirectory);
+    void DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path, const string &CutsDirectory);
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogFitDataToFile(const string &SampleName, const string &plots_path, const string &CutsDirectory, const string &Nucleon_Cuts_Status,
-                          const string &FD_photons_Status, const string &Efficiency_Status);
+    void LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &CutsDirectory,
+                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
 // ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
