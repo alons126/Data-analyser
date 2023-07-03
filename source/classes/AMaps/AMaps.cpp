@@ -1000,17 +1000,20 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     }
     //</editor-fold>
 
-    //<editor-fold desc="Save proton slices">
+    //<editor-fold desc="Save proton, neutron & nucleon slices">
     for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
-        ofstream p_hit_map_TempFile, n_hit_map_TempFile;
+        ofstream p_hit_map_TempFile, n_hit_map_TempFile, nuc_hit_map_TempFile;
 
         string ProtonTempFileName = "p_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
                                     to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
         string NeutronTempFileName = "n_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
-                                    to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
+                                     to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
+        string NucleonTempFileName = "nuc_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
+                                     to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
 
         p_hit_map_TempFile.open(SliceProtonSavePath + ProtonTempFileName);
         n_hit_map_TempFile.open(SliceNeutronSavePath + NeutronTempFileName);
+        nuc_hit_map_TempFile.open(SliceNucleonSavePath + NucleonTempFileName);
 
         p_hit_map_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
         p_hit_map_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
@@ -1018,30 +1021,39 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
         n_hit_map_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
         n_hit_map_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
         n_hit_map_TempFile << "\n";
+        nuc_hit_map_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
+        nuc_hit_map_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
+        nuc_hit_map_TempFile << "\n";
 
         for (int i = 0; i < hBinNumOfYBins; i++) {
             p_hit_map_TempFile << "Line\t";
             n_hit_map_TempFile << "Line\t";
+            nuc_hit_map_TempFile << "Line\t";
 
             for (int j = 0; j < hBinNumOfXBins; j++) {
                 if (j != hBinNumOfXBins - 1) {
                     p_hit_map_TempFile << p_Hit_Map_Slices.at(Slice).at(i).at(j) << ":";
                     n_hit_map_TempFile << n_Hit_Map_Slices.at(Slice).at(i).at(j) << ":";
+                    nuc_hit_map_TempFile << nuc_Hit_Map_Slices.at(Slice).at(i).at(j) << ":";
                 } else {
                     p_hit_map_TempFile << p_Hit_Map_Slices.at(Slice).at(i).at(j);
                     n_hit_map_TempFile << n_Hit_Map_Slices.at(Slice).at(i).at(j);
+                    nuc_hit_map_TempFile << nuc_Hit_Map_Slices.at(Slice).at(i).at(j);
                 }
             }
 
             p_hit_map_TempFile << "\n";
             n_hit_map_TempFile << "\n";
+            nuc_hit_map_TempFile << "\n";
         }
 
         p_hit_map_TempFile.close();
         n_hit_map_TempFile.close();
+        nuc_hit_map_TempFile.close();
 
 //        system(("cp " + HitMapSavePath + "p_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + p_hit_map_file_from).c_str());
 //        system(("cp " + HitMapSavePath + "n_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + n_hit_map_file_from).c_str());
+//        system(("cp " + HitMapSavePath + "nuc_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + nuc_hit_map_file_from).c_str());
     }
     //</editor-fold>
 
