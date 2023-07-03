@@ -661,44 +661,15 @@ void AMaps::CalcHitMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, b
 //<editor-fold desc="GenerateSeparateCPartAMaps function">
 void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
     for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
-//        vector<vector<int>> e_slice;
-//
-//        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-//            vector<int> e_col;
-//
-//            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-//                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) {
-//                    ElectronSepAMaps.at(bin).hFillByBin(i, j, 0);
-//                    e_col.push_back(0);
-//                } else {
-//                    e_col.push_back(1);
-//                }
-////                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) {
-////                    ElectronSepAMaps.at(bin).hFillByBin(i, j, 0);
-////                    e_col.push_back(0);
-////                } else {
-////                    e_col.push_back(1);
-////                }
-//
-////                if (ElectronAMap.GetHistogram2D()->GetBinContent(j, i) >= cP_minR) {
-////                    e_col.push_back(1);
-////                } else {
-////                    e_col.push_back(0);
-////                }
-//            }
-//
-//            ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-//            e_slice.push_back(e_col);
-//        }
-
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
                 if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
             }
-
-            ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
         }
 
+        ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+
+        //<editor-fold desc="Fill e_Hit_Map_Slices">
         vector<vector<int>> e_slice;
 
         for (int i = 0; i < hBinNumOfYBins; i++) {
@@ -716,67 +687,39 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
         }
 
         e_Hit_Map_Slices.push_back(e_slice);
+        //</editor-fold>
     }
-    /*
-    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
-        vector<vector<int>> e_slice;
 
+    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-            vector<int> e_col;
-
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) {
-                    ElectronSepAMaps.at(bin).hFillByBin(i, j, 0);
-                    e_col.push_back(0);
+                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
+            }
+        }
+
+        ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+
+        //<editor-fold desc="Fill p_Hit_Map_Slices">
+        vector<vector<int>> p_slice;
+
+        for (int i = 0; i < hBinNumOfYBins; i++) {
+            vector<int> p_col;
+
+            for (int j = 0; j < hBinNumOfXBins; j++) {
+                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
+                    p_col.push_back(1);
                 } else {
-                    e_col.push_back(1);
+                    p_col.push_back(0);
                 }
-
-//                if (ElectronAMap.GetHistogram2D()->GetBinContent(i, j) >= cP_minR) {
-//                    e_col.push_back(1);
-//                } else {
-//                    e_col.push_back(0);
-//                }
             }
 
-            ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-            e_slice.push_back(e_col);
+            p_slice.push_back(p_col);
         }
 
-        e_Hit_Map_Slices.push_back(e_slice);
+        p_Hit_Map_Slices.push_back(p_slice);
+        //</editor-fold>
+
     }
-*/
-
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
-        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
-            }
-        }
-
-        ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-    }
-    /*
-    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
-        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
-            }
-        }
-
-        ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-    }
-
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
-        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
-            }
-        }
-
-        ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
-    }
-*/
 
 }
 //</editor-fold>
@@ -932,10 +875,6 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
         e_hit_map_TempFile << "Upper_P_lim:\t" << +ElectronMomBinsLimits.at(s).at(1) << "\n";
         e_hit_map_TempFile << "\n";
 
-//        cout << "\n\ne_Hit_Map_Slices.size() = " << e_Hit_Map_Slices.size() << "\n";
-//        cout << "\n\nElectronMomBinsLimits.size() = " << ElectronMomBinsLimits.size() << "\n";
-//        exit(0);
-
         for (int i = 0; i < hBinNumOfYBins; i++) {
             e_hit_map_TempFile << "Line\t";
 
@@ -953,6 +892,39 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
         e_hit_map_TempFile.close();
 
 //        system(("cp " + HitMapSavePath + "e_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + e_hit_map_file_from).c_str());
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Save proton slices">
+    for (int s = 0; s < PBinsLimits.size(); s++) {
+        ofstream p_hit_map_TempFile;
+
+        string TempFileName = "p_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(s).at(0), 2) + "_to_" +
+                              to_string_with_precision(PBinsLimits.at(s).at(1), 2) + ".par";
+
+        p_hit_map_TempFile.open(SliceProtonSavePath + TempFileName);
+
+        p_hit_map_TempFile << "Lower_P_lim:\t" << +PBinsLimits.at(s).at(0) << "\n";
+        p_hit_map_TempFile << "Upper_P_lim:\t" << +PBinsLimits.at(s).at(1) << "\n";
+        p_hit_map_TempFile << "\n";
+
+        for (int i = 0; i < hBinNumOfYBins; i++) {
+            p_hit_map_TempFile << "Line\t";
+
+            for (int j = 0; j < hBinNumOfXBins; j++) {
+                if (j != hBinNumOfXBins - 1) {
+                    p_hit_map_TempFile << p_Hit_Map_Slices.at(s).at(i).at(j) << ":";
+                } else {
+                    p_hit_map_TempFile << p_Hit_Map_Slices.at(s).at(i).at(j);
+                }
+            }
+
+            p_hit_map_TempFile << "\n";
+        }
+
+        p_hit_map_TempFile.close();
+
+//        system(("cp " + HitMapSavePath + "p_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + p_hit_map_file_from).c_str());
     }
     //</editor-fold>
 
