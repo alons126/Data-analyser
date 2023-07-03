@@ -20,7 +20,7 @@
 // AMaps constructors ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="AMaps generation constructor">
-AMaps::AMaps(bool reformat_e_bins, double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXBins, int hbNumOfYBins) {
+AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath, int nOfMomBins, int hbNumOfXBins, int hbNumOfYBins) {
     HitMapSavePath = SavePath;
     hBinNumOfXBins = hbNumOfXBins;
     hBinNumOfYBins = hbNumOfYBins;
@@ -60,7 +60,7 @@ AMaps::AMaps(bool reformat_e_bins, double beamE, const string &SavePath, int nOf
     //</editor-fold>
 
     SetBins(beamE);
-    SetElectronBins(reformat_e_bins, beamE);
+    SetElectronBins(reformat_e_bins, equi_P_e_bins, beamE);
 
     //<editor-fold desc="Acceptance maps BC">
     string hStatsTitleAMapBCElectron = "Electron_AMap_BC", hTitleAMapBCElectron = "Electron AMap BC", hSaveNameAMapBCElectron = "01_e_AMap_BC";
@@ -328,7 +328,7 @@ void AMaps::SetBins(double beamE) {
 //</editor-fold>
 
 //<editor-fold desc="SetElectronBins function">
-void AMaps::SetElectronBins(bool reformat_e_bins, double beamE) {
+void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double beamE) {
     bool InvertedPrintOut = false;
     bool RegPrintOut = false;
 
@@ -386,21 +386,6 @@ void AMaps::SetElectronBins(bool reformat_e_bins, double beamE) {
         }
 
         NumOfElectronMomBins = ElectronInvertedMomBinsLimits.size();
-        /*
-        for (int i = 0; i < NumberOfMomBins; i++) {
-            double InvertedBinLower = InvertedPLowerLim + i * Delta;
-            double InvertedBinUpper = InvertedBinLower + Delta;
-
-            if (InvertedPrintOut) {
-                cout << "\n\nInvertedBinLower = " << InvertedBinLower << "\n";
-                cout << "InvertedBinUpper = " << InvertedBinUpper << "\n";
-                cout << "i = " << i << "\n";
-                cout << "Delta = " << Delta << "\n\n";
-            }
-
-            ElectronInvertedMomBinsLimits.push_back({InvertedBinLower, InvertedBinUpper});
-        }
-*/
 
         if (InvertedPrintOut && !RegPrintOut) { exit(0); }
 
@@ -420,6 +405,24 @@ void AMaps::SetElectronBins(bool reformat_e_bins, double beamE) {
             }
 
             ElectronMomBinsLimits.push_back({BinLower, BinUpper});
+        }
+
+        if (RegPrintOut) { exit(0); }
+    } else if (equi_P_e_bins) {
+        ElectronMomBinsLimits = {{0.4, 1},
+                                 {1,   1.6},
+                                 {1.6, 2.2},
+                                 {2.2, 2.8},
+                                 {2.8, 4},
+                                 {4,   5},
+                                 {5,   6}};
+        int NumOfElectronMomBins = ElectronMomBinsLimits.size();
+
+        if (RegPrintOut) {
+            for (int i = 0; i < NumOfElectronMomBins; i++) {
+                cout << "\n\nElectronMomBinsLimits.at(" << i << ").at(" << 0 << ") = " << ElectronMomBinsLimits.at(i).at(0) << "\n";
+                cout << "ElectronMomBinsLimits.at(" << i << ").at(" << 1 << ") = " << ElectronMomBinsLimits.at(i).at(1) << "\n";
+            }
         }
 
         if (RegPrintOut) { exit(0); }
@@ -658,14 +661,91 @@ void AMaps::CalcHitMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, b
 //<editor-fold desc="GenerateSeparateCPartAMaps function">
 void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
     for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
+//        vector<vector<int>> e_slice;
+//
+//        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
+//            vector<int> e_col;
+//
+//            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
+//                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) {
+//                    ElectronSepAMaps.at(bin).hFillByBin(i, j, 0);
+//                    e_col.push_back(0);
+//                } else {
+//                    e_col.push_back(1);
+//                }
+////                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) {
+////                    ElectronSepAMaps.at(bin).hFillByBin(i, j, 0);
+////                    e_col.push_back(0);
+////                } else {
+////                    e_col.push_back(1);
+////                }
+//
+////                if (ElectronAMap.GetHistogram2D()->GetBinContent(j, i) >= cP_minR) {
+////                    e_col.push_back(1);
+////                } else {
+////                    e_col.push_back(0);
+////                }
+//            }
+//
+//            ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+//            e_slice.push_back(e_col);
+//        }
+
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
                 if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
             }
+
+            ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
         }
 
-        ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+        vector<vector<int>> e_slice;
+
+        for (int i = 0; i < hBinNumOfYBins; i++) {
+            vector<int> e_col;
+
+            for (int j = 0; j < hBinNumOfXBins; j++) {
+                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
+                    e_col.push_back(1);
+                } else {
+                    e_col.push_back(0);
+                }
+            }
+
+            e_slice.push_back(e_col);
+        }
+
+        e_Hit_Map_Slices.push_back(e_slice);
     }
+    /*
+    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
+        vector<vector<int>> e_slice;
+
+        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
+            vector<int> e_col;
+
+            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
+                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) {
+                    ElectronSepAMaps.at(bin).hFillByBin(i, j, 0);
+                    e_col.push_back(0);
+                } else {
+                    e_col.push_back(1);
+                }
+
+//                if (ElectronAMap.GetHistogram2D()->GetBinContent(i, j) >= cP_minR) {
+//                    e_col.push_back(1);
+//                } else {
+//                    e_col.push_back(0);
+//                }
+            }
+
+            ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+            e_slice.push_back(e_col);
+        }
+
+        e_Hit_Map_Slices.push_back(e_slice);
+    }
+*/
 
     for (int bin = 0; bin < PBinsLimits.size(); bin++) {
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
@@ -677,19 +757,27 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
         ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
     }
     /*
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
                 if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
-
-                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
             }
         }
 
         ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+    }
+
+    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+        for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
+            for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
+                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
+            }
+        }
+
         ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
     }
 */
+
 }
 //</editor-fold>
 
@@ -819,6 +907,56 @@ void AMaps::GenerateNucleonAMap() {
 
 //<editor-fold desc="SaveHitMaps function">
 void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory) {
+    string SliceElectronSavePath = RefrenceHitMapsDirectory + SampleName + "/e_hit_map_by_slice/";
+    system(("mkdir -p " + SliceElectronSavePath).c_str());
+
+    string SliceProtonSavePath = RefrenceHitMapsDirectory + SampleName + "/p_hit_map_by_slice/";
+    system(("mkdir -p " + SliceProtonSavePath).c_str());
+
+    string SliceNeutronSavePath = RefrenceHitMapsDirectory + SampleName + "/n_hit_map_by_slice/";
+    system(("mkdir -p " + SliceNeutronSavePath).c_str());
+
+    string SliceNucleonSavePath = RefrenceHitMapsDirectory + SampleName + "/nuc_hit_map_by_slice/";
+    system(("mkdir -p " + SliceNucleonSavePath).c_str());
+
+    //<editor-fold desc="Save electron slices">
+    for (int s = 0; s < ElectronMomBinsLimits.size(); s++) {
+        ofstream e_hit_map_TempFile;
+
+        string TempFileName = "e_hit_map_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(s).at(0), 2) + "_to_" +
+                              to_string_with_precision(ElectronMomBinsLimits.at(s).at(1), 2) + ".par";
+
+        e_hit_map_TempFile.open(SliceElectronSavePath + TempFileName);
+
+        e_hit_map_TempFile << "Lower_P_lim:\t" << +ElectronMomBinsLimits.at(s).at(0) << "\n";
+        e_hit_map_TempFile << "Upper_P_lim:\t" << +ElectronMomBinsLimits.at(s).at(1) << "\n";
+        e_hit_map_TempFile << "\n";
+
+//        cout << "\n\ne_Hit_Map_Slices.size() = " << e_Hit_Map_Slices.size() << "\n";
+//        cout << "\n\nElectronMomBinsLimits.size() = " << ElectronMomBinsLimits.size() << "\n";
+//        exit(0);
+
+        for (int i = 0; i < hBinNumOfYBins; i++) {
+            e_hit_map_TempFile << "Line\t";
+
+            for (int j = 0; j < hBinNumOfXBins; j++) {
+                if (j != hBinNumOfXBins - 1) {
+                    e_hit_map_TempFile << e_Hit_Map_Slices.at(s).at(i).at(j) << ":";
+                } else {
+                    e_hit_map_TempFile << e_Hit_Map_Slices.at(s).at(i).at(j);
+                }
+            }
+
+            e_hit_map_TempFile << "\n";
+        }
+
+        e_hit_map_TempFile.close();
+
+//        system(("cp " + HitMapSavePath + "e_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + e_hit_map_file_from).c_str());
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Save combined maps">
     ofstream e_hit_map_file, p_hit_map_file, n_hit_map_file, nuc_hit_map_file;
 
     e_hit_map_file.open(HitMapSavePath + "e_hit_map_file.par");
@@ -861,6 +999,8 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     system(("cp " + HitMapSavePath + "p_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
     system(("cp " + HitMapSavePath + "n_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
     system(("cp " + HitMapSavePath + "nuc_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    //</editor-fold>
+
 }
 //</editor-fold>
 
@@ -1434,7 +1574,7 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
 
 // IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="MatchAngToHitMap function">
+//<editor-fold desc="IsInFDQuery function">
 bool AMaps::IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi) {
     bool inFDQuery, part_inSomeSector;
 

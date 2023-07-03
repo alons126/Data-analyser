@@ -118,12 +118,22 @@ void EventAnalyser() {
 
     /* Truth level calculation settings */
     bool calculate_truth_level = true;      // TL master ON/OFF switch
-    bool TL_with_one_reco_electron = false; // TL master ON/OFF switch
-    bool fill_TL_plots = false;              // Generate acceptance maps
+    bool TL_with_one_reco_electron = true;  // TL master ON/OFF switch
+    bool fill_TL_plots = false;             // Generate acceptance maps
     bool Rec_wTL_ES = false;                // Enforce TL event selection on Rec. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
+
+    /* Hit maps settings */
+    bool generate_AMaps = true;             // Generate acceptance maps
+    bool reformat_e_bins = false;
+    bool equi_P_e_bins = true;
+
+    /* Neutron resolution settings */
+    bool plot_and_fit_nRes = false;
+    bool VaryingDelta = true;
+    double DeltaSlices = 0.05;
 
     if (!calculate_2p) { calculate_pFDpCD = false; }
     if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
@@ -168,7 +178,7 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
+    bool apply_nBeta_fit_cuts = true;
     bool apply_kinematical_cuts = false;
     bool apply_proton_smearing = false;
 
@@ -178,7 +188,7 @@ void EventAnalyser() {
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
 
     bool custom_cuts_naming = true;
-    string Nucleon_Cuts_Status, FD_photons_Status, PSmearing_Status, Efficiency_Status;
+    string Nucleon_Cuts_Status, FD_photons_Status, PSmearing_Status, Additional_Status, Efficiency_Status;
 
     if (custom_cuts_naming) {
         if (apply_nucleon_cuts) {
@@ -213,19 +223,19 @@ void EventAnalyser() {
             PSmearing_Status = "wPs_";
         }
 
+        if (!generate_AMaps) {
+            Additional_Status = "";
+        } else {
+            Additional_Status = "AMaps_";
+        }
+
         if (!apply_nucleon_cuts) {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-//                Efficiency_Status = "Eff2_wFiducialCuts";
-//                Efficiency_Status = "Eff2_wFiducialCutsAnd1r_e";
                 Efficiency_Status = "Eff2";
             } else {
-//                Efficiency_Status = "Eff1_wFiducialCuts";
-//                Efficiency_Status = "Eff1_wFiducialCutsAnd1r_e";
-//                Efficiency_Status = "Eff1_AMaps";
-//                Efficiency_Status = "Eff1";
-                Efficiency_Status = "Eff1_ResPlots3";
+                Efficiency_Status = "Eff1";
             }
         }
 
@@ -233,14 +243,14 @@ void EventAnalyser() {
             plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-00_NO_CUTS.txt";
         } else {
+            string added_names = Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + Additional_Status + Efficiency_Status;
+
             if (!apply_chi2_cuts_1e_cut) {
                 plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_ALL_CUTS_" + Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status
-                             + Efficiency_Status;
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + Nucleon_Cuts_Status + FD_photons_Status
-                                           + Efficiency_Status + ".txt";
+                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_ALL_CUTS_" + added_names;
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + added_names + ".txt";
             }
         }
     } else {
@@ -480,120 +490,120 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-    //<editor-fold desc="Plot selector - plot all">
-    /* Master plots variable */
-    bool Plot_selector_master = true; // Master plot selector for analysis
-
-    /* Cut variable plots */
-    bool Cut_plots_master = true; // Master cut plots selector
-    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-
-    /* Beta plots */
-    bool W_plots = true;
-
-    /* Beta plots */
-    bool Beta_plots = true;
-    bool Beta_vs_P_plots = true;
-
-    /* Angle plots */
-    bool Angle_plots_master = true; // Master angle plots selector
-    bool Theta_e_plots = true, Phi_e_plots = true;
-
-    /* Q2 plots */
-    bool Q2_plots = true;
-
-    /* E_e plots */
-    bool E_e_plots = true;
-
-    /* ET plots */
-    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-
-    /* Ecal plots */
-    bool Ecal_plots = true;
-
-    /* Transverse variables plots */
-    bool TKI_plots = true;
-
-    /* ToF plots */
-    bool ToF_plots = false;
-
-    /* Efficiency plots */
-    bool Efficiency_plots = true;
-
-    /* Resolution plots */
-    bool Hit_maps_plots = true;
-
-    /* Resolution plots */
-    bool Resolution_plots = true;
-    //</editor-fold>
-
-//    //<editor-fold desc="Plot selector - selected plots">
+//    //<editor-fold desc="Plot selector - plot all">
 //    /* Master plots variable */
 //    bool Plot_selector_master = true; // Master plot selector for analysis
 //
 //    /* Cut variable plots */
 //    bool Cut_plots_master = true; // Master cut plots selector
-////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-////
-//    bool Momentum_plots = false;
-////    bool Momentum_plots = true;
-////
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 //
 //    /* Beta plots */
-////    bool W_plots = true;
-//    bool W_plots = false;
+//    bool W_plots = true;
 //
 //    /* Beta plots */
-////    bool Beta_plots = true;
-//    bool Beta_plots = false;
-////    bool Beta_vs_P_plots = true;
-//    bool Beta_vs_P_plots = false;
+//    bool Beta_plots = true;
+//    bool Beta_vs_P_plots = true;
 //
 //    /* Angle plots */
-////    bool Angle_plots_master = true; // Master angle plots selector
-////    bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
 //
 //    /* Q2 plots */
-////    bool Q2_plots = true;
-//    bool Q2_plots = false;
+//    bool Q2_plots = true;
 //
 //    /* E_e plots */
-////    bool E_e_plots = true;
-//    bool E_e_plots = false;
+//    bool E_e_plots = true;
 //
 //    /* ET plots */
-////    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_plots_master = true; // Master ET plots selector
 //    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 //
 //    /* Ecal plots */
-////    bool Ecal_plots = true;
-//    bool Ecal_plots = false;
+//    bool Ecal_plots = true;
 //
 //    /* Transverse variables plots */
-////    bool TKI_plots = true;
-//    bool TKI_plots = false;
+//    bool TKI_plots = true;
 //
 //    /* ToF plots */
-////    bool ToF_plots = true;
 //    bool ToF_plots = false;
 //
 //    /* Efficiency plots */
 //    bool Efficiency_plots = true;
-////    bool Efficiency_plots = false;
 //
 //    /* Resolution plots */
 //    bool Hit_maps_plots = true;
-////    bool Hit_maps_plots = false;
 //
 //    /* Resolution plots */
-////    bool Resolution_plots = true;
-//    bool Resolution_plots = false;
+//    bool Resolution_plots = true;
 //    //</editor-fold>
+
+    //<editor-fold desc="Plot selector - selected plots">
+    /* Master plots variable */
+    bool Plot_selector_master = true; // Master plot selector for analysis
+
+    /* Cut variable plots */
+    bool Cut_plots_master = true; // Master cut plots selector
+//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+//
+//    bool Momentum_plots = false;
+    bool Momentum_plots = true;
+//
+
+    /* Beta plots */
+//    bool W_plots = true;
+    bool W_plots = false;
+
+    /* Beta plots */
+//    bool Beta_plots = true;
+    bool Beta_plots = false;
+//    bool Beta_vs_P_plots = true;
+    bool Beta_vs_P_plots = false;
+
+    /* Angle plots */
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+    bool Angle_plots_master = false; // Master angle plots selector
+    bool Theta_e_plots = false, Phi_e_plots = false;
+
+    /* Q2 plots */
+//    bool Q2_plots = true;
+    bool Q2_plots = false;
+
+    /* E_e plots */
+//    bool E_e_plots = true;
+    bool E_e_plots = false;
+
+    /* ET plots */
+//    bool ETrans_plots_master = true; // Master ET plots selector
+    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+
+    /* Ecal plots */
+//    bool Ecal_plots = true;
+    bool Ecal_plots = false;
+
+    /* Transverse variables plots */
+//    bool TKI_plots = true;
+    bool TKI_plots = false;
+
+    /* ToF plots */
+//    bool ToF_plots = true;
+    bool ToF_plots = false;
+
+    /* Efficiency plots */
+    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+
+    /* Resolution plots */
+    bool Hit_maps_plots = true;
+//    bool Hit_maps_plots = false;
+
+    /* Resolution plots */
+//    bool Resolution_plots = true;
+    bool Resolution_plots = false;
+    //</editor-fold>
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -717,15 +727,13 @@ void EventAnalyser() {
     double dP_T_boundary = 3.;
     //</editor-fold>
 
-// Acceptance maps generation settings ----------------------------------------------------------------------------------------------------------------------------------
+// Hit maps generation --------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Acceptance map generation settings">
+    //<editor-fold desc="Hit maps generation">
     /* Hit maps are handled completely by the AMaps class */
-    bool generate_AMaps = false; // Generate acceptance maps
-    bool reformat_e_bins = true;
-
     if (!calculate_truth_level) { generate_AMaps = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
+    if (reformat_e_bins) { equi_P_e_bins = false; }
 
     //<editor-fold desc="Set Bins by case">
     int NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins;
@@ -755,7 +763,7 @@ void EventAnalyser() {
         NumberOfMomBins = 10;
         hBinNumOfXBins = hBinNumOfYBins = 100;
     } else { // Default
-        NumberOfMomBins = 10;
+        NumberOfMomBins = 5;
         hBinNumOfXBins = hBinNumOfYBins = 100;
     }
     //</editor-fold>
@@ -764,7 +772,8 @@ void EventAnalyser() {
     AMaps aMaps;
 
     if (generate_AMaps) {
-        aMaps = AMaps(reformat_e_bins, beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
+        aMaps = AMaps(reformat_e_bins, equi_P_e_bins,
+                      beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
     } else {
         aMaps = AMaps(RefrenceHitMapsDirectory, SampleName);
     }
@@ -772,15 +781,10 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Neutron resolution fits settings --------------------------------------------------------------------------------------------------------------------------------------
+// Neutron resolution & proton smearing ---------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Neutron resolution fit settings">
+    //<editor-fold desc="Neutron resolution">
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
-    bool plot_and_fit_nRes = true;
-    bool VaryingDelta = true;
-
-    double DeltaSlices = 0.05;
-
     if (!calculate_truth_level) { plot_and_fit_nRes = false; } // Disable resolution-realted operations if not calculating TL plots
     if (apply_proton_smearing) { plot_and_fit_nRes = false; }  // Disable resolution-realted operations when applying proton smearing
     if (plot_and_fit_nRes) { apply_nBeta_fit_cuts = false; }   // Disable upper momentum th. cut is resolution is being calculated
@@ -6482,11 +6486,11 @@ void EventAnalyser() {
 //  Filling truth level histograms (lundfile loop) ----------------------------------------------------------------------------------------------------------------------
 
         //TODO: confirm that the TL kin cuts are working!
+
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
-        if (calculate_truth_level && apply_nucleon_cuts && (!TL_with_one_reco_electron || (electrons.size() == 1)) &&
-            findSubstring(SampleName, "simulation")) { // run only for CLAS12 simulation & AFTER beta fit
+        if (calculate_truth_level && apply_nucleon_cuts && findSubstring(SampleName, "simulation")) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -6518,23 +6522,6 @@ void EventAnalyser() {
                 bool e_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
                 bool n_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
                 bool p_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                /*
-                if (!generate_AMaps) {
-                    e_inSomeSector = aMaps.MatchAngToHitMap("Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    n_inSomeSector = aMaps.MatchAngToHitMap("Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    p_inSomeSector = aMaps.MatchAngToHitMap("Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                } else {
-//                    e_inSomeSector = true;
-                    e_inSomeSector = n_inSomeSector = p_inSomeSector = true;
-                }
-
-//                e_inSomeSector = n_inSomeSector = p_inSomeSector = true;
-//                n_inSomeSector = p_inSomeSector = true;
-
-                bool e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                bool n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                bool p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-*/
 
                 if (particlePDGtmp == 11) {
                     if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
@@ -6683,19 +6670,6 @@ void EventAnalyser() {
                     bool e_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
                     bool n_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
                     bool p_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    /*
-                    //TODO: finish MatchAngToHitMap
-//                    e_inSomeSector = true;
-//                    p_inSomeSector = true;
-//                    n_inSomeSector = true;
-                    e_inSomeSector = aMaps.MatchAngToHitMap("Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    p_inSomeSector = aMaps.MatchAngToHitMap("Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    n_inSomeSector = aMaps.MatchAngToHitMap("Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-
-                    e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                    p_inFD = (p_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-                    n_inFD = (n_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
-*/
 
                     if (particlePDGtmp == 11) {
                         if (TL_Event_Selection_1e_cut) {
@@ -7284,9 +7258,15 @@ void EventAnalyser() {
                 if (generate_AMaps && TL_Event_Selection_1e_cut && inFD) { // NOTE: here we fill hit maps before they're generation - no fiducial cuts yet!
                     if (particlePDGtmp == 11) {
                         aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
-                    } else if (particlePDGtmp == 2112) {
-                        aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
-                    } else if (particlePDGtmp == 2212) {
+//                    } else if (particlePDGtmp == 2112) {
+                    } else if ((particlePDGtmp == 2112) && (!TL_with_one_reco_electron || (electrons.size() == 1))) {
+                        if ((Particle_TL_Momentum >= TL_n_mom_cuts.GetLowerCut()) &&
+                            (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) { // with mom. cuts
+                            aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
+                        }
+
+//                        aMaps.hFillHitMaps("TL", "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight); // without mom. cuts
+                    } else if ((particlePDGtmp == 2212) && (!TL_with_one_reco_electron || (electrons.size() == 1))) {
                         aMaps.hFillHitMaps("TL", "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
                     }
                 }
@@ -7573,6 +7553,8 @@ void EventAnalyser() {
 
         //<editor-fold desc="1e cut">
         /* Here we apply electron cut on everything that follows (1p, nFDpCD, 1e2p and 2p) */
+
+        //TODO: replace electrons[0] with electrons at Electron_ind.at(0)
 
         /* Applying rough 1e cut */
         if (Ne != 1) { continue; } // the rough 1e cut
@@ -8035,37 +8017,48 @@ void EventAnalyser() {
 
         //<editor-fold desc="Filling reco. hit maps">
         if (generate_AMaps) {
+
+            //<editor-fold desc="Filling electron reco. hit maps">
             if (electrons[0]->getRegion() == FD) {
                 ElectronAMapBC.hFill(Phi_e, Theta_e, Weight);
                 aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
             }
+            //</editor-fold>
 
-//            for (int i = 0; i < protons.size(); i++) {
+            //<editor-fold desc="Filling proton reco. hit maps">
+            //            for (int i = 0; i < protons.size(); i++) {
             for (int &i: Protons_ind) {
                 if (protons[i]->getRegion() == FD) {
                     ProtonAMapBC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
                     aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
                 }
             }
+            //</editor-fold>
 
-            //TODO: confirm with adi if I should fill these with of without ECAL veto.
-//            for (int &i: FD_Neutrons) {
-            for (int &i: NeutronsFD_ind) {
+            //<editor-fold desc="Filling neurton reco. hit maps">
+//            for (int &i: FD_Neutrons) { // without mom. cuts
+            for (int &i: NeutronsFD_ind) { // with low mom. cuts
                 if (allParticles[i]->getRegion() == FD) {
-
-//                bool NeutronInPCAL_1n = (allParticles[NeutronsFD_ind.at(0)]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                     bool hitECIN_1e_cut = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                     bool hitECOUT_1e_cut = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
                     auto n_detlayer_1e_cut = hitECIN_1e_cut ? clas12::ECIN : clas12::ECOUT;           // find first layer of hit
 
                     if (allParticles[i]->cal(n_detlayer_1e_cut)->getLv() > clasAna.getEcalEdgeCuts() &&
                         allParticles[i]->cal(n_detlayer_1e_cut)->getLw() > clasAna.getEcalEdgeCuts()) { // if neutron is within fiducial cuts
-                        aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi, allParticles[i]->getPhi() * 180.0 / pi,
-                                           Weight);
-                        NeutronAMapBC.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
+
+//                        bool NeutronPassVeto_1e_cut = true;
+                        bool NeutronPassVeto_1e_cut = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, i, Neutron_veto_cut.GetLowerCut());
+//                        bool NeutronPassVeto_1e_cut = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind.at(i), Neutron_veto_cut.GetLowerCut());
+
+                        if (NeutronPassVeto_1e_cut) { // if neutron passes ECAL veto
+                            aMaps.hFillHitMaps("Reco", "Neutron", allParticles[i]->getP(), allParticles[i]->getTheta() * 180.0 / pi,
+                                               allParticles[i]->getPhi() * 180.0 / pi, Weight);
+                            NeutronAMapBC.hFill(allParticles[i]->getPhi() * 180.0 / pi, allParticles[i]->getTheta() * 180.0 / pi, Weight);
+                        }
                     }
                 }
             }
+            //</editor-fold>
         }
         //</editor-fold>
 
@@ -8622,10 +8615,10 @@ void EventAnalyser() {
                     hdTheta_n_e_VS_dPhi_n_e_Electrons_BV_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight);
                 } // end of if neutron did not hit PCAL & hit either ECIN or ECOUT
 
-                bool NeutronPassVeto = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind.at(0), Neutron_veto_cut.GetLowerCut());
+                bool NeutronPassVeto_1n = NeutronECAL_Cut_Veto(allParticles, electrons, beamE, NeutronsFD_ind.at(0), Neutron_veto_cut.GetLowerCut());
 
                 /* Log vetoed neutron values (for self-consistency) */
-                if (!NeutronPassVeto) { hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight); }
+                if (!NeutronPassVeto_1n) { hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n.hFill(dPhi_hit_1n, dTheta_hit_1n, Weight); }
                 //</editor-fold>
 
                 // Setting kinematical cuts -----------------------------------------------------------------------------------------------------------------------------
@@ -8640,7 +8633,7 @@ void EventAnalyser() {
                 // Fillings 1n histograms -------------------------------------------------------------------------------------------------------------------------------
 
                 //<editor-fold desc="Applying neutron veto and Fillings 1n histograms">
-                if (NeutronPassVeto && Pass_Kin_Cuts_1n) {
+                if (NeutronPassVeto_1n && Pass_Kin_Cuts_1n) {
                     ++num_of_events_1n_inFD_AV;
 
                     //<editor-fold desc="Filling cut variable plots (1n)">
@@ -9205,7 +9198,7 @@ void EventAnalyser() {
                     //</editor-fold>
 
 
-                } // end of if NeutronPassVeto is true (i.e. if neutron did not hit PCAL & hit either ECIN or ECOUT)
+                } // end of if NeutronPassVeto_1n is true (i.e. if neutron did not hit PCAL & hit either ECIN or ECOUT)
                 //</editor-fold>
 
             } // end of proton in FD if

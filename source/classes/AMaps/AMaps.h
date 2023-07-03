@@ -85,9 +85,13 @@ private:
     hPlot2D NucleonAMap;
 
     vector<vector<int>> e_Hit_Map;
+    vector<vector<vector<int>>> e_Hit_Map_Slices;
     vector<vector<int>> p_Hit_Map;
+    vector<vector<vector<int>>> p_Hit_Map_Slices;
     vector<vector<int>> n_Hit_Map;
+    vector<vector<vector<int>>> n_Hit_Map_Slices;
     vector<vector<int>> nuc_Hit_Map;
+    vector<vector<vector<int>>> nuc_Hit_Map_Slices;
 
     vector<vector<int>> Loaded_e_Hit_Map;
     vector<vector<int>> Loaded_p_Hit_Map;
@@ -134,7 +138,8 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(bool reformat_e_bins, double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100, int hbNumOfYBins = 100);
+    AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100,
+          int hbNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
@@ -143,7 +148,7 @@ public:
 
     void SetBins(double beamE);
 
-    void SetElectronBins(bool reformat_e_bins, double beamE);
+    void SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double beamE);
 
     void SetBins(double beamE, double NumberOfMomBins); // old
 
