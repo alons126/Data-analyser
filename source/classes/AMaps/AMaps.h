@@ -46,8 +46,8 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> InvertedPBinsLimits, PBinsLimits;
     vector<vector<double>> ElectronInvertedMomBinsLimits, ElectronMomBinsLimits;
+    vector<vector<double>> InvertedPBinsLimits, PBinsLimits;
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -59,7 +59,7 @@ private:
     double MomBinTh = 0.4;
 
     /* TL hit maps */
-    vector<hPlot2D> ElectronTLHitMapsBySlice, ProtonTLHitMapsBySlice,  NeutronTLHitMapsBySlice;
+    vector<hPlot2D> ElectronTLHitMapsBySlice, ProtonTLHitMapsBySlice, NeutronTLHitMapsBySlice;
     hPlot2D NeutronTLHitMap;
 
     /* Reco. hit maps */
@@ -88,23 +88,6 @@ private:
     vector<vector<int>> nuc_Hit_Map;
     vector<vector<vector<int>>> nuc_Hit_Map_Slices;
 
-    vector<vector<int>> Loaded_e_Hit_Map;
-    vector<vector<vector<int>>> Loaded_e_Hit_Map_Slices;
-    vector<vector<int>> Loaded_p_Hit_Map;
-    vector<vector<vector<int>>> Loaded_p_Hit_Map_Slices;
-    vector<vector<int>> Loaded_n_Hit_Map;
-    vector<vector<vector<int>>> Loaded_n_Hit_Map_Slices;
-    vector<vector<int>> Loaded_nuc_Hit_Map;
-    vector<vector<vector<int>>> Loaded_nuc_Hit_Map_Slices;
-
-    /* Loaded hit maps */
-    //TODO: delete these histograms if the .par loading works
-    vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
-    TH2D *LoadedElectronAMaps0;
-    TH2D *LoadedProtonAMap;
-    TH2D *LoadedNeutronAMap;
-    TH2D *LoadedNucleonAMap;
-
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
 //    double Charged_particle_min_Ratio = 0.;
@@ -127,6 +110,26 @@ private:
     string Hit_Maps_Ratio_prefix = "03_Hit_Maps_Ratio_-_";
     string cPart_Sep_AMaps_prefix = "04_cPart_Sep_AMaps_-_";
     string AMaps_prefix = "05_AMaps_-_";
+
+    vector<vector<double>> Loaded_ElectronMomBinsLimits;
+    vector<vector<double>> Loaded_PBinsLimits;
+
+    vector<vector<int>> Loaded_e_Hit_Map;
+    vector<vector<vector<int>>> Loaded_e_Hit_Map_Slices;
+    vector<vector<int>> Loaded_p_Hit_Map;
+    vector<vector<vector<int>>> Loaded_p_Hit_Map_Slices;
+    vector<vector<int>> Loaded_n_Hit_Map;
+    vector<vector<vector<int>>> Loaded_n_Hit_Map_Slices;
+    vector<vector<int>> Loaded_nuc_Hit_Map;
+    vector<vector<vector<int>>> Loaded_nuc_Hit_Map_Slices;
+
+    /* Loaded hit maps */
+    //TODO: delete these histograms if the .par loading works
+    vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
+    TH2D *LoadedElectronAMaps0;
+    TH2D *LoadedProtonAMap;
+    TH2D *LoadedNeutronAMap;
+    TH2D *LoadedNucleonAMap;
 
 public:
 
@@ -216,6 +219,15 @@ public:
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+
+// ReadAMapLimits function ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadAMapLimits(const char *filename, vector<vector<double>> &Loaded_particle_limits);
+
+// ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadAMapSlices(const string &SampleName, const string &RefrenceHitMapsDirectory, const string &Particle,
+                        const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_Hit_Map_Slices);
 
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 

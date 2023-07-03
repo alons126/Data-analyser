@@ -77,7 +77,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
     NeutronAMapBC = hPlot2D("", "", hStatsTitleAMapBCNeutron, hTitleAMapBCNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", SavePathAMapsBC, hSaveNameAMapBCNeutron,
                             hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
 
-    string hStatsTitleAMapBCNucleon = "Nucleon_AMap_BC", hTitleAMapBCNucleon = "Nucleon AMap BC", hSaveNameAMapBCNucleon = "04_Nucleon_AMap_BC";
+    string hStatsTitleAMapBCNucleon = "Nucleon_AMap_BC", hTitleAMapBCNucleon = "Nucleon AMap BC", hSaveNameAMapBCNucleon = "04_nuc_AMap_BC";
     NucleonAMapBC = hPlot2D("", "", hStatsTitleAMapBCNucleon, hTitleAMapBCNucleon, "#phi_{nuc} [Deg]", "#theta_{nuc} [Deg]", SavePathAMapsBC, hSaveNameAMapBCNucleon,
                             hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
     //</editor-fold>
@@ -324,7 +324,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
     string hStatsTitleAMapNucleon = "Nucleon_AMap";
     string hTitleAMapNucleon = "Nucleon AMap for (Reco./TL)_{n}#geq" + to_string_with_precision(Neutral_particle_min_Ratio, 2) + " and (Reco./TL)_{c}#geq" +
                                to_string_with_precision(Charged_particle_min_Ratio, 2);
-    string hSaveNameAMapNucleon = "04_Nucleon_AMap";
+    string hSaveNameAMapNucleon = "04_nuc_AMap";
     NucleonAMap = hPlot2D("", "", hStatsTitleAMapNucleon, hTitleAMapNucleon, "#phi_{nuc} [Deg]", "#theta_{nuc} [Deg]", HitMapSavePathAMap, hSaveNameAMapNucleon,
                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
     //</editor-fold>
@@ -334,6 +334,14 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
 
 //<editor-fold desc="AMaps loading constructor">
 AMaps::AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
+    ReadAMapLimits((RefrenceHitMapsDirectory + SampleName + "/e_hit_map_by_slice/e_slice_limits.par").c_str(), Loaded_ElectronMomBinsLimits);
+    ReadAMapLimits((RefrenceHitMapsDirectory + SampleName + "/p_hit_map_by_slice/p_slice_limits.par").c_str(), Loaded_PBinsLimits);
+
+    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Nucleon", Loaded_PBinsLimits, Loaded_nuc_Hit_Map_Slices);
+
     ReadAMap((RefrenceHitMapsDirectory + SampleName + "/e_hit_map_file.par").c_str(), Loaded_e_Hit_Map);
     ReadAMap((RefrenceHitMapsDirectory + SampleName + "/p_hit_map_file.par").c_str(), Loaded_p_Hit_Map);
     ReadAMap((RefrenceHitMapsDirectory + SampleName + "/n_hit_map_file.par").c_str(), Loaded_n_Hit_Map);
@@ -968,16 +976,16 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     system(("mkdir -p " + SliceNucleonSavePath).c_str());
 
     //<editor-fold desc="Save electron slices">
-    for (int s = 0; s < ElectronMomBinsLimits.size(); s++) {
+    for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
         ofstream e_hit_map_TempFile;
 
-        string TempFileName = "e_hit_map_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(s).at(0), 2) + "_to_" +
-                              to_string_with_precision(ElectronMomBinsLimits.at(s).at(1), 2) + ".par";
+        string TempFileName = "e_hit_map_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(0), 2) + "_to_" +
+                              to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(1), 2) + ".par";
 
         e_hit_map_TempFile.open(SliceElectronSavePath + TempFileName);
 
-        e_hit_map_TempFile << "Lower_P_lim:\t" << +ElectronMomBinsLimits.at(s).at(0) << "\n";
-        e_hit_map_TempFile << "Upper_P_lim:\t" << +ElectronMomBinsLimits.at(s).at(1) << "\n";
+        e_hit_map_TempFile << "Lower_P_lim:\t" << +ElectronMomBinsLimits.at(Slice).at(0) << "\n";
+        e_hit_map_TempFile << "Upper_P_lim:\t" << +ElectronMomBinsLimits.at(Slice).at(1) << "\n";
         e_hit_map_TempFile << "\n";
 
         for (int i = 0; i < hBinNumOfYBins; i++) {
@@ -985,9 +993,9 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
 
             for (int j = 0; j < hBinNumOfXBins; j++) {
                 if (j != hBinNumOfXBins - 1) {
-                    e_hit_map_TempFile << e_Hit_Map_Slices.at(s).at(i).at(j) << ":";
+                    e_hit_map_TempFile << e_Hit_Map_Slices.at(Slice).at(i).at(j) << ":";
                 } else {
-                    e_hit_map_TempFile << e_Hit_Map_Slices.at(s).at(i).at(j);
+                    e_hit_map_TempFile << e_Hit_Map_Slices.at(Slice).at(i).at(j);
                 }
             }
 
@@ -1065,6 +1073,21 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     n_hit_map_file.open(HitMapSavePath + "n_hit_map_file.par");
     nuc_hit_map_file.open(HitMapSavePath + "nuc_hit_map_file.par");
 
+    for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
+        e_hit_map_file << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
+    }
+
+    for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
+        p_hit_map_file << "p_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        n_hit_map_file << "n_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        nuc_hit_map_file << "nuc_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+    }
+
+//    e_hit_map_file << "\n";
+//    p_hit_map_file << "\n";
+//    n_hit_map_file << "\n";
+//    nuc_hit_map_file << "\n";
+
     for (int i = 0; i < hBinNumOfYBins; i++) {
         e_hit_map_file << "Line\t";
         p_hit_map_file << "Line\t";
@@ -1100,6 +1123,40 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     system(("cp " + HitMapSavePath + "p_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
     system(("cp " + HitMapSavePath + "n_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
     system(("cp " + HitMapSavePath + "nuc_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    //</editor-fold>
+
+    //<editor-fold desc="Slice limits">
+    ofstream e_slice_limits, p_slice_limits, n_slice_limits, nuc_slice_limits;
+
+    e_slice_limits.open(SliceElectronSavePath + "e_slice_limits.par");
+    p_slice_limits.open(SliceProtonSavePath + "p_slice_limits.par");
+    n_slice_limits.open(SliceNeutronSavePath + "n_slice_limits.par");
+    nuc_slice_limits.open(SliceNucleonSavePath + "nuc_slice_limits.par");
+
+    for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
+        e_slice_limits << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
+    }
+
+    for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
+        p_slice_limits << "p_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        n_slice_limits << "n_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        nuc_slice_limits << "nuc_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+    }
+
+    e_slice_limits << "\n";
+    p_slice_limits << "\n";
+    n_slice_limits << "\n";
+    nuc_slice_limits << "\n";
+
+    e_slice_limits.close();
+    p_slice_limits.close();
+    n_slice_limits.close();
+    nuc_slice_limits.close();
+
+    system(("cp " + HitMapSavePath + "e_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "p_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "n_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "nuc_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
     //</editor-fold>
 
 }
@@ -1553,6 +1610,72 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 }
 //</editor-fold>
 
+// ReadAMapLimits function ----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadAMapLimits function">
+void AMaps::ReadAMapLimits(const char *filename, vector<vector<double>> &Loaded_particle_limits) {
+    ifstream infile;
+    infile.open(filename);
+
+    if (infile.is_open()) {
+        string tp;
+
+        // getline(infile, tp) = read data from file object and put it into string.
+        while (getline(infile, tp)) {
+            stringstream ss(tp);
+            string parameter, parameter2;
+            ss >> parameter; // get cut identifier
+
+            if (findSubstring(parameter, "_slice_")) {
+                // get cut values
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+
+                string LineEntry;
+                vector<double> particle_limits;
+
+                while (getline(ss2, LineEntry, ':')) { particle_limits.push_back(stod(LineEntry)); }
+
+                Loaded_particle_limits.push_back(particle_limits);
+            }
+        }
+    } else {
+        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
+    }
+}
+//</editor-fold>
+
+// ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadAMapSlices function">
+void AMaps::ReadAMapSlices(const string &SampleName, const string &RefrenceHitMapsDirectory, const string &Particle,
+                           const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_Hit_Map_Slices) {
+    string ParticleShort;
+
+    if (isElectron(Particle)) {
+        ParticleShort = "e";
+    } else if (isProton(Particle)) {
+        ParticleShort = "p";
+    } else if (isNeutron(Particle)) {
+        ParticleShort = "p";
+    } else {
+        ParticleShort = "nuc";
+    }
+
+    for (int Slice = 0; Slice < Loaded_particle_limits.size(); Slice++) {
+        vector<vector<int>> Loaded_Particle_Hit_Map_TempSlice;
+
+        string TempFileName = ParticleShort + "_hit_map_by_slice/" + ParticleShort + "_hit_map_file_from_" +
+                              to_string_with_precision(Loaded_particle_limits.at(Slice).at(0), 2) + "_to_" +
+                              to_string_with_precision(Loaded_particle_limits.at(Slice).at(1), 2) + ".par";
+
+        ReadAMap((RefrenceHitMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_Hit_Map_TempSlice);
+
+        Loaded_Particle_Hit_Map_Slices.push_back(Loaded_Particle_Hit_Map_TempSlice);
+    }
+}
+//</editor-fold>
+
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadAMap function">
@@ -1583,7 +1706,8 @@ void AMaps::ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_
             }
         }
     } else {
-        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nReadAMap: file:\n" << filename << "\nwas not found! Exiting...\n\n", exit(0);
+//        cout << "\n\nReadAMap: file not found! Exiting...\n\n", exit(0);
     }
 }
 //</editor-fold>

@@ -126,7 +126,7 @@ void EventAnalyser() {
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
 
     /* Hit maps settings */
-    bool generate_AMaps = true;             // Generate acceptance maps
+    bool generate_AMaps = false;             // Generate acceptance maps
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
@@ -769,14 +769,20 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Acceptance maps class declaration & definition">
+    cout << "\nSetting hit maps...";
+
     AMaps aMaps;
 
     if (generate_AMaps) {
-        aMaps = AMaps(reformat_e_bins, equi_P_e_bins,
-                      beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"], NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
+        aMaps = AMaps(reformat_e_bins, equi_P_e_bins, beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"],
+                      NumberOfMomBins, hBinNumOfXBins, hBinNumOfYBins);
     } else {
         aMaps = AMaps(RefrenceHitMapsDirectory, SampleName);
     }
+
+    cout << " done.\n\n";
+
+    exit(0);
     //</editor-fold>
 
     //</editor-fold>
@@ -785,6 +791,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Neutron resolution">
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
+    cout << "\nSetting neutron resolution data...";
+
     if (!calculate_truth_level) { plot_and_fit_nRes = false; } // Disable resolution-realted operations if not calculating TL plots
     if (apply_proton_smearing) { plot_and_fit_nRes = false; }  // Disable resolution-realted operations when applying proton smearing
     if (plot_and_fit_nRes) { apply_nBeta_fit_cuts = false; }   // Disable upper momentum th. cut is resolution is being calculated
@@ -800,6 +808,7 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
+    cout << " done.\n\n";
     //</editor-fold>
 
 // Debugging settings ---------------------------------------------------------------------------------------------------------------------------------------------------
