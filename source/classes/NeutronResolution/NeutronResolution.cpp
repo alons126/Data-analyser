@@ -54,8 +54,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                      to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
             hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_n_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                         to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
-            string hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
-                              to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
+            hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
+                       to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
             hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
                                        hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
@@ -71,9 +71,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
             hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
-                                       hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
+                                       -0.75, 0.75, hSliceNumOfBin);
             ResSliceFitCuts = DSCuts(hCutName, "FD", "Proton", "1n", 0, -9999, 9999);
-
         }
         /*
         string hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
@@ -163,7 +162,7 @@ Double_t CFitFunction(Double_t *v, Double_t *par) {
 }
 
 /* SliceFitDrawAndSave function for the fit */
-void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double beamE) {
+void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE) {
     for (int i = 0; i < NumberOfSlices; i++) {
         cout << "\n\n";
 
@@ -189,7 +188,15 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double bea
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
             FittedSlices.push_back(i); // Log slices that are been fitted
 
-            TF1 *func = new TF1("fit", CFitFunction, -1, 1, 3); // create a function with 3 parameters in the range [-3,3]
+            double FitUlim, FitLlim;
+
+            if (Particle == "Neutron") {
+                FitUlim = 1., FitLlim = -1.;
+            } else if (Particle == "Proton") {
+                FitUlim = 0.5, FitLlim = -0.5;
+            }
+
+            TF1 *func = new TF1("fit", CFitFunction, FitLlim, FitUlim, 3); // create a function with 3 parameters in the range [-3,3]
             func->SetLineColor(kRed);
 
             double SliceMax = hSlice->GetMaximum();
@@ -198,10 +205,15 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, double bea
             func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
             func->SetParNames("Constant", "Mean_value", "Sigma");
 
-            func->SetParLimits(1, -1.5, 1.5); // Mean limits
-            func->SetParLimits(2, 0.001, 0.35); // Sigma limits
+            if (Particle == "Neutron") {
+                func->SetParLimits(1, -1.5, 1.5); // Mean limits
+                func->SetParLimits(2, 0.001, 0.35); // Sigma limits
 //            func->SetParLimits(2, 0.001, 0.325); // Sigma limits
 //            func->SetParLimits(2, 0.001, 0.25); // Sigma limits
+            } else if (Particle == "Proton") {
+                func->SetParLimits(1, -1.5, 1.5); // Mean limits
+                func->SetParLimits(2, 0.0000000001, 0.35); // Sigma limits
+            }
 
             hSlice->Fit("fit");
 

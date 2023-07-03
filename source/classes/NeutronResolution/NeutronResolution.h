@@ -80,7 +80,7 @@ public:
 
 // SliceFitDrawAndSave function -----------------------------------------------------------------------------------------------------------------------------------------
 
-    void SliceFitDrawAndSave(const string &SampleName, double beamE);
+    void SliceFitDrawAndSave(const string &SampleName, const string &Particle, double beamE);
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -95,9 +95,16 @@ public:
 
     void ReadFitDataParam(const char *filename);
 
-// PSmear function --------------------------------------------------------------------------------------------------------------------------------------------
+// PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     double PSmear(bool apply_proton_smearing, double Momentum);
+
+// Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Set functions
+    void SethSliceUpperLim(double hsUpperLim) { hSliceUpperLim = hsUpperLim; };
+
+    void SethSliceLowerLim(double hsLowerLim) { hSliceLowerLim = hsLowerLim; };
 
 };
 
