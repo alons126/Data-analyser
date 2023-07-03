@@ -126,7 +126,7 @@ void EventAnalyser() {
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
 
     /* Hit maps settings */
-    bool generate_AMaps = false;             // Generate acceptance maps
+    bool generate_AMaps = false;            // Generate acceptance maps
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
@@ -530,6 +530,7 @@ void EventAnalyser() {
 //
 //    /* Efficiency plots */
 //    bool Efficiency_plots = true;
+//    bool TL_after_hit_maps_plots = true;
 //
 //    /* Resolution plots */
 //    bool Hit_maps_plots = true;
@@ -593,7 +594,8 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-    bool Efficiency_plots = true;
+    bool Efficiency_plots = false;
+    bool TL_after_hit_maps_plots = true;
 //    bool Efficiency_plots = false;
 
     /* Resolution plots */
@@ -614,7 +616,7 @@ void EventAnalyser() {
     if (!Cut_plots_master) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
     if (!Angle_plots_master) { Theta_e_plots = Phi_e_plots = false; }
     if (!ETrans_plots_master) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
-    if (!fill_TL_plots) { Efficiency_plots = false; }
+    if (!fill_TL_plots) { Efficiency_plots = TL_after_hit_maps_plots = false; }
     //</editor-fold>
 
     /* Other settings variables */
@@ -782,7 +784,7 @@ void EventAnalyser() {
 
     cout << " done.\n\n";
 
-    exit(0);
+//    exit(0);
     //</editor-fold>
 
     //</editor-fold>
@@ -5061,16 +5063,16 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Truth level theta vs. phi plots (1e_cut)">
-    hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e_cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
+    hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
                                                      directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"], "01_Theta_e_vs_Phi_e_truth_1e_cut",
                                                      Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
 
-    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1e_cut = hPlot2D("1e_cut", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]",
+    hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]",
                                                          "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
                                                          "02_Theta_nFD_vs_Phi_nFD_truth_1e_cut",
                                                          Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
 
-    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1e_cut = hPlot2D("1e_cut", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]",
+    hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]",
                                                          "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
                                                          "03_Theta_pFD_vs_Phi_pFD_truth_1e_cut",
                                                          Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
@@ -14884,8 +14886,47 @@ void EventAnalyser() {
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Efficiency histograms">
+
+    //<editor-fold desc="TL plots after hit maps">
+    if (TL_after_hit_maps_plots) {
+        cout << "\n\nPlotting TL plots after hit maps...\n\n";
+
+//  TL after hit maps plots ---------------------------------------------------------------------------------------------------------------------------------------------
+
+        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
+        hTheta_e_vs_Phi_e_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
+        hTheta_e_vs_Phi_e_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (1n)">
+        hTheta_e_vs_Phi_e_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (pFDpCD)">
+        hTheta_e_vs_Phi_e_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+        //<editor-fold desc="Truth level theta vs. phi plots (nFDpCD)">
+        hTheta_e_vs_Phi_e_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
+        //</editor-fold>
+
+    } else {
+        cout << "\n\nTL plots after hit maps are disabled by user.\n\n";
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Efficiency plots">
     if (Efficiency_plots) {
-        cout << "\n\nPlotting Efficiency histograms...\n\n";
+        cout << "\n\nPlotting efficiency histograms...\n\n";
 
 //  Efficiency plots -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -14972,12 +15013,6 @@ void EventAnalyser() {
         histPlotter2D(c1, Electron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Electron_hit_map_Dir, "01_Electron_hit_map");
         histPlotter2D(c1, Proton_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Proton_hit_map_Dir, "02_Proton_hit_map");
         histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
-        hTheta_e_vs_Phi_e_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_pFD_vs_Phi_pFD_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
         //</editor-fold>
@@ -15083,11 +15118,6 @@ void EventAnalyser() {
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_1p_FD, hPhi_p_All_Int_1p, plots);
         //</editor-fold>
 
-        //<editor-fold desc="Truth level theta vs. phi plots (1p)">
-        hTheta_e_vs_Phi_e_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_pFD_vs_Phi_pFD_truth_1p.hDrawAndSave(SampleName, c1, plots, true);
-        //</editor-fold>
-
         //</editor-fold>
 
         //<editor-fold desc="Efficiency plots (1n, CD & FD)">
@@ -15189,11 +15219,6 @@ void EventAnalyser() {
 
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_e_AC_truth_1n, hPhi_e_All_Int_1n_FD, plots);
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_n_AC_truth_1n_FD, hPhi_n_All_Int_1n, plots);
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (1n)">
-        hTheta_e_vs_Phi_e_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_truth_1n.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
         //</editor-fold>
@@ -15325,11 +15350,6 @@ void EventAnalyser() {
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_e_AC_truth_pFDpCD, hPhi_e_All_Int_pFDpCD_FD, plots);
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD, plots);
         DrawAndSaveEfficiencyPlots(SampleName, hPhi_p_AC_truth_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD, plots);
-        //</editor-fold>
-
-        //<editor-fold desc="Truth level theta vs. phi plots (pFDpCD)">
-        hTheta_e_vs_Phi_e_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_pFD_vs_Phi_pFD_truth_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
         //</editor-fold>
@@ -15482,19 +15502,13 @@ void EventAnalyser() {
         }
         //</editor-fold>
 
-        //<editor-fold desc="Truth level theta vs. phi plots (nFDpCD)">
-        hTheta_e_vs_Phi_e_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hTheta_nFD_vs_Phi_nFD_truth_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
-
-        //</editor-fold>
-
-//  Efficiency comperison plots -----------------------------------------------------------------------------------------------------------------------------------------
-
 
     } else {
         cout << "\n\nEfficiency plots are disabled by user.\n\n";
     }
+    //</editor-fold>
+
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------

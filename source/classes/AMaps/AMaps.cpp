@@ -1717,6 +1717,32 @@ void AMaps::ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_
 //<editor-fold desc="MatchAngToHitMap function">
 bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi) {
     if (isElectron(Particle)) {
+        for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
+            if (Momentum >= Loaded_ElectronMomBinsLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomBinsLimits.at(Slice).at(1)) {
+                for (int i = 0; i < hBinNumOfYBins; i++) {
+                    double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / hBinNumOfYBins;
+                    double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                    double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                    if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                        for (int j = 0; j < hBinNumOfXBins; j++) {
+                            double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / hBinNumOfXBins;
+                            double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                            double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                            if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                if (Loaded_e_Hit_Map_Slices.at(Slice).at(i).at(j) != 0) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } // end of find right phi if
+                        }
+                    } // end of find right theta if
+                }
+            } // end of if the right momentum
+        }
+        /*
         for (int i = 0; i < hBinNumOfYBins; i++) {
             double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / hBinNumOfYBins;
             double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -1738,7 +1764,34 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                 }
             } // end of find right theta if
         }
+*/
     } else if (isProton(Particle)) {
+        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
+            if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+                for (int i = 0; i < hBinNumOfYBins; i++) {
+                    double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
+                    double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                    double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                    if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                        for (int j = 0; j < hBinNumOfXBins; j++) {
+                            double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                            double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                            double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                            if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                if (Loaded_nuc_Hit_Map_Slices.at(Slice).at(i).at(j) != 0) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } // end of find right phi if
+                        }
+                    } // end of find right theta if
+                }
+            } // end of if the right momentum
+        }
+        /*
         for (int i = 0; i < hBinNumOfYBins; i++) {
             double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
             double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -1760,7 +1813,34 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                 }
             } // end of find right theta if
         }
+*/
     } else if (isNeutron(Particle)) {
+        for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
+            if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+                for (int i = 0; i < hBinNumOfYBins; i++) {
+                    double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
+                    double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                    double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                    if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                        for (int j = 0; j < hBinNumOfXBins; j++) {
+                            double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (hBinNumOfXBins);
+                            double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                            double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                            if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                if (Loaded_nuc_Hit_Map_Slices.at(Slice).at(i).at(j) != 0) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } // end of find right phi if
+                        }
+                    } // end of find right theta if
+                }
+            } // end of if the right momentum
+        }
+        /*
         for (int i = 0; i < hBinNumOfYBins; i++) {
             double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (hBinNumOfYBins);
             double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
@@ -1782,7 +1862,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                 }
             } // end of find right theta if
         }
-    } // end of if isElectron(Particle)
+*/
+    } // end of if Particle
 
     return false;
 }
