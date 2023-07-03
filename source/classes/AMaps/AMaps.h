@@ -46,13 +46,8 @@ private:
     /* Acceptance maps from class and before cuts (to be compared with one generated with the file) */
     hPlot2D ElectronAMapBC, ProtonAMapBC, NeutronAMapBC, NucleonAMapBC;
 
-    vector<vector<double>> InvertedPBinsLimits;           // proton inverted bins
-    vector<vector<double>> PBinsLimits;                   // proton inverted bins
-
-    vector<vector<double>> ElectronInvertedMomBinsLimits; // electron inverted bins
-    vector<vector<double>> ElectronMomBinsLimits;         // electron inverted bins
-    vector<vector<double>> ElectronInvertedMomBinsLimits_Temp; // electron inverted bins
-    vector<vector<double>> ElectronMomBinsLimits_Temp;         // electron inverted bins
+    vector<vector<double>> InvertedPBinsLimits, PBinsLimits;
+    vector<vector<double>> ElectronInvertedMomBinsLimits, ElectronMomBinsLimits;
 
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
@@ -64,19 +59,19 @@ private:
     double MomBinTh = 0.4;
 
     /* TL hit maps */
-    vector<hPlot2D> ElectronTLBinHitMaps, ProtonTLBinHitMaps;
+    vector<hPlot2D> ElectronTLHitMapsBySlice, ProtonTLHitMapsBySlice,  NeutronTLHitMapsBySlice;
     hPlot2D NeutronTLHitMap;
 
     /* Reco. hit maps */
-    vector<hPlot2D> ElectronRecoBinHitMaps, ProtonRecoBinHitMaps;
+    vector<hPlot2D> ElectronRecoHitMapsBySlice, ProtonRecoHitMapsBySlice, NeutronRecoHitMapsBySlice;
     hPlot2D NeutronRecoHitMap;
 
     /* Reco./TL ratio maps */
-    vector<hPlot2D> ElectronRecoToTLRatio, ProtonRecoToTLRatio;
+    vector<hPlot2D> ElectronRecoToTLRatioBySlice, ProtonRecoToTLRatioBySlice, NeutronRecoToTLRatioBySlice;
     hPlot2D NeutronRecoToTLRatio;
 
     /* Separated acceptance maps (= reco. above ration th.) */
-    vector<hPlot2D> ElectronSepAMaps, ProtonSepAMaps;   // separated AMaps for each bin
+    vector<hPlot2D> ElectronAMapsBySlice, ProtonAMapsBySlice, NeutronAMapsBySlice; // separated AMaps for each slice
 
     /* Acceptance maps (= reco. above ration th.) */
     hPlot2D ElectronAMap; // combined electron AMap
@@ -94,9 +89,13 @@ private:
     vector<vector<vector<int>>> nuc_Hit_Map_Slices;
 
     vector<vector<int>> Loaded_e_Hit_Map;
+    vector<vector<vector<int>>> Loaded_e_Hit_Map_Slices;
     vector<vector<int>> Loaded_p_Hit_Map;
+    vector<vector<vector<int>>> Loaded_p_Hit_Map_Slices;
     vector<vector<int>> Loaded_n_Hit_Map;
+    vector<vector<vector<int>>> Loaded_n_Hit_Map_Slices;
     vector<vector<int>> Loaded_nuc_Hit_Map;
+    vector<vector<vector<int>>> Loaded_nuc_Hit_Map_Slices;
 
     /* Loaded hit maps */
     //TODO: delete these histograms if the .par loading works

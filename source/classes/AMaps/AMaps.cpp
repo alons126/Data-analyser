@@ -54,6 +54,8 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
     system(("mkdir -p " + HitMapSavePathRecoNeutron).c_str());
     string HitMapSavePathRecoToTLNeutron = SavePath + "03c_Neutron_RecoToTL_Ratio/";
     system(("mkdir -p " + HitMapSavePathRecoToTLNeutron).c_str());
+    string HitMapSavePathSepAMapsNeutron = HitMapSavePath + "03d_Neutron_Separate_AMaps/";
+    system(("mkdir -p " + HitMapSavePathSepAMapsNeutron).c_str());
 
     string HitMapSavePathAMap = HitMapSavePath + "04_Finalized_AMaps/";
     system(("mkdir -p " + HitMapSavePathAMap).c_str());
@@ -100,7 +102,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         hPlot2D hPBinTLElectron = hPlot2D("", "", hStatsTitleTLElectron, hTitleTLElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", HitMapSavePathTLElectron,
                                           hSaveNameTLElectron,
                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ElectronTLBinHitMaps.push_back(hPBinTLElectron);
+        ElectronTLHitMapsBySlice.push_back(hPBinTLElectron);
         //</editor-fold>
 
         //<editor-fold desc="Electron Reco. hit maps">
@@ -113,7 +115,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         hPlot2D hPBinRecoElectron = hPlot2D("", "", hStatsTitleRecoElectron, hTitleRecoElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]", HitMapSavePathRecoElectron,
                                             hSaveNameRecoElectron,
                                             hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ElectronRecoBinHitMaps.push_back(hPBinRecoElectron);
+        ElectronRecoHitMapsBySlice.push_back(hPBinRecoElectron);
         //</editor-fold>
 
         //<editor-fold desc="Electron Reco./TL Ratio">
@@ -127,7 +129,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
                                                      HitMapSavePathRecoToTLElectron,
                                                      hSaveNameRecoToTLRatioElectron,
                                                      hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ElectronRecoToTLRatio.push_back(hPBinRecoToTLRatioElectron);
+        ElectronRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioElectron);
         //</editor-fold>
 
         //<editor-fold desc="Electron separate AMaps">
@@ -143,7 +145,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
                                                 HitMapSavePathSepAMapsElectron,
                                                 hSaveNameSepAMapsElectron,
                                                 hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ElectronSepAMaps.push_back(hPBinSepAMapsElectron);
+        ElectronAMapsBySlice.push_back(hPBinSepAMapsElectron);
         //</editor-fold>
 
         //</editor-fold>
@@ -168,7 +170,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinTLProton = hPlot2D("", "", hStatsTitleTLProton, hTitleTLProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", HitMapSavePathTLProton, hSaveNameTLProton,
                                         hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ProtonTLBinHitMaps.push_back(hPBinTLProton);
+        ProtonTLHitMapsBySlice.push_back(hPBinTLProton);
         //</editor-fold>
 
         //<editor-fold desc="Proton Reco. hit maps">
@@ -181,7 +183,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         hPlot2D hPBinRecoProton = hPlot2D("", "", hStatsTitleRecoProton, hTitleRecoProton, "#phi_{p} [Deg]", "#theta_{p} [Deg]", HitMapSavePathRecoProton,
                                           hSaveNameRecoProton,
                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ProtonRecoBinHitMaps.push_back(hPBinRecoProton);
+        ProtonRecoHitMapsBySlice.push_back(hPBinRecoProton);
         //</editor-fold>
 
         //<editor-fold desc="Proton Reco./TL Ratio">
@@ -195,7 +197,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
                                                    HitMapSavePathRecoToTLProton,
                                                    hSaveNameRecoToTLRatioProton,
                                                    hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ProtonRecoToTLRatio.push_back(hPBinRecoToTLRatioProton);
+        ProtonRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioProton);
         //</editor-fold>
 
         //<editor-fold desc="Proton separate AMaps">
@@ -211,7 +213,66 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
                                               HitMapSavePathSepAMapsProton,
                                               hSaveNameSepAMapsProton,
                                               hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
-        ProtonSepAMaps.push_back(hPBinSepAMapsProton);
+        ProtonAMapsBySlice.push_back(hPBinSepAMapsProton);
+        //</editor-fold>
+
+        //</editor-fold>
+
+        //<editor-fold desc="Setting neutron hit maps">
+
+        //<editor-fold desc="Neutron TL hit maps">
+        string hStatsTitleTLNeutron = "TL P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+        string hTitleTLNeutron = "TL P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
+        string hSaveNameTLNeutron = to_string(i + 1) + "_TL_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
+                                    to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
+        hPlot2D hPBinTLNeutron = hPlot2D("", "", hStatsTitleTLNeutron, hTitleTLNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", HitMapSavePathTLNeutron, hSaveNameTLNeutron,
+                                         hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+        NeutronTLHitMapsBySlice.push_back(hPBinTLNeutron);
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron Reco. hit maps">
+        string hStatsTitleRecoNeutron = "Reco P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+        string hTitleRecoNeutron = "Reco P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                   to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
+        string hSaveNameRecoNeutron = to_string(i + 1) + "_Reco_P_bin_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
+                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
+        hPlot2D hPBinRecoNeutron = hPlot2D("", "", hStatsTitleRecoNeutron, hTitleRecoNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", HitMapSavePathRecoNeutron,
+                                           hSaveNameRecoNeutron,
+                                           hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+        NeutronRecoHitMapsBySlice.push_back(hPBinRecoNeutron);
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron Reco./TL Ratio">
+        string hStatsTitleRecoToTLRatioNeutron = "Neutron Reco/TL ratio for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                                 to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
+        string hTitleRecoToTLRatioNeutron = "Neutron Reco/TL ratio for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]" + BinDensity;
+        string hSaveNameRecoToTLRatioNeutron = to_string(i + 1) + "_p_Ratio_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
+                                               to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
+        hPlot2D hPBinRecoToTLRatioNeutron = hPlot2D("", "", hStatsTitleRecoToTLRatioNeutron, hTitleRecoToTLRatioNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
+                                                    HitMapSavePathRecoToTLNeutron,
+                                                    hSaveNameRecoToTLRatioNeutron,
+                                                    hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+        NeutronRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioNeutron);
+        //</editor-fold>
+
+        //<editor-fold desc="Neutron separate AMaps">
+        string hStatsTitleSepAMapsNeutron = "Neutron AMap for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                            to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c] and (Reco./TL)#geq" +
+                                            to_string_with_precision(Charged_particle_min_Ratio, 2);
+        string hTitleSepAMapsNeutron = "Neutron AMap for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
+                                       to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c] and (Reco./TL)#geq" +
+                                       to_string_with_precision(Charged_particle_min_Ratio, 2);
+        string hSaveNameSepAMapsNeutron = to_string(i + 1) + "_p_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
+                                          to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
+        hPlot2D hPBinSepAMapsNeutron = hPlot2D("", "", hStatsTitleSepAMapsNeutron, hTitleSepAMapsNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
+                                               HitMapSavePathSepAMapsNeutron,
+                                               hSaveNameSepAMapsNeutron,
+                                               hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, hBinNumOfXBins, hBinNumOfYBins);
+        NeutronAMapsBySlice.push_back(hPBinSepAMapsNeutron);
         //</editor-fold>
 
         //</editor-fold>
@@ -561,14 +622,14 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
         if (is_e) {
             for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
                 if ((Momentum >= ElectronMomBinsLimits.at(i).at(0)) && (Momentum < ElectronMomBinsLimits.at(i).at(1))) {
-                    ElectronTLBinHitMaps.at(i).hFill(Phi, Theta, Weight);
+                    ElectronTLHitMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
             /*
             for (int i = 0; i < PBinsLimits.size(); i++) {
                 if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
-                    ElectronTLBinHitMaps.at(i).hFill(Phi, Theta, Weight);
+                    ElectronTLHitMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
@@ -576,29 +637,33 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
         } else if (is_p) {
             for (int i = 0; i < PBinsLimits.size(); i++) {
                 if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
-                    ProtonTLBinHitMaps.at(i).hFill(Phi, Theta, Weight);
+                    ProtonTLHitMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
-        } else if (is_n) { NeutronTLHitMap.hFill(Phi, Theta, Weight); }
+        } else if (is_n) {
+            NeutronTLHitMap.hFill(Phi, Theta, Weight);
+
+            for (int Bin = 0; Bin < PBinsLimits.size(); Bin++) { NeutronTLHitMapsBySlice.at(Bin).hFill(Phi, Theta, Weight); }
+        }
     } else {
         if (is_e) {
             ElectronAMapBC.hFill(Phi, Theta, Weight);
 
             for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
                 if ((Momentum >= ElectronMomBinsLimits.at(i).at(0)) && (Momentum < ElectronMomBinsLimits.at(i).at(1))) {
-                    ElectronRecoBinHitMaps.at(i).hFill(Phi, Theta, Weight);
-                    ElectronRecoToTLRatio.at(i).hFill(Phi, Theta, Weight);
-                    ElectronSepAMaps.at(i).hFill(Phi, Theta, Weight);
+                    ElectronRecoHitMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+                    ElectronRecoToTLRatioBySlice.at(i).hFill(Phi, Theta, Weight);
+                    ElectronAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
             /*
             for (int i = 0; i < PBinsLimits.size(); i++) {
                 if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
-                    ElectronRecoBinHitMaps.at(i).hFill(Phi, Theta, Weight);
-                    ElectronRecoToTLRatio.at(i).hFill(Phi, Theta, Weight);
-                    ElectronSepAMaps.at(i).hFill(Phi, Theta, Weight);
+                    ElectronRecoHitMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+                    ElectronRecoToTLRatioBySlice.at(i).hFill(Phi, Theta, Weight);
+                    ElectronAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
@@ -608,9 +673,9 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
 
             for (int i = 0; i < PBinsLimits.size(); i++) {
                 if ((Momentum >= PBinsLimits.at(i).at(0)) && (Momentum < PBinsLimits.at(i).at(1))) {
-                    ProtonRecoBinHitMaps.at(i).hFill(Phi, Theta, Weight);
-                    ProtonRecoToTLRatio.at(i).hFill(Phi, Theta, Weight);
-                    ProtonSepAMaps.at(i).hFill(Phi, Theta, Weight);
+                    ProtonRecoHitMapsBySlice.at(i).hFill(Phi, Theta, Weight);
+                    ProtonRecoToTLRatioBySlice.at(i).hFill(Phi, Theta, Weight);
+                    ProtonAMapsBySlice.at(i).hFill(Phi, Theta, Weight);
                     break; // no need to keep the loop going after filling histogram
                 }
             }
@@ -620,6 +685,12 @@ void AMaps::hFillHitMaps(const string &SampleType, const string &particle, doubl
             NeutronRecoHitMap.hFill(Phi, Theta, Weight);
             NeutronRecoToTLRatio.hFill(Phi, Theta, Weight);
             NeutronAMap.hFill(Phi, Theta, Weight);
+
+            for (int Bin = 0; Bin < PBinsLimits.size(); Bin++) {
+                NeutronRecoHitMapsBySlice.at(Bin).hFill(Phi, Theta, Weight);
+                NeutronRecoToTLRatioBySlice.at(Bin).hFill(Phi, Theta, Weight);
+                NeutronAMapsBySlice.at(Bin).hFill(Phi, Theta, Weight);
+            }
         }
     }
 }
@@ -632,27 +703,33 @@ void AMaps::CalcHitMapsRatio(bool ElectronRecoToTLDiv, bool ProtonRecoToTLDiv, b
     if (ElectronRecoToTLDiv) {
         for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
             if (ElectronRecoToTLDiv) {
-                ElectronRecoToTLRatio.at(i).hDivision(ElectronTLBinHitMaps.at(i).GetHistogram2D());
+                ElectronRecoToTLRatioBySlice.at(i).hDivision(ElectronTLHitMapsBySlice.at(i).GetHistogram2D());
             }
         }
     }
 
     if (ProtonRecoToTLDiv) {
         for (int i = 0; i < PBinsLimits.size(); i++) {
-            if (ProtonRecoToTLDiv) { ProtonRecoToTLRatio.at(i).hDivision(ProtonTLBinHitMaps.at(i).GetHistogram2D()); }
+            if (ProtonRecoToTLDiv) { ProtonRecoToTLRatioBySlice.at(i).hDivision(ProtonTLHitMapsBySlice.at(i).GetHistogram2D()); }
         }
     }
     /*
     if (ElectronRecoToTLDiv || ProtonRecoToTLDiv) {
         for (int i = 0; i < PBinsLimits.size(); i++) {
-            if (ElectronRecoToTLDiv) { ElectronRecoToTLRatio.at(i).hDivision(ElectronTLBinHitMaps.at(i).GetHistogram2D()); }
+            if (ElectronRecoToTLDiv) { ElectronRecoToTLRatioBySlice.at(i).hDivision(ElectronTLHitMapsBySlice.at(i).GetHistogram2D()); }
 
-            if (ProtonRecoToTLDiv) { ProtonRecoToTLRatio.at(i).hDivision(ProtonTLBinHitMaps.at(i).GetHistogram2D()); }
+            if (ProtonRecoToTLDiv) { ProtonRecoToTLRatioBySlice.at(i).hDivision(ProtonTLHitMapsBySlice.at(i).GetHistogram2D()); }
         }
     }
 */
 
-    if (NeutronRecoToTLDiv) { NeutronRecoToTLRatio.hDivision(NeutronTLHitMap.GetHistogram2D()); }
+    if (NeutronRecoToTLDiv) {
+        NeutronRecoToTLRatio.hDivision(NeutronTLHitMap.GetHistogram2D());
+
+        for (int i = 0; i < PBinsLimits.size(); i++) {
+            if (NeutronRecoToTLDiv) { NeutronRecoToTLRatioBySlice.at(i).hDivision(NeutronTLHitMapsBySlice.at(i).GetHistogram2D()); }
+        }
+    }
 }
 //</editor-fold>
 
@@ -663,11 +740,11 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
     for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) {
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronSepAMaps.at(bin).hFillByBin(i, j, 0); }
+                if (ElectronRecoToTLRatioBySlice.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ElectronAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
             }
         }
 
-        ElectronSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+        ElectronAMapsBySlice.at(bin).ApplyZMinLim(cP_minR);
 
         //<editor-fold desc="Fill e_Hit_Map_Slices">
         vector<vector<int>> e_slice;
@@ -676,7 +753,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
             vector<int> e_col;
 
             for (int j = 0; j < hBinNumOfXBins; j++) {
-                if (ElectronRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
+                if (ElectronRecoToTLRatioBySlice.at(bin).GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
                     e_col.push_back(1);
                 } else {
                     e_col.push_back(0);
@@ -688,16 +765,17 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
 
         e_Hit_Map_Slices.push_back(e_slice);
         //</editor-fold>
+
     }
 
     for (int bin = 0; bin < PBinsLimits.size(); bin++) {
         for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
             for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonSepAMaps.at(bin).hFillByBin(i, j, 0); }
+                if (ProtonRecoToTLRatioBySlice.at(bin).GetHistogram2D()->GetBinContent(i, j) < cP_minR) { ProtonAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
             }
         }
 
-        ProtonSepAMaps.at(bin).ApplyZMinLim(cP_minR);
+        ProtonAMapsBySlice.at(bin).ApplyZMinLim(cP_minR);
 
         //<editor-fold desc="Fill p_Hit_Map_Slices">
         vector<vector<int>> p_slice;
@@ -706,7 +784,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
             vector<int> p_col;
 
             for (int j = 0; j < hBinNumOfXBins; j++) {
-                if (ProtonRecoToTLRatio.at(bin).GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
+                if (ProtonRecoToTLRatioBySlice.at(bin).GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
                     p_col.push_back(1);
                 } else {
                     p_col.push_back(0);
@@ -720,7 +798,6 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
         //</editor-fold>
 
     }
-
 }
 //</editor-fold>
 
@@ -730,9 +807,9 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
 void AMaps::GenerateCPartAMaps(double cP_minR) {
     GenerateSeparateCPartAMaps(cP_minR);
 
-    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) { ElectronAMap.hAdd(ElectronSepAMaps.at(bin).GetHistogram2D()); }
+    for (int bin = 0; bin < ElectronMomBinsLimits.size(); bin++) { ElectronAMap.hAdd(ElectronAMapsBySlice.at(bin).GetHistogram2D()); }
 
-    for (int bin = 0; bin < PBinsLimits.size(); bin++) { ProtonAMap.hAdd(ProtonSepAMaps.at(bin).GetHistogram2D()); }
+    for (int bin = 0; bin < PBinsLimits.size(); bin++) { ProtonAMap.hAdd(ProtonAMapsBySlice.at(bin).GetHistogram2D()); }
 
     for (int i = 0; i < hBinNumOfYBins; i++) {
         vector<int> e_col, p_col;
@@ -755,8 +832,8 @@ void AMaps::GenerateCPartAMaps(double cP_minR) {
         p_Hit_Map.push_back(p_col);
         /*
     for (int bin = 0; bin < PBinsLimits.size(); bin++) {
-        ElectronAMap.hAdd(ElectronSepAMaps.at(bin).GetHistogram2D());
-        ProtonAMap.hAdd(ProtonSepAMaps.at(bin).GetHistogram2D());
+        ElectronAMap.hAdd(ElectronAMapsBySlice.at(bin).GetHistogram2D());
+        ProtonAMap.hAdd(ProtonAMapsBySlice.at(bin).GetHistogram2D());
     }
 
     for (int i = 0; i < hBinNumOfYBins; i++) {
@@ -789,7 +866,11 @@ void AMaps::GenerateCPartAMaps(double cP_minR) {
 void AMaps::GenerateNPartAMaps(double nP_minR) {
     for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
         for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) < nP_minR) { NeutronAMap.hFillByBin(i, j, 0); }
+            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) < nP_minR) {
+                NeutronAMap.hFillByBin(i, j, 0);
+
+                for (int bin = 0; bin < PBinsLimits.size(); bin++) { NeutronAMapsBySlice.at(bin).hFillByBin(i, j, 0); }
+            }
         }
     }
 
@@ -806,13 +887,15 @@ void AMaps::GenerateNPartAMaps(double nP_minR) {
 
         n_Hit_Map.push_back(n_col);
     }
-    /*
-    for (int i = 0; i < (hBinNumOfXBins + 1); i++) {
-        for (int j = 0; j < (hBinNumOfYBins + 1); j++) {
-            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(i, j) < nP_minR) { NeutronAMap.hFillByBin(i, j, 0); }
-        }
+
+    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+        NeutronAMapsBySlice.push_back(NeutronAMap);
+        n_Hit_Map_Slices.push_back(n_Hit_Map);
     }
-*/
+
+//    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+//        n_Hit_Map_Slices.push_back(n_Hit_Map);
+//    }
 }
 //</editor-fold>
 
@@ -843,6 +926,28 @@ void AMaps::GenerateNucleonAMap() {
 
         nuc_Hit_Map.push_back(nuc_col);
     }
+
+    for (int bin = 0; bin < PBinsLimits.size(); bin++) {
+        vector<vector<int>> nuc_slice;
+
+        for (int i = 0; i < hBinNumOfYBins; i++) {
+            vector<int> nuc_col;
+
+            for (int j = 0; j < hBinNumOfXBins; j++) {
+                if ((p_Hit_Map_Slices.at(bin).at(i).at(j) == 1) && (n_Hit_Map_Slices.at(bin).at(i).at(j) == 1)) {
+                    nuc_col.push_back(1);
+                } else {
+                    nuc_col.push_back(0);
+                }
+            }
+
+            nuc_slice.push_back(nuc_col);
+        }
+
+        nuc_Hit_Map_Slices.push_back(nuc_slice);
+    }
+
+//    cout << "\n\nGenerateNucleonAMap OK!\n", exit(0);
 }
 //</editor-fold>
 
@@ -1000,34 +1105,25 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
 
     /* Electron maps */
     for (int i = 0; i < ElectronMomBinsLimits.size(); i++) {
-        ElectronTLBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
-        ElectronRecoBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
-        ElectronRecoToTLRatio.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
-        ElectronSepAMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
+        ElectronTLHitMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
+        ElectronRecoHitMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
+        ElectronRecoToTLRatioBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
+        ElectronAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
     }
 
-    /* Proton maps */
     for (int i = 0; i < PBinsLimits.size(); i++) {
-        ProtonTLBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
-        ProtonRecoBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
-        ProtonRecoToTLRatio.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
-        ProtonSepAMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
+        /* Proton maps */
+        ProtonTLHitMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
+        ProtonRecoHitMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
+        ProtonRecoToTLRatioBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
+        ProtonAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
+
+        /* Neutron maps */
+        NeutronTLHitMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
+        NeutronRecoHitMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
+        NeutronRecoToTLRatioBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
+        NeutronAMapsBySlice.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
     }
-    //    //<editor-fold desc="old">
-//    for (int i = 0; i < PBinsLimits.size(); i++) {
-//        /* Electron maps */
-//        ElectronTLBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
-//        ElectronRecoBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
-//        ElectronRecoToTLRatio.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
-//        ElectronSepAMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
-//
-//        /* Proton maps */
-//        ProtonTLBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
-//        ProtonRecoBinHitMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, RecoHitMaps, true);
-//        ProtonRecoToTLRatio.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, HitMapsRatio, true);
-//        ProtonSepAMaps.at(i).hDrawAndSave(SampleNameTemp, h1DCanvas, Charged_particle_Sep_AMaps, true);
-//    }
-//    //</editor-fold>
 
     /* Neutron maps */
     NeutronTLHitMap.hDrawAndSave(SampleNameTemp, h1DCanvas, TLHitMaps, true);
@@ -1301,10 +1397,10 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         if (counter == 0) { SetHistBinsFromHistTitle(TempHist); }
 
         if (findSubstring(TempHist->GetTitle(), "{e}")) {
-            ElectronTLBinHitMaps.push_back(Temp2DHist);
+            ElectronTLHitMapsBySlice.push_back(Temp2DHist);
             SetSlicesFromHistTitle(TempHist, PBinsLimits);
         } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
-            ProtonTLBinHitMaps.push_back(Temp2DHist);
+            ProtonTLHitMapsBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
             NeutronTLHitMap.SetHistogram2D(TempHist);
         }
@@ -1329,9 +1425,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         Temp2DHist.SetHistogram2D(TempHist);
 
         if (findSubstring(TempHist->GetTitle(), "{e}")) {
-            ElectronRecoBinHitMaps.push_back(Temp2DHist);
+            ElectronRecoHitMapsBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
-            ProtonRecoBinHitMaps.push_back(Temp2DHist);
+            ProtonRecoHitMapsBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
             NeutronRecoHitMap.SetHistogram2D(TempHist);
         }
@@ -1354,9 +1450,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         Temp2DHist.SetHistogram2D(TempHist);
 
         if (findSubstring(TempHist->GetTitle(), "{e}")) {
-            ElectronRecoToTLRatio.push_back(Temp2DHist);
+            ElectronRecoToTLRatioBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "{p}")) {
-            ProtonRecoToTLRatio.push_back(Temp2DHist);
+            ProtonRecoToTLRatioBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "{n}")) {
             NeutronRecoToTLRatio.SetHistogram2D(TempHist);
         }
@@ -1379,9 +1475,9 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
         Temp2DHist.SetHistogram2D(TempHist);
 
         if (findSubstring(TempHist->GetTitle(), "Electron") || findSubstring(TempHist->GetTitle(), "electron")) {
-            ElectronSepAMaps.push_back(Temp2DHist);
+            ElectronAMapsBySlice.push_back(Temp2DHist);
         } else if (findSubstring(TempHist->GetTitle(), "Proton") || findSubstring(TempHist->GetTitle(), "proton")) {
-            ProtonSepAMaps.push_back(Temp2DHist);
+            ProtonAMapsBySlice.push_back(Temp2DHist);
         }
     }
     //</editor-fold>
