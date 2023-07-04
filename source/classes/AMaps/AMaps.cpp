@@ -266,7 +266,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         string hTitleSepAMapsNeutron = "Neutron AMap for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c] and (Reco./TL)#geq" +
                                        to_string_with_precision(Charged_particle_min_Ratio, 2);
-        string hSaveNameSepAMapsNeutron = to_string(i + 1) + "_p_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
+        string hSaveNameSepAMapsNeutron = to_string(i + 1) + "_n_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                           to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinSepAMapsNeutron = hPlot2D("", "", hStatsTitleSepAMapsNeutron, hTitleSepAMapsNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
                                                HitMapSavePathSepAMapsNeutron,
@@ -478,13 +478,19 @@ void AMaps::SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double bea
 
         if (RegPrintOut) { exit(0); }
     } else if (equi_P_e_bins) {
-        ElectronMomBinsLimits = {{0.4, 1},
-                                 {1,   1.6},
+        ElectronMomBinsLimits = {{0.4, 1.6},
                                  {1.6, 2.2},
                                  {2.2, 2.8},
                                  {2.8, 4},
                                  {4,   5},
                                  {5,   6}};
+//        ElectronMomBinsLimits = {{0.4, 1},
+//                                 {1,   1.6},
+//                                 {1.6, 2.2},
+//                                 {2.2, 2.8},
+//                                 {2.8, 4},
+//                                 {4,   5},
+//                                 {5,   6}};
         int NumOfElectronMomBins = ElectronMomBinsLimits.size();
 
         if (RegPrintOut) {
@@ -1882,11 +1888,13 @@ bool AMaps::IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string
     }
 
     //TODO: ask Adi is I should do an FD angle cut on electrons
-    if (isElectron(Particle)) {
-        inFDQuery = (part_inSomeSector && (Theta >= ThetaFD.GetLowerCutConst()) && (Theta <= ThetaFD.GetUpperCutConst()));
-    } else {
-        inFDQuery = part_inSomeSector;
-    }
+    inFDQuery = (part_inSomeSector && (Theta >= ThetaFD.GetLowerCutConst()) && (Theta <= ThetaFD.GetUpperCutConst()));
+
+//    if (isElectron(Particle)) {
+//        inFDQuery = (part_inSomeSector && (Theta >= ThetaFD.GetLowerCutConst()) && (Theta <= ThetaFD.GetUpperCutConst()));
+//    } else {
+//        inFDQuery = part_inSomeSector;
+//    }
 
     return inFDQuery;
 }

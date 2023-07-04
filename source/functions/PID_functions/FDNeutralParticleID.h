@@ -24,12 +24,8 @@ using namespace std;
  * Photon = a neutral particle (i.e., neutron or photon) in the FD with a PCal hit. */
 
 void FDNeutralParticleID(vector<region_part_ptr> allParticles,
-                         vector<int> &FD_Neutrons_within_th,
-                         vector<int> &ID_Neutrons_FD,
-                         DSCuts &Neutron_momentum_th,
-                         vector<int> &FD_Photons_within_th,
-                         vector<int> &ID_Photons_FD,
-                         DSCuts &Photon_momentum_th,
+                         vector<int> &FD_Neutrons_within_th, vector<int> &ID_Neutrons_FD, DSCuts &Neutron_momentum_th,
+                         vector<int> &FD_Photons_within_th, vector<int> &ID_Photons_FD, DSCuts &Photon_momentum_th,
                          bool apply_nucleon_cuts) {
 
     for (int &i: ID_Neutrons_FD) { // Identify neutron above momentum threshold
@@ -63,5 +59,25 @@ void FDNeutralParticleID(vector<region_part_ptr> allParticles,
     } // end of loop over ID_Photons_FD vector
 }
 
+int FDNeutralMaxP(vector<region_part_ptr> allParticles, vector<int> &FD_Neutrons_within_th, bool apply_nucleon_cuts) {
+    double P_max = -1;
+    int MaxPIndex = -1;
+    bool PrinOut = false;
+
+    for (int &i: FD_Neutrons_within_th) { // Identify neutron above momentum threshold
+        double P_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+
+        if (P_temp >= P_max) {
+            P_max = P_temp;
+            MaxPIndex = i;
+        }
+
+        if (PrinOut) { cout << "P_temp = " << P_temp << "\n"; }
+    }
+
+    if (PrinOut) { cout << "P_max = " << P_max << "\n\n"; }
+
+    return MaxPIndex;
+}
 
 #endif //FDNEUTRALPARTICLEID_H
