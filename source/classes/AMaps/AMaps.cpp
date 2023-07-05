@@ -131,7 +131,8 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         hPlot2D hPBinRecoToTLRatioElectron = hPlot2D("", "", hStatsTitleRecoToTLRatioElectron, hTitleRecoToTLRatioElectron, "#phi_{e} [Deg]", "#theta_{e} [Deg]",
                                                      HitMapSavePathRecoToTLElectron,
                                                      hSaveNameRecoToTLRatioElectron,
-                                                     hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
+                                                     hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistElectronSliceNumOfXBins,
+                                                     HistElectronSliceNumOfYBins);
         ElectronRecoToTLRatioBySlice.push_back(hPBinRecoToTLRatioElectron);
         //</editor-fold>
 
@@ -265,10 +266,10 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         //<editor-fold desc="Neutron separate AMaps">
         string hStatsTitleSepAMapsNeutron = "Neutron AMap for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
                                             to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c] and (Reco./TL)#geq" +
-                                            to_string_with_precision(Charged_particle_min_Ratio, 2);
+                                            to_string_with_precision(Neutral_particle_min_Ratio, 2);
         string hTitleSepAMapsNeutron = "Neutron AMap for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c] and (Reco./TL)#geq" +
-                                       to_string_with_precision(Charged_particle_min_Ratio, 2);
+                                       to_string_with_precision(Neutral_particle_min_Ratio, 2);
         string hSaveNameSepAMapsNeutron = to_string(i + 1) + "_n_SepAMap_for_P_from_" + to_string_with_precision(BinLowerLim, 2) + "_to_" +
                                           to_string_with_precision(BinUpperLim, BinUpperLimPrecision);
         hPlot2D hPBinSepAMapsNeutron = hPlot2D("", "", hStatsTitleSepAMapsNeutron, hTitleSepAMapsNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]",
