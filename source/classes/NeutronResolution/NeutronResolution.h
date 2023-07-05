@@ -44,7 +44,7 @@ private:
     vector<hPlot1D> ResSlices;
     vector<vector<double>> ResSlicesLimits;
     vector<DSCuts> ResSlicesFitVar;
-    vector<DSCuts> LoadedResSlicesFitVar;
+    vector<DSCuts> Loaded_Res_Slices_FitVar;
     vector<int> FittedSlices;
 
     double hSliceUpperLim = 1.5;
@@ -97,7 +97,7 @@ public:
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    double PSmear(bool apply_proton_smearing, double Momentum);
+    double PSmear(bool apply_proton_SmearingAndShift, double Momentum);
 
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 

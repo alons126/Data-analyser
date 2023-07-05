@@ -369,7 +369,7 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
                 TempCut.SetSliceUpperb(SliceUpperBoundaryTemp);
                 TempCut.SetSliceNumber(SliceNumberTemp);
 
-                LoadedResSlicesFitVar.push_back(TempCut);
+                Loaded_Res_Slices_FitVar.push_back(TempCut);
             }
         }
     } else {
@@ -383,18 +383,18 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="PSmear function">
-double NeutronResolution::PSmear(bool apply_proton_smearing, double Momentum) {
-    if (!apply_proton_smearing) {
+double NeutronResolution::PSmear(bool apply_proton_SmearingAndShift, double Momentum) {
+    if (!apply_proton_SmearingAndShift) {
         return Momentum;
     } else {
         TRandom3 *Rand = new TRandom3();
 
-        for (DSCuts LoadedResolutionSlice: LoadedResSlicesFitVar) {
-            if ((LoadedResolutionSlice.GetSliceLowerb() <= Momentum) && (LoadedResolutionSlice.GetSliceUpperb() >= Momentum)) {
-                double Smearing = Rand->Gaus(1, LoadedResolutionSlice.GetUpperCut());
-//                double Smearing = Rand->Gaus(LoadedResolutionSlice.GetMean(), LoadedResolutionSlice.GetUpperCut());
+        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
+            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+                double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
+                double Shift = Momentum + Loaded_res_slice.GetMean();
 
-                return Smearing * Momentum;
+                return Smearing * Shift;
             }
         }
     }
