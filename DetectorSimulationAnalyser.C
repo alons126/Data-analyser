@@ -119,7 +119,7 @@ void EventAnalyser() {
     /* Truth level calculation settings */
     bool calculate_truth_level = true;      // TL master ON/OFF switch
     bool TL_with_one_reco_electron = true;  // TL master ON/OFF switch
-    bool fill_TL_plots = false;             // Generate acceptance maps
+    bool fill_TL_plots = true;             // Generate acceptance maps
     bool Rec_wTL_ES = false;                // Enforce TL event selection on Rec. plots
 
     bool limless_mom_eff_plots = false;
@@ -8310,7 +8310,8 @@ void EventAnalyser() {
             TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
             P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(), e_1p->getPhi());                                                              // electron 3 momentum
             q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                                                  // 3 momentum transfer
-            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_proton_SmearingAndShift, p_1p->getP()), p_1p->getTheta(), p_1p->getPhi());                            // proton 3 momentum
+            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_proton_SmearingAndShift, p_1p->getP()), p_1p->getTheta(),
+                                     p_1p->getPhi());                            // proton 3 momentum
             P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                                                    // electron transverse momentum
             P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                                                      // proton transverse momentum
 
@@ -8339,9 +8340,10 @@ void EventAnalyser() {
             bool FD_Theta_Cut_1p = ((P_p_1p_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_1p = ((P_p_1p_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) && (P_p_1p_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut()));
 //            bool FD_Momentum_Cut_1p = (P_p_1p_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut());
-            bool Fiducial_cuts_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_p_1p_3v.Mag(), P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
+            bool e_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1p_3v.Mag(), P_e_1p_3v.Theta() * 180.0 / pi, P_e_1p_3v.Phi() * 180.0 / pi);
+            bool p_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_p_1p_3v.Mag(), P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
 
-            bool Pass_Kin_Cuts_1p = (!apply_kinematical_cuts || (FD_Theta_Cut_1p && FD_Momentum_Cut_1p && Fiducial_cuts_1p));
+            bool Pass_Kin_Cuts_1p = (!apply_kinematical_cuts || (FD_Theta_Cut_1p && FD_Momentum_Cut_1p && e_withinFC_1p && p_withinFC_1p));
             //</editor-fold>
 
             // Fillings 1p histograms -------------------------------------------------------------------------------------------------------------------------------
@@ -8901,9 +8903,10 @@ void EventAnalyser() {
             bool FD_Theta_Cut_1n = ((P_n_1n_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_1n = ((P_n_1n_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) && (P_n_1n_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut()));
 //            bool FD_Momentum_Cut_1n = (P_n_1n_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut());
-            bool Fiducial_cuts_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
+            bool e_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1n_3v.Mag(), P_e_1n_3v.Theta() * 180.0 / pi, P_e_1n_3v.Phi() * 180.0 / pi);
+            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
 
-            bool Pass_Kin_Cuts_1n = (!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_1n && Fiducial_cuts_1n));
+            bool Pass_Kin_Cuts_1n = (!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_1n && e_withinFC_1n && n_withinFC_1n));
             //</editor-fold>
 
             // Fillings 1n histograms -----------------------------------------------------------------------------------------------------------------------------------
@@ -10101,22 +10104,16 @@ void EventAnalyser() {
             TVector3 P_miss_pFDpCD_3v, P_tot_pFDpCD_3v, P_max_pFDpCD_3v, P_1_pFDpCD_3v, P_2_pFDpCD_3v;
             TVector3 P_T_e_pFDpCD_3v, P_T_L_pFDpCD_3v, P_T_tot_pFDpCD_3v, dP_T_L_pFDpCD_3v, dP_T_tot_pFDpCD_3v;
 
-            P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(),
-                                         e_pFDpCD->getPhi());                                              // electron 3 momentum
-            q_pFDpCD_3v = TVector3(Pvx - P_e_pFDpCD_3v.Px(), Pvy - P_e_pFDpCD_3v.Py(),
-                                   Pvz - P_e_pFDpCD_3v.Pz());                                  // 3 momentum transfer
-            P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(),
-                                       0);                                                        // electron transverse momentum
-            P_pFD_pFDpCD_3v.SetMagThetaPhi(pFD_pFDpCD->getP(), pFD_pFDpCD->getTheta(),
-                                           pFD_pFDpCD->getPhi());                                           // pFD 3 momentum
-            P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(),
-                                           pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
+            P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(), e_pFDpCD->getPhi());                                              // electron 3 momentum
+            q_pFDpCD_3v = TVector3(Pvx - P_e_pFDpCD_3v.Px(), Pvy - P_e_pFDpCD_3v.Py(), Pvz - P_e_pFDpCD_3v.Pz());                                  // 3 momentum transfer
+            P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
+            P_pFD_pFDpCD_3v.SetMagThetaPhi(pFD_pFDpCD->getP(), pFD_pFDpCD->getTheta(), pFD_pFDpCD->getPhi());                                           // pFD 3 momentum
+            P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(), pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
 
             //TODO: confirm definition of P_miss for 2p2h with Larry
 //            P_miss_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() - q_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() - q_pFDpCD_3v.Py(),
 //                                        P_pFD_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz());                                                                               // P_miss
-            P_miss_pFDpCD_3v =
-                    P_pFD_pFDpCD_3v - q_pFDpCD_3v;                                                                                                   // P_miss
+            P_miss_pFDpCD_3v = P_pFD_pFDpCD_3v - q_pFDpCD_3v;                                                                         // P_miss
 
             double E_e_pFDpCD = sqrt(m_e * m_e + P_e_pFDpCD_3v.Mag2()), omega_pFDpCD = beamE - E_e_pFDpCD;
             double W_pFDpCD = sqrt((omega_pFDpCD + m_p) * (omega_pFDpCD + m_p) - q_pFDpCD_3v.Mag2()), E_1_pFDpCD, E_2_pFDpCD;
@@ -10130,8 +10127,7 @@ void EventAnalyser() {
             TLorentzVector e_out_pFDpCD, Q_pFDpCD;
             double Q2_pFDpCD;
             e_out_pFDpCD.SetPxPyPzE(e_pFDpCD->par()->getPx(), e_pFDpCD->par()->getPy(), e_pFDpCD->par()->getPz(), E_e_pFDpCD);
-            Q_pFDpCD =
-                    beam - e_out_pFDpCD;                                                                                          // definition of 4-momentum transfer
+            Q_pFDpCD = beam - e_out_pFDpCD;                                                                                          // definition of 4-momentum transfer
             Q2_pFDpCD = fabs(Q_pFDpCD.Mag2());
             double xB_pFDpCD = Q2_pFDpCD / (2 * m_p * omega_pFDpCD);
 
@@ -10193,7 +10189,12 @@ void EventAnalyser() {
             bool FD_Momentum_Cut_pFDpCD = ((P_pFD_pFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                            (P_pFD_pFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut()));
 //            bool FD_Momentum_Cut_pFDpCD = (P_pFD_pFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut());
-            bool Pass_Kin_Cuts_pFDpCD = (!apply_kinematical_cuts || (FD_Theta_Cut_pFDpCD && FD_Momentum_Cut_pFDpCD));
+            bool e_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_pFDpCD_3v.Mag(), P_e_pFDpCD_3v.Theta() * 180.0 / pi,
+                                                       P_e_pFDpCD_3v.Phi() * 180.0 / pi);
+            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_pFD_pFDpCD_3v.Mag(), P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
+                                                         P_pFD_pFDpCD_3v.Phi() * 180.0 / pi);
+
+            bool Pass_Kin_Cuts_pFDpCD = (!apply_kinematical_cuts || (FD_Theta_Cut_pFDpCD && FD_Momentum_Cut_pFDpCD && e_withinFC_pFDpCD && pFD_withinFC_pFDpCD));
             //</editor-fold>
 
             //  Fillings pFDpCD histograms ------------------------------------------------------------------------------------------------------------------------------
@@ -10771,22 +10772,16 @@ void EventAnalyser() {
             TVector3 P_e_nFDpCD_3v, q_nFDpCD_3v, P_nFD_nFDpCD_3v, P_pCD_nFDpCD_3v, P_1_nFDpCD_3v, P_2_nFDpCD_3v, P_miss_nFDpCD_3v, P_tot_nFDpCD_3v;
             TVector3 P_T_e_nFDpCD_3v, P_T_L_nFDpCD_3v, P_T_tot_nFDpCD_3v, dP_T_L_nFDpCD_3v, dP_T_tot_nFDpCD_3v;
 
-            P_e_nFDpCD_3v.SetMagThetaPhi(e_nFDpCD->getP(), e_nFDpCD->getTheta(),
-                                         e_nFDpCD->getPhi());                                              // electron 3 momentum
-            q_nFDpCD_3v = TVector3(Pvx - P_e_nFDpCD_3v.Px(), Pvy - P_e_nFDpCD_3v.Py(),
-                                   Pvz - P_e_nFDpCD_3v.Pz());                                  // 3 momentum transfer
-            P_T_e_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py(),
-                                       0);                                                        // electron transverse momentum
-            P_nFD_nFDpCD_3v.SetMagThetaPhi(GetFDNeutronP(nFD_nFDpCD, apply_nucleon_cuts), nFD_nFDpCD->getTheta(),
-                                           nFD_nFDpCD->getPhi());         // FD neutron 3 momentum
-            P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(),
-                                           pCD_nFDpCD->getPhi());                                     // CD proton 3 momentum
+            P_e_nFDpCD_3v.SetMagThetaPhi(e_nFDpCD->getP(), e_nFDpCD->getTheta(), e_nFDpCD->getPhi());                                              // electron 3 momentum
+            q_nFDpCD_3v = TVector3(Pvx - P_e_nFDpCD_3v.Px(), Pvy - P_e_nFDpCD_3v.Py(), Pvz - P_e_nFDpCD_3v.Pz());                                  // 3 momentum transfer
+            P_T_e_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
+            P_nFD_nFDpCD_3v.SetMagThetaPhi(GetFDNeutronP(nFD_nFDpCD, apply_nucleon_cuts), nFD_nFDpCD->getTheta(), nFD_nFDpCD->getPhi());         // FD neutron 3 momentum
+            P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(), pCD_nFDpCD->getPhi());                                     // CD proton 3 momentum
 
             //TODO: confirm definition of P_miss for 2p2h with Larry
 //            P_miss_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() - q_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() - q_nFDpCD_3v.Py(),
 //                                        P_nFD_nFDpCD_3v.Pz() - q_nFDpCD_3v.Pz());                                                                               // P_miss
-            P_miss_nFDpCD_3v =
-                    P_nFD_nFDpCD_3v - q_nFDpCD_3v;                                                                                                   // P_miss
+            P_miss_nFDpCD_3v = P_nFD_nFDpCD_3v - q_nFDpCD_3v;                                                                                                   // P_miss
 
             double E_e_nFDpCD = sqrt(m_e * m_e + P_e_nFDpCD_3v.Mag2()), omega_nFDpCD = beamE - E_e_nFDpCD;
             double W_nFDpCD = sqrt((omega_nFDpCD + m_p) * (omega_nFDpCD + m_p) - q_nFDpCD_3v.Mag2());
@@ -10806,12 +10801,9 @@ void EventAnalyser() {
             double xB_nFDpCD = Q2_nFDpCD / (2 * m_p * omega_nFDpCD);
 
             /* Setting particle angles */
-            double Theta_e_nFDpCD = e_nFDpCD->getTheta() * 180.0 / pi, Phi_e_nFDpCD =
-                    e_nFDpCD->getPhi() * 180.0 / pi;             // Theta_e_nFDpCD, Phi_e_nFDpCD in deg
-            double Theta_nFD_nFDpCD = nFD_nFDpCD->getTheta() * 180.0 / pi, Phi_nFD_nFDpCD =
-                    nFD_nFDpCD->getPhi() * 180.0 / pi; // Theta_nFD_nFDpCD, Phi_nFD_nFDpCD in deg
-            double Theta_pCD_nFDpCD = pCD_nFDpCD->getTheta() * 180.0 / pi, Phi_pCD_nFDpCD =
-                    pCD_nFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_nFDpCD, Phi_pCD_nFDpCD in deg
+            double Theta_e_nFDpCD = e_nFDpCD->getTheta() * 180.0 / pi, Phi_e_nFDpCD = e_nFDpCD->getPhi() * 180.0 / pi;             // Theta_e_nFDpCD, Phi_e_nFDpCD in deg
+            double Theta_nFD_nFDpCD = nFD_nFDpCD->getTheta() * 180.0 / pi, Phi_nFD_nFDpCD = nFD_nFDpCD->getPhi() * 180.0 / pi; // Theta_nFD_nFDpCD, Phi_nFD_nFDpCD in deg
+            double Theta_pCD_nFDpCD = pCD_nFDpCD->getTheta() * 180.0 / pi, Phi_pCD_nFDpCD = pCD_nFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_nFDpCD, Phi_pCD_nFDpCD in deg
 
             /* Declaring Determining leading and recoil nucleons: */
             if ((P_nFD_nFDpCD_3v.Angle(q_nFDpCD_3v) * 180 / pi) <= 25. && ((P_nFD_nFDpCD_3v.Mag()) / (q_nFDpCD_3v.Mag())) >= 0.6) {
@@ -10828,8 +10820,7 @@ void EventAnalyser() {
             double dPhi_hit_nFDpCD = Phi_p1_nFDpCD - Phi_p2_nFDpCD;
             double Theta_nFD_pCD_nFDpCD = acos((P_nFD_nFDpCD_3v.Px() * P_pCD_nFDpCD_3v.Px() + P_nFD_nFDpCD_3v.Py() * P_pCD_nFDpCD_3v.Py()
                                                 + P_nFD_nFDpCD_3v.Pz() * P_pCD_nFDpCD_3v.Pz())
-                                               / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 /
-                                          pi;                            // Theta_nFD_pCD_nFDpCD in deg
+                                               / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi;                            // Theta_nFD_pCD_nFDpCD in deg
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -10909,7 +10900,12 @@ void EventAnalyser() {
             bool FD_Momentum_Cut_nFDpCD = ((P_nFD_nFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                            (P_nFD_nFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut()));
 //            bool FD_Momentum_Cut_nFDpCD = (P_nFD_nFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut());
-            bool Pass_Kin_Cuts_nFDpCD = (!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_nFDpCD));
+            bool e_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_nFDpCD_3v.Mag(), P_e_nFDpCD_3v.Theta() * 180.0 / pi,
+                                                       P_e_nFDpCD_3v.Phi() * 180.0 / pi);
+            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(), P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
+                                                         P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
+
+            bool Pass_Kin_Cuts_nFDpCD = (!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_nFDpCD && e_withinFC_nFDpCD && nFD_withinFC_nFDpCD));
             //</editor-fold>
 
             //  Fillings nFDpCD histograms ------------------------------------------------------------------------------------------------------------------------------
