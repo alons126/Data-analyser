@@ -52,9 +52,11 @@ private:
     double hBinLowerXLim = -180, hBinUpperXLim = 180;
     double hBinLowerYLim = 0, hBinUpperYLim = 50;
 
-    int hBinNumOfXBins;  // 100 by Default
-    int hBinNumOfYBins;  // 100 by Default
-    int NumberOfMomBins; // 10 by Default
+    int HistElectronSliceNumOfXBins;  // 100 by Default
+    int HistElectronSliceNumOfYBins;  // 100 by Default
+    int HistNucSliceNumOfXBins;       // 75 by Default
+    int HistNucSliceNumOfYBins;       // 75 by Default
+    int NumberNucOfMomSlices;         // 10 by Default
 
     double MomBinTh = 0.4;
 
@@ -93,7 +95,9 @@ private:
 //    double Charged_particle_min_Ratio = 0.;
 //    double Neutral_particle_min_Ratio = 0.;
     double Charged_particle_min_Ratio = 0.7;
-    double Neutral_particle_min_Ratio = 0.3;
+//    double Neutral_particle_min_Ratio = 0.2;
+    double Neutral_particle_min_Ratio = 0.25;
+//    double Neutral_particle_min_Ratio = 0.3;
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLHitMaps = new TList();
@@ -140,8 +144,8 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath = "./", int NumberOfMomBins = 10, int hbNumOfXBins = 100,
-          int hbNumOfYBins = 100);
+    AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath = "./", int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75,
+          int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
@@ -152,7 +156,7 @@ public:
 
     void SetElectronBins(bool reformat_e_bins, bool equi_P_e_bins, double beamE);
 
-    void SetBins(double beamE, double NumberOfMomBins); // old
+    void SetBins(double beamE, double NumberNucOfMomSlices); // old
 
 // isElectron function --------------------------------------------------------------------------------------------------------------------------------------------------
 
