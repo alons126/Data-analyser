@@ -84,22 +84,26 @@ void PlotsEff2x3Electron(string SampleName) {
             f = new TFile("plots_C12_simulation_6GeV_T5_first_250_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250_plots.root");
         }
     } else if (findSubstring(SampleName, "C12_simulation_6GeV_T5")) {
-        if (SampleName == "C12_simulation_6GeV_T5_noNC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_noNC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_noNC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_noNC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_noNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_noFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        if (SampleName == "C12_simulation_6GeV_T5_wNC_noFDph_Eff1") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
         } else if (SampleName == "C12_simulation_6GeV_T5_wNC_noFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
         } else if (SampleName == "C12_simulation_6GeV_T5_wNC_wFDph_Eff1") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
         } else if (SampleName == "C12_simulation_6GeV_T5_wNC_wFDph_Eff2") {
-            f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_noFDph_Eff1") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_noFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_noFDph_Eff2") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_noFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_wFDph_Eff1") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_wFDph_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wBC_wFDph_Eff2") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wBC_wFDph_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_wFC_Eff1") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFC_Eff1/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+        } else if (SampleName == "C12_simulation_6GeV_T5_wNC_wFC_Eff2") {
+            f = new TFile("00_plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_wNC_wFC_Eff2/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
         }
     } else if (findSubstring(SampleName, "C12_simulation_G18_2GeV")) {
         if (SampleName == "C12_simulation_G18_2GeV_noNC_noFDph_Eff1") {

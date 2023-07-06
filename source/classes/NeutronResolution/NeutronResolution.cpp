@@ -392,7 +392,9 @@ double NeutronResolution::PSmear(bool apply_proton_SmearingAndShift, double Mome
         for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                 double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
-                double Shift = Momentum + Loaded_res_slice.GetMean();
+
+                //TODO: add mechanism to shift protons and neutrons?
+                double Shift = Momentum - Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
 
                 return Smearing * Shift;
             }

@@ -34,7 +34,9 @@ void PlotsEffAndACorr2x3() {
 //    string SampleName = "C12_simulation_6GeV_T5_first_250";
 //    string SampleName = "C12_simulation_6GeV_T5";
 
-    string SampleName = "C12_simulation_6GeV_T5_first_10_wNC_noFDph_Eff2";
+    string SampleName = "C12_simulation_6GeV_T5_wNC_wFC_Eff2";
+//    string SampleName = "C12_simulation_6GeV_T5_first_10_wNC_noFDph_Eff2";
+
 //    string SampleName = "C12_simulation_6GeV_T5_first_100_wNC_noFDph_Eff2";
 //    string SampleName = "C12_simulation_6GeV_T5_first_250_wNC_noFDph_Eff2";
 //    string SampleName = "C12_simulation_6GeV_T5_wNC_noFDph_Eff2";
