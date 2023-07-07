@@ -120,13 +120,13 @@ void EventAnalyser() {
     bool calculate_truth_level = true;      // TL master ON/OFF switch
     bool TL_with_one_reco_electron = true;  // TL master ON/OFF switch
     bool fill_TL_plots = true;             // Generate acceptance maps
-    bool Rec_wTL_ES = true;                // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = true;                // Enforce TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
     bool Enable_FD_neutrons = true;         // keep as false to increse eff. plots
 
-    /* Hit maps settings */
+    /* Acceptance maps settings */
     bool generate_AMaps = false;            // Generate acceptance maps
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -139,6 +139,7 @@ void EventAnalyser() {
     if (!calculate_2p) { calculate_pFDpCD = false; }
     if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
     if (!calculate_truth_level) { Rec_wTL_ES = false; }
+//    if (generate_AMaps) { apply_fiducial_cuts = false; }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -217,11 +218,6 @@ void EventAnalyser() {
         if (!apply_proton_SmearingAndShift) {
             PSmearing_Status = "";
         } else {
-//            PSmearing_Status = "wPs_AbsGauss";
-//            PSmearing_Status = "wPs_AbsGaussAR1";
-//            PSmearing_Status = "wPs_Gauss";
-//            PSmearing_Status = "wPs_GaussAR1";
-//            PSmearing_Status = "wPs_TAKE_2_";
             PSmearing_Status = "wPs_";
         }
 
@@ -240,8 +236,6 @@ void EventAnalyser() {
         if (!generate_AMaps && !plot_and_fit_MomRes) {
             Additional_Status = "";
         } else if (generate_AMaps && !plot_and_fit_MomRes) {
-//            Additional_Status = "AMaps_Beta09_";
-//            Additional_Status = "AMaps_0_05_";
             Additional_Status = "AMaps_";
         } else if (!generate_AMaps && plot_and_fit_MomRes) {
             Additional_Status = "nRes_";
@@ -254,11 +248,9 @@ void EventAnalyser() {
         } else {
             if (Rec_wTL_ES) {
 //                Efficiency_Status = "Eff2_wmt_wNOneut";
-                Efficiency_Status = "Eff2_wmt_wANYneut";
+//                Efficiency_Status = "Eff2_wmt_wANYneut";
 //                Efficiency_Status = "Eff2_1re_wmt_wNOneut";
-//                Efficiency_Status = "Eff2_1re_wmt_wANYneut";
-//                Efficiency_Status = "Eff2_1re_wmt_wNOmtTL";
-//                Efficiency_Status = "Eff2_1re";
+                Efficiency_Status = "Eff2_1re_wmt_wANYneut";
 //                Efficiency_Status = "Eff2";
             } else {
                 Efficiency_Status = "Eff1";
@@ -470,7 +462,7 @@ void EventAnalyser() {
     DSCuts Theta_p2_cuts_nFDpCD = DSCuts("Theta_p2", "", "Proton", "nFDpCD", Theta_p2_cuts_2p.GetMean(), -9999, Theta_p2_cuts_2p.GetUpperCut());
     DSCuts dphi_pFD_pCD_nFDpCD = DSCuts("dPhi_pFD_pCD", "", "Proton", "nFDpCD", dphi_p1_p2_2p.GetMean(), -9999, dphi_p1_p2_2p.GetUpperCut());
 
-    /* Rec. kinematic cuts (based on nucleons efficiency) */
+    /* reco. kinematic cuts (based on nucleons efficiency) */
     DSCuts FD_nucleon_theta_cut = DSCuts("FD Nucleon theta cut", "FD", "", "", 0, 0, 32.);
     DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
     DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., n_mom_th.GetUpperCut());
@@ -498,14 +490,13 @@ void EventAnalyser() {
 //    const char *TL_ref_TListName = TL_ref_listName.c_str();
     //</editor-fold>
 
-//  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
+//  Creating directories ------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Creating directories">
     /* Code for creating directories.
      * Directory creation is done in the Directories class.
      * Added for the case that plots out folder does not exist and for organization.
      * All cut plots are separate from the analysis plots, and withing the 01_Cuts_plots folder. */
-
     cout << "Creating plot directories...\n\n";
 
     string Plots_Folder = plots_path;
@@ -520,123 +511,123 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-//    //<editor-fold desc="Plot selector - plot all">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
-//
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-//
-//    /* Beta plots */
-//    bool W_plots = true;
-//
-//    /* Beta plots */
-//    bool Beta_plots = true;
-//    bool Beta_vs_P_plots = true;
-//
-//    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-//
-//    /* Q2 plots */
-//    bool Q2_plots = true;
-//
-//    /* E_e plots */
-//    bool E_e_plots = true;
-//
-//    /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-//    bool Ecal_plots = true;
-//
-//    /* Transverse variables plots */
-//    bool TKI_plots = true;
-//
-//    /* ToF plots */
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-//    bool TL_after_hit_maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Hit_maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-//    //</editor-fold>
-
-    //<editor-fold desc="Plot selector - selected plots">
+    //<editor-fold desc="Plot selector - plot all">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-//
-//    bool Momentum_plots = false;
-    bool Momentum_plots = true;
-//
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_plots = true;
+    bool Beta_vs_P_plots = true;
 
     /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-    bool Angle_plots_master = false; // Master angle plots selector
-    bool Theta_e_plots = false, Phi_e_plots = false;
+    bool Angle_plots_master = true; // Master angle plots selector
+    bool Theta_e_plots = true, Phi_e_plots = true;
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
 
     /* ToF plots */
-//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
     bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
-    bool TL_after_hit_maps_plots = true;
-//    bool TL_after_hit_maps_plots = false;
+    bool TL_after_Acceptance_Maps_plots = true;
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
-//    bool Hit_maps_plots = false;
 
     /* Resolution plots */
     bool Resolution_plots = true;
-//    bool Resolution_plots = false;
     //</editor-fold>
+
+//    //<editor-fold desc="Plot selector - selected plots">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+////
+////    bool Momentum_plots = false;
+//    bool Momentum_plots = true;
+////
+//
+//    /* Beta plots */
+////    bool W_plots = true;
+//    bool W_plots = false;
+//
+//    /* Beta plots */
+////    bool Beta_plots = true;
+//    bool Beta_plots = false;
+////    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//
+//    /* Angle plots */
+////    bool Angle_plots_master = true; // Master angle plots selector
+////    bool Theta_e_plots = true, Phi_e_plots = true;
+//    bool Angle_plots_master = false; // Master angle plots selector
+//    bool Theta_e_plots = false, Phi_e_plots = false;
+//
+//    /* Q2 plots */
+////    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//
+//    /* E_e plots */
+////    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//
+//    /* ET plots */
+////    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+////    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//
+//    /* Transverse variables plots */
+////    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//
+//    /* ToF plots */
+////    bool ToF_plots = true;
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+//    bool Efficiency_plots = true;
+////    bool Efficiency_plots = false;
+//    bool TL_after_Acceptance_Maps_plots = true;
+////    bool TL_after_Acceptance_Maps_plots = false;
+//
+//    /* Resolution plots */
+//    bool Hit_maps_plots = true;
+////    bool Hit_maps_plots = false;
+//
+//    /* Resolution plots */
+//    bool Resolution_plots = true;
+////    bool Resolution_plots = false;
+//    //</editor-fold>
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -647,7 +638,7 @@ void EventAnalyser() {
     if (!Cut_plots_master) { Nphe_plots = Chi2_plots = Vertex_plots = SF_plots = fiducial_plots = Momentum_plots = false; }
     if (!Angle_plots_master) { Theta_e_plots = Phi_e_plots = false; }
     if (!ETrans_plots_master) { ETrans_all_plots = ETrans_QEL_plots = ETrans_MEC_plots = ETrans_RES_plots = ETrans_DIS_plots = false; }
-    if (!fill_TL_plots) { Efficiency_plots = TL_after_hit_maps_plots = false; }
+    if (!fill_TL_plots) { Efficiency_plots = TL_after_Acceptance_Maps_plots = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
     if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
@@ -762,11 +753,11 @@ void EventAnalyser() {
     double dP_T_boundary = 3.;
     //</editor-fold>
 
-// Hit maps generation --------------------------------------------------------------------------------------------------------------------------------------------------
+// Acceptance maps generation --------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Hit maps generation">
-    /* Hit maps are handled completely by the AMaps class */
-    cout << "\nSetting hit maps...";
+    //<editor-fold desc="Acceptance maps generation">
+    /* Acceptance maps are handled completely by the AMaps class */
+    cout << "\nSetting Acceptance maps...";
 
     if (!calculate_truth_level) { generate_AMaps = false; }
     if (!generate_AMaps) { Hit_maps_plots = false; }
@@ -782,7 +773,7 @@ void EventAnalyser() {
         aMaps = AMaps(reformat_e_bins, equi_P_e_bins, beamE, directories.Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"],
                       NumberNucOfMomSlices, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins, HistElectronSliceNumOfXBins, HistElectronSliceNumOfYBins);
     } else {
-        aMaps = AMaps(RefrenceHitMapsDirectory, SampleName);
+        aMaps = AMaps(AcceptanceMapsDirectory, SampleName);
     }
 
     cout << " done.\n\n";
@@ -2536,12 +2527,13 @@ void EventAnalyser() {
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
     //<editor-fold desc="Phi_e histograms (no #(e) cut)">
-    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", "#phi_{e} of Outgoing Electron (All Int., no #(e) cut, FD);#phi_{e} [Deg];",
+                                     100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_e_FD_Dir = directories.Angle_Directory_map["Phi_e_All_e_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (1e cut)">
-    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", "#phi_{e} of Outgoing Electron (All Int., 1e Cut, FD);#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Phi_e_1e_cut_Directory"];
     //</editor-fold>
 
@@ -4483,15 +4475,15 @@ void EventAnalyser() {
     THStack *sEcal_1p = new THStack("E_{cal} Reconstruction (1p)", "E_{cal} Reconstruction (1p);E_{cal} = E_{e} + T_{p} [GeV]");
     string sEcal_1p_Dir = directories.Ecal_Directory_map["Ecal_stack_1p_Directory"];
 
-    TH1D *hEcal_All_Int_1p = new TH1D("E_{cal} rec. (All Int., 1p)", "E_{cal} Reconstruction (All Int., 1p);E_{cal} = E_{e} + T_{p} [GeV]",
+    TH1D *hEcal_All_Int_1p = new TH1D("E_{cal} reco. (All Int., 1p)", "E_{cal} Reconstruction (All Int., 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_1p = new TH1D("E_{cal} rec. (QEL only, 1p)", "E_{cal} Reconstruction (QEL only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
+    TH1D *hEcal_QEL_1p = new TH1D("E_{cal} reco. (QEL only, 1p)", "E_{cal} Reconstruction (QEL only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_1p = new TH1D("E_{cal} rec. (MEC only, 1p)", "E_{cal} Reconstruction (MEC only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
+    TH1D *hEcal_MEC_1p = new TH1D("E_{cal} reco. (MEC only, 1p)", "E_{cal} Reconstruction (MEC only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_1p = new TH1D("E_{cal} rec. (RES only, 1p)", "E_{cal} Reconstruction (RES only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
+    TH1D *hEcal_RES_1p = new TH1D("E_{cal} reco. (RES only, 1p)", "E_{cal} Reconstruction (RES only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_1p = new TH1D("E_{cal} rec. (DIS only, 1p)", "E_{cal} Reconstruction (DIS only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
+    TH1D *hEcal_DIS_1p = new TH1D("E_{cal} reco. (DIS only, 1p)", "E_{cal} Reconstruction (DIS only, 1p);E_{cal} = E_{e} + T_{p} [GeV]",
                                   100, 0, beamE * 1.35);
     string hEcal_All_Int_1p_Dir = directories.Ecal_Directory_map["Ecal_All_Int_1p_Directory"];
     string hEcal_QEL_1p_Dir = directories.Ecal_Directory_map["Ecal_QEL_1p_Directory"];
@@ -4534,15 +4526,15 @@ void EventAnalyser() {
     THStack *sEcal_1n = new THStack("E_{cal} Reconstruction (1n)", "E_{cal} Reconstruction (1n);E_{cal} = E_{e} + T_{n} [GeV]");
     string sEcal_1n_Dir = directories.Ecal_Directory_map["Ecal_stack_1n_Directory"];
 
-    TH1D *hEcal_All_Int_1n = new TH1D("E_{cal} rec. (All Int., 1n)", "E_{cal} Reconstruction (All Int., 1n);E_{cal} = E_{e} + T_{n} [GeV]",
+    TH1D *hEcal_All_Int_1n = new TH1D("E_{cal} reco. (All Int., 1n)", "E_{cal} Reconstruction (All Int., 1n);E_{cal} = E_{e} + T_{n} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_1n = new TH1D("E_{cal} rec. (QEL only, 1n)", "E_{cal} Reconstruction (QEL only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
+    TH1D *hEcal_QEL_1n = new TH1D("E_{cal} reco. (QEL only, 1n)", "E_{cal} Reconstruction (QEL only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_1n = new TH1D("E_{cal} rec. (MEC only, 1n)", "E_{cal} Reconstruction (MEC only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
+    TH1D *hEcal_MEC_1n = new TH1D("E_{cal} reco. (MEC only, 1n)", "E_{cal} Reconstruction (MEC only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_1n = new TH1D("E_{cal} rec. (RES only, 1n)", "E_{cal} Reconstruction (RES only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
+    TH1D *hEcal_RES_1n = new TH1D("E_{cal} reco. (RES only, 1n)", "E_{cal} Reconstruction (RES only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_1n = new TH1D("E_{cal} rec. (DIS only, 1n)", "E_{cal} Reconstruction (DIS only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
+    TH1D *hEcal_DIS_1n = new TH1D("E_{cal} reco. (DIS only, 1n)", "E_{cal} Reconstruction (DIS only, 1n);E_{cal} = E_{e} + T_{n} [GeV]",
                                   100, 0, beamE * 1.35);
     string hEcal_All_Int_1n_Dir = directories.Ecal_Directory_map["Ecal_All_Int_1n_Directory"];
     string hEcal_QEL_1n_Dir = directories.Ecal_Directory_map["Ecal_QEL_1n_Directory"];
@@ -4585,15 +4577,15 @@ void EventAnalyser() {
     THStack *sEcal_2p = new THStack("E_{cal} Reconstruction (2p)", "E_{cal} Reconstruction (2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]");
     string sEcal_2p_Dir = directories.Ecal_Directory_map["Ecal_stack_2p_Directory"];
 
-    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} rec. (All Int., 2p)", "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_All_Int_2p = new TH1D("E_{cal} reco. (All Int., 2p)", "E_{cal} Reconstruction (All Int., 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} rec. (QEL only, 2p)", "E_{cal} Reconstruction (QEL only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_QEL_2p = new TH1D("E_{cal} reco. (QEL only, 2p)", "E_{cal} Reconstruction (QEL only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} rec. (MEC only, 2p)", "E_{cal} Reconstruction (MEC only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_MEC_2p = new TH1D("E_{cal} reco. (MEC only, 2p)", "E_{cal} Reconstruction (MEC only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_2p = new TH1D("E_{cal} rec. (RES only, 2p)", "E_{cal} Reconstruction (RES only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_RES_2p = new TH1D("E_{cal} reco. (RES only, 2p)", "E_{cal} Reconstruction (RES only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} rec. (DIS only, 2p)", "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
+    TH1D *hEcal_DIS_2p = new TH1D("E_{cal} reco. (DIS only, 2p)", "E_{cal} Reconstruction (DIS only, 2p);E_{cal} = E_{e} + T_{p_{1}} + T_{p_{2}} [GeV]",
                                   100, 0, beamE * 1.35);
     string hEcal_All_Int_2p_Dir = directories.Ecal_Directory_map["Ecal_All_Int_2p_Directory"];
     string hEcal_QEL_2p_Dir = directories.Ecal_Directory_map["Ecal_QEL_2p_Directory"];
@@ -4630,15 +4622,15 @@ void EventAnalyser() {
     THStack *sEcal_pFDpCD = new THStack("E_{cal} Reconstruction (pFDpCD)", "E_{cal} Reconstruction (pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]");
     string sEcal_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_pFDpCD_Directory"];
 
-    TH1D *hEcal_All_Int_pFDpCD = new TH1D("E_{cal} rec. (All Int., pFDpCD)", "E_{cal} Reconstruction (All Int., pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_All_Int_pFDpCD = new TH1D("E_{cal} reco. (All Int., pFDpCD)", "E_{cal} Reconstruction (All Int., pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                           100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_pFDpCD = new TH1D("E_{cal} rec. (QEL only, pFDpCD)", "E_{cal} Reconstruction (QEL only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_QEL_pFDpCD = new TH1D("E_{cal} reco. (QEL only, pFDpCD)", "E_{cal} Reconstruction (QEL only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_pFDpCD = new TH1D("E_{cal} rec. (MEC only, pFDpCD)", "E_{cal} Reconstruction (MEC only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_MEC_pFDpCD = new TH1D("E_{cal} reco. (MEC only, pFDpCD)", "E_{cal} Reconstruction (MEC only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_pFDpCD = new TH1D("E_{cal} rec. (RES only, pFDpCD)", "E_{cal} Reconstruction (RES only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_RES_pFDpCD = new TH1D("E_{cal} reco. (RES only, pFDpCD)", "E_{cal} Reconstruction (RES only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_pFDpCD = new TH1D("E_{cal} rec. (DIS only, pFDpCD)", "E_{cal} Reconstruction (DIS only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_DIS_pFDpCD = new TH1D("E_{cal} reco. (DIS only, pFDpCD)", "E_{cal} Reconstruction (DIS only, pFDpCD);E_{cal} = E_{e} + T_{pFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
     string hEcal_All_Int_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_All_Int_pFDpCD_Directory"];
     string hEcal_QEL_pFDpCD_Dir = directories.Ecal_Directory_map["Ecal_QEL_pFDpCD_Directory"];
@@ -4684,15 +4676,15 @@ void EventAnalyser() {
     THStack *sEcal_nFDpCD = new THStack("E_{cal} Reconstruction (nFDpCD)", "E_{cal} Reconstruction (nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]");
     string sEcal_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_stack_nFDpCD_Directory"];
 
-    TH1D *hEcal_All_Int_nFDpCD = new TH1D("E_{cal} rec. (All Int., nFDpCD)", "E_{cal} Reconstruction (All Int., nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_All_Int_nFDpCD = new TH1D("E_{cal} reco. (All Int., nFDpCD)", "E_{cal} Reconstruction (All Int., nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                           100, 0, beamE * 1.35);
-    TH1D *hEcal_QEL_nFDpCD = new TH1D("E_{cal} rec. (QEL only, nFDpCD)", "E_{cal} Reconstruction (QEL only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_QEL_nFDpCD = new TH1D("E_{cal} reco. (QEL only, nFDpCD)", "E_{cal} Reconstruction (QEL only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_MEC_nFDpCD = new TH1D("E_{cal} rec. (MEC only, nFDpCD)", "E_{cal} Reconstruction (MEC only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_MEC_nFDpCD = new TH1D("E_{cal} reco. (MEC only, nFDpCD)", "E_{cal} Reconstruction (MEC only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_RES_nFDpCD = new TH1D("E_{cal} rec. (RES only, nFDpCD)", "E_{cal} Reconstruction (RES only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_RES_nFDpCD = new TH1D("E_{cal} reco. (RES only, nFDpCD)", "E_{cal} Reconstruction (RES only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
-    TH1D *hEcal_DIS_nFDpCD = new TH1D("E_{cal} rec. (DIS only, nFDpCD)", "E_{cal} Reconstruction (DIS only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
+    TH1D *hEcal_DIS_nFDpCD = new TH1D("E_{cal} reco. (DIS only, nFDpCD)", "E_{cal} Reconstruction (DIS only, nFDpCD);E_{cal} = E_{e} + T_{nFD} + T_{pCD} [GeV]",
                                       100, 0, beamE * 1.35);
     string hEcal_All_Int_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_All_Int_nFDpCD_Directory"];
     string hEcal_QEL_nFDpCD_Dir = directories.Ecal_Directory_map["Ecal_QEL_nFDpCD_Directory"];
@@ -5092,16 +5084,16 @@ void EventAnalyser() {
 
     //<editor-fold desc="Truth level theta vs. phi plots (1e_cut)">
     hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
-                                                     directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"], "01_Theta_e_vs_Phi_e_truth_1e_cut",
+                                                     directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"], "01_Theta_e_vs_Phi_e_truth_1e_cut",
                                                      Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
 
     hPlot2D hTheta_nFD_vs_Phi_nFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{nFD} vs. #phi_{nFD}", "TL #theta_{nFD} vs. #phi_{nFD}", "#phi_{nFD} [Deg]",
-                                                         "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
+                                                         "#theta_{nFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
                                                          "02_Theta_nFD_vs_Phi_nFD_truth_1e_cut",
                                                          Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
 
     hPlot2D hTheta_pFD_vs_Phi_pFD_truth_1e_cut = hPlot2D("1e cut", "FD", "TL #theta_{pFD} vs. #phi_{pFD}", "TL #theta_{pFD} vs. #phi_{pFD}", "#phi_{pFD} [Deg]",
-                                                         "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_hit_maps_1e_cut_Directory"],
+                                                         "#theta_{pFD} [Deg]", directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"],
                                                          "03_Theta_pFD_vs_Phi_pFD_truth_1e_cut",
                                                          Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, 100, 100);
     //</editor-fold>
@@ -6074,26 +6066,26 @@ void EventAnalyser() {
 //    if (!f) { cout << "\n\n\nLoad reference histogram: no ref. histogram file have found! Exiting...\n\n\n", quit(); }
 //
 //    TH2D *Electron_hit_map = (TH2D *) f->Get("Electron_hit_map");
-//    string Electron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
+//    string Electron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_Acceptance_Maps_1e_cut_Directory"];
 //    if (!Electron_hit_map) { cout << "\n\n\nLoad reference histogram: Electron_hit_map is empty! Exiting...\n\n\n", quit(); }
 //
 //    TH2D *Proton_hit_map = (TH2D *) f->Get("Protons_hit_map");
-//    string Proton_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
+//    string Proton_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_Acceptance_Maps_1e_cut_Directory"];
 //    if (!Proton_hit_map) { cout << "\n\n\nLoad reference histogram: Protons_hit_map is empty! Exiting...\n\n\n", quit(); }
 //
 //    TH2D *Neutron_hit_map = (TH2D *) f->Get("Neutrons_hit_map");
-//    string Neutron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
+//    string Neutron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_Acceptance_Maps_1e_cut_Directory"];
 //    if (!Neutron_hit_map) { cout << "\n\n\nLoad reference histogram: Neutrons_hit_map is empty! Exiting...\n\n\n", quit(); }
 //    //</editor-fold>
 
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Hit maps histograms
+// Acceptance maps histograms
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="Hit maps histograms">
-    /* Hit maps are handled completely by the AMaps class */
+    //<editor-fold desc="Acceptance maps histograms">
+    /* Acceptance maps are handled completely by the AMaps class */
     hPlot2D ElectronAMapBC = hPlot2D("", "", "Electron_AMap_BC", "Electron AMap BC", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
                                      directories.Hit_Maps_Directory_map["AMaps_BC_1e_cut_Directory"], "01_Electron_AMap_BC",
                                      Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
@@ -6161,11 +6153,11 @@ void EventAnalyser() {
     string hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
     hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC",
-                                    "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}",
+                                    "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p", -2, 2);
     TH2D *hP_pFD_Res_VS_P_pFD_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD)",
                                             "P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                            "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+                                            "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", 65, 0, beamE * 1.1, 65, -2, 2);
     string hP_pFD_Res_VS_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
     /*    hPlot1D hdTheta_pFD_TL_BC_1p = hPlot1D("1p", "FD", "TL #Delta#theta_{pFD} BC", "#Delta#theta_{pFD} of FD proton BC",
                                            "#Delta#theta_{pFD} = #theta^{rec}_{pFD} - #theta^{truth}_{pFD} [Deg]",
@@ -6213,11 +6205,11 @@ void EventAnalyser() {
     string hTheta_pFD_TL_VS_Phi_pFD_TL_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];
 
     hPlot1D hP_pFD_Res_1p = hPlot1D("1p", "", "P_{pFD} resolution AC", "FD proton P_{pFD} resolution AC",
-                                    "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}",
+                                    "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}",
                                     directories.Resolution_Directory_map["Resolution_1p_Directory"], "04_P_pFD_Res_1p", -2, 2);
     TH2D *hP_pFD_Res_VS_P_pFD_1p = new TH2D("P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD)",
                                             "P_{pFD} resolution AC vs. P^{truth}_{pFD} (1p, FD);P^{truth}_{pFD} [GeV/c];"
-                                            "Resolution = (P^{truth}_{pFD} - P^{rec.}_{pFD})/P^{truth}_{pFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+                                            "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", 65, 0, beamE * 1.1, 65, -2, 2);
     string hP_pFD_Res_VS_P_pFD_1p_Dir = directories.Resolution_Directory_map["Resolution_1p_Directory"];*/
     //</editor-fold>
 
@@ -6268,11 +6260,11 @@ void EventAnalyser() {
     string hTheta_nFD_TL_VS_Phi_nFD_TL_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC",
-                                    "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}",
+                                    "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "04_P_nFD_Res_1n", -2, 2);
     TH2D *hP_nFD_Res_VS_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD)",
                                             "P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                            "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+                                            "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", 65, 0, beamE * 1.1, 65, -2, 2);
     string hP_nFD_Res_VS_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
     /*    hPlot1D hdTheta_nFD_TL_BC_1n = hPlot1D("1n", "FD", "TL #Delta#theta_{nFD} BC", "#Delta#theta_{nFD} of FD neutron BC",
                                            "#Delta#theta_{nFD} = #theta^{rec}_{nFD} - #theta^{truth}_{nFD} [Deg]",
@@ -6320,11 +6312,11 @@ void EventAnalyser() {
     string hTheta_nFD_TL_VS_Phi_nFD_TL_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC",
-                                    "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}",
+                                    "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}",
                                     directories.Resolution_Directory_map["Resolution_1n_Directory"], "04_P_nFD_Res_1n", -2, 2);
     TH2D *hP_nFD_Res_VS_P_nFD_1n = new TH2D("P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD)",
                                             "P_{nFD} resolution AC vs. P^{truth}_{nFD} (1n, FD);P^{truth}_{nFD} [GeV/c];"
-                                            "Resolution = (P^{truth}_{nFD} - P^{rec.}_{nFD})/P^{truth}_{nFD}", 65, 0, beamE * 1.1, 65, -2, 2);
+                                            "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", 65, 0, beamE * 1.1, 65, -2, 2);
     string hP_nFD_Res_VS_P_nFD_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];*/
     //</editor-fold>
 
@@ -7456,8 +7448,8 @@ void EventAnalyser() {
                     }
                 }
 
-                //<editor-fold desc="Fill electron and proton hit maps">
-                if (generate_AMaps && TL_Event_Selection_1e_cut && inFD) { // NOTE: here we fill hit maps before they're generation - no fiducial cuts yet!
+                //<editor-fold desc="Fill electron and proton Acceptance maps">
+                if (generate_AMaps && TL_Event_Selection_1e_cut && inFD) { // NOTE: here we fill Acceptance maps before they're generation - no fiducial cuts yet!
                     if (particlePDGtmp == 11) {
                         aMaps.hFillHitMaps("TL", "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi, Weight);
 //                    } else if ((particlePDGtmp == 2112) && (!TL_with_one_reco_electron || (electrons.size() == 1))) {
@@ -7477,7 +7469,7 @@ void EventAnalyser() {
 
             } // end of for loop over TL particles
 
-            //<editor-fold desc="Fill neutron hit maps">
+            //<editor-fold desc="Fill neutron Acceptance maps">
             if (generate_AMaps &&
                 TL_Event_Selection_1e_cut && (!TL_with_one_reco_electron || (electrons.size() == 1)) &&
                 ((TL_NeutronsFD_ind_mom_max != -1) && (TL_P_nFD_mom_max > 0))) {
@@ -8241,17 +8233,17 @@ void EventAnalyser() {
 
         //</editor-fold>
 
-        //<editor-fold desc="Filling reco. hit maps">
+        //<editor-fold desc="Filling reco. Acceptance maps">
         if (generate_AMaps) {
 
-            //<editor-fold desc="Filling electron reco. hit maps">
+            //<editor-fold desc="Filling electron reco. Acceptance maps">
             if (electrons[0]->getRegion() == FD) {
                 ElectronAMapBC.hFill(Phi_e, Theta_e, Weight);
                 aMaps.hFillHitMaps("Reco", "Electron", P_e, Theta_e, Phi_e, Weight);
             }
             //</editor-fold>
 
-            //<editor-fold desc="Filling proton reco. hit maps">
+            //<editor-fold desc="Filling proton reco. Acceptance maps">
             //            for (int i = 0; i < protons.size(); i++) {
             for (int &i: Protons_ind) {
                 if (protons[i]->getRegion() == FD) {
@@ -8261,7 +8253,7 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-            //<editor-fold desc="Filling neurton reco. hit maps">
+            //<editor-fold desc="Filling neurton reco. Acceptance maps">
             /*
             for (int &i: NeutronsFD_ind) {
                 if (allParticles[i]->par()->getBeta() <= 0.9) {
@@ -8313,7 +8305,7 @@ void EventAnalyser() {
             }
             //</editor-fold>
 
-        } // end of fill hit maps if
+        } // end of fill Acceptance maps if
         //</editor-fold>
 
         //</editor-fold>
@@ -15324,11 +15316,11 @@ void EventAnalyser() {
 
     //<editor-fold desc="Efficiency histograms">
 
-    //<editor-fold desc="TL plots after hit maps">
-    if (TL_after_hit_maps_plots) {
-        cout << "\n\nPlotting TL plots after hit maps...\n\n";
+    //<editor-fold desc="TL plots after Acceptance maps">
+    if (TL_after_Acceptance_Maps_plots) {
+        cout << "\n\nPlotting TL plots after Acceptance maps...\n\n";
 
-//  TL after hit maps plots ---------------------------------------------------------------------------------------------------------------------------------------------
+//  TL after Acceptance maps plots ---------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Truth level theta vs. phi plots (1p)">
         hTheta_e_vs_Phi_e_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, true);
@@ -15357,7 +15349,7 @@ void EventAnalyser() {
         //</editor-fold>
 
     } else {
-        cout << "\n\nTL plots after hit maps are disabled by user.\n\n";
+        cout << "\n\nTL plots after Acceptance maps are disabled by user.\n\n";
     }
     //</editor-fold>
 
@@ -15446,7 +15438,7 @@ void EventAnalyser() {
         hPhi_ph_BC_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         //</editor-fold>
 
-//        //<editor-fold desc="Loaded hit maps">
+//        //<editor-fold desc="Loaded Acceptance maps">
 //        histPlotter2D(c1, Electron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Electron_hit_map_Dir, "01_Electron_hit_map");
 //        histPlotter2D(c1, Proton_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Proton_hit_map_Dir, "02_Proton_hit_map");
 //        histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
@@ -15945,15 +15937,15 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Hit maps histograms
+// Acceptance maps histograms
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Hit maps histograms">
+    //<editor-fold desc="Acceptance maps histograms">
     if (Hit_maps_plots) {
 //    if (Hit_maps_plots && generate_AMaps) {
-        cout << "\n\nPlotting Hit maps histograms...\n\n";
+        cout << "\n\nPlotting Acceptance maps histograms...\n\n";
 
-//  Hit maps plots ------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Acceptance maps plots ------------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="AMap BC plots (1e cut)">
         ElectronAMapBC.hDrawAndSave(SampleName, c1, plots, true);
@@ -15962,12 +15954,12 @@ void EventAnalyser() {
         NucleonAMapBC.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
 
-        //<editor-fold desc="Hit maps plots (1e cut)">
-        aMaps.DrawAndSaveHitMaps(SampleName, c1, RefrenceHitMapsDirectory);
+        //<editor-fold desc="Acceptance maps plots (1e cut)">
+        aMaps.DrawAndSaveHitMaps(SampleName, c1, AcceptanceMapsDirectory);
         //</editor-fold>
 
     } else {
-        cout << "\n\nHit maps plots are disabled by user.\n\n";
+        cout << "\n\nAcceptance maps plots are disabled by user.\n\n";
     }
     //</editor-fold>
 

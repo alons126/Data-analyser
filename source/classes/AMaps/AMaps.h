@@ -60,11 +60,11 @@ private:
 
     double MomBinTh = 0.4;
 
-    /* TL hit maps */
+    /* TL Acceptance maps */
     vector<hPlot2D> ElectronTLHitMapsBySlice, ProtonTLHitMapsBySlice, NeutronTLHitMapsBySlice;
     hPlot2D NeutronTLHitMap;
 
-    /* Reco. hit maps */
+    /* Reco. Acceptance maps */
     vector<hPlot2D> ElectronRecoHitMapsBySlice, ProtonRecoHitMapsBySlice, NeutronRecoHitMapsBySlice;
     hPlot2D NeutronRecoHitMap;
 
@@ -96,9 +96,9 @@ private:
 //    double Neutral_particle_min_Ratio = 0.;
     double Charged_particle_min_Ratio = 0.7;
 //    double Neutral_particle_min_Ratio = 0.2;
-    double Neutral_particle_min_Ratio = 0.05;
+//    double Neutral_particle_min_Ratio = 0.05;
 //    double Neutral_particle_min_Ratio = 0.25;
-//    double Neutral_particle_min_Ratio = 0.3;
+    double Neutral_particle_min_Ratio = 0.3;
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLHitMaps = new TList();
@@ -109,10 +109,10 @@ private:
 
     string HitMapSavePath;
 
-    string AMapsBC_prefix = "00_AMapsBC_-_";
-    string Hit_Maps_TL_prefix = "01_Hit_Maps_TL_-_";
-    string Hit_Maps_Reco_prefix = "02_Hit_Maps_Reco_-_";
-    string Hit_Maps_Ratio_prefix = "03_Hit_Maps_Ratio_-_";
+    string AMapsBC_prefix = "00_AMaps_BC_-_";
+    string AMap_TL_prefix = "01_AMap_TL_-_";
+    string AMap_Reco_prefix = "02_AMap_Reco_-_";
+    string AMap_Ratio_prefix = "03_AMap_Ratio_-_";
     string cPart_Sep_AMaps_prefix = "04_cPart_Sep_AMaps_-_";
     string AMaps_prefix = "05_AMaps_-_";
 
@@ -128,7 +128,7 @@ private:
     vector<vector<int>> Loaded_nuc_Hit_Map;
     vector<vector<vector<int>>> Loaded_nuc_Hit_Map_Slices;
 
-    /* Loaded hit maps */
+    /* Loaded Acceptance maps */
     //TODO: delete these histograms if the .par loading works
     vector<TH2 *> LoadedElectronAMaps, LoadedProtonAMaps;   // separated AMaps for each bin
     TH2D *LoadedElectronAMaps0;
@@ -149,7 +149,7 @@ public:
           int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
-    AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+    AMaps(const string &AcceptanceMapsDirectory, const string &SampleName);
 
 // SetBins functions ----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -201,11 +201,11 @@ public:
 
 // SaveHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory);
+    void SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDirectory);
 
 // DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory);
+    void DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &AcceptanceMapsDirectory);
 
 // HistCounter function -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ public:
 
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName);
+    void ReadHitMaps(const string &AcceptanceMapsDirectory, const string &SampleName);
 
 // ReadAMapLimits function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -231,7 +231,7 @@ public:
 
 // ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadAMapSlices(const string &SampleName, const string &RefrenceHitMapsDirectory, const string &Particle,
+    void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
                         const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_Hit_Map_Slices);
 
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------

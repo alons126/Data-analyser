@@ -470,14 +470,14 @@ private:
     };
     //</editor-fold>
 
-    //<editor-fold desc="Hit maps plots directories">
-    bool create_Hit_Maps_Dir = true;
-    std::string Hit_Maps_Parent_Directory = "12_Hit_Maps_plots";
+    //<editor-fold desc="Acceptance maps plots directories">
+    bool create_Acceptance_Maps_Dir = true;
+    std::string Hit_Maps_Parent_Directory = "12_Acceptance_maps_plots";
     vector<std::string> Hit_Maps_Daughter_Folders = {"",
-                                                     "01_Hit_Maps_1e_cut",
-                                                     "01_Hit_Maps_1e_cut/00a_AMaps_BC_from_file",
+                                                     "01_AMaps_1e_cut",
+                                                     "01_AMaps_1e_cut/00a_AMaps_BC_from_file",
 //                                                          "01_1e_cut",
-//                                                          "01_1e_cut/01_Hit_Maps_1e_cut",
+//                                                          "01_1e_cut/01_AMaps_1e_cut",
     };
     //</editor-fold>
 

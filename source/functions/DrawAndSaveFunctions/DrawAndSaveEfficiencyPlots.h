@@ -59,11 +59,11 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
 
     //<editor-fold desc="Cloning histograms">
     TH1D *Histogram1D_REC = RPlot.GetHistogram();
-    string RPlot_Clone_StatsTitle = "Rec. " + RPlot.GetHistogramStatTitle() + " - cloned";
+    string RPlot_Clone_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned";
     TH1D *RPlot_Clone = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_StatsTitle).c_str());
-    string RPlot_Clone_test_StatsTitle = "Rec. " + RPlot.GetHistogramStatTitle() + " - cloned test";
+    string RPlot_Clone_test_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test";
     TH1D *RPlot_Clone_test = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_StatsTitle).c_str());
-    string RPlot_Clone_test_rebined_StatsTitle = "Rec. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
+    string RPlot_Clone_test_rebined_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
     RPlot_Clone_test_rebined->Rebin(2);
 
@@ -112,7 +112,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     string xLabel_Truth_temp = TLPlot_Clone->GetXaxis()->GetTitle();
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
-    string EfficiencyYLabel = "#epsilon_{eff} = #frac{rec.}{truth}";
+    string EfficiencyYLabel = "#epsilon_{eff} = #frac{reco.}{truth}";
     //</editor-fold>
 
     //<editor-fold desc="Setting Final state">
@@ -343,11 +343,11 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     //</editor-fold>
 
     //<editor-fold desc="Cloning histograms">
-    string RPlot_Clone_StatsTitle = "Rec. " + EfficiencyStatsTitle + " - cloned";
+    string RPlot_Clone_StatsTitle = "reco. " + EfficiencyStatsTitle + " - cloned";
     TH1D *RPlot_Clone = (TH1D *) RPlot->Clone((RPlot_Clone_StatsTitle).c_str());
-    string RPlot_Clone_test_StatsTitle = "Rec. " + EfficiencyStatsTitle + " - cloned test";
+    string RPlot_Clone_test_StatsTitle = "reco. " + EfficiencyStatsTitle + " - cloned test";
     TH1D *RPlot_Clone_test = (TH1D *) RPlot->Clone((RPlot_Clone_test_StatsTitle).c_str());
-    string RPlot_Clone_test_rebined_StatsTitle = "Rec. " + EfficiencyStatsTitle + " - cloned test rebined";
+    string RPlot_Clone_test_rebined_StatsTitle = "reco. " + EfficiencyStatsTitle + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) RPlot->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
     RPlot_Clone_test_rebined->Rebin(2);
 
@@ -401,9 +401,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     string xLabel_Truth_temp = TLPlot_Clone->GetXaxis()->GetTitle();
     string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
 
-    string EfficiencyYLabel = "#epsilon_{eff} = #frac{rec.}{truth}";
-//    string EfficiencyYLabel = "#epsilon_{eff} = rec./truth";
-//    string EfficiencyYLabel = "#epsilon_{eff} = rec/truth";
+    string EfficiencyYLabel = "#epsilon_{eff} = #frac{reco.}{truth}";
+//    string EfficiencyYLabel = "#epsilon_{eff} = reco./truth";
+//    string EfficiencyYLabel = "#epsilon_{eff} = recotruth";
 //    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "^{rec}" + "/" + xLabel_Truth;
 //    string EfficiencyYLabel = "#epsilon_{eff} = " + xLabel_REC + "/" + xLabel_Truth;
     //</editor-fold>

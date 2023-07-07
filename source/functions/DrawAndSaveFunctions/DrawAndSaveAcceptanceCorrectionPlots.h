@@ -60,11 +60,11 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
 
     //<editor-fold desc="Cloning histograms">
     TH1D *Histogram1D_REC = RPlot.GetHistogram();
-    string RPlot_Clone_StatsTitle = "Rec. " + RPlot.GetHistogramStatTitle() + " - cloned";
+    string RPlot_Clone_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned";
     TH1D *RPlot_Clone = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_StatsTitle).c_str());
-    string RPlot_Clone_test_StatsTitle = "Rec. " + RPlot.GetHistogramStatTitle() + " - cloned test";
+    string RPlot_Clone_test_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test";
     TH1D *RPlot_Clone_test = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_StatsTitle).c_str());
-    string RPlot_Clone_test_rebined_StatsTitle = "Rec. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
+    string RPlot_Clone_test_rebined_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
     RPlot_Clone_test_rebined->Rebin(2);
 
@@ -350,11 +350,11 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     //</editor-fold>
 
     //<editor-fold desc="Cloning histograms">
-    string RPlot_Clone_StatsTitle = "Rec. " + ACorrectionStatsTitle + " - cloned";
+    string RPlot_Clone_StatsTitle = "reco. " + ACorrectionStatsTitle + " - cloned";
     TH1D *RPlot_Clone = (TH1D *) RPlot->Clone((RPlot_Clone_StatsTitle).c_str());
-    string RPlot_Clone_test_StatsTitle = "Rec. " + ACorrectionStatsTitle + " - cloned test";
+    string RPlot_Clone_test_StatsTitle = "reco. " + ACorrectionStatsTitle + " - cloned test";
     TH1D *RPlot_Clone_test = (TH1D *) RPlot->Clone((RPlot_Clone_test_StatsTitle).c_str());
-    string RPlot_Clone_test_rebined_StatsTitle = "Rec. " + ACorrectionStatsTitle + " - cloned test rebined";
+    string RPlot_Clone_test_rebined_StatsTitle = "reco. " + ACorrectionStatsTitle + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) RPlot->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
     RPlot_Clone_test_rebined->Rebin(2);
 

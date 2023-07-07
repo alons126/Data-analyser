@@ -44,7 +44,7 @@ void PlotsEff2x3(string SampleName,
     //</editor-fold>
 
     TH1D *REC_Plot_1p = REC_Plot_1p_hist.GetHistogram();
-    string REC_Plot_1p_Clone_StatsTitle = "Rec. " + REC_Plot_1p_hist.GetHistogramStatTitle() + " - cloned";
+    string REC_Plot_1p_Clone_StatsTitle = "reco. " + REC_Plot_1p_hist.GetHistogramStatTitle() + " - cloned";
     TH1D *REC_Plot_1p_Clone = (TH1D *) REC_Plot_1p->Clone((REC_Plot_1p_Clone_StatsTitle).c_str());
     REC_Plot_1p_Clone->Rebin(2);
 
@@ -54,7 +54,7 @@ void PlotsEff2x3(string SampleName,
     TL_Plot_1p->Rebin(2);
 
     TH1D *REC_Plot_1n = REC_Plot_1n_hist.GetHistogram();
-    string REC_Plot_1n_Clone_StatsTitle = "Rec. " + REC_Plot_1n_hist.GetHistogramStatTitle() + " - cloned";
+    string REC_Plot_1n_Clone_StatsTitle = "reco. " + REC_Plot_1n_hist.GetHistogramStatTitle() + " - cloned";
     TH1D *REC_Plot_1n_Clone = (TH1D *) REC_Plot_1n->Clone((REC_Plot_1n_Clone_StatsTitle).c_str());
     REC_Plot_1n->Rebin(2);
 
