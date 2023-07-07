@@ -124,6 +124,7 @@ void EventAnalyser() {
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
+    bool Enable_FD_neutrons = true;         // keep as false to increse eff. plots
 
     /* Hit maps settings */
     bool generate_AMaps = false;            // Generate acceptance maps
@@ -252,7 +253,11 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-                Efficiency_Status = "Eff2_1re_wmt_wNOmtTL";
+//                Efficiency_Status = "Eff2_wmt_wNOneut";
+                Efficiency_Status = "Eff2_wmt_wANYneut";
+//                Efficiency_Status = "Eff2_1re_wmt_wNOneut";
+//                Efficiency_Status = "Eff2_1re_wmt_wANYneut";
+//                Efficiency_Status = "Eff2_1re_wmt_wNOmtTL";
 //                Efficiency_Status = "Eff2_1re";
 //                Efficiency_Status = "Eff2";
             } else {
@@ -2537,11 +2542,16 @@ void EventAnalyser() {
     string hPhi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Phi_e_1e_cut_Directory"];
 
     //<editor-fold desc="Phi_e histograms (1p)">
-    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 2p, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_QEL_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_MEC_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
@@ -6644,12 +6654,12 @@ void EventAnalyser() {
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
         if (calculate_truth_level && apply_nucleon_cuts && findSubstring(SampleName, "simulation")
-            && (!TL_with_one_reco_electron || (electrons.size() == 1))
+//            && (!TL_with_one_reco_electron || (electrons.size() == 1))
                 ) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
-            //<editor-fold desc="TL particles counting">
+            //<editor-fold desc="counting TL particles">
             /* Particle index vectors */
             vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
 
@@ -6704,18 +6714,12 @@ void EventAnalyser() {
                             (Particle_TL_Momentum <= TL_n_mom_cuts.GetUpperCut())) {
                             TL_NeutronsFD_mom_ind.push_back(i);
 
-//
 //                            cout << "Particle_TL_Momentum = " << Particle_TL_Momentum << "\n";
-//                            cout << "TL_n_mom_cuts.GetUpperCut() = " << TL_n_mom_cuts.GetUpperCut() << "\n";
-//
 
                             if (Particle_TL_Momentum >= TL_P_nFD_mom_max) {
                                 TL_P_nFD_mom_max = Particle_TL_Momentum;
                                 TL_NeutronsFD_ind_mom_max = i;
                             }
-
-//                            if (!(Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut())) { exit(0); }
-
                         }
 
                         TL_NeutronsFD_ind.push_back(i);
@@ -6780,11 +6784,9 @@ void EventAnalyser() {
                     TL_OtherPart_ind.push_back(i);
                 }
             }
-            //</editor-fold>
 
-//
 //            if (TL_P_nFD_mom_max != -1) { cout << "TL_P_nFD_mom_max = " << TL_P_nFD_mom_max << "\n\n\n"; }
-//
+            //</editor-fold>
 
             //<editor-fold desc="Event selection for TL plots">
             /* Setting up basic TL event selection */
@@ -6796,7 +6798,7 @@ void EventAnalyser() {
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
             /* Setting up 1p TL event selection */
-            bool no_FDNeutron_1p = (TL_NeutronsFD_mom_ind.size() == 0);
+            bool TL_FD_Neutrons_1p = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0));
             bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) &&
                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
 
@@ -6809,7 +6811,7 @@ void EventAnalyser() {
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) &&
                                         (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-            bool no_FDNeutron_pFDpCD = (TL_NeutronsFD_mom_ind.size() == 0);
+            bool TL_FD_Neutrons_pFDpCD = (Enable_FD_neutrons || (TL_NeutronsFD_mom_ind.size() == 0));
 
             /* Setting up nFDpCD TL event selection */
             bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
@@ -6819,13 +6821,13 @@ void EventAnalyser() {
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
 
             // 1p = one id. FD proton:
-            TL_Event_Selection_1p = (TL_Basic_ES && no_FDNeutron_1p && one_FDproton_1p);
+            TL_Event_Selection_1p = (TL_Basic_ES && TL_FD_Neutrons_1p && one_FDproton_1p);
 
             // 1n = one id. FD neutron & no id. protons:
             TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
 
             // pFDpCD = One id. FD proton & one id. CD proton:
-            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_FDproton_pFDpCD && one_CDproton_pFDpCD && no_FDNeutron_pFDpCD);
+            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_FDproton_pFDpCD && one_CDproton_pFDpCD && TL_FD_Neutrons_pFDpCD);
 
             // nFDpCD = One id. FD neutron & one id. CD proton:
             TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD);
@@ -8300,8 +8302,8 @@ void EventAnalyser() {
         //<editor-fold desc="1p (FD only)">
         /* 1p event selection: 1p = Protons_ind.size() = 1 (this proton is in the FD), no FD neutrons and any number of other neutrals and particles with pdg=0.*/
         bool one_rec_FD_proton_1p = ((Protons_ind.size() == 1) && (protons[Protons_ind.at(0)]->getRegion() == FD));
-        bool no_rec_FD_Neutrons_1p = (NeutronsFD_ind.size() == 0);
-        bool event_selection_1p = (basic_event_selection && one_rec_FD_proton_1p && no_rec_FD_Neutrons_1p);
+        bool reco_FD_Neutrons_1p = (Enable_FD_neutrons || (NeutronsFD_ind.size() == 0));
+        bool event_selection_1p = (basic_event_selection && one_rec_FD_proton_1p && reco_FD_Neutrons_1p);
         bool apply_TL_1p_ES = (!Rec_wTL_ES || TL_Event_Selection_1p);
 
         if (calculate_1p && event_selection_1p && apply_TL_1p_ES) { // for 1p calculations (with any number of neutrals)
@@ -8806,7 +8808,8 @@ void EventAnalyser() {
 
         //<editor-fold desc="1n (FD only)">
         /* 1n event selection: 1n = NeutronsFD_ind.size() = 1 with no charged particles (except electrons) and any number of other neutrals and particles with pdg=0. */
-        bool one_FD_neutron_1n = (NeutronsFD_ind.size() == 1), no_protons_1n = (Protons_ind.size() == 0);
+        bool one_FD_neutron_1n = (NeutronsFD_ind.size() == 1);
+        bool no_protons_1n = (Protons_ind.size() == 0);
         bool event_selection_1n = (basic_event_selection && one_FD_neutron_1n && no_protons_1n);
         bool apply_TL_1n_ES = (!Rec_wTL_ES || TL_Event_Selection_1n);
 
@@ -9528,8 +9531,8 @@ void EventAnalyser() {
 
         //<editor-fold desc="2p (FD & CD) ">
         /* 2p event selection: 2p = Protons_ind.size() = 2, no FD neutrons and any number of other neutrals and particles with pdg=0. */
-        bool no_rec_FD_Neutrons_2p = (NeutronsFD_ind.size() == 0);
-        bool event_selection_2p = (basic_event_selection && no_rec_FD_Neutrons_2p && (Protons_ind.size() == 2));
+        bool reco_FD_Neutrons_2p = (Enable_FD_neutrons || (NeutronsFD_ind.size() == 0));
+        bool event_selection_2p = (basic_event_selection && reco_FD_Neutrons_2p && (Protons_ind.size() == 2));
 
         if (calculate_2p && event_selection_2p) { // for 2p calculations (with any number of neutrals, neutrons and pdg=0)
             ++num_of_events_with_1e2p; // logging #(events) w/ 1e2p
