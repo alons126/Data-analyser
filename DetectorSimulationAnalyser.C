@@ -119,14 +119,14 @@ void EventAnalyser() {
     /* Truth level calculation settings */
     bool calculate_truth_level = true;      // TL master ON/OFF switch
     bool TL_with_one_reco_electron = true;  // TL master ON/OFF switch
-    bool fill_TL_plots = false;             // Generate acceptance maps
-    bool Rec_wTL_ES = false;                // Enforce TL event selection on Rec. plots
+    bool fill_TL_plots = true;             // Generate acceptance maps
+    bool Rec_wTL_ES = true;                // Enforce TL event selection on Rec. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
 
     /* Hit maps settings */
-    bool generate_AMaps = true;            // Generate acceptance maps
+    bool generate_AMaps = false;            // Generate acceptance maps
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
@@ -178,8 +178,8 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
-    bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
+    bool apply_nBeta_fit_cuts = true;
+    bool apply_fiducial_cuts = true; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_proton_SmearingAndShift = false;
 
@@ -252,7 +252,9 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-                Efficiency_Status = "Eff2";
+                Efficiency_Status = "Eff2_1re_wmt_wNOmtTL";
+//                Efficiency_Status = "Eff2_1re";
+//                Efficiency_Status = "Eff2";
             } else {
                 Efficiency_Status = "Eff1";
             }
@@ -615,8 +617,8 @@ void EventAnalyser() {
     bool ToF_plots = false;
 
     /* Efficiency plots */
-//    bool Efficiency_plots = true;
-    bool Efficiency_plots = false;
+    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
     bool TL_after_hit_maps_plots = true;
 //    bool TL_after_hit_maps_plots = false;
 
@@ -6398,7 +6400,7 @@ void EventAnalyser() {
                 /* Else, load values from fit. */
                 if (apply_nBeta_fit_cuts) {
                     n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
-                    TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+//                    TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
                     Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());          // Log values of beta fit cut (for monitoring)
                     Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());          // Log values of beta fit cut (for monitoring)
                 }
@@ -6641,7 +6643,9 @@ void EventAnalyser() {
         //<editor-fold desc="Filling truth level histograms (lundfile loop)">
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
-        if (calculate_truth_level && apply_nucleon_cuts && findSubstring(SampleName, "simulation")) { // run only for CLAS12 simulation & AFTER beta fit
+        if (calculate_truth_level && apply_nucleon_cuts && findSubstring(SampleName, "simulation")
+            && (!TL_with_one_reco_electron || (electrons.size() == 1))
+                ) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
@@ -6702,6 +6706,7 @@ void EventAnalyser() {
 
 //
 //                            cout << "Particle_TL_Momentum = " << Particle_TL_Momentum << "\n";
+//                            cout << "TL_n_mom_cuts.GetUpperCut() = " << TL_n_mom_cuts.GetUpperCut() << "\n";
 //
 
                             if (Particle_TL_Momentum >= TL_P_nFD_mom_max) {
@@ -6783,53 +6788,47 @@ void EventAnalyser() {
 
             //<editor-fold desc="Event selection for TL plots">
             /* Setting up basic TL event selection */
+            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool no_TL_cPions = (TL_piplus_mom_ind.size() == 0 && TL_piminus_mom_ind.size() == 0);                   // No id. cPions above momentum threshold
             bool no_TL_OtherPart = (TL_OtherPart_ind.size() == 0);                                                   // No other part. above momentum threshold
             bool no_TL_FDpi0 = (Enable_FD_photons || (TL_pi0FD_mom_ind.size() == 0));                                // No id. pi0 in the FD above momentum threshold
             bool no_TL_FDPhotons = (Enable_FD_photons || (TL_PhotonsFD_mom_ind.size() == 0));                        // No id. photons in the FD above momentum threshold
-            bool TL_Event_Selection_1e_cut = (TL_Electron_mom_ind.size() == 1 && TL_ElectronFD_mom_ind.size() == 1); // One id. FD electron above momentum threshold
             bool TL_Basic_ES = (TL_Event_Selection_1e_cut && no_TL_cPions && no_TL_OtherPart && no_TL_FDpi0 && no_TL_FDPhotons);
 
             /* Setting up 1p TL event selection */
             bool no_FDNeutron_1p = (TL_NeutronsFD_mom_ind.size() == 0);
-            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) && no_FDNeutron_1p &&
+            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1) &&
                                     (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-//            bool one_FDproton_1p = ((TL_Protons_mom_ind.size() == 1) && (TL_ProtonsFD_mom_ind.size() == 1));
 
             /* Setting up 1n TL event selection */
             bool one_FDNeutron_1n = ((TL_NeutronsFD_mom_ind.size() == 1) &&
                                      (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-//            bool one_FDNeutron_1n = (TL_NeutronsFD_mom_ind.size() == 1);
             bool no_protons_1n = (TL_Protons_mom_ind.size() == 0);
 
             /* Setting up pFDpCD TL event selection */
-            bool no_FDNeutron_pFDpCD = (TL_NeutronsFD_mom_ind.size() == 0);
-//            bool two_protons_pFDpCD = (TL_Protons_mom_ind.size() == 2);
-            bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) && no_FDNeutron_pFDpCD &&
-                                        (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-//            bool one_FDproton_pFDpCD = (TL_ProtonsFD_mom_ind.size() == 1);
             bool one_CDproton_pFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
+            bool one_FDproton_pFDpCD = ((TL_ProtonsFD_mom_ind.size() == 1) &&
+                                        (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_ProtonsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
+            bool no_FDNeutron_pFDpCD = (TL_NeutronsFD_mom_ind.size() == 0);
 
             /* Setting up nFDpCD TL event selection */
+            bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
             bool one_FDNeutron_nFDpCD = ((TL_NeutronsFD_mom_ind.size() == 1) &&
                                          (TLKinCutsCheck(c12, apply_kinematical_cuts, TL_NeutronsFD_mom_ind, FD_nucleon_theta_cut, FD_nucleon_momentum_cut)));
-//            bool one_FDNeutron_nFDpCD = (TL_NeutronsFD_mom_ind.size() == 1);
             bool one_proton_nFDpCD = (TL_Protons_mom_ind.size() == 1);
             bool no_FDproton_nFDpCD = (TL_ProtonsFD_mom_ind.size() == 0);
-            bool one_CDproton_nFDpCD = (TL_ProtonsCD_mom_ind.size() == 1);
 
             // 1p = one id. FD proton:
-            TL_Event_Selection_1p = (TL_Basic_ES && one_FDproton_1p);
+            TL_Event_Selection_1p = (TL_Basic_ES && no_FDNeutron_1p && one_FDproton_1p);
 
             // 1n = one id. FD neutron & no id. protons:
             TL_Event_Selection_1n = (TL_Basic_ES && one_FDNeutron_1n && no_protons_1n);
 
             // pFDpCD = One id. FD proton & one id. CD proton:
-            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_FDproton_pFDpCD && one_CDproton_pFDpCD);
-//            TL_Event_Selection_pFDpCD = (TL_Basic_ES && two_protons_pFDpCD && one_FDproton_pFDpCD && one_CDproton_pFDpCD);
+            TL_Event_Selection_pFDpCD = (TL_Basic_ES && one_FDproton_pFDpCD && one_CDproton_pFDpCD && no_FDNeutron_pFDpCD);
 
             // nFDpCD = One id. FD neutron & one id. CD proton:
-            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD && one_CDproton_nFDpCD);
+            TL_Event_Selection_nFDpCD = (TL_Basic_ES && one_CDproton_nFDpCD && one_FDNeutron_nFDpCD && one_proton_nFDpCD && no_FDproton_nFDpCD);
             //</editor-fold>
 
             //<editor-fold desc="Fill TL histograms and AMaps">
