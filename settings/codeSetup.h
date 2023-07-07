@@ -34,6 +34,8 @@ std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
 /* source directory and directories */
 std::string SourcesDirectory = WorkingDirectory + "source" + "/";
 std::string CutsDirectory = SourcesDirectory + "cuts" + "/";
+std::string PIDCutsDirectory = CutsDirectory + "PIDCuts" + "/";
+std::string NucleonCutsDirectory = CutsDirectory + "NucleonCuts" + "/";
 std::string NeutronResolutionDirectory = CutsDirectory + "NeutronResolution" + "/";
 std::string RefrenceHitMapsDirectory = CutsDirectory + "RefrenceHitMaps" + "/";
 

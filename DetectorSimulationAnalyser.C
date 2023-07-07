@@ -492,10 +492,10 @@ void EventAnalyser() {
     string listName = plots_path + "/" + AnalyseFileSample + plots_file_type;
     const char *TListName = listName.c_str();
 
-    /* Histogram ref. TList (for TL fiducial cuts) */
-    TList *TL_ref_plots = new TList();
-    string TL_ref_listName = CutsDirectory + "TL_ref_plots.root";
-    const char *TL_ref_TListName = TL_ref_listName.c_str();
+//    /* Histogram ref. TList (for TL fiducial cuts) */
+//    TList *TL_ref_plots = new TList();
+//    string TL_ref_listName = CutsDirectory + "TL_ref_plots.root";
+//    const char *TL_ref_TListName = TL_ref_listName.c_str();
     //</editor-fold>
 
 //  Checking directories ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -510,6 +510,8 @@ void EventAnalyser() {
 
     string Plots_Folder = plots_path;
     Directories directories = Directories(Plots_Folder);
+
+    cout << " done.\n\n";
     //</editor-fold>
 
 // Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -864,7 +866,7 @@ void EventAnalyser() {
     //<editor-fold desc="Histogram definitions">
     /* Histogram definitions and settings. */
 
-    cout << "\nDefining histograms...\n\n";
+    cout << "\nDefining histograms...";
 
     //TODO: add weights to all histograms
 
@@ -2533,24 +2535,26 @@ void EventAnalyser() {
     //<editor-fold desc="Phi_e histograms">
     THStack *sPhi_e = new THStack("#phi_{e} stack (CD & FD)", "#phi_{e} of Outgoing Electron (no #(e) cut, CD & FD);#phi_{e} [Deg];");
 
-    /* Phi_e histograms (no #(e) cut) */
+    //<editor-fold desc="Phi_e histograms (no #(e) cut)">
     TH1D *hPhi_e_All_e_FD = new TH1D("#phi_{e} (no #(e) cut, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_All_e_FD_Dir = directories.Angle_Directory_map["Phi_e_All_e_Directory"];
+    //</editor-fold>
 
-    /* Phi_e histograms (1e cut) */
+    //<editor-fold desc="Phi_e histograms (1e cut)">
     TH1D *hPhi_e_1e_cut_FD = new TH1D("#phi_{e} (1e Cut, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
     string hPhi_e_1e_cut_FD_Dir = directories.Angle_Directory_map["Phi_e_1e_cut_Directory"];
+    //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (1p)">
-    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 2p, FD);#phi_{e} [Deg];",
+    TH1D *hPhi_e_All_Int_1p_FD = new TH1D("#phi_{e} 1p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 1p, FD);#phi_{e} [Deg];",
                                           100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 2p, FD);#phi_{e} [Deg];",
+    TH1D *hPhi_e_QEL_1p_FD = new TH1D("#phi_{e} for 1p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 1p, FD);#phi_{e} [Deg];",
                                       100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 2p, FD);#phi_{e} [Deg];",
+    TH1D *hPhi_e_MEC_1p_FD = new TH1D("#phi_{e} for 1p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 1p, FD);#phi_{e} [Deg];",
                                       100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 2p, FD);#phi_{e} [Deg];",
+    TH1D *hPhi_e_RES_1p_FD = new TH1D("#phi_{e} for 1p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 1p, FD);#phi_{e} [Deg];",
                                       100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 2p, FD);#phi_{e} [Deg];",
+    TH1D *hPhi_e_DIS_1p_FD = new TH1D("#phi_{e} for 1p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 1p, FD);#phi_{e} [Deg];",
                                       100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
     string hPhi_e_QEL_1p_FD_Dir = directories.Angle_Directory_map["Phi_e_1p_Directory"];
@@ -2568,11 +2572,16 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (1n)">
-    TH1D *hPhi_e_All_Int_1n_FD = new TH1D("#phi_{e} 1n (All Int., FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_QEL_1n_FD = new TH1D("#phi_{e} for 1n (QEL Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_MEC_1n_FD = new TH1D("#phi_{e} for 1n (MEC Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_RES_1n_FD = new TH1D("#phi_{e} for 1n (RES Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
-    TH1D *hPhi_e_DIS_1n_FD = new TH1D("#phi_{e} for 1n (DIS Only, FD)", ";#phi_{e} [Deg];", 100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_All_Int_1n_FD = new TH1D("#phi_{e} 1n (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 1n, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_1n_FD = new TH1D("#phi_{e} for 1n (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 1n, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_1n_FD = new TH1D("#phi_{e} for 1n (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 1n, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_1n_FD = new TH1D("#phi_{e} for 1n (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 1n, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_1n_FD = new TH1D("#phi_{e} for 1n (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 1n, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_QEL_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     string hPhi_e_MEC_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
@@ -2588,24 +2597,35 @@ void EventAnalyser() {
     string hPhi_e_VS_W_1n_FD_Dir = directories.Angle_Directory_map["Phi_e_1n_Directory"];
     //</editor-fold>
 
-    /* Phi_e histograms (2p) */
-    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    //<editor-fold desc="Phi_e histograms (2p)">
+    TH1D *hPhi_e_All_Int_2p_FD = new TH1D("#phi_{e} 2p (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., 2p, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_2p_FD = new TH1D("#phi_{e} for 2p (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_2p_FD = new TH1D("#phi_{e} for 2p (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_2p_FD = new TH1D("#phi_{e} for 2p (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_2p_FD = new TH1D("#phi_{e} for 2p (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, 2p, FD);#phi_{e} [Deg];",
+                                      100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_QEL_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_MEC_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_RES_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
     string hPhi_e_DIS_2p_FD_Dir = directories.Angle_Directory_map["Phi_e_2p_Directory"];
+    //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (pFDpCD)">
-    TH1D *hPhi_e_All_Int_pFDpCD_FD = new TH1D("#phi_{e} pFDpCD (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_QEL_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_MEC_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_RES_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_DIS_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_All_Int_pFDpCD_FD = new TH1D("#phi_{e} pFDpCD (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., pFDpCD, FD);#phi_{e} [Deg];",
+                                              100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, pFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, pFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, pFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_pFDpCD_FD = new TH1D("#phi_{e} for pFDpCD (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, pFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_QEL_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
     string hPhi_e_MEC_pFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_pFDpCD_Directory"];
@@ -2622,11 +2642,16 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Phi_e histograms (nFDpCD)">
-    TH1D *hPhi_e_All_Int_nFDpCD_FD = new TH1D("#phi_{e} nFDpCD (All Int., FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_QEL_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (QEL Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_MEC_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (MEC Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_RES_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (RES Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
-    TH1D *hPhi_e_DIS_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (DIS Only, FD)", ";#phi_{e} [Deg];", 100, -180, 180);
+    TH1D *hPhi_e_All_Int_nFDpCD_FD = new TH1D("#phi_{e} nFDpCD (All Int., FD)", "#phi_{e} of Outgoing Electron (All Int., nFDpCD, FD);#phi_{e} [Deg];",
+                                              100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_QEL_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (QEL Only, FD)", "#phi_{e} of Outgoing Electron (QEL Only, nFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_MEC_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (MEC Only, FD)", "#phi_{e} of Outgoing Electron (MEC Only, nFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_RES_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (RES Only, FD)", "#phi_{e} of Outgoing Electron (RES Only, nFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
+    TH1D *hPhi_e_DIS_nFDpCD_FD = new TH1D("#phi_{e} for nFDpCD (DIS Only, FD)", "#phi_{e} of Outgoing Electron (DIS Only, nFDpCD, FD);#phi_{e} [Deg];",
+                                          100, Phi_lboundary, Phi_uboundary);
     string hPhi_e_All_Int_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_QEL_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
     string hPhi_e_MEC_nFDpCD_FD_Dir = directories.Angle_Directory_map["Phi_e_nFDpCD_Directory"];
@@ -6040,26 +6065,26 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Load reference histogram">
-    TFile *f = new TFile((CutsDirectory + "hit_map_ref.root").c_str());
-//    TFile *f = new TFile((CutsDirectory + "DC_fiducial_cut_10_reference_250.root").c_str());
-//    TFile *f = new TFile((CutsDirectory + "TL_ref_plots.root").c_str());
-//    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root").c_str());
-
-    if (!f) { cout << "\n\n\nLoad reference histogram: no ref. histogram file have found! Exiting...\n\n\n", quit(); }
-
-    TH2D *Electron_hit_map = (TH2D *) f->Get("Electron_hit_map");
-    string Electron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
-    if (!Electron_hit_map) { cout << "\n\n\nLoad reference histogram: Electron_hit_map is empty! Exiting...\n\n\n", quit(); }
-
-    TH2D *Proton_hit_map = (TH2D *) f->Get("Protons_hit_map");
-    string Proton_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
-    if (!Proton_hit_map) { cout << "\n\n\nLoad reference histogram: Protons_hit_map is empty! Exiting...\n\n\n", quit(); }
-
-    TH2D *Neutron_hit_map = (TH2D *) f->Get("Neutrons_hit_map");
-    string Neutron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
-    if (!Neutron_hit_map) { cout << "\n\n\nLoad reference histogram: Neutrons_hit_map is empty! Exiting...\n\n\n", quit(); }
-    //</editor-fold>
+//    //<editor-fold desc="Load reference histogram">
+//    TFile *f = new TFile((CutsDirectory + "hit_map_ref.root").c_str());
+////    TFile *f = new TFile((CutsDirectory + "DC_fiducial_cut_10_reference_250.root").c_str());
+////    TFile *f = new TFile((CutsDirectory + "TL_ref_plots.root").c_str());
+////    TFile *f = new TFile((CutsDirectory + "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10_plots.root").c_str());
+//
+//    if (!f) { cout << "\n\n\nLoad reference histogram: no ref. histogram file have found! Exiting...\n\n\n", quit(); }
+//
+//    TH2D *Electron_hit_map = (TH2D *) f->Get("Electron_hit_map");
+//    string Electron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
+//    if (!Electron_hit_map) { cout << "\n\n\nLoad reference histogram: Electron_hit_map is empty! Exiting...\n\n\n", quit(); }
+//
+//    TH2D *Proton_hit_map = (TH2D *) f->Get("Protons_hit_map");
+//    string Proton_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
+//    if (!Proton_hit_map) { cout << "\n\n\nLoad reference histogram: Protons_hit_map is empty! Exiting...\n\n\n", quit(); }
+//
+//    TH2D *Neutron_hit_map = (TH2D *) f->Get("Neutrons_hit_map");
+//    string Neutron_hit_map_Dir = directories.Eff_and_ACorr_Directory_map["Loaded_reco_ref_hit_maps_1e_cut_Directory"];
+//    if (!Neutron_hit_map) { cout << "\n\n\nLoad reference histogram: Neutrons_hit_map is empty! Exiting...\n\n\n", quit(); }
+//    //</editor-fold>
 
     //</editor-fold>
 
@@ -6305,6 +6330,7 @@ void EventAnalyser() {
 
     //</editor-fold>
 
+    cout << " done.\n\n";
     //</editor-fold>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -6319,10 +6345,10 @@ void EventAnalyser() {
     if (apply_cuts) {
         /* Read in target parameter files */
         if (!apply_chi2_cuts_1e_cut) {
-            clasAna.readInputParam((CutsDirectory + "ana.par").c_str());
+            clasAna.readInputParam((PIDCutsDirectory + "ana.par").c_str());
         } else if (apply_chi2_cuts_1e_cut) {
             cout << "\nLoading fitted pid cuts...\n\n";
-            clasAna.readInputParam((CutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+            clasAna.readInputParam((PIDCutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             /* Overwriting PID cuts according to SampleName */
             Chi2_Proton_cuts_CD.SetCutPram(clasAna.GetPidCutMean(2212, "CD"), -clasAna.GetPidCutSigma(2212, "CD"), clasAna.GetPidCutSigma(2212, "CD"));
@@ -6339,9 +6365,7 @@ void EventAnalyser() {
         if (apply_ECAL_SF_cuts) { // making f_ecalSFCuts = ture
             //todo: ask justin what are these cuts:
             //todo: ask justin for these cuts for LH2 and C12 (and other elements)
-//        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
-//        clasAna.readEcalSFPar((CutsDirectory + "ecal.par").c_str());
-            clasAna.readEcalSFPar((CutsDirectory + "paramsSF_40Ca_x2.dat").c_str());
+            clasAna.readEcalSFPar((PIDCutsDirectory + "paramsSF_40Ca_x2.dat").c_str());
             //TODO: RECHECK WHAT ARE THE CUTS HERE:
             SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.24865, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
 
@@ -6352,11 +6376,8 @@ void EventAnalyser() {
 
             //todo: ask justin what are these cuts:
             //todo: ask justin for these cuts for LH2 and C12 (and other elements)
-//        clasAna.readEcalPar((CutsDirectory + "ecal.par").c_str()); // OLD!!!
-//        clasAna.readEcalSFPar((CutsDirectory + "ecal.par").c_str());
-            clasAna.readEcalPPar((CutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
+            clasAna.readEcalPPar((PIDCutsDirectory + "paramsPI_40Ca_x2.dat").c_str());
 
-//            SF_cuts = DSCuts("SF", "FD", "Electron", "1e cut", 0.24865, clasAna.getEcalSFLowerCut(), clasAna.getEcalSFUpperCut());
             clasAna.setEcalPCuts();
         }
 
@@ -6397,7 +6418,7 @@ void EventAnalyser() {
             Beta_max_cut_ABF_FD_n_from_ph_apprax = DSCuts("Beta_cut_ECAL_apprax", "FD-ECAL_apprax", "", "1n", 1, -9999, 9999);
         } else {
             cout << "\n\nLoading fitted Beta cuts...\n\n";
-            clasAna.readInputParam((CutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+            clasAna.readInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
             /* Setting nucleon cuts - only if NOT plotting efficiency plots! */
             if (limless_mom_eff_plots ||
@@ -15425,11 +15446,11 @@ void EventAnalyser() {
         hPhi_ph_BC_truth_1e_cut.hDrawAndSave(SampleName, c1, plots, norm_Angle_plots_master, true, 1., 9999, 9999, 0, false);
         //</editor-fold>
 
-        //<editor-fold desc="Loaded hit maps">
-        histPlotter2D(c1, Electron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Electron_hit_map_Dir, "01_Electron_hit_map");
-        histPlotter2D(c1, Proton_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Proton_hit_map_Dir, "02_Proton_hit_map");
-        histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
-        //</editor-fold>
+//        //<editor-fold desc="Loaded hit maps">
+//        histPlotter2D(c1, Electron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Electron_hit_map_Dir, "01_Electron_hit_map");
+//        histPlotter2D(c1, Proton_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Proton_hit_map_Dir, "02_Proton_hit_map");
+//        histPlotter2D(c1, Neutron_hit_map, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, Neutron_hit_map_Dir, "03_Neutron_hit_map");
+//        //</editor-fold>
 
         //</editor-fold>
 
@@ -15906,11 +15927,7 @@ void EventAnalyser() {
         //</editor-fold>
 
         //<editor-fold desc="TL fiducial plots">
-        if (!apply_nucleon_cuts) {
-            histPlotter2D(c1, hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, TL_ref_plots, false,
-                          hTheta_nFD_vs_Phi_nFD_ref_plot_nFDpCD_Dir,
-                          "00_Theta_nFD_vs_Phi_nFD_ref_plot_nFDpCD");
-        } else {
+        if (apply_nucleon_cuts) {
             hnFD_Hit_map_nFDpCD_BEC.hDrawAndSave(SampleName, c1, plots, true);
             hnFD_Hit_map_nFDpCD_AEC.hDrawAndSave(SampleName, c1, plots, true);
             hTheta_nFD_vs_Phi_nFD_nFDpCD_BEC.hDrawAndSave(SampleName, c1, plots, true);
@@ -15987,7 +16004,7 @@ void EventAnalyser() {
         if (plot_and_fit_MomRes) {
             nRes.SliceFitDrawAndSave(SampleName, "Neutron", beamE);
             nRes.LogFitDataToFile(SampleName, "Neutron", plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-            nRes.DrawAndSaveResSlices(SampleName, "Neutron", c1, plots_path, CutsDirectory);
+            nRes.DrawAndSaveResSlices(SampleName, "Neutron", c1, plots_path, NeutronResolutionDirectory);
         }
         //</editor-fold>
 
@@ -16014,7 +16031,7 @@ void EventAnalyser() {
         if (plot_and_fit_MomRes) {
             pRes.SliceFitDrawAndSave(SampleName, "Proton", beamE);
             pRes.LogFitDataToFile(SampleName, "Proton", plots_path, NeutronResolutionDirectory, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
-            pRes.DrawAndSaveResSlices(SampleName, "Proton", c1, plots_path, CutsDirectory);
+            pRes.DrawAndSaveResSlices(SampleName, "Proton", c1, plots_path, NeutronResolutionDirectory);
         }
         //</editor-fold>
 
@@ -16040,7 +16057,7 @@ void EventAnalyser() {
         int chi2cuts_length = 6;
 
         ofstream FittedPIDCuts;
-        std::string FittedPIDCutsFilePath = CutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par";
+        std::string FittedPIDCutsFilePath = PIDCutsDirectory + "Fitted_PID_Cuts_-_" + SampleName + ".par";
 
         FittedPIDCuts.open(FittedPIDCutsFilePath);
         FittedPIDCuts << "######################################################################\n";
@@ -16065,7 +16082,7 @@ void EventAnalyser() {
     //<editor-fold desc="Saving nucleon cuts to .par file">
     if (!apply_nucleon_cuts) { // log nucleon cuts
         ofstream Nucleon_Cuts;
-        std::string Nucleon_CutsFilePath = CutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par";
+        std::string Nucleon_CutsFilePath = NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par";
 
         Nucleon_Cuts.open(Nucleon_CutsFilePath);
         Nucleon_Cuts << "######################################################################\n";
