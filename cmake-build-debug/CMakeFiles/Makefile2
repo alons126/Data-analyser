@@ -80,12 +80,12 @@ clean: CMakeFiles/Data-analyser.dir/clean
 CMakeFiles/Data-analyser.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Data-analyser.dir\build.make CMakeFiles/Data-analyser.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Data-analyser.dir\build.make CMakeFiles/Data-analyser.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="\\wsl$$\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles" --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32 "Built target Data-analyser"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="\\wsl$$\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles" --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33 "Built target Data-analyser"
 .PHONY : CMakeFiles/Data-analyser.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Data-analyser.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "\\wsl$$\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles" 32
+	$(CMAKE_COMMAND) -E cmake_progress_start "\\wsl$$\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles" 33
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Data-analyser.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "\\wsl$$\Ubuntu-20.04\home\alon\project\cmake-build-debug\CMakeFiles" 0
 .PHONY : CMakeFiles/Data-analyser.dir/rule

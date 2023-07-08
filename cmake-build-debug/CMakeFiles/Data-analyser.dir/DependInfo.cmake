@@ -34,7 +34,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/cuts"
-  "//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other"
+  "//wsl$/Ubuntu-20.04/home/alon/project/source/data/other"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/functions"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
@@ -54,6 +54,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "//wsl$/Ubuntu-20.04/home/alon/project/macros/process_events.C" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/macros/process_events.C.obj"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/Structures_beta/Histogram1D.cpp" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/source/Structures_beta/Histogram1D.cpp.obj"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/AMaps/AMaps.cpp" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/source/classes/AMaps/AMaps.cpp.obj"
+  "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DEfficiency/DEfficiency.cpp" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/source/classes/DEfficiency/DEfficiency.cpp.obj"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/Directories/Directories.cpp" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/source/classes/Directories/Directories.cpp.obj"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/ExperimentParameters/ExperimentParameters.cpp" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/source/classes/ExperimentParameters/ExperimentParameters.cpp.obj"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/NeutronResolution/NeutronResolution.cpp" "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/CMakeFiles/Data-analyser.dir/source/classes/NeutronResolution/NeutronResolution.cpp.obj"
@@ -88,7 +89,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/cuts"
-  "//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other"
+  "//wsl$/Ubuntu-20.04/home/alon/project/source/data/other"
   "//wsl$/Ubuntu-20.04/home/alon/project/source/functions"
   )
 

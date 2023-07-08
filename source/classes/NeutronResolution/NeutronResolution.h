@@ -84,11 +84,11 @@ public:
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path, const string &CutsDirectory);
+    void DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path, const string &DataDirectory);
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &CutsDirectory,
+    void LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &DataDirectory,
                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
 // ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------

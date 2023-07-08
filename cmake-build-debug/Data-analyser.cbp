@@ -41,7 +41,7 @@
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts"/>
-					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/data/other"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/functions"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.4/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.4/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
@@ -82,7 +82,7 @@
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/hPlots"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/TargetParameters"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts"/>
-					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/other"/>
+					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/data/other"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/project/source/functions"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.4/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
 					<Add directory="C:/Program Files/JetBrains/CLion 2023.1.4/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
@@ -189,6 +189,12 @@
 		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/AMaps/AMaps.h">
 			<Option target="Data-analyser"/>
 		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DEfficiency/DEfficiency.cpp">
+			<Option target="Data-analyser"/>
+		</Unit>
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DEfficiency/DEfficiency.h">
+			<Option target="Data-analyser"/>
+		</Unit>
 		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/classes/DSCuts/DSCuts.h">
 			<Option target="Data-analyser"/>
 		</Unit>
@@ -279,49 +285,49 @@
 		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/constants.h">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/Fitted_PID_Cuts_-_C12_simulation_6GeV_T5_first_10.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/Fitted_PID_Cuts_-_C12_simulation_6GeV_T5_first_10.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/ana.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/ana.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5_first_10.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5_first_10.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5_first_100.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__C12_simulation_6GeV_T5_first_100.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__Ca48_data_6GeV_run_015832.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__Ca48_data_6GeV_run_015832.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__Ca48_simulation_G18_10a_02_11b_6GeV.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__Ca48_simulation_G18_10a_02_11b_6GeV.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__LH2_data_6GeV_run_015032.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/Fitted_PID_Cuts__LH2_data_6GeV_run_015032.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/ana.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/ana.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/clas12ana_ver_1_myedit/ecal.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/clas12ana_ver_1_myedit/ecal.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/ecal.par">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/ecal.par">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsPI_40Ca_x2.dat">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/paramsPI_40Ca_x2.dat">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsPI_LD2_x2.dat">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/paramsPI_LD2_x2.dat">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsSF_40Ca_x2.dat">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/paramsSF_40Ca_x2.dat">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/cuts/paramsSF_LD2_x2.dat">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/data/PIDCuts/paramsSF_LD2_x2.dat">
 			<Option target="Data-analyser"/>
 		</Unit>
 		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/AngleCalc/CalcdPhi.h">
@@ -330,7 +336,7 @@
 		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/AngleCalc/GetBinFromAng.h">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/DrawAndSaveFunctions/DrawAndSaveAcceptanceCorrectionPlots.h">
+		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/DrawAndSaveFunctions/DrawAndSaveACorrPlots.h">
 			<Option target="Data-analyser"/>
 		</Unit>
 		<Unit filename="//wsl$/Ubuntu-20.04/home/alon/project/source/functions/DrawAndSaveFunctions/DrawAndSaveEfficiencyPlots.h">

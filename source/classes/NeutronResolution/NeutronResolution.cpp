@@ -264,7 +264,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
 //<editor-fold desc="DrawAndSaveResSlices function">
 void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path,
-                                             const string &CutsDirectory) {
+                                             const string &DataDirectory) {
     string SampleNameTemp = SampleName;
 
     ResSlicePlots->Add(FittedNeutronResSlices);
@@ -289,10 +289,10 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LogFitDataToFile function">
-void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &CutsDirectory,
+void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &DataDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
     ofstream Neutron_res_fit_param;
-    std::string Neutron_res_fit_paramFilePath = CutsDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
+    std::string Neutron_res_fit_paramFilePath = DataDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
 
     Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
     Neutron_res_fit_param << "######################################################################\n";
@@ -393,9 +393,6 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                 double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
 
-                //TODO: add mechanism to shift protons and neutrons?
-                double Shift = Momentum - Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
-
                 return Smearing * Momentum;
             }
         }
@@ -414,7 +411,11 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
     } else {
         for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-                double ShiftedMomentum = Momentum + Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
+
+                //TODO: ask Adi if shift should be by percentage or regular factor
+//                double ShiftedMomentum = Momentum * (1. + 10.); // minus for protons and plus for neutrons
+                double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
+//                double ShiftedMomentum = Momentum + Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
 
                 return ShiftedMomentum;
             }

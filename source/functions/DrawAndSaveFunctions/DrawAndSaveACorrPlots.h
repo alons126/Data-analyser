@@ -2,8 +2,8 @@
 // Created by alons on 17/05/2023.
 //
 
-#ifndef DRAWANDSAVEACCEPTANCECORRECTIONPLOTS_H
-#define DRAWANDSAVEACCEPTANCECORRECTIONPLOTS_H
+#ifndef DrawAndSaveACorrPlots_H
+#define DrawAndSaveACorrPlots_H
 
 #include <iostream>
 #include <vector>
@@ -38,7 +38,9 @@
 
 using namespace std;
 
-void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list) {
+// DrawAndSaveACorrPlots function for momentum plots:
+void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot,
+                           TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
     bool weighted_plots = true;
 
@@ -147,14 +149,14 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
         ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
     } else {
         if (findSubstring(ACorrectionRecTitle, ", FD)") ||
-            findSubstring(ACorrectionParticle, "FD " + ACorrectionParticle) ||
-            findSubstring(ACorrectionParticle, "FD " + ACorrectionParticleLC)) {
+            findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticle) ||
+            findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticleLC)) {
             ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/01_FD_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" +
                                  ACorrectionFS + "/";
             ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
         } else if (findSubstring(ACorrectionRecTitle, ", CD)") ||
-                   findSubstring(ACorrectionParticle, "CD " + ACorrectionParticle) ||
-                   findSubstring(ACorrectionParticle, "CD " + ACorrectionParticleLC)) {
+                   findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticle) ||
+                   findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticleLC)) {
             ACorrectionSaveDir = TLPlot.GetHistogram1DSaveNamePath() + "/02_CD_" + ACorrectionParticle + "_" + ACorrectionType + "_ACorrection_plots_" +
                                  ACorrectionFS + "/";
             ACorrectionTestSaveDir = ACorrectionSaveDir + "Cloned_hist_test/";
@@ -286,10 +288,52 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     Canvas->Clear();
     //</editor-fold>
 
+    //<editor-fold desc="Save acceptance correction data">
+    if (save_ACorr_data) {
+        system(("rm -r " + ACorr_data_Dir).c_str()); // clear old ACorr_data_Dir
+        system(("mkdir -p " + ACorr_data_Dir).c_str()); // recreate ACorr_data_Dir
+
+        string ACorr_data_StatsTitle;
+
+        if ((ACorrectionFS == "pFDpCD") || (ACorrectionFS == "nFDpCD")) {
+            if (findSubstring(ACorrectionRecTitle, ", FD)") ||
+                findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticle) ||
+                findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticleLC)) {
+                ACorr_data_StatsTitle = "FD_" + ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+            } else if (findSubstring(ACorrectionRecTitle, ", CD)") ||
+                       findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticle) ||
+                       findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticleLC)) {
+                ACorr_data_StatsTitle = "CD_" + ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+            } else {
+                ACorr_data_StatsTitle = ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+            }
+        } else {
+            ACorr_data_StatsTitle = ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+        }
+
+        TH1D *ACorr_factor = (TH1D *) ACorrection_plot->Clone(ACorr_data_StatsTitle.c_str());
+
+        ACorr_factor->SetLineStyle(1);
+        ACorr_factor->SetLineColor(kBlue);
+
+        if (weighted_plots) { ACorr_factor->Sumw2(); }
+
+//    ACorr_factor->Rebin(2);
+//    ACorr_factor->Divide(RPlot_Clone);
+////    ACorr_factor->Divide(TLPlot_Clone);
+        ACorr_factor->Draw();
+        ACorr_factor->SetStats(0);
+        ACorr_data->Add(ACorr_factor);
+//        Canvas->SaveAs((ACorr_factor_SaveName).c_str());
+        Canvas->Clear();
+    }    //</editor-fold>
+
     delete Canvas;
 }
 
-void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {
+// DrawAndSaveACorrPlots function for angle plots:
+void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot,
+                           TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
     bool weighted_plots = true;
 
@@ -596,7 +640,47 @@ void DrawAndSaveAcceptanceCorrectionPlots(string &SampleName, const hPlot1D &TLP
     Canvas->Clear();
     //</editor-fold>
 
+    //<editor-fold desc="Save acceptance correction data">
+    if (save_ACorr_data) {
+        system(("rm -r " + ACorr_data_Dir).c_str()); // clear old ACorr_data_Dir
+        system(("mkdir -p " + ACorr_data_Dir).c_str()); // recreate ACorr_data_Dir
+
+        string ACorr_data_StatsTitle;
+
+        if (((ACorrectionFS == "pFDpCD") || (ACorrectionFS == "nFDpCD")) && (ACorrectionParticle != "Electron")) {
+            if (findSubstring(ACorrectionRecTitle, ", FD)") ||
+                findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticle) ||
+                findSubstring(ACorrectionRecTitle, "FD " + ACorrectionParticleLC)) {
+                ACorr_data_StatsTitle = "FD_" + ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+            } else if (findSubstring(ACorrectionRecTitle, ", CD)") ||
+                       findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticle) ||
+                       findSubstring(ACorrectionRecTitle, "CD " + ACorrectionParticleLC)) {
+                ACorr_data_StatsTitle = "CD_" + ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+            } else {
+                ACorr_data_StatsTitle = ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+            }
+        } else {
+            ACorr_data_StatsTitle = ACorrectionParticle + "_" + ACorrectionType + "_" + "ACorr_" + ACorrectionFS;
+        }
+
+        TH1D *ACorr_factor = (TH1D *) ACorrection_plot->Clone(ACorr_data_StatsTitle.c_str());
+
+        ACorr_factor->SetLineStyle(1);
+        ACorr_factor->SetLineColor(kBlue);
+
+        if (weighted_plots) { ACorr_factor->Sumw2(); }
+
+//    ACorr_factor->Rebin(2);
+//    ACorr_factor->Divide(RPlot_Clone);
+////    ACorr_factor->Divide(TLPlot_Clone);
+        ACorr_factor->Draw();
+        ACorr_factor->SetStats(0);
+        ACorr_data->Add(ACorr_factor);
+//        Canvas->SaveAs((ACorr_factor_SaveName).c_str());
+        Canvas->Clear();
+    }    //</editor-fold>
+
     delete Canvas;
 }
 
-#endif //DRAWANDSAVEACCEPTANCECORRECTIONPLOTS_H
+#endif //DrawAndSaveACorrPlots_H
