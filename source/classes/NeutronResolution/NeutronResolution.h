@@ -97,7 +97,11 @@ public:
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    double PSmear(bool apply_proton_SmearingAndShift, double Momentum);
+    double PSmear(bool apply_nucleon_SmearAndShift, double Momentum);
+
+// NShift function ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    double NShift(bool apply_nucleon_SmearAndShift, double Momentum);
 
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -383,8 +383,8 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="PSmear function">
-double NeutronResolution::PSmear(bool apply_proton_SmearingAndShift, double Momentum) {
-    if (!apply_proton_SmearingAndShift) {
+double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Momentum) {
+    if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
         TRandom3 *Rand = new TRandom3();
@@ -396,7 +396,27 @@ double NeutronResolution::PSmear(bool apply_proton_SmearingAndShift, double Mome
                 //TODO: add mechanism to shift protons and neutrons?
                 double Shift = Momentum - Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
 
-                return Smearing * Shift;
+                return Smearing * Momentum;
+            }
+        }
+    }
+
+    return Momentum;
+}
+//</editor-fold>
+
+// NShift function ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="NShift function">
+double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Momentum) {
+    if (!apply_nucleon_SmearAndShift) {
+        return Momentum;
+    } else {
+        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
+            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+                double ShiftedMomentum = Momentum + Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
+
+                return ShiftedMomentum;
             }
         }
     }
