@@ -41,6 +41,8 @@ using namespace std;
 class DEfficiency {
 private:
 
+    bool weighted_plots = true;
+
     TList *ACorr_data = new TList();
 
 public:
@@ -52,23 +54,45 @@ public:
 
 // GetParticleName function ---------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetParticleName(string Source);
+    string GetParticleName(const string &Source);
 
 // GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetParticleNameLC(string Source);
+    string GetParticleNameLC(const string &Source);
 
 // GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetParticleNameShort(string Source);
+    string GetParticleNameShort(const string &Source);
 
 // GetType function -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetType(string Source);
+    string GetType(const string &Source);
+
+// GetTitle function -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+    string GetTitle(const string &Source);
 
 // GetFS function -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    string GetFS(string Source);
+    string GetFS(const string &Source);
+
+// SetXLabel function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    string SetXLabel(const string &Source);
+
+// SetSaveDir function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    string SetSaveDir(const string &Source, const string &BaseSaveDir, const string &Mod = "");
+
+// DrawAndSaveHistogram1D function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats, bool weighted_plots,
+                                bool rebin_plots, const string &HistSaveDir);
+
+// DrawAndSaveACorrPlots function -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot,
+                               TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir);
 
 };
 

@@ -384,6 +384,8 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
 
 //<editor-fold desc="PSmear function">
 double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Momentum) {
+    bool Printout = false;
+
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
@@ -392,6 +394,13 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
         for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                 double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
+
+                if (Printout) {
+                    cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
+                    cout << "Momentum = " << Momentum << "\n";
+                    cout << "Smearing = " << Smearing << "\n";
+                    cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
+                }
 
                 return Smearing * Momentum;
             }
@@ -406,6 +415,8 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 
 //<editor-fold desc="NShift function">
 double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Momentum) {
+    bool Printout = false;
+
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
@@ -413,9 +424,14 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
 
                 //TODO: ask Adi if shift should be by percentage or regular factor
-//                double ShiftedMomentum = Momentum * (1. + 10.); // minus for protons and plus for neutrons
                 double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
 //                double ShiftedMomentum = Momentum + Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
+
+                if (Printout) {
+                    cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
+                    cout << "Momentum = " << Momentum << "\n";
+                    cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
+                }
 
                 return ShiftedMomentum;
             }

@@ -119,8 +119,8 @@ void EventAnalyser() {
     /* Truth level calculation settings */
     bool calculate_truth_level = true;      // TL master ON/OFF switch
     bool TL_with_one_reco_electron = true;  // TL master ON/OFF switch
-    bool fill_TL_plots = true;             // Generate acceptance maps
-    bool Rec_wTL_ES = true;                // Enforce TL event selection on reco. plots
+    bool fill_TL_plots = true;              // Generate acceptance maps
+    bool Rec_wTL_ES = true;                 // Enforce TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false;         // keep as false to decrease RES and DIS
@@ -180,7 +180,7 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
+    bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_nucleon_SmearAndShift = false;
@@ -1489,12 +1489,12 @@ void EventAnalyser() {
                                               Momentum_lboundary, 20.);
 
     if (!apply_nucleon_SmearAndShift) {
-         hP_n_APID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
-                                          directories.Momentum_Directory_map["Momentum_1n_Directory"], "02a_P_n_APID_1n_FD",
-                                          Momentum_lboundary, Momentum_uboundary);
-         hP_n_APID_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum APID - ZOOMOUT", "Neutron momentum P_{n} APID - ZOOMOUT", "P_{n} [GeV/c]",
-                                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "02c_P_n_APID_1n_ZOOMOUT_FD",
-                                                  Momentum_lboundary, 20.);
+        hP_n_APID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
+                                  directories.Momentum_Directory_map["Momentum_1n_Directory"], "02a_P_n_APID_1n_FD",
+                                  Momentum_lboundary, Momentum_uboundary);
+        hP_n_APID_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum APID - ZOOMOUT", "Neutron momentum P_{n} APID - ZOOMOUT", "P_{n} [GeV/c]",
+                                          directories.Momentum_Directory_map["Momentum_1n_Directory"], "02c_P_n_APID_1n_ZOOMOUT_FD",
+                                          Momentum_lboundary, 20.);
     } else {
         hP_n_APID_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID&NS", "Neutron momentum P_{n} APID&NS", "P_{n} [GeV/c]",
                                   directories.Momentum_Directory_map["Momentum_1n_Directory"], "02a_P_n_APIDandNS_1n_FD",
@@ -6690,6 +6690,7 @@ void EventAnalyser() {
         bool TL_Event_Selection_1p = true, TL_Event_Selection_1n = true, TL_Event_Selection_pFDpCD = true, TL_Event_Selection_nFDpCD = true;
 
         if (calculate_truth_level && apply_nucleon_cuts && findSubstring(SampleName, "simulation")
+            && (!Rec_wTL_ES || (electrons.size() == 1))
 //            && (!TL_with_one_reco_electron || (electrons.size() == 1))
                 ) { // run only for CLAS12 simulation & AFTER beta fit
             auto mcpbank = c12->mcparts();
@@ -9018,11 +9019,13 @@ void EventAnalyser() {
                 //<editor-fold desc="Neutron momentum (1n)">
 
                 //<editor-fold desc="Neutron momentum - all contributions (1n)">
+                for (int &i: NeutronsFD_ind) {
 //                    hP_n_APID_1n_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
 //                    hP_n_APID_1n_ZOOMOUT_FD.hFill(P_n_1n_3v.Mag(), Weight); // after mom. th.
-                for (int &i: NeutronsFD_ind) {
-                    hP_n_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
-                    hP_n_APID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
+//                    hP_n_APID_1n_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
+//                    hP_n_APID_1n_ZOOMOUT_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight); // after mom. th.
+                    hP_n_APID_1n_FD.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[i], apply_nucleon_cuts)), Weight); // after mom. th.
+                    hP_n_APID_1n_ZOOMOUT_FD.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[i], apply_nucleon_cuts)), Weight); // after mom. th.
                 }
 
                 /* Neutron mom. after th. (verified neutrons) */
