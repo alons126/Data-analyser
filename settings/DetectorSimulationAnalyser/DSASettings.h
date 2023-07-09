@@ -29,9 +29,9 @@ bool calculate_truth_level;
 bool calculate_1p, calculate_1n;
 bool calculate_2p, calculate_pFDpCD, calculate_nFDpCD;
 
-bool Rec_wTL_ES; // Enforce TL event selection on Rec. plots
+bool Rec_wTL_ES; // Enforce TL event selection on reco. plots
 //
-bool Enable_FD_photons; // Enforce TL event selection on Rec. plots
+bool Enable_FD_photons; // Enforce TL event selection on reco. plots
 //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -582,9 +582,9 @@ void SetSettings () {
     bool calculate_1p = false, calculate_1n = false;
     bool calculate_2p = true, calculate_pFDpCD = true, calculate_nFDpCD = false;
 
-    bool Rec_wTL_ES = false; // Enforce TL event selection on Rec. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on reco. plots
 //
-    bool Enable_FD_photons = false; // Enforce TL event selection on Rec. plots
+    bool Enable_FD_photons = false; // Enforce TL event selection on reco. plots
 //</editor-fold>
 
 // ======================================================================================================================================================================

@@ -17,6 +17,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Data-analyser.dir/main.c.obj"
   "CMakeFiles/Data-analyser.dir/source/Structures_beta/Histogram1D.cpp.obj"
   "CMakeFiles/Data-analyser.dir/source/classes/AMaps/AMaps.cpp.obj"
+  "CMakeFiles/Data-analyser.dir/source/classes/DEfficiency/DEfficiency.cpp.obj"
   "CMakeFiles/Data-analyser.dir/source/classes/Directories/Directories.cpp.obj"
   "CMakeFiles/Data-analyser.dir/source/classes/ExperimentParameters/ExperimentParameters.cpp.obj"
   "CMakeFiles/Data-analyser.dir/source/classes/NeutronResolution/NeutronResolution.cpp.obj"

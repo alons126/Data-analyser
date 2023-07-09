@@ -193,17 +193,17 @@ private:
 //                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/03_fPhotons_noPCAL_yesECIN_plots_S6_1n",
 //                                                 "01_Beta_fit_plots/03_1n/01_Neutron_beta_from_fPhotons_plots_1n/05_Beta_fit_by_sector_1n/06_Sector_6/04_fPhotons_noPCAL_noECIN_yesECOUT_plots_S6_1n",
 
-                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/01_All_FD_neutrals_All_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/02_All_FD_neutrals_noPCAL_hit_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/03_All_FD_neutrals_noPCAL_yesECIN_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/04_All_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n",
-
-                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n",
-                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/01_All_FD_neutrals_All_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/02_All_FD_neutrals_noPCAL_hit_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/03_All_FD_neutrals_noPCAL_yesECIN_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/02_All_FD_neutrals_beta_plots_1n/04_All_FD_neutrals_noPCAL_noECIN_yesECOUT_plots_1n",
+//
+//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/01_FD_neutrals_noPDG0_All_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/02_FD_neutrals_noPDG0_noPCAL_hit_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/03_FD_neutrals_noPDG0_noPCAL_yesECIN_plots_1n",
+//                                                 "01_Beta_fit_plots/03_1n/03_FD_neutrals_beta_noPDG0_plots_1n/04_FD_neutrals_noPDG0_noPCAL_noECIN_yesECOUT_plots_1n",
 
                                                  "01_Beta_fit_plots/03_1n/04_Beta_vs_other_variables_plots_1n",
 
@@ -470,14 +470,14 @@ private:
     };
     //</editor-fold>
 
-    //<editor-fold desc="Hit maps plots directories">
-    bool create_Hit_Maps_Dir = true;
-    std::string Hit_Maps_Parent_Directory = "12_Hit_Maps_plots";
+    //<editor-fold desc="Acceptance maps plots directories">
+    bool create_Acceptance_Maps_Dir = true;
+    std::string Hit_Maps_Parent_Directory = "12_Acceptance_maps_plots";
     vector<std::string> Hit_Maps_Daughter_Folders = {"",
-                                                     "01_Hit_Maps_1e_cut",
-                                                     "01_Hit_Maps_1e_cut/00a_AMaps_BC_from_file",
+                                                     "01_AMaps_1e_cut",
+                                                     "01_AMaps_1e_cut/00a_AMaps_BC_from_file",
 //                                                          "01_1e_cut",
-//                                                          "01_1e_cut/01_Hit_Maps_1e_cut",
+//                                                          "01_1e_cut/01_AMaps_1e_cut",
     };
     //</editor-fold>
 

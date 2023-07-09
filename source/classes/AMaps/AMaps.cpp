@@ -93,7 +93,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
 
         string BinDensity = " (" + to_string(HistElectronSliceNumOfXBins) + "x" + to_string(HistElectronSliceNumOfYBins) + ")";
 
-        //<editor-fold desc="Setting electron hit maps">
+        //<editor-fold desc="Setting electron Acceptance maps">
 
         //<editor-fold desc="Electron TL hit map">
         string hStatsTitleTLElectron = "TL P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
@@ -108,7 +108,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         ElectronTLHitMapsBySlice.push_back(hPBinTLElectron);
         //</editor-fold>
 
-        //<editor-fold desc="Electron Reco. hit maps">
+        //<editor-fold desc="Electron Reco. Acceptance maps">
         string hStatsTitleRecoElectron = "Reco P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
                                          to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoElectron = "Reco P_{e} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{e}#leq" +
@@ -163,9 +163,9 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
 
         string BinDensity = " (" + to_string(HistNucSliceNumOfXBins) + "x" + to_string(HistNucSliceNumOfYBins) + ")";
 
-        //<editor-fold desc="Setting proton hit maps">
+        //<editor-fold desc="Setting proton Acceptance maps">
 
-        //<editor-fold desc="Proton TL hit maps">
+        //<editor-fold desc="Proton TL Acceptance maps">
         string hStatsTitleTLProton = "TL P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
                                      to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleTLProton = "TL P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
@@ -177,7 +177,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         ProtonTLHitMapsBySlice.push_back(hPBinTLProton);
         //</editor-fold>
 
-        //<editor-fold desc="Proton Reco. hit maps">
+        //<editor-fold desc="Proton Reco. Acceptance maps">
         string hStatsTitleRecoProton = "Reco P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
                                        to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoProton = "Reco P_{p} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
@@ -222,9 +222,9 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
 
         //</editor-fold>
 
-        //<editor-fold desc="Setting neutron hit maps">
+        //<editor-fold desc="Setting neutron Acceptance maps">
 
-        //<editor-fold desc="Neutron TL hit maps">
+        //<editor-fold desc="Neutron TL Acceptance maps">
         string hStatsTitleTLNeutron = "TL P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
                                       to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleTLNeutron = "TL P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
@@ -236,7 +236,7 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
         NeutronTLHitMapsBySlice.push_back(hPBinTLNeutron);
         //</editor-fold>
 
-        //<editor-fold desc="Neutron Reco. hit maps">
+        //<editor-fold desc="Neutron Reco. Acceptance maps">
         string hStatsTitleRecoNeutron = "Reco P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
                                         to_string_with_precision(BinUpperLim, BinUpperLimPrecision) + " [GeV/c]";
         string hTitleRecoNeutron = "Reco P_{n} bin for " + to_string_with_precision(BinLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
@@ -283,15 +283,15 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
 
     }
 
-    //<editor-fold desc="Setting neutron hit maps">
+    //<editor-fold desc="Setting neutron Acceptance maps">
 
-    //<editor-fold desc="Neutron TL hit maps">
+    //<editor-fold desc="Neutron TL Acceptance maps">
     string hStatsTitleTLNeutron = "TL Neutron Hit Map", hTitleTLNeutron = "TL Neutron Hit Map", hSaveNameTLNeutron = "TL_n_Hit_Map";
     NeutronTLHitMap = hPlot2D("", "", hStatsTitleTLNeutron, hTitleTLNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", HitMapSavePathTLNeutron, hSaveNameTLNeutron,
                               hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
     //</editor-fold>
 
-    //<editor-fold desc="Neutron Reco. hit maps">
+    //<editor-fold desc="Neutron Reco. Acceptance maps">
     string hStatsTitleRecoNeutron = "Reco Neutron Hit Map", hTitleRecoNeutron = "Reco Neutron Hit Map", hSaveNameRecoNeutron = "Reco_n_Hit_Map";
     NeutronRecoHitMap = hPlot2D("", "", hStatsTitleRecoNeutron, hTitleRecoNeutron, "#phi_{n} [Deg]", "#theta_{n} [Deg]", HitMapSavePathRecoNeutron,
                                 hSaveNameRecoNeutron, hBinLowerXLim, hBinUpperXLim, hBinLowerYLim, hBinUpperYLim, HistNucSliceNumOfXBins, HistNucSliceNumOfYBins);
@@ -337,19 +337,19 @@ AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const strin
 //</editor-fold>
 
 //<editor-fold desc="AMaps loading constructor">
-AMaps::AMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
-    ReadAMapLimits((RefrenceHitMapsDirectory + SampleName + "/e_hit_map_by_slice/e_slice_limits.par").c_str(), Loaded_ElectronMomBinsLimits);
-    ReadAMapLimits((RefrenceHitMapsDirectory + SampleName + "/p_hit_map_by_slice/p_slice_limits.par").c_str(), Loaded_PBinsLimits);
+AMaps::AMaps(const string &AcceptanceMapsDirectory, const string &SampleName) {
+    ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/e_slice_limits.par").c_str(), Loaded_ElectronMomBinsLimits);
+    ReadAMapLimits((AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/p_slice_limits.par").c_str(), Loaded_PBinsLimits);
 
-    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_Hit_Map_Slices);
-    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_Hit_Map_Slices);
-    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_Hit_Map_Slices);
-    ReadAMapSlices(SampleName, RefrenceHitMapsDirectory, "Nucleon", Loaded_PBinsLimits, Loaded_nuc_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Electron", Loaded_ElectronMomBinsLimits, Loaded_e_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Proton", Loaded_PBinsLimits, Loaded_p_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Neutron", Loaded_PBinsLimits, Loaded_n_Hit_Map_Slices);
+    ReadAMapSlices(SampleName, AcceptanceMapsDirectory, "Nucleon", Loaded_PBinsLimits, Loaded_nuc_Hit_Map_Slices);
 
-    ReadAMap((RefrenceHitMapsDirectory + SampleName + "/e_hit_map_file.par").c_str(), Loaded_e_Hit_Map);
-    ReadAMap((RefrenceHitMapsDirectory + SampleName + "/p_hit_map_file.par").c_str(), Loaded_p_Hit_Map);
-    ReadAMap((RefrenceHitMapsDirectory + SampleName + "/n_hit_map_file.par").c_str(), Loaded_n_Hit_Map);
-    ReadAMap((RefrenceHitMapsDirectory + SampleName + "/nuc_hit_map_file.par").c_str(), Loaded_nuc_Hit_Map);
+    ReadAMap((AcceptanceMapsDirectory + SampleName + "/e_AMap_file.par").c_str(), Loaded_e_Hit_Map);
+    ReadAMap((AcceptanceMapsDirectory + SampleName + "/p_AMap_file.par").c_str(), Loaded_p_Hit_Map);
+    ReadAMap((AcceptanceMapsDirectory + SampleName + "/n_AMap_file.par").c_str(), Loaded_n_Hit_Map);
+    ReadAMap((AcceptanceMapsDirectory + SampleName + "/nuc_AMap_file.par").c_str(), Loaded_nuc_Hit_Map);
 
     HistElectronSliceNumOfXBins = 100;  // 100 by Default
     HistElectronSliceNumOfYBins = 100;  // 100 by Default
@@ -915,24 +915,24 @@ void AMaps::GenerateNucleonAMap() {
 // SaveHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SaveHitMaps function">
-void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsDirectory) {
-    string SliceElectronSavePath = RefrenceHitMapsDirectory + SampleName + "/e_hit_map_by_slice/";
+void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDirectory) {
+    string SliceElectronSavePath = AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/";
     system(("mkdir -p " + SliceElectronSavePath).c_str());
 
-    string SliceProtonSavePath = RefrenceHitMapsDirectory + SampleName + "/p_hit_map_by_slice/";
+    string SliceProtonSavePath = AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/";
     system(("mkdir -p " + SliceProtonSavePath).c_str());
 
-    string SliceNeutronSavePath = RefrenceHitMapsDirectory + SampleName + "/n_hit_map_by_slice/";
+    string SliceNeutronSavePath = AcceptanceMapsDirectory + SampleName + "/n_AMap_by_slice/";
     system(("mkdir -p " + SliceNeutronSavePath).c_str());
 
-    string SliceNucleonSavePath = RefrenceHitMapsDirectory + SampleName + "/nuc_hit_map_by_slice/";
+    string SliceNucleonSavePath = AcceptanceMapsDirectory + SampleName + "/nuc_AMap_by_slice/";
     system(("mkdir -p " + SliceNucleonSavePath).c_str());
 
     //<editor-fold desc="Save electron slices">
     for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
         ofstream e_hit_map_TempFile;
 
-        string TempFileName = "e_hit_map_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(0), 2) + "_to_" +
+        string TempFileName = "e_AMap_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(0), 2) + "_to_" +
                               to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(1), 2) + ".par";
 
         e_hit_map_TempFile.open(SliceElectronSavePath + TempFileName);
@@ -957,7 +957,7 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
 
         e_hit_map_TempFile.close();
 
-//        system(("cp " + HitMapSavePath + "e_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + e_hit_map_file_from).c_str());
+//        system(("cp " + HitMapSavePath + "e_hit_map_TempFile.par " + AcceptanceMapsDirectory + SampleName + "/" + e_AMap_file_from).c_str());
     }
     //</editor-fold>
 
@@ -965,11 +965,11 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
         ofstream p_hit_map_TempFile, n_hit_map_TempFile, nuc_hit_map_TempFile;
 
-        string ProtonTempFileName = "p_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
+        string ProtonTempFileName = "p_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
                                     to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
-        string NeutronTempFileName = "n_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
+        string NeutronTempFileName = "n_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
                                      to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
-        string NucleonTempFileName = "nuc_hit_map_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
+        string NucleonTempFileName = "nuc_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
                                      to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
 
         p_hit_map_TempFile.open(SliceProtonSavePath + ProtonTempFileName);
@@ -1012,75 +1012,75 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
         n_hit_map_TempFile.close();
         nuc_hit_map_TempFile.close();
 
-//        system(("cp " + HitMapSavePath + "p_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + p_hit_map_file_from).c_str());
-//        system(("cp " + HitMapSavePath + "n_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + n_hit_map_file_from).c_str());
-//        system(("cp " + HitMapSavePath + "nuc_hit_map_TempFile.par " + RefrenceHitMapsDirectory + SampleName + "/" + nuc_hit_map_file_from).c_str());
+//        system(("cp " + HitMapSavePath + "p_hit_map_TempFile.par " + AcceptanceMapsDirectory + SampleName + "/" + p_AMap_file_from).c_str());
+//        system(("cp " + HitMapSavePath + "n_hit_map_TempFile.par " + AcceptanceMapsDirectory + SampleName + "/" + n_AMap_file_from).c_str());
+//        system(("cp " + HitMapSavePath + "nuc_hit_map_TempFile.par " + AcceptanceMapsDirectory + SampleName + "/" + nuc_AMap_file_from).c_str());
     }
     //</editor-fold>
 
     //<editor-fold desc="Save combined maps">
-    ofstream e_hit_map_file, p_hit_map_file, n_hit_map_file, nuc_hit_map_file;
+    ofstream e_AMap_file, p_AMap_file, n_AMap_file, nuc_AMap_file;
 
-    e_hit_map_file.open(HitMapSavePath + "e_hit_map_file.par");
-    p_hit_map_file.open(HitMapSavePath + "p_hit_map_file.par");
-    n_hit_map_file.open(HitMapSavePath + "n_hit_map_file.par");
-    nuc_hit_map_file.open(HitMapSavePath + "nuc_hit_map_file.par");
+    e_AMap_file.open(HitMapSavePath + "e_AMap_file.par");
+    p_AMap_file.open(HitMapSavePath + "p_AMap_file.par");
+    n_AMap_file.open(HitMapSavePath + "n_AMap_file.par");
+    nuc_AMap_file.open(HitMapSavePath + "nuc_AMap_file.par");
 
     for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
-        e_hit_map_file << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
+        e_AMap_file << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";
     }
 
     for (int Slice = 0; Slice < PBinsLimits.size(); Slice++) {
-        p_hit_map_file << "p_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
-        n_hit_map_file << "n_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
-        nuc_hit_map_file << "nuc_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        p_AMap_file << "p_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        n_AMap_file << "n_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
+        nuc_AMap_file << "nuc_slice_" << (Slice + 1) << "\t" << PBinsLimits.at(Slice).at(0) << ":" << PBinsLimits.at(Slice).at(1) << "\n";
     }
 
     for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
-        e_hit_map_file << "Line\t";
+        e_AMap_file << "Line\t";
 
         for (int j = 0; j < HistElectronSliceNumOfXBins; j++) {
             if (j != HistElectronSliceNumOfXBins - 1) {
-                e_hit_map_file << e_Hit_Map.at(i).at(j) << ":";
+                e_AMap_file << e_Hit_Map.at(i).at(j) << ":";
             } else {
-                e_hit_map_file << e_Hit_Map.at(i).at(j);
+                e_AMap_file << e_Hit_Map.at(i).at(j);
             }
         }
 
-        e_hit_map_file << "\n";
+        e_AMap_file << "\n";
     }
 
     for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
-        p_hit_map_file << "Line\t";
-        n_hit_map_file << "Line\t";
-        nuc_hit_map_file << "Line\t";
+        p_AMap_file << "Line\t";
+        n_AMap_file << "Line\t";
+        nuc_AMap_file << "Line\t";
 
         for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
             if (j != HistNucSliceNumOfXBins - 1) {
-                p_hit_map_file << p_Hit_Map.at(i).at(j) << ":";
-                n_hit_map_file << n_Hit_Map.at(i).at(j) << ":";
-                nuc_hit_map_file << nuc_Hit_Map.at(i).at(j) << ":";
+                p_AMap_file << p_Hit_Map.at(i).at(j) << ":";
+                n_AMap_file << n_Hit_Map.at(i).at(j) << ":";
+                nuc_AMap_file << nuc_Hit_Map.at(i).at(j) << ":";
             } else {
-                p_hit_map_file << p_Hit_Map.at(i).at(j);
-                n_hit_map_file << n_Hit_Map.at(i).at(j);
-                nuc_hit_map_file << nuc_Hit_Map.at(i).at(j);
+                p_AMap_file << p_Hit_Map.at(i).at(j);
+                n_AMap_file << n_Hit_Map.at(i).at(j);
+                nuc_AMap_file << nuc_Hit_Map.at(i).at(j);
             }
         }
 
-        p_hit_map_file << "\n";
-        n_hit_map_file << "\n";
-        nuc_hit_map_file << "\n";
+        p_AMap_file << "\n";
+        n_AMap_file << "\n";
+        nuc_AMap_file << "\n";
     }
 
-    e_hit_map_file.close();
-    p_hit_map_file.close();
-    n_hit_map_file.close();
-    nuc_hit_map_file.close();
+    e_AMap_file.close();
+    p_AMap_file.close();
+    n_AMap_file.close();
+    nuc_AMap_file.close();
 
-    system(("cp " + HitMapSavePath + "e_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
-    system(("cp " + HitMapSavePath + "p_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
-    system(("cp " + HitMapSavePath + "n_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
-    system(("cp " + HitMapSavePath + "nuc_hit_map_file.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "e_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "p_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "n_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "nuc_AMap_file.par " + AcceptanceMapsDirectory + SampleName).c_str());
     //</editor-fold>
 
     //<editor-fold desc="Slice limits">
@@ -1111,10 +1111,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
     n_slice_limits.close();
     nuc_slice_limits.close();
 
-    system(("cp " + HitMapSavePath + "e_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
-    system(("cp " + HitMapSavePath + "p_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
-    system(("cp " + HitMapSavePath + "n_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
-    system(("cp " + HitMapSavePath + "nuc_slice_limits.par " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "e_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "p_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "n_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
+    system(("cp " + HitMapSavePath + "nuc_slice_limits.par " + AcceptanceMapsDirectory + SampleName).c_str());
     //</editor-fold>
 
 }
@@ -1123,10 +1123,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &RefrenceHitMapsD
 // DrawAndSaveHitMaps function ------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveHitMaps function">
-void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &RefrenceHitMapsDirectory) {
+void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, const string &AcceptanceMapsDirectory) {
     string SampleNameTemp = SampleName;
 
-    system(("mkdir -p " + RefrenceHitMapsDirectory + SampleName).c_str());
+    system(("mkdir -p " + AcceptanceMapsDirectory + SampleName).c_str());
 
     CalcHitMapsRatio(calc_Electron_RecoToTL_Ratio, calc_Proton_RecoToTL_Ratio, calc_Neutron_RecoToTL_Ratio);
 
@@ -1134,7 +1134,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     GenerateNPartAMaps(Neutral_particle_min_Ratio);
     GenerateNucleonAMap();
 
-    SaveHitMaps(SampleName, RefrenceHitMapsDirectory);
+    SaveHitMaps(SampleName, AcceptanceMapsDirectory);
 
     /* Acceptance maps BC */
     ElectronAMapBC.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMapsBC, true);
@@ -1175,7 +1175,7 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     NeutronAMap.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMaps, true);
     NucleonAMap.hDrawAndSave(SampleNameTemp, h1DCanvas, AcceptanceMaps, true);
 
-    //<editor-fold desc="Save TL hit maps to plots directory">
+    //<editor-fold desc="Save TL Acceptance maps to plots directory">
     /* Acceptance maps BC */
     TFile *AMapsBC_plots_path_fout = new TFile((HitMapSavePath + "/" + AMapsBC_prefix + SampleName + ".root").c_str(), "recreate");
     AMapsBC_plots_path_fout->cd();
@@ -1183,22 +1183,22 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     AMapsBC_plots_path_fout->Write();
     AMapsBC_plots_path_fout->Close();
 
-    /* TL hit maps */
-    TFile *TLHitMaps_plots_path_fout = new TFile((HitMapSavePath + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str(), "recreate");
+    /* TL Acceptance maps */
+    TFile *TLHitMaps_plots_path_fout = new TFile((HitMapSavePath + "/" + AMap_TL_prefix + SampleName + ".root").c_str(), "recreate");
     TLHitMaps_plots_path_fout->cd();
     TLHitMaps->Write();
     TLHitMaps_plots_path_fout->Write();
     TLHitMaps_plots_path_fout->Close();
 
-    /* Reco hit maps */
-    TFile *RecoHitMaps_plots_path_fout = new TFile((HitMapSavePath + "/" + Hit_Maps_Reco_prefix + SampleName + ".root").c_str(), "recreate");
+    /* Reco Acceptance maps */
+    TFile *RecoHitMaps_plots_path_fout = new TFile((HitMapSavePath + "/" + AMap_Reco_prefix + SampleName + ".root").c_str(), "recreate");
     RecoHitMaps_plots_path_fout->cd();
     RecoHitMaps->Write();
     RecoHitMaps_plots_path_fout->Write();
     RecoHitMaps_plots_path_fout->Close();
 
-    /* Ratio hit maps */
-    TFile *RatioHitMaps_plots_path_fout = new TFile((HitMapSavePath + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
+    /* Ratio Acceptance maps */
+    TFile *RatioHitMaps_plots_path_fout = new TFile((HitMapSavePath + "/" + AMap_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
     RatioHitMaps_plots_path_fout->cd();
     HitMapsRatio->Write();
     RatioHitMaps_plots_path_fout->Write();
@@ -1219,48 +1219,48 @@ void AMaps::DrawAndSaveHitMaps(const string &SampleName, TCanvas *h1DCanvas, con
     AMaps_plots_path_fout->Close();
     //</editor-fold>
 
-    //<editor-fold desc="Save TL hit maps to refrence hit maps directory">
+    //<editor-fold desc="Save TL Acceptance maps to refrence Acceptance maps directory">
     /* Acceptance maps BC */
-    TFile *AMapsBC_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + AMapsBC_prefix + SampleName + ".root").c_str(), "recreate");
-    AMapsBC_ref_hit_maps_fout->cd();
+    TFile *AMapsBC_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMapsBC_prefix + SampleName + ".root").c_str(), "recreate");
+    AMapsBC_ref_AMaps_fout->cd();
     AcceptanceMapsBC->Write();
-    AMapsBC_ref_hit_maps_fout->Write();
-    AMapsBC_ref_hit_maps_fout->Close();
+    AMapsBC_ref_AMaps_fout->Write();
+    AMapsBC_ref_AMaps_fout->Close();
 
-    /* TL hit maps */
-    TFile *TLHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root").c_str(), "recreate");
-    TLHitMaps_ref_hit_maps_fout->cd();
+    /* TL Acceptance maps */
+    TFile *TLHitMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMap_TL_prefix + SampleName + ".root").c_str(), "recreate");
+    TLHitMaps_ref_AMaps_fout->cd();
     TLHitMaps->Write();
-    TLHitMaps_ref_hit_maps_fout->Write();
-    TLHitMaps_ref_hit_maps_fout->Close();
+    TLHitMaps_ref_AMaps_fout->Write();
+    TLHitMaps_ref_AMaps_fout->Close();
 
-    /* Reco hit maps */
-    TFile *RecoHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root").c_str(), "recreate");
-    RecoHitMaps_ref_hit_maps_fout->cd();
+    /* Reco Acceptance maps */
+    TFile *RecoHitMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMap_Reco_prefix + SampleName + ".root").c_str(), "recreate");
+    RecoHitMaps_ref_AMaps_fout->cd();
     RecoHitMaps->Write();
-    RecoHitMaps_ref_hit_maps_fout->Write();
-    RecoHitMaps_ref_hit_maps_fout->Close();
+    RecoHitMaps_ref_AMaps_fout->Write();
+    RecoHitMaps_ref_AMaps_fout->Close();
 
-    /* Ratio hit maps */
-    TFile *RatioHitMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
-    RatioHitMaps_ref_hit_maps_fout->cd();
+    /* Ratio Acceptance maps */
+    TFile *RatioHitMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMap_Ratio_prefix + SampleName + ".root").c_str(), "recreate");
+    RatioHitMaps_ref_AMaps_fout->cd();
     HitMapsRatio->Write();
-    RatioHitMaps_ref_hit_maps_fout->Write();
-    RatioHitMaps_ref_hit_maps_fout->Close();
+    RatioHitMaps_ref_AMaps_fout->Write();
+    RatioHitMaps_ref_AMaps_fout->Close();
 
     /* Charged particle separate AMaps */
-    TFile *cPartAMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str(), "recreate");
-    cPartAMaps_ref_hit_maps_fout->cd();
+    TFile *cPartAMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root").c_str(), "recreate");
+    cPartAMaps_ref_AMaps_fout->cd();
     Charged_particle_Sep_AMaps->Write();
-    cPartAMaps_ref_hit_maps_fout->Write();
-    cPartAMaps_ref_hit_maps_fout->Close();
+    cPartAMaps_ref_AMaps_fout->Write();
+    cPartAMaps_ref_AMaps_fout->Close();
 
     /* Acceptance maps */
-    TFile *AMaps_ref_hit_maps_fout = new TFile((RefrenceHitMapsDirectory + SampleName + "/" + AMaps_prefix + SampleName + ".root").c_str(), "recreate");
-    AMaps_ref_hit_maps_fout->cd();
+    TFile *AMaps_ref_AMaps_fout = new TFile((AcceptanceMapsDirectory + SampleName + "/" + AMaps_prefix + SampleName + ".root").c_str(), "recreate");
+    AMaps_ref_AMaps_fout->cd();
     AcceptanceMaps->Write();
-    AMaps_ref_hit_maps_fout->Write();
-    AMaps_ref_hit_maps_fout->Close();
+    AMaps_ref_AMaps_fout->Write();
+    AMaps_ref_AMaps_fout->Close();
     //</editor-fold>
 
 }
@@ -1388,11 +1388,11 @@ void AMaps::SetSlicesFromHistTitle(TH2D *Histogram2D, vector<vector<double>> Mom
 // ReadHitMaps function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadHitMaps function">
-void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &SampleName) {
+void AMaps::ReadHitMaps(const string &AcceptanceMapsDirectory, const string &SampleName) {
     bool PrintKeys = false;
 
     //<editor-fold desc="Load AMapsBC">
-    string AMapsBC_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMapsBC_prefix + SampleName + ".root";
+    string AMapsBC_RootFile_FileName = AcceptanceMapsDirectory + "/" + SampleName + "/" + AMapsBC_prefix + SampleName + ".root";
     TFile *AMapsBC_RootFile = new TFile(AMapsBC_RootFile_FileName.c_str());
     if (!AMapsBC_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMapsBC root file! Exiting...\n", exit(0); }
 //    int NumOfAMapsBC = HistCounter(AMapsBC_RootFile_FileName.c_str());
@@ -1417,7 +1417,7 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
     //</editor-fold>
 
     //<editor-fold desc="Load Hit_Maps_TL">
-    string Hit_Maps_TL_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_TL_prefix + SampleName + ".root";
+    string Hit_Maps_TL_RootFile_FileName = AcceptanceMapsDirectory + "/" + SampleName + "/" + AMap_TL_prefix + SampleName + ".root";
     TFile *Hit_Maps_TL_RootFile = new TFile(Hit_Maps_TL_RootFile_FileName.c_str());
     if (!Hit_Maps_TL_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_TL root file! Exiting...\n", exit(0); }
 //    int NumOfHit_Maps_TL = HistCounter(Hit_Maps_TL_RootFile_FileName.c_str());
@@ -1449,7 +1449,7 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
     //</editor-fold>
 
     //<editor-fold desc="Load Hit_Maps_Reco">
-    string Hit_Maps_Reco_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Reco_prefix + SampleName + ".root";
+    string Hit_Maps_Reco_RootFile_FileName = AcceptanceMapsDirectory + "/" + SampleName + "/" + AMap_Reco_prefix + SampleName + ".root";
     TFile *Hit_Maps_Reco_RootFile = new TFile(Hit_Maps_Reco_RootFile_FileName.c_str());
     if (!Hit_Maps_Reco_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Reco root file! Exiting...\n", exit(0); }
 //    int NumOfHit_Maps_Reco = HistCounter(Hit_Maps_Reco_RootFile_FileName.c_str());
@@ -1474,7 +1474,7 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
     //</editor-fold>
 
     //<editor-fold desc="Load Hit_Maps_Ratio">
-    string Hit_Maps_Ratio_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + Hit_Maps_Ratio_prefix + SampleName + ".root";
+    string Hit_Maps_Ratio_RootFile_FileName = AcceptanceMapsDirectory + "/" + SampleName + "/" + AMap_Ratio_prefix + SampleName + ".root";
     TFile *Hit_Maps_Ratio_RootFile = new TFile(Hit_Maps_Ratio_RootFile_FileName.c_str());
     if (!Hit_Maps_Ratio_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load Hit_Maps_Ratio root file! Exiting...\n", exit(0); }
 //    int NumOfHit_Maps_Ratio = HistCounter(Hit_Maps_Ratio_RootFile_FileName.c_str());
@@ -1499,7 +1499,7 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
     //</editor-fold>
 
     //<editor-fold desc="Load cPart_Sep_AMaps">
-    string cPart_Sep_AMaps_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root";
+    string cPart_Sep_AMaps_RootFile_FileName = AcceptanceMapsDirectory + "/" + SampleName + "/" + cPart_Sep_AMaps_prefix + SampleName + ".root";
     TFile *cPart_Sep_AMaps_RootFile = new TFile(cPart_Sep_AMaps_RootFile_FileName.c_str());
     if (!cPart_Sep_AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load cPart_Sep_AMaps root file! Exiting...\n", exit(0); }
 //    int NumOfcPart_Sep_AMaps = HistCounter(cPart_Sep_AMaps_RootFile_FileName.c_str());
@@ -1522,7 +1522,7 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
     //</editor-fold>
 
     //<editor-fold desc="Load AMaps">
-    string AMaps_RootFile_FileName = RefrenceHitMapsDirectory + "/" + SampleName + "/" + AMaps_prefix + SampleName + ".root";
+    string AMaps_RootFile_FileName = AcceptanceMapsDirectory + "/" + SampleName + "/" + AMaps_prefix + SampleName + ".root";
     TFile *AMaps_RootFile = new TFile(AMaps_RootFile_FileName.c_str());
     if (!AMaps_RootFile) { cout << "\n\nAMaps::ReadHitMaps: could not load AMaps root file! Exiting...\n", exit(0); }
 //    int NumOfAMaps = HistCounter(AMaps_RootFile_FileName.c_str());
@@ -1564,7 +1564,7 @@ void AMaps::ReadHitMaps(const string &RefrenceHitMapsDirectory, const string &Sa
 //    }
     //</editor-fold>
 
-    cout << "\n\nHit maps loaded!\n\n";
+    cout << "\n\nAcceptance maps loaded!\n\n";
 }
 //</editor-fold>
 
@@ -1606,7 +1606,7 @@ void AMaps::ReadAMapLimits(const char *filename, vector<vector<double>> &Loaded_
 // ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadAMapSlices function">
-void AMaps::ReadAMapSlices(const string &SampleName, const string &RefrenceHitMapsDirectory, const string &Particle,
+void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
                            const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_Hit_Map_Slices) {
     string ParticleShort;
 
@@ -1623,11 +1623,11 @@ void AMaps::ReadAMapSlices(const string &SampleName, const string &RefrenceHitMa
     for (int Slice = 0; Slice < Loaded_particle_limits.size(); Slice++) {
         vector<vector<int>> Loaded_Particle_Hit_Map_TempSlice;
 
-        string TempFileName = ParticleShort + "_hit_map_by_slice/" + ParticleShort + "_hit_map_file_from_" +
+        string TempFileName = ParticleShort + "_AMap_by_slice/" + ParticleShort + "_AMap_file_from_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(0), 2) + "_to_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(1), 2) + ".par";
 
-        ReadAMap((RefrenceHitMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_Hit_Map_TempSlice);
+        ReadAMap((AcceptanceMapsDirectory + SampleName + "/" + TempFileName).c_str(), Loaded_Particle_Hit_Map_TempSlice);
 
         Loaded_Particle_Hit_Map_Slices.push_back(Loaded_Particle_Hit_Map_TempSlice);
     }

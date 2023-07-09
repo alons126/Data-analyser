@@ -33,9 +33,12 @@ std::string SettingsDirectory = WorkingDirectory + "settings" + "/";
 
 /* source directory and directories */
 std::string SourcesDirectory = WorkingDirectory + "source" + "/";
-std::string CutsDirectory = SourcesDirectory + "cuts" + "/";
-std::string NeutronResolutionDirectory = CutsDirectory + "NeutronResolution" + "/";
-std::string RefrenceHitMapsDirectory = CutsDirectory + "RefrenceHitMaps" + "/";
+std::string DataDirectory = SourcesDirectory + "data" + "/";
+std::string ACorrDirectory = DataDirectory + "AcceptanceCorrections" + "/";
+std::string AcceptanceMapsDirectory = DataDirectory + "AcceptanceMaps" + "/";
+std::string NeutronResolutionDirectory = DataDirectory + "NeutronResolution" + "/";
+std::string NucleonCutsDirectory = DataDirectory + "NucleonCuts" + "/";
+std::string PIDCutsDirectory = DataDirectory + "PIDCuts" + "/";
 
 std::string plots_file_type = "_plots.root";
 std::string log_file_name = "Run_log.txt";
@@ -51,10 +54,10 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 //<editor-fold desc="Local hipo files">
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250"; // my test with Justin's code; all particle data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";

@@ -560,6 +560,30 @@ source/classes/AMaps/AMaps.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Data-analyser.dir\build.make CMakeFiles/Data-analyser.dir/source/classes/AMaps/AMaps.cpp.s
 .PHONY : source/classes/AMaps/AMaps.cpp.s
 
+source/classes/DEfficiency/DEfficiency.obj: source/classes/DEfficiency/DEfficiency.cpp.obj
+.PHONY : source/classes/DEfficiency/DEfficiency.obj
+
+# target to build an object file
+source/classes/DEfficiency/DEfficiency.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Data-analyser.dir\build.make CMakeFiles/Data-analyser.dir/source/classes/DEfficiency/DEfficiency.cpp.obj
+.PHONY : source/classes/DEfficiency/DEfficiency.cpp.obj
+
+source/classes/DEfficiency/DEfficiency.i: source/classes/DEfficiency/DEfficiency.cpp.i
+.PHONY : source/classes/DEfficiency/DEfficiency.i
+
+# target to preprocess a source file
+source/classes/DEfficiency/DEfficiency.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Data-analyser.dir\build.make CMakeFiles/Data-analyser.dir/source/classes/DEfficiency/DEfficiency.cpp.i
+.PHONY : source/classes/DEfficiency/DEfficiency.cpp.i
+
+source/classes/DEfficiency/DEfficiency.s: source/classes/DEfficiency/DEfficiency.cpp.s
+.PHONY : source/classes/DEfficiency/DEfficiency.s
+
+# target to generate assembly for a file
+source/classes/DEfficiency/DEfficiency.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Data-analyser.dir\build.make CMakeFiles/Data-analyser.dir/source/classes/DEfficiency/DEfficiency.cpp.s
+.PHONY : source/classes/DEfficiency/DEfficiency.cpp.s
+
 source/classes/Directories/Directories.obj: source/classes/Directories/Directories.cpp.obj
 .PHONY : source/classes/Directories/Directories.obj
 
@@ -935,6 +959,9 @@ help:
 	@echo ... source/classes/AMaps/AMaps.obj
 	@echo ... source/classes/AMaps/AMaps.i
 	@echo ... source/classes/AMaps/AMaps.s
+	@echo ... source/classes/DEfficiency/DEfficiency.obj
+	@echo ... source/classes/DEfficiency/DEfficiency.i
+	@echo ... source/classes/DEfficiency/DEfficiency.s
 	@echo ... source/classes/Directories/Directories.obj
 	@echo ... source/classes/Directories/Directories.i
 	@echo ... source/classes/Directories/Directories.s
