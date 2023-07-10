@@ -205,7 +205,29 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
     if (PlotsT == "FSRatio") {
         if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
             Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L") {
-            FSRTitle = Type + " ratio - ";
+            if (Type == "Q2") {
+                FSRTitle = "Q^{2} ratio - ";
+            }else if (Type == "E_e") {
+                FSRTitle = "E_{e} ratio - ";
+            }else if (Type == "omega") {
+                FSRTitle = "#omega ratio - ";
+            }else if (Type == "Ecal") {
+                FSRTitle = "E_{cal} ratio - ";
+            }else if (Type == "deltaP_T_tot") {
+                FSRTitle = "#deltaP_{T,tot} ratio - ";
+            }else if (Type == "deltaP_T_L") {
+                FSRTitle = "#deltaP_{T,L} ratio - ";
+            }else if (Type == "deltaAlpha_T_tot") {
+                FSRTitle = "#delta#alpha_{T,tot} ratio - ";
+            }else if (Type == "deltaAlpha_T_L") {
+                FSRTitle = "#delta#alpha_{T,L} ratio - ";
+            }else if (Type == "deltaPhi_T_tot") {
+                FSRTitle = "#delta#phi_{T,tot} ratio - ";
+            }else if (Type == "deltaPhi_T_L") {
+                FSRTitle = "#delta#phi_{T,L} ratio - ";
+            } else {
+                FSRTitle = Type + " ratio - ";
+            }
         } else {
             if (Particle == "Electron") {
                 if (Type == "momentum") {

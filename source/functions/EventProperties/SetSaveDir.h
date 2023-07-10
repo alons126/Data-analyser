@@ -33,11 +33,9 @@ void SetSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, co
                 TestSaveDir = SaveDir + "Cloned_hist_test/";
             } else {
                 if (DRegion == "FD") {
-//                SaveDir = Histogram1DSaveNamePath + "/";
                     SaveDir = Histogram1DSaveNamePath + "/01_FD_Nucleon_" + Type + "_plots/";
                     TestSaveDir = SaveDir + "Cloned_hist_test/";
                 } else if (DRegion == "CD") {
-//                SaveDir = Histogram1DSaveNamePath + "/";
                     SaveDir = Histogram1DSaveNamePath + "/02_CD_Nucleon_" + Type + "_plots/";
                     TestSaveDir = SaveDir + "Cloned_hist_test/";
                 } else {

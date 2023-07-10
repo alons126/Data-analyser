@@ -6600,7 +6600,7 @@ void EventAnalyser() {
         /* Get FD neutrons and photons above momentum threshold: */
         vector<int> NeutronsFD_ind, PhotonsFD_ind;                                                         // FD neutrons and photons by definition - within momentum th.
         FDNeutralParticleID(allParticles, NeutronsFD_ind, FD_Neutrons, n_mom_th, PhotonsFD_ind, FD_Photons, ph_mom_th, apply_nucleon_cuts);
-        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts);          // FD neutron (with momentum th.) with maximal momentum
+        int NeutronsFD_ind_mom_max = FDNeutralMaxP(allParticles, NeutronsFD_ind, apply_nucleon_cuts);      // FD neutron (with momentum th.) with maximal momentum
         //</editor-fold>
 
         //<editor-fold desc="Setting up event selection">
