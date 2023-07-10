@@ -31,10 +31,10 @@
 #include <TROOT.h>
 
 #include "../GeneralFunctions.h"
-#include "../EventProperties/GetParticleName.h"
-#include "../EventProperties/GetParticleNameLC.h"
-#include "../EventProperties/GetParticleNameShort.h"
-#include "../EventProperties/SetDRegion.h"
+//#include "../EventProperties/GetParticleName.h"
+//#include "../EventProperties/GetParticleNameLC.h"
+//#include "../EventProperties/GetParticleNameShort.h"
+//#include "../EventProperties/SetDRegion.h"
 #include "../EventProperties/SetFSRatioSaveDir.h"
 #include "../EventProperties/SetStatsTitle.h"
 #include "../EventProperties/SettingSaveNames.h"
@@ -42,11 +42,13 @@
 #include "../EventProperties/SetType.h"
 #include "../EventProperties/SetXAxisTitle.h"
 #include "../EventProperties/SetYAxisTitle.h"
+#include "../../classes/hData/hData.h"
 #include "../../classes/hPlots/hPlot1D.h"
 
 using namespace std;
 
 void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hPlot1D &nFDpCD_Plot, TList *Histogram_list) {
+    hData Propeties;
 
     bool weighted_plots = true;
 
@@ -84,14 +86,14 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     //<editor-fold desc="Setting variables">
     string FSRatioRecTitle = nFDpCD_Plot_Clone->GetTitle();
 
-    string FSRatioParticle = GetParticleName(FSRatioRecTitle);
-    string FSRatioParticleLC = GetParticleNameLC(FSRatioRecTitle);
-    string FSRatioParticleShort = GetParticleNameShort(FSRatioRecTitle);
+    string FSRatioParticle = Propeties.GetParticleName(FSRatioRecTitle);
+    string FSRatioParticleLC = Propeties.GetParticleNameLC(FSRatioRecTitle);
+    string FSRatioParticleShort = Propeties.GetParticleNameShort(FSRatioRecTitle);
 
-    string FSRatioType = SetType(FSRatioRecTitle);
+    string FSRatioType = Propeties.GetType(FSRatioRecTitle);
     string FSRatioPlotsT = "FSRatio";
-    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
-    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
+    string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
+    string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
 
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
     string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
@@ -208,6 +210,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
 }
 
 void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nFDpCD_Plot, TList *Histogram_list) {
+    hData Propeties;
 
     bool weighted_plots = true;
 
@@ -229,25 +232,13 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     //<editor-fold desc="Setting variables">
     string FSRatioRecTitle = nFDpCD_Plot->GetTitle();
 
-    string FSRatioParticle = GetParticleName(FSRatioRecTitle);
-    string FSRatioParticleLC = GetParticleNameLC(FSRatioRecTitle);
-    string FSRatioParticleShort = GetParticleNameShort(FSRatioRecTitle);
+    string FSRatioParticle = Propeties.GetParticleName(FSRatioRecTitle);
+    string FSRatioParticleLC = Propeties.GetParticleNameLC(FSRatioRecTitle);
+    string FSRatioParticleShort = Propeties.GetParticleNameShort(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting stats box title">
     string FSRatioStatsTitle = SetStatsTitle(FSRatioRecTitle);
-
-    /*
-    string FSRatioStatsType;
-
-    if (findSubstring(FSRatioRecTitle, "#theta")) { // for momentum FSRatio plots
-        FSRatioStatsType = "#theta_{" + FSRatioParticleShort + "}";
-    } else if (findSubstring(FSRatioRecTitle, "#phi")) { // for momentum FSRatio plots
-        FSRatioStatsType = "#phi_{" + FSRatioParticleShort + "}";
-    }
-
-    string FSRatioStatsTitle = FSRatioStatsType;
-*/
     //</editor-fold>
 
     //<editor-fold desc="Cloning histograms">
@@ -270,46 +261,18 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
-    string FSRatioType = SetType(FSRatioRecTitle);
+    string FSRatioType = Propeties.GetType(FSRatioRecTitle);
     string FSRatioPlotsT = "FSRatio";
-    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
-    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
-
-    /*
-    string FSRatioType = SetType(FSRatioRecTitle);
-    string FSRatioPlotsT = "FSRatio";
-    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
-    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
-*/
+    string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
+    string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
-
-    /*
-    string FSRatioXLabel;
-
-    if (findSubstring(FSRatioRecTitle, "momentum")) { // for momentum FSRatio plots
-        FSRatioXLabel = "P_{" + FSRatioParticleShort + "} [GeV/c]";
-    } else if (findSubstring(FSRatioRecTitle, "#theta")) { // for momentum FSRatio plots
-        FSRatioXLabel = FSRatioTitle + " [Deg]";
-    } else if (findSubstring(FSRatioRecTitle, "#phi")) { // for momentum FSRatio plots
-        FSRatioXLabel = FSRatioTitle + " [Deg]";
-    }
-*/
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
     string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
-
-    /*
-    string xLabel_REC_temp = nFDpCD_Plot_Clone->GetXaxis()->GetTitle();
-    string xLabel_REC = xLabel_REC_temp.substr(0, xLabel_REC_temp.find_last_of('[') - 1);
-    string xLabel_Truth_temp = pFDpCD_Plot_Clone->GetXaxis()->GetTitle();
-    string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
-
-    string FSRatioYLabel = string("#alpha = ") + "#frac{1}{#epsilon_{eff}} = " + xLabel_Truth + "/" + xLabel_REC + "^{rec}";
-*/
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
@@ -513,6 +476,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
 }
 
 void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_PlotSaveNamePath, TH1D *nFDpCD_Plot, TList *Histogram_list) {
+    hData Propeties;
 
     bool weighted_plots = true;
 
@@ -534,9 +498,9 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     //<editor-fold desc="Setting variables">
     string FSRatioRecTitle = nFDpCD_Plot->GetTitle();
 
-    string FSRatioParticle = GetParticleName(FSRatioRecTitle);
-    string FSRatioParticleLC = GetParticleNameLC(FSRatioRecTitle);
-    string FSRatioParticleShort = GetParticleNameShort(FSRatioRecTitle);
+    string FSRatioParticle = Propeties.GetParticleName(FSRatioRecTitle);
+    string FSRatioParticleLC = Propeties.GetParticleNameLC(FSRatioRecTitle);
+    string FSRatioParticleShort = Propeties.GetParticleNameShort(FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting stats box title">
@@ -574,79 +538,24 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
-    string FSRatioType = SetType(FSRatioRecTitle);
+    string FSRatioType = Propeties.GetType(FSRatioRecTitle);
     string FSRatioPlotsT = "FSRatio";
-    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
-    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
-
-    /*
-    string FSRatioType = SetType(FSRatioRecTitle);
-    string FSRatioPlotsT = "FSRatio";
-    string FSRatioDRegion = SetDRegion(FSRatioRecTitle, FSRatioParticle, FSRatioParticleLC);
-    string FSRatioTitle = SetTitle(FSRatioRecTitle, FSRatioPlotsT, FSRatioDRegion);
-*/
+    string FSRatioDRegion = Propeties.GetDRegion(FSRatioRecTitle);
+    string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
     //</editor-fold>
 
     //<editor-fold desc="Setting X axis label">
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
-
-    /*
-    string FSRatioXLabel;
-
-    if (findSubstring(FSRatioRecTitle, "momentum")) { // for momentum FSRatio plots
-        FSRatioXLabel = "P_{" + FSRatioParticleShort + "} [GeV/c]";
-    } else if (findSubstring(FSRatioRecTitle, "#theta")) { // for momentum FSRatio plots
-        FSRatioXLabel = FSRatioTitle + " [Deg]";
-    } else if (findSubstring(FSRatioRecTitle, "#phi")) { // for momentum FSRatio plots
-        FSRatioXLabel = FSRatioTitle + " [Deg]";
-    }
-*/
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
     string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
-
-    /*
-    string xLabel_REC_temp = nFDpCD_Plot_Clone->GetXaxis()->GetTitle();
-    string xLabel_REC = xLabel_REC_temp.substr(0, xLabel_REC_temp.find_last_of('[') - 1);
-    string xLabel_Truth_temp = pFDpCD_Plot_Clone->GetXaxis()->GetTitle();
-    string xLabel_Truth = xLabel_Truth_temp.substr(0, xLabel_Truth_temp.find_last_of('[') - 1);
-
-    string FSRatioYLabel = string("#alpha = ") + "#frac{1}{#epsilon_{eff}} = " + xLabel_Truth + "/" + xLabel_REC + "^{rec}";
-*/
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
     string FSRatioSaveDir, FSRatioTestSaveDir;
     SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_PlotSaveNamePath, FSRatioPlotsT, FSRatioDRegion,
                       FSRatioParticle, FSRatioParticleLC, FSRatioParticleShort, FSRatioType);
-
-    /*
-    string FSRatioSaveDir, FSRatioTestSaveDir;
-
-    if (findSubstring(FSRatioRecTitle, "Electron") || findSubstring(FSRatioRecTitle, "electron")) {
-        FSRatioSaveDir = pFDpCD_PlotSaveNamePath + "/00_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots_" + "/";
-        FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test/";
-    } else {
-        if (findSubstring(FSRatioRecTitle, ", FD)") ||
-            findSubstring(FSRatioRecTitle, "FD " + FSRatioParticle) ||
-            findSubstring(FSRatioRecTitle, "FD " + FSRatioParticleLC)) {
-            FSRatioSaveDir = pFDpCD_PlotSaveNamePath + "/01_FD_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots_" + "/";
-            FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test/";
-        } else if (findSubstring(FSRatioRecTitle, ", CD)") ||
-                   findSubstring(FSRatioRecTitle, "CD " + FSRatioParticle) ||
-                   findSubstring(FSRatioRecTitle, "CD " + FSRatioParticleLC)) {
-            FSRatioSaveDir = pFDpCD_PlotSaveNamePath + "/02_CD_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots_" + "/";
-            FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test/";
-        } else {
-            FSRatioSaveDir = pFDpCD_PlotSaveNamePath + "/" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_plots_" + "/";
-            FSRatioTestSaveDir = FSRatioSaveDir + "Cloned_hist_test" + "/";
-        }
-    }
-
-    system(("mkdir -p " + FSRatioSaveDir).c_str());
-    system(("mkdir -p " + FSRatioTestSaveDir).c_str());
-*/
     //</editor-fold>
 
     //<editor-fold desc="Setting save name">
@@ -658,28 +567,6 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
                      nFDpCD_Plot_Clone_SaveName, nFDpCD_Plot_Clone_test_SaveName, nFDpCD_Plot_Clone_test_rebined_SaveName,
                      pFDpCD_Plot_Clone_SaveName, pFDpCD_Plot_Clone_test_SaveName, pFDpCD_Plot_Clone_test_rebined_SaveName,
                      sNameFlag, FSRatio_plot_SaveName, FSRatioDRegion);
-
-    /*
-    string sNameFlag;
-
-    if (findSubstring(SampleName, "simulation")) {
-        sNameFlag = "s";
-    } else if (findSubstring(SampleName, "data")) {
-        sNameFlag = "d";
-    }
-
-    string nFDpCD_Plot_Clone_SaveName = FSRatioSaveDir + sNameFlag + "_" + FSRatioParticle + "_" + FSRatioType + "_" + "_" + "Rec_Clone.png";
-    string nFDpCD_Plot_Clone_test_SaveName =
-            FSRatioTestSaveDir + sNameFlag + "01a_" + FSRatioParticle + "_" + FSRatioType + "_" + "_" + "Rec_Clone_test.png";
-    string nFDpCD_Plot_Clone_test_rebined_SaveName =
-            FSRatioTestSaveDir + sNameFlag + "01b_" + FSRatioParticle + "_" + FSRatioType + "_" + "_" + "Rec_Clone_test_rebined.png";
-    string pFDpCD_Plot_Clone_SaveName = FSRatioSaveDir + sNameFlag + "_" + FSRatioParticle + "_" + FSRatioType + "_" + "_" + "Truth_Clone.png";
-    string pFDpCD_Plot_Clone_test_SaveName =
-            FSRatioTestSaveDir + sNameFlag + "02a_" + FSRatioParticle + "_" + FSRatioType + "_" + "_" + "Truth_Clone_test.png";
-    string pFDpCD_Plot_Clone_test_rebined_SaveName =
-            FSRatioTestSaveDir + sNameFlag + "02b_" + FSRatioParticle + "_" + FSRatioType + "_" + "_" + "Truth_Clone_test_rebined.png";
-    string FSRatio_plot_SaveName = FSRatioSaveDir + sNameFlag + "_" + FSRatioParticle + "_" + FSRatioType + "_FSRatio_" + ".png";
-*/
     //</editor-fold>
 
     TH1D *FSRatio_plot = (TH1D *) nFDpCD_Plot_Clone->Clone((FSRatioParticle + " " + FSRatioType + " FSRatio").c_str());

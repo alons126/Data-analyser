@@ -8,7 +8,7 @@
 
 //<editor-fold desc="GetParticleName function">
 string hData::GetParticleName(const string &Source) {
-    string ParticleName;
+    string ParticleName, FS = GetFS(Source);
 
     if (findSubstring(Source, "neutrals") || findSubstring(Source, "Neutrals")
         || findSubstring(Source, "neut.") || findSubstring(Source, "Neut.")) {
@@ -30,6 +30,8 @@ string hData::GetParticleName(const string &Source) {
     } else if (findSubstring(Source, "#gamma") || findSubstring(Source, "photon")
                || findSubstring(Source, "Photon")) {
         ParticleName = "Photon";
+    } else if ((FS == "nFDpCD") || (FS == "pFDpCD")) {
+        ParticleName = "Nucleon";
     } else {
         ParticleName = "Unknown";
     }
@@ -142,6 +144,28 @@ string hData::GetType(const string &Source) {
 
     if (findSubstring(Source, "momentum")) { // for momentum efficiency plots
         Type = "momentum";
+    } else if (findSubstring(Source, "W ")) { // for theta efficiency plots
+        Type = "W";
+    } else if (findSubstring(Source, "Q^{2}")) { // for theta efficiency plots
+        Type = "Q2";
+    } else if (findSubstring(Source, "E_{e}")) { // for theta efficiency plots
+        Type = "E_e";
+    } else if (findSubstring(Source, "#omega")) { // for theta efficiency plots
+        Type = "omega";
+    } else if (findSubstring(Source, "E_{cal}")) { // for theta efficiency plots
+        Type = "Ecal";
+    } else if (findSubstring(Source, "#deltaP_{T,tot}")) { // for theta efficiency plots
+        Type = "deltaP_T_tot";
+    } else if (findSubstring(Source, "#deltaP_{T,L}")) { // for theta efficiency plots
+        Type = "deltaP_T_L";
+    } else if (findSubstring(Source, "#delta#alpha_{T,tot}")) { // for theta efficiency plots
+        Type = "deltaAlpha_T_tot";
+    } else if (findSubstring(Source, "#delta#alpha_{T,L}")) { // for theta efficiency plots
+        Type = "deltaAlpha_T_L";
+    } else if (findSubstring(Source, "#delta#phi_{T,tot}")) { // for theta efficiency plots
+        Type = "deltaPhi_T_tot";
+    } else if (findSubstring(Source, "#delta#phi_{T,L}")) { // for theta efficiency plots
+        Type = "deltaPhi_T_L";
     } else if (findSubstring(Source, "#theta")) { // for theta efficiency plots
         Type = "theta";
     } else if (findSubstring(Source, "#phi")) { // for phi efficiency plots
@@ -149,6 +173,71 @@ string hData::GetType(const string &Source) {
     }
 
     return Type;
+}
+//</editor-fold>
+
+// GetDRegion function --------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetDRegion function">
+string hData::GetDRegion(const string &Source) {
+    string DRegion, Type = GetType(Source), Particle = GetParticleName(Source), ParticleLC = GetParticleNameLC(Source);
+
+    if (findSubstring(Source, ", FD)") || findSubstring(Type, "FD " + Particle) ||
+        findSubstring(Source, "FD " + ParticleLC)) {
+        DRegion = "FD";
+    } else if (findSubstring(Source, ", CD)") || findSubstring(Type, "CD " + Particle) ||
+               findSubstring(Source, "CD " + ParticleLC)) {
+        DRegion = "CD";
+    }
+
+    return DRegion;
+}
+//</editor-fold>
+
+// GetFSRTitle function -------------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetFSRTitle function">
+string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
+    string FSRTitle;
+
+    string Particle = GetParticleName(Source), ParticleShort = GetParticleNameShort(Source), Type = GetType(Source), DRegion = GetDRegion(Source);
+
+    if (PlotsT == "FSRatio") {
+        if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
+            Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L") {
+            FSRTitle = Type + " ratio - ";
+        } else {
+            if (Particle == "Electron") {
+                if (Type == "momentum") {
+                    FSRTitle = Particle + " " + Type + " ratio";
+                } else {
+                    FSRTitle = Particle + " #" + Type + " ratio";
+                }
+            } else {
+                if (DRegion == "FD") {
+                    if (Type == "momentum") {
+                        FSRTitle = DRegion + " nucleon " + Type + " ratio";
+                    } else {
+                        FSRTitle = DRegion + " nucleon #" + Type + " ratio";
+                    }
+                } else if (DRegion == "CD") {
+                    if (Type == "momentum") {
+                        FSRTitle = DRegion + " proton " + Type + " ratio";
+                    } else {
+                        FSRTitle = DRegion + " proton #" + Type + " ratio";
+                    }
+                }
+            }
+        }
+    } else {
+        if (Type == "momentum") {
+            FSRTitle = Particle + " " + Type;
+        } else {
+            FSRTitle = "#" + Type + "_{" + ParticleShort + "}";
+        }
+    }
+
+    return FSRTitle;
 }
 //</editor-fold>
 
@@ -182,13 +271,13 @@ string hData::GetStatsTitle(const string &Source) {
         StatsType = "#phi_{" + ParticleShort + "}";
     }
 
-    StatsTitle =  StatsType + " (" + FS + ")";
+    StatsTitle = StatsType + " (" + FS + ")";
 
     return StatsTitle;
 }
 //</editor-fold>
 
-// SetXLabel function ---------------------------------------------------------------------------------------------------------------------------------------------
+// SetXLabel function ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetXLabel function">
 string hData::SetXLabel(const string &Source) {
@@ -206,7 +295,7 @@ string hData::SetXLabel(const string &Source) {
 }
 //</editor-fold>
 
-// SetSaveDir function ---------------------------------------------------------------------------------------------------------------------------------------------
+// SetSaveDir function --------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetSaveDir function">
 string hData::SetSaveDir(const string &Source, const string &BaseSaveDir, const string &Mod) {

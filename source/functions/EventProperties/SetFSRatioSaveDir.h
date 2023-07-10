@@ -23,8 +23,15 @@ using namespace std;
 
 void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePathOriginal, const string &PlotsT,
                        const string &DRegion, const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
-    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
-                                     "/06a_FS_" + Type + "_ratio_plots";
+    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/FS_" + Type + "_ratio_plots";
+
+    /*
+    if (Type == "W" || Type == "Q2") {
+        Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/FS_" + Type + "_ratio_plots";
+    } else {
+        Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/06a_FS_" + Type + "_ratio_plots";
+    }
+*/
 
     SetSaveDir(SaveDir, TestSaveDir, RecTitle, Histogram1DSaveNamePath, PlotsT, DRegion, Particle, ParticleLC, ParticleShort, Type);
 }

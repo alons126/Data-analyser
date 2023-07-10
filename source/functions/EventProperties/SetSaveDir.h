@@ -22,45 +22,28 @@ using namespace std;
 
 void SetSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePath, const string &PlotsT, const string &DRegion,
                 const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
-/*
     if (PlotsT == "FSRatio") {
-        if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
-            SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "_plots/";
+        if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
+            Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L") {
+            SaveDir = Histogram1DSaveNamePath + "/";
             TestSaveDir = SaveDir + "Cloned_hist_test/";
         } else {
-            if (DRegion == "FD" || DRegion == "CD") {
-                SaveDir = Histogram1DSaveNamePath + "/";
+            if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
+                SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "_plots/";
                 TestSaveDir = SaveDir + "Cloned_hist_test/";
             } else {
-                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
-                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
-            }
-*/
-    if (PlotsT == "FSRatio") {
-        if (findSubstring(RecTitle, "Electron") || findSubstring(RecTitle, "electron")) {
-            SaveDir = Histogram1DSaveNamePath + "/00_" + Particle + "_" + Type + "_plots/";
-            TestSaveDir = SaveDir + "Cloned_hist_test/";
-        } else {
-/*
-            if (DRegion == "FD" || DRegion == "CD") {
-                SaveDir = Histogram1DSaveNamePath + "/";
-                TestSaveDir = SaveDir + "Cloned_hist_test/";
-            } else {
-                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
-                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
-            }
-*/
-            if (DRegion == "FD") {
+                if (DRegion == "FD") {
 //                SaveDir = Histogram1DSaveNamePath + "/";
-                SaveDir = Histogram1DSaveNamePath + "/01_FD_Nucleon_" + Type + "_plots/";
-                TestSaveDir = SaveDir + "Cloned_hist_test/";
-            } else if (DRegion == "CD") {
+                    SaveDir = Histogram1DSaveNamePath + "/01_FD_Nucleon_" + Type + "_plots/";
+                    TestSaveDir = SaveDir + "Cloned_hist_test/";
+                } else if (DRegion == "CD") {
 //                SaveDir = Histogram1DSaveNamePath + "/";
-                SaveDir = Histogram1DSaveNamePath + "/02_CD_Nucleon_" + Type + "_plots/";
-                TestSaveDir = SaveDir + "Cloned_hist_test/";
-            } else {
-                SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
-                TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+                    SaveDir = Histogram1DSaveNamePath + "/02_CD_Nucleon_" + Type + "_plots/";
+                    TestSaveDir = SaveDir + "Cloned_hist_test/";
+                } else {
+                    SaveDir = Histogram1DSaveNamePath + "/" + Particle + "_" + Type + "_plots/";
+                    TestSaveDir = SaveDir + "Cloned_hist_test" + "/";
+                }
             }
         }
     } else {
