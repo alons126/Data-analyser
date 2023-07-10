@@ -61,12 +61,12 @@ private:
     double MomBinTh = 0.4;
 
     /* TL Acceptance maps */
-    vector<hPlot2D> ElectronTLHitMapsBySlice, ProtonTLHitMapsBySlice, NeutronTLHitMapsBySlice;
-    hPlot2D NeutronTLHitMap;
+    vector<hPlot2D> ElectronTLAMapsBySlice, ProtonTLAMapsBySlice, NeutronTLAMapsBySlice;
+    hPlot2D NeutronTLAMap;
 
     /* Reco. Acceptance maps */
-    vector<hPlot2D> ElectronRecoHitMapsBySlice, ProtonRecoHitMapsBySlice, NeutronRecoHitMapsBySlice;
-    hPlot2D NeutronRecoHitMap;
+    vector<hPlot2D> ElectronRecoAMapsBySlice, ProtonRecoAMapsBySlice, NeutronRecoAMapsBySlice;
+    hPlot2D NeutronRecoAMap;
 
     /* Reco./TL ratio maps */
     vector<hPlot2D> ElectronRecoToTLRatioBySlice, ProtonRecoToTLRatioBySlice, NeutronRecoToTLRatioBySlice;
@@ -81,14 +81,14 @@ private:
     hPlot2D NeutronAMap;
     hPlot2D NucleonAMap;
 
-    vector<vector<int>> e_Hit_Map;
-    vector<vector<vector<int>>> e_Hit_Map_Slices;
-    vector<vector<int>> p_Hit_Map;
-    vector<vector<vector<int>>> p_Hit_Map_Slices;
-    vector<vector<int>> n_Hit_Map;
-    vector<vector<vector<int>>> n_Hit_Map_Slices;
-    vector<vector<int>> nuc_Hit_Map;
-    vector<vector<vector<int>>> nuc_Hit_Map_Slices;
+    vector<vector<int>> e_AMap;
+    vector<vector<vector<int>>> e_AMap_Slices;
+    vector<vector<int>> p_AMap;
+    vector<vector<vector<int>>> p_AMap_Slices;
+    vector<vector<int>> n_AMap;
+    vector<vector<vector<int>>> n_AMap_Slices;
+    vector<vector<int>> nuc_AMap;
+    vector<vector<vector<int>>> nuc_AMap_Slices;
 
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
@@ -101,13 +101,13 @@ private:
     double Neutral_particle_min_Ratio = 0.3;
 
     TList *AcceptanceMapsBC = new TList();
-    TList *TLHitMaps = new TList();
-    TList *RecoHitMaps = new TList();
-    TList *HitMapsRatio = new TList();
+    TList *TLAMaps = new TList();
+    TList *RecoAMaps = new TList();
+    TList *AMapsRatio = new TList();
     TList *Charged_particle_Sep_AMaps = new TList();
     TList *AcceptanceMaps = new TList();
 
-    string HitMapSavePath;
+    string AMapSavePath;
 
     string AMapsBC_prefix = "00_AMaps_BC_-_";
     string AMap_TL_prefix = "01_AMap_TL_-_";
@@ -119,14 +119,14 @@ private:
     vector<vector<double>> Loaded_ElectronMomBinsLimits;
     vector<vector<double>> Loaded_PBinsLimits;
 
-    vector<vector<int>> Loaded_e_Hit_Map;
-    vector<vector<vector<int>>> Loaded_e_Hit_Map_Slices;
-    vector<vector<int>> Loaded_p_Hit_Map;
-    vector<vector<vector<int>>> Loaded_p_Hit_Map_Slices;
-    vector<vector<int>> Loaded_n_Hit_Map;
-    vector<vector<vector<int>>> Loaded_n_Hit_Map_Slices;
-    vector<vector<int>> Loaded_nuc_Hit_Map;
-    vector<vector<vector<int>>> Loaded_nuc_Hit_Map_Slices;
+    vector<vector<int>> Loaded_e_AMap;
+    vector<vector<vector<int>>> Loaded_e_AMap_Slices;
+    vector<vector<int>> Loaded_p_AMap;
+    vector<vector<vector<int>>> Loaded_p_AMap_Slices;
+    vector<vector<int>> Loaded_n_AMap;
+    vector<vector<vector<int>>> Loaded_n_AMap_Slices;
+    vector<vector<int>> Loaded_nuc_AMap;
+    vector<vector<vector<int>>> Loaded_nuc_AMap_Slices;
 
     /* Loaded Acceptance maps */
     //TODO: delete these histograms if the .par loading works
@@ -179,9 +179,9 @@ public:
 
     void hFillHitMaps(const string &SampleType, const string &particle, double Momentum, double Theta, double Phi, double Weight);
 
-// CalcHitMapsRatio function --------------------------------------------------------------------------------------------------------------------------------------------
+// CalcAMapsRatio function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void CalcHitMapsRatio(bool ElectronRecoToTLDiv = true, bool PotonRecoToTLDiv = true, bool NeutronRecoToTLDiv = true);
+    void CalcAMapsRatio(bool ElectronRecoToTLDiv = true, bool PotonRecoToTLDiv = true, bool NeutronRecoToTLDiv = true);
 
 // GenerateSeparateCPartAMaps function ----------------------------------------------------------------------------------------------------------------------------------
 
@@ -232,11 +232,11 @@ public:
 // ReadAMapSlices function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
-                        const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_Hit_Map_Slices);
+                        const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_AMap_Slices);
 
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_hit_map);
+    void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_AMap);
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 

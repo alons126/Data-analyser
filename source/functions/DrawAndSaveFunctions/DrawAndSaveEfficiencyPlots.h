@@ -269,6 +269,12 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     Efficiency_plot->SetLineStyle(1);
     Efficiency_plot->SetLineColor(kBlue);
 
+    if (EfficiencyFS == "1n") {
+        Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.3);
+    } else {
+        Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
+    }
+
     if (weighted_plots) { Efficiency_plot->Sumw2(); }
 
     Efficiency_plot->Rebin(2);
@@ -580,6 +586,12 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     Efficiency_plot->GetYaxis()->SetLabelSize(0.0425);
     Efficiency_plot->GetYaxis()->CenterTitle(true);
     Efficiency_plot->SetLineWidth(2);
+
+    if (EfficiencyFS == "1n") {
+        Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.3);
+    } else {
+        Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
+    }
 
     if (weighted_plots) { Efficiency_plot->Sumw2(); }
 

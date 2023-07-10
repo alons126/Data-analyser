@@ -1,0 +1,24 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after nRes Gaussian fit) #
+######################################################################
+
+# Proton resolution parameters are for:
+#sample:	C12_simulation_6GeV_T5_first_100
+#run_mode:	wNC_Eff1
+#delta:		0.05
+#Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:FitMean:FitSigma
+
+fit_Slice_#1_from_0.40_to_0.70			1:0.4:0.7:0.0524088:0.0239569
+fit_Slice_#2_from_0.70_to_0.90			2:0.7:0.9:0.0227256:0.0190216
+fit_Slice_#3_from_0.90_to_1.05			3:0.9:1.05:0.0112672:0.0111263
+fit_Slice_#4_from_1.05_to_1.15			4:1.05:1.15:0.00991293:0.0102877
+fit_Slice_#5_from_1.15_to_1.25			5:1.15:1.25:0.00846969:0.010358
+fit_Slice_#6_from_1.25_to_1.35			6:1.25:1.35:0.0577815:0.162044
+fit_Slice_#7_from_1.35_to_1.45			7:1.35:1.45:0.00575565:0.0103983
+fit_Slice_#8_from_1.45_to_1.55			8:1.45:1.55:0.00664077:0.00952221
+fit_Slice_#9_from_1.55_to_1.65			9:1.55:1.65:0.00449254:0.0103378
+fit_Slice_#10_from_1.65_to_1.80			10:1.65:1.8:0.00407416:0.00979689
+fit_Slice_#11_from_1.80_to_1.95			11:1.8:1.95:0.00012273:0.00114372
+fit_Slice_#12_from_1.95_to_2.15			12:1.95:2.15:0.00266016:0.0108491
+fit_Slice_#13_from_2.15_to_2.50			13:2.15:2.5:0.299476:0.177471
+fit_Slice_#14_from_2.50_to_5.986			14:2.5:5.98636:0.00186634:0.00980553

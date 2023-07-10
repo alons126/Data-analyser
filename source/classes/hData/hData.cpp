@@ -192,14 +192,14 @@ string hData::GetStatsTitle(const string &Source) {
 
 //<editor-fold desc="SetXLabel function">
 string hData::SetXLabel(const string &Source) {
-    string XLabel;
+    string XLabel, ParicleShort = GetParticleNameShort(Source);
 
     if (findSubstring(Source, "momentum")) {
-        XLabel = "P_{" + Source + "} [GeV/c]";
+        XLabel = "P_{" + ParicleShort + "} [GeV/c]";
     } else if (findSubstring(Source, "#theta")) {
-        XLabel = Source + " [Deg]";
+        XLabel = "#theta_{" + ParicleShort + "} [Deg]";
     } else if (findSubstring(Source, "#phi")) {
-        XLabel = Source + " [Deg]";
+        XLabel = "#phi_{" + ParicleShort + "} [Deg]";
     }
 
     return XLabel;

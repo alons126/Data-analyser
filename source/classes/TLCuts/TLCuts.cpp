@@ -5,7 +5,7 @@
 #include "TLCuts.h"
 
 TLCuts::TLCuts(const string &SampleName, bool calculate_truth_level, bool Enable_photons_FD, bool apply_nucleon_cuts,
-               TH2D *Electron_hit_map, TH2D *Proton_hit_map, TH2D *Neutron_hit_map,
+               TH2D *Electron_AMap, TH2D *Proton_AMap, TH2D *Neutron_AMap,
                const DSCuts &ThetaFD, double Theta_uboundary_FD, double Theta_lboundary_FD,
                const DSCuts &ThetaCD, double Theta_uboundary_CD, double Theta_lboundary_CD,
                double Phi_lboundary, double Phi_uboundary,
@@ -26,17 +26,17 @@ TLCuts::TLCuts(const string &SampleName, bool calculate_truth_level, bool Enable
             double Particle_TL_Theta = acos((mcpbank->getPz()) / rCalc(mcpbank->getPx(), mcpbank->getPy(), mcpbank->getPz())) * 180.0 / pi;
             double Particle_TL_Phi = atan2(mcpbank->getPy(), mcpbank->getPx()) * 180.0 / pi;
 
-            int BinX = GetBinFromAng(Particle_TL_Phi, Neutron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-            int BinY = GetBinFromAng(Particle_TL_Theta, Neutron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-            int BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-            int BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
-            int BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_hit_map->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
-            int BinY_p = GetBinFromAng(Particle_TL_Theta, Proton_hit_map->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+            int BinX = GetBinFromAng(Particle_TL_Phi, Neutron_AMap->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+            int BinY = GetBinFromAng(Particle_TL_Theta, Neutron_AMap->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+            int BinX_e = GetBinFromAng(Particle_TL_Phi, Electron_AMap->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+            int BinY_e = GetBinFromAng(Particle_TL_Theta, Electron_AMap->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
+            int BinX_p = GetBinFromAng(Particle_TL_Phi, Proton_AMap->GetNbinsX(), Phi_lboundary, Phi_uboundary, false, "Phi");
+            int BinY_p = GetBinFromAng(Particle_TL_Theta, Proton_AMap->GetNbinsY(), Theta_lboundary_FD, Theta_uboundary_FD, false, "Theta");
 
-            bool inSomeSector = (Neutron_hit_map->GetBinContent(BinX, BinY) != 0);
-            bool e_inSomeSector = (Electron_hit_map->GetBinContent(BinX_e, BinY_e) != 0);
-            bool p_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
-            bool n_inSomeSector = (Proton_hit_map->GetBinContent(BinX_p, BinY_p) != 0);
+            bool inSomeSector = (Neutron_AMap->GetBinContent(BinX, BinY) != 0);
+            bool e_inSomeSector = (Electron_AMap->GetBinContent(BinX_e, BinY_e) != 0);
+            bool p_inSomeSector = (Proton_AMap->GetBinContent(BinX_p, BinY_p) != 0);
+            bool n_inSomeSector = (Proton_AMap->GetBinContent(BinX_p, BinY_p) != 0);
 
             bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCutConst()) && (Particle_TL_Theta <= ThetaFD.GetUpperCutConst()));
             bool e_inFD = (e_inSomeSector && (Particle_TL_Theta >= ThetaFD.GetLowerCutConst()) && (Particle_TL_Theta <= ThetaFD.GetUpperCutConst()));

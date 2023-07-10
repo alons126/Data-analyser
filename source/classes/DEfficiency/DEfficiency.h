@@ -54,7 +54,7 @@ private:
     TH1D *Histogram1D_Truth, *TLPlot_Clone, *TLPlot_Clone_test, *TLPlot_Clone_test_rebined;
     string TLPlot_Clone_StatsTitle, TLPlot_Clone_test_StatsTitle, TLPlot_Clone_test_rebined_StatsTitle;
 
-    string TLPlot_SaveNamePath, RPlot_SaveNamePath;
+    string EffAndACorr_SaveNamePath;
 
 public:
 
@@ -62,41 +62,6 @@ public:
 
     // Default constructor:
     DEfficiency() = default;
-
-/*
-// GetParticleName function ---------------------------------------------------------------------------------------------------------------------------------------------
-
-    string GetParticleName(const string &Source);
-
-// GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
-
-    string GetParticleNameLC(const string &Source);
-
-// GetParticleNameLC function -------------------------------------------------------------------------------------------------------------------------------------------
-
-    string GetParticleNameShort(const string &Source);
-
-// GetType function -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    string GetType(const string &Source);
-
-// GetTitle function -----------------------------------------------------------------------------------------------------------------------------------------------------
-
-    string GetTitle(const string &Source);
-
-// GetFS function -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    string GetFS(const string &Source);
-
-// SetXLabel function -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    string SetXLabel(const string &Source);
-
-// SetSaveDir function -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    string SetSaveDir(const string &Source, const string &BaseSaveDir, const string &Mod = "");
-
-*/
 
 // ResetHistograms function ---------------------------------------------------------------------------------------------------------------------------------------------
 

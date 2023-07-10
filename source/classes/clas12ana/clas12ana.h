@@ -485,9 +485,9 @@ private:
     TH2D *hTheta_e_vs_Phi_e_fiducial_cuts_map_ECAL = new TH2D("Electron_fiducial_cuts_map_ECAL", "#theta_{e} vs. #phi_{e};#phi_{e} [Deg];#theta_{e} [Deg]",
                                                               250, -180, 180, 250, 0, 50);  // My addition
 
-    TH2D *hTheta_p_vs_Phi_p_hit_map_DC_NO_CUTS = new TH2D("Proton_hit_map_DC_NO_CUTS", "#theta_{p} vs. #phi_{p} - NO DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
+    TH2D *hTheta_p_vs_Phi_p_AMap_DC_NO_CUTS = new TH2D("Proton_AMap_DC_NO_CUTS", "#theta_{p} vs. #phi_{p} - NO DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
                                                           250, -180, 180, 250, 0, 50);  // My addition
-    TH2D *hTheta_p_vs_Phi_p_hit_map_DC_WITH_CUTS = new TH2D("Proton_hit_map_DC_WITH_CUTS", "#theta_{p} vs. #phi_{p} - WITH DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
+    TH2D *hTheta_p_vs_Phi_p_AMap_DC_WITH_CUTS = new TH2D("Proton_AMap_DC_WITH_CUTS", "#theta_{p} vs. #phi_{p} - WITH DC edge cuts;#phi_{p} [Deg];#theta_{p} [Deg]",
                                                             150, -180, 180, 150, 0, 50);  // My addition
 
     TH2D *hTheta_vs_Phi_hit_map_ECAL_no_fiducial_cuts = new TH2D("hit_map_ECAL_no_fiducial_cuts", "ECAL #theta vs. #phi - no fiducial cuts;#phi [Deg];#theta [Deg]",
@@ -496,7 +496,7 @@ private:
                                                                 250, -180, 180, 250, 0, 50);  // My addition
     //</editor-fold>
 
-    TH2D *hAng_hit_map_electrons = new TH2D("Electron_hit_map", "Electron hit map with ECAL & DC fiducial cuts;#phi [Deg];#theta [Deg]",
+    TH2D *hAng_hit_map_electrons = new TH2D("Electron_AMap", "Electron hit map with ECAL & DC fiducial cuts;#phi [Deg];#theta [Deg]",
                                             250, -180, 180, 250, 0, 50);  // My addition
     TH2D *hAng_hit_map_protons = new TH2D("Protons_hit_map", "Protons hit map with DC fiducial cuts;#phi [Deg];#theta [Deg]",
                                           250, -180, 180, 250, 0, 50);  // My addition
@@ -721,7 +721,7 @@ void clas12ana::Run(const std::unique_ptr<clas12::clas12reader> &c12) {
 
                 if (debug_plots) {
                     if ((*p)->par()->getPid() == 2212 && (*p)->getRegion() == FD) { // My addition!!
-                        hTheta_p_vs_Phi_p_hit_map_DC_WITH_CUTS->Fill((*p)->getPhi() * 180.0 / pi, (*p)->getTheta() * 180.0 / pi);
+                        hTheta_p_vs_Phi_p_AMap_DC_WITH_CUTS->Fill((*p)->getPhi() * 180.0 / pi, (*p)->getTheta() * 180.0 / pi);
                         hAng_hit_map_protons->Fill((*p)->getPhi() * 180.0 / pi, (*p)->getTheta() * 180.0 / pi);
                     }
 
@@ -1492,8 +1492,8 @@ void clas12ana::WriteDebugPlots() {
 
     //<editor-fold desc="My addition">
     hTheta_e_vs_Phi_e_fiducial_cuts_map_ECAL->Write();  // My addition
-    hTheta_p_vs_Phi_p_hit_map_DC_NO_CUTS->Write();  // My addition
-    hTheta_p_vs_Phi_p_hit_map_DC_WITH_CUTS->Write();  // My addition
+    hTheta_p_vs_Phi_p_AMap_DC_NO_CUTS->Write();  // My addition
+    hTheta_p_vs_Phi_p_AMap_DC_WITH_CUTS->Write();  // My addition
     hTheta_vs_Phi_hit_map_ECAL_no_fiducial_cuts->Write();  // My addition
     hTheta_vs_Phi_hit_map_ECAL_w_fiducial_cuts->Write();  // My addition
     //</editor-fold>
@@ -1654,7 +1654,7 @@ void clas12ana::FillECALHitMap(region_part_ptr p) { // My addition
     */
             }
         } else if (p->par()->getPid() == 2212) {
-            hTheta_p_vs_Phi_p_hit_map_DC_NO_CUTS->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
+            hTheta_p_vs_Phi_p_AMap_DC_NO_CUTS->Fill(p->getPhi() * 180.0 / pi, p->getTheta() * 180.0 / pi);
         }
     }
 }

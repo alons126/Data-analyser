@@ -44,7 +44,9 @@ private:
     vector<hPlot1D> ResSlices;
     vector<vector<double>> ResSlicesLimits;
     vector<DSCuts> ResSlicesFitVar;
+    vector<DSCuts> ResSlicesHistVar;
     vector<DSCuts> Loaded_Res_Slices_FitVar;
+    vector<DSCuts> Loaded_Res_Slices_HistVar;
     vector<int> FittedSlices;
 
     double hSliceUpperLim = 1.5;
@@ -55,6 +57,8 @@ private:
 
     TList *ResSlicePlots = new TList();
     TFolder *FittedNeutronResSlices = new TFolder("Fitted neutron resolution slices", "Fitted neutron resolution slices");
+
+    TRandom3 *Rand = new TRandom3();
 
     string SlicesSavePath;
     string SlicesSaveNamePrefix;
@@ -84,16 +88,26 @@ public:
 
 // DrawAndSaveResSlices function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path, const string &DataDirectory);
+    void DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path, const string &NeutronResolutionDirectory);
+
+// LogResDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    void LogResDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &DataDirectory,
+    void LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
 
-// ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+// LogHistDataToFile function -------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadFitDataParam(const char *filename);
+    void LogHistDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+                           const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status);
+
+// ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadResDataParam(const char *filename);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 

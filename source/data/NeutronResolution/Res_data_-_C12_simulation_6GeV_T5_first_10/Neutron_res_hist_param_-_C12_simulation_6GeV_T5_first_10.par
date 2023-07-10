@@ -1,0 +1,24 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after nRes Gaussian Hist) #
+######################################################################
+
+# Neutron resolution parameters are for:
+#sample:	C12_simulation_6GeV_T5_first_10
+#run_mode:	wNC_Eff1
+#delta:		0.05
+#Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma
+
+hist_Slice_#1_from_0.40_to_0.70			1:0.4:0.7:-0.118882:0.517169
+hist_Slice_#2_from_0.70_to_0.90			2:0.7:0.9:0.0902442:0.104733
+hist_Slice_#3_from_0.90_to_1.05			3:0.9:1.05:0.0832231:0.101972
+hist_Slice_#4_from_1.05_to_1.15			4:1.05:1.15:0.0267686:0.0295578
+hist_Slice_#5_from_1.15_to_1.25			5:1.15:1.25:0.0312324:0.0226448
+hist_Slice_#6_from_1.25_to_1.35			6:1.25:1.35:0.110745:0.121931
+hist_Slice_#7_from_1.35_to_1.45			7:1.35:1.45:0.0457015:0.0580179
+hist_Slice_#8_from_1.45_to_1.55			8:1.45:1.55:0.0663249:0.0722528
+hist_Slice_#9_from_1.55_to_1.65			9:1.55:1.65:0.107887:0.213985
+hist_Slice_#10_from_1.65_to_1.80			10:1.65:1.8:0.120178:0.0843573
+hist_Slice_#11_from_1.80_to_1.95			11:1.8:1.95:0.119344:0.0854614
+hist_Slice_#12_from_1.95_to_2.15			12:1.95:2.15:0.180242:0.148475
+hist_Slice_#13_from_2.15_to_2.50			13:2.15:2.5:0.117053:0.113573
+hist_Slice_#14_from_2.50_to_5.986			14:2.5:5.98636:0.200176:0.157385

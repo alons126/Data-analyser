@@ -59,7 +59,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
 
             hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
                                        hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
-            ResSliceFitCuts = DSCuts(hCutName, "FD", "Neutron", "1n", 0, -9999, 9999);
+            ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Neutron", "1n", 0, -9999, 9999);
         } else if (Particle == "Proton") {
             hStatsTitle = "p res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{p}#leq" +
                           to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
@@ -72,7 +72,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
 
             hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
                                        -0.75, 0.75, hSliceNumOfBin);
-            ResSliceFitCuts = DSCuts(hCutName, "FD", "Proton", "1n", 0, -9999, 9999);
+            ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Proton", "1n", 0, -9999, 9999);
         }
         /*
         string hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
@@ -96,6 +96,9 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
         ResSlices.push_back(hResolutionSlice);
         ResSlicesLimits.push_back({SliceLowerLim, SliceUpperLim});
         ResSlicesFitVar.push_back(ResSliceFitCuts);
+
+        ResSliceFitCuts.SetCutVariable(("hist_" + hCutName));
+        ResSlicesHistVar.push_back(ResSliceFitCuts);
 
         if (SliceUpperLim == beamE) {
             SliceAndDice = false;
@@ -201,6 +204,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
             double SliceMax = hSlice->GetMaximum();
             double SliceMean = hSlice->GetMean();
+            double SliceStd = hSlice->GetRMS();
 
             func->SetParameters(SliceMax, SliceMean, 0.5); // start fit with histogram's max and mean
             func->SetParNames("Constant", "Mean_value", "Sigma");
@@ -223,6 +227,8 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
             ResSlicesFitVar.at(i).SetMean(func->GetParameter(1));
             ResSlicesFitVar.at(i).SetUpperCut(func->GetParameter(2));
+            ResSlicesHistVar.at(i).SetMean(SliceMean);
+            ResSlicesHistVar.at(i).SetUpperCut(SliceStd);
 
             double x_1_Cut_legend = gStyle->GetStatX(), y_1_Cut_legend = gStyle->GetStatY() - 0.2;
             double x_2_Cut_legend = gStyle->GetStatX() - 0.2, y_2_Cut_legend = gStyle->GetStatY() - 0.3;
@@ -264,7 +270,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
 
 //<editor-fold desc="DrawAndSaveResSlices function">
 void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const string &Particle, TCanvas *h1DCanvas, const string &plots_path,
-                                             const string &DataDirectory) {
+                                             const string &NeutronResolutionDirectory) {
     string SampleNameTemp = SampleName;
 
     ResSlicePlots->Add(FittedNeutronResSlices);
@@ -286,13 +292,28 @@ void NeutronResolution::DrawAndSaveResSlices(const string &SampleName, const str
 }
 //</editor-fold>
 
+// LogResDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="LogResDataToFile function">
+void NeutronResolution::LogResDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+                                         const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
+    string SaveDateDir = NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/";
+
+//    system(("rm -r " + SaveDateDir).c_str());
+    system(("mkdir -p " + SaveDateDir).c_str());
+
+    LogFitDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+    LogHistDataToFile(SampleName, Particle, plots_path, SaveDateDir, Nucleon_Cuts_Status, FD_photons_Status, Efficiency_Status);
+}
+//</editor-fold>
+
 // LogFitDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LogFitDataToFile function">
-void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &DataDirectory,
+void NeutronResolution::LogFitDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
     ofstream Neutron_res_fit_param;
-    std::string Neutron_res_fit_paramFilePath = DataDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
+    std::string Neutron_res_fit_paramFilePath = NeutronResolutionDirectory + Particle + "_res_fit_param_-_" + SampleName + ".par";
 
     Neutron_res_fit_param.open(Neutron_res_fit_paramFilePath);
     Neutron_res_fit_param << "######################################################################\n";
@@ -318,10 +339,42 @@ void NeutronResolution::LogFitDataToFile(const string &SampleName, const string 
 }
 //</editor-fold>
 
-// ReadFitDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+// LogHistDataToFile function --------------------------------------------------------------------------------------------------------------------------------------------
 
-//<editor-fold desc="ReadFitDataParam function">
-void NeutronResolution::ReadFitDataParam(const char *filename) {
+//<editor-fold desc="LogHistDataToFile function">
+void NeutronResolution::LogHistDataToFile(const string &SampleName, const string &Particle, const string &plots_path, const string &NeutronResolutionDirectory,
+                                          const string &Nucleon_Cuts_Status, const string &FD_photons_Status, const string &Efficiency_Status) {
+    ofstream Neutron_res_Hist_param;
+    std::string Neutron_res_Hist_paramFilePath = NeutronResolutionDirectory + Particle + "_res_hist_param_-_" + SampleName + ".par";
+
+    Neutron_res_Hist_param.open(Neutron_res_Hist_paramFilePath);
+    Neutron_res_Hist_param << "######################################################################\n";
+    Neutron_res_Hist_param << "# CLAS12 analysis cuts and parameters file (after nRes Gaussian Hist) #\n";
+    Neutron_res_Hist_param << "######################################################################\n";
+    Neutron_res_Hist_param << "\n";
+    Neutron_res_Hist_param << "# " + Particle + " resolution parameters are for:\n";
+    Neutron_res_Hist_param << "#sample:\t" << SampleName << "\n";
+    Neutron_res_Hist_param << "#run_mode:\t" << Nucleon_Cuts_Status + FD_photons_Status + Efficiency_Status << "\n";
+    Neutron_res_Hist_param << "#delta:\t\t" << delta << "\n";
+    Neutron_res_Hist_param << "#Parameters structure:\tSliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma\n";
+    Neutron_res_Hist_param << "\n";
+
+    for (DSCuts ResSlice: ResSlicesHistVar) {
+        Neutron_res_Hist_param << ResSlice.GetCutVariable() << "\t\t\t" << ResSlice.GetSliceNumber() << ":" << ResSlice.GetSliceLowerb() << ":"
+                               << ResSlice.GetSliceUpperb()
+                               << ":" << ResSlice.GetMean() << ":" << ResSlice.GetUpperCut() << "\n";
+    }
+
+    Neutron_res_Hist_param.close();
+
+    system(("cp " + Neutron_res_Hist_paramFilePath + " " + plots_path).c_str()); // Copy histogram parameters file to plots folder for easy download from the ifarm
+}
+//</editor-fold>
+
+// ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadResDataParam function">
+void NeutronResolution::ReadResDataParam(const char *filename) {
     ifstream infile;
     infile.open(filename);
 
@@ -337,7 +390,7 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
             string parameter, parameter2;
             ss >> parameter; // get cut identifier
 
-            if (findSubstring(parameter, "Slice_#")) {
+            if (findSubstring(parameter, "fit_Slice_#")) {
                 // get cut values
                 ss >> parameter2;
                 stringstream ss2(parameter2);
@@ -364,19 +417,50 @@ void NeutronResolution::ReadFitDataParam(const char *filename) {
                     count++;
                 }
 
-                DSCuts TempCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
-                TempCut.SetSliceLowerb(SliceLowerBoundaryTemp);
-                TempCut.SetSliceUpperb(SliceUpperBoundaryTemp);
-                TempCut.SetSliceNumber(SliceNumberTemp);
+                DSCuts TempFitCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", FitMeanTemp, -9999, FitSigmaTemp);
+                TempFitCut.SetSliceLowerb(SliceLowerBoundaryTemp);
+                TempFitCut.SetSliceUpperb(SliceUpperBoundaryTemp);
+                TempFitCut.SetSliceNumber(SliceNumberTemp);
 
-                Loaded_Res_Slices_FitVar.push_back(TempCut);
+                Loaded_Res_Slices_FitVar.push_back(TempFitCut);
+            } else if (findSubstring(parameter, "hist_Slice_#")) {
+                // get cut values
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string SliceParam;
+                int count = 0; // parameter number
+
+                string CutNameTemp = parameter;
+                int SliceNumberTemp;
+                double SliceLowerBoundaryTemp, SliceUpperBoundaryTemp, HistMeanTemp, HistSigmaTemp;
+
+                while (getline(ss2, SliceParam, ':')) {
+                    if (count == 0) {
+                        SliceNumberTemp = stoi(SliceParam);
+                    } else if (count == 1) {
+                        SliceLowerBoundaryTemp = stod(SliceParam);
+                    } else if (count == 2) {
+                        SliceUpperBoundaryTemp = stod(SliceParam);
+                    } else if (count == 3) {
+                        HistMeanTemp = stod(SliceParam);
+                    } else if (count == 4) {
+                        HistSigmaTemp = stod(SliceParam);
+                    }
+
+                    count++;
+                }
+
+                DSCuts TempHistCut = DSCuts(CutNameTemp, "FD", "Neutron", "1n", HistMeanTemp, -9999, HistSigmaTemp);
+                TempHistCut.SetSliceLowerb(SliceLowerBoundaryTemp);
+                TempHistCut.SetSliceUpperb(SliceUpperBoundaryTemp);
+                TempHistCut.SetSliceNumber(SliceNumberTemp);
+
+                Loaded_Res_Slices_HistVar.push_back(TempHistCut);
             }
         }
     } else {
-        cout << "\n\nReadFitDataParam: file not found! Exiting...\n\n", exit(0);
+        cout << "\n\nReadResDataParam: file not found! Exiting...\n\n", exit(0);
     }
-
-//    return;
 }
 //</editor-fold>
 
@@ -389,8 +473,6 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
-        TRandom3 *Rand = new TRandom3();
-
         for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                 double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
@@ -420,16 +502,15 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
-        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
+        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
+//        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-
-                //TODO: ask Adi if shift should be by percentage or regular factor
                 double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
-//                double ShiftedMomentum = Momentum + Loaded_res_slice.GetMean(); // minus for protons and plus for neutrons
 
                 if (Printout) {
                     cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
                     cout << "Momentum = " << Momentum << "\n";
+                    cout << "shift = " << Loaded_res_slice.GetMean() << "\n";
                     cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
                 }
 

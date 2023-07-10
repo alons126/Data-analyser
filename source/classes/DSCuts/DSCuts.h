@@ -10,7 +10,6 @@ public:
     /* Constructors */
     // Default constructor:
     DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -9999, double ulim = 9999);
-//    DSCuts(std::string cv = "", std::string r = "", std::string p = "", std::string ac = "", double mean = 0, double llim = -1, double ulim = -1);
 
     /* Set functions */
     void SetMeanHist(double mh) { MeanFromHistogram = mh; }
