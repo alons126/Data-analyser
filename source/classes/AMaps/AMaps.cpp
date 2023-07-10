@@ -1615,7 +1615,7 @@ void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMap
     } else if (isProton(Particle)) {
         ParticleShort = "p";
     } else if (isNeutron(Particle)) {
-        ParticleShort = "p";
+        ParticleShort = "n";
     } else {
         ParticleShort = "nuc";
     }
@@ -1715,8 +1715,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-//                                if (Loaded_p_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                if (Loaded_p_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+//                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
                                     return true;
                                 } else {
                                     return false;
@@ -1742,8 +1742,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-//                                if (Loaded_n_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                if (Loaded_n_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+//                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
                                     return true;
                                 } else {
                                     return false;

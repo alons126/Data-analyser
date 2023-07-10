@@ -73,18 +73,8 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, TH1D
     TLPlot_Clone_test_rebined_StatsTitle = "Truth " + StatsTitle + " - cloned test rebined";
     TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
     TLPlot_Clone_test_rebined->Rebin(2);
+
     EffAndACorr_SaveNamePath = TLPlot.GetHistogram1DSaveNamePath();
-
-//    cout << "\n\nHistogram1D_Truth->Integral() == " << Histogram1D_Truth->Integral() << "\n";
-//    cout << "TLPlot_Clone->Integral() == " << TLPlot_Clone->Integral() << "\n";
-//    cout << "TLPlot_Clone_test->Integral() == " << TLPlot_Clone_test->Integral() << "\n";
-//    cout << "TLPlot_Clone_test_rebined->Integral() == " << TLPlot_Clone_test_rebined->Integral() << "\n";
-////    cout << "TLPlot_Clone_test_rebined->Integral() == " << TLPlot_Clone_test_rebined->Integral() << "\n", exit(0);
-//    //    if (Histogram1D_Truth->Integral() == 0) { cout << "\n\nNO TL EVENTS!\n", exit(0); }
-
-//    cout << "\n\n\n\nEffAndACorr_SaveNamePath = " << EffAndACorr_SaveNamePath << "\n\n\n";
-//    exit(0);
-
 }
 //</editor-fold>
 
@@ -167,6 +157,15 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, string &SampleName, 
     //<editor-fold desc="Plotting and saving ACorrection_plot">
     ACorrection_plot->SetLineStyle(1);
     ACorrection_plot->SetLineColor(kBlue);
+    ACorrection_plot->SetStats(false);
+    ACorrection_plot->GetXaxis()->SetTitleSize(0.06);
+    ACorrection_plot->GetXaxis()->SetLabelSize(0.0425);
+    ACorrection_plot->GetXaxis()->CenterTitle(true);
+    ACorrection_plot->GetYaxis()->SetTitle("Arbitrary units (#events)");
+    ACorrection_plot->GetYaxis()->SetTitleSize(0.06);
+    ACorrection_plot->GetYaxis()->SetLabelSize(0.0425);
+    ACorrection_plot->GetYaxis()->CenterTitle(true);
+    ACorrection_plot->SetLineWidth(2);
 
     if (weighted_plots) { ACorrection_plot->Sumw2(); }
 
@@ -216,11 +215,6 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, string &SampleName, 
     }
     //</editor-fold>
 
-    cout << "\n\nHistogram1D_Truth->Integral() == " << Histogram1D_Truth->Integral() << "\n";
-    cout << "TLPlot_Clone->Integral() == " << TLPlot_Clone->Integral() << "\n";
-    cout << "TLPlot_Clone_test->Integral() == " << TLPlot_Clone_test->Integral() << "\n";
-    cout << "TLPlot_Clone_test_rebined->Integral() == " << TLPlot_Clone_test_rebined->Integral() << "\n";
-
     delete Canvas;
 }
 //</editor-fold>
@@ -232,7 +226,7 @@ void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName
                                         string &ACorr_data_Dir) {
     LoadHistograms(SampleName, TLPlot, RPlot);
     DrawACorrHistograms(save_ACorr_data, SampleName, Histogram_list, ACorr_data, ACorr_data_Dir);
-    ResetHistograms();
+//    ResetHistograms();
 }
 //</editor-fold>
 
