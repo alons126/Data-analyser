@@ -650,11 +650,15 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     Efficiency_plot->GetYaxis()->CenterTitle(true);
     Efficiency_plot->SetLineWidth(2);
 
+    Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
+
+/*
     if (EfficiencyFS == "1n") {
         Efficiency_plot->GetYaxis()->SetRangeUser(0., 0.4);
     } else {
         Efficiency_plot->GetYaxis()->SetRangeUser(0., 1.);
     }
+*/
 
     if (weighted_plots) { Efficiency_plot->Sumw2(); }
 

@@ -27,6 +27,11 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
             SimulationSample = true;
             sName = "C12_simulation_6GeV_T5";
 //            sName = "C12_simulation_Q205_598636MeV_T5";
+        } else if (AnalyseFileSample == "C12_simulation_G18_2GeV") {
+            BeamAt2GeV = true;
+            SimulationSample = true;
+            sName = "C12_simulation_G18_2GeV";
+//            sName = "C12_simulation_G18_2GeV_local";
         }
     } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") { // C12, simulation, 6GeV, Q205, T5, ifarm
         if (AnalyseFileSample == "reconhipo") {

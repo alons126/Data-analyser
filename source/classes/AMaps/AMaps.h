@@ -98,7 +98,8 @@ private:
 //    double Neutral_particle_min_Ratio = 0.2;
 //    double Neutral_particle_min_Ratio = 0.05;
 //    double Neutral_particle_min_Ratio = 0.25;
-    double Neutral_particle_min_Ratio = 0.3;
+//    double Neutral_particle_min_Ratio = 0.3;
+    double Neutral_particle_min_Ratio = Charged_particle_min_Ratio / 3.;
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLAMaps = new TList();
