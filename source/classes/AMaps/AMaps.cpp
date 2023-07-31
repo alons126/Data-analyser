@@ -1710,7 +1710,7 @@ void AMaps::ReadAMapSlices(const string &SampleName, const string &AcceptanceMap
     for (int Slice = 0; Slice < Loaded_particle_limits.size(); Slice++) {
         vector<vector<double>> Loaded_Particle_WMaps_TempSlice;
 
-        string TempFileName = ParticleShort + "_WMaps_by_slice/" + ParticleShort + "_WMaps_file_from_" +
+        string TempFileName = ParticleShort + "_WMap_by_slice/" + ParticleShort + "_WMap_file_from_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(0), 2) + "_to_" +
                               to_string_with_precision(Loaded_particle_limits.at(Slice).at(1), 2) + ".par";
 

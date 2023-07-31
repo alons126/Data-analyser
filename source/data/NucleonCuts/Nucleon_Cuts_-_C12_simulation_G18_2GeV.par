@@ -2,7 +2,7 @@
 # CLAS12 analysis cuts and parameters file (after Beta Gaussian fit) #
 ######################################################################
 
-# Cuts are fitted for - C12_simulation_G18_2GeV:	noNC_
+# Cuts are fitted for - C12_simulation_G18_2GeV:	noNC
 
 # Neutron momentum cuts (pid:mean:sigma) - sigma_FD=1:
 Momentum_th			2112:0:0.4:CD & FD

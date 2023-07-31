@@ -159,6 +159,9 @@ ExperimentParameters::ExperimentParameters(string AnalyseFilePath, string Analys
     } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
         TargetElement = "Ca48";
         TargetElementPDG = 1000200480;
+    } else if (SampleName.find("Ar40") <= SampleName[SampleName.size() - 1]) {
+        TargetElement = "Ar40";
+        TargetElementPDG = 1000180400;
     } else {
         TargetElement = "UNKOWN";
         TargetElementPDG = -9999;
