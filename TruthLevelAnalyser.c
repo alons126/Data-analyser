@@ -344,9 +344,9 @@ void gst::Loop() {
 // Plot selector --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
-    bool Theta_plots = false, Phi_plots = false;
+    bool Theta_plots = true, Phi_plots = true;
 
-    bool Energy_histogram_plots = false;
+    bool Energy_histogram_plots = true;
 
     bool ET_plots = true, ET_all_plots = true, ET_QEL_plots = true, ET_MEC_plots = true, ET_RES_plots = true, ET_DIS_plots = true;
     if (ET_plots == false) {
@@ -355,11 +355,11 @@ void gst::Loop() {
 
     bool inclusive_plots = true;
 
-    bool E_cal_plots = false, other_E_cal_plots = false;
+    bool E_cal_plots = true, other_E_cal_plots = false;
 
-    bool momentum_plots = false;
+    bool momentum_plots = true;
 
-    bool MicroBooNE_plots = false;
+    bool MicroBooNE_plots = true;
     //</editor-fold>
 
 // Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -4240,8 +4240,7 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
             fsEl_VS_theta_lp_lower_lim_2p_x = 0;
             fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
             fsEl_VS_theta_lp_lower_lim_2p_y = 0;
@@ -4256,8 +4255,7 @@ void gst::Loop() {
             fsEl_RES_lower_lim_2p = 0;
             fsEl_DIS_upper_lim_2p = 2.3;
             fsEl_DIS_lower_lim_2p = 0;
-            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
             fsEl_VS_theta_lp_lower_lim_2p_x = 0;
             fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
             fsEl_VS_theta_lp_lower_lim_2p_y = 0;
@@ -4276,8 +4274,7 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
             fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
             fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
             fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
@@ -4292,8 +4289,7 @@ void gst::Loop() {
             fsEl_RES_lower_lim_1n1p = 0;
             fsEl_DIS_upper_lim_1n1p = 2.3;
             fsEl_DIS_lower_lim_1n1p = 0;
-            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
-//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
             fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
             fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
             fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
@@ -4327,28 +4323,6 @@ void gst::Loop() {
         E_Trans90_all_upper_lim_1n1p = 1.7;
         E_Trans90_all_lower_lim_1n1p = 0;
         //</editor-fold>
-
-//        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
-//        E_Trans_all_ang_all_int_upper_lim_2p = BeamEnergy * 1.1;
-//        E_Trans_all_ang_all_int_lower_lim_2p = 0;
-//        E_Trans15_all_upper_lim_2p = BeamEnergy * 1.1;
-//        E_Trans15_all_lower_lim_2p = 0;
-//        E_Trans45_all_upper_lim_2p = BeamEnergy * 1.1;
-//        E_Trans45_all_lower_lim_2p = 0;
-//        E_Trans90_all_upper_lim_2p = BeamEnergy * 1.1;
-//        E_Trans90_all_lower_lim_2p = 0;
-//        //</editor-fold>
-
-//        //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
-//        E_Trans_all_ang_all_int_upper_lim_1n1p = BeamEnergy * 1.1;
-//        E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
-//        E_Trans15_all_upper_lim_1n1p = BeamEnergy * 1.1;
-//        E_Trans15_all_lower_lim_1n1p = 0;
-//        E_Trans45_all_upper_lim_1n1p = BeamEnergy * 1.1;
-//        E_Trans45_all_lower_lim_1n1p = 0;
-//        E_Trans90_all_upper_lim_1n1p = BeamEnergy * 1.1;
-//        E_Trans90_all_lower_lim_1n1p = 0;
-//        //</editor-fold>
 
         //</editor-fold>
 
@@ -4443,73 +4417,65 @@ void gst::Loop() {
         //</editor-fold>
 
         //<editor-fold desc="Inclusive Energy Transfer histograms">
-        E_Trans15_all_inclusive_upper_lim = 1.7;
+        E_Trans15_all_inclusive_upper_lim = 2.3;
         E_Trans15_all_inclusive_lower_lim = 0;
-        E_Trans15_QEL_inclusive_upper_lim = 1.7;
+        E_Trans15_QEL_inclusive_upper_lim = 2.3;
         E_Trans15_QEL_inclusive_lower_lim = 0;
-        E_Trans15_MEC_inclusive_upper_lim = 1.7;
+        E_Trans15_MEC_inclusive_upper_lim = 2.3;
         E_Trans15_MEC_inclusive_lower_lim = 0;
-        E_Trans15_RES_inclusive_upper_lim = 1.7;
+        E_Trans15_RES_inclusive_upper_lim = 2.3;
         E_Trans15_RES_inclusive_lower_lim = 0;
-        E_Trans15_DIS_inclusive_upper_lim = 1.7;
+        E_Trans15_DIS_inclusive_upper_lim = 2.3;
         E_Trans15_DIS_inclusive_lower_lim = 0;
         E_Trans_VS_q_all_inclusive_upper_lim_x = 2.75;
         E_Trans_VS_q_all_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_all_inclusive_upper_lim_y = 1.7;
+        E_Trans_VS_q_all_inclusive_upper_lim_y = 2.3;
         E_Trans_VS_q_all_inclusive_lower_lim_y = 0;
         E_Trans_VS_q_QEL_inclusive_upper_lim_x = 2.75;
         E_Trans_VS_q_QEL_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 1.7;
+        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 2.3;
         E_Trans_VS_q_QEL_inclusive_lower_lim_y = 0;
         E_Trans_VS_q_MEC_inclusive_upper_lim_x = 2.75;
         E_Trans_VS_q_MEC_inclusive_lower_lim_x = 0;
-        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 1.7;
+        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 2.3;
         E_Trans_VS_q_MEC_inclusive_lower_lim_y = 0;
         E_Trans_VS_q3_all_upper_lim_x_2p = 2.75;
         E_Trans_VS_q3_all_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_2p = 1.7;
+        E_Trans_VS_q3_all_upper_lim_y_2p = 2.3;
         E_Trans_VS_q3_all_lower_lim_y_2p = 0;
         E_Trans_VS_q3_QEL_upper_lim_x_2p = 2.75;
         E_Trans_VS_q3_QEL_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_2p = 1.7;
+        E_Trans_VS_q3_QEL_upper_lim_y_2p = 2.3;
         E_Trans_VS_q3_QEL_lower_lim_y_2p = 0;
         E_Trans_VS_q3_MEC_upper_lim_x_2p = 2.75;
         E_Trans_VS_q3_MEC_lower_lim_x_2p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_2p = 1.7;
+        E_Trans_VS_q3_MEC_upper_lim_y_2p = 2.3;
         E_Trans_VS_q3_MEC_lower_lim_y_2p = 0;
         E_Trans_VS_q3_all_upper_lim_x_1n1p = 2.75;
         E_Trans_VS_q3_all_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_all_upper_lim_y_1n1p = 1.7;
+        E_Trans_VS_q3_all_upper_lim_y_1n1p = 2.3;
         E_Trans_VS_q3_all_lower_lim_y_1n1p = 0;
         E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 2.75;
         E_Trans_VS_q3_QEL_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 1.7;
+        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 2.3;
         E_Trans_VS_q3_QEL_lower_lim_y_1n1p = 0;
         E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 2.75;
         E_Trans_VS_q3_MEC_lower_lim_x_1n1p = 0;
-        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 1.7;
+        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 2.3;
         E_Trans_VS_q3_MEC_lower_lim_y_1n1p = 0;
         //</editor-fold>
 
         //<editor-fold desc="E_cal restoration histograms">
 
         //<editor-fold desc="E_cal range">
-        E_cal_QEL_upper_lim_range = BeamEnergy * 1.35;
-        E_cal_QEL_lower_lim_range = 0;
-        E_cal_MEC_upper_lim_range = BeamEnergy * 1.35;
-        E_cal_MEC_lower_lim_range = 0;
-        E_cal_RES_upper_lim_range = BeamEnergy * 1.35;
-        E_cal_RES_lower_lim_range = 0;
-        E_cal_DIS_upper_lim_range = BeamEnergy * 1.35;
-        E_cal_DIS_lower_lim_range = 0;
-//        E_cal_QEL_upper_lim_range = 2.35;
-//        E_cal_QEL_lower_lim_range = 2.11;
-//        E_cal_MEC_upper_lim_range = 2.35;
-//        E_cal_MEC_lower_lim_range = 2.11;
-//        E_cal_RES_upper_lim_range = 2.35;
-//        E_cal_RES_lower_lim_range = 2.11;
-//        E_cal_DIS_upper_lim_range = 2.35;
-//        E_cal_DIS_lower_lim_range = 2.11;
+        E_cal_QEL_upper_lim_range = 2.35;
+        E_cal_QEL_lower_lim_range = 2.11;
+        E_cal_MEC_upper_lim_range = 2.35;
+        E_cal_MEC_lower_lim_range = 2.11;
+        E_cal_RES_upper_lim_range = 2.35;
+        E_cal_RES_lower_lim_range = 2.11;
+        E_cal_DIS_upper_lim_range = 2.35;
+        E_cal_DIS_lower_lim_range = 2.11;
         //</editor-fold>
 
         //<editor-fold desc="E_cal restoration histograms (2p)">
@@ -4581,6 +4547,364 @@ void gst::Loop() {
         //</editor-fold>
 
         //</editor-fold>
+
+//        //<editor-fold desc="general_file histogram limits">
+//
+//        //<editor-fold desc="Energy histograms">
+//
+//        //<editor-fold desc="Energy histograms (2p)">
+//        if (FSI_status == true) {
+//            fsEl_upper_lim_2p = 2.21;
+//            fsEl_lower_lim_2p = 1;
+//            fsEl_QEL_upper_lim_2p = 2.3;
+//            fsEl_QEL_lower_lim_2p = 0;
+//            fsEl_MEC_upper_lim_2p = 2.3;
+//            fsEl_MEC_lower_lim_2p = 0;
+//            fsEl_RES_upper_lim_2p = 2.3;
+//            fsEl_RES_lower_lim_2p = 0;
+//            fsEl_DIS_upper_lim_2p = 2.3;
+//            fsEl_DIS_lower_lim_2p = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
+//        } else if (FSI_status == false) {
+//            fsEl_upper_lim_2p = 2.21;
+//            fsEl_lower_lim_2p = 1;
+//            fsEl_QEL_upper_lim_2p = 2.3;
+//            fsEl_QEL_lower_lim_2p = 0;
+//            fsEl_MEC_upper_lim_2p = 2.3;
+//            fsEl_MEC_lower_lim_2p = 0;
+//            fsEl_RES_upper_lim_2p = 2.3;
+//            fsEl_RES_lower_lim_2p = 0;
+//            fsEl_DIS_upper_lim_2p = 2.3;
+//            fsEl_DIS_lower_lim_2p = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_2p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_2p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_2p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_2p_y = 0;
+//        }
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy histograms (1n1p)">
+//        if (FSI_status == true) {
+//            fsEl_upper_lim_1n1p = 2.3;
+//            fsEl_lower_lim_1n1p = 1;
+//            fsEl_QEL_upper_lim_1n1p = 2.3;
+//            fsEl_QEL_lower_lim_1n1p = 0;
+//            fsEl_MEC_upper_lim_1n1p = 2.3;
+//            fsEl_MEC_lower_lim_1n1p = 0;
+//            fsEl_RES_upper_lim_1n1p = 2.3;
+//            fsEl_RES_lower_lim_1n1p = 0;
+//            fsEl_DIS_upper_lim_1n1p = 2.3;
+//            fsEl_DIS_lower_lim_1n1p = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
+//        } else if (FSI_status == false) {
+//            fsEl_upper_lim_1n1p = 2.3;
+//            fsEl_lower_lim_1n1p = 1;
+//            fsEl_QEL_upper_lim_1n1p = 2.3;
+//            fsEl_QEL_lower_lim_1n1p = 0;
+//            fsEl_MEC_upper_lim_1n1p = 2.3;
+//            fsEl_MEC_lower_lim_1n1p = 0;
+//            fsEl_RES_upper_lim_1n1p = 2.3;
+//            fsEl_RES_lower_lim_1n1p = 0;
+//            fsEl_DIS_upper_lim_1n1p = 2.3;
+//            fsEl_DIS_lower_lim_1n1p = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_x = 70.0;
+////            fsEl_VS_theta_lp_upper_lim_1n1p_x = 90.0;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_x = 0;
+//            fsEl_VS_theta_lp_upper_lim_1n1p_y = 2.3;
+//            fsEl_VS_theta_lp_lower_lim_1n1p_y = 0;
+//        }
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms">
+//
+//        //<editor-fold desc="Energy Transfer histograms (all interactions)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
+//        E_Trans_all_ang_all_int_upper_lim_2p = 1.7;
+//        E_Trans_all_ang_all_int_lower_lim_2p = 0;
+//        E_Trans15_all_upper_lim_2p = 1.7;
+//        E_Trans15_all_lower_lim_2p = 0;
+//        E_Trans45_all_upper_lim_2p = 1.7;
+//        E_Trans45_all_lower_lim_2p = 0;
+//        E_Trans90_all_upper_lim_2p = 1.7;
+//        E_Trans90_all_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
+//        E_Trans_all_ang_all_int_upper_lim_1n1p = 1.7;
+//        E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
+//        E_Trans15_all_upper_lim_1n1p = 1.7;
+//        E_Trans15_all_lower_lim_1n1p = 0;
+//        E_Trans45_all_upper_lim_1n1p = 1.7;
+//        E_Trans45_all_lower_lim_1n1p = 0;
+//        E_Trans90_all_upper_lim_1n1p = 1.7;
+//        E_Trans90_all_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+////        //<editor-fold desc="Energy Transfer histograms (all interactions, 2p)">
+////        E_Trans_all_ang_all_int_upper_lim_2p = BeamEnergy * 1.1;
+////        E_Trans_all_ang_all_int_lower_lim_2p = 0;
+////        E_Trans15_all_upper_lim_2p = BeamEnergy * 1.1;
+////        E_Trans15_all_lower_lim_2p = 0;
+////        E_Trans45_all_upper_lim_2p = BeamEnergy * 1.1;
+////        E_Trans45_all_lower_lim_2p = 0;
+////        E_Trans90_all_upper_lim_2p = BeamEnergy * 1.1;
+////        E_Trans90_all_lower_lim_2p = 0;
+////        //</editor-fold>
+//
+////        //<editor-fold desc="Energy Transfer histograms (all interactions, 1n1p)">
+////        E_Trans_all_ang_all_int_upper_lim_1n1p = BeamEnergy * 1.1;
+////        E_Trans_all_ang_all_int_lower_lim_1n1p = 0;
+////        E_Trans15_all_upper_lim_1n1p = BeamEnergy * 1.1;
+////        E_Trans15_all_lower_lim_1n1p = 0;
+////        E_Trans45_all_upper_lim_1n1p = BeamEnergy * 1.1;
+////        E_Trans45_all_lower_lim_1n1p = 0;
+////        E_Trans90_all_upper_lim_1n1p = BeamEnergy * 1.1;
+////        E_Trans90_all_lower_lim_1n1p = 0;
+////        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (QEL only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (QEL only, 2p)">
+//        E_Trans15_QEL_upper_lim_2p = 1.7;
+//        E_Trans15_QEL_lower_lim_2p = 0;
+//        E_Trans45_QEL_upper_lim_2p = 1.7;
+//        E_Trans45_QEL_lower_lim_2p = 0;
+//        E_Trans90_QEL_upper_lim_2p = 1.7;
+//        E_Trans90_QEL_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (QEL only, 1n1p)">
+//        E_Trans15_QEL_upper_lim_1n1p = 1.7;
+//        E_Trans15_QEL_lower_lim_1n1p = 0;
+//        E_Trans45_QEL_upper_lim_1n1p = 1.7;
+//        E_Trans45_QEL_lower_lim_1n1p = 0;
+//        E_Trans90_QEL_upper_lim_1n1p = 1.7;
+//        E_Trans90_QEL_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (MEC only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (MEC only, 2p)">
+//        E_Trans15_MEC_upper_lim_2p = 1.7;
+//        E_Trans15_MEC_lower_lim_2p = 0;
+//        E_Trans45_MEC_upper_lim_2p = 1.7;
+//        E_Trans45_MEC_lower_lim_2p = 0;
+//        E_Trans90_MEC_upper_lim_2p = 1.7;
+//        E_Trans90_MEC_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (MEC only, 1n1p)">
+//        E_Trans15_MEC_upper_lim_1n1p = 1.7;
+//        E_Trans15_MEC_lower_lim_1n1p = 0;
+//        E_Trans45_MEC_upper_lim_1n1p = 1.7;
+//        E_Trans45_MEC_lower_lim_1n1p = 0;
+//        E_Trans90_MEC_upper_lim_1n1p = 1.7;
+//        E_Trans90_MEC_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (RES only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (RES only, 2p)">
+//        E_Trans15_RES_upper_lim_2p = 1.7;
+//        E_Trans15_RES_lower_lim_2p = 0;
+//        E_Trans45_RES_upper_lim_2p = 1.7;
+//        E_Trans45_RES_lower_lim_2p = 0;
+//        E_Trans90_RES_upper_lim_2p = 1.7;
+//        E_Trans90_RES_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (RES only, 1n1p)">
+//        E_Trans15_RES_upper_lim_1n1p = 1.7;
+//        E_Trans15_RES_lower_lim_1n1p = 0;
+//        E_Trans45_RES_upper_lim_1n1p = 1.7;
+//        E_Trans45_RES_lower_lim_1n1p = 0;
+//        E_Trans90_RES_upper_lim_1n1p = 1.7;
+//        E_Trans90_RES_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (DIS only)">
+//
+//        //<editor-fold desc="Energy Transfer histograms (DIS only, 2p)">
+//        E_Trans15_DIS_upper_lim_2p = 1.7;
+//        E_Trans15_DIS_lower_lim_2p = 0;
+//        E_Trans45_DIS_upper_lim_2p = 1.7;
+//        E_Trans45_DIS_lower_lim_2p = 0;
+//        E_Trans90_DIS_upper_lim_2p = 1.7;
+//        E_Trans90_DIS_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Energy Transfer histograms (DIS only, 1n1p)">
+//        E_Trans15_DIS_upper_lim_1n1p = 1.7;
+//        E_Trans15_DIS_lower_lim_1n1p = 0;
+//        E_Trans45_DIS_upper_lim_1n1p = 1.7;
+//        E_Trans45_DIS_lower_lim_1n1p = 0;
+//        E_Trans90_DIS_upper_lim_1n1p = 1.7;
+//        E_Trans90_DIS_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Inclusive Energy Transfer histograms">
+//        E_Trans15_all_inclusive_upper_lim = 1.7;
+//        E_Trans15_all_inclusive_lower_lim = 0;
+//        E_Trans15_QEL_inclusive_upper_lim = 1.7;
+//        E_Trans15_QEL_inclusive_lower_lim = 0;
+//        E_Trans15_MEC_inclusive_upper_lim = 1.7;
+//        E_Trans15_MEC_inclusive_lower_lim = 0;
+//        E_Trans15_RES_inclusive_upper_lim = 1.7;
+//        E_Trans15_RES_inclusive_lower_lim = 0;
+//        E_Trans15_DIS_inclusive_upper_lim = 1.7;
+//        E_Trans15_DIS_inclusive_lower_lim = 0;
+//        E_Trans_VS_q_all_inclusive_upper_lim_x = 2.75;
+//        E_Trans_VS_q_all_inclusive_lower_lim_x = 0;
+//        E_Trans_VS_q_all_inclusive_upper_lim_y = 1.7;
+//        E_Trans_VS_q_all_inclusive_lower_lim_y = 0;
+//        E_Trans_VS_q_QEL_inclusive_upper_lim_x = 2.75;
+//        E_Trans_VS_q_QEL_inclusive_lower_lim_x = 0;
+//        E_Trans_VS_q_QEL_inclusive_upper_lim_y = 1.7;
+//        E_Trans_VS_q_QEL_inclusive_lower_lim_y = 0;
+//        E_Trans_VS_q_MEC_inclusive_upper_lim_x = 2.75;
+//        E_Trans_VS_q_MEC_inclusive_lower_lim_x = 0;
+//        E_Trans_VS_q_MEC_inclusive_upper_lim_y = 1.7;
+//        E_Trans_VS_q_MEC_inclusive_lower_lim_y = 0;
+//        E_Trans_VS_q3_all_upper_lim_x_2p = 2.75;
+//        E_Trans_VS_q3_all_lower_lim_x_2p = 0;
+//        E_Trans_VS_q3_all_upper_lim_y_2p = 1.7;
+//        E_Trans_VS_q3_all_lower_lim_y_2p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_x_2p = 2.75;
+//        E_Trans_VS_q3_QEL_lower_lim_x_2p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_y_2p = 1.7;
+//        E_Trans_VS_q3_QEL_lower_lim_y_2p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_x_2p = 2.75;
+//        E_Trans_VS_q3_MEC_lower_lim_x_2p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_y_2p = 1.7;
+//        E_Trans_VS_q3_MEC_lower_lim_y_2p = 0;
+//        E_Trans_VS_q3_all_upper_lim_x_1n1p = 2.75;
+//        E_Trans_VS_q3_all_lower_lim_x_1n1p = 0;
+//        E_Trans_VS_q3_all_upper_lim_y_1n1p = 1.7;
+//        E_Trans_VS_q3_all_lower_lim_y_1n1p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_x_1n1p = 2.75;
+//        E_Trans_VS_q3_QEL_lower_lim_x_1n1p = 0;
+//        E_Trans_VS_q3_QEL_upper_lim_y_1n1p = 1.7;
+//        E_Trans_VS_q3_QEL_lower_lim_y_1n1p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_x_1n1p = 2.75;
+//        E_Trans_VS_q3_MEC_lower_lim_x_1n1p = 0;
+//        E_Trans_VS_q3_MEC_upper_lim_y_1n1p = 1.7;
+//        E_Trans_VS_q3_MEC_lower_lim_y_1n1p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal restoration histograms">
+//
+//        //<editor-fold desc="E_cal range">
+//        E_cal_QEL_upper_lim_range = BeamEnergy * 1.35;
+//        E_cal_QEL_lower_lim_range = 0;
+//        E_cal_MEC_upper_lim_range = BeamEnergy * 1.35;
+//        E_cal_MEC_lower_lim_range = 0;
+//        E_cal_RES_upper_lim_range = BeamEnergy * 1.35;
+//        E_cal_RES_lower_lim_range = 0;
+//        E_cal_DIS_upper_lim_range = BeamEnergy * 1.35;
+//        E_cal_DIS_lower_lim_range = 0;
+////        E_cal_QEL_upper_lim_range = 2.35;
+////        E_cal_QEL_lower_lim_range = 2.11;
+////        E_cal_MEC_upper_lim_range = 2.35;
+////        E_cal_MEC_lower_lim_range = 2.11;
+////        E_cal_RES_upper_lim_range = 2.35;
+////        E_cal_RES_lower_lim_range = 2.11;
+////        E_cal_DIS_upper_lim_range = 2.35;
+////        E_cal_DIS_lower_lim_range = 2.11;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal restoration histograms (2p)">
+//        if (BEnergyToNucleusCon == true) {
+//            E_cal_QEL_upper_lim_2p = E_cal_QEL_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_QEL_lower_lim_2p = E_cal_QEL_lower_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_MEC_upper_lim_2p = E_cal_MEC_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_MEC_lower_lim_2p = E_cal_MEC_lower_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_RES_upper_lim_2p = E_cal_RES_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_RES_lower_lim_2p = E_cal_RES_lower_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_DIS_upper_lim_2p = E_cal_DIS_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_DIS_lower_lim_2p = E_cal_DIS_lower_lim_range + 2 * BEnergyToNucleus;
+//        } else if (BEnergyToNucleusCon == false) {
+//            E_cal_QEL_upper_lim_2p = E_cal_QEL_upper_lim_range;
+//            E_cal_QEL_lower_lim_2p = E_cal_QEL_lower_lim_range;
+//            E_cal_MEC_upper_lim_2p = E_cal_MEC_upper_lim_range;
+//            E_cal_MEC_lower_lim_2p = E_cal_MEC_lower_lim_range;
+//            E_cal_RES_upper_lim_2p = E_cal_RES_upper_lim_range;
+//            E_cal_RES_lower_lim_2p = E_cal_RES_lower_lim_range;
+//            E_cal_DIS_upper_lim_2p = E_cal_DIS_upper_lim_range;
+//            E_cal_DIS_lower_lim_2p = E_cal_DIS_lower_lim_range;
+//        }
+//        //</editor-fold>
+//
+//        //<editor-fold desc="E_cal restoration histograms (1n1p)">
+//        if (BEnergyToNucleusCon == true) {
+//            E_cal_QEL_upper_lim_1n1p = E_cal_QEL_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_QEL_lower_lim_1n1p = E_cal_QEL_lower_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_MEC_upper_lim_1n1p = E_cal_MEC_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_MEC_lower_lim_1n1p = E_cal_MEC_lower_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_RES_upper_lim_1n1p = E_cal_RES_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_RES_lower_lim_1n1p = E_cal_RES_lower_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_DIS_upper_lim_1n1p = E_cal_DIS_upper_lim_range + 2 * BEnergyToNucleus;
+//            E_cal_DIS_lower_lim_1n1p = E_cal_DIS_lower_lim_range + 2 * BEnergyToNucleus;
+//        } else if (BEnergyToNucleusCon == false) {
+//            E_cal_QEL_upper_lim_1n1p = E_cal_QEL_upper_lim_range;
+//            E_cal_QEL_lower_lim_1n1p = E_cal_QEL_lower_lim_range;
+//            E_cal_MEC_upper_lim_1n1p = E_cal_MEC_upper_lim_range;
+//            E_cal_MEC_lower_lim_1n1p = E_cal_MEC_lower_lim_range;
+//            E_cal_RES_upper_lim_1n1p = E_cal_RES_upper_lim_range;
+//            E_cal_RES_lower_lim_1n1p = E_cal_RES_lower_lim_range;
+//            E_cal_DIS_upper_lim_1n1p = E_cal_DIS_upper_lim_range;
+//            E_cal_DIS_lower_lim_1n1p = E_cal_DIS_lower_lim_range;
+//        }
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms">
+//
+//        //<editor-fold desc="Momentum histograms (2p)">
+//        P_L_hist_upper_lim_2p = 2.3;
+//        P_L_hist_lower_lim_2p = 0;
+//        P_R_hist_upper_lim_2p = 2.3;
+//        P_R_hist_lower_lim_2p = 0;
+//        P_lp_hist_upper_lim_2p = 2.3;
+//        P_lp_hist_lower_lim_2p = 0;
+//        //</editor-fold>
+//
+//        //<editor-fold desc="Momentum histograms (1n1p)">
+//        P_p_hist_upper_lim_1n1p = 2.3;
+//        P_p_hist_lower_lim_1n1p = 0;
+//        P_n_hist_upper_lim_1n1p = 2.3;
+//        P_n_hist_lower_lim_1n1p = 0;
+//        P_lp_hist_upper_lim_1n1p = 2.3;
+//        P_lp_hist_lower_lim_1n1p = 0;
+//        //</editor-fold>
+//
+//        //</editor-fold>
+//
+//        //</editor-fold>
 
     }
 
@@ -5737,8 +6061,8 @@ void gst::Loop() {
 //                    double P_R_2p = -1;
 
 //                  Momentum cut to at least 300 [MeV/c] == 0.3 [GeV/c]:
-                    if (P_n1_2n >= 0 && P_n2_2n >= 0) {
-//                    if (P_p1_2p >= P_p1_lower_lim_2p && P_p2_2p >= P_p2_lower_lim_2p) {
+//                    if (P_n1_2n >= 0 && P_n2_2n >= 0) {
+                    if (P_n1_2n >= P_p1_lower_lim_2p && P_n2_2n >= P_p2_lower_lim_2p) {
                         double E_cal_2n;
 
                         if (BEnergyToNucleusCon == true) {

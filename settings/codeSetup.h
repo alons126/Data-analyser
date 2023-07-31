@@ -49,13 +49,18 @@ std::string plots_log_save_Directory = plots_path + "/" + log_file_name;
 // file_name definitions and selection
 // ======================================================================================================================================================================
 
+// file_name definition -------------------------------------------------------------------------------------------------------------------------------------------------
+
+//std::string file_name = "12C_2222GeV_GTEST19_10b_00_000";
+std::string file_name = "general_file";
+
 // hipo files -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="Local hipo files - C12 @ 6GeV">
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
@@ -163,6 +168,14 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////std::string AnalyseFile = AnalyseFileDir + "/" + "e_on_1000060120_2222MeV_em.gst.root";
 ////std::string AnalyseFile = "./e_on_1000060120_598636MeV.gst.root";
 
+////<editor-fold desc="SuSAv2 fix for thesis">
+//std::string AnalyseFilePath = "home/alon/project";
+//std::string AnalyseFileSample = "Downloads";
+//std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
+////std::string AnalyseFile = AnalyseFileDir + "/" + "12C_2222GeV_GTEST19_10b_00_000.root"; // Original problem
+//std::string AnalyseFile = AnalyseFileDir + "/" + "e_on_1000060120_EMMEC_test_myBranch.root"; // Initial fix with 1M events (myBranch)
+////</editor-fold>
+
 //std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_4_test_1";
 //std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
@@ -200,10 +213,6 @@ std::string AnalyseFile = AnalyseFileDir + "*.hipo";
 ////std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CC_myBranch_10M.root";
 //std::string AnalyseFile = "./nu_SuSAv2_fix_test_12C_2222GeV_CCMEC_myBranch_10M.root";
 //</editor-fold>
-
-// file_name definition -------------------------------------------------------------------------------------------------------------------------------------------------
-
-std::string file_name = "general_file";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                    Other parameters                                                                                 //

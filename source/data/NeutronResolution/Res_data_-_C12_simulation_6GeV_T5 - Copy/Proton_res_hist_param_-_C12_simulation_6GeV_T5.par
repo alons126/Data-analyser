@@ -1,0 +1,24 @@
+######################################################################
+# CLAS12 analysis cuts and parameters file (after nRes Gaussian Hist) #
+######################################################################
+
+# Proton resolution parameters are for:
+#sample:	C12_simulation_6GeV_T5
+#run_mode:	wNC_Eff1
+#delta:		0.05
+#Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma
+
+hist_Slice_#1_from_0.40_to_0.70			1:0.4:0.7:0.0556142:0.0421543
+hist_Slice_#2_from_0.70_to_0.90			2:0.7:0.9:0.0258696:0.0244302
+hist_Slice_#3_from_0.90_to_1.05			3:0.9:1.05:0.017605:0.0242485
+hist_Slice_#4_from_1.05_to_1.15			4:1.05:1.15:0.0142291:0.0234584
+hist_Slice_#5_from_1.15_to_1.25			5:1.15:1.25:0.0116032:0.0187848
+hist_Slice_#6_from_1.25_to_1.35			6:1.25:1.35:0.00995346:0.0190853
+hist_Slice_#7_from_1.35_to_1.45			7:1.35:1.45:0.00843884:0.0188132
+hist_Slice_#8_from_1.45_to_1.55			8:1.45:1.55:0.00687078:0.0139454
+hist_Slice_#9_from_1.55_to_1.65			9:1.55:1.65:0.00673521:0.0196281
+hist_Slice_#10_from_1.65_to_1.80			10:1.65:1.8:0.0055542:0.0151987
+hist_Slice_#11_from_1.80_to_1.95			11:1.8:1.95:0.00516181:0.0232379
+hist_Slice_#12_from_1.95_to_2.15			12:1.95:2.15:0.00395777:0.0103699
+hist_Slice_#13_from_2.15_to_2.50			13:2.15:2.5:0.00292834:0.0125994
+hist_Slice_#14_from_2.50_to_5.986			14:2.5:5.98636:0.00211583:0.0160135

@@ -119,9 +119,8 @@ void EventAnalyser() {
 
     /* Truth level calculation settings */
     bool calculate_truth_level = true; // TL master ON/OFF switch
-    bool TL_with_one_reco_electron = true;
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = true; // Enforce TL event selection on reco. plots
+    bool Rec_wTL_ES = false; // Enforce TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
@@ -132,6 +131,7 @@ void EventAnalyser() {
 
     /* Acceptance maps settings */
     bool generate_AMaps = false; // Generate acceptance maps
+    bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
@@ -180,12 +180,12 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true;
+    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = true; //TODO: add on/off switch for TL fiducial cuts
+    bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_nucleon_SmearAndShift = false;
 
@@ -240,10 +240,14 @@ void EventAnalyser() {
         if (!generate_AMaps && !plot_and_fit_MomRes) {
             Additional_Status = "";
         } else if (generate_AMaps && !plot_and_fit_MomRes) {
+//            Additional_Status = "AMaps_NOleading";
+//            Additional_Status = "AMaps_WITHleading";
             Additional_Status = "AMaps_";
         } else if (!generate_AMaps && plot_and_fit_MomRes) {
+//            Additional_Status = "nRes_SmallSlices";
             Additional_Status = "nRes_";
         } else if (generate_AMaps && plot_and_fit_MomRes) {
+//            Additional_Status = "nRes_SmallSlices_AMaps_";
             Additional_Status = "nRes_AMaps_";
         }
 
@@ -306,7 +310,7 @@ void EventAnalyser() {
     /* Print out the cuts within the run (for self-observation) */
     if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
 
-    if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
+    if (!apply_nucleon_cuts || !apply_chi2_cuts_1e_cut) { apply_nucleon_physical_cuts = false; }
 
     if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_nucleon_SmearAndShift = false; }
 
@@ -6520,6 +6524,7 @@ void EventAnalyser() {
     int num_of_QEL_events = 0, num_of_MEC_events = 0, num_of_RES_events = 0, num_of_DIS_events = 0;
 
     int num_of_events_with_at_least_1e = 0, num_of_events_with_exactly_1e = 0, num_of_events_with_exactly_1e_from_file = 0, num_of_events_more_then_1e = 0;
+    int num_of_QEL_events_1e_cut = 0, num_of_MEC_events_1e_cut = 0, num_of_RES_events_1e_cut = 0, num_of_DIS_events_1e_cut = 0;
 
     int num_of_events_1e1p_all = 0, num_of_events_with_1e1p = 0;
 
@@ -7854,12 +7859,32 @@ void EventAnalyser() {
         if (electrons[Electron_ind.at(0)]->getRegion() != FD) { cout << "\n\n1e cut: Electron_ind.at(0) is not in the FD! Exiting...\n\n", exit(EXIT_FAILURE); }
         //</editor-fold>
 
+        //<editor-fold desc="events counts (1e cut)">
+
+        //<editor-fold desc="events counts with protons (1e cut)">
+        if (processID == 1.) {
+            ++num_of_QEL_events_1e_cut;
+            qel = true;
+        } else if (processID == 2.) {
+            ++num_of_MEC_events_1e_cut;
+            mec = true;
+        } else if (processID == 3.) {
+            ++num_of_RES_events_1e_cut;
+            res = true;
+        } else if (processID == 4.) {
+            ++num_of_DIS_events_1e_cut;
+            dis = true;
+        }
+        //</editor-fold>
+
 //        //<editor-fold desc="events counts with protons (1e cut)">
 //        if (Nf_Prime == 2 && Np == 1) { ++num_of_events_with_1e1p; /* // logging #(events) w/ 1e1p */ }
 //        if (Protons_ind.size() == 1) { ++num_of_events_1e1p_all; } // #(1p) events with 1 identified protons (i.e. above momentum cuts)
 //        if (Protons_ind.size() == 2) { ++num_of_events_1e2p_all; } // #(2p) events with 2 identified protons (i.e. above momentum cuts)
 //        if (Protons_ind.size() == 2 && PhotonsFD_ind.size() == 0) { ++num_of_events_1e2p_all_woFDphotons; }
 //        //</editor-fold>
+
+        //</editor-fold>
 
         /* Electron 1e cut variables definitions */
         TVector3 P_e_1e;
@@ -9522,11 +9547,6 @@ void EventAnalyser() {
                     auto mcpbank_nRes = c12->mcparts();
                     const Int_t Ngen_nRes = mcpbank_nRes->getRows();
 
-//                        int reco_nFD_Pindex = n_1n->cal(n_detlayer_1n)->getIndex();
-//                        int TL_nFD_Pindex = mcpbank_nRes->match_to(n_1n->getIndex());
-//                        cout << "\n\n\nreco_nFD_Pindex = " << reco_nFD_Pindex << "\n";
-//                        cout << "TL_nFD_Pindex = " << TL_nFD_Pindex << "\n";
-
                     for (Int_t i = 0; i < Ngen_nRes; i++) {
                         mcpbank_nRes->setEntry(i);
 
@@ -9569,21 +9589,10 @@ void EventAnalyser() {
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
                                 hP_nFD_Res_VS_P_nFD_1n->Fill(TLNeutronP, nResolution, Weight);
                             }
-//                            else if (TLNeutronTheta < 40.) {
-//                                cout << "\ni = " << i << "\n";
-//                                cout << "NeutronsFD_ind.at(0) = " << NeutronsFD_ind.at(0) << "\n";
-//                                cout << "Theta TL = " << TLNeutronTheta << "\n";
-//                                cout << "Theta Rec = " << P_n_1n_3v.Theta() * 180.0 / pi << "\n";
-//                                cout << "Phi TL = " << TLNeutronPhi << "\n";
-//                                cout << "Phi Rec = " << P_n_1n_3v.Phi() * 180.0 / pi << "\n";
-//                                cout << "PID TL = " << pid << "\n";
-//                                cout << "PID Rec = " << n_1n->par()->getPid() << "\n";
-//                            }
                         }
                     }
                 } // end of resolution calculation if
                 //</editor-fold>
-
 
             } // end of if NeutronPassVeto_1n is true (i.e. if neutron did not hit PCAL & hit either ECIN or ECOUT)
             //</editor-fold>
@@ -16507,6 +16516,12 @@ void EventAnalyser() {
     myLogFile << "#(events) w/ more then 1e:\t\t\t" << num_of_events_more_then_1e << "\n";
     myLogFile << "#(events) w/ exactly 1e:\t\t\t" << num_of_events_with_exactly_1e << "\n\n";
 
+    myLogFile << "Total #(QEL events) 1e cut:\t\t\t" << num_of_QEL_events_1e_cut << "\n";
+    myLogFile << "Total #(MEC events) 1e cut:\t\t\t" << num_of_MEC_events_1e_cut << "\n";
+    myLogFile << "Total #(RES events) 1e cut:\t\t\t" << num_of_RES_events_1e_cut << "\n";
+    myLogFile << "Total #(DIS events) 1e cut:\t\t\t" << num_of_DIS_events_1e_cut << "\n";
+    myLogFile << "QEL + MEC + RES + DIS:\t\t\t\t" << num_of_QEL_events_1e_cut + num_of_MEC_events_1e_cut + num_of_RES_events_1e_cut + num_of_DIS_events_1e_cut << "\n\n";
+
     myLogFile << "-- 1e1p event counts ------------------------------------------------------\n";
     myLogFile << "#(events) w/ 1e1p:\t\t\t\t" << num_of_events_with_1e1p << "\n\n";
 
@@ -16636,6 +16651,12 @@ void EventAnalyser() {
     cout << "#(events) w/ more then 1e:\t\t" << num_of_events_more_then_1e << "\n";
     cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n\n";
     cout << "#(events) w/ exactly 1e (from file):\t" << num_of_events_with_exactly_1e_from_file << "\n\n";
+
+    cout << "Total #(QEL events) 1e cut:\t\t" << num_of_QEL_events_1e_cut << "\n";
+    cout << "Total #(MEC events) 1e cut:\t\t" << num_of_MEC_events_1e_cut << "\n";
+    cout << "Total #(RES events) 1e cut:\t\t" << num_of_RES_events_1e_cut << "\n";
+    cout << "Total #(DIS events) 1e cut:\t\t" << num_of_DIS_events_1e_cut << "\n";
+    cout << "QEL + MEC + RES + DIS:\t\t\t" << num_of_QEL_events_1e_cut + num_of_MEC_events_1e_cut + num_of_RES_events_1e_cut + num_of_DIS_events_1e_cut << "\n\n";
 
     cout << "-- 1e1p event counts ------------------------------------------------------\n";
     cout << "#(events) w/ 1e1p:\t\t\t" << num_of_events_with_1e1p << "\n\n";
