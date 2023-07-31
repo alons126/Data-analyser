@@ -81,6 +81,7 @@ private:
     hPlot2D NeutronAMap;
     hPlot2D NucleonAMap;
 
+    /* Acceptance maps */
     vector<vector<int>> e_AMap;
     vector<vector<vector<int>>> e_AMap_Slices;
     vector<vector<int>> p_AMap;
@@ -90,23 +91,22 @@ private:
     vector<vector<int>> nuc_AMap;
     vector<vector<vector<int>>> nuc_AMap_Slices;
 
-    vector<vector<int>> e_WMap;
-    vector<vector<vector<int>>> e_WMap_Slices;
-    vector<vector<int>> p_WMap;
-    vector<vector<vector<int>>> p_WMap_Slices;
-    vector<vector<int>> n_WMap;
-    vector<vector<vector<int>>> n_WMap_Slices;
+    /* Weight maps */
+    vector<vector<vector<double>>> e_WMap_Slices;
+    vector<vector<vector<double>>> p_WMap_Slices;
+    vector<vector<double>> n_WMap;
+    vector<vector<vector<double>>> n_WMap_Slices;
 
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
 //    double Charged_particle_min_Ratio = 0.;
 //    double Neutral_particle_min_Ratio = 0.;
     double Charged_particle_min_Ratio = 0.7;
-//    double Neutral_particle_min_Ratio = 0.2;
+    double Neutral_particle_min_Ratio = 0.2;
 //    double Neutral_particle_min_Ratio = 0.05;
 //    double Neutral_particle_min_Ratio = 0.25;
 //    double Neutral_particle_min_Ratio = 0.3;
-    double Neutral_particle_min_Ratio = Charged_particle_min_Ratio / 3.;
+//    double Neutral_particle_min_Ratio = Charged_particle_min_Ratio / 3.;
 
     TList *AcceptanceMapsBC = new TList();
     TList *TLAMaps = new TList();
@@ -127,6 +127,7 @@ private:
     vector<vector<double>> Loaded_ElectronMomBinsLimits;
     vector<vector<double>> Loaded_PBinsLimits;
 
+    /* Loaded acceptance maps */
     vector<vector<int>> Loaded_e_AMap;
     vector<vector<vector<int>>> Loaded_e_AMap_Slices;
     vector<vector<int>> Loaded_p_AMap;
@@ -136,12 +137,11 @@ private:
     vector<vector<int>> Loaded_nuc_AMap;
     vector<vector<vector<int>>> Loaded_nuc_AMap_Slices;
 
-    vector<vector<int>> Loaded_e_WMap;
-    vector<vector<vector<int>>> Loaded_e_WMap_Slices;
-    vector<vector<int>> Loaded_p_WMap;
-    vector<vector<vector<int>>> Loaded_p_WMap_Slices;
+    /* Loaded weight maps */
+    vector<vector<vector<double>>> Loaded_e_WMap_Slices;
+    vector<vector<vector<double>>> Loaded_p_WMap_Slices;
     vector<vector<int>> Loaded_n_WMap;
-    vector<vector<vector<int>>> Loaded_n_WMap_Slices;
+    vector<vector<vector<double>>> Loaded_n_WMap_Slices;
 
     /* Loaded Acceptance maps */
     //TODO: delete these histograms if the .par loading works
@@ -249,9 +249,14 @@ public:
     void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
                         const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<int>>> &Loaded_Particle_AMap_Slices);
 
+    void ReadAMapSlices(const string &SampleName, const string &AcceptanceMapsDirectory, const string &Particle,
+                        const vector<vector<double>> &Loaded_particle_limits, vector<vector<vector<double>>> &Loaded_Particle_WMap_Slices);
+
 // ReadAMap function ----------------------------------------------------------------------------------------------------------------------------------------------------
 
     void ReadAMap(const char *filename, vector<vector<int>> &Loaded_particle_AMap);
+
+    void ReadAMap(const char *filename, vector<vector<double>> &Loaded_particle_WMap);
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 

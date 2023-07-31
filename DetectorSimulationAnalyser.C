@@ -130,13 +130,13 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps settings */
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
     /* Neutron resolution settings */
-    bool plot_and_fit_MomRes = true;
+    bool plot_and_fit_MomRes = false;
     bool VaryingDelta = false;
     double DeltaSlices = 0.05;
 
@@ -184,7 +184,7 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
+    bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_nucleon_SmearAndShift = false;
@@ -202,7 +202,7 @@ void EventAnalyser() {
         if (apply_nucleon_cuts) {
             Nucleon_Cuts_Status = "wNC_";
         } else {
-            Nucleon_Cuts_Status = "noNC_";
+            Nucleon_Cuts_Status = "noNC";
         }
 
         if (!apply_nucleon_cuts) {
@@ -244,9 +244,17 @@ void EventAnalyser() {
         } else if (generate_AMaps && !plot_and_fit_MomRes) {
             Additional_Status = "AMaps_";
         } else if (!generate_AMaps && plot_and_fit_MomRes) {
-            Additional_Status = "nRes_";
+            if (!VaryingDelta) {
+                Additional_Status = "nResSS_";
+            } else {
+                Additional_Status = "nRes_";
+            }
         } else if (generate_AMaps && plot_and_fit_MomRes) {
-            Additional_Status = "nRes_AMaps_";
+            if (!VaryingDelta) {
+                Additional_Status = "nResSS_AMaps_";
+            } else {
+                Additional_Status = "nRes_AMaps_";
+            }
         }
 
         if (!apply_nucleon_cuts) {
@@ -268,15 +276,15 @@ void EventAnalyser() {
                                  + Efficiency_Status;
 
             if (!apply_chi2_cuts_1e_cut) { // Stage 1 - with cuts except PID (chi2) cuts
-                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
+                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-01_AC_woChi2";
+                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_AC_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
                 if (!apply_nucleon_cuts) { // Stage 2 - set nucleon cuts (neutron beta fit & proton double detection cuts)
-                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-02_ALL_CUTS_" + added_names;
-                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_" + added_names + ".txt";
+                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-02_AC_" + added_names;
+                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_AC_" + added_names + ".txt";
                 } else {
-                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_ALL_CUTS_" + added_names;
-                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_" + added_names + ".txt";
+                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_AC_" + added_names;
+                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_AC_" + added_names + ".txt";
                 }
             }
         }
