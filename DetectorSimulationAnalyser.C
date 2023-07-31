@@ -77,7 +77,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.1";
+    string AnalyserVersion = "Version 1.2";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code settings                                                                               //
@@ -136,8 +136,8 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution settings */
-    bool plot_and_fit_MomRes = false;
-    bool VaryingDelta = true;
+    bool plot_and_fit_MomRes = true;
+    bool VaryingDelta = false;
     double DeltaSlices = 0.05;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -183,8 +183,8 @@ void EventAnalyser() {
     bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = true;
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = false;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_nucleon_SmearAndShift = false;
@@ -197,6 +197,8 @@ void EventAnalyser() {
     string Nucleon_Cuts_Status, FD_photons_Status, PSmearing_Status, FiducialCuts_Status, KinCuts_Status, Additional_Status, Efficiency_Status;
 
     if (custom_cuts_naming) {
+
+        //<editor-fold desc="Status additions">
         if (apply_nucleon_cuts) {
             Nucleon_Cuts_Status = "wNC_";
         } else {
@@ -240,14 +242,10 @@ void EventAnalyser() {
         if (!generate_AMaps && !plot_and_fit_MomRes) {
             Additional_Status = "";
         } else if (generate_AMaps && !plot_and_fit_MomRes) {
-//            Additional_Status = "AMaps_NOleading";
-//            Additional_Status = "AMaps_WITHleading";
             Additional_Status = "AMaps_";
         } else if (!generate_AMaps && plot_and_fit_MomRes) {
-//            Additional_Status = "nRes_SmallSlices";
             Additional_Status = "nRes_";
         } else if (generate_AMaps && plot_and_fit_MomRes) {
-//            Additional_Status = "nRes_SmallSlices_AMaps_";
             Additional_Status = "nRes_AMaps_";
         }
 
@@ -255,34 +253,31 @@ void EventAnalyser() {
             Efficiency_Status = "";
         } else {
             if (Rec_wTL_ES) {
-//                Efficiency_Status = "Eff2_wmt_wNOneut";
-//                Efficiency_Status = "Eff2_wmt_wANYneut";
-//                Efficiency_Status = "Eff2_1re_wmt_wNOneut";
-//                Efficiency_Status = "Eff2_1re_wmt_wANYneut";
-//                Efficiency_Status = "Eff2_new";
-//                Efficiency_Status = "Eff2_old";
-//                Efficiency_Status = "Eff2_NoMomCuts";
-//                Efficiency_Status = "Eff2_wMomCuts";
                 Efficiency_Status = "Eff2";
             } else {
                 Efficiency_Status = "Eff1";
-//                Efficiency_Status = "Eff1_Reg";
             }
         }
+        //</editor-fold>
 
-        if (!apply_cuts) {
+        if (!apply_cuts) { // Stage 0 - no cuts
             plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-00_NO_CUTS";
             plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-00_NO_CUTS.txt";
         } else {
-            string added_names =
-                    Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + FiducialCuts_Status + KinCuts_Status + Additional_Status + Efficiency_Status;
+            string added_names = Nucleon_Cuts_Status + FD_photons_Status + PSmearing_Status + FiducialCuts_Status + KinCuts_Status + Additional_Status
+                                 + Efficiency_Status;
 
-            if (!apply_chi2_cuts_1e_cut) {
+            if (!apply_chi2_cuts_1e_cut) { // Stage 1 - with cuts except PID (chi2) cuts
                 plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-01_ALL_CUTS_woChi2";
                 plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-01_ALL_CUTS_woChi2.txt";
             } else if (apply_chi2_cuts_1e_cut) {
-                plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_ALL_CUTS_" + added_names;
-                plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_WithBetaCut_" + added_names + ".txt";
+                if (!apply_nucleon_cuts) { // Stage 2 - set nucleon cuts (neutron beta fit & proton double detection cuts)
+                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-02_ALL_CUTS_" + added_names;
+                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-02_ALL_CUTS_" + added_names + ".txt";
+                } else {
+                    plots_path = WorkingDirectory + "00_plots_" + SampleName + "_-03_ALL_CUTS_" + added_names;
+                    plots_log_save_Directory = plots_path + "/" + "Run_log_" + SampleName + "_-03_ALL_CUTS_" + added_names + ".txt";
+                }
             }
         }
     } else {
@@ -310,7 +305,7 @@ void EventAnalyser() {
     /* Print out the cuts within the run (for self-observation) */
     if (!apply_chi2_cuts_1e_cut) { apply_nucleon_cuts = false; }
 
-    if (!apply_nucleon_cuts || !apply_chi2_cuts_1e_cut) { apply_nucleon_physical_cuts = false; }
+    if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
 
     if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_nucleon_SmearAndShift = false; }
 
@@ -335,6 +330,7 @@ void EventAnalyser() {
     cout << "apply_DC_fiducial_cut:\t\t" << BoolToString(apply_DC_fiducial_cut) << "\n";
     cout << "apply_nucleon_cuts:\t\t" << BoolToString(apply_nucleon_cuts) << "\n";
     cout << "apply_nucleon_physical_cuts:\t" << BoolToString(apply_nucleon_physical_cuts) << "\n";
+    cout << "apply_nBeta_fit_cuts:\t\t" << BoolToString(apply_nBeta_fit_cuts) << "\n";
     cout << "apply_fiducial_cuts:\t\t" << BoolToString(apply_fiducial_cuts) << "\n";
     cout << "apply_kinematical_cuts:\t\t" << BoolToString(apply_kinematical_cuts) << "\n";
     cout << "apply_nucleon_SmearAndShift:\t" << BoolToString(apply_nucleon_SmearAndShift) << "\n\n";
@@ -521,123 +517,123 @@ void EventAnalyser() {
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
        Plot_selector_master must remain true, set it OFF only for debugging. */
 
-//    //<editor-fold desc="Plot selector - plot all">
-//    /* Master plots variable */
-//    bool Plot_selector_master = true; // Master plot selector for analysis
-//
-//    /* Cut variable plots */
-//    bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
-//
-//    /* Beta plots */
-//    bool W_plots = true;
-//
-//    /* Beta plots */
-//    bool Beta_plots = true;
-//    bool Beta_vs_P_plots = true;
-//
-//    /* Angle plots */
-//    bool Angle_plots_master = true; // Master angle plots selector
-//    bool Theta_e_plots = true, Phi_e_plots = true;
-//
-//    /* Q2 plots */
-//    bool Q2_plots = true;
-//
-//    /* E_e plots */
-//    bool E_e_plots = true;
-//
-//    /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
-//
-//    /* Ecal plots */
-//    bool Ecal_plots = true;
-//
-//    /* Transverse variables plots */
-//    bool TKI_plots = true;
-//
-//    /* ToF plots */
-//    bool ToF_plots = false;
-//
-//    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Hit_maps_plots = true;
-//
-//    /* Resolution plots */
-//    bool Resolution_plots = true;
-//    //</editor-fold>
-
-    //<editor-fold desc="Plot selector - selected plots">
+    //<editor-fold desc="Plot selector - plot all">
     /* Master plots variable */
     bool Plot_selector_master = true; // Master plot selector for analysis
 
     /* Cut variable plots */
     bool Cut_plots_master = true; // Master cut plots selector
-//    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
-    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
-//
-    bool Momentum_plots = false;
-//    bool Momentum_plots = true;
-//
+    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true, Momentum_plots = true;
 
     /* Beta plots */
-//    bool W_plots = true;
-    bool W_plots = false;
+    bool W_plots = true;
 
     /* Beta plots */
-//    bool Beta_plots = true;
-    bool Beta_plots = false;
-//    bool Beta_vs_P_plots = true;
-    bool Beta_vs_P_plots = false;
+    bool Beta_plots = true;
+    bool Beta_vs_P_plots = true;
 
     /* Angle plots */
     bool Angle_plots_master = true; // Master angle plots selector
     bool Theta_e_plots = true, Phi_e_plots = true;
-//    bool Angle_plots_master = false; // Master angle plots selector
-//    bool Theta_e_plots = false, Phi_e_plots = false;
 
     /* Q2 plots */
-//    bool Q2_plots = true;
-    bool Q2_plots = false;
+    bool Q2_plots = true;
 
     /* E_e plots */
-//    bool E_e_plots = true;
-    bool E_e_plots = false;
+    bool E_e_plots = true;
 
     /* ET plots */
-//    bool ETrans_plots_master = true; // Master ET plots selector
-    bool ETrans_plots_master = false; // Master ET plots selector
+    bool ETrans_plots_master = true; // Master ET plots selector
     bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 
     /* Ecal plots */
-//    bool Ecal_plots = true;
-    bool Ecal_plots = false;
+    bool Ecal_plots = true;
 
     /* Transverse variables plots */
-//    bool TKI_plots = true;
-    bool TKI_plots = false;
+    bool TKI_plots = true;
 
     /* ToF plots */
-//    bool ToF_plots = true;
     bool ToF_plots = false;
 
     /* Efficiency plots */
     bool Efficiency_plots = true;
-//    bool Efficiency_plots = false;
     bool TL_after_Acceptance_Maps_plots = true;
-//    bool TL_after_Acceptance_Maps_plots = false;
 
     /* Resolution plots */
     bool Hit_maps_plots = true;
-//    bool Hit_maps_plots = false;
 
     /* Resolution plots */
     bool Resolution_plots = true;
-//    bool Resolution_plots = false;
     //</editor-fold>
+
+//    //<editor-fold desc="Plot selector - selected plots">
+//    /* Master plots variable */
+//    bool Plot_selector_master = true; // Master plot selector for analysis
+//
+//    /* Cut variable plots */
+//    bool Cut_plots_master = true; // Master cut plots selector
+////    bool Nphe_plots = true, Chi2_plots = true, Vertex_plots = true, SF_plots = true, fiducial_plots = true;
+//    bool Nphe_plots = false, Chi2_plots = false, Vertex_plots = false, SF_plots = false, fiducial_plots = false;
+////
+//    bool Momentum_plots = false;
+////    bool Momentum_plots = true;
+////
+//
+//    /* Beta plots */
+////    bool W_plots = true;
+//    bool W_plots = false;
+//
+//    /* Beta plots */
+////    bool Beta_plots = true;
+//    bool Beta_plots = false;
+////    bool Beta_vs_P_plots = true;
+//    bool Beta_vs_P_plots = false;
+//
+//    /* Angle plots */
+//    bool Angle_plots_master = true; // Master angle plots selector
+//    bool Theta_e_plots = true, Phi_e_plots = true;
+////    bool Angle_plots_master = false; // Master angle plots selector
+////    bool Theta_e_plots = false, Phi_e_plots = false;
+//
+//    /* Q2 plots */
+////    bool Q2_plots = true;
+//    bool Q2_plots = false;
+//
+//    /* E_e plots */
+////    bool E_e_plots = true;
+//    bool E_e_plots = false;
+//
+//    /* ET plots */
+////    bool ETrans_plots_master = true; // Master ET plots selector
+//    bool ETrans_plots_master = false; // Master ET plots selector
+//    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
+//
+//    /* Ecal plots */
+////    bool Ecal_plots = true;
+//    bool Ecal_plots = false;
+//
+//    /* Transverse variables plots */
+////    bool TKI_plots = true;
+//    bool TKI_plots = false;
+//
+//    /* ToF plots */
+////    bool ToF_plots = true;
+//    bool ToF_plots = false;
+//
+//    /* Efficiency plots */
+//    bool Efficiency_plots = true;
+////    bool Efficiency_plots = false;
+//    bool TL_after_Acceptance_Maps_plots = true;
+////    bool TL_after_Acceptance_Maps_plots = false;
+//
+//    /* Resolution plots */
+//    bool Hit_maps_plots = true;
+////    bool Hit_maps_plots = false;
+//
+//    /* Resolution plots */
+//    bool Resolution_plots = true;
+////    bool Resolution_plots = false;
+//    //</editor-fold>/
 
     //<editor-fold desc="Turn off plots by master selectors">
     if (!Plot_selector_master) {
@@ -9228,41 +9224,85 @@ void EventAnalyser() {
                 //<editor-fold desc="Fill Beta plots (1n, FD only)">
 
                 //<editor-fold desc="Beta plots for neutrons from 'photons' (1n, FD)">
-                for (int &i: NeutronsFD_ind) {
-                    int PDGtmp = allParticles[i]->par()->getPid();
-                    double P_n_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+                if (!ES_by_leading_FDneutron) {
+                    for (int &i: NeutronsFD_ind) {
+                        int PDGtmp = allParticles[i]->par()->getPid();
+                        double P_n_temp = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
 
-                    bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
-                    bool inECINtmp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
-                    bool inECOUTtmp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+                        bool inPCALtmp = (allParticles[i]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                        bool inECINtmp = (allParticles[i]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                        bool inECOUTtmp = (allParticles[i]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
+
+                        if (PDGtmp == 22) {
+                            if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+                            if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(EXIT_FAILURE); }
+
+                            //<editor-fold desc="Filling beta of neutrons from 'photons' - all sectors">
+                            hBeta_n_from_ph_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+
+                            //<editor-fold desc="Beta_n_from_ph - !PCAL">
+                            if (!inPCALtmp) {
+                                hBeta_n_from_ph_02_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_02_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN">
+                            if (!inPCALtmp && inECINtmp) {
+                                hBeta_n_from_ph_03_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            }
+                            //</editor-fold>
+
+                            //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT">
+                            if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
+                                hBeta_n_from_ph_04_1n_FD.hFill(allParticles[i]->par()->getBeta());
+                                hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            }
+                            //</editor-fold>
+
+                            //</editor-fold>
+
+                        }
+                    }
+                } else {
+                    /* Fill beta plots for leading FD neutron event selection */
+                    int PDGtmp = allParticles[NeutronsFD_ind_mom_max]->par()->getPid();
+                    double P_n_temp = GetFDNeutronP(allParticles[NeutronsFD_ind_mom_max], apply_nucleon_cuts);
+
+                    bool inPCALtmp = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7); // PCAL hit
+                    bool inECINtmp = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7); // ECIN hit
+                    bool inECOUTtmp = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
                     if (PDGtmp == 22) {
-                        if (!(allParticles[i]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+                        if (!(allParticles[NeutronsFD_ind_mom_max]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
                         if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(EXIT_FAILURE); }
 
                         //<editor-fold desc="Filling beta of neutrons from 'photons' - all sectors">
-                        hBeta_n_from_ph_01_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                        hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
-                        hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[i]->par()->getBeta(), Weight);
+                        hBeta_n_from_ph_01_1n_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
+                        hBeta_n_from_ph_01_1n_ZOOMOUT_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
+                        hBeta_vs_P_1n_Neutrons_Only_from_photons_FD.hFill(P_n_temp, allParticles[NeutronsFD_ind_mom_max]->par()->getBeta(), Weight);
 
                         //<editor-fold desc="Beta_n_from_ph - !PCAL">
                         if (!inPCALtmp) {
-                            hBeta_n_from_ph_02_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                            hBeta_n_from_ph_02_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_n_from_ph_02_1n_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
+                            hBeta_n_from_ph_02_1n_ZOOMOUT_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
                         }
                         //</editor-fold>
 
                         //<editor-fold desc="Beta_n_from_ph - !PCAL && ECIN">
                         if (!inPCALtmp && inECINtmp) {
-                            hBeta_n_from_ph_03_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                            hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_n_from_ph_03_1n_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
+                            hBeta_n_from_ph_03_1n_ZOOMOUT_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
                         }
                         //</editor-fold>
 
                         //<editor-fold desc="Beta_n_from_ph - !PCAL && !ECIN && ECOUT">
                         if (!inPCALtmp && !inECINtmp && inECOUTtmp) {
-                            hBeta_n_from_ph_04_1n_FD.hFill(allParticles[i]->par()->getBeta());
-                            hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hFill(allParticles[i]->par()->getBeta());
+                            hBeta_n_from_ph_04_1n_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
+                            hBeta_n_from_ph_04_1n_ZOOMOUT_FD.hFill(allParticles[NeutronsFD_ind_mom_max]->par()->getBeta());
                         }
                         //</editor-fold>
 
@@ -16128,8 +16168,24 @@ void EventAnalyser() {
     myLogFile << "calculate_nFDpCD = " << BoolToString(calculate_nFDpCD) << "\n";
 
     myLogFile << "calculate_truth_level = " << BoolToString(calculate_truth_level) << "\n";
+    myLogFile << "fill_TL_plots = " << BoolToString(fill_TL_plots) << "\n";
     myLogFile << "Rec_wTL_ES = " << BoolToString(Rec_wTL_ES) << "\n";
     myLogFile << "Enable_FD_photons = " << BoolToString(Enable_FD_photons) << "\n\n";
+
+    myLogFile << "limless_mom_eff_plots = " << BoolToString(limless_mom_eff_plots) << "\n";
+    myLogFile << "Enable_FD_photons = " << BoolToString(Enable_FD_photons) << "\n";
+    myLogFile << "Enable_FD_neutrons = " << BoolToString(Enable_FD_neutrons) << "\n";
+
+    myLogFile << "ES_by_leading_FDneutron = " << BoolToString(ES_by_leading_FDneutron) << "\n\n";
+
+    myLogFile << "generate_AMaps = " << BoolToString(generate_AMaps) << "\n";
+    myLogFile << "TL_with_one_reco_electron = " << BoolToString(TL_with_one_reco_electron) << "\n";
+    myLogFile << "reformat_e_bins = " << BoolToString(reformat_e_bins) << "\n";
+    myLogFile << "equi_P_e_bins = " << BoolToString(equi_P_e_bins) << "\n\n";
+
+    myLogFile << "plot_and_fit_MomRes = " << BoolToString(plot_and_fit_MomRes) << "\n";
+    myLogFile << "VaryingDelta = " << BoolToString(VaryingDelta) << "\n";
+    myLogFile << "DeltaSlices = " << DeltaSlices << "\n\n";
 
     myLogFile << "Probe = " << Probe << " (PDG: " << Probe_pdg << ")" << "\n";
     myLogFile << "Target = " << Target_nucleus << " (PDG: " << Target_pdg << ")" << "\n\n";
@@ -16244,6 +16300,7 @@ void EventAnalyser() {
 
     myLogFile << "apply_nucleon_cuts = " << BoolToString(apply_nucleon_cuts) << "\n";
     myLogFile << "apply_nucleon_physical_cuts = " << BoolToString(apply_nucleon_physical_cuts) << "\n";
+    myLogFile << "apply_nBeta_fit_cuts = " << BoolToString(apply_nBeta_fit_cuts) << "\n";
     myLogFile << "apply_fiducial_cuts = " << BoolToString(apply_fiducial_cuts) << "\n";
     myLogFile << "apply_kinematical_cuts = " << BoolToString(apply_kinematical_cuts) << "\n";
     myLogFile << "apply_nucleon_SmearAndShift = " << BoolToString(apply_nucleon_SmearAndShift) << "\n\n";

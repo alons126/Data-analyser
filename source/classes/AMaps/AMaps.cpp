@@ -748,6 +748,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
         }
 
         e_AMap_Slices.push_back(e_slice);
+        e_WMap_Slices.push_back(e_slice);
         //</editor-fold>
 
     }
@@ -779,6 +780,7 @@ void AMaps::GenerateSeparateCPartAMaps(double cP_minR) {
         }
 
         p_AMap_Slices.push_back(p_slice);
+        p_WMap_Slices.push_back(p_slice);
         //</editor-fold>
 
     }
@@ -796,31 +798,37 @@ void AMaps::GenerateCPartAMaps(double cP_minR) {
     for (int bin = 0; bin < PBinsLimits.size(); bin++) { ProtonAMap.hAdd(ProtonAMapsBySlice.at(bin).GetHistogram2D()); }
 
     for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
-        vector<int> e_col;
+        vector<int> e_AMap_col, e_WMap_col;
 
         for (int j = 0; j < HistElectronSliceNumOfXBins; j++) {
             if (ElectronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
-                e_col.push_back(1);
+                e_AMap_col.push_back(1);
+                e_WMap_col.push_back(ElectronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1));
             } else {
-                e_col.push_back(0);
+                e_AMap_col.push_back(0);
+                e_WMap_col.push_back(0);
             }
         }
 
-        e_AMap.push_back(e_col);
+        e_AMap.push_back(e_AMap_col);
+        e_WMap.push_back(e_WMap_col);
     }
 
     for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
-        vector<int> p_col;
+        vector<int> p_AMap_col, p_WMap_col;
 
         for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
             if (ProtonAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= cP_minR) {
-                p_col.push_back(1);
+                p_AMap_col.push_back(1);
+                p_WMap_col.push_back(ProtonAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1));
             } else {
-                p_col.push_back(0);
+                p_AMap_col.push_back(0);
+                p_WMap_col.push_back(0);
             }
         }
 
-        p_AMap.push_back(p_col);
+        p_AMap.push_back(p_AMap_col);
+        p_WMap.push_back(p_WMap_col);
     }
 }
 //</editor-fold>
@@ -840,22 +848,26 @@ void AMaps::GenerateNPartAMaps(double nP_minR) {
     }
 
     for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
-        vector<int> n_col;
+        vector<int> n_AMap_col, n_WMap_col;
 
         for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
             if (NeutronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= nP_minR) {
-                n_col.push_back(1);
+                n_AMap_col.push_back(1);
+                n_WMap_col.push_back(NeutronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1));
             } else {
-                n_col.push_back(0);
+                n_AMap_col.push_back(0);
+                n_WMap_col.push_back(0);
             }
         }
 
-        n_AMap.push_back(n_col);
+        n_AMap.push_back(n_AMap_col);
+        n_WMap.push_back(n_WMap_col);
     }
 
     for (int bin = 0; bin < PBinsLimits.size(); bin++) {
         NeutronAMapsBySlice.push_back(NeutronAMap);
         n_AMap_Slices.push_back(n_AMap);
+        n_WMap_Slices.push_back(n_WMap);
     }
 }
 //</editor-fold>
@@ -916,17 +928,25 @@ void AMaps::GenerateNucleonAMap() {
 
 //<editor-fold desc="SaveHitMaps function">
 void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDirectory) {
-    string SliceElectronSavePath = AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/";
-    system(("mkdir -p " + SliceElectronSavePath).c_str());
+    string AMapSliceElectronSavePath = AcceptanceMapsDirectory + SampleName + "/e_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceElectronSavePath).c_str());
+    string WMapSliceElectronSavePath = AcceptanceMapsDirectory + SampleName + "/e_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceElectronSavePath).c_str());
 
-    string SliceProtonSavePath = AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/";
-    system(("mkdir -p " + SliceProtonSavePath).c_str());
+    string AMapSliceProtonSavePath = AcceptanceMapsDirectory + SampleName + "/p_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceProtonSavePath).c_str());
+    string WMapSliceProtonSavePath = AcceptanceMapsDirectory + SampleName + "/p_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceProtonSavePath).c_str());
 
-    string SliceNeutronSavePath = AcceptanceMapsDirectory + SampleName + "/n_AMap_by_slice/";
-    system(("mkdir -p " + SliceNeutronSavePath).c_str());
+    string AMapSliceNeutronSavePath = AcceptanceMapsDirectory + SampleName + "/n_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceNeutronSavePath).c_str());
+    string WMapSliceNeutronSavePath = AcceptanceMapsDirectory + SampleName + "/n_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceNeutronSavePath).c_str());
 
-    string SliceNucleonSavePath = AcceptanceMapsDirectory + SampleName + "/nuc_AMap_by_slice/";
-    system(("mkdir -p " + SliceNucleonSavePath).c_str());
+    string AMapSliceNucleonSavePath = AcceptanceMapsDirectory + SampleName + "/nuc_AMap_by_slice/";
+    system(("mkdir -p " + AMapSliceNucleonSavePath).c_str());
+    string WMapSliceNucleonSavePath = AcceptanceMapsDirectory + SampleName + "/nuc_WMap_by_slice/";
+    system(("mkdir -p " + WMapSliceNucleonSavePath).c_str());
 
     //<editor-fold desc="Save electron slices">
     for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
@@ -935,7 +955,7 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
         string TempFileName = "e_AMap_file_from_" + to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(0), 2) + "_to_" +
                               to_string_with_precision(ElectronMomBinsLimits.at(Slice).at(1), 2) + ".par";
 
-        e_AMap_TempFile.open(SliceElectronSavePath + TempFileName);
+        e_AMap_TempFile.open(AMapSliceElectronSavePath + TempFileName);
 
         e_AMap_TempFile << "Lower_P_lim:\t" << +ElectronMomBinsLimits.at(Slice).at(0) << "\n";
         e_AMap_TempFile << "Upper_P_lim:\t" << +ElectronMomBinsLimits.at(Slice).at(1) << "\n";
@@ -972,9 +992,9 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
         string NucleonTempFileName = "nuc_AMap_file_from_" + to_string_with_precision(PBinsLimits.at(Slice).at(0), 2) + "_to_" +
                                      to_string_with_precision(PBinsLimits.at(Slice).at(1), 2) + ".par";
 
-        p_AMap_TempFile.open(SliceProtonSavePath + ProtonTempFileName);
-        n_AMap_TempFile.open(SliceNeutronSavePath + NeutronTempFileName);
-        nuc_AMap_TempFile.open(SliceNucleonSavePath + NucleonTempFileName);
+        p_AMap_TempFile.open(AMapSliceProtonSavePath + ProtonTempFileName);
+        n_AMap_TempFile.open(AMapSliceNeutronSavePath + NeutronTempFileName);
+        nuc_AMap_TempFile.open(AMapSliceNucleonSavePath + NucleonTempFileName);
 
         p_AMap_TempFile << "Lower_P_lim:\t" << PBinsLimits.at(Slice).at(0) << "\n";
         p_AMap_TempFile << "Upper_P_lim:\t" << PBinsLimits.at(Slice).at(1) << "\n";
@@ -1086,10 +1106,10 @@ void AMaps::SaveHitMaps(const string &SampleName, const string &AcceptanceMapsDi
     //<editor-fold desc="Slice limits">
     ofstream e_slice_limits, p_slice_limits, n_slice_limits, nuc_slice_limits;
 
-    e_slice_limits.open(SliceElectronSavePath + "e_slice_limits.par");
-    p_slice_limits.open(SliceProtonSavePath + "p_slice_limits.par");
-    n_slice_limits.open(SliceNeutronSavePath + "n_slice_limits.par");
-    nuc_slice_limits.open(SliceNucleonSavePath + "nuc_slice_limits.par");
+    e_slice_limits.open(AMapSliceElectronSavePath + "e_slice_limits.par");
+    p_slice_limits.open(AMapSliceProtonSavePath + "p_slice_limits.par");
+    n_slice_limits.open(AMapSliceNeutronSavePath + "n_slice_limits.par");
+    nuc_slice_limits.open(AMapSliceNucleonSavePath + "nuc_slice_limits.par");
 
     for (int Slice = 0; Slice < ElectronMomBinsLimits.size(); Slice++) {
         e_slice_limits << "e_slice_" << (Slice + 1) << "\t" << ElectronMomBinsLimits.at(Slice).at(0) << ":" << ElectronMomBinsLimits.at(Slice).at(1) << "\n";

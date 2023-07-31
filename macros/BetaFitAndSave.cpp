@@ -68,7 +68,7 @@ void BetaFitAndSave() {
 
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut_wPhotonsFD/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
 //    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-03_ALL_CUTS_WithBetaCut_fixedTLcuts/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
-    TFile *f = new TFile("plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_NoBetaCut/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
+    TFile *f = new TFile("00_plots_C12_simulation_6GeV_T5_-02_ALL_CUTS_noNC_/recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_plots.root");
     string SampleName = "C12_simulation_6GeV_T5";
 
     cout << "\nSampleName:\t" << SampleName << "\n\n";
@@ -179,7 +179,8 @@ void BetaFitAndSave() {
 
     // Adding limits to "Mean_value"
     double BetaMean_valueUlim = 1.02;
-    double BetaMean_valueLlim = 1.008;
+    double BetaMean_valueLlim = 1.01;
+//    double BetaMean_valueLlim = 1.008;
 //    double BetaMean_valueLlim = 1.0075;
     func->SetParLimits(1, BetaMean_valueLlim, BetaMean_valueUlim);
     cout << "Beta Mean_value {Llim, Ulim}:\t{" << BetaMean_valueLlim << ", " << BetaMean_valueUlim << "}\n\n";

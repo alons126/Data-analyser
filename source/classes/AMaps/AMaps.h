@@ -72,7 +72,7 @@ private:
     vector<hPlot2D> ElectronRecoToTLRatioBySlice, ProtonRecoToTLRatioBySlice, NeutronRecoToTLRatioBySlice;
     hPlot2D NeutronRecoToTLRatio;
 
-    /* Separated acceptance maps (= reco. above ration th.) */
+    /* Separated acceptance & weight maps (= reco. above ration th.) */
     vector<hPlot2D> ElectronAMapsBySlice, ProtonAMapsBySlice, NeutronAMapsBySlice; // separated AMaps for each slice
 
     /* Acceptance maps (= reco. above ration th.) */
@@ -89,6 +89,13 @@ private:
     vector<vector<vector<int>>> n_AMap_Slices;
     vector<vector<int>> nuc_AMap;
     vector<vector<vector<int>>> nuc_AMap_Slices;
+
+    vector<vector<int>> e_WMap;
+    vector<vector<vector<int>>> e_WMap_Slices;
+    vector<vector<int>> p_WMap;
+    vector<vector<vector<int>>> p_WMap_Slices;
+    vector<vector<int>> n_WMap;
+    vector<vector<vector<int>>> n_WMap_Slices;
 
     bool calc_Electron_RecoToTL_Ratio = true, calc_Proton_RecoToTL_Ratio = true, calc_Neutron_RecoToTL_Ratio = true;
 
@@ -128,6 +135,13 @@ private:
     vector<vector<vector<int>>> Loaded_n_AMap_Slices;
     vector<vector<int>> Loaded_nuc_AMap;
     vector<vector<vector<int>>> Loaded_nuc_AMap_Slices;
+
+    vector<vector<int>> Loaded_e_WMap;
+    vector<vector<vector<int>>> Loaded_e_WMap_Slices;
+    vector<vector<int>> Loaded_p_WMap;
+    vector<vector<vector<int>>> Loaded_p_WMap_Slices;
+    vector<vector<int>> Loaded_n_WMap;
+    vector<vector<vector<int>>> Loaded_n_WMap_Slices;
 
     /* Loaded Acceptance maps */
     //TODO: delete these histograms if the .par loading works
