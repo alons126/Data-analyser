@@ -33,13 +33,6 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
             sName = "C12_simulation_G18_2GeV";
 //            sName = "C12_simulation_G18_2GeV_local";
         }
-    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") { // C12, simulation, 6GeV, Q205, T5, ifarm
-        if (AnalyseFileSample == "reconhipo") {
-            BeamAt6GeV = true;
-            SimulationSample = true;
-            sName = "C12_simulation_6GeV_T5";
-//            sName = "C12_simulation_Q205_598636MeV_T5";
-        }
     } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/C12_G18_10a_02_11b_207052MeV") { // C12, simulation, 2GeV, ifarm
         if (AnalyseFileSample == "reconhipo") {
             SimulationSample = true;
@@ -47,12 +40,26 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
             sName = "C12_simulation_G18_2GeV";
 //            sName = "C12_G18_10a_02_11b_207052MeV";
         }
-    } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") { // C, simulation, 6GeV, ifarm
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ar40_G18_10a_02_11b_207052MeV") { // Ar40, simulation, 2GeV, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            SimulationSample = true;
+            BeamAt2GeV = true;
+            sName = "Ar40_simulation_G18_2GeV";
+//            sName = "Ar40_G18_10a_02_11b_207052MeV";
+        }
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_207052MeV") { // Ca48, simulation, 2GeV, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            SimulationSample = true;
+            BeamAt2GeV = true;
+            sName = "Ca48_simulation_G18_2GeV";
+//            sName = "Ca48_G18_10a_02_11b_207052MeV";
+        }
+    } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/598636MeV_Q2_0_5_test_5") { // C12, simulation, 6GeV, Q205, T5, ifarm
         if (AnalyseFileSample == "reconhipo") {
             BeamAt6GeV = true;
             SimulationSample = true;
-            sName = "C_simulation_Justin_6GeV";
-//            sName = "C_simulation_Justin_598636MeV";
+            sName = "C12_simulation_6GeV_T5";
+//            sName = "C12_simulation_Q205_598636MeV_T5";
         }
     } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") { // Ca48, simulation, 6GeV, Q205, ifarm
         if (AnalyseFileSample == "reconhipo") {
@@ -66,6 +73,13 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
             BeamAt6GeV = true;
             SimulationSample = true;
             sName = "H1_simulation_G18_10a_02_11b_6GeV";
+        }
+    } else if (AnalyseFilePath == "volatile/clas12/users/esteejus/Simulation_sigmaCM") { // C, simulation, 6GeV, ifarm
+        if (AnalyseFileSample == "reconhipo") {
+            BeamAt6GeV = true;
+            SimulationSample = true;
+            sName = "C_simulation_Justin_6GeV";
+//            sName = "C_simulation_Justin_598636MeV";
         }
     } else if (AnalyseFilePath == "volatile/clas12/rg-m/48Ca/dst/recon") { // Ca48, data, 6GeV, ifarm
         if (AnalyseFileSample == "015832") {
