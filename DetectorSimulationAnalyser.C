@@ -192,7 +192,7 @@ void EventAnalyser() {
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
-    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_cuts = true;
     bool apply_nucleon_SmearAndShift = false;
     bool apply_kinematical_weights = false;
 
