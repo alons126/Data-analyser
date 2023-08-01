@@ -9,14 +9,14 @@
 #Parameters structure:	SliceNumber:SliceLowerBoundary:SliceUpperBoundary:HistMean:HistSigma
 
 hist_Slice_#1_from_0.40_to_0.45			1:0.4:0.45:-0.453676:0.167129
-hist_Slice_#2_from_0.45_to_0.50			2:0.45:0.5:0.0745826:0.089651
+hist_Slice_#2_from_0.45_to_0.50			2:0.45:0.5:0.073338:0.0879662
 hist_Slice_#3_from_0.50_to_0.55			3:0.5:0.55:0.0931875:0.0481149
 hist_Slice_#4_from_0.55_to_0.60			4:0.55:0.6:0.0699433:0.0370915
 hist_Slice_#5_from_0.60_to_0.65			5:0.6:0.65:0.0530716:0.0303809
 hist_Slice_#6_from_0.65_to_0.70			6:0.65:0.7:0.0417057:0.026079
 hist_Slice_#7_from_0.70_to_0.75			7:0.7:0.75:0.0337881:0.0237608
 hist_Slice_#8_from_0.75_to_0.80			8:0.75:0.8:0.0275899:0.0224698
-hist_Slice_#9_from_0.80_to_0.85			9:0.8:0.85:0.0251954:0.0233807
+hist_Slice_#9_from_0.80_to_0.85			9:0.8:0.85:0.0251828:0.0233736
 hist_Slice_#10_from_0.85_to_0.90			10:0.85:0.9:0.021456:0.0229341
 hist_Slice_#11_from_0.90_to_0.95			11:0.9:0.95:0.0203934:0.026533
 hist_Slice_#12_from_0.95_to_1.00			12:0.95:1:0.0180247:0.0274227
