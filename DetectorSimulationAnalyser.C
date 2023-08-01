@@ -144,12 +144,12 @@ void EventAnalyser() {
     if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
 
-    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
-        generate_AMaps = plot_and_fit_MomRes = true;
-        VaryingDelta = false;
-    }
+//    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
+//        generate_AMaps = plot_and_fit_MomRes = true;
+//        VaryingDelta = false;
+//    }
 
-    if (generate_AMaps) { Rec_wTL_ES = false; }
+//    if (generate_AMaps) { Rec_wTL_ES = false; }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -196,6 +196,13 @@ void EventAnalyser() {
     bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
+
+    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
+        generate_AMaps = plot_and_fit_MomRes = true;
+        VaryingDelta = false;
+    }
+
+    if (generate_AMaps) { Rec_wTL_ES = false; }
 
     //<editor-fold desc="Custom cuts naming">
     /* Save plots to custom-named folders, to allow multi-sample runs at once. */
