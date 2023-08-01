@@ -107,6 +107,38 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
 
             if (VaryingDelta) {
                 if (beamE == 5.98636) {
+                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
+                        Delta = delta * 6;
+                    } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.80)) { // 0.7-0.85
+                        Delta = delta * 3;
+                    } else if ((SliceLowerLim >= 0.80) && (SliceLowerLim < 2.00)) { // 0.85-2.05
+                        Delta = delta * 2;
+                    } else if ((SliceLowerLim >= 2.00) && (SliceLowerLim < 2.30)) { // 2.05-2.35
+                        Delta = delta * 3;
+                    } else if ((SliceLowerLim >= 2.30) && (SliceLowerLim < 2.50)) { // 2.35-2.55
+                        Delta = delta * 4;
+                    } else if ((SliceLowerLim >= 2.50) && (SliceLowerLim < 2.80)) { // 2.55-2.85
+                        Delta = delta * 6;
+                    } else if ((SliceLowerLim >= 2.80) && (SliceLowerLim < 3.25)) { // 2.85-3.30
+                        Delta = delta * 9;
+                    } else if (SliceLowerLim >= 3.25) { // 3.30-beamE
+                        Delta = beamE - SliceLowerLim;
+                    }
+                } else if (beamE == 2.07052) {
+                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
+                        Delta = delta * 3;
+                    } else if ((SliceLowerLim >= 0.50) && (SliceLowerLim < 1.10)) { // 0.55-1.15
+                        Delta = delta * 2;
+                    } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.25)) { // 1.15-1.30
+                        Delta = delta * 3;
+                    } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
+                        Delta = beamE - SliceLowerLim;
+                    }
+                }
+            }
+            /*
+            if (VaryingDelta) {
+                if (beamE == 5.98636) {
                     if ((SliceLowerLim >= 0.7) && (SliceLowerLim < 0.85)) { // 0.7-0.9
                         Delta = delta * 4;
                     } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.0)) { // 0.9-1.05
@@ -124,6 +156,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                     }
                 }
             }
+*/
 
             if ((SliceUpperLim + Delta) > beamE) {
                 SliceUpperLim = beamE;
