@@ -9047,7 +9047,7 @@ void EventAnalyser() {
             double omega_1n = beamE - E_e_1n, W_1n = sqrt((omega_1n + m_n) * (omega_1n + m_p) - q_1n_3v.Mag2());
             double Theta_p_e_p_n_1n, Theta_q_p_n_1n;
 
-            double Weight_1n = aMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomentum_1n, n_hit_1n_3v.Theta() * 180 / pi, n_hit_1n_3v.Phi() * 180 / pi);
+            double Weight_1n = aMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomentum_1n, P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
