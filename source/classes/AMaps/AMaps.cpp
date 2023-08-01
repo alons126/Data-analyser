@@ -1775,7 +1775,7 @@ void AMaps::ReadAMap(const char *filename, vector<vector<double>> &Loaded_partic
             string parameter, parameter2;
             ss >> parameter; // get cut identifier
 
-            if (findSubstring(parameter, "Line")) {
+            if (findSubstring(parameter, "Weight")) {
                 // get cut values
                 ss >> parameter2;
                 stringstream ss2(parameter2);
@@ -1889,31 +1889,11 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
 
 //<editor-fold desc="GetWeight function">
 double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, double Momentum, double Theta, double Phi) {
+    bool PrintOut = false;
+
     if (apply_kinematical_weights) {
         if (isElectron(Particle)) {
-            for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
-                if (Momentum >= Loaded_ElectronMomBinsLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomBinsLimits.at(Slice).at(1)) {
-                    for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
-                        double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / HistElectronSliceNumOfYBins;
-                        double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
-                        double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
-
-                        if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
-                            for (int j = 0; j < HistElectronSliceNumOfXBins; j++) {
-                                double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / HistElectronSliceNumOfXBins;
-                                double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
-                                double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
-
-                                if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-                                    if (Loaded_e_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        return (1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j)));
-                                    }
-                                } // end of find right phi if
-                            }
-                        } // end of find right theta if
-                    }
-                } // end of if the right momentum
-            }
+            return 1;
         } else if (isProton(Particle)) {
             for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
                 if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
@@ -1930,7 +1910,21 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_p_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        return (1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j)));
+                                        if (PrintOut) {
+                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n";
+                                            cout << "Momentum = " << Momentum << "\n";
+                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n\n";
+                                            cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
+                                            cout << "Theta = " << Theta << "\n";
+                                            cout << "ThetaUpperLimTemp = " << ThetaUpperLimTemp << "\n\n";
+                                            cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
+                                            cout << "Phi = " << Phi << "\n";
+                                            cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
+                                            cout << "Weight = " << Loaded_p_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
+                                        }
+
+                                        return (Loaded_p_WMap_Slices.at(Slice).at(i).at(j));
+//                                        return (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
@@ -1954,7 +1948,21 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_n_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        return (1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j)));
+                                        if (PrintOut) {
+                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n";
+                                            cout << "Momentum = " << Momentum << "\n";
+                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n\n";
+                                            cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
+                                            cout << "Theta = " << Theta << "\n";
+                                            cout << "ThetaUpperLimTemp = " << ThetaUpperLimTemp << "\n\n";
+                                            cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
+                                            cout << "Phi = " << Phi << "\n";
+                                            cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
+                                            cout << "Weight = " << Loaded_p_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
+                                        }
+
+                                        return (Loaded_n_WMap_Slices.at(Slice).at(i).at(j));
+//                                        return (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
