@@ -18,7 +18,11 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
     if (!VaryingDelta) {
         SliceUpperLim = SliceLowerLim + delta;
     } else {
-        SliceUpperLim = SliceLowerLim + 0.3;
+        if (beamE == 5.98636) {
+            SliceUpperLim = SliceLowerLim + 0.3;
+        } else if (beamE == 2.07052) {
+            SliceUpperLim = SliceLowerLim + 0.15;
+        }
     }
 
     bool SliceAndDice = true;
@@ -134,6 +138,17 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                     } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
                         Delta = beamE - SliceLowerLim;
                     }
+                    /*
+                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
+                        Delta = delta * 3;
+                    } else if ((SliceLowerLim >= 0.50) && (SliceLowerLim < 1.10)) { // 0.55-1.15
+                        Delta = delta * 2;
+                    } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.25)) { // 1.15-1.30
+                        Delta = delta * 3;
+                    } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
+                        Delta = beamE - SliceLowerLim;
+                    }
+*/
                 }
             }
             /*

@@ -137,7 +137,7 @@ void EventAnalyser() {
 
     /* Neutron resolution settings */
     bool plot_and_fit_MomRes = false;
-    bool VaryingDelta = true;
+    bool VaryingDelta = false;
     double DeltaSlices = 0.05;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -186,11 +186,11 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_nucleon_SmearAndShift = false;

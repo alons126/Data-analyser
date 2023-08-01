@@ -1906,7 +1906,7 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_e_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        return 1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j));
+                                        return (1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
@@ -1930,7 +1930,7 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_p_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        return 1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j));
+                                        return (1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
@@ -1954,7 +1954,7 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_n_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        return 1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j));
+                                        return (1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
