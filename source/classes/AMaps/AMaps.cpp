@@ -1840,8 +1840,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-                                if (Loaded_p_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-//                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+//                                if (Loaded_p_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
                                     return true;
                                 } else {
                                     return false;
@@ -1867,8 +1867,8 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-                                if (Loaded_n_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-//                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+//                                if (Loaded_n_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
                                     return true;
                                 } else {
                                     return false;
@@ -1882,6 +1882,92 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
     } // end of if Particle
 
     return false;
+}
+//</editor-fold>
+
+// GetWeight function --------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="GetWeight function">
+double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, double Momentum, double Theta, double Phi) {
+    if (apply_kinematical_weights) {
+        if (isElectron(Particle)) {
+            for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
+                if (Momentum >= Loaded_ElectronMomBinsLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomBinsLimits.at(Slice).at(1)) {
+                    for (int i = 0; i < HistElectronSliceNumOfYBins; i++) {
+                        double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / HistElectronSliceNumOfYBins;
+                        double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                        double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                        if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                            for (int j = 0; j < HistElectronSliceNumOfXBins; j++) {
+                                double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / HistElectronSliceNumOfXBins;
+                                double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                                double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                                if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                    if (Loaded_e_WMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return 1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j));
+                                    }
+                                } // end of find right phi if
+                            }
+                        } // end of find right theta if
+                    }
+                } // end of if the right momentum
+            }
+        } else if (isProton(Particle)) {
+            for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
+                if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+                    for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
+                        double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
+                        double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                        double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                        if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                            for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
+                                double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (HistNucSliceNumOfXBins);
+                                double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                                double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                                if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                    if (Loaded_p_WMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return 1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j));
+                                    }
+                                } // end of find right phi if
+                            }
+                        } // end of find right theta if
+                    }
+                } // end of if the right momentum
+            }
+        } else if (isNeutron(Particle)) {
+            for (int Slice = 0; Slice < Loaded_PBinsLimits.size(); Slice++) {
+                if (Momentum >= Loaded_PBinsLimits.at(Slice).at(0) && Momentum <= Loaded_PBinsLimits.at(Slice).at(1)) {
+                    for (int i = 0; i < HistNucSliceNumOfYBins; i++) {
+                        double dThetaTemp = (hBinUpperYLim - hBinLowerYLim) / (HistNucSliceNumOfYBins);
+                        double ThetaLowerLimTemp = hBinLowerYLim + i * dThetaTemp;
+                        double ThetaUpperLimTemp = ThetaLowerLimTemp + dThetaTemp;
+
+                        if ((Theta >= ThetaLowerLimTemp) && (Theta < ThetaUpperLimTemp)) {
+                            for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
+                                double dPhiTemp = (hBinUpperXLim - hBinLowerXLim) / (HistNucSliceNumOfXBins);
+                                double PhiLowerLimTemp = hBinLowerXLim + j * dPhiTemp;
+                                double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
+
+                                if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                    if (Loaded_n_WMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return 1 / (Loaded_e_WMap_Slices.at(Slice).at(i).at(j));
+                                    }
+                                } // end of find right phi if
+                            }
+                        } // end of find right theta if
+                    }
+                } // end of if the right momentum
+            }
+        } // end of if Particle
+
+        return 0;
+    } else {
+        return 1;
+    }
 }
 //</editor-fold>
 

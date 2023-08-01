@@ -262,6 +262,10 @@ public:
 
     bool MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi);
 
+// GetWeight function ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+    double GetWeight(bool apply_kinematical_weights, const string &Particle, double Momentum, double Theta, double Phi);
+
 // IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
 
     bool IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi);
