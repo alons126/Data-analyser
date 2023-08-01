@@ -186,7 +186,7 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
