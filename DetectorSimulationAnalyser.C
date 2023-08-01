@@ -143,6 +143,12 @@ void EventAnalyser() {
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (findSubstring(SampleName, "data")) { calculate_truth_level = false; }
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
+
+    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
+        generate_AMaps = plot_and_fit_MomRes = true;
+        VaryingDelta = false;
+    }
+
     if (generate_AMaps) { Rec_wTL_ES = false; }
     //</editor-fold>
 
@@ -158,13 +164,13 @@ void EventAnalyser() {
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -183,7 +189,7 @@ void EventAnalyser() {
     bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = false;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
@@ -239,22 +245,26 @@ void EventAnalyser() {
             FiducialCuts_Status = "wFC_";
         }
 
-        if (!generate_AMaps && !plot_and_fit_MomRes) {
+        if (apply_chi2_cuts_1e_cut) {
+            if (!generate_AMaps && !plot_and_fit_MomRes) {
+                Additional_Status = "";
+            } else if (generate_AMaps && !plot_and_fit_MomRes) {
+                Additional_Status = "AMaps_";
+            } else if (!generate_AMaps && plot_and_fit_MomRes) {
+                if (!VaryingDelta) {
+                    Additional_Status = "nResSS_";
+                } else {
+                    Additional_Status = "nRes_";
+                }
+            } else if (generate_AMaps && plot_and_fit_MomRes) {
+                if (!VaryingDelta) {
+                    Additional_Status = "nResSS_AMaps_";
+                } else {
+                    Additional_Status = "nRes_AMaps_";
+                }
+            }
+        } else {
             Additional_Status = "";
-        } else if (generate_AMaps && !plot_and_fit_MomRes) {
-            Additional_Status = "AMaps_";
-        } else if (!generate_AMaps && plot_and_fit_MomRes) {
-            if (!VaryingDelta) {
-                Additional_Status = "nResSS_";
-            } else {
-                Additional_Status = "nRes_";
-            }
-        } else if (generate_AMaps && plot_and_fit_MomRes) {
-            if (!VaryingDelta) {
-                Additional_Status = "nResSS_AMaps_";
-            } else {
-                Additional_Status = "nRes_AMaps_";
-            }
         }
 
         if (!apply_nucleon_cuts) {
@@ -9285,7 +9295,9 @@ void EventAnalyser() {
                     bool inECOUTtmp = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
 
                     if (PDGtmp == 22) {
-                        if (!(allParticles[NeutronsFD_ind_mom_max]->getRegion() == FD)) { cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE); }
+                        if (!(allParticles[NeutronsFD_ind_mom_max]->getRegion() == FD)) {
+                            cout << "\n\nBeta_n_1n: neutron is not in FD! Exiting...\n\n", exit(EXIT_FAILURE);
+                        }
                         if (!(!inPCALtmp && (inECINtmp || inECOUTtmp))) { cout << "\n\nBeta_n_1n: photon is not a neutron! Exiting...\n\n", exit(EXIT_FAILURE); }
 
                         //<editor-fold desc="Filling beta of neutrons from 'photons' - all sectors">
