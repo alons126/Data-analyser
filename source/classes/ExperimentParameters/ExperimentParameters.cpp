@@ -65,7 +65,7 @@ std::string ExperimentParameters::ConfigureSampleName(std::string AnalyseFilePat
         if (AnalyseFileSample == "reconhipo") {
             BeamAt6GeV = true;
             SimulationSample = true;
-            sName = "C12_simulation_G18_q208_6GeV";
+            sName = "C12_simulation_G18_Q208_6GeV";
 //            sName = "C12_simulation_Q205_598636MeV_T5";
         }
     } else if (AnalyseFilePath == "lustre19/expphy/volatile/clas12/asportes/simulationFiles/Ca48_G18_10a_02_11b_Q205_598636MeV") { // Ca48, simulation, 6GeV, Q205, ifarm
