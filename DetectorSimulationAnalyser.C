@@ -1248,12 +1248,12 @@ void EventAnalyser() {
 
     if (!apply_cuts) {
         hSF_1e_cut_BC_FD = hPlot1D("1e cut", "FD", "SF BC", "Sampling fraction f_{e} - before cuts", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                   directories.SF_Directory_map["SF_1e_cut_BC_Directory"], "01_SF_1e_cut_before_SF_cuts", SF_lboundary, SF_uboundary, 100, 100);
+                                   directories.SF_Directory_map["SF_1e_cut_BC_Directory"], "01_SF_1e_cut_before_SF_cuts", SF_lboundary, SF_uboundary);
         hSF_1e_cut_AC_FD = hPlot1D("1e cut", "FD", "SF AC", "Sampling fraction f_{e} - after cuts", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                   directories.SF_Directory_map["SF_1e_cut_AC_Directory"], "02_SF_1e_cut_after_SF_cuts", SF_lboundary, SF_uboundary, 100, 100);
+                                   directories.SF_Directory_map["SF_1e_cut_AC_Directory"], "02_SF_1e_cut_after_SF_cuts", SF_lboundary, SF_uboundary);
     } else {
         hSF_1e_cut_BC_FD = hPlot1D("1e cut", "FD", "SF", "Sampling fraction f_{e}", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                   directories.SF_Directory_map["SF_1e_cut_BC_Directory"], "01_SF_1e_cut", SF_lboundary, SF_uboundary, 100, 100);
+                                   directories.SF_Directory_map["SF_1e_cut_BC_Directory"], "01_SF_1e_cut", SF_lboundary, SF_uboundary);
     }
     //</editor-fold>
 
@@ -1280,7 +1280,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="SF plots (1p, FD)">
     hPlot1D hSF_1p_FD = hPlot1D("1p", "FD", "SF", "Sampling fraction f_{e}", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                directories.SF_Directory_map["SF_1p_Directory"], "01_SF_1p", SF_lboundary, SF_uboundary, 100, 100);
+                                directories.SF_Directory_map["SF_1p_Directory"], "01_SF_1p", SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (1p, FD)">
@@ -1295,7 +1295,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="SF plots (1n, FD)">
     hPlot1D hSF_1n_FD = hPlot1D("1n", "FD", "SF", "Sampling fraction f_{e}", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                directories.SF_Directory_map["SF_1n_Directory"], "01_SF_1n", SF_lboundary, SF_uboundary, 100, 100);
+                                directories.SF_Directory_map["SF_1n_Directory"], "01_SF_1n", SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (1n, FD)">
@@ -1310,7 +1310,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="SF plots (2p, FD)">
     hPlot1D hSF_2p_FD = hPlot1D("2p", "FD", "SF", "Sampling fraction f_{e}", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                directories.SF_Directory_map["SF_2p_Directory"], "01_SF_2p", SF_lboundary, SF_uboundary, 100, 100);
+                                directories.SF_Directory_map["SF_2p_Directory"], "01_SF_2p", SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (2p, FD)">
@@ -1325,7 +1325,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="SF plots (pFDpCD, FD)">
     hPlot1D hSF_pFDpCD_FD = hPlot1D("pFDpCD", "FD", "SF", "Sampling fraction f_{e}", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                    directories.SF_Directory_map["SF_pFDpCD_Directory"], "01_SF_pFDpCD", SF_lboundary, SF_uboundary, 100, 100);
+                                    directories.SF_Directory_map["SF_pFDpCD_Directory"], "01_SF_pFDpCD", SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (pFDpCD, FD)">
@@ -1341,7 +1341,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="SF plots (nFDpCD, FD)">
     hPlot1D hSF_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "SF", "Sampling fraction f_{e}", "f_{e} = (E_{PCAL} + E_{IN} + E_{OUT})/P_{e}",
-                                    directories.SF_Directory_map["SF_nFDpCD_Directory"], "01_SF_nFDpCD", SF_lboundary, SF_uboundary, 100, 100);
+                                    directories.SF_Directory_map["SF_nFDpCD_Directory"], "01_SF_nFDpCD", SF_lboundary, SF_uboundary);
     //</editor-fold>
 
     //<editor-fold desc="SF vs. P plots (nFDpCD, FD)">
@@ -13276,10 +13276,10 @@ void EventAnalyser() {
 
         if (!apply_kinematical_cuts) {
             histPlotter1D(c1, hTheta_n_All_Int_1n, norm_Angle_plots_master, true, Theta_n_1n_integral, "#theta_{n} of Outgoing FD Neutron", "All Int., 1n", plots, 2,
-                          false, true, Theta_n_1n, "01_Theta_n_All_Int_1n", hTheta_n_All_Int_1n_Dir, "FD", kBlue, true, true, false, true, 9999, -1, 0, false);
+                          false, true, sTheta_n_1n, "01_Theta_n_All_Int_1n", hTheta_n_All_Int_1n_Dir, "FD", kBlue, true, true, false, true, 9999, -1, 0, false);
         } else {
             histPlotter1D(c1, hTheta_n_All_Int_1n, norm_Angle_plots_master, true, Theta_n_1n_integral, "#theta_{n} of Outgoing FD Neutron", "All Int., 1n", plots, 2,
-                          false, true, Theta_n_1n, "01_Theta_n_All_Int_1n", hTheta_n_All_Int_1n_Dir, "FD", kBlue, true, true, false, true,
+                          false, true, sTheta_n_1n, "01_Theta_n_All_Int_1n", hTheta_n_All_Int_1n_Dir, "FD", kBlue, true, true, false, true,
                           FD_nucleon_theta_cut.GetUpperCut(), -1, 0, false);
         }
         //        histPlotter1D(c1, hTheta_n_All_Int_1n, norm_Angle_plots_master, true, Theta_n_1n_integral, "#theta_{n} of Outgoing FD Neutron", "All Int., 1n", 0.06, 0.0425,
