@@ -164,13 +164,13 @@ void EventAnalyser() {
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = false; // master ON/OFF switch for applying cuts
+    bool apply_cuts = true; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -12535,11 +12535,11 @@ void EventAnalyser() {
         cout << "\n\nBeta plots are disabled by user.\n\n";
     } // end of Beta plot if
 
-//    if (!apply_nucleon_cuts) {
-//        /* If sample is with 2GeV beam energy, no fit is needed. */
-    if (!apply_nucleon_cuts &&
-        !(findSubstring(SampleName, "2GeV") || findSubstring(SampleName, "2gev") || findSubstring(SampleName, "207052MeV") ||
-          findSubstring(SampleName, "207052mev") || findSubstring(SampleName, "2070MeV") || findSubstring(SampleName, "2070mev"))) {
+    if (!apply_nucleon_cuts) {
+        /* If sample is with 2GeV beam energy, no fit is needed. */
+//    if (!apply_nucleon_cuts &&
+//        !(findSubstring(SampleName, "2GeV") || findSubstring(SampleName, "2gev") || findSubstring(SampleName, "207052MeV") ||
+//          findSubstring(SampleName, "207052mev") || findSubstring(SampleName, "2070MeV") || findSubstring(SampleName, "2070mev"))) {
         /* If sample is with 2GeV beam energy, no fit is needed. */
         BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
         BetaFitApprax(SampleName, Beta_max_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
