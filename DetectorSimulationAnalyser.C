@@ -130,14 +130,14 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps settings */
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
     /* Neutron resolution settings */
-    bool plot_and_fit_MomRes = false;
-    bool VaryingDelta = false;
+    bool plot_and_fit_MomRes = true;
+    bool VaryingDelta = true;
     double DeltaSlices = 0.05;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -164,13 +164,13 @@ void EventAnalyser() {
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     //TODO: add beta = 1.2 cut for electrons
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -186,11 +186,11 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = true;
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = false;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -16908,10 +16908,7 @@ void EventAnalyser() {
     cout << "num_of_events_1epFDpFD:\t\t\t" << num_of_events_with_1epFDpFD << "\n";
     cout << "num_of_events_1epCDpCD:\t\t\t" << num_of_events_with_1epCDpCD << "\n\n";
 
-    cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n";
-    cout << "num_of_events_pFDpCD_wal1nFD:\t\t" << num_of_events_pFDpCD_wal1nFD << "\n";
-    cout << "num_of_events_pFDpCD_wmt1nFD:\t\t" << num_of_events_pFDpCD_wmt1nFD << "\n\n";
-//    cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
+    cout << "num_of_events_pFDpCD:\t\t\t" << num_of_events_pFDpCD << "\n\n";
 
     cout << "num_of_events_nFDpCD:\t\t\t" << num_of_events_nFDpCD << "\n";
     cout << "num_of_events_nFDpCD_AV:\t\t" << num_of_events_nFDpCD_AV << "\n\n";
