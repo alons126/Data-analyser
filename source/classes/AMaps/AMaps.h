@@ -72,10 +72,10 @@ private:
     vector<hPlot2D> ElectronRecoToTLRatioBySlice, ProtonRecoToTLRatioBySlice, NeutronRecoToTLRatioBySlice;
     hPlot2D NeutronRecoToTLRatio;
 
-    /* Separated acceptance & weight maps (= reco. above ration th.) */
+    /* Separated acceptance & weight maps (= reco. above ratio th.) */
     vector<hPlot2D> ElectronAMapsBySlice, ProtonAMapsBySlice, NeutronAMapsBySlice; // separated AMaps for each slice
 
-    /* Acceptance maps (= reco. above ration th.) */
+    /* Acceptance maps (= reco. above ratio th.) */
     hPlot2D ElectronAMap; // combined electron AMap
     hPlot2D ProtonAMap;   // combined proton AMap
     hPlot2D NeutronAMap;
@@ -150,7 +150,6 @@ private:
     TH2D *LoadedProtonAMap;
     TH2D *LoadedNeutronAMap;
     TH2D *LoadedNucleonAMap;
-
 public:
 
 // default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -160,8 +159,8 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // AMaps generation constructor:
-    AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath = "./", int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75,
-          int hesNumOfXBins = 100, int hesNumOfYBins = 100);
+    AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath = "./",
+          int nOfMomBins = 4, int hnsNumOfXBins = 75, int hnsNumOfYBins = 75, int hesNumOfXBins = 100, int hesNumOfYBins = 100);
 
     // AMaps loading constructor:
     AMaps(const string &AcceptanceMapsDirectory, const string &SampleName);

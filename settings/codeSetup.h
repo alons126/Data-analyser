@@ -36,6 +36,7 @@ std::string SourcesDirectory = WorkingDirectory + "source" + "/";
 std::string DataDirectory = SourcesDirectory + "data" + "/";
 std::string ACorrDirectory = DataDirectory + "AcceptanceCorrections" + "/";
 std::string AcceptanceMapsDirectory = DataDirectory + "AcceptanceMaps" + "/";
+std::string AcceptanceWeightsDirectory = DataDirectory + "AcceptanceWeights" + "/";
 std::string NeutronResolutionDirectory = DataDirectory + "NeutronResolution" + "/";
 std::string NucleonCutsDirectory = DataDirectory + "NucleonCuts" + "/";
 std::string PIDCutsDirectory = DataDirectory + "PIDCuts" + "/";
@@ -60,9 +61,9 @@ std::string file_name = "general_file";
 std::string AnalyseFilePath = "mnt/d/e4nu/hipo_data_files";
 
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_10"; // my test with Justin's code; all particle data saved
-std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
+//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_100"; // my test with Justin's code; all particle data saved
 //std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5_first_250"; // my test with Justin's code; all particle data saved
-//std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
+std::string AnalyseFileSample = "recon_qe_GENIE_C_598636MeV_Q2_0_5_test_5";            // my test with Justin's code; all particle data saved
 
 std::string AnalyseFileDir = "/" + AnalyseFilePath + "/" + AnalyseFileSample + "/";
 std::string AnalyseFile = AnalyseFileDir + "*.hipo";

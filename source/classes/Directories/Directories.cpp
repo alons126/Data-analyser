@@ -1041,17 +1041,19 @@ Directories::Directories(std::string plots_path) {
                                                                          Find(Eff_and_ACorr_Daughter_Folders, "06_nFDpCD/04_Neutron_FD_Hit_map_nFDpCD") + "/";
     //</editor-fold>
 
-    //<editor-fold desc="Efficiency & Acceptance Correction plots directories">
+    //<editor-fold desc="Acceptance maps directories">
     for (std::string folders_name: Hit_Maps_Daughter_Folders) {
         MakeDirectory(create_Acceptance_Maps_Dir, Hit_Maps_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
-    Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
+    AMaps_Directory_map["AMaps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
                                                           + Find(Hit_Maps_Daughter_Folders, "01_AMaps_1e_cut") + "/";
-    Hit_Maps_Directory_map["AMaps_BC_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
+    AMaps_Directory_map["AMaps_BC_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
                                                           + Find(Hit_Maps_Daughter_Folders, "01_AMaps_1e_cut/00a_AMaps_BC_from_file") + "/";
-//    Hit_Maps_Directory_map["Hit_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
-//                                                          + Find(Hit_Maps_Daughter_Folders, "01_1e_cut/01_AMaps_1e_cut") + "/";
+    AMaps_Directory_map["WMaps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
+                                                          + Find(Hit_Maps_Daughter_Folders, "02_WMaps_1e_cut") + "/";
+    AMaps_Directory_map["WMaps_BC_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
+                                                          + Find(Hit_Maps_Daughter_Folders, "02_WMaps_1e_cut/00a_WMaps_BC_from_file") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Resolution plots directories">

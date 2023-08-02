@@ -476,8 +476,9 @@ private:
     vector<std::string> Hit_Maps_Daughter_Folders = {"",
                                                      "01_AMaps_1e_cut",
                                                      "01_AMaps_1e_cut/00a_AMaps_BC_from_file",
-//                                                          "01_1e_cut",
-//                                                          "01_1e_cut/01_AMaps_1e_cut",
+
+                                                     "02_WMaps_1e_cut",
+                                                     "02_WMaps_1e_cut/00a_WMaps_BC_from_file",
     };
     //</editor-fold>
 
@@ -532,7 +533,7 @@ public:
     map<std::string, std::string> TKI_Directory_map;
     map<std::string, std::string> ToF_Directory_map;
     map<std::string, std::string> Eff_and_ACorr_Directory_map;
-    map<std::string, std::string> Hit_Maps_Directory_map;
+    map<std::string, std::string> AMaps_Directory_map;
     map<std::string, std::string> Resolution_Directory_map;
 
 // MakeDirectory function -----------------------------------------------------------------------------------------------------------------------------------------------

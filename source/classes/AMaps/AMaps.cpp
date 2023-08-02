@@ -20,8 +20,8 @@
 // AMaps constructors ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="AMaps generation constructor">
-AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath, int nOfMomBins, int hnsNumOfXBins, int hnsNumOfYBins,
-             int hesNumOfXBins, int hesNumOfYBins) {
+AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath,
+             int nOfMomBins, int hnsNumOfXBins, int hnsNumOfYBins, int hesNumOfXBins,             int hesNumOfYBins) {
     AMapSavePath = SavePath;
     HistNucSliceNumOfXBins = hnsNumOfXBins;
     HistNucSliceNumOfYBins = hnsNumOfYBins;
@@ -862,9 +862,9 @@ void AMaps::GenerateNPartAMaps(double nP_minR) {
         vector<double> n_WMap_col;
 
         for (int j = 0; j < HistNucSliceNumOfXBins; j++) {
-            if (NeutronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= nP_minR) {
+            if (NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(j + 1, i + 1) >= nP_minR) {
                 n_AMap_col.push_back(1);
-                n_WMap_col.push_back(NeutronAMap.GetHistogram2D()->GetBinContent(j + 1, i + 1));
+                n_WMap_col.push_back(NeutronRecoToTLRatio.GetHistogram2D()->GetBinContent(j + 1, i + 1));
             } else {
                 n_AMap_col.push_back(0);
                 n_WMap_col.push_back(0);
@@ -1911,9 +1911,9 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_p_WMap_Slices.at(Slice).at(i).at(j) != 0) {
                                         if (PrintOut) {
-                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n";
+                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
-                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n\n";
+                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n\n";
                                             cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
                                             cout << "Theta = " << Theta << "\n";
                                             cout << "ThetaUpperLimTemp = " << ThetaUpperLimTemp << "\n\n";
@@ -1923,8 +1923,8 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                             cout << "Weight = " << Loaded_p_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
                                         }
 
-                                        return (Loaded_p_WMap_Slices.at(Slice).at(i).at(j));
-//                                        return (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
+//                                        return (Loaded_p_WMap_Slices.at(Slice).at(i).at(j));
+                                        return (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
@@ -1949,20 +1949,20 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_n_WMap_Slices.at(Slice).at(i).at(j) != 0) {
                                         if (PrintOut) {
-                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n";
+                                            cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
-                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n\n";
+                                            cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n\n";
                                             cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
                                             cout << "Theta = " << Theta << "\n";
                                             cout << "ThetaUpperLimTemp = " << ThetaUpperLimTemp << "\n\n";
                                             cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
                                             cout << "Phi = " << Phi << "\n";
                                             cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
-                                            cout << "Weight = " << Loaded_p_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
+                                            cout << "Weight = " << Loaded_n_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
                                         }
 
-                                        return (Loaded_n_WMap_Slices.at(Slice).at(i).at(j));
-//                                        return (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
+//                                        return (Loaded_n_WMap_Slices.at(Slice).at(i).at(j));
+                                        return (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
                                     }
                                 } // end of find right phi if
                             }
