@@ -130,7 +130,7 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps settings */
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -170,7 +170,7 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -186,10 +186,10 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = false;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
