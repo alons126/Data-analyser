@@ -114,7 +114,7 @@ public:
 
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    void ReadResDataParam(const char *filename);
+    void ReadResDataParam(const char *filename, const string &SampleName, const string &NucleonCutsDirectory);
 
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 

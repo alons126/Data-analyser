@@ -101,6 +101,24 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
                 if (beamE == 5.98636) {
                     if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
                         Delta = delta * 6;
+                    } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.85)) { // 0.7-0.9
+                        Delta = delta * 4;
+                    } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.85)) { // 0.9-1.90
+                        Delta = delta * 2;
+                    } else if ((SliceLowerLim >= 1.85) && (SliceLowerLim < 2.15)) { // 1.90-2.20
+                        Delta = delta * 3;
+                    } else if ((SliceLowerLim >= 2.15) && (SliceLowerLim < 2.35)) { // 2.20-2.40
+                        Delta = delta * 4;
+                    } else if ((SliceLowerLim >= 2.35) && (SliceLowerLim < 2.60)) { // 2.40-2.65
+                        Delta = delta * 5;
+                    } else if ((SliceLowerLim >= 2.60) && (SliceLowerLim < 2.95)) { // 2.65-3.00
+                        Delta = delta * 7;
+                    } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
+                        Delta = SliceUpperMomLim - SliceLowerLim;
+                    }
+                    /*
+                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
+                        Delta = delta * 6;
                     } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.80)) { // 0.7-0.85
                         Delta = delta * 3;
                     } else if ((SliceLowerLim >= 0.80) && (SliceLowerLim < 2.00)) { // 0.85-2.05
@@ -116,6 +134,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
                     } else if (SliceLowerLim >= 3.25) { // 3.30-SliceUpperMomLim
                         Delta = SliceUpperMomLim - SliceLowerLim;
                     }
+*/
                 } else if (beamE == 2.07052) {
                     if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
                         Delta = delta * 3;
@@ -399,9 +418,10 @@ void NeutronResolution::LogHistDataToFile(const string &SampleName, const string
 // ReadResDataParam function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="ReadResDataParam function">
-void NeutronResolution::ReadResDataParam(const char *filename) {
+void NeutronResolution::ReadResDataParam(const char *filename, const string &SampleName, const string &NucleonCutsDirectory) {
     ifstream infile;
     infile.open(filename);
+    SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
     if (infile.is_open()) {
         string tp;
@@ -498,6 +518,37 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
+        if (Momentum <= SliceUpperMomLim) { // NOTE: changed according to upper neutron mom. th.
+            for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
+                if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+                    double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
+
+                    if (Printout) {
+                        cout << "\n\nLoaded_res_slice.GetUpperCut() = " << Loaded_res_slice.GetUpperCut() << "\n";
+                        cout << "Momentum = " << Momentum << "\n";
+                        cout << "Smearing = " << Smearing << "\n";
+                        cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
+                    }
+
+                    return Smearing * Momentum;
+                }
+            }
+        } else {
+            double Smearing = Rand->Gaus(1, Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut());
+
+            if (Printout) {
+                cout << "\n\nLoaded_Res_Slices_FitVar.GetUpperCut() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetUpperCut() << "\n";
+                cout << "Loaded_res_slice.GetSliceLowerb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceLowerb() << "\n";
+                cout << "Loaded_res_slice.GetSliceUpperb() = " << Loaded_Res_Slices_FitVar.at(Loaded_Res_Slices_FitVar.size() - 1).GetSliceUpperb() << "\n";
+                cout << "Momentum = " << Momentum << "\n";
+                cout << "Smearing = " << Smearing << "\n";
+                cout << "Smearing * Momentum = " << Smearing * Momentum << "\n\n";
+            }
+
+            return Smearing * Momentum;
+        }
+
+        //<editor-fold desc="Original">
         for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
             if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
                 double Smearing = Rand->Gaus(1, Loaded_res_slice.GetUpperCut());
@@ -512,6 +563,7 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
                 return Smearing * Momentum;
             }
         }
+        //</editor-fold>
     }
 
     return Momentum;
