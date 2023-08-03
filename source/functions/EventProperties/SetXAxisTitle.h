@@ -48,10 +48,25 @@ string SetXAxisTitle(const string &RecTitle) {
         XAxisTitle = "#delta#phi_{T,tot} [Deg]";
     } else if (findSubstring(RecTitle, "#delta#phi_{T,L}")) {
         XAxisTitle = "#delta#phi_{T,L} [Deg]";
-    } else if (findSubstring(RecTitle, "#theta")) {
+    } else if (findSubstring(RecTitle, "#theta") && !findSubstring(RecTitle, "#theta_{#vec{") &&
+               !(findSubstring(RecTitle, "#theta_{pFD,pCD}") || findSubstring(RecTitle, "#theta_{nFD,pCD}"))) {
         XAxisTitle = "#theta [Deg]";
     } else if (findSubstring(RecTitle, "#phi")) {
         XAxisTitle = "#phi [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{#vec{P}_{e},#vec{P}_{tot}}")) {
+        XAxisTitle = "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{tot}}")) {
+        XAxisTitle = "#theta_{#vec{q},#vec{P}_{tot}} [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pFD}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nFD}}")) {
+        XAxisTitle = "#theta_{#vec{q},#vec{P}_{nuc,FD}} [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pCD}}")) {
+        XAxisTitle = "#theta_{#vec{q},#vec{P}_{p,CD}} [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pL}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}}")) {
+        XAxisTitle = "#theta_{#vec{q},#vec{P}_{nuc,L}} [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pR}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nR}}")) {
+        XAxisTitle = "#theta_{#vec{q},#vec{P}_{nuc,R}} [Deg]";
+    } else if (findSubstring(RecTitle, "#theta_{pFD,pCD}") || findSubstring(RecTitle, "#theta_{nFD,pCD}")) {
+        XAxisTitle = "#theta_{nucFD,nucCD} [Deg]";
     }
 
     return XAxisTitle;

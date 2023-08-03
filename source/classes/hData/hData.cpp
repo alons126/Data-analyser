@@ -166,10 +166,27 @@ string hData::GetType(const string &Source) {
         Type = "deltaPhi_T_tot";
     } else if (findSubstring(Source, "#delta#phi_{T,L}")) { // for theta efficiency plots
         Type = "deltaPhi_T_L";
-    } else if (findSubstring(Source, "#theta")) { // for theta efficiency plots
+    } else if (findSubstring(Source, "#theta") && !findSubstring(Source, "#theta_{#vec{") &&
+               !(findSubstring(Source, "#theta_{pFD,pCD}") || findSubstring(Source, "#theta_{nFD,pCD}"))) { // for theta efficiency plots
         Type = "theta";
     } else if (findSubstring(Source, "#phi")) { // for phi efficiency plots
         Type = "phi";
+    } else if (findSubstring(Source, "#theta_{#vec{")) {
+        if (findSubstring(Source, "#theta_{#vec{P}_{e},#vec{P}_{tot}}")) {
+            Type = "Opening_ang_P_e_P_tot";
+        } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{tot}}")) {
+            Type = "Opening_ang_q_P_tot";
+        } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pFD}}") || findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nFD}}")) {
+            Type = "Opening_ang_q_P_nucFD";
+        } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pCD}}")) {
+            Type = "Opening_ang_q_P_nucCD";
+        } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pL}}") || findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nL}}")) {
+            Type = "Opening_ang_q_P_nucL";
+        } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pR}}") || findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nR}}")) {
+            Type = "Opening_ang_q_P_nucR";
+        }
+    } else if (findSubstring(Source, "#theta_{pFD,pCD}") || findSubstring(Source, "#theta_{nFD,pCD}")){
+        Type = "Opening_ang_P_nucFD_P_nucCD";
     }
 
     return Type;
@@ -204,27 +221,43 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
 
     if (PlotsT == "FSRatio") {
         if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
-            Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L") {
+            Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L" ||
+            Type == "Opening_ang_P_e_P_tot" || Type == "Opening_ang_q_P_tot" || Type == "Opening_ang_q_P_nucFD" || Type == "Opening_ang_q_P_nucCD" ||
+            Type == "Opening_ang_q_P_nucL" || Type == "Opening_ang_q_P_nucR" || Type == "Opening_ang_P_nucFD_P_nucCD") {
             if (Type == "Q2") {
                 FSRTitle = "Q^{2} ratio - ";
-            }else if (Type == "E_e") {
+            } else if (Type == "E_e") {
                 FSRTitle = "E_{e} ratio - ";
-            }else if (Type == "omega") {
+            } else if (Type == "omega") {
                 FSRTitle = "#omega ratio - ";
-            }else if (Type == "Ecal") {
+            } else if (Type == "Ecal") {
                 FSRTitle = "E_{cal} ratio - ";
-            }else if (Type == "deltaP_T_tot") {
+            } else if (Type == "deltaP_T_tot") {
                 FSRTitle = "#deltaP_{T,tot} ratio - ";
-            }else if (Type == "deltaP_T_L") {
+            } else if (Type == "deltaP_T_L") {
                 FSRTitle = "#deltaP_{T,L} ratio - ";
-            }else if (Type == "deltaAlpha_T_tot") {
+            } else if (Type == "deltaAlpha_T_tot") {
                 FSRTitle = "#delta#alpha_{T,tot} ratio - ";
-            }else if (Type == "deltaAlpha_T_L") {
+            } else if (Type == "deltaAlpha_T_L") {
                 FSRTitle = "#delta#alpha_{T,L} ratio - ";
-            }else if (Type == "deltaPhi_T_tot") {
+            } else if (Type == "deltaPhi_T_tot") {
                 FSRTitle = "#delta#phi_{T,tot} ratio - ";
-            }else if (Type == "deltaPhi_T_L") {
+            } else if (Type == "deltaPhi_T_L") {
                 FSRTitle = "#delta#phi_{T,L} ratio - ";
+            } else if (Type == "Opening_ang_P_e_P_tot") {
+                FSRTitle = "Opening angle between P_{e} and P_{tot} ratio - ";
+            } else if (Type == "Opening_ang_q_P_tot") {
+                FSRTitle = "Opening angle between q and P_{tot} ratio - ";
+            } else if (Type == "Opening_ang_q_P_nucFD") {
+                FSRTitle = "Opening angle between q and P_{nuc,FD} ratio - ";
+            } else if (Type == "Opening_ang_q_P_nucCD") {
+                FSRTitle = "Opening angle between q and P_{nuc,CD} ratio - ";
+            } else if (Type == "Opening_ang_q_P_nucL") {
+                FSRTitle = "Opening angle between q and leading nucleon P_{nuc,L} ratio - ";
+            } else if (Type == "Opening_ang_q_P_nucR") {
+                FSRTitle = "Opening angle between q and recoil nucleon P_{nuc,R} ratio - ";
+            } else if (Type == "Opening_ang_P_nucFD_P_nucCD") {
+                FSRTitle = "Opening angle between FD and CD nucleons ratio - ";
             } else {
                 FSRTitle = Type + " ratio - ";
             }

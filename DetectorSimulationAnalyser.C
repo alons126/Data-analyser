@@ -136,8 +136,8 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution settings */
-    bool plot_and_fit_MomRes = true;
-    bool VaryingDelta = true;
+    bool plot_and_fit_MomRes = false;
+    bool VaryingDelta = false;
     double DeltaSlices = 0.05;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
@@ -190,7 +190,7 @@ void EventAnalyser() {
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
+    bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -1873,10 +1873,10 @@ void EventAnalyser() {
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07c_P_n_BPID_nFDpCD_FD",
                                           Momentum_lboundary, Momentum_uboundary);
 
-    hPlot1D hP_nL_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
+    hPlot1D hP_nL_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Leading neutron momentum APID", "Leading neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07a_P_n_APID_nFDpCD_FD",
                                            Momentum_lboundary, Momentum_uboundary);
-    hPlot1D hP_nL_APIDandNS_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID&NS", "Neutron momentum P_{n} APID&NS", "P_{n} [GeV/c]",
+    hPlot1D hP_nL_APIDandNS_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Leading neutron momentum APID&NS", "Leading neutron momentum P_{n} APID&NS", "P_{n} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07b_P_n_APIDandNS_nFDpCD_FD",
                                                 Momentum_lboundary, Momentum_uboundary);
     //</editor-fold>
@@ -8958,7 +8958,7 @@ void EventAnalyser() {
                         bool InFD = ((TLProtonTheta >= ThetaFD.GetLowerCut()) && (TLProtonTheta <= ThetaFD.GetUpperCut()));
                         bool PassNeutronMomTh = ((TLProtonP >= n_mom_th.GetLowerCut()) && (TLProtonP <= n_mom_th.GetUpperCut()));
 
-                        double dPhiCut = 5., dThetaCut = 2.;
+                        double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
 
                         if (pid == 2212 && InFD && PassNeutronMomTh) {
                             hdTheta_pFD_TL_BC_1p.hFill(dProtonTheta, Weight);
@@ -8985,16 +8985,6 @@ void EventAnalyser() {
                                 hP_pFD_Res_1p.hFill(pResolution, Weight);
                                 hP_pFD_Res_VS_P_pFD_1p->Fill(TLProtonP, pResolution, Weight);
                             }
-//                            else if (TLProtonTheta < 40.) {
-//                                cout << "\ni = " << i << "\n";
-//                                cout << "PhotonsFD_ind.at(0) = " << PhotonsFD_ind.at(0) << "\n";
-//                                cout << "Theta TL = " << TLProtonTheta << "\n";
-//                                cout << "Theta Rec = " << P_p_1p_3v.Theta() * 180.0 / pi << "\n";
-//                                cout << "Phi TL = " << TLProtonPhi << "\n";
-//                                cout << "Phi Rec = " << P_p_1p_3v.Phi() * 180.0 / pi << "\n";
-//                                cout << "PID TL = " << pid << "\n";
-//                                cout << "PID Rec = " << protons[PhotonsFD_ind.at(0)]->par()->getPid() << "\n";
-//                            }
                         }
                     }
                 } // end of resolution calculation if
@@ -9753,7 +9743,7 @@ void EventAnalyser() {
                         bool InFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
                         bool PassNeutronMomTh = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
 
-                        double dPhiCut = 5., dThetaCut = 2.;
+                        double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
 
                         if (pid == 2112 && InFD && PassNeutronMomTh) {
                             hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
@@ -13771,10 +13761,8 @@ void EventAnalyser() {
         double Theta_p_e_p_tot_pFDpCD_integral = hTheta_p_e_p_tot_pFDpCD->Integral();
 
         histPlotter1D(c1, hTheta_p_e_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_p_e_p_tot_pFDpCD_integral,
-                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD",
-                      0.06,
-                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01a_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue,
-                      true,
+                      "#theta_{#vec{P}_{e},#vec{P}_{tot}} - Opening Angle Between #vec{P}_{e} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06,
+                      0.0425, 0.0425, plots, 2, false, true, sTheta_p_e_p_tot_pFDpCD, "01a_Theta_p_e_p_tot_All_Int_pFDpCD", hTheta_p_e_p_tot_pFDpCD_Dir, "", kBlue, true,
                       true, true, false);
         //</editor-fold>
 
@@ -13791,10 +13779,8 @@ void EventAnalyser() {
         double Theta_q_p_tot_pFDpCD_integral = hTheta_q_p_tot_pFDpCD->Integral();
 
         histPlotter1D(c1, hTheta_q_p_tot_pFDpCD, norm_Angle_plots_master, true, Theta_q_p_tot_pFDpCD_integral,
-                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_L_R_pFDpCD, "02a_Theta_q_p_tot_All_Int_pFDpCD", hTheta_q_p_tot_pFDpCD_Dir, "", kBlue, true, true,
-                      true,
+                      "#theta_{#vec{q},#vec{P}_{tot}} - Opening Angle Between #vec{q} and #vec{P}_{tot}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_q_p_L_R_pFDpCD, "02a_Theta_q_p_tot_All_Int_pFDpCD", hTheta_q_p_tot_pFDpCD_Dir, "", kBlue, true, true, true,
                       false);
         //</editor-fold>
 
@@ -13802,31 +13788,28 @@ void EventAnalyser() {
         double Theta_q_p_max_pFDpCD_integral = hTheta_q_p_max_pFDpCD->Integral();
 
         histPlotter1D(c1, hTheta_q_p_max_pFDpCD, norm_Angle_plots_master, true, Theta_q_p_max_pFDpCD_integral,
-                      "#theta_{#vec{q},#vec{P}_{max}} - Opening Angle Between #vec{q} and #vec{P}_{max}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06,
-                      0.0425,
-                      0.0425, plots, 2, false, true, sTheta_q_p_L_R_pFDpCD, "02aa_Theta_q_p_max_All_Int_pFDpCD", hTheta_q_p_max_pFDpCD_Dir, "", kBlue, true, true,
-                      true,
+                      "#theta_{#vec{q},#vec{P}_{max}} - Opening Angle Between #vec{q} and #vec{P}_{max}=#vec{P}_{pFD}+#vec{P}_{pCD}", "All Int., pFDpCD", 0.06, 0.0425,
+                      0.0425, plots, 2, false, true, sTheta_q_p_L_R_pFDpCD, "02aa_Theta_q_p_max_All_Int_pFDpCD", hTheta_q_p_max_pFDpCD_Dir, "", kBlue, true, true, true,
                       false);
         //</editor-fold>
 
-        //<editor-fold desc="hTheta_q_p_tot_vs_W_pFDpCD (pFDpCD, CD & FD)">
-        histPlotter2D(c1, hTheta_q_p_tot_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_tot_vs_W_pFDpCD_Dir,
-                      "02b_Theta_q_p_tot_vs_W_pFDpCD");
+        //<editor-fold desc="hTheta_q_p_tot vs. W_pFDpCD (pFDpCD, CD & FD)">
+        histPlotter2D(c1, hTheta_q_p_tot_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_tot_vs_W_pFDpCD_Dir, "02b_Theta_q_p_tot_vs_W_pFDpCD");
         //</editor-fold>
 
-        //<editor-fold desc="hTheta_q_p_L_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        //<editor-fold desc="hTheta_q_p_L vs. W_pFDpCD (pFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_q_p_L_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_L_vs_W_pFDpCD_Dir, "02c_Theta_q_p_L_vs_W_pFDpCD");
         //</editor-fold>
 
-        //<editor-fold desc="hTheta_q_p_R_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        //<editor-fold desc="hTheta_q_p_R vs. W_pFDpCD (pFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_q_p_R_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_p_R_vs_W_pFDpCD_Dir, "02d_Theta_q_p_R_vs_W_pFDpCD");
         //</editor-fold>
 
-        //<editor-fold desc="hTheta_q_pFD_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        //<editor-fold desc="hTheta_q_pFD vs. W_pFDpCD (pFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_q_pFD_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_pFD_vs_W_pFDpCD_Dir, "02e_Theta_q_pFD_vs_W_pFDpCD");
         //</editor-fold>
 
-        //<editor-fold desc="hTheta_q_pCD_vs_W_pFDpCD (pFDpCD, CD & FD)">
+        //<editor-fold desc="hTheta_q_pCD vs. W_pFDpCD (pFDpCD, CD & FD)">
         histPlotter2D(c1, hTheta_q_pCD_vs_W_pFDpCD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, false, hTheta_q_pCD_vs_W_pFDpCD_Dir, "02f_Theta_q_pCD_vs_W_pFDpCD");
         //</editor-fold>
 
@@ -14386,6 +14369,14 @@ void EventAnalyser() {
             DrawAndSaveFSRatio(SampleName, hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD_Dir, hTheta_pCD_All_Int_nFDpCD_CD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD_Dir, hPhi_nFD_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD_Dir, hPhi_pCD_All_Int_nFDpCD_CD, plots);
+
+            DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_pFDpCD, hTheta_p_e_p_tot_pFDpCD_Dir, hTheta_p_e_p_tot_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_pFDpCD, hTheta_q_p_tot_pFDpCD_Dir, hTheta_q_p_tot_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_pFDpCD, hTheta_q_p_L_pFDpCD_Dir, hTheta_q_p_L_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_R_pFDpCD, hTheta_q_p_R_pFDpCD_Dir, hTheta_q_p_R_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_pFDpCD, hTheta_q_pFD_pFDpCD_Dir, hTheta_q_nFD_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_pFDpCD, hTheta_q_pCD_pFDpCD_Dir, hTheta_q_pCD_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_All_Int_pFDpCD_Dir, hTheta_nFD_pCD_All_Int_nFDpCD, plots);
 
 //            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for angles!\n\n\n";
 //            quit();
