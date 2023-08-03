@@ -33,6 +33,7 @@
 
 #include "clas12reader.h"
 
+#include "../clas12ana/clas12ana.h"
 #include "../hPlots/hPlot1D.h"
 #include "../DSCuts/DSCuts.h"
 #include "../../functions/GeneralFunctions.h"
@@ -48,6 +49,8 @@ private:
     vector<DSCuts> Loaded_Res_Slices_FitVar;
     vector<DSCuts> Loaded_Res_Slices_HistVar;
     vector<int> FittedSlices;
+
+    double SliceUpperMomLim; // upper lim for momentum slices to be set after neutron upper momentum th.
 
     double hSliceUpperLim = 1.5;
     double hSliceLowerLim = -1.5;
@@ -75,8 +78,12 @@ public:
 
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    NeutronResolution(const string &SampleName, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./", double DeltaSlices = 0.2,
-                      bool VaryingDelta = false);
+    NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./",
+                      double DeltaSlices = 0.2, bool VaryingDelta = false);
+
+// SetUpperMomCut function ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory);
 
 // hFillResPlots function -----------------------------------------------------------------------------------------------------------------------------------------------
 

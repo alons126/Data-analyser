@@ -9,11 +9,12 @@
 //TODO: add a software that creates momentum slices with at least 1000 events each automatically
 
 //<editor-fold desc="NeutronResolution constructor">
-NeutronResolution::NeutronResolution(const string &SampleName, const string &Particle, double beamE, double ParticleMomTh, const string &SavePath, double DeltaSlices,
-                                     bool VaryingDelta) {
+NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double ParticleMomTh,
+                                     const string &SavePath, double DeltaSlices, bool VaryingDelta) {
     SlicesSavePath = SavePath, delta = DeltaSlices;
 
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
+    SetUpperMomCut(SampleName, NucleonCutsDirectory);
 
     if (!VaryingDelta) {
         SliceUpperLim = SliceLowerLim + delta;
@@ -90,7 +91,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
         ResSliceFitCuts.SetCutVariable(("hist_" + hCutName));
         ResSlicesHistVar.push_back(ResSliceFitCuts);
 
-        if (SliceUpperLim == beamE) {
+        if (SliceUpperLim == SliceUpperMomLim) {
+//        if (SliceUpperLim == beamE) {
             SliceAndDice = false;
         } else {
             SliceLowerLim = SliceUpperLim;
@@ -111,8 +113,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                         Delta = delta * 6;
                     } else if ((SliceLowerLim >= 2.80) && (SliceLowerLim < 3.25)) { // 2.85-3.30
                         Delta = delta * 9;
-                    } else if (SliceLowerLim >= 3.25) { // 3.30-beamE
-                        Delta = beamE - SliceLowerLim;
+                    } else if (SliceLowerLim >= 3.25) { // 3.30-SliceUpperMomLim
+                        Delta = SliceUpperMomLim - SliceLowerLim;
                     }
                 } else if (beamE == 2.07052) {
                     if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
@@ -124,43 +126,13 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                     } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
                         Delta = beamE - SliceLowerLim;
                     }
-                    /*
-                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 0.50) && (SliceLowerLim < 1.10)) { // 0.55-1.15
-                        Delta = delta * 2;
-                    } else if ((SliceLowerLim >= 1.10) && (SliceLowerLim < 1.25)) { // 1.15-1.30
-                        Delta = delta * 3;
-                    } else if (SliceLowerLim >= 1.25) { // 1.30-beamE
-                        Delta = beamE - SliceLowerLim;
-                    }
-*/
                 }
             }
-            /*
-            if (VaryingDelta) {
-                if (beamE == 5.98636) {
-                    if ((SliceLowerLim >= 0.7) && (SliceLowerLim < 0.85)) { // 0.7-0.9
-                        Delta = delta * 4;
-                    } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.0)) { // 0.9-1.05
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 1.0) && (SliceLowerLim < 1.6)) { // 1.05-1.65
-                        Delta = delta * 2;
-                    } else if ((SliceLowerLim >= 1.6) && (SliceLowerLim < 1.9)) { // 1.65-1.95
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 1.9) && (SliceLowerLim < 2.1)) { // 1.95-2.15
-                        Delta = delta * 4;
-                    } else if ((SliceLowerLim >= 2.1) && (SliceLowerLim < 2.45)) { // 2.15-2.5
-                        Delta = delta * 7;
-                    } else if (SliceLowerLim >= 2.45) { // 2.5-beamE
-                        Delta = beamE - SliceLowerLim;
-                    }
-                }
-            }
-*/
 
-            if ((SliceUpperLim + Delta) > beamE) {
-                SliceUpperLim = beamE;
+            if ((SliceUpperLim + Delta) > SliceUpperMomLim) {
+                SliceUpperLim = SliceUpperMomLim;
+//            if ((SliceUpperLim + Delta) > beamE) {
+//                SliceUpperLim = beamE;
             } else {
                 SliceUpperLim = SliceLowerLim + Delta;
             }
@@ -170,6 +142,18 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
     if (LimitsPrintOut && LimitsPrintOutAndExit) { exit(0); }
 
     NumberOfSlices = SliceNumber;
+}
+//</editor-fold>
+
+// SetUpperMomCut function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="SetUpperMomCut function">
+void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory) {
+    clas12ana clasAnaTemp;
+
+    clasAnaTemp.readInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
+
+    SliceUpperMomLim = clasAnaTemp.getNeutronMomentumCut();
 }
 //</editor-fold>
 

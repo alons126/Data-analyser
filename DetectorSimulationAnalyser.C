@@ -162,8 +162,6 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //TODO: add beta = 1.2 cut for electrons
     bool apply_cuts = true; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
@@ -191,7 +189,7 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
+    bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndShift = false;
@@ -835,16 +833,15 @@ void EventAnalyser() {
 
     if (!calculate_truth_level) { plot_and_fit_MomRes = false; } // Disable resolution-realted operations if not calculating TL plots
     if (apply_nucleon_SmearAndShift) { plot_and_fit_MomRes = false; }  // Disable resolution-realted operations when applying proton smearing
-    if (plot_and_fit_MomRes) { apply_nBeta_fit_cuts = false; }   // Disable upper momentum th. cut is resolution is being calculated
 
     //<editor-fold desc="Neutron resolution class declaration & definition">
     NeutronResolution nRes, pRes;
 
     if (plot_and_fit_MomRes) {
-        nRes = NeutronResolution(SampleName, "Neutron", beamE, n_mom_th.GetLowerCut(), directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"],
-                                 DeltaSlices, VaryingDelta);
-        pRes = NeutronResolution(SampleName, "Proton", beamE, p_mom_th.GetLowerCut(), directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"],
-                                 DeltaSlices, VaryingDelta);
+        nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, n_mom_th.GetLowerCut(),
+                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"], DeltaSlices, VaryingDelta);
+        pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, p_mom_th.GetLowerCut(),
+                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"], DeltaSlices, VaryingDelta);
     } else {
         nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str());
         nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_hist_param_-_" + SampleName + ".par").c_str());
@@ -6345,15 +6342,17 @@ void EventAnalyser() {
                                                            65, Phi_lboundary, Phi_uboundary, 65, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
-    hPlot1D hTheta_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} of matched TL n", "#theta^{truth}_{nFD} of matched TL FD neutron", "#theta^{truth}_{nFD} [Deg]",
-                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "01b_Theta_nFD_MatchedN_TL_1n",
-                                              Theta_lboundary_FD, Theta_uboundary_FD);
-    hPlot1D hPhi_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} of matched TL n", "#phi^{truth}_{nFD} of matched TL FD neutron", "#phi^{truth}_{nFD} [Deg]",
-                                            directories.Resolution_Directory_map["Resolution_1n_Directory"], "02b_Phi_nFD_MatchedN_TL_1n",
-                                            Phi_lboundary, Phi_uboundary);
+    hPlot1D hTheta_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #theta^{truth}_{nFD} of matched TL n", "#theta^{truth}_{nFD} of matched TL FD neutron",
+                                                "#theta^{truth}_{nFD} [Deg]",
+                                                directories.Resolution_Directory_map["Resolution_1n_Directory"], "01b_Theta_nFD_MatchedN_TL_1n",
+                                                Theta_lboundary_FD, Theta_uboundary_FD);
+    hPlot1D hPhi_nFD_TL_MatchedN_1n = hPlot1D("1n", "", "TL #phi^{truth}_{nFD} of matched TL n", "#phi^{truth}_{nFD} of matched TL FD neutron",
+                                              "#phi^{truth}_{nFD} [Deg]",
+                                              directories.Resolution_Directory_map["Resolution_1n_Directory"], "02b_Phi_nFD_MatchedN_TL_1n",
+                                              Phi_lboundary, Phi_uboundary);
     TH2D *hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n = new TH2D("#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} of matched TL n (1n, FD)",
-                                                           "#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} of matched TL FD neutron (1n, FD);#phi^{truth}_{nFD} [Deg];#theta^{truth}_{nFD} [Deg]",
-                                                           65, Phi_lboundary, Phi_uboundary, 65, Theta_lboundary_FD, Theta_uboundary_FD);
+                                                             "#theta^{truth}_{nFD} vs. #phi^{truth}_{nFD} of matched TL FD neutron (1n, FD);#phi^{truth}_{nFD} [Deg];#theta^{truth}_{nFD} [Deg]",
+                                                             65, Phi_lboundary, Phi_uboundary, 65, Theta_lboundary_FD, Theta_uboundary_FD);
     string hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n_Dir = directories.Resolution_Directory_map["Resolution_1n_Directory"];
 
     hPlot1D hP_nFD_Res_1n = hPlot1D("1n", "", "P_{nFD} resolution AC", "FD neutron P_{nFD} resolution AC",
@@ -6468,7 +6467,7 @@ void EventAnalyser() {
                 /* Else, load values from fit. */
                 if (apply_nBeta_fit_cuts) {
                     n_mom_th.SetUpperCut(clasAna.getNeutronMomentumCut());
-//                    TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
+                    TL_n_mom_cuts.SetUpperCut(clasAna.getNeutronMomentumCut());
                     Beta_cut.SetUpperCut(clasAna.getNeutralBetaCut());          // Log values of beta fit cut (for monitoring)
                     Beta_cut.SetMean(clasAna.getNeutralBetaCutMean());          // Log values of beta fit cut (for monitoring)
                 }
@@ -6716,6 +6715,14 @@ void EventAnalyser() {
             auto mcpbank = c12->mcparts();
             const Int_t Ngen = mcpbank->getRows();
 
+            bool TL_fiducial_cuts;
+
+            if (apply_fiducial_cuts) {
+                TL_fiducial_cuts = true;
+            } else {
+                TL_fiducial_cuts = false;
+            }
+
             //<editor-fold desc="counting TL particles">
             /* Particle index vectors */
             vector<int> TL_Electron_ind, TL_Neutrons_ind, TL_Protons_ind, TL_piplus_ind, TL_piminus_ind, TL_pizero_ind, TL_Photons_ind, TL_OtherPart_ind;
@@ -6744,9 +6751,9 @@ void EventAnalyser() {
                 bool inFD = ((Particle_TL_Theta >= ThetaFD.GetLowerCut()) && (Particle_TL_Theta <= ThetaFD.GetUpperCut()));
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
-                bool e_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                bool p_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                bool n_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                bool e_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                bool p_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                bool n_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
 
                 if (particlePDGtmp == 11) {
                     if ((Particle_TL_Momentum >= TL_e_mom_cuts.GetLowerCut()) &&
@@ -6905,9 +6912,9 @@ void EventAnalyser() {
                 bool inCD = ((Particle_TL_Theta > ThetaCD.GetLowerCut()) && (Particle_TL_Theta <= ThetaCD.GetUpperCut()));
 
                 if (fill_TL_plots) {
-                    bool e_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    bool p_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
-                    bool n_inFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                    bool e_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Electron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                    bool p_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Proton", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
+                    bool n_inFD = aMaps.IsInFDQuery((!TL_fiducial_cuts), ThetaFD, "Neutron", Particle_TL_Momentum, Particle_TL_Theta, Particle_TL_Phi);
 
                     if (particlePDGtmp == 11) {
                         if (TL_Event_Selection_1e_cut) {
@@ -9690,24 +9697,48 @@ void EventAnalyser() {
                     for (Int_t i = 0; i < Ngen_nRes; i++) {
                         mcpbank_nRes->setEntry(i);
 
+                        /* TL neutron kinematic variables */
                         double TLNeutronP = rCalc(mcpbank_nRes->getPx(), mcpbank_nRes->getPy(), mcpbank_nRes->getPz());
                         double TLNeutronTheta = acos(mcpbank_nRes->getPz() / TLNeutronP) * 180.0 / pi;
                         double TLNeutronPhi = atan2(mcpbank_nRes->getPy(), mcpbank_nRes->getPx()) * 180.0 / pi;
 
-                        double dNeutronTheta = (P_n_1n_3v.Theta() * 180.0 / pi) - TLNeutronTheta;
-                        double dNeutronPhi = CalcdPhi((P_n_1n_3v.Phi() * 180.0 / pi) - TLNeutronPhi);
+                        /* Reco neutron kinematic variables */
+                        double RecoNeutronP = P_n_1n_3v.Mag();
+                        double RecoNeutronTheta = P_n_1n_3v.Theta() * 180.0 / pi;
+                        double RecoNeutronPhi = P_n_1n_3v.Phi() * 180.0 / pi;
+
+                        /* Reco-TL angle difference */
+                        double dNeutronTheta = RecoNeutronTheta - TLNeutronTheta;
+                        double dNeutronPhi = CalcdPhi(RecoNeutronPhi - TLNeutronPhi);
 
                         auto pid = mcpbank_nRes->getPid();
 
-                        bool InFD_Reco = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), (P_n_1n_3v.Theta() * 180.0 / pi),
-                                                           (P_n_1n_3v.Phi() * 180.0 / pi), false);
-                        bool InFD_TL = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
-//                        bool InFD = ((TLNeutronTheta >= ThetaFD.GetLowerCut()) && (TLNeutronTheta <= ThetaFD.GetUpperCut()));
-                        bool PassNeutronMomTh = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
+                        //<editor-fold desc="nRes cuts">
 
+                        //<editor-fold desc="nRes good neutron cuts">
+                        bool nRes_TL_Pass_PIDCut = (pid == 2112);
+
+                        bool Reco_InFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", RecoNeutronP, RecoNeutronTheta, RecoNeutronPhi, false);
+                        bool TL_InFD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", TLNeutronP, TLNeutronTheta, TLNeutronPhi, false);
+                        bool nRes_Pass_FiducialCuts = (Reco_InFD && TL_InFD);
+
+                        bool Reco_Theta_kinCut = (RecoNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
+                        bool TL_Theta_kinCuts = (TLNeutronTheta <= FD_nucleon_theta_cut.GetUpperCut());
+                        bool nRes_Pass_ThetaKinCut = (Reco_Theta_kinCut && TL_Theta_kinCuts);
+
+                        bool nRes_Pass_Neutron_MomKinCut = ((TLNeutronP >= n_mom_th.GetLowerCut()) && (TLNeutronP <= n_mom_th.GetUpperCut()));
+                        //</editor-fold>
+
+                        //<editor-fold desc="nRes matching cuts">
                         double dPhiCut = 5., dThetaCut = 2.; //TODO: add to a DSCuts variable
+                        bool nRes_Pass_dThetaCut = (fabs(dNeutronTheta) < dThetaCut);
+                        bool nRes_Pass_dPhiCut = (fabs(dNeutronPhi) < dPhiCut);
+                        //</editor-fold>
 
-                        if (pid == 2112 && InFD_Reco && InFD_TL && PassNeutronMomTh) {
+                        //</editor-fold>
+
+                        if (nRes_TL_Pass_PIDCut && nRes_Pass_FiducialCuts && nRes_Pass_ThetaKinCut && nRes_Pass_Neutron_MomKinCut) {
+                            /* Plots for TL neutrons passing nRes cuts */
                             hdTheta_nFD_TL_BC_1n.hFill(dNeutronTheta, Weight);
                             hdTheta_nFD_TL_ZOOMIN_BC_1n.hFill(dNeutronTheta, Weight);
                             hdPhi_nFD_TL_BC_1n.hFill(dNeutronPhi, Weight);
@@ -9717,20 +9748,22 @@ void EventAnalyser() {
                             hPhi_nFD_TL_AnResC_1n.hFill(TLNeutronPhi, Weight);
                             hTheta_nFD_TL_VS_Phi_nFD_TL_AnResC_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
 
-                            if (fabs(dNeutronPhi) < dPhiCut) {
+                            if (nRes_Pass_dPhiCut) {
+                                /* Plots for TL neutrons passing nRes_Pass_dPhiCut */
                                 hdTheta_nFD_TL_AdPC_1n.hFill(dNeutronTheta, Weight);
                                 hdTheta_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronTheta, Weight);
                                 hdPhi_nFD_TL_AdPC_1n.hFill(dNeutronPhi, Weight);
                                 hdPhi_nFD_TL_ZOOMIN_AdPC_1n.hFill(dNeutronPhi, Weight);
                             }
 
-                            if ((fabs(dNeutronTheta) < dThetaCut) && (fabs(dNeutronPhi) < dPhiCut)) {
+                            if (nRes_Pass_dThetaCut && nRes_Pass_dPhiCut) {
+                                /* Plots for TL neutrons passing matching cuts */
                                 hTheta_nFD_TL_MatchedN_1n.hFill(TLNeutronTheta, Weight);
                                 hPhi_nFD_TL_MatchedN_1n.hFill(TLNeutronPhi, Weight);
                                 hTheta_nFD_TL_VS_Phi_nFD_TL_MatchedN_1n->Fill(TLNeutronPhi, TLNeutronTheta, Weight);
 
-                                double nResolution = (TLNeutronP - P_n_1n_3v.Mag()) / TLNeutronP;
-
+                                /* Filling nRes plots */
+                                double nResolution = (TLNeutronP - RecoNeutronP) / TLNeutronP;
                                 nRes.hFillResPlots(TLNeutronP, nResolution, Weight);
 
                                 hP_nFD_Res_1n.hFill(nResolution, Weight);
