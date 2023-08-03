@@ -21,7 +21,7 @@
 
 //<editor-fold desc="AMaps generation constructor">
 AMaps::AMaps(bool reformat_e_bins, bool equi_P_e_bins, double beamE, const string &SavePath,
-             int nOfMomBins, int hnsNumOfXBins, int hnsNumOfYBins, int hesNumOfXBins,             int hesNumOfYBins) {
+             int nOfMomBins, int hnsNumOfXBins, int hnsNumOfYBins, int hesNumOfXBins, int hesNumOfYBins) {
     AMapSavePath = SavePath;
     HistNucSliceNumOfXBins = hnsNumOfXBins;
     HistNucSliceNumOfYBins = hnsNumOfYBins;
@@ -1798,7 +1798,7 @@ void AMaps::ReadAMap(const char *filename, vector<vector<double>> &Loaded_partic
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="MatchAngToHitMap function">
-bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi) {
+bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC) {
     if (isElectron(Particle)) {
         for (int Slice = 0; Slice < Loaded_ElectronMomBinsLimits.size(); Slice++) {
             if (Momentum >= Loaded_ElectronMomBinsLimits.at(Slice).at(0) && Momentum <= Loaded_ElectronMomBinsLimits.at(Slice).at(1)) {
@@ -1840,11 +1840,18 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-//                                if (Loaded_p_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                    return true;
+                                if (NucleonOverlappingFC) {
+                                    if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
                                 } else {
-                                    return false;
+                                    if (Loaded_p_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
                                 }
                             } // end of find right phi if
                         }
@@ -1867,11 +1874,18 @@ bool AMaps::MatchAngToHitMap(const string &Particle, double Momentum, double The
                             double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                             if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
-//                                if (Loaded_n_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                    return true;
+                                if (NucleonOverlappingFC) {
+                                    if (Loaded_nuc_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
                                 } else {
-                                    return false;
+                                    if (Loaded_n_AMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
                                 }
                             } // end of find right phi if
                         }
@@ -1982,11 +1996,11 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 // IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="IsInFDQuery function">
-bool AMaps::IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi) {
+bool AMaps::IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC) {
     bool inFDQuery, part_inSomeSector;
 
     if (!generate_AMaps) {
-        part_inSomeSector = MatchAngToHitMap(Particle, Momentum, Theta, Phi);
+        part_inSomeSector = MatchAngToHitMap(Particle, Momentum, Theta, Phi, NucleonOverlappingFC);
     } else {
         part_inSomeSector = true;
     }

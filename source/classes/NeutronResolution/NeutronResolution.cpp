@@ -61,7 +61,7 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
+            hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "R_{n} = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
                                        hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
             ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Neutron", "1n", 0, -9999, 9999);
         } else if (Particle == "Proton") {
@@ -78,20 +78,6 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Par
                                        -0.75, 0.75, hSliceNumOfBin);
             ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Proton", "1n", 0, -9999, 9999);
         }
-        /*
-        string hStatsTitle = "n res. - " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
-                             to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
-        string hTitle = "Neutron resolution for " + to_string_with_precision(SliceLowerLim, 2) + "#leqP^{truth}_{n}#leq" +
-                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision) + " [GeV/c]";
-        string hSaveName = to_string(SliceNumber) + "_res_plot_for_TL_P_n_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
-                           to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
-        string hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
-                          to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
-
-        hPlot1D hResolutionSlice = hPlot1D("1n", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{nFD} - P^{reco.}_{nFD})/P^{truth}_{nFD}", SlicesSavePath, hSaveName,
-                                           hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
-        DSCuts ResSliceFitCuts = DSCuts(hCutName, "FD", "Neutron", "1n", 0, -9999, 9999);
-*/
 
         ResSliceFitCuts.SetSliceUpperb(SliceUpperLim);
         ResSliceFitCuts.SetSliceLowerb(SliceLowerLim);
@@ -235,6 +221,13 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         //</editor-fold>
 
         TH1D *hSlice = (TH1D *) ResSlices.at(i).GetHistogram();
+        hSlice->GetXaxis()->SetTitleSize(0.06);
+        hSlice->GetXaxis()->SetLabelSize(0.0425);
+        hSlice->GetXaxis()->CenterTitle(true);
+        hSlice->GetYaxis()->SetTitle("Arbitrary units (#events)");
+        hSlice->GetYaxis()->SetTitleSize(0.06);
+        hSlice->GetYaxis()->SetLabelSize(0.0425);
+        hSlice->GetYaxis()->CenterTitle(true);
 
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
             FittedSlices.push_back(i); // Log slices that are been fitted

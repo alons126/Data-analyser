@@ -259,7 +259,7 @@ public:
 
 // MatchAngToHitMap function --------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi);
+    bool MatchAngToHitMap(const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC = true);
 
 // GetWeight function ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -267,7 +267,7 @@ public:
 
 // IsInFDQuery function -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi);
+    bool IsInFDQuery(bool generate_AMaps, const DSCuts &ThetaFD, const string &Particle, double Momentum, double Theta, double Phi, bool NucleonOverlappingFC = true);
 
 // Other methods --------------------------------------------------------------------------------------------------------------------------------------------------------
 
