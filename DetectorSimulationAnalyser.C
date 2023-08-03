@@ -136,7 +136,7 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution settings */
-    bool plot_and_fit_MomRes = false;
+    bool plot_and_fit_MomRes = true;
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
 
@@ -186,10 +186,10 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = false;
     bool apply_fiducial_cuts = false; //TODO: add on/off switch for TL fiducial cuts
     bool apply_kinematical_cuts = false;
@@ -8958,7 +8958,7 @@ void EventAnalyser() {
                         bool InFD = ((TLProtonTheta >= ThetaFD.GetLowerCut()) && (TLProtonTheta <= ThetaFD.GetUpperCut()));
                         bool PassNeutronMomTh = ((TLProtonP >= n_mom_th.GetLowerCut()) && (TLProtonP <= n_mom_th.GetUpperCut()));
 
-                        double dPhiCut = 10., dThetaCut = 5.;
+                        double dPhiCut = 5., dThetaCut = 2.;
 
                         if (pid == 2212 && InFD && PassNeutronMomTh) {
                             hdTheta_pFD_TL_BC_1p.hFill(dProtonTheta, Weight);
@@ -16802,8 +16802,6 @@ void EventAnalyser() {
 
 // Saving histogram list and finishing execution ------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Saving histogram list and finishing execution">
-
     //<editor-fold desc="Saving histogram list">
     cout << "\n\nSaving histogram list...";
 
@@ -16830,6 +16828,7 @@ void EventAnalyser() {
     cout << " done.\n\n";
     //</editor-fold>
 
+    //<editor-fold desc="finishing execution">
     cout << "\n\n===========================================================================\n";
     cout << "\t\t\tExecution summary\n";
     cout << "===========================================================================\n\n";
@@ -16838,16 +16837,17 @@ void EventAnalyser() {
     cout << "\t\t\tEvent counts\n";
     cout << "---------------------------------------------------------------------------\n\n";
 
-    cout << "-- Total counts -----------------------------------------------------------\n";
-    cout << "Total #(events):\t\t\t" << num_of_events << "\n";
-    cout << "Total #(events) w/o any e:\t\t" << num_of_events_without_any_e << "\n";
-    cout << "Total #(events) w/ any e:\t\t" << num_of_events_with_any_e << "\n\n";
-
+    cout << "-- Inclusive TL counts ----------------------------------------------------\n";
     cout << "Total #(QEL events):\t\t\t" << num_of_QEL_events << "\n";
     cout << "Total #(MEC events):\t\t\t" << num_of_MEC_events << "\n";
     cout << "Total #(RES events):\t\t\t" << num_of_RES_events << "\n";
     cout << "Total #(DIS events):\t\t\t" << num_of_DIS_events << "\n";
     cout << "QEL + MEC + RES + DIS:\t\t\t" << num_of_QEL_events + num_of_MEC_events + num_of_RES_events + num_of_DIS_events << "\n\n";
+
+    cout << "-- Total counts -----------------------------------------------------------\n";
+    cout << "Total #(events):\t\t\t" << num_of_events << "\n";
+    cout << "Total #(events) w/o any e:\t\t" << num_of_events_without_any_e << "\n";
+    cout << "Total #(events) w/ any e:\t\t" << num_of_events_with_any_e << "\n\n";
 
     cout << "-- Events with electrons counts -------------------------------------------\n";
     cout << "#(events) w/ at least 1e:\t\t" << num_of_events_with_at_least_1e << "\n";
@@ -16855,6 +16855,7 @@ void EventAnalyser() {
     cout << "#(events) w/ exactly 1e:\t\t" << num_of_events_with_exactly_1e << "\n\n";
     cout << "#(events) w/ exactly 1e (from file):\t" << num_of_events_with_exactly_1e_from_file << "\n\n";
 
+    cout << "-- Inclusive Reco counts --------------------------------------------------\n";
     cout << "Total #(QEL events) 1e cut:\t\t" << num_of_QEL_events_1e_cut << "\n";
     cout << "Total #(MEC events) 1e cut:\t\t" << num_of_MEC_events_1e_cut << "\n";
     cout << "Total #(RES events) 1e cut:\t\t" << num_of_RES_events_1e_cut << "\n";
