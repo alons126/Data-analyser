@@ -77,7 +77,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.2";
+    string AnalyserVersion = "Version 1.3";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code settings                                                                               //
@@ -189,9 +189,9 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -236,27 +236,19 @@ void EventAnalyser() {
         if (!apply_nucleon_SmearAndShift) {
             PSmearing_Status = "";
         } else {
-//            PSmearing_Status = "wNSaS_REG_";
-            PSmearing_Status = "wNSaS_ShiftFit_";
-//            PSmearing_Status = "wNSaS_";
+            PSmearing_Status = "wNSaS_";
         }
 
-        if (!apply_kinematical_cuts) {
-            KinCuts_Status = "";
-        } else {
-            KinCuts_Status = "wKC_";
-        }
-
-        if (!apply_kinematical_cuts && !apply_kinematical_cuts) {
+        if (!apply_kinematical_cuts && !apply_kinematical_weights) {
             KinCuts_Status = "";
             KinWei_Status = "";
-        } else if (apply_kinematical_cuts && !apply_kinematical_cuts) {
+        } else if (apply_kinematical_cuts && !apply_kinematical_weights) {
             KinCuts_Status = "wKC_";
             KinWei_Status = "";
-        } else if (!generate_AMaps && plot_and_fit_MomRes) {
+        } else if (!apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "";
             KinWei_Status = "wKW_";
-        } else if (generate_AMaps && plot_and_fit_MomRes) {
+        } else if (apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "wKC";
             KinWei_Status = "wKW_";
         }
@@ -347,7 +339,7 @@ void EventAnalyser() {
 
     if (!apply_nucleon_cuts) { apply_nucleon_physical_cuts = false; }
 
-    if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_nucleon_SmearAndShift = false; }
+    if (!apply_nucleon_physical_cuts) { apply_nBeta_fit_cuts = apply_fiducial_cuts = apply_kinematical_cuts = apply_kinematical_weights = apply_nucleon_SmearAndShift = false; }
 
     if (generate_AMaps) { apply_fiducial_cuts = false; }
 
@@ -373,8 +365,8 @@ void EventAnalyser() {
     cout << "apply_nBeta_fit_cuts:\t\t" << BoolToString(apply_nBeta_fit_cuts) << "\n";
     cout << "apply_fiducial_cuts:\t\t" << BoolToString(apply_fiducial_cuts) << "\n";
     cout << "apply_kinematical_cuts:\t\t" << BoolToString(apply_kinematical_cuts) << "\n";
-    cout << "apply_nucleon_SmearAndShift:\t" << BoolToString(apply_nucleon_SmearAndShift) << "\n";
-    cout << "apply_kinematical_weights:\t" << BoolToString(apply_kinematical_weights) << "\n\n";
+    cout << "apply_kinematical_weights:\t" << BoolToString(apply_kinematical_weights) << "\n";
+    cout << "apply_nucleon_SmearAndShift:\t" << BoolToString(apply_nucleon_SmearAndShift) << "\n\n";
     //</editor-fold>
 
     //</editor-fold>
@@ -4035,13 +4027,35 @@ void EventAnalyser() {
 
     //<editor-fold desc="E_e plots (1e cut)">
     /* Energy (E_e) histograms (1e cut, CD & FD) */
-    THStack *sE_e_1e_cut = new THStack("E_{e} (CD & FD)", "E_{e} Histogram (1e Cut, CD & FD);E_{e} [GeV]");
-    TH1D *hE_e_1e_cut_FD = new TH1D("E_{e} (1e Cut)", ";E_{e} [GeV]", 100, 0, beamE * 1.1);
-    string hE_e_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    THStack *sE_e_1e_cut = new THStack("E_{e} (1e Cut)", "E_{e} Histogram (1e Cut);E_{e} [GeV]");
+    string sE_e_1e_cut_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_stack_Directory"];
+
+    TH1D *hE_e_All_Int_1e_cut_FD = new TH1D("E_{e} (1e Cut)", "E_{e} Histogram (All Int., 1e Cut);E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hE_e_QEL_1e_cut_FD = new TH1D("E_{e} (QEL Only, 1e cut)", "E_{e} Histogram (QEL Only, 1e cut);E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hE_e_MEC_1e_cut_FD = new TH1D("E_{e} (MEC Only, 1e cut)", "E_{e} Histogram (MEC Only, 1e cut);E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hE_e_RES_1e_cut_FD = new TH1D("E_{e} (RES Only, 1e cut)", "E_{e} Histogram (RES Only, 1e cut);E_{e} [GeV]", 100, 0, beamE * 1.1);
+    TH1D *hE_e_DIS_1e_cut_FD = new TH1D("E_{e} (DIS Only, 1e cut)", "E_{e} Histogram (DIS Only, 1e cut);E_{e} [GeV]", 100, 0, beamE * 1.1);
+    string hE_e_All_Int_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    string hE_e_QEL_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    string hE_e_MEC_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    string hE_e_RES_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
+    string hE_e_DIS_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_All_Int_1e_cut_Directory"];
 
     TH2D *hE_e_VS_Theta_e_All_Int_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (All Int., 1e Cut)",
                                                        "E_{e} vs. #theta_{e} (All Int., 1e Cut);#theta_{e} [Deg];E_{e} [GeV]", 65, 0, 50, 65, 0, beamE * 1.1);
+    TH2D *hE_e_VS_Theta_e_QEL_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (QEL Only, 1e cut)", "E_{e} vs. #theta_{e} (QEL Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+                                                   65, 0, 50, 65, 0, beamE * 1.1);
+    TH2D *hE_e_VS_Theta_e_MEC_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (MEC Only, 1e cut)", "E_{e} vs. #theta_{e} (MEC Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+                                                   65, 0, 50, 65, 0, beamE * 1.1);
+    TH2D *hE_e_VS_Theta_e_RES_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (RES Only, 1e cut)", "E_{e} vs. #theta_{e} (RES Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+                                                   65, 0, 50, 65, 0, beamE * 1.1);
+    TH2D *hE_e_VS_Theta_e_DIS_1e_cut_FD = new TH2D("E_{e} vs. #theta_{e} (DIS Only, 1e cut)", "E_{e} vs. #theta_{e} (DIS Only, 1e cut);#theta_{e} [Deg];E_{e} [GeV]",
+                                                   65, 0, 50, 65, 0, beamE * 1.1);
     string hE_e_VS_Theta_e_All_Int_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
+    string hE_e_VS_Theta_e_QEL_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
+    string hE_e_VS_Theta_e_MEC_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
+    string hE_e_VS_Theta_e_RES_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
+    string hE_e_VS_Theta_e_DIS_1e_cut_FD_Dir = directories.E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"];
     //</editor-fold>
 
     //<editor-fold desc="E_e plots (1p)">
@@ -5148,7 +5162,7 @@ void EventAnalyser() {
                                               Phi_lboundary, Phi_uboundary);
     //</editor-fold>
 
-    //<editor-fold desc="Truth level theta vs. phi plots (1e_cut)">
+    //<editor-fold desc="Truth level theta vs. phi plots (1e cut)">
     hPlot2D hTheta_e_vs_Phi_e_truth_1e_cut = hPlot2D("1e cut", "", "TL #theta_{e} vs. #phi_{e}", "TL #theta_{e} vs. #phi_{e}", "#phi_{e} [Deg]", "#theta_{e} [Deg]",
                                                      directories.Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"], "01_Theta_e_vs_Phi_e_truth_1e_cut",
                                                      Phi_lboundary, Phi_uboundary, Theta_lboundary_FD, Theta_uboundary_FD,
@@ -7985,25 +7999,37 @@ void EventAnalyser() {
         //<editor-fold desc="Filling 1e cut plots">
 
         //<editor-fold desc="Fill Electron plots (1e cut, FD only)">
-        if (electrons[0]->getRegion() == FD) {
-            hChi2_Electron_1e_cut_FD.hFill(electrons[0]->par()->getChi2Pid(), Weight);
+        hChi2_Electron_1e_cut_FD.hFill(electrons[0]->par()->getChi2Pid(), Weight);
 
-            hVx_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVx(), Weight);
-            hVy_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVy(), Weight);
-            hVz_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVz(), Weight);
+        hVx_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVx(), Weight);
+        hVy_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVy(), Weight);
+        hVz_Electron_1e_cut_FD.hFill(electrons[0]->par()->getVz(), Weight);
 
-            hBeta_vs_P_1e_cut_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
-            hBeta_vs_P_1e_cut_Electrons_Only_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
-            hBeta_vs_P_negative_part_1e_cut_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
+        hBeta_vs_P_1e_cut_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
+        hBeta_vs_P_1e_cut_Electrons_Only_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
+        hBeta_vs_P_negative_part_1e_cut_FD.hFill(P_e, electrons[0]->par()->getBeta(), Weight);
 
-            hP_e_1e_cut_FD.hFill(P_e, Weight);
+        hP_e_1e_cut_FD.hFill(P_e, Weight);
 
-            hTheta_e_1e_cut_FD->Fill(Theta_e);
-            hPhi_e_1e_cut_FD->Fill(Phi_e);
-            hTheta_e_VS_Phi_e_1e_cut_FD->Fill(Phi_e, Theta_e);
+        hTheta_e_1e_cut_FD->Fill(Theta_e, Weight);
+        hPhi_e_1e_cut_FD->Fill(Phi_e, Weight);
+        hTheta_e_VS_Phi_e_1e_cut_FD->Fill(Phi_e, Theta_e, Weight);
 
-            hE_e_VS_Theta_e_All_Int_1e_cut_FD->Fill(Theta_e, E_e);
-            hE_e_1e_cut_FD->Fill(E_e);
+        hE_e_VS_Theta_e_All_Int_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+        hE_e_All_Int_1e_cut_FD->Fill(E_e, Weight);
+
+        if (qel) {
+            hE_e_QEL_1e_cut_FD->Fill(E_e, Weight);
+            hE_e_VS_Theta_e_QEL_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+        } else if (mec) {
+            hE_e_MEC_1e_cut_FD->Fill(E_e, Weight);
+            hE_e_VS_Theta_e_MEC_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+        } else if (res) {
+            hE_e_RES_1e_cut_FD->Fill(E_e, Weight);
+            hE_e_VS_Theta_e_RES_1e_cut_FD->Fill(Theta_e, E_e, Weight);
+        } else if (dis) {
+            hE_e_DIS_1e_cut_FD->Fill(E_e, Weight);
+            hE_e_VS_Theta_e_DIS_1e_cut_FD->Fill(Theta_e, E_e, Weight);
         }
         //</editor-fold>
 
@@ -8504,12 +8530,12 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting 1p analysis variables">
-            double ProtonMomentum_1p = p_1p->getP(); // proton momentum before smear for kin cuts
+            double ProtonMomBKC_1p = p_1p->getP(); // proton momentum before smearing or kinematical cuts
 
             TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
             P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(), e_1p->getPhi());                                                              // electron 3 momentum
             q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                                                  // 3 momentum transfer
-            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomentum_1p), p_1p->getTheta(), p_1p->getPhi());                 // proton 3 momentum
+            P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomBKC_1p), p_1p->getTheta(), p_1p->getPhi());                 // proton 3 momentum
             P_T_e_1p_3v = TVector3(P_e_1p_3v.Px(), P_e_1p_3v.Py(), 0);                                                                    // electron transverse momentum
             P_T_p_1p_3v = TVector3(P_p_1p_3v.Px(), P_p_1p_3v.Py(), 0);                                                                      // proton transverse momentum
 
@@ -8531,18 +8557,23 @@ void EventAnalyser() {
             double Theta_e_1p = e_1p->getTheta() * 180.0 / pi, Phi_e_1p = e_1p->getPhi() * 180.0 / pi;                                     // Theta_e_1p, Phi_e_1p in deg
             double Theta_p_1p = p_1p->getTheta() * 180.0 / pi, Phi_p_1p = p_1p->getPhi() * 180.0 / pi;                                 // Theta_pFD_1p, Phi_pFD_1p in deg
 
-            double Weight_1p = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomentum_1p, Theta_p_1p, Phi_p_1p);
+//            double Weight_1p = wMaps.GetWeight(apply_kinematical_weights, "Proton", P_p_1p_3v.Mag(), Theta_p_1p, Phi_p_1p);
+            double Weight_1p = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomBKC_1p, Theta_p_1p, Phi_p_1p);
             //</editor-fold>
 
             // Setting kinematical cuts -----------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
+            /* Protons have lower momentum threshold & we don't lose good protons -> proton smearing before kin cuts */
             bool FD_Theta_Cut_1p = ((P_p_1p_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-            bool FD_Momentum_Cut_1p = ((ProtonMomentum_1p <= FD_nucleon_momentum_cut.GetUpperCut()) && (ProtonMomentum_1p >= FD_nucleon_momentum_cut.GetLowerCut()));
+            bool FD_Momentum_Cut_1p = ((P_p_1p_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+                                       (P_p_1p_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
             bool e_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1p_3v.Mag(), P_e_1p_3v.Theta() * 180.0 / pi, P_e_1p_3v.Phi() * 180.0 / pi);
-            bool p_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", ProtonMomentum_1p, P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
+//            bool p_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_p_1p_3v.Mag(), P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
+            bool p_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_1p, P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
 
-            bool Pass_Kin_Cuts_1p = ((!apply_kinematical_cuts || (FD_Theta_Cut_1p && FD_Momentum_Cut_1p)) && (!apply_fiducial_cuts || (e_withinFC_1p && p_withinFC_1p)));
+            bool Pass_Kin_Cuts_1p = ((!apply_kinematical_cuts || (FD_Theta_Cut_1p && FD_Momentum_Cut_1p)) &&
+                                     (!apply_fiducial_cuts || (e_withinFC_1p && p_withinFC_1p)));
             //</editor-fold>
 
             // Fillings 1p histograms -------------------------------------------------------------------------------------------------------------------------------
@@ -9051,12 +9082,12 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting 1n analysis variables">
-            double NeutronMomentum_1n = GetFDNeutronP(n_1n, apply_nucleon_cuts); // neutron momentum before shift for kin cuts
+            double NeutronMomBKC_1n = GetFDNeutronP(n_1n, apply_nucleon_cuts); // neutron momentum before shift for kin cuts
 
             TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
             P_e_1n_3v.SetMagThetaPhi(e_1n->getP(), e_1n->getTheta(), e_1n->getPhi());                                                              // electron 3 momentum
             q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                                  // 3 momentum transfer
-            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomentum_1n), n_1n->getTheta(), n_1n->getPhi());               // neutron 3 momentum
+            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());               // neutron 3 momentum
             P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                            // electron t. momentum
             P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                             // neutron t. momentum
 
@@ -9077,7 +9108,8 @@ void EventAnalyser() {
             double Theta_e_1n = e_1n->getTheta() * 180.0 / pi, Phi_e_1n = e_1n->getPhi() * 180.0 / pi;                                     // Theta_e_1n, Phi_e_1n in deg
             double Theta_n_1n = n_1n->getTheta() * 180.0 / pi, Phi_n_1n = n_1n->getPhi() * 180.0 / pi;                                 // Theta_pFD_1n, Phi_pFD_1n in deg
 
-            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomentum_1n, P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
+//            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
+            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -9121,12 +9153,16 @@ void EventAnalyser() {
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
+            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> shift after kin cuts */
             bool FD_Theta_Cut_1n = ((P_n_1n_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-            bool FD_Momentum_Cut_1n = ((NeutronMomentum_1n <= FD_nucleon_momentum_cut.GetUpperCut()) && (NeutronMomentum_1n >= FD_nucleon_momentum_cut.GetLowerCut()));
+            bool FD_Momentum_Cut_1n = ((NeutronMomBKC_1n <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+                                       (NeutronMomBKC_1n >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
             bool e_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1n_3v.Mag(), P_e_1n_3v.Theta() * 180.0 / pi, P_e_1n_3v.Phi() * 180.0 / pi);
-            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_1n, P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
+//            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
+            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
 
-            bool Pass_Kin_Cuts_1n = ((!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_1n)) && (!apply_fiducial_cuts || (e_withinFC_1n && n_withinFC_1n)));
+            bool Pass_Kin_Cuts_1n = ((!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_1n)) &&
+                                     (!apply_fiducial_cuts || (e_withinFC_1n && n_withinFC_1n)));
             //</editor-fold>
 
             // Fillings 1n histograms -----------------------------------------------------------------------------------------------------------------------------------
@@ -10402,7 +10438,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting pFDpCD analysis variables">
-            double ProtonMomentum_pFDpCD = pFD_pFDpCD->getP(); // neutron momentum before shift for kin cuts
+            double ProtonMomBKC_pFDpCD = pFD_pFDpCD->getP(); // proton momentum before smearing or kinematical cuts
 
             TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_pFD_pFDpCD_3v, P_pCD_pFDpCD_3v;
             TVector3 P_miss_pFDpCD_3v, P_tot_pFDpCD_3v, P_max_pFDpCD_3v, P_L_pFDpCD_3v, P_R_pFDpCD_3v;
@@ -10411,7 +10447,7 @@ void EventAnalyser() {
             P_e_pFDpCD_3v.SetMagThetaPhi(e_pFDpCD->getP(), e_pFDpCD->getTheta(), e_pFDpCD->getPhi());                                              // electron 3 momentum
             q_pFDpCD_3v = TVector3(Pvx - P_e_pFDpCD_3v.Px(), Pvy - P_e_pFDpCD_3v.Py(), Pvz - P_e_pFDpCD_3v.Pz());                                  // 3 momentum transfer
             P_T_e_pFDpCD_3v = TVector3(P_e_pFDpCD_3v.Px(), P_e_pFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
-            P_pFD_pFDpCD_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomentum_pFDpCD),
+            P_pFD_pFDpCD_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomBKC_pFDpCD),
                                            pFD_pFDpCD->getTheta(), pFD_pFDpCD->getPhi());                                                               // pFD 3 momentum
             P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(), pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
 
@@ -10462,18 +10498,22 @@ void EventAnalyser() {
                                                / (P_L_pFDpCD_3v.Mag() * P_R_pFDpCD_3v.Mag())) * 180.0 / pi;                                // Theta_pFD_pCD_pFDpCD in deg
             //</editor-fold>
 
-            double Weight_pFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomentum_pFDpCD, Theta_pFD_pFDpCD, Phi_pFD_pFDpCD);
+//            double Weight_pFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Proton", P_pFD_pFDpCD_3v.Mag(), Theta_pFD_pFDpCD, Phi_pFD_pFDpCD);
+            double Weight_pFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomBKC_pFDpCD, Theta_pFD_pFDpCD, Phi_pFD_pFDpCD);
             //</editor-fold>
 
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
+            /* Protons have lower momentum threshold & we don't lose good protons -> proton smearing before kin cuts */
             bool FD_Theta_Cut_pFDpCD = ((P_pFD_pFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-            bool FD_Momentum_Cut_pFDpCD = ((ProtonMomentum_pFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-                                           (ProtonMomentum_pFDpCD >= FD_nucleon_momentum_cut.GetLowerCut()));
+            bool FD_Momentum_Cut_pFDpCD = ((P_pFD_pFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+                                           (P_pFD_pFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
             bool e_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_pFDpCD_3v.Mag(), P_e_pFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_pFDpCD_3v.Phi() * 180.0 / pi);
-            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", ProtonMomentum_pFDpCD, P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
+//            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_pFD_pFDpCD_3v.Mag(), P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
+//                                                         P_pFD_pFDpCD_3v.Phi() * 180.0 / pi);
+            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_pFDpCD, P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
                                                          P_pFD_pFDpCD_3v.Phi() * 180.0 / pi);
 
             bool Pass_Kin_Cuts_pFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_pFDpCD && FD_Momentum_Cut_pFDpCD)) &&
@@ -11027,7 +11067,7 @@ void EventAnalyser() {
             //</editor-fold>
 
             //<editor-fold desc="Setting nFDpCD analysis variables">
-            double NeutronMomentum_nFDpCD = GetFDNeutronP(nFD_nFDpCD, apply_nucleon_cuts); // neutron momentum before shift for kin cuts
+            double NeutronMomBKC_nFDpCD = GetFDNeutronP(nFD_nFDpCD, apply_nucleon_cuts); // neutron momentum before shift for kin cuts
 
             TVector3 P_e_nFDpCD_3v, q_nFDpCD_3v, P_nFD_nFDpCD_3v, P_pCD_nFDpCD_3v;
             TVector3 P_miss_nFDpCD_3v, P_tot_nFDpCD_3v, P_L_nFDpCD_3v, P_R_nFDpCD_3v;
@@ -11036,7 +11076,7 @@ void EventAnalyser() {
             P_e_nFDpCD_3v.SetMagThetaPhi(e_nFDpCD->getP(), e_nFDpCD->getTheta(), e_nFDpCD->getPhi());                                              // electron 3 momentum
             q_nFDpCD_3v = TVector3(Pvx - P_e_nFDpCD_3v.Px(), Pvy - P_e_nFDpCD_3v.Py(), Pvz - P_e_nFDpCD_3v.Pz());                                  // 3 momentum transfer
             P_T_e_nFDpCD_3v = TVector3(P_e_nFDpCD_3v.Px(), P_e_nFDpCD_3v.Py(), 0);                                                        // electron transverse momentum
-            P_nFD_nFDpCD_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomentum_nFDpCD),
+            P_nFD_nFDpCD_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_nFDpCD),
                                            nFD_nFDpCD->getTheta(), nFD_nFDpCD->getPhi());                                                        // FD neutron 3 momentum
             P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(), pCD_nFDpCD->getPhi());                                     // CD proton 3 momentum
 
@@ -11079,7 +11119,8 @@ void EventAnalyser() {
                                                / (P_nFD_nFDpCD_3v.Mag() * P_pCD_nFDpCD_3v.Mag())) * 180.0 / pi;                            // Theta_nFD_pCD_nFDpCD in deg
             //</editor-fold>
 
-            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomentum_nFDpCD, Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
+//            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
+            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_nFDpCD, Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -11152,12 +11193,15 @@ void EventAnalyser() {
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
+            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> shift after kin cuts */
             bool FD_Theta_Cut_nFDpCD = ((P_nFD_nFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-            bool FD_Momentum_Cut_nFDpCD = ((NeutronMomentum_nFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
-                                           (NeutronMomentum_nFDpCD >= FD_nucleon_momentum_cut.GetLowerCut()));
+            bool FD_Momentum_Cut_nFDpCD = ((NeutronMomBKC_nFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+                                           (NeutronMomBKC_nFDpCD >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
             bool e_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_nFDpCD_3v.Mag(), P_e_nFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_nFDpCD_3v.Phi() * 180.0 / pi);
-            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomentum_nFDpCD, P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
+//            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(), P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
+//                                                         P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
+            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomBKC_nFDpCD, P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
                                                          P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
 
             bool Pass_Kin_Cuts_nFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_nFDpCD)) &&
@@ -14476,16 +14520,25 @@ void EventAnalyser() {
 //  E_e plots (FD only) -------------------------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="E_e plots (1e cut, FD)">
-        double E_e_integral = hE_e_1e_cut_FD->Integral();
+        double E_e_1e_cut_All_Int_integral = hE_e_All_Int_1e_cut_FD->Integral();
 
-        histPlotter1D(c1, hE_e_1e_cut_FD, norm_E_e_plots, true, E_e_integral, "E_{e} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false, true, sE_e_1e_cut,
-                      "01_E_e_1e_cut", hE_e_1e_cut_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_All_Int_1e_cut_FD, norm_E_e_plots, true, E_e_1e_cut_All_Int_integral, "E_{e} Histogram", "1e Cut", 0.06, 0.0425, 0.0425, plots, 2, false,
+                      true, sE_e_1e_cut, "01_E_e_1e_cut", hE_e_All_Int_1e_cut_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_QEL_1e_cut_FD, norm_E_e_plots, true, E_e_1e_cut_All_Int_integral, "E_{e} Histogram", "QEL Only, 1e_cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sE_e_1e_cut, "01_E_e_QEL_Only_1e_cut", hE_e_QEL_1e_cut_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_MEC_1e_cut_FD, norm_E_e_plots, true, E_e_1e_cut_All_Int_integral, "E_{e} Histogram", "MEC Only, 1e_cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sE_e_1e_cut, "02_E_e_MEC_Only_1e_cut", hE_e_MEC_1e_cut_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_RES_1e_cut_FD, norm_E_e_plots, true, E_e_1e_cut_All_Int_integral, "E_{e} Histogram", "RES Only, 1e_cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sE_e_1e_cut, "03_E_e_RES_Only_1e_cut", hE_e_RES_1e_cut_FD_Dir, "", kBlue, true, true, true);
+        histPlotter1D(c1, hE_e_DIS_1e_cut_FD, norm_E_e_plots, true, E_e_1e_cut_All_Int_integral, "E_{e} Histogram", "DIS Only, 1e_cut", 0.06, 0.0425, 0.0425, plots, 2,
+                      false, true, sE_e_1e_cut, "04_E_e_DIS_Only_1e_cut", hE_e_DIS_1e_cut_FD_Dir, "", kBlue, true, true, true);
+
+        stackPlotter1D(c1, sE_e_1e_cut, norm_E_e_plots, "E_{e} Histogram", "1e_cut", plots, hE_e_All_Int_1e_cut_FD, hE_e_QEL_1e_cut_FD, hE_e_MEC_1e_cut_FD,
+                       hE_e_RES_1e_cut_FD, hE_e_DIS_1e_cut_FD, "02_E_e_Stack", sE_e_1e_cut_Dir, "");
         //</editor-fold>
 
         //<editor-fold desc="E_e plots (1p, FD)">
         double E_e_1p_All_Int_integral = hE_e_All_Int_1p_FD->Integral();
-//        double E_e_QEL_Int_integral = hE_e_QEL_1p_FD->Integral(), E_e_MEC_Int_integral = hE_e_MEC_1p_FD->Integral();
-//        double E_e_RES_Int_integral = hE_e_RES_1p_FD->Integral(), E_e_DIS_Int_integral = hE_e_DIS_1p_FD->Integral();
 
         histPlotter1D(c1, hE_e_All_Int_1p_FD, norm_E_e_plots, true, E_e_1p_All_Int_integral, "E_{e} Histogram", "All Int., 1p", 0.06, 0.0425, 0.0425, plots, 2, false,
                       true, sE_e_1p_FD, "00_E_e_All_Int_1p", hE_e_All_Int_1p_FD_Dir, "", kBlue, true, true, true);
@@ -14693,6 +14746,14 @@ void EventAnalyser() {
         //<editor-fold desc="E_e vs. Theta_e histograms (1e cut, CD & FD)">
         histPlotter2D(c1, hE_e_VS_Theta_e_All_Int_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hE_e_VS_Theta_e_All_Int_1e_cut_FD_Dir,
                       "00_E_e_VS_Theta_e_All_Int_All_e_FD");
+        histPlotter2D(c1, hE_e_VS_Theta_e_QEL_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hE_e_VS_Theta_e_QEL_1e_cut_FD_Dir,
+                      "01_E_e_VS_Theta_e_QEL_Only_1e_cut_FD");
+        histPlotter2D(c1, hE_e_VS_Theta_e_MEC_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hE_e_VS_Theta_e_MEC_1e_cut_FD_Dir,
+                      "02_E_e_VS_Theta_e_MEC_Only_1e_cut_FD");
+        histPlotter2D(c1, hE_e_VS_Theta_e_RES_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hE_e_VS_Theta_e_RES_1e_cut_FD_Dir,
+                      "03_E_e_VS_Theta_e_RES_Only_1e_cut_FD");
+        histPlotter2D(c1, hE_e_VS_Theta_e_DIS_1e_cut_FD, 0.06, true, 0.0425, 0.0425, 0.0425, plots, true, hE_e_VS_Theta_e_DIS_1e_cut_FD_Dir,
+                      "04_E_e_VS_Theta_e_DIS_Only_1e_cut_FD");
         //</editor-fold>
 
         //<editor-fold desc="E_e vs. Theta_e histograms (1p, CD & FD)">
@@ -16447,8 +16508,8 @@ void EventAnalyser() {
     myLogFile << "apply_nBeta_fit_cuts = " << BoolToString(apply_nBeta_fit_cuts) << "\n";
     myLogFile << "apply_fiducial_cuts = " << BoolToString(apply_fiducial_cuts) << "\n";
     myLogFile << "apply_kinematical_cuts = " << BoolToString(apply_kinematical_cuts) << "\n";
-    myLogFile << "apply_nucleon_SmearAndShift = " << BoolToString(apply_nucleon_SmearAndShift) << "\n";
-    myLogFile << "apply_kinematical_weights = " << BoolToString(apply_kinematical_weights) << "\n\n";
+    myLogFile << "apply_kinematical_weights = " << BoolToString(apply_kinematical_weights) << "\n";
+    myLogFile << "apply_nucleon_SmearAndShift = " << BoolToString(apply_nucleon_SmearAndShift) << "\n\n";
     //</editor-fold>
 
     //</editor-fold>

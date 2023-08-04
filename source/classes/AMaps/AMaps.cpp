@@ -1924,6 +1924,8 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_p_WMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        double Weight = (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
+
                                         if (PrintOut) {
                                             cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
@@ -1934,11 +1936,10 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                             cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
                                             cout << "Phi = " << Phi << "\n";
                                             cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
-                                            cout << "Weight = " << Loaded_p_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
+                                            cout << "1/Weight = " << (1 / Weight) << "\n\n\n\n";
                                         }
 
-//                                        return (Loaded_p_WMap_Slices.at(Slice).at(i).at(j));
-                                        return (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
+                                        return Weight;
                                     }
                                 } // end of find right phi if
                             }
@@ -1962,6 +1963,8 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
                                     if (Loaded_n_WMap_Slices.at(Slice).at(i).at(j) != 0) {
+                                        double Weight = (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
+
                                         if (PrintOut) {
                                             cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
@@ -1972,11 +1975,10 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                             cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
                                             cout << "Phi = " << Phi << "\n";
                                             cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
-                                            cout << "Weight = " << Loaded_n_WMap_Slices.at(Slice).at(i).at(j) << "\n\n\n\n";
+                                            cout << "1/Weight = " << (1 / Weight) << "\n\n\n\n";
                                         }
 
-//                                        return (Loaded_n_WMap_Slices.at(Slice).at(i).at(j));
-                                        return (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
+                                        return Weight;
                                     }
                                 } // end of find right phi if
                             }

@@ -512,6 +512,8 @@ void NeutronResolution::ReadResDataParam(const char *filename, const string &Sam
 // PSmear function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="PSmear function">
+/* A function to smear protons by fitted neutron resolution */
+
 double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Momentum) {
     bool Printout = false;
 
@@ -573,6 +575,8 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 // NShift function ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="NShift function">
+/* A function to shift (calibrate) neutron momentum by fitted neutron shift */
+
 double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Momentum) {
     bool Printout = false;
 

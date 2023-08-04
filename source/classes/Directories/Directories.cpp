@@ -634,6 +634,8 @@ Directories::Directories(std::string plots_path) {
         MakeDirectory(create_E_e_Dir, E_e_Parent_Directory, folders_name, false, Plots_Folder);
     }
 
+    E_e_Directory_map["E_e_All_Int_1e_cut_stack_Directory"] = Plots_Folder + "/" + E_e_Parent_Directory + "/" +
+                                                          Find(E_e_Daughter_Folders, "01_1e_cut") + "/";
     E_e_Directory_map["E_e_All_Int_1e_cut_Directory"] = Plots_Folder + "/" + E_e_Parent_Directory + "/" +
                                                         Find(E_e_Daughter_Folders, "01_1e_cut/E_e_plots_1e_cut") + "/";
     E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"] = Plots_Folder + "/" + E_e_Parent_Directory + "/" +
