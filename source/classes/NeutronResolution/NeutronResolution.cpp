@@ -579,23 +579,40 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
     if (!apply_nucleon_SmearAndShift) {
         return Momentum;
     } else {
-        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
-//        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_FitVar) {
-            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
-                double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
 
-                if (Printout) {
-                    cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
-                    cout << "Momentum = " << Momentum << "\n";
-                    cout << "shift = " << Loaded_res_slice.GetMean() << "\n";
-                    cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
-                }
+        //<editor-fold desc="Neutron shift from excel linear fit">
+        //TODO: automate the neutron mom shift into this class for future uses
+        double shift = 0.0583 * Momentum - 0.0127;
+        double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
 
-                return ShiftedMomentum;
-            }
+        if (Printout) {
+            cout << "\n\nshift (0.0583 * Momentum - 0.0127) = " << shift << "\n";
+            cout << "Momentum = " << Momentum << "\n";
+            cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
         }
+
+        return ShiftedMomentum;
+        //</editor-fold>
+
+        //        //<editor-fold desc="Original (shift from loaded nRes fit variables)">
+//        for (DSCuts Loaded_res_slice: Loaded_Res_Slices_HistVar) {
+//            if ((Loaded_res_slice.GetSliceLowerb() <= Momentum) && (Loaded_res_slice.GetSliceUpperb() >= Momentum)) {
+//                double ShiftedMomentum = Momentum * (1 + Loaded_res_slice.GetMean()); // minus for protons and plus for neutrons
+//
+//                if (Printout) {
+//                    cout << "\n\nLoaded_res_slice.GetMean() = " << Loaded_res_slice.GetMean() << "\n";
+//                    cout << "Momentum = " << Momentum << "\n";
+//                    cout << "shift = " << Loaded_res_slice.GetMean() << "\n";
+//                    cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
+//                }
+//
+//                return ShiftedMomentum;
+//            }
+//        }
+//        //</editor-fold>
+
     }
 
-    return Momentum;
+//    return Momentum;
 }
 //</editor-fold>

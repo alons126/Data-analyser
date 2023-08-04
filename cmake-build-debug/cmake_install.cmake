@@ -1,4 +1,4 @@
-# Install script for directory: //wsl$/Ubuntu-20.04/home/alon/project
+# Install script for directory: //wsl.localhost/Ubuntu-20.04/home/alon/project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "//wsl$/Ubuntu-20.04/home/alon/project/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "//wsl.localhost/Ubuntu-20.04/home/alon/project/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

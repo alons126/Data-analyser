@@ -236,7 +236,9 @@ void EventAnalyser() {
         if (!apply_nucleon_SmearAndShift) {
             PSmearing_Status = "";
         } else {
-            PSmearing_Status = "wNSaS_";
+//            PSmearing_Status = "wNSaS_REG_";
+            PSmearing_Status = "wNSaS_ShiftFit_";
+//            PSmearing_Status = "wNSaS_";
         }
 
         if (!apply_kinematical_cuts) {
