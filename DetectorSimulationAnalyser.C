@@ -11103,11 +11103,15 @@ void EventAnalyser() {
             //<editor-fold desc="Determining leading, recoil protons and their angles (nFDpCD)">
             /* Determining leading and recoil particles (leading = particle with greater momentum) */
             if (P_nFD_nFDpCD_3v.Mag() >= P_pCD_nFDpCD_3v.Mag()) {
-                P_L_nFDpCD_3v = TVector3(nFD_nFDpCD->par()->getPx(), nFD_nFDpCD->par()->getPy(), nFD_nFDpCD->par()->getPz());
-                P_R_nFDpCD_3v = TVector3(pCD_nFDpCD->par()->getPx(), pCD_nFDpCD->par()->getPy(), pCD_nFDpCD->par()->getPz());
+                P_L_nFDpCD_3v = P_nFD_nFDpCD_3v;
+                P_R_nFDpCD_3v = P_pCD_nFDpCD_3v;
+//                P_L_nFDpCD_3v = TVector3(nFD_nFDpCD->par()->getPx(), nFD_nFDpCD->par()->getPy(), nFD_nFDpCD->par()->getPz());
+//                P_R_nFDpCD_3v = TVector3(pCD_nFDpCD->par()->getPx(), pCD_nFDpCD->par()->getPy(), pCD_nFDpCD->par()->getPz());
             } else {
-                P_R_nFDpCD_3v = TVector3(nFD_nFDpCD->par()->getPx(), nFD_nFDpCD->par()->getPy(), nFD_nFDpCD->par()->getPz());
-                P_L_nFDpCD_3v = TVector3(pCD_nFDpCD->par()->getPx(), pCD_nFDpCD->par()->getPy(), pCD_nFDpCD->par()->getPz());
+                P_L_nFDpCD_3v = P_pCD_nFDpCD_3v;
+                P_R_nFDpCD_3v = P_nFD_nFDpCD_3v;
+//                P_R_nFDpCD_3v = TVector3(nFD_nFDpCD->par()->getPx(), nFD_nFDpCD->par()->getPy(), nFD_nFDpCD->par()->getPz());
+//                P_L_nFDpCD_3v = TVector3(pCD_nFDpCD->par()->getPx(), pCD_nFDpCD->par()->getPy(), pCD_nFDpCD->par()->getPz());
             }
 
             /* Setting particle angles */
@@ -12361,16 +12365,14 @@ void EventAnalyser() {
         //<editor-fold desc="Momentum plots (pFDpCD, CD & FD)">
         hP_e_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
         hP_e_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., e_mom_th.GetLowerCut(), e_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
 
-        if (apply_kinematical_cuts) {
-            hP_p_APID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-            hP_p_BPID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        if (!apply_kinematical_cuts) {
             hP_p_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
             hP_p_APIDandPS_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
             hP_p_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         } else {
-            hP_p_APID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-            hP_p_BPID_pFDpCD_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
             hP_p_APID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
                                              FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
             hP_p_APIDandPS_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
@@ -12396,8 +12398,14 @@ void EventAnalyser() {
         hP_n_BPID_pFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         //</editor-fold>
 
-        //<editor-fold desc="Leading (pFD) and recoil (pCD) momentum threshold plots (pFDpCD)">
-        hP_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        //<editor-fold desc="Leading and recoil momentum threshold plots (pFDpCD)">
+        if (!apply_kinematical_cuts) {
+            hP_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        } else {
+            hP_pFD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1.,  FD_nucleon_momentum_cut.GetLowerCut(),
+                                       FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
+
         hP_pCD_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_pL_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_pR_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
@@ -12434,16 +12442,29 @@ void EventAnalyser() {
         hP_ph_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
         hP_ph_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., ph_mom_th.GetLowerCut(), ph_mom_th.GetUpperCut(), 0, false);
 
-        hP_n_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
-                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
-        hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
-                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
-//        hP_n_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
-//        hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        if (!apply_kinematical_cuts) {
+            hP_n_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+            hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        } else {
+            hP_n_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1.,  FD_nucleon_momentum_cut.GetLowerCut(),
+                                       FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+            hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1.,  FD_nucleon_momentum_cut.GetLowerCut(),
+                                       FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
+//        hP_n_APID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+//                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+//        hP_n_BPID_nFDpCD_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
+//                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
         //</editor-fold>
 
-        //<editor-fold desc="Leading (pFD) and recoil (pCD) momentum threshold plots (nFDpCD)">
-        hP_nFD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        //<editor-fold desc="Leading and recoil momentum threshold plots (nFDpCD)">
+        if (!apply_kinematical_cuts) {
+            hP_nFD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
+        } else {
+            hP_nFD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1.,  FD_nucleon_momentum_cut.GetLowerCut(),
+                                       FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
+        }
+
         hP_pCD_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_nL_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut(), 0, false);
         hP_nR_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
