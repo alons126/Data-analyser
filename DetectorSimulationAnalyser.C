@@ -8599,11 +8599,11 @@ void EventAnalyser() {
                     double Vx_p_1p = p->par()->getVx(), Vy_p_1p = p->par()->getVy(), Vz_p_1p = p->par()->getVz();
                     double dVx = Vx_p_1p - Vx_e_1p, dVy = Vy_p_1p - Vy_e_1p, dVz = Vz_p_1p - Vz_e_1p;
 
-                    hdVx_1p.hFill(dVx, Weight), hdVy_1p.hFill(dVy, Weight), hdVz_1p.hFill(dVz, Weight_1p);
+                    hdVx_1p.hFill(dVx, Weight_1p), hdVy_1p.hFill(dVy, Weight_1p), hdVz_1p.hFill(dVz, Weight_1p);
                 } // end of loop over protons vector
 
                 /* Filling SF histograms (1p) */
-                hSF_1p_FD.hFill(EoP_e_1p, Weight), hSF_VS_P_e_1p_FD.hFill(P_e_1p_3v.Mag(), EoP_e_1p, Weight_1p);
+                hSF_1p_FD.hFill(EoP_e_1p, Weight_1p), hSF_VS_P_e_1p_FD.hFill(P_e_1p_3v.Mag(), EoP_e_1p, Weight_1p);
 
                 /* Filling fiducial plots (1p) */
                 hVcal_VS_EoP_1p_PCAL.hFill(e_1p->cal(clas12::PCAL)->getLv(), EoP_e_1p, Weight_1p);
@@ -8742,24 +8742,24 @@ void EventAnalyser() {
 //        //<editor-fold desc="Beta vs. P from neutrons (1p, CD & FD)">
 //        for (int i = 0; i < neutrons.size(); i++) {
 //            if (neutrons[i]->getRegion() == CD) {
-//                hBeta_vs_P_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                hBeta_vs_P_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //
 //                if (neutrons[i]->par()->getCharge() == 1) {
-//                    hBeta_vs_P_positive_part_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                    hBeta_vs_P_positive_part_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //                } else if (neutrons[i]->par()->getCharge() == 0) {
-//                    hBeta_vs_P_neutral_part_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                    hBeta_vs_P_neutral_part_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //                } else if (neutrons[i]->par()->getCharge() == -1) {
-//                    hBeta_vs_P_negative_part_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                    hBeta_vs_P_negative_part_1p_CD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //                }
 //            } else if (neutrons[i]->getRegion() == FD) {
-//                hBeta_vs_P_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                hBeta_vs_P_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //
 //                if (neutrons[i]->par()->getCharge() == 1) {
-//                    hBeta_vs_P_positive_part_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                    hBeta_vs_P_positive_part_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //                } else if (neutrons[i]->par()->getCharge() == 0) {
-//                    hBeta_vs_P_neutral_part_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                    hBeta_vs_P_neutral_part_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //                } else if (neutrons[i]->par()->getCharge() == -1) {
-//                    hBeta_vs_P_negative_part_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight);
+//                    hBeta_vs_P_negative_part_1p_FD.hFill(neutrons[i]->getP(), neutrons[i]->par()->getBeta(),Weight_1p);
 //                }
 //            }
 //        } // end of loop over neutrons vector
@@ -9186,17 +9186,17 @@ void EventAnalyser() {
                     double Vz_n_1n = allParticles[NeutronsFD_ind_mom_max]->par()->getVz();
                     double dVx = Vx_n_1n - Vx_e, dVy = Vy_n_1n - Vy_e, dVz = Vz_n_1n - Vz_e;
 
-                    hdVx_1n.hFill(dVx, Weight), hdVy_1n.hFill(dVy, Weight), hdVz_1n.hFill(dVz, Weight_1n);
+                    hdVx_1n.hFill(dVx, Weight_1n), hdVy_1n.hFill(dVy, Weight_1n), hdVz_1n.hFill(dVz, Weight_1n);
                 } else {
                     for (auto &i: NeutronsFD_ind) {
                         double Vx_n_1n = allParticles[i]->par()->getVx(), Vy_n_1n = allParticles[i]->par()->getVy(), Vz_n_1n = allParticles[i]->par()->getVz();
                         double dVx = Vx_n_1n - Vx_e, dVy = Vy_n_1n - Vy_e, dVz = Vz_n_1n - Vz_e;
 
-                        hdVx_1n.hFill(dVx, Weight), hdVy_1n.hFill(dVy, Weight), hdVz_1n.hFill(dVz, Weight_1n);
+                        hdVx_1n.hFill(dVx, Weight_1n), hdVy_1n.hFill(dVy, Weight_1n), hdVz_1n.hFill(dVz, Weight_1n);
                     } // end of loop over neutrons vector
                 }
                 /* Filling SF histograms (1n) */
-                hSF_1n_FD.hFill(EoP_e_1n, Weight), hSF_VS_P_e_1n_FD.hFill(P_e, EoP_e_1n, Weight_1n);
+                hSF_1n_FD.hFill(EoP_e_1n, Weight_1n), hSF_VS_P_e_1n_FD.hFill(P_e, EoP_e_1n, Weight_1n);
 
                 /* Filling fiducial plots (1n) */
                 hVcal_VS_EoP_1n_PCAL.hFill(e_1n->cal(clas12::PCAL)->getLv(), EoP_e_1n, Weight_1n);
@@ -10542,7 +10542,7 @@ void EventAnalyser() {
                     double Vx_p_pFDpCD = p->par()->getVx(), Vy_p_pFDpCD = p->par()->getVy(), Vz_p_pFDpCD = p->par()->getVz();
                     double dVx_pFDpCD = Vx_p_pFDpCD - Vx_e_pFDpCD, dVy_pFDpCD = Vy_p_pFDpCD - Vy_e_pFDpCD, dVz_pFDpCD = Vz_p_pFDpCD - Vz_e_pFDpCD;
 
-                    hdVx_pFDpCD.hFill(dVx_pFDpCD, Weight), hdVy_pFDpCD.hFill(dVy_pFDpCD, Weight), hdVz_pFDpCD.hFill(dVz_pFDpCD, Weight_pFDpCD);
+                    hdVx_pFDpCD.hFill(dVx_pFDpCD, Weight_pFDpCD), hdVy_pFDpCD.hFill(dVy_pFDpCD, Weight_pFDpCD), hdVz_pFDpCD.hFill(dVz_pFDpCD, Weight_pFDpCD);
                 } // end of loop over protons vector
                 //</editor-fold>
 
@@ -10552,14 +10552,14 @@ void EventAnalyser() {
                 double Vx_pCD_pFDpCD = pCD_pFDpCD->par()->getVx(), Vy_pCD_pFDpCD = pCD_pFDpCD->par()->getVy(), Vz_pCD_pFDpCD = pCD_pFDpCD->par()->getVz();
                 double dVx_pCD_pFDpCD = Vx_pCD_pFDpCD - Vx_e_pFDpCD, dVy_pCD_pFDpCD = Vy_pCD_pFDpCD - Vy_e_pFDpCD, dVz_pCD_pFDpCD = Vz_pCD_pFDpCD - Vz_e_pFDpCD;
 
-                hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight), hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight), hdVz_pFD_pFDpCD.hFill(dVz_pFD_pFDpCD, Weight_pFDpCD);
-                hdVx_pCD_pFDpCD.hFill(dVx_pCD_pFDpCD, Weight), hdVy_pCD_pFDpCD.hFill(dVy_pCD_pFDpCD, Weight), hdVz_pCD_pFDpCD.hFill(dVz_pCD_pFDpCD, Weight_pFDpCD);
+                hdVx_pFD_pFDpCD.hFill(dVx_pFD_pFDpCD, Weight_pFDpCD), hdVy_pFD_pFDpCD.hFill(dVy_pFD_pFDpCD, Weight_pFDpCD), hdVz_pFD_pFDpCD.hFill(dVz_pFD_pFDpCD, Weight_pFDpCD);
+                hdVx_pCD_pFDpCD.hFill(dVx_pCD_pFDpCD, Weight_pFDpCD), hdVy_pCD_pFDpCD.hFill(dVy_pCD_pFDpCD, Weight_pFDpCD), hdVz_pCD_pFDpCD.hFill(dVz_pCD_pFDpCD, Weight_pFDpCD);
                 //</editor-fold>
 
                 //</editor-fold>
 
                 /* Filling SF histograms (pFDpCD) */
-                hSF_pFDpCD_FD.hFill(EoP_e_pFDpCD, Weight), hSF_VS_P_e_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), EoP_e_pFDpCD, Weight_pFDpCD);
+                hSF_pFDpCD_FD.hFill(EoP_e_pFDpCD, Weight_pFDpCD), hSF_VS_P_e_pFDpCD_FD.hFill(P_e_pFDpCD_3v.Mag(), EoP_e_pFDpCD, Weight_pFDpCD);
 
                 /* Filling fiducial plots (pFDpCD) */
                 hVcal_VS_EoP_pFDpCD_PCAL.hFill(e_pFDpCD->cal(clas12::PCAL)->getLv(), EoP_e_pFDpCD, Weight_pFDpCD);
@@ -10860,10 +10860,10 @@ void EventAnalyser() {
 
                 FillByInt(hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD, qel, mec, res, dis, W_pFDpCD, Weight_pFDpCD);
 
-                hP_pFD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(), Weight);                                                                                 // FD proton (pFDpCD)
-                hP_pCD_pFDpCD.hFill(P_pCD_pFDpCD_3v.Mag(), Weight);                                                                                 // CD proton (pFDpCD)
-                hP_pL_pFDpCD.hFill(P_L_pFDpCD_3v.Mag(), Weight);                                                                               // Leading proton (pFDpCD)
-                hP_pR_pFDpCD.hFill(P_R_pFDpCD_3v.Mag(), Weight);                                                                                // Recoil proton (pFDpCD)
+                hP_pFD_pFDpCD.hFill(P_pFD_pFDpCD_3v.Mag(), Weight_pFDpCD);                                                                          // FD proton (pFDpCD)
+                hP_pCD_pFDpCD.hFill(P_pCD_pFDpCD_3v.Mag(), Weight_pFDpCD);                                                                          // CD proton (pFDpCD)
+                hP_pL_pFDpCD.hFill(P_L_pFDpCD_3v.Mag(), Weight_pFDpCD);                                                                        // Leading proton (pFDpCD)
+                hP_pR_pFDpCD.hFill(P_R_pFDpCD_3v.Mag(), Weight_pFDpCD);                                                                         // Recoil proton (pFDpCD)
 
                 hP_p_1_vs_P_p_2_pFDpCD.hFill(P_L_pFDpCD_3v.Mag(), P_R_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_pFD_vs_P_pCD_pFDpCD.hFill(pFD_pFDpCD->getP(), pCD_pFDpCD->getP(), Weight_pFDpCD);
@@ -11230,7 +11230,7 @@ void EventAnalyser() {
                     double Vx_p_nFDpCD = p->par()->getVx(), Vy_p_nFDpCD = p->par()->getVy(), Vz_p_nFDpCD = p->par()->getVz();
                     double dVx_nFDpCD = Vx_p_nFDpCD - Vx_e_nFDpCD, dVy_nFDpCD = Vy_p_nFDpCD - Vy_e_nFDpCD, dVz_nFDpCD = Vz_p_nFDpCD - Vz_e_nFDpCD;
 
-                    hdVx_nFDpCD.hFill(dVx_nFDpCD, Weight), hdVy_nFDpCD.hFill(dVy_nFDpCD, Weight), hdVz_nFDpCD.hFill(dVz_nFDpCD, Weight_nFDpCD);
+                    hdVx_nFDpCD.hFill(dVx_nFDpCD, Weight_nFDpCD), hdVy_nFDpCD.hFill(dVy_nFDpCD, Weight_nFDpCD), hdVz_nFDpCD.hFill(dVz_nFDpCD, Weight_nFDpCD);
                 } // end of loop over protons vector
                 //</editor-fold>
 
@@ -11238,13 +11238,13 @@ void EventAnalyser() {
                 double Vx_pCD_nFDpCD = pCD_nFDpCD->par()->getVx(), Vy_pCD_nFDpCD = pCD_nFDpCD->par()->getVy(), Vz_pCD_nFDpCD = pCD_nFDpCD->par()->getVz();
                 double dVx_pCD_nFDpCD = Vx_pCD_nFDpCD - Vx_e_nFDpCD, dVy_pCD_nFDpCD = Vy_pCD_nFDpCD - Vy_e_nFDpCD, dVz_pCD_nFDpCD = Vz_pCD_nFDpCD - Vz_e_nFDpCD;
 
-                hdVx_pCD_nFDpCD.hFill(dVx_pCD_nFDpCD, Weight), hdVy_pCD_nFDpCD.hFill(dVy_pCD_nFDpCD, Weight), hdVz_pCD_nFDpCD.hFill(dVz_pCD_nFDpCD, Weight_nFDpCD);
+                hdVx_pCD_nFDpCD.hFill(dVx_pCD_nFDpCD, Weight_nFDpCD), hdVy_pCD_nFDpCD.hFill(dVy_pCD_nFDpCD, Weight_nFDpCD), hdVz_pCD_nFDpCD.hFill(dVz_pCD_nFDpCD, Weight_nFDpCD);
                 //</editor-fold>
 
                 //</editor-fold>
 
                 /* Filling SF histograms (nFDpCD) */
-                hSF_nFDpCD_FD.hFill(EoP_e_nFDpCD, Weight), hSF_VS_P_e_nFDpCD_FD.hFill(P_e_nFDpCD_3v.Mag(), EoP_e_nFDpCD, Weight_nFDpCD);
+                hSF_nFDpCD_FD.hFill(EoP_e_nFDpCD, Weight_nFDpCD), hSF_VS_P_e_nFDpCD_FD.hFill(P_e_nFDpCD_3v.Mag(), EoP_e_nFDpCD, Weight_nFDpCD);
 
                 /* Filling fiducial plots (nFDpCD) */
                 hVcal_VS_EoP_nFDpCD_PCAL.hFill(e_nFDpCD->cal(clas12::PCAL)->getLv(), EoP_e_nFDpCD, Weight_nFDpCD);
