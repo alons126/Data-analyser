@@ -217,6 +217,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     hData Propeties;
 
     bool weighted_plots = true;
+    bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -252,7 +253,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     TH1D *nFDpCD_Plot_Clone_test = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string nFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test rebined";
     TH1D *nFDpCD_Plot_Clone_test_rebined = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    nFDpCD_Plot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots){ nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_pFDpCD = pFDpCD_Plot.GetHistogram();
     string pFDpCD_Plot_Clone_StatsTitle = "Truth " + FSRatioStatsTitle + " - cloned";
@@ -261,7 +262,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     TH1D *pFDpCD_Plot_Clone_test = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *pFDpCD_Plot_Clone_test_rebined = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    pFDpCD_Plot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
@@ -428,7 +429,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
 
     if (weighted_plots) { nFDpCD_Plot_Clone->Sumw2(); }
 
-    nFDpCD_Plot_Clone->Rebin(2);
+    if (rebin_plots) { nFDpCD_Plot_Clone->Rebin(2); }
     nFDpCD_Plot_Clone->Draw();
     nFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(nFDpCD_Plot_Clone);
@@ -443,7 +444,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
 
     if (weighted_plots) { pFDpCD_Plot_Clone->Sumw2(); }
 
-    pFDpCD_Plot_Clone->Rebin(2);
+    if (rebin_plots){ pFDpCD_Plot_Clone->Rebin(2); }
     pFDpCD_Plot_Clone->Draw();
     pFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(pFDpCD_Plot_Clone);
@@ -466,7 +467,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
 
     if (weighted_plots) { FSRatio_plot->Sumw2(); }
 
-    FSRatio_plot->Rebin(2);
+    if (rebin_plots) { FSRatio_plot->Rebin(2); }
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
     FSRatio_plot->SetStats(0);
     FSRatio_plot->Draw();
@@ -483,6 +484,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     hData Propeties;
 
     bool weighted_plots = true;
+    bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -530,7 +532,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     TH1D *nFDpCD_Plot_Clone_test = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string nFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test rebined";
     TH1D *nFDpCD_Plot_Clone_test_rebined = (TH1D *) nFDpCD_Plot->Clone((nFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    nFDpCD_Plot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
     string pFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned";
     TH1D *pFDpCD_Plot_Clone = (TH1D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_StatsTitle).c_str());
@@ -538,7 +540,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     TH1D *pFDpCD_Plot_Clone_test = (TH1D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test rebined";
     TH1D *pFDpCD_Plot_Clone_test_rebined = (TH1D *) pFDpCD_Plot->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    pFDpCD_Plot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
@@ -656,7 +658,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
 
     if (weighted_plots) { nFDpCD_Plot_Clone->Sumw2(); }
 
-    nFDpCD_Plot_Clone->Rebin(2);
+    if (rebin_plots) { nFDpCD_Plot_Clone->Rebin(2); }
     nFDpCD_Plot_Clone->Draw();
     nFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(nFDpCD_Plot_Clone);
@@ -671,7 +673,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
 
     if (weighted_plots) { pFDpCD_Plot_Clone->Sumw2(); }
 
-    pFDpCD_Plot_Clone->Rebin(2);
+    if (rebin_plots) { pFDpCD_Plot_Clone->Rebin(2); }
     pFDpCD_Plot_Clone->SetLineWidth(2);
     pFDpCD_Plot_Clone->Draw();
     pFDpCD_Plot_Clone->SetStats(1);
@@ -695,7 +697,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
 
     if (weighted_plots) { FSRatio_plot->Sumw2(); }
 
-    FSRatio_plot->Rebin(2);
+    if (rebin_plots) { FSRatio_plot->Rebin(2); }
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
     FSRatio_plot->SetStats(0);
     FSRatio_plot->Draw();

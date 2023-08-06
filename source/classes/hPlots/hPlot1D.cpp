@@ -16,7 +16,7 @@ bool hPlot1D::findSubstring(std::string string1, std::string string2) {
 // Constructor definition -----------------------------------------------------------------------------------------------------------------------------------------------
 
 hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim,
-                 int hnob = 100) {
+                 int hnob) {
     HistogramStatsTitle = hst;
     Histogram1DTitles["HistogramStatTitle"] = hst;
     HistogramTitle = ht;
@@ -39,7 +39,7 @@ hPlot1D::hPlot1D(std::string h1DtReactions, std::string fState, std::string dReg
             HistogramXAxisLimits.at(1));
 }
 
-hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100) {
+hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob) {
     HistogramStatsTitle = hst;
     Histogram1DTitles["HistogramStatTitle"] = hst;
     HistogramTitle = ht;
@@ -59,7 +59,7 @@ hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::
 }
 
 hPlot1D::hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string sPath, std::string sName, double LowerXlim,
-                 double UpperXlim, int hnob = 100) {
+                 double UpperXlim, int hnob) {
     HistogramStatsTitle = hst;
     Histogram1DTitles["HistogramStatTitle"] = hst;
     HistogramTitle = ht;
@@ -102,8 +102,6 @@ hPlot1D::hPlot1D(std::string hst, std::string ht, std::string xat, double LowerX
                            HistogramNumberOfXBins, HistogramXAxisLimits.at(0), HistogramXAxisLimits.at(1));
 }
 
-// histPlotter1D function (old) -----------------------------------------------------------------------------------------------------------------------------------------
-
 //<editor-fold desc="histPlotter1D function (old)">
 void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization, double custom_normalization_factor,
                             std::string Histogram1DTitle, std::string Histogram1DTitleReactions, double titleSize, double labelSizex, double labelSizey,
@@ -140,10 +138,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -172,9 +172,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -300,10 +302,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -331,9 +335,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -447,10 +453,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -472,9 +480,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -606,10 +616,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -637,9 +649,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -754,10 +768,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -779,9 +795,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -905,10 +923,12 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -936,9 +956,11 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -1066,10 +1088,12 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -1095,9 +1119,11 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -1242,10 +1268,12 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -1271,9 +1299,11 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }
@@ -1414,10 +1444,12 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
             Histogram1D->Scale(100. / Histogram1D_integral, "nosw2");
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     } else if (normalize_Histogram == false) {
@@ -1444,9 +1476,11 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
             displayText->SetFillColor(0);
             displayText->AddText("Empty histogram");
             displayText->SetTextAlign(22);
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
             displayText->Draw();
         } else if (Histogram1D->Integral() != 0.) {
+            Histogram1D->Sumw2();
             Histogram1D->Draw();
         }
     }

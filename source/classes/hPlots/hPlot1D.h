@@ -90,14 +90,20 @@ public:
     hPlot1D() {} // Default constructor
 
     hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat,
-            double LowerXlim, double UpperXlim, int hnob = 100);
+            double LowerXlim, double UpperXlim, int hnob = 50);
+//    hPlot1D(std::string h1DtReactions, std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat,
+//            double LowerXlim, double UpperXlim, int hnob = 100);
 
     hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string sPath, std::string sName, double LowerXlim,
-            double UpperXlim, int hnob = 100);
+            double UpperXlim, int hnob = 50);
+//    hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, std::string sPath, std::string sName, double LowerXlim,
+//            double UpperXlim, int hnob = 100);
 
-    hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
+    hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 50);
+//    hPlot1D(std::string fState, std::string dRegion, std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
 
-    hPlot1D(std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
+    hPlot1D(std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 50);
+//    hPlot1D(std::string hst, std::string ht, std::string xat, double LowerXlim, double UpperXlim, int hnob = 100);
 
     // histPlotter1D function -------------------------------------------------------------------------------------------------------------------------------------------
 
