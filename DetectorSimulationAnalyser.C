@@ -9087,7 +9087,7 @@ void EventAnalyser() {
             TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
             P_e_1n_3v.SetMagThetaPhi(e_1n->getP(), e_1n->getTheta(), e_1n->getPhi());                                                              // electron 3 momentum
             q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                                  // 3 momentum transfer
-            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());               // neutron 3 momentum
+            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());                 // neutron 3 momentum
             P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                            // electron t. momentum
             P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                             // neutron t. momentum
 
@@ -9153,15 +9153,18 @@ void EventAnalyser() {
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
-            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> shift after kin cuts */
+            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> momentum kin cut before neutron shifting */
+            /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
             bool FD_Theta_Cut_1n = ((P_n_1n_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-            bool FD_Momentum_Cut_1n = ((NeutronMomBKC_1n <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+            bool FD_Momentum_Cut_BS_1n = ((NeutronMomBKC_1n <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                        (NeutronMomBKC_1n >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
+            bool FD_Momentum_Cut_AS_1n = ((P_n_1n_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+                                       (P_n_1n_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
             bool e_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1n_3v.Mag(), P_e_1n_3v.Theta() * 180.0 / pi, P_e_1n_3v.Phi() * 180.0 / pi);
 //            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
             bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
 
-            bool Pass_Kin_Cuts_1n = ((!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_1n)) &&
+            bool Pass_Kin_Cuts_1n = ((!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_BS_1n && FD_Momentum_Cut_AS_1n)) &&
                                      (!apply_fiducial_cuts || (e_withinFC_1n && n_withinFC_1n)));
             //</editor-fold>
 
@@ -10475,11 +10478,15 @@ void EventAnalyser() {
             //<editor-fold desc="Determining leading, recoil protons and their angles (pFDpCD)">
             /* Determining leading and recoil particles (leading = particle with greater momentum) */
             if (P_pFD_pFDpCD_3v.Mag() >= P_pCD_pFDpCD_3v.Mag()) {
-                P_L_pFDpCD_3v = TVector3(pFD_pFDpCD->par()->getPx(), pFD_pFDpCD->par()->getPy(), pFD_pFDpCD->par()->getPz());
-                P_R_pFDpCD_3v = TVector3(pCD_pFDpCD->par()->getPx(), pCD_pFDpCD->par()->getPy(), pCD_pFDpCD->par()->getPz());
+                P_L_pFDpCD_3v = P_pFD_pFDpCD_3v;
+                P_R_pFDpCD_3v = P_pCD_pFDpCD_3v;
+//                P_L_pFDpCD_3v = TVector3(pFD_pFDpCD->par()->getPx(), pFD_pFDpCD->par()->getPy(), pFD_pFDpCD->par()->getPz());
+//                P_R_pFDpCD_3v = TVector3(pCD_pFDpCD->par()->getPx(), pCD_pFDpCD->par()->getPy(), pCD_pFDpCD->par()->getPz());
             } else {
-                P_R_pFDpCD_3v = TVector3(pFD_pFDpCD->par()->getPx(), pFD_pFDpCD->par()->getPy(), pFD_pFDpCD->par()->getPz());
-                P_L_pFDpCD_3v = TVector3(pCD_pFDpCD->par()->getPx(), pCD_pFDpCD->par()->getPy(), pCD_pFDpCD->par()->getPz());
+                P_L_pFDpCD_3v = P_pCD_pFDpCD_3v;
+                P_R_pFDpCD_3v = P_pFD_pFDpCD_3v;
+//                P_R_pFDpCD_3v = TVector3(pFD_pFDpCD->par()->getPx(), pFD_pFDpCD->par()->getPy(), pFD_pFDpCD->par()->getPz());
+//                P_L_pFDpCD_3v = TVector3(pCD_pFDpCD->par()->getPx(), pCD_pFDpCD->par()->getPy(), pCD_pFDpCD->par()->getPz());
             }
 
             /* Determining higher momentum proton: */
@@ -11197,10 +11204,13 @@ void EventAnalyser() {
             // Setting kinematical cuts ---------------------------------------------------------------------------------------------------------------------------------
 
             //<editor-fold desc="Setting kinematical cuts">
-            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> shift after kin cuts */
+            /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> momentum kin cut before neutron shifting */
+            /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
             bool FD_Theta_Cut_nFDpCD = ((P_nFD_nFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-            bool FD_Momentum_Cut_nFDpCD = ((NeutronMomBKC_nFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+            bool FD_Momentum_Cut_BS_nFDpCD = ((NeutronMomBKC_nFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                            (NeutronMomBKC_nFDpCD >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
+            bool FD_Momentum_Cut_AS_nFDpCD = ((P_nFD_nFDpCD_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
+                                           (P_nFD_nFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
             bool e_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_nFDpCD_3v.Mag(), P_e_nFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_nFDpCD_3v.Phi() * 180.0 / pi);
 //            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(), P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
@@ -11208,7 +11218,7 @@ void EventAnalyser() {
             bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomBKC_nFDpCD, P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
                                                          P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
 
-            bool Pass_Kin_Cuts_nFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_nFDpCD)) &&
+            bool Pass_Kin_Cuts_nFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_BS_nFDpCD && FD_Momentum_Cut_AS_nFDpCD)) &&
                                          (!apply_fiducial_cuts || (e_withinFC_nFDpCD && nFD_withinFC_nFDpCD)));
             //</editor-fold>
 
