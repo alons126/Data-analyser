@@ -39,7 +39,8 @@
 using namespace std;
 
 void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list) {
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
+    bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -65,7 +66,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     TH1D *RPlot_Clone_test = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_StatsTitle).c_str());
     string RPlot_Clone_test_rebined_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
-    RPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { RPlot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_Truth = TLPlot.GetHistogram();
     string TLPlot_Clone_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned";
@@ -74,7 +75,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     TH1D *TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
     string TLPlot_Clone_test_rebined_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
-    TLPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
 
     //<editor-fold desc="Setting particle">
@@ -284,9 +285,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     RPlot_Clone->GetYaxis()->CenterTitle(true);
     RPlot_Clone->SetLineWidth(2);
 
-    if (weighted_plots) { RPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { RPlot_Clone->Sumw2(); }
 
-    RPlot_Clone->Rebin(2);
+    if (rebin_plots) { RPlot_Clone->Rebin(2); }
     RPlot_Clone->Draw();
     RPlot_Clone->SetStats(1);
     Histogram_list->Add(RPlot_Clone);
@@ -307,9 +308,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     TLPlot_Clone->GetYaxis()->CenterTitle(true);
     TLPlot_Clone->SetLineWidth(2);
 
-    if (weighted_plots) { TLPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { TLPlot_Clone->Sumw2(); }
 
-    TLPlot_Clone->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone->Rebin(2); }
     TLPlot_Clone->Draw();
     TLPlot_Clone->SetStats(1);
     Histogram_list->Add(TLPlot_Clone);
@@ -339,9 +340,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     }
 */
 
-    if (weighted_plots) { Efficiency_plot->Sumw2(); }
+    if (plot_errorbars) { Efficiency_plot->Sumw2(); }
 
-    Efficiency_plot->Rebin(2);
+    if (rebin_plots) { Efficiency_plot->Rebin(2); }
     Efficiency_plot->Divide(TLPlot_Clone);
     Efficiency_plot->Draw();
     Efficiency_plot->SetStats(0);
@@ -354,7 +355,8 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
 }
 
 void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
+    bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -419,7 +421,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     TH1D *RPlot_Clone_test = (TH1D *) RPlot->Clone((RPlot_Clone_test_StatsTitle).c_str());
     string RPlot_Clone_test_rebined_StatsTitle = "reco. " + EfficiencyStatsTitle + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) RPlot->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
-    RPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { RPlot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_Truth = TLPlot.GetHistogram();
     string TLPlot_Clone_StatsTitle = "Truth " + EfficiencyStatsTitle + " - cloned";
@@ -428,7 +430,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     TH1D *TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
     string TLPlot_Clone_test_rebined_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
-    TLPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
@@ -613,9 +615,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     RPlot_Clone->GetYaxis()->CenterTitle(true);
     RPlot_Clone->SetLineWidth(2);
 
-    if (weighted_plots) { RPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { RPlot_Clone->Sumw2(); }
 
-    RPlot_Clone->Rebin(2);
+    if (rebin_plots) { RPlot_Clone->Rebin(2); }
     RPlot_Clone->Draw();
     RPlot_Clone->SetStats(1);
     Histogram_list->Add(RPlot_Clone);
@@ -628,9 +630,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     TLPlot_Clone->SetLineStyle(1);
     TLPlot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { TLPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { TLPlot_Clone->Sumw2(); }
 
-    TLPlot_Clone->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone->Rebin(2); }
     TLPlot_Clone->Draw();
     TLPlot_Clone->SetStats(1);
     Histogram_list->Add(TLPlot_Clone);
@@ -660,9 +662,9 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D 
     }
 */
 
-    if (weighted_plots) { Efficiency_plot->Sumw2(); }
+    if (plot_errorbars) { Efficiency_plot->Sumw2(); }
 
-    Efficiency_plot->Rebin(2);
+    if (rebin_plots) { Efficiency_plot->Rebin(2); }
     Efficiency_plot->Divide(TLPlot_Clone);
     Efficiency_plot->SetStats(0);
     Efficiency_plot->Draw();

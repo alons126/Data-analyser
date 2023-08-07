@@ -39,7 +39,7 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, cons
     RPlot_Clone_test = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_StatsTitle).c_str());
     RPlot_Clone_test_rebined_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
     RPlot_Clone_test_rebined = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
-    RPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { RPlot_Clone_test_rebined->Rebin(2); }
 
     Histogram1D_Truth = TLPlot.GetHistogram();
     TLPlot_Clone_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned";
@@ -48,7 +48,7 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, cons
     TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
     TLPlot_Clone_test_rebined_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
-    TLPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone_test_rebined->Rebin(2); }
     EffAndACorr_SaveNamePath = TLPlot.GetHistogram1DSaveNamePath();
 }
 //</editor-fold>
@@ -63,7 +63,7 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, TH1D
     RPlot_Clone_test = (TH1D *) RPlot->Clone((RPlot_Clone_test_StatsTitle).c_str());
     RPlot_Clone_test_rebined_StatsTitle = "reco. " + StatsTitle + " - cloned test rebined";
     RPlot_Clone_test_rebined = (TH1D *) RPlot->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
-    RPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { RPlot_Clone_test_rebined->Rebin(2); }
 
     Histogram1D_Truth = TLPlot.GetHistogram();
     TLPlot_Clone_StatsTitle = "Truth " + StatsTitle + " - cloned";
@@ -72,7 +72,7 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, TH1D
     TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
     TLPlot_Clone_test_rebined_StatsTitle = "Truth " + StatsTitle + " - cloned test rebined";
     TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
-    TLPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone_test_rebined->Rebin(2); }
 
     EffAndACorr_SaveNamePath = TLPlot.GetHistogram1DSaveNamePath();
 }
@@ -167,9 +167,9 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, string &SampleName, 
     ACorrection_plot->GetYaxis()->CenterTitle(true);
     ACorrection_plot->SetLineWidth(2);
 
-    if (weighted_plots) { ACorrection_plot->Sumw2(); }
+    if (plot_errorbars) { ACorrection_plot->Sumw2(); }
 
-    ACorrection_plot->Rebin(2);
+    if (rebin_plots) { ACorrection_plot->Rebin(2); }
     ACorrection_plot->Divide(RPlot_Clone);
     ACorrection_plot->Draw();
     ACorrection_plot->SetStats(0);
@@ -206,7 +206,7 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, string &SampleName, 
         ACorr_factor->SetLineStyle(1);
         ACorr_factor->SetLineColor(kBlue);
 
-        if (weighted_plots) { ACorr_factor->Sumw2(); }
+        if (plot_errorbars) { ACorr_factor->Sumw2(); }
 
         ACorr_factor->Draw();
         ACorr_factor->SetStats(0);
@@ -242,8 +242,8 @@ void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName
 // DrawAndSaveHistogram1D function --------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveHistogram1D function">
-void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats, bool weighted_plots,
-                                         bool rebin_plots, const string &HistSaveDir) {
+void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats, bool PlotErrorbars,
+                                         bool RebinPlots, const string &HistSaveDir) {
     Histogram1D->SetLineStyle(LineStyle);
     Histogram1D->SetLineColor(kColor);
     Histogram1D->SetStats(ShowStats);
@@ -256,9 +256,9 @@ void DEfficiency::DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_l
     Histogram1D->GetYaxis()->CenterTitle(true);
     Histogram1D->SetLineWidth(2);
 
-    if (weighted_plots) { Histogram1D->Sumw2(); }
+    if (PlotErrorbars) { Histogram1D->Sumw2(); }
 
-    if (rebin_plots) { Histogram1D->Rebin(2); }
+    if (RebinPlots) { Histogram1D->Rebin(2); }
 
     Histogram1D->Draw();
     Histogram_list->Add(Histogram1D);

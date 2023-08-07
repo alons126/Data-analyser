@@ -43,7 +43,8 @@ using namespace std;
 class DEfficiency : public hData {
 private:
 
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
+    bool rebin_plots = false;
 
 //    TList *ACorr_data = new TList();
 
@@ -87,7 +88,7 @@ public:
 
 // DrawAndSaveHistogram1D function --------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats, bool weighted_plots,
+    void DrawAndSaveHistogram1D(TCanvas *HistCanvas, TList *Histogram_list, TH1D *Histogram1D, int LineStyle, int kColor, bool ShowStats, bool plot_errorbars,
                                 bool rebin_plots, const string &HistSaveDir);
 
 };

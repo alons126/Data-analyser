@@ -54,7 +54,7 @@ using namespace std;
 void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hPlot1D &nFDpCD_Plot, TList *Histogram_list) {
     hData Propeties;
 
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -169,7 +169,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     nFDpCD_Plot_Clone->SetLineStyle(1);
     nFDpCD_Plot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { nFDpCD_Plot_Clone->Sumw2(); }
+    if (plot_errorbars) { nFDpCD_Plot_Clone->Sumw2(); }
 
     nFDpCD_Plot_Clone->Rebin(2);
     nFDpCD_Plot_Clone->Draw();
@@ -184,7 +184,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     pFDpCD_Plot_Clone->SetLineStyle(1);
     pFDpCD_Plot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { pFDpCD_Plot_Clone->Sumw2(); }
+    if (plot_errorbars) { pFDpCD_Plot_Clone->Sumw2(); }
 
     pFDpCD_Plot_Clone->Rebin(2);
     pFDpCD_Plot_Clone->Draw();
@@ -199,7 +199,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     FSRatio_plot->SetLineStyle(1);
     FSRatio_plot->SetLineColor(kBlue);
 
-    if (weighted_plots) { FSRatio_plot->Sumw2(); }
+    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
 
     FSRatio_plot->Rebin(2);
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
@@ -216,7 +216,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
 void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nFDpCD_Plot, TList *Histogram_list) {
     hData Propeties;
 
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
     bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
@@ -427,7 +427,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     nFDpCD_Plot_Clone->GetYaxis()->CenterTitle(true);
     nFDpCD_Plot_Clone->SetLineWidth(2);
 
-    if (weighted_plots) { nFDpCD_Plot_Clone->Sumw2(); }
+    if (plot_errorbars) { nFDpCD_Plot_Clone->Sumw2(); }
 
     if (rebin_plots) { nFDpCD_Plot_Clone->Rebin(2); }
     nFDpCD_Plot_Clone->Draw();
@@ -442,7 +442,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     pFDpCD_Plot_Clone->SetLineStyle(1);
     pFDpCD_Plot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { pFDpCD_Plot_Clone->Sumw2(); }
+    if (plot_errorbars) { pFDpCD_Plot_Clone->Sumw2(); }
 
     if (rebin_plots){ pFDpCD_Plot_Clone->Rebin(2); }
     pFDpCD_Plot_Clone->Draw();
@@ -465,7 +465,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     FSRatio_plot->GetYaxis()->CenterTitle(true);
     FSRatio_plot->SetLineWidth(2);
 
-    if (weighted_plots) { FSRatio_plot->Sumw2(); }
+    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
 
     if (rebin_plots) { FSRatio_plot->Rebin(2); }
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
@@ -483,7 +483,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
 void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_PlotSaveNamePath, TH1D *nFDpCD_Plot, TList *Histogram_list) {
     hData Propeties;
 
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
     bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
@@ -656,7 +656,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     nFDpCD_Plot_Clone->GetYaxis()->CenterTitle(true);
     nFDpCD_Plot_Clone->SetLineWidth(2);
 
-    if (weighted_plots) { nFDpCD_Plot_Clone->Sumw2(); }
+    if (plot_errorbars) { nFDpCD_Plot_Clone->Sumw2(); }
 
     if (rebin_plots) { nFDpCD_Plot_Clone->Rebin(2); }
     nFDpCD_Plot_Clone->Draw();
@@ -671,7 +671,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     pFDpCD_Plot_Clone->SetLineStyle(1);
     pFDpCD_Plot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { pFDpCD_Plot_Clone->Sumw2(); }
+    if (plot_errorbars) { pFDpCD_Plot_Clone->Sumw2(); }
 
     if (rebin_plots) { pFDpCD_Plot_Clone->Rebin(2); }
     pFDpCD_Plot_Clone->SetLineWidth(2);
@@ -695,7 +695,7 @@ void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_Plo
     FSRatio_plot->GetYaxis()->CenterTitle(true);
     FSRatio_plot->SetLineWidth(2);
 
-    if (weighted_plots) { FSRatio_plot->Sumw2(); }
+    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
 
     if (rebin_plots) { FSRatio_plot->Rebin(2); }
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);

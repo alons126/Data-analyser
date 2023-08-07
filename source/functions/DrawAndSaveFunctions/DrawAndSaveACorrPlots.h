@@ -42,7 +42,8 @@ using namespace std;
 void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot,
                            TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
+    bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -68,7 +69,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     TH1D *RPlot_Clone_test = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_StatsTitle).c_str());
     string RPlot_Clone_test_rebined_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
-    RPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { RPlot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_Truth = TLPlot.GetHistogram();
     string TLPlot_Clone_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned";
@@ -77,7 +78,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     TH1D *TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
     string TLPlot_Clone_test_rebined_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
-    TLPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
 
     //<editor-fold desc="Setting particle">
@@ -246,9 +247,9 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     RPlot_Clone->SetLineStyle(1);
     RPlot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { RPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { RPlot_Clone->Sumw2(); }
 
-    RPlot_Clone->Rebin(2);
+    if (rebin_plots) { RPlot_Clone->Rebin(2); }
     RPlot_Clone->Draw();
     RPlot_Clone->SetStats(1);
     Histogram_list->Add(RPlot_Clone);
@@ -261,9 +262,9 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     TLPlot_Clone->SetLineStyle(1);
     TLPlot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { TLPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { TLPlot_Clone->Sumw2(); }
 
-    TLPlot_Clone->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone->Rebin(2); }
     TLPlot_Clone->Draw();
     TLPlot_Clone->SetStats(1);
     Histogram_list->Add(TLPlot_Clone);
@@ -276,9 +277,9 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     ACorrection_plot->SetLineStyle(1);
     ACorrection_plot->SetLineColor(kBlue);
 
-    if (weighted_plots) { ACorrection_plot->Sumw2(); }
+    if (plot_errorbars) { ACorrection_plot->Sumw2(); }
 
-    ACorrection_plot->Rebin(2);
+    if (rebin_plots) { ACorrection_plot->Rebin(2); }
     ACorrection_plot->Divide(RPlot_Clone);
 //    ACorrection_plot->Divide(TLPlot_Clone);
     ACorrection_plot->Draw();
@@ -316,7 +317,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
         ACorr_factor->SetLineStyle(1);
         ACorr_factor->SetLineColor(kBlue);
 
-        if (weighted_plots) { ACorr_factor->Sumw2(); }
+        if (plot_errorbars) { ACorr_factor->Sumw2(); }
 
 //    ACorr_factor->Rebin(2);
 //    ACorr_factor->Divide(RPlot_Clone);
@@ -335,7 +336,8 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
 void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot,
                            TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
-    bool weighted_plots = true;
+    bool plot_errorbars = true;
+    bool rebin_plots = false;
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -400,7 +402,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     TH1D *RPlot_Clone_test = (TH1D *) RPlot->Clone((RPlot_Clone_test_StatsTitle).c_str());
     string RPlot_Clone_test_rebined_StatsTitle = "reco. " + ACorrectionStatsTitle + " - cloned test rebined";
     TH1D *RPlot_Clone_test_rebined = (TH1D *) RPlot->Clone((RPlot_Clone_test_rebined_StatsTitle).c_str());
-    RPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { RPlot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_Truth = TLPlot.GetHistogram();
     string TLPlot_Clone_StatsTitle = "Truth " + ACorrectionStatsTitle + " - cloned";
@@ -409,7 +411,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     TH1D *TLPlot_Clone_test = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_StatsTitle).c_str());
     string TLPlot_Clone_test_rebined_StatsTitle = "Truth " + TLPlot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *TLPlot_Clone_test_rebined = (TH1D *) Histogram1D_Truth->Clone((TLPlot_Clone_test_rebined_StatsTitle).c_str());
-    TLPlot_Clone_test_rebined->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
 
     //<editor-fold desc="Setting title">
@@ -589,9 +591,9 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     RPlot_Clone->GetYaxis()->CenterTitle(true);
     RPlot_Clone->SetLineWidth(2);
 
-    if (weighted_plots) { RPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { RPlot_Clone->Sumw2(); }
 
-    RPlot_Clone->Rebin(2);
+    if (rebin_plots) { RPlot_Clone->Rebin(2); }
     RPlot_Clone->Draw();
     RPlot_Clone->SetStats(1);
     Histogram_list->Add(RPlot_Clone);
@@ -604,9 +606,9 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     TLPlot_Clone->SetLineStyle(1);
     TLPlot_Clone->SetLineColor(kBlue);
 
-    if (weighted_plots) { TLPlot_Clone->Sumw2(); }
+    if (plot_errorbars) { TLPlot_Clone->Sumw2(); }
 
-    TLPlot_Clone->Rebin(2);
+    if (rebin_plots) { TLPlot_Clone->Rebin(2); }
     TLPlot_Clone->Draw();
     TLPlot_Clone->SetStats(1);
     Histogram_list->Add(TLPlot_Clone);
@@ -627,9 +629,9 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
     ACorrection_plot->GetYaxis()->CenterTitle(true);
     ACorrection_plot->SetLineWidth(2);
 
-    if (weighted_plots) { ACorrection_plot->Sumw2(); }
+    if (plot_errorbars) { ACorrection_plot->Sumw2(); }
 
-    ACorrection_plot->Rebin(2);
+    if (rebin_plots) { ACorrection_plot->Rebin(2); }
     ACorrection_plot->Divide(RPlot_Clone);
 //    ACorrection_plot->Divide(TLPlot_Clone);
     ACorrection_plot->SetStats(0);
@@ -668,7 +670,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
         ACorr_factor->SetLineStyle(1);
         ACorr_factor->SetLineColor(kBlue);
 
-        if (weighted_plots) { ACorr_factor->Sumw2(); }
+        if (plot_errorbars) { ACorr_factor->Sumw2(); }
 
 //    ACorr_factor->Rebin(2);
 //    ACorr_factor->Divide(RPlot_Clone);
