@@ -197,8 +197,8 @@ void EventAnalyser() {
     bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -660,18 +660,18 @@ void EventAnalyser() {
 //    bool ToF_plots = false;
 //
 //    /* Efficiency plots */
-//    bool Efficiency_plots = true;
-////    bool Efficiency_plots = false;
-//    bool TL_after_Acceptance_Maps_plots = true;
-////    bool TL_after_Acceptance_Maps_plots = false;
+////    bool Efficiency_plots = true;
+//    bool Efficiency_plots = false;
+////    bool TL_after_Acceptance_Maps_plots = true;
+//    bool TL_after_Acceptance_Maps_plots = false;
 //
 //    /* Resolution plots */
-//    bool Hit_maps_plots = true;
-////    bool Hit_maps_plots = false;
+////    bool Hit_maps_plots = true;
+//    bool Hit_maps_plots = false;
 //
 //    /* Resolution plots */
-//    bool Resolution_plots = true;
-////    bool Resolution_plots = false;
+////    bool Resolution_plots = true;
+//    bool Resolution_plots = false;
 //    //</editor-fold>/
 
     //<editor-fold desc="Turn off plots by master selectors">
@@ -3674,7 +3674,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_L vs |P_p_L|/|q|">
     TH2D *hTheta_q_p_L_vs_p_L_q_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL} (All Int., pFDpCD)",
                                                   "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}| (All Int., pFDpCD);"
-                                                  "r_{pL};#theta_{#vec{q},#vec{P}_{pL}}", numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots, 0, 180);
+                                                  "r_{pL};#theta_{#vec{q},#vec{P}_{pL}}",
+                                                  numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
 
@@ -3693,7 +3694,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_pFD vs Theta_q_pCD">
     TH2D *hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD)",
                                                         "#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., pFDpCD);"
-                                                        "#theta_{#vec{q},#vec{P}_{pFD}};#theta_{#vec{q},#vec{P}_{pCD}}",
+                                                        "#theta_{#vec{q},#vec{P}_{pFD}} [Deg];#theta_{#vec{q},#vec{P}_{pCD}} [Deg]",
                                                         numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_pFDpCD_Directory"];
     //</editor-fold>
@@ -3980,8 +3981,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_p_e_p_tot vs. W (nFDpCD)">
     TH2D *hTheta_p_e_p_tot_vs_W_nFDpCD = new TH2D("#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD)",
                                                   "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0,
-                                                  180);
+                                                  "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg];",
+                                                  numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_p_e_p_tot_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -4076,8 +4077,8 @@ void EventAnalyser() {
 // Theta_q_p_L vs |P_L|/|q| (nFDpCD, CD & FD) ---------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Theta_q_p vs |P_p|/|q| (CD & FD)">
-    TH2D *hTheta_q_p_L_vs_p_L_q_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nFD}} vs. r_{nFD} (All Int., nFDpCD)",
-                                                  "#theta_{#vec{q},#vec{P}_{nFD}} vs. r_{nFD}=|#vec{P}_{nFD}|/|#vec{q}| (All Int., nFDpCD);"
+    TH2D *hTheta_q_p_L_vs_p_L_q_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL} (All Int., nFDpCD)",
+                                                  "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}| (All Int., nFDpCD);"
                                                   "r_{nFD};#theta_{#vec{q},#vec{P}_{nFD}}",
                                                   numTH2Dbins_Ang_Plots, 0, 1.05, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_p_L_q_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
@@ -4096,7 +4097,7 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_nFD vs Theta_q_pCD">
     TH2D *hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD)",
                                                         "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}} (All Int., nFDpCD);"
-                                                        "#theta_{#vec{q},#vec{P}_{nFD}};#theta_{#vec{q},#vec{P}_{pCD}}",
+                                                        "#theta_{#vec{q},#vec{P}_{nFD}} [Deg];#theta_{#vec{q},#vec{P}_{pCD}} [Deg]",
                                                         numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary, Opening_Ang_narrow_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
     string hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
@@ -5007,10 +5008,10 @@ void EventAnalyser() {
 
     //<editor-fold desc="Ecal vs. dP_T (2p)">
     TH2D *hEcal_vs_dP_T_L_2p = new TH2D("E_{cal} vs. #deltaP_{T,L} (All Int., 2p)",
-                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV];E_{cal} [GeV];",
+                                        "E_{cal} vs. #deltaP_{T,L} (All Int., 2p);#deltaP_{T,L} [GeV/c];E_{cal} [GeV];",
                                         numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     TH2D *hEcal_vs_dP_T_tot_2p = new TH2D("E_{cal} vs. #deltaP_{T,tot} (All Int., 2p)",
-                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV];E_{cal} [GeV];",
+                                          "E_{cal} vs. #deltaP_{T,tot} (All Int., 2p);#deltaP_{T,tot} [GeV/c];E_{cal} [GeV];",
                                           numTH2Dbins_E_cal_Plots, 0, dP_T_boundary, numTH2Dbins_E_cal_Plots, 0, beamE * 1.35);
     string hEcal_vs_dP_T_L_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
     string hEcal_vs_dP_T_tot_2p_Dir = directories.Ecal_Directory_map["Ecal_rec_vs_TKI_2p_Directory"];
@@ -12799,10 +12800,14 @@ void EventAnalyser() {
 // Final state ratios (nFDpCD/pFDpCD) -------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
+
+            DrawAndSaveFSRatio(SampleName, hP_tot_vs_P_rel_pFDpCD, hP_tot_vs_P_rel_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_pL_vs_P_pR_pFDpCD, hP_nL_vs_P_nR_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_pFD_vs_P_pCD_pFDpCD, hP_nFD_vs_P_pCD_nFDpCD, plots);
         }
         //</editor-fold>
 
@@ -12864,7 +12869,7 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hW_All_Int_pFDpCD, hW_All_Int_pFDpCD_Dir, hW_All_Int_nFDpCD, plots);
 //        DrawAndSaveFSRatio(SampleName, hW_QEL_pFDpCD, hW_QEL_pFDpCD_Dir, hW_QEL_nFDpCD, plots);
 //        DrawAndSaveFSRatio(SampleName, hW_MEC_pFDpCD, hW_MEC_pFDpCD_Dir, hW_MEC_nFDpCD, plots);
@@ -14737,7 +14742,7 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hTheta_e_All_Int_pFDpCD_FD, hTheta_e_All_Int_pFDpCD_FD_Dir, hTheta_e_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_e_All_Int_pFDpCD_FD, hPhi_e_All_Int_pFDpCD_FD_Dir, hPhi_e_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD_Dir, hTheta_nFD_All_Int_nFDpCD_FD, plots);
@@ -14752,6 +14757,22 @@ void EventAnalyser() {
             DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_pFDpCD, hTheta_q_pFD_pFDpCD_Dir, hTheta_q_nFD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_pFDpCD, hTheta_q_pCD_pFDpCD_Dir, hTheta_q_pCD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_All_Int_pFDpCD_Dir, hTheta_nFD_pCD_All_Int_nFDpCD, plots);
+
+            DrawAndSaveFSRatio(SampleName, hTheta_e_VS_P_e_pFDpCD_FD, hTheta_e_VS_P_e_pFDpCD_FD_Dir, hTheta_e_VS_P_e_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_e_VS_W_pFDpCD_FD, hTheta_e_VS_W_pFDpCD_FD_Dir, hTheta_e_VS_W_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hPhi_e_VS_P_e_pFDpCD_FD, hPhi_e_VS_P_e_pFDpCD_FD_Dir, hPhi_e_VS_P_e_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hPhi_e_VS_W_pFDpCD_FD, hPhi_e_VS_W_pFDpCD_FD_Dir, hPhi_e_VS_W_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_e_VS_Phi_e_pFDpCD_FD, hTheta_e_VS_Phi_e_pFDpCD_FD_Dir, hTheta_e_VS_Phi_e_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_vs_W_pFDpCD, hTheta_p_e_p_tot_vs_W_pFDpCD_Dir, hTheta_p_e_p_tot_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_vs_W_pFDpCD, hTheta_q_p_tot_vs_W_pFDpCD_Dir, hTheta_q_p_tot_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_W_pFDpCD, hTheta_q_p_L_vs_W_pFDpCD_Dir, hTheta_q_p_L_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_R_vs_W_pFDpCD, hTheta_q_p_R_vs_W_pFDpCD_Dir, hTheta_q_p_R_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_vs_W_pFDpCD, hTheta_q_pFD_vs_W_pFDpCD_Dir, hTheta_q_nFD_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_vs_W_pFDpCD, hTheta_q_pCD_vs_W_pFDpCD_Dir, hTheta_q_pCD_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_p_L_q_pFDpCD, hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir, hTheta_q_p_L_vs_p_L_q_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD, hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD_Dir, hTheta_q_p_L_vs_Theta_q_p_R_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD, hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD_Dir, hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_vs_W_pFDpCD, hTheta_pFD_pCD_vs_W_pFDpCD_Dir, hTheta_nFD_pCD_vs_W_nFDpCD, plots);
 
 //            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for angles!\n\n\n";
 //            quit();
@@ -14825,7 +14846,7 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hQ2_pFDpCD_FD, hQ2_pFDpCD_FD_Dir, hQ2_nFDpCD_FD, plots);
 
 //            exit(0);
@@ -15152,8 +15173,10 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hE_e_All_Int_pFDpCD_FD, hE_e_All_Int_pFDpCD_FD_Dir, hE_e_All_Int_nFDpCD_FD, plots);
+
+            DrawAndSaveFSRatio(SampleName, hE_e_VS_Theta_e_All_Int_pFDpCD_FD, hE_e_VS_Theta_e_All_Int_pFDpCD_FD_Dir, hE_e_VS_Theta_e_All_Int_nFDpCD_FD, plots);
 
 //            exit(0);
         }
@@ -15472,7 +15495,7 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hET15_All_Int_pFDpCD_FD, hET15_All_Int_pFDpCD_FD_Dir, hET15_All_Int_nFDpCD_FD, plots);
 
 //            exit(0);
@@ -15642,8 +15665,13 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hEcal_All_Int_pFDpCD, hEcal_All_Int_pFDpCD_Dir, hEcal_All_Int_nFDpCD, plots);
+
+            DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_L_pFDpCD, hEcal_vs_dP_T_L_pFDpCD_Dir, hEcal_vs_dP_T_L_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_tot_pFDpCD, hEcal_vs_dP_T_tot_pFDpCD_Dir, hEcal_vs_dP_T_tot_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_L_pFDpCD, hEcal_vs_dAlpha_T_L_pFDpCD_Dir, hEcal_vs_dAlpha_T_L_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_tot_pFDpCD, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir, hEcal_vs_dAlpha_T_tot_nFDpCD, plots);
 
 //            exit(0);
         }
@@ -15818,13 +15846,20 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts) {
+        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
             DrawAndSaveFSRatio(SampleName, hdP_T_L_pFDpCD, hdP_T_L_pFDpCD_Dir, hdP_T_L_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdP_T_tot_pFDpCD, hdP_T_tot_pFDpCD_Dir, hdP_T_tot_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_pFDpCD, hdAlpha_T_L_pFDpCD_Dir, hdAlpha_T_L_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_pFDpCD, hdAlpha_T_tot_pFDpCD_Dir, hdAlpha_T_tot_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdPhi_T_L_pFDpCD, hdPhi_T_L_pFDpCD_Dir, hdPhi_T_L_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdPhi_T_tot_pFDpCD, hdPhi_T_tot_pFDpCD_Dir, hdPhi_T_tot_nFDpCD, plots);
+
+            DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_dAlpha_T_L_pFDpCD, hdP_T_L_vs_dAlpha_T_L_pFDpCD_Dir, hdP_T_L_vs_dAlpha_T_L_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD_Dir, hdP_T_tot_vs_dAlpha_T_tot_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_W_pFDpCD, hdP_T_L_vs_W_pFDpCD_Dir, hdP_T_L_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_W_pFDpCD, hdP_T_tot_vs_W_pFDpCD_Dir, hdP_T_tot_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_vs_W_pFDpCD, hdAlpha_T_L_vs_W_pFDpCD_Dir, hdAlpha_T_L_vs_W_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_vs_W_pFDpCD, hdAlpha_T_tot_vs_W_pFDpCD_Dir, hdAlpha_T_tot_vs_W_nFDpCD, plots);
 
 //            exit(0);
         }

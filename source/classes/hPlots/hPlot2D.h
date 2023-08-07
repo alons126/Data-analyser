@@ -15,6 +15,8 @@ protected:
     map <std::string, std::string> Histogram2DTitles{{"FinalState",                ""},
                                                      {"DetectorRegion",            ""},
                                                      {"Histogram2DTitleReactions", ""}};
+    std::string HistogramStatsTitle;
+
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */
@@ -235,13 +237,15 @@ public:
 
     TH2D *GetHistogram2D() { return Histogram2D; }
 
+    TH2D *GetHistogram() const { return Histogram2D; }
+
     TH2D *GetHistogram2DConst() const { return Histogram2D; }
 
     std::string GetHistogramTitle() { return Histogram2DTitles["HistogramTitle"]; }
 
     std::string GetHistTitle() { return Histogram2D->GetTitle(); }
 
-    std::string GetHistogramStatTitle() { return Histogram2DTitles["HistogramStatTitle"]; }
+    std::string GetHistogramStatTitle() const { return HistogramStatsTitle; }
 
     std::string GetXaxisTitle() { return Histogram2DTitles["XaxisTitle"]; }
 
@@ -285,7 +289,7 @@ public:
 
     std::string GetHistogram2DSaveName() { return Histogram2DSaveName; }
 
-    std::string GetHistogram2DSaveNamePath() { return Histogram2DSaveNamePath; }
+    std::string GetHistogram2DSaveNamePath() const { return Histogram2DSaveNamePath; }
 
     std::string GetFinalState() { return Histogram2DTitles["FinalState"]; }
 

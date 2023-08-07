@@ -40,7 +40,7 @@ string GetParticleNameShort(string Source) {
                || findSubstring(Source, "Photon")) {
         ParticleNameShort = "Photon";
     } else {
-        ParticleNameShort = "#gamma";
+        ParticleNameShort = "unknown";
     }
 
     return ParticleNameShort;

@@ -26,11 +26,21 @@ void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTi
 //    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/FS_" + Type + "_ratio_plots";
     string Histogram1DSaveNamePath;
 
-    if (Type == "deltaP_T_tot" || Type == "deltaP_T_L" || Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L") {
-        Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
-                                  "/FS_TKI_ratio_plots/FS_" + Type + "_ratio_plots";
+    if (!findSubstring(RecTitle, "vs") && !findSubstring(RecTitle, "vs.") && !findSubstring(RecTitle, "VS") && !findSubstring(RecTitle, "VS.")) {
+        if (Type == "deltaP_T_tot" || Type == "deltaP_T_L" || Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" ||
+            Type == "deltaPhi_T_L") {
+            Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                      "/FS_TKI_ratio_plots/FS_" + Type + "_ratio_plots";
+        } else if (findSubstring(Type, "Opening_ang")) {
+            Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                      "/FS_Opening_ang_ratio_plots/FS_" + Type + "_ratio_plots";
+        } else {
+            Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                      "/FS_" + Type + "_ratio_plots";
+        }
     } else {
-        Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/FS_" + Type + "_ratio_plots";
+        Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                  "/FS_2D_hist_ratios/FS_" + Type + "_ratio_plots";
     }
 
     //<editor-fold desc="original">

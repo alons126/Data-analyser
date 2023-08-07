@@ -13,6 +13,7 @@ hPlot2D::hPlot2D(std::string h2DtReactions, std::string fState, std::string dReg
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramYAxisLimits.push_back(LowerYlim), HistogramYAxisLimits.push_back(UpperYlim);
     HistogramNumberOfXBins = hnoXb, HistogramNumberOfYBins = hnoYb;
+    HistogramStatsTitle = hst;
 
     Histogram2D = new TH2D(
             (Histogram2DTitles["HistogramStatTitle"] + " (" + Histogram2DTitles["Histogram2DTitleReactions"] + ", " + Histogram2DTitles["FinalState"] + ", " +
@@ -31,6 +32,7 @@ hPlot2D::hPlot2D(std::string h2DtReactions, std::string fState, std::string dReg
     HistogramYAxisLimits.push_back(LowerYlim), HistogramYAxisLimits.push_back(UpperYlim);
     HistogramNumberOfXBins = hnoXb, HistogramNumberOfYBins = hnoYb;
     Histogram2DSaveNamePath = sPath, Histogram2DSaveName = sName;
+    HistogramStatsTitle = hst;
 
     std::string subtitle;
 
@@ -58,6 +60,7 @@ hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramYAxisLimits.push_back(LowerYlim), HistogramYAxisLimits.push_back(UpperYlim);
     HistogramNumberOfXBins = hnoXb, HistogramNumberOfYBins = hnoYb;
+    HistogramStatsTitle = hst;
 
     Histogram2D = new TH2D(
             (Histogram2DTitles["HistogramStatTitle"] + " (" + Histogram2DTitles["FinalState"] + ", " + Histogram2DTitles["DetectorRegion"] + ")").c_str(),
@@ -76,6 +79,7 @@ hPlot2D::hPlot2D(std::string fState, std::string dRegion, std::string hst, std::
     HistogramNumberOfXBins = hnoXb, HistogramNumberOfYBins = hnoYb;
     Histogram2DSaveNamePath = sPath;
     Histogram2DSaveName = sName;
+    HistogramStatsTitle = hst;
 
     if (fState != "") {
         if (Histogram2DTitles["DetectorRegion"] == "") {
@@ -118,6 +122,7 @@ hPlot2D::hPlot2D(std::string hst, std::string ht, std::string xat, std::string y
     HistogramXAxisLimits.push_back(LowerXlim), HistogramXAxisLimits.push_back(UpperXlim);
     HistogramYAxisLimits.push_back(LowerYlim), HistogramYAxisLimits.push_back(UpperYlim);
     HistogramNumberOfXBins = hnoXb, HistogramNumberOfYBins = hnoYb;
+    HistogramStatsTitle = hst;
 
     Histogram2D = new TH2D(
             (Histogram2DTitles["HistogramStatTitle"]).c_str(),
