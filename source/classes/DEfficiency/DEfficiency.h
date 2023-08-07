@@ -70,20 +70,20 @@ public:
 
 // LoadHistograms functions ---------------------------------------------------------------------------------------------------------------------------------------------
 
-    void LoadHistograms(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot);
+    void LoadHistograms(const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot);
 
-    void LoadHistograms(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot);
+    void LoadHistograms(const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot);
 
 // DrawACorrHistograms function ----------------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawACorrHistograms(bool save_ACorr_data, string &SampleName, TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir);
+    void DrawACorrHistograms(bool save_ACorr_data, const string &SampleName, TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir);
 
 // DrawAndSaveACorrPlots function ---------------------------------------------------------------------------------------------------------------------------------------
 
-    void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list, TList *ACorr_data,
+    void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list, TList *ACorr_data,
                                string &ACorr_data_Dir);
 
-    void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list, TList *ACorr_data,
+    void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list, TList *ACorr_data,
                                string &ACorr_data_Dir);
 
 // DrawAndSaveHistogram1D function --------------------------------------------------------------------------------------------------------------------------------------

@@ -133,10 +133,9 @@ private:
                                                      "01_1e_cut",
                                                      "02_1p",
                                                      "03_1n",
-//                                                        "03_1e2p",
                                                      "04_2p",
-                                                     "05_pFDpCD",
-                                                     "06_nFDpCD"
+                                                     "05_pFDpCD","05_pFDpCD/Other",
+                                                     "06_nFDpCD","06_nFDpCD/Other"
     };
     //</editor-fold>
 

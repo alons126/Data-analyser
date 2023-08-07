@@ -51,7 +51,7 @@ using namespace std;
 //TODO: move this into a class with the propper functions
 
 
-void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hPlot1D &nFDpCD_Plot, TList *Histogram_list) {
+void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, const hPlot1D &nFDpCD_Plot, TList *Histogram_list) {
     hData Propeties;
 
     bool plot_errorbars = true;
@@ -213,7 +213,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, const hP
     delete Canvas;
 }
 
-void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nFDpCD_Plot, TList *Histogram_list) {
+void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nFDpCD_Plot, TList *Histogram_list) {
     hData Propeties;
 
     bool plot_errorbars = true;
@@ -480,7 +480,7 @@ void DrawAndSaveFSRatio(string &SampleName, const hPlot1D &pFDpCD_Plot, TH1D *nF
     delete Canvas;
 }
 
-void DrawAndSaveFSRatio(string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_PlotSaveNamePath, TH1D *nFDpCD_Plot, TList *Histogram_list) {
+void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, string pFDpCD_PlotSaveNamePath, TH1D *nFDpCD_Plot, TList *Histogram_list) {
     hData Propeties;
 
     bool plot_errorbars = true;

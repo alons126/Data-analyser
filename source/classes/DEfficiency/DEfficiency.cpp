@@ -31,7 +31,7 @@ void DEfficiency::ResetHistograms() {
 // LoadHistograms function ----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="LoadHistograms function">
-void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot) {
+void DEfficiency::LoadHistograms(const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot) {
     Histogram1D_REC = RPlot.GetHistogram();
     RPlot_Clone_StatsTitle = "reco. " + RPlot.GetHistogramStatTitle() + " - cloned";
     RPlot_Clone = (TH1D *) Histogram1D_REC->Clone((RPlot_Clone_StatsTitle).c_str());
@@ -54,7 +54,7 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, cons
 //</editor-fold>
 
 //<editor-fold desc="LoadHistograms function">
-void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot) {
+void DEfficiency::LoadHistograms(const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot) {
     string StatsTitle = GetStatsTitle(RPlot->GetTitle());
 
     RPlot_Clone_StatsTitle = "reco. " + StatsTitle + " - cloned";
@@ -81,7 +81,7 @@ void DEfficiency::LoadHistograms(string &SampleName, const hPlot1D &TLPlot, TH1D
 // DrawACorrHistograms function -----------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawACorrHistograms function">
-void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, string &SampleName, TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
+void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, const string &SampleName, TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
     //<editor-fold desc="Canvas definitions">
     TCanvas *Canvas = new TCanvas("Canvas", "Canvas", 1000, 750); // normal res
@@ -222,7 +222,7 @@ void DEfficiency::DrawACorrHistograms(bool save_ACorr_data, string &SampleName, 
 // DrawAndSaveACorrPlots function ---------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="DrawAndSaveACorrPlots function">
-void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list, TList *ACorr_data,
+void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list, TList *ACorr_data,
                                         string &ACorr_data_Dir) {
     LoadHistograms(SampleName, TLPlot, RPlot);
     DrawACorrHistograms(save_ACorr_data, SampleName, Histogram_list, ACorr_data, ACorr_data_Dir);
@@ -231,7 +231,7 @@ void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName
 //</editor-fold>
 
 //<editor-fold desc="DrawAndSaveACorrPlots function">
-void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list, TList *ACorr_data,
+void DEfficiency::DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list, TList *ACorr_data,
                                         string &ACorr_data_Dir) {
     LoadHistograms(SampleName, TLPlot, RPlot);
     DrawACorrHistograms(save_ACorr_data, SampleName, Histogram_list, ACorr_data, ACorr_data_Dir);

@@ -38,7 +38,7 @@
 
 using namespace std;
 
-void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list) {
+void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot, TList *Histogram_list) {
     bool plot_errorbars = true;
     bool rebin_plots = false;
 
@@ -354,7 +354,7 @@ void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, const
     delete Canvas;
 }
 
-void DrawAndSaveEfficiencyPlots(string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {
+void DrawAndSaveEfficiencyPlots(const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot, TList *Histogram_list) {
     bool plot_errorbars = true;
     bool rebin_plots = false;
 

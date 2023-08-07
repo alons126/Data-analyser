@@ -225,9 +225,13 @@ Directories::Directories(std::string plots_path) {
 
     Momentum_Directory_map["Momentum_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                           Find(Momentum_Daughter_Folders, "05_pFDpCD") + "/";
+    Momentum_Directory_map["Other_momentum_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                                Find(Momentum_Daughter_Folders, "05_pFDpCD/Other") + "/";
 
     Momentum_Directory_map["Momentum_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                           Find(Momentum_Daughter_Folders, "06_nFDpCD") + "/";
+    Momentum_Directory_map["Other_momentum_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                                Find(Momentum_Daughter_Folders, "06_nFDpCD/Other") + "/";
     //</editor-fold>
 
     //</editor-fold>
@@ -635,7 +639,7 @@ Directories::Directories(std::string plots_path) {
     }
 
     E_e_Directory_map["E_e_All_Int_1e_cut_stack_Directory"] = Plots_Folder + "/" + E_e_Parent_Directory + "/" +
-                                                          Find(E_e_Daughter_Folders, "01_1e_cut") + "/";
+                                                              Find(E_e_Daughter_Folders, "01_1e_cut") + "/";
     E_e_Directory_map["E_e_All_Int_1e_cut_Directory"] = Plots_Folder + "/" + E_e_Parent_Directory + "/" +
                                                         Find(E_e_Daughter_Folders, "01_1e_cut/E_e_plots_1e_cut") + "/";
     E_e_Directory_map["E_e_VS_Theta_e_All_Int_1e_cut_Directory"] = Plots_Folder + "/" + E_e_Parent_Directory + "/" +
@@ -985,9 +989,9 @@ Directories::Directories(std::string plots_path) {
     Eff_and_ACorr_Directory_map["Phi_Eff_and_ACorr_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
                                                                         Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/03_Phi_Eff_and_ACorr_plots_1e_cut") + "/";
     Eff_and_ACorr_Directory_map["TL_Acceptance_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                  Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Hit_maps") + "/";
+                                                                         Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/04_Hit_maps") + "/";
     Eff_and_ACorr_Directory_map["Loaded_reco_ref_Acceptance_Maps_1e_cut_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/" +
-                                                                               Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/05_Loaded_reco_ref_hit_maps") + "/";
+                                                                                      Find(Eff_and_ACorr_Daughter_Folders, "01_1e_cut/05_Loaded_reco_ref_hit_maps") + "/";
 
     Eff_and_ACorr_Directory_map["Eff_and_ACorr_1p_Directory"] = Plots_Folder + "/" + Eff_and_ACorr_Parent_Directory + "/"
                                                                 + Find(Eff_and_ACorr_Daughter_Folders, "02_1p") + "/";
@@ -1049,13 +1053,13 @@ Directories::Directories(std::string plots_path) {
     }
 
     AMaps_Directory_map["AMaps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
-                                                          + Find(Hit_Maps_Daughter_Folders, "01_AMaps_1e_cut") + "/";
+                                                    + Find(Hit_Maps_Daughter_Folders, "01_AMaps_1e_cut") + "/";
     AMaps_Directory_map["AMaps_BC_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
-                                                          + Find(Hit_Maps_Daughter_Folders, "01_AMaps_1e_cut/00a_AMaps_BC_from_file") + "/";
+                                                       + Find(Hit_Maps_Daughter_Folders, "01_AMaps_1e_cut/00a_AMaps_BC_from_file") + "/";
     AMaps_Directory_map["WMaps_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
-                                                          + Find(Hit_Maps_Daughter_Folders, "02_WMaps_1e_cut") + "/";
+                                                    + Find(Hit_Maps_Daughter_Folders, "02_WMaps_1e_cut") + "/";
     AMaps_Directory_map["WMaps_BC_1e_cut_Directory"] = Plots_Folder + "/" + Hit_Maps_Parent_Directory + "/"
-                                                          + Find(Hit_Maps_Daughter_Folders, "02_WMaps_1e_cut/00a_WMaps_BC_from_file") + "/";
+                                                       + Find(Hit_Maps_Daughter_Folders, "02_WMaps_1e_cut/00a_WMaps_BC_from_file") + "/";
     //</editor-fold>
 
     //<editor-fold desc="Resolution plots directories">

@@ -12,6 +12,8 @@ protected:
     std::string SampleName;
     double BeanEnergy;
 
+    bool LocalSample = false;
+
     bool SimulationSample = false;
     bool DataSample = false;
 
@@ -22,11 +24,11 @@ public:
 
 // ConfigureSampleName function -----------------------------------------------------------------------------------------------------------------------------------------
 
-    string ConfigureSampleName(string AnalyseFilePath, string AnalyseFileSample);
+    string ConfigureSampleName(const string &AnalyseFilePath, const string &AnalyseFileSample);
 
 // ConfigureBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------
 
-    double ConfigureBeanEnergy(string sn);
+    double ConfigureBeanEnergy(const string &sn);
 
 // GetBeanEnergy function -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -34,15 +36,21 @@ public:
 
 // ExperimentParameters function ----------------------------------------------------------------------------------------------------------------------------------------
 
-    ExperimentParameters(string AnalyseFilePath, string AnalyseFileSample);
+    ExperimentParameters(const string &AnalyseFilePath, const string &AnalyseFileSample);
 
 // other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    bool SSample() { return SimulationSample; };
+    bool SLocal() const { return LocalSample; };
 
-    bool DSample() { return DataSample; };
+    bool SSample() const { return SimulationSample; };
 
-    bool IsBeamAt2GeV() { return BeamAt2GeV; };
+    bool DSample() const { return DataSample; };
+
+    bool IsBeamAt2GeV() const { return BeamAt2GeV; };
+
+    bool IsBeamAt4GeV() const { return BeamAt4GeV; };
+
+    bool IsBeamAt6GeV() const { return BeamAt6GeV; };
 };
 
 

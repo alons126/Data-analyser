@@ -164,17 +164,17 @@ public:
                        bool apply_plot_cuts = false, double plot_cuts = 0, double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (unified):
-    void histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+    void histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                        double custom_normalization_factor, TList *Histogram_list, THStack *Histogram1DStack, double plot_lower_cut = -9999, double plot_upper_cut = 9999,
                        double plot_Xmax = 0, bool plot_max = true);
 
     // histPlotter1D function (unified, stackless):
-    void histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+    void histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                        double custom_normalization_factor, TList *Histogram_list, double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0,
                        bool plot_max = true);
 
     // histPlotter1DwFit function:
-    void histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+    void histPlotter1DwFit(const std::string SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                            double custom_normalization_factor, string Histogram1DTitle, string Histogram1DTitleReactions, TList *Histogram_list,
                            string Histogram1DSaveName, const string &Histogram1DSaveNamePath, string finalState, double &plot_Xmax, double &plot_lcut,
                            double &plot_ucut, double factor, bool plot_max = true, string particle = "");
@@ -194,12 +194,12 @@ public:
 
     void SimpleSave(TCanvas *Histogram1DCanvas) { Histogram1DCanvas->SaveAs((Histogram1DSaveNamePath + "/" + Histogram1DSaveName + ".png").c_str()); }
 
-    void hDrawAndSave(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
+    void hDrawAndSave(const std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
                       double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0, bool plotMax = false);
 
     void hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor);
 
-    void hDrawAndSaveWFit(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
+    void hDrawAndSaveWFit(const std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
                           double factor, double &plot_lower_cut, double &plot_upper_cut, double &plot_Xmax, bool plotMax = false);
 
 //    void hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool nHistogram, bool cNormalization, double cNormalizationFactor, std::string FinalState);

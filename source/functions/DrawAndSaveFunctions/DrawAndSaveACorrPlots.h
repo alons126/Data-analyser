@@ -39,7 +39,7 @@
 using namespace std;
 
 // DrawAndSaveACorrPlots function for momentum plots:
-void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot,
+void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, const hPlot1D &RPlot,
                            TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
     bool plot_errorbars = true;
@@ -333,7 +333,7 @@ void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot
 }
 
 // DrawAndSaveACorrPlots function for angle plots:
-void DrawAndSaveACorrPlots(bool save_ACorr_data, string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot,
+void DrawAndSaveACorrPlots(bool save_ACorr_data, const string &SampleName, const hPlot1D &TLPlot, TH1D *RPlot,
                            TList *Histogram_list, TList *ACorr_data, string &ACorr_data_Dir) {
 
     bool plot_errorbars = true;

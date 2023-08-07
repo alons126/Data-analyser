@@ -1038,7 +1038,7 @@ void hPlot1D::histPlotter1D(TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool 
 // histPlotter1D function (unified) -------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="histPlotter1D function (unified)">
-void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                             double custom_normalization_factor, TList *Histogram_list, THStack *Histogram1DStack, double plot_lower_cut = -9999,
                             double plot_upper_cut = 9999, double plot_Xmax = 0, bool plot_max = true) {
     Histogram1DCanvas->cd();
@@ -1218,7 +1218,7 @@ void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas,
 //</editor-fold>
 
 //<editor-fold desc="histPlotter1D function (unified, stackless)">
-void hPlot1D::histPlotter1D(std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
+void hPlot1D::histPlotter1D(const std::string &SampleName, TCanvas *Histogram1DCanvas, TH1D *Histogram1D, bool normalize_Histogram, bool custom_normalization,
                             double custom_normalization_factor, TList *Histogram_list, double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0,
                             bool plot_max = true) {
     Histogram1DCanvas->cd();
@@ -1622,7 +1622,7 @@ void hPlot1D::histPlotter1DwFit(std::string SampleName, TCanvas *Histogram1DCanv
 // hDrawAndSave function ------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hDrawAndSave function">
-void hPlot1D::hDrawAndSave(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
+void hPlot1D::hDrawAndSave(const std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
                            double plot_lower_cut = -9999, double plot_upper_cut = 9999, double plot_Xmax = 0, bool plotMax = false) {
     histPlotter1D(SampleName, h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, hList, plot_lower_cut, plot_upper_cut, plot_Xmax, plotMax);
 }
@@ -1638,7 +1638,7 @@ void hPlot1D::hDrawAndSave(TCanvas *h1DCanvas, TList *hList, bool normHistogram,
 // hDrawAndSaveWFit function ------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hDrawAndSaveWFit function">
-void hPlot1D::hDrawAndSaveWFit(std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
+void hPlot1D::hDrawAndSaveWFit(const std::string &SampleName, TCanvas *h1DCanvas, TList *hList, bool normHistogram, bool cNormalization, double cNormalizationFactor,
                                double factor, double &plot_lower_cut, double &plot_upper_cut, double &plot_Xmax, bool plotMax = false) {
     histPlotter1DwFit(SampleName, h1DCanvas, Histogram1D, normHistogram, cNormalization, cNormalizationFactor, Histogram1DTitles["HistogramTitle"],
                       Histogram1DTitles["Histogram1DTitleReactions"], hList, Histogram1DSaveName, Histogram1DSaveNamePath, Histogram1DTitles["FinalState"], plot_Xmax,
