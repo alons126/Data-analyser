@@ -33,8 +33,10 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
         if (!findSubstring(Title, "vs") && !findSubstring(Title, "vs.") && !findSubstring(Title, "VS") && !findSubstring(Title, "VS.")) {
             YAxisTitle = "nFDpCD/pFDpCD";
         } else {
-            if (findSubstring(Title, "P_{tot} vs. P_{rel}")) {
-                YAxisTitle = "P_{rel} = |#vec{P}_{pL} - #vec{P}_{pR}|/2 [GeV/c]";
+            if (findSubstring(Title, "#vec{P}_{tot} vs. #vec{P}_{rel}")) {
+                YAxisTitle = "|#vec{P}_{rel}| = |#vec{P}_{nucL} - #vec{P}_{nucR}|/2 [GeV/c]";
+            } else if (findSubstring(Title, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
+                YAxisTitle = "P_{tot}^{#mu} = P_{pL}^{#mu} + P_{pR}^{#mu} [GeV/c]";
             } else if (findSubstring(Title, "P_{pL} vs. P_{pR}") || findSubstring(Title, "P_{nL} vs. P_{nR}")) {
                 YAxisTitle = "P_{nucR} [GeV/c]";
             } else if (findSubstring(Title, "P_{pFD} vs. P_{pCD}") || findSubstring(Title, "P_{nFD} vs. P_{ncCD}")) {
@@ -53,8 +55,7 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
                 YAxisTitle = "#theta_{nucFD} [Deg]";
             } else if (findSubstring(Title, "#theta_{pCD} vs. #phi_{pCD}")) {
                 YAxisTitle = "#theta_{nucCD} [Deg]";
-            } else if (findSubstring(Title, "#theta_{pFD} vs. W") ||
-                       findSubstring(Title, "#theta_{nFD} vs. W")) {
+            } else if (findSubstring(Title, "#theta_{pFD} vs. W") || findSubstring(Title, "#theta_{nFD} vs. W")) {
                 YAxisTitle = "#theta_{nucFD} [Deg]";
             } else if (findSubstring(Title, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Title, "#theta_{nFD} vs. P_{nFD}")) {
                 YAxisTitle = "#theta_{nucFD} [Deg]";

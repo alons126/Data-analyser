@@ -63,15 +63,17 @@ string SetXAxisTitle(const string &RecTitle) {
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pCD}}")) {
             XAxisTitle = "#theta_{#vec{q},#vec{P}_{p,CD}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pL}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}}")) {
-            XAxisTitle = "#theta_{#vec{q},#vec{P}_{nuc,L}} [Deg]";
+            XAxisTitle = "#theta_{#vec{q},#vec{P}_{nucL}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pR}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nR}}")) {
-            XAxisTitle = "#theta_{#vec{q},#vec{P}_{nuc,R}} [Deg]";
+            XAxisTitle = "#theta_{#vec{q},#vec{P}_{nucR}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{pFD,pCD}") || findSubstring(RecTitle, "#theta_{nFD,pCD}")) {
             XAxisTitle = "#theta_{nucFD,nucCD} [Deg]";
         }
     } else {
-        if (findSubstring(RecTitle, "P_{tot} vs. P_{rel}")) {
-            XAxisTitle = "P_{tot} = |#vec{P}_{pL} + #vec{P}_{pR}| [GeV/c]";
+        if (findSubstring(RecTitle, "#vec{P}_{tot} vs. #vec{P}_{rel}")) {
+            XAxisTitle = "|#vec{P}_{tot}| = |#vec{P}_{nucL} + #vec{P}_{nucR}| [GeV/c]";
+        } else if (findSubstring(RecTitle, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
+            XAxisTitle = "P_{tot}^{#mu} = P_{pL}^{#mu} + P_{pR}^{#mu} [GeV/c]";
         } else if (findSubstring(RecTitle, "P_{pL} vs. P_{pR}") || findSubstring(RecTitle, "P_{nL} vs. P_{nR}")) {
             XAxisTitle = "P_{nucL} [GeV/c]";
         } else if (findSubstring(RecTitle, "P_{pFD} vs. P_{pCD}") || findSubstring(RecTitle, "P_{nFD} vs. P_{ncCD}")) {

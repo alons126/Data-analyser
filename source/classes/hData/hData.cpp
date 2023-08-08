@@ -144,7 +144,7 @@ string hData::GetType(const string &Source) {
 
     if (!findSubstring(Source, "vs") && !findSubstring(Source, "vs.")
         && !findSubstring(Source, "VS") && !findSubstring(Source, "VS.")) {
-        if (findSubstring(Source, "momentum")) { // for momentum efficiency plots
+        if (findSubstring(Source, "momentum") && !findSubstring(Source, "-momentum")) { // for momentum efficiency plots
             Type = "momentum";
         } else if (findSubstring(Source, "W ")) { // for theta efficiency plots
             Type = "W";
@@ -189,6 +189,10 @@ string hData::GetType(const string &Source) {
             }
         } else if (findSubstring(Source, "#theta_{pFD,pCD}") || findSubstring(Source, "#theta_{nFD,pCD}")) {
             Type = "Opening_ang_P_nucFD_P_nucCD";
+        } else if (findSubstring(Source, "Total nucleon 3-momentum")) {
+            Type = "Total_nucleon_3momentum";
+        } else if (findSubstring(Source, "Total nucleon 4-momentum")) {
+            Type = "Total_nucleon_4momentum";
         }
     } else {
         if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
@@ -341,14 +345,18 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 } else if (Type == "Opening_ang_q_P_nucCD") {
                     FSRTitle = "Opening angle between q and P_{nuc,CD} ratio - ";
                 } else if (Type == "Opening_ang_q_P_nucL") {
-                    FSRTitle = "Opening angle between q and leading nucleon P_{nuc,L} ratio - ";
+                    FSRTitle = "Opening angle between q and leading nucleon P_{nucL} ratio - ";
                 } else if (Type == "Opening_ang_q_P_nucR") {
-                    FSRTitle = "Opening angle between q and recoil nucleon P_{nuc,R} ratio - ";
+                    FSRTitle = "Opening angle between q and recoil nucleon P_{nucR} ratio - ";
                 } else if (Type == "Opening_ang_P_nucFD_P_nucCD") {
                     FSRTitle = "Opening angle between FD and CD nucleons ratio - ";
                 } else {
                     FSRTitle = Type + " ratio - ";
                 }
+            } else if (Type == "Total_nucleon_3momentum") {
+                FSRTitle = "Relative nucleon 3-momentum";
+            } else if (Type == "Total_nucleon_4momentum") {
+                FSRTitle = "Relative nucleon 4-momentum";
             } else {
                 if (Particle == "Electron") {
                     if (Type == "momentum") {
@@ -373,8 +381,10 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 }
             }
         } else {
-            if (findSubstring(Source, "P_{tot} vs. P_{rel}")) {
-                FSRTitle = "P_{tot} vs. P_{rel}";
+            if (findSubstring(Source, "#vec{P}_{tot} vs. #vec{P}_{rel}")) {
+                FSRTitle = "#vec{P}_{tot} vs. #vec{P}_{rel}";
+            } else if (findSubstring(Source, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
+                FSRTitle = "P_{tot}^{#mu} vs. P_{rel}^{#mu}";
             } else if (findSubstring(Source, "P_{pL} vs. P_{pR}") || findSubstring(Source, "P_{nL} vs. P_{nR}")) {
                 FSRTitle = "P_{nucL} vs. P_{nucR}";
             } else if (findSubstring(Source, "P_{pFD} vs. P_{pCD}") || findSubstring(Source, "P_{nFD} vs. P_{ncCD}")) {
