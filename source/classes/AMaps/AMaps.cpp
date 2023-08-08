@@ -1988,7 +1988,7 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                             cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
                                             cout << "Phi = " << Phi << "\n";
                                             cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
-                                            
+
                                             cout << "Weight = " << Weight << "\n\n";
 
                                             cout << "1/Weight = " << (1 / Weight) << "\n\n\n\n";
