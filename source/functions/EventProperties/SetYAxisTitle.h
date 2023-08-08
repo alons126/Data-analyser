@@ -36,10 +36,10 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
             if (findSubstring(Title, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
                 YAxisTitle = "|#vec{P}_{rel}| = |#vec{P}_{nucL} - #vec{P}_{nucR}|/2 [GeV/c]";
             } else if (findSubstring(Title, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
-                YAxisTitle = "P_{tot}^{#mu} = P_{pL}^{#mu} + P_{pR}^{#mu} [GeV/c]";
+                YAxisTitle = "P_{rel}^{#mu} = (P_{pL}^{#mu} - P_{pR}^{#mu})/2 [GeV/c]";
             } else if (findSubstring(Title, "P_{pL} vs. P_{pR}") || findSubstring(Title, "P_{nL} vs. P_{nR}")) {
                 YAxisTitle = "P_{nucR} [GeV/c]";
-            } else if (findSubstring(Title, "P_{pFD} vs. P_{pCD}") || findSubstring(Title, "P_{nFD} vs. P_{ncCD}")) {
+            } else if (findSubstring(Title, "P_{pFD} vs. P_{pCD}") || findSubstring(Title, "P_{nFD} vs. P_{pCD}")) {
                 YAxisTitle = "P_{nucFD} [GeV/c]";
             } else if (findSubstring(Title, "#theta_{e} vs. P_{e}")) {
                 YAxisTitle = "#theta_{e} [Deg]";
@@ -75,23 +75,27 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
                 YAxisTitle = "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg]";
             } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{tot}} vs. W")) {
                 YAxisTitle = "#theta_{#vec{q},#vec{P}_{tot}} [Deg]";
-            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pL}} vs. W") || findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nL}} vs. W")) {
+            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pL}} vs. W") ||
+            findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nL}} vs. W")) {
                 YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucL}} [Deg]";
-            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pR}} vs. W") || findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nR}} vs. W")) {
+            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pR}} vs. W") ||
+            findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nR}} vs. W")) {
                 YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucR}} [Deg]";
-            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pFD}} vs. W") || findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nFD}} vs. W")) {
+            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pFD}} vs. W") ||
+            findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nFD}} vs. W")) {
                 YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} [Deg]";
-            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W") || findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
+            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W") ||
+            findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
                 YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucCD}} [Deg]";
             } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}|") ||
                        findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}|")) {
-                YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucL}}";
-            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pL}} vs. #theta_{#vec{q},#vec{P}_{pR}") ||
-                       findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nL}} vs. #theta_{#vec{q},#vec{P}_{nR}")) {
-                YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucR}";
-            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}") ||
-                       findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}")) {
-                YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucCD} [Deg]";
+                YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucL}} [Deg]";
+            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pL}} vs. #theta_{#vec{q},#vec{P}_{pR}}") ||
+                       findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nL}} vs. #theta_{#vec{q},#vec{P}_{nR}}")) {
+                YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucR} [Deg]";
+            } else if (findSubstring(Title, "#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}") ||
+                       findSubstring(Title, "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}")) {
+                YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucCD}} [Deg]";
             } else if (findSubstring(Title, "#theta_{pFD,pCD} vs. W") || findSubstring(Title, "#theta_{nFD,pCD} vs. W")) {
                 YAxisTitle = "#theta_{nucFD,nucCD} [Deg]";
             } else if (findSubstring(Title, "E_{e} vs. #theta_{e}")) {

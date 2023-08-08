@@ -197,7 +197,7 @@ void EventAnalyser() {
     bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = false;
+    bool apply_kinematical_weights = true;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -1942,19 +1942,19 @@ void EventAnalyser() {
     //<editor-fold desc="Other momentum plots">
 
     //<editor-fold desc="pFD and pCD momentum plots (pFDpCD)">
-    hPlot1D hP_pFD_pFDpCD = hPlot1D("pFDpCD", "", "FD proton momentum", "FD proton momentum", "P_{pFD} [GeV/c]",
+    hPlot1D hP_pFD_pFDpCD = hPlot1D("pFDpCD", "", "FD proton momentum", "FD proton momentum P_{pFD}", "P_{pFD} [GeV/c]",
                                     directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "01a_P_pFD_pFDpCD",
                                     Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_pCD_pFDpCD = hPlot1D("pFDpCD", "", "CD proton momentum", "CD proton momentum", "P_{pCD} [GeV/c]",
+    hPlot1D hP_pCD_pFDpCD = hPlot1D("pFDpCD", "", "CD proton momentum", "CD proton momentum P_{pCD}", "P_{pCD} [GeV/c]",
                                     directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "01b_P_pCD_pFDpCD",
                                     CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     //</editor-fold>
 
     //<editor-fold desc="nFD and pCD momentum plots (nFDpCD)">
-    hPlot1D hP_nFD_nFDpCD = hPlot1D("nFDpCD", "", "FD neutron momentum", "FD neutron momentum", "P_{nFD} [GeV/c]",
+    hPlot1D hP_nFD_nFDpCD = hPlot1D("nFDpCD", "", "FD neutron momentum", "FD neutron momentum P_{nFD}", "P_{nFD} [GeV/c]",
                                     directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "01a_P_nFD_nFDpCD",
                                     Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_pCD_nFDpCD = hPlot1D("nFDpCD", "", "CD proton momentum", "CD proton momentum", "P_{pCD} [GeV/c]",
+    hPlot1D hP_pCD_nFDpCD = hPlot1D("nFDpCD", "", "CD proton momentum", "CD proton momentum P_{pCD}", "P_{pCD} [GeV/c]",
                                     directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "01b_P_pCD_nFDpCD",
                                     CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     //</editor-fold>
@@ -1972,7 +1972,7 @@ void EventAnalyser() {
                                              Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
 
     hPlot1D hP_tot_mu_pFDpCD = hPlot1D("pFDpCD", "", "Total nucleon momentum (4-vector)", "Total nucleon 4-momentum",
-                                       "P_{tot} = |#vec{P}_{pL} + #vec{P}_{pR}| [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
+                                       "P_{tot}^{#mu} = (P_{pL}^{#mu} + P_{pR}^{#mu}) [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
                                        "02d_P_tot_pFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_rel_mu_pFDpCD = hPlot1D("pFDpCD", "", "Relative nucleon momentum (4-vector)", "Relative nucleon 4-momentum",
                                        "P_{rel}^{#mu} = (P_{pL}^{#mu} - P_{pR}^{#mu})/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
@@ -1986,10 +1986,10 @@ void EventAnalyser() {
     //</editor-fold>
 
     //<editor-fold desc="Total and Relative nucleon momenta (nFDpCD)">
-    hPlot1D hP_tot_nFDpCD = hPlot1D("nFDpCD", "", "Total nucleon momentum (3-vector)", "Total nucleon momentum",
+    hPlot1D hP_tot_nFDpCD = hPlot1D("nFDpCD", "", "Total nucleon momentum (3-vector)", "Total nucleon 3-momentum",
                                     "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}| [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
                                     "02a_P_tot_nFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_rel_nFDpCD = hPlot1D("nFDpCD", "", "Relative nucleon momentum (3-vector)", "Relative nucleon momentum",
+    hPlot1D hP_rel_nFDpCD = hPlot1D("nFDpCD", "", "Relative nucleon momentum (3-vector)", "Relative nucleon 3-momentum",
                                     "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
                                     "02b_P_rel_nFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_tot_vs_P_rel_nFDpCD = hPlot2D("nFDpCD", "", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
@@ -1998,7 +1998,7 @@ void EventAnalyser() {
                                              Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
 
     hPlot1D hP_tot_mu_nFDpCD = hPlot1D("nFDpCD", "", "Total nucleon momentum (4-vector)", "Total nucleon 4-momentum",
-                                       "P_{tot} = |#vec{P}_{nL} + #vec{P}_{nR}| [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
+                                       "P_{tot}^{#mu} = (P_{nL}^{#mu} + P_{nR}^{#mu}) [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
                                        "02d_P_tot_nFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_rel_mu_nFDpCD = hPlot1D("nFDpCD", "", "Relative nucleon momentum (4-vector)", "Relative nucleon 4-momentum",
                                        "P_{rel}^{#mu} = (P_{nL}^{#mu} - P_{nR}^{#mu})/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
@@ -13231,17 +13231,24 @@ void EventAnalyser() {
 // Final state ratios (nFDpCD/pFDpCD) -------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
+        if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_tot_pFDpCD, hP_tot_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_rel_pFDpCD, hP_rel_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_tot_mu_pFDpCD, hP_tot_mu_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_rel_mu_pFDpCD, hP_rel_mu_nFDpCD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hP_tot_vs_P_rel_pFDpCD, hP_tot_vs_P_rel_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_pL_vs_P_pR_pFDpCD, hP_nL_vs_P_nR_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_pFD_vs_P_pCD_pFDpCD, hP_nFD_vs_P_pCD_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hP_tot_mu_vs_P_rel_mu_pFDpCD, hP_tot_mu_vs_P_rel_mu_nFDpCD, plots);
+            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+                DrawAndSaveFSRatio(SampleName, hP_pL_vs_P_pR_pFDpCD, hP_nL_vs_P_nR_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_pFD_vs_P_pCD_pFDpCD, hP_nFD_vs_P_pCD_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_tot_vs_P_rel_pFDpCD, hP_tot_vs_P_rel_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hP_tot_mu_vs_P_rel_mu_pFDpCD, hP_tot_mu_vs_P_rel_mu_nFDpCD, plots);
+            }
+
+//            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for momentum!\n\n\n";
+//            quit();
         }
         //</editor-fold>
 
@@ -14556,19 +14563,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_tot_All_Int_pFDpCD, norm_Angle_plots_master, true, Theta_tot_All_Int_pFDpCD_integral, "#theta_{tot} of total 3-momentum",
                       "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "00_Theta_tot_All_Int_pFDpCD",
-                      hTheta_tot_All_Int_pFDpCD_Dir, "", kBlue, true, true, true,true);
+                      hTheta_tot_All_Int_pFDpCD_Dir, "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_tot_QEL_pFDpCD, norm_Angle_plots_master, true, Theta_tot_QEL_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "QEL Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "01_Theta_tot_QEL_Only_pFDpCD", hTheta_tot_QEL_pFDpCD_Dir, "", kBlue, true,
-                      true, true,true);
+                      true, true, true);
         histPlotter1D(c1, hTheta_tot_MEC_pFDpCD, norm_Angle_plots_master, true, Theta_tot_MEC_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "MEC Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "02_Theta_tot_MEC_Only_pFDpCD", hTheta_tot_MEC_pFDpCD_Dir, "", kBlue, true,
-                      true, true,true);
+                      true, true, true);
         histPlotter1D(c1, hTheta_tot_RES_pFDpCD, norm_Angle_plots_master, true, Theta_tot_RES_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "RES Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "03_Theta_tot_RES_Only_pFDpCD", hTheta_tot_RES_pFDpCD_Dir, "", kBlue, true,
-                      true, true,true);
+                      true, true, true);
         histPlotter1D(c1, hTheta_tot_DIS_pFDpCD, norm_Angle_plots_master, true, Theta_tot_DIS_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "DIS Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "04_Theta_tot_DIS_Only_pFDpCD", hTheta_tot_DIS_pFDpCD_Dir, "", kBlue, true,
-                      true, true,true);
+                      true, true, true);
 
         stackPlotter1D(c1, sTheta_tot_pFDpCD, norm_Angle_plots_master, "#theta_{tot} of total 3-momentum", "pFDpCD", plots, hTheta_tot_All_Int_pFDpCD,
                        hTheta_tot_QEL_pFDpCD, hTheta_tot_MEC_pFDpCD, hTheta_tot_RES_pFDpCD, hTheta_tot_DIS_pFDpCD, "05_Theta_tot_Stack_pFDpCD",
@@ -14622,19 +14629,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_rel_All_Int_pFDpCD, norm_Angle_plots_master, true, Theta_rel_All_Int_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "00_Theta_rel_All_Int_pFDpCD",
-                      hTheta_rel_All_Int_pFDpCD_Dir, "", kBlue, true, true, true,true);
+                      hTheta_rel_All_Int_pFDpCD_Dir, "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_QEL_pFDpCD, norm_Angle_plots_master, true, Theta_rel_QEL_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "QEL Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "01_Theta_rel_QEL_Only_pFDpCD", hTheta_rel_QEL_pFDpCD_Dir,
-                      "", kBlue, true, true, true,true);
+                      "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_MEC_pFDpCD, norm_Angle_plots_master, true, Theta_rel_MEC_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "MEC Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "02_Theta_rel_MEC_Only_pFDpCD", hTheta_rel_MEC_pFDpCD_Dir,
-                      "", kBlue, true, true, true,true);
+                      "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_RES_pFDpCD, norm_Angle_plots_master, true, Theta_rel_RES_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "RES Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "03_Theta_rel_RES_Only_pFDpCD", hTheta_rel_RES_pFDpCD_Dir,
-                      "", kBlue, true, true, true,true);
+                      "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_DIS_pFDpCD, norm_Angle_plots_master, true, Theta_rel_DIS_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "DIS Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "04_Theta_rel_DIS_Only_pFDpCD", hTheta_rel_DIS_pFDpCD_Dir,
-                      "", kBlue, true, true, true,true);
+                      "", kBlue, true, true, true, true);
 
         stackPlotter1D(c1, sTheta_rel_pFDpCD, norm_Angle_plots_master, "#theta_{rel} of relative 3-momentum", "pFDpCD", plots, hTheta_rel_All_Int_pFDpCD,
                        hTheta_rel_QEL_pFDpCD, hTheta_rel_MEC_pFDpCD, hTheta_rel_RES_pFDpCD, hTheta_rel_DIS_pFDpCD, "05_Theta_rel_Stack_pFDpCD",
@@ -15397,13 +15404,17 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
+        if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hTheta_e_All_Int_pFDpCD_FD, hTheta_e_All_Int_pFDpCD_FD_Dir, hTheta_e_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_e_All_Int_pFDpCD_FD, hPhi_e_All_Int_pFDpCD_FD_Dir, hPhi_e_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_All_Int_pFDpCD_FD_Dir, hTheta_nFD_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_All_Int_pFDpCD_CD_Dir, hTheta_pCD_All_Int_nFDpCD_CD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_All_Int_pFDpCD_FD_Dir, hPhi_nFD_All_Int_nFDpCD_FD, plots);
             DrawAndSaveFSRatio(SampleName, hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_All_Int_pFDpCD_CD_Dir, hPhi_pCD_All_Int_nFDpCD_CD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_tot_All_Int_pFDpCD, hTheta_tot_All_Int_pFDpCD_Dir, hTheta_tot_All_Int_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hPhi_tot_All_Int_pFDpCD, hPhi_tot_All_Int_pFDpCD_Dir, hPhi_tot_All_Int_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hTheta_rel_All_Int_pFDpCD, hTheta_rel_All_Int_pFDpCD_Dir, hTheta_rel_All_Int_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hPhi_rel_All_Int_pFDpCD, hPhi_rel_All_Int_pFDpCD_Dir, hPhi_rel_All_Int_nFDpCD, plots);
 
             DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_pFDpCD, hTheta_p_e_p_tot_pFDpCD_Dir, hTheta_p_e_p_tot_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_pFDpCD, hTheta_q_p_tot_pFDpCD_Dir, hTheta_q_p_tot_nFDpCD, plots);
@@ -15413,21 +15424,26 @@ void EventAnalyser() {
             DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_pFDpCD, hTheta_q_pCD_pFDpCD_Dir, hTheta_q_pCD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_All_Int_pFDpCD, hTheta_pFD_pCD_All_Int_pFDpCD_Dir, hTheta_nFD_pCD_All_Int_nFDpCD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hTheta_e_VS_P_e_pFDpCD_FD, hTheta_e_VS_P_e_pFDpCD_FD_Dir, hTheta_e_VS_P_e_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_e_VS_W_pFDpCD_FD, hTheta_e_VS_W_pFDpCD_FD_Dir, hTheta_e_VS_W_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_e_VS_P_e_pFDpCD_FD, hPhi_e_VS_P_e_pFDpCD_FD_Dir, hPhi_e_VS_P_e_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hPhi_e_VS_W_pFDpCD_FD, hPhi_e_VS_W_pFDpCD_FD_Dir, hPhi_e_VS_W_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_e_VS_Phi_e_pFDpCD_FD, hTheta_e_VS_Phi_e_pFDpCD_FD_Dir, hTheta_e_VS_Phi_e_nFDpCD_FD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_vs_W_pFDpCD, hTheta_p_e_p_tot_vs_W_pFDpCD_Dir, hTheta_p_e_p_tot_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_vs_W_pFDpCD, hTheta_q_p_tot_vs_W_pFDpCD_Dir, hTheta_q_p_tot_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_W_pFDpCD, hTheta_q_p_L_vs_W_pFDpCD_Dir, hTheta_q_p_L_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_R_vs_W_pFDpCD, hTheta_q_p_R_vs_W_pFDpCD_Dir, hTheta_q_p_R_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_vs_W_pFDpCD, hTheta_q_pFD_vs_W_pFDpCD_Dir, hTheta_q_nFD_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_vs_W_pFDpCD, hTheta_q_pCD_vs_W_pFDpCD_Dir, hTheta_q_pCD_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_p_L_q_pFDpCD, hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir, hTheta_q_p_L_vs_p_L_q_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD, hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD_Dir, hTheta_q_p_L_vs_Theta_q_p_R_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD, hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD_Dir, hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_vs_W_pFDpCD, hTheta_pFD_pCD_vs_W_pFDpCD_Dir, hTheta_nFD_pCD_vs_W_nFDpCD, plots);
+            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+                DrawAndSaveFSRatio(SampleName, hTheta_e_VS_P_e_pFDpCD_FD, hTheta_e_VS_P_e_pFDpCD_FD_Dir, hTheta_e_VS_P_e_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_e_VS_W_pFDpCD_FD, hTheta_e_VS_W_pFDpCD_FD_Dir, hTheta_e_VS_W_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_e_VS_P_e_pFDpCD_FD, hPhi_e_VS_P_e_pFDpCD_FD_Dir, hPhi_e_VS_P_e_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hPhi_e_VS_W_pFDpCD_FD, hPhi_e_VS_W_pFDpCD_FD_Dir, hPhi_e_VS_W_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_e_VS_Phi_e_pFDpCD_FD, hTheta_e_VS_Phi_e_pFDpCD_FD_Dir, hTheta_e_VS_Phi_e_nFDpCD_FD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_p_e_p_tot_vs_W_pFDpCD, hTheta_p_e_p_tot_vs_W_pFDpCD_Dir, hTheta_p_e_p_tot_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_tot_vs_W_pFDpCD, hTheta_q_p_tot_vs_W_pFDpCD_Dir, hTheta_q_p_tot_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_W_pFDpCD, hTheta_q_p_L_vs_W_pFDpCD_Dir, hTheta_q_p_L_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_R_vs_W_pFDpCD, hTheta_q_p_R_vs_W_pFDpCD_Dir, hTheta_q_p_R_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_vs_W_pFDpCD, hTheta_q_pFD_vs_W_pFDpCD_Dir, hTheta_q_nFD_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_pCD_vs_W_pFDpCD, hTheta_q_pCD_vs_W_pFDpCD_Dir, hTheta_q_pCD_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_p_L_q_pFDpCD, hTheta_q_p_L_vs_p_L_q_pFDpCD_Dir, hTheta_q_p_L_vs_p_L_q_nFDpCD, plots);
+
+                //TODO: fix these two (no axis & title!):
+                DrawAndSaveFSRatio(SampleName, hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD, hTheta_q_p_L_vs_Theta_q_p_R_pFDpCD_Dir, hTheta_q_p_L_vs_Theta_q_p_R_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD, hTheta_q_pFD_vs_Theta_q_pCD_pFDpCD_Dir, hTheta_q_nFD_vs_Theta_q_pCD_nFDpCD, plots);
+
+                DrawAndSaveFSRatio(SampleName, hTheta_pFD_pCD_vs_W_pFDpCD, hTheta_pFD_pCD_vs_W_pFDpCD_Dir, hTheta_nFD_pCD_vs_W_nFDpCD, plots);
+            }
 
 //            cout << "\n\n\nExited after DrawAndSaveFSRatio finished for angles!\n\n\n";
 //            quit();
@@ -15828,10 +15844,12 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
+        if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hE_e_All_Int_pFDpCD_FD, hE_e_All_Int_pFDpCD_FD_Dir, hE_e_All_Int_nFDpCD_FD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hE_e_VS_Theta_e_All_Int_pFDpCD_FD, hE_e_VS_Theta_e_All_Int_pFDpCD_FD_Dir, hE_e_VS_Theta_e_All_Int_nFDpCD_FD, plots);
+            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+                DrawAndSaveFSRatio(SampleName, hE_e_VS_Theta_e_All_Int_pFDpCD_FD, hE_e_VS_Theta_e_All_Int_pFDpCD_FD_Dir, hE_e_VS_Theta_e_All_Int_nFDpCD_FD, plots);
+            }
 
 //            exit(0);
         }
@@ -16320,13 +16338,15 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
+        if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hEcal_All_Int_pFDpCD, hEcal_All_Int_pFDpCD_Dir, hEcal_All_Int_nFDpCD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_L_pFDpCD, hEcal_vs_dP_T_L_pFDpCD_Dir, hEcal_vs_dP_T_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_tot_pFDpCD, hEcal_vs_dP_T_tot_pFDpCD_Dir, hEcal_vs_dP_T_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_L_pFDpCD, hEcal_vs_dAlpha_T_L_pFDpCD_Dir, hEcal_vs_dAlpha_T_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_tot_pFDpCD, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir, hEcal_vs_dAlpha_T_tot_nFDpCD, plots);
+            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+                DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_L_pFDpCD, hEcal_vs_dP_T_L_pFDpCD_Dir, hEcal_vs_dP_T_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hEcal_vs_dP_T_tot_pFDpCD, hEcal_vs_dP_T_tot_pFDpCD_Dir, hEcal_vs_dP_T_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_L_pFDpCD, hEcal_vs_dAlpha_T_L_pFDpCD_Dir, hEcal_vs_dAlpha_T_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hEcal_vs_dAlpha_T_tot_pFDpCD, hEcal_vs_dAlpha_T_tot_pFDpCD_Dir, hEcal_vs_dAlpha_T_tot_nFDpCD, plots);
+            }
 
 //            exit(0);
         }
@@ -16501,7 +16521,7 @@ void EventAnalyser() {
 //  Final state ratios (nFDpCD/pFDpCD) ----------------------------------------------------------------------------------------------------------------------------------
 
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
-        if (apply_nucleon_cuts && (SampleName != "C12_simulation_6GeV_T5_first_10")) {
+        if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hdP_T_L_pFDpCD, hdP_T_L_pFDpCD_Dir, hdP_T_L_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdP_T_tot_pFDpCD, hdP_T_tot_pFDpCD_Dir, hdP_T_tot_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_pFDpCD, hdAlpha_T_L_pFDpCD_Dir, hdAlpha_T_L_nFDpCD, plots);
@@ -16509,12 +16529,14 @@ void EventAnalyser() {
             DrawAndSaveFSRatio(SampleName, hdPhi_T_L_pFDpCD, hdPhi_T_L_pFDpCD_Dir, hdPhi_T_L_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hdPhi_T_tot_pFDpCD, hdPhi_T_tot_pFDpCD_Dir, hdPhi_T_tot_nFDpCD, plots);
 
-            DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_dAlpha_T_L_pFDpCD, hdP_T_L_vs_dAlpha_T_L_pFDpCD_Dir, hdP_T_L_vs_dAlpha_T_L_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD_Dir, hdP_T_tot_vs_dAlpha_T_tot_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_W_pFDpCD, hdP_T_L_vs_W_pFDpCD_Dir, hdP_T_L_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_W_pFDpCD, hdP_T_tot_vs_W_pFDpCD_Dir, hdP_T_tot_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_vs_W_pFDpCD, hdAlpha_T_L_vs_W_pFDpCD_Dir, hdAlpha_T_L_vs_W_nFDpCD, plots);
-            DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_vs_W_pFDpCD, hdAlpha_T_tot_vs_W_pFDpCD_Dir, hdAlpha_T_tot_vs_W_nFDpCD, plots);
+            if (SampleName != "C12_simulation_6GeV_T5_first_10") {
+                DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_dAlpha_T_L_pFDpCD, hdP_T_L_vs_dAlpha_T_L_pFDpCD_Dir, hdP_T_L_vs_dAlpha_T_L_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD, hdP_T_tot_vs_dAlpha_T_tot_pFDpCD_Dir, hdP_T_tot_vs_dAlpha_T_tot_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdP_T_L_vs_W_pFDpCD, hdP_T_L_vs_W_pFDpCD_Dir, hdP_T_L_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdP_T_tot_vs_W_pFDpCD, hdP_T_tot_vs_W_pFDpCD_Dir, hdP_T_tot_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdAlpha_T_L_vs_W_pFDpCD, hdAlpha_T_L_vs_W_pFDpCD_Dir, hdAlpha_T_L_vs_W_nFDpCD, plots);
+                DrawAndSaveFSRatio(SampleName, hdAlpha_T_tot_vs_W_pFDpCD, hdAlpha_T_tot_vs_W_pFDpCD_Dir, hdAlpha_T_tot_vs_W_nFDpCD, plots);
+            }
 
 //            exit(0);
         }

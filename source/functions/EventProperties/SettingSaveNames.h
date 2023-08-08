@@ -31,7 +31,10 @@ void SettingSaveNames(const string &SampleName, const string &Type, const string
             if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
                 Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L" ||
                 Type == "Opening_ang_P_e_P_tot" || Type == "Opening_ang_q_P_tot" || Type == "Opening_ang_q_P_nucFD" || Type == "Opening_ang_q_P_nucCD" ||
-                Type == "Opening_ang_q_P_nucL" || Type == "Opening_ang_q_P_nucR" || Type == "Opening_ang_P_nucFD_P_nucCD") {
+                Type == "Opening_ang_q_P_nucL" || Type == "Opening_ang_q_P_nucR" || Type == "Opening_ang_P_nucFD_P_nucCD" ||
+                Type == "total_3momentum" || Type == "relative_3momentum" || Type == "total_4momentum"|| Type == "relative_4momentum" ||
+                Type == "theta_tot" || Type == "phi_tot" || Type == "theta_rel"|| Type == "phi_rel"
+                ) {
                 Numerator_Clone_SaveName = SaveDir + sNameFlag + "01_" + Type + "_nFDpCD_Clone.png";
                 Numerator_Clone_test_SaveName = TestSaveDir + sNameFlag + "01a_" + Type + "_nFDpCD_Clone_test.png";
                 Numerator_Clone_test_rebined_SaveName = TestSaveDir + sNameFlag + "01b_" + Type + "_nFDpCD_Clone_test_rebined.png";

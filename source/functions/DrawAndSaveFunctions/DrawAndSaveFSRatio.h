@@ -5,9 +5,12 @@
 /*
 to change FSR, change:
 
- type function
-
-
+type function
+title function
+SettingSaveNames
+SetSaveDir
+SetXAxisTitle
+SetYAxisTitle
 
  */
 
@@ -746,7 +749,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     TH2D *nFDpCD_Plot_Clone_test = (TH2D *) Histogram2D_nFDpCD->Clone((nFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string nFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + nFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH2D *nFDpCD_Plot_Clone_test_rebined = (TH2D *) Histogram2D_nFDpCD->Clone((nFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    nFDpCD_Plot_Clone_test_rebined->Rebin(2);
+//    nFDpCD_Plot_Clone_test_rebined->Rebin(2);
 
     TH2D *Histogram2D_pFDpCD = pFDpCD_Plot.GetHistogram();
     string pFDpCD_Plot_Clone_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned";
@@ -755,7 +758,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     TH2D *pFDpCD_Plot_Clone_test = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
     string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH2D *pFDpCD_Plot_Clone_test_rebined = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
-    pFDpCD_Plot_Clone_test_rebined->Rebin(2);
+//    pFDpCD_Plot_Clone_test_rebined->Rebin(2);
     //</editor-fold>
 
     //<editor-fold desc="Setting variables">
@@ -771,7 +774,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     string FSRatioTitle = Propeties.GetFSRTitle(FSRatioRecTitle, FSRatioPlotsT);
 
     string FSRatioXLabel = SetXAxisTitle(FSRatioRecTitle);
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
 
     string FSRatioSaveDir, FSRatioTestSaveDir;
     SetFSRatioSaveDir(FSRatioSaveDir, FSRatioTestSaveDir, FSRatioRecTitle, pFDpCD_Plot.GetHistogram2DSaveNamePath(), FSRatioPlotsT, FSRatioDRegion,
@@ -793,9 +796,9 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     FSRatio_plot->GetXaxis()->SetTitle((FSRatioXLabel).c_str());
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test">
-    nFDpCD_Plot_Clone_test->SetLineStyle(1);
-    nFDpCD_Plot_Clone_test->SetLineColor(kBlue);
-    nFDpCD_Plot_Clone_test->Draw();
+//    nFDpCD_Plot_Clone_test->SetLineStyle(1);
+//    nFDpCD_Plot_Clone_test->SetLineColor(kBlue);
+    nFDpCD_Plot_Clone_test->Draw("colz");
     nFDpCD_Plot_Clone_test->SetStats(1);
     Histogram_list->Add(nFDpCD_Plot_Clone_test);
 
@@ -804,9 +807,9 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     //</editor-fold>
 
     //<editor-fold desc="Plotting and saving pFDpCD_Plot_Clone_test">
-    pFDpCD_Plot_Clone_test->SetLineStyle(1);
-    pFDpCD_Plot_Clone_test->SetLineColor(kBlue);
-    pFDpCD_Plot_Clone_test->Draw();
+//    pFDpCD_Plot_Clone_test->SetLineStyle(1);
+//    pFDpCD_Plot_Clone_test->SetLineColor(kBlue);
+    pFDpCD_Plot_Clone_test->Draw("colz");
     pFDpCD_Plot_Clone_test->SetStats(1);
     Histogram_list->Add(pFDpCD_Plot_Clone_test);
 
@@ -815,9 +818,9 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     //</editor-fold>
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone_test_rebined">
-    nFDpCD_Plot_Clone_test_rebined->SetLineStyle(1);
-    nFDpCD_Plot_Clone_test_rebined->SetLineColor(kBlue);
-    nFDpCD_Plot_Clone_test_rebined->Draw();
+//    nFDpCD_Plot_Clone_test_rebined->SetLineStyle(1);
+//    nFDpCD_Plot_Clone_test_rebined->SetLineColor(kBlue);
+    nFDpCD_Plot_Clone_test_rebined->Draw("colz");
     nFDpCD_Plot_Clone_test_rebined->SetStats(1);
     Histogram_list->Add(nFDpCD_Plot_Clone_test_rebined);
 
@@ -826,9 +829,9 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     //</editor-fold>
 
     //<editor-fold desc="Plotting and saving pFDpCD_Plot_Clone_test_rebined">
-    pFDpCD_Plot_Clone_test_rebined->SetLineStyle(1);
-    pFDpCD_Plot_Clone_test_rebined->SetLineColor(kBlue);
-    pFDpCD_Plot_Clone_test_rebined->Draw();
+//    pFDpCD_Plot_Clone_test_rebined->SetLineStyle(1);
+//    pFDpCD_Plot_Clone_test_rebined->SetLineColor(kBlue);
+    pFDpCD_Plot_Clone_test_rebined->Draw("colz");
     pFDpCD_Plot_Clone_test_rebined->SetStats(1);
     Histogram_list->Add(pFDpCD_Plot_Clone_test_rebined);
 
@@ -837,13 +840,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     //</editor-fold>
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone">
-    nFDpCD_Plot_Clone->SetLineStyle(1);
-    nFDpCD_Plot_Clone->SetLineColor(kBlue);
+//    nFDpCD_Plot_Clone->SetLineStyle(1);
+//    nFDpCD_Plot_Clone->SetLineColor(kBlue);
 
-    if (plot_errorbars) { nFDpCD_Plot_Clone->Sumw2(); }
+//    if (plot_errorbars) { nFDpCD_Plot_Clone->Sumw2(); }
 
-    nFDpCD_Plot_Clone->Rebin(2);
-    nFDpCD_Plot_Clone->Draw();
+//    nFDpCD_Plot_Clone->Rebin(2);
+    nFDpCD_Plot_Clone->Draw("colz");
     nFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(nFDpCD_Plot_Clone);
 
@@ -852,13 +855,13 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     //</editor-fold>
 
     //<editor-fold desc="Plotting and saving pFDpCD_Plot_Clone">
-    pFDpCD_Plot_Clone->SetLineStyle(1);
-    pFDpCD_Plot_Clone->SetLineColor(kBlue);
+//    pFDpCD_Plot_Clone->SetLineStyle(1);
+//    pFDpCD_Plot_Clone->SetLineColor(kBlue);
 
-    if (plot_errorbars) { pFDpCD_Plot_Clone->Sumw2(); }
+//    if (plot_errorbars) { pFDpCD_Plot_Clone->Sumw2(); }
 
-    pFDpCD_Plot_Clone->Rebin(2);
-    pFDpCD_Plot_Clone->Draw();
+//    pFDpCD_Plot_Clone->Rebin(2);
+    pFDpCD_Plot_Clone->Draw("colz");
     pFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(pFDpCD_Plot_Clone);
 
@@ -867,19 +870,26 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     //</editor-fold>
 
     //<editor-fold desc="Plotting and saving FSRatio_plot">
-    FSRatio_plot->SetLineStyle(1);
-    FSRatio_plot->SetLineColor(kBlue);
+//    FSRatio_plot->SetLineStyle(1);
+//    FSRatio_plot->SetLineColor(kBlue);
 
-    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
+//    if (plot_errorbars) { FSRatio_plot->Sumw2(); }
 
-    FSRatio_plot->Rebin(2);
+//    FSRatio_plot->Rebin(2);
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
-    FSRatio_plot->Draw();
+    FSRatio_plot->Draw("colz");
     FSRatio_plot->SetStats(0);
     Histogram_list->Add(FSRatio_plot);
     Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
     Canvas->Clear();
     //</editor-fold>
+
+
+    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
+    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
+    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+
+
 
     delete Canvas;
 }
@@ -948,7 +958,7 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     //</editor-fold>
 
     //<editor-fold desc="Setting y axis label">
-    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle());
+    string FSRatioYLabel = SetYAxisTitle("FSRatio", nFDpCD_Plot_Clone->GetXaxis()->GetTitle(), pFDpCD_Plot_Clone->GetXaxis()->GetTitle(), FSRatioRecTitle);
     //</editor-fold>
 
     //<editor-fold desc="Setting save directory">
