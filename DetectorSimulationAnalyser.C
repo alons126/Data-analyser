@@ -1966,7 +1966,7 @@ void EventAnalyser() {
     hPlot1D hP_rel_pFDpCD = hPlot1D("pFDpCD", "", "Relative nucleon momentum (3-vector)", "Relative nucleon 3-momentum",
                                     "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
                                     "02b_P_rel_pFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
-    hPlot2D hP_tot_vs_P_rel_pFDpCD = hPlot2D("pFDpCD", "", "#vec{P}_{tot} vs. #vec{P}_{rel}", "#vec{P}_{tot} vs. #vec{P}_{rel}",
+    hPlot2D hP_tot_vs_P_rel_pFDpCD = hPlot2D("pFDpCD", "", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
                                              "|#vec{P}_{tot}| = |#vec{P}_{pL} + #vec{P}_{pR}| [GeV/c]", "|#vec{P}_{rel}| = |#vec{P}_{pL} - #vec{P}_{pR}|/2 [GeV/c]",
                                              directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "02c_P_tot_vs_P_rel",
                                              Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
@@ -1975,12 +1975,14 @@ void EventAnalyser() {
                                        "P_{tot} = |#vec{P}_{pL} + #vec{P}_{pR}| [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
                                        "02d_P_tot_pFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_rel_mu_pFDpCD = hPlot1D("pFDpCD", "", "Relative nucleon momentum (4-vector)", "Relative nucleon 4-momentum",
-                                       "P_{rel} = |#vec{P}_{pL} - #vec{P}_{pR}|/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
-                                       "02e_P_rel_pFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
+                                       "P_{rel}^{#mu} = (P_{pL}^{#mu} - P_{pR}^{#mu})/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"],
+                                       "02e_P_rel_pFDpCD", -CDMomentum_uboundary, CDMomentum_lboundary, numTH1Dbins);
+//                                       "02e_P_rel_pFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_tot_mu_vs_P_rel_mu_pFDpCD = hPlot2D("pFDpCD", "", "P_{tot}^{#mu} vs. P_{rel}^{#mu}", "P_{tot}^{#mu} vs. P_{rel}^{#mu}",
                                                    "P_{tot}^{#mu} = P_{pL}^{#mu} + P_{pR}^{#mu} [GeV/c]", "P_{rel}^{#mu} = (P_{pL}^{#mu} - P_{pR}^{#mu})/2 [GeV/c]",
                                                    directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "02f_P_tot_vs_P_rel",
-                                                   Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                                   Momentum_lboundary, Momentum_uboundary, -CDMomentum_uboundary, CDMomentum_lboundary, numTH2Dbins, numTH2Dbins);
+//                                                   Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Total and Relative nucleon momenta (nFDpCD)">
@@ -1990,7 +1992,7 @@ void EventAnalyser() {
     hPlot1D hP_rel_nFDpCD = hPlot1D("nFDpCD", "", "Relative nucleon momentum (3-vector)", "Relative nucleon momentum",
                                     "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
                                     "02b_P_rel_nFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
-    hPlot2D hP_tot_vs_P_rel_nFDpCD = hPlot2D("nFDpCD", "", "#vec{P}_{tot} vs. #vec{P}_{rel}", "#vec{P}_{tot} vs. #vec{P}_{rel}",
+    hPlot2D hP_tot_vs_P_rel_nFDpCD = hPlot2D("nFDpCD", "", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|", "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|",
                                              "|#vec{P}_{tot}| = |#vec{P}_{nL} + #vec{P}_{nR}| [GeV/c]", "|#vec{P}_{rel}| = |#vec{P}_{nL} - #vec{P}_{nR}|/2 [GeV/c]",
                                              directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "02c_P_tot_vs_P_rel",
                                              Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
@@ -1999,12 +2001,13 @@ void EventAnalyser() {
                                        "P_{tot} = |#vec{P}_{nL} + #vec{P}_{nR}| [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
                                        "02d_P_tot_nFDpCD", Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_rel_mu_nFDpCD = hPlot1D("nFDpCD", "", "Relative nucleon momentum (4-vector)", "Relative nucleon 4-momentum",
-                                       "P_{rel} = |#vec{P}_{nL} - #vec{P}_{nR}|/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
-                                       "02e_P_rel_nFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
+                                       "P_{rel}^{#mu} = (P_{nL}^{#mu} - P_{nR}^{#mu})/2 [GeV/c]", directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"],
+                                       "02e_P_rel_nFDpCD", -CDMomentum_uboundary, CDMomentum_lboundary, numTH1Dbins);
+//                                       "02e_P_rel_nFDpCD", CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_tot_mu_vs_P_rel_mu_nFDpCD = hPlot2D("nFDpCD", "", "P_{tot}^{#mu} vs. P_{rel}^{#mu}", "P_{tot}^{#mu} vs. P_{rel}^{#mu}",
                                                    "P_{tot}^{#mu} = P_{nL}^{#mu} + P_{nR}^{#mu} [GeV/c]", "P_{rel}^{#mu} = (P_{nL}^{#mu} - P_{nR}^{#mu})/2 [GeV/c]",
                                                    directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "02f_P_tot_vs_P_rel",
-                                                   Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                                   Momentum_lboundary, Momentum_uboundary, -CDMomentum_uboundary, CDMomentum_lboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Leading and recoil nucleon momentum plots (pFDpCD)">
@@ -12372,8 +12375,8 @@ void EventAnalyser() {
                 E_nL_nFDpCD = sqrt(m_L * m_L + P_nL_nFDpCD_3v.Mag2());
                 E_nR_nFDpCD = sqrt(m_R * m_R + P_nR_nFDpCD_3v.Mag2());
 
-                P_tot_mu_nFDpCD_4v.SetPxPyPzE(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(),
-                                              P_nFD_nFDpCD_3v.Pz() + P_pCD_nFDpCD_3v.Pz(), E_nL_nFDpCD + E_nR_nFDpCD);
+                P_tot_mu_nFDpCD_4v.SetPxPyPzE(P_nL_nFDpCD_3v.Px() + P_nR_nFDpCD_3v.Px(), P_nL_nFDpCD_3v.Py() + P_nR_nFDpCD_3v.Py(),
+                                              P_nL_nFDpCD_3v.Pz() + P_nR_nFDpCD_3v.Pz(), E_nL_nFDpCD + E_nR_nFDpCD);
                 P_rel_mu_nFDpCD_4v.SetPxPyPzE((P_nL_nFDpCD_3v.Px() - P_nR_nFDpCD_3v.Px()) / 2, (P_nL_nFDpCD_3v.Py() - P_nR_nFDpCD_3v.Py()) / 2,
                                               (P_nL_nFDpCD_3v.Pz() - P_nR_nFDpCD_3v.Pz()) / 2, (E_nL_nFDpCD - E_nR_nFDpCD) / 2);
                 hP_tot_mu_nFDpCD.hFill(P_tot_mu_nFDpCD_4v.Mag(), Weight_nFDpCD);
@@ -13197,7 +13200,7 @@ void EventAnalyser() {
         hP_tot_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_rel_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_tot_vs_P_rel_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hP_tot_mu_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_tot_mu_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_rel_mu_pFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_tot_mu_vs_P_rel_mu_pFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
@@ -13206,7 +13209,7 @@ void EventAnalyser() {
         hP_tot_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_rel_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_tot_vs_P_rel_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
-        hP_tot_mu_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_tot_mu_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_rel_mu_nFDpCD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., 9999, 9999, 0, false);
         hP_tot_mu_vs_P_rel_mu_nFDpCD.hDrawAndSave(SampleName, c1, plots, true);
         //</editor-fold>
@@ -14553,19 +14556,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_tot_All_Int_pFDpCD, norm_Angle_plots_master, true, Theta_tot_All_Int_pFDpCD_integral, "#theta_{tot} of total 3-momentum",
                       "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "00_Theta_tot_All_Int_pFDpCD",
-                      hTheta_tot_All_Int_pFDpCD_Dir, "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      hTheta_tot_All_Int_pFDpCD_Dir, "", kBlue, true, true, true,true);
         histPlotter1D(c1, hTheta_tot_QEL_pFDpCD, norm_Angle_plots_master, true, Theta_tot_QEL_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "QEL Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "01_Theta_tot_QEL_Only_pFDpCD", hTheta_tot_QEL_pFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true,true);
         histPlotter1D(c1, hTheta_tot_MEC_pFDpCD, norm_Angle_plots_master, true, Theta_tot_MEC_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "MEC Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "02_Theta_tot_MEC_Only_pFDpCD", hTheta_tot_MEC_pFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true,true);
         histPlotter1D(c1, hTheta_tot_RES_pFDpCD, norm_Angle_plots_master, true, Theta_tot_RES_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "RES Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "03_Theta_tot_RES_Only_pFDpCD", hTheta_tot_RES_pFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true,true);
         histPlotter1D(c1, hTheta_tot_DIS_pFDpCD, norm_Angle_plots_master, true, Theta_tot_DIS_pFDpCD_integral, "#theta_{tot} of total 3-momentum", "DIS Only, pFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_pFDpCD, "04_Theta_tot_DIS_Only_pFDpCD", hTheta_tot_DIS_pFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true,true);
 
         stackPlotter1D(c1, sTheta_tot_pFDpCD, norm_Angle_plots_master, "#theta_{tot} of total 3-momentum", "pFDpCD", plots, hTheta_tot_All_Int_pFDpCD,
                        hTheta_tot_QEL_pFDpCD, hTheta_tot_MEC_pFDpCD, hTheta_tot_RES_pFDpCD, hTheta_tot_DIS_pFDpCD, "05_Theta_tot_Stack_pFDpCD",
@@ -14619,19 +14622,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_rel_All_Int_pFDpCD, norm_Angle_plots_master, true, Theta_rel_All_Int_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "All Int., pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "00_Theta_rel_All_Int_pFDpCD",
-                      hTheta_rel_All_Int_pFDpCD_Dir, "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      hTheta_rel_All_Int_pFDpCD_Dir, "", kBlue, true, true, true,true);
         histPlotter1D(c1, hTheta_rel_QEL_pFDpCD, norm_Angle_plots_master, true, Theta_rel_QEL_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "QEL Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "01_Theta_rel_QEL_Only_pFDpCD", hTheta_rel_QEL_pFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true,true);
         histPlotter1D(c1, hTheta_rel_MEC_pFDpCD, norm_Angle_plots_master, true, Theta_rel_MEC_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "MEC Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "02_Theta_rel_MEC_Only_pFDpCD", hTheta_rel_MEC_pFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true,true);
         histPlotter1D(c1, hTheta_rel_RES_pFDpCD, norm_Angle_plots_master, true, Theta_rel_RES_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "RES Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "03_Theta_rel_RES_Only_pFDpCD", hTheta_rel_RES_pFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true,true);
         histPlotter1D(c1, hTheta_rel_DIS_pFDpCD, norm_Angle_plots_master, true, Theta_rel_DIS_pFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "DIS Only, pFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_pFDpCD, "04_Theta_rel_DIS_Only_pFDpCD", hTheta_rel_DIS_pFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true,true);
 
         stackPlotter1D(c1, sTheta_rel_pFDpCD, norm_Angle_plots_master, "#theta_{rel} of relative 3-momentum", "pFDpCD", plots, hTheta_rel_All_Int_pFDpCD,
                        hTheta_rel_QEL_pFDpCD, hTheta_rel_MEC_pFDpCD, hTheta_rel_RES_pFDpCD, hTheta_rel_DIS_pFDpCD, "05_Theta_rel_Stack_pFDpCD",
@@ -15046,19 +15049,34 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_tot_All_Int_nFDpCD, norm_Angle_plots_master, true, Theta_tot_All_Int_nFDpCD_integral, "#theta_{tot} of total 3-momentum",
                       "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "00_Theta_tot_All_Int_nFDpCD",
-                      hTheta_tot_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      hTheta_tot_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_tot_QEL_nFDpCD, norm_Angle_plots_master, true, Theta_tot_QEL_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "QEL Only, nFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "01_Theta_tot_QEL_Only_nFDpCD", hTheta_tot_QEL_nFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true, true);
         histPlotter1D(c1, hTheta_tot_MEC_nFDpCD, norm_Angle_plots_master, true, Theta_tot_MEC_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "MEC Only, nFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "02_Theta_tot_MEC_Only_nFDpCD", hTheta_tot_MEC_nFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true, true);
         histPlotter1D(c1, hTheta_tot_RES_nFDpCD, norm_Angle_plots_master, true, Theta_tot_RES_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "RES Only, nFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "03_Theta_tot_RES_Only_nFDpCD", hTheta_tot_RES_nFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true, true);
         histPlotter1D(c1, hTheta_tot_DIS_nFDpCD, norm_Angle_plots_master, true, Theta_tot_DIS_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "DIS Only, nFDpCD",
                       0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "04_Theta_tot_DIS_Only_nFDpCD", hTheta_tot_DIS_nFDpCD_Dir, "", kBlue, true,
-                      true, true, false, true, 47.5, 87.5, false);
+                      true, true, true);
+//        histPlotter1D(c1, hTheta_tot_All_Int_nFDpCD, norm_Angle_plots_master, true, Theta_tot_All_Int_nFDpCD_integral, "#theta_{tot} of total 3-momentum",
+//                      "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "00_Theta_tot_All_Int_nFDpCD",
+//                      hTheta_tot_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+//        histPlotter1D(c1, hTheta_tot_QEL_nFDpCD, norm_Angle_plots_master, true, Theta_tot_QEL_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "QEL Only, nFDpCD",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "01_Theta_tot_QEL_Only_nFDpCD", hTheta_tot_QEL_nFDpCD_Dir, "", kBlue, true,
+//                      true, true, false, true, 47.5, 87.5, false);
+//        histPlotter1D(c1, hTheta_tot_MEC_nFDpCD, norm_Angle_plots_master, true, Theta_tot_MEC_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "MEC Only, nFDpCD",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "02_Theta_tot_MEC_Only_nFDpCD", hTheta_tot_MEC_nFDpCD_Dir, "", kBlue, true,
+//                      true, true, false, true, 47.5, 87.5, false);
+//        histPlotter1D(c1, hTheta_tot_RES_nFDpCD, norm_Angle_plots_master, true, Theta_tot_RES_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "RES Only, nFDpCD",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "03_Theta_tot_RES_Only_nFDpCD", hTheta_tot_RES_nFDpCD_Dir, "", kBlue, true,
+//                      true, true, false, true, 47.5, 87.5, false);
+//        histPlotter1D(c1, hTheta_tot_DIS_nFDpCD, norm_Angle_plots_master, true, Theta_tot_DIS_nFDpCD_integral, "#theta_{tot} of total 3-momentum", "DIS Only, nFDpCD",
+//                      0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_tot_nFDpCD, "04_Theta_tot_DIS_Only_nFDpCD", hTheta_tot_DIS_nFDpCD_Dir, "", kBlue, true,
+//                      true, true, false, true, 47.5, 87.5, false);
 
         stackPlotter1D(c1, sTheta_tot_nFDpCD, norm_Angle_plots_master, "#theta_{tot} of total 3-momentum", "nFDpCD", plots, hTheta_tot_All_Int_nFDpCD,
                        hTheta_tot_QEL_nFDpCD, hTheta_tot_MEC_nFDpCD, hTheta_tot_RES_nFDpCD, hTheta_tot_DIS_nFDpCD, "05_Theta_tot_Stack_nFDpCD",
@@ -15112,19 +15130,19 @@ void EventAnalyser() {
 
         histPlotter1D(c1, hTheta_rel_All_Int_nFDpCD, norm_Angle_plots_master, true, Theta_rel_All_Int_nFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "All Int., nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_nFDpCD, "00_Theta_rel_All_Int_nFDpCD",
-                      hTheta_rel_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      hTheta_rel_All_Int_nFDpCD_Dir, "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_QEL_nFDpCD, norm_Angle_plots_master, true, Theta_rel_QEL_nFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "QEL Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_nFDpCD, "01_Theta_rel_QEL_Only_nFDpCD", hTheta_rel_QEL_nFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_MEC_nFDpCD, norm_Angle_plots_master, true, Theta_rel_MEC_nFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "MEC Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_nFDpCD, "02_Theta_rel_MEC_Only_nFDpCD", hTheta_rel_MEC_nFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_RES_nFDpCD, norm_Angle_plots_master, true, Theta_rel_RES_nFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "RES Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_nFDpCD, "03_Theta_rel_RES_Only_nFDpCD", hTheta_rel_RES_nFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true, true);
         histPlotter1D(c1, hTheta_rel_DIS_nFDpCD, norm_Angle_plots_master, true, Theta_rel_DIS_nFDpCD_integral, "#theta_{rel} of relative 3-momentum",
                       "DIS Only, nFDpCD", 0.06, 0.0425, 0.0425, plots, 2, false, true, sTheta_rel_nFDpCD, "04_Theta_rel_DIS_Only_nFDpCD", hTheta_rel_DIS_nFDpCD_Dir,
-                      "", kBlue, true, true, true, false, true, 47.5, 87.5, false);
+                      "", kBlue, true, true, true, true);
 
         stackPlotter1D(c1, sTheta_rel_nFDpCD, norm_Angle_plots_master, "#theta_{rel} of relative 3-momentum", "nFDpCD", plots, hTheta_rel_All_Int_nFDpCD,
                        hTheta_rel_QEL_nFDpCD, hTheta_rel_MEC_nFDpCD, hTheta_rel_RES_nFDpCD, hTheta_rel_DIS_nFDpCD, "05_Theta_rel_Stack_nFDpCD",

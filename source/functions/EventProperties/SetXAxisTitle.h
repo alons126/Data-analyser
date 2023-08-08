@@ -70,7 +70,7 @@ string SetXAxisTitle(const string &RecTitle) {
             XAxisTitle = "#theta_{nucFD,nucCD} [Deg]";
         }
     } else {
-        if (findSubstring(RecTitle, "#vec{P}_{tot} vs. #vec{P}_{rel}")) {
+        if (findSubstring(RecTitle, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
             XAxisTitle = "|#vec{P}_{tot}| = |#vec{P}_{nucL} + #vec{P}_{nucR}| [GeV/c]";
         } else if (findSubstring(RecTitle, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
             XAxisTitle = "P_{tot}^{#mu} = P_{pL}^{#mu} + P_{pR}^{#mu} [GeV/c]";

@@ -381,8 +381,8 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 }
             }
         } else {
-            if (findSubstring(Source, "#vec{P}_{tot} vs. #vec{P}_{rel}")) {
-                FSRTitle = "#vec{P}_{tot} vs. #vec{P}_{rel}";
+            if (findSubstring(Source, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
+                FSRTitle = "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|";
             } else if (findSubstring(Source, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
                 FSRTitle = "P_{tot}^{#mu} vs. P_{rel}^{#mu}";
             } else if (findSubstring(Source, "P_{pL} vs. P_{pR}") || findSubstring(Source, "P_{nL} vs. P_{nR}")) {

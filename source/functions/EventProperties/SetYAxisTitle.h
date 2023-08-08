@@ -33,7 +33,7 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
         if (!findSubstring(Title, "vs") && !findSubstring(Title, "vs.") && !findSubstring(Title, "VS") && !findSubstring(Title, "VS.")) {
             YAxisTitle = "nFDpCD/pFDpCD";
         } else {
-            if (findSubstring(Title, "#vec{P}_{tot} vs. #vec{P}_{rel}")) {
+            if (findSubstring(Title, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
                 YAxisTitle = "|#vec{P}_{rel}| = |#vec{P}_{nucL} - #vec{P}_{nucR}|/2 [GeV/c]";
             } else if (findSubstring(Title, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
                 YAxisTitle = "P_{tot}^{#mu} = P_{pL}^{#mu} + P_{pR}^{#mu} [GeV/c]";
