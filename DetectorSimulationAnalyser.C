@@ -77,7 +77,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.3";
+    string AnalyserVersion = "Version 1.5";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code settings                                                                               //
@@ -11057,6 +11057,10 @@ void EventAnalyser() {
             P_pFD_pFDpCD_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomBKC_pFDpCD),
                                            pFD_pFDpCD->getTheta(), pFD_pFDpCD->getPhi());                                                               // pFD 3 momentum
             P_pCD_pFDpCD_3v.SetMagThetaPhi(pCD_pFDpCD->getP(), pCD_pFDpCD->getTheta(), pCD_pFDpCD->getPhi());                                           // pCD 3 momentum
+            P_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
+                                       P_pFD_pFDpCD_3v.Pz() + P_pCD_pFDpCD_3v.Pz());                                                             // P_tot = P_pFD + P_pCD
+            P_rel_pFDpCD_3v = TVector3((P_pL_pFDpCD_3v.Px() - P_pR_pFDpCD_3v.Px()) / 2, (P_pL_pFDpCD_3v.Py() - P_pR_pFDpCD_3v.Py()) / 2,
+                                       (P_pL_pFDpCD_3v.Pz() - P_pR_pFDpCD_3v.Pz()) / 2);                                                       // P_rel = (P_pL - P_pR)/2
 
             double E_e_pFDpCD = sqrt(m_e * m_e + P_e_pFDpCD_3v.Mag2()), omega_pFDpCD = beamE - E_e_pFDpCD;
             double W_pFDpCD = sqrt((omega_pFDpCD + m_p) * (omega_pFDpCD + m_p) - q_pFDpCD_3v.Mag2());
@@ -11078,6 +11082,8 @@ void EventAnalyser() {
             double Theta_e_pFDpCD = e_pFDpCD->getTheta() * 180.0 / pi, Phi_e_pFDpCD = e_pFDpCD->getPhi() * 180.0 / pi;             // Theta_e_pFDpCD, Phi_e_pFDpCD in deg
             double Theta_pFD_pFDpCD = pFD_pFDpCD->getTheta() * 180.0 / pi, Phi_pFD_pFDpCD = pFD_pFDpCD->getPhi() * 180.0 / pi; // Theta_pFD_pFDpCD, Phi_pFD_pFDpCD in deg
             double Theta_pCD_pFDpCD = pCD_pFDpCD->getTheta() * 180.0 / pi, Phi_pCD_pFDpCD = pCD_pFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_pFDpCD, Phi_pCD_pFDpCD in deg
+            double Theta_tot_pFDpCD = P_tot_pFDpCD_3v.Theta() * 180.0 / pi, Phi_tot_pFDpCD = P_tot_pFDpCD_3v.Phi() * 180.0 / pi; //  in deg
+            double Theta_rel_pFDpCD = P_rel_pFDpCD_3v.Theta() * 180.0 / pi, Phi_rel_pFDpCD = P_rel_pFDpCD_3v.Phi() * 180.0 / pi; //  in deg
 
             //<editor-fold desc="Determining leading, recoil protons and their angles (pFDpCD)">
             /* Determining leading and recoil particles (leading = particle with greater momentum) */
@@ -11442,37 +11448,68 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                //<editor-fold desc="Filling pFD & pCD angle plots">
+                //<editor-fold desc="Filling angle plots (pFDpCD)">
+
+                //<editor-fold desc="FD proton angle plots (pFDpCD)">
                 FillByInt(hTheta_pFD_All_Int_pFDpCD_FD, hTheta_pFD_QEL_pFDpCD_FD, hTheta_pFD_MEC_pFDpCD_FD, hTheta_pFD_RES_pFDpCD_FD, hTheta_pFD_DIS_pFDpCD_FD,
                           qel, mec, res, dis, Theta_pFD_pFDpCD, Weight_pFDpCD);
                 hTheta_pFD_VS_P_pFD_pFDpCD_FD->Fill(P_pFD_pFDpCD_3v.Mag(), Theta_pFD_pFDpCD, Weight_pFDpCD);
                 hTheta_pFD_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Theta_pFD_pFDpCD, Weight_pFDpCD);
-
-                FillByInt(hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD, hTheta_pCD_DIS_pFDpCD_CD,
-                          qel, mec, res, dis, Theta_pCD_pFDpCD, Weight_pFDpCD);
-                hTheta_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Theta_pCD_pFDpCD, Weight_pFDpCD);
-                hTheta_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Theta_pCD_pFDpCD, Weight_pFDpCD);
 
                 FillByInt(hPhi_pFD_All_Int_pFDpCD_FD, hPhi_pFD_QEL_pFDpCD_FD, hPhi_pFD_MEC_pFDpCD_FD, hPhi_pFD_RES_pFDpCD_FD, hPhi_pFD_DIS_pFDpCD_FD,
                           qel, mec, res, dis, Phi_pFD_pFDpCD, Weight_pFDpCD);
                 hPhi_pFD_VS_P_pFD_pFDpCD_FD->Fill(P_pFD_pFDpCD_3v.Mag(), Phi_pFD_pFDpCD, Weight_pFDpCD);
                 hPhi_pFD_VS_W_pFDpCD_FD->Fill(W_pFDpCD, Phi_pFD_pFDpCD, Weight_pFDpCD);
 
+                hTheta_pFD_VS_Phi_pFD_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Theta_pFD_pFDpCD, Weight_pFDpCD);
+                //</editor-fold>
+
+                //<editor-fold desc="CD proton angle plots (pFDpCD)">
+                FillByInt(hTheta_pCD_All_Int_pFDpCD_CD, hTheta_pCD_QEL_pFDpCD_CD, hTheta_pCD_MEC_pFDpCD_CD, hTheta_pCD_RES_pFDpCD_CD, hTheta_pCD_DIS_pFDpCD_CD,
+                          qel, mec, res, dis, Theta_pCD_pFDpCD, Weight_pFDpCD);
+                hTheta_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Theta_pCD_pFDpCD, Weight_pFDpCD);
+                hTheta_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Theta_pCD_pFDpCD, Weight_pFDpCD);
+
                 FillByInt(hPhi_pCD_All_Int_pFDpCD_CD, hPhi_pCD_QEL_pFDpCD_CD, hPhi_pCD_MEC_pFDpCD_CD, hPhi_pCD_RES_pFDpCD_CD, hPhi_pCD_DIS_pFDpCD_CD,
                           qel, mec, res, dis, Phi_pCD_pFDpCD, Weight_pFDpCD);
                 hPhi_pCD_VS_P_pCD_pFDpCD_CD->Fill(P_pCD_pFDpCD_3v.Mag(), Phi_pCD_pFDpCD, Weight_pFDpCD);
                 hPhi_pCD_VS_W_pFDpCD_CD->Fill(W_pFDpCD, Phi_pCD_pFDpCD, Weight_pFDpCD);
 
-                hTheta_pFD_VS_Phi_pFD_pFDpCD_FD->Fill(Phi_pFD_pFDpCD, Theta_pFD_pFDpCD, Weight_pFDpCD);
                 hTheta_pCD_VS_Phi_pCD_pFDpCD_CD->Fill(Phi_pCD_pFDpCD, Theta_pCD_pFDpCD, Weight_pFDpCD);
+                //</editor-fold>
+
+                //<editor-fold desc="Total momentum angle plots (pFDpCD)">
+                FillByInt(hTheta_tot_All_Int_pFDpCD, hTheta_tot_QEL_pFDpCD, hTheta_tot_MEC_pFDpCD, hTheta_tot_RES_pFDpCD, hTheta_tot_DIS_pFDpCD,
+                          qel, mec, res, dis, Theta_tot_pFDpCD, Weight_pFDpCD);
+                hTheta_tot_VS_P_tot_pFDpCD->Fill(P_tot_pFDpCD_3v.Mag(), Theta_tot_pFDpCD, Weight_pFDpCD);
+                hTheta_tot_VS_W_pFDpCD->Fill(W_pFDpCD, Theta_tot_pFDpCD, Weight_pFDpCD);
+
+                FillByInt(hPhi_tot_All_Int_pFDpCD, hPhi_tot_QEL_pFDpCD, hPhi_tot_MEC_pFDpCD, hPhi_tot_RES_pFDpCD, hPhi_tot_DIS_pFDpCD,
+                          qel, mec, res, dis, Phi_tot_pFDpCD, Weight_pFDpCD);
+                hPhi_tot_VS_P_tot_pFDpCD->Fill(P_tot_pFDpCD_3v.Mag(), Phi_tot_pFDpCD, Weight_pFDpCD);
+                hPhi_tot_VS_W_pFDpCD->Fill(W_pFDpCD, Phi_tot_pFDpCD, Weight_pFDpCD);
+
+                hTheta_tot_VS_Phi_tot_pFDpCD->Fill(Phi_tot_pFDpCD, Theta_tot_pFDpCD, Weight_pFDpCD);
+                //</editor-fold>
+
+                //<editor-fold desc="Relative momentum angle plots (pFDpCD)">
+                FillByInt(hTheta_rel_All_Int_pFDpCD, hTheta_rel_QEL_pFDpCD, hTheta_rel_MEC_pFDpCD, hTheta_rel_RES_pFDpCD, hTheta_rel_DIS_pFDpCD, qel, mec, res, dis,
+                          Theta_rel_pFDpCD, Weight_pFDpCD);
+                hTheta_rel_VS_P_rel_pFDpCD->Fill(P_rel_pFDpCD_3v.Mag(), Theta_rel_pFDpCD, Weight_pFDpCD);
+                hTheta_rel_VS_W_pFDpCD->Fill(W_pFDpCD, Theta_rel_pFDpCD, Weight_pFDpCD);
+
+                FillByInt(hPhi_rel_All_Int_pFDpCD, hPhi_rel_QEL_pFDpCD, hPhi_rel_MEC_pFDpCD, hPhi_rel_RES_pFDpCD, hPhi_rel_DIS_pFDpCD, qel, mec, res, dis, Phi_rel_pFDpCD,
+                          Weight_pFDpCD);
+                hPhi_rel_VS_P_rel_pFDpCD->Fill(P_rel_pFDpCD_3v.Mag(), Phi_rel_pFDpCD, Weight_pFDpCD);
+                hPhi_rel_VS_W_pFDpCD->Fill(W_pFDpCD, Phi_rel_pFDpCD, Weight_pFDpCD);
+
+                hTheta_rel_VS_Phi_rel_pFDpCD->Fill(Phi_rel_pFDpCD, Theta_rel_pFDpCD, Weight_pFDpCD);
+                //</editor-fold>
+
                 //</editor-fold>
 
                 FillByInt(hW_All_Int_pFDpCD, hW_QEL_pFDpCD, hW_MEC_pFDpCD, hW_RES_pFDpCD, hW_DIS_pFDpCD, qel, mec, res, dis, W_pFDpCD, Weight_pFDpCD);
 
-                P_tot_pFDpCD_3v = TVector3(P_pFD_pFDpCD_3v.Px() + P_pCD_pFDpCD_3v.Px(), P_pFD_pFDpCD_3v.Py() + P_pCD_pFDpCD_3v.Py(),
-                                           P_pFD_pFDpCD_3v.Pz() + P_pCD_pFDpCD_3v.Pz());                                                         // P_tot = P_pFD + P_pCD
-                P_rel_pFDpCD_3v = TVector3((P_pL_pFDpCD_3v.Px() - P_pR_pFDpCD_3v.Px()) / 2, (P_pL_pFDpCD_3v.Py() - P_pR_pFDpCD_3v.Py()) / 2,
-                                           (P_pL_pFDpCD_3v.Pz() - P_pR_pFDpCD_3v.Pz()) / 2);                                                   // P_rel = (P_pL - P_pR)/2
                 hP_tot_pFDpCD.hFill(P_tot_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_rel_pFDpCD.hFill(P_rel_pFDpCD_3v.Mag(), Weight_pFDpCD);
                 hP_tot_vs_P_rel_pFDpCD.hFill(P_tot_pFDpCD_3v.Mag(), P_rel_pFDpCD_3v.Mag(), Weight_pFDpCD);
@@ -11704,6 +11741,10 @@ void EventAnalyser() {
             P_nFD_nFDpCD_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_nFDpCD),
                                            nFD_nFDpCD->getTheta(), nFD_nFDpCD->getPhi());                                                        // FD neutron 3 momentum
             P_pCD_nFDpCD_3v.SetMagThetaPhi(pCD_nFDpCD->getP(), pCD_nFDpCD->getTheta(), pCD_nFDpCD->getPhi());                                     // CD proton 3 momentum
+            P_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(),
+                                       P_nFD_nFDpCD_3v.Pz() + P_pCD_nFDpCD_3v.Pz());                                                             // P_tot = P_nFD + P_pCD
+            P_rel_nFDpCD_3v = TVector3((P_nL_nFDpCD_3v.Px() - P_nR_nFDpCD_3v.Px()) / 2, (P_nL_nFDpCD_3v.Py() - P_nR_nFDpCD_3v.Py()) / 2,
+                                       (P_nL_nFDpCD_3v.Pz() - P_nR_nFDpCD_3v.Pz()) / 2);                                                       // P_rel = (P_pL - P_pR)/2
 
             double E_e_nFDpCD = sqrt(m_e * m_e + P_e_nFDpCD_3v.Mag2()), omega_nFDpCD = beamE - E_e_nFDpCD;
             double W_nFDpCD = sqrt((omega_nFDpCD + m_p) * (omega_nFDpCD + m_p) - q_nFDpCD_3v.Mag2());
@@ -11725,6 +11766,8 @@ void EventAnalyser() {
             double Theta_e_nFDpCD = e_nFDpCD->getTheta() * 180.0 / pi, Phi_e_nFDpCD = e_nFDpCD->getPhi() * 180.0 / pi;             // Theta_e_nFDpCD, Phi_e_nFDpCD in deg
             double Theta_nFD_nFDpCD = nFD_nFDpCD->getTheta() * 180.0 / pi, Phi_nFD_nFDpCD = nFD_nFDpCD->getPhi() * 180.0 / pi; // Theta_nFD_nFDpCD, Phi_nFD_nFDpCD in deg
             double Theta_pCD_nFDpCD = pCD_nFDpCD->getTheta() * 180.0 / pi, Phi_pCD_nFDpCD = pCD_nFDpCD->getPhi() * 180.0 / pi; // Theta_pCD_nFDpCD, Phi_pCD_nFDpCD in deg
+            double Theta_tot_nFDpCD = P_tot_nFDpCD_3v.Theta() * 180.0 / pi, Phi_tot_nFDpCD = P_tot_nFDpCD_3v.Phi() * 180.0 / pi; //  in deg
+            double Theta_rel_nFDpCD = P_rel_nFDpCD_3v.Theta() * 180.0 / pi, Phi_rel_nFDpCD = P_rel_nFDpCD_3v.Phi() * 180.0 / pi; //  in deg
 
             //<editor-fold desc="Determining leading, recoil protons and their angles (nFDpCD)">
             double mL, mR; // Leading and recoil nucleon masses
@@ -11869,7 +11912,7 @@ void EventAnalyser() {
                 } // end of loop over protons vector
                 //</editor-fold>
 
-                //<editor-fold desc="Id. pFD and pCD protons (nFDpCD)">
+                //<editor-fold desc="Id. pCD protons (nFDpCD)">
                 double Vx_pCD_nFDpCD = pCD_nFDpCD->par()->getVx(), Vy_pCD_nFDpCD = pCD_nFDpCD->par()->getVy(), Vz_pCD_nFDpCD = pCD_nFDpCD->par()->getVz();
                 double dVx_pCD_nFDpCD = Vx_pCD_nFDpCD - Vx_e_nFDpCD, dVy_pCD_nFDpCD = Vy_pCD_nFDpCD - Vy_e_nFDpCD, dVz_pCD_nFDpCD = Vz_pCD_nFDpCD - Vz_e_nFDpCD;
 
@@ -12179,37 +12222,68 @@ void EventAnalyser() {
                 }
                 //</editor-fold>
 
-                //<editor-fold desc="Filling nFD & pCD angle plots">
+                //<editor-fold desc="Filling angle plots (nFDpCD)">
+
+                //<editor-fold desc="FD neutron angle plots (nFDpCD)">
                 FillByInt(hTheta_nFD_All_Int_nFDpCD_FD, hTheta_nFD_QEL_nFDpCD_FD, hTheta_nFD_MEC_nFDpCD_FD, hTheta_nFD_RES_nFDpCD_FD, hTheta_nFD_DIS_nFDpCD_FD, qel, mec,
                           res, dis, Theta_nFD_nFDpCD, Weight_nFDpCD);
                 hTheta_nFD_VS_P_nFD_nFDpCD_FD->Fill(P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Weight_nFDpCD);
                 hTheta_nFD_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Theta_nFD_nFDpCD, Weight_nFDpCD);
-
-                FillByInt(hTheta_pCD_All_Int_nFDpCD_CD, hTheta_pCD_QEL_nFDpCD_CD, hTheta_pCD_MEC_nFDpCD_CD, hTheta_pCD_RES_nFDpCD_CD, hTheta_pCD_DIS_nFDpCD_CD, qel, mec,
-                          res, dis, Theta_pCD_nFDpCD, Weight_nFDpCD);
-                hTheta_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Theta_pCD_nFDpCD, Weight_nFDpCD);
-                hTheta_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Theta_pCD_nFDpCD, Weight_nFDpCD);
 
                 FillByInt(hPhi_nFD_All_Int_nFDpCD_FD, hPhi_nFD_QEL_nFDpCD_FD, hPhi_nFD_MEC_nFDpCD_FD, hPhi_nFD_RES_nFDpCD_FD, hPhi_nFD_DIS_nFDpCD_FD, qel, mec, res, dis,
                           Phi_nFD_nFDpCD, Weight_nFDpCD);
                 hPhi_nFD_VS_P_nFD_nFDpCD_FD->Fill(P_nFD_nFDpCD_3v.Mag(), Phi_nFD_nFDpCD, Weight_nFDpCD);
                 hPhi_nFD_VS_W_nFDpCD_FD->Fill(W_nFDpCD, Phi_nFD_nFDpCD, Weight_nFDpCD);
 
+                hTheta_nFD_VS_Phi_nFD_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Theta_nFD_nFDpCD, Weight_nFDpCD);
+                //</editor-fold>
+
+                //<editor-fold desc="CD proton angle plots (nFDpCD)">
+                FillByInt(hTheta_pCD_All_Int_nFDpCD_CD, hTheta_pCD_QEL_nFDpCD_CD, hTheta_pCD_MEC_nFDpCD_CD, hTheta_pCD_RES_nFDpCD_CD, hTheta_pCD_DIS_nFDpCD_CD, qel, mec,
+                          res, dis, Theta_pCD_nFDpCD, Weight_nFDpCD);
+                hTheta_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Theta_pCD_nFDpCD, Weight_nFDpCD);
+                hTheta_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Theta_pCD_nFDpCD, Weight_nFDpCD);
+
                 FillByInt(hPhi_pCD_All_Int_nFDpCD_CD, hPhi_pCD_QEL_nFDpCD_CD, hPhi_pCD_MEC_nFDpCD_CD, hPhi_pCD_RES_nFDpCD_CD, hPhi_pCD_DIS_nFDpCD_CD, qel, mec, res, dis,
                           Phi_pCD_nFDpCD, Weight_nFDpCD);
                 hPhi_pCD_VS_P_pCD_nFDpCD_CD->Fill(P_pCD_nFDpCD_3v.Mag(), Phi_pCD_nFDpCD, Weight_nFDpCD);
                 hPhi_pCD_VS_W_nFDpCD_CD->Fill(W_nFDpCD, Phi_pCD_nFDpCD, Weight_nFDpCD);
 
-                hTheta_nFD_VS_Phi_nFD_nFDpCD_FD->Fill(Phi_nFD_nFDpCD, Theta_nFD_nFDpCD, Weight_nFDpCD);
                 hTheta_pCD_VS_Phi_pCD_nFDpCD_CD->Fill(Phi_pCD_nFDpCD, Theta_pCD_nFDpCD, Weight_nFDpCD);
+                //</editor-fold>
+
+                //<editor-fold desc="Total momentum angle plots (nFDpCD)">
+                FillByInt(hTheta_tot_All_Int_nFDpCD, hTheta_tot_QEL_nFDpCD, hTheta_tot_MEC_nFDpCD, hTheta_tot_RES_nFDpCD, hTheta_tot_DIS_nFDpCD, qel, mec, res, dis,
+                          Theta_tot_nFDpCD, Weight_nFDpCD);
+                hTheta_tot_VS_P_tot_nFDpCD->Fill(P_tot_nFDpCD_3v.Mag(), Theta_tot_nFDpCD, Weight_nFDpCD);
+                hTheta_tot_VS_W_nFDpCD->Fill(W_nFDpCD, Theta_tot_nFDpCD, Weight_nFDpCD);
+
+                FillByInt(hPhi_tot_All_Int_nFDpCD, hPhi_tot_QEL_nFDpCD, hPhi_tot_MEC_nFDpCD, hPhi_tot_RES_nFDpCD, hPhi_tot_DIS_nFDpCD, qel, mec, res, dis, Phi_tot_nFDpCD,
+                          Weight_nFDpCD);
+                hPhi_tot_VS_P_tot_nFDpCD->Fill(P_tot_nFDpCD_3v.Mag(), Phi_tot_nFDpCD, Weight_nFDpCD);
+                hPhi_tot_VS_W_nFDpCD->Fill(W_nFDpCD, Phi_tot_nFDpCD, Weight_nFDpCD);
+
+                hTheta_tot_VS_Phi_tot_nFDpCD->Fill(Phi_tot_nFDpCD, Theta_tot_nFDpCD, Weight_nFDpCD);
+                //</editor-fold>
+
+                //<editor-fold desc="Relative momentum angle plots (nFDpCD)">
+                FillByInt(hTheta_rel_All_Int_nFDpCD, hTheta_rel_QEL_nFDpCD, hTheta_rel_MEC_nFDpCD, hTheta_rel_RES_nFDpCD, hTheta_rel_DIS_nFDpCD, qel, mec, res, dis,
+                          Theta_rel_nFDpCD, Weight_nFDpCD);
+                hTheta_rel_VS_P_rel_nFDpCD->Fill(P_rel_nFDpCD_3v.Mag(), Theta_rel_nFDpCD, Weight_nFDpCD);
+                hTheta_rel_VS_W_nFDpCD->Fill(W_nFDpCD, Theta_rel_nFDpCD, Weight_nFDpCD);
+
+                FillByInt(hPhi_rel_All_Int_nFDpCD, hPhi_rel_QEL_nFDpCD, hPhi_rel_MEC_nFDpCD, hPhi_rel_RES_nFDpCD, hPhi_rel_DIS_nFDpCD, qel, mec, res, dis, Phi_rel_nFDpCD,
+                          Weight_nFDpCD);
+                hPhi_rel_VS_P_rel_nFDpCD->Fill(P_rel_nFDpCD_3v.Mag(), Phi_rel_nFDpCD, Weight_nFDpCD);
+                hPhi_rel_VS_W_nFDpCD->Fill(W_nFDpCD, Phi_rel_nFDpCD, Weight_nFDpCD);
+
+                hTheta_rel_VS_Phi_rel_nFDpCD->Fill(Phi_rel_nFDpCD, Theta_rel_nFDpCD, Weight_nFDpCD);
+                //</editor-fold>
+
                 //</editor-fold>
 
                 FillByInt(hW_All_Int_nFDpCD, hW_QEL_nFDpCD, hW_MEC_nFDpCD, hW_RES_nFDpCD, hW_DIS_nFDpCD, qel, mec, res, dis, W_nFDpCD, Weight_nFDpCD);
 
-                P_tot_nFDpCD_3v = TVector3(P_nFD_nFDpCD_3v.Px() + P_pCD_nFDpCD_3v.Px(), P_nFD_nFDpCD_3v.Py() + P_pCD_nFDpCD_3v.Py(),
-                                           P_nFD_nFDpCD_3v.Pz() + P_pCD_nFDpCD_3v.Pz());                                                         // P_tot = P_nFD + P_pCD
-                P_rel_nFDpCD_3v = TVector3((P_nL_nFDpCD_3v.Px() - P_nR_nFDpCD_3v.Px()) / 2, (P_nL_nFDpCD_3v.Py() - P_nR_nFDpCD_3v.Py()) / 2,
-                                           (P_nL_nFDpCD_3v.Pz() - P_nR_nFDpCD_3v.Pz()) / 2);                                                   // P_rel = (P_pL - P_pR)/2
                 hP_tot_nFDpCD.hFill(P_tot_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_rel_nFDpCD.hFill(P_rel_nFDpCD_3v.Mag(), Weight_nFDpCD);
                 hP_tot_vs_P_rel_nFDpCD.hFill(P_tot_nFDpCD_3v.Mag(), P_rel_nFDpCD_3v.Mag(), Weight_nFDpCD);

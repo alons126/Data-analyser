@@ -1923,24 +1923,33 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                 double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                    double Weight;
+
                                     if (Loaded_p_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        double Weight = (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
+                                        Weight = (1 / (Loaded_p_WMap_Slices.at(Slice).at(i).at(j)));
 
                                         if (PrintOut) {
                                             cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
                                             cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n\n";
+
                                             cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
                                             cout << "Theta = " << Theta << "\n";
                                             cout << "ThetaUpperLimTemp = " << ThetaUpperLimTemp << "\n\n";
+
                                             cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
                                             cout << "Phi = " << Phi << "\n";
                                             cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
+
+                                            cout << "Weight = " << Weight << "\n\n";
+
                                             cout << "1/Weight = " << (1 / Weight) << "\n\n\n\n";
                                         }
-
-                                        return Weight;
+                                    } else {
+                                        Weight = 0;
                                     }
+
+                                    return Weight;
                                 } // end of find right phi if
                             }
                         } // end of find right theta if
@@ -1962,24 +1971,33 @@ double AMaps::GetWeight(bool apply_kinematical_weights, const string &Particle, 
                                 double PhiUpperLimTemp = PhiLowerLimTemp + dPhiTemp;
 
                                 if ((Phi >= PhiLowerLimTemp) && (Phi < PhiUpperLimTemp)) {
+                                    double Weight;
+
                                     if (Loaded_n_WMap_Slices.at(Slice).at(i).at(j) != 0) {
-                                        double Weight = (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
+                                        Weight = (1 / (Loaded_n_WMap_Slices.at(Slice).at(i).at(j)));
 
                                         if (PrintOut) {
                                             cout << "MomentumLowerLimTemp = " << Loaded_PBinsLimits.at(Slice).at(0) << "\n";
                                             cout << "Momentum = " << Momentum << "\n";
                                             cout << "MomentumUpperLimTemp = " << Loaded_PBinsLimits.at(Slice).at(1) << "\n\n";
+
                                             cout << "ThetaLowerLimTemp = " << ThetaLowerLimTemp << "\n";
                                             cout << "Theta = " << Theta << "\n";
                                             cout << "ThetaUpperLimTemp = " << ThetaUpperLimTemp << "\n\n";
+
                                             cout << "PhiLowerLimTemp = " << PhiLowerLimTemp << "\n";
                                             cout << "Phi = " << Phi << "\n";
                                             cout << "PhiUpperLimTemp = " << PhiUpperLimTemp << "\n\n";
+                                            
+                                            cout << "Weight = " << Weight << "\n\n";
+
                                             cout << "1/Weight = " << (1 / Weight) << "\n\n\n\n";
                                         }
-
-                                        return Weight;
+                                    } else {
+                                        Weight = 0;
                                     }
+
+                                    return Weight;
                                 } // end of find right phi if
                             }
                         } // end of find right theta if
