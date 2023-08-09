@@ -269,7 +269,7 @@ void EventAnalyser() {
             if (!generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
             } else if (generate_AMaps && !plot_and_fit_MomRes) {
-                Additional_Status = "AMaps4_";
+                Additional_Status = "AMaps5_";
             } else if (!generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
@@ -869,7 +869,7 @@ void EventAnalyser() {
 
     /* Set Bins by case */
     int HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
-    int NumberNucOfMomSlices = 4;
+    int NumberNucOfMomSlices = 5;
 
     AMaps aMaps, wMaps;
 
