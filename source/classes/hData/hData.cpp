@@ -235,6 +235,22 @@ string hData::GetType(const string &Source) {
             Type = "phi_e_vs_P_e";
         } else if (findSubstring(Source, "#phi_{e} vs. W")) {
             Type = "phi_e_vs_W";
+        } else if (findSubstring(Source, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. P_{nFD}")) {
+            Type = "theta_nucFD_vs_P_nucFD";
+        } else if (findSubstring(Source, "#theta_{pFD} vs. W") || findSubstring(Source, "#theta_{nFD} vs. W")) {
+            Type = "theta_nucFD_vs_W";
+        } else if (findSubstring(Source, "#theta_{pCD} vs. P_{pCD}")) {
+            Type = "theta_nucCD_vs_P_nucCD";
+        } else if (findSubstring(Source, "#theta_{pCD} vs. W")) {
+            Type = "theta_nucCD_vs_W";
+        } else if (findSubstring(Source, "#phi_{pFD} vs. P_{pFD}") || findSubstring(Source, "#phi_{nFD} vs. P_{nFD}")) {
+            Type = "phi_nucFD_vs_P_nucFD";
+        } else if (findSubstring(Source, "#phi_{pFD} vs. W") || findSubstring(Source, "#phi_{nFD} vs. W")) {
+            Type = "phi_nucFD_vs_W";
+        } else if (findSubstring(Source, "#phi_{pCD} vs. P_{pCD}")) {
+            Type = "phi_nucCD_vs_P_nucCD";
+        } else if (findSubstring(Source, "#phi_{pCD} vs. W")) {
+            Type = "theta_nucCD_vs_W";
         } else if (findSubstring(Source, "#theta_{e} vs. #phi_{e}")) {
             Type = "theta_e_vs_phi_e";
         } else if (findSubstring(Source, "#theta_{pFD} vs. #phi_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. #phi_{nFD}")) {
@@ -444,16 +460,28 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 FSRTitle = "P_{tot}^{#mu} vs. P_{rel}^{#mu} - ";
             } else if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
                 FSRTitle = "#theta_{e} vs. P_{e} - ";
-            } else if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
-                FSRTitle = "#theta_{e} vs. P_{e} - ";
-            } else if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
-                FSRTitle = "#theta_{e} vs. P_{e} - ";
             } else if (findSubstring(Source, "#theta_{e} vs. W")) {
                 FSRTitle = "#theta_{e} vs. W - ";
             } else if (findSubstring(Source, "#phi_{e} vs. P_{e}")) {
                 FSRTitle = "#phi_{e} vs. P_{e} - ";
             } else if (findSubstring(Source, "#phi_{e} vs. W")) {
                 FSRTitle = "#phi_{e} vs. W - ";
+            } else if (findSubstring(Source, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. P_{nFD}")) {
+                FSRTitle = "#theta_{nucFD} vs. P_{nucFD}";
+            } else if (findSubstring(Source, "#theta_{pFD} vs. W") || findSubstring(Source, "#theta_{nFD} vs. W")) {
+                FSRTitle = "#theta_{nucFD} vs. W";
+            } else if (findSubstring(Source, "#theta_{pCD} vs. P_{pCD}")) {
+                FSRTitle = "#theta_{nucCD} vs. P_{nucCD}";
+            } else if (findSubstring(Source, "#theta_{pCD} vs. W")) {
+                FSRTitle = "#theta_{nucCD} vs. W";
+            } else if (findSubstring(Source, "#phi_{pFD} vs. P_{pFD}") || findSubstring(Source, "#phi_{nFD} vs. P_{nFD}")) {
+                FSRTitle = "#phi_{nucFD} vs. P_{nucFD}";
+            } else if (findSubstring(Source, "#phi_{pFD} vs. W") || findSubstring(Source, "#phi_{nFD} vs. W")) {
+                FSRTitle = "#phi_{nucFD} vs. W";
+            } else if (findSubstring(Source, "#phi_{pCD} vs. P_{pCD}")) {
+                FSRTitle = "#phi_{nucCD} vs. P_{nucCD}";
+            } else if (findSubstring(Source, "#phi_{pCD} vs. W")) {
+                FSRTitle = "#phi_{nucCD} vs. W";
             } else if (findSubstring(Source, "#theta_{e} vs. #phi_{e}")) {
                 FSRTitle = "#theta_{e} vs. #phi_{e} - ";
             } else if (findSubstring(Source, "#theta_{pFD} vs. #phi_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. #phi_{nFD}")) {

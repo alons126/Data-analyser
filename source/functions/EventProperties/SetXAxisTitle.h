@@ -113,21 +113,18 @@ string SetXAxisTitle(const string &RecTitle) {
         } else if (findSubstring(RecTitle, "#theta_{e} vs. P_{e}")) {
             XAxisTitle = "P_{e} [GeV/c]";
         } else if (findSubstring(RecTitle, "#theta_{e} vs. W")) {
-            XAxisTitle = "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV]";
+            XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#phi_{e} vs. P_{e}")) {
             XAxisTitle = "P_{e} [GeV/c]";
         } else if (findSubstring(RecTitle, "#phi_{e} vs. W")) {
-            XAxisTitle = "W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV]";
+            XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{e} vs. #phi_{e}")) {
             XAxisTitle = "#phi_{e} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{pFD} vs. #phi_{pFD}") || findSubstring(RecTitle, "#theta_{nFD} vs. #phi_{nFD}")) {
             XAxisTitle = "#phi_{nucFD} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{pCD} vs. #phi_{pCD}")) {
-            XAxisTitle = "#phi_{pCD} [Deg]";
-        } else if (findSubstring(RecTitle, "#theta_{pCD} vs. #phi_{pCD}")) {
-            XAxisTitle = "#phi_{pCD} [Deg]";
-        } else if (findSubstring(RecTitle, "#theta_{pFD} vs. W") ||
-                   findSubstring(RecTitle, "#theta_{nFD} vs. W")) {
+            XAxisTitle = "#phi_{nucCD} [Deg]";
+        } else if (findSubstring(RecTitle, "#theta_{pFD} vs. W") || findSubstring(RecTitle, "#theta_{nFD} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{pFD} vs. P_{pFD}") || findSubstring(RecTitle, "#theta_{nFD} vs. P_{nFD}")) {
             XAxisTitle = "P_{nucFD} [GeV/c]";
