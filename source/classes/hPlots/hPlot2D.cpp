@@ -486,12 +486,12 @@ void hPlot2D::hDrawAndSave(const std::string &SampleName, TCanvas *h2DCanvas, TL
 // hDivision function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="hDivision function">
-void hPlot2D::hDivision(TH2D *hDenominator, bool FixZLimits, double MaxZLim) {
+void hPlot2D::hDivision(TH2D *hDenominator, bool SetLogZLimits, double MaxZLim) {
     Histogram2D->Divide(hDenominator);
 
-    if (FixZLimits) {
-        Histogram2D->SetMaximum(MaxZLim);
-    }
+//    if (SetLogZLimits) {
+//        ZLogScalePlot = true;
+//    }
 }
 //</editor-fold>
 

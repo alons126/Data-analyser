@@ -120,7 +120,7 @@ public:
 
     void hAdd(TH2D *h) { Histogram2D->Add(h); }
 
-    void hDivision(TH2D *hDenominator, bool FixZLimits = true, double MaxZLim = 1.25);
+    void hDivision(TH2D *hDenominator, bool SetLogZLimits = true, double MaxZLim = 1.25);
 
 // Other histogram methods:
     void ApplyZMaxLim(double ZMaxLim) { Histogram2D->SetMaximum(ZMaxLim); }

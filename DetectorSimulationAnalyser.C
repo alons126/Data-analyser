@@ -136,7 +136,7 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps settings */
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -190,11 +190,11 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = false;
+    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = true;
     bool apply_fiducial_cuts = false;
     bool apply_kinematical_cuts = false;
     bool apply_kinematical_weights = false;
@@ -269,7 +269,7 @@ void EventAnalyser() {
             if (!generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
             } else if (generate_AMaps && !plot_and_fit_MomRes) {
-                Additional_Status = "AMaps_";
+                Additional_Status = "AMaps4_";
             } else if (!generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
@@ -3167,13 +3167,13 @@ void EventAnalyser() {
                                                               "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                               "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                               directories.Angle_Directory_map["Neutron_veto_1n_Directory"],
-                                                              "01_Neutron_hits_vs_electron_hits_AV_1n", -180, 180, -50, 50, 65, 65);
+                                                              "02_Neutron_hits_vs_electron_hits_AV_1n", -180, 180, -50, 50, 65, 65);
     hPlot2D hdTheta_n_e_VS_dPhi_n_e_Electrons_Vetoed_Neutrons_1n = hPlot2D("1n", "FD", "#Delta#theta_{n,e} vs. #Delta#phi_{n,e}",
                                                                            "'Neutron Hits' vs. Electron Hits - Vetoed Neutrons",
                                                                            "#Delta#phi_{n,e} = #phi_{n}^{ECIN/ECOUT} - #phi_{e}^{PCAL} [Deg]",
                                                                            "#Delta#theta_{n,e} = #theta_{n}^{ECIN/ECOUT} - #theta_{e}^{PCAL} [Deg]",
                                                                            directories.Angle_Directory_map["Neutron_veto_1n_Directory"],
-                                                                           "01_Neutron_hits_vs_electron_hits_Vetoed_1n", -180, 180, -50, 50, 65, 65);
+                                                                           "03_Neutron_hits_vs_electron_hits_Vetoed_1n", -180, 180, -50, 50, 65, 65);
     //</editor-fold>
 
     //</editor-fold>
