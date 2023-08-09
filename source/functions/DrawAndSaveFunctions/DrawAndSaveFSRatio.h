@@ -219,7 +219,8 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     FSRatio_plot->Draw();
 
 //    TLine *EquiLine = new TLine(Lower_cut, 0., Lower_cut, gPad->GetFrame()->GetY2());
-//    EquiLine->SetLineWidth(lineWidth);
+//    EquiLine->SetLineWidth(2);
+//    EquiLine->SetLineColor(kBlack);
 
     FSRatio_plot->SetStats(0);
     Histogram_list->Add(FSRatio_plot);
