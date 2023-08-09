@@ -195,10 +195,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -269,7 +269,7 @@ void EventAnalyser() {
             if (!generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
             } else if (generate_AMaps && !plot_and_fit_MomRes) {
-                Additional_Status = "AMaps6_";
+                Additional_Status = "AMaps_";
             } else if (!generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
@@ -869,7 +869,7 @@ void EventAnalyser() {
 
     /* Set Bins by case */
     int HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
-    int NumberNucOfMomSlices = 6;
+    int NumberNucOfMomSlices = 4;
 
     AMaps aMaps, wMaps;
 
