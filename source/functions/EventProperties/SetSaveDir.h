@@ -27,6 +27,7 @@ void SetSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, co
             if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
                 Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L" ||
                 Type == "total_3momentum" || Type == "relative_3momentum" || Type == "total_4momentum" || Type == "relative_4momentum" ||
+                Type == "leading_nuc_momentum" || Type == "recoil_nuc_momentum" ||
                 Type == "theta_tot" || Type == "phi_tot" || Type == "theta_rel"|| Type == "phi_rel"
                 ) {
                 SaveDir = Histogram1DSaveNamePath + "/";

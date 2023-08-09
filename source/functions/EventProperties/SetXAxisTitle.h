@@ -27,8 +27,20 @@ string SetXAxisTitle(const string &RecTitle) {
     if (!findSubstring(RecTitle, "vs") && !findSubstring(RecTitle, "vs.") &&
         !findSubstring(RecTitle, "VS") && !findSubstring(RecTitle, "VS.")) {
         if (findSubstring(RecTitle, "momentum") && !findSubstring(RecTitle, "-momentum") &&
-            !findSubstring(RecTitle, "Total") && !findSubstring(RecTitle, "Relative")) {
+            !findSubstring(RecTitle, "Total") && !findSubstring(RecTitle, "Relative") &&
+            !findSubstring(RecTitle, "Leading") && !findSubstring(RecTitle, "Recoil") &&
+            !findSubstring(RecTitle, "FD proton") && !findSubstring(RecTitle, "FD neutron") &&
+            !findSubstring(RecTitle, "CD proton")) {
             XAxisTitle = "Momentum [GeV/c]";
+        } else if (findSubstring(RecTitle, "momentum") &&
+                   (findSubstring(RecTitle, "FD proton") && findSubstring(RecTitle, "FD neutron"))) {
+            XAxisTitle = "P_{nucFD} [GeV/c]";
+        } else if (findSubstring(RecTitle, "momentum") && findSubstring(RecTitle, "CD proton")) {
+            XAxisTitle = "P_{nucCD} [GeV/c]";
+        } else if (findSubstring(RecTitle, "momentum") && findSubstring(RecTitle, "Leading")) {
+            XAxisTitle = "P_{nucL} [GeV/c]";
+        } else if (findSubstring(RecTitle, "momentum") && findSubstring(RecTitle, "Recoil")) {
+            XAxisTitle = "P_{nucR} [GeV/c]";
         } else if (findSubstring(RecTitle, "3-momentum") && findSubstring(RecTitle, "Total")) {
             XAxisTitle = "|#vec{P}_{tot}| = |#vec{P}_{nucL} + #vec{P}_{nucR}| [GeV/c]";
         } else if (findSubstring(RecTitle, "4-momentum") && findSubstring(RecTitle, "Total")) {
@@ -64,7 +76,7 @@ string SetXAxisTitle(const string &RecTitle) {
                    !(findSubstring(RecTitle, "#theta_{tot}") || findSubstring(RecTitle, "#theta_{rel}"))) {
             XAxisTitle = "#theta [Deg]";
         } else if (findSubstring(RecTitle, "#phi") &&
-                !(findSubstring(RecTitle, "#phi_{tot}") || findSubstring(RecTitle, "#phi_{rel}"))) {
+                   !(findSubstring(RecTitle, "#phi_{tot}") || findSubstring(RecTitle, "#phi_{rel}"))) {
             XAxisTitle = "#phi [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{tot}")) { // for phi efficiency plots
             XAxisTitle = "#theta_{tot} [Deg]";
@@ -136,16 +148,16 @@ string SetXAxisTitle(const string &RecTitle) {
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{tot}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pL}} vs. W") ||
-        findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}} vs. W")) {
+                   findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pR}} vs. W") ||
-        findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nR}} vs. W")) {
+                   findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nR}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pFD}} vs. W") ||
-        findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nFD}} vs. W")) {
+                   findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nFD}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W") ||
-        findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
+                   findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}|") ||
                    findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}|")) {

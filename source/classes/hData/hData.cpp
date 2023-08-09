@@ -145,8 +145,13 @@ string hData::GetType(const string &Source) {
     if (!findSubstring(Source, "vs") && !findSubstring(Source, "vs.")
         && !findSubstring(Source, "VS") && !findSubstring(Source, "VS.")) {
         if (findSubstring(Source, "momentum") && !findSubstring(Source, "-momentum") &&
-            !findSubstring(Source, "Total") && !findSubstring(Source, "Relative")) { // for momentum efficiency plots
+            !findSubstring(Source, "Total") && !findSubstring(Source, "Relative") &&
+            !findSubstring(Source, "Leading") && !findSubstring(Source, "Recoil")) {
             Type = "momentum";
+        } else if (findSubstring(Source, "momentum") && findSubstring(Source, "Leading")) { // for theta efficiency plots
+            Type = "leading_nuc_momentum";
+        } else if (findSubstring(Source, "momentum") && findSubstring(Source, "Recoil")) { // for theta efficiency plots
+            Type = "recoil_nuc_momentum";
         } else if (findSubstring(Source, "Total") && findSubstring(Source, "3-momentum")) { // for theta efficiency plots
             Type = "total_3momentum";
         } else if (findSubstring(Source, "Relative") && findSubstring(Source, "3-momentum")) { // for theta efficiency plots
@@ -381,6 +386,10 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 } else {
                     FSRTitle = Type + " ratio - ";
                 }
+            } else if (Type == "leading_nuc_momentum") {
+                FSRTitle = "Leading nucleon momentum - ";
+            } else if (Type == "recoil_nuc_momentum") {
+                FSRTitle = "Recoil nucleon momentum - ";
             } else if (Type == "total_3momentum") {
                 FSRTitle = "Total nucleon 3-momentum - ";
             } else if (Type == "relative_3momentum") {

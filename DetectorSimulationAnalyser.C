@@ -168,13 +168,13 @@ void EventAnalyser() {
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
-    bool apply_cuts = true; // master ON/OFF switch for applying cuts
+    bool apply_cuts = false; // master ON/OFF switch for applying cuts
 
     /* HTCC cut */
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = true;
+    bool apply_chi2_cuts_1e_cut = false;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
@@ -190,15 +190,15 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = false; // set as true to get good protons and chaculate neutron momentum
 
     /* Physical cuts */
-    bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
-    bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_physical_cuts = false; // nucleon physical cuts master
+    bool apply_nBeta_fit_cuts = false;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -13233,6 +13233,8 @@ void EventAnalyser() {
         //<editor-fold desc="Final state ratios (nFDpCD/pFDpCD)">
         if (apply_nucleon_cuts) {
             DrawAndSaveFSRatio(SampleName, hP_e_APID_pFDpCD_FD, hP_e_APID_nFDpCD_FD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_pL_pFDpCD, hP_nL_nFDpCD, plots);
+            DrawAndSaveFSRatio(SampleName, hP_pR_pFDpCD, hP_nR_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_pFD_pFDpCD, hP_nFD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_pCD_pFDpCD, hP_pCD_nFDpCD, plots);
             DrawAndSaveFSRatio(SampleName, hP_tot_pFDpCD, hP_tot_nFDpCD, plots);
