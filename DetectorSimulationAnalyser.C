@@ -174,14 +174,14 @@ void EventAnalyser() {
     bool apply_Nphe_cut = true;
 
     /* Chi2 cuts (= PID cuts) */
-    bool apply_chi2_cuts_1e_cut = false;
+    bool apply_chi2_cuts_1e_cut = true;
 
     /* Vertex cuts */
     bool apply_Vz_cuts = true, apply_dVz_cuts = true;
 
     /* Sampling Fraction (SF) cut */
     bool apply_ECAL_SF_cuts = true;
-    bool apply_ECAL_P_cuts = false;
+    bool apply_ECAL_P_cuts = true;
 
     /* ECAL fiducial (edge) cuts */
     bool apply_ECAL_fiducial_cuts = true;
@@ -648,8 +648,8 @@ void EventAnalyser() {
 //    bool ETrans_all_plots = true, ETrans_All_Int_plots = true, ETrans_QEL_plots = true, ETrans_MEC_plots = true, ETrans_RES_plots = true, ETrans_DIS_plots = true;
 //
 //    /* Ecal plots */
-////    bool Ecal_plots = true;
-//    bool Ecal_plots = false;
+//    bool Ecal_plots = true;
+////    bool Ecal_plots = false;
 //
 //    /* Transverse variables plots */
 ////    bool TKI_plots = true;
@@ -1948,6 +1948,9 @@ void EventAnalyser() {
     hPlot1D hP_pCD_pFDpCD = hPlot1D("pFDpCD", "", "CD proton momentum", "CD proton momentum P_{pCD}", "P_{pCD} [GeV/c]",
                                     directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "01b_P_pCD_pFDpCD",
                                     CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
+    hPlot2D hP_pFD_vs_P_pCD_pFDpCD = hPlot2D("pFDpCD", "", "P_{pFD} vs. P_{pCD}", "P_{pFD} vs. P_{pCD}", "P_{pFD} [GeV/c]", "P_{pCD} [GeV/c]",
+                                             directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "05_P_pFD_vs_P_pCD",
+                                             Momentum_lboundary, Momentum_uboundary, CDMomentum_lboundary, CDMomentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="nFD and pCD momentum plots (nFDpCD)">
@@ -1957,6 +1960,9 @@ void EventAnalyser() {
     hPlot1D hP_pCD_nFDpCD = hPlot1D("nFDpCD", "", "CD proton momentum", "CD proton momentum P_{pCD}", "P_{pCD} [GeV/c]",
                                     directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "01b_P_pCD_nFDpCD",
                                     CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
+    hPlot2D hP_nFD_vs_P_pCD_nFDpCD = hPlot2D("nFDpCD", "", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} [GeV/c]", "P_{pCD} [GeV/c]",
+                                             directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "05_P_nFD_vs_P_pCD",
+                                             Momentum_lboundary, Momentum_uboundary, CDMomentum_lboundary, CDMomentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Total and relative nucleon momenta (pFDpCD)">
@@ -2016,7 +2022,10 @@ void EventAnalyser() {
                                    Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_pR_pFDpCD = hPlot1D("pFDpCD", "", "Recoil proton momentum", "Recoil proton momentum", "P_{pR} [GeV/c]",
                                    directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "03b_P_pR_pFDpCD",
-                                   Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+                                   CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
+    hPlot2D hP_pL_vs_P_pR_pFDpCD = hPlot2D("pFDpCD", "", "P_{pL} vs. P_{pR}", "P_{pL} vs. P_{pR}", "P_{pL} [GeV/c]", "P_{pR} [GeV/c]",
+                                           directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "04_P_pL_vs_P_pR",
+                                           Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Leading and recoil nucleon momentum plots (nFDpCD)">
@@ -2025,31 +2034,10 @@ void EventAnalyser() {
                                    Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_nR_nFDpCD = hPlot1D("nFDpCD", "", "Recoil nucleon momentum", "Recoil nucleon momentum", "P_{nR} [GeV/c]",
                                    directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "03b_P_nR_nFDpCD",
-                                   Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    //</editor-fold>
-
-    //<editor-fold desc="P_pL vs P_pR (pFDpCD, CD & FD)">
-    hPlot2D hP_pL_vs_P_pR_pFDpCD = hPlot2D("pFDpCD", "", "P_{pL} vs. P_{pR}", "P_{pL} vs. P_{pR}", "P_{pL} [GeV/c]", "P_{pR} [GeV/c]",
-                                           directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "04_P_pL_vs_P_pR",
-                                           Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
-    //</editor-fold>
-
-    //<editor-fold desc="P_nL vs P_nR (nFDpCD, CD & FD)">
+                                   CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_nL_vs_P_nR_nFDpCD = hPlot2D("nFDpCD", "", "P_{nL} vs. P_{nR}", "P_{nL} vs. P_{nR}", "P_{nL} [GeV/c]", "P_{nR} [GeV/c]",
                                            directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "04_P_nL_vs_P_nR",
                                            Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
-    //</editor-fold>
-
-    //<editor-fold desc="pFD vs pCD (pFDpCD, CD & FD)">
-    hPlot2D hP_pFD_vs_P_pCD_pFDpCD = hPlot2D("pFDpCD", "", "P_{pFD} vs. P_{pCD}", "P_{pFD} vs. P_{pCD}", "P_{pFD} [GeV/c]", "P_{pCD} [GeV/c]",
-                                             directories.Momentum_Directory_map["Other_momentum_pFDpCD_Directory"], "05_P_pFD_vs_P_pCD",
-                                             Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
-    //</editor-fold>
-
-    //<editor-fold desc="nFD vs pCD (nFDpCD, CD & FD)">
-    hPlot2D hP_nFD_vs_P_pCD_nFDpCD = hPlot2D("nFDpCD", "", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} [GeV/c]", "P_{pCD} [GeV/c]",
-                                             directories.Momentum_Directory_map["Other_momentum_nFDpCD_Directory"], "05_P_nFD_vs_P_pCD",
-                                             Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //</editor-fold>

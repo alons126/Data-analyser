@@ -219,6 +219,10 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     FSRatio_plot->Draw();
     FSRatio_plot->SetStats(0);
 
+    if (FSRatio_plot->GetMaximum() > 10) {
+        FSRatio_plot->GetYaxis()->SetRangeUser(0, 10);
+    }
+
     TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
     EquiLine->SetLineWidth(2);
     EquiLine->SetLineColor(kBlack);
@@ -491,6 +495,10 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     FSRatio_plot->SetStats(0);
     FSRatio_plot->Draw();
 
+    if (FSRatio_plot->GetMaximum() > 10) {
+        FSRatio_plot->GetYaxis()->SetRangeUser(0, 10);
+    }
+
     TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
     EquiLine->SetLineWidth(2);
     EquiLine->SetLineColor(kBlack);
@@ -726,6 +734,10 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     FSRatio_plot->Draw();
     FSRatio_plot->SetStats(0);
 
+    if (FSRatio_plot->GetMaximum() > 10) {
+        FSRatio_plot->GetYaxis()->SetRangeUser(0, 10);
+    }
+
     TLine *EquiLine = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
     EquiLine->SetLineWidth(2);
     EquiLine->SetLineColor(kBlack);
@@ -895,7 +907,8 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
     FSRatio_plot->SetStats(0);
     FSRatio_plot->Draw("colz");
-    FSRatio_plot->SetMaximum(1.2);
+    Canvas->SetLogz(1);
+//    FSRatio_plot->SetMaximum(1.2);
 
     Histogram_list->Add(FSRatio_plot);
     Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
@@ -1167,11 +1180,14 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
     FSRatio_plot->SetStats(0);
     FSRatio_plot->Draw("colz");
-    FSRatio_plot->SetMaximum(1.2);
+    Canvas->SetLogz(1);
+//    FSRatio_plot->SetMaximum(1.2);
 
     Histogram_list->Add(FSRatio_plot);
     Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
     Canvas->Clear();
+    //</editor-fold>
+    //</editor-fold>
     //</editor-fold>
 
     delete Canvas;
@@ -1398,7 +1414,8 @@ void DrawAndSaveFSRatio(const string &SampleName, TH2D *pFDpCD_Plot, const strin
     FSRatio_plot->Divide(pFDpCD_Plot_Clone);
     FSRatio_plot->SetStats(0);
     FSRatio_plot->Draw("colz");
-    FSRatio_plot->SetMaximum(1.2);
+    Canvas->SetLogz(1);
+//    FSRatio_plot->SetMaximum(1.2);
 
     Histogram_list->Add(FSRatio_plot);
     Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
