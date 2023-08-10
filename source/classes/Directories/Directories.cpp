@@ -213,9 +213,13 @@ Directories::Directories(std::string plots_path) {
 
     Momentum_Directory_map["Momentum_1p_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                       Find(Momentum_Daughter_Folders, "02_1p") + "/";
+    Momentum_Directory_map["Analysis_plots_momentum_1p_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                                         Find(Momentum_Daughter_Folders, "02_1p/Analysis_plots") + "/";
 
     Momentum_Directory_map["Momentum_1n_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                       Find(Momentum_Daughter_Folders, "03_1n") + "/";
+    Momentum_Directory_map["Analysis_plots_momentum_1n_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                                     Find(Momentum_Daughter_Folders, "03_1n/Analysis_plots") + "/";
 
 //    Momentum_Directory_map["Momentum_1e2p_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
     Find(Momentum_Daughter_Folders, "03_1e2p") + "/";
@@ -225,13 +229,13 @@ Directories::Directories(std::string plots_path) {
 
     Momentum_Directory_map["Momentum_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                           Find(Momentum_Daughter_Folders, "05_pFDpCD") + "/";
-    Momentum_Directory_map["Other_momentum_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
-                                                                Find(Momentum_Daughter_Folders, "05_pFDpCD/Other") + "/";
+    Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                                Find(Momentum_Daughter_Folders, "05_pFDpCD/Analysis_plots") + "/";
 
     Momentum_Directory_map["Momentum_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
                                                           Find(Momentum_Daughter_Folders, "06_nFDpCD") + "/";
-    Momentum_Directory_map["Other_momentum_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
-                                                                Find(Momentum_Daughter_Folders, "06_nFDpCD/Other") + "/";
+    Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"] = Plots_Folder + "/" + Momentum_Parent_Directory + "/" +
+                                                                Find(Momentum_Daughter_Folders, "06_nFDpCD/Analysis_plots") + "/";
     //</editor-fold>
 
     //</editor-fold>
