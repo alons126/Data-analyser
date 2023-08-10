@@ -148,54 +148,55 @@ string hData::GetType(const string &Source) {
             !findSubstring(Source, "Total") && !findSubstring(Source, "Relative") &&
             !findSubstring(Source, "Leading") && !findSubstring(Source, "Recoil")) {
             Type = "momentum";
-        } else if (findSubstring(Source, "momentum") && findSubstring(Source, "Leading")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "momentum") && findSubstring(Source, "Leading")) {
             Type = "leading_nuc_momentum";
-        } else if (findSubstring(Source, "momentum") && findSubstring(Source, "Recoil")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "momentum") && findSubstring(Source, "Recoil")) {
             Type = "recoil_nuc_momentum";
-        } else if (findSubstring(Source, "Total") && findSubstring(Source, "3-momentum")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "Total") && findSubstring(Source, "3-momentum")) {
             Type = "total_3momentum";
-        } else if (findSubstring(Source, "Relative") && findSubstring(Source, "3-momentum")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "Relative") && findSubstring(Source, "3-momentum")) {
             Type = "relative_3momentum";
-        } else if (findSubstring(Source, "Total") && findSubstring(Source, "4-momentum")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "Total") && findSubstring(Source, "4-momentum")) {
             Type = "total_4momentum";
-        } else if (findSubstring(Source, "Relative") && findSubstring(Source, "4-momentum")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "Relative") && findSubstring(Source, "4-momentum")) {
             Type = "relative_4momentum";
-        } else if (findSubstring(Source, "W ")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "W ")) {
             Type = "W";
-        } else if (findSubstring(Source, "Q^{2}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "Q^{2}")) {
             Type = "Q2";
-        } else if (findSubstring(Source, "E_{e}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "E_{e}")) {
             Type = "E_e";
-        } else if (findSubstring(Source, "#omega")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#omega")) {
             Type = "omega";
-        } else if (findSubstring(Source, "E_{cal}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "E_{cal}")) {
             Type = "Ecal";
-        } else if (findSubstring(Source, "#deltaP_{T,tot}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#deltaP_{T,tot}")) {
             Type = "deltaP_T_tot";
-        } else if (findSubstring(Source, "#deltaP_{T,L}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#deltaP_{T,L}")) {
             Type = "deltaP_T_L";
-        } else if (findSubstring(Source, "#delta#alpha_{T,tot}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#delta#alpha_{T,tot}")) {
             Type = "deltaAlpha_T_tot";
-        } else if (findSubstring(Source, "#delta#alpha_{T,L}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#delta#alpha_{T,L}")) {
             Type = "deltaAlpha_T_L";
-        } else if (findSubstring(Source, "#delta#phi_{T,tot}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#delta#phi_{T,tot}")) {
             Type = "deltaPhi_T_tot";
-        } else if (findSubstring(Source, "#delta#phi_{T,L}")) { // for theta efficiency plots
+        } else if (findSubstring(Source, "#delta#phi_{T,L}")) {
             Type = "deltaPhi_T_L";
-        } else if (findSubstring(Source, "#theta") && !findSubstring(Source, "#theta_{#vec{") &&
+        } else if (findSubstring(Source, "#theta") &&
+                   !findSubstring(Source, "#theta_{#vec{") &&
                    !(findSubstring(Source, "#theta_{pFD,pCD}") || findSubstring(Source, "#theta_{nFD,pCD}")) &&
-                   !(findSubstring(Source, "#theta_{tot}") || findSubstring(Source, "#theta_{rel}"))) { // for theta efficiency plots
+                   !(findSubstring(Source, "#theta_{tot}") || findSubstring(Source, "#theta_{rel}"))) {
             Type = "theta";
         } else if (findSubstring(Source, "#phi") &&
-                   !(findSubstring(Source, "#phi_{tot}") || findSubstring(Source, "#phi_{rel}"))) { // for phi efficiency plots
+                   !(findSubstring(Source, "#phi_{tot}") || findSubstring(Source, "#phi_{rel}"))) {
             Type = "phi";
-        } else if (findSubstring(Source, "#theta_{tot}")) { // for phi efficiency plots
+        } else if (findSubstring(Source, "#theta_{tot}")) {
             Type = "theta_tot";
-        } else if (findSubstring(Source, "#phi_{tot}")) { // for phi efficiency plots
+        } else if (findSubstring(Source, "#phi_{tot}")) {
             Type = "phi_tot";
-        } else if (findSubstring(Source, "#theta_{rel}")) { // for phi efficiency plots
+        } else if (findSubstring(Source, "#theta_{rel}")) {
             Type = "theta_rel";
-        } else if (findSubstring(Source, "#phi_{rel}")) { // for phi efficiency plots
+        } else if (findSubstring(Source, "#phi_{rel}")) {
             Type = "phi_rel";
         } else if (findSubstring(Source, "#theta_{#vec{")) {
             if (findSubstring(Source, "#theta_{#vec{P}_{e},#vec{P}_{tot}}")) {
@@ -219,14 +220,18 @@ string hData::GetType(const string &Source) {
             Type = "Total_nucleon_4momentum";
         }
     } else {
+
         if (findSubstring(Source, "P_{pL} vs. P_{pR}") || findSubstring(Source, "P_{nL} vs. P_{nR}")) {
             Type = "P_nucL_vs_P_nucR";
         } else if (findSubstring(Source, "P_{pFD} vs. P_{pCD}") || findSubstring(Source, "P_{nFD} vs. P_{pCD}")) {
             Type = "P_nucFD_vs_P_nucCD";
+
         } else if (findSubstring(Source, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
             Type = "P_tot_vs_P_rel_3v";
+
         } else if (findSubstring(Source, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
             Type = "P_tot_vs_P_rel_4v";
+
         } else if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
             Type = "theta_e_vs_P_e";
         } else if (findSubstring(Source, "#theta_{e} vs. W")) {
@@ -235,47 +240,34 @@ string hData::GetType(const string &Source) {
             Type = "phi_e_vs_P_e";
         } else if (findSubstring(Source, "#phi_{e} vs. W")) {
             Type = "phi_e_vs_W";
+
         } else if (findSubstring(Source, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. P_{nFD}")) {
             Type = "theta_nucFD_vs_P_nucFD";
         } else if (findSubstring(Source, "#theta_{pFD} vs. W") || findSubstring(Source, "#theta_{nFD} vs. W")) {
             Type = "theta_nucFD_vs_W";
+
         } else if (findSubstring(Source, "#theta_{pCD} vs. P_{pCD}")) {
             Type = "theta_nucCD_vs_P_nucCD";
         } else if (findSubstring(Source, "#theta_{pCD} vs. W")) {
             Type = "theta_nucCD_vs_W";
+
         } else if (findSubstring(Source, "#phi_{pFD} vs. P_{pFD}") || findSubstring(Source, "#phi_{nFD} vs. P_{nFD}")) {
             Type = "phi_nucFD_vs_P_nucFD";
         } else if (findSubstring(Source, "#phi_{pFD} vs. W") || findSubstring(Source, "#phi_{nFD} vs. W")) {
             Type = "phi_nucFD_vs_W";
+
         } else if (findSubstring(Source, "#phi_{pCD} vs. P_{pCD}")) {
             Type = "phi_nucCD_vs_P_nucCD";
         } else if (findSubstring(Source, "#phi_{pCD} vs. W")) {
-            Type = "theta_nucCD_vs_W";
+            Type = "phi_nucCD_vs_W";
+
         } else if (findSubstring(Source, "#theta_{e} vs. #phi_{e}")) {
             Type = "theta_e_vs_phi_e";
         } else if (findSubstring(Source, "#theta_{pFD} vs. #phi_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. #phi_{nFD}")) {
             Type = "theta_nucFD_vs_theta_nucFD";
         } else if (findSubstring(Source, "#theta_{pCD} vs. #phi_{pCD}")) {
             Type = "theta_nucCD_vs_theta_nucCD";
-        } else if (findSubstring(Source, "#theta_{pCD} vs. #phi_{pCD}")) {
-            Type = "theta_nucCD_vs_theta_nucCD";
-        } else if (findSubstring(Source, "#theta_{pFD} vs. W") ||
-                   findSubstring(Source, "#theta_{nFD} vs. W")) {
-            Type = "theta_nucFD_vs_W";
-        } else if (findSubstring(Source, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. P_{nFD}")) {
-            Type = "theta_nucFD_vs_P_nucFD";
-        } else if (findSubstring(Source, "#theta_{pCD} vs. W") || findSubstring(Source, "#theta_{nCD} vs. W")) {
-            Type = "theta_nucCD_vs_W";
-        } else if (findSubstring(Source, "#theta_{pCD} vs. P_{pCD}") || findSubstring(Source, "#theta_{nCD} vs. P_{nCD}")) {
-            Type = "theta_nucCD_vs_P_nucCD";
-        } else if (findSubstring(Source, "#phi_{pFD} vs. W") || findSubstring(Source, "#phi_{nFD} vs. W")) {
-            Type = "phi_nucFD_vs_W";
-        } else if (findSubstring(Source, "#phi_{pFD} vs. P_{pFD}") || findSubstring(Source, "#phi_{nFD} vs. P_{nFD}")) {
-            Type = "phi_nucFD_vs_P_nucFD";
-        } else if (findSubstring(Source, "#phi_{pCD} vs. W") || findSubstring(Source, "#phi_{nCD} vs. W")) {
-            Type = "phi_nucCD_vs_W";
-        } else if (findSubstring(Source, "#phi_{pCD} vs. P_{pCD}") || findSubstring(Source, "#phi_{nCD} vs. P_{nCD}")) {
-            Type = "phi_nucCD_vs_P_nucCD";
+
         } else if (findSubstring(Source, "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W")) {
             Type = "theta_P_e_P_tot_vs_W";
         } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{tot}} vs. W")) {
@@ -288,6 +280,7 @@ string hData::GetType(const string &Source) {
             Type = "theta_q_P_nucFD_vs_W";
         } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W") || findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
             Type = "theta_q_P_nucCD_vs_W";
+
         } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}|") ||
                    findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}|")) {
             Type = "theta_q_P_nucCD_vs_r_nucL";
@@ -297,10 +290,13 @@ string hData::GetType(const string &Source) {
         } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}") ||
                    findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}")) {
             Type = "theta_q_P_nucFD_vs_theta_q_P_nucCD";
+
         } else if (findSubstring(Source, "#theta_{pFD,pCD} vs. W") || findSubstring(Source, "#theta_{nFD,pCD} vs. W")) {
             Type = "theta_nucFD_nucCD_vs_W";
+
         } else if (findSubstring(Source, "E_{e} vs. #theta_{e}")) {
             Type = "E_e_vs_theta_e";
+
         } else if (findSubstring(Source, "E_{cal} vs. #delta#alpha_{T,L}")) {
             Type = "E_cal_vs_dalpha_T_L";
         } else if (findSubstring(Source, "E_{cal} vs. #delta#alpha_{T,tot}")) {
@@ -309,10 +305,10 @@ string hData::GetType(const string &Source) {
             Type = "E_cal_vs_dP_T_L";
         } else if (findSubstring(Source, "E_{cal} vs. #deltaP_{T,tot}")) {
             Type = "E_cal_vs_dP_T_tot";
+
         } else if (findSubstring(Source, "E_{cal} vs. W")) {
             Type = "E_cal_vs_W";
-        } else if (findSubstring(Source, "E_{cal} vs. #deltaP_{T,tot}")) {
-            Type = "E_cal_vs_dP_T_tot";
+
         } else if (findSubstring(Source, "#deltaP_{T,L} vs. #delta#alpha_{T,L}")) {
             Type = "dP_T_L_vs_dalpha_T_L";
         } else if (findSubstring(Source, "#deltaP_{T,tot} vs. #delta#alpha_{T,tot}")) {
@@ -454,10 +450,6 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 FSRTitle = "P_{nucL} vs. P_{nucR} - ";
             } else if (findSubstring(Source, "P_{pFD} vs. P_{pCD}") || findSubstring(Source, "P_{nFD} vs. P_{pCD}")) {
                 FSRTitle = "P_{nucFD} vs. P_{nucCD} - ";
-            } else if (findSubstring(Source, "|#vec{P}_{tot}| vs. |#vec{P}_{rel}|")) {
-                FSRTitle = "|#vec{P}_{tot}| vs. |#vec{P}_{rel}| - ";
-            } else if (findSubstring(Source, "P_{tot}^{#mu} vs. P_{rel}^{#mu}")) {
-                FSRTitle = "P_{tot}^{#mu} vs. P_{rel}^{#mu} - ";
             } else if (findSubstring(Source, "#theta_{e} vs. P_{e}")) {
                 FSRTitle = "#theta_{e} vs. P_{e} - ";
             } else if (findSubstring(Source, "#theta_{e} vs. W")) {
@@ -488,23 +480,6 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 FSRTitle = "#theta_{nucFD} vs. #phi_{nucFD} - ";
             } else if (findSubstring(Source, "#theta_{pCD} vs. #phi_{pCD}")) {
                 FSRTitle = "#theta_{nucCD} vs. #phi_{nucCD} - ";
-            } else if (findSubstring(Source, "#theta_{pFD} vs. W") ||
-                       findSubstring(Source, "#theta_{nFD} vs. W")) {
-                FSRTitle = "#theta_{nucFD} vs. W - ";
-            } else if (findSubstring(Source, "#theta_{pFD} vs. P_{pFD}") || findSubstring(Source, "#theta_{nFD} vs. P_{nFD}")) {
-                FSRTitle = "#theta_{nucFD} vs. P_{nucFD} - ";
-            } else if (findSubstring(Source, "#theta_{pCD} vs. W") || findSubstring(Source, "#theta_{nCD} vs. W")) {
-                FSRTitle = "#theta_{nucCD} vs. W - ";
-            } else if (findSubstring(Source, "#theta_{pCD} vs. P_{pCD}") || findSubstring(Source, "#theta_{nCD} vs. P_{nCD}")) {
-                FSRTitle = "#theta_{nucCD} vs. P_{nucCD} - ";
-            } else if (findSubstring(Source, "#phi_{pFD} vs. W") || findSubstring(Source, "#phi_{nFD} vs. W")) {
-                FSRTitle = "#phi_{nucFD} vs. W - ";
-            } else if (findSubstring(Source, "#phi_{pFD} vs. P_{pFD}") || findSubstring(Source, "#phi_{nFD} vs. P_{nFD}")) {
-                FSRTitle = "#phi_{nucFD} vs. P_{nucFD} - ";
-            } else if (findSubstring(Source, "#phi_{pCD} vs. W") || findSubstring(Source, "#phi_{nCD} vs. W")) {
-                FSRTitle = "#phi_{nucCD} vs. W - ";
-            } else if (findSubstring(Source, "#phi_{pCD} vs. P_{pCD}") || findSubstring(Source, "#phi_{nCD} vs. P_{nCD}")) {
-                FSRTitle = "#phi_{nucCD} vs. P_{nucCD} - ";
             } else if (findSubstring(Source, "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W")) {
                 FSRTitle = "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W - ";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{tot}} vs. W")) {

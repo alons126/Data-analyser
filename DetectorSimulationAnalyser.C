@@ -136,7 +136,7 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps settings */
-    bool generate_AMaps = true; // Generate acceptance maps
+    bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -145,6 +145,7 @@ void EventAnalyser() {
     bool plot_and_fit_MomRes = false;
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
+    bool nRes_SaS_test = false; // to test neutron shift AFTER calculating neutron resolution
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (isData) { calculate_truth_level = false; }
@@ -195,9 +196,13 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
+//    bool apply_fiducial_cuts = false;
+//    bool apply_kinematical_cuts = false;
+//    bool apply_kinematical_weights = false;
+//    bool apply_nucleon_SmearAndShift = false;
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
+    bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -274,6 +279,7 @@ void EventAnalyser() {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
                 } else {
+//                    Additional_Status = "nRes_SaS_test_";
                     Additional_Status = "nRes_";
                 }
             } else if (generate_AMaps && plot_and_fit_MomRes) {
@@ -782,7 +788,8 @@ void EventAnalyser() {
     int numTH2Dbins_E_cal_Plots = 65;
 
     /* TKI plots */
-    int numTH1Dbins_TKI_Plots = 50;
+    int numTH1Dbins_TKI_dP_T_Plots = 50;
+    int numTH1Dbins_TKI_dAlpha_T_Plots = 30;
     int numTH2Dbins_TKI_Plots = 65;
 
     /* Efficiency % acceptance correction plots */
@@ -4353,7 +4360,8 @@ void EventAnalyser() {
     //<editor-fold desc="Theta_q_p_L vs. W (CD & FD)">
     TH2D *hTheta_q_p_L_vs_W_nFDpCD = new TH2D("#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD)",
                                               "#theta_{#vec{q},#vec{P}_{nL}} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                              "#theta_{#vec{q},#vec{P}_{nL}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, 0, 180);
+                                              "#theta_{#vec{q},#vec{P}_{nL}} [Deg];", numTH2Dbins_Ang_Plots, W_lboundary, W_uboundary, numTH2Dbins_Ang_Plots, Opening_Ang_narrow_lboundary,
+                                              Opening_Ang_narrow_uboundary);
     string hTheta_q_p_L_vs_W_nFDpCD_Dir = directories.Angle_Directory_map["Opening_angles_nFDpCD_Directory"];
     //</editor-fold>
 
@@ -5446,17 +5454,17 @@ void EventAnalyser() {
     //<editor-fold desc="TKI histograms (1p)">
     THStack *sdP_T_1p = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1p);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_1p = new TH1D("#deltaP_{T} (1p)", "#deltaP_{T} histogram (1p);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,p}| [GeV/c]",
-                              numTH1Dbins_E_cal_Plots, 0, dP_T_boundary);
+                              numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_1p_Dir = directories.TKI_Directory_map["dP_T_1p_Directory"];
 
     THStack *sdAlpha_T_1p = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1p);#delta#alpha_{T} [Deg]");
     TH1D *hdAlpha_T_1p = new TH1D("#delta#alpha_{T} (1p)", "#delta#alpha_{T} histogram (1p);#delta#alpha_{T} [Deg]",
-                                  numTH1Dbins_E_cal_Plots, 0, 180);
+                                  numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_1p_Dir = directories.TKI_Directory_map["dAlpha_T_1p_Directory"];
 
     THStack *sdPhi_T_1p = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1p);#delta#phi_{T} [Deg]");
     TH1D *hdPhi_T_1p = new TH1D("#delta#phi_{T} (1p)", "#delta#phi_{T} histogram (1p);#delta#phi_{T} [Deg]",
-                                numTH1Dbins_E_cal_Plots, 0, 180);
+                                numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_1p_Dir = directories.TKI_Directory_map["dPhi_T_1p_Directory"];
 
     TH2D *hdP_T_vs_dAlpha_T_1p = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1p)",
@@ -5468,17 +5476,17 @@ void EventAnalyser() {
     //<editor-fold desc="TKI histograms (1n)">
     THStack *sdP_T_1n = new THStack("#deltaP_{T} vs. #deltaP_{T,tot} (1n)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (1n);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_1n = new TH1D("#deltaP_{T} (1n)", "#deltaP_{T} histogram (1n);#deltaP_{T} = |#vec{p}_{T,e} + #vec{p}_{T,n}| [GeV/c]",
-                              numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+                              numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_1n_Dir = directories.TKI_Directory_map["dP_T_1n_Directory"];
 
     THStack *sdAlpha_T_1n = new THStack("#delta#alpha_{T} & #delta#alpha_{T,tot} (1n)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (1n);#delta#alpha_{T} [Deg]");
     TH1D *hdAlpha_T_1n = new TH1D("#delta#alpha_{T} (1n)", "#delta#alpha_{T} histogram (1n);#delta#alpha_{T} [Deg]",
-                                  numTH1Dbins_TKI_Plots, 0, 180);
+                                  numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_1n_Dir = directories.TKI_Directory_map["dAlpha_T_1n_Directory"];
 
     THStack *sdPhi_T_1n = new THStack("#delta#phi_{T} & #delta#phi_{T,tot} (1n)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (1n);#delta#phi_{T} [Deg]");
     TH1D *hdPhi_T_1n = new TH1D("#delta#phi_{T} (1n)", "#delta#phi_{T} histogram (1n);#delta#phi_{T} [Deg]",
-                                numTH1Dbins_TKI_Plots, 0, 180);
+                                numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_1n_Dir = directories.TKI_Directory_map["dPhi_T_1n_Directory"];
 
     TH2D *hdP_T_vs_dAlpha_T_1n = new TH2D("#deltaP_{T} vs. #delta#alpha_{T} (All Int., 1n)",
@@ -5490,26 +5498,26 @@ void EventAnalyser() {
     //<editor-fold desc="TKI histograms (2p)">
     THStack *sdP_T_2p = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (2p)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (2p);#deltaP_{T} [GeV/c]");
     TH1D *hdP_T_L_2p = new TH1D("#deltaP_{T,L} (2p)", "#deltaP_{T,L} by Leading Proton (2p);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,1}| [GeV/c]",
-                                numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+                                numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_2p = new TH1D("#deltaP_{T,tot} (2p)",
                                   "#deltaP_{T,tot} by Momentum Sum (2p);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,1} + #vec{p}_{T,2}| [GeV/c]",
-                                  numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+                                  numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_L_2p_Dir = directories.TKI_Directory_map["dP_T_2p_Directory"];
     string hdP_T_tot_2p_Dir = directories.TKI_Directory_map["dP_T_2p_Directory"];
 
     THStack *sdAlpha_T_2p = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (2p);#delta#alpha_{T} [Deg]");
     TH1D *hdAlpha_T_L_2p = new TH1D("#delta#alpha_{T,L} (2p)", "#delta#alpha_{T,L} by Leading Proton (2p);#delta#alpha_{T,L} [Deg]",
-                                    numTH1Dbins_TKI_Plots, 0, 180);
+                                    numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     TH1D *hdAlpha_T_tot_2p = new TH1D("#delta#alpha_{T,tot} (2p)", "#delta#alpha_{T,tot} by Momentum Sum (2p);#delta#alpha_{T,tot} [Deg]",
-                                      numTH1Dbins_TKI_Plots, 0, 180);
+                                      numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_L_2p_Dir = directories.TKI_Directory_map["dAlpha_T_2p_Directory"];
     string hdAlpha_T_tot_2p_Dir = directories.TKI_Directory_map["dAlpha_T_2p_Directory"];
 
     THStack *sdPhi_T_2p = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (2p)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (2p);#delta#phi_{T} [Deg]");
     TH1D *hdPhi_T_L_2p = new TH1D("#delta#phi_{T,L} (2p)", "#delta#phi_{T,L} by Leading Proton (2p);#delta#phi_{T,L} [Deg]",
-                                  numTH1Dbins_TKI_Plots, 0, 180);
+                                  numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     TH1D *hdPhi_T_tot_2p = new TH1D("#delta#phi_{T,tot} (2p)", "#delta#phi_{T,tot} by Momentum Sum (2p);#delta#phi_{T,tot} [Deg]",
-                                    numTH1Dbins_TKI_Plots, 0, 180);
+                                    numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_L_2p_Dir = directories.TKI_Directory_map["dPhi_T_2p_Directory"];
     string hdPhi_T_tot_2p_Dir = directories.TKI_Directory_map["dPhi_T_2p_Directory"];
 
@@ -5525,30 +5533,30 @@ void EventAnalyser() {
 
     //<editor-fold desc="TKI histograms (pFDpCD)">
 
-    //<editor-fold desc="TV plots (pFDpCD)">
+    //<editor-fold desc="TKI plots (pFDpCD)">
     THStack *sdP_T_pFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (pFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (pFDpCD);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_L_pFDpCD = new TH1D("#deltaP_{T,L} (pFDpCD)", "#deltaP_{T,L} by Leading FD Proton (pFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pFD}| [GeV/c]",
-                                    numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_L_pFDpCD = new TH1D("#deltaP_{T,L} (pFDpCD)", "#deltaP_{T,L} by leading proton (pFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c]",
+                                    numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_pFDpCD = new TH1D("#deltaP_{T,tot} (pFDpCD)",
                                       "#deltaP_{T,tot} by Momentum Sum (pFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]",
-                                      numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+                                      numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dP_T_pFDpCD_Directory"];
     string hdP_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dP_T_pFDpCD_Directory"];
 
     THStack *sdAlpha_T_pFDpCD = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (pFDpCD)",
                                             "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (pFDpCD);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_L_pFDpCD = new TH1D("#delta#alpha_{T,L} (pFDpCD)", "#delta#alpha_{T,L} by Leading FD Proton (pFDpCD);#delta#alpha_{T,L} [Deg]",
-                                        numTH1Dbins_TKI_Plots, 0, 180);
+    TH1D *hdAlpha_T_L_pFDpCD = new TH1D("#delta#alpha_{T,L} (pFDpCD)", "#delta#alpha_{T,L} by leading proton (pFDpCD);#delta#alpha_{T,L} [Deg]",
+                                        numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     TH1D *hdAlpha_T_tot_pFDpCD = new TH1D("#delta#alpha_{T,tot} (pFDpCD)", "#delta#alpha_{T,tot} by Momentum Sum (pFDpCD);#delta#alpha_{T,tot} [Deg]",
-                                          numTH1Dbins_TKI_Plots, 0, 180);
+                                          numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_pFDpCD_Directory"];
     string hdAlpha_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_pFDpCD_Directory"];
 
     THStack *sdPhi_T_pFDpCD = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (pFDpCD)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (pFDpCD);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_L_pFDpCD = new TH1D("#delta#phi_{T,L} (pFDpCD)", "#delta#phi_{T,L} by Leading FD Proton (pFDpCD);#delta#phi_{T,L} [Deg]",
-                                      numTH1Dbins_TKI_Plots, 0, 180);
+    TH1D *hdPhi_T_L_pFDpCD = new TH1D("#delta#phi_{T,L} (pFDpCD)", "#delta#phi_{T,L} by leading proton (pFDpCD);#delta#phi_{T,L} [Deg]",
+                                      numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     TH1D *hdPhi_T_tot_pFDpCD = new TH1D("#delta#phi_{T,tot} (pFDpCD)", "#delta#phi_{T,tot} by Momentum Sum (pFDpCD);#delta#phi_{T,tot} [Deg]",
-                                        numTH1Dbins_TKI_Plots, 0, 180);
+                                        numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_L_pFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_pFDpCD_Directory"];
     string hdPhi_T_tot_pFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_pFDpCD_Directory"];
 
@@ -5565,7 +5573,7 @@ void EventAnalyser() {
     //<editor-fold desc="TKI vs. W (pFDpCD)">
     TH2D *hdP_T_L_vs_W_pFDpCD = new TH2D("#deltaP_{T,L} vs. W (All Int., pFDpCD)",
                                          "#deltaP_{T,L} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pFD}| [GeV/c];",
+                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,pL}| [GeV/c];",
                                          numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_W_pFDpCD = new TH2D("#deltaP_{T,tot} vs. W (All Int., pFDpCD)",
                                            "#deltaP_{T,tot} vs. W (All Int., pFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
@@ -5588,30 +5596,30 @@ void EventAnalyser() {
 
     //<editor-fold desc="TKI histograms (nFDpCD)">
 
-    //<editor-fold desc="TV plots (nFDpCD)">
+    //<editor-fold desc="TKI plots (nFDpCD)">
     THStack *sdP_T_nFDpCD = new THStack("#deltaP_{T,L} & #deltaP_{T,tot} (nFDpCD)", "#deltaP_{T,L} vs. #deltaP_{T,tot} (nFDpCD);#deltaP_{T} [GeV/c]");
-    TH1D *hdP_T_L_nFDpCD = new TH1D("#deltaP_{T,L} (nFDpCD)", "#deltaP_{T,L} by Leading FD Neutron (nFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nFD}| [GeV/c]",
-                                    numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+    TH1D *hdP_T_L_nFDpCD = new TH1D("#deltaP_{T,L} (nFDpCD)", "#deltaP_{T,L} by leading nucleon (nFDpCD);#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c]",
+                                    numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     TH1D *hdP_T_tot_nFDpCD = new TH1D("#deltaP_{T,tot} (nFDpCD)",
                                       "#deltaP_{T,tot} by Momentum Sum (nFDpCD);#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nFD} + #vec{p}_{T,pCD}| [GeV/c]",
-                                      numTH1Dbins_TKI_Plots, 0, dP_T_boundary);
+                                      numTH1Dbins_TKI_dP_T_Plots, 0, dP_T_boundary);
     string hdP_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dP_T_nFDpCD_Directory"];
     string hdP_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dP_T_nFDpCD_Directory"];
 
     THStack *sdAlpha_T_nFDpCD = new THStack("#delta#alpha_{T,L} & #delta#alpha_{T,tot} (nFDpCD)",
                                             "#delta#alpha_{T,L} vs. #delta#alpha_{T,tot} (nFDpCD);#delta#alpha_{T} [Deg]");
-    TH1D *hdAlpha_T_L_nFDpCD = new TH1D("#delta#alpha_{T,L} (nFDpCD)", "#delta#alpha_{T,L} by Leading FD Neutron (nFDpCD);#delta#alpha_{T,L} [Deg]",
-                                        numTH1Dbins_TKI_Plots, 0, 180);
+    TH1D *hdAlpha_T_L_nFDpCD = new TH1D("#delta#alpha_{T,L} (nFDpCD)", "#delta#alpha_{T,L} by leading nucleon (nFDpCD);#delta#alpha_{T,L} [Deg]",
+                                        numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     TH1D *hdAlpha_T_tot_nFDpCD = new TH1D("#delta#alpha_{T,tot} (nFDpCD)", "#delta#alpha_{T,tot} by Momentum Sum (nFDpCD);#delta#alpha_{T,tot} [Deg]",
-                                          numTH1Dbins_TKI_Plots, 0, 180);
+                                          numTH1Dbins_TKI_dAlpha_T_Plots, 0, 180);
     string hdAlpha_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_nFDpCD_Directory"];
     string hdAlpha_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dAlpha_T_nFDpCD_Directory"];
 
     THStack *sdPhi_T_nFDpCD = new THStack("#delta#phi_{T,L} & #delta#phi_{T,tot} (nFDpCD)", "#delta#phi_{T,L} vs. #delta#phi_{T,tot} (nFDpCD);#delta#phi_{T} [Deg]");
-    TH1D *hdPhi_T_L_nFDpCD = new TH1D("#delta#phi_{T,L} (nFDpCD)", "#delta#phi_{T,L} by Leading FD Neutron (nFDpCD);#delta#phi_{T,L} [Deg]",
-                                      numTH1Dbins_TKI_Plots, 0, 180);
+    TH1D *hdPhi_T_L_nFDpCD = new TH1D("#delta#phi_{T,L} (nFDpCD)", "#delta#phi_{T,L} by leading nucleon (nFDpCD);#delta#phi_{T,L} [Deg]",
+                                      numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     TH1D *hdPhi_T_tot_nFDpCD = new TH1D("#delta#phi_{T,tot} (nFDpCD)", "#delta#phi_{T,tot} by Momentum Sum (nFDpCD);#delta#phi_{T,tot} [Deg]",
-                                        numTH1Dbins_TKI_Plots, 0, 180);
+                                        numTH1Dbins_TKI_dP_T_Plots, 0, 180);
     string hdPhi_T_L_nFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_nFDpCD_Directory"];
     string hdPhi_T_tot_nFDpCD_Dir = directories.TKI_Directory_map["dPhi_T_nFDpCD_Directory"];
 
@@ -5628,7 +5636,7 @@ void EventAnalyser() {
     //<editor-fold desc="TKI vs. W (nFDpCD)">
     TH2D *hdP_T_L_vs_W_nFDpCD = new TH2D("#deltaP_{T,L} vs. W (All Int., nFDpCD)",
                                          "#deltaP_{T,L} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
-                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nFD}| [GeV/c];",
+                                         "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nL}| [GeV/c];",
                                          numTH2Dbins_TKI_Plots, W_lboundary, W_uboundary, numTH2Dbins_TKI_Plots, 0, dP_T_boundary);
     TH2D *hdP_T_tot_vs_W_nFDpCD = new TH2D("#deltaP_{T,tot} vs. W (All Int., nFDpCD)",
                                            "#deltaP_{T,tot} vs. W (All Int., nFDpCD);W = #sqrt{(#omega + m_{p})^{2} - #vec{q}^{2}}  [GeV];"
@@ -9131,6 +9139,7 @@ void EventAnalyser() {
             double ProtonMomBKC_1p = p_1p->getP(); // proton momentum before smearing or kinematical cuts
 
             TVector3 P_e_1p_3v, q_1p_3v, P_p_1p_3v, P_T_e_1p_3v, P_T_p_1p_3v, dP_T_1p_3v, P_N_1p_3v;
+
             P_e_1p_3v.SetMagThetaPhi(e_1p->getP(), e_1p->getTheta(), e_1p->getPhi());                                                              // electron 3 momentum
             q_1p_3v = TVector3(Pvx - P_e_1p_3v.Px(), Pvy - P_e_1p_3v.Py(), Pvz - P_e_1p_3v.Pz());                                                  // 3 momentum transfer
             P_p_1p_3v.SetMagThetaPhi(nRes.PSmear(apply_nucleon_SmearAndShift, ProtonMomBKC_1p), p_1p->getTheta(), p_1p->getPhi());                 // proton 3 momentum
@@ -9609,7 +9618,7 @@ void EventAnalyser() {
         if (calculate_1n && event_selection_1n && apply_TL_1n_ES) { // for 1n calculations (with any number of neutrals)
             ++num_of_events_1n_inFD; // 1n event count after momentum and theta_n cuts
 
-            //<editor-fold desc="Setting particle vectors (for code organization)">
+            //<editor-fold desc="Setting particle vectors & SaS variable (for code organization)">
             /* Defining initial particle vectors: */
 
             //<editor-fold desc="Setting FD neutron index (1n)">
@@ -9624,6 +9633,17 @@ void EventAnalyser() {
 
             region_part_ptr e_1n = electrons[Electron_ind.at(0)];
             region_part_ptr n_1n = allParticles[n_ind_1n]; // neutron with the largest momentum magnitude
+
+            //<editor-fold desc="Setting SaS variable">
+            bool apply_nucleon_SmearAndShift_1n;
+
+            if (nRes_SaS_test) { // to test neutron shift AFTER calculating neutron resolution
+                apply_nucleon_SmearAndShift_1n = false;
+            } else {
+                apply_nucleon_SmearAndShift_1n = apply_nucleon_SmearAndShift;
+            }
+            //</editor-fold>
+
             //</editor-fold>
 
             //<editor-fold desc="Safety check (1n)">
@@ -9683,9 +9703,10 @@ void EventAnalyser() {
             double NeutronMomBKC_1n = GetFDNeutronP(n_1n, apply_nucleon_cuts); // neutron momentum before shift for kin cuts
 
             TVector3 P_e_1n_3v, q_1n_3v, P_n_1n_3v, P_T_e_1n_3v, P_T_n_1n_3v, dP_T_1n_3v, P_N_1n_3v;
+
             P_e_1n_3v.SetMagThetaPhi(e_1n->getP(), e_1n->getTheta(), e_1n->getPhi());                                                              // electron 3 momentum
             q_1n_3v = TVector3(Pvx - P_e_1n_3v.Px(), Pvy - P_e_1n_3v.Py(), Pvz - P_e_1n_3v.Pz());                                                  // 3 momentum transfer
-            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());                 // neutron 3 momentum
+            P_n_1n_3v.SetMagThetaPhi(nRes.NShift(apply_nucleon_SmearAndShift_1n, NeutronMomBKC_1n), n_1n->getTheta(), n_1n->getPhi());              // neutron 3 momentum
             P_T_e_1n_3v = TVector3(P_e_1n_3v.Px(), P_e_1n_3v.Py(), 0);                                                                            // electron t. momentum
             P_T_n_1n_3v = TVector3(P_n_1n_3v.Px(), P_n_1n_3v.Py(), 0);                                                                             // neutron t. momentum
 

@@ -60,9 +60,9 @@ string SetXAxisTitle(const string &RecTitle) {
         } else if (findSubstring(RecTitle, "E_{cal}")) {
             XAxisTitle = "E_{cal} = E_{e} + T_{nuc,FD} + T_{nuc,CD} [GeV]";
         } else if (findSubstring(RecTitle, "#deltaP_{T,tot}")) {
-            XAxisTitle = "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD}| [GeV/c]";
+            XAxisTitle = "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,nucFD} + #vec{p}_{T,nucCD}| [GeV/c]";
         } else if (findSubstring(RecTitle, "#deltaP_{T,L}")) {
-            XAxisTitle = "#deltaP_{T,tot} = |#vec{p}_{T,e} + #vec{p}_{T,pFD} + #vec{p}_{T,pCD}| [GeV/c]";
+            XAxisTitle = "#deltaP_{T,L} = |#vec{p}_{T,e} + #vec{p}_{T,nucL}| [GeV/c]";
         } else if (findSubstring(RecTitle, "#delta#alpha_{T,tot}")) {
             XAxisTitle = "#delta#alpha_{T,tot} [Deg]";
         } else if (findSubstring(RecTitle, "#delta#alpha_{T,L}")) {
@@ -128,17 +128,17 @@ string SetXAxisTitle(const string &RecTitle) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{pFD} vs. P_{pFD}") || findSubstring(RecTitle, "#theta_{nFD} vs. P_{nFD}")) {
             XAxisTitle = "P_{nucFD} [GeV/c]";
-        } else if (findSubstring(RecTitle, "#theta_{pCD} vs. W") || findSubstring(RecTitle, "#theta_{nCD} vs. W")) {
+        } else if (findSubstring(RecTitle, "#theta_{pCD} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
-        } else if (findSubstring(RecTitle, "#theta_{pCD} vs. P_{pCD}") || findSubstring(RecTitle, "#theta_{nCD} vs. P_{nCD}")) {
+        } else if (findSubstring(RecTitle, "#theta_{pCD} vs. P_{pCD}")) {
             XAxisTitle = "P_{pCD} [GeV/c]";
         } else if (findSubstring(RecTitle, "#phi_{pFD} vs. W") || findSubstring(RecTitle, "#phi_{nFD} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#phi_{pFD} vs. P_{pFD}") || findSubstring(RecTitle, "#phi_{nFD} vs. P_{nFD}")) {
             XAxisTitle = "P_{nucFD} [GeV/c]";
-        } else if (findSubstring(RecTitle, "#phi_{pCD} vs. W") || findSubstring(RecTitle, "#phi_{nCD} vs. W")) {
+        } else if (findSubstring(RecTitle, "#phi_{pCD} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
-        } else if (findSubstring(RecTitle, "#phi_{pCD} vs. P_{pCD}") || findSubstring(RecTitle, "#phi_{nCD} vs. P_{nCD}")) {
+        } else if (findSubstring(RecTitle, "#phi_{pCD} vs. P_{pCD}")) {
             XAxisTitle = "P_{pCD} [GeV/c]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{P}_{e},#vec{P}_{tot}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
@@ -153,8 +153,7 @@ string SetXAxisTitle(const string &RecTitle) {
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pFD}} vs. W") ||
                    findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nFD}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
-        } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W") ||
-                   findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nCD}} vs. W")) {
+        } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pCD}} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pL}} vs. r_{pL}=|#vec{P}_{pL}|/|#vec{q}|") ||
                    findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}} vs. r_{nL}=|#vec{P}_{nL}|/|#vec{q}|")) {
