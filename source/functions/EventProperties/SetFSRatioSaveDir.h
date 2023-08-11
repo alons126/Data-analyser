@@ -23,7 +23,6 @@ using namespace std;
 
 void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePathOriginal, const string &PlotsT,
                        const string &DRegion, const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
-//    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/FS_" + Type + "_ratio_plots";
     string Histogram1DSaveNamePath;
 
     if (!findSubstring(RecTitle, "vs") && !findSubstring(RecTitle, "vs.") &&
@@ -45,7 +44,7 @@ void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTi
                 Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
                                           "/FS_ang_ratio_plots/FS_phi_ratio_plots/FS_" + Type + "_ratio_plots";
             }
-        } else if (findSubstring(Type, "momentum")) { // Momentum ratios
+        } else if (findSubstring(Type, "momentum") || findSubstring(Type, "P_tot_minus_q")) { // Momentum ratios
             Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
                                       "/FS_momentum_ratio_plots/FS_" + Type + "_ratio_plots";
         } else {

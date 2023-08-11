@@ -160,6 +160,8 @@ string hData::GetType(const string &Source) {
             Type = "total_4momentum";
         } else if (findSubstring(Source, "Relative") && findSubstring(Source, "4-momentum")) {
             Type = "relative_4momentum";
+        } else if (findSubstring(Source, "#vec{P}_{tot}-#vec{q}")) {
+            Type = "P_tot_minus_q";
         } else if (findSubstring(Source, "W ")) {
             Type = "W";
         } else if (findSubstring(Source, "Q^{2}")) {
@@ -207,6 +209,8 @@ string hData::GetType(const string &Source) {
                 Type = "Opening_ang_q_P_nucFD";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pCD}}")) {
                 Type = "Opening_ang_q_P_nucCD";
+            } else if (findSubstring(Source, "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}}") || findSubstring(Source, "#theta_{#vec{P}_{nL}-#vec{q},#vec{P}_{nR}}")) {
+                Type = "Opening_ang_P_nucL_minus_q_nucR";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pL}}") || findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nL}}")) {
                 Type = "Opening_ang_q_P_nucL";
             } else if (findSubstring(Source, "#theta_{#vec{q},#vec{P}_{pR}}") || findSubstring(Source, "#theta_{#vec{q},#vec{P}_{nR}}")) {
@@ -293,6 +297,9 @@ string hData::GetType(const string &Source) {
 
         } else if (findSubstring(Source, "#theta_{pFD,pCD} vs. W") || findSubstring(Source, "#theta_{nFD,pCD} vs. W")) {
             Type = "theta_nucFD_nucCD_vs_W";
+
+        } else if (findSubstring(Source, "Q^{2} vs. W")) {
+            Type = "Q2_vs_W";
 
         } else if (findSubstring(Source, "E_{e} vs. #theta_{e}")) {
             Type = "E_e_vs_theta_e";
@@ -418,6 +425,10 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 FSRTitle = "#theta_{rel} of relative 3-momentum - ";
             } else if (Type == "phi_rel") {
                 FSRTitle = "#phi_{rel} of relative 3-momentum - ";
+            } else if (Type == "P_tot_minus_q") {
+                FSRTitle = "#vec{P}_{tot}-#vec{q} - ";
+            } else if (Type == "Opening_ang_P_nucL_minus_q_nucR") {
+                FSRTitle = "#theta_{#vec{P}_{nucL}-#vec{q},#vec{P}_{nucR}} - ";
             } else {
                 if (Particle == "Electron") {
                     if (Type == "momentum") {
@@ -507,6 +518,8 @@ string hData::GetFSRTitle(const string &Source, const string &PlotsT) {
                 FSRTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} vs. #theta_{#vec{q},#vec{P}_{nucCD}} - ";
             } else if (findSubstring(Source, "#theta_{pFD,pCD} vs. W") || findSubstring(Source, "#theta_{nFD,pCD} vs. W")) {
                 FSRTitle = "#theta_{nucFD,nucCD} vs. W - ";
+            } else if (findSubstring(Source, "Q^{2} vs. W")) {
+                FSRTitle = "Q^{2} vs. W - ";
             } else if (findSubstring(Source, "E_{e} vs. #theta_{e}")) {
                 FSRTitle = "E_{e} vs. #theta_{e} - ";
             } else if (findSubstring(Source, "E_{cal} vs. #delta#alpha_{T,L}")) {

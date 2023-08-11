@@ -98,6 +98,8 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
                 YAxisTitle = "#theta_{#vec{q},#vec{P}_{nucCD}} [Deg]";
             } else if (findSubstring(Title, "#theta_{pFD,pCD} vs. W") || findSubstring(Title, "#theta_{nFD,pCD} vs. W")) {
                 YAxisTitle = "#theta_{nucFD,nucCD} [Deg]";
+            } else if (findSubstring(Title, "Q^{2} vs. W")) {
+                YAxisTitle = "Q^{2} [GeV^{2}/c^{2}]";
             } else if (findSubstring(Title, "E_{e} vs. #theta_{e}")) {
                 YAxisTitle = "E_{e} [GeV]";
             } else if (findSubstring(Title, "E_{cal} vs. #delta#alpha_{T,L}")) {

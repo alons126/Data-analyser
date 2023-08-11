@@ -237,6 +237,10 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
 
     Canvas->Clear();
 
+//    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
+//    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
+
     /*
     Histogram_list->Add(FSRatio_plot);
     Canvas->SaveAs((FSRatio_plot_SaveName).c_str());
@@ -721,6 +725,10 @@ void DrawAndSaveFSRatio(const string &SampleName, TH1D *pFDpCD_Plot, const strin
     Canvas->SaveAs((FSRatio_plot_SaveName.substr(0, FSRatio_plot_SaveName.find_last_of(".png") - 3) + "_preSetRange2.png").c_str());
 
     Canvas->Clear();
+
+//    cout << "\n\n\nFSRatioType = " << FSRatioType << "\n\n\n";
+//    cout << "\n\n\nFSRatioRecTitle = " << FSRatioRecTitle << "\n\n\n";
+//    cout << "\n\n\nFSRatio_plot_SaveName = " << FSRatio_plot_SaveName << "\n\n\n";
 
     /*
     Histogram_list->Add(FSRatio_plot);

@@ -50,6 +50,8 @@ string SetXAxisTitle(const string &RecTitle) {
             XAxisTitle = "|#vec{P}_{rel}| = |#vec{P}_{nucL} - #vec{P}_{nucR}|/2 [GeV/c]";
         } else if (findSubstring(RecTitle, "4-momentum") && findSubstring(RecTitle, "Relative")) {
             XAxisTitle = "P_{rel}^{#mu} = (P_{nucL}^{#mu} - P_{nucR}^{#mu})/2 [GeV/c]";
+        } else if (findSubstring(RecTitle, "#vec{P}_{tot}-#vec{q}")) {
+            XAxisTitle = "|#vec{P}_{tot} - #vec{q}| = |#vec{P}_{pL} + #vec{P}_{pR}- #vec{q}| [GeV/c]";
         } else if (findSubstring(RecTitle, "W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "Q^{2}")) {
@@ -95,6 +97,8 @@ string SetXAxisTitle(const string &RecTitle) {
             XAxisTitle = "#theta_{#vec{q},#vec{P}_{nuc,FD}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pCD}}")) {
             XAxisTitle = "#theta_{#vec{q},#vec{P}_{p,CD}} [Deg]";
+        } else if (findSubstring(RecTitle, "#theta_{#vec{P}_{pL}-#vec{q},#vec{P}_{pR}}")) {
+            XAxisTitle = "#theta_{#vec{P}_{nucL}-#vec{q},#vec{P}_{nucR}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pL}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nL}}")) {
             XAxisTitle = "#theta_{#vec{q},#vec{P}_{nucL}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{pR}}") || findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nR}}")) {
@@ -166,6 +170,8 @@ string SetXAxisTitle(const string &RecTitle) {
                    findSubstring(RecTitle, "#theta_{#vec{q},#vec{P}_{nFD}} vs. #theta_{#vec{q},#vec{P}_{pCD}}")) {
             XAxisTitle = "#theta_{#vec{q},#vec{P}_{nucFD}} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{pFD,pCD} vs. W") || findSubstring(RecTitle, "#theta_{nFD,pCD} vs. W")) {
+            XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
+        } else if (findSubstring(RecTitle, "Q^{2} vs. W")) {
             XAxisTitle = "W = #sqrt{(#omega + m_{nuc})^{2} - #vec{q}^{2}}  [GeV]";
         } else if (findSubstring(RecTitle, "E_{e} vs. #theta_{e}")) {
             XAxisTitle = "#theta_{e} [Deg]";

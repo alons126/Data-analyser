@@ -23,13 +23,14 @@ using namespace std;
 void SetSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTitle, const string &Histogram1DSaveNamePath, const string &PlotsT, const string &DRegion,
                 const string &Particle, const string &ParticleLC, const string &ParticleShort, const string &Type) {
     if (PlotsT == "FSRatio") {
-        if (!findSubstring(Type, "vs") && !findSubstring(Type, "vs.") && !findSubstring(Type, "VS") && !findSubstring(Type, "VS.")){
+        if (!findSubstring(Type, "vs") && !findSubstring(Type, "vs.") && !findSubstring(Type, "VS") && !findSubstring(Type, "VS.")) {
             if (Type == "W" || Type == "Q2" || Type == "E_e" || Type == "omega" || Type == "Ecal" || Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
                 Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L" ||
                 Type == "total_3momentum" || Type == "relative_3momentum" || Type == "total_4momentum" || Type == "relative_4momentum" ||
                 Type == "leading_nuc_momentum" || Type == "recoil_nuc_momentum" ||
-                Type == "theta_tot" || Type == "phi_tot" || Type == "theta_rel"|| Type == "phi_rel"
-                ) {
+                Type == "theta_tot" || Type == "phi_tot" || Type == "theta_rel" || Type == "phi_rel" ||
+                Type == "Opening_ang_P_nucL_minus_q_nucR" || Type == "P_tot_minus_q"
+                    ) {
                 SaveDir = Histogram1DSaveNamePath + "/";
                 TestSaveDir = SaveDir + "Cloned_hist_test/";
             } else {
