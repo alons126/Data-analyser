@@ -250,7 +250,7 @@ void EventAnalyser() {
             KinCuts_Status = "";
             KinWei_Status = "";
         } else if (apply_kinematical_cuts && !apply_kinematical_weights) {
-            KinCuts_Status = "wKC_";
+            KinCuts_Status = "wKC_noASKC_";
             KinWei_Status = "";
         } else if (!apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "";
@@ -518,8 +518,8 @@ void EventAnalyser() {
     /* reco. kinematic cuts (based on nucleons' efficiency) */
     DSCuts FD_nucleon_theta_cut = DSCuts("FD Nucleon theta cut", "FD", "", "", 0, 0, 32.);
     DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
-    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., 3.); // new upper cut, following Larry meeting (10/08/23)
-//    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., n_mom_th.GetUpperCut());
+//    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., 3.); // new upper cut, following Larry meeting (10/08/23)
+    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., n_mom_th.GetUpperCut());
     //</editor-fold>
 
     //</editor-fold>
@@ -7116,11 +7116,11 @@ void EventAnalyser() {
             dphi_pFD_pCD_2p.SetMean(clasAna.getdPhiCutMean());
             dphi_pFD_pCD_pFDpCD.SetMean(clasAna.getdPhiCutMean());
 
-//            if (apply_kinematical_cuts) {
-//                //TODO: figure out what to do with these cuts in the 2GeV samples
-//                Nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
-//                FD_nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
-//            }
+            if (apply_kinematical_cuts) {
+                //TODO: figure out what to do with these cuts in the 2GeV samples
+                Nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
+                FD_nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
+            }
         }
 
         clasAna.printParams();
