@@ -26,14 +26,15 @@ string SetXAxisTitle(const string &RecTitle) {
 
     if (!findSubstring(RecTitle, "vs") && !findSubstring(RecTitle, "vs.") &&
         !findSubstring(RecTitle, "VS") && !findSubstring(RecTitle, "VS.")) {
-        if (findSubstring(RecTitle, "momentum") && !findSubstring(RecTitle, "-momentum") &&
+        if (findSubstring(RecTitle, "momentum") &&
+            !findSubstring(RecTitle, "-momentum") &&
             !findSubstring(RecTitle, "Total") && !findSubstring(RecTitle, "Relative") &&
             !findSubstring(RecTitle, "Leading") && !findSubstring(RecTitle, "Recoil") &&
             !findSubstring(RecTitle, "FD proton") && !findSubstring(RecTitle, "FD neutron") &&
             !findSubstring(RecTitle, "CD proton")) {
             XAxisTitle = "Momentum [GeV/c]";
         } else if (findSubstring(RecTitle, "momentum") &&
-                   (findSubstring(RecTitle, "FD proton") && findSubstring(RecTitle, "FD neutron"))) {
+                   (findSubstring(RecTitle, "FD proton") || findSubstring(RecTitle, "FD neutron"))) {
             XAxisTitle = "P_{nucFD} [GeV/c]";
         } else if (findSubstring(RecTitle, "momentum") && findSubstring(RecTitle, "CD proton")) {
             XAxisTitle = "P_{nucCD} [GeV/c]";
@@ -78,13 +79,13 @@ string SetXAxisTitle(const string &RecTitle) {
         } else if (findSubstring(RecTitle, "#phi") &&
                    !(findSubstring(RecTitle, "#phi_{tot}") || findSubstring(RecTitle, "#phi_{rel}"))) {
             XAxisTitle = "#phi [Deg]";
-        } else if (findSubstring(RecTitle, "#theta_{tot}")) { // for phi efficiency plots
+        } else if (findSubstring(RecTitle, "#theta_{tot}")) {
             XAxisTitle = "#theta_{tot} [Deg]";
-        } else if (findSubstring(RecTitle, "#phi_{tot}")) { // for phi efficiency plots
+        } else if (findSubstring(RecTitle, "#phi_{tot}")) {
             XAxisTitle = "#phi_{tot} [Deg]";
-        } else if (findSubstring(RecTitle, "#theta_{rel}")) { // for phi efficiency plots
+        } else if (findSubstring(RecTitle, "#theta_{rel}")) {
             XAxisTitle = "#theta_{rel} [Deg]";
-        } else if (findSubstring(RecTitle, "#phi_{rel}")) { // for phi efficiency plots
+        } else if (findSubstring(RecTitle, "#phi_{rel}")) {
             XAxisTitle = "phi_{rel} [Deg]";
         } else if (findSubstring(RecTitle, "#theta_{#vec{P}_{e},#vec{P}_{tot}}")) {
             XAxisTitle = "#theta_{#vec{P}_{e},#vec{P}_{tot}} [Deg]";

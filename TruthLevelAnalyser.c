@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <string>
 
-#include "settings/TruthLevelAnalyser.h"
+#include "setup/TruthLevelAnalyser.h"
 
 using namespace
 std;
@@ -25,10 +25,10 @@ void gst::Loop() {
     cout << "\t\t\tTruth level analyser\n";
     cout << "===========================================================================\n\n";
 
-//  Code settings
+//  Code setup
 //  =====================================================================================================================================================================
 
-    //<editor-fold desc="Code settings">
+    //<editor-fold desc="Code setup">
 
 //  Creating plots directories --------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -81,9 +81,9 @@ void gst::Loop() {
     system(("mkdir -p " + WorkingDirectory + "plots/theta_histograms").c_str());
     //</editor-fold>
 
-//  FSI settings --------------------------------------------------------------------------------------------------------------------------------------------------------
+//  FSI setup --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="FSI settings">
+    //<editor-fold desc="FSI setup">
     bool FSI_status; // true == with FSI; false == no FSI
     bool custom_FSI_status = true; // set as true by default
 
@@ -193,9 +193,9 @@ void gst::Loop() {
 
     //</editor-fold>
 
-// Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
+// Plot setup --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Plot settings">
+    //<editor-fold desc="Plot setup">
     bool lowest_nentries = true;
     int custom_nentries;
 
@@ -208,9 +208,9 @@ void gst::Loop() {
     bool wider_margin = true;
     //</editor-fold>
 
-// Calculation settings -------------------------------------------------------------------------------------------------------------------------------------------------
+// Calculation setup -------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Calculation settings">
+    //<editor-fold desc="Calculation setup">
     bool calculate_2n = true, calculate_2p = true, calculate_1n1p = true, calculate_MicroBooNE = true;
 
     bool BEnergyToNucleusCon = false; // For QEL ONLY!!!
@@ -362,9 +362,9 @@ void gst::Loop() {
     bool MicroBooNE_plots = true;
     //</editor-fold>
 
-// Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
+// Normalization setup -----------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Normalization settings">
+    //<editor-fold desc="Normalization setup">
     bool normalize_master = false;
 
     bool normalized_theta_lp_plots = true;
@@ -438,9 +438,9 @@ void gst::Loop() {
     }
     //</editor-fold>
 
-// Delete settings ------------------------------------------------------------------------------------------------------------------------------------------------------
+// Delete setup ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Delete settings">
+    //<editor-fold desc="Delete setup">
     bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
 
     //<editor-fold desc="Deleting files by cases">
@@ -4926,9 +4926,9 @@ void gst::Loop() {
 
     //</editor-fold>
 
-// Saving settings to log file -------------------------------------------------------------------------------------------------------------------------------------------
+// Saving setup to log file -------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Saving settings to log file">
+    //<editor-fold desc="Saving setup to log file">
     if (delete_txt_files == true) {
         system(("find " + WorkingDirectory + "plots -type f -iname '*.txt' -delete").c_str()); // Delete existing .txt files
     }
@@ -4938,12 +4938,12 @@ void gst::Loop() {
     myLogFile.open("" + WorkingDirectory + "plots/Run_log.txt");
 
     myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n";
-    myLogFile << "// Run was with '" << file_name << "' settings mode.\n";
+    myLogFile << "// Run was with '" << file_name << "' setup mode.\n";
     myLogFile << "// Input file was " << loadedInput << ".\n";
     myLogFile << "// Code version was " << Ver << "\n";
     myLogFile << "//////////////////////////////////////////////////////////////////////////////////////////\n";
     myLogFile << "\n";
-    myLogFile << "Code ran with the following settings:" << "\n";
+    myLogFile << "Code ran with the following setup:" << "\n";
     myLogFile << "\n";
     myLogFile << "\n";
 
@@ -4955,20 +4955,20 @@ void gst::Loop() {
     myLogFile << "plotsInput: " << plotsInput << "\n";
     myLogFile << "\n";
 
-    myLogFile << "FSI settings\n";
+    myLogFile << "FSI setup\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "FSI_status = " << BoolToString(FSI_status) << "\n";
     myLogFile << "\n";
     myLogFile << "\n";
 
-    myLogFile << "Plot settings\n";
+    myLogFile << "Plot setup\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "lowest_nentries = " << BoolToString(lowest_nentries) << "\n";
     myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n";
     myLogFile << "\n";
     myLogFile << "\n";
 
-    myLogFile << "Calculation settings\n";
+    myLogFile << "Calculation setup\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "calculate_2p = " << BoolToString(calculate_2p) << "\n";
     myLogFile << "calculate_1n1p = " << BoolToString(calculate_1n1p) << "\n";
@@ -5000,7 +5000,7 @@ void gst::Loop() {
     myLogFile << "\n";
     myLogFile << "\n";
 
-    myLogFile << "Normalization settings\n";
+    myLogFile << "Normalization setup\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "normalized_theta_lp_plots = " << BoolToString(normalized_theta_lp_plots) << "\n";
     myLogFile << "normalized_E_lp_plots = " << BoolToString(normalized_E_lp_plots) << "\n";
@@ -5010,7 +5010,7 @@ void gst::Loop() {
     myLogFile << "\n";
     myLogFile << "\n";
 
-    myLogFile << "Delete settings\n";
+    myLogFile << "Delete setup\n";
     myLogFile << "==========================================================================================\n";
     myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
     myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n";

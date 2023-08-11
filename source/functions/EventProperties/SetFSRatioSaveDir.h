@@ -26,14 +26,28 @@ void SetFSRatioSaveDir(string &SaveDir, string &TestSaveDir, const string &RecTi
 //    string Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) + "/FS_" + Type + "_ratio_plots";
     string Histogram1DSaveNamePath;
 
-    if (!findSubstring(RecTitle, "vs") && !findSubstring(RecTitle, "vs.") && !findSubstring(RecTitle, "VS") && !findSubstring(RecTitle, "VS.")) {
-        if (Type == "deltaP_T_tot" || Type == "deltaP_T_L" || Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" || Type == "deltaPhi_T_tot" ||
-            Type == "deltaPhi_T_L") {
+    if (!findSubstring(RecTitle, "vs") && !findSubstring(RecTitle, "vs.") &&
+        !findSubstring(RecTitle, "VS") && !findSubstring(RecTitle, "VS.")) {
+        if (Type == "deltaP_T_tot" || Type == "deltaP_T_L" ||
+            Type == "deltaAlpha_T_tot" || Type == "deltaAlpha_T_L" ||
+            Type == "deltaPhi_T_tot" || Type == "deltaPhi_T_L") { // TKI ratios
             Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
                                       "/FS_TKI_ratio_plots/FS_" + Type + "_ratio_plots";
-        } else if (findSubstring(Type, "Opening_ang")) {
+        } else if (findSubstring(Type, "Opening_ang") ||
+                   findSubstring(Type, "theta") || findSubstring(Type, "phi")) {
+            if (findSubstring(Type, "Opening_ang")) { // Angle ratios
+                Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                          "/FS_ang_ratio_plots/FS_Opening_ang_ratio_plots/FS_" + Type + "_ratio_plots";
+            } else if (findSubstring(Type, "theta")) {
+                Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                          "/FS_ang_ratio_plots/FS_theta_ratio_plots/FS_" + Type + "_ratio_plots";
+            } else if (findSubstring(Type, "phi")) {
+                Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
+                                          "/FS_ang_ratio_plots/FS_phi_ratio_plots/FS_" + Type + "_ratio_plots";
+            }
+        } else if (findSubstring(Type, "momentum")) { // Momentum ratios
             Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
-                                      "/FS_Opening_ang_ratio_plots/FS_" + Type + "_ratio_plots";
+                                      "/FS_momentum_ratio_plots/FS_" + Type + "_ratio_plots";
         } else {
             Histogram1DSaveNamePath = Histogram1DSaveNamePathOriginal.substr(0, Histogram1DSaveNamePathOriginal.find("05_pFDpCD") - 1) +
                                       "/FS_" + Type + "_ratio_plots";

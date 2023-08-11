@@ -35,7 +35,7 @@ scp -r asportes@ftp.jlab.org:/w/hallb-scshelf2102/clas12/asportes/recon_c12_6gev
 #include <TROOT.h>
 */
 
-#include "settings/codeSetup.h"
+#include "setup/codeSetup.h"
 #include "source/classes/AMaps/AMaps.cpp"
 #include "source/classes/clas12ana/clas12ana.h"
 #include "source/classes/DEfficiency/DEfficiency.cpp"
@@ -80,10 +80,10 @@ void EventAnalyser() {
     string AnalyserVersion = "Version 1.5";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                         Code settings                                                                               //
+//                                                                         Code setup                                                                               //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //<editor-fold desc="Code settings">
+    //<editor-fold desc="Code setup">
 
 // ======================================================================================================================================================================
 // Input processing
@@ -113,17 +113,17 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Event selection settings
+// Event selection setup
 // ======================================================================================================================================================================
 
-    //<editor-fold desc="Event selection settings">
+    //<editor-fold desc="Event selection setup">
     /* Settings to enable/disable specific FS plot calculations (Rec only): */
 
     /* Final states to analyse */
     bool calculate_1p = true, calculate_1n = true, calculate_2p = true;
     bool calculate_pFDpCD = true, calculate_nFDpCD = true;
 
-    /* Truth level calculation settings */
+    /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
     bool Rec_wTL_ES = false; // Enforce TL event selection on reco. plots
@@ -135,13 +135,13 @@ void EventAnalyser() {
     //TODO: add this switch to event selection variables!
     bool ES_by_leading_FDneutron = true;
 
-    /* Acceptance maps settings */
+    /* Acceptance maps setup */
     bool generate_AMaps = false; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
 
-    /* Neutron resolution settings */
+    /* Neutron resolution setup */
     bool plot_and_fit_MomRes = false;
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
@@ -160,12 +160,12 @@ void EventAnalyser() {
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Cut settings
+// Cut setup
 // ======================================================================================================================================================================
 
-// Cut settings ---------------------------------------------------------------------------------------------------------------------------------------------------------
+// Cut setup ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Cuts settings">
+    //<editor-fold desc="Cuts setup">
     /* Settings that allow to disable/enable every cut individually */
 
     // clas12ana cuts ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ void EventAnalyser() {
 
     /* Sampling Fraction (SF) cut */
     bool apply_ECAL_SF_cuts = true;
-    bool apply_ECAL_P_cuts = true;
+    bool apply_ECAL_P_cuts = false;
 
     /* ECAL fiducial (edge) cuts */
     bool apply_ECAL_fiducial_cuts = true;
@@ -196,14 +196,14 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = false;
+    bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = false;
+    bool apply_kinematical_weights = true;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
-    //<editor-fold desc="New samples settings">
+    //<editor-fold desc="New samples setup">
 //    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
 //        generate_AMaps = plot_and_fit_MomRes = true;
 //        VaryingDelta = false;
@@ -250,7 +250,7 @@ void EventAnalyser() {
             KinCuts_Status = "";
             KinWei_Status = "";
         } else if (apply_kinematical_cuts && !apply_kinematical_weights) {
-            KinCuts_Status = "wKC_noASKC_";
+            KinCuts_Status = "wKC_";
             KinWei_Status = "";
         } else if (!apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "";
@@ -275,7 +275,6 @@ void EventAnalyser() {
                 if (!VaryingDelta) {
                     Additional_Status = "nResSS_";
                 } else {
-//                    Additional_Status = "nRes_SaS_test_";
                     Additional_Status = "nRes_";
                 }
             } else if (generate_AMaps && plot_and_fit_MomRes) {
@@ -295,8 +294,7 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff11";
-//                Efficiency_Status = "Eff11";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
@@ -518,14 +516,14 @@ void EventAnalyser() {
     /* reco. kinematic cuts (based on nucleons' efficiency) */
     DSCuts FD_nucleon_theta_cut = DSCuts("FD Nucleon theta cut", "FD", "", "", 0, 0, 32.);
     DSCuts Nucleon_momentum_cut = DSCuts("Nucleon momentum cut", "FD", "", "", 0, n_mom_th.GetLowerCut(), n_mom_th.GetUpperCut());
-//    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., 3.); // new upper cut, following Larry meeting (10/08/23)
-    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., n_mom_th.GetUpperCut());
+    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., 3.); // new upper cut, following Larry meeting (10/08/23)
+//    DSCuts FD_nucleon_momentum_cut = DSCuts("FD nucleon momentum cut", "FD", "", "pFDpCD & nFDpCD", 0, 1., n_mom_th.GetUpperCut());
     //</editor-fold>
 
     //</editor-fold>
 
 // ======================================================================================================================================================================
-// Other settings
+// Other setup
 // ======================================================================================================================================================================
 
 // TList definition -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -554,7 +552,7 @@ void EventAnalyser() {
     cout << " done.\n\n";
     //</editor-fold>
 
-// Plot settings --------------------------------------------------------------------------------------------------------------------------------------------------------
+// Plot setup --------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //<editor-fold desc="Plot selector">
     /* Here are boolean variables used to turn ON/OFF the different plots of the code.
@@ -699,14 +697,14 @@ void EventAnalyser() {
     if (!plot_and_fit_MomRes) { Resolution_plots = false; }
     //</editor-fold>
 
-    /* Other settings variables */
+    /* Other setup variables */
     bool wider_margin = true;
     bool debug_plots = true; // Print out clas12ana debugging plots
     //</editor-fold>
 
-// Normalization settings -----------------------------------------------------------------------------------------------------------------------------------------------
+// Normalization setup -----------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Normalization settings">
+    //<editor-fold desc="Normalization setup">
     /* Here are boolean variables used to turn ON/OFF the different plot normalizations of the code.
      * Enable of presentations only, since event count is important otherwise. */
 
@@ -723,9 +721,9 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-// Delete settings ------------------------------------------------------------------------------------------------------------------------------------------------------
+// Delete setup ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Delete settings">
+    //<editor-fold desc="Delete setup">
     /* Clear files from previous runs (to prevent mix fo plots from different codes). */
 
     bool delete_png_files = true, delete_root_files = true, delete_txt_files = true;
@@ -754,9 +752,9 @@ void EventAnalyser() {
 
     //</editor-fold>
 
-// Histogram settings ---------------------------------------------------------------------------------------------------------------------------------------------------
+// Histogram setup ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Histogram settings">
+    //<editor-fold desc="Histogram setup">
     /* Histogram boundary variables. Used to unify histograms to the same boundaries. */
 
     //<editor-fold desc="Number of histogram bins">
@@ -932,11 +930,9 @@ void EventAnalyser() {
     /* Neutron resolution fits is handled completely by the NeutronResolution class */
     cout << "\nSetting acceptance correction data...";
 
-    bool save_ACorr_data = true;
-
+    bool save_ACorr_data = false;
 
     DEfficiency eff;
-
 
     TList *ACorr_data = new TList();
     string ACorr_data_Dir = ACorrDirectory + SampleName;
@@ -945,13 +941,12 @@ void EventAnalyser() {
 
     if (!calculate_truth_level) { save_ACorr_data = false; }
 
-
     cout << " done.\n\n";
     //</editor-fold>
 
-// Debugging settings ---------------------------------------------------------------------------------------------------------------------------------------------------
+// Debugging setup ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Debugging settings">
+    //<editor-fold desc="Debugging setup">
     /* Saving a printout of the number of particles in nEvents2print events. Used for clas12ana debugging. */
 
     bool GoodProtonsMonitorPlots = true;
@@ -998,7 +993,7 @@ void EventAnalyser() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //<editor-fold desc="Histogram definitions">
-    /* Histogram definitions and settings. */
+    /* Histogram definitions and setup. */
 
     cout << "\nDefining histograms...";
 
@@ -7116,11 +7111,12 @@ void EventAnalyser() {
             dphi_pFD_pCD_2p.SetMean(clasAna.getdPhiCutMean());
             dphi_pFD_pCD_pFDpCD.SetMean(clasAna.getdPhiCutMean());
 
-            if (apply_kinematical_cuts) {
-                //TODO: figure out what to do with these cuts in the 2GeV samples
-                Nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
-                FD_nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
-            }
+            /* Irelavent for MSc thesis following Larry meeting (10/08/23)*/
+//            if (apply_kinematical_cuts) {
+//                //TODO: figure out what to do with these cuts in the 2GeV samples
+//                Nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
+//                FD_nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
+//            }
         }
 
         clasAna.printParams();
@@ -17415,19 +17411,19 @@ void EventAnalyser() {
     }
     //</editor-fold>
 
-// Saving settings to log file ------------------------------------------------------------------------------------------------------------------------------------------
+// Saving setup to log file ------------------------------------------------------------------------------------------------------------------------------------------
 
-    //<editor-fold desc="Saving settings to log file">
+    //<editor-fold desc="Saving setup to log file">
     ofstream myLogFile;
     myLogFile.open(plots_log_save_Directory.c_str());
 
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n";
-    myLogFile << "// Run was with '" << file_name << "' settings mode\n";
+    myLogFile << "// Run was with '" << file_name << "' setup mode\n";
     myLogFile << "// Input file was " << LoadedInput << "\n";
     myLogFile << "// Code version was " << Ver << "\n";
     myLogFile << "// Analysis mode was 'Detector simulation'\n";
     myLogFile << "///////////////////////////////////////////////////////////////////////////\n\n";
-    myLogFile << "Code ran with the following settings:" << "\n\n";
+    myLogFile << "Code ran with the following setup:" << "\n\n";
 
     //<editor-fold desc="Input">
     myLogFile << "\n===========================================================================\n";
@@ -17443,19 +17439,19 @@ void EventAnalyser() {
     myLogFile << "SampleName: " << SampleName << "\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="settings">
+    //<editor-fold desc="setup">
 
-    //<editor-fold desc="Plot settings">
+    //<editor-fold desc="Plot setup">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Plot settings\n";
+    myLogFile << "Plot setup\n";
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "wider_margin = " << BoolToString(wider_margin) << "\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="Calculation settings">
+    //<editor-fold desc="Calculation setup">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Calculation settings\n";
+    myLogFile << "Calculation setup\n";
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "calculate_1p = " << BoolToString(calculate_1p) << "\n";
@@ -17550,9 +17546,9 @@ void EventAnalyser() {
     myLogFile << "E_cal_plots = " << BoolToString(Ecal_plots) << "\n";
     //</editor-fold>
 
-    //<editor-fold desc="Normalization settings">
+    //<editor-fold desc="Normalization setup">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Normalization settings\n";
+    myLogFile << "Normalization setup\n";
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "normalize_master = " << BoolToString(normalize_master) << "\n\n";
@@ -17571,18 +17567,18 @@ void EventAnalyser() {
     myLogFile << "norm_Ecal_plots = " << BoolToString(norm_Ecal_plots) << "\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="Delete settings">
+    //<editor-fold desc="Delete setup">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Delete settings\n";
+    myLogFile << "Delete setup\n";
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "delete_png_files = " << BoolToString(delete_png_files) << "\n";
     myLogFile << "delete_root_files = " << BoolToString(delete_root_files) << "\n\n";
     //</editor-fold>
 
-    //<editor-fold desc="Cut application settings">
+    //<editor-fold desc="Cut application setup">
     myLogFile << "\n===========================================================================\n";
-    myLogFile << "Cut application settings\n";
+    myLogFile << "Cut application setup\n";
     myLogFile << "===========================================================================\n\n";
 
     myLogFile << "apply_cuts = " << BoolToString(apply_cuts) << "\n\n";

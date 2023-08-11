@@ -145,7 +145,7 @@ void LogEventCuts(TH1D *Histogram1D, clas12::region_part_ptr Particle, double Lo
 // BoolToString function ------------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="BoolToString function">
-/* Usage: convert bool variables to string. Used to log settings to file. */
+/* Usage: convert bool variables to string. Used to log setup to file. */
 
 inline const char *const BoolToString(bool b) { return b ? "true" : "false"; }
 //</editor-fold>

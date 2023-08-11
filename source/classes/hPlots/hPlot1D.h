@@ -51,12 +51,12 @@ protected:
     int HistogramNumberOfXBins; // default #bins for 1D histogram is 100 (see constructor)
     vector<double> HistogramXAxisLimits;  // {LowerXlim, UpperXlim}
 
-    /* Histogram normalization settings */
+    /* Histogram normalization setup */
     bool NormalizeHistogram;
     bool CustomNormalization;
     double CustomNormalizationFactor;
 
-    /* Histogram appearance settings */
+    /* Histogram appearance setup */
     int LineColor = 1;
     int LineWidth = 2;
     vector<double> Histogram1DTitleSizes = {0.06, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey}
@@ -67,14 +67,14 @@ protected:
 //    THStack *Histogram1DStack;
     bool AddToStack = false;
 
-    /* Histogram cuts settings */
+    /* Histogram cuts setup */
     bool ApplyPlotCuts = true;
     //vector<double> - for cuts
     double PlotCuts = 0;
     double PlotXmax = 0;
     bool PlotHistogramMax = true;
 
-    /* Histogram scale settings */
+    /* Histogram scale setup */
     bool LogScalePlot = false, LinearScalePlot = true;
 
     /* Histogram save name and path */

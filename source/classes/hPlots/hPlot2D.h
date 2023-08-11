@@ -25,12 +25,12 @@ protected:
     vector<double> HistogramXAxisLimits;  // {LowerXlim, UpperXlim}
     vector<double> HistogramYAxisLimits;  // {LowerYlim, UpperYlim}
 
-//    /* Histogram normalization settings */
+//    /* Histogram normalization setup */
 //    bool NormalizeHistogram;
 //    bool CustomNormalization;
 //    double CustomNormalizationFactor;
 
-    /* Histogram appearance settings */
+    /* Histogram appearance setup */
     int LineColor = 1;
     int LineWidth = 2;
     vector<double> Histogram2DTitleSizes = {0.06, 0.0425, 0.0425, 0.0425}; // {TitleSize, LabelSizex, LabelSizey, LabelSizez}
@@ -41,14 +41,14 @@ protected:
 //    THStack *Histogram2DStack;
     bool AddToStack = false;
 
-    /* Histogram cuts settings */
+    /* Histogram cuts setup */
     bool ApplyPlotCuts = false;
     //vector<double> - for cuts
     double PlotCuts = 0;
     double PlotXmax = 0;
     bool PlotHistogramMax = true;
 
-    /* Histogram scale settings */
+    /* Histogram scale setup */
     bool ZLogScalePlot = true;
     bool ZLinearScalePlot = true;
 

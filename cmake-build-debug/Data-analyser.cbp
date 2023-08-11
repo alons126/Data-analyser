@@ -30,7 +30,7 @@
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/rcdb/cpp/include"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/clas12root"/>
-					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/settings"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/setup"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/source"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/source/classes/clas12ana"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit"/>
@@ -71,7 +71,7 @@
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/clas12root/rcdb/cpp/include"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project"/>
 					<Add directory="//wsl$/Ubuntu-20.04/home/alon/clas12root"/>
-					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/settings"/>
+					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/setup"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/source"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/source/classes/clas12ana"/>
 					<Add directory="//wsl.localhost/Ubuntu-20.04/home/alon/project/source/classes/clas12ana/clas12ana_ver_1_myedit"/>
@@ -174,10 +174,10 @@
 		<Unit filename="//wsl.localhost/Ubuntu-20.04/home/alon/project/run.sh">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl.localhost/Ubuntu-20.04/home/alon/project/settings/TruthLevelAnalyser.h">
+		<Unit filename="//wsl.localhost/Ubuntu-20.04/home/alon/project/setup/TruthLevelAnalyser.h">
 			<Option target="Data-analyser"/>
 		</Unit>
-		<Unit filename="//wsl.localhost/Ubuntu-20.04/home/alon/project/settings/codeSetup.h">
+		<Unit filename="//wsl.localhost/Ubuntu-20.04/home/alon/project/setup/codeSetup.h">
 			<Option target="Data-analyser"/>
 		</Unit>
 		<Unit filename="//wsl.localhost/Ubuntu-20.04/home/alon/project/source/Structures_beta/Histogram1D.cpp">
