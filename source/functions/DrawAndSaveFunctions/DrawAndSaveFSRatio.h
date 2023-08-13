@@ -87,11 +87,11 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, co
     if (rebin_plots) { nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_pFDpCD = pFDpCD_Plot.GetHistogram();
-    string pFDpCD_Plot_Clone_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned";
+    string pFDpCD_Plot_Clone_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned";
     TH1D *pFDpCD_Plot_Clone = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test";
+    string pFDpCD_Plot_Clone_test_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test";
     TH1D *pFDpCD_Plot_Clone_test = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
+    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *pFDpCD_Plot_Clone_test_rebined = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
@@ -294,11 +294,11 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot1D &pFDpCD_Plot, TH
     if (rebin_plots) { nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
     TH1D *Histogram1D_pFDpCD = pFDpCD_Plot.GetHistogram();
-    string pFDpCD_Plot_Clone_StatsTitle = "Truth " + FSRatioStatsTitle + " - cloned";
+    string pFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned";
     TH1D *pFDpCD_Plot_Clone = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_StatsTitle = "Truth " + FSRatioStatsTitle + " - cloned test";
+    string pFDpCD_Plot_Clone_test_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test";
     TH1D *pFDpCD_Plot_Clone_test = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
+    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH1D *pFDpCD_Plot_Clone_test_rebined = (TH1D *) Histogram1D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>
@@ -769,11 +769,11 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
 //    nFDpCD_Plot_Clone_test_rebined->Rebin(2);
 
     TH2D *Histogram2D_pFDpCD = pFDpCD_Plot.GetHistogram();
-    string pFDpCD_Plot_Clone_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned";
+    string pFDpCD_Plot_Clone_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned";
     TH2D *pFDpCD_Plot_Clone = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test";
+    string pFDpCD_Plot_Clone_test_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test";
     TH2D *pFDpCD_Plot_Clone_test = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
+    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH2D *pFDpCD_Plot_Clone_test_rebined = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
 //    pFDpCD_Plot_Clone_test_rebined->Rebin(2);
     //</editor-fold>
@@ -857,6 +857,21 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
 
     //<editor-fold desc="Plotting and saving nFDpCD_Plot_Clone">
     nFDpCD_Plot_Clone->Draw("colz");
+
+    if (FSRatioType == "P_nucFD_vs_P_nucCD" || FSRatioType == "P_nucL_vs_P_nucR") {
+        double Lowerlim_nFDpCD = max(nFDpCD_Plot.GetLowerXlim(), nFDpCD_Plot.GetLowerYlim());
+        double Upperlim_nFDpCD = min(nFDpCD_Plot.GetUpperXlim(), nFDpCD_Plot.GetUpperYlim());
+
+        TLine *EquiLine2D_nFDpCD = new TLine(Lowerlim_nFDpCD, Lowerlim_nFDpCD, Upperlim_nFDpCD, Upperlim_nFDpCD);
+        EquiLine2D_nFDpCD->SetLineWidth(2);
+        EquiLine2D_nFDpCD->SetLineColor(kRed);
+        EquiLine2D_nFDpCD->Draw("same");
+
+        auto nFDpCD_Plot_Clone_legend = new TLegend(0.87, 0.865 - 0.25, 0.87 - 0.2, 0.865 - 0.3);
+        TLegendEntry *EquiLine2D_nFDpCD_entry = nFDpCD_Plot_Clone_legend->AddEntry(EquiLine2D_nFDpCD, "y(x) = x", "l");
+        nFDpCD_Plot_Clone_legend->Draw("same");
+    }
+
     nFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(nFDpCD_Plot_Clone);
 
@@ -866,6 +881,21 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
 
     //<editor-fold desc="Plotting and saving pFDpCD_Plot_Clone">
     pFDpCD_Plot_Clone->Draw("colz");
+
+    if (FSRatioType == "P_nucFD_vs_P_nucCD" || FSRatioType == "P_nucL_vs_P_nucR") {
+        double Lowerlim_pFDpCD = max(pFDpCD_Plot.GetLowerXlim(), pFDpCD_Plot.GetLowerYlim());
+        double Upperlim_pFDpCD = min(pFDpCD_Plot.GetUpperXlim(), pFDpCD_Plot.GetUpperYlim());
+
+        TLine *EquiLine2D_pFDpCD = new TLine(Lowerlim_pFDpCD, Lowerlim_pFDpCD, Upperlim_pFDpCD, Upperlim_pFDpCD);
+        EquiLine2D_pFDpCD->SetLineWidth(2);
+        EquiLine2D_pFDpCD->SetLineColor(kRed);
+        EquiLine2D_pFDpCD->Draw("same");
+
+        auto pFDpCD_Plot_Clone_legend = new TLegend(0.87, 0.865 - 0.25, 0.87 - 0.2, 0.865 - 0.3);
+        TLegendEntry *EquiLine2D_pFDpCD_entry = pFDpCD_Plot_Clone_legend->AddEntry(EquiLine2D_pFDpCD, "y(x) = x", "l");
+        pFDpCD_Plot_Clone_legend->Draw("same");
+    }
+
     pFDpCD_Plot_Clone->SetStats(1);
     Histogram_list->Add(pFDpCD_Plot_Clone);
 
@@ -879,6 +909,21 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, co
     FSRatio_plot->SetMaximum(10);
     FSRatio_plot->SetMinimum(0.1);
     FSRatio_plot->Draw("colz");
+
+    if (FSRatioType == "P_nucFD_vs_P_nucCD" || FSRatioType == "P_nucL_vs_P_nucR") {
+        double Lowerlim_FSRatio = max(nFDpCD_Plot.GetLowerXlim(), nFDpCD_Plot.GetLowerYlim());
+        double Upperlim_FSRatio = min(nFDpCD_Plot.GetUpperXlim(), nFDpCD_Plot.GetUpperYlim());
+
+        TLine *EquiLine2D_FSRatio = new TLine(Lowerlim_FSRatio, Lowerlim_FSRatio, Upperlim_FSRatio, Upperlim_FSRatio);
+        EquiLine2D_FSRatio->SetLineWidth(2);
+        EquiLine2D_FSRatio->SetLineColor(kRed);
+        EquiLine2D_FSRatio->Draw("same");
+
+        auto FSRatio_Plot_Clone_legend = new TLegend(0.87, 0.825, 0.87 - 0.2, 0.825 - 0.05);
+        TLegendEntry *EquiLine2D_FSRatio_entry = FSRatio_Plot_Clone_legend->AddEntry(EquiLine2D_FSRatio, "y(x) = x", "l");
+        FSRatio_Plot_Clone_legend->Draw("same");
+    }
+
     Canvas->SetLogz(1);
 
     Histogram_list->Add(FSRatio_plot);
@@ -936,11 +981,11 @@ void DrawAndSaveFSRatio(const string &SampleName, const hPlot2D &pFDpCD_Plot, TH
     if (rebin_plots) { nFDpCD_Plot_Clone_test_rebined->Rebin(2); }
 
     TH2D *Histogram2D_pFDpCD = pFDpCD_Plot.GetHistogram();
-    string pFDpCD_Plot_Clone_StatsTitle = "Truth " + FSRatioStatsTitle + " - cloned";
+    string pFDpCD_Plot_Clone_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned";
     TH2D *pFDpCD_Plot_Clone = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_StatsTitle = "Truth " + FSRatioStatsTitle + " - cloned test";
+    string pFDpCD_Plot_Clone_test_StatsTitle = "FSR " + FSRatioStatsTitle + " - cloned test";
     TH2D *pFDpCD_Plot_Clone_test = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_StatsTitle).c_str());
-    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "Truth " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
+    string pFDpCD_Plot_Clone_test_rebined_StatsTitle = "FSR " + pFDpCD_Plot.GetHistogramStatTitle() + " - cloned test rebined";
     TH2D *pFDpCD_Plot_Clone_test_rebined = (TH2D *) Histogram2D_pFDpCD->Clone((pFDpCD_Plot_Clone_test_rebined_StatsTitle).c_str());
     if (rebin_plots) { pFDpCD_Plot_Clone_test_rebined->Rebin(2); }
     //</editor-fold>

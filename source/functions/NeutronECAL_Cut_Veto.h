@@ -52,9 +52,7 @@ bool NeutronECAL_Cut_Veto(vector<region_part_ptr> &allParticles, vector<region_p
     double theta_nq = p_n_Angles.Angle(p_q) * 180 / pi;
 
     if (beta < 0) { return false; }
-/*
-    if (beta > 1.1) { return false; }
-*/
+//    if (beta > 1.1) { return false; }
 //    // physics cuts, to be ignored according to Larry.
 //    if (theta_nq > 25) { return false; }
 //    if (theta_q > 40) { return false; }

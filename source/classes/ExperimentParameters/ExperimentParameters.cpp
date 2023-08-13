@@ -143,19 +143,35 @@ ExperimentParameters::ExperimentParameters(const string &AnalyseFilePath, const 
     SampleName = ConfigureSampleName(AnalyseFilePath, AnalyseFileSample);
     BeanEnergy = ConfigureBeanEnergy(SampleName);
 
-    if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
-        (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
-        (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
+    if (SampleName.find("H1") <= SampleName[SampleName.size() - 1]) {
+        TargetElement = "H1";
+        TargetElementPDG = 1000010010;
+        TotalBaryonNumber_A = 1;
+        TotalChargeNumber_Z = 1;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
+    } else if ((SampleName.find("c12") <= SampleName[SampleName.size() - 1]) || (SampleName.find("C12") <= SampleName[SampleName.size() - 1]) ||
+               (SampleName.find("12c") <= SampleName[SampleName.size() - 1]) || (SampleName.find("12C") <= SampleName[SampleName.size() - 1]) ||
+               (SampleName.find("_c_") <= SampleName[SampleName.size() - 1]) || (SampleName.find("_C_") <= SampleName[SampleName.size() - 1])) {
         TargetElement = "C12";
         TargetElementPDG = 1000060120;
+        TotalBaryonNumber_A = 12;
+        TotalChargeNumber_Z = 6;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
     } else if (SampleName.find("Ca48") <= SampleName[SampleName.size() - 1]) {
         TargetElement = "Ca48";
         TargetElementPDG = 1000200480;
+        TotalBaryonNumber_A = 48;
+        TotalChargeNumber_Z = 20;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
     } else if (SampleName.find("Ar40") <= SampleName[SampleName.size() - 1]) {
         TargetElement = "Ar40";
         TargetElementPDG = 1000180400;
+        TotalBaryonNumber_A = 40;
+        TotalChargeNumber_Z = 18;
+        StrangeQuarksNumber_L = IsomerNumber_I = 0;
     } else {
         TargetElement = "UNKOWN";
         TargetElementPDG = -9999;
+        TotalBaryonNumber_A = TotalChargeNumber_Z = StrangeQuarksNumber_L = IsomerNumber_I = 0;
     }
 }

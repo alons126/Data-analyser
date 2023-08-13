@@ -96,7 +96,7 @@ void StackPlot4(string &SampleName, TList *Histogram_list,
     double diplayTextSize = 0.1;
 
     string Histogram1DTitle = Hist1.GetHistogramTitle();
-    string Histogram1DTitleReactions = "";
+    string Histogram1DTitleReactions;
     string xLable = Hist1.GetXaxisTitle();
     string finalState = Hist1.GetFinalState();
     string HistogramStackSaveNamePath0 = Hist1.GetHistogram1DSaveNamePath().substr(0, Hist1.GetHistogram1DSaveNamePath().find_last_of("/"));

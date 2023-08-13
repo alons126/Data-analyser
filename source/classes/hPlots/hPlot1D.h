@@ -40,11 +40,7 @@ protected:
     map <std::string, std::string> Histogram1DTitles{{"FinalState",                ""},
                                                      {"DetectorRegion",            ""},
                                                      {"Histogram1DTitleReactions", ""}};
-    std::string HistogramStatsTitle;
-    std::string HistogramTitle;
-    std::string XaxisTitle;
-    std::string FinalState;
-    std::string DetectorRegion;
+    std::string HistogramStatsTitle, HistogramTitle, XaxisTitle, FinalState, DetectorRegion;
     bool Title2 = false;
 
     /* Histogram xAxis limits and #bins */

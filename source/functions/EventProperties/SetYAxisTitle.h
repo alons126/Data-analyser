@@ -40,7 +40,7 @@ string SetYAxisTitle(const string &PlotT, const string &Numerator, const string 
             } else if (findSubstring(Title, "P_{pL} vs. P_{pR}") || findSubstring(Title, "P_{nL} vs. P_{nR}")) {
                 YAxisTitle = "P_{nucR} [GeV/c]";
             } else if (findSubstring(Title, "P_{pFD} vs. P_{pCD}") || findSubstring(Title, "P_{nFD} vs. P_{pCD}")) {
-                YAxisTitle = "P_{nucFD} [GeV/c]";
+                YAxisTitle = "P_{nucCD} [GeV/c]";
             } else if (findSubstring(Title, "#theta_{e} vs. P_{e}")) {
                 YAxisTitle = "#theta_{e} [Deg]";
             } else if (findSubstring(Title, "#theta_{e} vs. W")) {

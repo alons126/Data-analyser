@@ -164,15 +164,66 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 }
 //</editor-fold>
 
+// ReadInputParam function -----------------------------------------------------------------------------------------------------------------------------------------------
+
+//<editor-fold desc="ReadInputParam function">
+/* This function reads nucleon cuts (especially neutron upper th.). It was imported from the clas12ana class */
+
+void NeutronResolution::ReadInputParam(const char *filename) {
+    ifstream infile;
+    infile.open(filename);
+
+    if (infile.is_open()) {
+        string tp;
+
+        //remove 3 lines of header
+        for (int i = 0; i < 3; i++)
+            getline(infile, tp);
+
+        while (getline(infile, tp))  //read data from file object and put it into string.
+        {
+            stringstream ss(tp);
+            string parameter, parameter2;
+            double value;
+            //get cut identifier
+            ss >> parameter;
+
+            if (parameter == "Momentum_cuts_ECAL") {
+                ss >> parameter2;
+                stringstream ss2(parameter2);
+                string pid_v;
+                int count = 0;
+                string pid = "";
+                vector<double> par;
+
+                while (getline(ss2, pid_v, ':')) {
+                    if (count == 0)
+                        pid = pid_v;
+                    else
+                        par.push_back(atof(pid_v.c_str()));
+
+                    count++;
+                }
+
+                if (pid != "") {
+                    Neutron_Momentum_cut = par.at(1);
+                }
+            }
+        }
+    } else
+        cout << "Parameter file didn't read in " << endl;
+
+    return;
+}
+//</editor-fold>
+
 // SetUpperMomCut function -----------------------------------------------------------------------------------------------------------------------------------------------
 
 //<editor-fold desc="SetUpperMomCut function">
 void NeutronResolution::SetUpperMomCut(const string &SampleName, const string &NucleonCutsDirectory) {
-    clas12ana clasAnaTemp;
+    ReadInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
 
-    clasAnaTemp.readInputParam((NucleonCutsDirectory + "Nucleon_Cuts_-_" + SampleName + ".par").c_str()); // load sample-appropreate cuts file from CutsDirectory
-
-    SliceUpperMomLim = clasAnaTemp.getNeutronMomentumCut();
+    SliceUpperMomLim = Neutron_Momentum_cut;
 }
 //</editor-fold>
 

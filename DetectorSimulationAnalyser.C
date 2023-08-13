@@ -75,7 +75,7 @@ void EventAnalyser() {
     cout << "\t\t\tDetector simulation analyser\n";
     cout << "===========================================================================\n\n";
 
-    string AnalyserVersion = "Version 1.5";
+    string AnalyserVersion = "Version 1.6";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                         Code setup                                                                               //
@@ -148,13 +148,6 @@ void EventAnalyser() {
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (isData) { calculate_truth_level = false; }
     if (!calculate_truth_level) { TL_with_one_reco_electron = fill_TL_plots = Rec_wTL_ES = false; }
-
-//    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
-//        generate_AMaps = plot_and_fit_MomRes = true;
-//        VaryingDelta = false;
-//    }
-
-//    if (generate_AMaps) { Rec_wTL_ES = false; }
     //</editor-fold>
 
 // ======================================================================================================================================================================
@@ -202,6 +195,7 @@ void EventAnalyser() {
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
     //<editor-fold desc="New samples setup">
+    //TODO: automate code to NOT require AMaps and nRes at early run stages!
 //    if (!apply_chi2_cuts_1e_cut) { // for first run on new samples
 //        generate_AMaps = plot_and_fit_MomRes = true;
 //        VaryingDelta = false;
@@ -760,6 +754,9 @@ void EventAnalyser() {
     int numTH1Dbins = 50;
     int numTH2Dbins = 65;
 
+    /* Momentum plots */
+    int numTH2Dbins_Mom_Plots = 65; // To be changed if apply_kinematical_cuts = true
+
     /* Beta plots */
     int numTH1Dbins_Beta_Plots = 65;
     int numTH2Dbins_Beta_Plots = 65;
@@ -838,6 +835,14 @@ void EventAnalyser() {
     /* Momentum boundries */
     double Momentum_lboundary = 0., Momentum_uboundary = beamE * 1.1; // Default
     double CDMomentum_lboundary = 0., CDMomentum_uboundary = beamE / 2; // CD nucleons (pFDpCD & nFDpCD)
+    double P_nucFD_lboundary = 0., P_nucFD_uboundary = beamE * 1.1; // Default
+    double P_nucCD_lboundary = 0., P_nucCD_uboundary = beamE / 2; // CD nucleons (pFDpCD & nFDpCD)
+
+    if (apply_kinematical_cuts) {
+        P_nucFD_lboundary = FD_nucleon_momentum_cut.GetLowerCut(), P_nucFD_uboundary = FD_nucleon_momentum_cut.GetUpperCut() * 1.1;
+        P_nucCD_lboundary = 0.4, P_nucCD_uboundary = 2.5; // CD nucleons (pFDpCD & nFDpCD)
+//        numTH2Dbins_Mom_Plots = 30;
+    }
 
     /* W boundries */
     double W_lboundary = 0.5, W_uboundary = (beamE * 1.1) / 2; // Default
@@ -1958,7 +1963,8 @@ void EventAnalyser() {
                                     CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_pFD_vs_P_pCD_pFDpCD = hPlot2D("pFDpCD", "", "P_{pFD} vs. P_{pCD}", "P_{pFD} vs. P_{pCD}", "P_{pFD} [GeV/c]", "P_{pCD} [GeV/c]",
                                              directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"], "05_P_pFD_vs_P_pCD",
-                                             Momentum_lboundary, Momentum_uboundary, CDMomentum_lboundary, CDMomentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                             P_nucFD_lboundary, P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
+//                                             Momentum_lboundary, Momentum_uboundary, CDMomentum_lboundary, CDMomentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="nFD and pCD momentum plots (nFDpCD)">
@@ -1970,7 +1976,8 @@ void EventAnalyser() {
                                     CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_nFD_vs_P_pCD_nFDpCD = hPlot2D("nFDpCD", "", "P_{nFD} vs. P_{pCD}", "P_{nFD} vs. P_{pCD}", "P_{nFD} [GeV/c]", "P_{pCD} [GeV/c]",
                                              directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"], "05_P_nFD_vs_P_pCD",
-                                             Momentum_lboundary, Momentum_uboundary, CDMomentum_lboundary, CDMomentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                             P_nucFD_lboundary, P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
+//                                             Momentum_lboundary, Momentum_uboundary, CDMomentum_lboundary, CDMomentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Total and relative nucleon momenta (pFDpCD)">
@@ -2051,7 +2058,8 @@ void EventAnalyser() {
                                    CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_pL_vs_P_pR_pFDpCD = hPlot2D("pFDpCD", "", "P_{pL} vs. P_{pR}", "P_{pL} vs. P_{pR}", "P_{pL} [GeV/c]", "P_{pR} [GeV/c]",
                                            directories.Momentum_Directory_map["Analysis_plots_momentum_pFDpCD_Directory"], "04_P_pL_vs_P_pR",
-                                           Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                           P_nucFD_lboundary, P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
+//                                           Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //<editor-fold desc="Leading and recoil nucleon momentum plots (nFDpCD)">
@@ -2063,7 +2071,8 @@ void EventAnalyser() {
                                    CDMomentum_lboundary, CDMomentum_uboundary, numTH1Dbins);
     hPlot2D hP_nL_vs_P_nR_nFDpCD = hPlot2D("nFDpCD", "", "P_{nL} vs. P_{nR}", "P_{nL} vs. P_{nR}", "P_{nL} [GeV/c]", "P_{nR} [GeV/c]",
                                            directories.Momentum_Directory_map["Analysis_plots_momentum_nFDpCD_Directory"], "04_P_nL_vs_P_nR",
-                                           Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
+                                           P_nucFD_lboundary, P_nucFD_uboundary, P_nucCD_lboundary, P_nucCD_uboundary, numTH2Dbins_Mom_Plots, numTH2Dbins_Mom_Plots);
+//                                           Momentum_lboundary, Momentum_uboundary, Momentum_lboundary, Momentum_uboundary, numTH2Dbins, numTH2Dbins);
     //</editor-fold>
 
     //</editor-fold>
@@ -7171,12 +7180,15 @@ void EventAnalyser() {
             dphi_pFD_pCD_2p.SetMean(clasAna.getdPhiCutMean());
             dphi_pFD_pCD_pFDpCD.SetMean(clasAna.getdPhiCutMean());
 
-            /* Irelavent for MSc thesis following Larry meeting (10/08/23)*/
+            //<editor-fold desc="Old KC loading (commented!)">
+            /* Irelavent for MSc thesis following Larry meeting (10/08/23) - KC have been reduced to 3 GeV instead of upper neuron threshold */
 //            if (apply_kinematical_cuts) {
 //                //TODO: figure out what to do with these cuts in the 2GeV samples
 //                Nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
 //                FD_nucleon_momentum_cut.SetUpperCut(clasAna.getNeutronMomentumCut());
 //            }
+            //</editor-fold>
+
         }
 
         clasAna.printParams();
@@ -11149,7 +11161,8 @@ void EventAnalyser() {
             double ProtonMomBKC_pFDpCD = pFD_pFDpCD->getP(); // proton momentum before smearing or kinematical cuts
 
             TVector3 P_e_pFDpCD_3v, q_pFDpCD_3v, P_pFD_pFDpCD_3v, P_pCD_pFDpCD_3v;
-            TVector3 P_miss_pFDpCD_3v, P_tot_pFDpCD_3v, P_rel_pFDpCD_3v, P_max_pFDpCD_3v, P_pL_pFDpCD_3v, P_pR_pFDpCD_3v, P_pL_minus_q_pFDpCD_v3, P_tot_minus_q_pFDpCD_v3;
+            TVector3 P_miss_pFDpCD_3v, P_tot_pFDpCD_3v, P_rel_pFDpCD_3v, P_max_pFDpCD_3v, P_pL_pFDpCD_3v, P_pR_pFDpCD_3v;
+            TVector3 P_pL_minus_q_pFDpCD_v3, P_tot_minus_q_pFDpCD_v3;
             TVector3 P_T_e_pFDpCD_3v, P_T_L_pFDpCD_3v, P_T_tot_pFDpCD_3v, dP_T_L_pFDpCD_3v, dP_T_tot_pFDpCD_3v;
             TLorentzVector P_tot_mu_pFDpCD_4v, P_rel_mu_pFDpCD_4v;
 
@@ -11210,7 +11223,7 @@ void EventAnalyser() {
             P_pL_minus_q_pFDpCD_v3 = TVector3(P_pL_pFDpCD_3v.Px() - q_pFDpCD_3v.Px(), P_pL_pFDpCD_3v.Py() - q_pFDpCD_3v.Py(),
                                               P_pL_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz());                                                                        // P_pL - q
             P_tot_minus_q_pFDpCD_v3 = TVector3(P_tot_pFDpCD_3v.Px() - q_pFDpCD_3v.Px(), P_tot_pFDpCD_3v.Py() - q_pFDpCD_3v.Py(),
-                                               P_tot_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz());                                                                      // P_tot - q
+                                               P_tot_pFDpCD_3v.Pz() - q_pFDpCD_3v.Pz());                                                                     // P_tot - q
 
             /* Setting particle angles */
             double Theta_e_pFDpCD = e_pFDpCD->getTheta() * 180.0 / pi, Phi_e_pFDpCD = e_pFDpCD->getPhi() * 180.0 / pi;             // Theta_e_pFDpCD, Phi_e_pFDpCD in deg
@@ -11845,7 +11858,8 @@ void EventAnalyser() {
             double NeutronMomBKC_nFDpCD = GetFDNeutronP(nFD_nFDpCD, apply_nucleon_cuts); // neutron momentum before shift for kin cuts
 
             TVector3 P_e_nFDpCD_3v, q_nFDpCD_3v, P_nFD_nFDpCD_3v, P_pCD_nFDpCD_3v;
-            TVector3 P_miss_nFDpCD_3v, P_tot_nFDpCD_3v, P_rel_nFDpCD_3v, P_nL_nFDpCD_3v, P_nR_nFDpCD_3v, P_nL_minus_q_nFDpCD_v3, P_tot_minus_q_nFDpCD_v3;
+            TVector3 P_miss_nFDpCD_3v, P_tot_nFDpCD_3v, P_rel_nFDpCD_3v, P_nL_nFDpCD_3v, P_nR_nFDpCD_3v;
+            TVector3 P_nL_minus_q_nFDpCD_v3, P_tot_minus_q_nFDpCD_v3;
             TVector3 P_T_e_nFDpCD_3v, P_T_L_nFDpCD_3v, P_T_tot_nFDpCD_3v, dP_T_L_nFDpCD_3v, dP_T_tot_nFDpCD_3v;
             TLorentzVector P_tot_mu_nFDpCD_4v, P_rel_mu_nFDpCD_4v;
 

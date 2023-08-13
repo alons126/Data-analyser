@@ -70,6 +70,8 @@ private:
     double deltaFactor = 1.;
     int NumberOfSlices = 0;
 
+    double Neutron_Momentum_cut = 9999.; // from clas12ana
+
 public:
 
 // default constructor --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -80,6 +82,10 @@ public:
 
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./",
                       double DeltaSlices = 0.2, bool VaryingDelta = false);
+
+// ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    void ReadInputParam(const char *filename);
 
 // SetUpperMomCut function ----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -127,9 +133,9 @@ public:
 // Other functions ------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Set functions
-    void SethSliceUpperLim(double hsUpperLim) { hSliceUpperLim = hsUpperLim; };
+    void SetHistSliceUpperLim(double hsUpperLim) { hSliceUpperLim = hsUpperLim; };
 
-    void SethSliceLowerLim(double hsLowerLim) { hSliceLowerLim = hsLowerLim; };
+    void SetHistSliceLowerLim(double hsLowerLim) { hSliceLowerLim = hsLowerLim; };
 
 };
 

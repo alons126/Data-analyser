@@ -102,12 +102,6 @@ void StackPlot3(string &SampleName, TList *Histogram_list,
     string HistogramStackSaveNamePath1 = HistogramStackSaveNamePath0.substr(0, HistogramStackSaveNamePath0.find_last_of("/"));
     string HistogramStackSaveNamePath = HistogramStackSaveNamePath1.substr(0, HistogramStackSaveNamePath1.find_last_of("/")) + "/";
     string HistogramStackSaveName = HistogramStackSaveNamePath1.substr(HistogramStackSaveNamePath1.find_last_of('/') + 1) + "_Stack3";
-//    string HistogramStackSaveName = Hist1.GetHistogram1DSaveName() + "_Stack";
-
-
-//    cout << "\n\n\nfinalState = " << finalState << "\n\n";
-//    exit(EXIT_FAILURE);
-
 
     double TitleSize = Hist1.GetTitleSize();
     double LabelSize = Hist1.GetLabelSizeX();

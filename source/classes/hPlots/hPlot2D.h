@@ -233,11 +233,9 @@ public:
     void SetPlotHistogramMax(bool phMax = true) { PlotHistogramMax = phMax; }
 
 //  Get methods:
-//    TH2D GetHistogram2D() { return *Histogram2D; }
+    TH2D *GetHistogram2D() { return Histogram2D; } // used in AMaps class
 
-    TH2D *GetHistogram2D() { return Histogram2D; }
-
-    TH2D *GetHistogram() const { return Histogram2D; }
+    TH2D *GetHistogram() const { return Histogram2D; } // used in final state ratio (FSR) plots
 
     TH2D *GetHistogram2DConst() const { return Histogram2D; }
 
@@ -255,13 +253,13 @@ public:
 
     int GetHistogramNumberOfYBins() { return HistogramNumberOfYBins; }
 
-    double GetUpperXlim() { return HistogramXAxisLimits.at(1); }
+    double GetUpperXlim() const { return HistogramXAxisLimits.at(1); }
 
-    double GetLowerXlim() { return HistogramXAxisLimits.at(0); }
+    double GetLowerXlim() const { return HistogramXAxisLimits.at(0); }
 
-    double GetUpperYlim() { return HistogramYAxisLimits.at(1); }
+    double GetUpperYlim() const { return HistogramYAxisLimits.at(1); }
 
-    double GetLowerYlim() { return HistogramYAxisLimits.at(0); }
+    double GetLowerYlim() const { return HistogramYAxisLimits.at(0); }
 
     double GetXBinCenter(int xBin) { return Histogram2D->GetXaxis()->GetBinCenter(xBin); }
 

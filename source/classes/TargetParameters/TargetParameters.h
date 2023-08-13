@@ -5,8 +5,18 @@
 class TargetParameters {
 protected:
     std::string TargetElement;
-    int TargetElementPDG, ProbePDG;
+    int TargetElementPDG; // Target PDG used in GENIE
+    int ProbePDG; // Incident lepton PDG
+
     double BindingEnergyToNucleus;
+
+    /* Target PDG in GENIE code - 10LZZZAAAI */
+    int TotalBaryonNumber_A;
+    int TotalChargeNumber_Z;
+    int StrangeQuarksNumber_L;
+    int IsomerNumber_I;
+//    10LZZZAAAI
+//    1000080160
 
 public:
     void SetTargetElement(std::string TargetElementName) { TargetElement = TargetElementName; }
