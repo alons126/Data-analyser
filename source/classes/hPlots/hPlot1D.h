@@ -322,6 +322,8 @@ public:
     std::string GetHistogramStatTitle() const { return HistogramStatsTitle; }
 //    std::string GetHistogramStatTitle() const { return Histogram1DTitles["HistogramStatTitle"]; }
 
+    std::string GetHistogramName() { return Histogram1D->GetName(); } // GetHistogramStatTitle (the ROOT version)
+
     std::string GetXaxisTitle() const { return XaxisTitle; }
 
     std::string GetYaxisTitle() { return Histogram1DTitles["YaxisTitle"]; }

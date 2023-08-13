@@ -55,7 +55,7 @@ SetYAxisTitle
 
 using namespace std;
 
-//TODO: move this into a class with the propper functions
+//TODO: move this into a class with the proper functions
 
 // DrawAndSaveFSRatio in 1D plots ---------------------------------------------------------------------------------------------------------------------------------------
 

@@ -190,7 +190,7 @@ void EventAnalyser() {
     bool apply_fiducial_cuts = true;
     bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = false;
+    bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -9825,8 +9825,9 @@ void EventAnalyser() {
             double Theta_e_1n = e_1n->getTheta() * 180.0 / pi, Phi_e_1n = e_1n->getPhi() * 180.0 / pi;                                     // Theta_e_1n, Phi_e_1n in deg
             double Theta_n_1n = n_1n->getTheta() * 180.0 / pi, Phi_n_1n = n_1n->getPhi() * 180.0 / pi;                                 // Theta_pFD_1n, Phi_pFD_1n in deg
 
-//            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
-            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
+            /* Weights -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
+            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
+//            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -9872,14 +9873,14 @@ void EventAnalyser() {
             //<editor-fold desc="Setting kinematical cuts">
             /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> momentum kin cut before neutron shifting */
             /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
+            /* Fiducial cuts -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             bool FD_Theta_Cut_1n = ((P_n_1n_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_BS_1n = ((NeutronMomBKC_1n <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                           (NeutronMomBKC_1n >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
             bool FD_Momentum_Cut_AS_1n = ((P_n_1n_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                           (P_n_1n_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
             bool e_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1n_3v.Mag(), P_e_1n_3v.Theta() * 180.0 / pi, P_e_1n_3v.Phi() * 180.0 / pi);
-//            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
-            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
+            bool n_withinFC_1n = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180.0 / pi, P_n_1n_3v.Phi() * 180.0 / pi);
 
             bool Pass_Kin_Cuts_1n = ((!apply_kinematical_cuts || (FD_Theta_Cut_1n && FD_Momentum_Cut_BS_1n && FD_Momentum_Cut_AS_1n)) &&
                                      (!apply_fiducial_cuts || (e_withinFC_1n && n_withinFC_1n)));
@@ -11928,8 +11929,9 @@ void EventAnalyser() {
             double Theta_tot_nFDpCD = P_tot_nFDpCD_3v.Theta() * 180.0 / pi, Phi_tot_nFDpCD = P_tot_nFDpCD_3v.Phi() * 180.0 / pi; // in deg
             double Theta_rel_nFDpCD = P_rel_nFDpCD_3v.Theta() * 180.0 / pi, Phi_rel_nFDpCD = P_rel_nFDpCD_3v.Phi() * 180.0 / pi; // in deg
 
-//            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
-            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_nFDpCD, Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
+            /* Weights -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
+            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
+//            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_nFDpCD, Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -12004,6 +12006,7 @@ void EventAnalyser() {
             //<editor-fold desc="Setting kinematical cuts">
             /* Good neutrons are within momentum kin cuts (lower -> efficiency; upper -> beta fit) -> momentum kin cut before neutron shifting */
             /* We want to compare FD neutrons with FD protons in the same momentum region -> additional momentum kin cut after neutron shifting */
+            /* Fiducial cuts -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             bool FD_Theta_Cut_nFDpCD = ((P_nFD_nFDpCD_3v.Theta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
             bool FD_Momentum_Cut_BS_nFDpCD = ((NeutronMomBKC_nFDpCD <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                               (NeutronMomBKC_nFDpCD >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut before neutron shifting
@@ -12011,9 +12014,7 @@ void EventAnalyser() {
                                               (P_nFD_nFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Additional momentum kin cut after neutron shifting
             bool e_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_nFDpCD_3v.Mag(), P_e_nFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_nFDpCD_3v.Phi() * 180.0 / pi);
-//            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(), P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
-//                                                         P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
-            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", NeutronMomBKC_nFDpCD, P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
+            bool nFD_withinFC_nFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Neutron", P_nFD_nFDpCD_3v.Mag(), P_nFD_nFDpCD_3v.Theta() * 180.0 / pi,
                                                          P_nFD_nFDpCD_3v.Phi() * 180.0 / pi);
 
             bool Pass_Kin_Cuts_nFDpCD = ((!apply_kinematical_cuts || (FD_Theta_Cut_nFDpCD && FD_Momentum_Cut_BS_nFDpCD && FD_Momentum_Cut_AS_nFDpCD)) &&

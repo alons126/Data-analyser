@@ -102,7 +102,8 @@ public:
                        std::string Histogram2DSaveName, TF1 *Beta_function1, std::string particle1, bool showStats = true, bool plot_legend = true);
 
     /* Corresponding hDrawAndSave function (Beta vs. P plots, single particle) */
-    void hDrawAndSave(const std::string &SampleName, TCanvas *h2DCanvas, TList *hList, TF1 *Beta_function1, std::string particle1, bool showStats, bool plot_legend = true);
+    void
+    hDrawAndSave(const std::string &SampleName, TCanvas *h2DCanvas, TList *hList, TF1 *Beta_function1, std::string particle1, bool showStats, bool plot_legend = true);
     //</editor-fold>
 
     //<editor-fold desc="histPlotter2D function (Beta vs. P plots, 3 particles (by charge))">
@@ -244,6 +245,8 @@ public:
     std::string GetHistTitle() { return Histogram2D->GetTitle(); }
 
     std::string GetHistogramStatTitle() const { return HistogramStatsTitle; }
+
+    std::string GetHistogramName() { return Histogram2D->GetName(); } // GetHistogramStatTitle (the ROOT version)
 
     std::string GetXaxisTitle() { return Histogram2DTitles["XaxisTitle"]; }
 
