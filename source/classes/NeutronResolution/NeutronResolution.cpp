@@ -197,17 +197,13 @@ void NeutronResolution::ReadInputParam(const char *filename) {
                 vector<double> par;
 
                 while (getline(ss2, pid_v, ':')) {
-                    if (count == 0)
-                        pid = pid_v;
-                    else
-                        par.push_back(atof(pid_v.c_str()));
+                    if (count == 0) { pid = pid_v; }
+                    else { par.push_back(atof(pid_v.c_str())); }
 
                     count++;
                 }
 
-                if (pid != "") {
-                    Neutron_Momentum_cut = par.at(1);
-                }
+                if (pid != "") { Neutron_Momentum_cut = par.at(1); }
             }
         }
     } else
