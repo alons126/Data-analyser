@@ -34,7 +34,7 @@
 
 using namespace std;
 
-void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
+void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list, const double beamE) {
 
     double W_yLLim = -0.1, W_yULim = 0.1, W_xLLim = 0.9, W_xULim = 1.;
     double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
@@ -329,24 +329,6 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         gr->SetPoint(1, Beta_Min, deltaPRel_UncertaintyL);
         gr->Draw("same");
 
-/*
-    const Int_t n_Max = 1;
-    auto gr_Max = new TGraph(n_Max);
-    gr_Max->SetMarkerStyle(20);
-    auto ex_Max = new TExec("ex_Max", "drawtext_Max();");
-    gr_Max->GetListOfFunctions()->Add(ex_Max);
-    gr_Max->SetPoint(0, Beta_Max, deltaPRel_UncertaintyU);
-    gr_Max->Draw("same");
-
-    const Int_t n_Min = 1;
-    auto gr_Min = new TGraph(n_Min);
-    gr_Min->SetMarkerStyle(20);
-    auto ex_Min = new TExec("ex_Min", "drawtext_Min();");
-    gr_Min->GetListOfFunctions()->Add(ex_Min);
-    gr_Min->SetPoint(0, Beta_Min, deltaPRel_UncertaintyL);
-    gr_Min->Draw("same");
-*/
-
         const char *Rel_deltaPSaveDir = Rel_deltaPSaveNameDir.c_str();
         Canvas->SaveAs(Rel_deltaPSaveDir);
         Canvas->Clear();
@@ -410,6 +392,8 @@ void BetaFit(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, 
         Canvas->Clear();
         //</editor-fold>
 
+    } else {
+        Momentum_cuts.SetUpperCut(beamE);
     }
 
 }

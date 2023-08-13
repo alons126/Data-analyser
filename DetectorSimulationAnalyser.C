@@ -134,7 +134,7 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -182,15 +182,15 @@ void EventAnalyser() {
     bool apply_DC_fiducial_cut = true;
 
     /* Nucleon cuts */
-    bool apply_nucleon_cuts = true; // set as true to get good protons and chaculate neutron momentum
+    bool apply_nucleon_cuts = true; // set as true to get good protons and calculate upper neutron momentum th.
 
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true;
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -882,8 +882,15 @@ void EventAnalyser() {
     if (reformat_e_bins) { equi_P_e_bins = false; }
 
     /* Set Bins by case */
-    int HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
-    int NumberNucOfMomSlices = 4;
+    int NumberNucOfMomSlices, HistElectronSliceNumOfXBins = numTH2Dbins_Electron_Ang_Plots, HistNucSliceNumOfXBins = numTH2Dbins_Nucleon_Ang_Plots;
+
+    //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
+    if (SampleName == "C12_simulation_G18_Q204_6GeV") {
+        NumberNucOfMomSlices = 6;
+    } else {
+        NumberNucOfMomSlices = 4;
+    }
+    //</editor-fold>
 
     AMaps aMaps, wMaps;
 
@@ -9085,17 +9092,17 @@ void EventAnalyser() {
 
             //<editor-fold desc="Filling proton reco. Acceptance maps">
             for (int &i: Protons_ind) {
-                bool FD_Theta_Cut_Reco_protons = ((protons[i]->getTheta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
-                bool FD_Momentum_Cut_Reco_protons = ((protons[i]->getP() <= clasAna.getNeutronMomentumCut()) &&
-                                                     (protons[i]->getP() >= FD_nucleon_momentum_cut.GetLowerCut()));
+                if (protons[i]->getRegion() == FD) {
+                    bool FD_Theta_Cut_Reco_protons = ((protons[i]->getTheta() * 180.0 / pi) <= FD_nucleon_theta_cut.GetUpperCut());
+                    bool FD_Momentum_Cut_Reco_protons = ((protons[i]->getP() <= clasAna.getNeutronMomentumCut()) &&
+                                                         (protons[i]->getP() >= FD_nucleon_momentum_cut.GetLowerCut()));
 //                bool FD_Momentum_Cut_Reco_protons = ((protons[i]->getP() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
 //                                                     (protons[i]->getP() >= FD_nucleon_momentum_cut.GetLowerCut()));
 
-                ProtonAMapBC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
-                aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
+                    ProtonAMapBC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
+                    aMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
 
-                if (FD_Theta_Cut_Reco_protons && FD_Momentum_Cut_Reco_protons) {
-                    if (protons[i]->getRegion() == FD) {
+                    if (FD_Theta_Cut_Reco_protons && FD_Momentum_Cut_Reco_protons) {
                         ProtonAMapBCwKC.hFill(protons[i]->getPhi() * 180.0 / pi, protons[i]->getTheta() * 180.0 / pi, Weight);
                         wMaps.hFillHitMaps("Reco", "Proton", protons[i]->getP(), protons[i]->getTheta() * 180.0 / pi, protons[i]->getPhi() * 180.0 / pi, Weight);
                     }
@@ -9106,7 +9113,6 @@ void EventAnalyser() {
             //<editor-fold desc="Filling neurton reco. Acceptance maps">
             if (ES_by_leading_FDneutron) {
                 if (NeutronsFD_ind_mom_max != -1) { // if NeutronsFD_ind_mom_max == -1, there are no neutrons above momentum th. in the event
-
                     bool hitPCAL_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::PCAL)->getDetector() == 7);   // PCAL hit
                     bool hitECIN_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECIN)->getDetector() == 7);   // ECIN hit
                     bool hitECOUT_1e_cut = (allParticles[NeutronsFD_ind_mom_max]->cal(clas12::ECOUT)->getDetector() == 7); // ECOUT hit
@@ -9248,7 +9254,7 @@ void EventAnalyser() {
             double Theta_e_1p = e_1p->getTheta() * 180.0 / pi, Phi_e_1p = e_1p->getPhi() * 180.0 / pi;                                     // Theta_e_1p, Phi_e_1p in deg
             double Theta_p_1p = p_1p->getTheta() * 180.0 / pi, Phi_p_1p = p_1p->getPhi() * 180.0 / pi;                                 // Theta_pFD_1p, Phi_pFD_1p in deg
 
-//            double Weight_1p = wMaps.GetWeight(apply_kinematical_weights, "Proton", P_p_1p_3v.Mag(), Theta_p_1p, Phi_p_1p);
+            /* Weights -> before proton shifting; because proton detection is good! */
             double Weight_1p = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomBKC_1p, Theta_p_1p, Phi_p_1p);
             //</editor-fold>
 
@@ -9260,7 +9266,6 @@ void EventAnalyser() {
             bool FD_Momentum_Cut_1p = ((P_p_1p_3v.Mag() <= FD_nucleon_momentum_cut.GetUpperCut()) &&
                                        (P_p_1p_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
             bool e_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_1p_3v.Mag(), P_e_1p_3v.Theta() * 180.0 / pi, P_e_1p_3v.Phi() * 180.0 / pi);
-//            bool p_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_p_1p_3v.Mag(), P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
             bool p_withinFC_1p = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_1p, P_p_1p_3v.Theta() * 180.0 / pi, P_p_1p_3v.Phi() * 180.0 / pi);
 
             bool Pass_Kin_Cuts_1p = ((!apply_kinematical_cuts || (FD_Theta_Cut_1p && FD_Momentum_Cut_1p)) &&
@@ -9827,7 +9832,6 @@ void EventAnalyser() {
 
             /* Weights -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_n_1n_3v.Mag(), P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
-//            double Weight_1n = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_1n, P_n_1n_3v.Theta() * 180 / pi, P_n_1n_3v.Phi() * 180 / pi);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -11233,7 +11237,7 @@ void EventAnalyser() {
             double Theta_tot_pFDpCD = P_tot_pFDpCD_3v.Theta() * 180.0 / pi, Phi_tot_pFDpCD = P_tot_pFDpCD_3v.Phi() * 180.0 / pi; // in deg
             double Theta_rel_pFDpCD = P_rel_pFDpCD_3v.Theta() * 180.0 / pi, Phi_rel_pFDpCD = P_rel_pFDpCD_3v.Phi() * 180.0 / pi; // in deg
 
-//            double Weight_pFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Proton", P_pFD_pFDpCD_3v.Mag(), Theta_pFD_pFDpCD, Phi_pFD_pFDpCD);
+            /* Weights -> before proton shifting; because proton detection is good! */
             double Weight_pFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Proton", ProtonMomBKC_pFDpCD, Theta_pFD_pFDpCD, Phi_pFD_pFDpCD);
             //</editor-fold>
 
@@ -11246,8 +11250,6 @@ void EventAnalyser() {
                                            (P_pFD_pFDpCD_3v.Mag() >= FD_nucleon_momentum_cut.GetLowerCut())); // Momentum kin cut after proton smearing
             bool e_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Electron", P_e_pFDpCD_3v.Mag(), P_e_pFDpCD_3v.Theta() * 180.0 / pi,
                                                        P_e_pFDpCD_3v.Phi() * 180.0 / pi);
-//            bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", P_pFD_pFDpCD_3v.Mag(), P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
-//                                                         P_pFD_pFDpCD_3v.Phi() * 180.0 / pi);
             bool pFD_withinFC_pFDpCD = aMaps.IsInFDQuery(generate_AMaps, ThetaFD, "Proton", ProtonMomBKC_pFDpCD, P_pFD_pFDpCD_3v.Theta() * 180.0 / pi,
                                                          P_pFD_pFDpCD_3v.Phi() * 180.0 / pi);
 
@@ -11931,7 +11933,6 @@ void EventAnalyser() {
 
             /* Weights -> after neutron shifting; because we want to match the currected neutron momentum to the proton maps! */
             double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", P_nFD_nFDpCD_3v.Mag(), Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
-//            double Weight_nFDpCD = wMaps.GetWeight(apply_kinematical_weights, "Neutron", NeutronMomBKC_nFDpCD, Theta_nFD_nFDpCD, Phi_nFD_nFDpCD);
             //</editor-fold>
 
             // Fake FD neutrons handling (neutron veto) -----------------------------------------------------------------------------------------------------------------
@@ -13498,8 +13499,8 @@ void EventAnalyser() {
 //        /* If sample is with 2GeV beam energy, no fit is needed. */
     if (!apply_nucleon_cuts && !is2GeVSample) {
         /* If sample is with 2GeV beam energy, no fit is needed. */
-        BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots);
-        BetaFitApprax(SampleName, Beta_max_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots);
+        BetaFit(SampleName, Beta_max_cut_ABF_FD_n_from_ph, n_momentum_cuts_ABF_FD_n_from_ph, hBeta_n_from_ph_01_1n_FD, plots, beamE);
+        BetaFitApprax(SampleName, Beta_max_cut_ABF_FD_n_from_ph_apprax, n_momentum_cuts_ABF_FD_n_from_ph_apprax, hBeta_n_from_ph_01_1n_FD, plots, beamE);
     }
     //</editor-fold>
 

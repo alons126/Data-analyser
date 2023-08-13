@@ -33,7 +33,7 @@
 
 using namespace std;
 
-void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list) {
+void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_cuts, const hPlot1D &BetaPlot, TList *Histogram_list, const double beamE) {
 
     double W_yLLim = -0.1, W_yULim = 0.1, W_xLLim = 0.9, W_xULim = 1.;
     double deltaPRel_UncertaintyU = 0.2, deltaPRel_UncertaintyL = 0.1;
@@ -323,6 +323,8 @@ void BetaFitApprax(const string &SampleName, DSCuts &Beta_cut, DSCuts &Momentum_
         Canvas->Clear();
         //</editor-fold>
 
+    } else {
+        Momentum_cuts.SetUpperCut(beamE);
     }
 }
 
