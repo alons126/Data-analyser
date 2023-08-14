@@ -140,7 +140,7 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true;
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
     bool nRes_test = false;
