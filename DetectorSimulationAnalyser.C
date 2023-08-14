@@ -288,7 +288,7 @@ void EventAnalyser() {
             if (Rec_wTL_ES) {
                 Efficiency_Status = "Eff2";
             } else {
-                Efficiency_Status = "Eff1_SLICE";
+                Efficiency_Status = "Eff1";
             }
         }
         //</editor-fold>
