@@ -116,25 +116,6 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
                     } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
                         Delta = SliceUpperMomLim - SliceLowerLim;
                     }
-                    /*
-                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
-                        Delta = delta * 6;
-                    } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.80)) { // 0.7-0.85
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 0.80) && (SliceLowerLim < 2.00)) { // 0.85-2.05
-                        Delta = delta * 2;
-                    } else if ((SliceLowerLim >= 2.00) && (SliceLowerLim < 2.30)) { // 2.05-2.35
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 2.30) && (SliceLowerLim < 2.50)) { // 2.35-2.55
-                        Delta = delta * 4;
-                    } else if ((SliceLowerLim >= 2.50) && (SliceLowerLim < 2.80)) { // 2.55-2.85
-                        Delta = delta * 6;
-                    } else if ((SliceLowerLim >= 2.80) && (SliceLowerLim < 3.25)) { // 2.85-3.30
-                        Delta = delta * 9;
-                    } else if (SliceLowerLim >= 3.25) { // 3.30-SliceUpperMomLim
-                        Delta = SliceUpperMomLim - SliceLowerLim;
-                    }
-*/
                 } else if (beamE == 2.07052) {
                     if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
                         Delta = delta * 3;
@@ -278,6 +259,7 @@ void NeutronResolution::SliceFitDrawAndSave(const string &SampleName, const stri
         hSlice->GetYaxis()->SetTitleSize(0.06);
         hSlice->GetYaxis()->SetLabelSize(0.0425);
         hSlice->GetYaxis()->CenterTitle(true);
+        hSlice->Sumw2();
 
         if (hSlice->Integral() != 0.) { // Fit only the non-empty histograms
             FittedSlices.push_back(i); // Log slices that are been fitted
