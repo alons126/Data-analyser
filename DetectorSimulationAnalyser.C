@@ -262,7 +262,7 @@ void EventAnalyser() {
             if (!generate_AMaps && !plot_and_fit_MomRes) {
                 Additional_Status = "";
             } else if (generate_AMaps && !plot_and_fit_MomRes) {
-                Additional_Status = "AMaps8_";
+                Additional_Status = "AMaps9_";
 //                Additional_Status = "AMaps_";
             } else if (!generate_AMaps && plot_and_fit_MomRes) {
                 if (!VaryingDelta) {
@@ -887,7 +887,7 @@ void EventAnalyser() {
 
     //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
     if (SampleName == "C12_simulation_G18_Q204_6GeV") {
-        NumberNucOfMomSlices = 8;
+        NumberNucOfMomSlices = 9;
 //        NumberNucOfMomSlices = 6;
     } else {
         NumberNucOfMomSlices = 4;
