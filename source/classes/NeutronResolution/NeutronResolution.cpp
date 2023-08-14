@@ -30,8 +30,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
     int SliceNumber = 0;
 
     /* Variables for debugging purposes: */
-    bool LimitsPrintOut = false;
-    bool LimitsPrintOutAndExit = false;
+    bool LimitsPrintOut = true;
+    bool LimitsPrintOutAndExit = true;
 
     while (SliceAndDice) {
         ++SliceNumber;
