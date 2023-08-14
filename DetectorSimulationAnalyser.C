@@ -140,7 +140,7 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
     bool nRes_test = false;
@@ -187,8 +187,8 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndShift = false;
 
@@ -242,7 +242,8 @@ void EventAnalyser() {
             KinCuts_Status = "";
             KinWei_Status = "";
         } else if (apply_kinematical_cuts && !apply_kinematical_weights) {
-            KinCuts_Status = "wKC_";
+            KinCuts_Status = "wKC4_";
+//            KinCuts_Status = "wKC_";
             KinWei_Status = "";
         } else if (!apply_kinematical_cuts && apply_kinematical_weights) {
             KinCuts_Status = "";
