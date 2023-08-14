@@ -652,7 +652,7 @@ double NeutronResolution::PSmear(bool apply_nucleon_SmearAndShift, double Moment
 
     }
 
-    return Momentum;
+//    return Momentum;
 }
 //</editor-fold>
 
