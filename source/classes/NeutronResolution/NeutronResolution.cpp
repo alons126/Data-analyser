@@ -20,7 +20,11 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
         SliceUpperLim = SliceLowerLim + delta;
     } else {
         if (beamE == 5.98636) {
-            SliceUpperLim = SliceLowerLim + 0.3;
+            if (SampleName == "C12_simulation_G18_Q204_6GeV") {
+                SliceUpperLim = SliceLowerLim + 0.25;
+            } else {
+                SliceUpperLim = SliceLowerLim + 0.3;
+            }
         } else if (beamE == 2.07052) {
             SliceUpperLim = SliceLowerLim + 0.15;
         }
@@ -30,8 +34,8 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
     int SliceNumber = 0;
 
     /* Variables for debugging purposes: */
-    bool LimitsPrintOut = false;
-    bool LimitsPrintOutAndExit = false;
+    bool LimitsPrintOut = true;
+    bool LimitsPrintOutAndExit = true;
 
     while (SliceAndDice) {
         ++SliceNumber;
@@ -99,22 +103,42 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
 
             if (VaryingDelta) {
                 if (beamE == 5.98636) {
-                    if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
-                        Delta = delta * 6;
-                    } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.85)) { // 0.7-0.9
-                        Delta = delta * 4;
-                    } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.85)) { // 0.9-1.90
-                        Delta = delta * 2;
-                    } else if ((SliceLowerLim >= 1.85) && (SliceLowerLim < 2.15)) { // 1.90-2.20
-                        Delta = delta * 3;
-                    } else if ((SliceLowerLim >= 2.15) && (SliceLowerLim < 2.35)) { // 2.20-2.40
-                        Delta = delta * 4;
-                    } else if ((SliceLowerLim >= 2.35) && (SliceLowerLim < 2.60)) { // 2.40-2.65
-                        Delta = delta * 5;
-                    } else if ((SliceLowerLim >= 2.60) && (SliceLowerLim < 2.95)) { // 2.65-3.00
-                        Delta = delta * 7;
-                    } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
-                        Delta = SliceUpperMomLim - SliceLowerLim;
+                    if (SampleName == "C12_simulation_G18_Q204_6GeV") {
+                        if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.60)) { // 0.4-0.65
+                            Delta = delta * 5;
+                        } else if ((SliceLowerLim >= 0.60) && (SliceLowerLim < 1.00)) { // 0.65-1.05
+                            Delta = delta * 2;
+                        } else if ((SliceLowerLim >= 1.00) && (SliceLowerLim < 1.70)) { // 1.05-1.70
+                            Delta = delta * 1;
+                        } else if ((SliceLowerLim >= 1.70) && (SliceLowerLim < 2.25)) { // 1.70-2.30
+                            Delta = delta * 2;
+                        } else if ((SliceLowerLim >= 2.25) && (SliceLowerLim < 2.55)) { // 2.30-2.60
+                            Delta = delta * 3;
+                        } else if ((SliceLowerLim >= 2.55) && (SliceLowerLim < 2.95)) { // 2.60-3.00
+                            Delta = delta * 4;
+                        } else if ((SliceLowerLim >= 2.95) && (SliceLowerLim < 3.25)) { // 3.00-3.30
+                            Delta = delta * 6;
+                        } else if (SliceLowerLim >= 3.25) { // 3.00-SliceUpperMomLim
+                            Delta = SliceUpperMomLim - SliceLowerLim;
+                        }
+                    } else {
+                        if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.65)) { // 0.4-0.7
+                            Delta = delta * 6;
+                        } else if ((SliceLowerLim >= 0.65) && (SliceLowerLim < 0.85)) { // 0.7-0.9
+                            Delta = delta * 4;
+                        } else if ((SliceLowerLim >= 0.85) && (SliceLowerLim < 1.85)) { // 0.9-1.90
+                            Delta = delta * 2;
+                        } else if ((SliceLowerLim >= 1.85) && (SliceLowerLim < 2.15)) { // 1.90-2.20
+                            Delta = delta * 3;
+                        } else if ((SliceLowerLim >= 2.15) && (SliceLowerLim < 2.35)) { // 2.20-2.40
+                            Delta = delta * 4;
+                        } else if ((SliceLowerLim >= 2.35) && (SliceLowerLim < 2.60)) { // 2.40-2.65
+                            Delta = delta * 5;
+                        } else if ((SliceLowerLim >= 2.60) && (SliceLowerLim < 2.95)) { // 2.65-3.00
+                            Delta = delta * 7;
+                        } else if (SliceLowerLim >= 2.95) { // 3.00-SliceUpperMomLim
+                            Delta = SliceUpperMomLim - SliceLowerLim;
+                        }
                     }
                 } else if (beamE == 2.07052) {
                     if ((SliceLowerLim >= 0.40) && (SliceLowerLim < 0.50)) { // 0.4-0.55
