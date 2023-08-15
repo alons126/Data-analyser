@@ -134,7 +134,7 @@ void EventAnalyser() {
     bool ES_by_leading_FDneutron = true;
 
     /* Acceptance maps setup */
-    bool generate_AMaps = false; // Generate acceptance maps
+    bool generate_AMaps = true; // Generate acceptance maps
     bool TL_with_one_reco_electron = true;
     bool reformat_e_bins = false;
     bool equi_P_e_bins = true;
@@ -187,10 +187,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
@@ -888,8 +888,8 @@ void EventAnalyser() {
 
     //<editor-fold desc="Determine NumberNucOfMomSlices by sample">
     if (SampleName == "C12_simulation_G18_Q204_6GeV") {
-//        NumberNucOfMomSlices = 9;
-        NumberNucOfMomSlices = 6;
+        NumberNucOfMomSlices = 9;
+//        NumberNucOfMomSlices = 6;
     } else {
         NumberNucOfMomSlices = 4;
     }
@@ -9761,10 +9761,10 @@ void EventAnalyser() {
         //<editor-fold desc="1n (FD only)">
         /* 1n event selection: 1n = any number of id. FD neutrons (we look at the leading nFD), with no charged particles (except electrons) and any number of other
                                     neutrals and particles with pdg=0. */
-//        bool one_FD_neutron_1n = (NeutronsFD_ind.size() == 1);
-        bool no_protons_1n = (Protons_ind.size() == 0);
-        bool event_selection_1n = (basic_event_selection && no_protons_1n && (NeutronsFD_ind_mom_max != -1)); // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
-//        bool event_selection_1n = (basic_event_selection && one_FD_neutron_1n && no_protons_1n);
+        bool no_protons_1n = (Protons_ind.size() == 0); // there are no id. protons in both CD and FD
+        bool at_least_one_FDneutron_1n = (NeutronsFD_ind_mom_max != -1); // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+        bool event_selection_1n = (basic_event_selection && no_protons_1n && at_least_one_FDneutron_1n);
+
         bool apply_TL_1n_ES = (!Rec_wTL_ES || TL_Event_Selection_1n);
 
         if (calculate_1n && event_selection_1n && apply_TL_1n_ES) { // for 1n calculations (with any number of neutrals)
@@ -11849,10 +11849,8 @@ void EventAnalyser() {
         /* nFDpCD event selection: nFDpCD = one id. proton in the CD, any number of id. FD neutrons (we look at the leading nFD) and any number of neutrons, other
                                             neutrals and particles with pdg=0.*/
         bool one_CDproton_nFDpCD = (Protons_ind.size() == 1 && protons[Protons_ind.at(0)]->getRegion() == CD); // there's only one id. proton + this proton is in the CD
-        bool at_least_one_FDneutron = (NeutronsFD_ind_mom_max != -1); // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
-//        bool single_nFD = (NeutronsFD_ind.size() == 1);
-        bool event_selection_nFDpCD = (basic_event_selection && one_CDproton_nFDpCD && at_least_one_FDneutron);
-//        bool event_selection_nFDpCD = (basic_event_selection && one_CDproton_nFDpCD && single_nFD);
+        bool at_least_one_FDneutron_nFDpCD = (NeutronsFD_ind_mom_max != -1); // for TL_NeutronsFD_ind_mom_max = -1 we don't have any nFD
+        bool event_selection_nFDpCD = (basic_event_selection && one_CDproton_nFDpCD && at_least_one_FDneutron_nFDpCD);
 
         bool apply_TL_nFDpCD_ES = (!Rec_wTL_ES || TL_Event_Selection_nFDpCD);
         //</editor-fold>
@@ -12194,8 +12192,10 @@ void EventAnalyser() {
 
                 //<editor-fold desc="Neutron momentum (nFDpCD)">
                 for (int &i: NeutronsFD_ind) {
-                    hP_n_APID_nFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_nFDpCD);
-                    hP_n_APIDandNS_nFDpCD_FD.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[i], apply_nucleon_cuts)), Weight_nFDpCD);
+                    double TempNeutonMomentum = GetFDNeutronP(allParticles[i], apply_nucleon_cuts);
+
+                    hP_n_APID_nFDpCD_FD.hFill(TempNeutonMomentum, Weight_nFDpCD);
+                    hP_n_APIDandNS_nFDpCD_FD.hFill(nRes.NShift(apply_nucleon_SmearAndShift, TempNeutonMomentum), Weight_nFDpCD);
                 } // after mom. th.
 
                 for (int &i: FD_Neutrons) { hP_n_BPID_nFDpCD_FD.hFill(GetFDNeutronP(allParticles[i], apply_nucleon_cuts), Weight_nFDpCD); } // before mom. th.

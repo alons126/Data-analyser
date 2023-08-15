@@ -690,7 +690,7 @@ double NeutronResolution::NShift(bool apply_nucleon_SmearAndShift, double Moment
         double ShiftedMomentum = Momentum * (1 + shift); // minus for protons and plus for neutrons
 
         if (Printout) {
-            cout << "\n\nshift (0.0583 * Momentum - 0.0127) = " << shift << "\n";
+            cout << "\n\nshift = " << shift << "\n";
             cout << "Momentum = " << Momentum << "\n";
             cout << "ShiftedMomentum = " << ShiftedMomentum << "\n\n";
         }
