@@ -82,7 +82,7 @@ public:
 // constructor ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double nMomTh, const string &SavePath = "./",
-                      double DeltaSlices = 0.2, bool VaryingDelta = false);
+                      double DeltaSlices = 0.2, bool VaryingDelta = false, bool nRes_test = false);
 
 // ReadInputParam function ----------------------------------------------------------------------------------------------------------------------------------------------
 

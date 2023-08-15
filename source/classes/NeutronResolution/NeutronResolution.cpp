@@ -10,7 +10,7 @@
 
 //<editor-fold desc="NeutronResolution constructor">
 NeutronResolution::NeutronResolution(const string &SampleName, const string &NucleonCutsDirectory, const string &Particle, double beamE, double ParticleMomTh,
-                                     const string &SavePath, double DeltaSlices, bool VaryingDelta) {
+                                     const string &SavePath, double DeltaSlices, bool VaryingDelta, bool nRes_test) {
     SlicesSavePath = SavePath, delta = DeltaSlices;
 
     double Delta = delta, SliceLowerLim = ParticleMomTh, SliceUpperLim;
@@ -79,8 +79,14 @@ NeutronResolution::NeutronResolution(const string &SampleName, const string &Nuc
             hCutName = "Slice_#" + to_string(SliceNumber) + "_from_" + to_string_with_precision(SliceLowerLim, 2) + "_to_" +
                        to_string_with_precision(SliceUpperLim, SliceUpperLimPrecision);
 
-            hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
-                                       -0.75, 0.75, hSliceNumOfBin);
+            if (!nRes_test){
+                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                                           -0.75, 0.75, hSliceNumOfBin);
+            } else {
+                hResolutionSlice = hPlot1D("1p", "FD", hStatsTitle, hTitle, "Resolution = (P^{truth}_{pFD} - P^{reco.}_{pFD})/P^{truth}_{pFD}", SlicesSavePath, hSaveName,
+                                           hSliceLowerLim, hSliceUpperLim, hSliceNumOfBin);
+            }
+
             ResSliceFitCuts = DSCuts(("fit_" + hCutName), "FD", "Proton", "1n", 0, -9999, 9999);
         }
 

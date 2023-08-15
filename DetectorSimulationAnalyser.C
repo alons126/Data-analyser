@@ -140,10 +140,10 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = true;
+    bool nRes_test = false;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (isData) { calculate_truth_level = false; }
@@ -187,9 +187,9 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
-    bool apply_kinematical_weights = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
+    bool apply_kinematical_weights = true;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
@@ -926,9 +926,9 @@ void EventAnalyser() {
 
     if (plot_and_fit_MomRes) {
         nRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Neutron", beamE, n_mom_th.GetLowerCut(),
-                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"], DeltaSlices, VaryingDelta);
+                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1n_Directory"], DeltaSlices, VaryingDelta, nRes_test);
         pRes = NeutronResolution(SampleName, NucleonCutsDirectory, "Proton", beamE, p_mom_th.GetLowerCut(),
-                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"], DeltaSlices, VaryingDelta);
+                                 directories.Resolution_Directory_map["Momentum_resolution_slices_1p_Directory"], DeltaSlices, VaryingDelta, nRes_test);
 
         if (nRes_test) {
             nRes.ReadResDataParam((NeutronResolutionDirectory + "Res_data_-_" + SampleName + "/Neutron_res_fit_param_-_" + SampleName + ".par").c_str(),
@@ -1602,6 +1602,15 @@ void EventAnalyser() {
     hPlot1D hP_p_BPID_1p_CD = hPlot1D("1p", "CD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
                                       directories.Momentum_Directory_map["Momentum_1p_Directory"], "02c_P_p_BPID_1p_CD",
                                       Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+    hPlot1D hP_p_APID_1p_FD = hPlot1D("1p", "FD", "Proton momentum APID", "Proton momentum P_{p} APID", "P_{p} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_1p_Directory"], "02d_P_p_APID_1p_FD",
+                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+    hPlot1D hP_p_APIDandPS_1p_FD = hPlot1D("1p", "FD", "Proton momentum APID&PS", "Proton momentum P_{p} APID&PS", "P_{p} [GeV/c]",
+                                           directories.Momentum_Directory_map["Momentum_1p_Directory"], "02e_P_p_APIDandPS_1p_FD",
+                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
+    hPlot1D hP_p_BPID_1p_FD = hPlot1D("1p", "FD", "Proton momentum BPID", "Proton momentum P_{p} BPID", "P_{p} [GeV/c]",
+                                      directories.Momentum_Directory_map["Momentum_1p_Directory"], "02f_P_p_BPID_1p_FD",
+                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
 
     hPlot1D hP_pFD_APID_1p = hPlot1D("1p", "FD", "FD proton momentum APID", "FD proton momentum APID", "P_{p} [GeV/c]",
                                      directories.Momentum_Directory_map["Analysis_plots_momentum_1p_Directory"], "01a_P_pFD_APID_1p_FD",
@@ -1609,9 +1618,6 @@ void EventAnalyser() {
     hPlot1D hP_pFD_APIDandPS_1p = hPlot1D("1p", "FD", "FD proton momentum APID&PS", "FD proton momentum APID&PS", "P_{p} [GeV/c]",
                                           directories.Momentum_Directory_map["Analysis_plots_momentum_1p_Directory"], "01b_P_pFD_APIDandPS_1p_FD",
                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_pFD_BPID_1p = hPlot1D("1p", "FD", "FD proton momentum BPID", "FD proton momentum BPID", "P_{p} [GeV/c]",
-                                     directories.Momentum_Directory_map["Analysis_plots_momentum_1p_Directory"], "01c_P_pFD_BPID_1p_FD",
-                                     Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
 
     hPlot1D hP_piplus_APID_1p_CD = hPlot1D("1p", "CD", "#pi^{+} momentum APID", "#pi^{+} momentum P_{#pi^{+}} APID", "P_{#pi^{+}} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1p_Directory"], "03a_P_piplus_APID_1p_CD",
@@ -1674,24 +1680,24 @@ void EventAnalyser() {
     hPlot1D hP_n_BPID_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum BPID - ZOOMOUT", "Neutron momentum P_{n} BPID - ZOOMOUT", "P_{n} [GeV/c]",
                                               directories.Momentum_Directory_map["Momentum_1n_Directory"], "02d_P_n_BPID_1n_ZOOMOUT_FD",
                                               Momentum_lboundary, 20., numTH1Dbins);
-    hPlot1D hP_n_APIDandNS_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID&NS", "Neutron momentum P_{n} APID&NS", "P_{n} [GeV/c]",
+    hPlot1D hP_n_APIDandNS_1n_FD = hPlot1D("1n", "FD", "Neutron momentum APID&NC", "Neutron momentum P_{n} APID&NC", "P_{n} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_1n_Directory"], "02e_P_n_APIDandNS_1n_FD",
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_n_APIDandNS_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum APID&NS - ZOOMOUT", "Neutron momentum P_{n} APID&NS - ZOOMOUT", "P_{n} [GeV/c]",
+    hPlot1D hP_n_APIDandNS_1n_ZOOMOUT_FD = hPlot1D("1n", "FD", "Neutron momentum APID&NC - ZOOMOUT", "Neutron momentum P_{n} APID&NC - ZOOMOUT", "P_{n} [GeV/c]",
                                                    directories.Momentum_Directory_map["Momentum_1n_Directory"], "02f_P_n_APIDandNS_1n_ZOOMOUT_FD",
                                                    Momentum_lboundary, 20., numTH1Dbins);
 
     hPlot1D hP_nFD_APID_1n = hPlot1D("1n", "FD", "Leading FD neutron momentum APID", "Leading FD neutron momentum APID", "P_{n} [GeV/c]",
                                      directories.Momentum_Directory_map["Analysis_plots_momentum_1n_Directory"], "01a_P_nFD_APID_1n_FD",
                                      Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_nFD_APIDandNS_1n = hPlot1D("1n", "FD", "Leading FD neutron momentum APID&NS", "Leading FD neutron momentum APID&NS", "P_{n} [GeV/c]",
+    hPlot1D hP_nFD_APIDandNS_1n = hPlot1D("1n", "FD", "Leading FD neutron momentum APID&NC", "Leading FD neutron momentum APID&NC", "P_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Analysis_plots_momentum_1n_Directory"], "01b_P_nFD_APIDandNS_1n_FD",
                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_nFD_APID_1n_ZOOMOUT = hPlot1D("1n", "FD", "Leading FD neutron momentum APID - ZOOMOUT", "Leading FD neutron momentum APID - ZOOMOUT", "P_{n} [GeV/c]",
                                              directories.Momentum_Directory_map["Analysis_plots_momentum_1n_Directory"], "01c_P_nFD_APID_1n_ZOOMOUT_FD",
                                              Momentum_lboundary, 20., numTH1Dbins);
-    hPlot1D hP_nFD_APIDandNS_1n_ZOOMOUT = hPlot1D("1n", "FD", "Leading FD neutron momentum APID&NS - ZOOMOUT",
-                                                  "Leading FD neutron momentum APID&NS - ZOOMOUT", "P_{n} [GeV/c]",
+    hPlot1D hP_nFD_APIDandNS_1n_ZOOMOUT = hPlot1D("1n", "FD", "Leading FD neutron momentum APID&NC - ZOOMOUT",
+                                                  "Leading FD neutron momentum APID&NC - ZOOMOUT", "P_{n} [GeV/c]",
                                                   directories.Momentum_Directory_map["Analysis_plots_momentum_1n_Directory"], "01d_P_nFD_APIDandNS_1n_ZOOMOUT_FD",
                                                   Momentum_lboundary, 20., numTH1Dbins);
 
@@ -1956,7 +1962,7 @@ void EventAnalyser() {
     hPlot1D hP_n_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID", "Neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                           directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07a_P_n_APID_nFDpCD_FD",
                                           Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_n_APIDandNS_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID&NS", "Neutron momentum P_{n} APID&NS", "P_{n} [GeV/c]",
+    hPlot1D hP_n_APIDandNS_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum APID&NC", "Neutron momentum P_{n} APID&NC", "P_{n} [GeV/c]",
                                                directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07b_P_n_APIDandNS_nFDpCD_FD",
                                                Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     hPlot1D hP_n_BPID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Neutron momentum BPID", "Neutron momentum P_{n} BPID", "P_{n} [GeV/c]",
@@ -1966,7 +1972,7 @@ void EventAnalyser() {
     hPlot1D hP_nL_APID_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Leading neutron momentum APID", "Leading neutron momentum P_{n} APID", "P_{n} [GeV/c]",
                                            directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07a_P_n_APID_nFDpCD_FD",
                                            Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
-    hPlot1D hP_nL_APIDandNS_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Leading neutron momentum APID&NS", "Leading neutron momentum P_{n} APID&NS", "P_{n} [GeV/c]",
+    hPlot1D hP_nL_APIDandNS_nFDpCD_FD = hPlot1D("nFDpCD", "FD", "Leading neutron momentum APID&NC", "Leading neutron momentum P_{n} APID&NC", "P_{n} [GeV/c]",
                                                 directories.Momentum_Directory_map["Momentum_nFDpCD_Directory"], "07b_P_n_APIDandNS_nFDpCD_FD",
                                                 Momentum_lboundary, Momentum_uboundary, numTH1Dbins);
     //</editor-fold>
@@ -9360,11 +9366,9 @@ void EventAnalyser() {
                     if (protons[i]->getRegion() == CD) {
                         hP_p_APID_1p_CD.hFill(protons[i]->getP(), Weight_1p); // after mom. th.
                         hP_p_APIDandPS_1p_CD.hFill(nRes.PSmear(apply_nucleon_SmearAndShift, protons[i]->getP()), Weight_1p); // after mom. th. & smearing
-//                        hP_p_APIDandPS_1p_CD.hFill(P_p_1p_3v.Mag(), Weight_1p); // after mom. th. & smearing
                     } else if (protons[i]->getRegion() == FD) {
-                        hP_pFD_APID_1p.hFill(protons[i]->getP(), Weight_1p); // after mom. th.
-                        hP_pFD_APIDandPS_1p.hFill(nRes.PSmear(apply_nucleon_SmearAndShift, protons[i]->getP()), Weight_1p); // after mom. th. & smearing
-//                        hP_pFD_APIDandPS_1p.hFill(P_p_1p_3v.Mag(), Weight_1p); // after mom. th. & smearing
+                        hP_p_APID_1p_FD.hFill(protons[i]->getP(), Weight_1p); // after mom. th.
+                        hP_p_APIDandPS_1p_FD.hFill(nRes.PSmear(apply_nucleon_SmearAndShift, protons[i]->getP()), Weight_1p); // after mom. th. & smearing
                     }
                 }
 
@@ -9373,7 +9377,7 @@ void EventAnalyser() {
                     if (protons[i]->getRegion() == CD) {
                         hP_p_BPID_1p_CD.hFill(protons[i]->getP(), Weight_1p); // before mom. th.
                     } else if (protons[i]->getRegion() == FD) {
-                        hP_pFD_BPID_1p.hFill(protons[i]->getP(), Weight_1p); // before mom. th.
+                        hP_p_BPID_1p_FD.hFill(protons[i]->getP(), Weight_1p); // before mom. th.
                     }
                 }
                 //</editor-fold>
@@ -9624,6 +9628,9 @@ void EventAnalyser() {
                     hEcal_DIS_1p->Fill(Ecal_1p, Weight_1p); // Fill Ecal for DIS only
                 }
                 //</editor-fold>
+
+                hP_pFD_APID_1p.hFill(ProtonMomBKC_1p, Weight_1p);                                                                                       // FD proton (1p)
+                hP_pFD_APIDandPS_1p.hFill(P_p_1p_3v.Mag(), Weight_1p);                                                                   // FD proton after smearing (1p)
 
                 dP_T_1p_3v = TVector3(P_T_e_1p_3v.Px() + P_T_p_1p_3v.Px(), P_T_e_1p_3v.Py() + P_T_p_1p_3v.Py(), 0);
                 dAlpha_T_1p = acos(-(P_e_1p_3v.Px() * dP_T_1p_3v.Px() + P_e_1p_3v.Py() * dP_T_1p_3v.Py() + P_e_1p_3v.Pz() * dP_T_1p_3v.Pz())
@@ -9986,11 +9993,11 @@ void EventAnalyser() {
                 //<editor-fold desc="Neutron momentum (1n)">
 
                 //<editor-fold desc="Neutron momentum - all contributions (1n)">
-                /* Leading neutron after mom. th. */
-                hP_nFD_APID_1n.hFill(GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts), Weight_1n);
-                hP_nFD_APID_1n_ZOOMOUT.hFill(GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts), Weight_1n);
-                hP_nFD_APIDandNS_1n.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts)), Weight_1n);
-                hP_nFD_APIDandNS_1n_ZOOMOUT.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts)), Weight_1n);
+//                /* Leading neutron after mom. th. */
+//                hP_nFD_APID_1n.hFill(GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts), Weight_1n);
+//                hP_nFD_APID_1n_ZOOMOUT.hFill(GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts), Weight_1n);
+//                hP_nFD_APIDandNS_1n.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts)), Weight_1n);
+//                hP_nFD_APIDandNS_1n_ZOOMOUT.hFill(nRes.NShift(apply_nucleon_SmearAndShift, GetFDNeutronP(allParticles[n_ind_1n], apply_nucleon_cuts)), Weight_1n);
 
                 /* FD Neutrons after mom. th. */
                 for (int &i: NeutronsFD_ind) {
@@ -10463,6 +10470,11 @@ void EventAnalyser() {
                     hEcal_DIS_1n->Fill(Ecal_1n, Weight_1n); // Fill Ecal for DIS only
                 }
                 //</editor-fold>
+
+                hP_nFD_APID_1n.hFill(NeutronMomBKC_1n, Weight_1n);                                                                             // Leading FD neutron (1n)
+                hP_nFD_APID_1n_ZOOMOUT.hFill(NeutronMomBKC_1n, Weight_1n);                                                                     // Leading FD neutron (1n)
+                hP_nFD_APIDandNS_1n.hFill(P_n_1n_3v.Mag(), Weight_1n);                                                          // Leading FD neutron after shifting (1n)
+                hP_nFD_APIDandNS_1n_ZOOMOUT.hFill(P_n_1n_3v.Mag(), Weight_1n);                                                  // Leading FD neutron after shifting (1n)
 
                 dP_T_1n_3v = TVector3(P_T_e_1n_3v.Px() + P_T_n_1n_3v.Px(), P_T_e_1n_3v.Py() + P_T_n_1n_3v.Py(), 0);
                 dAlpha_T_1n = acos(-(P_e_1n_3v.Px() * dP_T_1n_3v.Px() + P_e_1n_3v.Py() * dP_T_1n_3v.Py() + P_e_1n_3v.Pz() * dP_T_1n_3v.Pz())
@@ -13132,18 +13144,18 @@ void EventAnalyser() {
         hP_p_APID_1p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_p_APIDandPS_1p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         hP_p_BPID_1p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_APID_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_APIDandPS_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
+        hP_p_BPID_1p_FD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
 
         if (!apply_kinematical_cuts) {
             hP_pFD_APID_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
             hP_pFD_APIDandPS_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
-            hP_pFD_BPID_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., p_mom_th.GetLowerCut(), p_mom_th.GetUpperCut(), 0, false);
         } else {
             hP_pFD_APID_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
                                         FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
             hP_pFD_APIDandPS_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
                                              FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
-            hP_pFD_BPID_1p.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., FD_nucleon_momentum_cut.GetLowerCut(),
-                                        FD_nucleon_momentum_cut.GetUpperCut(), 0, false);
         }
 
         hP_piplus_APID_1p_CD.hDrawAndSave(SampleName, c1, plots, norm_Momentum_plots, true, 1., pip_mom_th.GetLowerCut(), pip_mom_th.GetUpperCut(), 0, false);

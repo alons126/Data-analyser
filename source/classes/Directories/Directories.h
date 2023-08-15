@@ -131,11 +131,11 @@ private:
     std::string Momentum_Parent_Directory = "01_Cuts_plots/06_Momentum_plots";
     vector<std::string> Momentum_Daughter_Folders = {"",
                                                      "01_1e_cut",
-                                                     "02_1p","02_1p/Analysis_plots",
-                                                     "03_1n","03_1n/Analysis_plots",
+                                                     "02_1p","02_1p/Analysis_plots_1p",
+                                                     "03_1n","03_1n/Analysis_plots_1n",
                                                      "04_2p",
-                                                     "05_pFDpCD","05_pFDpCD/Analysis_plots",
-                                                     "06_nFDpCD","06_nFDpCD/Analysis_plots"
+                                                     "05_pFDpCD","05_pFDpCD/Analysis_plots_pFDpCD",
+                                                     "06_nFDpCD","06_nFDpCD/Analysis_plots_nFDpCD"
     };
     //</editor-fold>
 
