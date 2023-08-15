@@ -124,7 +124,7 @@ void EventAnalyser() {
     /* Truth level calculation setup */
     bool calculate_truth_level = true; // TL master ON/OFF switch
     bool fill_TL_plots = true;
-    bool Rec_wTL_ES = false; // Enforce TL event selection on reco. plots
+    bool Rec_wTL_ES = true; // Enforce TL event selection on reco. plots
 
     bool limless_mom_eff_plots = false;
     bool Enable_FD_photons = false; // keep as false to decrease RES and DIS
@@ -140,10 +140,10 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = true; // Generate nRes plots
+    bool plot_and_fit_MomRes = false; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = true;
+    bool nRes_test = false;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (isData) { calculate_truth_level = false; }
@@ -187,10 +187,10 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = false;
-    bool apply_kinematical_cuts = false;
+    bool apply_fiducial_cuts = true;
+    bool apply_kinematical_cuts = true;
     bool apply_kinematical_weights = false;
-    bool apply_nucleon_SmearAndShift = true;
+    bool apply_nucleon_SmearAndShift = false;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
 
