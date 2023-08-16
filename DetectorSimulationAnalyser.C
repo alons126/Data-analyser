@@ -140,10 +140,10 @@ void EventAnalyser() {
     bool equi_P_e_bins = true;
 
     /* Neutron resolution setup */
-    bool plot_and_fit_MomRes = false; // Generate nRes plots
+    bool plot_and_fit_MomRes = true; // Generate nRes plots
     bool VaryingDelta = true;
     double DeltaSlices = 0.05;
-    bool nRes_test = false;
+    bool nRes_test = true;
 
 //    if (!calculate_2p) { calculate_pFDpCD = false; }
     if (isData) { calculate_truth_level = false; }
@@ -187,9 +187,9 @@ void EventAnalyser() {
     /* Physical cuts */
     bool apply_nucleon_physical_cuts = true; // nucleon physical cuts master
     bool apply_nBeta_fit_cuts = true; // apply neutron upper mom. th.
-    bool apply_fiducial_cuts = true;
-    bool apply_kinematical_cuts = true;
-    bool apply_kinematical_weights = true;
+    bool apply_fiducial_cuts = false;
+    bool apply_kinematical_cuts = false;
+    bool apply_kinematical_weights = false;
     bool apply_nucleon_SmearAndShift = true;
 
     //<editor-fold desc="Custom cuts naming & print out execution variables">
